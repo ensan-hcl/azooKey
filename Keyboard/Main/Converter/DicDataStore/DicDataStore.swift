@@ -351,7 +351,11 @@ final class DicDataStore{
 
     ///計算時に利用。無視すべきデータかどうか。
     internal func shouldBeRemoved(data: DicDataElementProtocol) -> Bool {
-        return data.value() + self.getPenalty(data: data) < self.treshold
+        let value = data.value()
+        if value < self.treshold{
+            return true
+        }
+        return value + self.getPenalty(data: data) < self.treshold
     }
 
     private func loadLOUDS(identifier: String){
