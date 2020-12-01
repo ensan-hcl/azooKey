@@ -366,14 +366,22 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         if inputData.characters.isEmpty{
             return []
         }
+        let start1 = Date()
 
         guard let result = self.convertToLattice(inputData, N_best: N_best) else{
             return []
         }
 
+        print("ラティス構築", -start1.timeIntervalSinceNow)
+        let start2 = Date()
         let candidates = self.processResult(inputData: inputData, result: result, requirePrediction: requirePrediction, requireEnglishPrediction: requireEnglishPrediction)
-        return candidates.map{
+        print("ラティス処理", -start2.timeIntervalSinceNow)
+
+        let results = candidates.map{
             $0.withActions(self.getApporopriateActions($0))
         }
+        print("全体", -start1.timeIntervalSinceNow)
+
+        return results
     }
 }

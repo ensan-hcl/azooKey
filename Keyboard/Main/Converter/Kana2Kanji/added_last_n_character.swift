@@ -50,7 +50,6 @@ extension Kana2Kanji{
         let start2 = Date()
         //(2)
         nodes.indices.forEach{(i: Int) in
-            //forEachをSerialな並列処理で行うことによって、高速化が可能になる。
             nodes[i].forEach{(node: LatticeNode) in
                 if node.prevs.isEmpty{
                     return
