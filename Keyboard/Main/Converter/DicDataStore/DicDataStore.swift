@@ -351,6 +351,13 @@ final class DicDataStore{
 
     ///計算時に利用。無視すべきデータかどうか。
     internal func shouldBeRemoved(data: DicDataElementProtocol) -> Bool {
+        if data.adjust.isZero && (
+            data is LRE_V3E_DicDataElement ||
+            data is V3E_DicDataElement ||
+            data is SRE_V3E_DicDataElement
+        ){
+            return true
+        }
         let value = data.value()
         if value < self.treshold{
             return true
@@ -472,7 +479,6 @@ final class DicDataStore{
                     return nil
                 }
                 return data.adjustedData(adjust)
-
             }
             return result
         }

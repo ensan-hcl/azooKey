@@ -580,11 +580,6 @@ struct HorizontalFlickKeyboardModel: KeyboardModelProtocol{
                     labelType: .text("÷"),
                     pressActions: [.input("÷")]
                 ),
-                .bottom: FlickedKeyModel(
-                    labelType: .text("DEBUG"),
-                    pressActions: [.DEBUG_DATA_INPUT]
-                ),
-
             ]),
             FlickKeyModel(labelType: .text("8"), pressActions: [.input("8")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -599,11 +594,6 @@ struct HorizontalFlickKeyboardModel: KeyboardModelProtocol{
                     labelType: .text("〆"),
                     pressActions: [.input("〆")]
                 ),
-                .bottom: FlickedKeyModel(
-                    labelType: .text("飴󠄀"),
-                    pressActions: [.input("飴󠄀")]
-                ),
-
             ]),
             FlickKeyModel(labelType: .text("0"), pressActions: [.input("0")], flickKeys: [
                 .left: FlickedKeyModel(

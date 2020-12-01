@@ -48,6 +48,19 @@ struct RomanInputData: InputDataProtocol {
         let triple = unit*3
         let nextLetter = (right + 1 == characters.count) ? "\0" : self.characters[right + 1]
         let nodes = (0..<count).map{(i: Int) in
+            Self.lengths.map{i+$0}.flatMap{(j: Int) -> [String] in
+                if count <= j{
+                    return []
+                }
+                if i == j && freezed[left + i]{
+                    return [String(self.characters[left + i])]
+                }
+                if (left + i ... left + j).allSatisfy{!freezed[$0]}{
+                    return Self.getTypo(String(self.characters[left + i ... left + j]))
+                }
+                return []
+            }
+            /*
             (i..<min(count, i + Self.possibleMaxLength)).flatMap{(j: Int) -> [String] in
                 if i == j && freezed[left + i]{
                     return [String(self.characters[left + i])]
@@ -57,6 +70,7 @@ struct RomanInputData: InputDataProtocol {
                 }
                 return []
             }
+ */
         }
 
         var result: [(lattice: RomanKanaConvertingLattice, penalty: PValue)] = []
@@ -240,7 +254,7 @@ extension RomanInputData{
         return []
     }
 
-    private static let possibleMaxLength = 2
+    private static let lengths = [0,2]
 
     private static let possibleTypo: [String: [String]] = [
         "bs": ["ba"],

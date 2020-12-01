@@ -599,11 +599,6 @@ struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
                     labelType: .text("〆"),
                     pressActions: [.input("〆")]
                 ),
-                .bottom: FlickedKeyModel(
-                    labelType: .text("飴󠄀"),
-                    pressActions: [.input("飴󠄀")]
-                ),
-
             ]),
             FlickKeyModel(labelType: .symbols(["0","〜","…"]), pressActions: [.input("0")], flickKeys: [
                 .left: FlickedKeyModel(
