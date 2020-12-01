@@ -194,7 +194,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     }
 
     private func processResult(inputData: InputData, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> [Candidate] {
-        let start = Date()
         self.previousInputData = inputData
         self.nodes = result.nodes
 
@@ -284,7 +283,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             return count0 == count1 ? $0.value>$1.value : count0 > count1
         }
 
-        print("計算所要時間: 結果の処理", -start.timeIntervalSinceNow)
         var result = Array(full_candidate)
         result.append(contentsOf: clause_candidates)
         result.append(contentsOf: wise_candidates)
