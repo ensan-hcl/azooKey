@@ -343,7 +343,12 @@ final class DicDataStore{
     private func getPenalty(data: DicDataElementProtocol) -> PValue {
         return -2.0/PValue(data.word.count)
     }
-    
+
+    ///計算時に利用。無視すべきデータかどうか。
+    private func shouldBeRemoved(value: PValue, wordCount: Int) -> Bool {
+        return value - 2.0/PValue(wordCount) < self.treshold
+    }
+
     ///計算時に利用。無視すべきデータかどうか。
     internal func shouldBeRemoved(data: DicDataElementProtocol) -> Bool {
         return data.value() + self.getPenalty(data: data) < self.treshold
@@ -456,13 +461,14 @@ final class DicDataStore{
                 if penalty.isZero{
                     return data
                 }
-                let pUnit: PValue = self.getPenalty(data: data)/2   //負の値
                 let ratio = Self.getTypoPenaltyRatio(data.lcid)
-                let element = data.adjustedData(pUnit * penalty * ratio)
-                if self.shouldBeRemoved(data: element){    //この時点で選別
+                let pUnit: PValue = self.getPenalty(data: data)/2   //負の値
+                let adjust = pUnit * penalty * ratio
+                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count){
                     return nil
                 }
-                return element
+                return data.adjustedData(adjust)
+
             }
             return result
         }
@@ -514,13 +520,13 @@ final class DicDataStore{
                 if penalty.isZero{
                     return data
                 }
-                let pUnit: PValue = self.getPenalty(data: data)/2   //負の値
                 let ratio = Self.getTypoPenaltyRatio(data.lcid)
-                let element = data.adjustedData(pUnit * penalty * ratio)
-                if self.shouldBeRemoved(data: element){    //この時点で選別
+                let pUnit: PValue = self.getPenalty(data: data)/2   //負の値
+                let adjust = pUnit * penalty * ratio
+                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count){
                     return nil
                 }
-                return element
+                return data.adjustedData(adjust)
             }
             return result
         }
