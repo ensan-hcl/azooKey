@@ -10,27 +10,32 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selection = 0
- 
+    @ObservedObject private var storeVariableSection = Store.variableSection
+    @State private var isPresented = true
     var body: some View {
-        TabView(selection: $selection){
-            Text("First View")
-                .font(.title)
-                .tabItem {
-                    VStack {
-                        Image("first")
-                        Text("First")
+        ZStack{
+            TabView(selection: $selection){
+                TipsTabView()
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "lightbulb.fill").font(.system(size: 20, weight: .light)).foregroundColor(.systemGray2)
+                            Text("ヒント")
+                        }
                     }
-                }
-                .tag(0)
-            Text("Second View")
-                .font(.title)
-                .tabItem {
-                    VStack {
-                        Image("second")
-                        Text("Second")
+                    .tag(0)
+                SettingTabView()
+                    .font(.title)
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "wrench.fill").font(.system(size: 20, weight: .light)).foregroundColor(.systemGray2)
+                            Text("設定")
+                        }
                     }
-                }
-                .tag(1)
+                    .tag(1)
+
+            }.fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
+                EnableAzooKeyView()
+            }            
         }
     }
 }

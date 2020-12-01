@@ -1,0 +1,22 @@
+{
+  "images" : [
+    {
+      "filename" : "romanCustomKeySetting2_l.jpg",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "romanCustomKeySetting2_d.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
