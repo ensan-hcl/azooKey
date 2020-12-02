@@ -196,13 +196,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     private func processResult(inputData: InputData, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> [Candidate] {
         self.previousInputData = inputData
         self.nodes = result.nodes
-
+        let start1 = Date()
         let clauseResult = result.result.getCandidateData()
-        /*
-        clauseResult.forEach{
-            print($0.data)
-        }
-        */
         if clauseResult.isEmpty{
             return []
         }
@@ -228,28 +223,38 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 data: Array(candidateData.data[0...count])
             )
         }
-
+        print("処理1:", -start1.timeIntervalSinceNow)
+        let start2 = Date()
         let sums: [(CandidateData, Candidate)] = clauseResult.map{($0, converter.processClauseCandidate($0))}
-        /*
-         sums.forEach{
-         print($0.1.text, $0.1.value, $0.1.data)
-         }
-         */
-
         //文章全体を変換した場合の候補上位五件
         let sentence_candidates = self.getUniqueCandidate(sums.map{$0.1}).sorted{$0.value>$1.value}.prefix(5)
+        print("処理2:", -start2.timeIntervalSinceNow)
+        let start3 = Date()
+
         //予測変換
         let prediction_candidates: [Candidate] = requirePrediction ? self.getUniqueCandidate(self.getPredictionCandidate(sums)) : []
+        print("処理3.1:", -start3.timeIntervalSinceNow)
+        let start3_2 = Date()
+
         //英単語の予測変換。appleのapiを使うため、処理が異なる。
         let english_candidates: [Candidate] = requireEnglishPrediction ? self.getForeignPredictionCandidate(inputData: inputData, language: "en-US") : []
+        print("処理3.2:", -start3_2.timeIntervalSinceNow)
+        let start3_3 = Date()
+
         //ゼロヒント予測変換
         let best10 = getUniqueCandidate(sentence_candidates + prediction_candidates).sorted{$0.value > $1.value}.prefix(10)
         let zeroHintPrediction_candidates = converter.getZeroHintPredictionCandidates(preparts: best10, N_best: 3)
+        print("処理3.3:", -start3_3.timeIntervalSinceNow)
+
+        print("処理3全体:", -start3.timeIntervalSinceNow)
+        let start4 = Date()
 
         //文全体を変換するパターン
         let full_candidate = getUniqueCandidate(best10+zeroHintPrediction_candidates + english_candidates).sorted{$0.value>$1.value}.prefix(5)
         //重複のない変換候補を作成するための集合
         var seenCandidate: Set<String> = Set(full_candidate.map{$0.text})
+        print("処理4:", -start4.timeIntervalSinceNow)
+        let start5 = Date()
 
         //文節のみ変換するパターン
         let clause_candidates = self.getUniqueCandidate(clauseCandidates.filter{!seenCandidate.contains($0.text)}).sorted{$0.value>$1.value}.prefix(5)
@@ -271,6 +276,9 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     data: [$0.data]
                 )
         }
+        print("処理5:", -start5.timeIntervalSinceNow)
+        let start6 = Date()
+
         //追加する部分
         let additionalCandidates: [Candidate] = self.getAdditionalCandidate(inputData)
 
@@ -287,10 +295,12 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         result.append(contentsOf: clause_candidates)
         result.append(contentsOf: wise_candidates)
         result.append(contentsOf: word_candidates)
+        print("処理6:", -start6.timeIntervalSinceNow)
+
         return result
     }
 
-    func convertToLattice(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]])?{
+    private func convertToLattice(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]])?{
         if inputData.characters.isEmpty{
             return nil
         }

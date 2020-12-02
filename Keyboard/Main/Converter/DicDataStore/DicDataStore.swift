@@ -250,10 +250,8 @@ final class DicDataStore{
     private var ccParsed: Set<Int> = []
     private var ccLines: [[Int: PValue]] = []
     private var mmValue: [PValue] = []
-    private var midCount: Int = .zero
-    private var ccDefaultValue: PValue = .zero
-    private var cidCount: Int = .zero
     private let treshold: PValue = -17
+    private var midCount = Int.zero
 
     private var loudses: [String: LOUDS] = [:]
     private var charsID: [Character: UInt8] = [:]
@@ -267,6 +265,9 @@ final class DicDataStore{
     private func setup(){
         numberFormatter.numberStyle = .spellOut
         numberFormatter.locale = .init(identifier: "ja-JP")
+
+        var cidCount: Int = 0
+
         do {
             var plist: [String: String] = [:]
             let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/plist.csv", encoding: String.Encoding.utf8)
@@ -277,11 +278,10 @@ final class DicDataStore{
                 plist[String($0[0])] = String($0[1])
             }
             self.maxlength = Int(plist["maxlength", default: ""]) ?? .zero
-            self.ccDefaultValue = PValue(plist["ccWhenNil", default: ""]) ?? -30
-            self.cidCount = Int(plist["cidCount", default: ""]) ?? .zero
+            cidCount = Int(plist["cidCount", default: ""]) ?? .zero
             self.midCount = Int(plist["midCount", default: ""]) ?? .zero
 
-            self.ccLines = [[Int: PValue]].init(repeating: [:], count: self.cidCount)
+            self.ccLines = [[Int: PValue]].init(repeating: [:], count: cidCount)
             
         } catch let error {
             print("ファイルが存在しません: \(error)")
@@ -393,14 +393,14 @@ final class DicDataStore{
         return louds.byfixNodeIndices(chars: key.map{self.charsID[$0, default: .max]})
     }
 
-    private func prefixMatchLOUDS(identifier: String, key: String) -> [Int] {
+    private func prefixMatchLOUDS(identifier: String, key: String, depth: Int = .max) -> [Int] {
         if !self.loudses.keys.contains(identifier){
             self.loadLOUDS(identifier: identifier)
         }
         guard let louds = self.loudses[identifier] else {
             return []
         }
-        return louds.prefixNodeIndices(chars: key.map{self.charsID[$0, default: .max]})
+        return louds.prefixNodeIndices(chars: key.map{self.charsID[$0, default: .max]}, maxDepth: depth)
     }
 
     private func getDicData(identifier: String, indices: Set<Int>) -> [DicDataElementProtocol] {
@@ -593,9 +593,16 @@ final class DicDataStore{
                 print("ファイルが存在しません: \(error)")
                 return []
             }
+        }else if count == 2{
+            let first = String(head.first!)
+            //最大700件に絞ることによって低速化を回避する。
+            //FIXME: 場当たり的な対処。改善が求められる。
+            let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head), depth: 5).prefix(700)
+            //print(prefixIndices.count, prefixIndices.prefix(100))
+            return self.getDicData(identifier: first, indices: Set(prefixIndices))
         }else{
             let first = String(head.first!)
-            let prefixIndices: [Int] = self.prefixMatchLOUDS(identifier: first, key: String(head))
+            let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head)).prefix(700)
             return self.getDicData(identifier: first, indices: Set(prefixIndices))
         }
     }
@@ -722,7 +729,7 @@ final class DicDataStore{
     /// - 要求があった場合ごとにファイルを読み込んで
     internal func getCCValue(_ former: Int, _ latter: Int) -> PValue {
         if ccParsed.contains(former){
-            let defaultValue = ccLines[former][-1, default: self.ccDefaultValue]
+            let defaultValue = ccLines[former][-1, default: -25]
             return ccLines[former][latter, default: defaultValue]
         }
         let add: PValue = 3
@@ -730,7 +737,7 @@ final class DicDataStore{
         let values = loadCCBinary(path: path)
         ccLines[former] = [Int: PValue].init(uniqueKeysWithValues: values.map{(Int($0.0), PValue($0.1) + add)})
         ccParsed.update(with: former)
-        return ccLines[former][latter, default: self.ccDefaultValue]
+        return ccLines[former][latter, default: -25]
     }
 
     ///meaning idから意味連接尤度を得る関数

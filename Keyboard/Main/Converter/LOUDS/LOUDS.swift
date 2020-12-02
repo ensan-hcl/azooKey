@@ -90,16 +90,19 @@ struct LOUDS{
         return findFlag ? index:nil
     }
 
-    private func prefixNodeIndices(nodeIndex: Int) -> [Int] {
+    private func prefixNodeIndices(nodeIndex: Int, depth: Int = 0, maxDepth: Int) -> [Int] {
         let childNodeIndices = self.childNodeIndices(from: nodeIndex)
-        return childNodeIndices + childNodeIndices.flatMap{self.prefixNodeIndices(nodeIndex: $0)}
+        if depth == maxDepth{
+            return Array(childNodeIndices)
+        }
+        return childNodeIndices + childNodeIndices.flatMap{self.prefixNodeIndices(nodeIndex: $0, depth: depth+1, maxDepth: maxDepth)}
     }
 
-    internal func prefixNodeIndices(chars: [UInt8], ignoringPerfectMatch: Bool = false) -> [Int] {
+    internal func prefixNodeIndices(chars: [UInt8], maxDepth: Int) -> [Int] {
         guard let nodeIndex = self.searchNodeIndex(chars: chars) else{
             return []
         }
-        return self.prefixNodeIndices(nodeIndex: nodeIndex)
+        return self.prefixNodeIndices(nodeIndex: nodeIndex, maxDepth: maxDepth)
     }
 
     internal func byfixNodeIndices(chars: [UInt8]) -> [Int] {

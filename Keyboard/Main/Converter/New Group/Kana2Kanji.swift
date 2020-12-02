@@ -33,6 +33,7 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
     func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, N_best: Int) -> [Candidate] {
         let datas: [DicDataElementProtocol]
         let lastData: DicDataElementProtocol?
+        let start_3_1_1 = Date()
         do{
             var _str = ""
             let prestring = prepart.clauses.map{$0.clause.text}.joined()
@@ -47,8 +48,13 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
             lastData = prepart.data.count > count ? prepart.data[count] : nil
             datas = Array(prepart.data.prefix(count))
         }
+        print("処理3.1.1", -start_3_1_1.timeIntervalSinceNow)
+        let start_3_1_2 = Date()
+
         let memory: [DicDataElementProtocol] = dicdataStore.getPrefixMemory(lastRuby)
-        print(memory)
+        print("処理3.1.2", -start_3_1_2.timeIntervalSinceNow)
+        let start_3_1_3 = Date()
+
         let dicdata: DicDataStore.DicData
         switch Store.shared.keyboardType{
         case .flick:
@@ -65,6 +71,10 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
                 dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
             }
         }
+
+        print("処理3.1.3", -start_3_1_3.timeIntervalSinceNow) //ここが激遅い
+        let start_3_1_4 = Date()
+
         let lastCandidate = prepart.isEmpty ? Candidate(text: "", value: .zero, visibleString: "", rcid: .zero, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
         let nextLcid = prepart.lastClause?.nextLcid ?? 1316
         let lastMid = lastCandidate.lastMid
@@ -76,6 +86,10 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
             let lastPrev = lastCandidate.data[lastCandidate.data.endIndex - 2]
             ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
         }
+
+        print("処理3.1.4", -start_3_1_4.timeIntervalSinceNow)
+        let start_3_1_5 = Date()
+
         var result: [Candidate] = []
 
         result.reserveCapacity(N_best &+ 1)
@@ -100,6 +114,8 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
                 result.removeLast()
             }
         }
+        print("処理3.1.5", -start_3_1_5.timeIntervalSinceNow)
+        print("処理3.1全体", -start_3_1_1.timeIntervalSinceNow)
 
         return result
     }

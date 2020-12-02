@@ -118,7 +118,24 @@ struct RomanInputData: InputDataProtocol {
 }
 
 extension RomanInputData{
-
+    /*
+    internal func isAfterAddedCharacter(previous: Self) -> Int? {
+        let count_a = self.characters.count
+        let count_b = previous.characters.count
+        if count_b-count_a >= 0{
+            return nil
+        }
+        let prefix: [Character] = Array(self.characters.prefix(count_b))
+        if prefix == previous.characters{
+            //nとっのパターンの場合は判定しない。
+            if prefix.last == "n" || self.characters.suffix(count_a-count_b).first == prefix.last{
+                return nil
+            }
+            return self.characters.count - previous.count
+        }
+        return nil
+    }
+*/
     internal func isAfterDeletedCharacter(previous: RomanInputData) -> Int? {
         if Array(previous.characters.prefix(self.characters.count)) == self.characters{
             let count_a = self.characters.count
@@ -166,7 +183,7 @@ extension RomanInputData{
     }
 }
 
-fileprivate struct RomanKanaConvertingLattice{
+private struct RomanKanaConvertingLattice{
     var components: [(string: String, isFreezed: Bool)]
     var count: Int = 0
 
