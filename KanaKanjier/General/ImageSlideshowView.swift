@@ -32,7 +32,6 @@ struct ImageSlideshowView: View {
     }
 
     func update(){
-        print(selection, pictures)
         self.selection = (selection + 1) % pictures.count
     }
 }

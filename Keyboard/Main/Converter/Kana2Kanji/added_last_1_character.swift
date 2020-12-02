@@ -26,13 +26,11 @@ extension Kana2Kanji{
     ///
     ///(4)ノードをアップデートした上で返却する。
     func kana2lattice_addedLast(_ inputData: InputData, N_best: Int, previousResult: (inputData: InputData, nodes: [[LatticeNode]]) ) -> (result: LatticeNode, nodes: [[LatticeNode]]) {
-        print("一文字追加。追加されたのは「\(inputData.characters.last!)」")
-        
+
         //(0)
         let nodes = previousResult.nodes
         let count = previousResult.inputData.count
 
-        let start1 = Date()
 
         //(1)
         let addedNodes: [[LatticeNode]] = (0...count).map{(i: Int) in
@@ -41,8 +39,6 @@ extension Kana2Kanji{
             }
             return self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: count)
         }
-        print("計算所要時間: (1) 辞書の検索", -start1.timeIntervalSinceNow)    //ココが一番時間がかかっていた。
-        let start2 = Date()
         //(2)
         nodes.indices.forEach{(i: Int) in
             //forEachをSerialな並列処理で行うことによって、高速化が可能になる。
@@ -81,9 +77,6 @@ extension Kana2Kanji{
             }
         }
         
-        print("計算所要時間: (2) ノードの登録", -start2.timeIntervalSinceNow)
-        let start3 = Date()
-
         //(3)
         let result = LatticeNode.EOSNode
 
@@ -104,11 +97,8 @@ extension Kana2Kanji{
             }
         }
         
-        print("計算所要時間: (3) ノードのresultへの登録", -start3.timeIntervalSinceNow)
-
         //(4)
         let updatedNodes: Nodes = nodes.indices.map{nodes[$0] + addedNodes[$0]} + [addedNodes.last ?? []]
-        print("計算所要時間: 全体", -start1.timeIntervalSinceNow)
         return (result: result, nodes: updatedNodes)
     }
 }

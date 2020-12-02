@@ -47,22 +47,9 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.action.registerProxy(self.textDocumentProxy)
         Store.shared.action.registerDelegate(self)
         Store.shared.design.registerScreenSize(size: UIScreen.main.bounds.size)
-        var entries: [UILexiconEntry] = []
-        self.requestSupplementaryLexicon(completion: {
-            print($0.entries)
-            $0.entries.forEach{entry in
-                print(entry.userInput, entry.documentText)
-            }
-            entries.append(contentsOf: $0.entries)
-        })
-        print("entries:", entries)
-        self.current("viewDidLoad")
-
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        current("appear")
         self.registerScreenActualSize()
         super.viewDidAppear(animated)
         let window = self.view.window!
@@ -82,10 +69,6 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
-    func current(_ head: String){
-        //print(head,self.keyboardViewHost.view.safeAreaInsets, keyboardViewHost.view.safeAreaLayoutGuide, self.view.bounds, self.keyboardViewHost.view.bounds)
-    }
-
     func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
         let button = UIButton(type: .custom)
         button.addTarget(self, action: #selector(self.handleInputModeList(from:with:)), for: .allTouchEvents)
@@ -102,7 +85,6 @@ final class KeyboardViewController: UIInputViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Store.shared.closeKeyboard()
-        print("キーボードが閉じられました")
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -115,21 +97,9 @@ final class KeyboardViewController: UIInputViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        current("layout")
         self.registerScreenActualSize()
-        print("描画終わり", self.view.frame.size)
     }
 
-
-    override func selectionWillChange(_ textInput: UITextInput?) {
-        super.selectionWillChange(textInput)
-        print("selectionWillChange")
-    }
-
-    override func selectionDidChange(_ textInput: UITextInput?) {
-        super.selectionDidChange(textInput)
-        print("selectionDidChange")
-    }
 
     override func textWillChange(_ textInput: UITextInput?) {
         super.textWillChange(textInput)
@@ -148,7 +118,6 @@ final class KeyboardViewController: UIInputViewController {
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
-        print("textDidChange", self.textDocumentProxy.selectedText?.description)
         Store.shared.action.registerSomethingDidChange(left: left, center: center, right: right)
     }
 }

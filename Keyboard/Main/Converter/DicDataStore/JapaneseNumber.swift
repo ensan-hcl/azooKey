@@ -394,7 +394,7 @@ extension DicDataStore{
                 curnum = nil
                 stack = (.Zero, .Zero, .Zero, .Zero)
             case .エラー:
-                print("エラー")
+                break
             }
         }
         return result

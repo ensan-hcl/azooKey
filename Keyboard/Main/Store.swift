@@ -35,7 +35,6 @@ final class Store{
     private(set) var keyboardModelVariableSection = KeyboardModelVariableSection()   //ビューに関わる部分
     private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
     private init(){
-        print("Store.sharedが生成されました")
         if UserSettingDepartment.checkResetSetting(){
             self.sendToDicDataStore(.resetMemory)
         }
@@ -81,12 +80,10 @@ final class Store{
                                               appropriateFor: nil, create: false)
             let path = library.appendingPathComponent("\(fileName).\(ex)")
             guard let data = contents.data(using: .utf8) else {
-                print("ファイルをutf8で保存できません")
                 return
             }
             fileManager.createFile(atPath: path.path, contents: data, attributes: nil)
         } catch {
-            print(error)
         }
     }
 
@@ -100,7 +97,6 @@ final class Store{
             let contents = try String.init(contentsOfFile: path.path)
             return contents
         } catch {
-            print(error)
         }
         return ""
     }
@@ -114,7 +110,6 @@ final class Store{
             let path = library.appendingPathComponent("\(fileName).\(ex)")
             try fileManager.removeItem(atPath: path.path)
         } catch {
-            print(error)
         }
     }
 
@@ -701,7 +696,6 @@ final class ActionDepartment{
     }
 
     func appearedAgain(){
-        print("再び表示されました")
         self.sendToDicDataStore(.reloadUserDict)
     }
 
@@ -781,29 +775,6 @@ final class ActionDepartment{
 
         case .hideLearningMemory:
             self.hideLearningMemory()
-
-        //MARK: デバッグ用
-        case .DEBUG_DATA_INPUT:
-            self.inputStateHolder.isDebugMode.toggle()
-            if self.inputStateHolder.isDebugMode{
-                var left = self.inputStateHolder.proxy.documentContextBeforeInput ?? "nil"
-                if left == "\n"{
-                    left = "↩︎"
-                }
-
-                var center = self.inputStateHolder.proxy.selectedText ?? "nil"
-                center = center.replacingOccurrences(of: "\n", with: "↩︎")
-
-                var right = self.inputStateHolder.proxy.documentContextAfterInput ?? "nil"
-                if right == "\n"{
-                    right = "↩︎"
-                }
-                if right.isEmpty{
-                    right = "empty"
-                }
-
-                self.registerDebugPrint("left:\(Array(left.unicodeScalars))/center:\(Array(center.unicodeScalars))/right:\(Array(right.unicodeScalars))")
-            }
         }
     }
 
@@ -916,7 +887,6 @@ final class ActionDepartment{
     
     ///何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     func registerSomethingDidChange(left: String, center: String, right: String){
-        print("something did happen by user!")
         let b_left = self.tempTextData.left
         let b_center = self.tempTextData.center
         let b_right = self.tempTextData.right
@@ -928,9 +898,7 @@ final class ActionDepartment{
         let isSelected = !center.isEmpty
 
         if isSelected{
-            print("select:", "left:", left.debugDescription, "right:", right.debugDescription, "center:", center.debugDescription)
             self.inputStateHolder.userSelectedText(text: center)
-            print("user operation id: select")
             return
         }
         
@@ -939,34 +907,28 @@ final class ActionDepartment{
             //全体としてテキストが変化せず、選択範囲が無くなっている場合→選択を解除した
             if wasSelected && !isSelected{
                 self.inputStateHolder.userDeselectedText()
-                print("user operation id: 1")
                 return
             }
 
             //全体としてテキストが変化せず、選択範囲は前後ともになく、左側(右側)の文字列だけが変わっていた場合→カーソルを移動した
             if !wasSelected && !isSelected && b_left != left{
                 let offset = left.count - b_left.count
-                print("user operation id: 2")
-
                 self.inputStateHolder.userMovedCursor(count: offset)
                 return
             }
             //ただタップしただけ、などの場合ここにくる事がある。
-            print("user operation id: 3")
             return
         }
         //以降isWholeTextChangedは常にtrue
         //全体としてテキストが変化しており、前は左は改行コードになっていて選択範囲が存在し、かつ前の選択範囲と後の全体が一致する場合→行全体の選択が解除された
         //行全体を選択している場合は改行コードが含まれる。
         if b_left == "\n" && b_center == a_wholeText{
-            print("user operation id: 5")
             self.inputStateHolder.userDeselectedText()
             return
         }
 
         //全体としてテキストが変化しており、左右の文字列を合わせたものが不変である場合→カットしたのではないか？
         if b_left + b_right == left + right{
-            print("user operation id: 6")
             self.inputStateHolder.userCutText(text: b_center)
             return
         }
@@ -976,10 +938,8 @@ final class ActionDepartment{
             //もしクリップボードに文字列がコピーされており、かつ、前の左側文字列にその文字列を加えた文字列が後の左側の文字列に一致した場合→確実にペースト
             if let pastedText = UIPasteboard.general.string, left.hasSuffix(pastedText){
                 if wasSelected{
-                    print("user operation id: 7")
                     self.inputStateHolder.userReplacedSelectedText(text: pastedText)
                 }else{
-                    print("user operation id: 8")
                     self.inputStateHolder.userPastedText(text: pastedText)
                 }
                 return
@@ -987,12 +947,10 @@ final class ActionDepartment{
         }
         
         if left == "\n" && b_left.isEmpty && right == b_right{
-            print("user operation id: 9")
             return
         }
         
         //上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
-        print("user operation id: 10, \((left,center,right)), \((b_left, b_center, b_right))")
         self.inputStateHolder.clear()
     }
 
@@ -1000,9 +958,6 @@ final class ActionDepartment{
         Store.shared.userSetting.writeLearningTypeSetting(to: .nothing)
     }
 
-    func registerDebugPrint(_ text: String){
-        self.inputStateHolder.setDebugResult(text: text)
-    }
 }
 
 //ActionDepartmentの状態を保存する部分
@@ -1080,7 +1035,6 @@ private final class InputStateHolder{
                 self.proxy.deleteBackward()
             }
         }
-        print("ビジブルストリイング：",candidate.visibleString)
         self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.visibleString.count))
         
         self.isSelected = false
@@ -1105,7 +1059,6 @@ private final class InputStateHolder{
     }
     
     fileprivate func clear(){
-        print("クリアしました")
         self.inputtedText = ""
         self.cursorPosition = self.cursorMinimumPosition
         self.isSelected = false
@@ -1119,7 +1072,6 @@ private final class InputStateHolder{
     }
 
     fileprivate func closeKeyboard(){
-        print("キーボードを閉じます")
         self.sendToDicDataStore(.closeKeyboard)
         self._romanConverter = nil
         self._flickConverter = nil
@@ -1326,7 +1278,6 @@ private final class InputStateHolder{
                     return 1
                 }
                 let suf = after.prefix(count)
-                print("あとの文字は、",suf,-suf.utf16.count)
                 return suf.utf16.count
             }else{
                 return 1
@@ -1335,7 +1286,6 @@ private final class InputStateHolder{
         else {
             if let before = self.proxy.documentContextBeforeInput{
                 let pre = before.suffix(-count)
-                print("前の文字は、",pre,-pre.utf16.count)
 
                 return -pre.utf16.count
 
@@ -1351,7 +1301,6 @@ private final class InputStateHolder{
             let offset = self.getActualOffset(count: count)
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
         }
-        print("moveCursor, cursorPosition:", cursorPosition, count)
         //カーソル位置の正規化
         if cursorPosition + count > self.cursorMaximumPosition{
             let offset = self.getActualOffset(count: self.cursorMaximumPosition - self.cursorPosition)
@@ -1376,7 +1325,6 @@ private final class InputStateHolder{
     
     //MARK: userが勝手にカーソルを何かした場合の後処理
     fileprivate func userMovedCursor(count: Int){
-        print("userによるカーソル移動を検知、今の位置は\(self.cursorPosition)、動かしたオフセットは\(count)")
         if self.inputtedText.isEmpty{
             //入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
@@ -1387,7 +1335,6 @@ private final class InputStateHolder{
         if self.cursorPosition > self.cursorMaximumPosition{
             let offset = self.getActualOffset(count: self.cursorMaximumPosition - self.cursorPosition)
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            print("右にはみ出したので\(self.cursorMaximumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
             self.cursorPosition = self.cursorMaximumPosition
             setResult()
             return
@@ -1396,7 +1343,6 @@ private final class InputStateHolder{
             let offset = self.getActualOffset(count: self.cursorMinimumPosition - self.cursorPosition)
             //let offset = self.cursorMinimumPosition - self.cursorPosition
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            print("左にはみ出したので\(self.cursorMinimumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
             self.cursorPosition = self.cursorMinimumPosition
             setResult()
             return
@@ -1465,9 +1411,6 @@ private final class InputStateHolder{
 
 
     fileprivate func setResult(options: [ResultOptions] = [.convertInput]){
-        if isDebugMode{
-            return
-        }
         var results = [Candidate]()
         options.forEach{option in
             switch option{
@@ -1489,7 +1432,6 @@ private final class InputStateHolder{
                 //Storeに通知し、ResultViewに表示する。
             case .mojiCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)
-                print("mojiCount: ",inputtedText)
                 let count = input.filter{!$0.isNewline}.count
                 let mojisu = Candidate(text: "文字数:\(count)", value: 0, visibleString: "", rcid: 0, lastMid: 0, data: [], inputable: false)
                 results.append(mojisu)
@@ -1502,20 +1444,6 @@ private final class InputStateHolder{
             }
         }
         Store.shared.registerResult(results)
-    }
-    
-    //debug中であることを示す。
-    fileprivate var isDebugMode: Bool = false
-    
-    fileprivate func setDebugResult(text: String){
-        #if DEBUG
-        if !isDebugMode{
-            return
-        }
-
-        Store.shared.registerResult([Candidate(text: text, value: .zero, visibleString: text, rcid: .zero, lastMid: 500, data: [])])
-        isDebugMode = true
-        #endif
     }
     
     fileprivate func openApp(apppath: String){}

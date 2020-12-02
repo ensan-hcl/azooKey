@@ -52,8 +52,5 @@ struct SuggestModel{
 
 final class SuggestModelVariableSection: ObservableObject{
     @Published var suggestState: SuggestState = .nothing
-    deinit{
-        print("deinit SuggestModelVariableSection")
-    }
 }
 

@@ -143,12 +143,10 @@ struct RomanCustomKeysItemView: View {
     }
 
     func delete(at offsets: IndexSet) {
-        print(Array(offsets))
         self.viewModel.value.remove(at: offsets)
     }
 
     func move(at offsets: IndexSet, to index: Int) {
-        print(Array(offsets), index, self.viewModel.value.list.indices)
         self.viewModel.value.move(at: offsets, to: index)
     }
 

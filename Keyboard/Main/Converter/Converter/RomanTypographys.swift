@@ -50,7 +50,6 @@ extension KanaKanjiConverter{
         ///𝐼𝑇𝐴𝐿𝐼𝐶
         do{
             let italic = text.unicodeScalars.map{
-                print($0)
                 if $0.isRomanUppercased{
                     let scalar = UnicodeScalar($0.value + 119795)!
                     return String(scalar)

@@ -53,7 +53,6 @@ struct RomanCustomKeys: Savable {
         if let main = currentMain{
             result.append(RomanCustomKey(name: main, longpress: currentLongpress))
         }
-        print("save", result)
         let array = RomanCustomKeysArray(list: result)
         let encoder = JSONEncoder()
         if let encodedValue = try? encoder.encode(array) {
@@ -167,7 +166,6 @@ struct RomanCustomKeys: Savable {
     }
 
     static func get(_ value: Any) -> RomanCustomKeys? {
-        print(value)
         if let value = value as? SaveValue{
             let decoder = JSONDecoder()
             if let keys = try? decoder.decode(RomanCustomKeysArray.self, from: value) {

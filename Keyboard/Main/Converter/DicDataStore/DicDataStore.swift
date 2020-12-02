@@ -242,7 +242,6 @@ private struct LearningMemorys{
 
 final class DicDataStore{
     init(){
-        print("DicDataStoreが初期化されました")
         self.setup()
     }
 
@@ -284,13 +283,11 @@ final class DicDataStore{
             self.ccLines = [[Int: PValue]].init(repeating: [:], count: cidCount)
             
         } catch let error {
-            print("ファイルが存在しません: \(error)")
         }
         do{
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
             charsID = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map{($0.element, UInt8($0.offset))})
         }catch let error{
-            print("ファイルが存在しません: \(error)")
         }
         do{
             let path = Bundle.main.bundlePath + "/mm.binary"
@@ -306,11 +303,9 @@ final class DicDataStore{
                 }
                 self.mmValue = ui64array.map{PValue($0)}
             } catch {
-                print("Failed to read the file.")
                 self.mmValue = [PValue].init(repeating: .zero, count: self.midCount*self.midCount)
             }
         }
-        print("userDictを初めて読み込みます")
         self.loadLOUDS(identifier: "user")
     }
 
@@ -334,9 +329,7 @@ final class DicDataStore{
     }
 
     private func reloadUserDict(){
-        print("userDictを再読み込みします。",Date())
         self.loadLOUDS(identifier: "user")
-        print("userDictを再読み込みしました。")
     }
 
     ///ペナルティ関数。文字数で決める。
@@ -368,8 +361,6 @@ final class DicDataStore{
     private func loadLOUDS(identifier: String){
         if let louds = LOUDS.build(identifier){
             self.loudses[identifier] = louds
-        }else{
-            print("loudsの読み込みに失敗")
         }
     }
 
@@ -419,13 +410,10 @@ final class DicDataStore{
     ///   - inputData: 入力データ
     ///   - from: 起点
     internal func getLOUDSData<T: InputDataProtocol, LatticeNode: LatticeNodeProtocol>(inputData: T, from index: Int) -> [LatticeNode] {
-        let start_0 = Date()
         let toIndex = min(inputData.count, index + self.maxlength)
         let segments = (index ..< toIndex).map{inputData[index...$0]}
         let wisedicdata: DicData = (index ..< toIndex).flatMap{self.getWiseDicData(head: segments[$0-index], allowRomanLetter: $0+1 == toIndex)}
-        print("計算所要時間: wisedicdata", -start_0.timeIntervalSinceNow)
 
-        let start_1_1 = Date()
         var string2segment = [String: Int].init()
         //indicesをreverseすることで、stringWithTypoは長さの長い順に並ぶ=removeでヒットしやすくなる
         let stringWithTypoData: [(string: String, penalty: PValue)] = (index ..< toIndex).reversed().flatMap{(end) -> [(string: String, penalty: PValue)] in
@@ -439,9 +427,6 @@ final class DicDataStore{
 
         let strings = stringWithTypoData.map{$0.string}
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
-        print("計算所要時間: 謝り訂正の検索", -start_1_1.timeIntervalSinceNow)   //ここが遅い
-
-        let start_1_2 = Date()
         var stringSet: Set<String> = Set(strings)
         strings.forEach{string in
             if string.count > 4{
@@ -451,8 +436,6 @@ final class DicDataStore{
                 stringSet.remove(string)
             }
         }
-        print("計算所要時間: 検索対象の整理", -start_1_2.timeIntervalSinceNow)
-        let start_2 = Date()
         //先頭の文字: そこで検索したい文字列の集合
         let group = [Character: [String]].init(grouping: stringSet, by: {$0.first!})
 
@@ -463,9 +446,6 @@ final class DicDataStore{
         }
 
         let userDictIndices = Set(stringSet.flatMap{self.throughMatchLOUDS(identifier: "user", key: $0)})
-        print("計算所要時間: 検索", -start_2.timeIntervalSinceNow)
-
-        let start_3 = Date()
         let dicdata: DicData = (indices + [("user", userDictIndices)]).flatMap{(identifier, value) -> DicData in
             let result: DicData = self.getDicData(identifier: identifier, indices: value).compactMap{(data: DicData.Element) in
                 let penalty = string2penalty[data.ruby, default: .zero]
@@ -482,25 +462,16 @@ final class DicDataStore{
             }
             return result
         }
-        print("計算所要時間: 辞書データの生成", -start_3.timeIntervalSinceNow)
-
-        let start_4 = Date()
         if index == .zero{
             let result: [LatticeNode] = (dicdata + wisedicdata).map{
                 let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]])
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
-                //node.prevs.append(PreviousNodes(LatticeNode.PreviousNode.BOSNode))
-
                 return node
             }
-            print("計算所要時間: ノードの生成", -start_4.timeIntervalSinceNow)
-            print("計算所要時間: 辞書検索全体", -start_0.timeIntervalSinceNow)
             return result
 
         }else{
             let result: [LatticeNode] = (dicdata + wisedicdata).map{LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]])}
-            print("計算所要時間: ノードの生成", -start_4.timeIntervalSinceNow)
-            print("計算所要時間: 辞書検索全体", -start_0.timeIntervalSinceNow)
             return result
         }
     }
@@ -566,7 +537,6 @@ final class DicDataStore{
             self.zeroHintPredictionDicData = dicdata
             return dicdata
         }catch let error{
-            print(error)
             self.zeroHintPredictionDicData = []
             return []
         }
@@ -590,7 +560,6 @@ final class DicDataStore{
                 let dicdata: DicData = csvData.map{self.convertDicData(from: $0)}
                 return dicdata
             } catch let error {
-                print("ファイルが存在しません: \(error)")
                 return []
             }
         }else if count == 2{
@@ -598,7 +567,6 @@ final class DicDataStore{
             //最大700件に絞ることによって低速化を回避する。
             //FIXME: 場当たり的な対処。改善が求められる。
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head), depth: 5).prefix(700)
-            //print(prefixIndices.count, prefixIndices.prefix(100))
             return self.getDicData(identifier: first, indices: Set(prefixIndices))
         }else{
             let first = String(head.first!)
@@ -695,7 +663,6 @@ final class DicDataStore{
             }
             return ui64array
         } catch {
-            print("Failed to read the file.")
             return []
         }
     }

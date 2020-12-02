@@ -24,7 +24,6 @@ struct RomanInputData: InputDataProtocol {
             let index = history.supremumIndexWithFreezing(for: input)
             self.history = KanaRomanStateHolder(components: Array(history.components.prefix(index + 1)))
         }
-        print(history.components, self.history.components)
         self.hiraganaString = input
         self.string = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
         let romanString = self.history.components.map{$0.internalText}.joined()   //split由来のデータではかな文字が含まれる
@@ -111,31 +110,12 @@ struct RomanInputData: InputDataProtocol {
             }
             return nil
         }
-        print(finalResult)
         return finalResult
     }
     
 }
 
 extension RomanInputData{
-    /*
-    internal func isAfterAddedCharacter(previous: Self) -> Int? {
-        let count_a = self.characters.count
-        let count_b = previous.characters.count
-        if count_b-count_a >= 0{
-            return nil
-        }
-        let prefix: [Character] = Array(self.characters.prefix(count_b))
-        if prefix == previous.characters{
-            //nとっのパターンの場合は判定しない。
-            if prefix.last == "n" || self.characters.suffix(count_a-count_b).first == prefix.last{
-                return nil
-            }
-            return self.characters.count - previous.count
-        }
-        return nil
-    }
-*/
     internal func isAfterDeletedCharacter(previous: RomanInputData) -> Int? {
         if Array(previous.characters.prefix(self.characters.count)) == self.characters{
             let count_a = self.characters.count

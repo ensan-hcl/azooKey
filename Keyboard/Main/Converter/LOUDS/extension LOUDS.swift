@@ -7,28 +7,7 @@
 //
 
 import Foundation
-/*
-extension Array{
-    init(path: String, options: Data.ReadingOptions = []) throws {
-        do {
-            let binaryData = try Data(contentsOf: URL(fileURLWithPath: path), options: options) //2度読み込むことはないのでキャッシュ不要
-            let array = binaryData.withUnsafeBytes{pointer -> Array<Element> in
-                Array(
-                    UnsafeBufferPointer(
-                        start: pointer.baseAddress!.assumingMemoryBound(to: Element.self),
-                        count: pointer.count / MemoryLayout<Element>.size
-                    )
-                )
-            }
-            self = array
-        } catch let error {
-            print("Failed to read the file.")
-            throw error
-        }
 
-    }
-}
-*/
 extension LOUDS{
     private static func loadLOUDSBinary(from url: URL) -> [UInt64] {
         do {
@@ -43,7 +22,6 @@ extension LOUDS{
             }
             return ui64array
         } catch {
-            print("Failed to read the file.")
             return []
         }
     }
@@ -77,7 +55,6 @@ extension LOUDS{
         do{
             nodeIndex2ID = try Array(Data(contentsOf: charsURL, options: [.uncached]))   //2度読み込むことはないのでキャッシュ不要
         } catch let error {
-            print("ファイルが存在しません: \(error)")
             nodeIndex2ID = []
         }
 
@@ -92,7 +69,6 @@ extension LOUDS{
             let path = Self.getLoudstxtPath(identifier)
             data = try Data(contentsOf: URL(fileURLWithPath: path))
         } catch let error {
-            print("ファイルが存在しません: \(error)")
             data = Data()
         }
 

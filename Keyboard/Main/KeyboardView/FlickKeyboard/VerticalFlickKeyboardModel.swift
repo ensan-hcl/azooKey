@@ -580,11 +580,6 @@ struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
                     labelType: .text("÷"),
                     pressActions: [.input("÷")]
                 ),
-                .bottom: FlickedKeyModel(
-                    labelType: .text("DEBUG"),
-                    pressActions: [.DEBUG_DATA_INPUT]
-                ),
-
             ]),
             FlickKeyModel(labelType: .symbols(["8","〒","々","〆"]), pressActions: [.input("8")], flickKeys: [
                 .left: FlickedKeyModel(

@@ -28,8 +28,6 @@ enum ActionType{
     case hideLearningMemory
     //タブの変更
     case moveTab(TabState)
-    //デバッグ用
-    case DEBUG_DATA_INPUT
 }
 
 extension ActionType{

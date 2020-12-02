@@ -15,7 +15,7 @@ import Foundation
  の三点、8種類のデータを作成する。
  */
 
-protocol DicDataElementProtocol: CustomDebugStringConvertible {
+protocol DicDataElementProtocol {
     var word: String {get}
     var ruby: String{get}
     var lcid: Int{get}
@@ -32,12 +32,6 @@ protocol DicDataElementProtocol: CustomDebugStringConvertible {
 extension DicDataElementProtocol{
     func value() -> PValue {
         return min(.zero, self.baseValue + self.adjust)
-    }
-}
-
-extension DicDataElementProtocol{
-    var debugDescription: String {
-        return "(ruby: \(self.ruby), word: \(self.word), adjust: \(self.adjust), value: \(self.value()))"
     }
 }
 
