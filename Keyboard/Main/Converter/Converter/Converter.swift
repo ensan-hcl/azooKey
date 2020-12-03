@@ -225,7 +225,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     /// - Parameters:
     ///   - inputData: 変換対象のInputData。
     ///   - result: convertToLatticeによって得られた結果。
-    ///   - requirePrediction: 予測変換を必要とするか否か。-
+    ///   - requirePrediction: 予測変換を必要とするか否か。
     ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
     /// - Returns:
     ///   重複のない変換候補。

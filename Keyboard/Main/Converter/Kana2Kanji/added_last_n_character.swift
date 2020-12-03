@@ -8,7 +8,7 @@
 
 import Foundation
 extension Kana2Kanji{
-    ///カナを漢字に変換する関数, 最後の一文字を追加した場合。
+    ///カナを漢字に変換する関数, 最後の複数文字を追加した場合。
     /// - Parameters:
     ///   - inputData: 今のInputData。
     ///   - N_best: N_best。
@@ -26,7 +26,7 @@ extension Kana2Kanji{
     ///(3)(1)のregisterされた結果をresultノードに追加していく。この際EOSとの連接コストを計算しておく。
     ///
     ///(4)ノードをアップデートした上で返却する。
-    func kana2lattice_added(_ inputData: InputData, N_best: Int, addedCount: Int, previousResult: (inputData: InputData, nodes: [[LatticeNode]])) -> (result: LatticeNode, nodes: [[LatticeNode]]) {
+    func kana2lattice_added(_ inputData: InputData, N_best: Int, addedCount: Int, previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
         print("\(addedCount)文字追加。追加されたのは「\(inputData.characters.suffix(addedCount))」")
         if addedCount == 1{
             return kana2lattice_addedLast(inputData, N_best: N_best, previousResult: previousResult)

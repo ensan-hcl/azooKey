@@ -14,6 +14,13 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
     let ccBonusUnit = 5
     var dicdataStore = DicDataStore()
 
+    ///CandidateDataの状態からCandidateに変更する関数
+    /// - parameters:
+    ///   - data: CandidateData
+    /// - returns:
+    ///    Candidateとなった値を返す。
+    /// - note:
+    ///     この関数の役割は意味連接の考慮にある。
     func processClauseCandidate(_ data: CandidateData) -> Candidate {
         let mmValue: (value: PValue, mid: Int) = data.clauses.reduce((value: .zero, mid: 500)){ result, data in
             return (
@@ -29,7 +36,17 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
 
         return Candidate(text: text, value: value, visibleString: visibleString, rcid: rcid, lastMid: lastMid, data: data.data)
     }
-    
+
+    ///CandidateDataの状態から予測変換候補を取得する関数
+    /// - parameters:
+    ///   - prepart: CandidateDataで、予測変換候補に至る前の部分。例えば「これはき」の「き」の部分から予測をする場合「これは」の部分がprepart。
+    ///   - lastRuby:
+    ///     「これはき」の「き」の部分
+    ///   - N_best: 取得する数
+    /// - returns:
+    ///    「これはき」から「これは今日」に対応する候補などを作って返す。
+    /// - note:
+    ///     この関数の役割は意味連接の考慮にある。
     func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, N_best: Int) -> [Candidate] {
         let datas: [DicDataElementProtocol]
         let lastData: DicDataElementProtocol?
@@ -120,6 +137,14 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
         return result
     }
 
+    ///入力がない状態から、妥当な候補を探す
+    /// - parameters:
+    ///   - preparts: Candidate列。以前確定した候補など
+    ///   - N_best: 取得する候補数
+    /// - returns:
+    ///   ゼロヒント予測変換の結果
+    /// - note:
+    ///   「食べちゃ-てる」「食べちゃ-いる」などの間抜けな候補を返すことが多いため、学習によるもの以外を無効化している。
     func getZeroHintPredictionCandidates<T: Collection>(preparts: T, N_best: Int) -> [Candidate] where T.Element == Candidate{
         //let dicdata = self.dicdataStore.getZeroHintPredictionDicData()
         var result: [Candidate] = []

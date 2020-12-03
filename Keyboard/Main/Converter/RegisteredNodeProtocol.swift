@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 protocol RegisteredNodeProtocol{
     var data: DicDataElementProtocol {get}
     var prev: RegisteredNodeProtocol? {get}
@@ -20,7 +21,7 @@ struct FlickRegisteredNode: RegisteredNodeProtocol {
     let data: DicDataElementProtocol
     let prev: RegisteredNodeProtocol?
     let totalValue: PValue
-    var ruby: String{
+    var ruby: String {
         return self.data.ruby
     }
     

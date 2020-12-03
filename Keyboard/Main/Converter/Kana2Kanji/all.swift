@@ -8,12 +8,15 @@
 
 import Foundation
 extension Kana2Kanji{
+    ///Latticeを構成する基本単位
+    typealias Nodes = [[LatticeNode]]
+
     ///カナを漢字に変換する関数, 前提はなくかな列が与えられた場合。
     /// - Parameters:
-    ///   - string: かな列
+    ///   - inputData: 入力データ。
     ///   - N_best: N_best。
     /// - Returns:
-    ///   - 変換候補。
+    ///   変換候補。
     ///### 実装状況
     ///(0)多用する変数の宣言。
     ///
@@ -24,8 +27,7 @@ extension Kana2Kanji{
     ///(3)(1)のregisterされた結果をresultノードに追加していく。この際EOSとの連接計算を行っておく。
     ///
     ///(4)ノードをアップデートした上で返却する。
-    typealias Nodes = [[LatticeNode]]
-    func kana2lattice_all(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]]){
+    func kana2lattice_all(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: Nodes){
         let START = Date()
         let count = inputData.count
         let result = LatticeNode.EOSNode

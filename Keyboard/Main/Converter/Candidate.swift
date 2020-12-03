@@ -57,14 +57,25 @@ struct CandidateData{
     }
 }
 
+/// 変換候補のデータ
 struct Candidate{
+    ///入力となるテキスト
     let text: String
+    ///評価値
     let value: PValue
+    ///実際の入力テキスト
     let visibleString: String
+    ///右側cid
     let rcid: Int
+    ///最後のmid
     let lastMid: Int
+    ///DicDataElement列
     let data: [DicDataElementProtocol]
+    ///変換として選択した際に実行する`action`。
+    /// - note: 括弧を入力した際にカーソルを移動するために追加した変数
     let actions: [ActionType]
+    ///入力できるものか
+    /// - note: 文字数表示のために追加したフラグ
     let inputable: Bool
 
     init(text: String, value: PValue, visibleString: String, rcid: Int, lastMid: Int, data: [DicDataElementProtocol], actions: [ActionType] = [], inputable: Bool = true){
@@ -77,7 +88,9 @@ struct Candidate{
         self.actions = actions
         self.inputable = inputable
     }
-
+    ///後から`action`を追加した形を生成する関数
+    ///- parameters:
+    ///  - actions: 実行する`action`
     func withActions(_ actions: [ActionType]) -> Candidate {
         return Candidate(text: text, value: value, visibleString: visibleString, rcid: rcid, lastMid: lastMid, data: data, actions: actions, inputable: inputable)
     }

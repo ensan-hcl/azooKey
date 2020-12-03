@@ -262,6 +262,10 @@ extension String{
         "ryo":"リョ",
         "wi":"ウィ",
         "we":"ウェ",
+        "zh":"←",
+        "zj":"↓",
+        "zk":"↑",
+        "zl":"→",
     ]
     private static let hiraganaChanges: [String: String] = [
         "a":"あ",
@@ -517,6 +521,10 @@ extension String{
         "ryo":"りょ",
         "wi":"うぃ",
         "we":"うぇ",
+        "zh":"←",
+        "zj":"↓",
+        "zk":"↑",
+        "zl":"→",
     ]
 
     static func roman2katakana<S: StringProtocol>(currentText: S, added: String) -> (result: String, delete: Int, input: String){

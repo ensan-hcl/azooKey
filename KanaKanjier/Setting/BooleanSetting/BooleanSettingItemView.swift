@@ -16,15 +16,26 @@ struct BooleanSettingItemView: View {
     }
     let item: SettingItem<Bool>
     @ObservedObject private var viewModel: SettingItemViewModel<Bool>
+    @State private var isOn = false
 
     var body: some View {
         HStack{
             Text(self.item.screenName)
+            Button{
+                isOn = true
+            }label: {
+                Image(systemName: "info.circle")
+            }
             Spacer()
             Toggle(isOn: self.$viewModel.value) {
                 EmptyView()
             }
             .toggleStyle(SwitchToggleStyle())
+            .alert(isPresented: $isOn){
+                Alert(title: Text(self.item.description), dismissButton: .default(Text("OK"), action: {
+                    isOn = false
+                }))
+            }
         }
     }
 }

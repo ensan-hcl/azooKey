@@ -9,20 +9,23 @@
 import Foundation
 
 extension Character{
+    ///小書きのかなカナ集合
     private static let kogakiKana: Set<Character> = [
         "ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "ゕ", "ゖ", "っ", "ゃ", "ゅ", "ょ", "ゎ",
         "ァ", "ィ", "ゥ", "ェ", "ォ", "ヵ", "ヶ", "ッ", "ャ", "ュ", "ョ", "ヮ"
     ]
-    
+    ///濁点付きのかなカナ集合
     private static let dakutenKana: Set<Character> = [
         "ゔ", "が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば", "び", "ぶ", "べ", "ぼ",
         "ヴ", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ヅ", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ"
     ]
-    
+
+    ///小書きかなか否か
     var isKogana: Bool {
         return Character.kogakiKana.contains(self)
     }
-    
+
+    ///自分が小書きであれば該当する文字を返す。
     var kogaki: Character {
         switch self{
         case "あ":return "ぁ"
@@ -52,7 +55,8 @@ extension Character{
         default: return self
         }
     }
-    
+
+    ///小書きから大書きを返す
     var ogaki: Character {
         switch self{
         case "ぁ":return "あ"
@@ -83,10 +87,11 @@ extension Character{
         }
     }
 
+    ///濁点付きか否か
     var isDakuten: Bool {
         return Character.dakutenKana.contains(self)
     }
-    
+    ///濁点をつけて返す
     var dakuten: Character {
         switch self{
         case"う":return "ゔ"
@@ -134,7 +139,7 @@ extension Character{
         default: return self
         }
     }
-    
+    ///濁点を外して返す
     var mudakuten: Character {
         switch self{
         case"ゔ":return "う"
@@ -182,14 +187,14 @@ extension Character{
         default: return self
         }
     }
-
+    ///半濁点かどうか
     var isHandakuten: Bool {
         return [
             "ぱ", "ぴ", "ぷ", "ぺ", "ぽ",
             "パ", "ピ", "プ", "ペ", "ポ"
         ].contains(self)
     }
-
+    ///半濁点をつけて返す
     var handakuten: Character {
         switch self{
         case"は":return "ぱ"
@@ -205,7 +210,7 @@ extension Character{
         default: return self
         }
     }
-    
+    ///半濁点を外して返す
     var muhandakuten: Character {
         switch self{
         case"ぱ":return "は"
@@ -223,8 +228,6 @@ extension Character{
     }
 
     ///濁点、小書き、半濁点などを相互に変換する関数。
-    /// - Parameters:
-    ///   - character: 変換対象の文字。
     func requestChange() -> String {
         if self.isLowercase{
             return self.uppercased()

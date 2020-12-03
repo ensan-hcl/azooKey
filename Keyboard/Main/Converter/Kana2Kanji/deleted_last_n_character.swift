@@ -10,7 +10,7 @@ import Foundation
 
 extension Kana2Kanji{
     
-    ///カナを漢字に変換する関数, 最後の一文字を削除した場合。
+    ///カナを漢字に変換する関数, 最後の複数文字を削除した場合。
     /// - Parameters:
     ///   - deletedCount: 消した文字数。
     ///   - N_best: N_best値。

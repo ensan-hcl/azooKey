@@ -8,14 +8,15 @@
 
 import Foundation
 import SwiftUI
-enum CursorMoveViewGestureState{
+
+private enum CursorMoveViewGestureState{
     case unactive
     case moving(CGPoint, Int)   //右だったら+1、左だったら-1
 }
 
 struct CursorMoveView: View{
-    @State var gestureState: CursorMoveViewGestureState = .unactive
-    var gesture: some Gesture {
+    @State private var gestureState: CursorMoveViewGestureState = .unactive
+    private var gesture: some Gesture {
         DragGesture(minimumDistance: 0).onChanged({value in
             switch self.gestureState{
             case .unactive:
@@ -46,7 +47,7 @@ struct CursorMoveView: View{
         Group{
          //   Rectangle()
             RadialGradient(gradient: Gradient(colors: [Store.shared.design.colors.highlightedKeyColor, Store.shared.design.colors.backGroundColor]), center: .center, startRadius: 1, endRadius: 200)
-                .frame(height: Store.shared.design.keyViewSize.height)
+                .frame(height: Store.shared.design.resultViewHeight)
                 .foregroundColor(Color(UIColor.systemGray6))
                 .cornerRadius(20)
                 /*
@@ -76,7 +77,7 @@ struct CursorMoveView: View{
                     })
                     Spacer()
                 }.foregroundColor(.primary))
-        }.frame(height: Store.shared.design.keyViewSize.height)
+        }.frame(height: Store.shared.design.resultViewHeight)
 
     }
 }
