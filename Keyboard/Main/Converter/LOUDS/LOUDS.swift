@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// LOUDS
 struct LOUDS{
     typealias Unit = UInt64
     private static let unit = 64

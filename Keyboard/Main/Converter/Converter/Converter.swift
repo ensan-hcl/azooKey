@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+///かな漢字変換の管理を受け持つクラス
 final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol>{
     private var converter = Kana2Kanji<InputData, LatticeNode>()
     private var checker = UITextChecker()
@@ -18,7 +19,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     private var nodes: [[LatticeNode]] = []
     private var completedData: Candidate? = nil
     private var lastData: DicDataElementProtocol? = nil
-    
+
+    ///リセットする関数
     func clear(){
         self.previousInputData = nil
         self.nodes = []
@@ -26,21 +28,32 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         self.lastData = nil
     }
 
-    ///上流の関数からデータを渡すための橋
+    ///上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
+    /// - Parameters:
+    ///   - data: 行うべき操作。
     func sendToDicDataStore(_ data: Store.DicDataStoreNotification){
         self.converter.dicdataStore.sendToDicDataStore(data)
     }
-
+    ///確定操作後、内部状態のキャッシュを変更する関数。
+    /// - Parameters:
+    ///   - candidate: 確定された候補。
     func setCompletedData(_ candidate: Candidate){
         self.completedData = candidate
     }
 
+    ///確定操作後、学習メモリをアップデートする関数。
+    /// - Parameters:
+    ///   - candidate: 確定された候補。
     func updateLearningData(_ candidate: Candidate){
         self.converter.dicdataStore.updateLearningData(candidate, with: self.lastData)
         self.lastData = candidate.data.last
     }
 
-     ///補足的な辞書情報を得る。
+    ///賢い変換候補を生成する関数。
+    /// - Parameters:
+    ///   - string: 入力されたString
+    /// - Returns:
+    ///   `賢い変換候補
     private func getWiseCandidate(string: String) -> [Candidate] {
         var result = [Candidate]()
         if Store.shared.userSetting.westerJapaneseCalenderSetting{
@@ -56,7 +69,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         return result
     }
 
-    ///変換候補を要求する関数。
+    ///変換候補の重複を除去する関数。
     /// - Parameters:
     ///   - candidates: uniqueを実行する候補列。
     /// - Returns:
@@ -77,7 +90,12 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         }
         return result
     }
-
+    ///外国語への予測変換候補を生成する関数
+    /// - Parameters:
+    ///   - inputData: 変換対象のデータ。
+    ///   - language: 言語コード。現在は`en-US`のみ対応している。
+    /// - Returns:
+    ///   予測変換候補
     private func getForeignPredictionCandidate(inputData: InputData, language: String) -> [Candidate] {
         switch language{
         case "en-US":
@@ -108,6 +126,11 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         }
     }
 
+    ///予測変換候補を生成する関数
+    /// - Parameters:
+    ///   - sums: 変換対象のデータ。
+    /// - Returns:
+    ///   予測変換候補
     private func getPredictionCandidate(_ sums: [(CandidateData, Candidate)]) -> [Candidate] {
         //予測変換は次の方針で行う。
         //prepart: 前半文節 lastPart: 最終文節とする。
@@ -148,6 +171,11 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         return candidates
     }
 
+    ///付加的な変換候補を生成する関数
+    /// - Parameters:
+    ///   - inputData: 変換対象のInputData。
+    /// - Returns:
+    ///   付加的な変換候補
     private func getAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
         var candidates: [Candidate] = []
         do{
@@ -193,6 +221,14 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         return candidates
     }
 
+    ///ラティスを処理し変換候補の形にまとめる関数
+    /// - Parameters:
+    ///   - inputData: 変換対象のInputData。
+    ///   - result: convertToLatticeによって得られた結果。
+    ///   - requirePrediction: 予測変換を必要とするか否か。-
+    ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
+    /// - Returns:
+    ///   重複のない変換候補。
     private func processResult(inputData: InputData, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> [Candidate] {
         self.previousInputData = inputData
         self.nodes = result.nodes
@@ -300,7 +336,13 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         return result
     }
 
-    private func convertToLattice(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]])?{
+    ///入力からラティスを構築する関数。状況に応じて呼ぶ関数を分ける。
+    /// - Parameters:
+    ///   - inputData: 変換対象のInputData。
+    ///   - N_best: 計算途中で保存する候補数。実際に得られる候補数とは異なる。
+    /// - Returns:
+    ///   結果のラティスノードと、計算済みノードの全体
+    private func convertToLattice(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]])? {
         if inputData.characters.isEmpty{
             return nil
         }
@@ -362,10 +404,12 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
     }
     
-    ///変換候補を要求する関数。
+    ///外部から呼ばれる変換候補を要求する関数。
     /// - Parameters:
-    ///   - string: 変換対象の文字列。
+    ///   - inputData: 変換対象のInputData。
     ///   - N_best: 計算途中で保存する候補数。実際に得られる候補数とは異なる。
+    ///   - requirePrediction: 予測変換を必要とするか否か。-
+    ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
     /// - Returns:
     ///   重複のない変換候補。
     func requestCandidates(_ inputData: InputData, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> [Candidate] {

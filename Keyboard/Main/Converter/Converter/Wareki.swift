@@ -22,6 +22,9 @@ extension KanaKanjiConverter{
         )
     }
 
+    ///和暦で書かれた入力を西暦に変換する関数
+    /// - parameters:
+    ///   - string: 入力
     func toSeireki<S: StringProtocol>(string: S) -> [Candidate] {
         let count = string.count
         if string == "メイジガンネン"{
@@ -116,7 +119,9 @@ extension KanaKanjiConverter{
         return []
 
     }
-
+    ///西暦で書かれた入力を和暦に変換する関数
+    /// - parameters:
+    ///   - string: 入力
     func toWareki<S: StringProtocol>(string: S) -> [Candidate] {
         let makeResult0: (String) -> Candidate = {
             let string = String(string)

@@ -1016,7 +1016,6 @@ private final class InputStateHolder{
     fileprivate var isSelected = false
     private var cursorPosition = 0
     private let cursorMinimumPosition: Int = 0
-    
     ///カーソルの動ける最大範囲。`inputtedText`の文字数に等しい。
     private var cursorMaximumPosition: Int {
         return inputtedText.count

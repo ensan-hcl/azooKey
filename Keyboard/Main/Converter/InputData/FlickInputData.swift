@@ -61,8 +61,12 @@ struct FlickInputData: InputDataProtocol{
 }
 
 extension FlickInputData{
+    ///誤り部分の最長文字数
     private static let possibleMaxLength = 1
 
+    ///誤り訂正候補を取得する関数
+    ///- parameters:
+    ///  - string: 元の文字列
     fileprivate static func getTypo(_ string: String) -> [String] {
         let count = string.count
         if count > 1{
@@ -76,6 +80,7 @@ extension FlickInputData{
         return []
     }
 
+    ///あり得る誤りをまとめた辞書。
     private static let possibleTypo: [String: [String]] = [
         "カ":["ガ"],
         "キ":["ギ"],

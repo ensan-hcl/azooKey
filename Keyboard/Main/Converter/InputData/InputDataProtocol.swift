@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// 入力を管理するInputDataのprotocol
+/// - Note:structに対して付与すること。
 protocol InputDataProtocol{
     var hiraganaString: String  {get}
     var string: String          {get}
