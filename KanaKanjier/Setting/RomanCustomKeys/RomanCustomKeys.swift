@@ -32,7 +32,7 @@ struct RomanCustomKeys: Savable {
         (true,"！"),
         (false,"！"),
         (false,"!"),
-        (true,"…"),
+        (true,"・"),
     ])
 
     var saveValue: SaveValue {
