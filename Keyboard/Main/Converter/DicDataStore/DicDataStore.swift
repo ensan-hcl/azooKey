@@ -49,6 +49,12 @@ private struct LearningMemorys{
         }
     }
 
+    func match<S: StringProtocol>(_ ruby: S) -> DicDataStore.DicData {
+        let dicdata = self.values.lazy.filter{$0.data.ruby == ruby}.map{$0.data.adjustedData(PValue($0.count * 3))}
+        return Array(dicdata)
+    }
+
+
     func getSingle(_ data: DicDataElementProtocol) -> Int {
         if let element = self.values.last(where: {$0.data == data}){
             return element.count
@@ -423,6 +429,8 @@ final class DicDataStore{
         let toIndex = min(inputData.count, index + self.maxlength)
         let segments = (index ..< toIndex).map{inputData[index...$0]}
         let wisedicdata: DicData = (index ..< toIndex).flatMap{self.getWiseDicData(head: segments[$0-index], allowRomanLetter: $0+1 == toIndex)}
+        let memorydicdata: DicData = (index ..< toIndex).flatMap{self.getMatch(segments[$0-index])}
+
         print("計算所要時間: wisedicdata", -start_0.timeIntervalSinceNow)
 
         let start_1_1 = Date()
@@ -486,7 +494,7 @@ final class DicDataStore{
 
         let start_4 = Date()
         if index == .zero{
-            let result: [LatticeNode] = (dicdata + wisedicdata).map{
+            let result: [LatticeNode] = (dicdata + wisedicdata + memorydicdata).map{
                 let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]])
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 //node.prevs.append(PreviousNodes(LatticeNode.PreviousNode.BOSNode))
@@ -498,7 +506,7 @@ final class DicDataStore{
             return result
 
         }else{
-            let result: [LatticeNode] = (dicdata + wisedicdata).map{LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]])}
+            let result: [LatticeNode] = (dicdata + wisedicdata + memorydicdata).map{LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]])}
             print("計算所要時間: ノードの生成", -start_4.timeIntervalSinceNow)
             print("計算所要時間: 辞書検索全体", -start_0.timeIntervalSinceNow)
             return result
@@ -512,6 +520,8 @@ final class DicDataStore{
     internal func getLOUDSData<T: InputDataProtocol, LatticeNode: LatticeNodeProtocol>(inputData: T, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
         let segment = inputData[fromIndex...toIndex]
         let wisedicdata: DicData = self.getWiseDicData(head: segment, allowRomanLetter: toIndex == inputData.count - 1)
+        let memorydicdata: DicData = self.getMatch(segment)
+
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
         let group = [Character: [String]].init(grouping: stringWithTypoData.map{$0.string}, by: {$0.first!})
@@ -541,14 +551,14 @@ final class DicDataStore{
             return result
         }
         if fromIndex == .zero{
-            let result: [LatticeNode] = (dicdata + wisedicdata).map{
+            let result: [LatticeNode] = (dicdata + wisedicdata + memorydicdata).map{
                 let node = LatticeNode(data: $0, romanString: segment)
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 return node
             }
             return result
         }else{
-            let result: [LatticeNode] = (dicdata + wisedicdata).map{LatticeNode(data: $0, romanString: segment)}
+            let result: [LatticeNode] = (dicdata + wisedicdata + memorydicdata).map{LatticeNode(data: $0, romanString: segment)}
             return result
         }
     }
@@ -704,6 +714,10 @@ final class DicDataStore{
             print("Failed to read the file.")
             return []
         }
+    }
+
+    private func getMatch<S: StringProtocol>(_ ruby: S) -> DicData {
+        return self.memory.match(ruby)
     }
 
     internal func getSingleMemory(_ data: DicDataElementProtocol) -> Int {
