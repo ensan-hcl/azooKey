@@ -12,7 +12,7 @@ struct CustomKeyTipsView: View {
     var body: some View {
         TipsContentView("キーをカスタマイズする"){
             TipsContentParagraph{
-                Text("azooKeyでは一部キーのカスタマイズが可能です。")
+                Text("azooKeyでは一部キーのカスタマイズが可能です。「設定」タブから変更できます。")
             }
 
             TipsContentParagraph{
