@@ -235,7 +235,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let start1 = Date()
         let clauseResult = result.result.getCandidateData()
         if clauseResult.isEmpty{
-            return []
+            return self.getUniqueCandidate(self.getAdditionalCandidate(inputData))   //アーリーリターン
         }
         let clauseCandidates: [Candidate] = clauseResult.map{(candidateData: CandidateData) -> Candidate in
             let first = candidateData.clauses.first!
