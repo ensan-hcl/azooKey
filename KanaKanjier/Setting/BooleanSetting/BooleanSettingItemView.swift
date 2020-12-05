@@ -20,15 +20,13 @@ struct BooleanSettingItemView: View {
 
     var body: some View {
         HStack{
-            Text(self.item.screenName)
-            Button{
-                isOn = true
-            }label: {
-                Image(systemName: "info.circle")
-            }
-            Spacer()
             Toggle(isOn: self.$viewModel.value) {
-                EmptyView()
+                Text(self.item.screenName)
+                Button{
+                    isOn = true
+                }label: {
+                    Image(systemName: "info.circle")
+                }
             }
             .toggleStyle(SwitchToggleStyle())
             .alert(isPresented: $isOn){
