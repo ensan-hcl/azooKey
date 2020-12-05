@@ -7,8 +7,8 @@
 //
 
 import Foundation
-extension String{
-    private static let katakanaChanges: [String: String] = [
+enum Roman2Kana{
+    static let katakanaChanges: [String: String] = [
         "a":"ア",
         "xa":"ァ",
         "la":"ァ",
@@ -267,7 +267,7 @@ extension String{
         "zk":"↑",
         "zl":"→",
     ]
-    private static let hiraganaChanges: [String: String] = [
+    static let hiraganaChanges: [String: String] = [
         "a":"あ",
         "xa":"ぁ",
         "la":"ぁ",
@@ -526,18 +526,19 @@ extension String{
         "zk":"↑",
         "zl":"→",
     ]
-
+}
+extension String{
     static func roman2katakana<S: StringProtocol>(currentText: S, added: String) -> (result: String, delete: Int, input: String){
         let last_3 = currentText.suffix(3)
-        if let kana = String.katakanaChanges[last_3 + added]{
+        if let kana = Roman2Kana.katakanaChanges[last_3 + added]{
             return (result: currentText.prefix(currentText.count-last_3.count) + kana, delete: last_3.count, input: kana)
         }
         let last_2 = currentText.suffix(2)
-        if let kana = String.katakanaChanges[last_2 + added]{
+        if let kana = Roman2Kana.katakanaChanges[last_2 + added]{
             return (result: currentText.prefix(currentText.count-last_2.count) + kana, delete: last_2.count, input: kana)
         }
         let last_1 = currentText.suffix(1)
-        if let kana = String.katakanaChanges[last_1 + added]{
+        if let kana = Roman2Kana.katakanaChanges[last_1 + added]{
             return (result: currentText.prefix(currentText.count-last_1.count) + kana, delete: last_1.count, input: kana)
         }
         if last_1 == added && added.onlyRomanAlphabet{
@@ -547,7 +548,7 @@ extension String{
             return (result: currentText.prefix(currentText.count-last_1.count) + "ン" + added, delete: 1, input: "ン" + added)
         }
 
-        if let kana = String.katakanaChanges[added]{
+        if let kana = Roman2Kana.katakanaChanges[added]{
             return (result: currentText + kana, delete: .zero, input: kana)
         }
         return (result: currentText + added, delete: .zero, input: added)
@@ -556,15 +557,15 @@ extension String{
 
     static func roman2hiragana<S: StringProtocol>(currentText: S, added: String) -> (result: String, delete: Int, input: String) {
         let last_3 = currentText.suffix(3)
-        if let kana = String.hiraganaChanges[last_3 + added]{
+        if let kana = Roman2Kana.hiraganaChanges[last_3 + added]{
             return (result: currentText.prefix(currentText.count-last_3.count) + kana, delete: last_3.count, input: kana)
         }
         let last_2 = currentText.suffix(2)
-        if let kana = String.hiraganaChanges[last_2 + added]{
+        if let kana = Roman2Kana.hiraganaChanges[last_2 + added]{
             return (result: currentText.prefix(currentText.count-last_2.count) + kana, delete: last_2.count, input: kana)
         }
         let last_1 = currentText.suffix(1)
-        if let kana = String.hiraganaChanges[last_1 + added]{
+        if let kana = Roman2Kana.hiraganaChanges[last_1 + added]{
             return (result: currentText.prefix(currentText.count-last_1.count) + kana, delete: last_1.count, input: kana)
         }
         if last_1 == added && added.onlyRomanAlphabet{
@@ -574,12 +575,12 @@ extension String{
             return (result: currentText.prefix(currentText.count-last_1.count) + "ん" + added, delete: 1, input: "ん" + added)
         }
 
-        if let kana = String.hiraganaChanges[added]{
+        if let kana = Roman2Kana.hiraganaChanges[added]{
             return (result: currentText + kana, delete: .zero, input: kana)
         }
         return (result: currentText + added, delete: .zero, input: added)
     }
-    
+
     static func roman2hiraganaConsideringDisplaying<C: BidirectionalCollection>(current: C, added: String) -> (result: String, components: [KanaComponent], delete: Int, input: String) where C.Element == KanaComponent {
         if !added.onlyRomanAlphabet{
             let components = current + [KanaComponent(internalText: added, kana: added, escapeRomanKanaConverting: false)]
@@ -589,7 +590,7 @@ extension String{
             let last = current.suffix(3)
             if last.allSatisfy({!$0.escapeRomanKanaConverting}){
                 let last_roman = last.map{$0.internalText}.joined() + added
-                if let kana = String.hiraganaChanges[last_roman]{
+                if let kana = Roman2Kana.hiraganaChanges[last_roman]{
                     let deleteCount = last.map{$0.displayedText}.joined().count
                     let actualText = current.dropLast(last.count).map{$0.displayedText}.joined() + kana
                     let components = current.dropLast(last.count) + [KanaComponent(internalText: last_roman, kana: kana)]
@@ -601,7 +602,7 @@ extension String{
             let last = current.suffix(2)
             if last.allSatisfy({!$0.escapeRomanKanaConverting}){
                 let last_roman = last.map{$0.internalText}.joined() + added
-                if let kana = String.hiraganaChanges[last_roman]{
+                if let kana = Roman2Kana.hiraganaChanges[last_roman]{
                     let deleteCount = last.map{$0.displayedText}.joined().count
                     let actualText = current.dropLast(last.count).map{$0.displayedText}.joined() + kana
                     let components = current.dropLast(last.count) + [KanaComponent(internalText: last_roman, kana: kana)]
@@ -612,7 +613,7 @@ extension String{
         do{
             if let last = current.last{
                 let lastLetter = last.internalText
-                if !last.escapeRomanKanaConverting, let kana = String.hiraganaChanges[lastLetter + added]{
+                if !last.escapeRomanKanaConverting, let kana = Roman2Kana.hiraganaChanges[lastLetter + added]{
                     let components = current.dropLast() + [KanaComponent(internalText: lastLetter + added, kana: kana)]
 
                     let deleteCount = last.displayedText.count
@@ -634,7 +635,7 @@ extension String{
             }
         }
         do{
-            if let kana = String.hiraganaChanges[added]{
+            if let kana = Roman2Kana.hiraganaChanges[added]{
                 let components = current + [KanaComponent(internalText: added, kana: kana)]
                 return (result: current.map{$0.displayedText}.joined() + kana, components: components, delete: .zero, input: kana)
             }
