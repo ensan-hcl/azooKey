@@ -52,6 +52,12 @@ struct SettingTabView: View {
                             Spacer()
                         }
                     }
+                    NavigationLink(destination: AzooKeyUserDictionaryView()) {
+                        HStack{
+                            Text("azooKeyユーザ辞書")
+                            Spacer()
+                        }
+                    }
                 }
                 Section(header: Text("学習機能")){
                     //BooleanSettingItemView(Store.shared.stopLearningWhenSearchSetting)
