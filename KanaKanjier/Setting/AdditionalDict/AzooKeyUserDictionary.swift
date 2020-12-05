@@ -62,50 +62,59 @@ struct UserDictionaryData: Identifiable, Codable{
 struct AzooKeyUserDictionaryView: View {
     let exceptionKey = "その他"
     @State private var isActiveAddView = false
-
+    @State private var listMode = true
     @State private var items: [UserDictionaryData] = [
         UserDictionaryData(ruby: "あずき", word: "azooKey", id: 0),
     ]
 
+
+
     var body: some View {
         Form {
-            Section{
-                Text("変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。")
-            }
-
-            Section{
-                HStack{
-                    Text("追加する")
-                    Spacer()
-                    Button{
-                        let id = self.items.map{$0.id}.max()
-                        items.append(UserDictionaryData(ruby: "", word: "", id: (id ?? -1) + 1))
-                    }label: {
-                        HStack {
-                            Image(systemName: "plus")
-                        }
-                    }
+            if listMode{
+                Section{
+                    Text("変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。")
                 }
-            }
-            let currentGroupedItems = Dictionary(grouping: self.items, by: {$0.ruby.first.map{String($0)} ?? exceptionKey})
-            let keys = currentGroupedItems.keys
-            let currentKeys = keys.contains(exceptionKey) ? [exceptionKey] + keys.filter{$0 != exceptionKey}.sorted() : keys.sorted()
 
-            ForEach(currentKeys, id: \.self){key in
-                Section(header: Text(key)){
-                    ForEach(currentGroupedItems[key]!){data in
-                        let editableData = data.makeEditableData()
-                        NavigationLink(destination: UserDictionaryDataSettingView(editableData)){
-                            HStack{
-                                Text(editableData.word)
-                                Spacer()
-                                Text(editableData.ruby)
-                                    .foregroundColor(.systemGray)
+                Section{
+                    HStack{
+                        Text("追加する")
+                        Spacer()
+                        Button{
+                            let id = self.items.map{$0.id}.max()
+                            items.append(UserDictionaryData(ruby: "", word: "", id: (id ?? -1) + 1))
+                        }label: {
+                            HStack {
+                                Image(systemName: "plus")
                             }
                         }
                     }
-
                 }
+                let currentGroupedItems = Dictionary(grouping: self.items, by: {$0.ruby.first.map{String($0)} ?? exceptionKey})
+                let keys = currentGroupedItems.keys
+                let currentKeys = keys.contains(exceptionKey) ? [exceptionKey] + keys.filter{$0 != exceptionKey}.sorted() : keys.sorted()
+
+                ForEach(currentKeys, id: \.self){key in
+                    Section(header: Text(key)){
+                        ForEach(currentGroupedItems[key]!){data in
+                            let editableData = data.makeEditableData()
+                            Button{
+                                self.listMode = true
+                            }label: {
+                                HStack{
+                                    Text(editableData.word)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                    Text(editableData.ruby)
+                                        .foregroundColor(.systemGray)
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }else{
+                UserDictionaryDataSettingView(EditableUserDictionaryData(ruby:"", word: ""))
             }
         }
         .navigationBarTitle(Text("ユーザ辞書"), displayMode: .inline)
@@ -168,6 +177,8 @@ struct UserDictionaryDataSettingView: View {
     }
 
     func save(){
-        //userDefaultから今ある
+        //userDefaultから今ある一覧を読み込む
+
+        //一覧にデータを足すか、変更する
     }
 }
