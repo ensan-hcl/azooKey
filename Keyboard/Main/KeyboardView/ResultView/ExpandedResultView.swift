@@ -12,7 +12,7 @@ import SwiftUI
 struct ExpandedResultView: View {
     private let model: ExpandedResultModel
     @ObservedObject private var modelVariableSection: ExpandedResultModelVariableSection
-    
+
     init(model: ExpandedResultModel){
         self.model = model
         self.modelVariableSection = model.variableSection
@@ -32,7 +32,7 @@ struct ExpandedResultView: View {
                         .font(Store.shared.design.fonts.iconImageFont)
                         .frame(height: 18)
                 }
-                .buttonStyle(ResultButtonStyle())
+                .buttonStyle(ResultButtonStyle(height: 18))
                 .padding(.trailing, 10)
             }
             .padding(.top, 10)
@@ -48,7 +48,7 @@ struct ExpandedResultView: View {
                                 }){
                                     Text(datum.candidate.text)
                                 }
-                                .buttonStyle(ResultButtonStyle())
+                                .buttonStyle(ResultButtonStyle(height: 18))
                                 .contextMenu{
                                     ResultContextMenuView(text: datum.candidate.text)
                                 }
@@ -73,7 +73,7 @@ private final class ExpandedResultModelVariableSection: ObservableObject{
 
 struct ExpandedResultModel{
     fileprivate var variableSection = ExpandedResultModelVariableSection()
-    
+
     private func registerResults(results: [ResultData]){
         var curSum: CGFloat = .zero
         var splited: [SplitedResultData] = []
@@ -93,16 +93,16 @@ struct ExpandedResultModel{
         splited.append(SplitedResultData(id: splited.count, results: curResult))
         self.variableSection.splitedResults = splited
     }
-    
+
     fileprivate func pressed(data: ResultData){
         Store.shared.action.registerComplete(data.candidate)
         self.collapse()
     }
-    
+
     func expand(results: [ResultData]){
         self.registerResults(results: results)
     }
-    
+
     fileprivate func collapse(){
         Store.shared.collapseResult()
         self.variableSection.splitedResults = []
