@@ -17,6 +17,7 @@ private enum EnableAzooKeyViewStep{
 
 struct EnableAzooKeyView: View {
     @State private var step: EnableAzooKeyViewStep = .menu
+    @State private var text = ""
 
     var body: some View {
         ScrollView{
@@ -92,6 +93,7 @@ struct EnableAzooKeyView: View {
                             EnableAzooKeyViewHeader("azooKeyが使えます！")
                             EnableAzooKeyViewText("準備は完了です！", with: "checkmark")
                             EnableAzooKeyViewText("キーボードの地球儀ボタンを長押しし、azooKeyを選択してください", with: "globe")
+                            TextField("キーボードを開く", text: $text).textFieldStyle(RoundedBorderTextFieldStyle())
                             EnableAzooKeyViewImage("initSettingGlobeTapImage")
                             EnableAzooKeyViewText("azooKeyをお楽しみください！", with: "star.fill")
                             CenterAlignedView{

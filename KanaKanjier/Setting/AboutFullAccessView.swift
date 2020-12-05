@@ -13,7 +13,7 @@ struct AboutFullAccesView: View {
         Form{
             VStack(alignment: .leading){
                 Text("azooKeyは現在フルアクセスなしで全機能をご利用いただけます。")
-                Text("今後、キーボード内での通信や、3DTouchやキー音などの機能を追加する場合、フルアクセスが必要となる場合があります。")
+                Text("今後、キーボード内での通信や、3DTouchなどの機能を追加する場合、フルアクセスが必要となる場合があります。")
                 Spacer()
             }
         }.navigationBarTitle(Text("フルアクセスについて"), displayMode: .inline)

@@ -87,6 +87,7 @@
 		1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB02250290D800EB1864 /* SuggestModel.swift */; };
 		1A58AB0D25037E9E00EB1864 /* ExpandedResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */; };
 		1A60058525275CB9008E2B92 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1A60058425275CB9008E2B92 /* Settings.bundle */; };
+		1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */; };
 		1A64C8BE251315AD00ACD537 /* DicDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicDataStore.swift */; };
 		1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */; };
 		1A65C00B250B800E00F297BF /* LatticeNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */; };
@@ -2406,6 +2407,7 @@
 		1A58AB02250290D800EB1864 /* SuggestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestModel.swift; sourceTree = "<group>"; };
 		1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedResultView.swift; sourceTree = "<group>"; };
 		1A60058425275CB9008E2B92 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInformationView.swift; sourceTree = "<group>"; };
 		1A64C8BD251315AD00ACD537 /* DicDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicDataStore.swift; sourceTree = "<group>"; };
 		1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseNumber.swift; sourceTree = "<group>"; };
 		1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatticeNodeProtocol.swift; sourceTree = "<group>"; };
@@ -7123,6 +7125,7 @@
 				1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */,
 				1A9B0A6D2565797E004203BB /* ContactView.swift */,
 				1A4057FC2558472B0073C6F7 /* AboutFullAccessView.swift */,
+				1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -9540,6 +9543,7 @@
 				1AC031662512302F004CA505 /* KeyFlickSettingItemView.swift in Sources */,
 				1A3A16042528BFF900A5BA4F /* SelctInputStyle.swift in Sources */,
 				1AC031642512138F004CA505 /* SettingItemProtocol.swift in Sources */,
+				1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */,
 				1AF28CE0253C9FFC0012CF94 /* CursorMoveTips.swift in Sources */,
 				1AC0315D25120A17004CA505 /* SettingTab.swift in Sources */,
 				1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */,

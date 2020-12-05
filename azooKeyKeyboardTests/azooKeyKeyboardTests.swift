@@ -9,6 +9,12 @@
 import XCTest
 @testable import Keyboard
 
+extension KanaComponent: Equatable{
+    static func ==(lhs: KanaComponent, rhs: KanaComponent) -> Bool {
+        return lhs.internalText == rhs.internalText && lhs.displayedText == rhs.displayedText && lhs.isFreezed == rhs.isFreezed && lhs.escapeRomanKanaConverting == rhs.escapeRomanKanaConverting
+    }
+}
+
 class azooKeyKeyboardTests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -22,6 +28,71 @@ class azooKeyKeyboardTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        do{
+            let holder = KanaRomanStateHolder()
+
+            holder.insert("a", leftSideText: "")
+            XCTAssert(holder.components == [KanaComponent(internalText: "a", kana: "あ")])
+            holder.insert("k", leftSideText: "あ")
+            XCTAssert(holder.components == [KanaComponent(internalText: "a", kana: "あ"), KanaComponent(internalText: "k", kana: "k", escapeRomanKanaConverting: false)])
+            holder.insert("i", leftSideText: "あk")
+            XCTAssert(holder.components == [KanaComponent(internalText: "a", kana: "あ"), KanaComponent(internalText: "ki", kana: "き")])
+            holder.insert("n", leftSideText: "あき")
+            XCTAssert(holder.components == [KanaComponent(internalText: "a", kana: "あ"), KanaComponent(internalText: "ki", kana: "き"), KanaComponent(internalText: "n", kana: "n", escapeRomanKanaConverting: false)])
+            holder.insert("t", leftSideText: "あきn")
+            XCTAssert(holder.components == [
+                KanaComponent(internalText: "a", kana: "あ"),
+                KanaComponent(internalText: "ki", kana: "き"),
+                KanaComponent(internalText: "n", kana: "ん"),
+                KanaComponent(internalText: "t", kana: "t", escapeRomanKanaConverting: false)
+            ])
+            holder.insert("e", leftSideText: "あきんt")
+            XCTAssert(holder.components == [
+                KanaComponent(internalText: "a", kana: "あ"),
+                KanaComponent(internalText: "ki", kana: "き"),
+                KanaComponent(internalText: "n", kana: "ん"),
+                KanaComponent(internalText: "te", kana: "て")
+            ])
+            holder.insert("n", leftSideText: "あきん")
+            print(holder.components)
+            XCTAssert(holder.components == [
+                KanaComponent(internalText: "a", kana: "あ"),
+                KanaComponent(internalText: "ki", kana: "き"),
+                KanaComponent(internalText: "n", kana: "ん", isFreezed: true),
+                KanaComponent(internalText: "n", kana: "n", escapeRomanKanaConverting: false),
+                KanaComponent(internalText: "te", kana: "て")
+            ])
+        }
+
+        do{
+            let holder = KanaRomanStateHolder()
+
+            holder.insert("k", leftSideText: "")
+            holder.insert("a", leftSideText: "k")
+            holder.insert("n", leftSideText: "か")
+            XCTAssert(
+                holder.components == [
+                    KanaComponent(internalText: "ka", kana: "か"),
+                    KanaComponent(internalText: "n", kana: "n", escapeRomanKanaConverting: false)
+                ]
+            )
+            holder.insert("y", leftSideText: "かn")
+            XCTAssert(
+                holder.components == [
+                    KanaComponent(internalText: "ka", kana: "か"),
+                    KanaComponent(internalText: "n", kana: "n", escapeRomanKanaConverting: false),
+                    KanaComponent(internalText: "y", kana: "y", escapeRomanKanaConverting: false),
+                ]
+            )
+            holder.insert("u", leftSideText: "かny")
+            XCTAssert(
+                holder.components == [
+                    KanaComponent(internalText: "ka", kana: "か"),
+                    KanaComponent(internalText: "nyu", kana: "にゅ"),
+                ]
+            )
+
+        }
     }
 
     func testPerformanceExample() throws {

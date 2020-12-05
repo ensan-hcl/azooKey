@@ -77,20 +77,21 @@ struct SettingTabView: View {
                         }
                     }
                      */
-                    NavigationLink(destination: AboutFullAccesView()) {
-                        HStack{
-                            Text("フルアクセスについて")
-                            Spacer()
-                        }
-                    }
-                    NavigationLink(destination: OpenSourceSoftWaresLicenceView()) {
-                        HStack{
-                            Text("オープンソースソフトウェア")
-                            Spacer()
-                        }
-                    }
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
+                        .foregroundColor(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
+                        .foregroundColor(.primary)
+                    NavigationLink(destination: UpdateInfomationView()) {
+                        HStack{
+                            Text("更新履歴")
+                            Spacer()
+                        }
+                    }
+                    HStack{
+                        Text("バージョン")
+                        Spacer()
+                        Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "取得中です")
+                    }
 
                 }
 
