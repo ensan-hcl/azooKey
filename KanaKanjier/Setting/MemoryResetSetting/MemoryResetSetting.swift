@@ -33,7 +33,7 @@ struct MemoryResetSettingItemView: View {
                 primaryButton: .cancel(Text("キャンセル"), action: {
                     self.showAlert = false
                 }),
-                secondaryButton: .destructive(Text("削除"), action: {
+                secondaryButton: .destructive(Text("リセットする"), action: {
                     self.viewModel.value = .need
                     self.showAlert = false
                 })

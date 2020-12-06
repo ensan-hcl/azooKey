@@ -22,10 +22,19 @@ final class EditableUserDictionaryData: ObservableObject {
 
     @Published var ruby: String
     @Published var word: String
+    @Published var isVerb: Bool
+    @Published var isPersonName: Bool
+    @Published var isPlaceName: Bool
 
-    init(ruby: String, word: String){
+    let id: Int
+
+    init(ruby: String, word: String, isVerb: Bool, isPersonName: Bool, isPlaceName: Bool, id: Int){
         self.ruby = ruby
         self.word = word
+        self.id = id
+        self.isVerb = isVerb
+        self.isPersonName = isPersonName
+        self.isPlaceName = isPlaceName
     }
 
     func neadVerbCheck() -> Bool {
@@ -43,94 +52,186 @@ final class EditableUserDictionaryData: ObservableObject {
     var hasError: Bool {
         return !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy{self.availableChars.contains($0)}
     }
+
+    func makeStableData() -> UserDictionaryData {
+        return UserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
+    }
+
 }
 
 struct UserDictionary: Codable {
     let items: [UserDictionaryData]
+
+    init(items: [UserDictionaryData]){
+        self.items = items.indices.map{i in
+            let item = items[i]
+            return UserDictionaryData(ruby: item.ruby, word: item.word, isVerb: item.isVerb, isPersonName: item.isPersonName, isPlaceName: item.isPlaceName, id: i)
+        }
+    }
+
+    func save(){
+        let encoder = JSONEncoder()
+        let saveData: Data
+        if let encodedValue = try? encoder.encode(self) {
+            saveData = encodedValue
+        }else{
+            saveData = Data()
+        }
+        let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
+        userDefaults.set(saveData, forKey: "user_dict")
+    }
+    static func get() -> Self? {
+        let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
+        if let value = userDefaults.value(forKey: "user_dict") as? Data{
+            let decoder = JSONDecoder()
+            if let userDictionary = try? decoder.decode(UserDictionary.self, from: value) {
+                return userDictionary
+            }
+        }
+        return nil
+    }
 }
 
 struct UserDictionaryData: Identifiable, Codable{
     let ruby: String
     let word: String
+    let isVerb: Bool
+    let isPersonName: Bool
+    let isPlaceName: Bool
     let id: Int
 
     func makeEditableData() -> EditableUserDictionaryData {
-        return EditableUserDictionaryData(ruby: ruby, word: word)
+        return EditableUserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
+    }
+
+    static func emptyData(id: Int) -> Self {
+        return UserDictionaryData(ruby: "", word: "", isVerb: false, isPersonName: false, isPlaceName: false, id: id)
+    }
+}
+
+final class UserDictManagerVariables: ObservableObject {
+    @Published var items: [UserDictionaryData] = [
+        UserDictionaryData(ruby: "あずき", word: "azooKey", isVerb: false, isPersonName: true, isPlaceName: false, id: 0),
+    ]
+    @Published var mode: Mode = .list
+    @Published var selectedItem: EditableUserDictionaryData? = nil
+
+    enum Mode{
+        case list
+        case details
+    }
+
+    init(){
+        if let userDictionary = UserDictionary.get(){
+            self.items = userDictionary.items
+        }
     }
 }
 
 struct AzooKeyUserDictionaryView: View {
-    let exceptionKey = "その他"
-    @State private var isActiveAddView = false
-    @State private var listMode = true
-    @State private var items: [UserDictionaryData] = [
-        UserDictionaryData(ruby: "あずき", word: "azooKey", id: 0),
-    ]
-
-
+    @ObservedObject private var variables: UserDictManagerVariables = UserDictManagerVariables()
 
     var body: some View {
-        Form {
-            if listMode{
-                Section{
-                    Text("変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。")
-                }
-
-                Section{
-                    HStack{
-                        Text("追加する")
-                        Spacer()
-                        Button{
-                            let id = self.items.map{$0.id}.max()
-                            items.append(UserDictionaryData(ruby: "", word: "", id: (id ?? -1) + 1))
-                        }label: {
-                            HStack {
-                                Image(systemName: "plus")
-                            }
-                        }
-                    }
-                }
-                let currentGroupedItems = Dictionary(grouping: self.items, by: {$0.ruby.first.map{String($0)} ?? exceptionKey})
-                let keys = currentGroupedItems.keys
-                let currentKeys = keys.contains(exceptionKey) ? [exceptionKey] + keys.filter{$0 != exceptionKey}.sorted() : keys.sorted()
-
-                ForEach(currentKeys, id: \.self){key in
-                    Section(header: Text(key)){
-                        ForEach(currentGroupedItems[key]!){data in
-                            let editableData = data.makeEditableData()
-                            Button{
-                                self.listMode = true
-                            }label: {
-                                HStack{
-                                    Text(editableData.word)
-                                        .foregroundColor(.primary)
-                                    Spacer()
-                                    Text(editableData.ruby)
-                                        .foregroundColor(.systemGray)
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }else{
-                UserDictionaryDataSettingView(EditableUserDictionaryData(ruby:"", word: ""))
+        if variables.mode == .list{
+            UserDictionaryDataListView(variables: variables)
+        }else{
+            if let item = self.variables.selectedItem{
+                UserDictionaryDataSettingView(item, variables: variables)
             }
         }
-        .navigationBarTitle(Text("ユーザ辞書"), displayMode: .inline)
     }
 }
 
 
+struct UserDictionaryDataListView: View {
+    let exceptionKey = "その他"
+
+    @ObservedObject private var variables: UserDictManagerVariables
+    @State private var editMode = EditMode.inactive
+
+    init(variables: UserDictManagerVariables){
+        self.variables = variables
+    }
+
+    var body: some View {
+        Form {
+            Section{
+                Text("変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。")
+            }
+
+            Section{
+                HStack{
+                    Text("追加する")
+                    Spacer()
+                    Button{
+                        let id = variables.items.map{$0.id}.max()
+                        self.variables.selectedItem = UserDictionaryData.emptyData(id: (id ?? -1) + 1).makeEditableData()
+                        self.variables.mode = .details
+
+                    }label: {
+                        HStack {
+                            Image(systemName: "plus")
+                        }
+                    }
+                }
+            }
+            let currentGroupedItems: [String: [UserDictionaryData]] = Dictionary(grouping: variables.items, by: {$0.ruby.first.map{String($0)} ?? exceptionKey}).mapValues{$0.sorted{$0.id < $1.id}}
+            let keys = currentGroupedItems.keys
+            let currentKeys: [String] = keys.contains(exceptionKey) ? [exceptionKey] + keys.filter{$0 != exceptionKey}.sorted() : keys.sorted()
+
+            ForEach(currentKeys, id: \.self){key in
+                Section(header: Text(key)){
+                    List{
+                        ForEach(currentGroupedItems[key]!){data in
+                            Button{
+                                self.variables.selectedItem = data.makeEditableData()
+                                self.variables.mode = .details
+                            }label: {
+                                HStack{
+                                    Text(data.word)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                    Text(data.ruby)
+                                        .foregroundColor(.systemGray)
+                                }
+                            }
+                        }
+                        .onDelete(perform: self.delete(section: key))
+                    }.environment(\.editMode, $editMode)
+                }
+
+            }
+        }
+        .navigationBarTitle(Text("ユーザ辞書"), displayMode: .inline)
+        .navigationBarItems(trailing: EmptyView())
+    }
+
+    func delete(section: String) -> (IndexSet) -> Void {
+        return {(offsets: IndexSet) in
+            let indices: [Int]
+            if section == exceptionKey{
+                indices = variables.items.indices.filter{variables.items[$0].ruby.first == nil}
+            }else{
+                indices = variables.items.indices.filter{variables.items[$0].ruby.hasPrefix(section)}
+            }
+            let sortedIndices = indices.sorted{
+                variables.items[$0].id < variables.items[$1].id
+            }
+            variables.items.remove(atOffsets: IndexSet(offsets.map{sortedIndices[$0]}))
+            let userDictionary = UserDictionary(items: variables.items)
+            userDictionary.save()
+        }
+    }
+
+}
+
 struct UserDictionaryDataSettingView: View {
     @ObservedObject private var item: EditableUserDictionaryData
+    @ObservedObject private var variables: UserDictManagerVariables
 
-    @State private var isVerb = false
-    @State private var isPlaceName = false
-    @State private var isPersonName = false
-
-    init(_ item: EditableUserDictionaryData){
+    init(_ item: EditableUserDictionaryData, variables: UserDictManagerVariables){
         self.item = item
+        self.variables = variables
     }
 
     var body: some View {
@@ -142,43 +243,71 @@ struct UserDictionaryDataSettingView: View {
                         Image(systemName: "exclamationmark.triangle")
                     }
                 }
+                if item.hasError{
+                    HStack{
+                        Spacer()
+                        Text("読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください")
+                            .font(.caption)
+                    }
+                }
                 TextField("単語", text: $item.word)
             }
             Section(header: Text("詳細な設定")){
                 if item.neadVerbCheck(){
                     HStack{
-                        Toggle(isOn: $isVerb) {
+                        Toggle(isOn: $item.isVerb) {
                             Text("「\(item.mizenkeiWord)(\(item.mizenkeiRuby))」と言える")
                         }
                     }
                 }
                 HStack{
                     Spacer()
-                    Toggle(isOn: $isPersonName) {
-                        Text("人・動物などの名前である")
+                    Toggle(isOn: $item.isPersonName) {
+                        Text("人・動物・会社などの名前である")
                     }
                 }
                 HStack{
                     Spacer()
-                    Toggle(isOn: $isPlaceName) {
+                    Toggle(isOn: $item.isPlaceName) {
                         Text("場所・建物などの名前である")
                     }
                 }
 
             }
         }
+        .navigationTitle(Text("詳細設定"))
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(trailing: Button{
+            if !item.hasError{
+                self.save()
+                variables.mode = .list
+            }
+        }label: {
+            Text("完了")
+        })
+
         .onDisappear{
+            self.save()
             print("見えなくなるからここで更新処理をかける")
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)){_ in
+            self.save()
             print("バックグラウンドに入るからここで更新処理をかける")
+        }
+        .onTapGesture {
+            .closeKeyboard(<#T##self: UIApplication##UIApplication#>)
         }
 
     }
 
     func save(){
-        //userDefaultから今ある一覧を読み込む
+        if let itemIndex = variables.items.firstIndex(where: {$0.id == self.item.id}) {
+            variables.items[itemIndex] = item.makeStableData()
+        }else{
+            variables.items.append(item.makeStableData())
+        }
 
-        //一覧にデータを足すか、変更する
+        let userDictionary = UserDictionary(items: variables.items)
+        userDictionary.save()
     }
 }
