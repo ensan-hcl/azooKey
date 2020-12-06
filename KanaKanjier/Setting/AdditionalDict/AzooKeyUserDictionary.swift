@@ -14,7 +14,7 @@ final class EditableUserDictionaryData: ObservableObject {
         do{
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
 
-            return Array(string)
+            return Array(string).filter{!["\t",","," ","\0"].contains($0)}
         }catch{
             return []
         }
@@ -49,8 +49,35 @@ final class EditableUserDictionaryData: ObservableObject {
         self.word.dropLast() + "らない"
     }
 
-    var hasError: Bool {
-        return !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy{self.availableChars.contains($0)}
+    enum AppendError{
+        case rubyEmpty
+        case wordEmpty
+        case unavailableCharacter
+
+        var message: String {
+            switch self{
+            case .rubyEmpty:
+                return "読みが空です"
+            case .wordEmpty:
+                return "単語が空です"
+            case .unavailableCharacter:
+                return "読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください"
+            }
+        }
+
+    }
+
+    var error: AppendError? {
+        if ruby.isEmpty{
+            return .rubyEmpty
+        }
+        if word.isEmpty{
+            return .wordEmpty
+        }
+        if !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy{self.availableChars.contains($0)}{
+            return .unavailableCharacter
+        }
+        return nil
     }
 
     func makeStableData() -> UserDictionaryData {
@@ -161,7 +188,6 @@ struct UserDictionaryDataListView: View {
 
             Section{
                 HStack{
-                    Text("追加する")
                     Spacer()
                     Button{
                         let id = variables.items.map{$0.id}.max()
@@ -171,8 +197,11 @@ struct UserDictionaryDataListView: View {
                     }label: {
                         HStack {
                             Image(systemName: "plus")
+                            Text("追加する")
                         }
                     }
+                    Spacer()
+
                 }
             }
             let currentGroupedItems: [String: [UserDictionaryData]] = Dictionary(grouping: variables.items, by: {$0.ruby.first.map{String($0)} ?? exceptionKey}).mapValues{$0.sorted{$0.id < $1.id}}
@@ -237,20 +266,17 @@ struct UserDictionaryDataSettingView: View {
     var body: some View {
         Form {
             Section(header: Text("読みと単語")){
-                HStack{
-                    TextField("読み", text: $item.ruby)
-                    if item.hasError{
-                        Image(systemName: "exclamationmark.triangle")
-                    }
-                }
-                if item.hasError{
+                TextField("読み", text: $item.ruby)
+                    .padding(.vertical, 2)
+                TextField("単語", text: $item.word)
+                    .padding(.vertical, 2)
+                if let error = item.error{
                     HStack{
-                        Spacer()
-                        Text("読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください")
+                        Image(systemName: "exclamationmark.triangle")
+                        Text(error.message)
                             .font(.caption)
                     }
                 }
-                TextField("単語", text: $item.word)
             }
             Section(header: Text("詳細な設定")){
                 if item.neadVerbCheck(){
@@ -277,15 +303,16 @@ struct UserDictionaryDataSettingView: View {
         }
         .navigationTitle(Text("詳細設定"))
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(trailing: Button{
-            if !item.hasError{
-                self.save()
-                variables.mode = .list
+        .navigationBarItems(
+            trailing: Button{
+                if item.error == nil{
+                    self.save()
+                    variables.mode = .list
+                }
+            }label: {
+                Text("完了")
             }
-        }label: {
-            Text("完了")
-        })
-
+        )
         .onDisappear{
             self.save()
             print("見えなくなるからここで更新処理をかける")
@@ -295,19 +322,22 @@ struct UserDictionaryDataSettingView: View {
             print("バックグラウンドに入るからここで更新処理をかける")
         }
         .onTapGesture {
-            .closeKeyboard(<#T##self: UIApplication##UIApplication#>)
+            UIApplication.shared.closeKeyboard()
         }
 
     }
 
     func save(){
-        if let itemIndex = variables.items.firstIndex(where: {$0.id == self.item.id}) {
-            variables.items[itemIndex] = item.makeStableData()
-        }else{
-            variables.items.append(item.makeStableData())
+        if item.error == nil{
+            if let itemIndex = variables.items.firstIndex(where: {$0.id == self.item.id}) {
+                variables.items[itemIndex] = item.makeStableData()
+            }else{
+                variables.items.append(item.makeStableData())
+            }
+
+            let userDictionary = UserDictionary(items: variables.items)
+            userDictionary.save()
         }
 
-        let userDictionary = UserDictionary(items: variables.items)
-        userDictionary.save()
     }
 }

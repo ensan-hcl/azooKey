@@ -48,11 +48,31 @@ struct LOUDSBuilder{
         return result
     }
 
-    func process(from paths: [String], to identifier: String = "user", block: [String]){
+    func loadUserDictInfo() -> (paths: [String], blocks: [String]){
+        let paths: [String]
+        if let list = UserDefaults.standard.array(forKey: "additional_dict") as? [String]{
+            paths = list.compactMap{AdditionalDict.init(rawValue: $0)}.flatMap{$0.dictFileIdentifiers}
+        }else{
+            paths = []
+        }
+        
+        let blocks: [String]
+        if let list = UserDefaults.standard.array(forKey: "additional_dict_blocks") as? [String]{
+            blocks = list.compactMap{AdditionalDictBlockTarget.init(rawValue: $0)}.flatMap{$0.target}
+        }else{
+            blocks = []
+        }
+
+        return (paths, blocks)
+    }
+
+    func process(to identifier: String = "user"){
         let trieroot = TrieNode<Character, Int>()
+
+        let (paths, blocks) = self.loadUserDictInfo()
+
         let csvData: [[String]]
         var csvLines: [Substring] = []
-
         do{
             for path in paths{
                 let string = try String(contentsOfFile: Bundle.main.bundlePath + "/" + path, encoding: String.Encoding.utf8)
@@ -60,7 +80,7 @@ struct LOUDSBuilder{
             }
             csvData = csvLines.map{$0.components(separatedBy: "\t")}
             csvData.indices.forEach{index in
-                if !block.contains(csvData[index][1]){
+                if !blocks.contains(csvData[index][1]){
                     trieroot.insertValue(for: csvData[index][0], value: index)
                 }
             }

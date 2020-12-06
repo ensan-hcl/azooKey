@@ -104,7 +104,10 @@ struct EnableAzooKeyView: View {
                         }
                         .onAppear{
                             value.scrollTo(0, anchor: .top)
+                        }.onTapGesture {
+                            UIApplication.shared.closeKeyboard()
                         }
+
                     }
                 }
                 .id(0)

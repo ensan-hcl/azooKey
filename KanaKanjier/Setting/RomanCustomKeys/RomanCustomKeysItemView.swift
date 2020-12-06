@@ -74,6 +74,10 @@ struct RomanCustomKeysItemView: View {
             }
             .navigationBarItems(trailing: addButton2)
             .environment(\.editMode, $editMode)
+
+        }
+        .onTapGesture {
+            UIApplication.shared.closeKeyboard()
         }
         .navigationBarTitle("カスタムキー")
 

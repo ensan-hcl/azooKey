@@ -27,6 +27,18 @@ enum AdditionalDict: String {
     }
 }
 
+enum AdditionalDictBlockTarget: String {
+    case gokiburi = "gokiburi"
+
+    var target: [String] {
+        switch self{
+        case .gokiburi:
+            return ["\u{1FAB3}"]
+        }
+    }
+}
+
+
 final private class AdditionalDictManageViewModel: ObservableObject {
     @Published var kaomoji: Bool {
         didSet{
@@ -78,12 +90,13 @@ final private class AdditionalDictManageViewModel: ObservableObject {
         var blockTargets: [String] = []
         if gokiburi{
             blocklist.append("gokiburi")
-            blockTargets.append("\u{1FAB3}")    //ゴキブリの絵文字
+            blockTargets.append(contentsOf: AdditionalDictBlockTarget.gokiburi.target)    //ゴキブリの絵文字
         }
-        let builder = LOUDSBuilder(txtFileSplit: 2048)
-        builder.process(from: targets, block: blockTargets)
         UserDefaults.standard.setValue(list, forKey: "additional_dict")
         UserDefaults.standard.setValue(blocklist, forKey: "additional_dict_blocks")
+
+        let builder = LOUDSBuilder(txtFileSplit: 2048)
+        builder.process()
 
         Store.shared.noticeReloadUserDict()
     }
