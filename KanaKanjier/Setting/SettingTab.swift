@@ -105,18 +105,19 @@ struct SettingTabView: View {
                             Spacer()
                         }
                     }
-                    /*
-                    HStack{
-                        Text("レビューする")
-                        Spacer()
-                    }.onTapGesture {
 
-                        print("押されたよ")
-                        if let windowScene = UIApplication.shared.windows.first?.windowScene {
-                            SKStoreReviewController.requestReview(in: windowScene)
+                    
+                    HStack{
+                        Button{
+                            if let windowScene = UIApplication.shared.windows.first?.windowScene {
+                                SKStoreReviewController.requestReview(in: windowScene)
+                            }
+                        }label: {
+                            Text("レビューする")
                         }
-                    }
-                     */
+
+                        Spacer()
+                    }.foregroundColor(.primary)
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
                         .foregroundColor(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)

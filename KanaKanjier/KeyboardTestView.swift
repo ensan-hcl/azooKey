@@ -44,6 +44,28 @@ enum DragGestureState{
     case inactive
     case started
     case ringAppeared
+
+}
+struct TestView: View {
+    @State private var keyboardType = Store.shared.keyboardTypeSetting.value
+    var size: CGSize {
+        let screenWidth = UIScreen.main.bounds.width
+        switch keyboardType{
+        case .flick:
+            return CGSize(width: screenWidth/5.6, height: screenWidth/8)
+        case .roman:
+            return CGSize(width: screenWidth/12.2, height: screenWidth/9)
+        }
+
+    }
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 5)
+            .stroke()
+            .frame(width: size.width, height: size.height)
+            .overlay(Text("あ"))
+    }
+
 }
 
 /*
@@ -53,7 +75,7 @@ struct DoubleSwipeGesture: Gesture {
     typealias Body = <#type#>
 }
 */
-
+/*
 struct KeyButton: View {
     @State private var pressed = false
 
@@ -96,7 +118,7 @@ struct TestView: View {
         }
     }
 }
-
+*/
 /*
 struct TestView: View {
     @State private var input = ""

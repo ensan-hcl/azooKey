@@ -14,7 +14,7 @@ extension LOUDSBuilder{
         do{
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
             Self.char2UInt8 = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map{($0.element, UInt8($0.offset))})
-        }catch let error{
+        }catch{
             print("ファイルが存在しません: \(error)")
         }
 
@@ -78,7 +78,6 @@ struct LOUDSBuilder{
 
         let (paths, blocks, useradds) = self.loadUserDictInfo()
 
-        print(useradds.map{$0.dictionaryForm})
         let csvData: [[String]]
         var csvLines: [Substring] = []
         do{
@@ -93,7 +92,7 @@ struct LOUDSBuilder{
                     trieroot.insertValue(for: csvData[index][0], value: index)
                 }
             }
-        } catch let error {
+        } catch {
             print("ファイルが存在しません: \(error)")
             csvData = []
             csvLines = []

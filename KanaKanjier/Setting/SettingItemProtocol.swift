@@ -16,7 +16,6 @@ protocol Savable{
 
 extension Savable{
     static func get(_ value: Any) -> Self? {
-        print(value, type(of: self))
         return value as? Self
     }
 }
