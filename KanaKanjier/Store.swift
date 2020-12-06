@@ -78,6 +78,22 @@ class Store{
         defaultValue: .flick
     ))
 
+
+    var resultViewFontSizeSetting = SettingItemViewModel(SettingItem<FontSizeSetting>(
+        identifier: .resultViewFontSize,
+        screenName: "変換候補の表示サイズ",
+        description: "文字の大きさを指定できます",
+        defaultValue: .value(18)
+    ))
+
+    var keyViewFontSizeSetting = SettingItemViewModel(SettingItem<FontSizeSetting>(
+        identifier: .keyViewFontSize,
+        screenName: "キーの表示サイズ",
+        description: "キーの文字の大きさを指定できます。文字が大きすぎる場合表示が崩れることがあります。",
+        defaultValue: .value(-1)
+    ))
+
+
     var memorySetting = SettingItemViewModel(SettingItem<LearningType>(
         identifier: .learningType,
         screenName: "学習の使用",

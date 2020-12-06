@@ -78,6 +78,7 @@ struct LOUDSBuilder{
 
         let (paths, blocks, useradds) = self.loadUserDictInfo()
 
+        print(useradds.map{$0.dictionaryForm})
         let csvData: [[String]]
         var csvLines: [Substring] = []
         do{
@@ -85,6 +86,7 @@ struct LOUDSBuilder{
                 let string = try String(contentsOfFile: Bundle.main.bundlePath + "/" + path, encoding: String.Encoding.utf8)
                 csvLines.append(contentsOf: string.split(separator: "\n"))
             }
+            csvLines.append(contentsOf: useradds.flatMap{$0.dictionaryForm}.map{Substring($0)})
             csvData = csvLines.map{$0.components(separatedBy: "\t")}
             csvData.indices.forEach{index in
                 if !blocks.contains(csvData[index][1]){
@@ -117,7 +119,6 @@ struct LOUDSBuilder{
                 node.id = currentID
                 nodes2Characters.append(char)
                 let stringData: String = Array(node.value).sorted().map{csvLines[$0]}.joined(separator: ",")
-                print(char, stringData)
 
                 data.append(stringData)
                 bits += [Bool].init(repeating: true, count: node.children.count) + [false]

@@ -218,7 +218,7 @@ struct OpenSourceSoftWaresLicenceView: View {
 
             Section{
                 Text("Emoji-IME-Dictionary").font(.title).padding()
-                Text("本アプリケーションは顔文字への変換候補を表示するためにEmoji-IME-Dictionaryのデータを使用しています。")
+                Text("本アプリケーションは絵文字への変換候補を表示するためにEmoji-IME-Dictionaryのデータを使用しています。")
                 FallbackLink("Licence", destination: "https://github.com/peaceiris/emoji-ime-dictionary/blob/main/LICENSE")
                 FallbackLink("Emoji-IME-Dictionary", destination: "https://github.com/peaceiris/emoji-ime-dictionary")
             }

@@ -41,6 +41,40 @@ struct SettingTabView: View {
                 Section(header: Text("サウンド")){
                     BooleanSettingItemView(Store.shared.enableSoundSetting)
                 }
+                Section(header: Text("表示")){
+                    FontSizeSettingItemView(Store.shared.keyViewFontSizeSetting, availableValues: [
+                        -1,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25,
+                        26,
+                        27,
+                        28
+                    ])
+                    FontSizeSettingItemView(Store.shared.resultViewFontSizeSetting, availableValues: [
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                    ])
+                }
                 Section(header: Text("変換")){
                     BooleanSettingItemView(Store.shared.halfKanaSetting)
                     BooleanSettingItemView(Store.shared.typographyLetterSetting)

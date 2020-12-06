@@ -90,6 +90,8 @@
 		1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */; };
 		1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */; };
 		1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */; };
+		1A64A8D5257C91500022C081 /* FontSizeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8D4257C91500022C081 /* FontSizeSetting.swift */; };
+		1A64A8E0257C925E0022C081 /* FontSizeSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8DF257C925E0022C081 /* FontSizeSettingItemView.swift */; };
 		1A64C8BE251315AD00ACD537 /* DicDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicDataStore.swift */; };
 		1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */; };
 		1A65C00B250B800E00F297BF /* LatticeNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */; };
@@ -2412,6 +2414,8 @@
 		1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInformationView.swift; sourceTree = "<group>"; };
 		1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionary.swift; sourceTree = "<group>"; };
 		1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjuctionBuilder.swift; sourceTree = "<group>"; };
+		1A64A8D4257C91500022C081 /* FontSizeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSizeSetting.swift; sourceTree = "<group>"; };
+		1A64A8DF257C925E0022C081 /* FontSizeSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSizeSettingItemView.swift; sourceTree = "<group>"; };
 		1A64C8BD251315AD00ACD537 /* DicDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicDataStore.swift; sourceTree = "<group>"; };
 		1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseNumber.swift; sourceTree = "<group>"; };
 		1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatticeNodeProtocol.swift; sourceTree = "<group>"; };
@@ -4879,6 +4883,15 @@
 			path = ResultView;
 			sourceTree = "<group>";
 		};
+		1A64A8DA257C91550022C081 /* FontSizeSetting */ = {
+			isa = PBXGroup;
+			children = (
+				1A64A8D4257C91500022C081 /* FontSizeSetting.swift */,
+				1A64A8DF257C925E0022C081 /* FontSizeSettingItemView.swift */,
+			);
+			path = FontSizeSetting;
+			sourceTree = "<group>";
+		};
 		1A64C8C7251372AB00ACD537 /* DicDataStore */ = {
 			isa = PBXGroup;
 			children = (
@@ -7122,6 +7135,7 @@
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
 				1AC031632512138F004CA505 /* SettingItemProtocol.swift */,
 				1AF616B9256D40A5001A0B32 /* MemoryResetSetting */,
+				1A64A8DA257C91550022C081 /* FontSizeSetting */,
 				1ACE00712567518100899DA2 /* KeyboardTypeSetting */,
 				1ACE00722567519D00899DA2 /* LearningType */,
 				1ACE00702567515300899DA2 /* BooleanSetting */,
@@ -9561,6 +9575,7 @@
 				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
 				1AA346822567D8B100B41A16 /* UserSetting.swift in Sources */,
 				1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */,
+				1A64A8E0257C925E0022C081 /* FontSizeSettingItemView.swift in Sources */,
 				1A4057D8255841C70073C6F7 /* LearningType.swift in Sources */,
 				1AA346AA2567F15700B41A16 /* SharedStore.swift in Sources */,
 				1A9B0A6E2565797E004203BB /* ContactView.swift in Sources */,
@@ -9584,6 +9599,7 @@
 				1AB50779255ECC6C003C0BF2 /* LOUDSBuilder.swift in Sources */,
 				1ACEEFE92566601700899DA2 /* TipsViewComponent.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,
+				1A64A8D5257C91500022C081 /* FontSizeSetting.swift in Sources */,
 				1AF616BB256D40CB001A0B32 /* MemoryResetCondition.swift in Sources */,
 				1A9B0A2D25635090004203BB /* EmojiKaomojiView.swift in Sources */,
 				1A4057FD2558472B0073C6F7 /* AboutFullAccessView.swift in Sources */,

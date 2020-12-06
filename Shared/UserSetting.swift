@@ -20,6 +20,8 @@ enum Setting: String {
     case halfKana = "half_kana_candidate"
     case memoryReset = "memory_reset_setting"
     case enableSound = "sound_enable_setting"
+    case resultViewFontSize = "result_view_font_size"
+    case keyViewFontSize = "key_view_font_size"
 
     var key: String {
         self.rawValue
@@ -38,6 +40,16 @@ struct DefaultSetting{
             return false
         default:
             return nil
+        }
+    }
+
+    func getDoubleSetting(_ setting: Setting) -> Double? {
+        switch setting{
+        case .resultViewFontSize:
+            return 18
+        case .keyViewFontSize:
+            return -1
+        default: return nil
         }
     }
 

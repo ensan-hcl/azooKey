@@ -38,7 +38,8 @@ final class EditableUserDictionaryData: ObservableObject {
     }
 
     func neadVerbCheck() -> Bool {
-        return self.ruby.last == "る" && ["る", "ル"].contains(self.word.last)
+        let result = self.ruby.last == "る" && ["る", "ル"].contains(self.word.last)
+        return result
     }
 
     var mizenkeiRuby: String {
@@ -81,6 +82,9 @@ final class EditableUserDictionaryData: ObservableObject {
     }
 
     func makeStableData() -> UserDictionaryData {
+        if !self.neadVerbCheck() && isVerb{
+            isVerb = false
+        }
         return UserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
     }
 
@@ -131,10 +135,15 @@ struct UserDictionaryData: Identifiable, Codable{
 
     var dictionaryForm: [String] {
         let katakanaRuby = self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!
-        let cid: Int
         if isVerb{
-            cid = 772
-        }else if isPersonName{
+            let cid = 772
+            let conjuctions = ConjuctionBuilder.getConjugations(data: (word: word, ruby: katakanaRuby, cid: cid), addStandardForm: true)
+            return conjuctions.map{
+                "\($0.ruby)\t\($0.word)\t\($0.cid)\t\($0.cid)\t\(501)\t-5.0000"
+            }
+        }
+        let cid: Int
+        if isPersonName{
             cid = 1289
         }else if isPlaceName{
             cid = 1293
@@ -262,6 +271,11 @@ struct UserDictionaryDataListView: View {
             variables.items.remove(atOffsets: IndexSet(offsets.map{sortedIndices[$0]}))
             let userDictionary = UserDictionary(items: variables.items)
             userDictionary.save()
+
+            let builder = LOUDSBuilder(txtFileSplit: 2048)
+            builder.process()
+            Store.shared.noticeReloadUserDict()
+
         }
     }
 
@@ -350,6 +364,11 @@ struct UserDictionaryDataSettingView: View {
 
             let userDictionary = UserDictionary(items: variables.items)
             userDictionary.save()
+
+            let builder = LOUDSBuilder(txtFileSplit: 2048)
+            builder.process()
+            Store.shared.noticeReloadUserDict()
+
         }
 
     }

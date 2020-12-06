@@ -402,19 +402,31 @@ final class DesignDepartment{
         case `default`
 
         var iconFontSize: CGFloat {
-            UIFontMetrics.default.scaledValue(for: 20)
+            let userDecidedSize = Store.shared.userSetting.keyViewFontSize
+            if userDecidedSize != -1{
+                return UIFontMetrics.default.scaledValue(for: CGFloat(userDecidedSize))
+            }
+            return UIFontMetrics.default.scaledValue(for: 20)
         }
 
         var iconImageFont: Font {
-            let size = UIFontMetrics.default.scaledValue(for: 20)
+            let size = self.iconFontSize
             return Font.system(size: size, weight: .regular)
         }
 
+        var resultViewFontSize: CGFloat {
+            return CGFloat(Store.shared.userSetting.resultViewFontSize)
+        }
+
         var resultViewFont: Font {
-            .system(size: 18)
+            .system(size: CGFloat(Store.shared.userSetting.resultViewFontSize))
         }
 
         func keyLabelFont(text: String, width: CGFloat, scale: CGFloat) -> Font {
+            let userDecidedSize = Store.shared.userSetting.keyViewFontSize
+            if userDecidedSize != -1 {
+                return .system(size: CGFloat(userDecidedSize) * scale, weight: .regular, design: .default)
+            }
             let maxFontSize: Int
             switch Store.shared.keyboardType{
             case .flick:
@@ -527,6 +539,9 @@ struct UserSettingDepartment{
 
         self.learningType = Self.learningTypeSetting(.inputAndOutput)
 
+        self.resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? 18
+        self.keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
+
         if Self.checkResetSetting(){
             Store.shared.sendToDicDataStore(.resetMemory)
         }
@@ -566,6 +581,9 @@ struct UserSettingDepartment{
     var soundSetting: Bool = Self.getBoolSetting(.enableSound)
     var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput, initialize: true)
 
+    var resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? 18
+    var keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
+
     static func getBoolSetting(_ setting: Setting) -> Bool {
         if let object = Self.userDefaults.object(forKey: setting.key), let bool = object as? Bool{
             return bool
@@ -573,6 +591,15 @@ struct UserSettingDepartment{
             return bool
         }
         return false
+    }
+
+    static func getDoubleSetting(_ setting: Setting) -> Double? {
+        if let object = Self.userDefaults.object(forKey: setting.key), let value = object as? Double{
+            return value
+        }else if let value = DefaultSetting.shared.getDoubleSetting(setting){
+            return value
+        }
+        return nil
     }
 
     static func learningTypeSetting(_ current: LearningType, initialize: Bool = false) -> LearningType {

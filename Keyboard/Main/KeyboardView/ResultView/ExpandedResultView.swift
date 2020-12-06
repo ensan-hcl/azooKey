@@ -78,7 +78,7 @@ struct ExpandedResultModel{
         var curSum: CGFloat = .zero
         var splited: [SplitedResultData] = []
         var curResult: [ResultData] = []
-        let font = UIFont.systemFont(ofSize: 19)
+        let font = UIFont.systemFont(ofSize: Store.shared.design.fonts.resultViewFontSize+1)
         results.forEach{[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
             if !Store.shared.design.isOverScreenWidth(curSum + width){

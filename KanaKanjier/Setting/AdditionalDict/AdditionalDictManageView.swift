@@ -115,30 +115,25 @@ struct AdditionalDictManageViewMain: View {
     }
 
     var body: some View {
-            Section(header: Text("利用するもの")){
-                HStack{
-                    Text("絵文字")
-                    Text("🥺🌎♨️")
-                    Spacer()
-                    Toggle(isOn: $viewModel.emoji, label: {})
-                }
-                HStack{
-                    Text("顔文字")
-                    Text("(◍•ᴗ•◍)")
-                    Spacer()
-                    Toggle(isOn: $viewModel.kaomoji, label: {})
-                }
+        Section(header: Text("利用するもの")){
+            Toggle(isOn: $viewModel.emoji){
+                Text("絵文字")
+                Text("🥺🌎♨️")
             }
-            if self.style == .all{
-                if #available(iOS 14.2, *){
-                    Section(header: Text("不快な絵文字を表示しない")){
-                        HStack{
-                            Text("ゴキブリの絵文字を非表示")
-                            Toggle(isOn: $viewModel.gokiburi, label: {})
-                        }
+            Toggle(isOn: $viewModel.kaomoji){
+                Text("顔文字")
+                Text("(◍•ᴗ•◍)")
+            }
+        }
+        if self.style == .all{
+            if #available(iOS 14.2, *){
+                Section(header: Text("不快な絵文字を表示しない")){
+                    Toggle(isOn: $viewModel.gokiburi){
+                        Text("ゴキブリの絵文字を非表示")
                     }
                 }
             }
+        }
     }
 }
 
