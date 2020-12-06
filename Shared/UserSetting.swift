@@ -45,9 +45,7 @@ struct DefaultSetting{
 
     func getDoubleSetting(_ setting: Setting) -> Double? {
         switch setting{
-        case .resultViewFontSize:
-            return 18
-        case .keyViewFontSize:
+        case .resultViewFontSize, .keyViewFontSize:
             return -1
         default: return nil
         }

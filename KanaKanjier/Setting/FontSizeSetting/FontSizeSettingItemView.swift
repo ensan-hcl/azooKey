@@ -10,13 +10,21 @@
 import SwiftUI
 
 struct FontSizeSettingItemView: View {
+    enum Target{
+        case key
+        case result
+    }
+
     let availableValues: [FontSizeSetting]
+    let target: Target
+
     typealias ItemViewModel = SettingItemViewModel<FontSizeSetting>
     typealias ItemModel = SettingItem<FontSizeSetting>
 
-    init(_ viewModel: ItemViewModel, availableValues: [FontSizeSetting]){
+    init(_ viewModel: ItemViewModel, _ target: Target, availableValues: [FontSizeSetting]){
         self.item = viewModel.item
         self.viewModel = viewModel
+        self.target = target
         self.availableValues = availableValues
     }
     
@@ -35,9 +43,17 @@ struct FontSizeSettingItemView: View {
                         Image(systemName: "info.circle")
                     }
                 }
-                Text("サンプル")
-                    .font(.system(size: CGFloat(viewModel.value.saveValue == -1 ? 18 : CGFloat(viewModel.value.saveValue))))
-                    .underline()
+                let size = CGFloat(viewModel.value.saveValue == -1 ? 18 : viewModel.value.saveValue)
+                switch self.target{
+                case .key:
+                    KeyView(fontSize: size)
+                    
+                case .result:
+                    Text("サンプル")
+                        .font(.system(size: size))
+                        .underline()
+                        .padding()
+                }
             }
             Spacer()
             Picker(selection: $viewModel.value, label: Text("")) {
@@ -59,4 +75,30 @@ struct FontSizeSettingItemView: View {
 
     }
 
+}
+struct KeyView: View {
+    @ObservedObject private var storeVariableSection = Store.variableSection
+    let fontSize: CGFloat
+
+    init(fontSize: CGFloat){
+        self.fontSize = fontSize
+    }
+
+    var size: CGSize {
+        let screenWidth = UIScreen.main.bounds.width
+        switch storeVariableSection.KeyboardType{
+        case .flick:
+            return CGSize(width: screenWidth/5.6, height: screenWidth/8)
+        case .roman:
+            return CGSize(width: screenWidth/12.2, height: screenWidth/9)
+        }
+
+    }
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 5)
+            .stroke()
+            .frame(width: size.width, height: size.height)
+            .overlay(Text("あ").font(.system(size: fontSize)))
+    }
 }

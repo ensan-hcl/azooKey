@@ -42,7 +42,7 @@ struct SettingTabView: View {
                     BooleanSettingItemView(Store.shared.enableSoundSetting)
                 }
                 Section(header: Text("表示")){
-                    FontSizeSettingItemView(Store.shared.keyViewFontSizeSetting, availableValues: [
+                    FontSizeSettingItemView(Store.shared.keyViewFontSizeSetting, .key, availableValues: [
                         -1,
                         15,
                         16,
@@ -59,7 +59,8 @@ struct SettingTabView: View {
                         27,
                         28
                     ])
-                    FontSizeSettingItemView(Store.shared.resultViewFontSizeSetting, availableValues: [
+                    FontSizeSettingItemView(Store.shared.resultViewFontSizeSetting, .result, availableValues: [
+                        -1,
                         12,
                         13,
                         14,

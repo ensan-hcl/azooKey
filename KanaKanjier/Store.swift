@@ -17,7 +17,7 @@ class Store{
     var halfKanaSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .halfKana,
         screenName: "半角カナ変換",
-        description: "半角ｶﾀｶﾅへの変換を候補に表示します。",
+        description: "半角ｶﾀｶﾅへの変換を候補に表示します",
         defaultValue: true
     ))
 

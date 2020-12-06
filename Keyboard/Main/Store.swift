@@ -415,11 +415,12 @@ final class DesignDepartment{
         }
 
         var resultViewFontSize: CGFloat {
-            return CGFloat(Store.shared.userSetting.resultViewFontSize)
+            let size = Store.shared.userSetting.resultViewFontSize
+            return CGFloat(size == -1 ? 18: size)
         }
 
         var resultViewFont: Font {
-            .system(size: CGFloat(Store.shared.userSetting.resultViewFontSize))
+            .system(size: resultViewFontSize)
         }
 
         func keyLabelFont(text: String, width: CGFloat, scale: CGFloat) -> Font {
@@ -539,7 +540,7 @@ struct UserSettingDepartment{
 
         self.learningType = Self.learningTypeSetting(.inputAndOutput)
 
-        self.resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? 18
+        self.resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
         self.keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
 
         if Self.checkResetSetting(){
@@ -581,7 +582,7 @@ struct UserSettingDepartment{
     var soundSetting: Bool = Self.getBoolSetting(.enableSound)
     var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput, initialize: true)
 
-    var resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? 18
+    var resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
     var keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
 
     static func getBoolSetting(_ setting: Setting) -> Bool {
