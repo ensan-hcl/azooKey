@@ -97,7 +97,6 @@ final private class AdditionalDictManageViewModel: ObservableObject {
 
         let builder = LOUDSBuilder(txtFileSplit: 2048)
         builder.process()
-
         Store.shared.noticeReloadUserDict()
     }
 

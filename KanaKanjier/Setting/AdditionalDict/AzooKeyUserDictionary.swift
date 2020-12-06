@@ -104,12 +104,10 @@ struct UserDictionary: Codable {
         }else{
             saveData = Data()
         }
-        let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-        userDefaults.set(saveData, forKey: "user_dict")
+        UserDefaults.standard.set(saveData, forKey: "user_dict")
     }
     static func get() -> Self? {
-        let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-        if let value = userDefaults.value(forKey: "user_dict") as? Data{
+        if let value = UserDefaults.standard.value(forKey: "user_dict") as? Data{
             let decoder = JSONDecoder()
             if let userDictionary = try? decoder.decode(UserDictionary.self, from: value) {
                 return userDictionary
@@ -129,6 +127,21 @@ struct UserDictionaryData: Identifiable, Codable{
 
     func makeEditableData() -> EditableUserDictionaryData {
         return EditableUserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
+    }
+
+    var dictionaryForm: [String] {
+        let katakanaRuby = self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!
+        let cid: Int
+        if isVerb{
+            cid = 772
+        }else if isPersonName{
+            cid = 1289
+        }else if isPlaceName{
+            cid = 1293
+        }else{
+            cid = 1288
+        }
+        return ["\(katakanaRuby)\t\(word)\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
     }
 
     static func emptyData(id: Int) -> Self {

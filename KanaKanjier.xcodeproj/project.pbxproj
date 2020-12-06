@@ -89,6 +89,7 @@
 		1A60058525275CB9008E2B92 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1A60058425275CB9008E2B92 /* Settings.bundle */; };
 		1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */; };
 		1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */; };
+		1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */; };
 		1A64C8BE251315AD00ACD537 /* DicDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicDataStore.swift */; };
 		1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */; };
 		1A65C00B250B800E00F297BF /* LatticeNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */; };
@@ -2410,6 +2411,7 @@
 		1A60058425275CB9008E2B92 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInformationView.swift; sourceTree = "<group>"; };
 		1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionary.swift; sourceTree = "<group>"; };
+		1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjuctionBuilder.swift; sourceTree = "<group>"; };
 		1A64C8BD251315AD00ACD537 /* DicDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicDataStore.swift; sourceTree = "<group>"; };
 		1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseNumber.swift; sourceTree = "<group>"; };
 		1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatticeNodeProtocol.swift; sourceTree = "<group>"; };
@@ -7099,6 +7101,7 @@
 			isa = PBXGroup;
 			children = (
 				1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */,
+				1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */,
 				1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */,
 			);
 			path = AdditionalDict;
@@ -9577,6 +9580,7 @@
 				1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */,
 				1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */,
 				1ACE00752567525000899DA2 /* RomanCustomKeys.swift in Sources */,
+				1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */,
 				1AB50779255ECC6C003C0BF2 /* LOUDSBuilder.swift in Sources */,
 				1ACEEFE92566601700899DA2 /* TipsViewComponent.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,

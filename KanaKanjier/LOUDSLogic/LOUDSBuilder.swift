@@ -48,7 +48,7 @@ struct LOUDSBuilder{
         return result
     }
 
-    func loadUserDictInfo() -> (paths: [String], blocks: [String]){
+    func loadUserDictInfo() -> (paths: [String], blocks: [String], useradds: [UserDictionaryData]){
         let paths: [String]
         if let list = UserDefaults.standard.array(forKey: "additional_dict") as? [String]{
             paths = list.compactMap{AdditionalDict.init(rawValue: $0)}.flatMap{$0.dictFileIdentifiers}
@@ -63,13 +63,20 @@ struct LOUDSBuilder{
             blocks = []
         }
 
-        return (paths, blocks)
+        let useradds: [UserDictionaryData]
+        if let dictionary = UserDictionary.get(){
+            useradds = dictionary.items
+        }else{
+            useradds = []
+        }
+
+        return (paths, blocks, useradds)
     }
 
     func process(to identifier: String = "user"){
         let trieroot = TrieNode<Character, Int>()
 
-        let (paths, blocks) = self.loadUserDictInfo()
+        let (paths, blocks, useradds) = self.loadUserDictInfo()
 
         let csvData: [[String]]
         var csvLines: [Substring] = []
