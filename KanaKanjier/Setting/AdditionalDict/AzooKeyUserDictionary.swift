@@ -345,6 +345,7 @@ struct UserDictionaryDataSettingView: View {
                 if item.error == nil{
                     self.save()
                     variables.mode = .list
+                    Store.shared.feedbackGenerator.notificationOccurred(.success)
                 }
             }label: {
                 Text("完了")
@@ -376,8 +377,6 @@ struct UserDictionaryDataSettingView: View {
             let builder = LOUDSBuilder(txtFileSplit: 2048)
             builder.process()
             Store.shared.noticeReloadUserDict()
-
         }
-
     }
 }

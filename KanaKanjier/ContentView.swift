@@ -19,7 +19,7 @@ struct ContentView: View {
                     .tabItem {
                         VStack {
                             Image(systemName: "lightbulb.fill").font(.system(size: 20, weight: .light)).foregroundColor(.systemGray2)
-                            Text("ヒント")
+                            Text("使い方")
                         }
                     }
                     .tag(0)
@@ -32,6 +32,7 @@ struct ContentView: View {
                         }
                     }
                     .tag(1)
+                /*
                 TestView()
                     .tabItem {
                         VStack {
@@ -40,7 +41,7 @@ struct ContentView: View {
                         }
                     }
                     .tag(2)
-
+                */
 
             }.fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()

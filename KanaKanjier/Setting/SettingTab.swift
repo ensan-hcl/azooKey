@@ -21,7 +21,7 @@ struct SettingTabView: View {
                 }
                 switch storeVariableSection.KeyboardType{
                 case .flick:
-                    Section(header: Text("カスタムキー")){
+                    Section(header: Text("カスタムキー"), footer: Text("\(Image(systemName: "doc.on.clipboard"))を長押しでペースト")){
                         Text(Store.shared.koganaKeyFlickSetting.item.description)
                         ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
                         KeyFlickSettingItemView(Store.shared.koganaKeyFlickSetting)
@@ -107,7 +107,6 @@ struct SettingTabView: View {
                         }
                     }
 
-                    
                     HStack{
                         Button{
                             if let windowScene = UIApplication.shared.windows.first?.windowScene {

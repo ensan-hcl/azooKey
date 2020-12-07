@@ -96,22 +96,22 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   - language: 言語コード。現在は`en-US`のみ対応している。
     /// - Returns:
     ///   予測変換候補
-    private func getForeignPredictionCandidate(inputData: InputData, language: String) -> [Candidate] {
+    private func getForeignPredictionCandidate(inputData: InputData, language: String, penalty: PValue = -5) -> [Candidate] {
         switch language{
         case "en-US":
             var result: [Candidate] = []
-            let ruby = inputData.string
+            let ruby = String(inputData.characters)
             let range = NSMakeRange(0, ruby.utf16.count)
             if !ruby.onlyRomanAlphabet{
                 return result
             }
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language){
                 if !completions.isEmpty{
-                    let data = [LRE_SRE_DicDataElement(ruby: ruby, cid: 1288, mid: 501, value: -5)]
-                    let candidate: Candidate = Candidate(text: ruby, value: -5, visibleString: ruby, rcid: 1288, lastMid: 501, data: data)
+                    let data = [LRE_SRE_DicDataElement(ruby: ruby, cid: 1288, mid: 501, value: penalty)]
+                    let candidate: Candidate = Candidate(text: ruby, value: penalty, visibleString: ruby, rcid: 1288, lastMid: 501, data: data)
                     result.append(candidate)
                 }
-                var value: PValue = -10
+                var value: PValue = -5 + penalty
                 let delta: PValue = -10/PValue(completions.count)
                 completions.forEach{word in
                     let data = [LRE_SRE_DicDataElement(ruby: word, cid: 1288, mid: 501, value: value)]
@@ -171,6 +171,21 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         return candidates
     }
 
+    ///トップレベルに追加する付加的な変換候補を生成する関数
+    /// - Parameters:
+    ///   - inputData: 変換対象のInputData。
+    /// - Returns:
+    ///   付加的な変換候補
+    private func getTopLevelAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
+        var candidates: [Candidate] = []
+
+        switch Store.shared.keyboardType{
+        case .flick: break
+        case .roman:
+            candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US", penalty: -10))
+        }
+        return candidates
+    }
     ///付加的な変換候補を生成する関数
     /// - Parameters:
     ///   - inputData: 変換対象のInputData。
@@ -178,26 +193,28 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   付加的な変換候補
     private func getAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
         var candidates: [Candidate] = []
+        let string = inputData.katakanaString
         do{
-            let data = LRE_SRE_DicDataElement(ruby: inputData.string, cid: 1288, mid: 501, value: -14)
+            let data = LRE_SRE_DicDataElement(ruby: string, cid: 1288, mid: 501, value: -14)
             //カタカナ
             let katakana = Candidate(
-                text: inputData.string,
+                text: string,
                 value: -14,
-                visibleString: inputData.string,
+                visibleString: string,
                 rcid: 1288,
                 lastMid: 501,
                 data: [data]
             )
             candidates.append(katakana)
         }
+        let hiraganaString = string.applyingTransform(.hiraganaToKatakana, reverse: true)!
         do{
-            let data = LRE_DicDataElement(word: inputData.hiraganaString, ruby: inputData.string, cid: 1288, mid: 501, value: -14.5)
+            let data = LRE_DicDataElement(word: hiraganaString, ruby: string, cid: 1288, mid: 501, value: -14.5)
 
             let hiragana = Candidate(
-                text: inputData.hiraganaString,
+                text: hiraganaString,
                 value: -14.5,
-                visibleString: inputData.string,
+                visibleString: string,
                 rcid: 1288,
                 lastMid: 501,
                 data: [data]
@@ -205,12 +222,12 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             candidates.append(hiragana)
         }
         if Store.shared.userSetting.halfWidthKatakanaSetting{
-            let string = inputData.string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
-            let data = LRE_DicDataElement(word: string, ruby: inputData.string, cid: 1288, mid: 501, value: -15)
+            let string = string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
+            let data = LRE_DicDataElement(word: string, ruby: string, cid: 1288, mid: 501, value: -15)
             let halfWidthKatakana = Candidate(
                 text: string,
                 value: -15,
-                visibleString: inputData.string,
+                visibleString: string,
                 rcid: 1288,
                 lastMid: 501,
                 data: [data]
@@ -285,8 +302,10 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         print("処理3全体:", -start3.timeIntervalSinceNow)
         let start4 = Date()
 
+
+        let toplevel_additional_candidate = self.getTopLevelAdditionalCandidate(inputData)
         //文全体を変換するパターン
-        let full_candidate = getUniqueCandidate(best10+zeroHintPrediction_candidates + english_candidates).sorted{$0.value>$1.value}.prefix(5)
+        let full_candidate = getUniqueCandidate(best10 + english_candidates + (zeroHintPrediction_candidates + toplevel_additional_candidate)).sorted{$0.value>$1.value}.prefix(5)
         //重複のない変換候補を作成するための集合
         var seenCandidate: Set<String> = Set(full_candidate.map{$0.text})
         print("処理4:", -start4.timeIntervalSinceNow)
@@ -296,7 +315,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let clause_candidates = self.getUniqueCandidate(clauseCandidates.filter{!seenCandidate.contains($0.text)}).sorted{$0.value>$1.value}.prefix(5)
         seenCandidate.formUnion(clause_candidates.map{$0.text})
         //賢く変換するパターン
-        let wise_candidates: [Candidate] = self.getWiseCandidate(string: inputData.string)
+        let wise_candidates: [Candidate] = self.getWiseCandidate(string: inputData.katakanaString)
         seenCandidate.formUnion(wise_candidates.map{$0.text})
 
         //最初の辞書データ

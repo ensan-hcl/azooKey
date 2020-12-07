@@ -32,13 +32,11 @@ struct SettingItem <Value: Savable> {
     ///設定の名前
     var identifier: Setting
     var screenName: String
-    var description: String
     var value: Value
     
-    init(identifier: Setting, screenName: String, description: String, defaultValue: Value){
+    init(identifier: Setting, screenName: String, defaultValue: Value){
         self.identifier = identifier
         self.screenName = screenName
-        self.description = description
         let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
         if let __value = userDefaults.value(forKey: identifier.key), let _value = Value.get(__value){
             self.value = _value
@@ -46,6 +44,10 @@ struct SettingItem <Value: Savable> {
             self.value = defaultValue
             userDefaults.setValue(defaultValue.saveValue, forKey: identifier.key)
         }
+    }
+
+    var description: String {
+        identifier.explanation
     }
 
     func save(_ value: Value){

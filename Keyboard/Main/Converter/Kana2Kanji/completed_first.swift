@@ -18,11 +18,10 @@ extension Kana2Kanji{
         let count = inputData.count
         //(1)
         let start = LatticeNode.RegisteredNode.BOSNode()
-        //let start = PreviousNodes(LatticeNode.PreviousNode.BOSNode)
         let nodes: Nodes = previousResult.nodes.suffix(count)
         nodes.indices.forEach{(i: Int) in
             if i == .zero{
-                nodes[0].forEach{
+                nodes[i].forEach{
                     $0.prevs = [start]
                 }
             }else{

@@ -11,8 +11,7 @@ import Foundation
 /// 入力を管理するInputDataのprotocol
 /// - Note:structに対して付与すること。
 protocol InputDataProtocol{
-    var hiraganaString: String  {get}
-    var string: String          {get}
+    var katakanaString: String  {get}
     var characters: [Character] {get}
     var count: Int              {get}
     
@@ -55,7 +54,7 @@ extension InputDataProtocol{
     }
     
     internal func isAfterDeletedPrefixCharacter(previous: Self) -> Int? {
-        if previous.string.hasSuffix(self.string){
+        if previous.katakanaString.hasSuffix(self.katakanaString){
             let dif = previous.characters.count - self.characters.count
             if dif == 0{
                 return nil

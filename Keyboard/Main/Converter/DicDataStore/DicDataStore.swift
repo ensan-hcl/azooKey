@@ -316,7 +316,6 @@ final class DicDataStore{
                 self.mmValue = [PValue].init(repeating: .zero, count: self.midCount*self.midCount)
             }
         }
-        print("userDictを初めて読み込みます")
         self.loadLOUDS(identifier: "user")
     }
 
@@ -340,9 +339,7 @@ final class DicDataStore{
     }
 
     private func reloadUserDict(){
-        print("userDictを再読み込みします。",Date())
         self.loadLOUDS(identifier: "user")
-        print("userDictを再読み込みしました。")
     }
 
     ///ペナルティ関数。文字数で決める。
@@ -352,7 +349,11 @@ final class DicDataStore{
 
     ///計算時に利用。無視すべきデータかどうか。
     private func shouldBeRemoved(value: PValue, wordCount: Int) -> Bool {
-        return value - 2.0/PValue(wordCount) < self.treshold
+        let d = value - self.treshold
+        if d < 0{
+            return true
+        }
+        return 2.0/PValue(wordCount) < d
     }
 
     ///計算時に利用。無視すべきデータかどうか。

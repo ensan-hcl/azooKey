@@ -9,8 +9,7 @@
 import Foundation
 
 struct RomanInputData: InputDataProtocol {
-    internal let hiraganaString: String
-    internal let string: String
+    internal let katakanaString: String
     internal let characters: [Character]
     ///kana2Latticeにおける分割数だと思うこと。
     internal let count: Int
@@ -25,8 +24,7 @@ struct RomanInputData: InputDataProtocol {
             self.history = KanaRomanStateHolder(components: Array(history.components.prefix(index + 1)))
         }
         print(history.components, self.history.components)
-        self.hiraganaString = input
-        self.string = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
+        self.katakanaString = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
         let romanString = self.history.components.map{$0.internalText}.joined()   //split由来のデータではかな文字が含まれる
         self.count = romanString.count
         self.characters = Array(romanString)
@@ -115,6 +113,37 @@ struct RomanInputData: InputDataProtocol {
         return finalResult
     }
     
+}
+
+
+extension RomanInputData{
+    fileprivate static func getTypo(_ string: String) -> [String] {
+        let count = string.count
+        if count > 1{
+            return Self.possibleTypo[string, default: []]
+        }
+        if count == 1{
+            var result = Self.possibleTypo[string, default: []]
+            result.append(string)
+            return result
+        }
+        return []
+    }
+
+    private static let lengths = [0,1]
+
+    private static let possibleTypo: [String: [String]] = [
+        "bs": ["ba"],
+        "no": ["bo"],
+        "li": ["ki"],
+        "lo": ["ko"],
+        "lu": ["ku"],
+        "my": ["mu"],
+        "tp": ["to"],
+        "ts": ["ta"],
+        "wi": ["wo"],
+        "pu": ["ou"],
+    ]
 }
 
 extension RomanInputData{
@@ -255,32 +284,4 @@ private struct RomanKanaConvertingLattice{
         }
     }
 
-}
-
-extension RomanInputData{
-    fileprivate static func getTypo(_ string: String) -> [String] {
-        let count = string.count
-        if count > 1{
-            return Self.possibleTypo[string, default: []]
-        }
-        if count == 1{
-            var result = Self.possibleTypo[string, default: []]
-            result.append(string)
-            return result
-        }
-        return []
-    }
-
-    private static let lengths = [0,2]
-
-    private static let possibleTypo: [String: [String]] = [
-        "bs": ["ba"],
-        "li": ["ki"],
-        "lo": ["ko"],
-        "lu": ["ku"],
-        "my": ["mu"],
-        "tp": ["to"],
-        "ts": ["ta"],
-        "wi": ["wo"],
-    ]
 }

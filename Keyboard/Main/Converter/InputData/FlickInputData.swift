@@ -9,21 +9,19 @@
 import Foundation
 
 struct FlickInputData: InputDataProtocol{
-    internal let hiraganaString: String
-    internal let string: String
+    internal let katakanaString: String
     internal let characters: [Character]
     internal let count: Int
     
     init(_ input: String){
-        self.hiraganaString = input
         self.count = input.count
-        self.string = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
-        self.characters = Array(self.string)
+        self.katakanaString = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
+        self.characters = Array(self.katakanaString)
     }
 
     subscript(_ range: ClosedRange<Int>) -> String {
         get{
-            return String(self.string[range])
+            return String(self.katakanaString[range])
         }
     }
 
