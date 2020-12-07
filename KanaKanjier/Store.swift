@@ -12,6 +12,7 @@ import SwiftUI
 class Store{
     static let shared = Store()
     static var variableSection = StoreVariableSection()
+    var feedbackGenerator = UINotificationFeedbackGenerator()
     private init(){}
 
     var halfKanaSetting = SettingItemViewModel(SettingItem<Bool>(

@@ -26,19 +26,28 @@ struct KeyFlickSettingItemView: View {
     var body: some View {
         VStack{
             HStack{
-                Image(systemName: "arrow.left")
-                Text("左フリック")
+                Text("\(Image(systemName: "arrow.left"))左フリック")
                 TextField("入力する文字", text: $viewModel.value.left)
+                    .padding(.vertical, 2)
+                Divider()
+                PasteLongPressButton($viewModel.value.left)
+                    .padding(.horizontal, 5)
             }
             HStack{
-                Image(systemName: "arrow.up")
-                Text("上フリック")
+                Text("\(Image(systemName: "arrow.up"))上フリック")
                 TextField("入力する文字", text: $viewModel.value.top)
+                    .padding(.vertical, 2)
+                Divider()
+                PasteLongPressButton($viewModel.value.top)
+                    .padding(.horizontal, 5)
             }
             HStack{
-                Image(systemName: "arrow.right")
-                Text("右フリック")
+                Text("\(Image(systemName: "arrow.right"))右フリック")
                 TextField("入力する文字", text: $viewModel.value.right)
+                    .padding(.vertical, 2)
+                Divider()
+                PasteLongPressButton($viewModel.value.right)
+                    .padding(.horizontal, 5)
             }
 
         }

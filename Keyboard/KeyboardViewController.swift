@@ -63,6 +63,8 @@ final class KeyboardViewController: UIInputViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         current("appear")
+        //print(textDocumentProxy.documentIdentifier)
+        //print(UIPasteboard.general.string)
         self.registerScreenActualSize()
         super.viewDidAppear(animated)
         let window = self.view.window!

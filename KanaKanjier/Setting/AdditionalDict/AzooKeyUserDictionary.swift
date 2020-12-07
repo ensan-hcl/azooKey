@@ -292,11 +292,21 @@ struct UserDictionaryDataSettingView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("読みと単語")){
-                TextField("読み", text: $item.ruby)
-                    .padding(.vertical, 2)
-                TextField("単語", text: $item.word)
-                    .padding(.vertical, 2)
+            Section(header: Text("読みと単語"), footer: Text("\(Image(systemName: "doc.on.clipboard"))を長押しでペースト")){
+                HStack{
+                    TextField("読み", text: $item.ruby)
+                        .padding(.vertical, 2)
+                    Divider()
+                    PasteLongPressButton($item.ruby)
+                        .padding(.horizontal, 5)
+                }
+                HStack{
+                    TextField("単語", text: $item.word)
+                        .padding(.vertical, 2)
+                    Divider()
+                    PasteLongPressButton($item.word)
+                        .padding(.horizontal, 5)
+                }
                 if let error = item.error{
                     HStack{
                         Image(systemName: "exclamationmark.triangle")
@@ -342,11 +352,9 @@ struct UserDictionaryDataSettingView: View {
         )
         .onDisappear{
             self.save()
-            print("見えなくなるからここで更新処理をかける")
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)){_ in
             self.save()
-            print("バックグラウンドに入るからここで更新処理をかける")
         }
         .onTapGesture {
             UIApplication.shared.closeKeyboard()
