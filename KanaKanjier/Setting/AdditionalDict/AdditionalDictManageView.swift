@@ -139,11 +139,10 @@ struct AdditionalDictManageViewMain: View {
 
 struct AdditionalDictManageView: View {
     var body: some View {
-        NavigationView {
-            Form {
-                AdditionalDictManageViewMain()
-            }
-        }.navigationBarTitle(Text("絵文字と顔文字"), displayMode: .inline)
+        Form {
+            AdditionalDictManageViewMain()
+        }
+        .navigationBarTitle(Text("絵文字と顔文字"), displayMode: .inline)
     }
 }
 
