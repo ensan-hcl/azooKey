@@ -353,7 +353,7 @@ final class DicDataStore{
         if d < 0{
             return true
         }
-        return 2.0/PValue(wordCount) < d
+        return 2.0/PValue(wordCount) < -d
     }
 
     ///計算時に利用。無視すべきデータかどうか。
@@ -365,11 +365,11 @@ final class DicDataStore{
         ){
             return true
         }
-        let value = data.value()
-        if value < self.treshold{
+        let d = data.value() - self.treshold
+        if d < 0{
             return true
         }
-        return value + self.getPenalty(data: data) < self.treshold
+        return self.getPenalty(data: data) < -d
     }
 
     private func loadLOUDS(identifier: String){

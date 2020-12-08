@@ -136,7 +136,7 @@ class TextFileSpliting: XCTestCase {
         
     }
     
-    /*
+
      func testPerformanceGetNthLine4() throws{
      print()
      self.measure {
@@ -161,7 +161,7 @@ class TextFileSpliting: XCTestCase {
      }
      
      }
-     */
+
     func testPerformanceGetNthLine3() throws{
         print()
         self.measure {
@@ -235,16 +235,17 @@ class TextFileSpliting: XCTestCase {
         print()
         self.measure {
             do{
-                guard let path = Bundle(for: type(of: self)).path(forResource: "aozora", ofType: "csv") else {
+                guard let path = Bundle(for: type(of: self)).path(forResource: "シ0", ofType: "loudstxt") else {
                     print("ファイルが存在しません")
                     return
                 }
                 print("ファイルが存在しました")
                 
-                let string = try String(contentsOfFile: path, encoding: String.Encoding.utf8).components(separatedBy: .newlines)
+                let strings = try String(contentsOfFile: path, encoding: .utf8).split(separator: "\n", omittingEmptySubsequences: false)
+                let result = (0..<1700).map{strings[$0]}
+
             } catch let error {
                 print("ファイルが存在しません: \(error)")
-                let string = ""
             }
             
         }
@@ -257,7 +258,7 @@ class TextFileSpliting: XCTestCase {
             
             let data:Data
             do{
-                guard let path = Bundle(for: type(of: self)).path(forResource: "aozora", ofType: "csv") else {
+                guard let path = Bundle(for: type(of: self)).path(forResource: "シ0", ofType: "loudstxt") else {
                     print("ファイルが存在しません")
                     return
                 }
@@ -339,7 +340,7 @@ class TextFileSpliting: XCTestCase {
             
             let data:Data
             do{
-                guard let path = Bundle(for: type(of: self)).path(forResource: "aozora", ofType: "csv") else {
+                guard let path = Bundle(for: type(of: self)).path(forResource: "シ0", ofType: "loudstxt") else {
                     print("ファイルが存在しません")
                     return
                 }
@@ -350,21 +351,22 @@ class TextFileSpliting: XCTestCase {
                 print("ファイルが存在しません: \(error)")
                 data = Data()
             }
-            let indices = [1000, 2000, 5000, 8000, 10000, 12000, 15000, 17000].sorted()
+            let indices = (0..<1700)
             var indicesIterator = indices.makeIterator()
             guard var targetIndex = indicesIterator.next() else{
                 return
             }
-            let bytes:[String] = data.withUnsafeBytes {
+            let newLineNumber = UInt8(ascii: "\n")
+            let bytes: [String] = data.withUnsafeBytes {
                 var results:[String] = []
                 results.reserveCapacity(indices.count)
                 var result:[UInt8] = []
                 var count = 0
-                let newLineNumber = UInt8(ascii: "\n")
                 for byte in $0{
                     let isNewLine = byte == newLineNumber
                     if count == targetIndex && !isNewLine{
                         result.append(byte)
+                        continue
                     }
                     
                     if count > targetIndex{
@@ -383,14 +385,132 @@ class TextFileSpliting: XCTestCase {
                     }
                     
                     if isNewLine{
-                        count = count &+ 1
+                        count &+= 1
                     }
                 }
                 return results
             }
-            
-            print(bytes)
+
         }
     }
-    
+
+    func testPerformanceGetNthLine8() throws{
+        print()
+
+        self.measure {
+
+            let data:Data
+            do{
+                guard let path = Bundle(for: type(of: self)).path(forResource: "シ0", ofType: "loudstxt") else {
+                    print("ファイルが存在しません")
+                    return
+                }
+                print("ファイルが存在しました")
+                let url = URL(fileURLWithPath: path)
+                data = try Data(contentsOf: url)
+            } catch let error {
+                print("ファイルが存在しません: \(error)")
+                data = Data()
+            }
+            let indices = (0..<1700)
+            var indicesIterator = indices.makeIterator()
+            guard var targetIndex = indicesIterator.next() else{
+                return
+            }
+            let newLineNumber = UInt8(ascii: "\n")
+
+            let bytes: [String] = data.withUnsafeBytes {
+                var results:[String] = []
+                results.reserveCapacity(indices.count)
+                var result:[UInt8] = []
+                var count = 0
+                for byte in $0{
+                    let isNewLine = byte == newLineNumber
+                    if count == targetIndex && !isNewLine{
+                        result.append(byte)
+                        continue
+                    }
+
+                    if count > targetIndex{
+                        results.append(String(decoding: result, as: UTF8.self))
+                        result = []
+                        if let _targetIndex = indicesIterator.next(){
+                            targetIndex = _targetIndex
+                            if count == targetIndex{
+                                result.append(byte)
+                            }
+                        }else{
+                            break
+                        }
+                    }
+
+                    if isNewLine{
+                        count &+= 1
+                    }
+                }
+                return results
+            }
+        }
+    }
+
+    func testPerformanceGetNthLine9() throws{
+        print()
+
+        self.measure {
+
+            var data: String
+            do{
+                guard let path = Bundle(for: type(of: self)).path(forResource: "シ0", ofType: "loudstxt") else {
+                    print("ファイルが存在しません")
+                    return
+                }
+                print("ファイルが存在しました")
+                let url = URL(fileURLWithPath: path)
+                data = try String(contentsOf: url, encoding: .utf8)
+            } catch let error {
+                print("ファイルが存在しません: \(error)")
+                data = String()
+            }
+            let indices = (0..<1700)
+            var indicesIterator = indices.makeIterator()
+            guard var targetIndex = indicesIterator.next() else{
+                return
+            }
+            let newLineNumber = UInt8(ascii: "\n")
+
+            let bytes: [String] = data.withUTF8 {
+                var results: [String] = []
+                results.reserveCapacity(indices.count)
+                var result: [UInt8] = []
+                var count = 0
+                for byte in $0{
+                    let isNewLine = byte == newLineNumber
+                    if count == targetIndex && !isNewLine{
+                        result.append(byte)
+                        continue
+                    }
+
+                    if count > targetIndex{
+                        results.append(String(decoding: result, as: UTF8.self))
+                        result = []
+                        if let _targetIndex = indicesIterator.next(){
+                            targetIndex = _targetIndex
+                            if count == targetIndex{
+                                result.append(byte)
+                            }
+                        }else{
+                            break
+                        }
+                    }
+
+                    if isNewLine{
+                        count &+= 1
+                    }
+                }
+                return results
+            }
+        }
+    }
+
 }
+

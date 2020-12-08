@@ -100,16 +100,18 @@ extension LOUDS{
         guard var targetIndex = indicesIterator.next() else{
             return []
         }
+        let newLineNumber = UInt8(ascii: "\n")
+
         let strings: [String] = data.withUnsafeBytes {
             var results: [String] = []
             results.reserveCapacity(indices.count)
             var result: [UInt8] = []
             var count = 0
-            let newLineNumber = UInt8(ascii: "\n")
             for byte in $0{
                 let isNewLine = byte == newLineNumber
                 if count == targetIndex && !isNewLine{
                     result.append(byte)
+                    continue
                 }
 
                 if count > targetIndex{

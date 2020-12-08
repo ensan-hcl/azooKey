@@ -103,7 +103,9 @@ extension RegisteredNodeProtocol{
             case .flick:
                 break
             case .roman:
-                lastClause.ruby = lastClause.ruby.roman2katakana
+                if Store.shared.keyboardModel.tabState != .abc{
+                    lastClause.ruby = lastClause.ruby.roman2katakana
+                }
             }
             lastcandidate.clauses.append((clause: unit, value: self.totalValue))
             lastcandidate.data.append(self.data)

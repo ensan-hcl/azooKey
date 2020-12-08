@@ -37,7 +37,6 @@ final class KeyboardModelVariableSection: ObservableObject{
     @Published var isTextMagnifying = false
     @Published var magnifyingText = ""
     @Published var refreshing = true
-
     func refreshView(){
         refreshing.toggle()
     }
@@ -45,7 +44,7 @@ final class KeyboardModelVariableSection: ObservableObject{
 
 struct KeyboardView: View {
     //二つ以上になったらまとめてvariableSectioinにすること！
-    @ObservedObject var modelVariableSection = Store.shared.keyboardModelVariableSection
+    @ObservedObject private var modelVariableSection = Store.shared.keyboardModelVariableSection
     var body: some View {
         ZStack{[unowned modelVariableSection] in
             Store.shared.design.colors.backGroundColor

@@ -31,8 +31,10 @@ extension LatticeNodeProtocol{
         case .flick:
             break
         case .roman:
-            result.forEach{
-                $0.lastClause?.ruby = $0.lastClause?.ruby.roman2katakana ?? ""
+            if Store.shared.keyboardModel.tabState != .abc{
+                result.forEach{
+                    $0.lastClause?.ruby = $0.lastClause?.ruby.roman2katakana ?? ""
+                }
             }
         }
         return result
