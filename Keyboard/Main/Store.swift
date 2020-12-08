@@ -1092,7 +1092,8 @@ private final class InputStateHolder{
     }
 
     ///変換を選択した場合に呼ばれる
-    /// - Parameters:
+    /// - Note
+    ///   visibleStringの利用はバグを招きやすいとみられ、できれば控えた方が良いと思う。
     fileprivate func complete(candidate: Candidate){
         switch Store.shared.keyboardType{
         case .flick:
