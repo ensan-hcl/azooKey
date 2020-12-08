@@ -53,7 +53,6 @@ struct SettingItem <Value: Savable> {
     func save(_ value: Value){
         let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
         userDefaults.set(value.saveValue, forKey: identifier.key)
-        //print("value did change",userDefaults.value(forKey: identifier))
     }
 }
 

@@ -61,11 +61,9 @@ struct KeyButton: View {
     var longTapGesture: some Gesture {
         LongPressGesture(minimumDuration: 0.5, maximumDistance: 20)
             .onChanged{value in
-                print(value)
                 self.pressed = value
             }
             .onEnded{value in
-                print(value)
                 self.pressed = value
                 UINotificationFeedbackGenerator().notificationOccurred(.success)
             }

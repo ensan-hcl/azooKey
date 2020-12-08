@@ -49,20 +49,14 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.design.registerScreenSize(size: UIScreen.main.bounds.size)
         var entries: [UILexiconEntry] = []
         self.requestSupplementaryLexicon(completion: {
-            print($0.entries)
             $0.entries.forEach{entry in
                 print(entry.userInput, entry.documentText)
             }
             entries.append(contentsOf: $0.entries)
         })
-        print("entries:", entries)
-        self.current("viewDidLoad")
-
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        current("appear")
         //print(textDocumentProxy.documentIdentifier)
         //print(UIPasteboard.general.string)
         self.registerScreenActualSize()
@@ -82,10 +76,6 @@ final class KeyboardViewController: UIInputViewController {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
             Store.shared.design.registerScreenSize(size: size)
         }
-    }
-
-    func current(_ head: String){
-        //print(head,self.keyboardViewHost.view.safeAreaInsets, keyboardViewHost.view.safeAreaLayoutGuide, self.view.bounds, self.keyboardViewHost.view.bounds)
     }
 
     func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
@@ -117,7 +107,6 @@ final class KeyboardViewController: UIInputViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        current("layout")
         self.registerScreenActualSize()
         print("描画終わり", self.view.frame.size)
     }
@@ -150,7 +139,6 @@ final class KeyboardViewController: UIInputViewController {
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
-        print("textDidChange", self.textDocumentProxy.selectedText?.description)
         Store.shared.action.registerSomethingDidChange(left: left, center: center, right: right)
     }
 }

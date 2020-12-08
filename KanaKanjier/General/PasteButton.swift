@@ -17,8 +17,6 @@ struct PasteButton: View {
 
     var body: some View {
         Button{
-            print("押された")
-
             if let string = UIPasteboard.general.string{
                 text = string
             }
@@ -39,7 +37,6 @@ struct PasteLongPressButton: View {
     var body: some View {
         Image(systemName: "doc.on.clipboard")
             .onLongPressGesture(minimumDuration: 0.5){
-                print("長押しでペースト")
                 if let string = UIPasteboard.general.string{
 
                     Store.shared.feedbackGenerator.notificationOccurred(.success)
