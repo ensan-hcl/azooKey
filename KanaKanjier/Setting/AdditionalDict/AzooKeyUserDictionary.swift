@@ -167,7 +167,12 @@ final class UserDictManagerVariables: ObservableObject {
 
     enum Mode{
         case list
-        case details
+        case details(Cancelable)
+    }
+
+    enum Cancelable{
+        case cancelable
+        case incancelable
     }
 
     init(){
@@ -181,11 +186,19 @@ struct AzooKeyUserDictionaryView: View {
     @ObservedObject private var variables: UserDictManagerVariables = UserDictManagerVariables()
 
     var body: some View {
-        if variables.mode == .list{
+        switch variables.mode{
+        case .list:
             UserDictionaryDataListView(variables: variables)
-        }else{
-            if let item = self.variables.selectedItem{
-                UserDictionaryDataSettingView(item, variables: variables)
+        case let .details(cancelable):
+            switch cancelable{
+            case .cancelable:
+                if let item = self.variables.selectedItem{
+                    UserDictionaryDataSettingView(item, variables: variables, cancelable: true)
+                }
+            case .incancelable:
+                if let item = self.variables.selectedItem{
+                    UserDictionaryDataSettingView(item, variables: variables)
+                }
             }
         }
     }
@@ -214,7 +227,7 @@ struct UserDictionaryDataListView: View {
                     Button{
                         let id = variables.items.map{$0.id}.max()
                         self.variables.selectedItem = UserDictionaryData.emptyData(id: (id ?? -1) + 1).makeEditableData()
-                        self.variables.mode = .details
+                        self.variables.mode = .details(.cancelable)
 
                     }label: {
                         HStack {
@@ -236,7 +249,7 @@ struct UserDictionaryDataListView: View {
                         ForEach(currentGroupedItems[key]!){data in
                             Button{
                                 self.variables.selectedItem = data.makeEditableData()
-                                self.variables.mode = .details
+                                self.variables.mode = .details(.incancelable)
                             }label: {
                                 HStack{
                                     Text(data.word)
@@ -284,27 +297,29 @@ struct UserDictionaryDataListView: View {
 struct UserDictionaryDataSettingView: View {
     @ObservedObject private var item: EditableUserDictionaryData
     @ObservedObject private var variables: UserDictManagerVariables
+    let cancelable: Bool
 
-    init(_ item: EditableUserDictionaryData, variables: UserDictManagerVariables){
+    init(_ item: EditableUserDictionaryData, variables: UserDictManagerVariables, cancelable: Bool = false){
         self.item = item
         self.variables = variables
+        self.cancelable = cancelable
     }
 
     var body: some View {
         Form {
             Section(header: Text("読みと単語"), footer: Text("\(Image(systemName: "doc.on.clipboard"))を長押しでペースト")){
                 HStack{
-                    TextField("読み", text: $item.ruby)
-                        .padding(.vertical, 2)
-                    Divider()
-                    PasteLongPressButton($item.ruby)
-                        .padding(.horizontal, 5)
-                }
-                HStack{
                     TextField("単語", text: $item.word)
                         .padding(.vertical, 2)
                     Divider()
                     PasteLongPressButton($item.word)
+                        .padding(.horizontal, 5)
+                }
+                HStack{
+                    TextField("読み", text: $item.ruby)
+                        .padding(.vertical, 2)
+                    Divider()
+                    PasteLongPressButton($item.ruby)
                         .padding(.horizontal, 5)
                 }
                 if let error = item.error{
@@ -340,14 +355,24 @@ struct UserDictionaryDataSettingView: View {
         }
         .navigationTitle(Text("詳細設定"))
         .navigationBarBackButtonHidden(true)
+
         .navigationBarItems(
+            leading: Group{
+                if self.cancelable{
+                    Button{
+                        variables.mode = .list
+                    } label: {
+                        Text("キャンセル")
+                    }
+                }
+            },
             trailing: Button{
                 if item.error == nil{
                     self.save()
                     variables.mode = .list
                     Store.shared.feedbackGenerator.notificationOccurred(.success)
                 }
-            }label: {
+            } label: {
                 Text("完了")
             }
         )

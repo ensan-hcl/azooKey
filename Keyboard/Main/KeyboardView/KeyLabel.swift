@@ -89,14 +89,15 @@ struct KeyLabel: View {
                 HStack(alignment: .bottom){
                     Text(primary)
                         .font(font)
-                        .padding(.trailing, -4)
+                        .padding(.trailing, -5)
                     Text(secondery)
                         .font(subFont)
                         .bold()
                         .foregroundColor(.gray)
-                        .padding(.leading, -4)
-                        .offset(y: -1.5)
-                }.offset(y: 0.5)
+                        .padding(.leading, -5)
+                        .offset(y: -1)
+                }.allowsHitTesting(false)
+
             }
         }
     }

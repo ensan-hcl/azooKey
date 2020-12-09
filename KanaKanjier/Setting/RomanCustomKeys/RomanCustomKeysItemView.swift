@@ -23,6 +23,7 @@ struct RomanCustomKeysItemView: View {
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
     @State private var editMode = EditMode.active
+    @State private var showAlert = false
 
     var body: some View {
         VStack{
@@ -70,14 +71,29 @@ struct RomanCustomKeysItemView: View {
                 .onDelete(perform: delete)
                 .onMove(perform: move)
                 .deleteDisabled(self.editMode != .active)
+
                 Text("\(Image(systemName: "chevron.right")),\(Image(systemName: "chevron.left"))をタップすることで長押しキーを切り替え可能です。")
+                Text("デフォルトに戻す")
+                    .onTapGesture{
+                        showAlert = true
+                    }
+                .foregroundColor(.red)
+                .padding()
             }
             .navigationBarItems(trailing: addButton2)
             .environment(\.editMode, $editMode)
+            .alert(isPresented: $showAlert){
+                Alert(title: Text("デフォルトに戻します。よろしいですか？"), message: Text("この操作は取り消せません。"),
+                      primaryButton: .cancel(Text("キャンセル")){
+                        showAlert = false
+                      },
+                      secondaryButton: .destructive(Text("デフォルトに戻す")){
+                        showAlert = false
+                        viewModel.value = RomanCustomKeys.defaultValue
+                      }
+                )
+            }
 
-        }
-        .onTapGesture {
-            UIApplication.shared.closeKeyboard()
         }
         .navigationBarTitle("カスタムキー")
 

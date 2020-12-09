@@ -489,7 +489,7 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
             RomanKeyModel(labelType: .text("ー"), pressActions: [.input("ー")]),
         ],
         [
-            RomanFunctionalKeyModel(labelType: .selectable("あ", "A"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.abc)]),
+            RomanFunctionalKeyModel(labelType: .selectable("あ", "Ａ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.abc)]),
             RomanKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
             RomanKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
             RomanKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
@@ -534,7 +534,7 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
             RomanFunctionalKeyModel(labelType: .image("textformat.alt"), rowInfo: (normal: 9, functional: 1, space: 0, enter: 0), pressActions: [.changeCharacterType]),
         ],
         [
-            RomanFunctionalKeyModel(labelType: .selectable("A", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.hira)]),
+            RomanFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.hira)]),
             RomanKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
             RomanKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
             RomanKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
