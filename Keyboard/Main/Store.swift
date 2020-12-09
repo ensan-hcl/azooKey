@@ -35,7 +35,7 @@ final class Store{
     private(set) var keyboardModelVariableSection = KeyboardModelVariableSection()   //ビューに関わる部分
     private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
     private init(){
-        print("Store.sharedが生成されました")
+        NSLog("Store.sharedが生成されました")
         if UserSettingDepartment.checkResetSetting(){
             self.sendToDicDataStore(.resetMemory)
         }
@@ -1517,7 +1517,6 @@ private final class InputStateHolder{
                 //Storeに通知し、ResultViewに表示する。
             case .mojiCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)
-                print("mojiCount: ",inputtedText)
                 let count = input.filter{!$0.isNewline}.count
                 let mojisu = Candidate(text: "文字数:\(count)", value: 0, visibleString: "", rcid: 0, lastMid: 0, data: [], inputable: false)
                 results.append(mojisu)

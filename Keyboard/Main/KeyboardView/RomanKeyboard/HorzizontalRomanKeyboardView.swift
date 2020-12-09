@@ -19,7 +19,6 @@ struct HorizontalRomanKeyboardView: View{
     }
     
     var verticalIndices: Range<Int> {
-        print("verticalIndices",modelVariableSection.tabState)
         switch modelVariableSection.tabState{
         case .hira:
             return self.model.hiraKeyboard.indices
@@ -37,8 +36,6 @@ struct HorizontalRomanKeyboardView: View{
     }
 
     func horizontalIndices(v: Int) -> Range<Int> {
-        print("horizontalIndices",modelVariableSection.tabState)
-
         switch modelVariableSection.tabState{
         case .hira:
             return self.model.hiraKeyboard[v].indices
