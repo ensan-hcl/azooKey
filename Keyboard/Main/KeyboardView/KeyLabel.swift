@@ -15,8 +15,8 @@ enum KeyLabelType{
     case image(String)
     case customImage(String)
     case changeKeyboard
+    case selectable(String, String)
 }
-
 
 struct KeyLabel: View {
 
@@ -82,6 +82,21 @@ struct KeyLabel: View {
                     .allowsHitTesting(false)
             case .changeKeyboard:
                 Store.shared.action.makeChangeKeyboardButtonView()
+            case let .selectable(primary, secondery):
+                let font = Store.shared.design.fonts.keyLabelFont(text: primary+primary, width: width, scale: self.textSize.scale)
+                let subFont = Store.shared.design.fonts.keyLabelFont(text: secondery+secondery, width: width, scale: TextSize.small.scale)
+            
+                HStack(alignment: .bottom){
+                    Text(primary)
+                        .font(font)
+                        .padding(.trailing, -4)
+                    Text(secondery)
+                        .font(subFont)
+                        .bold()
+                        .foregroundColor(.gray)
+                        .padding(.leading, -4)
+                        .offset(y: -1.5)
+                }.offset(y: 0.5)
             }
         }
     }

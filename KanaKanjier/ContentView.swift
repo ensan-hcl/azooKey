@@ -32,7 +32,7 @@ struct ContentView: View {
                         }
                     }
                     .tag(1)
-                /*
+
                 TestView()
                     .tabItem {
                         VStack {
@@ -41,7 +41,7 @@ struct ContentView: View {
                         }
                     }
                     .tag(2)
-                */
+                
 
             }.fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()

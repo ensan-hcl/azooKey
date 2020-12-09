@@ -55,6 +55,25 @@ struct DoubleSwipeGesture: Gesture {
 }
 */
 
+
+struct TestView: View {
+    @State private var text: String = ""
+
+    var body: some View {
+        TextField("入力", text: $text)
+            .background(Color.red)
+            .textFieldStyle(MyTextFieldStyle())
+    }
+}
+
+struct MyTextFieldStyle: TextFieldStyle {
+    func _body(configuration: TextField<_Label>) -> some View {
+        configuration
+            .clipShape(Circle())
+    }
+}
+
+/*
 struct KeyButton: View {
     @State private var pressed = false
 
@@ -95,7 +114,7 @@ struct TestView: View {
         }
     }
 }
-
+*/
 /*
 struct TestView: View {
     @State private var input = ""
