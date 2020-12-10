@@ -1108,23 +1108,24 @@ private final class InputStateHolder{
                 self.proxy.deleteBackward()
             }
         }
-        print("ビジブルストリイング：",candidate.visibleString)
-        self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.visibleString.count))
+        let visibleString = candidate.visibleString
+        print("ビジブルストリイング：",visibleString)
+        self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(visibleString.count))
         
         self.isSelected = false
         //全ての変換が終わった場合
-        if candidate.visibleString.count == self.inputtedText.count{
+        if visibleString.count == self.inputtedText.count{
             self.clear()
             Store.shared.registerEnterKeyState(.return)
         }
         //そうでない場合、続きの変換部分をセットする。
         else{
             if Store.shared.keyboardType == .roman{
-                self.kanaRomanStateHolder.complete(self.inputtedText.prefix(candidate.visibleString.count))
+                self.kanaRomanStateHolder.complete(self.inputtedText.prefix(visibleString.count))
             }
             let offset = self.getActualOffset(count: self.cursorMaximumPosition - self.cursorPosition)
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            self.inputtedText = String(self.inputtedText.dropFirst(candidate.visibleString.count))
+            self.inputtedText = String(self.inputtedText.dropFirst(visibleString.count))
             self.cursorPosition = self.cursorMaximumPosition
             self._flickConverter?.setCompletedData(candidate)
             self._romanConverter?.setCompletedData(candidate)

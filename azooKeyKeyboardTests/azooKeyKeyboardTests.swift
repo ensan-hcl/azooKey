@@ -95,6 +95,22 @@ class azooKeyKeyboardTests: XCTestCase {
         }
     }
 
+    func roman2kanaTest() throws {
+        do{
+            XCTAssert("ka".roman2katakana == "カ")
+            XCTAssert("te".roman2katakana == "テ")
+            XCTAssert("ai".roman2katakana == "アイ")
+            XCTAssert("tt".roman2katakana == "ッt")
+            XCTAssert("fa".roman2katakana == "ファ")
+            XCTAssert("zl".roman2katakana == "→")
+            XCTAssert("nn".roman2katakana == "ン")
+            XCTAssert("an".roman2katakana == "アン")
+            XCTAssert("ny".roman2katakana == "ny")
+        }
+
+
+    }
+
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         //let store = DicDataStore()

@@ -2288,6 +2288,7 @@
 		1AFA570D257FAFAC00477DC2 /* 》.louds in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5447257FAFA800477DC2 /* 》.louds */; };
 		1AFA5717257FAFBE00477DC2 /* charID.chid in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5716257FAFBD00477DC2 /* charID.chid */; };
 		1AFA57392580DB2200477DC2 /* ButtonWithAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57382580DB2200477DC2 /* ButtonWithAlert.swift */; };
+		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
 		1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68372518A40D00C649C4 /* LargeTextView.swift */; };
 		1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */; };
 		1AFB68502518F18A00C649C4 /* CursorMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */; };
@@ -4622,6 +4623,7 @@
 		1AFA5447257FAFA800477DC2 /* 》.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "》.louds"; sourceTree = "<group>"; };
 		1AFA5716257FAFBD00477DC2 /* charID.chid */ = {isa = PBXFileReference; lastKnownFileType = file; path = charID.chid; sourceTree = "<group>"; };
 		1AFA57382580DB2200477DC2 /* ButtonWithAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithAlert.swift; sourceTree = "<group>"; };
+		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
 		1AFB68372518A40D00C649C4 /* LargeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextView.swift; sourceTree = "<group>"; };
 		1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceSoftWaresLicenceView.swift; sourceTree = "<group>"; };
 		1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorMoveView.swift; sourceTree = "<group>"; };
@@ -6393,6 +6395,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC2FA2500D72D002CAA93 /* Kana2Kanji.swift */,
+				1AFA574325811B4500477DC2 /* getPrediction.swift */,
 				1A8A8401250F65110093A701 /* all.swift */,
 				1AF1C55E252DD10F002FCC66 /* added_last_n_character.swift */,
 				1A8A8403250F65410093A701 /* added_last_1_character.swift */,
@@ -9718,6 +9721,7 @@
 				1A3DC22D2500D6C6002CAA93 /* Converter.swift in Sources */,
 				1A3DC2FB2500D72D002CAA93 /* Kana2Kanji.swift in Sources */,
 				1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */,
+				1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */,
 				1A3DC2212500D600002CAA93 /* TabKeyModel.swift in Sources */,
 				1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */,
 				1AA346962567F04300B41A16 /* RomanCustomKeys.swift in Sources */,
@@ -9845,6 +9849,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -9907,6 +9912,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
