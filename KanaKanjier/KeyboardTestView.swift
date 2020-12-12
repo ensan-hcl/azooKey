@@ -135,8 +135,29 @@ struct TestView: View {
 
     @ObservedObject private var editState = EditState()
 
-    let width: CGFloat = 32
-    let padding: CGFloat = 5
+    var padding: CGFloat {
+        return spacing/2
+    }
+
+    let screenWidth = UIScreen.main.bounds.width
+
+    var keySize: CGSize {
+        return CGSize(width: screenWidth/12.2, height: screenWidth/9)
+    }
+    var spacing: CGFloat {
+        (screenWidth - keySize.width * 10)/(9+0.5)
+    }
+    func romanScaledKeyWidth(normal: Int, for count: Int) -> CGFloat {
+        let width = keySize.width * CGFloat(normal) + spacing * CGFloat(normal - 1)
+        let necessarySpacing = spacing * CGFloat(count - 1)
+        return (width - necessarySpacing) / CGFloat(count)
+    }
+    var width: CGFloat {
+        return romanScaledKeyWidth(normal: 7, for: keyData.count)
+    }
+    var variationWidth: CGFloat {
+        return romanScaledKeyWidth(normal: 7, for: 7)
+    }
 
     @State private var keyData: [RomanCustomKey]
 
@@ -186,7 +207,7 @@ struct TestView: View {
                                 .focus(.accentColor, focused: true)
                         }
                         DraggableItem(selectState: selectState, editState: editState, index: i, label: longpresses[i].name, long: true, update: longPressUpdate, onEnd: longPressOnEnd)
-                            .frame(width: width, height: 50)
+                            .frame(width: variationWidth, height: 50)
                             .padding(padding)
                             .zIndex(selectState.longpressSelectedIndex == i ? 1:0)
                     }
@@ -198,6 +219,8 @@ struct TestView: View {
                 if longpresses.isEmpty{
                     Button{
                         keyData[selectState.selectedIndex].longpresses.append(RomanVariationKey(name: "", input: ""))
+                        selectState.longpressSelectedIndex = self.keyData[selectState.selectedIndex].longpresses.endIndex - 1
+                        editState.state = .action
                     }label: {
                         Text("追加する")
                     }
@@ -213,7 +236,7 @@ struct TestView: View {
 
                     let sIndex = selectState.selectedIndex
                     let lpsIndex = selectState.longpressSelectedIndex
-                    if lpsIndex == -1{
+                    if lpsIndex == -1 && sIndex != -1{
                         TextField("ラベル", text: $keyData[sIndex].name)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .frame(maxWidth: .infinity)
@@ -239,15 +262,13 @@ struct TestView: View {
 
                     let sIndex = selectState.selectedIndex
                     let lpsIndex = selectState.longpressSelectedIndex
-                    if lpsIndex == -1{
-
+                    if lpsIndex == -1 && sIndex != -1{
                         TextField("入力される文字", text: $keyData[sIndex].input, onCommit: {
                             if keyData[sIndex].name.isEmpty{
                                 keyData[sIndex].name = keyData[sIndex].input
                             }
                         })
                             .textFieldStyle(RoundedBorderTextFieldStyle())
-
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal)
                     }else{
@@ -271,32 +292,23 @@ struct TestView: View {
                 HStack{
                     Group{
                         ToolBarButton(systemImage: "trash", labelText: "削除"){
-                            if !editState.allowDrag{
+                            if editState.state == .none{
                                 let sIndex = selectState.selectedIndex
                                 let lpsIndex = selectState.longpressSelectedIndex
-                                if lpsIndex == -1{
-                                    self.keyData.remove(at: sIndex)
+                                if lpsIndex == -1 && sIndex != -1{
                                     self.selectState.selectedIndex = -1
+                                    print(self.keyData.indices, sIndex)
+                                    self.keyData.remove(at: sIndex)
                                 }else{
-                                    self.keyData[sIndex].longpresses.remove(at: lpsIndex)
                                     self.selectState.longpressSelectedIndex = -1
+                                    self.keyData[sIndex].longpresses.remove(at: lpsIndex)
                                 }
                             }
                         }
-                        .foregroundColor(.primary)
-
-                        Spacer()
-                    }/*
-                    Group{
-                        ToolBarButton(systemImage: "bubble.middle.bottom", labelText: "長押し設定"){
-                            editState.state = .none
-                        }
-                        .foregroundColor(.primary)
+                        .foregroundColor(editState.state == .none ? .primary:.gray)
 
                         Spacer()
                     }
- */
-                    
                     Group{
                         ToolBarButton(systemImage: "arrow.left.arrow.right", labelText: "移動"){
                             editState.toggle(.drag)
@@ -306,18 +318,16 @@ struct TestView: View {
                     }
                     Group{
                         ToolBarButton(systemImage: "text.cursor", labelText: "入力"){
-                            editState.state = .action
+                            editState.toggle(.action)
                         }
                         .foregroundColor(editState.editAction ? .accentColor:.primary)
-
                         Spacer()
                     }
                     Group{
                         ToolBarButton(systemImage: "questionmark.square", labelText: "ラベル"){
-                            editState.state = .label
+                            editState.toggle(.label)
                         }
                         .foregroundColor(editState.editLabel ? .accentColor:.primary)
-
                         Spacer()
                     }
                     Group{
@@ -326,9 +336,14 @@ struct TestView: View {
                             let lpsIndex = selectState.longpressSelectedIndex
                             if lpsIndex == -1{
                                 self.keyData.append(RomanCustomKey(name: "", longpress: []))
+                                selectState.selectedIndex = self.keyData.endIndex - 1
+                                editState.state = .action
                             }else{
                                 self.keyData[sIndex].longpresses.append(RomanVariationKey(name: "", input: ""))
+                                selectState.longpressSelectedIndex = self.keyData[sIndex].longpresses.endIndex - 1
+                                editState.state = .action
                             }
+
                         }
                         .foregroundColor(.primary)
 
@@ -348,6 +363,17 @@ struct TestView: View {
         if delta.isZero{
             return index
         }
+
+        let endIndex: Int
+        let width: CGFloat
+        if selectState.longpressSelectedIndex == -1{
+            endIndex = keyData.endIndex
+            width = self.width
+        }else{
+            endIndex = keyData[selectState.selectedIndex].longpresses.endIndex
+            width = self.variationWidth
+        }
+
         if delta < 0{
             //負の場合
             var position = CGFloat.zero
@@ -364,12 +390,6 @@ struct TestView: View {
             //正の場合
             var position = CGFloat.zero
             var index = index + 1
-            let endIndex: Int
-            if selectState.longpressSelectedIndex == -1{
-                endIndex = keyData.endIndex
-            }else{
-                endIndex = keyData[selectState.selectedIndex].longpresses.endIndex
-            }
             while index < endIndex{
                 position += (width + padding*2)
                 if delta < position{
