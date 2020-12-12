@@ -8,6 +8,7 @@
 
 import Foundation
 
+//一文節を担う
 final class ClauseDataUnit{
     var mid: Int = 500
     var lcid: Int = .zero
@@ -16,25 +17,16 @@ final class ClauseDataUnit{
 
     var text: String = ""
     var ruby: String = ""
-    init(){}
+    var rubyCount: Int = 0
 
-    init(data: DicDataElementProtocol){
-        if DicDataStore.includeMMValueCalculation(data){
-            self.mid = data.mid
-        }
-        self.lcid = data.lcid
-        self.rcid = data.rcid
-        self.nextLcid = data.lcid
-        self.text = data.word
-        self.ruby = data.ruby
-    }
+    init(){}
 
     func merge(with unit: ClauseDataUnit){
         self.text.append(unit.text)
         self.ruby.append(unit.ruby)
+        self.rubyCount += unit.rubyCount
         self.rcid = unit.rcid
         self.nextLcid = unit.nextLcid
-
     }
 }
 
@@ -65,6 +57,7 @@ struct Candidate{
     let value: PValue
     ///実際の入力テキスト
     let visibleString: String
+    let correspondingCount: Int
     ///右側cid
     let rcid: Int
     ///最後のmid
@@ -78,10 +71,11 @@ struct Candidate{
     /// - note: 文字数表示のために追加したフラグ
     let inputable: Bool
 
-    init(text: String, value: PValue, visibleString: String, rcid: Int, lastMid: Int, data: [DicDataElementProtocol], actions: [ActionType] = [], inputable: Bool = true){
+    init(text: String, value: PValue, visibleString: String, correspondingCount: Int, rcid: Int, lastMid: Int, data: [DicDataElementProtocol], actions: [ActionType] = [], inputable: Bool = true){
         self.text = text
         self.value = value
         self.visibleString = visibleString
+        self.correspondingCount = correspondingCount
         self.rcid = rcid
         self.lastMid = lastMid
         self.data = data
@@ -92,6 +86,16 @@ struct Candidate{
     ///- parameters:
     ///  - actions: 実行する`action`
     func withActions(_ actions: [ActionType]) -> Candidate {
-        return Candidate(text: text, value: value, visibleString: visibleString, rcid: rcid, lastMid: lastMid, data: data, actions: actions, inputable: inputable)
+        return Candidate(
+            text: text,
+            value: value,
+            visibleString: visibleString,
+            correspondingCount: correspondingCount,
+            rcid: rcid,
+            lastMid: lastMid,
+            data: data,
+            actions: actions,
+            inputable: inputable
+        )
     }
 }

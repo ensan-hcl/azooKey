@@ -54,17 +54,17 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   - string: 入力されたString
     /// - Returns:
     ///   `賢い変換候補
-    private func getWiseCandidate(string: String) -> [Candidate] {
+    private func getWiseCandidate(_ inputData: InputData) -> [Candidate] {
         var result = [Candidate]()
         if Store.shared.userSetting.westerJapaneseCalenderSetting{
-            result.append(contentsOf: self.toWareki(string: string))
-            result.append(contentsOf: self.toSeireki(string: string))
+            result.append(contentsOf: self.toWareki(inputData))
+            result.append(contentsOf: self.toSeireki(inputData))
         }
         if Store.shared.userSetting.typographyLettersSetting{
-            result.append(contentsOf: self.typographicalCandidates(from: string))
+            result.append(contentsOf: self.typographicalCandidates(inputData))
         }
         if Store.shared.userSetting.unicodeCandidateSetting{
-            result.append(contentsOf: self.unicode(string: string))
+            result.append(contentsOf: self.unicode(inputData))
         }
         return result
     }
@@ -108,14 +108,29 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language){
                 if !completions.isEmpty{
                     let data = [LRE_SRE_DicDataElement(ruby: ruby, cid: 1288, mid: 501, value: penalty)]
-                    let candidate: Candidate = Candidate(text: ruby, value: penalty, visibleString: ruby, rcid: 1288, lastMid: 501, data: data)
+                    let candidate: Candidate = Candidate(
+                        text: ruby,
+                        value: penalty,
+                        visibleString: ruby,
+                        correspondingCount: inputData.characters.count,
+                        rcid: 1288,
+                        lastMid: 501,
+                        data: data
+                    )
                     result.append(candidate)
                 }
                 var value: PValue = -5 + penalty
                 let delta: PValue = -10/PValue(completions.count)
                 completions.forEach{word in
                     let data = [LRE_SRE_DicDataElement(ruby: word, cid: 1288, mid: 501, value: value)]
-                    let candidate: Candidate = Candidate(text: word, value: value, visibleString: ruby, rcid: 1288, lastMid: 501, data: data)
+                    let candidate: Candidate = Candidate(
+                        text: word,
+                        value: value,
+                        visibleString: ruby,
+                        correspondingCount: inputData.characters.count,
+                        rcid: 1288,
+                        lastMid: 501,
+                        data: data)
                     result.append(candidate)
                     value += delta
                 }
@@ -151,8 +166,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 newUnit.merge(with: oldlastPart.clause)     //マージする。
                 let newValue = lastUnit.value + oldlastPart.value
                 let newlastPart: CandidateData.ClausesUnit = (clause: newUnit, value: newValue)
-                let lastRuby = newlastPart.clause.ruby
-                let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: lastRuby, N_best: 5)
+                let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: newlastPart.clause.ruby, lastRubyCount: newlastPart.clause.rubyCount, N_best: 5)
                 candidates += predictions
                 lastpart = newlastPart
                 if !predictions.isEmpty{
@@ -160,8 +174,9 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 }
             }else{
                 let lastRuby = prepart.lastClause!.ruby
+                let lastRubyCount = prepart.lastClause!.rubyCount
                 lastpart = prepart.clauses.popLast()
-                let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: lastRuby, N_best: 5)
+                let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: lastRuby, lastRubyCount: lastRubyCount, N_best: 5)
                 candidates += predictions
                 if !predictions.isEmpty{
                     count += 1
@@ -201,6 +216,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 text: string,
                 value: -14,
                 visibleString: string,
+                correspondingCount: inputData.characters.count,
                 rcid: 1288,
                 lastMid: 501,
                 data: [data]
@@ -215,6 +231,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 text: hiraganaString,
                 value: -14.5,
                 visibleString: string,
+                correspondingCount: inputData.characters.count,
                 rcid: 1288,
                 lastMid: 501,
                 data: [data]
@@ -228,6 +245,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 text: string,
                 value: -15,
                 visibleString: string,
+                correspondingCount: inputData.characters.count,
                 rcid: 1288,
                 lastMid: 501,
                 data: [data]
@@ -271,6 +289,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 text: first.clause.text,
                 value:first.value,
                 visibleString: first.clause.ruby,
+                correspondingCount: first.clause.rubyCount,
                 rcid: first.clause.rcid,
                 lastMid: first.clause.mid,
                 data: Array(candidateData.data[0...count])
@@ -315,7 +334,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let clause_candidates = self.getUniqueCandidate(clauseCandidates.filter{!seenCandidate.contains($0.text)}).sorted{$0.value>$1.value}.prefix(5)
         seenCandidate.formUnion(clause_candidates.map{$0.text})
         //賢く変換するパターン
-        let wise_candidates: [Candidate] = self.getWiseCandidate(string: inputData.katakanaString)
+        let wise_candidates: [Candidate] = self.getWiseCandidate(inputData)
         seenCandidate.formUnion(wise_candidates.map{$0.text})
 
         //最初の辞書データ
@@ -326,6 +345,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     text: $0.data.word,
                     value: $0.data.value(),
                     visibleString: $0.data.ruby,
+                    correspondingCount: $0.rubyCount,
                     rcid: $0.data.rcid,
                     lastMid: $0.data.mid,
                     data: [$0.data]

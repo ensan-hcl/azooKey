@@ -29,10 +29,11 @@ extension KanaKanjiConverter{
     ///   - text: 対象文字列。
     /// - note:
     ///    現在英字のみ。ギリシャ文字や数字に対応する必要あり。
-    func typographicalCandidates(from text: String) -> [Candidate] {
-        let strings = self.typographicalLetters(from: text)
+    func typographicalCandidates(_ inputData: InputData) -> [Candidate] {
+        let string = inputData.katakanaString
+        let strings = self.typographicalLetters(from: string)
         return strings.map{
-            Candidate(text: $0, value: -15, visibleString: text, rcid: 1288, lastMid: 501, data: [LRE_DicDataElement(word: $0, ruby: text, cid: 1288, mid: 501, value: -15)])
+            Candidate(text: $0, value: -15, visibleString: string, correspondingCount: inputData.characters.count, rcid: 1288, lastMid: 501, data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1288, mid: 501, value: -15)])
         }
     }
 

@@ -33,8 +33,16 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
         let visibleString = data.clauses.map{$0.clause.ruby}.joined()
         let rcid = data.clauses.last!.clause.rcid
         let lastMid = data.clauses.last!.clause.mid
-
-        return Candidate(text: text, value: value, visibleString: visibleString, rcid: rcid, lastMid: lastMid, data: data.data)
+        let correspondingCount = data.clauses.map{$0.clause.rubyCount}.reduce(0, +)
+        return Candidate(
+            text: text,
+            value: value,
+            visibleString: visibleString,
+            correspondingCount: correspondingCount,
+            rcid: rcid,
+            lastMid: lastMid,
+            data: data.data
+        )
     }
 
     ///入力がない状態から、妥当な候補を探す
@@ -90,7 +98,15 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
                     let newValue = candidate.value + mmValue + ccValue + wValue + bonus
                     var nodedata = candidate.data
                     nodedata.append(data)
-                    let candidate = Candidate(text: candidate.text + data.word, value: newValue, visibleString: candidate.visibleString, rcid: data.rcid, lastMid: includeMMValueCalculation ? data.mid:candidate.lastMid, data: nodedata)
+                    let candidate = Candidate(
+                        text: candidate.text + data.word,
+                        value: newValue,
+                        visibleString: candidate.visibleString,
+                        correspondingCount: candidate.correspondingCount,
+                        rcid: data.rcid,
+                        lastMid: includeMMValueCalculation ? data.mid:candidate.lastMid,
+                        data: nodedata
+                    )
                     result.append(candidate)
                 }
             }

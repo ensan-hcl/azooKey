@@ -60,7 +60,7 @@ final class FlickLatticeNode: LatticeNodeProtocol{
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> FlickRegisteredNode {
-        return FlickRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value)
+        return FlickRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
     }
 
     init(data: DicDataElementProtocol){
@@ -93,7 +93,7 @@ final class RomanLatticeNode: LatticeNodeProtocol{
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {
-        return RomanRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, romanString: self.romanString)
+        return RomanRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount, romanString: self.romanString)
     }
 
 }

@@ -1110,42 +1110,46 @@ private final class InputStateHolder{
     /// - Note
     ///   visibleStringの利用はバグを招きやすいとみられ、できれば控えた方が良いと思う。
     fileprivate func complete(candidate: Candidate){
-        switch Store.shared.keyboardType{
-        case .flick:
-            self.flickConverter.updateLearningData(candidate)
-        case .roman:
-            self.romanConverter.updateLearningData(candidate)
-        }
-
+        //削除する
         let leftsideInputedText = self.inputtedText.prefix(self.cursorPosition)
         if !self.isSelected{
             (0..<self.cursorPosition).forEach{_ in
                 self.proxy.deleteBackward()
             }
         }
-        let visibleString = candidate.visibleString
-        print("ビジブルストリイング：",visibleString)
-        self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(visibleString.count))
-        
         self.isSelected = false
-        //全ての変換が終わった場合
-        if visibleString.count == self.inputtedText.count{
-            self.clear()
-            Store.shared.registerEnterKeyState(.return)
+
+        switch Store.shared.keyboardType{
+        case .flick:
+            self.flickConverter.updateLearningData(candidate)
+            self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.correspondingCount))
+            if candidate.correspondingCount == inputtedText.count{
+                self.clear()
+                Store.shared.registerEnterKeyState(.return)
+                return
+            }
+            self.inputtedText = String(self.inputtedText.dropFirst(candidate.correspondingCount))
+            self.flickConverter.setCompletedData(candidate)
+
+        case .roman:
+            self.romanConverter.updateLearningData(candidate)
+            self.kanaRomanStateHolder.complete(candidate.correspondingCount)    //characterでいう確定分
+            let displayedText = self.kanaRomanStateHolder.components.map{$0.displayedText}.joined()
+            self.proxy.insertText(candidate.text + displayedText)
+            if self.kanaRomanStateHolder.components.isEmpty{
+                self.clear()
+                Store.shared.registerEnterKeyState(.return)
+                return
+            }
+            self.inputtedText = displayedText
+            self.romanConverter.setCompletedData(candidate)
+
         }
         //そうでない場合、続きの変換部分をセットする。
-        else{
-            if Store.shared.keyboardType == .roman{
-                self.kanaRomanStateHolder.complete(self.inputtedText.prefix(visibleString.count))
-            }
-            let offset = self.getActualOffset(count: self.cursorMaximumPosition - self.cursorPosition)
-            self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            self.inputtedText = String(self.inputtedText.dropFirst(visibleString.count))
-            self.cursorPosition = self.cursorMaximumPosition
-            self._flickConverter?.setCompletedData(candidate)
-            self._romanConverter?.setCompletedData(candidate)
-            self.setResult()
-        }
+        let offset = self.getActualOffset(count: self.cursorMaximumPosition)
+        self.proxy.adjustTextPosition(byCharacterOffset: offset)
+        self.cursorPosition = self.cursorMaximumPosition
+        self.setResult()
     }
     
     fileprivate func clear(){
@@ -1173,7 +1177,7 @@ private final class InputStateHolder{
     //単純に確定した場合のデータ
     fileprivate func enter() -> [ActionType] {
         let _candidate = Candidate(
-            text: self.inputtedText, value: -18, visibleString: self.inputtedText, rcid: 1298, lastMid: 501,
+            text: self.inputtedText, value: -18, visibleString: self.inputtedText, correspondingCount: self.inputtedText.count, rcid: 1298, lastMid: 501,
             data: [
                 LRE_SRE_DicDataElement(ruby: self.inputtedText, cid: 1298, mid: 501, value: -18)
             ]
@@ -1534,13 +1538,13 @@ private final class InputStateHolder{
             case .mojiCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)
                 let count = input.filter{!$0.isNewline}.count
-                let mojisu = Candidate(text: "文字数:\(count)", value: 0, visibleString: "", rcid: 0, lastMid: 0, data: [], inputable: false)
+                let mojisu = Candidate(text: "文字数:\(count)", value: 0, visibleString: "", correspondingCount: 0, rcid: 0, lastMid: 0, data: [], inputable: false)
                 results.append(mojisu)
             case .wordCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)
                 if input.isEnglishSentence{
                     let count = input.components(separatedBy: .newlines).map{$0.split(separator: " ").count}.reduce(0, +)
-                    results.append(Candidate(text: "単語数:\(count)", value: 0, visibleString: "", rcid: 0, lastMid: 0, data: [], inputable: false))
+                    results.append(Candidate(text: "単語数:\(count)", value: 0, visibleString: "", correspondingCount: 0, rcid: 0, lastMid: 0, data: [], inputable: false))
                 }
             }
         }

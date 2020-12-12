@@ -8,111 +8,113 @@
 
 import Foundation
 
-
 extension KanaKanjiConverter{
-    private func makeResult<S: StringProtocol>(_ ruby: S, _ string: String) -> Candidate {
-        let ruby = String(ruby)
-        return Candidate(
-            text: string,
-            value: -18,
-            visibleString: ruby,
-            rcid: 1285,
-            lastMid: 237,
-            data: [LRE_DicDataElement(word: string, ruby: ruby, cid: 1285, mid: 237, value: -18)]
-        )
-    }
-
     ///和暦で書かれた入力を西暦に変換する関数
     /// - parameters:
     ///   - string: 入力
-    func toSeireki<S: StringProtocol>(string: S) -> [Candidate] {
-        let count = string.count
+    func toSeireki(_ inputData: InputData) -> [Candidate] {
+        let string = inputData.katakanaString
+        let count = inputData.characters.count
+        let makeResult0: (String) -> Candidate = {
+            return Candidate(
+                text: $0,
+                value: -18,
+                visibleString: string,
+                correspondingCount: count,
+                rcid: 1285,
+                lastMid: 237,
+                data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -18)]
+            )
+        }
+
+
+        let katakanaStringCount = string.count
         if string == "メイジガンネン"{
             return [
-                makeResult(string, "1868年")
+                makeResult0("1868年")
             ]
         }
         if string == "タイショウガンネン"{
             return [
-                makeResult(string, "1912年")
+                makeResult0("1912年")
             ]
         }
         if string == "ショウワガンネン"{
             return [
-                makeResult(string, "1926年")
+                makeResult0("1926年")
             ]
         }
         if string == "ヘイセイガンネン"{
             return [
-                makeResult(string, "1989年")
+                makeResult0("1989年")
             ]
         }
         if string == "レイワガンネン"{
             return [
-                makeResult(string, "2019年")
+                makeResult0("2019年")
             ]
         }
         if !string.hasSuffix("ネン"){
             return []
         }
         if string.hasPrefix("ショウワ"){
-            if count == 8, let year = Int(string[4...5]){
+            if katakanaStringCount == 8, let year = Int(string[4...5]){
                 return [
-                    makeResult(string, "\(year + 1925)年")
+                    makeResult0("\(year + 1925)年")
                 ]
             }
-            if count == 7, let year = Int(string[4...4]){
+            if katakanaStringCount == 7, let year = Int(string[4...4]){
                 return [
-                    makeResult(string, "\(year + 1925)年")
+                    makeResult0("\(year + 1925)年")
                 ]
             }
         }
         if string.hasPrefix("ヘイセイ"){
-            if count == 8, let year = Int(string[4...5]){
+            if katakanaStringCount == 8, let year = Int(string[4...5]){
                 return [
-                    makeResult(string, "\(year + 1988)年")
+                    makeResult0("\(year + 1988)年")
                 ]
             }
-            if count == 7, let year = Int(string[4...4]){
+            if katakanaStringCount == 7, let year = Int(string[4...4]){
                 return [
-                    makeResult(string, "\(year + 1988)年")
+                    makeResult0("\(year + 1988)年")
                 ]
             }
         }
         if string.hasPrefix("レイワ"){
-            if count == 7, let year = Int(string[3...4]){
+            if katakanaStringCount == 7, let year = Int(string[3...4]){
                 return [
-                    makeResult(string, "\(year + 2018)年")
+                    makeResult0("\(year + 2018)年")
                 ]
             }
-            if count == 6, let year = Int(string[3...3]){
+            if katakanaStringCount == 6, let year = Int(string[3...3]){
                 return [
-                    makeResult(string, "\(year + 2018)年")
+                    makeResult0("\(year + 2018)年")
                 ]
             }
         }
         if string.hasPrefix("メイジ"){
-            if count == 7, let year = Int(string[3...4]){
+            if katakanaStringCount == 7, let year = Int(string[3...4]){
                 return [
-                    makeResult(string, "\(year + 1867)年")
+                    makeResult0("\(year + 1867)年")
                 ]
             }
-            if count == 6, let year = Int(string[3...3]){
+            if katakanaStringCount == 6, let year = Int(string[3...3]){
                 return [
-                    makeResult(string, "\(year + 1867)年")
+                    makeResult0("\(year + 1867)年")
                 ]
             }
         }
         
         if string.hasPrefix("タイショウ"){
-            if count == 9, let year = Int(string[5...6]){
+            if katakanaStringCount == 9, let year = Int(string[5...6]){
                 return [
-                    makeResult(string, "\(year + 1911)年")
+                    makeResult0("\(year + 1911)年")
                 ]
             }
-            if count == 8, let year = Int(string[5...5]){
+            if katakanaStringCount == 8, let year = Int(string[5...5]){
                 return [
-                    makeResult(string, "\(year + 1911)年")
+                    makeResult0("\(year + 1911)年")
                 ]
             }
         }
@@ -122,24 +124,26 @@ extension KanaKanjiConverter{
     ///西暦で書かれた入力を和暦に変換する関数
     /// - parameters:
     ///   - string: 入力
-    func toWareki<S: StringProtocol>(string: S) -> [Candidate] {
+    func toWareki(_ inputData: InputData) -> [Candidate] {
+        let string = inputData.katakanaString
+
         let makeResult0: (String) -> Candidate = {
-            let string = String(string)
             return Candidate(
                 text: $0,
                 value: -18,
                 visibleString: string,
+                correspondingCount: inputData.characters.count,
                 rcid: 1285,
                 lastMid: 237,
                 data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -18)]
             )
         }
         let makeResult1: (String) -> Candidate = {
-            let string = String(string)
             return Candidate(
                 text: $0,
                 value: -19,
                 visibleString: string,
+                correspondingCount: inputData.characters.count,
                 rcid: 1285,
                 lastMid: 237,
                 data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -19)]

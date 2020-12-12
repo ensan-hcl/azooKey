@@ -19,7 +19,7 @@ extension Kana2Kanji{
     ///    「これはき」から「これは今日」に対応する候補などを作って返す。
     /// - note:
     ///     この関数の役割は意味連接の考慮にある。
-    func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, N_best: Int) -> [Candidate] {
+    func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, lastRubyCount: Int, N_best: Int) -> [Candidate] {
         let datas: [DicDataElementProtocol]
         let lastData: DicDataElementProtocol?
         let start_3_1_1 = Date()
@@ -64,11 +64,12 @@ extension Kana2Kanji{
         print("処理3.1.3", -start_3_1_3.timeIntervalSinceNow) //ここが激遅い
         let start_3_1_4 = Date()
 
-        let lastCandidate = prepart.isEmpty ? Candidate(text: "", value: .zero, visibleString: "", rcid: .zero, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
+        let lastCandidate = prepart.isEmpty ? Candidate(text: "", value: .zero, visibleString: "", correspondingCount: 0, rcid: .zero, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
         let nextLcid = prepart.lastClause?.nextLcid ?? 1316
         let lastMid = lastCandidate.lastMid
         let lastRcid = lastCandidate.rcid
         let visibleString = lastCandidate.visibleString + lastRuby
+        let correspoindingCount = lastCandidate.correspondingCount + lastRubyCount
         var ignoreCCValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
 
         if lastCandidate.data.count > 1, let lastNext = lastData{
@@ -100,6 +101,7 @@ extension Kana2Kanji{
                 text: lastCandidate.text + data.word,
                 value: newValue,
                 visibleString: visibleString,
+                correspondingCount: correspoindingCount,
                 rcid: data.rcid,
                 lastMid: includeMMValueCalculation ? data.mid:lastMid,
                 data: nodedata
