@@ -56,12 +56,19 @@ class Store{
         screenName: "「小ﾞﾟ」キーのフリック割り当て",
         defaultValue: KeyFlickSetting(targetKeyIdentifier: "kogana")
     ))
-
+/*
     var numberTabCustomKeysSetting = SettingItemViewModel(SettingItem<RomanCustomKeys>(
         identifier: .numberTabCustomKeys,
         screenName: "数字タブのカスタムキー機能",
         defaultValue: RomanCustomKeys.defaultValue
     ))
+*/
+    var numberTabCustomKeysSettingNew = SettingItemViewModel(SettingItem<RomanCustomKeysValue>(
+        identifier: .numberTabCustomKeys,
+        screenName: "数字タブのカスタムキー機能",
+        defaultValue: RomanCustomKeysValue.defaultValue
+    ))
+
 
     var keyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardType>(
         identifier: .keyboardType,

@@ -10,6 +10,26 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
+            VersionView("1.3", releaseDate: "2020年12月xx日"){
+                ParagraphView("機能を追加しました。", points: [
+                    "英語入力中、大文字に固定する機能を追加",
+                ])
+                ParagraphView("機能を改善しました。", points: [
+                    "ローマ字カスタムキーの編集画面を一新",
+                ])
+                ParagraphView("不具合を修正しました。", points: [
+                    "ローマ字での日本語入力中、一部の入力が正しく反映されない問題",
+                ])
+                ParagraphView("記号の変換を改善しました。", points: [])
+                ParagraphView("その他軽微な変換機能の改善を行いました。", points: [])
+            }
+
+            VersionView("1.2.1", releaseDate: "2020年12月10日"){
+                ParagraphView("不具合を修正しました。", points: [
+                    "ローマ字カスタムキーの編集で削除ができなくなる問題",
+                ])
+            }
+
             VersionView("1.2", releaseDate: "2020年12月09日"){
                 ParagraphView("機能を追加しました。", points: [
                     "azooKeyユーザ辞書機能を追加",

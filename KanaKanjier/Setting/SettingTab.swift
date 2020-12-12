@@ -11,6 +11,7 @@ import StoreKit
 
 struct SettingTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
+    @State private var text = ""
     var body: some View {
         NavigationView {
             Form {
@@ -28,7 +29,7 @@ struct SettingTabView: View {
                     Section(header: Text("カスタムキー")){
                         Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
                         ImageSlideshowView(pictures: ["romanCustomKeySetting0","romanCustomKeySetting1","romanCustomKeySetting2"])
-                        NavigationLink(destination: RomanCustomKeysItemView(Store.shared.numberTabCustomKeysSetting)){
+                        NavigationLink(destination: RomanCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
                             HStack{
                                 Text("設定する")
                                 Spacer()

@@ -165,6 +165,13 @@ private struct LearningMemorys{
     }
 
     init(){
+        if UserSettingDepartment.checkResetSetting(){
+            //リセットする。
+            self.values = []
+            self.index2order = []
+            self.save(force: true)
+        }
+
         if !Store.shared.userSetting.learningType.needUsingMemory{
             self.values = []
             self.index2order = []

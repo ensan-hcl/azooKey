@@ -36,10 +36,6 @@ final class Store{
     private(set) var keyboardModelVariableSection = KeyboardModelVariableSection()   //ビューに関わる部分
     private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
     private init(){
-        print("Store.sharedが生成されました")
-        if UserSettingDepartment.checkResetSetting(){
-            self.sendToDicDataStore(.resetMemory)
-        }
     }
     
     func initialize(){
@@ -642,8 +638,8 @@ struct UserSettingDepartment{
     }
 
     var romanNumberTabKeySetting: [RomanKeyModel] {
-        let customKeys: RomanCustomKeys
-        if let value = Self.userDefaults.value(forKey: Setting.numberTabCustomKeys.key), let keys = RomanCustomKeys.get(value){
+        let customKeys: RomanCustomKeysValue
+        if let value = Self.userDefaults.value(forKey: Setting.numberTabCustomKeys.key), let keys = RomanCustomKeysValue.get(value){
             customKeys = keys
         }else if let defaultValue = DefaultSetting.shared.romanCustomKeyDefaultSetting(.numberTabCustomKeys){
             customKeys = defaultValue
@@ -656,10 +652,10 @@ struct UserSettingDepartment{
         return keys.map{key in
             RomanKeyModel(
                 labelType: .text(key.name),
-                pressActions: [.input(key.name)],
+                pressActions: [.input(key.input)],
                 variationsModel: VariationsModel(
-                    key.longpress.map{string in
-                        (label: .text(string), actions: [.input(string)])
+                    key.longpresses.map{item in
+                        (label: .text(item.name), actions: [.input(item.input)])
                     }
                 ),
                 for: scale
@@ -1232,7 +1228,7 @@ private final class InputStateHolder{
             return
         }
         //スペースだった場合
-        if text == " " || text == "　"{
+        if text == " " || text == "　" || text == "\t" || text == "\0"{
             self.proxy.insertText(text)
             self.clear()
             return
