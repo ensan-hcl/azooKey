@@ -2289,6 +2289,9 @@
 		1AFA5717257FAFBE00477DC2 /* charID.chid in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5716257FAFBD00477DC2 /* charID.chid */; };
 		1AFA57392580DB2200477DC2 /* ButtonWithAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57382580DB2200477DC2 /* ButtonWithAlert.swift */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
+		1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */; };
+		1AFA57542582EFAE00477DC2 /* RomanAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */; };
+		1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57592583051500477DC2 /* CapslockTips.swift */; };
 		1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68372518A40D00C649C4 /* LargeTextView.swift */; };
 		1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */; };
 		1AFB68502518F18A00C649C4 /* CursorMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */; };
@@ -4624,6 +4627,9 @@
 		1AFA5716257FAFBD00477DC2 /* charID.chid */ = {isa = PBXFileReference; lastKnownFileType = file; path = charID.chid; sourceTree = "<group>"; };
 		1AFA57382580DB2200477DC2 /* ButtonWithAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithAlert.swift; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
+		1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickAaKeyModel.swift; sourceTree = "<group>"; };
+		1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanAaKeyModel.swift; sourceTree = "<group>"; };
+		1AFA57592583051500477DC2 /* CapslockTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapslockTips.swift; sourceTree = "<group>"; };
 		1AFB68372518A40D00C649C4 /* LargeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextView.swift; sourceTree = "<group>"; };
 		1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceSoftWaresLicenceView.swift; sourceTree = "<group>"; };
 		1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorMoveView.swift; sourceTree = "<group>"; };
@@ -4682,6 +4688,7 @@
 				1A2602B3251489E400EAD647 /* RomanSpaceKeyModel.swift */,
 				1AF28CF5253D1DC30012CF94 /* RomanChangeKeyboardKeyModel.swift */,
 				1A2602BD25148BB100EAD647 /* RomanEnterKeyModel.swift */,
+				1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */,
 				1A2602C725148CDF00EAD647 /* RomanFunctionalKeyModel.swift */,
 			);
 			path = KeyView;
@@ -4835,6 +4842,7 @@
 				1A3DC2202500D600002CAA93 /* TabKeyModel.swift */,
 				1AF28CEB253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift */,
 				1A3A16312529712300A5BA4F /* KogakiKeyModel.swift */,
+				1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */,
 			);
 			path = KeyView;
 			sourceTree = "<group>";
@@ -6549,6 +6557,7 @@
 			children = (
 				1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */,
 				1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */,
+				1AFA57592583051500477DC2 /* CapslockTips.swift */,
 				1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */,
 				1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */,
 				1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */,
@@ -9666,6 +9675,7 @@
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
+				1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */,
 				1A4057F7255843850073C6F7 /* LearningTypeSettingItemView.swift in Sources */,
 				1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */,
 				1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */,
@@ -9754,6 +9764,7 @@
 				1A3DC2122500D586002CAA93 /* HorizontalFlickKeyboardModel.swift in Sources */,
 				1AA3469F2567F08100B41A16 /* KeyboardType.swift in Sources */,
 				1A677370256F7AC30037AF22 /* SoundTools.swift in Sources */,
+				1AFA57542582EFAE00477DC2 /* RomanAaKeyModel.swift in Sources */,
 				1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */,
 				1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */,
 				1AF28CEC253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift in Sources */,
@@ -9790,6 +9801,7 @@
 				1A26029D2514808D00EAD647 /* RomanKeyModelVariableSection.swift in Sources */,
 				1A8A8402250F65110093A701 /* all.swift in Sources */,
 				1A6F959725144481007399AC /* VerticalRomanKeyboardView.swift in Sources */,
+				1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */,
 				1AF1C55F252DD10F002FCC66 /* added_last_n_character.swift in Sources */,
 				1AA346912567F01E00B41A16 /* SettingItemProtocol.swift in Sources */,
 				1A3DC20C2500D53B002CAA93 /* VerticalFlickKeyboardView.swift in Sources */,

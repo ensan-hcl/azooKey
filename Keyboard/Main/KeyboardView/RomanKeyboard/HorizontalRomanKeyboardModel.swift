@@ -16,6 +16,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
     let resultModel = ResultModel()
     
     let enterKeyModel: EnterKeyModelProtocol = RomanEnterKeyModel.shared
+    let aAKeyModel: AaKeyModelProtocol = RomanAaKeyModel.shared
     let expandedResultModel = ExpandedResultModel()
     var variableSection = HorizontalRomanKeyboardModelVariableSection()
     
@@ -296,7 +297,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
             RomanKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
             RomanKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
             RomanKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
-            RomanFunctionalKeyModel(labelType: .image("textformat.alt"), rowInfo: (normal: 9, functional: 1, space: 0, enter: 0), pressActions: [.changeCharacterType]),
+            RomanAaKeyModel.shared,
         ],
         [
             RomanFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.hira)]),

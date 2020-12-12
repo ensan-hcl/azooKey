@@ -38,4 +38,5 @@ enum RomanKeyPressState{
 final class RomanKeyModelVariableSection: ObservableObject {
     @Published var pressState: RomanKeyPressState = .unpressed
     @Published var enterKeyState: EnterKeyState = .return(.default)
+    @Published var aAKeyState: AaKeyState = .normal
 }

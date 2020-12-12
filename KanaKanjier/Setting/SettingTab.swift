@@ -10,8 +10,6 @@ import SwiftUI
 import StoreKit
 
 struct SettingTabView: View {
-    @State private var pid : Int32 = 0
-
     @ObservedObject private var storeVariableSection = Store.variableSection
     var body: some View {
         NavigationView {

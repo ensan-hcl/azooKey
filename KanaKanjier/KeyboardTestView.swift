@@ -76,34 +76,56 @@ extension View {
     }
 }
 /*
-enum SelectState{
-    case none
-    case item(index: Int, delta: CGFloat)
+ enum SelectState{
+ case none
+ case item(index: Int, delta: CGFloat)
 
-    var item: (index: Int, delta: CGFloat)? {
-        switch self{
-        case .none:
-            return nil
-        case let .item(index, delta):
-            return (index, delta)
-        }
-    }
-}
+ var item: (index: Int, delta: CGFloat)? {
+ switch self{
+ case .none:
+ return nil
+ case let .item(index, delta):
+ return (index, delta)
+ }
+ }
+ }
  */
 
 class SelectState: ObservableObject{
-    @Published var between = false
     @Published var targetIndex = -1
     @Published var selectedIndex = -1
+    @Published var longpressTargetIndex = -1
+    @Published var longpressSelectedIndex = -1
 
     func reset(){
         self.selectedIndex = -1
         self.targetIndex = -1
-        self.between = false
+    }
+}
+class EditState: ObservableObject{
+    enum State{
+        case none
+        case drag
+        case label
+        case action
+    }
+    @Published var state = State.none
+    var allowDrag: Bool {
+        return state == .drag
+    }
+    var editLabel: Bool {
+        return state == .label
+    }
+    var editAction: Bool {
+        return state == .action
     }
 
-    func isFocused(_ index: Int) -> Bool {
-        return !between && targetIndex == index && selectedIndex != index
+    func toggle(_ state: State){
+        if self.state == state{
+            self.state = .none
+        }else{
+            self.state = state
+        }
     }
 }
 
@@ -111,116 +133,334 @@ struct TestView: View {
     @State private var keys = ["、","。","！","？","・"]
     @ObservedObject private var selectState = SelectState()
 
+    @ObservedObject private var editState = EditState()
+
     let width: CGFloat = 32
     let padding: CGFloat = 5
 
+    @State private var keyData: [RomanCustomKey]
+
+    init(){
+        let data = UserDefaults(suiteName: SharedStore.appGroupKey)!.value(forKey: Setting.numberTabCustomKeys.key)
+        let romanCustomKeys = RomanCustomKeys.get(data)!
+        self._keyData = State(initialValue: romanCustomKeys.keys)
+        //print(romanCustomKeys.keys)
+    }
+
     var separator: some View {
         Rectangle()
-            .frame(width: 2)
+            .frame(width: 2, height: 40)
             .foregroundColor(.accentColor)
     }
 
     var body: some View {
-        HStack(spacing: 0){
-            ForEach(keys.indices){i in
-                if selectState.between && selectState.targetIndex == i{
+        VStack{
+            Spacer(minLength: 50)
+                .fixedSize()
+
+            HStack(spacing: 0){
+                ForEach(keyData.indices, id: \.self){i in
+                    if editState.allowDrag && selectState.targetIndex == i{
+                        separator
+                            .focus(.accentColor, focused: true)
+                    }
+                    DraggableItem(selectState: selectState, editState: editState, index: i, label: keyData[i].name, update: update, onEnd: onEnd)
+                        .frame(width: width, height: 50)
+                        .padding(padding)
+                        .zIndex(selectState.selectedIndex == i ? 1:0)
+                }
+                if editState.allowDrag && selectState.targetIndex == keyData.endIndex{
                     separator
                         .focus(.accentColor, focused: true)
                 }
-                DraggableItem(selectState: selectState, index: i, label: keys[i], update: update, onEnd: onEnd)
-                    .frame(width: width, height: 50)
-                    .padding(padding)
-                    .zIndex(selectState.selectedIndex == i ? 1:0)
+            }.scaledToFit()
+            if self.selectState.selectedIndex != -1{
+                Spacer(minLength: 50)
+                    .fixedSize()
+                Text("長押しした時の候補")
+                let longpresses = keyData[selectState.selectedIndex].longpresses
+                HStack(spacing: 0){
+                    ForEach(longpresses.indices, id: \.self){i in
+                        if editState.allowDrag && selectState.longpressTargetIndex == i{
+                            separator
+                                .focus(.accentColor, focused: true)
+                        }
+                        DraggableItem(selectState: selectState, editState: editState, index: i, label: longpresses[i].name, long: true, update: longPressUpdate, onEnd: longPressOnEnd)
+                            .frame(width: width, height: 50)
+                            .padding(padding)
+                            .zIndex(selectState.longpressSelectedIndex == i ? 1:0)
+                    }
+                    if editState.allowDrag && selectState.longpressTargetIndex == longpresses.endIndex{
+                        separator
+                            .focus(.accentColor, focused: true)
+                    }
+                }.scaledToFit()
+                if longpresses.isEmpty{
+                    Button{
+                        keyData[selectState.selectedIndex].longpresses.append(RomanVariationKey(name: "", input: ""))
+                    }label: {
+                        Text("追加する")
+                    }
+                }
             }
-            if selectState.between && selectState.targetIndex == keys.endIndex{
-                separator
-                    .focus(.accentColor, focused: true)
+            Spacer()
+            if editState.editLabel{
+                VStack{
+                    Text("キーに表示される文字を設定します。")
+                        .font(.caption)
+                    Text("入力される文字とは異なっていても構いません。")
+                        .font(.caption)
+
+                    let sIndex = selectState.selectedIndex
+                    let lpsIndex = selectState.longpressSelectedIndex
+                    if lpsIndex == -1{
+                        TextField("ラベル", text: $keyData[sIndex].name)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal)
+                    }else{
+                        TextField("ラベル", text: $keyData[sIndex].longpresses[lpsIndex].name)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal)
+                    }
+                }
+                .frame(maxHeight: 80)
+                .padding(.vertical, 3)
+                .background(RoundedRectangle(cornerRadius: 4).stroke(Color.systemGray5))
+                .padding()
+            }
+            if editState.editAction{
+                VStack{
+                    Text("キーを押して入力される文字を設定します。")
+                        .font(.caption)
+                    Text("キーの見た目は「ラベル」で設定できます。")
+                        .font(.caption)
+
+                    let sIndex = selectState.selectedIndex
+                    let lpsIndex = selectState.longpressSelectedIndex
+                    if lpsIndex == -1{
+
+                        TextField("入力される文字", text: $keyData[sIndex].input, onCommit: {
+                            if keyData[sIndex].name.isEmpty{
+                                keyData[sIndex].name = keyData[sIndex].input
+                            }
+                        })
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal)
+                    }else{
+                        TextField("入力される文字", text: $keyData[sIndex].longpresses[lpsIndex].input, onCommit: {
+                            if keyData[sIndex].longpresses[lpsIndex].name.isEmpty{
+                                keyData[sIndex].longpresses[lpsIndex].name = keyData[sIndex].longpresses[lpsIndex].input
+                            }
+                        })
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal)
+                    }
+                }
+                .frame(maxHeight: 80)
+                .padding(.vertical, 3)
+                .background(RoundedRectangle(cornerRadius: 4).stroke(Color.systemGray5))
+                .padding()
             }
 
-        }.scaledToFit()
+            if selectState.selectedIndex != -1{
+                HStack{
+                    Group{
+                        ToolBarButton(systemImage: "trash", labelText: "削除"){
+                            if !editState.allowDrag{
+                                let sIndex = selectState.selectedIndex
+                                let lpsIndex = selectState.longpressSelectedIndex
+                                if lpsIndex == -1{
+                                    self.keyData.remove(at: sIndex)
+                                    self.selectState.selectedIndex = -1
+                                }else{
+                                    self.keyData[sIndex].longpresses.remove(at: lpsIndex)
+                                    self.selectState.longpressSelectedIndex = -1
+                                }
+                            }
+                        }
+                        .foregroundColor(.primary)
+
+                        Spacer()
+                    }/*
+                    Group{
+                        ToolBarButton(systemImage: "bubble.middle.bottom", labelText: "長押し設定"){
+                            editState.state = .none
+                        }
+                        .foregroundColor(.primary)
+
+                        Spacer()
+                    }
+ */
+                    
+                    Group{
+                        ToolBarButton(systemImage: "arrow.left.arrow.right", labelText: "移動"){
+                            editState.toggle(.drag)
+                        }
+                        .foregroundColor(editState.allowDrag ? .accentColor:.primary)
+                        Spacer()
+                    }
+                    Group{
+                        ToolBarButton(systemImage: "text.cursor", labelText: "入力"){
+                            editState.state = .action
+                        }
+                        .foregroundColor(editState.editAction ? .accentColor:.primary)
+
+                        Spacer()
+                    }
+                    Group{
+                        ToolBarButton(systemImage: "questionmark.square", labelText: "ラベル"){
+                            editState.state = .label
+                        }
+                        .foregroundColor(editState.editLabel ? .accentColor:.primary)
+
+                        Spacer()
+                    }
+                    Group{
+                        ToolBarButton(systemImage: "plus", labelText: "追加"){
+                            let sIndex = selectState.selectedIndex
+                            let lpsIndex = selectState.longpressSelectedIndex
+                            if lpsIndex == -1{
+                                self.keyData.append(RomanCustomKey(name: "", longpress: []))
+                            }else{
+                                self.keyData[sIndex].longpresses.append(RomanVariationKey(name: "", input: ""))
+                            }
+                        }
+                        .foregroundColor(.primary)
+
+                    }
+                }
+                .frame(maxHeight: 50)
+                .padding(.vertical, 3)
+                .background(RoundedRectangle(cornerRadius: 4).stroke(Color.systemGray5))
+                .padding()
+            }
+        }
     }
 
-    func pointedIndex(index: Int, delta: CGFloat) -> (index: Int, between: Bool) {
+
+    private func pointedIndex(index: Int, delta: CGFloat) -> Int{
         print(index, delta)
         if delta.isZero{
-            return (index, false)
+            return index
         }
         if delta < 0{
             //負の場合
             var position = CGFloat.zero
             var index = index
             while index >= 0{
-                position -= (width/2 - padding/2)
+                position -= (width + padding*2)
                 if position < delta{
-                    return (index, false)
+                    return index
                 }
-
-                position -= 3*padding
-                if position < delta{
-                    return (index, true)
-                }
-
                 index -= 1
             }
-            return (0, true)
+            return 0
         }else{
             //正の場合
             var position = CGFloat.zero
-            var index = index
-            while index < keys.endIndex{
-                position += (width/2 - padding/2)
+            var index = index + 1
+            let endIndex: Int
+            if selectState.longpressSelectedIndex == -1{
+                endIndex = keyData.endIndex
+            }else{
+                endIndex = keyData[selectState.selectedIndex].longpresses.endIndex
+            }
+            while index < endIndex{
+                position += (width + padding*2)
                 if delta < position{
-                    return (index, false)
+                    return index
                 }
 
                 index += 1
-
-                position += 3*padding
-                if delta < position{
-                    return (index, true)
-                }
             }
-            return (keys.endIndex, true)
+            return endIndex
         }
 
     }
 
     func update(index: Int, delta: CGFloat){
-        let (targetIndex, between) = self.pointedIndex(index: index, delta: delta)
-        self.selectState.between = between
+        let targetIndex = self.pointedIndex(index: index, delta: delta)
         self.selectState.targetIndex = targetIndex
+    }
+
+    func longPressUpdate(index: Int, delta: CGFloat){
+        let targetIndex = self.pointedIndex(index: index, delta: delta)
+        self.selectState.longpressTargetIndex = targetIndex
     }
 
     func onEnd(){
         let selectedIndex = selectState.selectedIndex
         let targetIndex = selectState.targetIndex
-        let between = selectState.between
-
-        if between{
+        if targetIndex != -1{
             if selectedIndex > targetIndex{
-                let item = self.keys.remove(at: selectedIndex)
-                self.keys.insert(item, at: targetIndex)
+                let item = self.keyData.remove(at: selectedIndex)
+                self.keyData.insert(item, at: targetIndex)
+                self.selectState.selectedIndex = targetIndex
             }else if selectedIndex < targetIndex{
-                self.keys.insert(self.keys[selectedIndex], at: targetIndex)
-                self.keys.remove(at: selectedIndex)
+                self.keyData.insert(self.keyData[selectedIndex], at: targetIndex)
+                self.keyData.remove(at: selectedIndex)
+                self.selectState.selectedIndex = targetIndex - 1
             }
-        }else{
-
         }
-        self.selectState.reset()
+        self.selectState.targetIndex = -1
+    }
 
+    func longPressOnEnd(){
+        let selectedKeyIndex = selectState.selectedIndex
+        let selectedIndex = selectState.longpressSelectedIndex
+        let targetIndex = selectState.longpressTargetIndex
+        if targetIndex != -1{
+            if selectedIndex > targetIndex{
+                let item = keyData[selectedKeyIndex].longpresses.remove(at: selectedIndex)
+                keyData[selectedKeyIndex].longpresses.insert(item, at: targetIndex)
+                self.selectState.longpressSelectedIndex = targetIndex
+            }else if selectedIndex < targetIndex{
+                keyData[selectedKeyIndex].longpresses.insert(keyData[selectedKeyIndex].longpresses[selectedIndex], at: targetIndex)
+                keyData[selectedKeyIndex].longpresses.remove(at: selectedIndex)
+                self.selectState.longpressSelectedIndex = targetIndex - 1
+            }
+        }
+        self.selectState.longpressTargetIndex = -1
+
+    }
+
+}
+
+struct ToolBarButton: View{
+    let systemImage: String
+    let labelText: String
+    let action: () -> ()
+
+    var body: some View {
+        Button{
+            action()
+        }label: {
+            VStack{
+                Image(systemName: systemImage)
+                    .font(.system(size: 23))
+                Spacer()
+                Text(labelText)
+                    .font(.system(size: 10))
+
+            }
+        }
+        .padding(.horizontal, 10)
     }
 }
 
 struct DraggableItem: View {
     enum DragState {
         case inactive
-        case pressing
         case dragging(translation: CGSize)
 
         var translation: CGSize {
             switch self {
-            case .inactive, .pressing:
+            case .inactive:
                 return .zero
             case .dragging(let translation):
                 return translation
@@ -231,14 +471,14 @@ struct DraggableItem: View {
             switch self {
             case .inactive:
                 return false
-            case .pressing, .dragging:
+            case .dragging:
                 return true
             }
         }
 
         var isDragging: Bool {
             switch self {
-            case .inactive, .pressing:
+            case .inactive:
                 return false
             case .dragging:
                 return true
@@ -249,90 +489,117 @@ struct DraggableItem: View {
     @GestureState var dragState = DragState.inactive
     @State var viewState: CGSize = .zero
     @ObservedObject private var selectState: SelectState
-    @State private var animationEnabled = false
+    @ObservedObject private var editState: EditState
 
     let index: Int
     let label: String
+    let long: Bool
 
     let onEnd: () -> ()
     let update: (Int, CGFloat) -> ()
 
-    init(selectState: SelectState, index: Int, label: String, update: @escaping (Int, CGFloat) -> (), onEnd: @escaping () -> ()){
+    init(selectState: SelectState, editState: EditState, index: Int, label: String, long: Bool = false, update: @escaping (Int, CGFloat) -> (), onEnd: @escaping () -> ()){
         self.selectState = selectState
+        self.editState = editState
         self.index = index
         self.label = label
+        self.long = long
         self.update = update
         self.onEnd = onEnd
     }
 
+    var focused: Bool {
+        if long && selectState.longpressSelectedIndex == index{
+            return true
+        }
+        if !long && selectState.selectedIndex == index{
+            return selectState.longpressSelectedIndex == -1
+        }
+        return false
+    }
+
+    var strokeColor: Color {
+        if focused{
+            return .accentColor
+        }
+        if longpressFocused{
+            return .gray
+        }
+        return .primary
+    }
+
+    var longpressFocused: Bool {
+        return !long && selectState.selectedIndex == index && selectState.longpressSelectedIndex != -1
+    }
 
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
-            .stroke(selectState.isFocused(index) ? Color.accentColor:Color.primary)
-            .background(RoundedRectangle(cornerRadius: 10).fill(selectState.isFocused(index) ? Color.systemGray4 : Color.systemGray6))
-            .focus(.accentColor, focused: selectState.isFocused(index))
+            .stroke(strokeColor)
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
+            .focus(.accentColor, focused: focused)
+            .focus(.gray, focused: longpressFocused)
+
             .overlay(Text(label))
             .offset(
                 x: viewState.width + dragState.translation.width,
                 y: viewState.height + dragState.translation.height
             )
-            .contextMenu{
-                Button{
-                    print("並び替え")
+            .onTapGesture {
+                if !long{
                     self.selectState.selectedIndex = index
-                    animationEnabled = true
-                    Store.shared.feedbackGenerator.notificationOccurred(.success)
-                } label: {
-                    Text("並び替え")
-                    Image(systemName: "arrow.left.arrow.right")
+                    self.selectState.longpressSelectedIndex = -1
+                }else{
+                    self.selectState.longpressSelectedIndex = index
                 }
-
-                Button{
-                    print("削除")
-                } label: {
-                    Text("削除").foregroundColor(.red)
-                    Image(systemName: "trash").foregroundColor(.red)
-                }
-
             }
             .gesture(
                 DragGesture()
                     .updating($dragState){value, state, transaction in
-                        if self.selectState.selectedIndex == index{
-                            update(index, value.translation.width)
-                            state = .dragging(translation: value.translation)
+                        if !long{
+                            if self.selectState.selectedIndex == index && editState.allowDrag{
+                                update(index, value.translation.width)
+                                state = .dragging(translation: value.translation)
+                                return
+                            }
+                        }else{
+                            if self.selectState.longpressSelectedIndex == index && editState.allowDrag{
+                                update(index, value.translation.width)
+                                state = .dragging(translation: value.translation)
+                                return
+                            }
                         }
                     }
                     .onEnded {_ in
-                        print("終了")
-                        animationEnabled = false
-                        self.onEnd()
-                    }
-        )
-/*
-            .gesture(
-                LongPressGesture(minimumDuration: 0.5).onEnded{_ in Store.shared.feedbackGenerator.notificationOccurred(.success)}
-                    .sequenced(before: DragGesture())
-                    .updating($dragState) { value, state, transaction in
-                        switch value {
-                        case .first(true):  // Long press begins.
-                            state = .pressing
-                            self.selectState.selectedIndex = index
-                        case .second(true, let drag):    // Long press confirmed, dragging may begin.
-                            update(index, drag?.translation.width ?? .zero)
-                            state = .dragging(translation: drag?.translation ?? .zero)
-                        default:    // Dragging ended or the long press cancelled.
-                            print("いつ呼ばれるの？default")
-                            state = .inactive
+                        if editState.allowDrag{
+                            print("終了")
+                            self.onEnd()
                         }
                     }
-                    .onEnded { value in
-                        guard case .second(true, let drag?) = value else { return }
-                        print("終了")
-                        self.onEnd()
-                    }
             )
- */
+        /*
+         .gesture(
+         LongPressGesture(minimumDuration: 0.5).onEnded{_ in Store.shared.feedbackGenerator.notificationOccurred(.success)}
+         .sequenced(before: DragGesture())
+         .updating($dragState) { value, state, transaction in
+         switch value {
+         case .first(true):  // Long press begins.
+         state = .pressing
+         self.selectState.selectedIndex = index
+         case .second(true, let drag):    // Long press confirmed, dragging may begin.
+         update(index, drag?.translation.width ?? .zero)
+         state = .dragging(translation: drag?.translation ?? .zero)
+         default:    // Dragging ended or the long press cancelled.
+         print("いつ呼ばれるの？default")
+         state = .inactive
+         }
+         }
+         .onEnded { value in
+         guard case .second(true, let drag?) = value else { return }
+         print("終了")
+         self.onEnd()
+         }
+         )
+         */
 
     }
 }
@@ -345,65 +612,6 @@ struct MyTextFieldStyle: TextFieldStyle {
     }
 }
 
-/*
- struct KeyButton: View {
- @State private var pressed = false
-
- var longTapGesture: some Gesture {
- LongPressGesture(minimumDuration: 0.5, maximumDistance: 20)
- .onChanged{value in
- self.pressed = value
- }
- .onEnded{value in
- self.pressed = value
- UINotificationFeedbackGenerator().notificationOccurred(.success)
- }
- }
-
- var body: some View {
- RoundedRectangle(cornerRadius: 5)
- .stroke(Color.primary, lineWidth: 3)
- .frame(width: 30, height: 40)
- .background(self.pressed ? Color.yellow : Color.clear)
- .gesture(longTapGesture)
- }
- }
-
- struct TestView: View {
- @State private var selection: Int = -1
-
- var body: some View {
- HStack{
- Spacer()
- ForEach(0..<6){_ in
- KeyButton()
- }
- Spacer()
- Circle()
- .foregroundColor(.blue)
- .frame(width: 40, height: 40)
- .overlay(Image(systemName: "plus").foregroundColor(.white))
- }
- }
- }
- */
-/*
- struct TestView: View {
- @State private var input = ""
- var body: some View {
- VStack{
- TextField("番号を入力", text: $input).keyboardType(.numberPad)
- Button{
- if let value = Int(input){
- AudioServicesPlaySystemSound(SystemSoundID(value))
- }
- }label: {
- Label("聴く！", systemImage: "speaker.wave.2")
- }
- }
- }
- }
- */
 /*
  struct TestView: View {
  @State var location: CGPoint = .zero

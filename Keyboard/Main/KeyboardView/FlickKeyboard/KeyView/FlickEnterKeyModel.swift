@@ -12,7 +12,6 @@ import SwiftUI
 struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
     static var shared = FlickEnterKeyModel()
     var variableSection: KeyModelVariableSection = KeyModelVariableSection()
-    
     let suggestModel: SuggestModel
     let needSuggestView = false
     

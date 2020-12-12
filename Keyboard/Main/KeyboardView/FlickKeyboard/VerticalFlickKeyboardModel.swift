@@ -24,6 +24,8 @@ struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
     let expandedResultModel = ExpandedResultModel()
 
     let enterKeyModel: EnterKeyModelProtocol = FlickEnterKeyModel.shared
+    let aAKeyModel: AaKeyModelProtocol = FlickAaKeyModel.shared
+
     let hiraTabKeyModel = TabKeyModel.hiraTabKeyModel
     let abcTabKeyModel = TabKeyModel.abcTabKeyModel
     let numberTabKeyModel = TabKeyModel.numberTabKeyModel
@@ -350,7 +352,7 @@ struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
                     pressActions: [.input("s")]
                 ),
             ]),
-            FlickKeyModel(labelType: .text("a/A"), pressActions: [.changeCharacterType], flickKeys: [:]),
+            FlickAaKeyModel.shared,
 
         ],
         //第3列

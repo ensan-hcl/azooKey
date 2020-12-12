@@ -32,6 +32,11 @@ struct FlickKeyView: View{
         self.model = model
         self.modelVariableSection = model.variableSection
     }
+
+    var suggestAnimation: Animation {
+        Animation.easeIn(duration: 0.1).delay(0.5)
+    }
+
     //これはどちらかというとViewに属すると判断した
     var gesture: some Gesture {
         DragGesture(minimumDistance: .zero)
@@ -42,7 +47,7 @@ struct FlickKeyView: View{
                     //押し始めの時間を記録する。
                     modelVariableSection.pressState = .started(Date())
                     self.model.sound()
-                    withAnimation(self.model.suggestAnimation) {
+                    withAnimation(suggestAnimation) {
                         //サジェストが必要な設定なら
                         if self.model.needSuggestView{
                             //全てのサジェストを表示する

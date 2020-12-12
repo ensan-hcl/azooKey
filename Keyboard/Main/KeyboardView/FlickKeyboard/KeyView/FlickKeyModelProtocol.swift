@@ -44,7 +44,6 @@ protocol FlickKeyModelProtocol {
     
     var backGroundColorWhenPressed: Color {get}
     var backGroundColorWhenUnpressed: Color {get}
-    var suggestAnimation: Animation {get}
 
     func flickSensitivity(to direction: FlickDirection) -> CGFloat
     func sound()
@@ -103,10 +102,6 @@ extension FlickKeyModelProtocol{
     var backGroundColorWhenUnpressed: Color {
         Store.shared.design.colors.normalKeyColor
     }
-    var suggestAnimation: Animation {
-        Animation.easeIn(duration: 0.1).delay(0.5)
-    }
-
     func flickSensitivity(to direction: FlickDirection) -> CGFloat {
         return 25
     }

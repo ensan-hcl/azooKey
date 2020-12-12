@@ -25,7 +25,6 @@ protocol RomanKeyModelProtocol{
     
     var backGroundColorWhenPressed: Color {get}
     var backGroundColorWhenUnpressed: Color {get}
-    var suggestAnimation: Animation {get}
 
     func sound()
 }
@@ -49,9 +48,5 @@ extension RomanKeyModelProtocol{
     }
     var backGroundColorWhenUnpressed: Color {
         Store.shared.design.colors.normalKeyColor
-    }
-    
-    var suggestAnimation: Animation {
-        Animation.easeIn(duration: 0.1).delay(0.5)
     }
 }

@@ -14,3 +14,8 @@ enum EnterKeyState{
     case `return`(UIReturnKeyType)   //改行
     case edit       //編集
 }
+
+enum AaKeyState{
+    case normal
+    case capslock
+}

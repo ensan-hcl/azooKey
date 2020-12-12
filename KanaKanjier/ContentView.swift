@@ -41,7 +41,6 @@ struct ContentView: View {
                         }
                     }
                     .tag(2)
-                
 
             }.fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()

@@ -12,7 +12,7 @@ import SwiftUI
 final class KeyModelVariableSection: ObservableObject{
     @Published var keyboardState: TabState = .hira
     @Published var enterKeyState: EnterKeyState = .return(.default)
-
+    @Published var aAKeyState: AaKeyState = .normal
     @Published var suggestState: SuggestState = .nothing
     @Published var pressState: KeyPressState = .inactive
 }

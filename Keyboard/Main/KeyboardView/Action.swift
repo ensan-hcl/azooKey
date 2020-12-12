@@ -24,7 +24,7 @@ enum ActionType{
     //変換関連
     case enter
     case changeCharacterType    //濁点、半濁点、小さい文字
-
+    case changeCapsLockState(state: AaKeyState)
     case hideLearningMemory
     //タブの変更
     case moveTab(TabState)
@@ -60,6 +60,7 @@ enum KeyLongPressActionType: Equatable{
     case delete
     case moveCursor(MoveDirection)
     case toggleShowMoveCursorView
+    case changeCapsLockState(state: AaKeyState)
 
     
     static func == (lsb: KeyLongPressActionType, rsb: KeyLongPressActionType) -> Bool {
@@ -72,6 +73,8 @@ enum KeyLongPressActionType: Equatable{
             return l == r
         case (.toggleShowMoveCursorView,.toggleShowMoveCursorView):
             return true
+        case let (.changeCapsLockState(lstate),.changeCapsLockState(rstate)):
+            return lstate == rstate
         default:
             return false
         }

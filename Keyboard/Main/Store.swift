@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-import AudioToolbox
+
 ///アプリケーション全体で共有すべき情報を集約するクラス。
 final class Store{
     static let shared = Store()
@@ -16,6 +16,7 @@ final class Store{
     fileprivate var orientation: KeyboardOrientation = .vertical
     private var enterKeyType: UIReturnKeyType = .default
     private var enterKeyState: EnterKeyState = .return(.default)
+    fileprivate var aAKeyState: AaKeyState = .normal
 
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     var action = ActionDepartment()
@@ -35,7 +36,7 @@ final class Store{
     private(set) var keyboardModelVariableSection = KeyboardModelVariableSection()   //ビューに関わる部分
     private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
     private init(){
-        NSLog("Store.sharedが生成されました")
+        print("Store.sharedが生成されました")
         if UserSettingDepartment.checkResetSetting(){
             self.sendToDicDataStore(.resetMemory)
         }
@@ -168,6 +169,11 @@ final class Store{
         case `return`
         case edit
         case complete
+    }
+
+    fileprivate func registerAaKeyState(_ state: AaKeyState){
+        self.keyboardModel.aAKeyModel.setKeyState(new: state)
+        self.aAKeyState = state
     }
     
     fileprivate func registerEnterKeyState(_ state: RoughEnterKeyState){
@@ -764,7 +770,12 @@ final class ActionDepartment{
         switch action{
         case let .input(text):
             Store.shared.showMoveCursorView(false)
-            self.inputStateHolder.input(text: text)
+            if Store.shared.keyboardModel.tabState == .abc && Store.shared.aAKeyState == .capslock{
+                let input = text.uppercased()
+                self.inputStateHolder.input(text: input)
+            }else{
+                self.inputStateHolder.input(text: text)
+            }
         case let .delete(count):
             Store.shared.showMoveCursorView(false)
             self.inputStateHolder.delete(count: count)
@@ -788,7 +799,8 @@ final class ActionDepartment{
             }
         case let .moveCursor(count):
             self.inputStateHolder.moveCursor(count: count)
-
+        case let .changeCapsLockState(state):
+            Store.shared.registerAaKeyState(state)
         case .toggleShowMoveCursorView:
             Store.shared.toggleShowMoveCursorView()
 
@@ -892,7 +904,14 @@ final class ActionDepartment{
             })
             let tuple = (type: action, timer: timer)
             self.timers.append(tuple)
+        case let .changeCapsLockState(state):
+            let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
+                Store.shared.registerAaKeyState(state)
+            })
+            let tuple = (type: action, timer: timer)
+            self.timers.append(tuple)
         }
+
     }
     
     ///長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。

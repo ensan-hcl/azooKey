@@ -8,9 +8,39 @@
 
 import SwiftUI
 
+struct RomanVariationKey: Codable {
+    var name: String
+    var input: String
+}
+
 struct RomanCustomKey: Codable {
-    let name: String
-    let longpress: [String]
+    var name: String
+    var longpress: [String]
+    var input: String
+    var longpresses: [RomanVariationKey]
+    enum CodingKeys: String, CodingKey {
+        case name
+        case longpress
+        case input
+        case longpresses
+    }
+
+    init(name: String, longpress: [String]){
+        self.name = name
+        self.longpress = longpress
+        self.input = name
+        self.longpresses = longpress.map{RomanVariationKey(name: $0, input: $0)}
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let name = try values.decode(String.self, forKey: .name)
+        let longpress = try values.decode([String].self, forKey: .longpress)
+        self.name = name
+        self.longpress = longpress
+        self.input = (try? values.decode(String.self, forKey: .input)) ?? name
+        self.longpresses =  (try? values.decode([RomanVariationKey].self, forKey: .longpresses)) ?? longpress.map{RomanVariationKey(name: $0, input: $0)}
+    }
 }
 
 private struct RomanCustomKeysArray: Codable {

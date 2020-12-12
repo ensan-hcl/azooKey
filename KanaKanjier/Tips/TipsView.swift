@@ -50,6 +50,11 @@ struct TipsTabView: View {
                                 Text("漢字を拡大表示する")
                             }
                         }
+                        NavigationLink(destination: CapsLockTipsView()) {
+                            VStack{
+                                Text("大文字に固定する")
+                            }
+                        }
                         NavigationLink(destination: CustomKeyTipsView()) {
                             VStack{
                                 Text("キーをカスタマイズする")
