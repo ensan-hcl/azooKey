@@ -1110,7 +1110,7 @@ private final class InputStateHolder{
     /// - Note
     ///   visibleStringの利用はバグを招きやすいとみられ、できれば控えた方が良いと思う。
     fileprivate func complete(candidate: Candidate){
-        //削除する
+        //入力部分を削除する
         let leftsideInputedText = self.inputtedText.prefix(self.cursorPosition)
         if !self.isSelected{
             (0..<self.cursorPosition).forEach{_ in
@@ -1143,11 +1143,7 @@ private final class InputStateHolder{
             }
             self.inputtedText = displayedText
             self.romanConverter.setCompletedData(candidate)
-
         }
-        //そうでない場合、続きの変換部分をセットする。
-        let offset = self.getActualOffset(count: self.cursorMaximumPosition)
-        self.proxy.adjustTextPosition(byCharacterOffset: offset)
         self.cursorPosition = self.cursorMaximumPosition
         self.setResult()
     }
