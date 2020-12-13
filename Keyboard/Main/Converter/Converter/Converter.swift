@@ -189,11 +189,12 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   付加的な変換候補
     private func getTopLevelAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
         var candidates: [Candidate] = []
-
-        switch Store.shared.keyboardType{
-        case .flick: break
-        case .roman:
-            candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US", penalty: -10))
+        if Store.shared.userSetting.englishCandidateSetting{
+            switch Store.shared.keyboardType{
+            case .flick: break
+            case .roman:
+                candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US", penalty: -10))
+            }
         }
         return candidates
     }

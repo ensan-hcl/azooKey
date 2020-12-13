@@ -13,6 +13,7 @@ struct UpdateInfomationView: View {
             VersionView("1.3", releaseDate: "2020年12月xx日"){
                 ParagraphView("機能を追加しました。", points: [
                     "英語入力中、大文字に固定する機能を追加",
+                    "ローマ字での日本語入力中、英語への変換を表示する機能のON/OFF設定を追加",
                 ])
                 ParagraphView("機能を改善しました。", points: [
                     "ローマ字カスタムキーの編集画面を一新",
@@ -21,7 +22,7 @@ struct UpdateInfomationView: View {
                     "ローマ字での日本語入力中、一部の入力が正しく反映されない問題",
                 ])
                 ParagraphView("記号の変換を改善しました。", points: [])
-                ParagraphView("その他軽微な変換機能の改善を行いました。", points: [])
+                ParagraphView("その他軽微なデザイン・変換機能の改善を行いました。", points: [])
             }
 
             VersionView("1.2.1", releaseDate: "2020年12月10日"){

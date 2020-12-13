@@ -94,6 +94,12 @@ struct SettingTabView: View {
                     ])
                 }
                 Section(header: Text("変換")){
+                    switch storeVariableSection.KeyboardType{
+                    case .flick:
+                        EmptyView()
+                    case .roman:
+                        BooleanSettingItemView(Store.shared.englishCandidateSetting)
+                    }
                     BooleanSettingItemView(Store.shared.halfKanaSetting)
                     BooleanSettingItemView(Store.shared.typographyLetterSetting)
                     BooleanSettingItemView(Store.shared.wesJapCalenderSetting)

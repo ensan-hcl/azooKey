@@ -9,7 +9,7 @@
 import Foundation
 
 extension KanaKanjiConverter{
-    ///unicode文字列`"uxxxx"`を対応する記号に変換する関数
+    ///unicode文字列`"uxxxx, Uxxxx, u+xxxx, U+xxxx"`を対応する記号に変換する関数
     /// - parameters: 
     func unicode(_ inputData: InputData) -> [Candidate] {
         let value0: PValue = -10

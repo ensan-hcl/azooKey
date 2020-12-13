@@ -39,6 +39,12 @@ class Store{
         defaultValue: true
     ))
 
+    var englishCandidateSetting = SettingItemViewModel(SettingItem<Bool>(
+        identifier: .englishCandidate,
+        screenName: "日本語入力中の英単語変換",
+        defaultValue: true
+    ))
+
     var unicodeCandidateSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .unicodeCandidate,
         screenName: "unicode変換",

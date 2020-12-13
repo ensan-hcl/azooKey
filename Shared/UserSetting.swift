@@ -17,6 +17,7 @@ enum Setting: String {
     case unicodeCandidate = "unicode_candidate"
     case wesJapCalender = "western_japanese_calender_candidate"
     case typographyLetter = "typography_roman_candidate"
+    case englishCandidate = "roman_english_candidate"
     case halfKana = "half_kana_candidate"
     case memoryReset = "memory_reset_setting"
     case enableSound = "sound_enable_setting"
@@ -26,6 +27,8 @@ enum Setting: String {
     var key: String {
         self.rawValue
     }
+
+    static let boolSetting: [Self] = [.wesJapCalender, .typographyLetter, .halfKana, .unicodeCandidate, .englishCandidate, .stopLearningWhenSearch, .enableSound]
 
     var explanation: String {
         switch self{
@@ -41,6 +44,8 @@ enum Setting: String {
             return "web検索などで入力した単語を学習しません。"
         case .unicodeCandidate:
             return "「u3042→あ」のように、入力されたunicode番号に対応する文字に変換します。接頭辞にはu, u+, U, U+が使えます。"
+        case .englishCandidate:
+            return "「いんてれsちんg」→「interesting」のように、ローマ字日本語入力中も英語への変換候補を表示します。"
         case .wesJapCalender:
             return "「2020ねん→令和2年」「れいわ2ねん→2020年」のように西暦と和暦を相互に変換して候補に表示します。"
         case .typographyLetter:
@@ -65,7 +70,7 @@ struct DefaultSetting{
 
     func getBoolDefaultSetting(_ setting: Setting) -> Bool? {
         switch setting{
-        case .wesJapCalender, .typographyLetter, .halfKana, .unicodeCandidate:
+        case .wesJapCalender, .typographyLetter, .halfKana, .unicodeCandidate, .englishCandidate:
             return true
         case .stopLearningWhenSearch, .enableSound:
             return false

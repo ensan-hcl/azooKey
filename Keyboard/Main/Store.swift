@@ -539,6 +539,7 @@ struct UserSettingDepartment{
         self.halfWidthKatakanaSetting = Self.getBoolSetting(.halfKana)
         self.typographyLettersSetting = Self.getBoolSetting(.typographyLetter)
         self.soundSetting = Self.getBoolSetting(.enableSound)
+        self.englishCandidateSetting = Self.getBoolSetting(.englishCandidate)
 
         self.learningType = Self.learningTypeSetting(.inputAndOutput)
 
@@ -578,6 +579,8 @@ struct UserSettingDepartment{
     var kogakiFlickSetting: [FlickDirection: FlickedKeyModel] = Self.getKogakiFlickSetting()
 
     var unicodeCandidateSetting: Bool = Self.getBoolSetting(.unicodeCandidate)
+    var englishCandidateSetting: Bool = Self.getBoolSetting(.englishCandidate)
+
     var westerJapaneseCalenderSetting: Bool = Self.getBoolSetting(.wesJapCalender)
     var halfWidthKatakanaSetting: Bool = Self.getBoolSetting(.halfKana)
     var typographyLettersSetting: Bool = Self.getBoolSetting(.typographyLetter)
