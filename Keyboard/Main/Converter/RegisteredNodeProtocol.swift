@@ -63,7 +63,6 @@ extension RegisteredNodeProtocol{
     func getCandidateData() -> CandidateData {
         guard let prev = self.prev else {
             let unit = ClauseDataUnit()
-            unit.rcid = self.data.rcid
             unit.mid = self.data.mid
             unit.ruby = self.ruby
             unit.rubyCount = self.rubyCount
@@ -84,7 +83,6 @@ extension RegisteredNodeProtocol{
             lastClause.text.append(self.data.word)
             lastClause.ruby.append(self.ruby)
             lastClause.rubyCount += self.rubyCount
-            lastClause.rcid = self.data.rcid
             //最初だった場合を想定している
             if (lastClause.mid == 500 && self.data.mid != 500) || DicDataStore.includeMMValueCalculation(self.data){
                 lastClause.mid = self.data.mid
@@ -98,8 +96,6 @@ extension RegisteredNodeProtocol{
             let unit = ClauseDataUnit()
             unit.text = self.data.word
             unit.ruby = self.ruby
-            unit.lcid = self.data.lcid
-            unit.rcid = self.data.rcid
             unit.rubyCount = self.rubyCount
             if DicDataStore.includeMMValueCalculation(self.data){
                 unit.mid = self.data.mid

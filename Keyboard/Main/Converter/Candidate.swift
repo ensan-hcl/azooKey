@@ -11,10 +11,7 @@ import Foundation
 //一文節を担う
 final class ClauseDataUnit{
     var mid: Int = 500
-    var lcid: Int = .zero
-    var rcid: Int = .zero
     var nextLcid = 1316
-
     var text: String = ""
     var ruby: String = ""
     var rubyCount: Int = 0
@@ -25,7 +22,6 @@ final class ClauseDataUnit{
         self.text.append(unit.text)
         self.ruby.append(unit.ruby)
         self.rubyCount += unit.rubyCount
-        self.rcid = unit.rcid
         self.nextLcid = unit.nextLcid
     }
 }
