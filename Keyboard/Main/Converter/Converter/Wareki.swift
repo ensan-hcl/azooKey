@@ -19,7 +19,6 @@ extension KanaKanjiConverter{
             return Candidate(
                 text: $0,
                 value: -18,
-                visibleString: string,
                 correspondingCount: count,
                 rcid: 1285,
                 lastMid: 237,
@@ -131,7 +130,6 @@ extension KanaKanjiConverter{
             return Candidate(
                 text: $0,
                 value: -18,
-                visibleString: string,
                 correspondingCount: inputData.characters.count,
                 rcid: 1285,
                 lastMid: 237,
@@ -142,7 +140,6 @@ extension KanaKanjiConverter{
             return Candidate(
                 text: $0,
                 value: -19,
-                visibleString: string,
                 correspondingCount: inputData.characters.count,
                 rcid: 1285,
                 lastMid: 237,

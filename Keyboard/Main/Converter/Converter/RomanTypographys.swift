@@ -33,7 +33,14 @@ extension KanaKanjiConverter{
         let string = inputData.katakanaString
         let strings = self.typographicalLetters(from: string)
         return strings.map{
-            Candidate(text: $0, value: -15, visibleString: string, correspondingCount: inputData.characters.count, rcid: 1288, lastMid: 501, data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1288, mid: 501, value: -15)])
+            Candidate(
+                text: $0,
+                value: -15,
+                correspondingCount: inputData.characters.count,
+                rcid: 1288,
+                lastMid: 501,
+                data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1288, mid: 501, value: -15)]
+            )
         }
     }
 

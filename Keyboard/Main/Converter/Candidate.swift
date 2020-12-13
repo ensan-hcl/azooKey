@@ -55,8 +55,7 @@ struct Candidate{
     let text: String
     ///評価値
     let value: PValue
-    ///実際の入力テキスト
-    let visibleString: String
+    ///内部文字列で対応する文字数。
     let correspondingCount: Int
     ///右側cid
     let rcid: Int
@@ -71,10 +70,9 @@ struct Candidate{
     /// - note: 文字数表示のために追加したフラグ
     let inputable: Bool
 
-    init(text: String, value: PValue, visibleString: String, correspondingCount: Int, rcid: Int, lastMid: Int, data: [DicDataElementProtocol], actions: [ActionType] = [], inputable: Bool = true){
+    init(text: String, value: PValue, correspondingCount: Int, rcid: Int, lastMid: Int, data: [DicDataElementProtocol], actions: [ActionType] = [], inputable: Bool = true){
         self.text = text
         self.value = value
-        self.visibleString = visibleString
         self.correspondingCount = correspondingCount
         self.rcid = rcid
         self.lastMid = lastMid
@@ -89,7 +87,6 @@ struct Candidate{
         return Candidate(
             text: text,
             value: value,
-            visibleString: visibleString,
             correspondingCount: correspondingCount,
             rcid: rcid,
             lastMid: lastMid,

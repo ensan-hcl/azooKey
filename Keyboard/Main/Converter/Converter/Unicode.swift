@@ -24,7 +24,6 @@ extension KanaKanjiConverter{
                     Candidate(
                         text: char,
                         value: value0,
-                        visibleString: string,
                         correspondingCount: inputData.characters.count,
                         rcid: .zero,
                         lastMid: 500,

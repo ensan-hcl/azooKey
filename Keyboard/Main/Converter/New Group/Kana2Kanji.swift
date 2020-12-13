@@ -30,14 +30,12 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
         }
         let text = data.clauses.map{$0.clause.text}.joined()
         let value = data.clauses.last!.value + mmValue.value
-        let visibleString = data.clauses.map{$0.clause.ruby}.joined()
         let rcid = data.clauses.last!.clause.rcid
         let lastMid = data.clauses.last!.clause.mid
         let correspondingCount = data.clauses.map{$0.clause.rubyCount}.reduce(0, +)
         return Candidate(
             text: text,
             value: value,
-            visibleString: visibleString,
             correspondingCount: correspondingCount,
             rcid: rcid,
             lastMid: lastMid,
@@ -73,7 +71,7 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
                 var nodedata = candidate.data
                 nodedata.append(data)
 
-                let candidate = Candidate(text: candidate.text + data.string, value: newValue, visibleString: candidate.visibleString, rcid: data.rcid, lastMid: isInposition ? data.mid:candidate.lastMid, data: nodedata)
+                let candidate = Candidate(text: candidate.text + data.string, value: newValue, correspondingCount: candidate.correspondingCount, rcid: data.rcid, lastMid: isInposition ? data.mid:candidate.lastMid, data: nodedata)
                 result.insert(candidate, at: lastindex)
                 //カウントがオーバーしている場合は除去する
                 if result.count == N_best &+ 1{
@@ -101,7 +99,6 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
                     let candidate = Candidate(
                         text: candidate.text + data.word,
                         value: newValue,
-                        visibleString: candidate.visibleString,
                         correspondingCount: candidate.correspondingCount,
                         rcid: data.rcid,
                         lastMid: includeMMValueCalculation ? data.mid:candidate.lastMid,

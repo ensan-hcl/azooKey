@@ -111,7 +111,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
-                        visibleString: ruby,
                         correspondingCount: inputData.characters.count,
                         rcid: 1288,
                         lastMid: 501,
@@ -126,7 +125,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
-                        visibleString: ruby,
                         correspondingCount: inputData.characters.count,
                         rcid: 1288,
                         lastMid: 501,
@@ -215,7 +213,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let katakana = Candidate(
                 text: string,
                 value: -14,
-                visibleString: string,
                 correspondingCount: inputData.characters.count,
                 rcid: 1288,
                 lastMid: 501,
@@ -230,7 +227,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let hiragana = Candidate(
                 text: hiraganaString,
                 value: -14.5,
-                visibleString: string,
                 correspondingCount: inputData.characters.count,
                 rcid: 1288,
                 lastMid: 501,
@@ -244,7 +240,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let halfWidthKatakana = Candidate(
                 text: string,
                 value: -15,
-                visibleString: string,
                 correspondingCount: inputData.characters.count,
                 rcid: 1288,
                 lastMid: 501,
@@ -288,7 +283,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             return Candidate(
                 text: first.clause.text,
                 value:first.value,
-                visibleString: first.clause.ruby,
                 correspondingCount: first.clause.rubyCount,
                 rcid: first.clause.rcid,
                 lastMid: first.clause.mid,
@@ -344,7 +338,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 Candidate(
                     text: $0.data.word,
                     value: $0.data.value(),
-                    visibleString: $0.data.ruby,
                     correspondingCount: $0.rubyCount,
                     rcid: $0.data.rcid,
                     lastMid: $0.data.mid,
@@ -361,8 +354,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
          文字列の長さごとに並べ、かつその中で評価の高いものから順に並べる。
          */
         let word_candidates: [Candidate] = self.getUniqueCandidate((dicCandidates+additionalCandidates).filter{!seenCandidate.contains($0.text)}).sorted{
-            let count0 = $0.visibleString.count
-            let count1 = $1.visibleString.count
+            let count0 = $0.correspondingCount
+            let count1 = $1.correspondingCount
             return count0 == count1 ? $0.value>$1.value : count0 > count1
         }
 

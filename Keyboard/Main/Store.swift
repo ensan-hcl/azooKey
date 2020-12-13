@@ -1107,8 +1107,6 @@ private final class InputStateHolder{
     }
 
     ///変換を選択した場合に呼ばれる
-    /// - Note
-    ///   visibleStringの利用はバグを招きやすいとみられ、できれば控えた方が良いと思う。
     fileprivate func complete(candidate: Candidate){
         //入力部分を削除する
         let leftsideInputedText = self.inputtedText.prefix(self.cursorPosition)
@@ -1173,7 +1171,11 @@ private final class InputStateHolder{
     //単純に確定した場合のデータ
     fileprivate func enter() -> [ActionType] {
         let _candidate = Candidate(
-            text: self.inputtedText, value: -18, visibleString: self.inputtedText, correspondingCount: self.inputtedText.count, rcid: 1298, lastMid: 501,
+            text: self.inputtedText,
+            value: -18,
+            correspondingCount: self.inputtedText.count,
+            rcid: 1298,
+            lastMid: 501,
             data: [
                 LRE_SRE_DicDataElement(ruby: self.inputtedText, cid: 1298, mid: 501, value: -18)
             ]
@@ -1534,13 +1536,31 @@ private final class InputStateHolder{
             case .mojiCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)
                 let count = input.filter{!$0.isNewline}.count
-                let mojisu = Candidate(text: "文字数:\(count)", value: 0, visibleString: "", correspondingCount: 0, rcid: 0, lastMid: 0, data: [], inputable: false)
+                let mojisu = Candidate(
+                    text: "文字数:\(count)",
+                    value: 0,
+                    correspondingCount: 0,
+                    rcid: 0,
+                    lastMid: 0,
+                    data: [],
+                    inputable: false
+                )
                 results.append(mojisu)
             case .wordCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)
                 if input.isEnglishSentence{
                     let count = input.components(separatedBy: .newlines).map{$0.split(separator: " ").count}.reduce(0, +)
-                    results.append(Candidate(text: "単語数:\(count)", value: 0, visibleString: "", correspondingCount: 0, rcid: 0, lastMid: 0, data: [], inputable: false))
+                    results.append(
+                        Candidate(
+                            text: "単語数:\(count)",
+                            value: 0,
+                            correspondingCount: 0,
+                            rcid: 0,
+                            lastMid: 0,
+                            data: [],
+                            inputable: false
+                        )
+                    )
                 }
             }
         }
@@ -1556,7 +1576,7 @@ private final class InputStateHolder{
             return
         }
 
-        Store.shared.registerResult([Candidate(text: text, value: .zero, visibleString: text, rcid: .zero, lastMid: 500, data: [])])
+        Store.shared.registerResult([Candidate(text: text, value: .zero, rcid: .zero, lastMid: 500, data: [])])
         isDebugMode = true
         #endif
     }
