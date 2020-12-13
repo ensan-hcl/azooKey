@@ -57,9 +57,7 @@ struct Candidate{
     let value: PValue
     ///内部文字列で対応する文字数。
     let correspondingCount: Int
-    ///右側cid
-    let rcid: Int
-    ///最後のmid
+    ///最後のmid(予測変換に利用)
     let lastMid: Int
     ///DicDataElement列
     let data: [DicDataElementProtocol]
@@ -70,11 +68,10 @@ struct Candidate{
     /// - note: 文字数表示のために追加したフラグ
     let inputable: Bool
 
-    init(text: String, value: PValue, correspondingCount: Int, rcid: Int, lastMid: Int, data: [DicDataElementProtocol], actions: [ActionType] = [], inputable: Bool = true){
+    init(text: String, value: PValue, correspondingCount: Int, lastMid: Int, data: [DicDataElementProtocol], actions: [ActionType] = [], inputable: Bool = true){
         self.text = text
         self.value = value
         self.correspondingCount = correspondingCount
-        self.rcid = rcid
         self.lastMid = lastMid
         self.data = data
         self.actions = actions
@@ -88,7 +85,6 @@ struct Candidate{
             text: text,
             value: value,
             correspondingCount: correspondingCount,
-            rcid: rcid,
             lastMid: lastMid,
             data: data,
             actions: actions,

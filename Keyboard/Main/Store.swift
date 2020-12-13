@@ -1174,7 +1174,6 @@ private final class InputStateHolder{
             text: self.inputtedText,
             value: -18,
             correspondingCount: self.inputtedText.count,
-            rcid: 1298,
             lastMid: 501,
             data: [
                 LRE_SRE_DicDataElement(ruby: self.inputtedText, cid: 1298, mid: 501, value: -18)
@@ -1540,7 +1539,6 @@ private final class InputStateHolder{
                     text: "文字数:\(count)",
                     value: 0,
                     correspondingCount: 0,
-                    rcid: 0,
                     lastMid: 0,
                     data: [],
                     inputable: false
@@ -1555,7 +1553,6 @@ private final class InputStateHolder{
                             text: "単語数:\(count)",
                             value: 0,
                             correspondingCount: 0,
-                            rcid: 0,
                             lastMid: 0,
                             data: [],
                             inputable: false
@@ -1576,7 +1573,7 @@ private final class InputStateHolder{
             return
         }
 
-        Store.shared.registerResult([Candidate(text: text, value: .zero, rcid: .zero, lastMid: 500, data: [])])
+        Store.shared.registerResult([Candidate(text: text, value: .zero, lastMid: 500, data: [])])
         isDebugMode = true
         #endif
     }

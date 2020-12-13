@@ -112,7 +112,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                         text: ruby,
                         value: penalty,
                         correspondingCount: inputData.characters.count,
-                        rcid: 1288,
                         lastMid: 501,
                         data: data
                     )
@@ -126,7 +125,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                         text: word,
                         value: value,
                         correspondingCount: inputData.characters.count,
-                        rcid: 1288,
                         lastMid: 501,
                         data: data)
                     result.append(candidate)
@@ -214,7 +212,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 text: string,
                 value: -14,
                 correspondingCount: inputData.characters.count,
-                rcid: 1288,
                 lastMid: 501,
                 data: [data]
             )
@@ -228,7 +225,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 text: hiraganaString,
                 value: -14.5,
                 correspondingCount: inputData.characters.count,
-                rcid: 1288,
                 lastMid: 501,
                 data: [data]
             )
@@ -241,7 +237,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 text: string,
                 value: -15,
                 correspondingCount: inputData.characters.count,
-                rcid: 1288,
                 lastMid: 501,
                 data: [data]
             )
@@ -284,7 +279,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 text: first.clause.text,
                 value:first.value,
                 correspondingCount: first.clause.rubyCount,
-                rcid: first.clause.rcid,
                 lastMid: first.clause.mid,
                 data: Array(candidateData.data[0...count])
             )
@@ -339,7 +333,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     text: $0.data.word,
                     value: $0.data.value(),
                     correspondingCount: $0.rubyCount,
-                    rcid: $0.data.rcid,
                     lastMid: $0.data.mid,
                     data: [$0.data]
                 )

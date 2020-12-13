@@ -30,14 +30,12 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
         }
         let text = data.clauses.map{$0.clause.text}.joined()
         let value = data.clauses.last!.value + mmValue.value
-        let rcid = data.clauses.last!.clause.rcid
         let lastMid = data.clauses.last!.clause.mid
         let correspondingCount = data.clauses.map{$0.clause.rubyCount}.reduce(0, +)
         return Candidate(
             text: text,
             value: value,
             correspondingCount: correspondingCount,
-            rcid: rcid,
             lastMid: lastMid,
             data: data.data
         )
@@ -88,7 +86,7 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
                     if count <= 1{
                         return
                     }
-                    let ccValue = self.dicdataStore.getCCValue(candidate.rcid, data.lcid)
+                    let ccValue = self.dicdataStore.getCCValue(last.rcid, data.lcid)
                     let includeMMValueCalculation = DicDataStore.includeMMValueCalculation(data)
                     let mmValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(candidate.lastMid, data.mid):.zero
                     let wValue = data.value()
@@ -100,7 +98,6 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
                         text: candidate.text + data.word,
                         value: newValue,
                         correspondingCount: candidate.correspondingCount,
-                        rcid: data.rcid,
                         lastMid: includeMMValueCalculation ? data.mid:candidate.lastMid,
                         data: nodedata
                     )

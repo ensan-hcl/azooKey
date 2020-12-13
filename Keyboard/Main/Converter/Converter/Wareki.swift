@@ -20,7 +20,6 @@ extension KanaKanjiConverter{
                 text: $0,
                 value: -18,
                 correspondingCount: count,
-                rcid: 1285,
                 lastMid: 237,
                 data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -18)]
             )
@@ -131,7 +130,6 @@ extension KanaKanjiConverter{
                 text: $0,
                 value: -18,
                 correspondingCount: inputData.characters.count,
-                rcid: 1285,
                 lastMid: 237,
                 data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -18)]
             )
@@ -141,7 +139,6 @@ extension KanaKanjiConverter{
                 text: $0,
                 value: -19,
                 correspondingCount: inputData.characters.count,
-                rcid: 1285,
                 lastMid: 237,
                 data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -19)]
             )
