@@ -66,9 +66,10 @@ extension Kana2Kanji{
                         //クラスの連続確率を計算する。
                         let ccValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
                         let ccBonus = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
+                        let ccSum = ccValue + ccBonus
                         //nodeの持っている全てのprevnodeに対して
                         node.values.indices.forEach{(index: Int) in
-                            let newValue = ccValue + ccBonus + node.values[index]
+                            let newValue = ccSum + node.values[index]
                             //追加すべきindexを取得する
                             let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
                             if lastindex == N_best{
