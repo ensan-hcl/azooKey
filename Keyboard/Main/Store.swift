@@ -937,6 +937,7 @@ final class ActionDepartment{
     ///何かが変化する前に状態の保存を行う関数。
     func registerSomethingWillChange(left: String, center: String, right: String){
         self.tempTextData = (left: left, center: center, right: right)
+        print("registerSomethingWillChange", self.tempTextData)
     }
     //MARK: left/center/rightとして得られる情報は以下の通り
     /*
@@ -969,6 +970,9 @@ final class ActionDepartment{
     
     ///何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     func registerSomethingDidChange(left: String, center: String, right: String){
+        if self.inputStateHolder.isAfterAdjusted(){
+            return
+        }
         print("something did happen by user!")
         let b_left = self.tempTextData.left
         let b_center = self.tempTextData.center
@@ -998,9 +1002,8 @@ final class ActionDepartment{
 
             //全体としてテキストが変化せず、選択範囲は前後ともになく、左側(右側)の文字列だけが変わっていた場合→カーソルを移動した
             if !wasSelected && !isSelected && b_left != left{
+                print("user operation id: 2", b_left, left)
                 let offset = left.count - b_left.count
-                print("user operation id: 2")
-
                 self.inputStateHolder.userMovedCursor(count: offset)
                 return
             }
@@ -1067,12 +1070,15 @@ private final class InputStateHolder{
     private var kanaRomanStateHolder = KanaRomanStateHolder()
     //セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
     fileprivate var isSelected = false
+    //現在のカーソル位置。カーソル左側の文字数に等しい
     private var cursorPosition = 0
+    //カーソルの取りうる最小位置。
     private let cursorMinimumPosition: Int = 0
     ///カーソルの動ける最大範囲。`inputtedText`の文字数に等しい。
     private var cursorMaximumPosition: Int {
         return inputtedText.count
     }
+    private var afterAdjusted: Bool = false
 
     typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
     typealias FlickConverter = KanaKanjiConverter<FlickInputData, FlickLatticeNode>
@@ -1116,6 +1122,14 @@ private final class InputStateHolder{
         }
     }
 
+    func isAfterAdjusted() -> Bool {
+        if self.afterAdjusted{
+            self.afterAdjusted = false
+            return true
+        }
+        return false
+    }
+
     ///変換を選択した場合に呼ばれる
     fileprivate func complete(candidate: Candidate){
         //入力部分を削除する
@@ -1155,8 +1169,10 @@ private final class InputStateHolder{
         }
         if self.cursorPosition == 0{
             self.cursorPosition = self.cursorMaximumPosition
-            let offset = self.getActualOffset(count: self.cursorMaximumPosition)
+            //入力の直後、documentContextAfterInputは間違っていることがあるため、ここではoffsetをinputtedTextから直接計算する。
+            let offset = inputtedText.utf16.count
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
+            self.afterAdjusted = true
         }
         self.setResult()
     }
@@ -1407,9 +1423,11 @@ private final class InputStateHolder{
 
     ///キーボード経由でのカーソル移動
     fileprivate func moveCursor(count: Int){
+        self.afterAdjusted = true
         if inputtedText.isEmpty{
             let offset = self.getActualOffset(count: count)
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
+            return
         }
         print("moveCursor, cursorPosition:", cursorPosition, count)
         //カーソル位置の正規化
@@ -1450,6 +1468,7 @@ private final class InputStateHolder{
             print("右にはみ出したので\(self.cursorMaximumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
             self.cursorPosition = self.cursorMaximumPosition
             setResult()
+            self.afterAdjusted = true
             return
         }
         if self.cursorPosition < self.cursorMinimumPosition{
@@ -1459,6 +1478,7 @@ private final class InputStateHolder{
             print("左にはみ出したので\(self.cursorMinimumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
             self.cursorPosition = self.cursorMinimumPosition
             setResult()
+            self.afterAdjusted = true
             return
         }
         setResult()
@@ -1527,9 +1547,6 @@ private final class InputStateHolder{
 
 
     fileprivate func setResult(options: [ResultOptions] = [.convertInput]){
-        if isDebugMode{
-            return
-        }
         var results = [Candidate]()
         options.forEach{option in
             switch option{
@@ -1590,7 +1607,7 @@ private final class InputStateHolder{
             return
         }
 
-        Store.shared.registerResult([Candidate(text: text, value: .zero, lastMid: 500, data: [])])
+        Store.shared.registerResult([Candidate(text: text, value: .zero, correspondingCount: 0, lastMid: 500, data: [])])
         isDebugMode = true
         #endif
     }
