@@ -33,22 +33,17 @@ extension Kana2Kanji{
         let result = LatticeNode.EOSNode
 
         let nodes: [[LatticeNode]] = (.zero ..< count).map{dicdataStore.getLOUDSData(inputData: inputData, from: $0)}
-        print("nodes:", nodes.map{$0.first?.data.ruby})
-        let start = Date()
+        TimeMesureTools.startTimeMesure()
         //「i文字目から始まるnodes」に対して
         nodes.indices.forEach{(i: Int) in
-            //forEachをSerialな並列処理で行うことによって、高速化が可能になる。
             //それぞれのnodeに対して
             nodes[i].forEach{(node: LatticeNode) in
                 if node.prevs.isEmpty{
-                    //print("removeします Emptyなので", node.data)
                     return
                 }
                 if self.dicdataStore.shouldBeRemoved(data: node.data){
-                    //print("removeします 消されるべきなので", node.data)
                     return
                 }
-                //print("生き残りました", node.data)
                 //生起確率を取得する。
                 let wValue = node.data.value()
                 //valuesを更新する
@@ -66,7 +61,6 @@ extension Kana2Kanji{
                     nodes[nextIndex].forEach{(nextnode: LatticeNode) in
                         //この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                         if self.dicdataStore.shouldBeRemoved(data: nextnode.data){
-                            //print("removeします 消されるべきなので:", nextnode.data)
                             return
                         }
                         //クラスの連続確率を計算する。
@@ -92,7 +86,7 @@ extension Kana2Kanji{
                 }
             }
         }
-        print("計算所要時間：",-start.timeIntervalSinceNow)
+        TimeMesureTools.endTimeMesure("計算所要時間：")
         print("計算所要時間：全体",-START.timeIntervalSinceNow)
         return (result: result, nodes: nodes)
     }

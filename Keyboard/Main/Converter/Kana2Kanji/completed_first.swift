@@ -34,7 +34,6 @@ extension Kana2Kanji{
         let result = LatticeNode.EOSNode
 
         nodes.indices.forEach{(i: Int) in
-            //forEachをSerialな並列処理で行うことによって、高速化が可能になる。
             nodes[i].forEach{(node: LatticeNode) in
                 if node.prevs.isEmpty{
                     return
@@ -46,12 +45,14 @@ extension Kana2Kanji{
                 let wValue = node.data.value()
                 //valuesを更新する
                 node.values = node.prevs.map{$0.totalValue + wValue}
-                
                 //変換した文字数
                 let nextIndex = node.rubyCount + i
                 //文字数がcountと等しくない場合は先に進む
                 if nextIndex != count{
                     nodes[nextIndex].forEach{(nextnode: LatticeNode) in
+                        if self.dicdataStore.shouldBeRemoved(data: nextnode.data){
+                            return
+                        }
                         //クラスの連続確率を計算する。
                         let ccValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
                         let ccBonus = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)

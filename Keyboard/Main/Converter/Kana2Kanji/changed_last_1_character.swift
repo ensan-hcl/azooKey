@@ -48,7 +48,6 @@ extension Kana2Kanji{
                 if self.dicdataStore.shouldBeRemoved(data: node.data){
                     return
                 }
-
                 //変換した文字数
                 let nextIndex = node.rubyCount + i
                 addedNodes[nextIndex].forEach{(nextnode: LatticeNode) in

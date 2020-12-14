@@ -6,7 +6,7 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
+//import Foundation
 /*
 fileprivate enum 活用の種類{
     case 一段

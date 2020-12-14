@@ -89,27 +89,32 @@ final class KanaRomanStateHolder{
 
     //左側=leftSideTextを削除する
     //必要な動作：入力された数のcharacterを左から落とす
-    func complete(_ completedCount: Int){
+    func complete(_ completedCount: Int) -> Int {
         var count = 0
+        var displayedTextCount = 0
         while !components.isEmpty{
             let charCount = components[0].internalText.count
             if count + charCount < completedCount{
-                components.removeFirst()
+                let first = components.removeFirst()
                 count += charCount
+                displayedTextCount += first.displayedText.count
                 continue
             }else if count + charCount == completedCount{
-                components.removeFirst()
+                let first = components.removeFirst()
+                displayedTextCount += first.displayedText.count
                 break
             }else{
                 var firsts = components[0].split()
                 while count < completedCount{
                     count += firsts[0].internalText.count
-                    firsts.removeFirst()
+                    let first = firsts.removeFirst()
+                    displayedTextCount += first.displayedText.count
                 }
                 self.components = firsts + components.dropFirst()
                 break
             }
         }
+        return displayedTextCount
     }
 
     //左側=leftSideTextの部分に対してかな文字count分削除する

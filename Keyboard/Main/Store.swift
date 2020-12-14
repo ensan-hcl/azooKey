@@ -1129,23 +1129,28 @@ private final class InputStateHolder{
                 Store.shared.registerEnterKeyState(.return)
                 return
             }
+            self.cursorPosition -= candidate.correspondingCount
             self.inputtedText = String(self.inputtedText.dropFirst(candidate.correspondingCount))
             self.flickConverter.setCompletedData(candidate)
 
         case .roman:
             self.romanConverter.updateLearningData(candidate)
-            self.kanaRomanStateHolder.complete(candidate.correspondingCount)    //characterでいう確定分
-            let displayedText = self.kanaRomanStateHolder.components.map{$0.displayedText}.joined()
-            self.proxy.insertText(candidate.text + displayedText)
+            let displayedTextCount = self.kanaRomanStateHolder.complete(candidate.correspondingCount)
+            self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(displayedTextCount))
             if self.kanaRomanStateHolder.components.isEmpty{
                 self.clear()
                 Store.shared.registerEnterKeyState(.return)
                 return
             }
-            self.inputtedText = displayedText
+            self.cursorPosition -= displayedTextCount
+            self.inputtedText = String(self.inputtedText.dropFirst(displayedTextCount))
             self.romanConverter.setCompletedData(candidate)
         }
-        self.cursorPosition = self.cursorMaximumPosition
+        if self.cursorPosition == 0{
+            self.cursorPosition = self.cursorMaximumPosition
+            let offset = self.getActualOffset(count: self.cursorMaximumPosition)
+            self.proxy.adjustTextPosition(byCharacterOffset: offset)
+        }
         self.setResult()
     }
     

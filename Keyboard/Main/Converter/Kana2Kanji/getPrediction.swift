@@ -22,7 +22,7 @@ extension Kana2Kanji{
     func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, lastRubyCount: Int, N_best: Int) -> [Candidate] {
         let datas: [DicDataElementProtocol]
         let lastData: DicDataElementProtocol?
-        let start_3_1_1 = Date()
+        TimeMesureTools.startTimeMesure()
         do{
             var _str = ""
             let prestring = prepart.clauses.map{$0.clause.text}.joined()
@@ -37,12 +37,10 @@ extension Kana2Kanji{
             lastData = prepart.data.count > count ? prepart.data[count] : nil
             datas = Array(prepart.data.prefix(count))
         }
-        print("処理3.1.1", -start_3_1_1.timeIntervalSinceNow)
-        let start_3_1_2 = Date()
+        TimeMesureTools.endAndStart("処理3.1.1")
 
         let memory: [DicDataElementProtocol] = dicdataStore.getPrefixMemory(lastRuby)
-        print("処理3.1.2", -start_3_1_2.timeIntervalSinceNow)
-        let start_3_1_3 = Date()
+        TimeMesureTools.endAndStart("処理3.1.2")
 
         let dicdata: DicDataStore.DicData
         switch Store.shared.keyboardType{
@@ -61,8 +59,7 @@ extension Kana2Kanji{
             }
         }
 
-        print("処理3.1.3", -start_3_1_3.timeIntervalSinceNow) //ここが激遅い
-        let start_3_1_4 = Date()
+        TimeMesureTools.endAndStart("処理3.1.3") //ここが激遅い
 
         let lastCandidate = prepart.isEmpty ? Candidate(text: "", value: .zero, correspondingCount: 0, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
         let lastRcid = lastCandidate.data.last?.rcid ?? 1316
@@ -76,8 +73,7 @@ extension Kana2Kanji{
             ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
         }
 
-        print("処理3.1.4", -start_3_1_4.timeIntervalSinceNow)
-        let start_3_1_5 = Date()
+        TimeMesureTools.endAndStart("処理3.1.4")
 
         var result: [Candidate] = []
 
@@ -109,9 +105,7 @@ extension Kana2Kanji{
                 result.removeLast()
             }
         }
-        print("処理3.1.5", -start_3_1_5.timeIntervalSinceNow)
-        print("処理3.1全体", -start_3_1_1.timeIntervalSinceNow)
-
+        TimeMesureTools.endAndStart("処理3.1.5")
         return result
     }
 }
