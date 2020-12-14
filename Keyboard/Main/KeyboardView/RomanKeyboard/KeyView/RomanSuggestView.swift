@@ -94,7 +94,7 @@ struct RomanSuggestView{
     static func scaleToVariationsSize(keyWidth: CGFloat, scale_y: CGFloat, variationsCount: Int, color: Color, direction: VariationsViewDirection) -> some View {
         let keyViewSize = Store.shared.design.keyViewSize
         let height = (keyViewSize.height*2 + Store.shared.design.keyViewVerticalSpacing) * scale_y
-        let dw = (keyViewSize.width * CGFloat(variationsCount) + Store.shared.design.keyViewHorizontalSpacing * CGFloat(variationsCount-1))*109/keyViewSize.width
+        let dw = (keyViewSize.width * CGFloat(variationsCount - 1) + Store.shared.design.keyViewHorizontalSpacing * CGFloat(variationsCount-1))*109/keyViewSize.width
         switch direction{
         case .center:
             return expandedPath(rdw: dw/2, ldw: dw/2, width: keyWidth).fill(color).frame(width: keyWidth, height: height)

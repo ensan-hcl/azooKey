@@ -18,6 +18,9 @@ struct UpdateInfomationView: View {
                 ParagraphView("機能を改善しました。", points: [
                     "ローマ字カスタムキーの編集画面を一新",
                 ])
+                ParagraphView("技術的に解決困難な不具合のため、文字数カウント機能を削除しました。", points: [
+                    "今後別の形でのカウント機能の実装を検討します。"
+                ])
                 ParagraphView("不具合を修正しました。", points: [
                     "ローマ字での日本語入力中、一部の入力が正しく反映されない問題",
                 ])

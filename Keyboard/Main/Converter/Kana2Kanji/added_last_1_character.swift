@@ -94,7 +94,7 @@ extension Kana2Kanji{
                 }
                 //生起確率を取得する。
                 let wValue = node.data.value()
-                //valuesを更新する
+                //valuesを更新する(更新はここで行えばよい)
                 node.values = node.prevs.map{$0.totalValue + wValue}
                 //最後に至るので
                 node.prevs.indices.forEach{
@@ -104,7 +104,7 @@ extension Kana2Kanji{
             }
         }
         
-        TimeMesureTools.endAndStart("計算所要時間: (3) ノードのresultへの登録")
+        TimeMesureTools.endTimeMesure("計算所要時間: (3) ノードのresultへの登録")
 
         //(4)
         let updatedNodes: Nodes = nodes.indices.map{nodes[$0] + addedNodes[$0]} + [addedNodes.last ?? []]

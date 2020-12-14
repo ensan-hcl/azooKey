@@ -24,8 +24,13 @@ enum TabState: Equatable{
             return false
         }
     }
-
 }
+
+enum KeyboardLanguage{
+    case english
+    case japanese
+}
+
 enum KeyboardOrientation{
     case vertical       //width<height
     case horizontal     //height<width

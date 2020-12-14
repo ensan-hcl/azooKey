@@ -13,6 +13,7 @@ import SwiftUI
 final class Store{
     static let shared = Store()
     var keyboardType: KeyboardType = .roman
+    var keyboardLanguage: KeyboardLanguage = .japanese
     fileprivate var orientation: KeyboardOrientation = .vertical
     private var enterKeyType: UIReturnKeyType = .default
     private var enterKeyState: EnterKeyState = .return(.default)
@@ -187,6 +188,12 @@ final class Store{
     }
     
     fileprivate func setTabState(_ state: TabState){
+        if state == .abc{
+            self.keyboardLanguage = .english
+        }
+        if state == .hira{
+            self.keyboardLanguage = .japanese
+        }
         self.keyboardModel.setTabState(state: state)
     }
 
@@ -1499,7 +1506,9 @@ private final class InputStateHolder{
             //self.setResult(options: [.mojiCount, .wordCount])
             self.setResult(options: [])
         }else{
-            self.setResult(options: [.mojiCount, .wordCount, .convertInput])
+            //FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
+            //参照: https://qiita.com/En3_HCl/items/476ffb665cd37cb312da
+            self.setResult(options: [.convertInput])
         }
         Store.shared.registerEnterKeyState(.edit)
     }

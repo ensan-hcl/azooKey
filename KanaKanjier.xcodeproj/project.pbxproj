@@ -957,6 +957,8 @@
 		1AD4DDAD2585F81500A6FA18 /* p_ド.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1AD4DD622585F81400A6FA18 /* p_ド.csv */; };
 		1AD4DDAE2585F81500A6FA18 /* p_テ.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1AD4DD632585F81400A6FA18 /* p_テ.csv */; };
 		1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */; };
+		1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
+		1AD4DDD1258718F600A6FA18 /* RomanChangeTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDD0258718F600A6FA18 /* RomanChangeTabKeyModel.swift */; };
 		1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDE8652545D48900E524E1 /* Candidate.swift */; };
 		1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */; };
 		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
@@ -3322,6 +3324,7 @@
 		1AD4DD622585F81400A6FA18 /* p_ド.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "p_ド.csv"; sourceTree = "<group>"; };
 		1AD4DD632585F81400A6FA18 /* p_テ.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "p_テ.csv"; sourceTree = "<group>"; };
 		1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMesureTools.swift; sourceTree = "<group>"; };
+		1AD4DDD0258718F600A6FA18 /* RomanChangeTabKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanChangeTabKeyModel.swift; sourceTree = "<group>"; };
 		1ADDE8652545D48900E524E1 /* Candidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Candidate.swift; sourceTree = "<group>"; };
 		1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDataProtocol.swift; sourceTree = "<group>"; };
 		1AE4DB742515FE1C00A24158 /* KanaComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaComponent.swift; sourceTree = "<group>"; };
@@ -4733,6 +4736,7 @@
 				1A26029C2514808D00EAD647 /* RomanKeyModelVariableSection.swift */,
 				1A2602B3251489E400EAD647 /* RomanSpaceKeyModel.swift */,
 				1AF28CF5253D1DC30012CF94 /* RomanChangeKeyboardKeyModel.swift */,
+				1AD4DDD0258718F600A6FA18 /* RomanChangeTabKeyModel.swift */,
 				1A2602BD25148BB100EAD647 /* RomanEnterKeyModel.swift */,
 				1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */,
 				1A2602C725148CDF00EAD647 /* RomanFunctionalKeyModel.swift */,
@@ -9871,6 +9875,7 @@
 				1A26028B251476A800EAD647 /* RomanSuggestView.swift in Sources */,
 				1A4623EF252461A800EF5B02 /* extension UInt.swift in Sources */,
 				1A3DC2102500D571002CAA93 /* HorizontalKeyboardView.swift in Sources */,
+				1AD4DDD1258718F600A6FA18 /* RomanChangeTabKeyModel.swift in Sources */,
 				1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */,
 				1A2602EA2514F7D100EAD647 /* RomanVariationsView.swift in Sources */,
 				1A65C00B250B800E00F297BF /* LatticeNodeProtocol.swift in Sources */,
@@ -9908,6 +9913,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AF1CB21252F22EB002FCC66 /* Store.swift in Sources */,
+				1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */,
 				1AF1CB0F252F227C002FCC66 /* extension UInt.swift in Sources */,
 				1AF1CB15252F22A7002FCC66 /* all.swift in Sources */,
 				1AF1CB1B252F22AB002FCC66 /* DicDataStore.swift in Sources */,

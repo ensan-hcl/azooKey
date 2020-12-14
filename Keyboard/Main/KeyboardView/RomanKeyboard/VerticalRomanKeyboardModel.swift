@@ -221,7 +221,7 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
         ],
 
         [
-            RomanFunctionalKeyModel(labelType: .text("あ"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.hira)]),
+            RomanChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
             RomanChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
             RomanSpaceKeyModel(),
             RomanEnterKeyModel.shared,
@@ -456,7 +456,7 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
             RomanFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
         ],
         [
-            RomanFunctionalKeyModel(labelType: .text("あ"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.hira)]),
+            RomanChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
             RomanChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
             RomanSpaceKeyModel(),
             RomanEnterKeyModel.shared,
