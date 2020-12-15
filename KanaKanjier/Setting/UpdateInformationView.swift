@@ -10,7 +10,7 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
-            VersionView("1.3", releaseDate: "2020年12月xx日"){
+            VersionView("1.3", releaseDate: "2020年12月15日"){
                 ParagraphView("機能を追加しました。", points: [
                     "英語入力中、大文字に固定する機能を追加",
                     "ローマ字での日本語入力中、英語への変換を表示する機能のON/OFF設定を追加",
