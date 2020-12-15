@@ -2685,7 +2685,7 @@
 		1AD4D8082585F80A00A6FA18 /* ’.loudschars2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "’.loudschars2"; sourceTree = "<group>"; };
 		1AD4D8092585F80A00A6FA18 /* 1.loudschars2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.loudschars2; sourceTree = "<group>"; };
 		1AD4D80A2585F80A00A6FA18 /* テ4.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "テ4.loudstxt"; sourceTree = "<group>"; };
-		1AD4D80B2585F80A00A6FA18 /* ウ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ウ.louds"; sourceTree = "<group>"; };
+		1AD4D80B2585F80A00A6FA18 /* ウ.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ウ.louds"; sourceTree = "<group>"; };
 		1AD4D80C2585F80A00A6FA18 /* □.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "□.louds"; sourceTree = "<group>"; };
 		1AD4D80D2585F80A00A6FA18 /* オ.loudschars2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "オ.loudschars2"; sourceTree = "<group>"; };
 		1AD4D80E2585F80A00A6FA18 /* ト1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ト1.loudstxt"; sourceTree = "<group>"; };
@@ -2794,7 +2794,7 @@
 		1AD4D8752585F80B00A6FA18 /* ソ1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ソ1.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8762585F80B00A6FA18 /* ゲ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ゲ0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8772585F80B00A6FA18 /* ソ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ソ0.loudstxt"; sourceTree = "<group>"; };
-		1AD4D8782585F80B00A6FA18 /* マ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "マ.louds"; sourceTree = "<group>"; };
+		1AD4D8782585F80B00A6FA18 /* マ.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "マ.louds"; sourceTree = "<group>"; };
 		1AD4D8792585F80B00A6FA18 /* ─0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "─0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D87A2585F80B00A6FA18 /* キ4.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "キ4.loudstxt"; sourceTree = "<group>"; };
 		1AD4D87B2585F80B00A6FA18 /* ★.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "★.louds"; sourceTree = "<group>"; };
@@ -2862,7 +2862,7 @@
 		1AD4D8B92585F80B00A6FA18 /* ド1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ド1.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8BA2585F80B00A6FA18 /* サ4.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "サ4.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8BB2585F80B00A6FA18 /* オ9.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "オ9.loudstxt"; sourceTree = "<group>"; };
-		1AD4D8BC2585F80B00A6FA18 /* ッ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ッ.louds"; sourceTree = "<group>"; };
+		1AD4D8BC2585F80B00A6FA18 /* ッ.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ッ.louds"; sourceTree = "<group>"; };
 		1AD4D8BD2585F80B00A6FA18 /* サ5.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "サ5.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8BE2585F80B00A6FA18 /* オ8.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "オ8.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8BF2585F80B00A6FA18 /* ド0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ド0.loudstxt"; sourceTree = "<group>"; };
@@ -2881,7 +2881,7 @@
 		1AD4D8CC2585F80B00A6FA18 /* デ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "デ0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8CD2585F80B00A6FA18 /* コ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "コ0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8CE2585F80B00A6FA18 /* コ1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "コ1.loudstxt"; sourceTree = "<group>"; };
-		1AD4D8CF2585F80B00A6FA18 /* ゲ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ゲ.louds"; sourceTree = "<group>"; };
+		1AD4D8CF2585F80B00A6FA18 /* ゲ.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ゲ.louds"; sourceTree = "<group>"; };
 		1AD4D8D02585F80B00A6FA18 /* →0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "→0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D8D12585F80B00A6FA18 /* ”.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "”.louds"; sourceTree = "<group>"; };
 		1AD4D8D22585F80B00A6FA18 /* ン.loudschars2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ン.loudschars2"; sourceTree = "<group>"; };
@@ -2981,7 +2981,7 @@
 		1AD4D9302585F80C00A6FA18 /* フ6.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "フ6.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9312585F80C00A6FA18 /* ■.loudschars2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "■.loudschars2"; sourceTree = "<group>"; };
 		1AD4D9322585F80C00A6FA18 /* フ7.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "フ7.loudstxt"; sourceTree = "<group>"; };
-		1AD4D9332585F80C00A6FA18 /* ク.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ク.louds"; sourceTree = "<group>"; };
+		1AD4D9332585F80C00A6FA18 /* ク.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ク.louds"; sourceTree = "<group>"; };
 		1AD4D9342585F80C00A6FA18 /* ラ1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ラ1.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9352585F80C00A6FA18 /* ラ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ラ0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9362585F80C00A6FA18 /* ベ.loudschars2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ベ.loudschars2"; sourceTree = "<group>"; };
@@ -3029,7 +3029,7 @@
 		1AD4D9602585F80C00A6FA18 /* 〈.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "〈.louds"; sourceTree = "<group>"; };
 		1AD4D9612585F80C00A6FA18 /* →.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "→.louds"; sourceTree = "<group>"; };
 		1AD4D9622585F80C00A6FA18 /* タ6.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "タ6.loudstxt"; sourceTree = "<group>"; };
-		1AD4D9632585F80C00A6FA18 /* ゴ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ゴ.louds"; sourceTree = "<group>"; };
+		1AD4D9632585F80C00A6FA18 /* ゴ.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ゴ.louds"; sourceTree = "<group>"; };
 		1AD4D9642585F80C00A6FA18 /* 9.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 9.louds; sourceTree = "<group>"; };
 		1AD4D9652585F80C00A6FA18 /* タ7.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "タ7.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9662585F80C00A6FA18 /* ロ2.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ロ2.loudstxt"; sourceTree = "<group>"; };
@@ -3113,7 +3113,7 @@
 		1AD4D9B42585F80D00A6FA18 /* フ.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "フ.louds"; sourceTree = "<group>"; };
 		1AD4D9B52585F80D00A6FA18 /* イ4.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "イ4.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9B62585F80D00A6FA18 /* ▼.loudschars2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "▼.loudschars2"; sourceTree = "<group>"; };
-		1AD4D9B72585F80D00A6FA18 /* ヂ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ヂ.louds"; sourceTree = "<group>"; };
+		1AD4D9B72585F80D00A6FA18 /* ヂ.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ヂ.louds"; sourceTree = "<group>"; };
 		1AD4D9B82585F80D00A6FA18 /* ‥.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "‥.louds"; sourceTree = "<group>"; };
 		1AD4D9B92585F80D00A6FA18 /* レ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "レ.louds"; sourceTree = "<group>"; };
 		1AD4D9BA2585F80D00A6FA18 /* ←.loudschars2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "←.loudschars2"; sourceTree = "<group>"; };
@@ -3121,9 +3121,9 @@
 		1AD4D9BC2585F80D00A6FA18 /* ヴ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ヴ0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9BD2585F80D00A6FA18 /* ヘ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ヘ0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9BE2585F80D00A6FA18 /* グ.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "グ.louds"; sourceTree = "<group>"; };
-		1AD4D9BF2585F80D00A6FA18 /* コ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "コ.louds"; sourceTree = "<group>"; };
+		1AD4D9BF2585F80D00A6FA18 /* コ.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "コ.louds"; sourceTree = "<group>"; };
 		1AD4D9C02585F80D00A6FA18 /* ヘ1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ヘ1.loudstxt"; sourceTree = "<group>"; };
-		1AD4D9C12585F80D00A6FA18 /* エ.louds */ = {isa = PBXFileReference; lastKnownFileType = file; path = "エ.louds"; sourceTree = "<group>"; };
+		1AD4D9C12585F80D00A6FA18 /* エ.louds */ = {isa = PBXFileReference; lastKnownFileType = text; path = "エ.louds"; sourceTree = "<group>"; };
 		1AD4D9C22585F80D00A6FA18 /* ￣0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "￣0.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9C32585F80D00A6FA18 /* タ1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "タ1.loudstxt"; sourceTree = "<group>"; };
 		1AD4D9C42585F80D00A6FA18 /* タ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "タ0.loudstxt"; sourceTree = "<group>"; };
@@ -10091,7 +10091,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				SWIFT_VERSION = 5.0;
@@ -10115,7 +10115,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				SWIFT_VERSION = 5.0;
@@ -10227,7 +10227,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=300";
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
@@ -10256,7 +10256,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
 				SKIP_INSTALL = YES;
