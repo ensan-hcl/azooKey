@@ -8,16 +8,15 @@
 
 import Foundation
 
-struct KeyFlickSetting: Savable {
-    typealias SaveValue = [String: String]
-    var saveValue: [String: String] {
-        return [
-            "identifier":targetKeyIdentifier,
-            "left":left,
-            "top":top,
-            "right":right,
-            "bottom":bottom
-        ]
+struct KeyFlickSetting: Savable, Codable {
+    typealias SaveValue = Data
+    var saveValue: Data {
+        let encoder = JSONEncoder()
+        if let encodedValue = try? encoder.encode(self) {
+            return encodedValue
+        }else{
+            return Data()
+        }
     }
 
     let targetKeyIdentifier: String
@@ -33,9 +32,20 @@ struct KeyFlickSetting: Savable {
         self.left = left
         self.right = right
     }
-    
+
+    /*
+     var saveValue: [String: String] {
+     return [
+     "identifier":targetKeyIdentifier,
+     "left":left,
+     "top":top,
+     "right":right,
+     "bottom":bottom
+     ]
+     }*/
+
     static func get(_ value: Any) -> KeyFlickSetting? {
-        if let dict = value as? SaveValue{
+        if let dict = value as? [String: String]{
             if let identifier = dict["identifier"],
                let left = dict["left"],
                let top = dict["top"],
@@ -43,6 +53,13 @@ struct KeyFlickSetting: Savable {
                let bottom = dict["bottom"]{
                 return KeyFlickSetting(targetKeyIdentifier: identifier, left: left, top: top, right: right, bottom: bottom)
             }
+        }
+        if let value = value as? Data{
+            let decoder = JSONDecoder()
+            if let data = try? decoder.decode(KeyFlickSetting.self, from: value) {
+                return data
+            }
+
         }
         return nil
     }

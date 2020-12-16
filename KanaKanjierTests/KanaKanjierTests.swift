@@ -198,11 +198,10 @@ class KanaKanjierTests: XCTestCase {
                     print("ファイルが存在しません")
                     return
                 }
-                print("ファイルが存在しました")
 
                 let string = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
                 nodeIndex2Characters = string.components(separatedBy: "\n").map{Character($0)}
-            } catch let error {
+            } catch {
                 print("ファイルが存在しません: \(error)")
                 nodeIndex2Characters = []
             }
@@ -217,7 +216,7 @@ class KanaKanjierTests: XCTestCase {
 
                 let string = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
                 data = string.components(separatedBy: "\n")
-            } catch let error {
+            } catch {
                 print("ファイルが存在しません: \(error)")
                 data = []
             }
@@ -226,7 +225,6 @@ class KanaKanjierTests: XCTestCase {
                 print("ファイルが存在しません")
                 return
             }
-            print("ファイルが存在しました")
 
             let bytes = ReadBinaryFile_UInt64(path: path).map{$0.littleEndian}
             let louds = FastLOUDSUIntTrie(bytes: bytes, nodeIndex2Character: nodeIndex2Characters)

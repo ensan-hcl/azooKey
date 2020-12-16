@@ -494,60 +494,24 @@ final class DesignDepartment{
 
 }
 
-struct KeyFlickSetting{
-    typealias SaveValue = [String: String]
-    var saveValue: [String: String] {
-        return [
-            "identifier": targetKeyIdentifier,
-            "left": left,
-            "top": top,
-            "right": right,
-            "bottom": bottom
-        ]
-    }
-
-    let targetKeyIdentifier: String
-    var left: String
-    var top: String
-    var right: String
-    var bottom: String
-    
-    init(targetKeyIdentifier: String, left: String = "", top: String = "", right: String = "", bottom: String = "") {
-        self.targetKeyIdentifier = targetKeyIdentifier
-        self.top = top
-        self.bottom = bottom
-        self.left = left
-        self.right = right
-    }
-
-    static func get(_ value: Any) -> KeyFlickSetting? {
-        guard case let dict as SaveValue = value else{
-            return nil
-        }
-
-        if let identifier = dict["identifier"],
-           let left = dict["left"],
-           let top = dict["top"],
-           let right = dict["right"],
-           let bottom = dict["bottom"]{
-            return KeyFlickSetting(targetKeyIdentifier: identifier, left: left, top: top, right: right, bottom: bottom)
-        }
-        return nil
-    }
-}
-
 struct UserSettingDepartment{
-    static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-    
-    mutating func refresh(){
-        self.kogakiFlickSetting = Self.getKogakiFlickSetting()
-        self.unicodeCandidateSetting = Self.getBoolSetting(.unicodeCandidate)
-        self.westerJapaneseCalenderSetting = Self.getBoolSetting(.wesJapCalender)
-        self.halfWidthKatakanaSetting = Self.getBoolSetting(.halfKana)
-        self.typographyLettersSetting = Self.getBoolSetting(.typographyLetter)
-        self.soundSetting = Self.getBoolSetting(.enableSound)
-        self.englishCandidateSetting = Self.getBoolSetting(.englishCandidate)
+    private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
+    private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .typographyLetter, .enableSound, .englishCandidate]
+    private var boolSettings: [Setting: Bool]
 
+    fileprivate init(){
+        self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
+            dictionary[setting] = Self.getBoolSetting(setting)
+        }
+    }
+
+    fileprivate mutating func refresh(){
+        //bool値の設定を更新
+        self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
+            dictionary[setting] = Self.getBoolSetting(setting)
+        }
+
+        self.kogakiFlickSetting = Self.getKogakiFlickSetting()
         self.learningType = Self.learningTypeSetting(.inputAndOutput)
 
         self.resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
@@ -558,8 +522,12 @@ struct UserSettingDepartment{
         }
     }
 
-    static func getKogakiFlickSetting() -> [FlickDirection: FlickedKeyModel] {
-        let value = Self.userDefaults.value(forKey: "kogana_flicks")
+    internal func bool(for key: Setting) -> Bool {
+        return self.boolSettings[key] ?? false
+    }
+
+    private static func getKogakiFlickSetting() -> [FlickDirection: FlickedKeyModel] {
+        let value = Self.userDefaults.value(forKey: Setting.koganaKeyFlick.key)
         let setting: KeyFlickSetting
         if let value = value, let data = KeyFlickSetting.get(value){
             setting = data
@@ -584,20 +552,12 @@ struct UserSettingDepartment{
 
     }
     var kogakiFlickSetting: [FlickDirection: FlickedKeyModel] = Self.getKogakiFlickSetting()
-
-    var unicodeCandidateSetting: Bool = Self.getBoolSetting(.unicodeCandidate)
-    var englishCandidateSetting: Bool = Self.getBoolSetting(.englishCandidate)
-
-    var westerJapaneseCalenderSetting: Bool = Self.getBoolSetting(.wesJapCalender)
-    var halfWidthKatakanaSetting: Bool = Self.getBoolSetting(.halfKana)
-    var typographyLettersSetting: Bool = Self.getBoolSetting(.typographyLetter)
-    var soundSetting: Bool = Self.getBoolSetting(.enableSound)
     var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput, initialize: true)
 
     var resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
     var keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
 
-    static func getBoolSetting(_ setting: Setting) -> Bool {
+    private static func getBoolSetting(_ setting: Setting) -> Bool {
         if let object = Self.userDefaults.object(forKey: setting.key), let bool = object as? Bool{
             return bool
         }else if let bool = DefaultSetting.shared.getBoolDefaultSetting(setting){
@@ -606,7 +566,7 @@ struct UserSettingDepartment{
         return false
     }
 
-    static func getDoubleSetting(_ setting: Setting) -> Double? {
+    private static func getDoubleSetting(_ setting: Setting) -> Double? {
         if let object = Self.userDefaults.object(forKey: setting.key), let value = object as? Double{
             return value
         }else if let value = DefaultSetting.shared.getDoubleSetting(setting){
@@ -615,7 +575,7 @@ struct UserSettingDepartment{
         return nil
     }
 
-    static func learningTypeSetting(_ current: LearningType, initialize: Bool = false) -> LearningType {
+    private static func learningTypeSetting(_ current: LearningType, initialize: Bool = false) -> LearningType {
         let result: LearningType
         if let object = Self.userDefaults.object(forKey: Setting.learningType.key),
            let value = LearningType.get(object){
@@ -641,7 +601,7 @@ struct UserSettingDepartment{
         return false
     }
 
-    mutating func writeLearningTypeSetting(to type: LearningType) {
+    fileprivate mutating func writeLearningTypeSetting(to type: LearningType) {
         Self.userDefaults.set(type.saveValue, forKey: Setting.learningType.key)
         self.learningType = type
         Store.shared.sendToDicDataStore(.notifyLearningType(type))
@@ -870,12 +830,12 @@ final class ActionDepartment{
                 return
             }
         }
-        let deleteStartTime = Date()
+        let startTime = Date()
 
         switch action{
         case .delete:
             let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
-                let span: TimeInterval = timer.fireDate.timeIntervalSince(deleteStartTime)
+                let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
                     SoundTools.delete()
                     self?.inputStateHolder.delete(count: 1)
@@ -885,7 +845,7 @@ final class ActionDepartment{
             self.timers.append(tuple)
         case let .input(text):
             let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
-                let span: TimeInterval = timer.fireDate.timeIntervalSince(deleteStartTime)
+                let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
                     SoundTools.click()
                     self?.inputStateHolder.input(text: text)
@@ -896,7 +856,7 @@ final class ActionDepartment{
         case let .moveCursor(direction):
             let count = (direction == .right ? 1:-1)
             let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
-                let span: TimeInterval = timer.fireDate.timeIntervalSince(deleteStartTime)
+                let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
                     SoundTools.tabOrOtherKey()
                     self?.inputStateHolder.moveCursor(count: count)
@@ -937,7 +897,6 @@ final class ActionDepartment{
     ///何かが変化する前に状態の保存を行う関数。
     func registerSomethingWillChange(left: String, center: String, right: String){
         self.tempTextData = (left: left, center: center, right: right)
-        print("registerSomethingWillChange", self.tempTextData)
     }
     //MARK: left/center/rightとして得られる情報は以下の通り
     /*
@@ -985,9 +944,7 @@ final class ActionDepartment{
         let isSelected = !center.isEmpty
 
         if isSelected{
-            print("select:", "left:", left.debugDescription, "right:", right.debugDescription, "center:", center.debugDescription)
             self.inputStateHolder.userSelectedText(text: center)
-            print("user operation id: select")
             return
         }
         

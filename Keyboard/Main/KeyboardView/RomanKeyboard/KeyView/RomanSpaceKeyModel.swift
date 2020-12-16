@@ -28,10 +28,10 @@ struct RomanSpaceKeyModel: RomanKeyModelProtocol{
 
     func getLabel() -> KeyLabel {
         let width = self.keySize.width
-        switch Store.shared.keyboardModel.tabState{
-        case .abc:
+        switch Store.shared.keyboardLanguage{
+        case .english:
             return KeyLabel(.text("space"), width: width, textSize: .small)
-        default:
+        case .japanese:
             return KeyLabel(.text("空白"), width: width, textSize: .small)
         }
     }

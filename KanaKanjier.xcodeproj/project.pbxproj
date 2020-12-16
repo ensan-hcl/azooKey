@@ -960,6 +960,7 @@
 		1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1AD4DDD1258718F600A6FA18 /* RomanChangeTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDD0258718F600A6FA18 /* RomanChangeTabKeyModel.swift */; };
 		1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDE8652545D48900E524E1 /* Candidate.swift */; };
+		1AE3DF02258A20A2007C7C4A /* KeyFlickSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */; };
 		1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */; };
 		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
 		1AE4DB7C25163C6B00A24158 /* FlickInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB7B25163C6B00A24158 /* FlickInputData.swift */; };
@@ -9902,6 +9903,7 @@
 				1AF1C55F252DD10F002FCC66 /* added_last_n_character.swift in Sources */,
 				1AA346912567F01E00B41A16 /* SettingItemProtocol.swift in Sources */,
 				1A3DC20C2500D53B002CAA93 /* VerticalFlickKeyboardView.swift in Sources */,
+				1AE3DF02258A20A2007C7C4A /* KeyFlickSetting.swift in Sources */,
 				1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */,
 				1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */,
 				1A3A16322529712300A5BA4F /* KogakiKeyModel.swift in Sources */,

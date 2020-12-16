@@ -145,7 +145,7 @@ struct LOUDSBuilder{
 
         do {
             let count = (data.count)/txtFileSplit
-            let indiceses:[Range<Int>] = (0...count).map{
+            let indiceses: [Range<Int>] = (0...count).map{
                 let start = $0*txtFileSplit
                 let _end = ($0+1)*txtFileSplit
                 let end = data.count < _end ? data.count:_end

@@ -296,13 +296,13 @@ final class DicDataStore{
 
             self.ccLines = [[Int: PValue]].init(repeating: [:], count: cidCount)
             
-        } catch let error {
+        } catch {
             print("ファイルが存在しません: \(error)")
         }
         do{
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
             charsID = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map{($0.element, UInt8($0.offset))})
-        }catch let error{
+        } catch {
             print("ファイルが存在しません: \(error)")
         }
         do{
@@ -583,7 +583,7 @@ final class DicDataStore{
             let dicdata: DicData = csvData.map{convertDicData(from: $0)}
             self.zeroHintPredictionDicData = dicdata
             return dicdata
-        }catch let error{
+        } catch {
             print(error)
             self.zeroHintPredictionDicData = []
             return []
@@ -607,7 +607,7 @@ final class DicDataStore{
                 let csvData = csvLines.map{$0.split(separator: ",", omittingEmptySubsequences: false)}
                 let dicdata: DicData = csvData.map{self.convertDicData(from: $0)}
                 return dicdata
-            } catch let error {
+            } catch  {
                 print("ファイルが存在しません: \(error)")
                 return []
             }
@@ -616,7 +616,6 @@ final class DicDataStore{
             //最大700件に絞ることによって低速化を回避する。
             //FIXME: 場当たり的な対処。改善が求められる。
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head), depth: 5).prefix(700)
-            //print(prefixIndices.count, prefixIndices.prefix(100))
             return self.getDicData(identifier: first, indices: Set(prefixIndices))
         }else{
             let first = String(head.first!)

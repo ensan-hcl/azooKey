@@ -9,9 +9,8 @@ import Foundation
 import SwiftUI
 
 struct RomanAaKeyModel: RomanKeyModelProtocol, AaKeyModelProtocol{
-    init(){}
-
     static var shared = RomanAaKeyModel()
+
     var variableSection = RomanKeyModelVariableSection()
     var keySize: CGSize {
         return CGSize(width: Store.shared.design.romanScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Store.shared.design.keyViewSize.height)

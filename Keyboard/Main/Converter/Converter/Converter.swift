@@ -56,14 +56,14 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   `賢い変換候補
     private func getWiseCandidate(_ inputData: InputData) -> [Candidate] {
         var result = [Candidate]()
-        if Store.shared.userSetting.westerJapaneseCalenderSetting{
+        if Store.shared.userSetting.bool(for: .wesJapCalender){
             result.append(contentsOf: self.toWareki(inputData))
             result.append(contentsOf: self.toSeireki(inputData))
         }
-        if Store.shared.userSetting.typographyLettersSetting{
+        if Store.shared.userSetting.bool(for: .typographyLetter){
             result.append(contentsOf: self.typographicalCandidates(inputData))
         }
-        if Store.shared.userSetting.unicodeCandidateSetting{
+        if Store.shared.userSetting.bool(for: .unicodeCandidate){
             result.append(contentsOf: self.unicode(inputData))
         }
         return result
@@ -189,7 +189,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   付加的な変換候補
     private func getTopLevelAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
         var candidates: [Candidate] = []
-        if Store.shared.userSetting.englishCandidateSetting{
+        if Store.shared.userSetting.bool(for: .englishCandidate){
             switch Store.shared.keyboardType{
             case .flick: break
             case .roman:
@@ -231,7 +231,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             )
             candidates.append(hiragana)
         }
-        if Store.shared.userSetting.halfWidthKatakanaSetting{
+        if Store.shared.userSetting.bool(for: .halfKana){
             let string = string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
             let data = LRE_DicDataElement(word: string, ruby: string, cid: 1288, mid: 501, value: -15)
             let halfWidthKatakana = Candidate(

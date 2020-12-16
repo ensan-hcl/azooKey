@@ -57,8 +57,6 @@ final class KeyboardViewController: UIInputViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //print(textDocumentProxy.documentIdentifier)
-        //print(UIPasteboard.general.string)
         self.registerScreenActualSize()
         super.viewDidAppear(animated)
         let window = self.view.window!
@@ -111,7 +109,7 @@ final class KeyboardViewController: UIInputViewController {
         print("描画終わり", self.view.frame.size)
     }
 
-
+    /*
     override func selectionWillChange(_ textInput: UITextInput?) {
         super.selectionWillChange(textInput)
         print("selectionWillChange")
@@ -121,15 +119,16 @@ final class KeyboardViewController: UIInputViewController {
         super.selectionDidChange(textInput)
         print("selectionDidChange")
     }
-
+     */
     override func textWillChange(_ textInput: UITextInput?) {
         super.textWillChange(textInput)
-        
+
         Store.shared.registerUIReturnKeyType(type: self.textDocumentProxy.returnKeyType ?? .default)
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
-       
+
+        print(left, center, right)
         Store.shared.action.registerSomethingWillChange(left: left, center: center, right: right)
     }
     
@@ -139,6 +138,8 @@ final class KeyboardViewController: UIInputViewController {
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
+
+        print(left, center, right)
         Store.shared.action.registerSomethingDidChange(left: left, center: center, right: right)
     }
 }
