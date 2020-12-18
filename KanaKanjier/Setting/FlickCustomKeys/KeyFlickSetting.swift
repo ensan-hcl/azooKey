@@ -34,6 +34,7 @@ struct KeyFlickSetting: Savable, Codable {
     }
 
     /*
+     これに由来する
      var saveValue: [String: String] {
      return [
      "identifier":targetKeyIdentifier,

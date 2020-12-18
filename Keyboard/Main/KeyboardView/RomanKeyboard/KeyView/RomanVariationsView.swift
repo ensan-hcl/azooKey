@@ -9,8 +9,6 @@
 import Foundation
 import SwiftUI
 
-
-
 struct RomanVariationsView: View {
     private let model: VariationsModel
     @ObservedObject private var modelVariableSection: VariationsModelVariableSection

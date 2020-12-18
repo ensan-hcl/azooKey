@@ -14,7 +14,7 @@ struct SharedStore{
 }
 
 func debug(_ items: Any...){
-    #if debug
+    #if DEBUG
         print(items)
     #endif
 }

@@ -10,99 +10,14 @@ import Foundation
 import SwiftUI
 
 struct OpenSourceSoftWaresLicenceView: View {
-    let licence_mecab = """
+    private let licence_mecab = """
     MeCab is copyrighted free software by Taku Kudo <taku@chasen.org> and
     Nippon Telegraph and Telephone Corporation, and is released under
     any of the GPL (see the file GPL), the LGPL (see the file LGPL), or the
     BSD License (see the file BSD).
     """
-    let licence_mecab_ipadic_neologd = """
-    Copyright (C) 2015-2019 Toshinori Sato (@overlast)
 
-          https://github.com/neologd/mecab-ipadic-neologd
-
-        i. 本データは、株式会社はてなが提供するはてなキーワード一覧ファイル
-           中の表記、及び、読み仮名の大半を使用している。
-
-           はてなキーワード一覧ファイルの著作権は、株式会社はてなにある。
-
-           はてなキーワード一覧ファイルの使用条件に基づき、また、
-           データ使用の許可を頂いたことに対する感謝の意を込めて、
-           以下に株式会社はてなおよびはてなキーワードへの参照をURLで示す。
-
-           株式会社はてな : http://hatenacorp.jp/information/outline
-
-           はてなキーワード :
-           http://developer.hatena.ne.jp/ja/documents/keyword/misc/catalog
-
-       ii. 本データは、日本郵便株式会社が提供する郵便番号データ中の表記、
-           及び、読み仮名を使用している。
-
-           日本郵便株式会社は、郵便番号データに限っては著作権を主張しないと
-           述べている。
-
-           日本郵便株式会社の郵便番号データに対する感謝の意を込めて、
-           以下に日本郵便株式会社および郵便番号データへの参照をURLで示す。
-
-           日本郵便株式会社 :
-             http://www.post.japanpost.jp/about/profile.html
-
-           郵便番号データ :
-             http://www.post.japanpost.jp/zipcode/dl/readme.html
-
-      iii. 本データは、スナフキん氏が提供する日本全国駅名一覧中の表記、及び
-           読み仮名を使用している。
-
-           日本全国駅名一覧の著作権は、スナフキん氏にある。
-
-           スナフキん氏は 「このデータを利用されるのは自由ですが、その際に
-           不利益を被ったりした場合でも、スナフキんは一切責任は負えません
-           ことをご承知おき下さい」と述べている。
-
-           スナフキん氏に対する感謝の意を込めて、
-           以下に日本全国駅名一覧のコーナーへの参照をURLで示す。
-
-           日本全国駅名一覧のコーナー :
-             http://www5a.biglobe.ne.jp/~harako/data/station.htm
-
-       iv. 本データは、工藤拓氏が提供する人名(姓/名)エントリデータ中の、
-           漢字表記の姓・名とそれに対応する読み仮名を使用している。
-
-           人名(姓/名)エントリデータは被災者・安否不明者の人名の
-           表記揺れ対策として、Mozcの人名辞書を活用できるという
-           工藤氏の考えによって提供されている。
-
-           工藤氏に対する感謝の意を込めて、
-           以下にデータ本体と経緯が分かる情報への参照をURLで示す。
-
-           人名(姓/名)エントリデータ :
-             http://chasen.org/~taku/software/misc/personal_name.zip
-
-           上記データが提供されることになった経緯
-             http://togetter.com/li/111529
-
-        v. 本データは、Web上からクロールした大量の文書データから抽出した
-           表記とそれに対応する読み仮名のデータを含んでいる。
-
-           抽出した表記とそれに対応する読み仮名の組は、上記の i. から iv.
-           の言語資源の組み合わせによって得られる組のみを採録した。
-
-           Web 上に文書データを公開して下さっている皆様に感謝いたします。
-
-    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    """
-    
-    let licence_ipadic = """
+    private let licence_ipadic = """
     Copyright 2000, 2001, 2002, 2003 Nara Institute of Science
     and Technology.  All Rights Reserved.
 
@@ -244,17 +159,5 @@ struct OpenSourceSoftWaresLicenceView: View {
         }
         .multilineTextAlignment(.leading)
         .navigationBarTitle(Text("オープンソースソフトウェア"), displayMode: .inline)
-    }
-}
-
-struct OpenSourceSoftWaresLicenceStack<Content: View>: View {
-    let content: () -> Content
-    init(@ViewBuilder _ content: @escaping () -> Content){
-        self.content = content
-    }
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10){
-            self.content()
-        }
     }
 }
