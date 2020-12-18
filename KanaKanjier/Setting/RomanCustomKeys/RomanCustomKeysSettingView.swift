@@ -535,7 +535,6 @@ private struct DraggableItem: View {
                     }
                     .onEnded {_ in
                         if editState.allowDrag{
-                            print("終了")
                             self.onEnd()
                         }
                     }

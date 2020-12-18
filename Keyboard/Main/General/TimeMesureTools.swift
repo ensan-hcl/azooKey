@@ -16,7 +16,7 @@ class TimeMesureTools{
     }
 
     static func endTimeMesure(_ message: String = ""){
-        print(message, -(Self.start?.timeIntervalSinceNow ?? .nan))
+        debug(message, -(Self.start?.timeIntervalSinceNow ?? .nan))
         Self.start = nil
     }
 

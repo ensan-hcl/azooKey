@@ -284,30 +284,30 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 data: Array(candidateData.data[0...count])
             )
         }
-        print("処理1:", -start1.timeIntervalSinceNow)
+        debug("処理1:", -start1.timeIntervalSinceNow)
         let start2 = Date()
         let sums: [(CandidateData, Candidate)] = clauseResult.map{($0, converter.processClauseCandidate($0))}
         //文章全体を変換した場合の候補上位五件
         let sentence_candidates = self.getUniqueCandidate(sums.map{$0.1}).sorted{$0.value>$1.value}.prefix(5)
-        print("処理2:", -start2.timeIntervalSinceNow)
+        debug("処理2:", -start2.timeIntervalSinceNow)
         let start3 = Date()
 
         //予測変換
         let prediction_candidates: [Candidate] = requirePrediction ? self.getUniqueCandidate(self.getPredictionCandidate(sums)) : []
-        print("処理3.1:", -start3.timeIntervalSinceNow)
+        debug("処理3.1:", -start3.timeIntervalSinceNow)
         let start3_2 = Date()
 
         //英単語の予測変換。appleのapiを使うため、処理が異なる。
         let english_candidates: [Candidate] = requireEnglishPrediction ? self.getForeignPredictionCandidate(inputData: inputData, language: "en-US") : []
-        print("処理3.2:", -start3_2.timeIntervalSinceNow)
+        debug("処理3.2:", -start3_2.timeIntervalSinceNow)
         let start3_3 = Date()
 
         //ゼロヒント予測変換
         let best10 = getUniqueCandidate(sentence_candidates + prediction_candidates).sorted{$0.value > $1.value}.prefix(10)
         let zeroHintPrediction_candidates = converter.getZeroHintPredictionCandidates(preparts: best10, N_best: 3)
-        print("処理3.3:", -start3_3.timeIntervalSinceNow)
+        debug("処理3.3:", -start3_3.timeIntervalSinceNow)
 
-        print("処理3全体:", -start3.timeIntervalSinceNow)
+        debug("処理3全体:", -start3.timeIntervalSinceNow)
         let start4 = Date()
 
 
@@ -316,7 +316,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let full_candidate = getUniqueCandidate(best10 + english_candidates + (zeroHintPrediction_candidates + toplevel_additional_candidate)).sorted{$0.value>$1.value}.prefix(5)
         //重複のない変換候補を作成するための集合
         var seenCandidate: Set<String> = Set(full_candidate.map{$0.text})
-        print("処理4:", -start4.timeIntervalSinceNow)
+        debug("処理4:", -start4.timeIntervalSinceNow)
         let start5 = Date()
 
         //文節のみ変換するパターン
@@ -338,7 +338,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     data: [$0.data]
                 )
         }
-        print("処理5:", -start5.timeIntervalSinceNow)
+        debug("処理5:", -start5.timeIntervalSinceNow)
         let start6 = Date()
 
         //追加する部分
@@ -357,7 +357,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         result.append(contentsOf: clause_candidates)
         result.append(contentsOf: wise_candidates)
         result.append(contentsOf: word_candidates)
-        print("処理6:", -start6.timeIntervalSinceNow)
+        debug("処理6:", -start6.timeIntervalSinceNow)
 
         return result
     }
@@ -374,7 +374,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         }
 
         guard let previousInputData = self.previousInputData else{
-            print("新規計算用の関数を呼びますA")
+            debug("新規計算用の関数を呼びますA")
             let result = converter.kana2lattice_all(inputData, N_best: N_best)
             self.previousInputData = inputData
             return result
@@ -382,7 +382,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         //文節確定の後の場合
         if let lastClause = self.completedData, let _ = inputData.isAfterDeletedPrefixCharacter(previous: previousInputData){
-            print("文節確定用の関数を呼びます")
+            debug("文節確定用の関数を呼びます")
             let result = converter.kana2lattice_afterComplete(inputData, completedData: lastClause, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             self.completedData = nil
@@ -391,7 +391,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         //一文字消した場合
         if let deletedCount = inputData.isAfterDeletedCharacter(previous: previousInputData){
-            print("最後尾削除用の関数を呼びます, 消した文字数は\(deletedCount)")
+            debug("最後尾削除用の関数を呼びます, 消した文字数は\(deletedCount)")
             let result = converter.kana2lattice_deletedLast(deletedCount: deletedCount, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
@@ -399,7 +399,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         //一文字変わった場合
         if let counts = inputData.isAfterReplacedCharacter(previous: previousInputData){
-            print("最後尾文字置換用の関数を呼びますA")
+            debug("最後尾文字置換用の関数を呼びますA")
             let result = converter.kana2lattice_changed(inputData, N_best: N_best, counts: counts, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
@@ -407,7 +407,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         //1文字増やした場合
         if let addedCount = inputData.isAfterAddedCharacter(previous: previousInputData){
-            print("最後尾追加用の関数を呼びます")
+            debug("最後尾追加用の関数を呼びます")
             let result = converter.kana2lattice_added(inputData, N_best: N_best, addedCount: addedCount,  previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
@@ -415,7 +415,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         //一文字増やしていない場合
         if true{
-            print("新規計算用の関数を呼びますB")
+            debug("新規計算用の関数を呼びますB")
             let result = converter.kana2lattice_all(inputData, N_best: N_best)
             self.previousInputData = inputData
             return result
@@ -439,7 +439,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     /// - Returns:
     ///   重複のない変換候補。
     func requestCandidates(_ inputData: InputData, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> [Candidate] {
-        print("入力は", inputData.characters)
+        debug("入力は", inputData.characters)
         //stringが無の場合
         if inputData.characters.isEmpty{
             return []
@@ -450,15 +450,15 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             return []
         }
 
-        print("ラティス構築", -start1.timeIntervalSinceNow)
+        debug("ラティス構築", -start1.timeIntervalSinceNow)
         let start2 = Date()
         let candidates = self.processResult(inputData: inputData, result: result, requirePrediction: requirePrediction, requireEnglishPrediction: requireEnglishPrediction)
-        print("ラティス処理", -start2.timeIntervalSinceNow)
+        debug("ラティス処理", -start2.timeIntervalSinceNow)
 
         let results = candidates.map{
             $0.withActions(self.getApporopriateActions($0))
         }
-        print("全体", -start1.timeIntervalSinceNow)
+        debug("全体", -start1.timeIntervalSinceNow)
 
         return results
     }

@@ -10,6 +10,17 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
+            VersionView("1.4", releaseDate: "2020年12月xx日"){
+                ParagraphView("機能を追加しました。", points: [
+                    "日付/時刻の入力やランダムな変換を可能にする「テンプレート」機能を追加",
+                ])
+                ParagraphView("機能を改善しました。", points: [
+                    "フリックカスタムキーの編集画面を一新",
+                ])
+
+                ParagraphView("その他軽微なデザイン・変換機能の改善を行いました。", points: [])
+
+            }
             VersionView("1.3.1", releaseDate: "2020年12月18日"){
                 ParagraphView("不具合を修正しました。", points: [
                     "iPhone X以降の端末で一部キーが反応しない問題",

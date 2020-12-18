@@ -22,7 +22,7 @@ extension Array{
             }
             self = array
         } catch {
-            print("Failed to read the file.")
+             debug("Failed to read the file.")
             throw error
         }
 
@@ -43,7 +43,7 @@ extension LOUDS{
             }
             return ui64array
         } catch {
-            print("Failed to read the file.")
+            debug("Failed to read the file.")
             return []
         }
     }
@@ -77,7 +77,7 @@ extension LOUDS{
         do{
             nodeIndex2ID = try Array(Data(contentsOf: charsURL, options: [.uncached]))   //2度読み込むことはないのでキャッシュ不要
         } catch {
-            print("ファイルが存在しません: \(error)")
+            debug("ファイルが存在しません: \(error)")
             nodeIndex2ID = []
         }
 
@@ -92,7 +92,7 @@ extension LOUDS{
             let path = Self.getLoudstxtPath(identifier)
             data = try Data(contentsOf: URL(fileURLWithPath: path))
         } catch {
-            print("ファイルが存在しません: \(error)")
+            debug("ファイルが存在しません: \(error)")
             data = Data()
         }
 

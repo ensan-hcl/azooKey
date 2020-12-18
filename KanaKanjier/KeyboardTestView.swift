@@ -72,24 +72,78 @@ struct MyTextFieldStyle: TextFieldStyle {
     }
 }
 
+protocol TemplateLiteralProtocol{
+    static func `import`(from string: String) -> Self
+    func export() -> String
+}
 
 enum TemplateLiteralType{
     case date
     case random
 }
 
-enum CalendarType{
-    case western
-    case japanese
+
+struct DateTemplateLiteral: TemplateLiteralProtocol {
+    var format: String
+    var type: CalendarType
+    var language: Language
+    var delta: String
+    var deltaUnit: Int
+
+    enum CalendarType: String{
+        case western = "western"
+        case japanese = "japanese"
+
+        var identifier: Calendar.Identifier {
+            switch self{
+            case .western:
+                return .gregorian
+            case .japanese:
+                return .japanese
+            }
+        }
+    }
+
+    enum Language: String{
+        case english = "en_US"
+        case japanese = "ja_JP"
+
+        var identifier: String {
+            return self.rawValue
+        }
+    }
+
+    static func `import`(from string: String) -> DateTemplateLiteral {
+        let splited = string.split(separator: " ")
+        let format = (splited.filter{$0.hasPrefix("format")}.first ?? "").dropFirst("format=\"".count).dropLast(1)
+        let type = (splited.filter{$0.hasPrefix("type")}.first ?? "").dropFirst("type=\"".count).dropLast(1)
+        let language = (splited.filter{$0.hasPrefix("language")}.first ?? "").dropFirst("language=\"".count).dropLast(1)
+        let delta = (splited.filter{$0.hasPrefix("delta")}.first ?? "").dropFirst("delta=\"".count).dropLast(1)
+        let deltaUnit = (splited.filter{$0.hasPrefix("deltaunit")}.first ?? "").dropFirst("deltaunit=\"".count).dropLast(1)
+
+        return DateTemplateLiteral(
+            format: String(format),
+            type: CalendarType.init(rawValue: String(type))!,
+            language: Language.init(rawValue: String(language))!,
+            delta: String(delta),
+            deltaUnit: Int(deltaUnit) ?? 0
+        )
+    }
+
+
+    func export() -> String {
+        return """
+        <date format="\(format)" type="\(type.rawValue)" language="\(language.identifier)" delta="\(delta)" deltaunit="\(deltaUnit)">
+        """
+    }
 }
 
-enum CalendarLanguage{
-    case english
-    case japanese
-}
 
-struct TestView: View {
+//QiitaのタグみたいなTextField
+struct TestView2: View {
     @State private var text: String = ""
+    let borderColor = Color(.sRGB, red: 0.745, green: 0.866, blue: 0.988)
+    let fillColor = Color(.sRGB, red: 0.847, green: 0.917, blue: 0.992)
     var body: some View {
         ZStack{
             TextField("入力", text: $text)
@@ -99,11 +153,11 @@ struct TestView: View {
                 ForEach(strings.indices, id: \.self){i in
                     Text(strings[i])
                         .background(
-                            Color(.sRGB, red: 0.847, green: 0.917, blue: 0.992)
+                            fillColor
                                 .cornerRadius(5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color(.sRGB, red: 0.745, green: 0.866, blue: 0.988))
+                                        .stroke(borderColor)
                                 )
                         )
                         .padding(.horizontal, 2)
@@ -114,7 +168,7 @@ struct TestView: View {
     }
 }
 
-struct TestView2: View {
+struct TestView: View {
     @State private var selection: TemplateLiteralType = .date
     var body: some View {
         Form{
@@ -131,27 +185,167 @@ struct TestView2: View {
             case .date:
                 DateTemplateLiteralSettingView()
             case .random:
-                EmptyView()
+                RandomTemplateLiteralSettingView()
             }
         }
     }
 }
 
+struct RandomTemplateLiteral {
+    enum ValueType{
+        case int, double, string
+    }
+    enum Value{
+        case int(from: Int, to: Int)
+        case double(from: Double, to: Double)
+        case string([String])
+    }
+    var value: Value
+}
+
+struct RandomTemplateLiteralSettingView: View {
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    //リテラル
+    @State private var literal = RandomTemplateLiteral(value: .int(from: 1, to: 6)) {
+        didSet{
+            self.update()
+        }
+    }
+    //選択されているテンプレート
+    @State private var formatSelection = "yyyy年MM月dd日"
+    //表示用
+    @State private var previewString: String = ""
+
+    @State private var type: RandomTemplateLiteral.ValueType = .int
+
+    @State private var intStringFrom: String = ""
+    @State private var intStringTo: String = ""
+
+    @State private var doubleStringFrom: String = ""
+    @State private var doubleStringTo: String = ""
+
+    @State private var stringsString: String = ""
+
+    func update(){
+        switch self.literal.value{
+        case let .int(from: left, to: right):
+            let min = left<right ? left:right
+            let max = left<right ? right:left
+            previewString = "\(Int.random(in: min...max))"
+        case let .double(from: left, to: right):
+            let min = left<right ? left:right
+            let max = left<right ? right:left
+            previewString = "\(Double.random(in: min...max))"
+        case let .string(strings):
+            previewString = strings.randomElement() ?? "値を設定してください"
+        }
+    }
+
+    var body: some View {
+        Group{
+            Section(header: Text("プレビュー")){
+                HStack{
+                    Text(previewString)
+                    Spacer()
+                }
+            }
+            Section(header: Text("値の種類")){
+                VStack{
+                    HStack{
+                        Spacer()
+                        Text("値の種類")
+                        Spacer()
+                    }
+                    Picker("値の種類", selection: $type){
+                        Text("整数").tag(RandomTemplateLiteral.ValueType.int)
+                        Text("小数").tag(RandomTemplateLiteral.ValueType.double)
+                        Text("文字列").tag(RandomTemplateLiteral.ValueType.string)
+                    }
+                    .labelsHidden()
+                    .pickerStyle(WheelPickerStyle())
+                    .padding(.vertical, -2)
+                }
+            }
+            switch type{
+            case .int:
+                HStack{
+                    TextField("左端の値", text: $intStringFrom, onEditingChanged: {_ in
+                        if let left = Int(intStringFrom){
+                            if case let .int(from: _, to: right) = literal.value{
+                                literal.value = .int(from: left, to: right)
+                            }else{
+                                literal.value = .int(from: left, to: left)
+                            }
+                        }
+                    })
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Text("から")
+                }
+                HStack{
+                    TextField("右端の値", text: $intStringTo, onEditingChanged: {_ in
+                        if let right = Int(intStringTo){
+                            if case let .int(from: left, to: _) = literal.value{
+                                literal.value = .int(from: left, to: right)
+                            }else{
+                                literal.value = .int(from: right, to: right)
+                            }
+                        }
+                    })
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Text("まで")
+                }
+            case .double:
+                HStack{
+                    TextField("左端の値", text: $doubleStringFrom, onEditingChanged: {_ in
+                        if let left = Double(doubleStringFrom){
+                            if case let .double(from: _, to: right) = literal.value{
+                                literal.value = .double(from: left, to: right)
+                            }else{
+                                literal.value = .double(from: left, to: left)
+                            }
+                        }
+                    })
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Text("から")
+                }
+                HStack{
+                    TextField("右端の値", text: $doubleStringTo, onEditingChanged: {_ in
+                        if let right = Double(doubleStringTo){
+                            if case let .double(from: left, to: _) = literal.value{
+                                literal.value = .double(from: left, to: right)
+                            }else{
+                                literal.value = .double(from: right, to: right)
+                            }
+                        }
+                    })
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Text("まで")
+                }
+            case .string:
+                TextField("表示する値(カンマ区切り)", text: $stringsString, onEditingChanged: {_ in
+                    literal.value = .string(stringsString.components(separatedBy: ","))
+                })
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+        }.font(.body)
+        .onReceive(timer){_ in
+            self.update()
+        }
+    }
+}
+
+
 struct DateTemplateLiteralSettingView: View {
     private let timer = Timer.publish(every: 1/90, on: .main, in: .common).autoconnect()
-    @State private var furtherSettingExpanded = false
-    @State private var type: CalendarType = .western {
+    //リテラル
+    @State private var literal = DateTemplateLiteral(format: "yyyy年MM月dd日(EEE) a hh:mm:ss", type: .western, language: .japanese, delta: "0", deltaUnit: 1) {
         didSet{
             self.update()
         }
     }
-    @State private var language: CalendarLanguage = .japanese{
-        didSet{
-            self.update()
-        }
-    }
+    //選択されているテンプレート
     @State private var formatSelection = "yyyy年MM月dd日"
-    @State private var format = "yyyy年MM月dd日(EEE) a hh:mm:ss"
+    //表示用
     @State private var date: Date = Date()
     @State private var dateString: String = ""
 
@@ -159,20 +353,18 @@ struct DateTemplateLiteralSettingView: View {
     func update(){
         self.date = Date()
         let f = DateFormatter()
-        f.dateFormat = formatSelection == "カスタム" ? format:formatSelection
-        switch language{
-        case .japanese:
+        if formatSelection == "カスタム"{
+            f.dateFormat = literal.format
+            f.locale = Locale(identifier: literal.language.identifier)
+            f.calendar = Calendar(identifier: literal.type.identifier)
+            dateString = f.string(from: date.advanced(by: (Double(literal.delta) ?? .nan) * Double(literal.deltaUnit)))
+        }else{
+            f.dateFormat = formatSelection
             f.locale = Locale(identifier: "ja_JP")
-        case .english:
-            f.locale = Locale(identifier: "en_US")
-        }
-        switch type{
-        case .japanese:
-            f.calendar = Calendar(identifier: .japanese)
-        case .western:
             f.calendar = Calendar(identifier: .gregorian)
+            dateString = f.string(from: date)
+
         }
-        dateString = f.string(from: date)
     }
 
     let yyyy年MM月dd日: DateFormatter = {
@@ -226,18 +418,45 @@ struct DateTemplateLiteralSettingView: View {
                 }
             }
             if formatSelection == "カスタム"{
-                Section(header: Text("カスタム"), footer: Text("書式はYYYYMMddhhmmssフォーマットで記述します。詳しい記法はインターネット等で確認できます。")){
+                Section(header: Text("カスタム書式")){
                     HStack{
                         Text("書式")
                         Spacer()
-                        TextField("書式を入力", text: $format)
+                        TextField("書式を入力", text: $literal.format)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
+                    HStack{
+                        VStack{
+                            HStack{
+                                Text("ズレ")
+
+                                Spacer()
+                                TextField("ズレ", text: $literal.delta)
+                                    .multilineTextAlignment(.trailing)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                Picker(selection: $literal.deltaUnit, label: Text("")) {
+                                    Text("日").tag(60*60*24)
+                                    Text("時間").tag(60*60)
+                                    Text("分").tag(60)
+                                    Text("秒").tag(1)
+                                }
+                                .labelsHidden()
+                                .pickerStyle(InlinePickerStyle())
+                                .frame(maxWidth: 100, maxHeight: 70)
+                                .clipped()
+                            }
+                            if Double(literal.delta) == nil{
+                                Text("\(Image(systemName: "exclamationmark.triangle"))の値が無効です。有効な数値を入力してください")
+                            }
+                        }
+                    }
+
                     HStack{
                         Text("暦の種類")
                         Spacer()
-                        Picker(selection: $type, label: Text("")) {
-                            Text("西暦").tag(CalendarType.western)
-                            Text("和暦").tag(CalendarType.japanese)
+                        Picker(selection: $literal.type, label: Text("")) {
+                            Text("西暦").tag(DateTemplateLiteral.CalendarType.western)
+                            Text("和暦").tag(DateTemplateLiteral.CalendarType.japanese)
                         }
                         .labelsHidden()
                         .pickerStyle(InlinePickerStyle())
@@ -247,9 +466,9 @@ struct DateTemplateLiteralSettingView: View {
                     HStack{
                         Text("言語")
                         Spacer()
-                        Picker(selection: $language, label: Text("")) {
-                            Text("日本語").tag(CalendarLanguage.japanese)
-                            Text("英語").tag(CalendarLanguage.english)
+                        Picker(selection: $literal.language, label: Text("")) {
+                            Text("日本語").tag(DateTemplateLiteral.Language.japanese)
+                            Text("英語").tag(DateTemplateLiteral.Language.english)
                         }
                         .labelsHidden()
                         .pickerStyle(InlinePickerStyle())
@@ -257,7 +476,7 @@ struct DateTemplateLiteralSettingView: View {
                         .clipped()
                     }
                 }
-                Section{
+                Section(header: Text("書式はyyyyMMddhhmmssフォーマットで記述します。詳しい記法はインターネット等で確認できます。")){
                     FallbackLink("Web検索", destination: "https://www.google.com/search?q=yyyymmddhhmm")
                 }
             }
@@ -366,7 +585,7 @@ struct DateTemplateLiteralSettingView: View {
  let distance = value.location.distance(to: value.startLocation)
  if distance > 30{
  self.direction = value.startLocation.direction(to: value.location)
- print(self.direction)
+ debug(self.direction)
  }
  }
  }.onEnded{value in

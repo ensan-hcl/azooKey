@@ -88,7 +88,7 @@ extension Kana2Kanji{
             }
         }
         TimeMesureTools.endTimeMesure("計算所要時間：")
-        print("計算所要時間：全体",-START.timeIntervalSinceNow)
+        debug("計算所要時間：全体",-START.timeIntervalSinceNow)
         return (result: result, nodes: nodes)
     }
 

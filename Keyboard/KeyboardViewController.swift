@@ -50,7 +50,7 @@ final class KeyboardViewController: UIInputViewController {
         var entries: [UILexiconEntry] = []
         self.requestSupplementaryLexicon(completion: {
             $0.entries.forEach{entry in
-                print(entry.userInput, entry.documentText)
+                debug(entry.userInput, entry.documentText)
             }
             entries.append(contentsOf: $0.entries)
         })
@@ -92,7 +92,7 @@ final class KeyboardViewController: UIInputViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Store.shared.closeKeyboard()
-        print("キーボードが閉じられました")
+        debug("キーボードが閉じられました")
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -106,18 +106,18 @@ final class KeyboardViewController: UIInputViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.registerScreenActualSize()
-        print("描画終わり", self.view.frame.size)
+        debug("描画終わり", self.view.frame.size)
     }
 
     /*
     override func selectionWillChange(_ textInput: UITextInput?) {
         super.selectionWillChange(textInput)
-        print("selectionWillChange")
+     debug("selectionWillChange")
     }
 
     override func selectionDidChange(_ textInput: UITextInput?) {
         super.selectionDidChange(textInput)
-        print("selectionDidChange")
+     debug("selectionDidChange")
     }
      */
     override func textWillChange(_ textInput: UITextInput?) {
@@ -128,7 +128,7 @@ final class KeyboardViewController: UIInputViewController {
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
-        print(left, center, right)
+        debug(left, center, right)
         Store.shared.action.registerSomethingWillChange(left: left, center: center, right: right)
     }
     
@@ -139,7 +139,7 @@ final class KeyboardViewController: UIInputViewController {
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
-        print(left, center, right)
+        debug(left, center, right)
         Store.shared.action.registerSomethingDidChange(left: left, center: center, right: right)
     }
 }

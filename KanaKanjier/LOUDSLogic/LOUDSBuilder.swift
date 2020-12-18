@@ -15,7 +15,7 @@ extension LOUDSBuilder{
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
             Self.char2UInt8 = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map{($0.element, UInt8($0.offset))})
         }catch{
-            print("ファイルが存在しません: \(error)")
+            debug("ファイルが存在しません: \(error)")
         }
 
     }
@@ -93,7 +93,7 @@ struct LOUDSBuilder{
                 }
             }
         } catch {
-            print("ファイルが存在しません: \(error)")
+            debug("ファイルが存在しません: \(error)")
             csvData = []
             csvLines = []
             return
@@ -132,7 +132,7 @@ struct LOUDSBuilder{
             let binary = Data(bytes: bytes, count: bytes.count*8)
             try binary.write(to: URL(fileURLWithPath: binaryFilePath))
         } catch {
-            print(error)
+            debug(error)
         }
 
         do {
@@ -140,7 +140,7 @@ struct LOUDSBuilder{
             let binary = Data(bytes: uint8s, count: uint8s.count)
             try binary.write(to: URL(fileURLWithPath: loudsCharsFilePath))
         } catch {
-            print(error)
+            debug(error)
         }
 
         do {
@@ -158,7 +158,7 @@ struct LOUDSBuilder{
                     let result = data[indices].joined(separator: "\n")
                     try result.write(toFile: loudsTxtFilePath("\(start)"), atomically: true, encoding: .utf8)
                 }catch{
-                    print(error)
+                    debug(error)
                 }
             }
 

@@ -46,7 +46,7 @@ extension Kana2Kanji{
             }
         }
 
-        print("辞書の読み込み:", -start1.timeIntervalSinceNow)
+        debug("辞書の読み込み:", -start1.timeIntervalSinceNow)
         let start2 = Date()
         //(3)
         nodes.indices.forEach{(i: Int) in
@@ -87,7 +87,7 @@ extension Kana2Kanji{
 
         }
 
-        print("ノードの登録前半:", -start2.timeIntervalSinceNow)
+        debug("ノードの登録前半:", -start2.timeIntervalSinceNow)
         let start3 = Date()
         let result = LatticeNode.EOSNode
         addedNodes.indices.forEach{(i: Int) in
@@ -138,13 +138,13 @@ extension Kana2Kanji{
             }
         }
 
-        print("ノードの登録後半:", -start3.timeIntervalSinceNow)
+        debug("ノードの登録後半:", -start3.timeIntervalSinceNow)
         let start4 = Date()
 
         let updatedNodes = nodes.indices.map{
             return nodes[$0] + addedNodes[$0]
         } + addedNodes.suffix(counts.added)
-        print("結果の集計:", -start4.timeIntervalSinceNow)
+        debug("結果の集計:", -start4.timeIntervalSinceNow)
 
         return (result: result, nodes: updatedNodes)
     }

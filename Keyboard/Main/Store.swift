@@ -79,12 +79,12 @@ final class Store{
                                               appropriateFor: nil, create: false)
             let path = library.appendingPathComponent("\(fileName).\(ex)")
             guard let data = contents.data(using: .utf8) else {
-                print("ファイルをutf8で保存できません")
+                debug("ファイルをutf8で保存できません")
                 return
             }
             fileManager.createFile(atPath: path.path, contents: data, attributes: nil)
         } catch {
-            print(error)
+            debug(error)
         }
     }
 
@@ -98,7 +98,7 @@ final class Store{
             let contents = try String.init(contentsOfFile: path.path)
             return contents
         } catch {
-            print(error)
+            debug(error)
         }
         return ""
     }
@@ -112,7 +112,7 @@ final class Store{
             let path = library.appendingPathComponent("\(fileName).\(ex)")
             try fileManager.removeItem(atPath: path.path)
         } catch {
-            print(error)
+            debug(error)
         }
     }
 
@@ -710,7 +710,7 @@ final class ActionDepartment{
     }
 
     func appearedAgain(){
-        print("再び表示されました")
+        debug("再び表示されました")
         self.sendToDicDataStore(.reloadUserDict)
     }
 
@@ -941,7 +941,7 @@ final class ActionDepartment{
         if self.inputStateHolder.isAfterAdjusted(){
             return
         }
-        print("something did happen by user!")
+        debug("something did happen by user!")
         let b_left = self.tempTextData.left
         let b_center = self.tempTextData.center
         let b_right = self.tempTextData.right
@@ -962,33 +962,33 @@ final class ActionDepartment{
             //全体としてテキストが変化せず、選択範囲が無くなっている場合→選択を解除した
             if wasSelected && !isSelected{
                 self.inputStateHolder.userDeselectedText()
-                print("user operation id: 1")
+                debug("user operation id: 1")
                 return
             }
 
             //全体としてテキストが変化せず、選択範囲は前後ともになく、左側(右側)の文字列だけが変わっていた場合→カーソルを移動した
             if !wasSelected && !isSelected && b_left != left{
-                print("user operation id: 2", b_left, left)
+                debug("user operation id: 2", b_left, left)
                 let offset = left.count - b_left.count
                 self.inputStateHolder.userMovedCursor(count: offset)
                 return
             }
             //ただタップしただけ、などの場合ここにくる事がある。
-            print("user operation id: 3")
+            debug("user operation id: 3")
             return
         }
         //以降isWholeTextChangedは常にtrue
         //全体としてテキストが変化しており、前は左は改行コードになっていて選択範囲が存在し、かつ前の選択範囲と後の全体が一致する場合→行全体の選択が解除された
         //行全体を選択している場合は改行コードが含まれる。
         if b_left == "\n" && b_center == a_wholeText{
-            print("user operation id: 5")
+            debug("user operation id: 5")
             self.inputStateHolder.userDeselectedText()
             return
         }
 
         //全体としてテキストが変化しており、左右の文字列を合わせたものが不変である場合→カットしたのではないか？
         if b_left + b_right == left + right{
-            print("user operation id: 6")
+            debug("user operation id: 6")
             self.inputStateHolder.userCutText(text: b_center)
             return
         }
@@ -998,10 +998,10 @@ final class ActionDepartment{
             //もしクリップボードに文字列がコピーされており、かつ、前の左側文字列にその文字列を加えた文字列が後の左側の文字列に一致した場合→確実にペースト
             if let pastedText = UIPasteboard.general.string, left.hasSuffix(pastedText){
                 if wasSelected{
-                    print("user operation id: 7")
+                    debug("user operation id: 7")
                     self.inputStateHolder.userReplacedSelectedText(text: pastedText)
                 }else{
-                    print("user operation id: 8")
+                    debug("user operation id: 8")
                     self.inputStateHolder.userPastedText(text: pastedText)
                 }
                 return
@@ -1009,12 +1009,12 @@ final class ActionDepartment{
         }
         
         if left == "\n" && b_left.isEmpty && right == b_right{
-            print("user operation id: 9")
+            debug("user operation id: 9")
             return
         }
         
         //上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
-        print("user operation id: 10, \((left,center,right)), \((b_left, b_center, b_right))")
+        debug("user operation id: 10, \((left,center,right)), \((b_left, b_center, b_right))")
         self.inputStateHolder.clear()
     }
 
@@ -1144,7 +1144,7 @@ private final class InputStateHolder{
     }
     
     fileprivate func clear(){
-        print("クリアしました")
+        debug("クリアしました")
         self.inputtedText = ""
         self.cursorPosition = self.cursorMinimumPosition
         self.isSelected = false
@@ -1158,7 +1158,7 @@ private final class InputStateHolder{
     }
 
     fileprivate func closeKeyboard(){
-        print("キーボードを閉じます")
+        debug("キーボードを閉じます")
         self.sendToDicDataStore(.closeKeyboard)
         self._romanConverter = nil
         self._flickConverter = nil
@@ -1368,7 +1368,7 @@ private final class InputStateHolder{
                     return 1
                 }
                 let suf = after.prefix(count)
-                print("あとの文字は、",suf,-suf.utf16.count)
+                debug("あとの文字は、",suf,-suf.utf16.count)
                 return suf.utf16.count
             }else{
                 return 1
@@ -1377,7 +1377,7 @@ private final class InputStateHolder{
         else {
             if let before = self.proxy.documentContextBeforeInput{
                 let pre = before.suffix(-count)
-                print("前の文字は、",pre,-pre.utf16.count)
+                debug("前の文字は、",pre,-pre.utf16.count)
 
                 return -pre.utf16.count
 
@@ -1395,7 +1395,7 @@ private final class InputStateHolder{
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
             return
         }
-        print("moveCursor, cursorPosition:", cursorPosition, count)
+        debug("moveCursor, cursorPosition:", cursorPosition, count)
         //カーソル位置の正規化
         if cursorPosition + count > self.cursorMaximumPosition{
             let offset = self.getActualOffset(count: self.cursorMaximumPosition - self.cursorPosition)
@@ -1420,7 +1420,7 @@ private final class InputStateHolder{
     
     //MARK: userが勝手にカーソルを何かした場合の後処理
     fileprivate func userMovedCursor(count: Int){
-        print("userによるカーソル移動を検知、今の位置は\(self.cursorPosition)、動かしたオフセットは\(count)")
+        debug("userによるカーソル移動を検知、今の位置は\(self.cursorPosition)、動かしたオフセットは\(count)")
         if self.inputtedText.isEmpty{
             //入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
@@ -1431,7 +1431,7 @@ private final class InputStateHolder{
         if self.cursorPosition > self.cursorMaximumPosition{
             let offset = self.getActualOffset(count: self.cursorMaximumPosition - self.cursorPosition)
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            print("右にはみ出したので\(self.cursorMaximumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
+            debug("右にはみ出したので\(self.cursorMaximumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
             self.cursorPosition = self.cursorMaximumPosition
             setResult()
             self.afterAdjusted = true
@@ -1441,7 +1441,7 @@ private final class InputStateHolder{
             let offset = self.getActualOffset(count: self.cursorMinimumPosition - self.cursorPosition)
             //let offset = self.cursorMinimumPosition - self.cursorPosition
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            print("左にはみ出したので\(self.cursorMinimumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
+            debug("左にはみ出したので\(self.cursorMinimumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
             self.cursorPosition = self.cursorMinimumPosition
             setResult()
             self.afterAdjusted = true

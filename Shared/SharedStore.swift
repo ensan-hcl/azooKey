@@ -12,3 +12,9 @@ struct SharedStore{
     static let bundleName = "DevEn3.azooKey.keyboard"
     static let appGroupKey = "group.com.azooKey.keyboard"
 }
+
+func debug(_ items: Any...){
+    #if debug
+        print(items)
+    #endif
+}

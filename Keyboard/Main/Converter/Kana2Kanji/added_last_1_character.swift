@@ -26,7 +26,7 @@ extension Kana2Kanji{
     ///
     ///(4)ノードをアップデートした上で返却する。
     func kana2lattice_addedLast(_ inputData: InputData, N_best: Int, previousResult: (inputData: InputData, nodes: Nodes) ) -> (result: LatticeNode, nodes: Nodes) {
-        print("一文字追加。追加されたのは「\(inputData.characters.last!)」")
+        debug("一文字追加。追加されたのは「\(inputData.characters.last!)」")
         let START = Date()
         TimeMesureTools.startTimeMesure()
         //(0)
@@ -108,7 +108,7 @@ extension Kana2Kanji{
 
         //(4)
         let updatedNodes: Nodes = nodes.indices.map{nodes[$0] + addedNodes[$0]} + [addedNodes.last ?? []]
-        print("計算所要時間: 全体", -START.timeIntervalSinceNow)
+        debug("計算所要時間: 全体", -START.timeIntervalSinceNow)
         return (result: result, nodes: updatedNodes)
     }
 }

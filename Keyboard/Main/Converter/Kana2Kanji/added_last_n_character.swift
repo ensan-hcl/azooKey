@@ -27,7 +27,7 @@ extension Kana2Kanji{
     ///
     ///(4)ノードをアップデートした上で返却する。
     func kana2lattice_added(_ inputData: InputData, N_best: Int, addedCount: Int, previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
-        print("\(addedCount)文字追加。追加されたのは「\(inputData.characters.suffix(addedCount))」")
+        debug("\(addedCount)文字追加。追加されたのは「\(inputData.characters.suffix(addedCount))」")
         if addedCount == 1{
             return kana2lattice_addedLast(inputData, N_best: N_best, previousResult: previousResult)
         }
@@ -36,7 +36,7 @@ extension Kana2Kanji{
         let count = inputData.count
 
         let start1 = Date()
-        print(addedCount, count, previousResult.inputData.count, previousResult.inputData.characters)
+        debug(addedCount, count, previousResult.inputData.count, previousResult.inputData.characters)
         //(1)
         let addedNodes: [[LatticeNode]] = ( .zero ..< count).map{(i: Int) in
             (previousResult.inputData.count ..< max(previousResult.inputData.count, min(count, i+self.dicdataStore.maxlength+1))).flatMap{j -> [LatticeNode] in
@@ -46,7 +46,7 @@ extension Kana2Kanji{
                 return self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: j)
             }
         }
-        print("計算所要時間: (1) 辞書の検索", -start1.timeIntervalSinceNow)    //ココが一番時間がかかっていた。
+        debug("計算所要時間: (1) 辞書の検索", -start1.timeIntervalSinceNow)    //ココが一番時間がかかっていた。
         let start2 = Date()
         //(2)
         nodes.indices.forEach{(i: Int) in
@@ -139,12 +139,12 @@ extension Kana2Kanji{
             }
         }
 
-        print("計算所要時間: (3) ノードのresultへの登録", -start2.timeIntervalSinceNow)
+        debug("計算所要時間: (3) ノードのresultへの登録", -start2.timeIntervalSinceNow)
 
         //(4)
 
         let updatedNodes = nodes.indices.map{nodes[$0] + addedNodes[$0]} + addedNodes.suffix(addedNodes.endIndex - nodes.endIndex)
-        print("計算所要時間: 全体", -start1.timeIntervalSinceNow)
+        debug("計算所要時間: 全体", -start1.timeIntervalSinceNow)
         return (result: result, nodes: updatedNodes)
     }
 }

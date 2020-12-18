@@ -14,7 +14,7 @@ extension Kana2Kanji{
     ///
     ///(2)次に、再度計算して良い候補を得る。
     func kana2lattice_afterComplete(_ inputData: InputData, completedData: Candidate, N_best: Int, previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
-        print("確定直後の変換、元の文字は：",previousResult.inputData.characters, "新しい文字は：", inputData.characters)
+        debug("確定直後の変換、元の文字は：",previousResult.inputData.characters, "新しい文字は：", inputData.characters)
         let count = inputData.count
         //(1)
         let start = LatticeNode.RegisteredNode.BOSNode()
