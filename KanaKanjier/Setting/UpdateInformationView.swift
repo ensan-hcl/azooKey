@@ -10,6 +10,11 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
+            VersionView("1.3.1", releaseDate: "2020年12月18日"){
+                ParagraphView("不具合を修正しました。", points: [
+                    "iPhone X以降の端末で一部キーが反応しない問題",
+                ])
+            }
             VersionView("1.3", releaseDate: "2020年12月15日"){
                 ParagraphView("機能を追加しました。", points: [
                     "英語入力中、大文字に固定する機能を追加",
