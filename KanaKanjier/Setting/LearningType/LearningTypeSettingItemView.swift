@@ -22,7 +22,7 @@ struct LearningTypeSettingItemView: View {
 
     var body: some View {
         HStack{
-            Text(self.item.screenName)
+            Text(self.item.identifier.title)
             Spacer()
             Picker(selection: $viewModel.value, label: Text("")) {
                 ForEach(0 ..< LearningType.allCases.count) { i in

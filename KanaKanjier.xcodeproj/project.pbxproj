@@ -997,7 +997,7 @@
 		1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57592583051500477DC2 /* CapslockTips.swift */; };
 		1AFA57602584810800477DC2 /* Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA575F2584810800477DC2 /* Focus.swift */; };
 		1AFA57662584815B00477DC2 /* RomanCustomKeysSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */; };
-		1AFA57702584C16200477DC2 /* EnterKeyChangableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA576F2584C16200477DC2 /* EnterKeyChangableTextField.swift */; };
+		1AFA57702584C16200477DC2 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA576F2584C16200477DC2 /* ShareSheet.swift */; };
 		1AFA5D312585069500477DC2 /* mm.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5D302585069500477DC2 /* mm.binary */; };
 		1AFA62F1258506C100477DC2 /* 927.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5DCA258506AC00477DC2 /* 927.binary */; };
 		1AFA62F2258506C100477DC2 /* 827.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5DCB258506AC00477DC2 /* 827.binary */; };
@@ -3359,7 +3359,7 @@
 		1AFA57592583051500477DC2 /* CapslockTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapslockTips.swift; sourceTree = "<group>"; };
 		1AFA575F2584810800477DC2 /* Focus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Focus.swift; sourceTree = "<group>"; };
 		1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeysSettingView.swift; sourceTree = "<group>"; };
-		1AFA576F2584C16200477DC2 /* EnterKeyChangableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterKeyChangableTextField.swift; sourceTree = "<group>"; };
+		1AFA576F2584C16200477DC2 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		1AFA5D302585069500477DC2 /* mm.binary */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mm.binary; path = "../../../../../AzooKey-dict/workspaces/12:12/_results/mm.binary"; sourceTree = "<group>"; };
 		1AFA5DCA258506AC00477DC2 /* 927.binary */ = {isa = PBXFileReference; lastKnownFileType = file; path = 927.binary; sourceTree = "<group>"; };
 		1AFA5DCB258506AC00477DC2 /* 827.binary */ = {isa = PBXFileReference; lastKnownFileType = file; path = 827.binary; sourceTree = "<group>"; };
@@ -5185,7 +5185,7 @@
 			isa = PBXGroup;
 			children = (
 				1ACEEFCF25665E3600899DA2 /* FallbackLink.swift */,
-				1AFA576F2584C16200477DC2 /* EnterKeyChangableTextField.swift */,
+				1AFA576F2584C16200477DC2 /* ShareSheet.swift */,
 				1AFA57382580DB2200477DC2 /* ButtonWithAlert.swift */,
 				1AFA575F2584810800477DC2 /* Focus.swift */,
 				1AFA4BB2257E169100477DC2 /* PasteButton.swift */,
@@ -9758,7 +9758,7 @@
 				1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */,
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
 				1A8654BC2526F50400006582 /* KeyboardType.swift in Sources */,
-				1AFA57702584C16200477DC2 /* EnterKeyChangableTextField.swift in Sources */,
+				1AFA57702584C16200477DC2 /* ShareSheet.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
@@ -10097,7 +10097,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -10121,7 +10121,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -10238,7 +10238,7 @@
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -10266,7 +10266,7 @@
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

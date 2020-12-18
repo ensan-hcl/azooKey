@@ -21,7 +21,7 @@ struct BooleanSettingItemView: View {
     var body: some View {
         HStack{
             Toggle(isOn: self.$viewModel.value) {
-                Text(self.item.screenName)
+                Text(self.item.identifier.title)
                 Button{
                     isOn = true
                 }label: {

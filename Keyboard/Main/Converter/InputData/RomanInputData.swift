@@ -52,7 +52,7 @@ struct RomanInputData: InputDataProtocol {
                 if i == j && freezed[left + i]{
                     return [String(self.characters[left + i])]
                 }
-                if (left + i ... left + j).allSatisfy{!freezed[$0]}{
+                if (left + i ... left + j).allSatisfy({!freezed[$0]}){
                     return Self.getTypo(String(self.characters[left + i ... left + j]))
                 }
                 return []

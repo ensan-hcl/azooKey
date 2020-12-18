@@ -233,107 +233,43 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
         [
             RomanKeyModel(
                 labelType: .text("["),
-                pressActions: [.input("[")],
-                variationsModel: VariationsModel([
-                    (label: .text("1"), actions: [.input("1")] ),
-                    (label: .text("１"), actions: [.input("１")] ),
-                    (label: .text("一"), actions: [.input("一")] ),
-                    (label: .text("①"), actions: [.input("①")] ),
-
-                ], direction: .right)
+                pressActions: [.input("[")]
             ),
             RomanKeyModel(
                 labelType: .text("]"),
-                pressActions: [.input("]")],
-                variationsModel: VariationsModel([
-                    (label: .text("2"), actions: [.input("2")] ),
-                    (label: .text("２"), actions: [.input("２")] ),
-                    (label: .text("二"), actions: [.input("二")] ),
-                    (label: .text("②"), actions: [.input("②")] ),
-
-                ], direction: .right)
+                pressActions: [.input("]")]
             ),
             RomanKeyModel(
                 labelType: .text("{"),
-                pressActions: [.input("}")],
-                variationsModel: VariationsModel([
-                    (label: .text("3"), actions: [.input("3")] ),
-                    (label: .text("３"), actions: [.input("３")] ),
-                    (label: .text("三"), actions: [.input("三")] ),
-                    (label: .text("③"), actions: [.input("③")] ),
-
-                ])
+                pressActions: [.input("}")]
             ),
             RomanKeyModel(
                 labelType: .text("}"),
-                pressActions: [.input("}")],
-                variationsModel: VariationsModel([
-                    (label: .text("3"), actions: [.input("3")] ),
-                    (label: .text("３"), actions: [.input("３")] ),
-                    (label: .text("三"), actions: [.input("三")] ),
-                    (label: .text("③"), actions: [.input("③")] ),
-
-                ])
+                pressActions: [.input("}")]
             ),
             RomanKeyModel(
                 labelType: .text("#"),
-                pressActions: [.input("#")],
-                variationsModel: VariationsModel([
-                    (label: .text("4"), actions: [.input("4")] ),
-                    (label: .text("４"), actions: [.input("４")] ),
-                    (label: .text("四"), actions: [.input("四")] ),
-                    (label: .text("④"), actions: [.input("④")] ),
-                ])
+                pressActions: [.input("#")]
             ),
             RomanKeyModel(
                 labelType: .text("%"),
-                pressActions: [.input("%")],
-                variationsModel: VariationsModel([
-                    (label: .text("5"), actions: [.input("5")] ),
-                    (label: .text("５"), actions: [.input("５")] ),
-                    (label: .text("五"), actions: [.input("五")] ),
-                    (label: .text("⑤"), actions: [.input("⑤")] ),
-                ])
+                pressActions: [.input("%")]
             ),
             RomanKeyModel(
                 labelType: .text("^"),
-                pressActions: [.input("^")],
-                variationsModel: VariationsModel([
-                    (label: .text("6"), actions: [.input("6")] ),
-                    (label: .text("６"), actions: [.input("６")] ),
-                    (label: .text("六"), actions: [.input("六")] ),
-                    (label: .text("⑥"), actions: [.input("⑥")] ),
-                ])
+                pressActions: [.input("^")]
             ),
             RomanKeyModel(
                 labelType: .text("*"),
-                pressActions: [.input("*")],
-                variationsModel: VariationsModel([
-                    (label: .text("7"), actions: [.input("7")] ),
-                    (label: .text("７"), actions: [.input("７")] ),
-                    (label: .text("七"), actions: [.input("七")] ),
-                    (label: .text("⑦"), actions: [.input("⑦")] ),
-                ])
+                pressActions: [.input("*")]
             ),
             RomanKeyModel(
                 labelType: .text("+"),
-                pressActions: [.input("+")],
-                variationsModel: VariationsModel([
-                    (label: .text("8"), actions: [.input("8")] ),
-                    (label: .text("８"), actions: [.input("８")] ),
-                    (label: .text("八"), actions: [.input("八")] ),
-                    (label: .text("⑧"), actions: [.input("⑧")] ),
-                ])
+                pressActions: [.input("+")]
             ),
             RomanKeyModel(
                 labelType: .text("="),
-                pressActions: [.input("=")],
-                variationsModel: VariationsModel([
-                    (label: .text("9"), actions: [.input("9")] ),
-                    (label: .text("９"), actions: [.input("９")] ),
-                    (label: .text("九"), actions: [.input("九")] ),
-                    (label: .text("⑨"), actions: [.input("⑨")] ),
-                ], direction: .left)
+                pressActions: [.input("=")]
             ),
         ],
         [
@@ -368,37 +304,16 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
             RomanKeyModel(labelType: .text(">"), pressActions: [.input(">")]),
             RomanKeyModel(
                 labelType: .text("\""),
-                pressActions: [.input("\"")],
-                variationsModel: VariationsModel([
-                    (label: .text("「"), actions: [.input("「")] ),
-                    (label: .text("『"), actions: [.input("『")] ),
-                    (label: .text("【"), actions: [.input("【")] ),
-                    (label: .text("（"), actions: [.input("（")] ),
-                    (label: .text("《"), actions: [.input("《")] ),
-                ])
+                pressActions: [.input("\"")]
             ),
             RomanKeyModel(
                 labelType: .text("'"),
-                pressActions: [.input("'")],
-                variationsModel: VariationsModel([
-                    (label: .text("「"), actions: [.input("「")] ),
-                    (label: .text("『"), actions: [.input("『")] ),
-                    (label: .text("【"), actions: [.input("【")] ),
-                    (label: .text("（"), actions: [.input("（")] ),
-                    (label: .text("《"), actions: [.input("《")] ),
-                ])
+                pressActions: [.input("'")]
             ),
 
             RomanKeyModel(
                 labelType: .text("$"),
-                pressActions: [.input("$")],
-                variationsModel: VariationsModel([
-                    (label: .text("」"), actions: [.input("」")] ),
-                    (label: .text("』"), actions: [.input("』")] ),
-                    (label: .text("】"), actions: [.input("】")] ),
-                    (label: .text("）"), actions: [.input("）")] ),
-                    (label: .text("》"), actions: [.input("》")] ),
-                ])
+                pressActions: [.input("$")]
             ),
             RomanKeyModel(
                 labelType: .text("€"),
@@ -452,7 +367,7 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("!"), actions: [.input("!")] ),
                 ]),
                 for: (7, 5)),
-            RomanKeyModel(labelType: .text("…"), pressActions: [.input("・")], for: (7, 5)),
+            RomanKeyModel(labelType: .text("・"), pressActions: [.input("…")], for: (7, 5)),
             RomanFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
         ],
         [

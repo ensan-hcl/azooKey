@@ -85,6 +85,8 @@ struct TipsTabView: View {
 
             }
             .font(.body)
+            .navigationViewStyle(StackNavigationViewStyle())
+
         }
     }
 }

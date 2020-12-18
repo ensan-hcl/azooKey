@@ -30,6 +30,39 @@ enum Setting: String {
 
     static let boolSetting: [Self] = [.wesJapCalender, .typographyLetter, .halfKana, .unicodeCandidate, .englishCandidate, .stopLearningWhenSearch, .enableSound]
 
+    var title: String {
+        switch self{
+        case .keyboardType:
+            return "キーボードの種類"
+        case .numberTabCustomKeys:
+            return "数字タブのカスタムキー機能"
+        case .koganaKeyFlick:
+            return "「小ﾞﾟ」キーのフリック割り当て"
+        case .learningType:
+            return "学習の使用"
+        case .stopLearningWhenSearch:
+            return "検索時は学習を停止"
+        case .unicodeCandidate:
+            return "unicode変換"
+        case .englishCandidate:
+            return "日本語入力中の英単語変換"
+        case .wesJapCalender:
+            return "西暦⇄和暦変換"
+        case .typographyLetter:
+            return "装飾英字変換"
+        case .halfKana:
+            return "半角カナ変換"
+        case .memoryReset:
+            return "学習のリセット"
+        case .enableSound:
+            return "キー音のON/OFF"
+        case .resultViewFontSize:
+            return "変換候補の表示サイズ"
+        case .keyViewFontSize:
+            return "キーの表示サイズ"
+        }
+    }
+
     var explanation: String {
         switch self{
         case .keyboardType:

@@ -17,92 +17,72 @@ class Store{
 
     var halfKanaSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .halfKana,
-        screenName: "半角カナ変換",
         defaultValue: true
     ))
 
     var enableSoundSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .enableSound,
-        screenName: "キー音のON/OFF",
         defaultValue: false
     ))
 
     var typographyLetterSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .typographyLetter,
-        screenName: "装飾英字変換",
         defaultValue: true
     ))
     
     var wesJapCalenderSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .wesJapCalender,
-        screenName: "西暦⇄和暦変換",
         defaultValue: true
     ))
 
     var englishCandidateSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .englishCandidate,
-        screenName: "日本語入力中の英単語変換",
         defaultValue: true
     ))
 
     var unicodeCandidateSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .unicodeCandidate,
-        screenName: "unicode変換",
         defaultValue: true
     ))
     
     var stopLearningWhenSearchSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .stopLearningWhenSearch,
-        screenName: "検索時は学習を停止",
         defaultValue: false
     ))
     
     var koganaKeyFlickSetting = SettingItemViewModel(SettingItem<KeyFlickSetting>(
         identifier: .koganaKeyFlick,
-        screenName: "「小ﾞﾟ」キーのフリック割り当て",
         defaultValue: KeyFlickSetting(targetKeyIdentifier: "kogana")
     ))
-/*
-    var numberTabCustomKeysSetting = SettingItemViewModel(SettingItem<RomanCustomKeys>(
-        identifier: .numberTabCustomKeys,
-        screenName: "数字タブのカスタムキー機能",
-        defaultValue: RomanCustomKeys.defaultValue
-    ))
-*/
+
     var numberTabCustomKeysSettingNew = SettingItemViewModel(SettingItem<RomanCustomKeysValue>(
         identifier: .numberTabCustomKeys,
-        screenName: "数字タブのカスタムキー機能",
         defaultValue: RomanCustomKeysValue.defaultValue
     ))
 
 
     var keyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardType>(
         identifier: .keyboardType,
-        screenName: "キーボードの種類",
         defaultValue: .flick
     ))
 
     var resultViewFontSizeSetting = SettingItemViewModel(SettingItem<FontSizeSetting>(
         identifier: .resultViewFontSize,
-        screenName: "変換候補の表示サイズ",
         defaultValue: -1
     ))
 
     var keyViewFontSizeSetting = SettingItemViewModel(SettingItem<FontSizeSetting>(
         identifier: .keyViewFontSize,
-        screenName: "キーの表示サイズ",
         defaultValue: -1
     ))
 
     var memorySetting = SettingItemViewModel(SettingItem<LearningType>(
         identifier: .learningType,
-        screenName: "学習の使用",
         defaultValue: .inputAndOutput
     ))
 
     var memoryResetSetting = SettingItemViewModel(SettingItem<MemoryResetCondition>(
         identifier: .memoryReset,
-        screenName: "学習のリセット",
         defaultValue: .none
     ))
 
@@ -121,6 +101,27 @@ class Store{
     
     func iconFont(_ size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font? {
         return Font.custom("AzooKeyIcon-Regular", size: size, relativeTo: style)
+    }
+
+    let imageMaximumWidth: CGFloat = 500
+
+    var shouldTryRequestReview: Bool = false
+
+    func shouldRequestReview() -> Bool {
+        self.shouldTryRequestReview = false
+        if let lastDate = UserDefaults.standard.value(forKey: "last_reviewed_date") as? Date{
+            if -lastDate.timeIntervalSinceNow < 10000000{   //約3ヶ月半経過していたら
+                return false
+            }
+        }
+
+        let rand = Int.random(in: 0...4)
+
+        if rand == 0{
+            UserDefaults.standard.set(Date(), forKey: "last_reviewed_date")
+            return true
+        }
+        return false
     }
 
 }

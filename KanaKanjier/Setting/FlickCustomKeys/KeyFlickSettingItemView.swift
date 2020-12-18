@@ -18,9 +18,6 @@ struct KeyFlickSettingItemView: View {
     }
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
-    
-    
-    private let types = KeyboardType.allCases
 
     // TODO: 可能になったタイミングでReturnKeyTypeを設定する
     var body: some View {

@@ -55,10 +55,13 @@ struct TipsImage: View {
     }
     
     var body: some View {
-        Image(self.name)
-            .resizable()
-            .scaledToFit()
-            .cornerRadius(2)
+        CenterAlignedView{
+            Image(self.name)
+                .resizable()
+                .scaledToFit()
+                .cornerRadius(2)
+                .frame(maxWidth: Store.shared.imageMaximumWidth)
+        }
     }
 
 }

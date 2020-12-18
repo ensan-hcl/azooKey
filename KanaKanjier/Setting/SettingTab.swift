@@ -129,7 +129,7 @@ struct SettingTabView: View {
                             Spacer()
                         }
                     }
-
+                    /*
                     HStack{
                         Button{
                             if let windowScene = UIApplication.shared.windows.first?.windowScene {
@@ -141,6 +141,7 @@ struct SettingTabView: View {
 
                         Spacer()
                     }.foregroundColor(.primary)
+ */
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
                         .foregroundColor(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
@@ -161,8 +162,15 @@ struct SettingTabView: View {
 
             }
             .navigationBarTitle(Text("設定"), displayMode: .large)
-
+            .onAppear(){
+                if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview(){
+                    if let windowScene = UIApplication.shared.windows.first?.windowScene {
+                        SKStoreReviewController.requestReview(in: windowScene)
+                    }
+                }
+            }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .font(.body)
     }
 }

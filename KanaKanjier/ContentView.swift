@@ -32,6 +32,15 @@ struct ContentView: View {
                         }
                     }
                     .tag(1)
+                TestView()
+                    .font(.title)
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "wrench.fill").font(.system(size: 20, weight: .light)).foregroundColor(.systemGray2)
+                            Text("設定")
+                        }
+                    }
+                    .tag(2)
 
             }.fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()

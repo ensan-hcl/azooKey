@@ -27,10 +27,13 @@ struct KeyboardTypeSettingItemView: View {
 
     var body: some View {
         VStack{
-            Text(self.item.screenName + "(現在: \(viewModel.value.string))")
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
+            Text(self.item.identifier.title + "(現在: \(viewModel.value.string))")
+            CenterAlignedView{
+                Image(imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: Store.shared.imageMaximumWidth)
+            }
             Picker(selection: $viewModel.value, label: Text("キーボードの種類")) {
                 ForEach(0 ..< types.count) { i in
                     Text(types[i].string).tag(types[i])

@@ -22,7 +22,7 @@ struct MemoryResetSettingItemView: View {
             self.showAlert = true
         }label: {
             HStack{
-                Text(self.item.screenName)
+                Text(self.item.identifier.title)
                     .foregroundColor(.primary)
             }
         }

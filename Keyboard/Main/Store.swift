@@ -291,12 +291,21 @@ final class DesignDepartment{
         switch keyboardType{
         case .flick:
             if orientation == .vertical{
+                if UIDevice.current.userInterfaceIdiom == .pad{
+                    return CGSize(width: screenWidth/5.6, height: screenWidth/12)
+                }
                 return CGSize(width: screenWidth/5.6, height: screenWidth/8)
             }else{
+                if UIDevice.current.userInterfaceIdiom == .pad{
+                    return CGSize(width: screenWidth/9, height: screenWidth/22)
+                }
                 return CGSize(width: screenWidth/9, height: screenWidth/18)
             }
         case .roman:
             if orientation == .vertical{
+                if UIDevice.current.userInterfaceIdiom == .pad{
+                    return CGSize(width: screenWidth/12.2, height: screenWidth/12)
+                }
                 return CGSize(width: screenWidth/12.2, height: screenWidth/9)
             }else{
                 return CGSize(width: screenWidth/13, height: screenWidth/20)

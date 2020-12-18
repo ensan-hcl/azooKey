@@ -17,17 +17,21 @@ struct ImageSlideshowView: View {
     }
 
     var body: some View {
-        HStack{
-            ForEach(pictures.indices, id: \.self){i in
-                if i == selection{
-                    Image(pictures[selection])
-                        .resizable()
-                        .scaledToFit()
+        CenterAlignedView{
+            HStack{
+                ForEach(pictures.indices, id: \.self){i in
+                    if i == selection{
+
+                        Image(pictures[selection])
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: Store.shared.imageMaximumWidth)
+                    }
                 }
             }
-        }
-        .onReceive(timer){_ in
-            self.update()
+            .onReceive(timer){_ in
+                self.update()
+            }
         }
     }
 

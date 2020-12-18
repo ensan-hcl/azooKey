@@ -31,12 +31,10 @@ extension Bool: Savable {
 struct SettingItem <Value: Savable> {
     ///設定の名前
     var identifier: Setting
-    var screenName: String
     var value: Value
     
-    init(identifier: Setting, screenName: String, defaultValue: Value){
+    init(identifier: Setting, defaultValue: Value){
         self.identifier = identifier
-        self.screenName = screenName
         let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
         if let __value = userDefaults.value(forKey: identifier.key), let _value = Value.get(__value){
             self.value = _value

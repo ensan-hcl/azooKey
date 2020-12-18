@@ -36,7 +36,7 @@ struct FontSizeSettingItemView: View {
         HStack{
             VStack{
                 HStack{
-                    Text(self.item.screenName)
+                    Text(self.item.identifier.title)
                     Button{
                         isOn = true
                     }label: {

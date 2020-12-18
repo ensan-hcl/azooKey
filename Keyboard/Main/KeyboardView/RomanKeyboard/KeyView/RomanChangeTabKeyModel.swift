@@ -23,7 +23,7 @@ struct RomanChangeTabKeyModel: RomanKeyModelProtocol{
                 return [.moveTab(.abc)]
             }
         case false:
-            return []
+            return [.moveTab(.hira)]
         }
 
     }

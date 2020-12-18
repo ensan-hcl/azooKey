@@ -17,3 +17,20 @@ extension Color{
     static let systemGray6: Color = Color(UIColor.systemGray6)
 }
 
+extension LocalizedStringKey.StringInterpolation{
+    mutating func appendInterpolation(bold value: LocalizedStringKey){
+        self.appendInterpolation(Text(value).bold())
+    }
+
+    mutating func appendInterpolation(underline value: LocalizedStringKey){
+        self.appendInterpolation(Text(value).underline())
+    }
+
+    mutating func appendInterpolation(italic value: LocalizedStringKey){
+        self.appendInterpolation(Text(value).italic())
+    }
+
+    mutating func appendInterpolation(systemImage name: String){
+        self.appendInterpolation(Image(systemName: name))
+    }
+}

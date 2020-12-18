@@ -75,7 +75,7 @@ final class EditableUserDictionaryData: ObservableObject {
         if word.isEmpty{
             return .wordEmpty
         }
-        if !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy{self.availableChars.contains($0)}{
+        if !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy({self.availableChars.contains($0)}){
             return .unavailableCharacter
         }
         return nil
@@ -186,27 +186,31 @@ struct AzooKeyUserDictionaryView: View {
     @ObservedObject private var variables: UserDictManagerVariables = UserDictManagerVariables()
 
     var body: some View {
-        switch variables.mode{
-        case .list:
-            UserDictionaryDataListView(variables: variables)
-        case let .details(cancelable):
-            switch cancelable{
-            case .cancelable:
-                if let item = self.variables.selectedItem{
-                    UserDictionaryDataSettingView(item, variables: variables, cancelable: true)
-                }
-            case .incancelable:
-                if let item = self.variables.selectedItem{
-                    UserDictionaryDataSettingView(item, variables: variables)
+        Group{
+            switch variables.mode{
+            case .list:
+                UserDictionaryDataListView(variables: variables)
+            case let .details(cancelable):
+                switch cancelable{
+                case .cancelable:
+                    if let item = self.variables.selectedItem{
+                        UserDictionaryDataSettingView(item, variables: variables, cancelable: true)
+                    }
+                case .incancelable:
+                    if let item = self.variables.selectedItem{
+                        UserDictionaryDataSettingView(item, variables: variables)
+                    }
                 }
             }
+        }.onDisappear{
+            Store.shared.shouldTryRequestReview = true
         }
     }
 }
 
 
 struct UserDictionaryDataListView: View {
-    let exceptionKey = "その他"
+    private let exceptionKey = "その他"
 
     @ObservedObject private var variables: UserDictManagerVariables
     @State private var editMode = EditMode.inactive
@@ -297,7 +301,7 @@ struct UserDictionaryDataListView: View {
 struct UserDictionaryDataSettingView: View {
     @ObservedObject private var item: EditableUserDictionaryData
     @ObservedObject private var variables: UserDictManagerVariables
-    let cancelable: Bool
+    private let cancelable: Bool
 
     init(_ item: EditableUserDictionaryData, variables: UserDictManagerVariables, cancelable: Bool = false){
         self.item = item
