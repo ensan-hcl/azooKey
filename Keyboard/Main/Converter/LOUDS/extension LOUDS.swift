@@ -138,7 +138,6 @@ extension LOUDS{
             }
             return results
         }
-
         return strings
 
     }

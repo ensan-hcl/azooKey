@@ -83,62 +83,6 @@ enum TemplateLiteralType{
 }
 
 
-struct DateTemplateLiteral: TemplateLiteralProtocol {
-    var format: String
-    var type: CalendarType
-    var language: Language
-    var delta: String
-    var deltaUnit: Int
-
-    enum CalendarType: String{
-        case western = "western"
-        case japanese = "japanese"
-
-        var identifier: Calendar.Identifier {
-            switch self{
-            case .western:
-                return .gregorian
-            case .japanese:
-                return .japanese
-            }
-        }
-    }
-
-    enum Language: String{
-        case english = "en_US"
-        case japanese = "ja_JP"
-
-        var identifier: String {
-            return self.rawValue
-        }
-    }
-
-    static func `import`(from string: String) -> DateTemplateLiteral {
-        let splited = string.split(separator: " ")
-        let format = (splited.filter{$0.hasPrefix("format")}.first ?? "").dropFirst("format=\"".count).dropLast(1)
-        let type = (splited.filter{$0.hasPrefix("type")}.first ?? "").dropFirst("type=\"".count).dropLast(1)
-        let language = (splited.filter{$0.hasPrefix("language")}.first ?? "").dropFirst("language=\"".count).dropLast(1)
-        let delta = (splited.filter{$0.hasPrefix("delta")}.first ?? "").dropFirst("delta=\"".count).dropLast(1)
-        let deltaUnit = (splited.filter{$0.hasPrefix("deltaunit")}.first ?? "").dropFirst("deltaunit=\"".count).dropLast(1)
-
-        return DateTemplateLiteral(
-            format: String(format),
-            type: CalendarType.init(rawValue: String(type))!,
-            language: Language.init(rawValue: String(language))!,
-            delta: String(delta),
-            deltaUnit: Int(deltaUnit) ?? 0
-        )
-    }
-
-
-    func export() -> String {
-        return """
-        <date format="\(format)" type="\(type.rawValue)" language="\(language.identifier)" delta="\(delta)" deltaunit="\(deltaUnit)">
-        """
-    }
-}
-
-
 //QiitaのタグみたいなTextField
 struct TestView2: View {
     @State private var text: String = ""
@@ -191,54 +135,174 @@ struct TestView: View {
     }
 }
 
-struct RandomTemplateLiteral {
-    enum ValueType{
-        case int, double, string
+
+struct DateTemplateLiteral: TemplateLiteralProtocol {
+    var format: String
+    var type: CalendarType
+    var language: Language
+    var delta: String
+    var deltaUnit: Int
+
+    enum CalendarType: String{
+        case western = "western"
+        case japanese = "japanese"
+
+        var identifier: Calendar.Identifier {
+            switch self{
+            case .western:
+                return .gregorian
+            case .japanese:
+                return .japanese
+            }
+        }
+    }
+
+    enum Language: String{
+        case english = "en_US"
+        case japanese = "ja_JP"
+
+        var identifier: String {
+            return self.rawValue
+        }
+    }
+
+    static func `import`(from string: String) -> DateTemplateLiteral {
+        let splited = string.split(separator: " ")
+        let format = (splited.filter{$0.hasPrefix("format")}.first ?? "").dropFirst("format=\"".count).dropLast(1)
+        let type = (splited.filter{$0.hasPrefix("type")}.first ?? "").dropFirst("type=\"".count).dropLast(1)
+        let language = (splited.filter{$0.hasPrefix("language")}.first ?? "").dropFirst("language=\"".count).dropLast(1)
+        let delta = (splited.filter{$0.hasPrefix("delta")}.first ?? "").dropFirst("delta=\"".count).dropLast(1)
+        let deltaUnit = (splited.filter{$0.hasPrefix("deltaunit")}.first ?? "").dropFirst("deltaunit=\"".count).dropLast(1)
+
+        return DateTemplateLiteral(
+            format: String(format).unescaped(),
+            type: CalendarType.init(rawValue: String(type))!,
+            language: Language.init(rawValue: String(language))!,
+            delta: String(delta),
+            deltaUnit: Int(deltaUnit) ?? 0
+        )
+    }
+
+
+    func export() -> String {
+        return """
+        <date format="\(format.escaped())" type="\(type.rawValue)" language="\(language.identifier)" delta="\(delta)" deltaunit="\(deltaUnit)">
+        """
+    }
+}
+
+struct RandomTemplateLiteral: TemplateLiteralProtocol{
+    enum ValueType: String {
+        case int = "int"
+        case double = "double"
+        case string = "string"
     }
     enum Value{
         case int(from: Int, to: Int)
         case double(from: Double, to: Double)
         case string([String])
+
+        var type: ValueType {
+            switch self{
+            case .int(from: _, to: _):
+                return .int
+            case .double(from: _, to: _):
+                return .double
+            case .string(_):
+                return .string
+            }
+        }
+
+        var string: String {
+            switch self {
+            case let .int(from: left, to: right):
+                return "\(left),\(right)"
+            case let .double(from: left, to: right):
+                return "\(left),\(right)"
+            case let .string(strings):
+                return strings.map{$0.escaped()}.joined(separator: ",")
+            }
+        }
     }
     var value: Value
+
+    static func `import`(from string: String) -> RandomTemplateLiteral {
+        let splited = string.split(separator: " ")
+        let type = (splited.filter{$0.hasPrefix("type")}.first ?? "").dropFirst("type=\"".count).dropLast(1)
+        let valueString = (splited.filter{$0.hasPrefix("value")}.first ?? "").dropFirst("value=\"".count).dropLast(1)
+
+        let valueType = ValueType.init(rawValue: String(type))!
+        let value: Value
+        switch valueType{
+        case .int:
+            value = .int(from: Int(splited[0]) ?? 0, to: Int(splited[1]) ?? 0)
+        case .double:
+            let splited = valueString.split(separator: ",")
+            value = .double(from: Double(splited[0]) ?? .nan, to: Double(splited[1]) ?? .nan)
+        case .string:
+            value = .string(valueString.components(separatedBy: ","))
+        }
+        return RandomTemplateLiteral(value: value)
+    }
+
+    func export() -> String {
+        return """
+        <random type="\(value.type.rawValue)" value="\(value.string)">
+        """
+    }
+
 }
 
 struct RandomTemplateLiteralSettingView: View {
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     //リテラル
-    @State private var literal = RandomTemplateLiteral(value: .int(from: 1, to: 6)) {
+    @State private var literal = RandomTemplateLiteral(value: .int(from: 1, to: 6))
+    //表示用
+    @State private var previewString: String = ""
+
+    @State private var type: RandomTemplateLiteral.ValueType = .int {
         didSet{
             self.update()
         }
     }
-    //選択されているテンプレート
-    @State private var formatSelection = "yyyy年MM月dd日"
-    //表示用
-    @State private var previewString: String = ""
 
-    @State private var type: RandomTemplateLiteral.ValueType = .int
+    @State private var intStringFrom: String = "1"
+    @State private var intStringTo: String = "6"
 
-    @State private var intStringFrom: String = ""
-    @State private var intStringTo: String = ""
+    @State private var doubleStringFrom: String = "0"
+    @State private var doubleStringTo: String = "1"
 
-    @State private var doubleStringFrom: String = ""
-    @State private var doubleStringTo: String = ""
-
-    @State private var stringsString: String = ""
+    @State private var stringsString: String = "グー,チョキ,パー"
 
     func update(){
-        switch self.literal.value{
-        case let .int(from: left, to: right):
+        switch self.type{
+        case .int:
+            guard let left = Int(intStringFrom),
+                  let right = Int(intStringTo) else{
+                return
+            }
             let min = left<right ? left:right
             let max = left<right ? right:left
             previewString = "\(Int.random(in: min...max))"
-        case let .double(from: left, to: right):
+            self.literal.value = .int(from: min, to: max)
+        case .double:
+            guard let left = Double(doubleStringFrom),
+                  let right = Double(doubleStringTo) else{
+                return
+            }
             let min = left<right ? left:right
             let max = left<right ? right:left
             previewString = "\(Double.random(in: min...max))"
-        case let .string(strings):
+            self.literal.value = .double(from: min, to: max)
+        case .string:
+            let strings = stringsString.components(separatedBy: ",")
             previewString = strings.randomElement() ?? "値を設定してください"
+            self.literal.value = .string(strings)
         }
+    }
+
+    var warning: some View {
+        Text("\(Image(systemName: "exclamationmark.triangle"))値が無効です。有効な数値を入力してください")
     }
 
     var body: some View {
@@ -268,64 +332,52 @@ struct RandomTemplateLiteralSettingView: View {
             }
             switch type{
             case .int:
-                HStack{
-                    TextField("左端の値", text: $intStringFrom, onEditingChanged: {_ in
-                        if let left = Int(intStringFrom){
-                            if case let .int(from: _, to: right) = literal.value{
-                                literal.value = .int(from: left, to: right)
-                            }else{
-                                literal.value = .int(from: left, to: left)
-                            }
-                        }
-                    })
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    Text("から")
+                VStack{
+                    HStack{
+                        TextField("左端の値", text: $intStringFrom)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Text("から")
+                    }
+                    if Int(intStringFrom) == nil{
+                        warning
+                    }
+
                 }
-                HStack{
-                    TextField("右端の値", text: $intStringTo, onEditingChanged: {_ in
-                        if let right = Int(intStringTo){
-                            if case let .int(from: left, to: _) = literal.value{
-                                literal.value = .int(from: left, to: right)
-                            }else{
-                                literal.value = .int(from: right, to: right)
-                            }
-                        }
-                    })
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    Text("まで")
+                VStack{
+                    HStack{
+                        TextField("右端の値", text: $intStringTo)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Text("まで")
+                    }
+                    if Int(intStringTo) == nil{
+                        warning
+                    }
+
                 }
             case .double:
-                HStack{
-                    TextField("左端の値", text: $doubleStringFrom, onEditingChanged: {_ in
-                        if let left = Double(doubleStringFrom){
-                            if case let .double(from: _, to: right) = literal.value{
-                                literal.value = .double(from: left, to: right)
-                            }else{
-                                literal.value = .double(from: left, to: left)
-                            }
-                        }
-                    })
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    Text("から")
+                VStack{
+                    HStack{
+                        TextField("左端の値", text: $doubleStringFrom)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Text("から")
+                    }
+                    if Double(doubleStringFrom) == nil{
+                        warning
+                    }
                 }
-                HStack{
-                    TextField("右端の値", text: $doubleStringTo, onEditingChanged: {_ in
-                        if let right = Double(doubleStringTo){
-                            if case let .double(from: left, to: _) = literal.value{
-                                literal.value = .double(from: left, to: right)
-                            }else{
-                                literal.value = .double(from: right, to: right)
-                            }
-                        }
-                    })
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    Text("まで")
+                VStack{
+                    HStack{
+                        TextField("右端の値", text: $doubleStringTo)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Text("まで")
+                    }
+                    if Double(doubleStringTo) == nil{
+                        warning
+                    }
                 }
             case .string:
-                TextField("表示する値(カンマ区切り)", text: $stringsString, onEditingChanged: {_ in
-                    literal.value = .string(stringsString.components(separatedBy: ","))
-                })
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("表示する値(カンマ区切り)", text: $stringsString)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
             }
         }.font(.body)
         .onReceive(timer){_ in
@@ -425,29 +477,27 @@ struct DateTemplateLiteralSettingView: View {
                         TextField("書式を入力", text: $literal.format)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
-                    HStack{
-                        VStack{
-                            HStack{
-                                Text("ズレ")
+                    VStack{
+                        HStack{
+                            Text("ズレ")
 
-                                Spacer()
-                                TextField("ズレ", text: $literal.delta)
-                                    .multilineTextAlignment(.trailing)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                Picker(selection: $literal.deltaUnit, label: Text("")) {
-                                    Text("日").tag(60*60*24)
-                                    Text("時間").tag(60*60)
-                                    Text("分").tag(60)
-                                    Text("秒").tag(1)
-                                }
-                                .labelsHidden()
-                                .pickerStyle(InlinePickerStyle())
-                                .frame(maxWidth: 100, maxHeight: 70)
-                                .clipped()
+                            Spacer()
+                            TextField("ズレ", text: $literal.delta)
+                                .multilineTextAlignment(.trailing)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                            Picker(selection: $literal.deltaUnit, label: Text("")) {
+                                Text("日").tag(60*60*24)
+                                Text("時間").tag(60*60)
+                                Text("分").tag(60)
+                                Text("秒").tag(1)
                             }
-                            if Double(literal.delta) == nil{
-                                Text("\(Image(systemName: "exclamationmark.triangle"))の値が無効です。有効な数値を入力してください")
-                            }
+                            .labelsHidden()
+                            .pickerStyle(InlinePickerStyle())
+                            .frame(maxWidth: 100, maxHeight: 70)
+                            .clipped()
+                        }
+                        if Double(literal.delta) == nil{
+                            Text("\(Image(systemName: "exclamationmark.triangle"))値が無効です。有効な数値を入力してください")
                         }
                     }
 

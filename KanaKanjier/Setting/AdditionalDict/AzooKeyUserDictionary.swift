@@ -139,7 +139,7 @@ struct UserDictionaryData: Identifiable, Codable{
             let cid = 772
             let conjuctions = ConjuctionBuilder.getConjugations(data: (word: word, ruby: katakanaRuby, cid: cid), addStandardForm: true)
             return conjuctions.map{
-                "\($0.ruby)\t\($0.word)\t\($0.cid)\t\($0.cid)\t\(501)\t-5.0000"
+                "\($0.ruby)\t\($0.word.escaped())\t\($0.cid)\t\($0.cid)\t\(501)\t-5.0000"
             }
         }
         let cid: Int
@@ -150,7 +150,7 @@ struct UserDictionaryData: Identifiable, Codable{
         }else{
             cid = 1288
         }
-        return ["\(katakanaRuby)\t\(word)\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
+        return ["\(katakanaRuby)\t\(word.escaped())\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
     }
 
     static func emptyData(id: Int) -> Self {

@@ -4745,6 +4745,19 @@
 			path = KeyView;
 			sourceTree = "<group>";
 		};
+		1A36B146258D0BA90084DFE0 /* SettingData */ = {
+			isa = PBXGroup;
+			children = (
+				1AC031632512138F004CA505 /* SettingItemProtocol.swift */,
+				1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */,
+				1A8654BB2526F50400006582 /* KeyboardType.swift */,
+				1A4057D7255841C70073C6F7 /* LearningType.swift */,
+				1ACE00742567525000899DA2 /* RomanCustomKeys.swift */,
+				1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */,
+			);
+			path = SettingData;
+			sourceTree = "<group>";
+		};
 		1A3A16022528BFE700A5BA4F /* Tips */ = {
 			isa = PBXGroup;
 			children = (
@@ -5092,6 +5105,7 @@
 			children = (
 				1AA346812567D8B100B41A16 /* UserSetting.swift */,
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
+				1A36B146258D0BA90084DFE0 /* SettingData */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -5119,7 +5133,6 @@
 			isa = PBXGroup;
 			children = (
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
-				1AC031632512138F004CA505 /* SettingItemProtocol.swift */,
 				1AF616B9256D40A5001A0B32 /* MemoryResetSetting */,
 				1A64A8DA257C91550022C081 /* FontSizeSetting */,
 				1ACE00712567518100899DA2 /* KeyboardType */,
@@ -5139,7 +5152,6 @@
 		1ACE006F2567514400899DA2 /* FlickCustomKeys */ = {
 			isa = PBXGroup;
 			children = (
-				1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */,
 				1AC031652512302F004CA505 /* KeyFlickSettingItemView.swift */,
 			);
 			path = FlickCustomKeys;
@@ -5156,7 +5168,6 @@
 		1ACE00712567518100899DA2 /* KeyboardType */ = {
 			isa = PBXGroup;
 			children = (
-				1A8654BB2526F50400006582 /* KeyboardType.swift */,
 				1A4057E8255843460073C6F7 /* KeyboardTypeSettingItemView.swift */,
 			);
 			path = KeyboardType;
@@ -5165,7 +5176,6 @@
 		1ACE00722567519D00899DA2 /* LearningType */ = {
 			isa = PBXGroup;
 			children = (
-				1A4057D7255841C70073C6F7 /* LearningType.swift */,
 				1A4057F6255843850073C6F7 /* LearningTypeSettingItemView.swift */,
 			);
 			path = LearningType;
@@ -5174,7 +5184,6 @@
 		1ACE00732567521200899DA2 /* RomanCustomKeys */ = {
 			isa = PBXGroup;
 			children = (
-				1ACE00742567525000899DA2 /* RomanCustomKeys.swift */,
 				1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */,
 				1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */,
 			);
@@ -6056,7 +6065,6 @@
 		1AF616B9256D40A5001A0B32 /* MemoryResetSetting */ = {
 			isa = PBXGroup;
 			children = (
-				1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */,
 				1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */,
 			);
 			path = MemoryResetSetting;
