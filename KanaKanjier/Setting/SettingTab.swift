@@ -117,6 +117,16 @@ struct SettingTabView: View {
                         }
                     }
                 }
+
+                Section(header: Text("テンプレート")){
+                    NavigationLink(destination: TemplateListView()) {
+                        HStack{
+                            Text("テンプレートを管理")
+                            Spacer()
+                        }
+                    }
+                }
+
                 Section(header: Text("学習機能")){
                     //BooleanSettingItemView(Store.shared.stopLearningWhenSearchSetting)
                     LearningTypeSettingItemView(Store.shared.memorySetting)

@@ -967,6 +967,9 @@
 		1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB852516D0D600A24158 /* RomanInputData.swift */; };
 		1AE4DBC02518578200A24158 /* HorzizontalRomanKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBBF2518578200A24158 /* HorzizontalRomanKeyboardView.swift */; };
 		1AE4DBC6251857AA00A24158 /* HorizontalRomanKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBC5251857AA00A24158 /* HorizontalRomanKeyboardModel.swift */; };
+		1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */; };
+		1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */; };
+		1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
 		1AEB864A251CE730000A8379 /* roman2kana.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEB8649251CE730000A8379 /* roman2kana.swift */; };
 		1AF1C55F252DD10F002FCC66 /* added_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1C55E252DD10F002FCC66 /* added_last_n_character.swift */; };
 		1AF1CAF4252F2228002FCC66 /* azooKeyKeyboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1CAF3252F2228002FCC66 /* azooKeyKeyboardTests.swift */; };
@@ -3333,6 +3336,9 @@
 		1AE4DB852516D0D600A24158 /* RomanInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanInputData.swift; sourceTree = "<group>"; };
 		1AE4DBBF2518578200A24158 /* HorzizontalRomanKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorzizontalRomanKeyboardView.swift; sourceTree = "<group>"; };
 		1AE4DBC5251857AA00A24158 /* HorizontalRomanKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalRomanKeyboardModel.swift; sourceTree = "<group>"; };
+		1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListView.swift; sourceTree = "<group>"; };
+		1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateEditingView.swift; sourceTree = "<group>"; };
+		1AE70BF0258E5798009B9B8B /* TemplateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateData.swift; sourceTree = "<group>"; };
 		1AEB8649251CE730000A8379 /* roman2kana.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = roman2kana.swift; sourceTree = "<group>"; };
 		1AF1C55E252DD10F002FCC66 /* added_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = added_last_n_character.swift; sourceTree = "<group>"; };
 		1AF1CAF1252F2227002FCC66 /* azooKeyKeyboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = azooKeyKeyboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5133,6 +5139,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
+				1AE70BDF258DB4A0009B9B8B /* Template */,
 				1AF616B9256D40A5001A0B32 /* MemoryResetSetting */,
 				1A64A8DA257C91550022C081 /* FontSizeSetting */,
 				1ACE00712567518100899DA2 /* KeyboardType */,
@@ -6051,6 +6058,16 @@
 				1AE4DB742515FE1C00A24158 /* KanaComponent.swift */,
 			);
 			path = InputData;
+			sourceTree = "<group>";
+		};
+		1AE70BDF258DB4A0009B9B8B /* Template */ = {
+			isa = PBXGroup;
+			children = (
+				1AE70BF0258E5798009B9B8B /* TemplateData.swift */,
+				1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */,
+				1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */,
+			);
+			path = Template;
 			sourceTree = "<group>";
 		};
 		1AF1CAF2252F2228002FCC66 /* azooKeyKeyboardTests */ = {
@@ -9747,10 +9764,12 @@
 				1A3A16042528BFF900A5BA4F /* SelctInputStyle.swift in Sources */,
 				1AC031642512138F004CA505 /* SettingItemProtocol.swift in Sources */,
 				1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */,
+				1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */,
 				1AF28CE0253C9FFC0012CF94 /* CursorMoveTips.swift in Sources */,
 				1AC0315D25120A17004CA505 /* SettingTab.swift in Sources */,
 				1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */,
 				1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */,
+				1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */,
 				1A3A162C2529671300A5BA4F /* KeyFlickSetting.swift in Sources */,
 				1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */,
 				1A4057E9255843460073C6F7 /* KeyboardTypeSettingItemView.swift in Sources */,
@@ -9786,6 +9805,7 @@
 				1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */,
 				1AB50779255ECC6C003C0BF2 /* LOUDSBuilder.swift in Sources */,
 				1ACEEFE92566601700899DA2 /* TipsViewComponent.swift in Sources */,
+				1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,
 				1A64A8D5257C91500022C081 /* FontSizeSetting.swift in Sources */,
 				1AFA57602584810800477DC2 /* Focus.swift in Sources */,

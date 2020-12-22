@@ -12,6 +12,8 @@ import SwiftUI
 ///アプリケーション全体で共有すべき情報を集約するクラス。
 final class Store{
     static let shared = Store()
+    //FIXME: KeyboardTypeがViewの種類と入力スタイルの種類の両方を兼ねているのがまずい。
+    //例えばKeyboardLayoutType: romanとflick、InputStyle: roman/directのようにすべきでは
     var keyboardType: KeyboardType = .roman
     var keyboardLanguage: KeyboardLanguage = .japanese
     fileprivate var orientation: KeyboardOrientation = .vertical

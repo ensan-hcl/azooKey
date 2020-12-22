@@ -24,7 +24,6 @@ struct ContentView: View {
                     }
                     .tag(0)
                 SettingTabView()
-                    .font(.title)
                     .tabItem {
                         VStack {
                             Image(systemName: "wrench.fill").font(.system(size: 20, weight: .light)).foregroundColor(.systemGray2)
@@ -33,7 +32,6 @@ struct ContentView: View {
                     }
                     .tag(1)
                 TestView()
-                    .font(.title)
                     .tabItem {
                         VStack {
                             Image(systemName: "wrench.fill").font(.system(size: 20, weight: .light)).foregroundColor(.systemGray2)
