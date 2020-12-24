@@ -70,7 +70,7 @@ struct TemplateListView: View {
                 }
                 .onDelete(perform: delete)
             }
-        }.navigationBarTitle(Text("テンプレートを管理"), displayMode: .inline)
+        }.navigationBarTitle(Text("テンプレートの管理"), displayMode: .inline)
         .navigationBarItems(trailing: addButton)
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)){_ in
             self.save()

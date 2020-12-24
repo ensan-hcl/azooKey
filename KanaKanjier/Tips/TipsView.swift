@@ -55,6 +55,11 @@ struct TipsTabView: View {
                                 Text("大文字に固定する")
                             }
                         }
+                        NavigationLink(destination: TemplateSettingTipsView()) {
+                            VStack{
+                                Text("タイムスタンプを使う")
+                            }
+                        }
                         NavigationLink(destination: CustomKeyTipsView()) {
                             VStack{
                                 Text("キーをカスタマイズする")

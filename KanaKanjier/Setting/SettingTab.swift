@@ -121,7 +121,7 @@ struct SettingTabView: View {
                 Section(header: Text("テンプレート")){
                     NavigationLink(destination: TemplateListView()) {
                         HStack{
-                            Text("テンプレートを管理")
+                            Text("テンプレートの管理")
                             Spacer()
                         }
                     }

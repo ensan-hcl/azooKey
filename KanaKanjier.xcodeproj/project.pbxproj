@@ -145,6 +145,7 @@
 		1AC031662512302F004CA505 /* KeyFlickSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC031652512302F004CA505 /* KeyFlickSettingItemView.swift */; };
 		1AC19AF22531AA800077BF8D /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC19AF12531AA800077BF8D /* Set.swift */; };
 		1AC19AFC253359870077BF8D /* isPrime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC19AFB253359860077BF8D /* isPrime.swift */; };
+		1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */; };
 		1ACE00752567525000899DA2 /* RomanCustomKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE00742567525000899DA2 /* RomanCustomKeys.swift */; };
 		1ACE007F2567534F00899DA2 /* RomanCustomKeysItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */; };
 		1ACE61C3257286E5008078D3 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE61C2257286E5008078D3 /* Color.swift */; };
@@ -2517,6 +2518,7 @@
 		1AC031652512302F004CA505 /* KeyFlickSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyFlickSettingItemView.swift; sourceTree = "<group>"; };
 		1AC19AF12531AA800077BF8D /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 		1AC19AFB253359860077BF8D /* isPrime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = isPrime.swift; sourceTree = "<group>"; };
+		1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSettingTipsView.swift; sourceTree = "<group>"; };
 		1ACE00742567525000899DA2 /* RomanCustomKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeys.swift; sourceTree = "<group>"; };
 		1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1ACE61C2257286E5008078D3 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -5221,6 +5223,7 @@
 			children = (
 				1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */,
 				1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */,
+				1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */,
 				1AFA57592583051500477DC2 /* CapslockTips.swift */,
 				1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */,
 				1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */,
@@ -9797,6 +9800,7 @@
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
 				1AFA57392580DB2200477DC2 /* ButtonWithAlert.swift in Sources */,
 				1A4057DF255843330073C6F7 /* BooleanSettingItemView.swift in Sources */,
+				1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */,
 				1ACE61C3257286E5008078D3 /* Color.swift in Sources */,
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */,
