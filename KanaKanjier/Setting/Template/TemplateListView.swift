@@ -43,12 +43,9 @@ struct TemplateListView: View {
     @ObservedObject private var data = TemplateDataList()
     @State private var previewStrings: [String] = []
     init(){
-        do{
-            let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(Self.dataFileName)
-            let json = try Data(contentsOf: url)
-            let saveData = try JSONDecoder().decode([TemplateData].self, from: json)
-            self.data.templates = saveData.map{TemplateDataModel($0)}
-        } catch {
+        if let savedData = TemplateData.load(){
+            self.data.templates = savedData.map{TemplateDataModel($0)}
+        } else {
             self.data.templates = Self.defaultData.map{TemplateDataModel($0)}
         }
         self._previewStrings = State(initialValue: data.templates.map{$0.data.previewString})
@@ -109,12 +106,10 @@ struct TemplateListView: View {
     }
 
     func save(){
-        debug("セーブします")
         if let json = try? JSONEncoder().encode(self.data.templates.map{$0.data}){
-            guard let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(Self.dataFileName) else { return }
+            guard let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(TemplateData.dataFileName) else { return }
             do {
                 try json.write(to: url)
-                debug("セーブ成功")
             } catch {
                 debug(error)
             }

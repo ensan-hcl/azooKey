@@ -54,6 +54,19 @@ struct TemplateData: Codable{
         try container.encode(self.literal.export(), forKey: .template)
         try container.encode(name, forKey: .name)
     }
+
+    static let dataFileName = "user_templates.json"
+    static func load() -> [TemplateData]? {
+        do{
+            let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(Self.dataFileName)
+            let json = try Data(contentsOf: url)
+            let saveData = try JSONDecoder().decode([TemplateData].self, from: json)
+            return saveData
+        } catch {
+            return nil
+        }
+
+    }
 }
 
 protocol TemplateLiteralProtocol{
@@ -117,7 +130,7 @@ struct DateTemplateLiteral: TemplateLiteralProtocol {
         return formatter.string(from: Date().advanced(by: Double((Int(delta) ?? 0) * deltaUnit)))
     }
 
-    static func `import`(from string: String) -> DateTemplateLiteral {
+    static func `import`(from string: String, escaped: Bool = false) -> DateTemplateLiteral {
         let splited = string.split(separator: " ")
         let format = parse(splited: splited, key: "format")
         let type = parse(splited: splited, key: "type")
@@ -126,7 +139,7 @@ struct DateTemplateLiteral: TemplateLiteralProtocol {
         let deltaUnit = parse(splited: splited, key: "deltaunit")
         print(format, type, language, delta, deltaUnit)
         return DateTemplateLiteral(
-            format: String(format).unescaped(),
+            format: format.unescaped(),
             type: CalendarType.init(rawValue: String(type))!,
             language: Language.init(rawValue: String(language))!,
             delta: String(delta),
@@ -188,10 +201,10 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol{
         }
     }
 
-    static func `import`(from string: String) -> RandomTemplateLiteral {
+    static func `import`(from string: String, escaped: Bool = false) -> RandomTemplateLiteral {
         let splited = string.split(separator: " ")
         let type = parse(splited: splited, key: "type")
-        let valueString = parse(splited: splited, key: "value")
+        let valueString = parse(splited: splited, key: "value").unescaped()
 
         let valueType = ValueType.init(rawValue: String(type))!
         let value: Value
@@ -210,7 +223,7 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol{
 
     func export() -> String {
         return """
-        <random type="\(value.type.rawValue)" value="\(value.string)">
+        <random type="\(value.type.rawValue)" value="\(value.string.escaped())">
         """
     }
 

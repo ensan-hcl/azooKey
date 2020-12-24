@@ -9,155 +9,6 @@
 import SwiftUI
 import Foundation
 
-final class EditableUserDictionaryData: ObservableObject {
-    lazy var availableChars: [Character] = {
-        do{
-            let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
-
-            return Array(string).filter{!["\t",","," ","\0"].contains($0)}
-        }catch{
-            return []
-        }
-    }()
-
-    @Published var ruby: String
-    @Published var word: String
-    @Published var isVerb: Bool
-    @Published var isPersonName: Bool
-    @Published var isPlaceName: Bool
-
-    let id: Int
-
-    init(ruby: String, word: String, isVerb: Bool, isPersonName: Bool, isPlaceName: Bool, id: Int){
-        self.ruby = ruby
-        self.word = word
-        self.id = id
-        self.isVerb = isVerb
-        self.isPersonName = isPersonName
-        self.isPlaceName = isPlaceName
-    }
-
-    func neadVerbCheck() -> Bool {
-        let result = self.ruby.last == "る" && ["る", "ル"].contains(self.word.last)
-        return result
-    }
-
-    var mizenkeiRuby: String {
-        self.ruby.dropLast() + "らない"
-    }
-
-    var mizenkeiWord: String {
-        self.word.dropLast() + "らない"
-    }
-
-    enum AppendError{
-        case rubyEmpty
-        case wordEmpty
-        case unavailableCharacter
-
-        var message: String {
-            switch self{
-            case .rubyEmpty:
-                return "読みが空です"
-            case .wordEmpty:
-                return "単語が空です"
-            case .unavailableCharacter:
-                return "読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください"
-            }
-        }
-
-    }
-
-    var error: AppendError? {
-        if ruby.isEmpty{
-            return .rubyEmpty
-        }
-        if word.isEmpty{
-            return .wordEmpty
-        }
-        if !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy({self.availableChars.contains($0)}){
-            return .unavailableCharacter
-        }
-        return nil
-    }
-
-    func makeStableData() -> UserDictionaryData {
-        if !self.neadVerbCheck() && isVerb{
-            isVerb = false
-        }
-        return UserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
-    }
-
-}
-
-struct UserDictionary: Codable {
-    let items: [UserDictionaryData]
-
-    init(items: [UserDictionaryData]){
-        self.items = items.indices.map{i in
-            let item = items[i]
-            return UserDictionaryData(ruby: item.ruby, word: item.word, isVerb: item.isVerb, isPersonName: item.isPersonName, isPlaceName: item.isPlaceName, id: i)
-        }
-    }
-
-    func save(){
-        let encoder = JSONEncoder()
-        let saveData: Data
-        if let encodedValue = try? encoder.encode(self) {
-            saveData = encodedValue
-        }else{
-            saveData = Data()
-        }
-        UserDefaults.standard.set(saveData, forKey: "user_dict")
-    }
-    static func get() -> Self? {
-        if let value = UserDefaults.standard.value(forKey: "user_dict") as? Data{
-            let decoder = JSONDecoder()
-            if let userDictionary = try? decoder.decode(UserDictionary.self, from: value) {
-                return userDictionary
-            }
-        }
-        return nil
-    }
-}
-
-struct UserDictionaryData: Identifiable, Codable{
-    let ruby: String
-    let word: String
-    let isVerb: Bool
-    let isPersonName: Bool
-    let isPlaceName: Bool
-    let id: Int
-
-    func makeEditableData() -> EditableUserDictionaryData {
-        return EditableUserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
-    }
-
-    var dictionaryForm: [String] {
-        let katakanaRuby = self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!
-        if isVerb{
-            let cid = 772
-            let conjuctions = ConjuctionBuilder.getConjugations(data: (word: word, ruby: katakanaRuby, cid: cid), addStandardForm: true)
-            return conjuctions.map{
-                "\($0.ruby)\t\($0.word.escaped())\t\($0.cid)\t\($0.cid)\t\(501)\t-5.0000"
-            }
-        }
-        let cid: Int
-        if isPersonName{
-            cid = 1289
-        }else if isPlaceName{
-            cid = 1293
-        }else{
-            cid = 1288
-        }
-        return ["\(katakanaRuby)\t\(word.escaped())\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
-    }
-
-    static func emptyData(id: Int) -> Self {
-        return UserDictionaryData(ruby: "", word: "", isVerb: false, isPersonName: false, isPlaceName: false, id: id)
-    }
-}
-
 final class UserDictManagerVariables: ObservableObject {
     @Published var items: [UserDictionaryData] = [
         UserDictionaryData(ruby: "あずき", word: "azooKey", isVerb: false, isPersonName: true, isPlaceName: false, id: 0),
@@ -315,6 +166,26 @@ struct UserDictionaryDataSettingView: View {
                 HStack{
                     TextField("単語", text: $item.word)
                         .padding(.vertical, 2)
+                    //FIXME: 技術的に厳しかった
+                    /*
+                    HighlightableTextField("単語", text: $item.word){text in
+                        let parts = highlight(text)
+                        HStack(spacing: 0){
+                            ForEach(parts.indices, id: \.self){i in
+                                switch parts[i].type{
+                                case .normal:
+                                    Text(parts[i].text)
+                                case .background:
+                                    Text(parts[i].text)
+                                        .foregroundColor(.orange)
+                                        .bold()
+                                        .tracking(-0.5)
+                                }
+                            }
+                            Spacer()
+                        }
+                    }
+                    */
                     Divider()
                     PasteLongPressButton($item.word)
                         .padding(.horizontal, 5)
@@ -386,10 +257,24 @@ struct UserDictionaryDataSettingView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)){_ in
             self.save()
         }
-        .onTapGesture {
-            UIApplication.shared.closeKeyboard()
-        }
+    }
 
+    enum HighlightType{
+        case normal
+        case background
+    }
+
+    func highlight<S: StringProtocol>(_ text: S) -> [(text: String, type: HighlightType)] {
+        print(text)
+        if let range = text.range(of: "\\{\\{.*?\\}\\}", options: .regularExpression){
+            let lowerSide = text[text.startIndex ..< range.lowerBound]
+            let internalSide = text[range]
+            let upperSide = text[range.upperBound ..< text.endIndex]
+
+            return highlight(lowerSide) + [(String(internalSide), .background)] + highlight(upperSide)
+        }else{
+            return [(String(text), .normal)]
+        }
     }
 
     func save(){
@@ -406,6 +291,31 @@ struct UserDictionaryDataSettingView: View {
             let builder = LOUDSBuilder(txtFileSplit: 2048)
             builder.process()
             Store.shared.noticeReloadUserDict()
+        }
+    }
+}
+
+
+struct HighlightableTextField<Content: View>: View {
+    let title: LocalizedStringKey
+    @Binding private var text: String
+    let covering: (String) -> Content
+
+    init(_ title: LocalizedStringKey, text: Binding<String>, @ViewBuilder covering: @escaping (String) -> Content){
+        self.title = title
+        self._text = text
+        self.covering = covering
+    }
+
+    var body: some View {
+        ZStack(alignment: .trailing){
+            covering(text)
+                .allowsHitTesting(false)
+                .lineLimit(1)
+                .truncationMode(.head)
+            TextField(title, text: $text)
+                .foregroundColor(.clear)
+
         }
     }
 }

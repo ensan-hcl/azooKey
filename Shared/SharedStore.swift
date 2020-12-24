@@ -19,7 +19,7 @@ func debug(_ items: Any...){
     #endif
 }
 
-extension String{
+extension StringProtocol{
     //エスケープが必要なのは次の文字:
     /*
      \ -> \\
@@ -31,8 +31,7 @@ extension String{
      */
     //please use these letters in order to avoid user-inputting text crash
     func escaped() -> String {
-        var result = self
-        result = result.replacingOccurrences(of: "\\", with: "\\b")
+        var result = self.replacingOccurrences(of: "\\", with: "\\b")
         result = result.replacingOccurrences(of: "\0", with: "\\0")
         result = result.replacingOccurrences(of: "\n", with: "\\n")
         result = result.replacingOccurrences(of: "\t", with: "\\t")
@@ -43,8 +42,7 @@ extension String{
     }
 
     func unescaped() -> String {
-        var result = self
-        result = result.replacingOccurrences(of: "\\d", with: "\"")
+        var result = self.replacingOccurrences(of: "\\d", with: "\"")
         result = result.replacingOccurrences(of: "\\s", with: " ")
         result = result.replacingOccurrences(of: "\\c", with: ",")
         result = result.replacingOccurrences(of: "\\t", with: "\t")

@@ -456,7 +456,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         debug("ラティス処理", -start2.timeIntervalSinceNow)
 
         let results = candidates.map{
-            $0.withActions(self.getApporopriateActions($0))
+            $0.withActions(self.getApporopriateActions($0)).parseTemplate()
         }
         debug("全体", -start1.timeIntervalSinceNow)
 

@@ -65,34 +65,24 @@ extension DispatchQueue{
  */
 
 
-//QiitaのタグみたいなTextField
 struct TestView: View {
-    @State private var text: String = ""
-    let borderColor = Color(.sRGB, red: 0.745, green: 0.866, blue: 0.988)
-    let fillColor = Color(.sRGB, red: 0.847, green: 0.917, blue: 0.992)
     var body: some View {
-        ZStack{
-            TextField("入力", text: $text)
-                .foregroundColor(.clear)
-            HStack(spacing:0){
-                let strings = text.split(separator: " ", omittingEmptySubsequences: false)
-                ForEach(strings.indices, id: \.self){i in
-                    Text(strings[i])
-                        .background(
-                            fillColor
-                                .cornerRadius(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(borderColor)
-                                )
-                        )
-                        .padding(.horizontal, 2)
-                }
-                Spacer()
-            }
+        VStack{
+            Text("SwiftUIでTextの省略位置を指定するにはtruncationModeを使用しましょう")
+                .truncationMode(.tail)
+                .lineLimit(1)
+            Text("SwiftUIでTextの省略位置を指定するにはtruncationModeを使用しましょう")
+                .truncationMode(.head)
+                .lineLimit(1)
+            Text("SwiftUIでTextの省略位置を指定するにはtruncationModeを使用しましょう")
+                .truncationMode(.middle)
+                .lineLimit(1)
+
         }
     }
 }
+
+
 
 /*
 

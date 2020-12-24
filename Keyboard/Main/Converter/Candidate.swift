@@ -87,4 +87,33 @@ struct Candidate{
             inputable: inputable
         )
     }
+
+    static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"//.escaped().replacingOccurrences(of: "\\", with: "\\\\")
+    static let randomExpression = "<random type=\".*?\" value=\".*?\">"//.escaped().replacingOccurrences(of: "\\", with: "\\\\")
+
+    func parseTemplate() -> Candidate {
+        var newText = text
+        while let range = newText.range(of: Self.dateExpression, options: .regularExpression){
+            let templateString = String(newText[range])
+            let template = DateTemplateLiteral.import(from: templateString)
+            let value = template.previewString()
+            newText.replaceSubrange(range, with: value)
+        }
+        while let range = newText.range(of: Self.randomExpression, options: .regularExpression){
+            let templateString = String(newText[range])
+            let template = RandomTemplateLiteral.import(from: templateString)
+            let value = template.previewString()
+            newText.replaceSubrange(range, with: value)
+        }
+
+        return Candidate(
+            text: newText.unescaped(),
+            value: value,
+            correspondingCount: correspondingCount,
+            lastMid: lastMid,
+            data: data,
+            actions: actions,
+            inputable: inputable
+        )
+    }
 }

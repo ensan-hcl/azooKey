@@ -27,10 +27,17 @@ extension LOUDSBuilder{
 
 struct LOUDSBuilder{
     let txtFileSplit: Int
+    let templateData: [TemplateData]
 
     init(txtFileSplit: Int){
         self.txtFileSplit = txtFileSplit
         Self.loadCharID()
+
+        if let data = TemplateData.load(){
+            self.templateData = data
+        }else{
+            self.templateData = []
+        }
     }
 
     private func BoolToUInt64(_ bools: [Bool]) -> [UInt64] {
@@ -73,6 +80,43 @@ struct LOUDSBuilder{
         return (paths, blocks, useradds)
     }
 
+    func parseTemplate<S: StringProtocol>(_ word: S) -> String {
+        if let range = word.range(of: "\\{\\{.*?\\}\\}", options: .regularExpression){
+            let center: String
+            if let data = templateData.first(where: {$0.name == word[range].dropFirst(2).dropLast(2)}){
+                center = data.literal.export()
+            }else{
+                center = String(word[range])
+            }
+
+            let left = word[word.startIndex..<range.lowerBound]
+            let right = word[range.upperBound..<word.endIndex]
+            return parseTemplate(left) + center + parseTemplate(right)
+        }else{
+            return word.escaped()
+        }
+    }
+
+    func makeDictionaryForm(_ data: UserDictionaryData) -> [String] {
+        let katakanaRuby = data.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!
+        if data.isVerb{
+            let cid = 772
+            let conjuctions = ConjuctionBuilder.getConjugations(data: (word: data.word, ruby: katakanaRuby, cid: cid), addStandardForm: true)
+            return conjuctions.map{
+                "\($0.ruby)\t\(parseTemplate($0.word))\t\($0.cid)\t\($0.cid)\t\(501)\t-5.0000"
+            }
+        }
+        let cid: Int
+        if data.isPersonName{
+            cid = 1289
+        }else if data.isPlaceName{
+            cid = 1293
+        }else{
+            cid = 1288
+        }
+        return ["\(katakanaRuby)\t\(parseTemplate(data.word))\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
+    }
+
     func process(to identifier: String = "user"){
         let trieroot = TrieNode<Character, Int>()
 
@@ -85,7 +129,7 @@ struct LOUDSBuilder{
                 let string = try String(contentsOfFile: Bundle.main.bundlePath + "/" + path, encoding: String.Encoding.utf8)
                 csvLines.append(contentsOf: string.split(separator: "\n"))
             }
-            csvLines.append(contentsOf: useradds.flatMap{$0.dictionaryForm}.map{Substring($0)})
+            csvLines.append(contentsOf: useradds.flatMap{self.makeDictionaryForm($0)}.map{Substring($0)})
             csvData = csvLines.map{$0.components(separatedBy: "\t")}
             csvData.indices.forEach{index in
                 if !blocks.contains(csvData[index][1]){
