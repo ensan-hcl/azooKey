@@ -999,14 +999,12 @@
 		1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA4BB2257E169100477DC2 /* PasteButton.swift */; };
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA5717257FAFBE00477DC2 /* charID.chid in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5716257FAFBD00477DC2 /* charID.chid */; };
-		1AFA57392580DB2200477DC2 /* ButtonWithAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57382580DB2200477DC2 /* ButtonWithAlert.swift */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
 		1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */; };
 		1AFA57542582EFAE00477DC2 /* RomanAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */; };
 		1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57592583051500477DC2 /* CapslockTips.swift */; };
 		1AFA57602584810800477DC2 /* Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA575F2584810800477DC2 /* Focus.swift */; };
 		1AFA57662584815B00477DC2 /* RomanCustomKeysSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */; };
-		1AFA57702584C16200477DC2 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA576F2584C16200477DC2 /* ShareSheet.swift */; };
 		1AFA5D312585069500477DC2 /* mm.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5D302585069500477DC2 /* mm.binary */; };
 		1AFA62F1258506C100477DC2 /* 927.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5DCA258506AC00477DC2 /* 927.binary */; };
 		1AFA62F2258506C100477DC2 /* 827.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA5DCB258506AC00477DC2 /* 827.binary */; };
@@ -3368,14 +3366,12 @@
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA5716257FAFBD00477DC2 /* charID.chid */ = {isa = PBXFileReference; lastKnownFileType = file; path = charID.chid; sourceTree = "<group>"; };
-		1AFA57382580DB2200477DC2 /* ButtonWithAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithAlert.swift; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
 		1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickAaKeyModel.swift; sourceTree = "<group>"; };
 		1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanAaKeyModel.swift; sourceTree = "<group>"; };
 		1AFA57592583051500477DC2 /* CapslockTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapslockTips.swift; sourceTree = "<group>"; };
 		1AFA575F2584810800477DC2 /* Focus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Focus.swift; sourceTree = "<group>"; };
 		1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeysSettingView.swift; sourceTree = "<group>"; };
-		1AFA576F2584C16200477DC2 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		1AFA5D302585069500477DC2 /* mm.binary */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mm.binary; path = "../../../../../AzooKey-dict/workspaces/12:12/_results/mm.binary"; sourceTree = "<group>"; };
 		1AFA5DCA258506AC00477DC2 /* 927.binary */ = {isa = PBXFileReference; lastKnownFileType = file; path = 927.binary; sourceTree = "<group>"; };
 		1AFA5DCB258506AC00477DC2 /* 827.binary */ = {isa = PBXFileReference; lastKnownFileType = file; path = 827.binary; sourceTree = "<group>"; };
@@ -5215,8 +5211,6 @@
 				1ACE61C2257286E5008078D3 /* Color.swift */,
 				1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */,
 				1ACEEFCF25665E3600899DA2 /* FallbackLink.swift */,
-				1AFA576F2584C16200477DC2 /* ShareSheet.swift */,
-				1AFA57382580DB2200477DC2 /* ButtonWithAlert.swift */,
 				1AFA575F2584810800477DC2 /* Focus.swift */,
 				1AFA4BB2257E169100477DC2 /* PasteButton.swift */,
 				1ACEEFDD25665F0100899DA2 /* CenterAlignedView.swift */,
@@ -9800,12 +9794,10 @@
 				1AC8A5AA2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
 				1A8654BC2526F50400006582 /* KeyboardLayoutType.swift in Sources */,
-				1AFA57702584C16200477DC2 /* ShareSheet.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
-				1AFA57392580DB2200477DC2 /* ButtonWithAlert.swift in Sources */,
 				1A4057DF255843330073C6F7 /* BooleanSettingItemView.swift in Sources */,
 				1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */,
 				1ACE61C3257286E5008078D3 /* Color.swift in Sources */,

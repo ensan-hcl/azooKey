@@ -74,11 +74,13 @@ struct RomanKeyView: View{
     var body: some View{
         ZStack(alignment: .bottom){
             Group{
+                let vSpacing = Design.shared.keyViewVerticalSpacing
                 Rectangle()
                     .frame(width: self.model.keySize.width, height: self.model.keySize.height)
                     .contentShape(
                         Rectangle()
-                            .size(CGSize(width: self.model.keySize.width + Design.shared.keyViewHorizontalSpacing, height: self.model.keySize.height))
+                            .size(CGSize(width: self.model.keySize.width + Design.shared.keyViewHorizontalSpacing, height: self.model.keySize.height + vSpacing))
+                            .offset(x: 0, y: vSpacing/2)
                     )
                     .foregroundColor(self.modelVariableSection.pressState.isActive ? self.model.backGroundColorWhenPressed:self.model.backGroundColorWhenUnpressed)
                     .cornerRadius(6)
