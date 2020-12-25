@@ -15,7 +15,7 @@ struct SharedStore{
 
 func debug(_ items: Any...){
     #if DEBUG
-        print(items)
+    print(items.map{"\($0)"}.joined(separator: " "))
     #endif
 }
 

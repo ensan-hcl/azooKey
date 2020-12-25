@@ -80,7 +80,6 @@ struct RomanKeyView: View{
                     .contentShape(
                         Rectangle()
                             .size(CGSize(width: self.model.keySize.width + Design.shared.keyViewHorizontalSpacing, height: self.model.keySize.height + vSpacing))
-                            .offset(x: 0, y: vSpacing/2)
                     )
                     .foregroundColor(self.modelVariableSection.pressState.isActive ? self.model.backGroundColorWhenPressed:self.model.backGroundColorWhenUnpressed)
                     .cornerRadius(6)

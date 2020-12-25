@@ -18,7 +18,7 @@ struct CursorMoveTipsView: View {
             }
             
             TipsContentParagraph{
-                Text("\("黄色枠", color: .orange)\(systemImage: "circle.fill")部分に指を置いて左右になぞることでカーソルが滑らかに移動します。")
+                Text("\("黄色枠", color: .orange)\(Image(systemName: "circle.fill"))部分に指を置いて左右になぞることでカーソルが滑らかに移動します。")
                 Text("1文字ずつ移動したい場合は\("青枠", color: .blue)の\(systemImage: "chevron.left.2")部分または\(systemImage: "chevron.right.2")部分をタップすることでそれぞれの方向に1文字ずつ移動します。")
                 Text("カーソル移動ボタンを消すには、入力/削除を行うか、再び空白を長押ししてください。")
             }

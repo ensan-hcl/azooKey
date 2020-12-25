@@ -13,10 +13,11 @@ struct TemplateSettingTipsView: View {
     var body: some View {
         TipsContentView("タイムスタンプを設定する"){
             TipsContentParagraph{
-                Text("azooKeyでは「テンプレート」という機能を使うことで、時刻や乱数などを用いた高度な変換を定義することが可能です。ここでは「2020/01/23 01:23」という形式のタイムスタンプを作ってみます。")
+                Text("azooKeyでは「テンプレート」という機能を使うことで、時刻や乱数などを用いた高度な変換を定義することが可能です。")
+                Text("ここでは「2020/01/23 01:23」という形式のタイムスタンプを作ってみます。")
             }
             TipsContentParagraph{
-                Text("テンプレートを作るには、まず「テンプレートの管理」から作成します。画面右上の\(systemImage: "plus", color: .accentColor)を押して、テンプレートを追加しましょう。")
+                Text("まず「テンプレートの管理」から新しいテンプレートを作成します。画面右上の\(systemImage: "plus", color: .accentColor)を押して、テンプレートを追加しましょう。")
                 TipsImage("templateSettingTips_1")
             }
             TipsContentParagraph{
@@ -43,7 +44,10 @@ struct TemplateSettingTipsView: View {
             }
 
             TipsContentParagraph{
-                Text("azooKeyではこの他にも、「ズレ」を設定することで昨日や明日の日付を表示したり、乱数を用いるテンプレートを設定したりすることができます。")
+                Text("「yyyy/MM/dd hh:mm」というのは日付の書式の書き方で、「yyyy」が4桁の年、「MM」が2桁の月、「dd」は2桁の日付を指しています。「hh」と「mm」も同様に時間と分です。")
+                Text("この書式を使って他にもカスタマイズが可能です。「hh」ではなく「HH」を使うことで24時間表記にすることができます。また「M」一文字を使った場合は「01」月ではなく「1」月と表示されます。「ss」で秒を、「EEE」で曜日を、「a」で午前/午後を表示することもできます。")
+
+                Text("azooKeyではこの他にも、「ズレ」を設定することで昨日や明日の日付を表示したり、乱数を用いるテンプレートを設定したりすることができます。お試しください。")
             }
 
         }

@@ -241,7 +241,7 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
             ),
             RomanKeyModel(
                 labelType: .text("{"),
-                pressActions: [.input("}")]
+                pressActions: [.input("{")]
             ),
             RomanKeyModel(
                 labelType: .text("}"),
