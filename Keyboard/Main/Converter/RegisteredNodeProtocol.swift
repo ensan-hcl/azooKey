@@ -18,7 +18,7 @@ protocol RegisteredNodeProtocol{
     static func BOSNode() -> Self
 }
 
-struct FlickRegisteredNode: RegisteredNodeProtocol {
+struct DirectRegisteredNode: RegisteredNodeProtocol {
     let data: DicDataElementProtocol
     let prev: RegisteredNodeProtocol?
     let totalValue: PValue
@@ -34,8 +34,8 @@ struct FlickRegisteredNode: RegisteredNodeProtocol {
         self.rubyCount = rubyCount
     }
 
-    static func BOSNode() -> FlickRegisteredNode {
-        FlickRegisteredNode(data: BOSEOSDicDataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0)
+    static func BOSNode() -> DirectRegisteredNode {
+        DirectRegisteredNode(data: BOSEOSDicDataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0)
     }
 }
 
@@ -102,8 +102,8 @@ extension RegisteredNodeProtocol{
             }
             //前の文節の処理
             lastClause.nextLcid = self.data.lcid
-            switch Store.shared.keyboardType{
-            case .flick:
+            switch Store.shared.inputStyle{
+            case .direct:
                 break
             case .roman:
                 if Store.shared.keyboardModel.tabState != .abc{

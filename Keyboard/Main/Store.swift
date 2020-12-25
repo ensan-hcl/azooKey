@@ -14,7 +14,9 @@ final class Store{
     static let shared = Store()
     //FIXME: KeyboardTypeがViewの種類と入力スタイルの種類の両方を兼ねているのがまずい。
     //例えばKeyboardLayoutType: romanとflick、InputStyle: roman/directのようにすべきでは
-    var keyboardType: KeyboardType = .roman
+    var keyboardLayoutType: KeyboardLayoutType = .roman
+    var inputStyle: InputStyle = .roman
+
     var keyboardLanguage: KeyboardLanguage = .japanese
     fileprivate var orientation: KeyboardOrientation = .vertical
     private var enterKeyType: UIReturnKeyType = .default
@@ -38,13 +40,12 @@ final class Store{
     private(set) var needsInputModeSwitchKey = true   //ビューに関わる部分
     private(set) var keyboardModelVariableSection = KeyboardModelVariableSection()   //ビューに関わる部分
     private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
-    private init(){
-    }
+    private init(){}
     
     func initialize(){
         self.action.initialize()
         self.refreshKeyboardModel()
-        self.registerKeyboardType()
+        self.setKeyboardType()
         if let lastTabState = self.lastVerticalTabState{
             self.setTabState(lastTabState)
             lastVerticalTabState = nil
@@ -119,7 +120,7 @@ final class Store{
     }
 
     fileprivate func refreshKeyboardModel(absolutely: Bool = false){
-        switch (self.keyboardType, self.orientation){
+        switch (self.keyboardLayoutType, self.orientation){
         case (.flick, .vertical):
             if absolutely || !(self.keyboardModel is VerticalFlickKeyboardModel){
                 self.keyboardModel = VerticalFlickKeyboardModel()
@@ -224,11 +225,12 @@ final class Store{
         }
     }
     
-    func registerKeyboardType(){
+    func setKeyboardType(){
         let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
         let key = "keyboard_type"
-        if let string = userDefaults.string(forKey: key), let type = KeyboardType.get(string){
-            self.keyboardType = type
+        if let string = userDefaults.string(forKey: key), let type = KeyboardLayoutType.get(string){
+            self.keyboardLayoutType = type
+            self.inputStyle = type == .flick ? .direct : .roman
         }else{
             userDefaults.set("flick", forKey: key)
         }
@@ -245,8 +247,8 @@ final class DesignDepartment{
 
     private(set) var screenWidth: CGFloat = .zero
 
-    private var keyboardType: KeyboardType {
-        Store.shared.keyboardType
+    private var keyboardLayoutType: KeyboardLayoutType {
+        Store.shared.keyboardLayoutType
     }
 
     private var orientation: KeyboardOrientation {
@@ -259,7 +261,7 @@ final class DesignDepartment{
 
     var keyboardHeight: CGFloat {
         let keyheight = Store.shared.design.keyViewSize.height * CGFloat(Store.shared.design.verticalKeyCount + 1)
-        switch keyboardType{
+        switch keyboardLayoutType{
         case .flick:
             let spaceheight = Store.shared.design.keyViewVerticalSpacing * CGFloat(Store.shared.design.verticalKeyCount - 1) + 6.0
             return keyheight + spaceheight
@@ -271,7 +273,7 @@ final class DesignDepartment{
     }
 
     var verticalKeyCount: Int {
-        switch keyboardType{
+        switch keyboardLayoutType{
         case .flick:
             return 4
         case .roman:
@@ -280,7 +282,7 @@ final class DesignDepartment{
     }
 
     var horizontalKeyCount: Int {
-        switch keyboardType{
+        switch keyboardLayoutType{
         case .flick:
             return 5
         case .roman:
@@ -290,7 +292,7 @@ final class DesignDepartment{
 
     ///KeyViewのサイズを自動で計算して返す。
     var keyViewSize: CGSize {
-        switch keyboardType{
+        switch keyboardLayoutType{
         case .flick:
             if orientation == .vertical{
                 if UIDevice.current.userInterfaceIdiom == .pad{
@@ -316,7 +318,7 @@ final class DesignDepartment{
     }
     
     var keyViewVerticalSpacing: CGFloat {
-        switch keyboardType{
+        switch keyboardLayoutType{
         case .flick:
             if orientation == .vertical{
                 return keyViewHorizontalSpacing
@@ -334,7 +336,7 @@ final class DesignDepartment{
     }
     
     var keyViewHorizontalSpacing: CGFloat {
-        switch keyboardType{
+        switch keyboardLayoutType{
         case .flick:
             if orientation == .vertical{
                 return (screenWidth - keyViewSize.width * 5)/5
@@ -353,7 +355,7 @@ final class DesignDepartment{
     }
 
     var resultViewHeight: CGFloat {
-        switch keyboardType{
+        switch keyboardLayoutType{
         case .flick:
             return keyViewSize.height
         case.roman:
@@ -449,7 +451,7 @@ final class DesignDepartment{
                 return .system(size: CGFloat(userDecidedSize) * scale, weight: .regular, design: .default)
             }
             let maxFontSize: Int
-            switch Store.shared.keyboardType{
+            switch Store.shared.keyboardLayoutType{
             case .flick:
                 maxFontSize = Int(21*scale)
             case .roman:
@@ -478,7 +480,7 @@ final class DesignDepartment{
             return Color("OpenKeyColor")
         }
         var normalKeyColor: Color {
-            switch Store.shared.keyboardType{
+            switch Store.shared.keyboardLayoutType{
             case .flick:
                 return Color("NormalKeyColor")
             case .roman:
@@ -486,7 +488,7 @@ final class DesignDepartment{
             }
         }
         var specialKeyColor: Color {
-            switch Store.shared.keyboardType{
+            switch Store.shared.keyboardLayoutType{
             case .flick:
                 return Color("TabKeyColor")
             case .roman:
@@ -494,7 +496,7 @@ final class DesignDepartment{
             }
         }
         var highlightedKeyColor: Color {
-            switch Store.shared.keyboardType{
+            switch Store.shared.keyboardLayoutType{
             case .flick:
                 return Color("HighlightedKeyColor")
             case .roman:
@@ -1049,13 +1051,13 @@ private final class InputStateHolder{
     private var afterAdjusted: Bool = false
 
     typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
-    typealias FlickConverter = KanaKanjiConverter<FlickInputData, FlickLatticeNode>
+    typealias DirectConverter = KanaKanjiConverter<DirectInputData, DirectLatticeNode>
     ///かな漢字変換を受け持つ変換器。
     private var _romanConverter: RomanConverter?
-    private var _flickConverter: FlickConverter?
+    private var _directConverter: DirectConverter?
 
     private var romanConverter: RomanConverter {
-        self._flickConverter = nil
+        self._directConverter = nil
         if let romanConverter = self._romanConverter{
             return romanConverter
         }
@@ -1063,18 +1065,18 @@ private final class InputStateHolder{
         return self._romanConverter!
     }
 
-    private var flickConverter: FlickConverter {
+    private var directConverter: DirectConverter {
         self._romanConverter = nil
-        if let flickConverter = self._flickConverter{
+        if let flickConverter = self._directConverter{
             return flickConverter
         }
-        self._flickConverter = FlickConverter()
-        return self._flickConverter!
+        self._directConverter = DirectConverter()
+        return self._directConverter!
     }
 
     func sendToDicDataStore(_ data: Store.DicDataStoreNotification){
         self._romanConverter?.sendToDicDataStore(data)
-        self._flickConverter?.sendToDicDataStore(data)
+        self._directConverter?.sendToDicDataStore(data)
     }
 
     fileprivate func registerProxy(_ proxy: UITextDocumentProxy){
@@ -1082,8 +1084,8 @@ private final class InputStateHolder{
     }
 
     private var isRomanKanaInputMode: Bool {
-        switch Store.shared.keyboardType{
-        case .flick:
+        switch Store.shared.inputStyle{
+        case .direct:
             return false
         case .roman:
             return Store.shared.keyboardModel.tabState == .hira
@@ -1109,9 +1111,9 @@ private final class InputStateHolder{
         }
         self.isSelected = false
 
-        switch Store.shared.keyboardType{
-        case .flick:
-            self.flickConverter.updateLearningData(candidate)
+        switch Store.shared.inputStyle{
+        case .direct:
+            self.directConverter.updateLearningData(candidate)
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.correspondingCount))
             if candidate.correspondingCount == inputtedText.count{
                 self.clear()
@@ -1120,7 +1122,7 @@ private final class InputStateHolder{
             }
             self.cursorPosition -= candidate.correspondingCount
             self.inputtedText = String(self.inputtedText.dropFirst(candidate.correspondingCount))
-            self.flickConverter.setCompletedData(candidate)
+            self.directConverter.setCompletedData(candidate)
 
         case .roman:
             self.romanConverter.updateLearningData(candidate)
@@ -1154,7 +1156,7 @@ private final class InputStateHolder{
         self.setResult()
         self.kanaRomanStateHolder = KanaRomanStateHolder()
         self._romanConverter?.clear()
-        self._flickConverter?.clear()
+        self._directConverter?.clear()
         Store.shared.collapseResult()
         Store.shared.registerEnterKeyState(.return)
     }
@@ -1163,7 +1165,7 @@ private final class InputStateHolder{
         debug("キーボードを閉じます")
         self.sendToDicDataStore(.closeKeyboard)
         self._romanConverter = nil
-        self._flickConverter = nil
+        self._directConverter = nil
         self.clear()
     }
 
@@ -1179,11 +1181,11 @@ private final class InputStateHolder{
             ]
         )
         let actions: [ActionType]
-        switch Store.shared.keyboardType{
-        case .flick:
-            actions = self.flickConverter.getApporopriateActions(_candidate)
+        switch Store.shared.inputStyle{
+        case .direct:
+            actions = self.directConverter.getApporopriateActions(_candidate)
             let candidate = _candidate.withActions(actions)
-            self.flickConverter.updateLearningData(candidate)
+            self.directConverter.updateLearningData(candidate)
         case .roman:
             actions = self.romanConverter.getApporopriateActions(_candidate)
 
@@ -1202,8 +1204,8 @@ private final class InputStateHolder{
 
             self.inputtedText = text
             self.kanaRomanStateHolder = KanaRomanStateHolder()
-            switch Store.shared.keyboardType{
-            case .flick:
+            switch Store.shared.inputStyle{
+            case .direct:
                 break
             case .roman:
                 if isRomanKanaInputMode{
@@ -1238,8 +1240,8 @@ private final class InputStateHolder{
         let leftSideText = inputtedText.prefix(cursorPosition)
         let rightSideText = inputtedText.dropFirst(cursorPosition)
         
-        switch Store.shared.keyboardType{
-        case .flick:
+        switch Store.shared.inputStyle{
+        case .direct:
             self.inputtedText = leftSideText + text + rightSideText
             self.proxy.insertText(text)
             self.cursorPosition += text.count
@@ -1280,7 +1282,7 @@ private final class InputStateHolder{
         (0..<count).forEach{_ in
             self.proxy.deleteBackward()
         }
-        if Store.shared.keyboardType == .roman{
+        if Store.shared.inputStyle == .roman{
             //ステートホルダーを調整する
             self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition))
         }
@@ -1521,10 +1523,10 @@ private final class InputStateHolder{
             case .convertInput:
                 let input_hira = self.inputtedText.prefix(self.cursorPosition)
                 let result: [Candidate]
-                switch Store.shared.keyboardType{
-                case .flick:
-                    let inputData = FlickInputData(String(input_hira))
-                    result = self.flickConverter.requestCandidates(inputData, N_best: 10)
+                switch Store.shared.inputStyle{
+                case .direct:
+                    let inputData = DirectInputData(String(input_hira))
+                    result = self.directConverter.requestCandidates(inputData, N_best: 10)
                 case .roman:
                     let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
                     let requirePrediction = Store.shared.keyboardModel.tabState == .hira

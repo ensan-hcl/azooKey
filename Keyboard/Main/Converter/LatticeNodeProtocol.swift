@@ -27,8 +27,8 @@ protocol LatticeNodeProtocol: class {
 extension LatticeNodeProtocol{
     func getCandidateData() -> [CandidateData] {
         let result = self.prevs.map{$0.getCandidateData()}
-        switch Store.shared.keyboardType{
-        case .flick:
+        switch Store.shared.inputStyle{
+        case .direct:
             break
         case .roman:
             if Store.shared.keyboardModel.tabState != .abc{
@@ -41,8 +41,8 @@ extension LatticeNodeProtocol{
     }
 }
 ///ラティスのノード。これを用いて計算する。
-final class FlickLatticeNode: LatticeNodeProtocol{
-    typealias RegisteredNode = FlickRegisteredNode
+final class DirectLatticeNode: LatticeNodeProtocol{
+    typealias RegisteredNode = DirectRegisteredNode
     init(data: DicDataElementProtocol, romanString: String) {
         self.data = data
     }
@@ -55,12 +55,12 @@ final class FlickLatticeNode: LatticeNodeProtocol{
         return self.data.ruby.count
     }
 
-    static var EOSNode: FlickLatticeNode {
-        return FlickLatticeNode(data: BOSEOSDicDataElement.EOSData)
+    static var EOSNode: DirectLatticeNode {
+        return DirectLatticeNode(data: BOSEOSDicDataElement.EOSData)
     }
 
-    func getSqueezedNode(_ index: Int, value: PValue) -> FlickRegisteredNode {
-        return FlickRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
+    func getSqueezedNode(_ index: Int, value: PValue) -> DirectRegisteredNode {
+        return DirectRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
     }
 
     init(data: DicDataElementProtocol){

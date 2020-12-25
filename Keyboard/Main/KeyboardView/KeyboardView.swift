@@ -56,40 +56,27 @@ struct KeyboardView: View {
                 .frame(maxWidth: .infinity)
 
             if modelVariableSection.refreshing{
-                switch modelVariableSection.keyboardOrientation{
-                case .vertical:
-                    switch Store.shared.keyboardType {
-                    case .flick:
-                        VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
-                    case .roman:
-                        VerticalRomanKeyboardView(Store.shared.keyboardModel as! VerticalRomanKeyboardModel)
-                    }
-                case .horizontal:
-                    switch Store.shared.keyboardType {
-                    case .flick:
-                        HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
-                    case .roman:
-                        HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
-                    }
+                switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayoutType){
+                case (.vertical, .flick):
+                    VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
+                case (.vertical, .roman):
+                    VerticalRomanKeyboardView(Store.shared.keyboardModel as! VerticalRomanKeyboardModel)
+                case (.horizontal, .flick):
+                    HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
+                case (.horizontal, .roman):
+                    HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
                 }
             }else{
-                switch modelVariableSection.keyboardOrientation{
-                case .vertical:
-                    switch Store.shared.keyboardType {
-                    case .flick:
-                        VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
-                    case .roman:
-                        VerticalRomanKeyboardView(Store.shared.keyboardModel as! VerticalRomanKeyboardModel)
-                    }
-                case .horizontal:
-                    switch Store.shared.keyboardType {
-                    case .flick:
-                        HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
-                    case .roman:
-                        HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
-                    }
+                switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayoutType){
+                case (.vertical, .flick):
+                    VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
+                case (.vertical, .roman):
+                    VerticalRomanKeyboardView(Store.shared.keyboardModel as! VerticalRomanKeyboardModel)
+                case (.horizontal, .flick):
+                    HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
+                case (.horizontal, .roman):
+                    HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
                 }
-
             }
             if modelVariableSection.isTextMagnifying{
                 LargeTextView(modelVariableSection.magnifyingText)

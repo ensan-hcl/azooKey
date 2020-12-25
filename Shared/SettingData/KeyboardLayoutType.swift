@@ -8,8 +8,17 @@
 
 import Foundation
 
-enum KeyboardType: String, CaseIterable{
+enum InputStyle: String{
+    ///常に入力された文字を直接入力するスタイル
+    case direct = "direct"
+    ///「ひらがな」タブの状態にあるときのみローマ字入力とし、そのほかでは`direct`と同様に動作するスタイル
+    case roman = "roman"
+}
+
+enum KeyboardLayoutType: String, CaseIterable{
+    ///フリック入力式のレイアウトで表示するスタイル
     case flick = "flick"
+    ///ローマ字入力式のレイアウトで表示するスタイル
     case roman = "roman"
     
     var string: String {
@@ -36,13 +45,13 @@ enum KeyboardType: String, CaseIterable{
     }
 }
 
-extension KeyboardType: Savable {
+extension KeyboardLayoutType: Savable {
     typealias SaveValue = String
     var saveValue: String {
         return self.rawValue
     }
     
-    static func get(_ value: Any) -> KeyboardType? {
+    static func get(_ value: Any) -> KeyboardLayoutType? {
         if let string = value as? String{
             return self.init(rawValue: string)
         }

@@ -190,8 +190,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     private func getTopLevelAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
         var candidates: [Candidate] = []
         if Store.shared.userSetting.bool(for: .englishCandidate){
-            switch Store.shared.keyboardType{
-            case .flick: break
+            switch Store.shared.inputStyle{
+            case .direct: break
             case .roman:
                 candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US", penalty: -10))
             }

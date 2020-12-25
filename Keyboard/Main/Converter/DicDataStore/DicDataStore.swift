@@ -686,7 +686,7 @@ final class DicDataStore{
         if Store.shared.keyboardModel.tabState == .abc && head.onlyRomanAlphabet{
             result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 40, value: -14))
         }
-        if Store.shared.keyboardModel.tabState != .abc && Store.shared.keyboardType == .roman{
+        if Store.shared.keyboardModel.tabState != .abc && Store.shared.inputStyle == .roman{
             if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head]{
                 result.append(LRE_DicDataElement(word: hiragana, ruby: katakana, cid: 1288, mid: 501, value: -13))
                 result.append(LRE_SRE_DicDataElement(ruby: katakana, cid: 1288, mid: 501, value: -14))

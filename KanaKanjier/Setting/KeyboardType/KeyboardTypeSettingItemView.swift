@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct KeyboardTypeSettingItemView: View {
-    typealias ItemViewModel = SettingItemViewModel<KeyboardType>
-    typealias ItemModel = SettingItem<KeyboardType>
+    typealias ItemViewModel = SettingItemViewModel<KeyboardLayoutType>
+    typealias ItemModel = SettingItem<KeyboardLayoutType>
 
     init(_ viewModel: ItemViewModel){
         self.item = viewModel.item
@@ -19,7 +19,7 @@ struct KeyboardTypeSettingItemView: View {
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
 
-    private let types = KeyboardType.allCases
+    private let types = KeyboardLayoutType.allCases
     var imageName:String{
         Store.variableSection.KeyboardType = types[viewModel.value.id]
         return types[viewModel.value.id].imageName

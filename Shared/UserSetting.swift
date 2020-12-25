@@ -130,6 +130,6 @@ struct DefaultSetting{
     }
 
     let koganaKeyFlickSettingDefault = ("", "", "", "")
-    let keyboardTypeSettingDefault = KeyboardType.flick
+    let keyboardTypeSettingDefault = KeyboardLayoutType.flick
     let memorySettingDefault = LearningType.inputAndOutput
 }

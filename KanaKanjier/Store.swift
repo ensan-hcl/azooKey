@@ -61,7 +61,7 @@ class Store{
     ))
 
 
-    var keyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardType>(
+    var keyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayoutType>(
         identifier: .keyboardType,
         defaultValue: .flick
     ))
@@ -129,5 +129,5 @@ class Store{
 class StoreVariableSection: ObservableObject{
     @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
-    @Published var KeyboardType: KeyboardType = .flick
+    @Published var KeyboardType: KeyboardLayoutType = .flick
 }

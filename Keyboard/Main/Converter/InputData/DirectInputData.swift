@@ -1,5 +1,5 @@
 //
-//  FlickInputData.swift
+//  DirectInputData.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/19.
@@ -8,18 +8,18 @@
 
 import Foundation
 
-struct FlickInputData: InputDataProtocol{
+struct DirectInputData: InputDataProtocol{
     internal let katakanaString: String
     internal let characters: [Character]
     internal let count: Int
     
-    init(_ input: String){
+    internal init(_ input: String){
         self.count = input.count
         self.katakanaString = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
         self.characters = Array(self.katakanaString)
     }
 
-    subscript(_ range: ClosedRange<Int>) -> String {
+    internal subscript(_ range: ClosedRange<Int>) -> String {
         get{
             return String(self.katakanaString[range])
         }
@@ -58,7 +58,7 @@ struct FlickInputData: InputDataProtocol{
     }
 }
 
-extension FlickInputData{
+extension DirectInputData{
     ///誤り部分の最長文字数
     private static let possibleMaxLength = 1
 

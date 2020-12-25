@@ -43,8 +43,8 @@ extension Kana2Kanji{
         TimeMesureTools.endAndStart("処理3.1.2")
 
         let dicdata: DicDataStore.DicData
-        switch Store.shared.keyboardType{
-        case .flick:
+        switch Store.shared.inputStyle{
+        case .direct:
             dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: lastRuby)
         case .roman:
             let ruby = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
