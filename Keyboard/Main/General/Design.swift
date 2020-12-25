@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-//MARK:Storeのデザイン部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
+//MARK:デザイン部門のロジックを全て切り出したオブジェクト。
 final class Design{
     private init(){}
     static let shared = Design()

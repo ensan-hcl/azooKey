@@ -13,7 +13,8 @@ struct VerticalFlickKeyboardView: View{
     private let model: VerticalFlickKeyboardModel
     @ObservedObject private var modelVariableSection: VerticalFlickKeyboardModelVariableSection
 
-    init(_ model: VerticalFlickKeyboardModel){
+    init(_ model: VerticalFlickKeyboardModel, size: CGSize? = nil){
+        debug(size)
         self.model = model
         self.modelVariableSection = model.variableSection
     }

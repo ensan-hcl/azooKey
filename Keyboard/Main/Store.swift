@@ -40,8 +40,8 @@ final class Store{
     
     func initialize(){
         self.action.initialize()
-        self.refreshKeyboardModel()
         self.setKeyboardType()
+        self.refreshKeyboardModel()
         if let lastTabState = self.lastVerticalTabState{
             self.setTabState(lastTabState)
             lastVerticalTabState = nil

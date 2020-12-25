@@ -52,6 +52,7 @@ struct KeyboardView: View {
     @ObservedObject private var modelVariableSection = Store.shared.keyboardModelVariableSection
     var body: some View {
         ZStack{[unowned modelVariableSection] in
+            
             Design.shared.colors.backGroundColor
                 .frame(maxWidth: .infinity)
 
