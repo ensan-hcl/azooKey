@@ -15,7 +15,7 @@ final class Store{
     //FIXME: KeyboardTypeがViewの種類と入力スタイルの種類の両方を兼ねているのがまずい。
     //例えばKeyboardLayoutType: romanとflick、InputStyle: roman/directのようにすべきでは
     var keyboardLayoutType: KeyboardLayoutType = .roman
-    var inputStyle: InputStyle = .roman
+    var inputStyle: InputStyle = .direct
 
     var keyboardLanguage: KeyboardLanguage = .japanese
     fileprivate var orientation: KeyboardOrientation = .vertical
@@ -35,8 +35,6 @@ final class Store{
     let feedbackGenerator = UINotificationFeedbackGenerator()
     
     fileprivate var lastVerticalTabState: TabState? = nil
-
-
     private(set) var needsInputModeSwitchKey = true   //ビューに関わる部分
     private(set) var keyboardModelVariableSection = KeyboardModelVariableSection()   //ビューに関わる部分
     private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
