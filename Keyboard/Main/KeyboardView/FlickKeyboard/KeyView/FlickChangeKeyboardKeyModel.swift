@@ -46,6 +46,6 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
     }
 
     func sound() {
-        SoundTools.tabOrOtherKey()
+        Sound.tabOrOtherKey()
     }
 }

@@ -54,13 +54,13 @@ extension ActionType{
     func sound(){
         switch self{
         case .input(_):
-            SoundTools.click()
+            Sound.click()
         case .delete(_):
-            SoundTools.delete()
+            Sound.delete()
         case .smoothDelete:
-            SoundTools.smoothDelete()
+            Sound.smoothDelete()
         case .moveTab(_), .enter, .changeCharacterType, .toggleShowMoveCursorView, .moveCursor(_):
-            SoundTools.tabOrOtherKey()
+            Sound.tabOrOtherKey()
         default:
             return
         }

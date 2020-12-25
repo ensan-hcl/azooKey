@@ -37,6 +37,6 @@ struct RomanSpaceKeyModel: RomanKeyModelProtocol{
     }
 
     func sound() {
-        SoundTools.click()
+        Sound.click()
     }
 }

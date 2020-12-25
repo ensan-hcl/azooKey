@@ -49,7 +49,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol, AaKeyModelProtocol{
     }
 
     func sound() {
-        SoundTools.tabOrOtherKey()
+        Sound.tabOrOtherKey()
     }
 
     var backGroundColorWhenUnpressed: Color {

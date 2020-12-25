@@ -1,5 +1,5 @@
 //
-//  SoundTools.swift
+//  Sound.swift
 //  Keyboard
 //
 //  Created by β α on 2020/11/26.
@@ -12,7 +12,7 @@ import AudioToolbox
 
 /// 音を鳴らすためのツールセット
 ///  - important: staticでない関数を追加する際は一考せよ。
-struct SoundTools{
+struct Sound{
     //使えそうな音
     /* i
      1103: 高いクリック音

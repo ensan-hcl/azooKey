@@ -75,6 +75,6 @@ struct RomanChangeKeyboardKeyModel: RomanKeyModelProtocol{
     }
 
     func sound() {
-        SoundTools.tabOrOtherKey()
+        Sound.tabOrOtherKey()
     }
 }

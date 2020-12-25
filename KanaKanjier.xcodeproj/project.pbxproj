@@ -100,7 +100,7 @@
 		1A67360625092C1E003FC654 /* DicDataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67360525092C1E003FC654 /* DicDataElement.swift */; };
 		1A6736082509F39E003FC654 /* VerbConjugation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6736072509F39E003FC654 /* VerbConjugation.swift */; };
 		1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A673609250AFBCB003FC654 /* Wareki.swift */; };
-		1A677370256F7AC30037AF22 /* SoundTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* SoundTools.swift */; };
+		1A677370256F7AC30037AF22 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* Sound.swift */; };
 		1A6F959725144481007399AC /* VerticalRomanKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* VerticalRomanKeyboardView.swift */; };
 		1A7817AC2575C898007661D8 /* emoji13_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7817AB2575C898007661D8 /* emoji13_dict.tsv */; };
 		1A7817B22575C89D007661D8 /* emoji...12_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */; };
@@ -146,7 +146,7 @@
 		1AC19AF22531AA800077BF8D /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC19AF12531AA800077BF8D /* Set.swift */; };
 		1AC19AFC253359870077BF8D /* isPrime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC19AFB253359860077BF8D /* isPrime.swift */; };
 		1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */; };
-		1AC8A594259587A200B71E5A /* DesignTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A593259587A200B71E5A /* DesignTools.swift */; };
+		1AC8A594259587A200B71E5A /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A593259587A200B71E5A /* Design.swift */; };
 		1ACE00752567525000899DA2 /* RomanCustomKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE00742567525000899DA2 /* RomanCustomKeys.swift */; };
 		1ACE007F2567534F00899DA2 /* RomanCustomKeysItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */; };
 		1ACE61C3257286E5008078D3 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE61C2257286E5008078D3 /* Color.swift */; };
@@ -2478,7 +2478,7 @@
 		1A67360525092C1E003FC654 /* DicDataElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicDataElement.swift; sourceTree = "<group>"; };
 		1A6736072509F39E003FC654 /* VerbConjugation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbConjugation.swift; sourceTree = "<group>"; };
 		1A673609250AFBCB003FC654 /* Wareki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wareki.swift; sourceTree = "<group>"; };
-		1A67736F256F7AC30037AF22 /* SoundTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundTools.swift; sourceTree = "<group>"; };
+		1A67736F256F7AC30037AF22 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		1A6F959625144481007399AC /* VerticalRomanKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalRomanKeyboardView.swift; sourceTree = "<group>"; };
 		1A7817AB2575C898007661D8 /* emoji13_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji13_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji13_dict.tsv"; sourceTree = "<group>"; };
 		1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji...12_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji...12_dict.tsv"; sourceTree = "<group>"; };
@@ -2520,7 +2520,7 @@
 		1AC19AF12531AA800077BF8D /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 		1AC19AFB253359860077BF8D /* isPrime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = isPrime.swift; sourceTree = "<group>"; };
 		1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSettingTipsView.swift; sourceTree = "<group>"; };
-		1AC8A593259587A200B71E5A /* DesignTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTools.swift; sourceTree = "<group>"; };
+		1AC8A593259587A200B71E5A /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
 		1ACE00742567525000899DA2 /* RomanCustomKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeys.swift; sourceTree = "<group>"; };
 		1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1ACE61C2257286E5008078D3 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -5030,8 +5030,8 @@
 		1A677375256F7ADD0037AF22 /* General */ = {
 			isa = PBXGroup;
 			children = (
-				1A67736F256F7AC30037AF22 /* SoundTools.swift */,
-				1AC8A593259587A200B71E5A /* DesignTools.swift */,
+				1A67736F256F7AC30037AF22 /* Sound.swift */,
+				1AC8A593259587A200B71E5A /* Design.swift */,
 				1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */,
 			);
 			path = General;
@@ -9901,7 +9901,7 @@
 				1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */,
 				1A3DC2122500D586002CAA93 /* HorizontalFlickKeyboardModel.swift in Sources */,
 				1AA3469F2567F08100B41A16 /* KeyboardLayoutType.swift in Sources */,
-				1A677370256F7AC30037AF22 /* SoundTools.swift in Sources */,
+				1A677370256F7AC30037AF22 /* Sound.swift in Sources */,
 				1AFA57542582EFAE00477DC2 /* RomanAaKeyModel.swift in Sources */,
 				1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */,
 				1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */,
@@ -9948,7 +9948,7 @@
 				1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */,
 				1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */,
 				1A3A16322529712300A5BA4F /* KogakiKeyModel.swift in Sources */,
-				1AC8A594259587A200B71E5A /* DesignTools.swift in Sources */,
+				1AC8A594259587A200B71E5A /* Design.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

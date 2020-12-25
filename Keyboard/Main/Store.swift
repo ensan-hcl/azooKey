@@ -490,7 +490,7 @@ final class ActionDepartment{
             self.inputStateHolder.delete(count: count)
 
         case .smoothDelete:
-            SoundTools.smoothDelete()
+            Sound.smoothDelete()
             Store.shared.showMoveCursorView(false)
             self.inputStateHolder.smoothDelete()
 
@@ -580,7 +580,7 @@ final class ActionDepartment{
             let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
                 let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
-                    SoundTools.delete()
+                    Sound.delete()
                     self?.inputStateHolder.delete(count: 1)
                 }
             })
@@ -590,7 +590,7 @@ final class ActionDepartment{
             let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
                 let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
-                    SoundTools.click()
+                    Sound.click()
                     self?.inputStateHolder.input(text: text)
                 }
             })
@@ -601,7 +601,7 @@ final class ActionDepartment{
             let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
                 let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
-                    SoundTools.tabOrOtherKey()
+                    Sound.tabOrOtherKey()
                     self?.inputStateHolder.moveCursor(count: count)
                 }
             })

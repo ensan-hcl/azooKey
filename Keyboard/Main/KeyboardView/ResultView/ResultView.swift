@@ -40,7 +40,7 @@ struct ResultView: View{
                                 ForEach(modelVariableSection.results){data in
                                     if data.candidate.inputable{
                                         Button{
-                                            SoundTools.click()
+                                            Sound.click()
                                             self.model.pressed(candidate: data.candidate)
                                         } label: {
                                             Text(data.candidate.text)

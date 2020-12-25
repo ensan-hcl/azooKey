@@ -57,7 +57,7 @@ struct RomanAaKeyModel: RomanKeyModelProtocol, AaKeyModelProtocol{
     }
 
     func sound() {
-        SoundTools.tabOrOtherKey()
+        Sound.tabOrOtherKey()
     }
 
 }
