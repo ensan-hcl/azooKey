@@ -13,7 +13,7 @@ struct SmoothDeleteTipsView: View {
     var body: some View {
         TipsContentView("文頭まで削除する"){
             TipsContentParagraph{
-                Text("フリックのキーボードでは削除\(Image(systemName: "delete.left"))キーを左にフリックすると、文頭まで削除することができます。")
+                Text("フリックのキーボードでは削除\(systemImage: "delete.left")キーを左にフリックすると、文頭まで削除することができます。")
                 TipsImage("smoothDelete")
             }
             TipsContentParagraph{

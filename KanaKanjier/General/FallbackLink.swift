@@ -32,7 +32,7 @@ struct FallbackLink: View {
                 self.showAlert = true
             }
         }){
-            Text("\(Image(systemName: "arrow.up.forward.square")) \(title)")
+            Text("\(systemImage: "arrow.up.forward.square") \(title)")
         }.alert(isPresented: $showAlert){
             Alert(title: Text("ブラウザを開けませんでした"), message: Text("URLをコピーします。"), dismissButton: .default(Text("OK"), action: {
                 UIPasteboard.general.string = url.absoluteString

@@ -68,16 +68,7 @@ extension DispatchQueue{
 struct TestView: View {
     var body: some View {
         VStack{
-            Text("SwiftUIでTextの省略位置を指定するにはtruncationModeを使用しましょう")
-                .truncationMode(.tail)
-                .lineLimit(1)
-            Text("SwiftUIでTextの省略位置を指定するにはtruncationModeを使用しましょう")
-                .truncationMode(.head)
-                .lineLimit(1)
-            Text("SwiftUIでTextの省略位置を指定するにはtruncationModeを使用しましょう")
-                .truncationMode(.middle)
-                .lineLimit(1)
-
+            Image(systemName: "plus")
         }
     }
 }

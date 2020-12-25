@@ -21,7 +21,7 @@ struct CapsLockTipsView: View {
                 Text("ローマ字入力では「Aa」キーを長押しします。")
             }
             TipsContentParagraph{
-                Text("どちらの入力方式でも\(Image(systemName: "capslock.fill"))は大文字固定になっていることを意味します。")
+                Text("どちらの入力方式でも\(systemImage: "capslock.fill")は大文字固定になっていることを意味します。")
                 Text("解除するにはもう一度キーを押してください。")
             }
 

@@ -23,7 +23,7 @@ struct KeyFlickSettingItemView: View {
     var body: some View {
         VStack{
             HStack{
-                Text("\(Image(systemName: "arrow.left"))左フリック")
+                Text("\(systemImage: "arrow.left")左フリック")
                 TextField("入力する文字", text: $viewModel.value.left)
                     .padding(.vertical, 2)
                 Divider()
@@ -31,7 +31,7 @@ struct KeyFlickSettingItemView: View {
                     .padding(.horizontal, 5)
             }
             HStack{
-                Text("\(Image(systemName: "arrow.up"))上フリック")
+                Text("\(systemImage: "arrow.up")上フリック")
                 TextField("入力する文字", text: $viewModel.value.top)
                     .padding(.vertical, 2)
                 Divider()
@@ -39,7 +39,7 @@ struct KeyFlickSettingItemView: View {
                     .padding(.horizontal, 5)
             }
             HStack{
-                Text("\(Image(systemName: "arrow.right"))右フリック")
+                Text("\(systemImage: "arrow.right")右フリック")
                 TextField("入力する文字", text: $viewModel.value.right)
                     .padding(.vertical, 2)
                 Divider()

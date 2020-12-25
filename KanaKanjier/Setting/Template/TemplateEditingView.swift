@@ -36,10 +36,10 @@ struct TemplateEditingView: View {
                 }
                 let sames = data.templates.indices.filter{data.templates[$0].data.name == name}
                 if sames != [index] && !sames.isEmpty{
-                    Text("\(Image(systemName: "exclamationmark.triangle"))名前が重複しています")
+                    Text("\(systemImage: "exclamationmark.triangle")名前が重複しています")
                 }
                 if name.isEmpty{
-                    Text("\(Image(systemName: "exclamationmark.triangle"))名前を入力してください")
+                    Text("\(systemImage: "exclamationmark.triangle")名前を入力してください")
                 }
             }
             Picker(selection: $variableSection.selection, label: Text("")){
@@ -384,7 +384,7 @@ struct DateTemplateLiteralSettingView: View {
                             }
                         }
                         if Double(literal.delta) == nil{
-                            Text("\(Image(systemName: "exclamationmark.triangle"))値が無効です。有効な数値を入力してください")
+                            Text("\(systemImage: "exclamationmark.triangle")値が無効です。有効な数値を入力してください")
                         }
                     }
 

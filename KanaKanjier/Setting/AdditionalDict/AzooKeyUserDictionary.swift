@@ -162,7 +162,7 @@ struct UserDictionaryDataSettingView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("読みと単語"), footer: Text("\(Image(systemName: "doc.on.clipboard"))を長押しでペースト")){
+            Section(header: Text("読みと単語"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")){
                 HStack{
                     TextField("単語", text: $item.word)
                         .padding(.vertical, 2)

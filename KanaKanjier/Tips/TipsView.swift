@@ -78,7 +78,7 @@ struct TipsTabView: View {
                                 Text("絵文字や顔文字の変換候補を表示したい")
                             }
                         }
-                        NavigationLink(destination: BugReportTipsView()) {
+                        NavigationLink(destination: ContactView()) {
                             VStack{
                                 Text("バグの報告や機能のリクエストをしたい")
                             }
