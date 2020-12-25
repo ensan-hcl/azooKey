@@ -1,5 +1,5 @@
 //
-//  UpdateInfomation.swift
+//  UpdateInfomationView.swift
 //  KanaKanjier
 //
 //  Created by β α on 2020/12/03.

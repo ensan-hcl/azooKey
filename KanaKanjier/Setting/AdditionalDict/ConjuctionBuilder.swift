@@ -1,5 +1,5 @@
 //
-//  VerbConjugation.swift
+//  ConjuctionBuilder.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/10.
