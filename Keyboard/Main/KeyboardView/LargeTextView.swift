@@ -16,7 +16,7 @@ struct LargeTextView: View {
     }
     
     var font: Font {
-        return Font.system(size: Store.shared.design.getMaximumTextSize(self.text), weight: .regular, design: .serif)
+        return Font.system(size: Design.shared.getMaximumTextSize(self.text), weight: .regular, design: .serif)
     }
     var body: some View {
         VStack{
@@ -30,9 +30,9 @@ struct LargeTextView: View {
                 Image(systemName: "xmark")
                 Text("閉じる")
                     .font(.body)
-            }.frame(width: nil, height: Store.shared.design.keyViewSize.height)
+            }.frame(width: nil, height: Design.shared.keyViewSize.height)
         }
         .background(Color(UIColor.systemBackground))
-        .frame(height: Store.shared.design.keyboardHeight)
+        .frame(height: Design.shared.keyboardHeight)
     }
 }

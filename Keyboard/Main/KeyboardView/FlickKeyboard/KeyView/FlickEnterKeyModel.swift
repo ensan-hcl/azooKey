@@ -39,7 +39,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
     }
     
     var keySize: CGSize {
-        return Store.shared.design.flickEnterKeySize
+        return Design.shared.flickEnterKeySize
     }
     
     var label: KeyLabel {
@@ -50,13 +50,13 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
     var backGroundColorWhenUnpressed: Color {
         switch variableSection.enterKeyState{
         case .complete, .edit:
-            return Store.shared.design.colors.specialKeyColor
+            return Design.shared.colors.specialKeyColor
         case let .return(type):
             switch type{
             case .default:
-                return Store.shared.design.colors.specialKeyColor
+                return Design.shared.colors.specialKeyColor
             default:
-                return Store.shared.design.colors.specialEnterKeyColor
+                return Design.shared.colors.specialEnterKeyColor
             }
         }
     }

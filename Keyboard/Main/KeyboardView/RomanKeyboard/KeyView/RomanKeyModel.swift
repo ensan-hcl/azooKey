@@ -22,7 +22,7 @@ struct RomanKeyModel: RomanKeyModelProtocol{
     private let scale: (normalCount: Int, forCount: Int)
     
     var keySize: CGSize {
-        CGSize(width: Store.shared.design.romanScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Store.shared.design.keyViewSize.height)
+        CGSize(width: Design.shared.romanScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewSize.height)
     }
 
     init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], variationsModel: VariationsModel = VariationsModel([]),  needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){

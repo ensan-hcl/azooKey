@@ -42,7 +42,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
     }
 
     var backGroundColorWhenUnpressed: Color {
-        return Store.shared.design.colors.specialKeyColor
+        return Design.shared.colors.specialKeyColor
     }
 
     func sound() {

@@ -78,7 +78,7 @@ struct RomanKeyView: View{
                     .frame(width: self.model.keySize.width, height: self.model.keySize.height)
                     .contentShape(
                         Rectangle()
-                            .size(CGSize(width: self.model.keySize.width + Store.shared.design.keyViewHorizontalSpacing, height: self.model.keySize.height))
+                            .size(CGSize(width: self.model.keySize.width + Design.shared.keyViewHorizontalSpacing, height: self.model.keySize.height))
                     )
                     .foregroundColor(self.modelVariableSection.pressState.isActive ? self.model.backGroundColorWhenPressed:self.model.backGroundColorWhenUnpressed)
                     .cornerRadius(6)
@@ -87,13 +87,13 @@ struct RomanKeyView: View{
             }
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
-                    let height = Store.shared.design.keyViewVerticalSpacing + self.model.keySize.height
+                    let height = Design.shared.keyViewVerticalSpacing + self.model.keySize.height
                     if self.modelVariableSection.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty{
                         RomanSuggestView.scaleToVariationsSize(
                             keyWidth: self.model.keySize.width,
                             scale_y: 1,
                             variationsCount: self.model.variationsModel.variations.count,
-                            color: Store.shared.design.colors.highlightedKeyColor,
+                            color: Design.shared.colors.highlightedKeyColor,
                             direction: model.variationsModel.direction
                         )
                         .overlay(
@@ -106,7 +106,7 @@ struct RomanKeyView: View{
                         RomanSuggestView.scaleToFrameSize(
                             keyWidth: self.model.keySize.width,
                             scale_y: 1,
-                            color: Store.shared.design.colors.highlightedKeyColor
+                            color: Design.shared.colors.highlightedKeyColor
                         )
                         .overlay(
                             self.model.getLabel()

@@ -46,10 +46,10 @@ struct TabKeyModel: FlickKeyModelProtocol{
 
     var backGroundColorWhenUnpressed: Color {
         if self.variableSection.keyboardState == self.tabType{
-            return Store.shared.design.colors.highlightedKeyColor
+            return Design.shared.colors.highlightedKeyColor
 
         }
-        return Store.shared.design.colors.specialKeyColor
+        return Design.shared.colors.specialKeyColor
 
     }
     

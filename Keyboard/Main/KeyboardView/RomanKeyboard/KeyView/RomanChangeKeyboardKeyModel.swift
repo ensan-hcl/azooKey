@@ -41,13 +41,13 @@ struct RomanChangeKeyboardKeyModel: RomanKeyModelProtocol{
 
     var keySize: CGSize {
         return CGSize(
-            width: Store.shared.design.romanFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
-            height: Store.shared.design.keyViewSize.height
+            width: Design.shared.romanFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
+            height: Design.shared.keyViewSize.height
         )
     }
 
     var backGroundColorWhenUnpressed: Color {
-        return Store.shared.design.colors.specialKeyColor
+        return Design.shared.colors.specialKeyColor
     }
 
     init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)){

@@ -13,7 +13,7 @@ struct RomanAaKeyModel: RomanKeyModelProtocol, AaKeyModelProtocol{
 
     var variableSection = RomanKeyModelVariableSection()
     var keySize: CGSize {
-        return CGSize(width: Store.shared.design.romanScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Store.shared.design.keyViewSize.height)
+        return CGSize(width: Design.shared.romanScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewSize.height)
     }
     var variationsModel = VariationsModel([])
 
@@ -49,7 +49,7 @@ struct RomanAaKeyModel: RomanKeyModelProtocol, AaKeyModelProtocol{
     }
 
     var backGroundColorWhenUnpressed: Color {
-        return Store.shared.design.colors.specialKeyColor
+        return Design.shared.colors.specialKeyColor
     }
 
     func setKeyState(new state: AaKeyState){

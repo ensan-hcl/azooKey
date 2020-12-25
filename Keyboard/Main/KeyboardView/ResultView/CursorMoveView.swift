@@ -46,8 +46,8 @@ struct CursorMoveView: View{
     var body: some View {
         Group{
          //   Rectangle()
-            RadialGradient(gradient: Gradient(colors: [Store.shared.design.colors.highlightedKeyColor, Store.shared.design.colors.backGroundColor]), center: .center, startRadius: 1, endRadius: 200)
-                .frame(height: Store.shared.design.resultViewHeight)
+            RadialGradient(gradient: Gradient(colors: [Design.shared.colors.highlightedKeyColor, Design.shared.colors.backGroundColor]), center: .center, startRadius: 1, endRadius: 200)
+                .frame(height: Design.shared.resultViewHeight)
                 .foregroundColor(Color(UIColor.systemGray6))
                 .cornerRadius(20)
                 /*
@@ -77,7 +77,7 @@ struct CursorMoveView: View{
                     })
                     Spacer()
                 }.foregroundColor(.primary))
-        }.frame(height: Store.shared.design.resultViewHeight)
+        }.frame(height: Design.shared.resultViewHeight)
 
     }
 }

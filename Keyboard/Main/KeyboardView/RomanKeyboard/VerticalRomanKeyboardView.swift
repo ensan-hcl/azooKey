@@ -80,9 +80,9 @@ struct VerticalRomanKeyboardView: View{
                 VStack(spacing: 0){
                     ResultView(model: model.resultModel)
                         .padding(.vertical, 6)
-                    VStack(spacing: Store.shared.design.keyViewVerticalSpacing){
+                    VStack(spacing: Design.shared.keyViewVerticalSpacing){
                         ForEach(self.verticalIndices){(v: Int) in
-                            HStack(spacing: Store.shared.design.keyViewHorizontalSpacing){
+                            HStack(spacing: Design.shared.keyViewHorizontalSpacing){
                                 ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
                                     RomanKeyView(self.keyModels[v][h])
                                 }

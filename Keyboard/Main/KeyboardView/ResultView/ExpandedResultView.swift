@@ -29,14 +29,14 @@ struct ExpandedResultView: View {
                     self.model.collapse()
                 }){
                     Image(systemName: "chevron.up")
-                        .font(Store.shared.design.fonts.iconImageFont)
+                        .font(Design.shared.fonts.iconImageFont)
                         .frame(height: 18)
                 }
                 .buttonStyle(ResultButtonStyle(height: 18))
                 .padding(.trailing, 10)
             }
             .padding(.top, 10)
-            .background(Store.shared.design.colors.backGroundColor)
+            .background(Design.shared.colors.backGroundColor)
             ScrollView{
                 LazyVStack(alignment: .leading){
                     ForEach(modelVariableSection.splitedResults){results in
@@ -56,13 +56,13 @@ struct ExpandedResultView: View {
                         }
                     }
                 }
-                .background(Store.shared.design.colors.backGroundColor)
+                .background(Design.shared.colors.backGroundColor)
                 .padding(.vertical, 3)
                 .padding(.leading, 15)
 
             }
         }
-        .frame(height: Store.shared.design.keyboardHeight, alignment: .bottom)
+        .frame(height: Design.shared.keyboardHeight, alignment: .bottom)
     }
 }
 
@@ -78,10 +78,10 @@ struct ExpandedResultModel{
         var curSum: CGFloat = .zero
         var splited: [SplitedResultData] = []
         var curResult: [ResultData] = []
-        let font = UIFont.systemFont(ofSize: Store.shared.design.fonts.resultViewFontSize+1)
+        let font = UIFont.systemFont(ofSize: Design.shared.fonts.resultViewFontSize+1)
         results.forEach{[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
-            if !Store.shared.design.isOverScreenWidth(curSum + width){
+            if !Design.shared.isOverScreenWidth(curSum + width){
                 curResult.append(datum)
                 curSum += width
             }else{

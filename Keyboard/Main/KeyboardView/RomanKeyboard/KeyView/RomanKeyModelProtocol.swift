@@ -44,9 +44,9 @@ extension RomanKeyModelProtocol{
     }
         
     var backGroundColorWhenPressed: Color {
-        Store.shared.design.colors.highlightedKeyColor
+        Design.shared.colors.highlightedKeyColor
     }
     var backGroundColorWhenUnpressed: Color {
-        Store.shared.design.colors.normalKeyColor
+        Design.shared.colors.normalKeyColor
     }
 }

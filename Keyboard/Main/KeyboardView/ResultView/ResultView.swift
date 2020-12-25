@@ -45,14 +45,14 @@ struct ResultView: View{
                                         } label: {
                                             Text(data.candidate.text)
                                         }
-                                        .buttonStyle(ResultButtonStyle(height: Store.shared.design.resultViewHeight*0.6))
+                                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6))
                                         .contextMenu{
                                             ResultContextMenuView(text: data.candidate.text)
                                         }
                                         .id(data.id)
                                     }else{
                                         Text(data.candidate.text)
-                                            .font(Store.shared.design.fonts.resultViewFont)
+                                            .font(Design.shared.fonts.resultViewFont)
                                             .underline(true, color: .accentColor)
                                     }
                                 }
@@ -62,17 +62,17 @@ struct ResultView: View{
                         }
                         .padding(.horizontal, 5)
                     }
-                    .frame(height: Store.shared.design.resultViewHeight)
+                    .frame(height: Design.shared.resultViewHeight)
                     if modelVariableSection.results.count > 1{
                         //候補を展開するボタン
                         Button(action: {
                             self.model.expand()
                         }){
                             Image(systemName: "chevron.down")
-                                .font(Store.shared.design.fonts.iconImageFont)
+                                .font(Design.shared.fonts.iconImageFont)
                                 .frame(height: 18)
                         }
-                        .buttonStyle(ResultButtonStyle(height: Store.shared.design.resultViewHeight*0.6))
+                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6))
                         .padding(.trailing, 10)
                     }
                 }
@@ -135,11 +135,11 @@ struct ResultButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Store.shared.design.fonts.resultViewFont)
+            .font(Design.shared.fonts.resultViewFont)
             .frame(height: height)
             .padding(.all, 5)
             .foregroundColor(.primary)
-            .background(configuration.isPressed ? Color(UIColor.systemGray4):Store.shared.design.colors.backGroundColor)
+            .background(configuration.isPressed ? Color(UIColor.systemGray4):Design.shared.colors.backGroundColor)
             .cornerRadius(5.0)
     }
 }

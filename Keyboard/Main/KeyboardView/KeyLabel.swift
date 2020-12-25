@@ -54,15 +54,15 @@ struct KeyLabel: View {
         Group{
             switch self.labelType{
             case let .text(text):
-                let font = Store.shared.design.fonts.keyLabelFont(text: text, width: width, scale: self.textSize.scale)
+                let font = Design.shared.fonts.keyLabelFont(text: text, width: width, scale: self.textSize.scale)
                 Text(text)
                     .font(font)
                     .allowsHitTesting(false)
             case let .symbols(symbols):
                 let mainText = symbols.first!
-                let font = Store.shared.design.fonts.keyLabelFont(text: mainText, width: width, scale: self.textSize.scale)
+                let font = Design.shared.fonts.keyLabelFont(text: mainText, width: width, scale: self.textSize.scale)
                 let subText = symbols.dropFirst().joined()
-                let subFont = Store.shared.design.fonts.keyLabelFont(text: subText, width: width, scale: TextSize.xsmall.scale)
+                let subFont = Design.shared.fonts.keyLabelFont(text: subText, width: width, scale: TextSize.xsmall.scale)
                 VStack{
                     Text(mainText)
                         .font(font)
@@ -73,7 +73,7 @@ struct KeyLabel: View {
 
             case let .image(imageName):
                 Image(systemName: imageName)
-                    .font(Store.shared.design.fonts.iconImageFont)
+                    .font(Design.shared.fonts.iconImageFont)
                     .allowsHitTesting(false)
             case let .customImage(imageName):
                 Image(imageName)
@@ -83,8 +83,8 @@ struct KeyLabel: View {
             case .changeKeyboard:
                 Store.shared.action.makeChangeKeyboardButtonView()
             case let .selectable(primary, secondery):
-                let font = Store.shared.design.fonts.keyLabelFont(text: primary+primary, width: width, scale: self.textSize.scale)
-                let subFont = Store.shared.design.fonts.keyLabelFont(text: secondery+secondery, width: width, scale: TextSize.small.scale)
+                let font = Design.shared.fonts.keyLabelFont(text: primary+primary, width: width, scale: self.textSize.scale)
+                let subFont = Design.shared.fonts.keyLabelFont(text: secondery+secondery, width: width, scale: TextSize.small.scale)
             
                 HStack(alignment: .bottom){
                     Text(primary)

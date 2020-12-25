@@ -18,12 +18,12 @@ struct RomanVariationsView: View {
     }
     
     var body: some View {
-        HStack(spacing: Store.shared.design.keyViewHorizontalSpacing){
+        HStack(spacing: Design.shared.keyViewHorizontalSpacing){
             ForEach(model.variations.indices){(index: Int) in
                 ZStack{
                     Rectangle()
-                        .foregroundColor(index == self.modelVariableSection.selection ? Color.blue:Store.shared.design.colors.highlightedKeyColor)
-                        .frame(width: Store.shared.design.keyViewSize.width, height: Store.shared.design.keyViewSize.height*0.9, alignment: .center)
+                        .foregroundColor(index == self.modelVariableSection.selection ? Color.blue:Design.shared.colors.highlightedKeyColor)
+                        .frame(width: Design.shared.keyViewSize.width, height: Design.shared.keyViewSize.height*0.9, alignment: .center)
                         .cornerRadius(10.0)
                     getLabel(model.variations[index].label)
                 }
@@ -33,7 +33,7 @@ struct RomanVariationsView: View {
     }
     
     func getLabel(_ labelType: KeyLabelType) -> KeyLabel {
-        let width = Store.shared.design.keyViewSize.width
+        let width = Design.shared.keyViewSize.width
         return KeyLabel(labelType, width: width)
     }
 

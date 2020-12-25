@@ -44,9 +44,9 @@ struct SuggestModel{
     var keySize: CGSize {
         switch self.keyType{
         case .normal, .kogaki, .aA:
-            return Store.shared.design.keyViewSize
+            return Design.shared.keyViewSize
         case .enter:
-            return Store.shared.design.flickEnterKeySize
+            return Design.shared.flickEnterKeySize
         }
     }
 

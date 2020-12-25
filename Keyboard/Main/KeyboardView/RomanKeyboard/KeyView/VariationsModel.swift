@@ -33,8 +33,8 @@ struct VariationsModel{
     
     func registerLocation(dx: CGFloat){
         let count = CGFloat(self.variations.count)
-        let width = Store.shared.design.keyViewSize.width
-        let spacing = Store.shared.design.keyViewHorizontalSpacing
+        let width = Design.shared.keyViewSize.width
+        let spacing = Design.shared.keyViewHorizontalSpacing
         let start: CGFloat
         switch self.direction {
         case .center:

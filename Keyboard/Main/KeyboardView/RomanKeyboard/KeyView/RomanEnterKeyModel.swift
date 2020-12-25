@@ -15,7 +15,7 @@ struct RomanEnterKeyModel: RomanKeyModelProtocol, EnterKeyModelProtocol{
     static var shared = RomanEnterKeyModel()
     var variableSection = RomanKeyModelVariableSection()
     var keySize: CGSize {
-        return CGSize(width: Store.shared.design.romanEnterKeyWidth, height: Store.shared.design.keyViewSize.height)
+        return CGSize(width: Design.shared.romanEnterKeyWidth, height: Design.shared.keyViewSize.height)
     }
     var variationsModel = VariationsModel([])
 
@@ -44,13 +44,13 @@ struct RomanEnterKeyModel: RomanKeyModelProtocol, EnterKeyModelProtocol{
     var backGroundColorWhenUnpressed: Color {
         switch variableSection.enterKeyState{
         case .complete, .edit:
-            return Store.shared.design.colors.specialKeyColor
+            return Design.shared.colors.specialKeyColor
         case let .return(type):
             switch type{
             case .default:
-                return Store.shared.design.colors.specialKeyColor
+                return Design.shared.colors.specialKeyColor
             default:
-                return Store.shared.design.colors.specialEnterKeyColor
+                return Design.shared.colors.specialEnterKeyColor
             }
         }
     }
