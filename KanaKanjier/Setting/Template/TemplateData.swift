@@ -25,6 +25,7 @@ struct TemplateData: Codable{
         }else if template.dropFirst().hasPrefix("random"){
             self.type = .random
         }else{
+            debug("不明", template, name)
             self.type = .date
             self.literal = DateTemplateLiteral.example
             return
@@ -137,7 +138,7 @@ struct DateTemplateLiteral: TemplateLiteralProtocol {
         let language = parse(splited: splited, key: "language")
         let delta = parse(splited: splited, key: "delta")
         let deltaUnit = parse(splited: splited, key: "deltaunit")
-        print(format, type, language, delta, deltaUnit)
+        debug(format, type, language, delta, deltaUnit)
         return DateTemplateLiteral(
             format: format.unescaped(),
             type: CalendarType.init(rawValue: String(type))!,

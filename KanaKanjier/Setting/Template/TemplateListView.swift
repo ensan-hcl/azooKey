@@ -30,12 +30,12 @@ struct TemplateDataModel {
 //Listが大元のtemplatesを持ち、各EditingViewにBindingで渡して編集させる。
 struct TemplateListView: View {
     static let defaultData = [
-        TemplateData(template: "<random type=\"int\" value=\"0,10\">", name: "random0_10"),
-        TemplateData(template: "<random type=\"int\" value=\"1,6\">", name: "dice"),
-        TemplateData(template: "<random type=\"double\" value=\"0,1\">", name: "rand"),
+        TemplateData(template: "<random type=\"int\" value=\"1,6\">", name: "サイコロ"),
+        TemplateData(template: "<random type=\"double\" value=\"0,1\">", name: "乱数"),
         TemplateData(template: "<random type=\"string\" value=\"大吉,吉,凶\">", name: "おみくじ"),
-        TemplateData(template: "<date format=\"yyyy年MM月dd日\" type=\"western\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "日付"),
-        TemplateData(template: "<date format=\"Gy年MM月dd日\" type=\"japanese\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "今年")
+        TemplateData(template: "<date format=\"yyyy年MM月dd日\" type=\"western\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "今日"),
+        TemplateData(template: "<date format=\"yyyy年MM月dd日\" type=\"western\" language=\"ja_JP\" delta=\"1\" deltaunit=\"86400\">", name: "明日"),
+        TemplateData(template: "<date format=\"Gy年MM月dd日\" type=\"japanese\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "和暦")
     ]
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -49,6 +49,7 @@ struct TemplateListView: View {
             self.data.templates = Self.defaultData.map{TemplateDataModel($0)}
         }
         self._previewStrings = State(initialValue: data.templates.map{$0.data.previewString})
+        self.update()
     }
 
     func update(){

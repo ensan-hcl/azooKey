@@ -15,8 +15,6 @@ struct TemplateEditingView: View {
     let index: Int
 
     @ObservedObject private var variableSection: TemplateEditingViewVariableSection
-
-    @State private var bridge: TemplateLiteralProtocol = DateTemplateLiteral.example
     @State private var name: String = ""
 
     init(_ data: TemplateDataList, index: Int){
@@ -51,9 +49,9 @@ struct TemplateEditingView: View {
 
             switch variableSection.selection{
             case .date:
-                DateTemplateLiteralSettingView(data, index: index, bridge: $bridge, variableSection: variableSection)
+                DateTemplateLiteralSettingView(data, index: index, variableSection: variableSection)
             case .random:
-                RandomTemplateLiteralSettingView(data, index: index, bridge: $bridge, variableSection: variableSection)
+                RandomTemplateLiteralSettingView(data, index: index, variableSection: variableSection)
             }
         }.navigationBarTitle(Text("テンプレートを編集"), displayMode: .inline)
         .navigationBarBackButtonHidden(true)
@@ -67,7 +65,6 @@ struct TemplateEditingView: View {
             }
             data.templates[index].data.name = self.name
             data.templates[index].data.type = self.variableSection.selection
-            data.templates[index].data.literal = self.bridge
             presentationMode.wrappedValue.dismiss()
         }label: {
             Text("完了")
@@ -78,22 +75,18 @@ struct TemplateEditingView: View {
 
 
 struct RandomTemplateLiteralSettingView: View {
+    static let templateLiteralType = TemplateLiteralType.random
     enum Error{
         case nan
         case stringIsNil
     }
 
-
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    private let timer = Timer.publish(every: 0.8, on: .main, in: .common).autoconnect()
     //リテラル
     @ObservedObject private var data: TemplateDataList
 
     @State private var literal = RandomTemplateLiteral(value: .int(from: 1, to: 6))
-    @State private var type: RandomTemplateLiteral.ValueType = .int {
-        didSet{
-            self.update()
-        }
-    }
+    @State private var type: RandomTemplateLiteral.ValueType = .int
     //表示用
     @State private var previewString: String = ""
 
@@ -105,16 +98,16 @@ struct RandomTemplateLiteralSettingView: View {
 
     @State private var stringsString: String = "グー,チョキ,パー"
 
-    @Binding private var bridge: TemplateLiteralProtocol
-
     @ObservedObject private var variableSection: TemplateEditingViewVariableSection
+    private let index: Int
 
-    init(_ data: TemplateDataList, index: Int, bridge: Binding<TemplateLiteralProtocol>, variableSection: TemplateEditingViewVariableSection){
-        self._bridge = bridge
+    fileprivate init(_ data: TemplateDataList, index: Int, variableSection: TemplateEditingViewVariableSection){
+        self.index = index
         self.data = data
         self.variableSection = variableSection
         if let template = data.templates[index].data.literal as? RandomTemplateLiteral{
             self._literal = State(initialValue: template)
+            self._type = State(initialValue: template.value.type)
             switch template.value{
             case let .int(from: left, to: right):
                 self._intStringFrom = State(initialValue: "\(left)")
@@ -125,14 +118,12 @@ struct RandomTemplateLiteralSettingView: View {
             case let .string(strings):
                 self._stringsString = State(initialValue: strings.joined(separator: ","))
             }
-            self._type = State(initialValue: template.value.type)
         }
         self._previewString = State(initialValue: self.literal.previewString())
-        debug(intStringFrom, intStringTo, doubleStringFrom, doubleStringTo, stringsString, type)
     }
 
     func update(){
-        if variableSection.selection != .random{
+        if variableSection.selection != Self.templateLiteralType{
             return
         }
         switch self.type{
@@ -157,7 +148,7 @@ struct RandomTemplateLiteralSettingView: View {
             self.literal.value = .string(strings)
         }
         self.previewString = self.literal.previewString()
-        self.bridge = self.literal
+        self.data.templates[index].data.literal = self.literal
     }
 
     func warning(_ type: Error) -> some View {
@@ -197,7 +188,6 @@ struct RandomTemplateLiteralSettingView: View {
                     if Int(intStringFrom) == nil{
                         warning(.nan)
                     }
-
                 }
                 VStack{
                     HStack{
@@ -208,7 +198,6 @@ struct RandomTemplateLiteralSettingView: View {
                     if Int(intStringTo) == nil{
                         warning(.nan)
                     }
-
                 }
             case .double:
                 VStack{
@@ -247,34 +236,28 @@ struct RandomTemplateLiteralSettingView: View {
             self.update()
         }
     }
+
 }
 
 
 struct DateTemplateLiteralSettingView: View {
-    private let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
+    static let templateLiteralType = TemplateLiteralType.date
+    private let timer = Timer.publish(every: 1/7, on: .main, in: .common).autoconnect()
     //リテラル
     @ObservedObject private var data: TemplateDataList
 
-    @State private var literal = DateTemplateLiteral.example {
-        didSet{
-            self.update()
-        }
-    }
-    @Binding private var bridge: TemplateLiteralProtocol
+    @State private var literal = DateTemplateLiteral.example
+    private let index: Int
     //選択されているテンプレート
-    @State private var formatSelection = "yyyy年MM月dd日" {
-        didSet{
-            self.update()
-        }
-    }
+    @State private var formatSelection = "yyyy年MM月dd日"
     //表示用
     @State private var date: Date = Date()
     @State private var dateString: String = ""
     @ObservedObject private var variableSection: TemplateEditingViewVariableSection
 
-    init(_ data: TemplateDataList, index: Int, bridge: Binding<TemplateLiteralProtocol>, variableSection: TemplateEditingViewVariableSection){
-        self._bridge = bridge
+    fileprivate init(_ data: TemplateDataList, index: Int, variableSection: TemplateEditingViewVariableSection){
         self.data = data
+        self.index = index
         self.variableSection = variableSection
         if let template = data.templates[index].data.literal as? DateTemplateLiteral{
             if template.language == DateTemplateLiteral.example.language,
@@ -282,10 +265,10 @@ struct DateTemplateLiteralSettingView: View {
                template.delta == DateTemplateLiteral.example.delta,
                template.deltaUnit == DateTemplateLiteral.example.deltaUnit,
                ["yyyy年MM月dd日", "HH:mm", "yyyy/MM/dd"].contains(template.format){
-                    self._formatSelection = State(initialValue: template.format)
-                    var literal = DateTemplateLiteral.example
-                    literal.format = template.format
-                    self._literal = State(initialValue: literal)
+                var literal = DateTemplateLiteral.example
+                literal.format = template.format
+                self._literal = State(initialValue: literal)
+                self._formatSelection = State(initialValue: template.format)
             }else{
                 self._literal = State(initialValue: template)
                 self._formatSelection = State(initialValue: "カスタム")
@@ -294,7 +277,7 @@ struct DateTemplateLiteralSettingView: View {
     }
 
     func update(){
-        if variableSection.selection != .date{
+        if variableSection.selection != Self.templateLiteralType{
             return
         }
 
@@ -305,13 +288,13 @@ struct DateTemplateLiteralSettingView: View {
             f.locale = Locale(identifier: literal.language.identifier)
             f.calendar = Calendar(identifier: literal.type.identifier)
             dateString = f.string(from: date.advanced(by: (Double(literal.delta) ?? .nan) * Double(literal.deltaUnit)))
-            self.bridge = self.literal
+            self.data.templates[index].data.literal = self.literal
         }else{
             f.dateFormat = formatSelection
             f.locale = Locale(identifier: "ja_JP")
             f.calendar = Calendar(identifier: .gregorian)
             dateString = f.string(from: date)
-            self.bridge = DateTemplateLiteral(format: formatSelection, type: .western, language: .japanese, delta: "0", deltaUnit: 1)
+            self.data.templates[index].data.literal = DateTemplateLiteral(format: formatSelection, type: .western, language: .japanese, delta: "0", deltaUnit: 1)
         }
     }
 
