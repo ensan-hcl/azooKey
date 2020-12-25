@@ -147,6 +147,8 @@
 		1AC19AFC253359870077BF8D /* isPrime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC19AFB253359860077BF8D /* isPrime.swift */; };
 		1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */; };
 		1AC8A594259587A200B71E5A /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A593259587A200B71E5A /* Design.swift */; };
+		1AC8A5AA2595934C00B71E5A /* ArrayBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */; };
+		1AC8A5AB2595934C00B71E5A /* ArrayBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */; };
 		1ACE00752567525000899DA2 /* RomanCustomKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE00742567525000899DA2 /* RomanCustomKeys.swift */; };
 		1ACE007F2567534F00899DA2 /* RomanCustomKeysItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */; };
 		1ACE61C3257286E5008078D3 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE61C2257286E5008078D3 /* Color.swift */; };
@@ -2521,6 +2523,7 @@
 		1AC19AFB253359860077BF8D /* isPrime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = isPrime.swift; sourceTree = "<group>"; };
 		1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSettingTipsView.swift; sourceTree = "<group>"; };
 		1AC8A593259587A200B71E5A /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
+		1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayBuilder.swift; sourceTree = "<group>"; };
 		1ACE00742567525000899DA2 /* RomanCustomKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeys.swift; sourceTree = "<group>"; };
 		1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1ACE61C2257286E5008078D3 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -5119,6 +5122,7 @@
 			children = (
 				1AA346812567D8B100B41A16 /* UserSetting.swift */,
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
+				1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */,
 				1A36B146258D0BA90084DFE0 /* SettingData */,
 			);
 			path = Shared;
@@ -9794,6 +9798,7 @@
 				1AA346AA2567F15700B41A16 /* SharedStore.swift in Sources */,
 				1A9B0A6E2565797E004203BB /* ContactView.swift in Sources */,
 				1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */,
+				1AC8A5AA2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
 				1A8654BC2526F50400006582 /* KeyboardLayoutType.swift in Sources */,
 				1AFA57702584C16200477DC2 /* ShareSheet.swift in Sources */,
@@ -9938,6 +9943,7 @@
 				1A6736082509F39E003FC654 /* VerbConjugation.swift in Sources */,
 				1A3DC2192500D5C1002CAA93 /* KeyModelVariableSection.swift in Sources */,
 				1A26029D2514808D00EAD647 /* RomanKeyModelVariableSection.swift in Sources */,
+				1AC8A5AB2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1A8A8402250F65110093A701 /* all.swift in Sources */,
 				1A6F959725144481007399AC /* VerticalRomanKeyboardView.swift in Sources */,
 				1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */,
