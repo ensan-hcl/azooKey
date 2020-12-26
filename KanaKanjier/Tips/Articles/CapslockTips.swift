@@ -14,7 +14,6 @@ struct CapsLockTipsView: View {
         TipsContentView("大文字に固定する"){
             TipsContentParagraph{
                 Text("大文字のみ入力するモード(Caps Lock)を利用できます。")
-
             }
             TipsContentParagraph{
                 Text("フリック入力では「a/A」キーを上にフリックします。")
