@@ -20,6 +20,11 @@ class Store{
         defaultValue: true
     ))
 
+    var fullRomanSetting = SettingItemViewModel(SettingItem<Bool>(
+        identifier: .fullRoman,
+        defaultValue: true
+    ))
+
     var enableSoundSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .enableSound,
         defaultValue: false

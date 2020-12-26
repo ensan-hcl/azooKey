@@ -207,8 +207,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         var candidates: [Candidate] = []
         let string = inputData.katakanaString
         do{
-            let data = LRE_SRE_DicDataElement(ruby: string, cid: 1288, mid: 501, value: -14)
             //カタカナ
+            let data = LRE_SRE_DicDataElement(ruby: string, cid: 1288, mid: 501, value: -14)
             let katakana = Candidate(
                 text: string,
                 value: -14,
@@ -220,6 +220,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         }
         let hiraganaString = string.applyingTransform(.hiraganaToKatakana, reverse: true)!
         do{
+            //ひらがな
             let data = LRE_DicDataElement(word: hiraganaString, ruby: string, cid: 1288, mid: 501, value: -14.5)
 
             let hiragana = Candidate(
@@ -231,11 +232,38 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             )
             candidates.append(hiragana)
         }
+        do{
+            //大文字
+            let word = string.uppercased()
+            let data = LRE_DicDataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
+            let uppercasedLetter = Candidate(
+                text: word,
+                value: -14.6,
+                correspondingCount: inputData.characters.count,
+                lastMid: 501,
+                data: [data]
+            )
+            candidates.append(uppercasedLetter)
+        }
+        if Store.shared.userSetting.bool(for: .fullRoman){
+            //全角英数字
+            let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: true) ?? ""
+            let data = LRE_DicDataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
+            let fullWidthLetter = Candidate(
+                text: word,
+                value: -14.7,
+                correspondingCount: inputData.characters.count,
+                lastMid: 501,
+                data: [data]
+            )
+            candidates.append(fullWidthLetter)
+        }
         if Store.shared.userSetting.bool(for: .halfKana){
-            let string = string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
-            let data = LRE_DicDataElement(word: string, ruby: string, cid: 1288, mid: 501, value: -15)
+            //半角カタカナ
+            let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
+            let data = LRE_DicDataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
             let halfWidthKatakana = Candidate(
-                text: string,
+                text: word,
                 value: -15,
                 correspondingCount: inputData.characters.count,
                 lastMid: 501,

@@ -10,15 +10,15 @@ import SwiftUI
 
 struct FallbackLink: View {
     @State private var showAlert = false
-    private let title: String
+    private let title: LocalizedStringKey
     private let url: URL
 
-    init(_ title: String, destination: String){
+    init(_ title: LocalizedStringKey, destination: String){
         self.title = title
         self.url = URL(string: destination)!
     }
 
-    init(_ title: String, destination: URL){
+    init(_ title: LocalizedStringKey, destination: URL){
         self.title = title
         self.url = destination
     }

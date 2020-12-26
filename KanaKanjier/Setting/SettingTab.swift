@@ -101,6 +101,7 @@ struct SettingTabView: View {
                         BooleanSettingItemView(Store.shared.englishCandidateSetting)
                     }
                     BooleanSettingItemView(Store.shared.halfKanaSetting)
+                    BooleanSettingItemView(Store.shared.fullRomanSetting)
                     BooleanSettingItemView(Store.shared.typographyLetterSetting)
                     BooleanSettingItemView(Store.shared.wesJapCalenderSetting)
                     BooleanSettingItemView(Store.shared.unicodeCandidateSetting)

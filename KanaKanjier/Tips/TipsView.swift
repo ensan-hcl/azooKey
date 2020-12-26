@@ -31,7 +31,6 @@ struct TipsTabView: View {
                                 Text("入力方法を選ぶ")
                             }
                         }
-                        
                     }
 
                     Section(header: Text("便利な使い方")){

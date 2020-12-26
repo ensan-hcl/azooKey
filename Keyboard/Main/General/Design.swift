@@ -13,14 +13,12 @@ final class Design{
     private init(){}
     static let shared = Design()
 
+    var orientation: KeyboardOrientation = .vertical
+
     private(set) var screenWidth: CGFloat = .zero
 
     private var keyboardLayoutType: KeyboardLayoutType {
         Store.shared.keyboardLayoutType
-    }
-
-    private var orientation: KeyboardOrientation {
-        Store.shared.orientation
     }
 
     var keyboardWidth: CGFloat {

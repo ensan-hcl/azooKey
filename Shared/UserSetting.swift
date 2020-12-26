@@ -19,6 +19,7 @@ enum Setting: String {
     case typographyLetter = "typography_roman_candidate"
     case englishCandidate = "roman_english_candidate"
     case halfKana = "half_kana_candidate"
+    case fullRoman = "full_roman_candidate"
     case memoryReset = "memory_reset_setting"
     case enableSound = "sound_enable_setting"
     case resultViewFontSize = "result_view_font_size"
@@ -52,6 +53,8 @@ enum Setting: String {
             return "装飾英字変換"
         case .halfKana:
             return "半角カナ変換"
+        case .fullRoman:
+            return "全角英数字変換"
         case .memoryReset:
             return "学習のリセット"
         case .enableSound:
@@ -85,6 +88,8 @@ enum Setting: String {
             return "英字入力をした際、「𝕥𝕪𝕡𝕠𝕘𝕣𝕒𝕡𝕙𝕪」のような装飾字体を候補に表示します。"
         case .halfKana:
             return "半角ｶﾀｶﾅへの変換を候補に表示します。"
+        case .fullRoman:
+            return "全角英数字(ａｂｃ１２３)への変換候補を表示します。"
         case .memoryReset:
             return "学習履歴を全て消去します。この操作は取り消せません。"
         case .enableSound:
@@ -103,7 +108,7 @@ struct DefaultSetting{
 
     func getBoolDefaultSetting(_ setting: Setting) -> Bool? {
         switch setting{
-        case .wesJapCalender, .typographyLetter, .halfKana, .unicodeCandidate, .englishCandidate:
+        case .wesJapCalender, .typographyLetter, .halfKana, .fullRoman, .unicodeCandidate, .englishCandidate:
             return true
         case .stopLearningWhenSearch, .enableSound:
             return false

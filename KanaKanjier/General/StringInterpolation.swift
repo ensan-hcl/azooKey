@@ -13,20 +13,20 @@ extension LocalizedStringKey.StringInterpolation{
         self.appendInterpolation(Text(value).foregroundColor(color))
     }
 
-    mutating func appendInterpolation(bold value: LocalizedStringKey){
-        self.appendInterpolation(Text(value).bold())
+    mutating func appendInterpolation(bold value: LocalizedStringKey, color: Color? = nil){
+        self.appendInterpolation(Text(value).bold().foregroundColor(color))
     }
 
-    mutating func appendInterpolation(underline value: LocalizedStringKey){
-        self.appendInterpolation(Text(value).underline())
+    mutating func appendInterpolation(underline value: LocalizedStringKey, color: Color? = nil){
+        self.appendInterpolation(Text(value).underline().foregroundColor(color))
     }
 
-    mutating func appendInterpolation(italic value: LocalizedStringKey){
-        self.appendInterpolation(Text(value).italic())
+    mutating func appendInterpolation(italic value: LocalizedStringKey, color: Color? = nil){
+        self.appendInterpolation(Text(value).italic().foregroundColor(color))
     }
 
-    mutating func appendInterpolation(monospaced value: LocalizedStringKey){
-        self.appendInterpolation(Text(value).font(.system(.body, design: .monospaced)))
+    mutating func appendInterpolation(monospaced value: LocalizedStringKey, color: Color? = nil){
+        self.appendInterpolation(Text(value).font(.system(.body, design: .monospaced)).foregroundColor(color))
     }
 
     mutating func appendInterpolation(systemImage name: String, color: Color? = nil){

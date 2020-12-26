@@ -341,7 +341,6 @@ struct DateTemplateLiteralSettingView: View {
                 }.onReceive(timer){_ in
                     self.update()
                 }
-
             }
             if formatSelection == "カスタム"{
                 Section(header: Text("カスタム書式")){

@@ -9,16 +9,12 @@
 import Foundation
 import SwiftUI
 
-///アプリケーション全体で共有すべき情報を集約するクラス。
+///ビュー間の情報の受け渡しを担うクラス
 final class Store{
     static let shared = Store()
-    //FIXME: KeyboardTypeがViewの種類と入力スタイルの種類の両方を兼ねているのがまずい。
-    //例えばKeyboardLayoutType: romanとflick、InputStyle: roman/directのようにすべきでは
     var keyboardLayoutType: KeyboardLayoutType = .roman
     var inputStyle: InputStyle = .direct
-
     var keyboardLanguage: KeyboardLanguage = .japanese
-    var orientation: KeyboardOrientation = .vertical
     private var enterKeyType: UIReturnKeyType = .default
     private var enterKeyState: EnterKeyState = .return(.default)
     fileprivate var aAKeyState: AaKeyState = .normal
@@ -39,6 +35,7 @@ final class Store{
     private init(){}
     
     func initialize(){
+        self.userSetting.reload()
         self.action.initialize()
         self.setKeyboardType()
         self.refreshKeyboardModel()
@@ -46,12 +43,11 @@ final class Store{
             self.setTabState(lastTabState)
             lastVerticalTabState = nil
         }
-        self.userSetting.refresh()
     }
 
     func appearedAgain(){
+        self.userSetting.reload()
         self.action.appearedAgain()
-        self.userSetting.refresh()
     }
 
     func setNeedsInputModeSwitchKeyMode(_ bool: Bool){
@@ -116,7 +112,7 @@ final class Store{
     }
 
     fileprivate func refreshKeyboardModel(absolutely: Bool = false){
-        switch (self.keyboardLayoutType, self.orientation){
+        switch (self.keyboardLayoutType, Design.shared.orientation){
         case (.flick, .vertical):
             if absolutely || !(self.keyboardModel is VerticalFlickKeyboardModel){
                 self.keyboardModel = VerticalFlickKeyboardModel()
@@ -200,13 +196,13 @@ final class Store{
     ///* 1回目に値を保存してしまう
     ///* if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
     func setOrientation(_ orientation: KeyboardOrientation){
-        if self.orientation == orientation{
+        if Design.shared.orientation == orientation{
             self.refreshKeyboardModel()
             self.keyboardModelVariableSection.keyboardOrientation = orientation
             self.keyboardModelVariableSection.refreshView()
             return
         }
-        self.orientation = orientation
+        Design.shared.orientation = orientation
         self.refreshKeyboardModel()
         self.keyboardModelVariableSection.keyboardOrientation = orientation
     }
@@ -221,14 +217,9 @@ final class Store{
     }
     
     func setKeyboardType(){
-        let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-        let key = "keyboard_type"
-        if let string = userDefaults.string(forKey: key), let type = KeyboardLayoutType.get(string){
-            self.keyboardLayoutType = type
-            self.inputStyle = type == .flick ? .direct : .roman
-        }else{
-            userDefaults.set("flick", forKey: key)
-        }
+        let type = self.userSetting.keyboardLayoutType
+        self.keyboardLayoutType = type
+        self.inputStyle = type == .flick ? .direct : .roman
     }
 
     func closeKeyboard(){
@@ -239,7 +230,7 @@ final class Store{
 
 struct UserSettingDepartment{
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-    private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .typographyLetter, .enableSound, .englishCandidate]
+    private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate]
     private var boolSettings: [Setting: Bool]
 
     fileprivate init(){
@@ -248,12 +239,12 @@ struct UserSettingDepartment{
         }
     }
 
-    fileprivate mutating func refresh(){
+    fileprivate mutating func reload(){
         //bool値の設定を更新
         self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getBoolSetting(setting)
         }
-
+        self.keyboardLayoutType = Self.getKeyboardLayoutTypeSetting()
         self.kogakiFlickSetting = Self.getKogakiFlickSetting()
         self.learningType = Self.learningTypeSetting(.inputAndOutput)
 
@@ -299,6 +290,17 @@ struct UserSettingDepartment{
 
     var resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
     var keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
+
+    var keyboardLayoutType = Self.getKeyboardLayoutTypeSetting()
+
+    private static func getKeyboardLayoutTypeSetting() -> KeyboardLayoutType {
+        if let string = Self.userDefaults.string(forKey: Setting.keyboardType.key), let type = KeyboardLayoutType.get(string){
+            return type
+        }else{
+            userDefaults.set(KeyboardLayoutType.flick.rawValue, forKey: Setting.keyboardType.key)
+            return .flick
+        }
+    }
 
     private static func getBoolSetting(_ setting: Setting) -> Bool {
         if let object = Self.userDefaults.object(forKey: setting.key), let bool = object as? Bool{
