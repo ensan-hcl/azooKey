@@ -92,7 +92,6 @@ struct KeyView: View {
         case .roman:
             return CGSize(width: screenWidth/12.2, height: screenWidth/9)
         }
-
     }
 
     var body: some View {

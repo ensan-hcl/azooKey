@@ -57,7 +57,12 @@ class Store{
     
     var koganaKeyFlickSetting = SettingItemViewModel(SettingItem<KeyFlickSetting>(
         identifier: .koganaKeyFlick,
-        defaultValue: KeyFlickSetting(targetKeyIdentifier: "kogana")
+        defaultValue: CustomizableFlickKey.kogana.defaultSetting
+    ))
+
+    var kanaSymbolsKeyFlickSetting = SettingItemViewModel(SettingItem<KeyFlickSetting>(
+        identifier: .kanaSymbolsKeyFlick,
+        defaultValue: CustomizableFlickKey.kanaSymbols.defaultSetting
     ))
 
     var numberTabCustomKeysSettingNew = SettingItemViewModel(SettingItem<RomanCustomKeysValue>(

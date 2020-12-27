@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+
+
 struct KeyFlickSettingItemView: View {
     typealias ItemViewModel = SettingItemViewModel<KeyFlickSetting>
     typealias ItemModel = SettingItem<KeyFlickSetting>
@@ -24,26 +26,26 @@ struct KeyFlickSettingItemView: View {
         VStack{
             HStack{
                 Text("\(systemImage: "arrow.left")左フリック")
-                TextField("入力する文字", text: $viewModel.value.left)
+                TextField("入力する文字", text: $viewModel.value.left.input)
                     .padding(.vertical, 2)
                 Divider()
-                PasteLongPressButton($viewModel.value.left)
+                PasteLongPressButton($viewModel.value.left.input)
                     .padding(.horizontal, 5)
             }
             HStack{
                 Text("\(systemImage: "arrow.up")上フリック")
-                TextField("入力する文字", text: $viewModel.value.top)
+                TextField("入力する文字", text: $viewModel.value.top.input)
                     .padding(.vertical, 2)
                 Divider()
-                PasteLongPressButton($viewModel.value.top)
+                PasteLongPressButton($viewModel.value.top.input)
                     .padding(.horizontal, 5)
             }
             HStack{
                 Text("\(systemImage: "arrow.right")右フリック")
-                TextField("入力する文字", text: $viewModel.value.right)
+                TextField("入力する文字", text: $viewModel.value.right.input)
                     .padding(.vertical, 2)
                 Divider()
-                PasteLongPressButton($viewModel.value.right)
+                PasteLongPressButton($viewModel.value.right.input)
                     .padding(.horizontal, 5)
             }
 

@@ -12,6 +12,7 @@ enum Setting: String {
     case keyboardType = "keyboard_type"
     case numberTabCustomKeys = "roman_number_custom_keys"
     case koganaKeyFlick = "kogana_flicks"
+    case kanaSymbolsKeyFlick = "kana_symbols_flick"
     case learningType = "memory_learining_styple_setting"
     case stopLearningWhenSearch = "stop_learning_when_search"
     case unicodeCandidate = "unicode_candidate"
@@ -39,6 +40,8 @@ enum Setting: String {
             return "数字タブのカスタムキー機能"
         case .koganaKeyFlick:
             return "「小ﾞﾟ」キーのフリック割り当て"
+        case .kanaSymbolsKeyFlick:
+            return "「､｡?!」キーのフリック割り当て"
         case .learningType:
             return "学習の使用"
         case .stopLearningWhenSearch:
@@ -74,6 +77,8 @@ enum Setting: String {
             return "数字タブの「、。！？…」部分に好きな記号や文字を割り当てて利用することができます。"
         case .koganaKeyFlick:
             return "「小ﾞﾟ」キーの「左」「上」「右」フリックに、好きな文字列を割り当てて利用することができます。"
+        case .kanaSymbolsKeyFlick:
+            return "「､｡?!」キーと「左」「上」「右」フリックに割り当てられた文字を変更することができます。"
         case .learningType:
             return "「新たに学習し、反映する(デフォルト)」「新たな学習を停止する」「新たに学習せず、これまでの学習も反映しない」選択できます。この設定の変更で学習結果が消えることはありません。"
         case .stopLearningWhenSearch:

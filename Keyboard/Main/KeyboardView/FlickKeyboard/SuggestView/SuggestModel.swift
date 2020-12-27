@@ -13,6 +13,7 @@ enum SuggestModelKeyType{
     case normal
     case enter
     case kogaki
+    case kanaSymbols
     case aA
 }
 
@@ -25,6 +26,8 @@ struct SuggestModel{
             return _flickModels
         case .kogaki:
             return Store.shared.userSetting.kogakiFlickSetting
+        case .kanaSymbols:
+            return Store.shared.userSetting.kanaSymbolsFlickSetting.flick
         case .aA:
             return FlickAaKeyModel.shared.flickKeys
         }
@@ -43,7 +46,7 @@ struct SuggestModel{
     
     var keySize: CGSize {
         switch self.keyType{
-        case .normal, .kogaki, .aA:
+        case .normal, .kogaki, .kanaSymbols, .aA:
             return Design.shared.keyViewSize
         case .enter:
             return Design.shared.flickEnterKeySize

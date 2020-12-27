@@ -68,7 +68,7 @@ extension DispatchQueue{
 struct TestView: View {
     var body: some View {
         VStack{
-            Image(systemName: "plus")
+            FlickCustomKeysSettingView(Store.shared.koganaKeyFlickSetting)
         }
     }
 }

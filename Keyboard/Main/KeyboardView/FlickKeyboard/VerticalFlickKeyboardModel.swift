@@ -254,20 +254,7 @@ struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
                 )
 
             ]),
-            FlickKeyModel(labelType: .text("､｡?!"), pressActions: [.input("、")], flickKeys: [
-                .left: FlickedKeyModel(
-                    labelType: .text("。"),
-                    pressActions: [.input("。")]
-                ),
-                .top: FlickedKeyModel(
-                    labelType: .text("？"),
-                    pressActions: [.input("？")]
-                ),
-                .right: FlickedKeyModel(
-                    labelType: .text("！"),
-                    pressActions: [.input("！")]
-                )
-            ]),
+            KanaSymbolsKeyModel.shared
         ],
         //第5列
         [

@@ -253,21 +253,7 @@ struct HorizontalFlickKeyboardModel: KeyboardModelProtocol{
                 )
 
             ]),
-            FlickKeyModel(labelType: .text("､｡?!"), pressActions: [.input("、")], flickKeys: [
-                .left: FlickedKeyModel(
-                    labelType: .text("。"),
-                    pressActions: [.input("。")]
-                ),
-                .top: FlickedKeyModel(
-                    labelType: .text("？"),
-                    pressActions: [.input("？")]
-                ),
-                .right: FlickedKeyModel(
-                    labelType: .text("！"),
-                    pressActions: [.input("！")]
-                )
-            ]),
-        ],
+            KanaSymbolsKeyModel.shared        ],
         //第5列
         [
             FlickKeyModel(labelType: .image("delete.left"), pressActions: [.delete(1)], longPressActions: [.delete], flickKeys: [

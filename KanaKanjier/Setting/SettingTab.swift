@@ -24,7 +24,15 @@ struct SettingTabView: View {
                     Section(header: Text("カスタムキー"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")){
                         Text(Store.shared.koganaKeyFlickSetting.item.description)
                         ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
-                        KeyFlickSettingItemView(Store.shared.koganaKeyFlickSetting)
+                        //KeyFlickSettingItemView(Store.shared.koganaKeyFlickSetting)
+
+                        NavigationLink(destination: FlickCustomKeysSettingSelectView()){
+                            HStack{
+                                Text("設定する")
+                                Spacer()
+                            }
+                        }
+
                     }
                 case .roman:
                     Section(header: Text("カスタムキー")){

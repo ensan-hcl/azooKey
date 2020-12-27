@@ -15,6 +15,7 @@ final class Design{
 
     var orientation: KeyboardOrientation = .vertical
 
+    ///do not  consider using screenHeight
     private(set) var screenWidth: CGFloat = .zero
 
     private var keyboardLayoutType: KeyboardLayoutType {
@@ -58,65 +59,51 @@ final class Design{
 
     ///KeyViewのサイズを自動で計算して返す。
     var keyViewSize: CGSize {
-        switch keyboardLayoutType{
-        case .flick:
-            if orientation == .vertical{
-                if UIDevice.current.userInterfaceIdiom == .pad{
-                    return CGSize(width: screenWidth/5.6, height: screenWidth/12)
-                }
-                return CGSize(width: screenWidth/5.6, height: screenWidth/8)
-            }else{
-                if UIDevice.current.userInterfaceIdiom == .pad{
-                    return CGSize(width: screenWidth/9, height: screenWidth/22)
-                }
-                return CGSize(width: screenWidth/9, height: screenWidth/18)
+        switch (keyboardLayoutType, orientation){
+        case (.flick, .vertical):
+            if UIDevice.current.userInterfaceIdiom == .pad{
+                return CGSize(width: screenWidth/5.6, height: screenWidth/12)
             }
-        case .roman:
-            if orientation == .vertical{
-                if UIDevice.current.userInterfaceIdiom == .pad{
-                    return CGSize(width: screenWidth/12.2, height: screenWidth/12)
-                }
-                return CGSize(width: screenWidth/12.2, height: screenWidth/9)
-            }else{
-                return CGSize(width: screenWidth/13, height: screenWidth/20)
+            return CGSize(width: screenWidth/5.6, height: screenWidth/8)
+        case (.flick, .horizontal):
+            if UIDevice.current.userInterfaceIdiom == .pad{
+                return CGSize(width: screenWidth/9, height: screenWidth/22)
             }
+            return CGSize(width: screenWidth/9, height: screenWidth/18)
+        case (.roman, .vertical):
+            if UIDevice.current.userInterfaceIdiom == .pad{
+                return CGSize(width: screenWidth/12.2, height: screenWidth/12)
+            }
+            return CGSize(width: screenWidth/12.2, height: screenWidth/9)
+        case (.roman, .horizontal):
+            return CGSize(width: screenWidth/13, height: screenWidth/20)
         }
     }
 
     var keyViewVerticalSpacing: CGFloat {
-        switch keyboardLayoutType{
-        case .flick:
-            if orientation == .vertical{
-                return keyViewHorizontalSpacing
-            }else{
-                return keyViewHorizontalSpacing/2
-            }
-
-        case .roman:
-            if orientation == .vertical{
-                return keyViewSize.width/3
-            }else{
-                return keyViewSize.width/5
-            }
+        switch (keyboardLayoutType, orientation){
+        case (.flick, .vertical):
+            return keyViewHorizontalSpacing
+        case (.flick, .horizontal):
+            return keyViewHorizontalSpacing/2
+        case (.roman, .vertical):
+            return keyViewSize.width/3
+        case (.roman, .horizontal):
+            return keyViewSize.width/5
         }
     }
 
     var keyViewHorizontalSpacing: CGFloat {
-        switch keyboardLayoutType{
-        case .flick:
-            if orientation == .vertical{
-                return (screenWidth - keyViewSize.width * 5)/5
-            }else{
-                return (screenWidth - screenWidth*10/13)/12 - 0.5
-            }
-
-        case .roman:
-            if orientation == .vertical{
-                //9だとself.horizontalKeyCount-1で画面ぴったりになるが、それだとあまりにピシピシなので0.1を加えて調整する。
-                return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount))/(9+0.5)
-            }else{
-                return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount))/10
-            }
+        switch (keyboardLayoutType, orientation){
+        case (.flick, .vertical):
+            return (screenWidth - keyViewSize.width * 5)/5
+        case (.flick, .horizontal):
+            return (screenWidth - screenWidth*10/13)/12 - 0.5
+        case (.roman, .vertical):
+            //9だとself.horizontalKeyCount-1で画面ぴったりになるが、それだとあまりにピシピシなので0.1を加えて調整する。
+            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount))/(9+0.5)
+        case (.roman, .horizontal):
+            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount))/10
         }
     }
 
@@ -176,11 +163,8 @@ final class Design{
             return
         }
         self.registerScreenWidth(width: size.width)
-        if size.width<size.height{
-            Store.shared.setOrientation(.vertical)
-        }else{
-            Store.shared.setOrientation(.horizontal)
-        }
+        let orientation: KeyboardOrientation = size.width<size.height ? .vertical : .horizontal
+        Store.shared.setOrientation(orientation)
     }
 
     let colors = Colors.default

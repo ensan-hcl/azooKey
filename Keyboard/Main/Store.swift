@@ -209,10 +209,8 @@ final class Store{
 
     func registerUIReturnKeyType(type: UIReturnKeyType){
         self.enterKeyType = type
-        if case let .return(prev) = self.enterKeyState{
-            if prev != type{
-                self.registerEnterKeyState(.return)
-            }
+        if case let .return(prev) = self.enterKeyState, prev != type{
+            self.registerEnterKeyState(.return)
         }
     }
     
@@ -246,6 +244,8 @@ struct UserSettingDepartment{
         }
         self.keyboardLayoutType = Self.getKeyboardLayoutTypeSetting()
         self.kogakiFlickSetting = Self.getKogakiFlickSetting()
+        self.kanaSymbolsFlickSetting = Self.getKanaSymbolsFlickSetting()
+
         self.learningType = Self.learningTypeSetting(.inputAndOutput)
 
         self.resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
@@ -266,26 +266,47 @@ struct UserSettingDepartment{
         if let value = value, let data = KeyFlickSetting.get(value){
             setting = data
         }else{
-            setting = KeyFlickSetting(targetKeyIdentifier: "kogana")
+            setting = CustomizableFlickKey.kogana.defaultSetting
         }
         
         var dict: [FlickDirection: FlickedKeyModel] = [:]
-        if let left = setting.left == "" ? nil:FlickedKeyModel(labelType: .text(setting.left), pressActions: [.input(setting.left)]){
+        if let left = setting.left.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: [.input(setting.left.input)]){
             dict[.left] = left
         }
-        if let top = setting.top == "" ? nil:FlickedKeyModel(labelType: .text(setting.top), pressActions: [.input(setting.top)]){
+        if let top = setting.top.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: [.input(setting.top.input)]){
             dict[.top] = top
         }
-        if let right = setting.right == "" ? nil:FlickedKeyModel(labelType: .text(setting.right), pressActions: [.input(setting.right)]){
+        if let right = setting.right.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: [.input(setting.right.input)]){
             dict[.right] = right
-        }
-        if let bottom = setting.bottom == "" ? nil:FlickedKeyModel(labelType: .text(setting.bottom), pressActions: [.input(setting.bottom)]){
-            dict[.bottom] = bottom
         }
         return dict
 
     }
+
+    private static func getKanaSymbolsFlickSetting() -> (labelType: KeyLabelType, actions: [ActionType], flick:  [FlickDirection: FlickedKeyModel]) {
+        let value = Self.userDefaults.value(forKey: Setting.kanaSymbolsKeyFlick.key)
+        let setting: KeyFlickSetting
+        if let value = value, let data = KeyFlickSetting.get(value){
+            setting = data
+        }else{
+            setting = CustomizableFlickKey.kanaSymbols.defaultSetting
+        }
+        var dict: [FlickDirection: FlickedKeyModel] = [:]
+        if let left = setting.left.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: [.input(setting.left.input)]){
+            dict[.left] = left
+        }
+        if let top = setting.top.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: [.input(setting.top.input)]){
+            dict[.top] = top
+        }
+        if let right = setting.right.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: [.input(setting.right.input)]){
+            dict[.right] = right
+        }
+        return (.text(setting.center.label), [.input(setting.center.input)], dict)
+    }
+
     var kogakiFlickSetting: [FlickDirection: FlickedKeyModel] = Self.getKogakiFlickSetting()
+    var kanaSymbolsFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick:  [FlickDirection: FlickedKeyModel]) = Self.getKanaSymbolsFlickSetting()
+
     var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput, initialize: true)
 
     var resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
