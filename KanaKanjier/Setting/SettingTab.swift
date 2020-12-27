@@ -22,10 +22,10 @@ struct SettingTabView: View {
                 switch storeVariableSection.KeyboardType{
                 case .flick:
                     Section(header: Text("カスタムキー"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")){
-                        Text(Store.shared.koganaKeyFlickSetting.item.description)
+                        VStack{
+                            Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
+                        }
                         ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
-                        //KeyFlickSettingItemView(Store.shared.koganaKeyFlickSetting)
-
                         NavigationLink(destination: FlickCustomKeysSettingSelectView()){
                             HStack{
                                 Text("設定する")

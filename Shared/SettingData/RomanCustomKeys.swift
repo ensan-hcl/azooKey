@@ -54,7 +54,7 @@ struct RomanCustomKeysValue: Savable {
         RomanCustomKey(name: "、", input: "、", longpresses: [RomanVariationKey(name: "、", input: "、"), RomanVariationKey(name: ",", input: ",")]),
         RomanCustomKey(name: "？", input: "？", longpresses: [RomanVariationKey(name: "？", input: "？"), RomanVariationKey(name: "?", input: "?")]),
         RomanCustomKey(name: "！", input: "！", longpresses: [RomanVariationKey(name: "！", input: "！"), RomanVariationKey(name: "!", input: "!")]),
-        RomanCustomKey(name: "・", input: "・", longpresses: []),
+        RomanCustomKey(name: "・", input: "・", longpresses: [RomanVariationKey(name: "…", input: "…")]),
     ])
 
     var saveValue: SaveValue {

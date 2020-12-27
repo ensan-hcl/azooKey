@@ -177,7 +177,7 @@ struct FlickCustomKeysSettingView: View {
             if selectState.selectedPosition != nil{
                 HStack{
                     Group{
-                        ToolBarButton(systemImage: "arrow.triangle.2.circlepath", labelText: "デフォルトに戻す"){
+                        ToolBarButton(systemImage: "arrow.triangle.2.circlepath", labelText: "リセット"){
                             self.reload()
                         }
                         .foregroundColor(editState.state == .none ? .primary:.systemGray)

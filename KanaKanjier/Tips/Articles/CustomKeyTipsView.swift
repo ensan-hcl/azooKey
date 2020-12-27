@@ -15,7 +15,7 @@ struct CustomKeyTipsView: View {
                 Text("azooKeyでは一部キーのカスタマイズが可能です。「設定」タブから変更できます。")
             }
             TipsContentParagraph{
-                Text("フリック入力では、ひらがなタブの「小ﾞﾟ」キーのフリックに最大3方向まで好きな文字を登録することができます。")
+                Text("フリック入力では、ひらがなタブの「小ﾞﾟ」キーと「､｡?!」キーのフリックに最大3方向まで好きな文字を登録することができます。")
                 ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
             }
             TipsContentParagraph{

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-
+/*
 
 struct KeyFlickSettingItemView: View {
     typealias ItemViewModel = SettingItemViewModel<KeyFlickSetting>
@@ -52,3 +52,4 @@ struct KeyFlickSettingItemView: View {
         }
     }
 }
+*/
