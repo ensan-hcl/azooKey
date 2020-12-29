@@ -12,7 +12,6 @@ import SwiftUI
 
 final class VerticalFlickKeyboardModelVariableSection: ObservableObject{
     @Published var tabState: TabState = .hira
-    @Published var isResultViewExpanded = false
 }
 
 //M：基本は変わらないx

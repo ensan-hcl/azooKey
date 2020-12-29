@@ -62,7 +62,7 @@ struct ResultView: View{
                         }
                         .padding(.horizontal, 5)
                     }
-                    .frame(height: Design.shared.resultViewHeight)
+
                     if modelVariableSection.results.count > 1{
                         //候補を展開するボタン
                         Button(action: {
@@ -75,7 +75,7 @@ struct ResultView: View{
                         .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6))
                         .padding(.trailing, 10)
                     }
-                }
+                }.frame(height: Design.shared.resultViewHeight)
             }
         }
     }

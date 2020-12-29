@@ -10,12 +10,12 @@ import Foundation
 import SwiftUI
 
 struct LargeTextView: View {
-    let text: String
+    private let text: String
     init(_ text: String){
         self.text = text
     }
     
-    var font: Font {
+    private var font: Font {
         return Font.system(size: Design.shared.getMaximumTextSize(self.text), weight: .regular, design: .serif)
     }
     var body: some View {

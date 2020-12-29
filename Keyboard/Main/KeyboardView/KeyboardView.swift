@@ -108,7 +108,5 @@ struct KeyboardView: View {
                 LargeTextView(modelVariableSection.magnifyingText)
             }
         }
-
     }
-    
 }

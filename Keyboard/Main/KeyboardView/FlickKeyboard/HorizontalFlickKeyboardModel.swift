@@ -11,7 +11,6 @@ import SwiftUI
 
 final class HorizontalKeyboardModelVariableSection: ObservableObject{
     @Published var tabState: TabState = .hira
-    @Published var isResultViewExpanded = false
 }
 
 //M：基本は変わらない

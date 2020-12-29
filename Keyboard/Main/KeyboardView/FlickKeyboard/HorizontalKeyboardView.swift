@@ -75,70 +75,67 @@ struct HorizontalKeyboardView: View {
     }
 
     var body: some View {
-        Group{
-                HStack{
-                    switch self.alignmnet{
-                    case .right:
-                        Spacer()
-                        leftAlignButtonImage.onTapGesture {
-                            self.alignmnet = .center
-                        }
-                        Spacer()
-                    case .center:
-                        Spacer()
-                        leftAlignButtonImage.onTapGesture {
-                            self.alignmnet = .left
-                        }
-                        Spacer()
-                    case .left:
-                        EmptyView()
-                    }
-                    VStack(spacing: 0){
-                        ResultView(model: model.resultModel)
-                            .frame(width: Design.shared.keyboardWidth)
-                            .padding(.bottom, 6)
-                        ZStack{
-                            HStack(spacing: Design.shared.keyViewHorizontalSpacing){
-                                ForEach(self.horizontalIndices){h in
-                                    VStack(spacing: Design.shared.keyViewVerticalSpacing){
-                                        //IDを明示する必要がある。
-                                        ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
-                                            return FlickKeyView(model: self.keyModels[h][v])
-                                        }
-                                    }
-                                }
-                            }
-                            HStack(spacing: Design.shared.keyViewHorizontalSpacing){
-                                ForEach(self.horizontalIndices){h in
-                                    VStack(spacing: Design.shared.keyViewVerticalSpacing){
-                                        ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
-                                            return SuggestView(model: self.keyModels[h][v].suggestModel)
-                                        }
-                                    }
+        HStack{
+            switch self.alignmnet{
+            case .right:
+                Spacer()
+                leftAlignButtonImage.onTapGesture {
+                    self.alignmnet = .center
+                }
+                Spacer()
+            case .center:
+                Spacer()
+                leftAlignButtonImage.onTapGesture {
+                    self.alignmnet = .left
+                }
+                Spacer()
+            case .left:
+                EmptyView()
+            }
+            VStack(spacing: 0){
+                ResultView(model: model.resultModel)
+                    .frame(width: Design.shared.keyboardWidth)
+                    .padding(.bottom, 6)
+                ZStack{
+                    HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+                        ForEach(self.horizontalIndices){h in
+                            VStack(spacing: Design.shared.keyViewVerticalSpacing){
+                                //IDを明示する必要がある。
+                                ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
+                                    return FlickKeyView(model: self.keyModels[h][v])
                                 }
                             }
                         }
                     }
-                    switch self.alignmnet{
-                    case .left:
-                        Spacer()
-                        rightAlignButtonImage.onTapGesture {
-                            self.alignmnet = .center
+                    HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+                        ForEach(self.horizontalIndices){h in
+                            VStack(spacing: Design.shared.keyViewVerticalSpacing){
+                                ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
+                                    return SuggestView(model: self.keyModels[h][v].suggestModel)
+                                }
+                            }
                         }
-                        Spacer()
-                    case .center:
-                        Spacer()
-                        rightAlignButtonImage.onTapGesture {
-                            self.alignmnet = .right
-                        }
-                        Spacer()
-                    case .right:
-                        EmptyView()
                     }
                 }
+            }
+            switch self.alignmnet{
+            case .left:
+                Spacer()
+                rightAlignButtonImage.onTapGesture {
+                    self.alignmnet = .center
+                }
+                Spacer()
+            case .center:
+                Spacer()
+                rightAlignButtonImage.onTapGesture {
+                    self.alignmnet = .right
+                }
+                Spacer()
+            case .right:
+                EmptyView()
+            }
         }
         .padding(.bottom, 2.0)
         .padding(.top, Design.shared.keyViewVerticalSpacing)
-
     }
 }

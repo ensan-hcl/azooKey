@@ -9,7 +9,6 @@
 import Foundation
 final class HorizontalRomanKeyboardModelVariableSection: ObservableObject{
     @Published var tabState: TabState = .hira
-    @Published var isResultViewExpanded = false
 }
 
 struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
