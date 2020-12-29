@@ -24,15 +24,6 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
         self.variableSection.tabState = state
     }
 
-    func expandResultView(_ results: [ResultData]) {
-        self.variableSection.isResultViewExpanded = true
-        self.expandedResultModel.expand(results: results)
-    }
-
-    func collapseResultView(){
-        self.variableSection.isResultViewExpanded = false
-    }
-
     var tabState: TabState {
         return self.variableSection.tabState
     }

@@ -73,10 +73,6 @@ struct VerticalRomanKeyboardView: View{
 
     var body: some View {
         Group{
-            if self.modelVariableSection.isResultViewExpanded{
-                ExpandedResultView(model: self.model.expandedResultModel)
-            }
-            else{
                 VStack(spacing: 0){
                     ResultView(model: model.resultModel)
                         .padding(.vertical, 6)
@@ -89,7 +85,6 @@ struct VerticalRomanKeyboardView: View{
                             }
                         }
                     }
-                }
             }
         }.padding(.bottom, 2)
 

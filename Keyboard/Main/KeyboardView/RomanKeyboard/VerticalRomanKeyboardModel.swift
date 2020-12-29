@@ -28,15 +28,6 @@ struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
         return self.variableSection.tabState
     }
 
-    func expandResultView(_ results: [ResultData]) {
-        self.variableSection.isResultViewExpanded = true
-        self.expandedResultModel.expand(results: results)
-    }
-
-    func collapseResultView(){
-        self.variableSection.isResultViewExpanded = false
-    }
-
     //横に並べる
     var numberKeyboard: [[RomanKeyModelProtocol]] {[
         [

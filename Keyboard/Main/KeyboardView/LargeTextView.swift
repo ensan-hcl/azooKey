@@ -33,6 +33,6 @@ struct LargeTextView: View {
             }.frame(width: nil, height: Design.shared.keyViewSize.height)
         }
         .background(Color(UIColor.systemBackground))
-        .frame(height: Design.shared.keyboardHeight)
+        .frame(height: Design.shared.keyboardHeight, alignment: .bottom)
     }
 }

@@ -12,27 +12,29 @@ import SwiftUI
 ///ビュー間の情報の受け渡しを担うクラス
 final class Store{
     static let shared = Store()
-    var keyboardLayoutType: KeyboardLayoutType = .roman
-    var inputStyle: InputStyle = .direct
-    var keyboardLanguage: KeyboardLanguage = .japanese
+    private(set) var keyboardLayoutType: KeyboardLayoutType = .roman
+    private(set) var inputStyle: InputStyle = .direct
+    private(set) var keyboardLanguage: KeyboardLanguage = .japanese
     private var enterKeyType: UIReturnKeyType = .default
     private var enterKeyState: EnterKeyState = .return(.default)
     fileprivate var aAKeyState: AaKeyState = .normal
-
+    var keyboardViewModel = KeyboardModel()
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
-    var action = ActionDepartment()
+    private(set) var action = ActionDepartment()
     ///Storeの記述部門を全て切り出したオブジェクト。
-    var languageDepartment = LanguageDepartment()
-    ///Storeの記述部門を全て切り出したオブジェクト。
+    let languageDepartment = LanguageDepartment()
+    ///Storeの設定部門を全て切り出したオブジェクト。
     var userSetting = UserSettingDepartment()
 
     let feedbackGenerator = UINotificationFeedbackGenerator()
     
     fileprivate var lastVerticalTabState: TabState? = nil
     private(set) var needsInputModeSwitchKey = true   //ビューに関わる部分
-    private(set) var keyboardModelVariableSection = KeyboardModelVariableSection()   //ビューに関わる部分
+    private(set) var keyboardModelVariableSection: KeyboardModelVariableSection   //ビューに関わる部分
     private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
-    private init(){}
+    private init(){
+        self.keyboardModelVariableSection = self.keyboardViewModel.variableSection
+    }
     
     func initialize(){
         self.userSetting.reload()
@@ -145,11 +147,11 @@ final class Store{
     }
     
     func expandResult(results: [ResultData]){
-        self.keyboardModel.expandResultView(results)
+        self.keyboardViewModel.expandResultView(results)
     }
     
     func collapseResult(){
-        self.keyboardModel.collapseResultView()
+        self.keyboardViewModel.collapseResultView()
     }
 
     func setMagnifyingText(_ text: String){
@@ -216,7 +218,6 @@ final class Store{
     }
     
     func setKeyboardType(implicitly type: KeyboardLayoutType? = nil){
-        /*
         if let type = type{
             self.keyboardLayoutType = type
             self.refreshKeyboardModel()
@@ -224,7 +225,7 @@ final class Store{
             self.action.setResult()
             return
         }
- */
+
         let type = self.userSetting.keyboardLayoutType
         self.keyboardLayoutType = type
         self.inputStyle = type == .flick ? .direct : .roman
@@ -827,8 +828,8 @@ private final class InputStateHolder{
     }
     private var afterAdjusted: Bool = false
 
-    typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
-    typealias DirectConverter = KanaKanjiConverter<DirectInputData, DirectLatticeNode>
+    private typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
+    private typealias DirectConverter = KanaKanjiConverter<DirectInputData, DirectLatticeNode>
     ///かな漢字変換を受け持つ変換器。
     private var _romanConverter: RomanConverter?
     private var _directConverter: DirectConverter?
@@ -1286,7 +1287,7 @@ private final class InputStateHolder{
         Store.shared.setEnterKeyState(.return)
     }
 
-    enum ResultOptions{
+    fileprivate enum ResultOptions{
         case convertInput
         case mojiCount
         case wordCount

@@ -76,9 +76,6 @@ struct HorizontalKeyboardView: View {
 
     var body: some View {
         Group{
-            if self.modelVariableSection.isResultViewExpanded{
-                ExpandedResultView(model: self.model.expandedResultModel)
-            }else{
                 HStack{
                     switch self.alignmnet{
                     case .right:
@@ -139,7 +136,6 @@ struct HorizontalKeyboardView: View {
                         EmptyView()
                     }
                 }
-            }
         }
         .padding(.bottom, 2.0)
         .padding(.top, Design.shared.keyViewVerticalSpacing)

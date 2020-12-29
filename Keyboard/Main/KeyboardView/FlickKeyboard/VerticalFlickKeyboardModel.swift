@@ -40,16 +40,6 @@ struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
         self.abcTabKeyModel.setKeyboardState(new: state)
         self.numberTabKeyModel.setKeyboardState(new: state)
     }
-
-    func expandResultView(_ results: [ResultData]) {
-        self.variableSection.isResultViewExpanded = true
-        self.expandedResultModel.expand(results: results)
-    }
-
-    func collapseResultView(){
-        self.variableSection.isResultViewExpanded = false
-    }
-
     //縦に並べる
     var hiraKeyboard:[[FlickKeyModelProtocol]] = [
         //第1列

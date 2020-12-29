@@ -9,8 +9,6 @@
 import Foundation
 protocol KeyboardModelProtocol {
     func setTabState(state: TabState)
-    func expandResultView(_ results: [ResultData])
-    func collapseResultView()
     var resultModel: ResultModel {get}
     var expandedResultModel: ExpandedResultModel {get}
     var enterKeyModel: EnterKeyModelProtocol {get}

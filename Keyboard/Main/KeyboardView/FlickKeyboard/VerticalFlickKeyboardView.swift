@@ -68,9 +68,6 @@ struct VerticalFlickKeyboardView: View{
 
     var body: some View {
         Group{
-            if self.modelVariableSection.isResultViewExpanded{
-                ExpandedResultView(model: self.model.expandedResultModel)
-            }else{
                 VStack(spacing: 0){
                     ResultView(model: model.resultModel)
                         .padding(.bottom, 6)
@@ -94,7 +91,6 @@ struct VerticalFlickKeyboardView: View{
                                 }
                             }
                         }
-                    }
                 }
             }
         }

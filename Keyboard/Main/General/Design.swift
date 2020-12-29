@@ -30,12 +30,13 @@ final class Design{
         let keyheight = self.keyViewSize.height * CGFloat(self.verticalKeyCount + 1)
         switch keyboardLayoutType{
         case .flick:
-            let spaceheight = self.keyViewVerticalSpacing * CGFloat(self.verticalKeyCount - 1) + 6.0
-            return keyheight + spaceheight
+            //ビューの実装では、フリックでは縦に4列なので3つの縦スペーシング + 上に縦スペーシング1つ分のpadding + 候補ビュー間6pxのpadding
+            let spaceheight = self.keyViewVerticalSpacing * CGFloat(self.verticalKeyCount) + 6.0
+            return keyheight + spaceheight + 2
         case .roman:
-            //resultViewがspacing*2+keyHeightを持っているので、-1+1となる。
+            //resultViewHeightがspacing*2+keyHeightを持っているので、-1+1となる。
             let spaceheight = self.keyViewVerticalSpacing * CGFloat(self.verticalKeyCount) + 12.0
-            return keyheight + spaceheight
+            return keyheight + spaceheight + 2
         }
     }
 
