@@ -95,7 +95,7 @@ struct ExpandedResultModel{
     }
 
     fileprivate func pressed(data: ResultData){
-        Store.shared.action.registerComplete(data.candidate)
+        Store.shared.action.notifyComplete(data.candidate)
         self.collapse()
     }
 

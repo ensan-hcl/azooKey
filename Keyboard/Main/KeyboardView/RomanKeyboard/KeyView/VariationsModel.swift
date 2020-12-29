@@ -28,7 +28,7 @@ struct VariationsModel{
         }
         
         let selected = self.variableSection.selection
-        self.variations[selected].actions.forEach{Store.shared.action.registerPressAction($0)}
+        self.variations[selected].actions.forEach{Store.shared.action.registerAction($0)}
     }
     
     func registerLocation(dx: CGFloat){

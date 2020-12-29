@@ -117,7 +117,7 @@ struct ResultModel{
     }
 
     fileprivate func pressed(candidate: Candidate){
-        Store.shared.action.registerComplete(candidate)
+        Store.shared.action.notifyComplete(candidate)
     }
 
     fileprivate func expand(){

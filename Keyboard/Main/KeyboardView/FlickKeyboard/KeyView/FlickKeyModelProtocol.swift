@@ -73,7 +73,7 @@ extension FlickKeyModelProtocol{
     }
     
     func press(){
-        self.pressActions.forEach{Store.shared.action.registerPressAction($0)}
+        self.pressActions.forEach{Store.shared.action.registerAction($0)}
     }
     
     func longPressReserve(){

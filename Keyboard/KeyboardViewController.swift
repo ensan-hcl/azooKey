@@ -44,8 +44,8 @@ final class KeyboardViewController: UIInputViewController {
         keyboardViewHost.view.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         keyboardViewHost.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
-        Store.shared.action.registerProxy(self.textDocumentProxy)
-        Store.shared.action.registerDelegate(self)
+        Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
+        Store.shared.action.setDelegateViewController(self)
         Design.shared.registerScreenSize(size: UIScreen.main.bounds.size)
         var entries: [UILexiconEntry] = []
         self.requestSupplementaryLexicon(completion: {
@@ -123,13 +123,13 @@ final class KeyboardViewController: UIInputViewController {
     override func textWillChange(_ textInput: UITextInput?) {
         super.textWillChange(textInput)
 
-        Store.shared.registerUIReturnKeyType(type: self.textDocumentProxy.returnKeyType ?? .default)
+        Store.shared.setUIReturnKeyType(type: self.textDocumentProxy.returnKeyType ?? .default)
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        Store.shared.action.registerSomethingWillChange(left: left, center: center, right: right)
+        Store.shared.action.notifySomethingWillChange(left: left, center: center, right: right)
     }
     
     override func textDidChange(_ textInput: UITextInput?) {
@@ -140,7 +140,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        Store.shared.action.registerSomethingDidChange(left: left, center: center, right: right)
+        Store.shared.action.notifySomethingDidChange(left: left, center: center, right: right)
     }
 }
 

@@ -152,7 +152,7 @@ final class Store{
         self.keyboardModel.collapseResultView()
     }
 
-    func registerMagnifyingText(_ text: String){
+    func setMagnifyingText(_ text: String){
         self.keyboardModelVariableSection.magnifyingText = text
         self.keyboardModelVariableSection.isTextMagnifying = true
     }
@@ -163,12 +163,12 @@ final class Store{
         case complete
     }
 
-    fileprivate func registerAaKeyState(_ state: AaKeyState){
+    fileprivate func setAaKeyState(_ state: AaKeyState){
         self.keyboardModel.aAKeyModel.setKeyState(new: state)
         self.aAKeyState = state
     }
     
-    fileprivate func registerEnterKeyState(_ state: RoughEnterKeyState){
+    fileprivate func setEnterKeyState(_ state: RoughEnterKeyState){
         switch state{
         case .return:
             self.keyboardModel.enterKeyModel.setKeyState(new: .return(self.enterKeyType))
@@ -205,16 +205,26 @@ final class Store{
         Design.shared.orientation = orientation
         self.refreshKeyboardModel()
         self.keyboardModelVariableSection.keyboardOrientation = orientation
+        self.action.setResult()
     }
 
-    func registerUIReturnKeyType(type: UIReturnKeyType){
+    func setUIReturnKeyType(type: UIReturnKeyType){
         self.enterKeyType = type
         if case let .return(prev) = self.enterKeyState, prev != type{
-            self.registerEnterKeyState(.return)
+            self.setEnterKeyState(.return)
         }
     }
     
-    func setKeyboardType(){
+    func setKeyboardType(implicitly type: KeyboardLayoutType? = nil){
+        /*
+        if let type = type{
+            self.keyboardLayoutType = type
+            self.refreshKeyboardModel()
+            self.keyboardModelVariableSection.refreshView()
+            self.action.setResult()
+            return
+        }
+ */
         let type = self.userSetting.keyboardLayoutType
         self.keyboardLayoutType = type
         self.inputStyle = type == .flick ? .direct : .roman
@@ -471,15 +481,19 @@ final class ActionDepartment{
         self.sendToDicDataStore(.reloadUserDict)
     }
 
-    func registerProxy(_ proxy: UITextDocumentProxy){
-        self.inputStateHolder.registerProxy(proxy)
+    func setResult(){
+        self.inputStateHolder.setResult()
+    }
+
+    func setTextDocumentProxy(_ proxy: UITextDocumentProxy){
+        self.inputStateHolder.setTextDocumentProxy(proxy)
     }
 
     func sendToDicDataStore(_ data: Store.DicDataStoreNotification){
         self.inputStateHolder.sendToDicDataStore(data)
     }
 
-    func registerDelegate(_ controller: KeyboardViewController){
+    func setDelegateViewController(_ controller: KeyboardViewController){
         self.delegate = controller
     }
 
@@ -491,7 +505,7 @@ final class ActionDepartment{
     /// - Parameters:
     ///   - text: String。確定された文字列。
     ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
-    func registerComplete(_ candidate: Candidate){
+    func notifyComplete(_ candidate: Candidate){
         self.inputStateHolder.complete(candidate: candidate)
         candidate.actions.forEach{
             self.doAction($0)
@@ -532,7 +546,7 @@ final class ActionDepartment{
         case let .moveCursor(count):
             self.inputStateHolder.moveCursor(count: count)
         case let .changeCapsLockState(state):
-            Store.shared.registerAaKeyState(state)
+            Store.shared.setAaKeyState(state)
         case .toggleShowMoveCursorView:
             Store.shared.toggleShowMoveCursorView()
 
@@ -548,9 +562,19 @@ final class ActionDepartment{
             self.inputStateHolder.changeCharacter()
 
         case let .moveTab(type):
-            Store.shared.setTabState(type)
-            Store.shared.lastVerticalTabState = type
-
+            switch type{
+            case .hira:
+                //Store.shared.setKeyboardType(implicitly: .flick)
+                Store.shared.setTabState(type)
+                Store.shared.lastVerticalTabState = type
+            case .abc:
+                //Store.shared.setKeyboardType(implicitly: .roman)
+                Store.shared.setTabState(type)
+                Store.shared.lastVerticalTabState = type
+            default:
+                Store.shared.setTabState(type)
+                Store.shared.lastVerticalTabState = type
+            }
         case .hideLearningMemory:
             self.hideLearningMemory()
 
@@ -574,7 +598,7 @@ final class ActionDepartment{
                     right = "empty"
                 }
 
-                self.registerDebugPrint("left:\(Array(left.unicodeScalars))/center:\(Array(center.unicodeScalars))/right:\(Array(right.unicodeScalars))")
+                self.setDebugPrint("left:\(Array(left.unicodeScalars))/center:\(Array(center.unicodeScalars))/right:\(Array(right.unicodeScalars))")
             }
         }
     }
@@ -582,7 +606,7 @@ final class ActionDepartment{
     ///押した場合に行われる。
     /// - Parameters:
     ///   - action: 行われた動作。
-    func registerPressAction(_ action: ActionType){
+    func registerAction(_ action: ActionType){
         self.doAction(action)
     }
     
@@ -638,7 +662,7 @@ final class ActionDepartment{
             self.timers.append(tuple)
         case let .changeCapsLockState(state):
             let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
-                Store.shared.registerAaKeyState(state)
+                Store.shared.setAaKeyState(state)
             })
             let tuple = (type: action, timer: timer)
             self.timers.append(tuple)
@@ -661,7 +685,7 @@ final class ActionDepartment{
     }
     
     ///何かが変化する前に状態の保存を行う関数。
-    func registerSomethingWillChange(left: String, center: String, right: String){
+    func notifySomethingWillChange(left: String, center: String, right: String){
         self.tempTextData = (left: left, center: center, right: right)
     }
     //MARK: left/center/rightとして得られる情報は以下の通り
@@ -694,7 +718,7 @@ final class ActionDepartment{
      */
     
     ///何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    func registerSomethingDidChange(left: String, center: String, right: String){
+    func notifySomethingDidChange(left: String, center: String, right: String){
         if self.inputStateHolder.isAfterAdjusted(){
             return
         }
@@ -779,7 +803,7 @@ final class ActionDepartment{
         Store.shared.userSetting.writeLearningTypeSetting(to: .nothing)
     }
 
-    func registerDebugPrint(_ text: String){
+    func setDebugPrint(_ text: String){
         self.inputStateHolder.setDebugResult(text: text)
     }
 }
@@ -832,7 +856,7 @@ private final class InputStateHolder{
         self._directConverter?.sendToDicDataStore(data)
     }
 
-    fileprivate func registerProxy(_ proxy: UITextDocumentProxy){
+    fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy){
         self.proxy = proxy
     }
 
@@ -870,7 +894,7 @@ private final class InputStateHolder{
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.correspondingCount))
             if candidate.correspondingCount == inputtedText.count{
                 self.clear()
-                Store.shared.registerEnterKeyState(.return)
+                Store.shared.setEnterKeyState(.return)
                 return
             }
             self.cursorPosition -= candidate.correspondingCount
@@ -883,7 +907,7 @@ private final class InputStateHolder{
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(displayedTextCount))
             if self.kanaRomanStateHolder.components.isEmpty{
                 self.clear()
-                Store.shared.registerEnterKeyState(.return)
+                Store.shared.setEnterKeyState(.return)
                 return
             }
             self.cursorPosition -= displayedTextCount
@@ -911,7 +935,7 @@ private final class InputStateHolder{
         self._romanConverter?.clear()
         self._directConverter?.clear()
         Store.shared.collapseResult()
-        Store.shared.registerEnterKeyState(.return)
+        Store.shared.setEnterKeyState(.return)
     }
 
     fileprivate func closeKeyboard(){
@@ -973,7 +997,7 @@ private final class InputStateHolder{
             self.proxy.insertText(text)
             setResult()
             
-            Store.shared.registerEnterKeyState(.complete)
+            Store.shared.setEnterKeyState(.complete)
             return
         }
         
@@ -1016,7 +1040,7 @@ private final class InputStateHolder{
             }
         }
         
-        Store.shared.registerEnterKeyState(.complete)
+        Store.shared.setEnterKeyState(.complete)
 
         setResult()
     }
@@ -1049,7 +1073,7 @@ private final class InputStateHolder{
         }
 
         if self.inputtedText.isEmpty{
-            Store.shared.registerEnterKeyState(.return)
+            Store.shared.setEnterKeyState(.return)
         }
     }
 
@@ -1096,7 +1120,7 @@ private final class InputStateHolder{
             let selectedText = self.inputtedText
             self.delete(count: 1)
             self.input(text: selectedText)
-            Store.shared.registerEnterKeyState(.complete)
+            Store.shared.setEnterKeyState(.complete)
         }
     }
     
@@ -1213,7 +1237,7 @@ private final class InputStateHolder{
         self.cursorPosition = self.cursorMaximumPosition
         self.isSelected = false
         setResult()
-        Store.shared.registerEnterKeyState(.complete)
+        Store.shared.setEnterKeyState(.complete)
     }
     
     fileprivate func userCutText(text: String){
@@ -1221,7 +1245,7 @@ private final class InputStateHolder{
         self.cursorPosition = .zero
         self.isSelected = false
         self.setResult()
-        Store.shared.registerEnterKeyState(.return)
+        Store.shared.setEnterKeyState(.return)
     }
     
     fileprivate func userReplacedSelectedText(text: String){
@@ -1231,7 +1255,7 @@ private final class InputStateHolder{
         self.isSelected = false
         
         setResult()
-        Store.shared.registerEnterKeyState(.complete)
+        Store.shared.setEnterKeyState(.complete)
     }
     
     //ユーザが文章を選択した場合、その部分を入力中であるとみなす
@@ -1253,13 +1277,13 @@ private final class InputStateHolder{
             //参照: https://qiita.com/En3_HCl/items/476ffb665cd37cb312da
             self.setResult(options: [.convertInput])
         }
-        Store.shared.registerEnterKeyState(.edit)
+        Store.shared.setEnterKeyState(.edit)
     }
     
     //選択を解除した場合、clearとみなす
     fileprivate func userDeselectedText(){
         self.clear()
-        Store.shared.registerEnterKeyState(.return)
+        Store.shared.setEnterKeyState(.return)
     }
 
     enum ResultOptions{
