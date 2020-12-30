@@ -32,15 +32,6 @@ extension CGPoint{
 }
 
 
-extension DispatchQueue{
-    func cancelableAsyncAfter(deadline: DispatchTime, execute: @escaping () -> Void) -> DispatchWorkItem {
-        let item = DispatchWorkItem(block: execute)
-        asyncAfter(deadline: deadline, execute: item)
-        return item
-    }
-}
-
-
 /*
  struct DoubleSwipeGesture: Gesture {
  typealias Value = <#type#>
@@ -68,7 +59,7 @@ extension DispatchQueue{
 struct TestView: View {
     var body: some View {
         VStack{
-            Image(systemName: "plus")
+            KeyboardLayoutTypeDetailsView()
         }
     }
 }

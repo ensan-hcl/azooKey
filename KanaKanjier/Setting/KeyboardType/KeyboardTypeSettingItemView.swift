@@ -12,34 +12,90 @@ struct KeyboardTypeSettingItemView: View {
     typealias ItemViewModel = SettingItemViewModel<KeyboardLayoutType>
     typealias ItemModel = SettingItem<KeyboardLayoutType>
 
-    init(_ viewModel: ItemViewModel){
-        self.item = viewModel.item
-        self.viewModel = viewModel
-    }
+    @State private var selection: KeyboardLayoutType = .flick
+    @State private var ignoreChange = false
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
 
+    let language: Language
+    let setTogether: Bool
+
     private let types = KeyboardLayoutType.allCases
-    var imageName:String{
-        Store.variableSection.KeyboardType = types[viewModel.value.id]
-        return types[viewModel.value.id].imageName
+
+    enum Language{
+        case japanese
+        case english
+
+        var name: String {
+            switch self {
+            case .japanese:
+                return "日本語"
+            case .english:
+                return "英語"
+            }
+        }
+    }
+
+    init(_ viewModel: ItemViewModel, language: Language = .japanese, setTogether: Bool = false){
+        self.language = language
+        self.setTogether = setTogether
+        self.item = viewModel.item
+        self.viewModel = viewModel
+        self._selection = State(initialValue: viewModel.value)
+    }
+
+    var imageName: String {
+        let type = selection
+        switch (type, language){
+        case (.flick, .japanese): return "KeyboardImage_flick_ja"
+        case (.flick, .english): return "KeyboardImage_flick_en"
+        case (.roman, .japanese): return "KeyboardImage_roman_ja"
+        case (.roman, .english): return "KeyboardImage_roman_en"
+        }
+    }
+
+    var labelText: String {
+        if setTogether{
+            return "キーボードの種類" + "(現在: \(viewModel.value.string))"
+        }else{
+            return "\(language.name)"+"キーボードの種類" + "(現在: \(viewModel.value.string))"
+        }
     }
 
     var body: some View {
         VStack{
-            Text(self.item.identifier.title + "(現在: \(viewModel.value.string))")
+            Text(labelText)
             CenterAlignedView{
                 Image(imageName)
                     .resizable()
                     .scaledToFit()
                     .frame(maxWidth: Store.shared.imageMaximumWidth)
             }
-            Picker(selection: $viewModel.value, label: Text("キーボードの種類")) {
+            Picker(selection: $selection, label: Text(labelText)) {
                 ForEach(0 ..< types.count) { i in
                     Text(types[i].string).tag(types[i])
                 }
             }
-            .pickerStyle(SegmentedPickerStyle())    // セグメントピッカースタイルの指定
+            .labelsHidden()
+            .pickerStyle(SegmentedPickerStyle())
+            .onChange(of: selection, perform: { _ in
+                if ignoreChange{
+                    return
+                }
+                let type = selection
+                self.viewModel.value = type
+                if self.item.identifier == .keyboardType{
+                    Store.variableSection.keyboardType = type
+                }
+                if setTogether{
+                    Store.shared.englishKeyboardTypeSetting.value = type
+                }
+            })
+        }
+        .onAppear{
+            self.ignoreChange = true
+            self.selection = viewModel.value
+            self.ignoreChange = false
         }
     }
 }

@@ -30,13 +30,6 @@ enum KeyboardLayoutType: String, CaseIterable{
         }
     }
     
-    var imageName: String {
-        switch self{
-        case .flick: return "flickKeyboardImage"
-        case .roman: return "romanKeyboardImage"
-        }
-    }
-
     var id: Int {
         switch self{
         case .flick: return 0

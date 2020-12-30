@@ -17,9 +17,15 @@ struct SettingTabView: View {
         NavigationView {
             Form {
                 Section(header: Text("キーボードの種類")){
-                    KeyboardTypeSettingItemView(Store.shared.keyboardTypeSetting)
+                    KeyboardTypeSettingItemView(Store.shared.keyboardTypeSetting, setTogether: true)
+                    NavigationLink(destination: KeyboardLayoutTypeDetailsView()){
+                        HStack{
+                            Text("詳しい設定")
+                            Spacer()
+                        }
+                    }
                 }
-                switch storeVariableSection.KeyboardType{
+                switch storeVariableSection.keyboardType{
                 case .flick:
                     Section(header: Text("カスタムキー"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")){
                         VStack{
@@ -102,7 +108,7 @@ struct SettingTabView: View {
                     ])
                 }
                 Section(header: Text("変換")){
-                    switch storeVariableSection.KeyboardType{
+                    switch storeVariableSection.keyboardType{
                     case .flick:
                         EmptyView()
                     case .roman:

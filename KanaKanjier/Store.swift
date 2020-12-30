@@ -76,6 +76,11 @@ class Store{
         defaultValue: .flick
     ))
 
+    var englishKeyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayoutType>(
+        identifier: .englishKeyboardType,
+        defaultValue: .flick
+    ))
+
     var resultViewFontSizeSetting = SettingItemViewModel(SettingItem<FontSizeSetting>(
         identifier: .resultViewFontSize,
         defaultValue: -1
@@ -139,5 +144,5 @@ class Store{
 class StoreVariableSection: ObservableObject{
     @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
-    @Published var KeyboardType: KeyboardLayoutType = .flick
+    @Published var keyboardType: KeyboardLayoutType = .flick
 }

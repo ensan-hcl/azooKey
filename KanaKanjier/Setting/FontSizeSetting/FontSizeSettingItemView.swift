@@ -86,7 +86,7 @@ struct KeyView: View {
 
     var size: CGSize {
         let screenWidth = UIScreen.main.bounds.width
-        switch storeVariableSection.KeyboardType{
+        switch storeVariableSection.keyboardType{
         case .flick:
             return CGSize(width: screenWidth/5.6, height: screenWidth/8)
         case .roman:

@@ -10,6 +10,7 @@ import Foundation
 
 enum Setting: String {
     case keyboardType = "keyboard_type"
+    case englishKeyboardType = "keyboard_type_en"
     case numberTabCustomKeys = "roman_number_custom_keys"
     case koganaKeyFlick = "kogana_flicks"
     case kanaSymbolsKeyFlick = "kana_symbols_flick"
@@ -35,7 +36,9 @@ enum Setting: String {
     var title: String {
         switch self{
         case .keyboardType:
-            return "キーボードの種類"
+            return "日本語キーボードの種類"
+        case .englishKeyboardType:
+            return "日本語キーボードの種類"
         case .numberTabCustomKeys:
             return "数字タブのカスタムキー機能"
         case .koganaKeyFlick:
@@ -72,7 +75,9 @@ enum Setting: String {
     var explanation: String {
         switch self{
         case .keyboardType:
-            return "フリック入力とローマ字入力が選択できます。"
+            return "日本語の入力方法をフリック入力とローマ字入力から選択できます。"
+        case .englishKeyboardType:
+            return "英語の入力方法をフリック入力とローマ字入力から選択できます。"
         case .numberTabCustomKeys:
             return "数字タブの「、。！？…」部分に好きな記号や文字を割り当てて利用することができます。"
         case .koganaKeyFlick:
@@ -141,5 +146,7 @@ struct DefaultSetting{
 
     let koganaKeyFlickSettingDefault = ("", "", "", "")
     let keyboardTypeSettingDefault = KeyboardLayoutType.flick
+    let englishKeyboardTypeSettingDefault = KeyboardLayoutType.flick
+
     let memorySettingDefault = LearningType.inputAndOutput
 }
