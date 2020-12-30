@@ -19,9 +19,6 @@ struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
     //変更の可能性がある部分
     var variableSection = VerticalFlickKeyboardModelVariableSection()
 
-    let resultModel = ResultModel()
-    let expandedResultModel = ExpandedResultModel()
-
     let enterKeyModel: EnterKeyModelProtocol = FlickEnterKeyModel.shared
     let aAKeyModel: AaKeyModelProtocol = FlickAaKeyModel.shared
 

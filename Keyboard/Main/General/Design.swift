@@ -149,7 +149,7 @@ final class Design{
     func getMaximumTextSize(_ text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 10)
         let size = text.size(withAttributes: [.font: font])
-        return (keyViewSize.height*4 + keyViewVerticalSpacing*4)/size.height * 10
+        return self.keyboardHeight/size.height * 10
     }
 
     func isOverScreenWidth(_ value: CGFloat) -> Bool {

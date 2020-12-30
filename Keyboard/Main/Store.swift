@@ -135,15 +135,15 @@ final class Store{
     }
     
     fileprivate func showMoveCursorView(_ bool: Bool){
-        self.keyboardModel.resultModel.showMoveCursorView(bool)
+        self.keyboardViewModel.resultModel.showMoveCursorView(bool)
     }
     
     fileprivate func toggleShowMoveCursorView(){
-        self.keyboardModel.resultModel.toggleShowMoveCursorView()
+        self.keyboardViewModel.resultModel.toggleShowMoveCursorView()
     }
 
     fileprivate func registerResult(_ result: [Candidate]){
-        self.keyboardModel.resultModel.setResults(result)
+        self.keyboardViewModel.resultModel.setResults(result)
     }
     
     func expandResult(results: [ResultData]){

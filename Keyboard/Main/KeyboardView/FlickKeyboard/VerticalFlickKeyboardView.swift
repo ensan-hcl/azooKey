@@ -68,8 +68,6 @@ struct VerticalFlickKeyboardView: View{
 
     var body: some View {
         VStack(spacing: 0){
-            ResultView(model: model.resultModel)
-                .padding(.bottom, 6)
             ZStack{
                 HStack(spacing: Design.shared.keyViewHorizontalSpacing){
                     ForEach(self.horizontalIndices){h in
@@ -93,7 +91,6 @@ struct VerticalFlickKeyboardView: View{
             }
         }
         .padding(.bottom, 2.0)
-        .padding(.top, Design.shared.keyViewVerticalSpacing)
     }
 }
 

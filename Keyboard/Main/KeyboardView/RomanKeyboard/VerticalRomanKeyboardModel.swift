@@ -12,11 +12,8 @@ final class VerticalRomanKeyboardModelVariableSection: ObservableObject{
 }
 
 struct VerticalRomanKeyboardModel: KeyboardModelProtocol{
-    let resultModel = ResultModel()
-    
     let enterKeyModel: EnterKeyModelProtocol = RomanEnterKeyModel.shared
     let aAKeyModel: AaKeyModelProtocol = RomanAaKeyModel.shared
-    let expandedResultModel = ExpandedResultModel()
     var variableSection = VerticalRomanKeyboardModelVariableSection()
     
     func setTabState(state: TabState){

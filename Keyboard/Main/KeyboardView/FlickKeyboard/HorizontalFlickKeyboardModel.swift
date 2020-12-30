@@ -19,9 +19,6 @@ struct HorizontalFlickKeyboardModel: KeyboardModelProtocol{
     //変更の可能性がある部分
     var variableSection = HorizontalKeyboardModelVariableSection()
 
-    let resultModel = ResultModel()
-    let expandedResultModel = ExpandedResultModel()
-
     let enterKeyModel: EnterKeyModelProtocol = FlickEnterKeyModel.shared
     let aAKeyModel: AaKeyModelProtocol = FlickAaKeyModel.shared
     let hiraTabKeyModel = TabKeyModel.hiraTabKeyModel

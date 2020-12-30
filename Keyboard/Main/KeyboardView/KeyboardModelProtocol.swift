@@ -9,12 +9,9 @@
 import Foundation
 protocol KeyboardModelProtocol {
     func setTabState(state: TabState)
-    var resultModel: ResultModel {get}
-    var expandedResultModel: ExpandedResultModel {get}
     var enterKeyModel: EnterKeyModelProtocol {get}
     var aAKeyModel: AaKeyModelProtocol {get}
     var tabState: TabState {get}
-
 }
 
 protocol EnterKeyModelProtocol {

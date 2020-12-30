@@ -13,7 +13,7 @@ import SwiftUI
 struct VerticalRomanKeyboardView: View{
     private let model: VerticalRomanKeyboardModel
     @ObservedObject private var modelVariableSection: VerticalRomanKeyboardModelVariableSection
-    
+
     init(_ model: VerticalRomanKeyboardModel){
         self.model = model
         self.modelVariableSection = self.model.variableSection
@@ -69,12 +69,10 @@ struct VerticalRomanKeyboardView: View{
             }
         }
     }
-    
-    
+
+
     var body: some View {
         VStack(spacing: 0){
-            ResultView(model: model.resultModel)
-                .padding(.vertical, 6)
             VStack(spacing: Design.shared.keyViewVerticalSpacing){
                 ForEach(self.verticalIndices){(v: Int) in
                     HStack(spacing: Design.shared.keyViewHorizontalSpacing){
@@ -86,6 +84,6 @@ struct VerticalRomanKeyboardView: View{
             }
         }
         .padding(.bottom, 2)
-        
+
     }
 }

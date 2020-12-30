@@ -5006,6 +5006,7 @@
 				1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */,
 				1A3DC2272500D64D002CAA93 /* ResultView.swift */,
 				1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */,
+				1AFB68372518A40D00C649C4 /* LargeTextView.swift */,
 			);
 			path = ResultView;
 			sourceTree = "<group>";
@@ -5049,7 +5050,6 @@
 				1AF28D05253DE4B60012CF94 /* KeyLabel.swift */,
 				1A2602DB2514CC9C00EAD647 /* KeyStates.swift */,
 				1A3DC2162500D5AB002CAA93 /* Action.swift */,
-				1AFB68372518A40D00C649C4 /* LargeTextView.swift */,
 				1A58AB0B25037E8800EB1864 /* ResultView */,
 				1A6F95912514446A007399AC /* RomanKeyboard */,
 				1A3DC2082500D514002CAA93 /* FlickKeyboard */,
