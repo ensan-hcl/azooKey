@@ -110,11 +110,17 @@ final class Design{
     }
 
     var resultViewHeight: CGFloat {
-        switch keyboardLayoutType{
-        case .flick:
-            return keyViewSize.height
-        case.roman:
-            return keyViewSize.height + keyViewVerticalSpacing
+        switch orientation{
+        case .vertical:
+            if UIDevice.current.userInterfaceIdiom == .pad{
+                return screenWidth/12
+            }
+            return screenWidth/8
+        case .horizontal:
+            if UIDevice.current.userInterfaceIdiom == .pad{
+                return screenWidth/22
+            }
+            return screenWidth/18
         }
     }
 

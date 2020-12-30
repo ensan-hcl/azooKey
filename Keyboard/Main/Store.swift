@@ -207,7 +207,6 @@ final class Store{
         Design.shared.orientation = orientation
         self.refreshKeyboardModel()
         self.keyboardModelVariableSection.keyboardOrientation = orientation
-        self.action.setResult()
     }
 
     func setUIReturnKeyType(type: UIReturnKeyType){
@@ -222,7 +221,6 @@ final class Store{
             self.keyboardLayoutType = type
             self.refreshKeyboardModel()
             self.keyboardModelVariableSection.refreshView()
-            self.action.setResult()
             return
         }
 
