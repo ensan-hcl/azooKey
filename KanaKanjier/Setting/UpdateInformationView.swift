@@ -10,22 +10,21 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
-            VersionView("1.4", releaseDate: "2020年12月xx日"){
+            VersionView("1.4", releaseDate: "2021年01月xx日"){
                 ParagraphView("機能を追加しました。"){
                     "日付や時刻の入力やランダムな変換を可能にする「テンプレート」機能を追加"
+                    "フリック入力で「､｡!?」キーをカスタマイzスする機能を追加"
                     "全角英数字の変換候補を表示する設定を追加"
                 }
                 ParagraphView("機能を改善しました。"){
-                    "日本語入力と英字入力それぞれでキーボードの種類を選択できるように変更"
+                    "日本語入力と英語入力それぞれでキーボードの種類を選択できるように変更"
                     "フリックカスタムキーの編集画面を一新"
                 }
                 ParagraphView("不具合を修正しました。"){
                     "フリック/ローマ字入力方式の切り替え直後にキーボードがクラッシュする問題"
                     "ローマ字入力で正しく入力できない文字がある問題"
                 }
-
                 ParagraphView("その他軽微なデザイン・変換機能の改善を行いました。")
-
             }
             VersionView("1.3.1", releaseDate: "2020年12月18日"){
                 ParagraphView("不具合を修正しました。"){
