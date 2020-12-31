@@ -71,13 +71,13 @@ class Store{
     ))
 
 
-    var keyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayoutType>(
-        identifier: .keyboardType,
+    var keyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayout>(
+        identifier: .japaneseKeyboardLayout,
         defaultValue: .flick
     ))
 
-    var englishKeyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayoutType>(
-        identifier: .englishKeyboardType,
+    var englishKeyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayout>(
+        identifier: .englishKeyboardLayout,
         defaultValue: .flick
     ))
 
@@ -144,5 +144,5 @@ class Store{
 class StoreVariableSection: ObservableObject{
     @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
-    @Published var keyboardType: KeyboardLayoutType = .flick
+    @Published var keyboardType: KeyboardLayout = .flick
 }

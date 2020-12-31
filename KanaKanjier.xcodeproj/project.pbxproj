@@ -105,7 +105,7 @@
 		1A6F959725144481007399AC /* VerticalRomanKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* VerticalRomanKeyboardView.swift */; };
 		1A7817AC2575C898007661D8 /* emoji13_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7817AB2575C898007661D8 /* emoji13_dict.tsv */; };
 		1A7817B22575C89D007661D8 /* emoji...12_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */; };
-		1A8654BC2526F50400006582 /* KeyboardLayoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8654BB2526F50400006582 /* KeyboardLayoutType.swift */; };
+		1A8654BC2526F50400006582 /* KeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8654BB2526F50400006582 /* KeyboardLayout.swift */; };
 		1A86F47A25352AF200B92B49 /* swift-algorithm-topN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F47925352AF200B92B49 /* swift-algorithm-topN.swift */; };
 		1A86F4802535643C00B92B49 /* RomanKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F47F2535643C00B92B49 /* RomanKeyboard.swift */; };
 		1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4A92536033900B92B49 /* changed_last_n_character.swift */; };
@@ -126,7 +126,7 @@
 		1AA346872567D8CA00B41A16 /* UserSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346812567D8B100B41A16 /* UserSetting.swift */; };
 		1AA346912567F01E00B41A16 /* SettingItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC031632512138F004CA505 /* SettingItemProtocol.swift */; };
 		1AA346962567F04300B41A16 /* RomanCustomKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE00742567525000899DA2 /* RomanCustomKeys.swift */; };
-		1AA3469F2567F08100B41A16 /* KeyboardLayoutType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8654BB2526F50400006582 /* KeyboardLayoutType.swift */; };
+		1AA3469F2567F08100B41A16 /* KeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8654BB2526F50400006582 /* KeyboardLayout.swift */; };
 		1AA346A42567F12A00B41A16 /* LearningType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057D7255841C70073C6F7 /* LearningType.swift */; };
 		1AA346AA2567F15700B41A16 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346A92567F15700B41A16 /* SharedStore.swift */; };
 		1AA346AF2567F15C00B41A16 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346A92567F15700B41A16 /* SharedStore.swift */; };
@@ -2486,7 +2486,7 @@
 		1A6F959625144481007399AC /* VerticalRomanKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalRomanKeyboardView.swift; sourceTree = "<group>"; };
 		1A7817AB2575C898007661D8 /* emoji13_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji13_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji13_dict.tsv"; sourceTree = "<group>"; };
 		1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji...12_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji...12_dict.tsv"; sourceTree = "<group>"; };
-		1A8654BB2526F50400006582 /* KeyboardLayoutType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayoutType.swift; sourceTree = "<group>"; };
+		1A8654BB2526F50400006582 /* KeyboardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayout.swift; sourceTree = "<group>"; };
 		1A86F47925352AF200B92B49 /* swift-algorithm-topN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "swift-algorithm-topN.swift"; sourceTree = "<group>"; };
 		1A86F47F2535643C00B92B49 /* RomanKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanKeyboard.swift; sourceTree = "<group>"; };
 		1A86F4A92536033900B92B49 /* changed_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changed_last_n_character.swift; sourceTree = "<group>"; };
@@ -4767,7 +4767,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC031632512138F004CA505 /* SettingItemProtocol.swift */,
-				1A8654BB2526F50400006582 /* KeyboardLayoutType.swift */,
+				1A8654BB2526F50400006582 /* KeyboardLayout.swift */,
 				1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */,
 				1A4057D7255841C70073C6F7 /* LearningType.swift */,
 				1ACE00742567525000899DA2 /* RomanCustomKeys.swift */,
@@ -9803,7 +9803,7 @@
 				1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */,
 				1AC8A5AA2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
-				1A8654BC2526F50400006582 /* KeyboardLayoutType.swift in Sources */,
+				1A8654BC2526F50400006582 /* KeyboardLayout.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
@@ -9909,7 +9909,7 @@
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,
 				1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */,
 				1A3DC2122500D586002CAA93 /* HorizontalFlickKeyboardModel.swift in Sources */,
-				1AA3469F2567F08100B41A16 /* KeyboardLayoutType.swift in Sources */,
+				1AA3469F2567F08100B41A16 /* KeyboardLayout.swift in Sources */,
 				1A677370256F7AC30037AF22 /* Sound.swift in Sources */,
 				1AFA57542582EFAE00477DC2 /* RomanAaKeyModel.swift in Sources */,
 				1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */,

@@ -18,8 +18,8 @@ final class Design{
     ///do not  consider using screenHeight
     private(set) var screenWidth: CGFloat = .zero
 
-    private var keyboardLayoutType: KeyboardLayoutType {
-        Store.shared.keyboardLayoutType
+    private var keyboardLayoutType: KeyboardLayout {
+        Store.shared.keyboardLayout
     }
 
     var keyboardWidth: CGFloat {
@@ -209,7 +209,7 @@ final class Design{
                 return .system(size: CGFloat(userDecidedSize) * scale, weight: .regular, design: .default)
             }
             let maxFontSize: Int
-            switch Store.shared.keyboardLayoutType{
+            switch Store.shared.keyboardLayout{
             case .flick:
                 maxFontSize = Int(21*scale)
             case .roman:
@@ -238,7 +238,7 @@ final class Design{
             return Color("OpenKeyColor")
         }
         var normalKeyColor: Color {
-            switch Store.shared.keyboardLayoutType{
+            switch Store.shared.keyboardLayout{
             case .flick:
                 return Color("NormalKeyColor")
             case .roman:
@@ -246,7 +246,7 @@ final class Design{
             }
         }
         var specialKeyColor: Color {
-            switch Store.shared.keyboardLayoutType{
+            switch Store.shared.keyboardLayout{
             case .flick:
                 return Color("TabKeyColor")
             case .roman:
@@ -254,7 +254,7 @@ final class Design{
             }
         }
         var highlightedKeyColor: Color {
-            switch Store.shared.keyboardLayoutType{
+            switch Store.shared.keyboardLayout{
             case .flick:
                 return Color("HighlightedKeyColor")
             case .roman:

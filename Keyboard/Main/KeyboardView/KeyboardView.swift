@@ -87,7 +87,7 @@ struct KeyboardView: View {
                     ResultView(model: model.resultModel)
                         .padding(.vertical, 6)
                     if modelVariableSection.refreshing{
-                        switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayoutType){
+                        switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
                         case (.vertical, .roman):
@@ -98,7 +98,7 @@ struct KeyboardView: View {
                             HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
                         }
                     }else{
-                        switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayoutType){
+                        switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
                         case (.vertical, .roman):

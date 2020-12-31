@@ -12,7 +12,7 @@ import SwiftUI
 ///ビュー間の情報の受け渡しを担うクラス
 final class Store{
     static let shared = Store()
-    private(set) var keyboardLayoutType: KeyboardLayoutType = .roman
+    private(set) var keyboardLayout: KeyboardLayout = .roman
     private(set) var inputStyle: InputStyle = .direct
     private(set) var keyboardLanguage: KeyboardLanguage = .japanese
     private var enterKeyType: UIReturnKeyType = .default
@@ -114,7 +114,7 @@ final class Store{
     }
 
     fileprivate func refreshKeyboardModel(absolutely: Bool = false){
-        switch (self.keyboardLayoutType, Design.shared.orientation){
+        switch (self.keyboardLayout, Design.shared.orientation){
         case (.flick, .vertical):
             if absolutely || !(self.keyboardModel is VerticalFlickKeyboardModel){
                 self.keyboardModel = VerticalFlickKeyboardModel()
@@ -218,19 +218,19 @@ final class Store{
     }
 
     func setKeyboardType(for tab: TabState){
-        let japaneseLayout = self.userSetting.keyboardLayoutType(for: .keyboardType)
-        let type: KeyboardLayoutType
+        let japaneseLayout = self.userSetting.keyboardLayout(for: .japaneseKeyboardLayout)
+        let type: KeyboardLayout
         switch tab{
         case .hira:
             type = japaneseLayout
         case .abc:
-            type = self.userSetting.keyboardLayoutType(for: .englishKeyboardType)
+            type = self.userSetting.keyboardLayout(for: .englishKeyboardLayout)
         default:
-            type = self.keyboardLayoutType
+            type = self.keyboardLayout
         }
         self.inputStyle = japaneseLayout == .flick ? .direct : .roman
-        if type != self.keyboardLayoutType{
-            self.keyboardLayoutType = type
+        if type != self.keyboardLayout{
+            self.keyboardLayout = type
             self.refreshKeyboardModel()
             self.keyboardModelVariableSection.refreshView()
             return
@@ -247,13 +247,13 @@ struct UserSettingDepartment{
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
     private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate]
     private var boolSettings: [Setting: Bool]
-    private var keyboardLayoutSetting: [Setting: KeyboardLayoutType]
+    private var keyboardLayoutSetting: [Setting: KeyboardLayout]
 
     fileprivate init(){
         self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getBoolSetting(setting)
         }
-        self.keyboardLayoutSetting = [Setting.englishKeyboardType, Setting.keyboardType].reduce(into: [:]){dictionary, setting in
+        self.keyboardLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getKeyboardLayoutSetting(setting)
         }
     }
@@ -263,7 +263,7 @@ struct UserSettingDepartment{
         self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getBoolSetting(setting)
         }
-        self.keyboardLayoutSetting = [Setting.englishKeyboardType, Setting.keyboardType].reduce(into: [:]){dictionary, setting in
+        self.keyboardLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getKeyboardLayoutSetting(setting)
         }
         self.kogakiFlickSetting = Self.getKogakiFlickSetting()
@@ -283,7 +283,7 @@ struct UserSettingDepartment{
         self.boolSettings[key, default: false]
     }
 
-    internal func keyboardLayoutType(for key: Setting) -> KeyboardLayoutType {
+    internal func keyboardLayout(for key: Setting) -> KeyboardLayout {
         self.keyboardLayoutSetting[key, default: .flick]
     }
 
@@ -340,13 +340,13 @@ struct UserSettingDepartment{
     var keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
 
 
-    private static func getKeyboardLayoutSetting(_ setting: Setting) -> KeyboardLayoutType {
+    private static func getKeyboardLayoutSetting(_ setting: Setting) -> KeyboardLayout {
         switch setting{
-        case .keyboardType, .englishKeyboardType:
-            if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayoutType.get(string){
+        case .japaneseKeyboardLayout, .englishKeyboardLayout:
+            if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayout.get(string){
                 return type
             }else{
-                userDefaults.set(KeyboardLayoutType.flick.rawValue, forKey: setting.key)
+                userDefaults.set(KeyboardLayout.flick.rawValue, forKey: setting.key)
                 return .flick
             }
         default: return .flick

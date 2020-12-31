@@ -9,10 +9,10 @@
 import SwiftUI
 
 struct KeyboardTypeSettingItemView: View {
-    typealias ItemViewModel = SettingItemViewModel<KeyboardLayoutType>
-    typealias ItemModel = SettingItem<KeyboardLayoutType>
+    typealias ItemViewModel = SettingItemViewModel<KeyboardLayout>
+    typealias ItemModel = SettingItem<KeyboardLayout>
 
-    @State private var selection: KeyboardLayoutType = .flick
+    @State private var selection: KeyboardLayout = .flick
     @State private var ignoreChange = false
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
@@ -20,7 +20,7 @@ struct KeyboardTypeSettingItemView: View {
     let language: Language
     let setTogether: Bool
 
-    private let types = KeyboardLayoutType.allCases
+    private let types = KeyboardLayout.allCases
 
     enum Language{
         case japanese
@@ -84,7 +84,7 @@ struct KeyboardTypeSettingItemView: View {
                 }
                 let type = selection
                 self.viewModel.value = type
-                if self.item.identifier == .keyboardType{
+                if self.item.identifier == .japaneseKeyboardLayout{
                     Store.variableSection.keyboardType = type
                 }
                 if setTogether{
