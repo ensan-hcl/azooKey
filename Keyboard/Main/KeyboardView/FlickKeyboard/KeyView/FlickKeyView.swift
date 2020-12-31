@@ -33,12 +33,12 @@ struct FlickKeyView: View{
         self.modelVariableSection = model.variableSection
     }
 
-    var suggestAnimation: Animation {
+    private var suggestAnimation: Animation {
         Animation.easeIn(duration: 0.1).delay(0.5)
     }
 
     //これはどちらかというとViewに属すると判断した
-    var gesture: some Gesture {
+    private var gesture: some Gesture {
         DragGesture(minimumDistance: .zero)
             .onChanged({[unowned modelVariableSection] (value: DragGesture.Value) in
                 switch modelVariableSection.pressState{
@@ -211,7 +211,6 @@ struct FlickKeyView: View{
             })
         
     }
-    
     
     var body: some View {
         Rectangle()

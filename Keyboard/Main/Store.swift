@@ -18,7 +18,7 @@ final class Store{
     private var enterKeyType: UIReturnKeyType = .default
     private var enterKeyState: EnterKeyState = .return(.default)
     fileprivate var aAKeyState: AaKeyState = .normal
-    var keyboardViewModel = KeyboardModel()
+    private(set) var keyboardViewModel = KeyboardModel()
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     private(set) var action = ActionDepartment()
     ///Storeの記述部門を全て切り出したオブジェクト。
@@ -216,31 +216,19 @@ final class Store{
             self.setEnterKeyState(.return)
         }
     }
-    /*
-    func setKeyboardType(implicitly type: KeyboardLayoutType? = nil){
-        if let type = type{
-            self.keyboardLayoutType = type
-            self.refreshKeyboardModel()
-            self.keyboardModelVariableSection.refreshView()
-            return
-        }
 
-        let type = self.userSetting.keyboardLayoutType
-        self.keyboardLayoutType = type
-        self.inputStyle = type == .flick ? .direct : .roman
-    }
-    */
     func setKeyboardType(for tab: TabState){
+        let japaneseLayout = self.userSetting.keyboardLayoutType(for: .keyboardType)
         let type: KeyboardLayoutType
         switch tab{
         case .hira:
-            type = self.userSetting.keyboardLayoutType(for: .keyboardType)
+            type = japaneseLayout
         case .abc:
             type = self.userSetting.keyboardLayoutType(for: .englishKeyboardType)
         default:
             type = self.keyboardLayoutType
         }
-        self.inputStyle = self.userSetting.keyboardLayoutType(for: .keyboardType) == .flick ? .direct : .roman
+        self.inputStyle = japaneseLayout == .flick ? .direct : .roman
         if type != self.keyboardLayoutType{
             self.keyboardLayoutType = type
             self.refreshKeyboardModel()
@@ -248,7 +236,6 @@ final class Store{
             return
         }
     }
-
 
     func closeKeyboard(){
         self.action.closeKeyboard()

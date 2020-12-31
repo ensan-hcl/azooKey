@@ -22,7 +22,7 @@ enum SuggestState{
 }
 
 //V：フリック・長押しされた時に表示されるビュー
-struct SuggestView: View{
+struct SuggestView: View {
     private let model: SuggestModel
     @ObservedObject private var modelVariableSection: SuggestModelVariableSection
     
@@ -31,7 +31,7 @@ struct SuggestView: View{
         self.modelVariableSection = model.variableSection
     }
      
-    func neededApeearView(direction: FlickDirection) -> some View {
+    private func neededApeearView(direction: FlickDirection) -> some View {
         if case .oneDirection(direction) = self.modelVariableSection.suggestState{
             if let model = self.model.flickModels[direction]{
                 return model.getSuggestView(size: self.model.keySize, isPointed: true)

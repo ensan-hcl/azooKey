@@ -13,14 +13,14 @@ struct RomanKeyView: View{
     private let model: RomanKeyModelProtocol
     @ObservedObject private var modelVariableSection: RomanKeyModelVariableSection
 
-    @State var suggest = false
+    @State private var suggest = false
     
     init(_ model: RomanKeyModelProtocol){
         self.model = model
         self.modelVariableSection = model.variableSection
     }
     
-    var gesture: some Gesture {
+    private var gesture: some Gesture {
         DragGesture(minimumDistance: .zero)
             .onChanged({(value: DragGesture.Value) in
                 self.suggest = true

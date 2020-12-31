@@ -31,13 +31,13 @@ final class Design{
         let vSpacing = self.keyViewVerticalSpacing
         switch keyboardLayoutType{
         case .flick:
-            //ビューの実装では、フリックでは縦に4列なので3つの縦スペーシング + 上に縦スペーシング1つ分のpadding + 候補ビュー間6pxのpadding
-            let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + vSpacing + 6.0
-            return viewheight + spaceheight + 2
+            //ビューの実装では、フリックでは縦に4列なので3つの縦スペーシング + 上下6pxのpadding
+            let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
+            return viewheight + spaceheight
         case .roman:
             //4つなので3つの縦スペーシング + 上下6pxのpadding
             let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
-            return viewheight + spaceheight + 2
+            return viewheight + spaceheight
         }
     }
 
@@ -76,7 +76,7 @@ final class Design{
             if UIDevice.current.userInterfaceIdiom == .pad{
                 return CGSize(width: screenWidth/12.2, height: screenWidth/12)
             }
-            return CGSize(width: screenWidth/12.2, height: screenWidth/9)
+            return CGSize(width: screenWidth/12.2, height: screenWidth/8.3)
         case (.roman, .horizontal):
             return CGSize(width: screenWidth/13, height: screenWidth/20)
         }
@@ -155,7 +155,7 @@ final class Design{
     func getMaximumTextSize(_ text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 10)
         let size = text.size(withAttributes: [.font: font])
-        return self.keyboardHeight/size.height * 10
+        return (self.keyboardHeight - self.keyViewSize.height*1.2)/size.height * 10
     }
 
     func isOverScreenWidth(_ value: CGFloat) -> Bool {

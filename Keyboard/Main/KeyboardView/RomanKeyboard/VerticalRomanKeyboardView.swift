@@ -13,13 +13,13 @@ import SwiftUI
 struct VerticalRomanKeyboardView: View{
     private let model: VerticalRomanKeyboardModel
     @ObservedObject private var modelVariableSection: VerticalRomanKeyboardModelVariableSection
-
+    
     init(_ model: VerticalRomanKeyboardModel){
         self.model = model
         self.modelVariableSection = self.model.variableSection
     }
     
-    var verticalIndices: Range<Int> {
+    private var verticalIndices: Range<Int> {
         switch modelVariableSection.tabState{
         case .hira:
             return self.model.hiraKeyboard.indices
@@ -36,7 +36,7 @@ struct VerticalRomanKeyboardView: View{
         }
     }
     
-    func horizontalIndices(v: Int) -> Range<Int> {
+    private func horizontalIndices(v: Int) -> Range<Int> {
         switch modelVariableSection.tabState{
         case .hira:
             return self.model.hiraKeyboard[v].indices
@@ -53,7 +53,7 @@ struct VerticalRomanKeyboardView: View{
         }
     }
     
-    var keyModels: [[RomanKeyModelProtocol]] {
+    private var keyModels: [[RomanKeyModelProtocol]] {
         switch modelVariableSection.tabState{
         case .hira:
             return self.model.hiraKeyboard
@@ -69,21 +69,17 @@ struct VerticalRomanKeyboardView: View{
             }
         }
     }
-
-
+    
+    
     var body: some View {
-        VStack(spacing: 0){
-            VStack(spacing: Design.shared.keyViewVerticalSpacing){
-                ForEach(self.verticalIndices){(v: Int) in
-                    HStack(spacing: Design.shared.keyViewHorizontalSpacing){
-                        ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
-                            RomanKeyView(self.keyModels[v][h])
-                        }
+        VStack(spacing: Design.shared.keyViewVerticalSpacing){
+            ForEach(self.verticalIndices){(v: Int) in
+                HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+                    ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
+                        RomanKeyView(self.keyModels[v][h])
                     }
                 }
             }
         }
-        .padding(.bottom, 2)
-
     }
 }

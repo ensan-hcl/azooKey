@@ -16,7 +16,7 @@ struct LargeTextView: View {
     }
     
     private var font: Font {
-        return Font.system(size: Design.shared.getMaximumTextSize(self.text), weight: .regular, design: .serif)
+        Font.system(size: Design.shared.getMaximumTextSize(self.text), weight: .regular, design: .serif)
     }
     var body: some View {
         VStack{
@@ -33,6 +33,6 @@ struct LargeTextView: View {
             }.frame(width: nil, height: Design.shared.keyViewSize.height)
         }
         .background(Color(UIColor.systemBackground))
-        .frame(height: Design.shared.keyboardHeight, alignment: .bottom)
+        .frame(height: Design.shared.keyboardHeight + 2, alignment: .bottom)
     }
 }

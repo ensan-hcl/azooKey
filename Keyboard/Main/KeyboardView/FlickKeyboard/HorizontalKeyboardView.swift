@@ -22,7 +22,7 @@ struct HorizontalKeyboardView: View {
         self.modelVariableSection = model.variableSection
     }
 
-    var horizontalIndices: Range<Int> {
+    private var horizontalIndices: Range<Int> {
         switch modelVariableSection.tabState{
         case .hira:
             return self.model.hiraKeyboard.indices
@@ -92,24 +92,22 @@ struct HorizontalKeyboardView: View {
             case .left:
                 EmptyView()
             }
-            VStack(spacing: 0){
-                ZStack{
-                    HStack(spacing: Design.shared.keyViewHorizontalSpacing){
-                        ForEach(self.horizontalIndices){h in
-                            VStack(spacing: Design.shared.keyViewVerticalSpacing){
-                                //IDを明示する必要がある。
-                                ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
-                                    return FlickKeyView(model: self.keyModels[h][v])
-                                }
+            ZStack{
+                HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+                    ForEach(self.horizontalIndices){h in
+                        VStack(spacing: Design.shared.keyViewVerticalSpacing){
+                            //IDを明示する必要がある。
+                            ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
+                                return FlickKeyView(model: self.keyModels[h][v])
                             }
                         }
                     }
-                    HStack(spacing: Design.shared.keyViewHorizontalSpacing){
-                        ForEach(self.horizontalIndices){h in
-                            VStack(spacing: Design.shared.keyViewVerticalSpacing){
-                                ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
-                                    return SuggestView(model: self.keyModels[h][v].suggestModel)
-                                }
+                }
+                HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+                    ForEach(self.horizontalIndices){h in
+                        VStack(spacing: Design.shared.keyViewVerticalSpacing){
+                            ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
+                                return SuggestView(model: self.keyModels[h][v].suggestModel)
                             }
                         }
                     }
@@ -132,6 +130,5 @@ struct HorizontalKeyboardView: View {
                 EmptyView()
             }
         }
-        .padding(.bottom, 2.0)
     }
 }

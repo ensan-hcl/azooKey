@@ -81,6 +81,7 @@ struct KeyboardView: View {
 
             if modelVariableSection.isResultViewExpanded{
                 ExpandedResultView(model: self.model.expandedResultModel)
+                    .padding(.bottom, 2)
             }else{
                 VStack(spacing: 0){
                     ResultView(model: model.resultModel)
@@ -108,7 +109,7 @@ struct KeyboardView: View {
                             HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
                         }
                     }
-                }
+                }.padding(.bottom, 2)
             }
             if modelVariableSection.isTextMagnifying{
                 LargeTextView(modelVariableSection.magnifyingText)

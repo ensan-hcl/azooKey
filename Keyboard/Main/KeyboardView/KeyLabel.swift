@@ -19,7 +19,6 @@ enum KeyLabelType{
 }
 
 struct KeyLabel: View {
-
     enum TextSize{
         case large
         case medium

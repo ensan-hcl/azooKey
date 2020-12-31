@@ -16,6 +16,7 @@ struct UpdateInfomationView: View {
                     "全角英数字の変換候補を表示する設定を追加"
                 }
                 ParagraphView("機能を改善しました。"){
+                    "日本語入力と英字入力それぞれでキーボードの種類を選択できるように変更"
                     "フリックカスタムキーの編集画面を一新"
                 }
                 ParagraphView("不具合を修正しました。"){
@@ -121,7 +122,7 @@ private struct ParagraphView: View {
 
     var body: some View {
         VStack(alignment: .leading){
-            Text("⚫︎\(headline)")
+            Text("⚫︎\(headline)").bold()
             let allPoints = points()
             ForEach(allPoints.indices, id: \.self){i in
                 Text("・\(allPoints[i])")

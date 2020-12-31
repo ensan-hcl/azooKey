@@ -27,7 +27,7 @@ struct SettingTabView: View {
                 }
                 switch storeVariableSection.keyboardType{
                 case .flick:
-                    Section(header: Text("カスタムキー"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")){
+                    Section(header: Text("カスタムキー")){
                         VStack{
                             Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
                         }
