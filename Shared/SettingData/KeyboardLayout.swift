@@ -18,14 +18,14 @@ enum InputStyle: String{
 enum KeyboardLayout: String, CaseIterable{
     ///フリック入力式のレイアウトで表示するスタイル
     case flick = "flick"
-    ///ローマ字入力式のレイアウトで表示するスタイル
-    case roman = "roman"
+    ///qwerty入力式のレイアウトで表示するスタイル
+    case qwerty = "roman"
     
     var string: String {
         switch self{
         case .flick:
             return "フリック入力"
-        case .roman:
+        case .qwerty:
             return "ローマ字入力"
         }
     }
@@ -33,7 +33,7 @@ enum KeyboardLayout: String, CaseIterable{
     var id: Int {
         switch self{
         case .flick: return 0
-        case .roman: return 1
+        case .qwerty: return 1
         }
     }
 }

@@ -89,7 +89,7 @@ struct KeyView: View {
         switch storeVariableSection.keyboardType{
         case .flick:
             return CGSize(width: screenWidth/5.6, height: screenWidth/8)
-        case .roman:
+        case .qwerty:
             return CGSize(width: screenWidth/12.2, height: screenWidth/9)
         }
     }

@@ -90,22 +90,22 @@ struct KeyboardView: View {
                         switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
-                        case (.vertical, .roman):
+                        case (.vertical, .qwerty):
                             VerticalRomanKeyboardView(Store.shared.keyboardModel as! VerticalRomanKeyboardModel)
                         case (.horizontal, .flick):
                             HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
-                        case (.horizontal, .roman):
+                        case (.horizontal, .qwerty):
                             HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
                         }
                     }else{
                         switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
-                        case (.vertical, .roman):
+                        case (.vertical, .qwerty):
                             VerticalRomanKeyboardView(Store.shared.keyboardModel as! VerticalRomanKeyboardModel)
                         case (.horizontal, .flick):
                             HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
-                        case (.horizontal, .roman):
+                        case (.horizontal, .qwerty):
                             HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
                         }
                     }

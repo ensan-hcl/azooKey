@@ -34,7 +34,7 @@ final class Design{
             //ビューの実装では、フリックでは縦に4列なので3つの縦スペーシング + 上下6pxのpadding
             let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
             return viewheight + spaceheight
-        case .roman:
+        case .qwerty:
             //4つなので3つの縦スペーシング + 上下6pxのpadding
             let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
             return viewheight + spaceheight
@@ -45,7 +45,7 @@ final class Design{
         switch keyboardLayoutType{
         case .flick:
             return 4
-        case .roman:
+        case .qwerty:
             return 4
         }
     }
@@ -54,7 +54,7 @@ final class Design{
         switch keyboardLayoutType{
         case .flick:
             return 5
-        case .roman:
+        case .qwerty:
             return 10
         }
     }
@@ -72,12 +72,12 @@ final class Design{
                 return CGSize(width: screenWidth/9, height: screenWidth/22)
             }
             return CGSize(width: screenWidth/9, height: screenWidth/18)
-        case (.roman, .vertical):
+        case (.qwerty, .vertical):
             if UIDevice.current.userInterfaceIdiom == .pad{
                 return CGSize(width: screenWidth/12.2, height: screenWidth/12)
             }
             return CGSize(width: screenWidth/12.2, height: screenWidth/8.3)
-        case (.roman, .horizontal):
+        case (.qwerty, .horizontal):
             return CGSize(width: screenWidth/13, height: screenWidth/20)
         }
     }
@@ -88,9 +88,9 @@ final class Design{
             return keyViewHorizontalSpacing
         case (.flick, .horizontal):
             return keyViewHorizontalSpacing/2
-        case (.roman, .vertical):
+        case (.qwerty, .vertical):
             return keyViewSize.width/3
-        case (.roman, .horizontal):
+        case (.qwerty, .horizontal):
             return keyViewSize.width/5
         }
     }
@@ -101,10 +101,10 @@ final class Design{
             return (screenWidth - keyViewSize.width * 5)/5
         case (.flick, .horizontal):
             return (screenWidth - screenWidth*10/13)/12 - 0.5
-        case (.roman, .vertical):
+        case (.qwerty, .vertical):
             //9だとself.horizontalKeyCount-1で画面ぴったりになるが、それだとあまりにピシピシなので0.1を加えて調整する。
             return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount))/(9+0.5)
-        case (.roman, .horizontal):
+        case (.qwerty, .horizontal):
             return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount))/10
         }
     }
@@ -212,7 +212,7 @@ final class Design{
             switch Store.shared.keyboardLayout{
             case .flick:
                 maxFontSize = Int(21*scale)
-            case .roman:
+            case .qwerty:
                 maxFontSize = Int(25*scale)
             }
             //段階的フォールバック
@@ -241,7 +241,7 @@ final class Design{
             switch Store.shared.keyboardLayout{
             case .flick:
                 return Color("NormalKeyColor")
-            case .roman:
+            case .qwerty:
                 return Color("RomanKeyColor")
             }
         }
@@ -249,7 +249,7 @@ final class Design{
             switch Store.shared.keyboardLayout{
             case .flick:
                 return Color("TabKeyColor")
-            case .roman:
+            case .qwerty:
                 return Color("TabKeyColor")
             }
         }
@@ -257,7 +257,7 @@ final class Design{
             switch Store.shared.keyboardLayout{
             case .flick:
                 return Color("HighlightedKeyColor")
-            case .roman:
+            case .qwerty:
                 return Color("RomanHighlightedKeyColor")
             }
         }

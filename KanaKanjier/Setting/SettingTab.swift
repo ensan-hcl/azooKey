@@ -40,7 +40,7 @@ struct SettingTabView: View {
                         }
 
                     }
-                case .roman:
+                case .qwerty:
                     Section(header: Text("カスタムキー")){
                         Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
                         ImageSlideshowView(pictures: ["romanCustomKeySetting0","romanCustomKeySetting1","romanCustomKeySetting2"])
@@ -111,7 +111,7 @@ struct SettingTabView: View {
                     switch storeVariableSection.keyboardType{
                     case .flick:
                         EmptyView()
-                    case .roman:
+                    case .qwerty:
                         BooleanSettingItemView(Store.shared.englishCandidateSetting)
                     }
                     BooleanSettingItemView(Store.shared.halfKanaSetting)

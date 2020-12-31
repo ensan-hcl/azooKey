@@ -49,8 +49,8 @@ struct KeyboardTypeSettingItemView: View {
         switch (type, language){
         case (.flick, .japanese): return "KeyboardImage_flick_ja"
         case (.flick, .english): return "KeyboardImage_flick_en"
-        case (.roman, .japanese): return "KeyboardImage_roman_ja"
-        case (.roman, .english): return "KeyboardImage_roman_en"
+        case (.qwerty, .japanese): return "KeyboardImage_roman_ja"
+        case (.qwerty, .english): return "KeyboardImage_roman_en"
         }
     }
 

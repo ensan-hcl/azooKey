@@ -12,7 +12,7 @@ import SwiftUI
 ///ビュー間の情報の受け渡しを担うクラス
 final class Store{
     static let shared = Store()
-    private(set) var keyboardLayout: KeyboardLayout = .roman
+    private(set) var keyboardLayout: KeyboardLayout = .qwerty
     private(set) var inputStyle: InputStyle = .direct
     private(set) var keyboardLanguage: KeyboardLanguage = .japanese
     private var enterKeyType: UIReturnKeyType = .default
@@ -123,11 +123,11 @@ final class Store{
             if absolutely || !(self.keyboardModel is HorizontalFlickKeyboardModel){
                 self.keyboardModel = HorizontalFlickKeyboardModel()
             }
-        case (.roman, .vertical):
+        case (.qwerty, .vertical):
             if absolutely || !(self.keyboardModel is VerticalRomanKeyboardModel){
                 self.keyboardModel = VerticalRomanKeyboardModel()
             }
-        case (.roman, .horizontal):
+        case (.qwerty, .horizontal):
             if absolutely || !(self.keyboardModel is HorizontalRomanKeyboardModel){
                 self.keyboardModel = HorizontalRomanKeyboardModel()
             }
