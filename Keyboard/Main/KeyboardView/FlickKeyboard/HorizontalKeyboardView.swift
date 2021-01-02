@@ -93,9 +93,9 @@ struct HorizontalKeyboardView: View {
                 EmptyView()
             }
             ZStack{
-                HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+                HStack(spacing: Design.shared.horizontalSpacing){
                     ForEach(self.horizontalIndices){h in
-                        VStack(spacing: Design.shared.keyViewVerticalSpacing){
+                        VStack(spacing: Design.shared.verticalSpacing){
                             //IDを明示する必要がある。
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
                                 return FlickKeyView(model: self.keyModels[h][v])
@@ -103,9 +103,9 @@ struct HorizontalKeyboardView: View {
                         }
                     }
                 }
-                HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+                HStack(spacing: Design.shared.horizontalSpacing){
                     ForEach(self.horizontalIndices){h in
-                        VStack(spacing: Design.shared.keyViewVerticalSpacing){
+                        VStack(spacing: Design.shared.verticalSpacing){
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
                                 return SuggestView(model: self.keyModels[h][v].suggestModel)
                             }

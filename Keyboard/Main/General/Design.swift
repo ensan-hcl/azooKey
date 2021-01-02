@@ -18,50 +18,13 @@ final class Design{
     ///do not  consider using screenHeight
     private(set) var screenWidth: CGFloat = .zero
 
-    private var keyboardLayoutType: KeyboardLayout {
+    private var keyboardLayout: KeyboardLayout {
         Store.shared.keyboardLayout
-    }
-
-    var keyboardWidth: CGFloat {
-        return self.keyViewSize.width * CGFloat(self.horizontalKeyCount) + self.keyViewHorizontalSpacing * CGFloat(self.horizontalKeyCount-1)
-    }
-
-    var keyboardHeight: CGFloat {
-        let viewheight = self.keyViewSize.height * CGFloat(self.verticalKeyCount) + self.resultViewHeight
-        let vSpacing = self.keyViewVerticalSpacing
-        switch keyboardLayoutType{
-        case .flick:
-            //ビューの実装では、フリックでは縦に4列なので3つの縦スペーシング + 上下6pxのpadding
-            let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
-            return viewheight + spaceheight
-        case .qwerty:
-            //4つなので3つの縦スペーシング + 上下6pxのpadding
-            let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
-            return viewheight + spaceheight
-        }
-    }
-
-    var verticalKeyCount: Int {
-        switch keyboardLayoutType{
-        case .flick:
-            return 4
-        case .qwerty:
-            return 4
-        }
-    }
-
-    var horizontalKeyCount: Int {
-        switch keyboardLayoutType{
-        case .flick:
-            return 5
-        case .qwerty:
-            return 10
-        }
     }
 
     ///KeyViewのサイズを自動で計算して返す。
     var keyViewSize: CGSize {
-        switch (keyboardLayoutType, orientation){
+        switch (keyboardLayout, orientation){
         case (.flick, .vertical):
             if UIDevice.current.userInterfaceIdiom == .pad{
                 return CGSize(width: screenWidth/5.6, height: screenWidth/12)
@@ -82,12 +45,49 @@ final class Design{
         }
     }
 
-    var keyViewVerticalSpacing: CGFloat {
-        switch (keyboardLayoutType, orientation){
+    var keyboardWidth: CGFloat {
+        return self.keyViewSize.width * CGFloat(self.horizontalKeyCount) + self.horizontalSpacing * CGFloat(self.horizontalKeyCount-1)
+    }
+
+    var keyboardHeight: CGFloat {
+        let viewheight = self.keyViewSize.height * CGFloat(self.verticalKeyCount) + self.resultViewHeight
+        let vSpacing = self.verticalSpacing
+        switch keyboardLayout{
+        case .flick:
+            //ビューの実装では、フリックでは縦に4列なので3つの縦スペーシング + 上下6pxのpadding
+            let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
+            return viewheight + spaceheight
+        case .qwerty:
+            //4つなので3つの縦スペーシング + 上下6pxのpadding
+            let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
+            return viewheight + spaceheight
+        }
+    }
+
+    var verticalKeyCount: Int {
+        switch keyboardLayout{
+        case .flick:
+            return 4
+        case .qwerty:
+            return 4
+        }
+    }
+
+    var horizontalKeyCount: Int {
+        switch keyboardLayout{
+        case .flick:
+            return 5
+        case .qwerty:
+            return 10
+        }
+    }
+
+    var verticalSpacing: CGFloat {
+        switch (keyboardLayout, orientation){
         case (.flick, .vertical):
-            return keyViewHorizontalSpacing
+            return horizontalSpacing
         case (.flick, .horizontal):
-            return keyViewHorizontalSpacing/2
+            return horizontalSpacing/2
         case (.qwerty, .vertical):
             return keyViewSize.width/3
         case (.qwerty, .horizontal):
@@ -95,8 +95,8 @@ final class Design{
         }
     }
 
-    var keyViewHorizontalSpacing: CGFloat {
-        switch (keyboardLayoutType, orientation){
+    var horizontalSpacing: CGFloat {
+        switch (keyboardLayout, orientation){
         case (.flick, .vertical):
             return (screenWidth - keyViewSize.width * 5)/5
         case (.flick, .horizontal):
@@ -126,7 +126,7 @@ final class Design{
 
     var flickEnterKeySize: CGSize {
         let size = keyViewSize
-        return CGSize(width: size.width, height: size.height*2 + keyViewVerticalSpacing)
+        return CGSize(width: size.width, height: size.height*2 + verticalSpacing)
     }
 
     var romanSpaceKeyWidth: CGFloat {
@@ -138,14 +138,14 @@ final class Design{
     }
 
     func romanScaledKeyWidth(normal: Int, for count: Int) -> CGFloat {
-        let width = keyViewSize.width * CGFloat(normal) + keyViewHorizontalSpacing * CGFloat(normal - 1)
-        let spacing = keyViewHorizontalSpacing * CGFloat(count - 1)
+        let width = keyViewSize.width * CGFloat(normal) + horizontalSpacing * CGFloat(normal - 1)
+        let spacing = horizontalSpacing * CGFloat(count - 1)
         return (width - spacing) / CGFloat(count)
     }
 
     func romanFunctionalKeyWidth(normal: Int, functional: Int, enter: Int = 0, space: Int = 0) -> CGFloat {
         let maxWidth = keyboardWidth
-        let spacing = keyViewHorizontalSpacing * CGFloat(normal + functional + space + enter - 1)
+        let spacing = horizontalSpacing * CGFloat(normal + functional + space + enter - 1)
         let normalKeyWidth = keyViewSize.width * CGFloat(normal)
         let spaceKeyWidth = romanSpaceKeyWidth * CGFloat(space)
         let enterKeyWidth = romanEnterKeyWidth * CGFloat(enter)
@@ -162,15 +162,11 @@ final class Design{
         return screenWidth < value
     }
 
-    func registerScreenWidth(width: CGFloat){
-        self.screenWidth = width
-    }
-
-    func registerScreenSize(size: CGSize){
+    func setScreenSize(size: CGSize){
         if self.screenWidth == size.width{
             return
         }
-        self.registerScreenWidth(width: size.width)
+        self.screenWidth = size.width
         let orientation: KeyboardOrientation = size.width<size.height ? .vertical : .horizontal
         Store.shared.setOrientation(orientation)
     }

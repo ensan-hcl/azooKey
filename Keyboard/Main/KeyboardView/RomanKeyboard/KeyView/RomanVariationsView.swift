@@ -18,7 +18,7 @@ struct RomanVariationsView: View {
     }
     
     var body: some View {
-        HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+        HStack(spacing: Design.shared.horizontalSpacing){
             ForEach(model.variations.indices){(index: Int) in
                 ZStack{
                     Rectangle()

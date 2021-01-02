@@ -74,12 +74,12 @@ struct RomanKeyView: View{
     var body: some View{
         ZStack(alignment: .bottom){
             Group{
-                let vSpacing = Design.shared.keyViewVerticalSpacing
+                let vSpacing = Design.shared.verticalSpacing
                 Rectangle()
                     .frame(width: self.model.keySize.width, height: self.model.keySize.height)
                     .contentShape(
                         Rectangle()
-                            .size(CGSize(width: self.model.keySize.width + Design.shared.keyViewHorizontalSpacing, height: self.model.keySize.height + vSpacing))
+                            .size(CGSize(width: self.model.keySize.width + Design.shared.horizontalSpacing, height: self.model.keySize.height + vSpacing))
                     )
                     .foregroundColor(self.modelVariableSection.pressState.isActive ? self.model.backGroundColorWhenPressed:self.model.backGroundColorWhenUnpressed)
                     .cornerRadius(6)
@@ -88,7 +88,7 @@ struct RomanKeyView: View{
             }
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
-                    let height = Design.shared.keyViewVerticalSpacing + self.model.keySize.height
+                    let height = Design.shared.verticalSpacing + self.model.keySize.height
                     if self.modelVariableSection.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty{
                         RomanSuggestView.scaleToVariationsSize(
                             keyWidth: self.model.keySize.width,

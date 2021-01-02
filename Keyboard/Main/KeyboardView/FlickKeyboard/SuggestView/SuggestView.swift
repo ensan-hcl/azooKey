@@ -50,11 +50,11 @@ struct SuggestView: View {
     }
     
     var body: some View {
-        VStack(spacing: Design.shared.keyViewVerticalSpacing){
+        VStack(spacing: Design.shared.verticalSpacing){
             if self.modelVariableSection.suggestState.isActive{
                 self.neededApeearView(direction: .top)
                 
-                HStack(spacing: Design.shared.keyViewHorizontalSpacing){
+                HStack(spacing: Design.shared.horizontalSpacing){
                     self.neededApeearView(direction: .left)
                     Rectangle()
                         .frame(width: self.model.keySize.width, height: self.model.keySize.height)
