@@ -69,7 +69,7 @@ struct VerticalFlickKeyboardView: View{
     var body: some View {
         ZStack{
             HStack(spacing: Design.shared.horizontalSpacing){
-                ForEach(self.horizontalIndices){h in
+                ForEach(self.horizontalIndices, id: \.self){h in
                     VStack(spacing: Design.shared.verticalSpacing){
                         //IDを明示する必要がある。
                         ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
@@ -79,7 +79,7 @@ struct VerticalFlickKeyboardView: View{
                 }
             }
             HStack(spacing: Design.shared.horizontalSpacing){
-                ForEach(self.horizontalIndices){h in
+                ForEach(self.horizontalIndices, id: \.self){h in
                     VStack(spacing: Design.shared.verticalSpacing){
                         ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
                             return SuggestView(model: self.keyModels[h][v].suggestModel)

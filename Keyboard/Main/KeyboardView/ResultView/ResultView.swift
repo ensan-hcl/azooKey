@@ -37,7 +37,7 @@ struct ResultView: View{
                     ScrollView(.horizontal, showsIndicators: false){
                         ScrollViewReader{scrollViewProxy in
                             LazyHStack(spacing: 10) {
-                                ForEach(modelVariableSection.results){data in
+                                ForEach(modelVariableSection.results, id: \.id){data in
                                     if data.candidate.inputable{
                                         Button{
                                             Sound.click()
@@ -103,7 +103,16 @@ struct ResultModel{
 
     func setResults(_ results: [Candidate]){
         self.variableSection.results = results.indices.map{ResultData(id: $0, candidate: results[$0])}
-        self.variableSection.scrollViewProxy?.scrollTo(0, anchor: .trailing)
+        self.scrollTop()
+    }
+
+    func scrollTop(){
+        if let proxy = self.variableSection.scrollViewProxy{
+            proxy.scrollTo(0, anchor: .trailing)
+        }else{
+            debug("proxyが失われていて、先頭にスクロールできませんでした")
+        }
+
     }
 
     func showMoveCursorView(_ bool: Bool){

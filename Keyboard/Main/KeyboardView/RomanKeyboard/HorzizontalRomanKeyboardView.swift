@@ -72,7 +72,7 @@ struct HorizontalRomanKeyboardView: View{
     
     var body: some View {
         VStack(spacing: Design.shared.verticalSpacing){
-            ForEach(self.verticalIndices){(v: Int) in
+            ForEach(self.verticalIndices, id: \.self){(v: Int) in
                 HStack(spacing: Design.shared.horizontalSpacing){
                     ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
                         RomanKeyView(self.keyModels[v][h])

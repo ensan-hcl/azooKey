@@ -19,7 +19,7 @@ struct RomanVariationsView: View {
     
     var body: some View {
         HStack(spacing: Design.shared.horizontalSpacing){
-            ForEach(model.variations.indices){(index: Int) in
+            ForEach(model.variations.indices, id: \.self){(index: Int) in
                 ZStack{
                     Rectangle()
                         .foregroundColor(index == self.modelVariableSection.selection ? Color.blue:Design.shared.colors.highlightedKeyColor)

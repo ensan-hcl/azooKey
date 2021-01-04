@@ -39,10 +39,10 @@ struct ExpandedResultView: View {
             .background(Design.shared.colors.backGroundColor)
             ScrollView{
                 LazyVStack(alignment: .leading){
-                    ForEach(modelVariableSection.splitedResults){results in
+                    ForEach(modelVariableSection.splitedResults, id: \.id){results in
                         Divider()
                         HStack{
-                            ForEach(results.results){datum in
+                            ForEach(results.results, id: \.id){datum in
                                 Button(action: {
                                     self.model.pressed(data: datum)
                                 }){

@@ -55,11 +55,11 @@ extension CGPoint{
  }
  */
 
-
 struct TestView: View {
+    @State private var proxy: ScrollViewProxy? = nil
+
     var body: some View {
         VStack{
-            KeyboardLayoutTypeDetailsView()
         }
     }
 }
