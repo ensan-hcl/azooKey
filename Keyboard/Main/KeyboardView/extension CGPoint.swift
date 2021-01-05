@@ -9,15 +9,14 @@
 import Foundation
 import SwiftUI
 extension CGPoint{
+    @inlinable
     func distance(to point: CGPoint) -> CGFloat {
-        let x1: CGFloat = self.x
-        let x2: CGFloat = point.x
-        let y1: CGFloat = self.y
-        let y2: CGFloat = point.y
-        let d2: CGFloat = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)
-        let d: CGFloat = sqrt(d2)
-        return d
+        let dx: CGFloat = x-point.x
+        let dy: CGFloat = y-point.y
+        let d2: CGFloat = dx*dx + dy*dy
+        return sqrt(d2)
     }
+    
     func direction(to point: CGPoint) -> FlickDirection {
         let x: CGFloat = point.x - self.x
         let y: CGFloat = point.y - self.y

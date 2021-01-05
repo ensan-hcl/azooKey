@@ -81,7 +81,6 @@ extension KanaKanjiConverter{
                 return "\(year + 1867)年"
             }
         }
-        
         if string.hasPrefix("タイショウ"){
             if katakanaStringCount == 9, let year = Int(string[5...6]){
                 return "\(year + 1911)年"
