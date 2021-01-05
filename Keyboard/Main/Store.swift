@@ -589,6 +589,7 @@ final class ActionDepartment{
 
         //MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
+            #if DEBUG
             self.inputStateHolder.isDebugMode.toggle()
             if self.inputStateHolder.isDebugMode{
                 var left = self.inputStateHolder.proxy.documentContextBeforeInput ?? "nil"
@@ -609,6 +610,7 @@ final class ActionDepartment{
 
                 self.setDebugPrint("left:\(Array(left.unicodeScalars))/center:\(Array(center.unicodeScalars))/right:\(Array(right.unicodeScalars))")
             }
+            #endif
         }
     }
 
@@ -1353,9 +1355,10 @@ private final class InputStateHolder{
         }
         Store.shared.registerResult(results)
     }
-    
+    #if DEBUG
     //debug中であることを示す。
     fileprivate var isDebugMode: Bool = false
+    #endif
     
     fileprivate func setDebugResult(text: String){
         #if DEBUG

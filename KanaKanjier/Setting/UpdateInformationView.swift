@@ -10,7 +10,7 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
-            VersionView("1.4", releaseDate: "2021年01月xx日"){
+            VersionView("1.4", releaseDate: "2021年01月05日"){
                 ParagraphView("機能を追加しました。"){
                     "日付や時刻の入力やランダムな変換を可能にする「テンプレート」機能を追加"
                     "フリック入力で「､｡!?」キーをカスタマイズする機能を追加"
@@ -24,7 +24,7 @@ struct UpdateInfomationView: View {
                     "フリック/ローマ字入力方式の切り替え直後にキーボードがクラッシュする問題"
                     "ローマ字入力で正しく入力できない文字がある問題"
                 }
-                ParagraphView("その他軽微なデザイン・変換機能の改善を行いました。")
+                ParagraphView("その他軽微なデザイン・変換機能・操作性の改善を行いました。")
             }
             VersionView("1.3.1", releaseDate: "2020年12月18日"){
                 ParagraphView("不具合を修正しました。"){

@@ -43,6 +43,7 @@ struct TemplateListView: View {
     @ObservedObject private var data = TemplateDataList()
     @State private var previewStrings: [String] = []
     init(){
+        debug("ListViewの初期化")
         if let savedData = TemplateData.load(){
             self.data.templates = savedData.map{TemplateDataModel($0)}
         } else {
@@ -56,10 +57,18 @@ struct TemplateListView: View {
         self.previewStrings = data.templates.map{$0.data.previewString}
     }
 
+    var indices: Range<Int> {
+        //let pindices = previewStrings.indices
+        let dindices = data.templates.indices
+        //debug("previewStrings.indices", pindices)
+        //debug("data.templates.indices", dindices)
+        return dindices
+    }
+
     var body: some View {
         Form{
             List{
-                ForEach(data.templates.indices, id: \.self){i in
+                ForEach(indices, id: \.self){i in
                     NavigationLink(destination: TemplateEditingView(data, index: i)){
                         HStack{
                             Text(data.templates[i].data.name)
@@ -73,6 +82,9 @@ struct TemplateListView: View {
             }
         }.navigationBarTitle(Text("テンプレートの管理"), displayMode: .inline)
         .navigationBarItems(trailing: addButton)
+        .onAppear{
+            self.previewStrings = data.templates.map{$0.data.previewString}
+        }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)){_ in
             self.save()
         }
@@ -95,7 +107,7 @@ struct TemplateListView: View {
             }
             let newData = TemplateData(template: DateTemplateLiteral.example.export(), name: name)
             data.templates.append(TemplateDataModel(newData))
-            self.previewStrings.append(newData.previewString)
+            self.previewStrings = data.templates.map{$0.data.previewString}
         }label: {
             Image(systemName: "plus")
         }
