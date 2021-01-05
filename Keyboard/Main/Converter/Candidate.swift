@@ -76,7 +76,7 @@ struct Candidate{
     ///後から`action`を追加した形を生成する関数
     ///- parameters:
     ///  - actions: 実行する`action`
-    func withActions(_ actions: [ActionType]) -> Candidate {
+    @inlinable func withActions(_ actions: [ActionType]) -> Candidate {
         return Candidate(
             text: text,
             value: value,
@@ -88,10 +88,10 @@ struct Candidate{
         )
     }
 
-    static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"//.escaped().replacingOccurrences(of: "\\", with: "\\\\")
-    static let randomExpression = "<random type=\".*?\" value=\".*?\">"//.escaped().replacingOccurrences(of: "\\", with: "\\\\")
+    static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"
+    static let randomExpression = "<random type=\".*?\" value=\".*?\">"
 
-    func parseTemplate() -> Candidate {
+    @inlinable func parseTemplate() -> Candidate {
         var newText = text
         while let range = newText.range(of: Self.dateExpression, options: .regularExpression){
             let templateString = String(newText[range])
