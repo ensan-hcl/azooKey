@@ -9,115 +9,88 @@
 import Foundation
 
 extension KanaKanjiConverter{
+    ///西暦に変換した結果を返す関数。
+    /// - parameters:
+    ///   - text: 対象文字列。
+    /// - note:
+    ///    現在英字のみ。ギリシャ文字や数字に対応する必要あり。
+    func toSeirekiCandidates(_ inputData: InputData) -> [Candidate] {
+        let string = inputData.katakanaString
+        let result = self.toSeireki(string)
+        return result.map{[Candidate(
+            text: $0,
+            value: -15,
+            correspondingCount: inputData.characters.count,
+            lastMid: 501,
+            data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1288, mid: 501, value: -15)]
+        )]} ?? []
+    }
+
     ///和暦で書かれた入力を西暦に変換する関数
     /// - parameters:
     ///   - string: 入力
-    func toSeireki(_ inputData: InputData) -> [Candidate] {
-        let string = inputData.katakanaString
-        let count = inputData.characters.count
-        let makeResult0: (String) -> Candidate = {
-            return Candidate(
-                text: $0,
-                value: -18,
-                correspondingCount: count,
-                lastMid: 237,
-                data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -18)]
-            )
-        }
-
-
+    private func toSeireki(_ string: String) -> String? {
         let katakanaStringCount = string.count
         if string == "メイジガンネン"{
-            return [
-                makeResult0("1868年")
-            ]
+            return "1868年"
         }
         if string == "タイショウガンネン"{
-            return [
-                makeResult0("1912年")
-            ]
+            return "1912年"
         }
         if string == "ショウワガンネン"{
-            return [
-                makeResult0("1926年")
-            ]
+            return "1926年"
         }
         if string == "ヘイセイガンネン"{
-            return [
-                makeResult0("1989年")
-            ]
+            return "1989年"
         }
         if string == "レイワガンネン"{
-            return [
-                makeResult0("2019年")
-            ]
+            return "2019年"
         }
         if !string.hasSuffix("ネン"){
-            return []
+            return nil
         }
         if string.hasPrefix("ショウワ"){
             if katakanaStringCount == 8, let year = Int(string[4...5]){
-                return [
-                    makeResult0("\(year + 1925)年")
-                ]
+                return "\(year + 1925)年"
             }
             if katakanaStringCount == 7, let year = Int(string[4...4]){
-                return [
-                    makeResult0("\(year + 1925)年")
-                ]
+                return "\(year + 1925)年"
             }
         }
         if string.hasPrefix("ヘイセイ"){
             if katakanaStringCount == 8, let year = Int(string[4...5]){
-                return [
-                    makeResult0("\(year + 1988)年")
-                ]
+                return "\(year + 1988)年"
             }
             if katakanaStringCount == 7, let year = Int(string[4...4]){
-                return [
-                    makeResult0("\(year + 1988)年")
-                ]
+                return "\(year + 1988)年"
             }
         }
         if string.hasPrefix("レイワ"){
             if katakanaStringCount == 7, let year = Int(string[3...4]){
-                return [
-                    makeResult0("\(year + 2018)年")
-                ]
+                return "\(year + 2018)年"
             }
             if katakanaStringCount == 6, let year = Int(string[3...3]){
-                return [
-                    makeResult0("\(year + 2018)年")
-                ]
+                return "\(year + 2018)年"
             }
         }
         if string.hasPrefix("メイジ"){
             if katakanaStringCount == 7, let year = Int(string[3...4]){
-                return [
-                    makeResult0("\(year + 1867)年")
-                ]
+                return "\(year + 1867)年"
             }
             if katakanaStringCount == 6, let year = Int(string[3...3]){
-                return [
-                    makeResult0("\(year + 1867)年")
-                ]
+                return "\(year + 1867)年"
             }
         }
         
         if string.hasPrefix("タイショウ"){
             if katakanaStringCount == 9, let year = Int(string[5...6]){
-                return [
-                    makeResult0("\(year + 1911)年")
-                ]
+                return "\(year + 1911)年"
             }
             if katakanaStringCount == 8, let year = Int(string[5...5]){
-                return [
-                    makeResult0("\(year + 1911)年")
-                ]
+                return "\(year + 1911)年"
             }
         }
-        return []
-
+        return nil
     }
     ///西暦で書かれた入力を和暦に変換する関数
     /// - parameters:

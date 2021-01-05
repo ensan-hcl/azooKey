@@ -58,7 +58,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         var result = [Candidate]()
         if Store.shared.userSetting.bool(for: .wesJapCalender){
             result.append(contentsOf: self.toWareki(inputData))
-            result.append(contentsOf: self.toSeireki(inputData))
+            result.append(contentsOf: self.toSeirekiCandidates(inputData))
         }
         if Store.shared.userSetting.bool(for: .typographyLetter){
             result.append(contentsOf: self.typographicalCandidates(inputData))
