@@ -16,7 +16,7 @@ extension CGPoint{
         let d2: CGFloat = dx*dx + dy*dy
         return sqrt(d2)
     }
-    
+
     func direction(to point: CGPoint) -> FlickDirection {
         let x: CGFloat = point.x - self.x
         let y: CGFloat = point.y - self.y

@@ -36,7 +36,7 @@ enum KeyboardOrientation{
     case horizontal     //height<width
 }
 
-//keyboard type, orientationに関わらず保持すべきデータ。
+//layout, orientation, language, inputstyleに関わらず保持すべきデータ。
 final class KeyboardModelVariableSection: ObservableObject{
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published var isTextMagnifying = false

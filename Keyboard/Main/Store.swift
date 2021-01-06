@@ -1111,7 +1111,7 @@ private final class InputStateHolder{
         var leftSideText = self.proxy.documentContextBeforeInput ?? ""
         var count = 0
         while let last = leftSideText.last{
-            if ["、","。","！","？",".",","].contains(last){
+            if ["、","。","！","？",".",",","．","，"].contains(last){
                 if count == 0{
                     count = 1
                 }
