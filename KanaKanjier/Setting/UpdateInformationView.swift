@@ -10,6 +10,9 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
+            VersionView("1.4.1", releaseDate: "2020年12月06日"){
+                ParagraphView("軽微な不具合を修正しました。")
+            }
             VersionView("1.4", releaseDate: "2021年01月05日"){
                 ParagraphView("機能を追加しました。"){
                     "日付や時刻の入力やランダムな変換を可能にする「テンプレート」機能を追加"
