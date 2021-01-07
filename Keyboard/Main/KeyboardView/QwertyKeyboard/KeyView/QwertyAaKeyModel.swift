@@ -1,5 +1,5 @@
 //
-//  RomanAaKeyModel.swift
+//  QwertyAaKeyModel.swift
 //  Keyboard
 //
 //  Created by β α on 2020/12/11.
@@ -8,12 +8,12 @@
 import Foundation
 import SwiftUI
 
-struct RomanAaKeyModel: RomanKeyModelProtocol, AaKeyModelProtocol{
-    static var shared = RomanAaKeyModel()
+struct QwertyAaKeyModel: QwertyKeyModelProtocol, AaKeyModelProtocol{
+    static var shared = QwertyAaKeyModel()
 
-    var variableSection = RomanKeyModelVariableSection()
+    var variableSection = QwertyKeyModelVariableSection()
     var keySize: CGSize {
-        return CGSize(width: Design.shared.romanScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewSize.height)
+        return CGSize(width: Design.shared.qwertyScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewSize.height)
     }
     var variationsModel = VariationsModel([])
 

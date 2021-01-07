@@ -17,33 +17,58 @@ struct SettingTabView: View {
         NavigationView {
             Form {
                 Section(header: Text("キーボードの種類")){
-                    KeyboardTypeSettingItemView(Store.shared.keyboardTypeSetting, setTogether: true)
+                    //KeyboardLayoutSettingItemView(Store.shared.keyboardTypeSetting, setTogether: true, id: 11)
                     NavigationLink(destination: KeyboardLayoutTypeDetailsView()){
                         HStack{
-                            Text("詳しい設定")
+                            Text("キーボードの種類を設定する")
                             Spacer()
                         }
                     }
                 }
-                switch storeVariableSection.keyboardType{
-                case .flick:
+                switch (storeVariableSection.keyboardType, storeVariableSection.englishKeyboardLayout){
+                case (.flick, .flick):
                     Section(header: Text("カスタムキー")){
                         VStack{
                             Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
+                            ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
                         }
-                        ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
                         NavigationLink(destination: FlickCustomKeysSettingSelectView()){
                             HStack{
                                 Text("設定する")
                                 Spacer()
                             }
                         }
-
                     }
-                case .qwerty:
+                case (.flick, .qwerty), (.qwerty, .flick):
                     Section(header: Text("カスタムキー")){
-                        Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
-                        ImageSlideshowView(pictures: ["romanCustomKeySetting0","romanCustomKeySetting1","romanCustomKeySetting2"])
+                        VStack{
+                            Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
+                            ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
+                        }
+                        NavigationLink(destination: FlickCustomKeysSettingSelectView()){
+                            HStack{
+                                Text("設定する")
+                                Spacer()
+                            }
+                        }
+                        VStack{
+                            Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
+                            ImageSlideshowView(pictures: ["romanCustomKeySetting0","romanCustomKeySetting1","romanCustomKeySetting2"])
+                        }
+                        NavigationLink(destination: RomanCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
+                            HStack{
+                                Text("設定する")
+                                Spacer()
+                            }
+                        }
+                    }
+
+                case (.qwerty, .qwerty):
+                    Section(header: Text("カスタムキー")){
+                        VStack{
+                            Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
+                            ImageSlideshowView(pictures: ["romanCustomKeySetting0","romanCustomKeySetting1","romanCustomKeySetting2"])
+                        }
                         NavigationLink(destination: RomanCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
                             HStack{
                                 Text("設定する")

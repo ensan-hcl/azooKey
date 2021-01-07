@@ -1,20 +1,20 @@
 //
-//  HorizontalRomanKeyboardModel.swift
+//  VerticalQwertyKeyboardModel.swift
 //  Keyboard
 //
-//  Created by β α on 2020/09/21.
+//  Created by β α on 2020/09/18.
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
 import Foundation
-final class HorizontalRomanKeyboardModelVariableSection: ObservableObject{
+final class VerticalQwertyKeyboardModelVariableSection: ObservableObject{
     @Published var tabState: TabState = .hira
 }
 
-struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
-    let enterKeyModel: EnterKeyModelProtocol = RomanEnterKeyModel.shared
-    let aAKeyModel: AaKeyModelProtocol = RomanAaKeyModel.shared
-    var variableSection = HorizontalRomanKeyboardModelVariableSection()
+struct VerticalQwertyKeyboardModel: KeyboardModelProtocol{
+    let enterKeyModel: EnterKeyModelProtocol = QwertyEnterKeyModel.shared
+    let aAKeyModel: AaKeyModelProtocol = QwertyAaKeyModel.shared
+    var variableSection = VerticalQwertyKeyboardModelVariableSection()
     
     func setTabState(state: TabState){
         self.variableSection.tabState = state
@@ -25,9 +25,9 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
     }
 
     //横に並べる
-    var numberKeyboard: [[RomanKeyModelProtocol]] = [
+    var numberKeyboard: [[QwertyKeyModelProtocol]] {[
         [
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("1"),
                 pressActions: [.input("1")],
                 variationsModel: VariationsModel([
@@ -38,7 +38,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
 
                 ], direction: .right)
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("2"),
                 pressActions: [.input("2")],
                 variationsModel: VariationsModel([
@@ -49,7 +49,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
 
                 ], direction: .right)
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("3"),
                 pressActions: [.input("3")],
                 variationsModel: VariationsModel([
@@ -60,7 +60,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
 
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("4"),
                 pressActions: [.input("4")],
                 variationsModel: VariationsModel([
@@ -70,7 +70,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("④"), actions: [.input("④")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("5"),
                 pressActions: [.input("5")],
                 variationsModel: VariationsModel([
@@ -80,7 +80,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("⑤"), actions: [.input("⑤")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("6"),
                 pressActions: [.input("6")],
                 variationsModel: VariationsModel([
@@ -90,7 +90,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("⑥"), actions: [.input("⑥")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("7"),
                 pressActions: [.input("7")],
                 variationsModel: VariationsModel([
@@ -100,7 +100,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("⑦"), actions: [.input("⑦")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("8"),
                 pressActions: [.input("8")],
                 variationsModel: VariationsModel([
@@ -110,7 +110,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("⑧"), actions: [.input("⑧")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("9"),
                 pressActions: [.input("9")],
                 variationsModel: VariationsModel([
@@ -120,7 +120,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("⑨"), actions: [.input("⑨")] ),
                 ], direction: .left)
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("0"),
                 pressActions: [.input("0")],
                 variationsModel: VariationsModel([
@@ -132,8 +132,8 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
             ),
         ],
         [
-            RomanKeyModel(labelType: .text("-"), pressActions: [.input("-")]),
-            RomanKeyModel(
+            QwertyKeyModel(labelType: .text("-"), pressActions: [.input("-")]),
+            QwertyKeyModel(
                 labelType: .text("/"),
                 pressActions: [.input("/")],
                 variationsModel: VariationsModel([
@@ -141,7 +141,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("\\"), actions: [.input("\\")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text(":"),
                 pressActions: [.input(":")],
                 variationsModel: VariationsModel([
@@ -151,7 +151,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("；"), actions: [.input("；")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("@"),
                 pressActions: [.input("@")],
                 variationsModel: VariationsModel([
@@ -159,9 +159,9 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("＠"), actions: [.input("＠")] ),
                 ])
             ),
-            RomanKeyModel(labelType: .text("("), pressActions: [.input("(")]),
-            RomanKeyModel(labelType: .text(")"), pressActions: [.input(")")]),
-            RomanKeyModel(
+            QwertyKeyModel(labelType: .text("("), pressActions: [.input("(")]),
+            QwertyKeyModel(labelType: .text(")"), pressActions: [.input(")")]),
+            QwertyKeyModel(
                 labelType: .text("「"),
                 pressActions: [.input("「")],
                 variationsModel: VariationsModel([
@@ -172,18 +172,18 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("《"), actions: [.input("《")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("」"),
                 pressActions: [.input("」")],
-                          variationsModel: VariationsModel([
-                            (label: .text("」"), actions: [.input("」")] ),
-                            (label: .text("』"), actions: [.input("』")] ),
-                            (label: .text("】"), actions: [.input("】")] ),
-                            (label: .text("）"), actions: [.input("）")] ),
-                            (label: .text("》"), actions: [.input("》")] ),
-                          ])
+                variationsModel: VariationsModel([
+                    (label: .text("」"), actions: [.input("」")] ),
+                    (label: .text("』"), actions: [.input("』")] ),
+                    (label: .text("】"), actions: [.input("】")] ),
+                    (label: .text("）"), actions: [.input("）")] ),
+                    (label: .text("》"), actions: [.input("》")] ),
+                ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("¥"),
                 pressActions: [.input("¥")],
                 variationsModel: VariationsModel([
@@ -195,163 +195,73 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("₿"), actions: [.input("₿")] ),
                     (label: .text("£"), actions: [.input("£")] ),
                     (label: .text("¤"), actions: [.input("¤")] ),
-                ])
+                ], direction: .left)
             ),
-            RomanKeyModel(labelType: .text("&"), pressActions: [.input("&")]),
-        ],
-        
-        [
-            RomanFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.other(RomanAdditionalTabs.symbols.identifier))]),
-        ] + Store.shared.userSetting.romanNumberTabKeySetting +
-        [
-            RomanFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+            QwertyKeyModel(labelType: .text("&"), pressActions: [.input("&")]),
         ],
 
         [
-            RomanFunctionalKeyModel(labelType: .text("あいう"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.hira)]),
-            RomanChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
-            RomanSpaceKeyModel(),
-            RomanEnterKeyModel.shared,
-        ],
-    ]
-    
-    //横に並べる
-    var hiraKeyboard: [[RomanKeyModelProtocol]] = [
+            QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]),
+        ] + Store.shared.userSetting.qwertyNumberTabKeySetting +
         [
-            RomanKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
-            RomanKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
-            RomanKeyModel(labelType: .text("e"), pressActions: [.input("e")]),
-            RomanKeyModel(labelType: .text("r"), pressActions: [.input("r")]),
-            RomanKeyModel(labelType: .text("t"), pressActions: [.input("t")]),
-            RomanKeyModel(labelType: .text("y"), pressActions: [.input("y")]),
-            RomanKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
-            RomanKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
-            RomanKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
-            RomanKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
+            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
         ],
-        [
-            RomanKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
-            RomanKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
-            RomanKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
-            RomanKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
-            RomanKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
-            RomanKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
-            RomanKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
-            RomanKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
-            RomanKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
-            RomanKeyModel(labelType: .text("ー"), pressActions: [.input("ー")]),
-        ],
-        [
-            RomanFunctionalKeyModel(labelType: .selectable("あ", "Ａ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.abc)]),
-            RomanKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
-            RomanKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
-            RomanKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
-            RomanKeyModel(labelType: .text("v"), pressActions: [.input("v")]),
-            RomanKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
-            RomanKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
-            RomanKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
-            RomanFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
-        ],
-        [
-            RomanFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
-            RomanChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
-            RomanSpaceKeyModel(),
-            RomanEnterKeyModel.shared,
-        ],
-    ]
 
-    //横に並べる
-    var abcKeyboard: [[RomanKeyModelProtocol]] = [
         [
-            RomanKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
-            RomanKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
-            RomanKeyModel(labelType: .text("e"), pressActions: [.input("e")]),
-            RomanKeyModel(labelType: .text("r"), pressActions: [.input("r")]),
-            RomanKeyModel(labelType: .text("t"), pressActions: [.input("t")]),
-            RomanKeyModel(labelType: .text("y"), pressActions: [.input("y")]),
-            RomanKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
-            RomanKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
-            RomanKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
-            RomanKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
-        ],
-        [
-            RomanKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
-            RomanKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
-            RomanKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
-            RomanKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
-            RomanKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
-            RomanKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
-            RomanKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
-            RomanKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
-            RomanKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
-            RomanAaKeyModel.shared,
-        ],
-        [
-            RomanFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.hira)]),
-            RomanKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
-            RomanKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
-            RomanKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
-            RomanKeyModel(labelType: .text("v"), pressActions: [.input("v")]),
-            RomanKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
-            RomanKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
-            RomanKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
-            RomanFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
-        ],
-        [
-            RomanFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
-            RomanChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
-            RomanSpaceKeyModel(),
-            RomanEnterKeyModel.shared,
+            QwertyChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertyChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertySpaceKeyModel(),
+            QwertyEnterKeyModel.shared,
         ],
     ]
-
+    }
     //横に並べる
-    var symbolsKeyboard: [[RomanKeyModelProtocol]] = [
+    var symbolsKeyboard: [[QwertyKeyModelProtocol]] = [
         [
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("["),
                 pressActions: [.input("[")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("]"),
                 pressActions: [.input("]")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("{"),
                 pressActions: [.input("{")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("}"),
                 pressActions: [.input("}")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("#"),
                 pressActions: [.input("#")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("%"),
                 pressActions: [.input("%")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("^"),
                 pressActions: [.input("^")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("*"),
                 pressActions: [.input("*")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("+"),
                 pressActions: [.input("+")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("="),
                 pressActions: [.input("=")]
             ),
         ],
         [
-            RomanKeyModel(labelType: .text("_"), pressActions: [.input("_")]),
-            RomanKeyModel(
+            QwertyKeyModel(labelType: .text("_"), pressActions: [.input("_")]),
+            QwertyKeyModel(
                 labelType: .text("\\"),
                 pressActions: [.input("\\")],
                 variationsModel: VariationsModel([
@@ -359,7 +269,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("\\"), actions: [.input("\\")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text(";"),
                 pressActions: [.input(";")],
                 variationsModel: VariationsModel([
@@ -369,7 +279,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("；"), actions: [.input("；")] ),
                 ])
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("|"),
                 pressActions: [.input("|")],
                 variationsModel: VariationsModel([
@@ -377,22 +287,22 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("＠"), actions: [.input("＠")] ),
                 ])
             ),
-            RomanKeyModel(labelType: .text("<"), pressActions: [.input("<")]),
-            RomanKeyModel(labelType: .text(">"), pressActions: [.input(">")]),
-            RomanKeyModel(
+            QwertyKeyModel(labelType: .text("<"), pressActions: [.input("<")]),
+            QwertyKeyModel(labelType: .text(">"), pressActions: [.input(">")]),
+            QwertyKeyModel(
                 labelType: .text("\""),
                 pressActions: [.input("\"")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("'"),
                 pressActions: [.input("'")]
             ),
 
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("$"),
                 pressActions: [.input("$")]
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("€"),
                 pressActions: [.input("€")],
                 variationsModel: VariationsModel([
@@ -409,8 +319,8 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
         ],
 
         [
-            RomanFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.number)]),
-            RomanKeyModel(
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.number)]),
+            QwertyKeyModel(
                 labelType: .text("."),
                 pressActions: [.input(".")],
                 variationsModel: VariationsModel([
@@ -419,7 +329,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                 ]),
                 for: (7, 5)
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text(","),
                 pressActions: [.input(",")],
                 variationsModel: VariationsModel([
@@ -427,7 +337,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text(","), actions: [.input(",")] ),
                 ]),
                 for: (7, 5)),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("?"),
                 pressActions: [.input("?")],
                 variationsModel: VariationsModel([
@@ -436,7 +346,7 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                 ]),
                 for: (7, 5)
             ),
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text("!"),
                 pressActions: [.input("!")],
                 variationsModel: VariationsModel([
@@ -444,14 +354,104 @@ struct HorizontalRomanKeyboardModel: KeyboardModelProtocol{
                     (label: .text("!"), actions: [.input("!")] ),
                 ]),
                 for: (7, 5)),
-            RomanKeyModel(labelType: .text("・"), pressActions: [.input("…")], for: (7, 5)),
-            RomanFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+            QwertyKeyModel(labelType: .text("・"), pressActions: [.input("…")], for: (7, 5)),
+            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
         ],
         [
-            RomanChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
-            RomanChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
-            RomanSpaceKeyModel(),
-            RomanEnterKeyModel.shared,
+            QwertyChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertyChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertySpaceKeyModel(),
+            QwertyEnterKeyModel.shared,
+        ],
+    ]
+
+    //横に並べる
+    var hiraKeyboard: [[QwertyKeyModelProtocol]] = [
+        [
+            QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
+            QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
+            QwertyKeyModel(labelType: .text("e"), pressActions: [.input("e")]),
+            QwertyKeyModel(labelType: .text("r"), pressActions: [.input("r")]),
+            QwertyKeyModel(labelType: .text("t"), pressActions: [.input("t")]),
+            QwertyKeyModel(labelType: .text("y"), pressActions: [.input("y")]),
+            QwertyKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
+            QwertyKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
+            QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
+            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
+        ],
+        [
+            QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
+            QwertyKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
+            QwertyKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
+            QwertyKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
+            QwertyKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
+            QwertyKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
+            QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
+            QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
+            QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
+            QwertyKeyModel(labelType: .text("ー"), pressActions: [.input("ー")]),
+        ],
+        [
+            QwertyFunctionalKeyModel(labelType: .selectable("あ", "Ａ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.abc)]),
+            QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
+            QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
+            QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
+            QwertyKeyModel(labelType: .text("v"), pressActions: [.input("v")]),
+            QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
+            QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
+            QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
+            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+        ],
+        [
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
+            QwertyChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertySpaceKeyModel(),
+            QwertyEnterKeyModel.shared,
+        ],
+    ]
+
+    //横に並べる
+    var abcKeyboard: [[QwertyKeyModelProtocol]] = [
+        [
+            QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
+            QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
+            QwertyKeyModel(labelType: .text("e"), pressActions: [.input("e")]),
+            QwertyKeyModel(labelType: .text("r"), pressActions: [.input("r")]),
+            QwertyKeyModel(labelType: .text("t"), pressActions: [.input("t")]),
+            QwertyKeyModel(labelType: .text("y"), pressActions: [.input("y")]),
+            QwertyKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
+            QwertyKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
+            QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
+            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
+        ],
+        [
+            QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
+            QwertyKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
+            QwertyKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
+            QwertyKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
+            QwertyKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
+            QwertyKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
+            QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
+            QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
+            QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
+            QwertyAaKeyModel.shared
+        ],
+        [
+            QwertyFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.hira)]),
+            QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
+            QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
+            QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
+            QwertyKeyModel(labelType: .text("v"), pressActions: [.input("v")]),
+            QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
+            QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
+            QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
+            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+        ],
+        [
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
+            QwertyChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertySpaceKeyModel(),
+            QwertyEnterKeyModel.shared,
         ],
     ]
 

@@ -1,5 +1,5 @@
 //
-//  RomanVariationsView.swift
+//  QwertyVariationsView.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct RomanVariationsView: View {
+struct QwertyVariationsView: View {
     private let model: VariationsModel
     @ObservedObject private var modelVariableSection: VariationsModelVariableSection
     init(model: VariationsModel){

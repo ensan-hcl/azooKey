@@ -129,26 +129,26 @@ final class Design{
         return CGSize(width: size.width, height: size.height*2 + verticalSpacing)
     }
 
-    var romanSpaceKeyWidth: CGFloat {
+    var qwertySpaceKeyWidth: CGFloat {
         return keyViewSize.width*5
     }
 
-    var romanEnterKeyWidth: CGFloat {
+    var qwertyEnterKeyWidth: CGFloat {
         return keyViewSize.width*3
     }
 
-    func romanScaledKeyWidth(normal: Int, for count: Int) -> CGFloat {
+    func qwertyScaledKeyWidth(normal: Int, for count: Int) -> CGFloat {
         let width = keyViewSize.width * CGFloat(normal) + horizontalSpacing * CGFloat(normal - 1)
         let spacing = horizontalSpacing * CGFloat(count - 1)
         return (width - spacing) / CGFloat(count)
     }
 
-    func romanFunctionalKeyWidth(normal: Int, functional: Int, enter: Int = 0, space: Int = 0) -> CGFloat {
+    func qwertyFunctionalKeyWidth(normal: Int, functional: Int, enter: Int = 0, space: Int = 0) -> CGFloat {
         let maxWidth = keyboardWidth
         let spacing = horizontalSpacing * CGFloat(normal + functional + space + enter - 1)
         let normalKeyWidth = keyViewSize.width * CGFloat(normal)
-        let spaceKeyWidth = romanSpaceKeyWidth * CGFloat(space)
-        let enterKeyWidth = romanEnterKeyWidth * CGFloat(enter)
+        let spaceKeyWidth = qwertySpaceKeyWidth * CGFloat(space)
+        let enterKeyWidth = qwertyEnterKeyWidth * CGFloat(enter)
         return (maxWidth - (spacing + normalKeyWidth + spaceKeyWidth + enterKeyWidth)) / CGFloat(functional)
     }
 

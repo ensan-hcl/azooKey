@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A26028B251476A800EAD647 /* RomanSuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* RomanSuggestView.swift */; };
-		1A26029125147FEC00EAD647 /* RomanKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* RomanKeyView.swift */; };
-		1A2602972514801F00EAD647 /* RomanKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* RomanKeyModel.swift */; };
-		1A26029D2514808D00EAD647 /* RomanKeyModelVariableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029C2514808D00EAD647 /* RomanKeyModelVariableSection.swift */; };
-		1A2602A42514820300EAD647 /* VerticalRomanKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602A32514820300EAD647 /* VerticalRomanKeyboardModel.swift */; };
-		1A2602AE251489C700EAD647 /* RomanKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602AD251489C700EAD647 /* RomanKeyModelProtocol.swift */; };
-		1A2602B4251489E500EAD647 /* RomanSpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602B3251489E400EAD647 /* RomanSpaceKeyModel.swift */; };
-		1A2602BE25148BB100EAD647 /* RomanEnterKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602BD25148BB100EAD647 /* RomanEnterKeyModel.swift */; };
-		1A2602C825148CDF00EAD647 /* RomanFunctionalKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602C725148CDF00EAD647 /* RomanFunctionalKeyModel.swift */; };
+		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
+		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
+		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
+		1A26029D2514808D00EAD647 /* QwertyKeyModelVariableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029C2514808D00EAD647 /* QwertyKeyModelVariableSection.swift */; };
+		1A2602A42514820300EAD647 /* VerticalQwertyKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602A32514820300EAD647 /* VerticalQwertyKeyboardModel.swift */; };
+		1A2602AE251489C700EAD647 /* QwertyKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602AD251489C700EAD647 /* QwertyKeyModelProtocol.swift */; };
+		1A2602B4251489E500EAD647 /* QwertySpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602B3251489E400EAD647 /* QwertySpaceKeyModel.swift */; };
+		1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602BD25148BB100EAD647 /* QwertyEnterKeyModel.swift */; };
+		1A2602C825148CDF00EAD647 /* QwertyFunctionalKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602C725148CDF00EAD647 /* QwertyFunctionalKeyModel.swift */; };
 		1A2602DC2514CC9C00EAD647 /* KeyStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602DB2514CC9C00EAD647 /* KeyStates.swift */; };
-		1A2602EA2514F7D100EAD647 /* RomanVariationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602E92514F7D100EAD647 /* RomanVariationsView.swift */; };
+		1A2602EA2514F7D100EAD647 /* QwertyVariationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602E92514F7D100EAD647 /* QwertyVariationsView.swift */; };
 		1A2602F42514FB6E00EAD647 /* VariationsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602F32514FB6E00EAD647 /* VariationsModel.swift */; };
 		1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
 		1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
@@ -60,7 +60,7 @@
 		1A3DC2FF2500F837002CAA93 /* extension Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2FE2500F837002CAA93 /* extension Character.swift */; };
 		1A4057D8255841C70073C6F7 /* LearningType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057D7255841C70073C6F7 /* LearningType.swift */; };
 		1A4057DF255843330073C6F7 /* BooleanSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057DE255843330073C6F7 /* BooleanSettingItemView.swift */; };
-		1A4057E9255843460073C6F7 /* KeyboardTypeSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057E8255843460073C6F7 /* KeyboardTypeSettingItemView.swift */; };
+		1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057E8255843460073C6F7 /* KeyboardLayoutSettingItemView.swift */; };
 		1A4057F7255843850073C6F7 /* LearningTypeSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057F6255843850073C6F7 /* LearningTypeSettingItemView.swift */; };
 		1A4057FD2558472B0073C6F7 /* AboutFullAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057FC2558472B0073C6F7 /* AboutFullAccessView.swift */; };
 		1A40E4C425A36894008A6298 /* 927.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1A40DF9D25A3687F008A6298 /* 927.binary */; };
@@ -2236,12 +2236,12 @@
 		1A6736082509F39E003FC654 /* VerbConjugation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6736072509F39E003FC654 /* VerbConjugation.swift */; };
 		1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A673609250AFBCB003FC654 /* Wareki.swift */; };
 		1A677370256F7AC30037AF22 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* Sound.swift */; };
-		1A6F959725144481007399AC /* VerticalRomanKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* VerticalRomanKeyboardView.swift */; };
+		1A6F959725144481007399AC /* VerticalQwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* VerticalQwertyKeyboardView.swift */; };
 		1A7817AC2575C898007661D8 /* emoji13_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7817AB2575C898007661D8 /* emoji13_dict.tsv */; };
 		1A7817B22575C89D007661D8 /* emoji...12_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */; };
 		1A8654BC2526F50400006582 /* KeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8654BB2526F50400006582 /* KeyboardLayout.swift */; };
 		1A86F47A25352AF200B92B49 /* swift-algorithm-topN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F47925352AF200B92B49 /* swift-algorithm-topN.swift */; };
-		1A86F4802535643C00B92B49 /* RomanKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F47F2535643C00B92B49 /* RomanKeyboard.swift */; };
+		1A86F4802535643C00B92B49 /* QwertyKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F47F2535643C00B92B49 /* QwertyKeyboard.swift */; };
 		1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4A92536033900B92B49 /* changed_last_n_character.swift */; };
 		1A86F4B82539356100B92B49 /* only_contains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4B72539356100B92B49 /* only_contains.swift */; };
 		1A8A8402250F65110093A701 /* all.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8401250F65110093A701 /* all.swift */; };
@@ -2296,15 +2296,15 @@
 		1ACEEFF72566786A00899DA2 /* kaomoji_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1ACEEFF62566786A00899DA2 /* kaomoji_dict.tsv */; };
 		1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */; };
 		1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
-		1AD4DDD1258718F600A6FA18 /* RomanChangeTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDD0258718F600A6FA18 /* RomanChangeTabKeyModel.swift */; };
+		1AD4DDD1258718F600A6FA18 /* QwertyChangeTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDD0258718F600A6FA18 /* QwertyChangeTabKeyModel.swift */; };
 		1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDE8652545D48900E524E1 /* Candidate.swift */; };
 		1AE3DF02258A20A2007C7C4A /* KeyFlickSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */; };
 		1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */; };
 		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
 		1AE4DB7C25163C6B00A24158 /* DirectInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */; };
 		1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB852516D0D600A24158 /* RomanInputData.swift */; };
-		1AE4DBC02518578200A24158 /* HorzizontalRomanKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBBF2518578200A24158 /* HorzizontalRomanKeyboardView.swift */; };
-		1AE4DBC6251857AA00A24158 /* HorizontalRomanKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBC5251857AA00A24158 /* HorizontalRomanKeyboardModel.swift */; };
+		1AE4DBC02518578200A24158 /* HorizontalQwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBBF2518578200A24158 /* HorizontalQwertyKeyboardView.swift */; };
+		1AE4DBC6251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBC5251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift */; };
 		1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */; };
 		1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */; };
 		1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
@@ -2323,7 +2323,7 @@
 		1AF28CE0253C9FFC0012CF94 /* CursorMoveTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */; };
 		1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */; };
 		1AF28CEC253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CEB253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift */; };
-		1AF28CF6253D1DC30012CF94 /* RomanChangeKeyboardKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CF5253D1DC30012CF94 /* RomanChangeKeyboardKeyModel.swift */; };
+		1AF28CF6253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CF5253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift */; };
 		1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */; };
 		1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28D05253DE4B60012CF94 /* KeyLabel.swift */; };
 		1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */; };
@@ -2332,7 +2332,7 @@
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
 		1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */; };
-		1AFA57542582EFAE00477DC2 /* RomanAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */; };
+		1AFA57542582EFAE00477DC2 /* QwertyAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57532582EFAE00477DC2 /* QwertyAaKeyModel.swift */; };
 		1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57592583051500477DC2 /* CapslockTips.swift */; };
 		1AFA57602584810800477DC2 /* Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA575F2584810800477DC2 /* Focus.swift */; };
 		1AFA57662584815B00477DC2 /* RomanCustomKeysSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */; };
@@ -2392,17 +2392,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1A26028A251476A800EAD647 /* RomanSuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanSuggestView.swift; sourceTree = "<group>"; };
-		1A26029025147FEC00EAD647 /* RomanKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanKeyView.swift; sourceTree = "<group>"; };
-		1A2602962514801F00EAD647 /* RomanKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanKeyModel.swift; sourceTree = "<group>"; };
-		1A26029C2514808D00EAD647 /* RomanKeyModelVariableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanKeyModelVariableSection.swift; sourceTree = "<group>"; };
-		1A2602A32514820300EAD647 /* VerticalRomanKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalRomanKeyboardModel.swift; sourceTree = "<group>"; };
-		1A2602AD251489C700EAD647 /* RomanKeyModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanKeyModelProtocol.swift; sourceTree = "<group>"; };
-		1A2602B3251489E400EAD647 /* RomanSpaceKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanSpaceKeyModel.swift; sourceTree = "<group>"; };
-		1A2602BD25148BB100EAD647 /* RomanEnterKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanEnterKeyModel.swift; sourceTree = "<group>"; };
-		1A2602C725148CDF00EAD647 /* RomanFunctionalKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanFunctionalKeyModel.swift; sourceTree = "<group>"; };
+		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
+		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
+		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
+		1A26029C2514808D00EAD647 /* QwertyKeyModelVariableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModelVariableSection.swift; sourceTree = "<group>"; };
+		1A2602A32514820300EAD647 /* VerticalQwertyKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalQwertyKeyboardModel.swift; sourceTree = "<group>"; };
+		1A2602AD251489C700EAD647 /* QwertyKeyModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModelProtocol.swift; sourceTree = "<group>"; };
+		1A2602B3251489E400EAD647 /* QwertySpaceKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySpaceKeyModel.swift; sourceTree = "<group>"; };
+		1A2602BD25148BB100EAD647 /* QwertyEnterKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyEnterKeyModel.swift; sourceTree = "<group>"; };
+		1A2602C725148CDF00EAD647 /* QwertyFunctionalKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyFunctionalKeyModel.swift; sourceTree = "<group>"; };
 		1A2602DB2514CC9C00EAD647 /* KeyStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStates.swift; sourceTree = "<group>"; };
-		1A2602E92514F7D100EAD647 /* RomanVariationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanVariationsView.swift; sourceTree = "<group>"; };
+		1A2602E92514F7D100EAD647 /* QwertyVariationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyVariationsView.swift; sourceTree = "<group>"; };
 		1A2602F32514FB6E00EAD647 /* VariationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationsModel.swift; sourceTree = "<group>"; };
 		1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionaryData.swift; sourceTree = "<group>"; };
 		1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayoutTypeDetailsView.swift; sourceTree = "<group>"; };
@@ -2450,7 +2450,7 @@
 		1A3DC2FE2500F837002CAA93 /* extension Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension Character.swift"; sourceTree = "<group>"; };
 		1A4057D7255841C70073C6F7 /* LearningType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningType.swift; sourceTree = "<group>"; };
 		1A4057DE255843330073C6F7 /* BooleanSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooleanSettingItemView.swift; sourceTree = "<group>"; };
-		1A4057E8255843460073C6F7 /* KeyboardTypeSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTypeSettingItemView.swift; sourceTree = "<group>"; };
+		1A4057E8255843460073C6F7 /* KeyboardLayoutSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayoutSettingItemView.swift; sourceTree = "<group>"; };
 		1A4057F6255843850073C6F7 /* LearningTypeSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningTypeSettingItemView.swift; sourceTree = "<group>"; };
 		1A4057FC2558472B0073C6F7 /* AboutFullAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutFullAccessView.swift; sourceTree = "<group>"; };
 		1A40DF9D25A3687F008A6298 /* 927.binary */ = {isa = PBXFileReference; lastKnownFileType = file; path = 927.binary; sourceTree = "<group>"; };
@@ -4626,12 +4626,12 @@
 		1A6736072509F39E003FC654 /* VerbConjugation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbConjugation.swift; sourceTree = "<group>"; };
 		1A673609250AFBCB003FC654 /* Wareki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wareki.swift; sourceTree = "<group>"; };
 		1A67736F256F7AC30037AF22 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
-		1A6F959625144481007399AC /* VerticalRomanKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalRomanKeyboardView.swift; sourceTree = "<group>"; };
+		1A6F959625144481007399AC /* VerticalQwertyKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalQwertyKeyboardView.swift; sourceTree = "<group>"; };
 		1A7817AB2575C898007661D8 /* emoji13_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji13_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji13_dict.tsv"; sourceTree = "<group>"; };
 		1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji...12_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji...12_dict.tsv"; sourceTree = "<group>"; };
 		1A8654BB2526F50400006582 /* KeyboardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayout.swift; sourceTree = "<group>"; };
 		1A86F47925352AF200B92B49 /* swift-algorithm-topN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "swift-algorithm-topN.swift"; sourceTree = "<group>"; };
-		1A86F47F2535643C00B92B49 /* RomanKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanKeyboard.swift; sourceTree = "<group>"; };
+		1A86F47F2535643C00B92B49 /* QwertyKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyboard.swift; sourceTree = "<group>"; };
 		1A86F4A92536033900B92B49 /* changed_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changed_last_n_character.swift; sourceTree = "<group>"; };
 		1A86F4B72539356100B92B49 /* only_contains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = only_contains.swift; sourceTree = "<group>"; };
 		1A8A8401250F65110093A701 /* all.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = all.swift; sourceTree = "<group>"; };
@@ -4680,14 +4680,14 @@
 		1ACEEFE82566601700899DA2 /* TipsViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsViewComponent.swift; sourceTree = "<group>"; };
 		1ACEEFF62566786A00899DA2 /* kaomoji_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = kaomoji_dict.tsv; sourceTree = "<group>"; };
 		1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMesureTools.swift; sourceTree = "<group>"; };
-		1AD4DDD0258718F600A6FA18 /* RomanChangeTabKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanChangeTabKeyModel.swift; sourceTree = "<group>"; };
+		1AD4DDD0258718F600A6FA18 /* QwertyChangeTabKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyChangeTabKeyModel.swift; sourceTree = "<group>"; };
 		1ADDE8652545D48900E524E1 /* Candidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Candidate.swift; sourceTree = "<group>"; };
 		1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDataProtocol.swift; sourceTree = "<group>"; };
 		1AE4DB742515FE1C00A24158 /* KanaComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaComponent.swift; sourceTree = "<group>"; };
 		1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectInputData.swift; sourceTree = "<group>"; };
 		1AE4DB852516D0D600A24158 /* RomanInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanInputData.swift; sourceTree = "<group>"; };
-		1AE4DBBF2518578200A24158 /* HorzizontalRomanKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorzizontalRomanKeyboardView.swift; sourceTree = "<group>"; };
-		1AE4DBC5251857AA00A24158 /* HorizontalRomanKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalRomanKeyboardModel.swift; sourceTree = "<group>"; };
+		1AE4DBBF2518578200A24158 /* HorizontalQwertyKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalQwertyKeyboardView.swift; sourceTree = "<group>"; };
+		1AE4DBC5251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalQwertyKeyboardModel.swift; sourceTree = "<group>"; };
 		1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListView.swift; sourceTree = "<group>"; };
 		1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateEditingView.swift; sourceTree = "<group>"; };
 		1AE70BF0258E5798009B9B8B /* TemplateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateData.swift; sourceTree = "<group>"; };
@@ -4702,7 +4702,7 @@
 		1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorMoveTips.swift; sourceTree = "<group>"; };
 		1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiLargeText.swift; sourceTree = "<group>"; };
 		1AF28CEB253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickChangeKeyboardKeyModel.swift; sourceTree = "<group>"; };
-		1AF28CF5253D1DC30012CF94 /* RomanChangeKeyboardKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanChangeKeyboardKeyModel.swift; sourceTree = "<group>"; };
+		1AF28CF5253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyChangeKeyboardKeyModel.swift; sourceTree = "<group>"; };
 		1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTypeSettingFailureTips.swift; sourceTree = "<group>"; };
 		1AF28D05253DE4B60012CF94 /* KeyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyLabel.swift; sourceTree = "<group>"; };
 		1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetSetting.swift; sourceTree = "<group>"; };
@@ -4711,7 +4711,7 @@
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
 		1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickAaKeyModel.swift; sourceTree = "<group>"; };
-		1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanAaKeyModel.swift; sourceTree = "<group>"; };
+		1AFA57532582EFAE00477DC2 /* QwertyAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyAaKeyModel.swift; sourceTree = "<group>"; };
 		1AFA57592583051500477DC2 /* CapslockTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapslockTips.swift; sourceTree = "<group>"; };
 		1AFA575F2584810800477DC2 /* Focus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Focus.swift; sourceTree = "<group>"; };
 		1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeysSettingView.swift; sourceTree = "<group>"; };
@@ -4764,19 +4764,19 @@
 		1A2602A2251481E600EAD647 /* KeyView */ = {
 			isa = PBXGroup;
 			children = (
-				1A26029025147FEC00EAD647 /* RomanKeyView.swift */,
+				1A26029025147FEC00EAD647 /* QwertyKeyView.swift */,
 				1A2602F32514FB6E00EAD647 /* VariationsModel.swift */,
-				1A2602E92514F7D100EAD647 /* RomanVariationsView.swift */,
-				1A26028A251476A800EAD647 /* RomanSuggestView.swift */,
-				1A2602AD251489C700EAD647 /* RomanKeyModelProtocol.swift */,
-				1A2602962514801F00EAD647 /* RomanKeyModel.swift */,
-				1A26029C2514808D00EAD647 /* RomanKeyModelVariableSection.swift */,
-				1A2602B3251489E400EAD647 /* RomanSpaceKeyModel.swift */,
-				1AF28CF5253D1DC30012CF94 /* RomanChangeKeyboardKeyModel.swift */,
-				1AD4DDD0258718F600A6FA18 /* RomanChangeTabKeyModel.swift */,
-				1A2602BD25148BB100EAD647 /* RomanEnterKeyModel.swift */,
-				1AFA57532582EFAE00477DC2 /* RomanAaKeyModel.swift */,
-				1A2602C725148CDF00EAD647 /* RomanFunctionalKeyModel.swift */,
+				1A2602E92514F7D100EAD647 /* QwertyVariationsView.swift */,
+				1A26028A251476A800EAD647 /* QwertySuggestView.swift */,
+				1A2602AD251489C700EAD647 /* QwertyKeyModelProtocol.swift */,
+				1A2602962514801F00EAD647 /* QwertyKeyModel.swift */,
+				1A26029C2514808D00EAD647 /* QwertyKeyModelVariableSection.swift */,
+				1A2602B3251489E400EAD647 /* QwertySpaceKeyModel.swift */,
+				1AF28CF5253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift */,
+				1AD4DDD0258718F600A6FA18 /* QwertyChangeTabKeyModel.swift */,
+				1A2602BD25148BB100EAD647 /* QwertyEnterKeyModel.swift */,
+				1AFA57532582EFAE00477DC2 /* QwertyAaKeyModel.swift */,
+				1A2602C725148CDF00EAD647 /* QwertyFunctionalKeyModel.swift */,
 			);
 			path = KeyView;
 			sourceTree = "<group>";
@@ -7228,23 +7228,23 @@
 				1A2602DB2514CC9C00EAD647 /* KeyStates.swift */,
 				1A3DC2162500D5AB002CAA93 /* Action.swift */,
 				1A58AB0B25037E8800EB1864 /* ResultView */,
-				1A6F95912514446A007399AC /* RomanKeyboard */,
+				1A6F95912514446A007399AC /* QwertyKeyboard */,
 				1A3DC2082500D514002CAA93 /* FlickKeyboard */,
 			);
 			path = KeyboardView;
 			sourceTree = "<group>";
 		};
-		1A6F95912514446A007399AC /* RomanKeyboard */ = {
+		1A6F95912514446A007399AC /* QwertyKeyboard */ = {
 			isa = PBXGroup;
 			children = (
-				1A86F47F2535643C00B92B49 /* RomanKeyboard.swift */,
-				1A6F959625144481007399AC /* VerticalRomanKeyboardView.swift */,
-				1A2602A32514820300EAD647 /* VerticalRomanKeyboardModel.swift */,
-				1AE4DBBF2518578200A24158 /* HorzizontalRomanKeyboardView.swift */,
-				1AE4DBC5251857AA00A24158 /* HorizontalRomanKeyboardModel.swift */,
+				1A86F47F2535643C00B92B49 /* QwertyKeyboard.swift */,
+				1A6F959625144481007399AC /* VerticalQwertyKeyboardView.swift */,
+				1A2602A32514820300EAD647 /* VerticalQwertyKeyboardModel.swift */,
+				1AE4DBBF2518578200A24158 /* HorizontalQwertyKeyboardView.swift */,
+				1AE4DBC5251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift */,
 				1A2602A2251481E600EAD647 /* KeyView */,
 			);
-			path = RomanKeyboard;
+			path = QwertyKeyboard;
 			sourceTree = "<group>";
 		};
 		1A8A8400250F64FC0093A701 /* Kana2Kanji */ = {
@@ -7366,7 +7366,7 @@
 		1ACE00712567518100899DA2 /* KeyboardType */ = {
 			isa = PBXGroup;
 			children = (
-				1A4057E8255843460073C6F7 /* KeyboardTypeSettingItemView.swift */,
+				1A4057E8255843460073C6F7 /* KeyboardLayoutSettingItemView.swift */,
 				1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */,
 			);
 			path = KeyboardType;
@@ -9826,7 +9826,7 @@
 				1A39A1A2259325D7008DDCFE /* AzooKeyUserDictionaryData.swift in Sources */,
 				1A3A162C2529671300A5BA4F /* KeyFlickSetting.swift in Sources */,
 				1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */,
-				1A4057E9255843460073C6F7 /* KeyboardTypeSettingItemView.swift in Sources */,
+				1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */,
 				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
 				1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */,
 				1AA346822567D8B100B41A16 /* UserSetting.swift in Sources */,
@@ -9919,24 +9919,24 @@
 				1AA346962567F04300B41A16 /* RomanCustomKeys.swift in Sources */,
 				1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */,
 				1AE4DB7C25163C6B00A24158 /* DirectInputData.swift in Sources */,
-				1A2602BE25148BB100EAD647 /* RomanEnterKeyModel.swift in Sources */,
-				1AE4DBC02518578200A24158 /* HorzizontalRomanKeyboardView.swift in Sources */,
+				1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */,
+				1AE4DBC02518578200A24158 /* HorizontalQwertyKeyboardView.swift in Sources */,
 				1A3DC2FF2500F837002CAA93 /* extension Character.swift in Sources */,
 				1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */,
 				1AFB8B24251B648F00C649C4 /* KeyboardModelProtocol.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,
 				1A3DC20E2500D55F002CAA93 /* VerticalFlickKeyboardModel.swift in Sources */,
-				1A2602A42514820300EAD647 /* VerticalRomanKeyboardModel.swift in Sources */,
+				1A2602A42514820300EAD647 /* VerticalQwertyKeyboardModel.swift in Sources */,
 				1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */,
 				1A8A8404250F65410093A701 /* added_last_1_character.swift in Sources */,
 				1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */,
 				1A3DC2232500D60F002CAA93 /* FlickedKeyModel.swift in Sources */,
 				1AFB68502518F18A00C649C4 /* CursorMoveView.swift in Sources */,
 				1A9218F7255238E9005F45C4 /* Unicode.swift in Sources */,
-				1A26029125147FEC00EAD647 /* RomanKeyView.swift in Sources */,
+				1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */,
 				1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */,
-				1A2602B4251489E500EAD647 /* RomanSpaceKeyModel.swift in Sources */,
+				1A2602B4251489E500EAD647 /* QwertySpaceKeyModel.swift in Sources */,
 				1A3DC2172500D5AB002CAA93 /* Action.swift in Sources */,
 				1A4623E52524617B00EF5B02 /* LOUDS.swift in Sources */,
 				1AA346872567D8CA00B41A16 /* UserSetting.swift in Sources */,
@@ -9947,7 +9947,7 @@
 				1A3DC2122500D586002CAA93 /* HorizontalFlickKeyboardModel.swift in Sources */,
 				1AA3469F2567F08100B41A16 /* KeyboardLayout.swift in Sources */,
 				1A677370256F7AC30037AF22 /* Sound.swift in Sources */,
-				1AFA57542582EFAE00477DC2 /* RomanAaKeyModel.swift in Sources */,
+				1AFA57542582EFAE00477DC2 /* QwertyAaKeyModel.swift in Sources */,
 				1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */,
 				1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */,
 				1AF28CEC253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift in Sources */,
@@ -9959,33 +9959,33 @@
 				1A3DC2152500D59F002CAA93 /* FlickKeyView.swift in Sources */,
 				1A67360625092C1E003FC654 /* DicDataElement.swift in Sources */,
 				1A4623F52524621F00EF5B02 /* extension LOUDS.swift in Sources */,
-				1A26028B251476A800EAD647 /* RomanSuggestView.swift in Sources */,
+				1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */,
 				1A4623EF252461A800EF5B02 /* extension UInt.swift in Sources */,
 				1A3DC2102500D571002CAA93 /* HorizontalKeyboardView.swift in Sources */,
-				1AD4DDD1258718F600A6FA18 /* RomanChangeTabKeyModel.swift in Sources */,
+				1AD4DDD1258718F600A6FA18 /* QwertyChangeTabKeyModel.swift in Sources */,
 				1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */,
-				1A2602EA2514F7D100EAD647 /* RomanVariationsView.swift in Sources */,
+				1A2602EA2514F7D100EAD647 /* QwertyVariationsView.swift in Sources */,
 				1A65C00B250B800E00F297BF /* LatticeNodeProtocol.swift in Sources */,
-				1A2602C825148CDF00EAD647 /* RomanFunctionalKeyModel.swift in Sources */,
+				1A2602C825148CDF00EAD647 /* QwertyFunctionalKeyModel.swift in Sources */,
 				1A2602DC2514CC9C00EAD647 /* KeyStates.swift in Sources */,
 				1A2602F42514FB6E00EAD647 /* VariationsModel.swift in Sources */,
-				1A2602972514801F00EAD647 /* RomanKeyModel.swift in Sources */,
+				1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */,
 				1AA346A42567F12A00B41A16 /* LearningType.swift in Sources */,
-				1AE4DBC6251857AA00A24158 /* HorizontalRomanKeyboardModel.swift in Sources */,
-				1A86F4802535643C00B92B49 /* RomanKeyboard.swift in Sources */,
-				1A2602AE251489C700EAD647 /* RomanKeyModelProtocol.swift in Sources */,
+				1AE4DBC6251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift in Sources */,
+				1A86F4802535643C00B92B49 /* QwertyKeyboard.swift in Sources */,
+				1A2602AE251489C700EAD647 /* QwertyKeyModelProtocol.swift in Sources */,
 				1A3DC22A2500D65C002CAA93 /* extension CGPoint.swift in Sources */,
 				1AA346AF2567F15C00B41A16 /* SharedStore.swift in Sources */,
 				1A8A840A250F65DA0093A701 /* completed_first.swift in Sources */,
 				1A3DC2282500D64D002CAA93 /* ResultView.swift in Sources */,
 				1A9218E4255238CE005F45C4 /* RomanTypographys.swift in Sources */,
-				1AF28CF6253D1DC30012CF94 /* RomanChangeKeyboardKeyModel.swift in Sources */,
+				1AF28CF6253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift in Sources */,
 				1A6736082509F39E003FC654 /* VerbConjugation.swift in Sources */,
 				1A3DC2192500D5C1002CAA93 /* KeyModelVariableSection.swift in Sources */,
-				1A26029D2514808D00EAD647 /* RomanKeyModelVariableSection.swift in Sources */,
+				1A26029D2514808D00EAD647 /* QwertyKeyModelVariableSection.swift in Sources */,
 				1AC8A5AB2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1A8A8402250F65110093A701 /* all.swift in Sources */,
-				1A6F959725144481007399AC /* VerticalRomanKeyboardView.swift in Sources */,
+				1A6F959725144481007399AC /* VerticalQwertyKeyboardView.swift in Sources */,
 				1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */,
 				1AF1C55F252DD10F002FCC66 /* added_last_n_character.swift in Sources */,
 				1AA346912567F01E00B41A16 /* SettingItemProtocol.swift in Sources */,

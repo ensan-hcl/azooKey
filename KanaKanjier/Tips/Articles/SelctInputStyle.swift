@@ -15,8 +15,8 @@ struct SelctInputStyleTipsView:View {
             TipsContentParagraph{
                 Text("日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。")
             }
-            KeyboardTypeSettingItemView(Store.shared.keyboardTypeSetting, language: .japanese).padding(.vertical)
-            KeyboardTypeSettingItemView(Store.shared.englishKeyboardTypeSetting, language: .english).padding(.vertical)
+            KeyboardLayoutSettingItemView(Store.shared.keyboardTypeSetting, language: .japanese).padding(.vertical)
+            KeyboardLayoutSettingItemView(Store.shared.englishKeyboardTypeSetting, language: .english).padding(.vertical)
             TipsContentParagraph(style: .caption){
                 Text("現在は携帯電話式の入力については対応していません。")
             }

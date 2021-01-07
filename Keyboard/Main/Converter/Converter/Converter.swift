@@ -451,8 +451,11 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     }
 
     func getApporopriateActions(_ candidate: Candidate) -> [ActionType] {
-        if ["[]","()","（）","「」","『』","【】","{}","<>","《》"].contains(candidate.text){
+        if ["[]","()","｛｝","〈〉","〔〕","（）","「」","『』","【】","{}","<>","《》","\"\"","\'\'","””"].contains(candidate.text){
             return [.moveCursor(-1)]
+        }
+        if ["{{}}"].contains(candidate.text){
+            return [.moveCursor(-2)]
         }
         return []
 

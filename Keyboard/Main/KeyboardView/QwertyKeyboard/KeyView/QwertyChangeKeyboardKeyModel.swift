@@ -1,5 +1,5 @@
 //
-//  RomanFunctionalKeyModel.swift
+//  QwertyFunctionalKeyModel.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-struct RomanChangeKeyboardKeyModel: RomanKeyModelProtocol{
-    var variableSection = RomanKeyModelVariableSection()
+struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
+    var variableSection = QwertyKeyModelVariableSection()
 
     var pressActions: [ActionType]{
         switch Store.shared.needsInputModeSwitchKey{
@@ -19,15 +19,15 @@ struct RomanChangeKeyboardKeyModel: RomanKeyModelProtocol{
         case false:
             switch Store.shared.keyboardModel.tabState{
             case .hira:
-                return [.moveTab(.other(RomanAdditionalTabs.symbols.identifier))]
+                return [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]
             case .abc:
-                return [.moveTab(.other(RomanAdditionalTabs.symbols.identifier))]
+                return [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]
             case .number:
                 return [.moveTab(.abc)]
-            case let .other(string) where string == RomanAdditionalTabs.symbols.identifier:
+            case let .other(string) where string == QwertyAdditionalTabs.symbols.identifier:
                 return [.moveTab(.abc)]
             default:
-                return [.moveTab(.other(RomanAdditionalTabs.symbols.identifier))]
+                return [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]
             }
         }
 
@@ -41,7 +41,7 @@ struct RomanChangeKeyboardKeyModel: RomanKeyModelProtocol{
 
     var keySize: CGSize {
         return CGSize(
-            width: Design.shared.romanFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
+            width: Design.shared.qwertyFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
             height: Design.shared.keyViewSize.height
         )
     }

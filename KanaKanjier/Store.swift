@@ -145,4 +145,5 @@ class StoreVariableSection: ObservableObject{
     @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
     @Published var keyboardType: KeyboardLayout = .flick
+    @Published var englishKeyboardLayout: KeyboardLayout = .flick
 }

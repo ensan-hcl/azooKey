@@ -135,7 +135,7 @@ struct DefaultSetting{
         }
     }
 
-    func romanCustomKeyDefaultSetting(_ setting: Setting) -> RomanCustomKeysValue? {
+    func qwertyCustomKeyDefaultSetting(_ setting: Setting) -> RomanCustomKeysValue? {
         switch setting{
         case .numberTabCustomKeys:
             return RomanCustomKeysValue.defaultValue

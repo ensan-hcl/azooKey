@@ -1,5 +1,5 @@
 //
-//  RomanSuggestView.swift
+//  QwertySuggestView.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -30,7 +30,7 @@ enum VariationsViewDirection{
 
 }
 
-struct RomanSuggestView{
+struct QwertySuggestView{
     static func expandedPath(rdw: CGFloat, ldw: CGFloat, width: CGFloat) -> some Shape {
         return Path { path in
             path.move(to: CGPoint(x: 122, y: 281))

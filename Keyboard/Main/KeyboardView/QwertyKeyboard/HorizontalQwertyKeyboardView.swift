@@ -1,20 +1,19 @@
 //
-//  VerticalRomanKeyboardView.swift
+//  HorzizontalQwertyKeyboardView.swift
 //  Keyboard
 //
-//  Created by β α on 2020/09/18.
+//  Created by β α on 2020/09/21.
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
 import Foundation
 import SwiftUI
 
-
-struct VerticalRomanKeyboardView: View{
-    private let model: VerticalRomanKeyboardModel
-    @ObservedObject private var modelVariableSection: VerticalRomanKeyboardModelVariableSection
+struct HorizontalQwertyKeyboardView: View{
+    private let model: HorizontalQwertyKeyboardModel
+    @ObservedObject private var modelVariableSection: HorizontalQwertyKeyboardModelVariableSection
     
-    init(_ model: VerticalRomanKeyboardModel){
+    init(_ model: HorizontalQwertyKeyboardModel){
         self.model = model
         self.modelVariableSection = self.model.variableSection
     }
@@ -29,7 +28,7 @@ struct VerticalRomanKeyboardView: View{
             return self.model.numberKeyboard.indices
         case let .other(string):
             switch string{
-            case RomanAdditionalTabs.symbols.identifier:
+            case QwertyAdditionalTabs.symbols.identifier:
                 return self.model.symbolsKeyboard.indices
             default: return 0..<0
             }
@@ -46,14 +45,14 @@ struct VerticalRomanKeyboardView: View{
             return self.model.numberKeyboard[v].indices
         case let .other(string):
             switch string{
-            case RomanAdditionalTabs.symbols.identifier:
+            case QwertyAdditionalTabs.symbols.identifier:
                 return self.model.symbolsKeyboard[v].indices
             default: return 0..<0
             }
         }
     }
     
-    private var keyModels: [[RomanKeyModelProtocol]] {
+    private var keyModels: [[QwertyKeyModelProtocol]] {
         switch modelVariableSection.tabState{
         case .hira:
             return self.model.hiraKeyboard
@@ -63,7 +62,7 @@ struct VerticalRomanKeyboardView: View{
             return self.model.numberKeyboard
         case let .other(string):
             switch string{
-            case RomanAdditionalTabs.symbols.identifier:
+            case QwertyAdditionalTabs.symbols.identifier:
                 return self.model.symbolsKeyboard
             default: return []
             }
@@ -76,10 +75,10 @@ struct VerticalRomanKeyboardView: View{
             ForEach(self.verticalIndices, id: \.self){(v: Int) in
                 HStack(spacing: Design.shared.horizontalSpacing){
                     ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
-                        RomanKeyView(self.keyModels[v][h])
+                        QwertyKeyView(self.keyModels[v][h])
                     }
                 }
             }
-        }
+        }        
     }
 }

@@ -1,5 +1,5 @@
 //
-//  RomanKeyModel.swift
+//  QwertyKeyModel.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-struct RomanKeyModel: RomanKeyModelProtocol{
-    var variableSection = RomanKeyModelVariableSection()
+struct QwertyKeyModel: QwertyKeyModelProtocol{
+    var variableSection = QwertyKeyModelVariableSection()
     
     let pressActions: [ActionType]
     var longPressActions: [KeyLongPressActionType]
@@ -22,7 +22,7 @@ struct RomanKeyModel: RomanKeyModelProtocol{
     private let scale: (normalCount: Int, forCount: Int)
     
     var keySize: CGSize {
-        CGSize(width: Design.shared.romanScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewSize.height)
+        CGSize(width: Design.shared.qwertyScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewSize.height)
     }
 
     init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], variationsModel: VariationsModel = VariationsModel([]),  needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){

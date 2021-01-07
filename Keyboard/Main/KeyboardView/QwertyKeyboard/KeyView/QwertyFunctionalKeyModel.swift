@@ -1,5 +1,5 @@
 //
-//  RomanFunctionalKeyModel.swift
+//  QwertyFunctionalKeyModel.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-struct RomanFunctionalKeyModel: RomanKeyModelProtocol{    
-    var variableSection = RomanKeyModelVariableSection()
+struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
+    var variableSection = QwertyKeyModelVariableSection()
     
     let pressActions: [ActionType]
     var longPressActions: [KeyLongPressActionType]
@@ -23,7 +23,7 @@ struct RomanFunctionalKeyModel: RomanKeyModelProtocol{
     
     var keySize: CGSize {
         return CGSize(
-            width: Design.shared.romanFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
+            width: Design.shared.qwertyFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
             height: Design.shared.keyViewSize.height
         )
     }

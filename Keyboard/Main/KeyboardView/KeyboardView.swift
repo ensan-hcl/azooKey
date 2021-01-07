@@ -91,22 +91,22 @@ struct KeyboardView: View {
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
                         case (.vertical, .qwerty):
-                            VerticalRomanKeyboardView(Store.shared.keyboardModel as! VerticalRomanKeyboardModel)
+                            VerticalQwertyKeyboardView(Store.shared.keyboardModel as! VerticalQwertyKeyboardModel)
                         case (.horizontal, .flick):
                             HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
                         case (.horizontal, .qwerty):
-                            HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
+                            HorizontalQwertyKeyboardView(Store.shared.keyboardModel as! HorizontalQwertyKeyboardModel)
                         }
                     }else{
                         switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
                         case (.vertical, .qwerty):
-                            VerticalRomanKeyboardView(Store.shared.keyboardModel as! VerticalRomanKeyboardModel)
+                            VerticalQwertyKeyboardView(Store.shared.keyboardModel as! VerticalQwertyKeyboardModel)
                         case (.horizontal, .flick):
                             HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
                         case (.horizontal, .qwerty):
-                            HorizontalRomanKeyboardView(Store.shared.keyboardModel as! HorizontalRomanKeyboardModel)
+                            HorizontalQwertyKeyboardView(Store.shared.keyboardModel as! HorizontalQwertyKeyboardModel)
                         }
                     }
                 }.padding(.bottom, 2)

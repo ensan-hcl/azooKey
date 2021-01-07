@@ -1,5 +1,5 @@
 //
-//  RomanKeyView.swift
+//  QwertyKeyView.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-struct RomanKeyView: View{
-    private let model: RomanKeyModelProtocol
-    @ObservedObject private var modelVariableSection: RomanKeyModelVariableSection
+struct QwertyKeyView: View{
+    private let model: QwertyKeyModelProtocol
+    @ObservedObject private var modelVariableSection: QwertyKeyModelVariableSection
 
     @State private var suggest = false
     
-    init(_ model: RomanKeyModelProtocol){
+    init(_ model: QwertyKeyModelProtocol){
         self.model = model
         self.modelVariableSection = model.variableSection
     }
@@ -90,7 +90,7 @@ struct RomanKeyView: View{
                 if self.suggest && self.model.needSuggestView{
                     let height = Design.shared.verticalSpacing + self.model.keySize.height
                     if self.modelVariableSection.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty{
-                        RomanSuggestView.scaleToVariationsSize(
+                        QwertySuggestView.scaleToVariationsSize(
                             keyWidth: self.model.keySize.width,
                             scale_y: 1,
                             variationsCount: self.model.variationsModel.variations.count,
@@ -98,13 +98,13 @@ struct RomanKeyView: View{
                             direction: model.variationsModel.direction
                         )
                         .overlay(
-                            RomanVariationsView(model: self.model.variationsModel)
+                            QwertyVariationsView(model: self.model.variationsModel)
                                 .padding(.bottom, height)
                                 .padding(self.model.variationsModel.direction.edge, 15),
                             alignment: self.model.variationsModel.direction.alignment
                         )
                     }else{
-                        RomanSuggestView.scaleToFrameSize(
+                        QwertySuggestView.scaleToFrameSize(
                             keyWidth: self.model.keySize.width,
                             scale_y: 1,
                             color: Design.shared.colors.highlightedKeyColor

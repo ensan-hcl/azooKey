@@ -1,5 +1,5 @@
 //
-//  RomanChangeTabKeyModel.swift
+//  QwertyChangeTabKeyModel.swift
 //  Keyboard
 //
 //  Created by β α on 2020/12/14.
@@ -10,8 +10,8 @@ import Foundation
 import SwiftUI
 
 //symbolタブ、123タブで表示される切り替えボタン
-struct RomanChangeTabKeyModel: RomanKeyModelProtocol{
-    var variableSection = RomanKeyModelVariableSection()
+struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
+    var variableSection = QwertyKeyModelVariableSection()
 
     var pressActions: [ActionType]{
         switch Store.shared.needsInputModeSwitchKey{
@@ -36,7 +36,7 @@ struct RomanChangeTabKeyModel: RomanKeyModelProtocol{
 
     var keySize: CGSize {
         return CGSize(
-            width: Design.shared.romanFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
+            width: Design.shared.qwertyFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
             height: Design.shared.keyViewSize.height
         )
     }

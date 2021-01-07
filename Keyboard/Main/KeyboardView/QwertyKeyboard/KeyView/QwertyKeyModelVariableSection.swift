@@ -1,5 +1,5 @@
 //
-//  RomanKeyModelVariableSection.swift
+//  QwertyKeyModelVariableSection.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-enum RomanKeyPressState{
+enum QwertyKeyPressState{
     case unpressed
     case started(Date)
     case longPressed
@@ -35,8 +35,8 @@ enum RomanKeyPressState{
 
 }
 
-final class RomanKeyModelVariableSection: ObservableObject {
-    @Published var pressState: RomanKeyPressState = .unpressed
+final class QwertyKeyModelVariableSection: ObservableObject {
+    @Published var pressState: QwertyKeyPressState = .unpressed
     @Published var enterKeyState: EnterKeyState = .return(.default)
     @Published var aAKeyState: AaKeyState = .normal
 }

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct KeyboardTypeSettingItemView: View {
+struct KeyboardLayoutSettingItemView: View {
     typealias ItemViewModel = SettingItemViewModel<KeyboardLayout>
     typealias ItemModel = SettingItem<KeyboardLayout>
 
@@ -36,12 +36,16 @@ struct KeyboardTypeSettingItemView: View {
         }
     }
 
-    init(_ viewModel: ItemViewModel, language: Language = .japanese, setTogether: Bool = false){
+    let id: Int
+
+    init(_ viewModel: ItemViewModel, language: Language = .japanese, setTogether: Bool = false, id: Int = 0){
         self.language = language
         self.setTogether = setTogether
         self.item = viewModel.item
         self.viewModel = viewModel
         self._selection = State(initialValue: viewModel.value)
+        debug("layout_setting", "init", id)
+        self.id = id
     }
 
     var imageName: String {
@@ -78,24 +82,33 @@ struct KeyboardTypeSettingItemView: View {
             }
             .labelsHidden()
             .pickerStyle(SegmentedPickerStyle())
-            .onChange(of: selection, perform: { _ in
-                if ignoreChange{
-                    return
-                }
-                let type = selection
-                self.viewModel.value = type
-                if self.item.identifier == .japaneseKeyboardLayout{
-                    Store.variableSection.keyboardType = type
-                }
-                if setTogether{
-                    Store.shared.englishKeyboardTypeSetting.value = type
-                }
-            })
         }
+        .onChange(of: selection, perform: { _ in
+            if ignoreChange{
+                return
+            }
+            debug("layout_setting", id, setTogether, language, ignoreChange)
+            let type = selection
+            self.viewModel.value = type
+            switch language{
+            case .japanese:
+                Store.variableSection.keyboardType = type
+            case .english:
+                Store.variableSection.englishKeyboardLayout = type
+            }
+            if setTogether{
+                Store.shared.englishKeyboardTypeSetting.value = type
+                Store.variableSection.englishKeyboardLayout = type
+            }
+        })
         .onAppear{
             self.ignoreChange = true
             self.selection = viewModel.value
             self.ignoreChange = false
+        }
+        .onDisappear{
+            self.ignoreChange = true
+            debug("layout_setting", "remove author", id, language, ignoreChange)
         }
     }
 }

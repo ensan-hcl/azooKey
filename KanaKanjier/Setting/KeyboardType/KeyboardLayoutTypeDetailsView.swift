@@ -13,8 +13,8 @@ struct KeyboardLayoutTypeDetailsView: View {
     var body: some View {
         Form{
             Section{
-                KeyboardTypeSettingItemView(Store.shared.keyboardTypeSetting, language: .japanese).padding(.vertical)
-                KeyboardTypeSettingItemView(Store.shared.englishKeyboardTypeSetting, language: .english).padding(.vertical)
+                KeyboardLayoutSettingItemView(Store.shared.keyboardTypeSetting, language: .japanese, id: 10).padding(.vertical)
+                KeyboardLayoutSettingItemView(Store.shared.englishKeyboardTypeSetting, language: .english, id: 20).padding(.vertical)
             }
         }.navigationBarTitle(Text("キーボードの詳細設定"), displayMode: .inline)
     }

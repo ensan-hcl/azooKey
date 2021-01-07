@@ -124,12 +124,12 @@ final class Store{
                 self.keyboardModel = HorizontalFlickKeyboardModel()
             }
         case (.qwerty, .vertical):
-            if absolutely || !(self.keyboardModel is VerticalRomanKeyboardModel){
-                self.keyboardModel = VerticalRomanKeyboardModel()
+            if absolutely || !(self.keyboardModel is VerticalQwertyKeyboardModel){
+                self.keyboardModel = VerticalQwertyKeyboardModel()
             }
         case (.qwerty, .horizontal):
-            if absolutely || !(self.keyboardModel is HorizontalRomanKeyboardModel){
-                self.keyboardModel = HorizontalRomanKeyboardModel()
+            if absolutely || !(self.keyboardModel is HorizontalQwertyKeyboardModel){
+                self.keyboardModel = HorizontalQwertyKeyboardModel()
             }
         }
     }
@@ -284,7 +284,10 @@ struct UserSettingDepartment{
     }
 
     internal func keyboardLayout(for key: Setting) -> KeyboardLayout {
-        self.keyboardLayoutSetting[key, default: .flick]
+        if key == .englishKeyboardLayout, let layout = self.keyboardLayoutSetting[Setting.japaneseKeyboardLayout]{
+            return self.keyboardLayoutSetting[key, default: layout]
+        }
+        return self.keyboardLayoutSetting[key, default: .flick]
     }
 
     private static func getKogakiFlickSetting() -> [FlickDirection: FlickedKeyModel] {
@@ -403,11 +406,11 @@ struct UserSettingDepartment{
         Store.shared.sendToDicDataStore(.notifyLearningType(type))
     }
 
-    var romanNumberTabKeySetting: [RomanKeyModel] {
+    var qwertyNumberTabKeySetting: [QwertyKeyModel] {
         let customKeys: RomanCustomKeysValue
         if let value = Self.userDefaults.value(forKey: Setting.numberTabCustomKeys.key), let keys = RomanCustomKeysValue.get(value){
             customKeys = keys
-        }else if let defaultValue = DefaultSetting.shared.romanCustomKeyDefaultSetting(.numberTabCustomKeys){
+        }else if let defaultValue = DefaultSetting.shared.qwertyCustomKeyDefaultSetting(.numberTabCustomKeys){
             customKeys = defaultValue
         }else{
             return []
@@ -416,7 +419,7 @@ struct UserSettingDepartment{
         let count = keys.count
         let scale = (7, count)
         return keys.map{key in
-            RomanKeyModel(
+            QwertyKeyModel(
                 labelType: .text(key.name),
                 pressActions: [.input(key.input)],
                 variationsModel: VariationsModel(

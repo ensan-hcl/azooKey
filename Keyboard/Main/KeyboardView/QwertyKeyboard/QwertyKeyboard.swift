@@ -1,5 +1,5 @@
 //
-//  RomanKeyboard.swift
+//  QwertyKeyboard.swift
 //  Keyboard
 //
 //  Created by β α on 2020/10/13.
@@ -7,7 +7,7 @@
 //
 
 import Foundation
-enum RomanAdditionalTabs{
+enum QwertyAdditionalTabs{
     case symbols
     var identifier: String {
         switch self {

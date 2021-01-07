@@ -1,5 +1,5 @@
 //
-//  RomanEnterKeyView.swift
+//  QwertyEnterKeyView.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-struct RomanEnterKeyModel: RomanKeyModelProtocol, EnterKeyModelProtocol{
+struct QwertyEnterKeyModel: QwertyKeyModelProtocol, EnterKeyModelProtocol{
     init(){}
 
-    static var shared = RomanEnterKeyModel()
-    var variableSection = RomanKeyModelVariableSection()
+    static var shared = QwertyEnterKeyModel()
+    var variableSection = QwertyKeyModelVariableSection()
     var keySize: CGSize {
-        return CGSize(width: Design.shared.romanEnterKeyWidth, height: Design.shared.keyViewSize.height)
+        return CGSize(width: Design.shared.qwertyEnterKeyWidth, height: Design.shared.keyViewSize.height)
     }
     var variationsModel = VariationsModel([])
 

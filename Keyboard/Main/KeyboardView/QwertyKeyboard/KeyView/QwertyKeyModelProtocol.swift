@@ -1,5 +1,5 @@
 //
-//  RomanKeyModelProtocol.swift
+//  QwertyKeyModelProtocol.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/18.
@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-protocol RomanKeyModelProtocol{
+protocol QwertyKeyModelProtocol{
     var pressActions: [ActionType] {get}
     var longPressActions: [KeyLongPressActionType] {get}
     var keySize: CGSize {get}
     var needSuggestView: Bool {get}
     
-    var variableSection: RomanKeyModelVariableSection {get set}
+    var variableSection: QwertyKeyModelVariableSection {get set}
     
     var variationsModel: VariationsModel {get}
     func getLabel() -> KeyLabel
@@ -30,7 +30,7 @@ protocol RomanKeyModelProtocol{
 }
 
 
-extension RomanKeyModelProtocol{
+extension QwertyKeyModelProtocol{
     func press(){
         self.pressActions.forEach{Store.shared.action.registerAction($0)}
     }
