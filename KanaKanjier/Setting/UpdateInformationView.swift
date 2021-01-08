@@ -11,7 +11,9 @@ struct UpdateInfomationView: View {
     var body: some View {
         Form{
             VersionView("1.4.2", releaseDate: "2021年01月08日"){
-                ParagraphView("軽微な不具合を修正しました。")
+                ParagraphView("不具合を修正しました。"){
+                    "キーボードの種類の変更が反映されない事がある問題の修正"
+                }
             }
             VersionView("1.4.1", releaseDate: "2021年01月06日"){
                 ParagraphView("軽微な不具合を修正しました。")
