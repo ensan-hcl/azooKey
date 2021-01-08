@@ -883,6 +883,10 @@ final class DicDataStore{
         if 147...554 ~= data.lcid{
             return false
         }
+        //接頭辞
+        if 557...560 ~= data.lcid{
+            return false
+        }
         //接尾名詞を除去
         if 1297...1305 ~= data.lcid{
             return false
