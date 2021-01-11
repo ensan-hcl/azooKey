@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TimeMesureTools{
+final class TimeMesureTools{
     private static var start: Date?
 
     static func startTimeMesure(){

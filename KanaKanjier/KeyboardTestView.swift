@@ -9,8 +9,6 @@
 import Foundation
 import SwiftUI
 import AudioToolbox
-class VariableSection: ObservableObject{
-}
 
 extension CGPoint{
     func distance(to point: CGPoint) -> CGFloat {

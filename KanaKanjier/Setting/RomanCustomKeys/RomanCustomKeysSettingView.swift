@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-fileprivate class SelectState: ObservableObject{
+fileprivate final class SelectState: ObservableObject{
     @Published var targetIndex = -1
     @Published var selectedIndex = -1
     @Published var longpressTargetIndex = -1
@@ -19,7 +19,7 @@ fileprivate class SelectState: ObservableObject{
         self.targetIndex = -1
     }
 }
-fileprivate class EditState: ObservableObject{
+fileprivate final class EditState: ObservableObject{
     enum State{
         case none
         case drag

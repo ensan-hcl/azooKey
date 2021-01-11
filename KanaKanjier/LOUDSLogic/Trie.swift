@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TrieNode<Key: Hashable, Value: Hashable> {
+final class TrieNode<Key: Hashable, Value: Hashable> {
     var value: Set<Value>
     var children: [Key: TrieNode<Key, Value>]
     var id = -1

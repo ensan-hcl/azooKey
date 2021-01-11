@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-class Store{
+final class Store{
     static let shared = Store()
     static var variableSection = StoreVariableSection()
     var feedbackGenerator = UINotificationFeedbackGenerator()
@@ -141,7 +141,7 @@ class Store{
 
 }
 
-class StoreVariableSection: ObservableObject{
+final class StoreVariableSection: ObservableObject{
     @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
     @Published var keyboardType: KeyboardLayout = .flick

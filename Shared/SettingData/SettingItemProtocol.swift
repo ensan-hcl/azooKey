@@ -54,7 +54,7 @@ struct SettingItem <Value: Savable> {
     }
 }
 
-class SettingItemViewModel<Value: Savable>: ObservableObject{
+final class SettingItemViewModel<Value: Savable>: ObservableObject{
     let item: SettingItem<Value>
     @Published var value: Value{
         didSet {

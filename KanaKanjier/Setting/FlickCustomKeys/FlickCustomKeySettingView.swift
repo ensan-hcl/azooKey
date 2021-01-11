@@ -8,14 +8,14 @@
 
 import SwiftUI
 
-fileprivate class SelectState: ObservableObject{
+fileprivate final class SelectState: ObservableObject{
     @Published var selectedPosition: FlickKeyPosition? = nil
 
     func reset(){
         self.selectedPosition = nil
     }
 }
-fileprivate class EditState: ObservableObject{
+fileprivate final class EditState: ObservableObject{
     enum State{
         case none
         case label
