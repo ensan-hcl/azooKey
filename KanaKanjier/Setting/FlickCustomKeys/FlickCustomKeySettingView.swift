@@ -210,14 +210,14 @@ struct FlickCustomKeysSettingView: View {
     var labelEditor: some View {
         VStack{
             if let key = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(key){
-                TextField("ラベル", text: label(key))
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal)
                 Text("キーに表示される文字を設定します。")
                     .font(.caption)
                 Text("入力される文字とは異なっていても構いません。")
                     .font(.caption)
+                TextField("ラベル", text: label(key))
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal)
             }else{
                 Text("このキーは編集できません。")
                     .font(.caption)
