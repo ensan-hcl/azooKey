@@ -202,6 +202,12 @@ struct SettingTabView: View {
                             Spacer()
                         }
                     }
+                    NavigationLink(destination: OpenSourceSoftWaresLicenceView()) {
+                        HStack{
+                            Text("ライセンス")
+                            Spacer()
+                        }
+                    }
                     HStack{
                         Text("バージョン")
                         Spacer()
