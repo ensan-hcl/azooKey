@@ -92,7 +92,7 @@ extension TemplateLiteralProtocol{
     }
 }
 
-struct DateTemplateLiteral: TemplateLiteralProtocol {
+struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
     static let example = DateTemplateLiteral(format: "yyyy年MM月dd日(EEE) a hh:mm:ss", type: .western, language: .japanese, delta: "0", deltaUnit: 1)
     var format: String
     var type: CalendarType
@@ -156,13 +156,17 @@ struct DateTemplateLiteral: TemplateLiteralProtocol {
     }
 }
 
-struct RandomTemplateLiteral: TemplateLiteralProtocol{
+struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable{
+    static func == (lhs: RandomTemplateLiteral, rhs: RandomTemplateLiteral) -> Bool {
+        return lhs.value == rhs.value
+    }
+
     enum ValueType: String {
         case int = "int"
         case double = "double"
         case string = "string"
     }
-    enum Value{
+    enum Value: Equatable{
         case int(from: Int, to: Int)
         case double(from: Double, to: Double)
         case string([String])

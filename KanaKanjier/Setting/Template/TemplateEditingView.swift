@@ -24,6 +24,26 @@ struct TemplateEditingView: View {
         self.variableSection = data.templates[index].variableSection
     }
 
+    var doneButton: some View {
+        Button{
+            //validation
+            let sames = data.templates.indices.filter{data.templates[$0].data.name == name}
+            if sames != [index] && !sames.isEmpty{
+                return
+            }
+            if name.isEmpty{
+                return
+            }
+            //データの更新
+            data.templates[index].data.name = self.name
+            data.templates[index].data.type = self.variableSection.selection
+            //画面を閉じる
+            presentationMode.wrappedValue.dismiss()
+        } label: {
+            Text("完了")
+        }
+    }
+
     var body: some View {
         Form{
             VStack{
@@ -55,24 +75,9 @@ struct TemplateEditingView: View {
             }
         }.navigationBarTitle(Text("テンプレートを編集"), displayMode: .inline)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(trailing: Button{
-            let sames = data.templates.indices.filter{data.templates[$0].data.name == name}
-            if sames != [index] && !sames.isEmpty{
-                return
-            }
-            if name.isEmpty{
-                return
-            }
-            data.templates[index].data.name = self.name
-            data.templates[index].data.type = self.variableSection.selection
-            presentationMode.wrappedValue.dismiss()
-        }label: {
-            Text("完了")
-        })
+        .navigationBarItems(trailing: doneButton)
     }
-
 }
-
 
 struct RandomTemplateLiteralSettingView: View {
     static let templateLiteralType = TemplateLiteralType.random
@@ -80,7 +85,6 @@ struct RandomTemplateLiteralSettingView: View {
         case nan
         case stringIsNil
     }
-
     private let timer = Timer.publish(every: 0.8, on: .main, in: .common).autoconnect()
     //リテラル
     @ObservedObject private var data: TemplateDataList
@@ -175,6 +179,8 @@ struct RandomTemplateLiteralSettingView: View {
                     Text(previewString)
                     Spacer()
                 }
+            }.onReceive(timer){_ in
+                self.update()
             }
 
             switch type{
@@ -232,9 +238,6 @@ struct RandomTemplateLiteralSettingView: View {
                 }
             }
         }.font(.body)
-        .onReceive(timer){_ in
-            self.update()
-        }
     }
 
 }
@@ -242,7 +245,6 @@ struct RandomTemplateLiteralSettingView: View {
 
 struct DateTemplateLiteralSettingView: View {
     static let templateLiteralType = TemplateLiteralType.date
-    private let timer = Timer.publish(every: 1/7, on: .main, in: .common).autoconnect()
     //リテラル
     @ObservedObject private var data: TemplateDataList
 
@@ -254,6 +256,8 @@ struct DateTemplateLiteralSettingView: View {
     @State private var date: Date = Date()
     @State private var dateString: String = ""
     @ObservedObject private var variableSection: TemplateEditingViewVariableSection
+
+    @State private var formatter: DateFormatter = DateFormatter()
 
     fileprivate init(_ data: TemplateDataList, index: Int, variableSection: TemplateEditingViewVariableSection){
         self.data = data
@@ -274,27 +278,15 @@ struct DateTemplateLiteralSettingView: View {
                 self._formatSelection = State(initialValue: "カスタム")
             }
         }
-    }
 
-    func update(){
-        if variableSection.selection != Self.templateLiteralType{
-            return
-        }
-
-        self.date = Date()
-        let f = DateFormatter()
         if formatSelection == "カスタム"{
-            f.dateFormat = literal.format
-            f.locale = Locale(identifier: literal.language.identifier)
-            f.calendar = Calendar(identifier: literal.type.identifier)
-            dateString = f.string(from: date.advanced(by: (Double(literal.delta) ?? .nan) * Double(literal.deltaUnit)))
-            self.data.templates[index].data.literal = self.literal
+            self.formatter.dateFormat = literal.format
+            self.formatter.locale = Locale(identifier: literal.language.identifier)
+            self.formatter.calendar = Calendar(identifier: literal.type.identifier)
         }else{
-            f.dateFormat = formatSelection
-            f.locale = Locale(identifier: "ja_JP")
-            f.calendar = Calendar(identifier: .gregorian)
-            dateString = f.string(from: date)
-            self.data.templates[index].data.literal = DateTemplateLiteral(format: formatSelection, type: .western, language: .japanese, delta: "0", deltaUnit: 1)
+            self.formatter.dateFormat = formatSelection
+            self.formatter.locale = Locale(identifier: "ja_JP")
+            self.formatter.calendar = Calendar(identifier: .gregorian)
         }
     }
 
@@ -322,24 +314,53 @@ struct DateTemplateLiteralSettingView: View {
         return f
     }()
 
+    func update(){
+        if formatSelection == "カスタム"{
+            self.date = Date().advanced(by: (Double(literal.delta) ?? .nan) * Double(literal.deltaUnit))
+            self.data.templates[index].data.literal = self.literal
+        }else{
+            self.date = Date()
+            self.data.templates[index].data.literal = DateTemplateLiteral(format: formatSelection, type: .western, language: .japanese, delta: "0", deltaUnit: 1)
+        }
+    }
+
     var body: some View {
         Group{
             Section(header: Text("書式の設定")){
                 VStack{
                     Picker("書式", selection: $formatSelection){
-                        Text(date, formatter: Self.yyyy年MM月dd日).tag("yyyy年MM月dd日")
-                        Text(date, formatter: Self.HH_mm).tag("HH:mm")
-                        Text(date, formatter: Self.yyyy_MM_dd).tag("yyyy/MM/dd")
+                        Text(Self.yyyy年MM月dd日.string(from: date)).tag("yyyy年MM月dd日")
+                        Text(Self.HH_mm.string(from: date)).tag("HH:mm")
+                        Text(Self.yyyy_MM_dd.string(from: date)).tag("yyyy/MM/dd")
                         Text("カスタム").tag("カスタム")
+                    }.onChange(of: formatSelection) {value in
+                        print(value)
+                        if value != "カスタム"{
+                            formatter.dateFormat = value
+                            formatter.locale = Locale(identifier: "ja_JP")
+                            formatter.calendar = Calendar(identifier: .gregorian)
+                            update()
+                        }else{
+                            formatter.dateFormat = literal.format
+                            formatter.locale = Locale(identifier: literal.language.identifier)
+                            formatter.calendar = Calendar(identifier: literal.type.identifier)
+                            update()
+                        }
+                        update()
                     }
                 }
             }
             Section(header: Text("プレビュー")){
                 HStack{
-                    Text(dateString)
+                    Text(formatter.string(from: date))
                     Spacer()
-                }.onReceive(timer){_ in
-                    self.update()
+                    Button{
+                        update()
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                        Text("更新")
+                    }
+                    
                 }
             }
             if formatSelection == "カスタム"{
@@ -385,12 +406,20 @@ struct DateTemplateLiteralSettingView: View {
                             Text("日本語").tag(DateTemplateLiteral.Language.japanese)
                             Text("英語").tag(DateTemplateLiteral.Language.english)
                         }
+
                     }
+                }
+                .onChange(of: literal){value in
+                    formatter.dateFormat = value.format
+                    formatter.locale = Locale(identifier: value.language.identifier)
+                    formatter.calendar = Calendar(identifier: value.type.identifier)
+                    update()
                 }
                 Section(header: Text("書式はyyyyMMddhhmmssフォーマットで記述します。詳しい記法はインターネット等で確認できます。")){
                     FallbackLink("Web検索", destination: "https://www.google.com/search?q=yyyymmddhhmm")
                 }
             }
+
         }
     }
 }
