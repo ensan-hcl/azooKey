@@ -12,7 +12,7 @@ struct UpdateInfomationView: View {
         Form{
             VersionView("1.4.4", releaseDate: "2021年01月30日"){
                 ParagraphView("不具合を修正しました。"){
-                    "テンプレートの更新が完了できないことがある不具合"
+                    "テンプレートの編集が完了できないことがある不具合"
                 }
             }
             VersionView("1.4.3", releaseDate: "2021年01月18日"){
