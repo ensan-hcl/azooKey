@@ -732,7 +732,7 @@ final class ActionDepartment{
      */
     
     ///何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    func notifySomethingDidChange(left: String, center: String, right: String){
+    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String){
         if self.inputStateHolder.isAfterAdjusted(){
             return
         }
@@ -741,14 +741,14 @@ final class ActionDepartment{
         let b_center = self.tempTextData.center
         let b_right = self.tempTextData.right
 
-        let a_wholeText = left + center + right
+        let a_wholeText = a_left + a_center + a_right
         let b_wholeText = b_left + b_center + b_right
         let isWholeTextChanged = a_wholeText != b_wholeText
         let wasSelected = !b_center.isEmpty
-        let isSelected = !center.isEmpty
+        let isSelected = !a_center.isEmpty
 
         if isSelected{
-            self.inputStateHolder.userSelectedText(text: center)
+            self.inputStateHolder.userSelectedText(text: a_center)
             return
         }
         
@@ -762,9 +762,9 @@ final class ActionDepartment{
             }
 
             //全体としてテキストが変化せず、選択範囲は前後ともになく、左側(右側)の文字列だけが変わっていた場合→カーソルを移動した
-            if !wasSelected && !isSelected && b_left != left{
-                debug("user operation id: 2", b_left, left)
-                let offset = left.count - b_left.count
+            if !wasSelected && !isSelected && b_left != a_left{
+                debug("user operation id: 2", b_left, a_left)
+                let offset = a_left.count - b_left.count
                 self.inputStateHolder.userMovedCursor(count: offset)
                 return
             }
@@ -782,16 +782,16 @@ final class ActionDepartment{
         }
 
         //全体としてテキストが変化しており、左右の文字列を合わせたものが不変である場合→カットしたのではないか？
-        if b_left + b_right == left + right{
+        if b_left + b_right == a_left + a_right{
             debug("user operation id: 6")
             self.inputStateHolder.userCutText(text: b_center)
             return
         }
         
         //全体としてテキストが変化しており、右側の文字列が不変であった場合→ペーストしたのではないか？
-        if b_right == right{
+        if b_right == a_right{
             //もしクリップボードに文字列がコピーされており、かつ、前の左側文字列にその文字列を加えた文字列が後の左側の文字列に一致した場合→確実にペースト
-            if let pastedText = UIPasteboard.general.string, left.hasSuffix(pastedText){
+            if let pastedText = UIPasteboard.general.string, a_left.hasSuffix(pastedText){
                 if wasSelected{
                     debug("user operation id: 7")
                     self.inputStateHolder.userReplacedSelectedText(text: pastedText)
@@ -803,13 +803,13 @@ final class ActionDepartment{
             }
         }
         
-        if left == "\n" && b_left.isEmpty && right == b_right{
+        if a_left == "\n" && b_left.isEmpty && a_right == b_right{
             debug("user operation id: 9")
             return
         }
         
         //上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
-        debug("user operation id: 10, \((left,center,right)), \((b_left, b_center, b_right))")
+        debug("user operation id: 10, \((a_left,a_center,a_right)), \((b_left, b_center, b_right))")
         self.inputStateHolder.clear()
     }
 

@@ -140,7 +140,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        Store.shared.action.notifySomethingDidChange(left: left, center: center, right: right)
+        Store.shared.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
     }
 }
 
