@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A12DC5225C1C3EA00316009 /* lines.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DC5025C1C3E900316009 /* lines.txt */; };
+		1A12DC5325C1C3EA00316009 /* lines.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DC5125C1C3E900316009 /* lines.binary */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
@@ -2395,6 +2397,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1A12DC5025C1C3E900316009 /* lines.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lines.txt; sourceTree = "<group>"; };
+		1A12DC5125C1C3E900316009 /* lines.binary */ = {isa = PBXFileReference; lastKnownFileType = file; path = lines.binary; sourceTree = "<group>"; };
 		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
 		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
@@ -6407,6 +6411,8 @@
 		1A46245C2524D06800EF5B02 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				1A12DC5125C1C3E900316009 /* lines.binary */,
+				1A12DC5025C1C3E900316009 /* lines.txt */,
 				1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */,
 				1A4624BA2524DCE200EF5B02 /* キ.louds */,
 				1A4624BE2524DCE500EF5B02 /* キ.loudschars2 */,
@@ -7646,8 +7652,10 @@
 				1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */,
 				1A4624C42524DCE900EF5B02 /* キ10000.loudstxt in Resources */,
 				1A4624CA2524DCE900EF5B02 /* キ18000.loudstxt in Resources */,
+				1A12DC5325C1C3EA00316009 /* lines.binary in Resources */,
 				1A4624CD2524DCE900EF5B02 /* キ4000.loudstxt in Resources */,
 				1A4624D02524DCE900EF5B02 /* キ6000.loudstxt in Resources */,
+				1A12DC5225C1C3EA00316009 /* lines.txt in Resources */,
 				1A4624C82524DCE900EF5B02 /* キ.louds in Resources */,
 				1A4624CB2524DCE900EF5B02 /* キ14000.loudstxt in Resources */,
 				1A4624C92524DCE900EF5B02 /* キ8000.loudstxt in Resources */,

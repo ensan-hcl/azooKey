@@ -10,13 +10,18 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
+            VersionView("1.4.4", releaseDate: "2021年01月30日"){
+                ParagraphView("不具合を修正しました。"){
+                    "テンプレートの更新が完了できないことがある不具合"
+                }
+            }
             VersionView("1.4.3", releaseDate: "2021年01月18日"){
                 ParagraphView("不統一なデザインを修正しました。")
                 ParagraphView("辞書を更新しました。")
             }
             VersionView("1.4.2", releaseDate: "2021年01月08日"){
                 ParagraphView("不具合を修正しました。"){
-                    "キーボードの種類の変更が反映されない事がある問題の修正"
+                    "キーボードの種類の変更が反映されない事がある問題"
                 }
             }
             VersionView("1.4.1", releaseDate: "2021年01月06日"){
