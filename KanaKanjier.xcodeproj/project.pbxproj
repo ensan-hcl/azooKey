@@ -752,6 +752,9 @@
 		1A12E22B25C3A93C00316009 /* マ1.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DF4525C3A93900316009 /* マ1.loudstxt */; };
 		1A12E22C25C3A93C00316009 /* 》.louds in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DF4625C3A93900316009 /* 》.louds */; };
 		1A12E24225C3E1CB00316009 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24125C3E1CA00316009 /* MessageView.swift */; };
+		1A12E24825C41A7100316009 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24725C41A7100316009 /* Message.swift */; };
+		1A12E25125C4428D00316009 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24725C41A7100316009 /* Message.swift */; };
+		1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E25725C4484200316009 /* DataUpdateView.swift */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
@@ -3143,6 +3146,8 @@
 		1A12DF4525C3A93900316009 /* マ1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "マ1.loudstxt"; sourceTree = "<group>"; };
 		1A12DF4625C3A93900316009 /* 》.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "》.louds"; sourceTree = "<group>"; };
 		1A12E24125C3E1CA00316009 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		1A12E24725C41A7100316009 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		1A12E25725C4484200316009 /* DataUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUpdateView.swift; sourceTree = "<group>"; };
 		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
 		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
@@ -5523,6 +5528,14 @@
 			path = "../../../../../AzooKey-dict/workspaces/12:12/_results/louds";
 			sourceTree = "<group>";
 		};
+		1A12E25625C447D800316009 /* DataUpdateView */ = {
+			isa = PBXGroup;
+			children = (
+				1A12E25725C4484200316009 /* DataUpdateView.swift */,
+			);
+			path = DataUpdateView;
+			sourceTree = "<group>";
+		};
 		1A2602A2251481E600EAD647 /* KeyView */ = {
 			isa = PBXGroup;
 			children = (
@@ -5603,6 +5616,7 @@
 				1ACEEFCE25665E2600899DA2 /* General */,
 				1A3A16022528BFE700A5BA4F /* Tips */,
 				1AC0316225121384004CA505 /* Setting */,
+				1A12E25625C447D800316009 /* DataUpdateView */,
 				1A9B0A4E25642C23004203BB /* EnableAzooKeyView */,
 				1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */,
 				1ABB671B256BD22B008AF0C8 /* AzooKeyIcon-Regular.otf */,
@@ -7318,6 +7332,7 @@
 				1AA346812567D8B100B41A16 /* UserSetting.swift */,
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */,
+				1A12E24725C41A7100316009 /* Message.swift */,
 				1A36B146258D0BA90084DFE0 /* SettingData */,
 			);
 			path = Shared;
@@ -9834,6 +9849,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AC031612512129A004CA505 /* Store.swift in Sources */,
+				1A12E25125C4428D00316009 /* Message.swift in Sources */,
 				1ACEEFDE25665F0100899DA2 /* CenterAlignedView.swift in Sources */,
 				1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */,
 				1AC031662512302F004CA505 /* KeyFlickSettingItemView.swift in Sources */,
@@ -9871,6 +9887,7 @@
 				1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */,
 				1ACE61C3257286E5008078D3 /* Color.swift in Sources */,
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
+				1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */,
 				1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
 				1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */,
@@ -9929,6 +9946,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A86F4B82539356100B92B49 /* only_contains.swift in Sources */,
+				1A12E24825C41A7100316009 /* Message.swift in Sources */,
 				1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */,
 				1AC8A5DD25986CA500B71E5A /* KanaSymbolsKeyModel.swift in Sources */,
 				1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */,

@@ -15,6 +15,18 @@ final class Store{
     var feedbackGenerator = UINotificationFeedbackGenerator()
     private init(){}
 
+    private var messageManager = MessageManager()
+
+    func appDidOpen(){
+        //ユーザ辞書に登録がない場合
+        let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
+        let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
+
+        if !FileManager.default.fileExists(atPath: binaryFilePath){
+            messageManager.done(.ver1_5_update_loudstxt)
+        }
+    }
+
     var halfKanaSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .halfKana,
         defaultValue: true

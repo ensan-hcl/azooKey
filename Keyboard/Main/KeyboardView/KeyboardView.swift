@@ -63,22 +63,13 @@ struct KeyboardModel {
 
 }
 
-fileprivate struct MessageManager{
-    let necessaryMessages: [MessageViewData] = [
-        MessageViewData(
-            id: "ver1.5_update_loudstxt_alert",
-            title: "お願い",
-            description: "内部データの更新のため本体アプリを開きます。よろしいですか？",
-            needOpenContainer: true,
-            detailsURL: "https://azookey.netlify.app/"
-        )
-    ]
-}
 
 struct KeyboardView: View {
     //二つ以上になったらまとめてvariableSectioinにすること！
     @ObservedObject private var modelVariableSection: KeyboardModelVariableSection
     private let model: KeyboardModel
+
+    @State private var messageManager: MessageManager = MessageManager()
 
     init(){
         self.model = Store.shared.keyboardViewModel
@@ -87,7 +78,6 @@ struct KeyboardView: View {
 
     var body: some View {
         ZStack{[unowned modelVariableSection] in
-            
             Design.shared.colors.backGroundColor
                 .frame(maxWidth: .infinity)
             if modelVariableSection.isResultViewExpanded{
@@ -126,8 +116,10 @@ struct KeyboardView: View {
                 LargeTextView(modelVariableSection.magnifyingText)
             }
             
-            ForEach(UserSettingDepartment.necessaryMessages, id: \.id){data in
-                MessageView(data: data)
+            ForEach(messageManager.necessaryMessages, id: \.id){data in
+                if messageManager.requireShow(data.id){
+                    MessageView(data: data, manager: $messageManager)
+                }
             }
         }
     }

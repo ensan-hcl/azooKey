@@ -12,6 +12,13 @@ struct ContentView: View {
     @State private var selection = 0
     @ObservedObject private var storeVariableSection = Store.variableSection
     @State private var isPresented = true
+
+    @State private var messageManager = MessageManager()
+
+    init(){
+        Store.shared.appDidOpen()
+    }
+
     var body: some View {
         ZStack{
             TabView(selection: $selection){
@@ -33,13 +40,21 @@ struct ContentView: View {
                     .tag(1)
             }.fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()
-            }            
-        }
-    }
-}
+            }
+            ForEach(messageManager.necessaryMessages, id: \.id){data in
+                if messageManager.requireShow(data.id){
+                    switch data.id{
+                    case .mock:
+                        EmptyView()
+                    case .ver1_5_update_loudstxt:
+                        DataUpdateView(id: data.id, manager: $messageManager){
+                            while let value = (0..<10000000).randomElement(), value != 0{
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
