@@ -10,38 +10,40 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
-            VersionView("1.4.4", releaseDate: "2021年01月30日"){
-                ParagraphView("不具合を修正しました。"){
-                    "テンプレートの編集が完了できないことがある不具合"
+            Group{
+                VersionView("1.4.4", releaseDate: "2021年01月30日"){
+                    ParagraphView("不具合を修正しました。"){
+                        "テンプレートの編集が完了できないことがある不具合"
+                    }
                 }
-            }
-            VersionView("1.4.3", releaseDate: "2021年01月18日"){
-                ParagraphView("不統一なデザインを修正しました。")
-                ParagraphView("辞書を更新しました。")
-            }
-            VersionView("1.4.2", releaseDate: "2021年01月08日"){
-                ParagraphView("不具合を修正しました。"){
-                    "キーボードの種類の変更が反映されない事がある問題"
+                VersionView("1.4.3", releaseDate: "2021年01月18日"){
+                    ParagraphView("不統一なデザインを修正しました。")
+                    ParagraphView("辞書を更新しました。")
                 }
-            }
-            VersionView("1.4.1", releaseDate: "2021年01月06日"){
-                ParagraphView("軽微な不具合を修正しました。")
-            }
-            VersionView("1.4", releaseDate: "2021年01月05日"){
-                ParagraphView("機能を追加しました。"){
-                    "日付や時刻の入力やランダムな変換を可能にする「テンプレート」機能を追加"
-                    "フリック入力で「､｡!?」キーをカスタマイズする機能を追加"
-                    "全角英数字の変換候補を表示する設定を追加"
+                VersionView("1.4.2", releaseDate: "2021年01月08日"){
+                    ParagraphView("不具合を修正しました。"){
+                        "キーボードの種類の変更が反映されない事がある問題"
+                    }
                 }
-                ParagraphView("機能を改善しました。"){
-                    "日本語入力と英語入力それぞれでキーボードの種類を選択できるように変更"
-                    "フリックカスタムキーの編集画面を一新"
+                VersionView("1.4.1", releaseDate: "2021年01月06日"){
+                    ParagraphView("軽微な不具合を修正しました。")
                 }
-                ParagraphView("不具合を修正しました。"){
-                    "フリック/ローマ字入力方式の切り替え直後にキーボードがクラッシュする問題"
-                    "ローマ字入力で正しく入力できない文字がある問題"
+                VersionView("1.4", releaseDate: "2021年01月05日"){
+                    ParagraphView("機能を追加しました。"){
+                        "日付や時刻の入力やランダムな変換を可能にする「テンプレート」機能を追加"
+                        "フリック入力で「､｡!?」キーをカスタマイズする機能を追加"
+                        "全角英数字の変換候補を表示する設定を追加"
+                    }
+                    ParagraphView("機能を改善しました。"){
+                        "日本語入力と英語入力それぞれでキーボードの種類を選択できるように変更"
+                        "フリックカスタムキーの編集画面を一新"
+                    }
+                    ParagraphView("不具合を修正しました。"){
+                        "フリック/ローマ字入力方式の切り替え直後にキーボードがクラッシュする問題"
+                        "ローマ字入力で正しく入力できない文字がある問題"
+                    }
+                    ParagraphView("その他軽微なデザイン・変換機能・操作性の改善を行いました。")
                 }
-                ParagraphView("その他軽微なデザイン・変換機能・操作性の改善を行いました。")
             }
             VersionView("1.3.1", releaseDate: "2020年12月18日"){
                 ParagraphView("不具合を修正しました。"){
