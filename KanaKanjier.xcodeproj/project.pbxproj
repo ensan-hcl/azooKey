@@ -751,6 +751,7 @@
 		1A12E22A25C3A93C00316009 /* マ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DF4425C3A93900316009 /* マ0.loudstxt */; };
 		1A12E22B25C3A93C00316009 /* マ1.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DF4525C3A93900316009 /* マ1.loudstxt */; };
 		1A12E22C25C3A93C00316009 /* 》.louds in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DF4625C3A93900316009 /* 》.louds */; };
+		1A12E24225C3E1CB00316009 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24125C3E1CA00316009 /* MessageView.swift */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
@@ -3141,6 +3142,7 @@
 		1A12DF4425C3A93900316009 /* マ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "マ0.loudstxt"; sourceTree = "<group>"; };
 		1A12DF4525C3A93900316009 /* マ1.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "マ1.loudstxt"; sourceTree = "<group>"; };
 		1A12DF4625C3A93900316009 /* 》.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "》.louds"; sourceTree = "<group>"; };
+		1A12E24125C3E1CA00316009 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
 		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
@@ -7242,6 +7244,7 @@
 				1AF28D05253DE4B60012CF94 /* KeyLabel.swift */,
 				1A2602DB2514CC9C00EAD647 /* KeyStates.swift */,
 				1A3DC2162500D5AB002CAA93 /* Action.swift */,
+				1A12E24125C3E1CA00316009 /* MessageView.swift */,
 				1A58AB0B25037E8800EB1864 /* ResultView */,
 				1A6F95912514446A007399AC /* QwertyKeyboard */,
 				1A3DC2082500D514002CAA93 /* FlickKeyboard */,
@@ -9930,6 +9933,7 @@
 				1AC8A5DD25986CA500B71E5A /* KanaSymbolsKeyModel.swift in Sources */,
 				1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */,
 				1A3DC22D2500D6C6002CAA93 /* Converter.swift in Sources */,
+				1A12E24225C3E1CB00316009 /* MessageView.swift in Sources */,
 				1A3DC2FB2500D72D002CAA93 /* Kana2Kanji.swift in Sources */,
 				1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */,
 				1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */,

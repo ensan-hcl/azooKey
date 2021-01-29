@@ -820,6 +820,11 @@ final class ActionDepartment{
     func setDebugPrint(_ text: String){
         self.inputStateHolder.setDebugResult(text: text)
     }
+
+    func openApp(scheme: String){
+        delegate.openApp(scheme: scheme)
+    }
+
 }
 
 //ActionDepartmentの状態を保存する部分
@@ -1373,7 +1378,4 @@ private final class InputStateHolder{
         isDebugMode = true
         #endif
     }
-    
-    fileprivate func openApp(apppath: String){}
-    
 }

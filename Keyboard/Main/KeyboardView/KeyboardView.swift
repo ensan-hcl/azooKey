@@ -63,6 +63,18 @@ struct KeyboardModel {
 
 }
 
+fileprivate struct MessageManager{
+    let necessaryMessages: [MessageViewData] = [
+        MessageViewData(
+            id: "ver1.5_update_loudstxt_alert",
+            title: "お願い",
+            description: "内部データの更新のため本体アプリを開きます。よろしいですか？",
+            needOpenContainer: true,
+            detailsURL: "https://azookey.netlify.app/"
+        )
+    ]
+}
+
 struct KeyboardView: View {
     //二つ以上になったらまとめてvariableSectioinにすること！
     @ObservedObject private var modelVariableSection: KeyboardModelVariableSection
@@ -78,7 +90,6 @@ struct KeyboardView: View {
             
             Design.shared.colors.backGroundColor
                 .frame(maxWidth: .infinity)
-
             if modelVariableSection.isResultViewExpanded{
                 ExpandedResultView(model: self.model.expandedResultModel)
                     .padding(.bottom, 2)
@@ -113,6 +124,10 @@ struct KeyboardView: View {
             }
             if modelVariableSection.isTextMagnifying{
                 LargeTextView(modelVariableSection.magnifyingText)
+            }
+            
+            ForEach(UserSettingDepartment.necessaryMessages, id: \.id){data in
+                MessageView(data: data)
             }
         }
     }
