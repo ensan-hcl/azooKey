@@ -10,7 +10,7 @@ import Foundation
 
 enum MessageIdentifier: String, Hashable{
     case mock = "mock_alert"
-    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt1"
+    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"
 
     var key: String {
         return self.rawValue + "_status"

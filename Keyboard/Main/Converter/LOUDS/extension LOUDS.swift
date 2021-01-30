@@ -71,6 +71,14 @@ extension LOUDS{
         return Bundle.main.bundlePath + "/\(identifier).loudstxt"
     }
 
+    private static func getLoudstxt2Path(_ identifier: String) -> String {
+        if identifier.hasPrefix("user"){
+            let directory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
+            return directory.appendingPathComponent("\(identifier).loudstxt2").path
+        }
+        return Bundle.main.bundlePath + "/\(identifier).loudstxt2"
+    }
+
     internal static func build(_ identifier: String) -> LOUDS? {
         let (charsURL, loudsURL) = Self.getLOUDSURL(identifier)
         let nodeIndex2ID: [UInt8]
@@ -85,7 +93,7 @@ extension LOUDS{
         let louds = LOUDS(bytes: bytes, nodeIndex2ID: nodeIndex2ID)
         return louds
     }
-    
+    /*
     internal static func getData(_ identifier: String, indices: [Int]) -> [String] {
         let data: Data
         do{
@@ -139,6 +147,43 @@ extension LOUDS{
             return results
         }
         return strings
+
+    }*/
+
+    internal static func getData(_ identifier: String, indices: [Int]) -> [String] {
+        let binary: Data
+        do{
+            let path = Self.getLoudstxt2Path(identifier)
+            binary = try Data(contentsOf: URL(fileURLWithPath: path))
+        } catch {
+            debug("ファイルが存在しません: \(error)")
+            return []
+        }
+
+        let lc = binary[0..<2].withUnsafeBytes{pointer -> [UInt16] in
+            return Array(
+                UnsafeBufferPointer(
+                    start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
+                    count: pointer.count / MemoryLayout<UInt16>.size
+                )
+            )
+        }[0]
+
+        let header_endIndex: UInt32 = 2 + UInt32(lc) * UInt32(MemoryLayout<UInt32>.size)
+        let i32array = binary[2..<header_endIndex].withUnsafeBytes{pointer -> [UInt32] in
+            return Array(
+                UnsafeBufferPointer(
+                    start: pointer.baseAddress!.assumingMemoryBound(to: UInt32.self),
+                    count: pointer.count / MemoryLayout<UInt32>.size
+                )
+            )
+        }
+
+        return indices.compactMap{(index: Int) in
+            let startIndex = Int(i32array[index])
+            let endIndex = index == (lc-1) ? binary.endIndex : Int(i32array[index + 1])
+            return String(bytes: binary[startIndex ..< endIndex], encoding: .utf8)
+        }
 
     }
 }
