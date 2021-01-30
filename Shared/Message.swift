@@ -9,7 +9,7 @@
 import Foundation
 
 enum MessageIdentifier: String, Hashable{
-    case mock = "mock_alert"
+    case mock = "mock_alert0"
     case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"
 
     var key: String {
@@ -40,15 +40,15 @@ struct MessageManager{
         MessageData(
             id: .ver1_5_update_loudstxt,
             title: "お願い",
-            description: "内部データの更新のため本体アプリを開きます。よろしいですか？",
+            description: "内部データの更新のため本体アプリを開く必要があります。よろしいですか？",
             needOpenContainer: true,
             detailsURL: "https://azookey.netlify.app/messages/ver1_5"
         ),
         /*
         MessageData(
             id: .mock,
-            title: "お知らせ",
-            description: "本体アプリを開きます。よろしいですか？",
+            title: "お願い",
+            description: "内部データの更新のため本体アプリを開く必要があります。よろしいですか？",
             needOpenContainer: true,
             detailsURL: "https://azookey.netlify.app/"
         )*/

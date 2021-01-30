@@ -29,8 +29,13 @@ struct MessageView: View {
                         .bold()
                         .padding(.top)
                         .foregroundColor(.black)
-                    Text(data.description).padding()
-                        .foregroundColor(.black)
+                    ScrollView{
+                        Text(data.description)
+                            .padding(.horizontal)
+                            .foregroundColor(.black)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                     Divider()
                     HStack{
                         if let urlString = data.detailsURL{
