@@ -143,13 +143,16 @@ final class KeyboardViewController: UIInputViewController {
         debug(left, center, right)
         Store.shared.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
     }
+
+    @objc func openURL(_ url: URL) {}
     //https://stackoverflow.com/questions/40019521/open-my-application-from-my-keyboard-extension-in-swift-3-0より
     func openUrl(url: URL?) {
-        let selector = sel_registerName("openURL:")
-        var responder = self as UIResponder?
+        let selector = #selector(openURL(_:))
+        var responder = (self as UIResponder).next
         while let r = responder, !r.responds(to: selector) {
             responder = r.next
         }
+        //debug(responder)
         _ = responder?.perform(selector, with: url)
     }
 

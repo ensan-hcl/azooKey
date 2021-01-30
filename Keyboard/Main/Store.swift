@@ -568,6 +568,7 @@ final class ActionDepartment{
             }
         case let .moveCursor(count):
             self.inputStateHolder.moveCursor(count: count)
+            //self.openApp(scheme: "azooKey://")
         case let .changeCapsLockState(state):
             Store.shared.setAaKeyState(state)
         case .toggleShowMoveCursorView:
