@@ -15,7 +15,7 @@ final class Store{
     var feedbackGenerator = UINotificationFeedbackGenerator()
     private init(){}
 
-    private var messageManager = MessageManager()
+    var messageManager = MessageManager()
 
     func appDidOpen(){
         //ユーザ辞書に登録がない場合

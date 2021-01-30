@@ -117,6 +117,25 @@ struct LOUDSBuilder{
         return ["\(katakanaRuby)\t\(parseTemplate(data.word))\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
     }
 
+    func make_loudstxt2(lines: [String]) -> Data {
+        let lc = lines.count    //データ数
+        let count = Data(bytes: [UInt16(lc)], count: 2) //データ数をUInt16でマップ
+
+        let data = lines.map{$0.data(using: .utf8) ?? Data()}
+        let body = data.reduce(Data(), +)   //データ
+
+        let header_endIndex: UInt32 = 2 + UInt32(lc) * UInt32(MemoryLayout<UInt32>.size)
+        let headerArray = data.dropLast().reduce(into: [header_endIndex]){array, value in //ヘッダの作成
+            array.append(array.last! + UInt32(value.count))
+        }
+
+        let header = Data(bytes: headerArray, count: MemoryLayout<UInt32>.size*headerArray.count)
+        let binary = count + header + body
+
+        return binary
+    }
+
+
     func process(to identifier: String = "user"){
         let trieroot = TrieNode<Character, Int>()
 
@@ -148,6 +167,7 @@ struct LOUDSBuilder{
         let binaryFilePath = directoryPath.appendingPathComponent("\(identifier).louds").path
         let loudsCharsFilePath = directoryPath.appendingPathComponent("\(identifier).loudschars2").path
         let loudsTxtFilePath: (String) -> String = {directoryPath.appendingPathComponent("\(identifier + $0).loudstxt").path}
+        let loudsTxt2FilePath: (String) -> String = {directoryPath.appendingPathComponent("\(identifier + $0).loudstxt2").path}
 
         var currentID = 0
         var nodes2Characters: [Character] = ["\0", "\0"]
@@ -199,13 +219,15 @@ struct LOUDSBuilder{
             for indices in indiceses{
                 do{
                     let start = indices.startIndex/txtFileSplit
-                    let result = data[indices].joined(separator: "\n")
-                    try result.write(toFile: loudsTxtFilePath("\(start)"), atomically: true, encoding: .utf8)
+                    let binary = make_loudstxt2(lines: Array(data[indices]))
+                    try binary.write(to: URL(fileURLWithPath: loudsTxt2FilePath("\(start)")), options: .atomic)
+                    try FileManager.default.removeItem(atPath: loudsTxtFilePath("\(start)"))
                 }catch{
                     debug(error)
                 }
             }
 
+            Store.shared.messageManager.done(.ver1_5_update_loudstxt)
         }
     }
 

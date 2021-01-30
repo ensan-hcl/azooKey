@@ -48,9 +48,9 @@ struct ContentView: View {
                         EmptyView()
                     case .ver1_5_update_loudstxt:
                         DataUpdateView(id: data.id, manager: $messageManager){
-                            while let value = (0..<10000000).randomElement(), value != 0{
-
-                            }
+                            let builder = LOUDSBuilder(txtFileSplit: 2048)
+                            builder.process()
+                            Store.shared.noticeReloadUserDict()
                         }
                     }
                 }
