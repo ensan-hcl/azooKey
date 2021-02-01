@@ -264,41 +264,23 @@ final class DicDataStore{
     private var ccLines: [[Int: PValue]] = []
     private var mmValue: [PValue] = []
     private let treshold: PValue = -17
-    private var midCount = Int.zero
 
     private var loudses: [String: LOUDS] = [:]
     private var charsID: [Character: UInt8] = [:]
     private var memory: LearningMemorys = LearningMemorys()
     private var zeroHintPredictionDicData: DicData? = nil
 
-    internal var maxlength: Int = .zero
+    internal let maxlength: Int = 20
+    private let midCount = 502
+    private let midCount = 1319
 
     private let numberFormatter = NumberFormatter()
     ///初期化時のセットアップ用の関数。プロパティリストを読み込み、連接確率リストを読み込んで行分割し保存しておく。
     private func setup(){
         numberFormatter.numberStyle = .spellOut
         numberFormatter.locale = .init(identifier: "ja-JP")
+        self.ccLines = [[Int: PValue]].init(repeating: [:], count: cidCount)
 
-        var cidCount: Int = 0
-
-        do {
-            var plist: [String: String] = [:]
-            let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/plist.csv", encoding: String.Encoding.utf8)
-            let csvLines = csvString.split(separator: "\n")
-            let csvData = csvLines.map{$0.split(separator: ",")}
-            csvData.forEach{
-                if $0.count<2{return}
-                plist[String($0[0])] = String($0[1])
-            }
-            self.maxlength = Int(plist["maxlength", default: ""]) ?? .zero
-            cidCount = Int(plist["cidCount", default: ""]) ?? .zero
-            self.midCount = Int(plist["midCount", default: ""]) ?? .zero
-
-            self.ccLines = [[Int: PValue]].init(repeating: [:], count: cidCount)
-            
-        } catch {
-            debug("ファイルが存在しません: \(error)")
-        }
         do{
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
             charsID = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map{($0.element, UInt8($0.offset))})
