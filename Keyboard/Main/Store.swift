@@ -481,7 +481,7 @@ struct LanguageDepartment{
 final class ActionDepartment{
     fileprivate init(){}
     
-    private var inputStateHolder = InputStateHolder()
+    private var inputStateHolder = InputManager()
     private weak var delegate: KeyboardViewController!
     
     //即時変数
@@ -829,7 +829,7 @@ final class ActionDepartment{
 }
 
 //ActionDepartmentの状態を保存する部分
-private final class InputStateHolder{
+private final class InputManager{
     fileprivate var proxy: UITextDocumentProxy!
     
     //現在入力中の文字
