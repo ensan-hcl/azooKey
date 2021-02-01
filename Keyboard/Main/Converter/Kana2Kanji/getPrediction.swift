@@ -25,7 +25,7 @@ extension Kana2Kanji{
         TimeMesureTools.startTimeMesure()
         do{
             var _str = ""
-            let prestring = prepart.clauses.map{$0.clause.text}.joined()
+            let prestring: String = prepart.clauses.map{$0.clause.text}.joined()
             var count: Int = .zero
             while true{
                 if prestring == _str{
@@ -47,12 +47,12 @@ extension Kana2Kanji{
         case .direct:
             dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: lastRuby)
         case .roman:
-            let ruby = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
-            let roman = lastRuby.suffix(lastRuby.count - ruby.count)
+            let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
+            let roman: Substring = lastRuby.suffix(lastRuby.count - ruby.count)
             if !roman.isEmpty{
-                let ruby = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
-                let possibleNexts = DicDataStore.possibleNexts[String(roman), default: []].map{ruby + $0}
-                let _dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
+                let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
+                let possibleNexts: [Substring] = DicDataStore.possibleNexts[String(roman), default: []].map{ruby + $0}
+                let _dicdata: DicDataStore.DicData = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
                 dicdata = _dicdata.filter{data in !possibleNexts.allSatisfy{!$0.hasPrefix(data.ruby)}}
             }else{
                 dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
@@ -61,15 +61,15 @@ extension Kana2Kanji{
 
         TimeMesureTools.endAndStart("処理3.1.3") //ここが激遅い
 
-        let lastCandidate = prepart.isEmpty ? Candidate(text: "", value: .zero, correspondingCount: 0, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
-        let lastRcid = lastCandidate.data.last?.rcid ?? 1316
-        let nextLcid = prepart.lastClause?.nextLcid ?? 1316
-        let lastMid = lastCandidate.lastMid
-        let correspoindingCount = lastCandidate.correspondingCount + lastRubyCount
-        var ignoreCCValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
+        let lastCandidate: Candidate = prepart.isEmpty ? Candidate(text: "", value: .zero, correspondingCount: 0, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
+        let lastRcid: Int = lastCandidate.data.last?.rcid ?? 1316
+        let nextLcid: Int = prepart.lastClause?.nextLcid ?? 1316
+        let lastMid: Int = lastCandidate.lastMid
+        let correspoindingCount: Int = lastCandidate.correspondingCount + lastRubyCount
+        var ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
 
         if lastCandidate.data.count > 1, let lastNext = lastData{
-            let lastPrev = lastCandidate.data[lastCandidate.data.endIndex - 2]
+            let lastPrev: DicDataElementProtocol = lastCandidate.data[lastCandidate.data.endIndex - 2]
             ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
         }
 
@@ -80,17 +80,17 @@ extension Kana2Kanji{
         result.reserveCapacity(N_best &+ 1)
         (dicdata+memory).forEach{(data: DicDataElementProtocol) in
             let includeMMValueCalculation = DicDataStore.includeMMValueCalculation(data)
-            let mmValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
-            let ccValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)
-            let penalty = -PValue(data.ruby.count &- lastRuby.count)    //文字数差をペナルティとする
-            let wValue = data.value()
+            let mmValue: PValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
+            let ccValue: PValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)
+            let penalty: PValue = -PValue(data.ruby.count &- lastRuby.count)    //文字数差をペナルティとする
+            let wValue: PValue = data.value()
             let newValue: PValue = lastCandidate.value + mmValue + ccValue + wValue + penalty - ignoreCCValue
             //追加すべきindexを取得する
-            let lastindex = (result.lastIndex(where: {$0.value >= newValue}) ?? -1) + 1
+            let lastindex: Int = (result.lastIndex(where: {$0.value >= newValue}) ?? -1) + 1
             if lastindex >= N_best{
                 return
             }
-            var nodedata = datas
+            var nodedata: [DicDataElementProtocol] = datas
             nodedata.append(data)
             let candidate: Candidate = Candidate(
                 text: lastCandidate.text + data.word,
