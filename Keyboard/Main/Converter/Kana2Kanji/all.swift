@@ -71,7 +71,7 @@ extension Kana2Kanji{
                         node.values.indices.forEach{(index: Int) in
                             let newValue: PValue = ccSum + node.values[index]
                             //追加すべきindexを取得する
-                            let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
+                            let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                             if lastindex == N_best{
                                 return
                             }
