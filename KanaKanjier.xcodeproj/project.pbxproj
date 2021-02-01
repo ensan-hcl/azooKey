@@ -766,6 +766,7 @@
 		1A2602EA2514F7D100EAD647 /* QwertyVariationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602E92514F7D100EAD647 /* QwertyVariationsView.swift */; };
 		1A2602F42514FB6E00EAD647 /* VariationsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602F32514FB6E00EAD647 /* VariationsModel.swift */; };
 		1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
+		1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A364E3125C8361A00A56583 /* LearningMemory.swift */; };
 		1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
 		1A39A1A2259325D7008DDCFE /* AzooKeyUserDictionaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */; };
 		1A3A07D8259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */; };
@@ -3154,6 +3155,7 @@
 		1A2602DB2514CC9C00EAD647 /* KeyStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStates.swift; sourceTree = "<group>"; };
 		1A2602E92514F7D100EAD647 /* QwertyVariationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyVariationsView.swift; sourceTree = "<group>"; };
 		1A2602F32514FB6E00EAD647 /* VariationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationsModel.swift; sourceTree = "<group>"; };
+		1A364E3125C8361A00A56583 /* LearningMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningMemory.swift; sourceTree = "<group>"; };
 		1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionaryData.swift; sourceTree = "<group>"; };
 		1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayoutTypeDetailsView.swift; sourceTree = "<group>"; };
 		1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelctInputStyle.swift; sourceTree = "<group>"; };
@@ -7220,6 +7222,7 @@
 			children = (
 				1A64C8BD251315AD00ACD537 /* DicDataStore.swift */,
 				1A67360525092C1E003FC654 /* DicDataElement.swift */,
+				1A364E3125C8361A00A56583 /* LearningMemory.swift */,
 				1A6736072509F39E003FC654 /* VerbConjugation.swift */,
 				1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */,
 			);
@@ -9984,6 +9987,7 @@
 				1A3DC2152500D59F002CAA93 /* FlickKeyView.swift in Sources */,
 				1A67360625092C1E003FC654 /* DicDataElement.swift in Sources */,
 				1A4623F52524621F00EF5B02 /* extension LOUDS.swift in Sources */,
+				1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */,
 				1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */,
 				1A4623EF252461A800EF5B02 /* extension UInt.swift in Sources */,
 				1A3DC2102500D571002CAA93 /* HorizontalKeyboardView.swift in Sources */,
