@@ -177,7 +177,7 @@ class TopNTest: XCTestCase {
         let values = (0..<1000000).map{_ in Int.random(in: 0..<10000000)}
         let N_best = 100000
         measure{
-            let topN: [Int] = Array(values.partiallySorted(N_best, by: >=).prefix(N_best))
+            let topN: [Int] = Array(values.sortedPrefix(N_best, by: >=).prefix(N_best))
         }
     }
 
