@@ -29,8 +29,8 @@ extension Kana2Kanji{
     ///(4)ノードをアップデートした上で返却する。
     func kana2lattice_all(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: Nodes){
         let START = Date()
-        let count = inputData.count
-        let result = LatticeNode.EOSNode
+        let count: Int = inputData.count
+        let result: LatticeNode = LatticeNode.EOSNode
 
         let nodes: [[LatticeNode]] = (.zero ..< count).map{dicdataStore.getLOUDSData(inputData: inputData, from: $0)}
         TimeMesureTools.startTimeMesure()
@@ -45,15 +45,15 @@ extension Kana2Kanji{
                     return
                 }
                 //生起確率を取得する。
-                let wValue = node.data.value()
+                let wValue: PValue = node.data.value()
                 //valuesを更新する
                 node.values = node.prevs.map{$0.totalValue + wValue}
                 //変換した文字数
-                let nextIndex = i &+ node.rubyCount
+                let nextIndex: Int = i &+ node.rubyCount
                 //文字数がcountと等しい場合登録する
                 if nextIndex == count{
                     node.prevs.indices.forEach{
-                        let newnode = node.getSqueezedNode($0, value: node.values[$0])
+                        let newnode: RegisteredNode = node.getSqueezedNode($0, value: node.values[$0])
                         result.prevs.append(newnode)
                     }
                 }else{
@@ -64,18 +64,18 @@ extension Kana2Kanji{
                             return
                         }
                         //クラスの連続確率を計算する。
-                        let ccValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
-                        let ccBonus = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
-                        let ccSum = ccValue + ccBonus
+                        let ccValue: PValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
+                        let ccBonus: PValue = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
+                        let ccSum: PValue = ccValue + ccBonus
                         //nodeの持っている全てのprevnodeに対して
                         node.values.indices.forEach{(index: Int) in
-                            let newValue = ccSum + node.values[index]
+                            let newValue: PValue = ccSum + node.values[index]
                             //追加すべきindexを取得する
-                            let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
+                            let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
                             if lastindex == N_best{
                                 return
                             }
-                            let newnode = node.getSqueezedNode(index, value: newValue)
+                            let newnode: RegisteredNode = node.getSqueezedNode(index, value: newValue)
                             nextnode.prevs.insert(newnode, at: lastindex)
                             //カウントがオーバーしている場合は除去する
                             if nextnode.prevs.count > N_best{
