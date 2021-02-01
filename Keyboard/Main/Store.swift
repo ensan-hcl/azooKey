@@ -481,7 +481,7 @@ struct LanguageDepartment{
 final class ActionDepartment{
     fileprivate init(){}
     
-    private var inputStateHolder = InputManager()
+    private var inputManager = InputManager()
     private weak var delegate: KeyboardViewController!
     
     //即時変数
@@ -490,7 +490,7 @@ final class ActionDepartment{
     private var tempSavedSelectedText: String!
 
     func initialize(){
-        self.inputStateHolder.closeKeyboard()
+        self.inputManager.closeKeyboard()
         self.timers.forEach{$0.timer.invalidate()}
         self.timers = []
     }
@@ -505,15 +505,15 @@ final class ActionDepartment{
     }
 
     func setResult(){
-        self.inputStateHolder.setResult()
+        self.inputManager.setResult()
     }
 
     func setTextDocumentProxy(_ proxy: UITextDocumentProxy){
-        self.inputStateHolder.setTextDocumentProxy(proxy)
+        self.inputManager.setTextDocumentProxy(proxy)
     }
 
     func sendToDicDataStore(_ data: Store.DicDataStoreNotification){
-        self.inputStateHolder.sendToDicDataStore(data)
+        self.inputManager.sendToDicDataStore(data)
     }
 
     func setDelegateViewController(_ controller: KeyboardViewController){
@@ -529,7 +529,7 @@ final class ActionDepartment{
     ///   - text: String。確定された文字列。
     ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
     func notifyComplete(_ candidate: Candidate){
-        self.inputStateHolder.complete(candidate: candidate)
+        self.inputManager.complete(candidate: candidate)
         candidate.actions.forEach{
             self.doAction($0)
         }
@@ -541,33 +541,33 @@ final class ActionDepartment{
             Store.shared.showMoveCursorView(false)
             if Store.shared.keyboardModel.tabState == .abc && Store.shared.aAKeyState == .capslock{
                 let input = text.uppercased()
-                self.inputStateHolder.input(text: input)
+                self.inputManager.input(text: input)
             }else{
-                self.inputStateHolder.input(text: text)
+                self.inputManager.input(text: text)
             }
         case let .delete(count):
             Store.shared.showMoveCursorView(false)
-            self.inputStateHolder.delete(count: count)
+            self.inputManager.delete(count: count)
 
         case .smoothDelete:
             Sound.smoothDelete()
             Store.shared.showMoveCursorView(false)
-            self.inputStateHolder.smoothDelete()
+            self.inputManager.smoothDelete()
 
         case .deselectAndUseAsInputting:
-            self.inputStateHolder.edit()
+            self.inputManager.edit()
 
         case .saveSelectedTextIfNeeded:
-            if self.inputStateHolder.isSelected{
-                self.tempSavedSelectedText = self.inputStateHolder.inputtedText
+            if self.inputManager.isSelected{
+                self.tempSavedSelectedText = self.inputManager.inputtedText
             }
         case .restoreSelectedTextIfNeeded:
             if let tmp = self.tempSavedSelectedText{
-                self.inputStateHolder.input(text: tmp)
+                self.inputManager.input(text: tmp)
                 self.tempSavedSelectedText = nil
             }
         case let .moveCursor(count):
-            self.inputStateHolder.moveCursor(count: count)
+            self.inputManager.moveCursor(count: count)
             //self.openApp(scheme: "azooKey://")
         case let .changeCapsLockState(state):
             Store.shared.setAaKeyState(state)
@@ -576,14 +576,14 @@ final class ActionDepartment{
 
         case .enter:
             Store.shared.showMoveCursorView(false)
-            let actions = self.inputStateHolder.enter()
+            let actions = self.inputManager.enter()
             actions.forEach{
                 self.doAction($0)
             }
 
         case .changeCharacterType:
             Store.shared.showMoveCursorView(false)
-            self.inputStateHolder.changeCharacter()
+            self.inputManager.changeCharacter()
 
         case let .moveTab(type):
             Store.shared.setTabState(type)
@@ -594,17 +594,17 @@ final class ActionDepartment{
         //MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
             #if DEBUG
-            self.inputStateHolder.isDebugMode.toggle()
-            if self.inputStateHolder.isDebugMode{
-                var left = self.inputStateHolder.proxy.documentContextBeforeInput ?? "nil"
+            self.inputManager.isDebugMode.toggle()
+            if self.inputManager.isDebugMode{
+                var left = self.inputManager.proxy.documentContextBeforeInput ?? "nil"
                 if left == "\n"{
                     left = "↩︎"
                 }
 
-                var center = self.inputStateHolder.proxy.selectedText ?? "nil"
+                var center = self.inputManager.proxy.selectedText ?? "nil"
                 center = center.replacingOccurrences(of: "\n", with: "↩︎")
 
-                var right = self.inputStateHolder.proxy.documentContextAfterInput ?? "nil"
+                var right = self.inputManager.proxy.documentContextAfterInput ?? "nil"
                 if right == "\n"{
                     right = "↩︎"
                 }
@@ -643,7 +643,7 @@ final class ActionDepartment{
                 let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
                     Sound.delete()
-                    self?.inputStateHolder.delete(count: 1)
+                    self?.inputManager.delete(count: 1)
                 }
             })
             let tuple = (type: action, timer: timer)
@@ -653,7 +653,7 @@ final class ActionDepartment{
                 let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
                     Sound.click()
-                    self?.inputStateHolder.input(text: text)
+                    self?.inputManager.input(text: text)
                 }
             })
             let tuple = (type: action, timer: timer)
@@ -664,7 +664,7 @@ final class ActionDepartment{
                 let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
                     Sound.tabOrOtherKey()
-                    self?.inputStateHolder.moveCursor(count: count)
+                    self?.inputManager.moveCursor(count: count)
                 }
             })
             let tuple = (type: action, timer: timer)
@@ -734,7 +734,7 @@ final class ActionDepartment{
     
     ///何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     func notifySomethingDidChange(a_left: String, a_center: String, a_right: String){
-        if self.inputStateHolder.isAfterAdjusted(){
+        if self.inputManager.isAfterAdjusted(){
             return
         }
         debug("something did happen by user!")
@@ -749,7 +749,7 @@ final class ActionDepartment{
         let isSelected = !a_center.isEmpty
 
         if isSelected{
-            self.inputStateHolder.userSelectedText(text: a_center)
+            self.inputManager.userSelectedText(text: a_center)
             return
         }
         
@@ -757,7 +757,7 @@ final class ActionDepartment{
         if !isWholeTextChanged{
             //全体としてテキストが変化せず、選択範囲が無くなっている場合→選択を解除した
             if wasSelected && !isSelected{
-                self.inputStateHolder.userDeselectedText()
+                self.inputManager.userDeselectedText()
                 debug("user operation id: 1")
                 return
             }
@@ -766,7 +766,7 @@ final class ActionDepartment{
             if !wasSelected && !isSelected && b_left != a_left{
                 debug("user operation id: 2", b_left, a_left)
                 let offset = a_left.count - b_left.count
-                self.inputStateHolder.userMovedCursor(count: offset)
+                self.inputManager.userMovedCursor(count: offset)
                 return
             }
             //ただタップしただけ、などの場合ここにくる事がある。
@@ -778,14 +778,14 @@ final class ActionDepartment{
         //行全体を選択している場合は改行コードが含まれる。
         if b_left == "\n" && b_center == a_wholeText{
             debug("user operation id: 5")
-            self.inputStateHolder.userDeselectedText()
+            self.inputManager.userDeselectedText()
             return
         }
 
         //全体としてテキストが変化しており、左右の文字列を合わせたものが不変である場合→カットしたのではないか？
         if b_left + b_right == a_left + a_right{
             debug("user operation id: 6")
-            self.inputStateHolder.userCutText(text: b_center)
+            self.inputManager.userCutText(text: b_center)
             return
         }
         
@@ -795,10 +795,10 @@ final class ActionDepartment{
             if let pastedText = UIPasteboard.general.string, a_left.hasSuffix(pastedText){
                 if wasSelected{
                     debug("user operation id: 7")
-                    self.inputStateHolder.userReplacedSelectedText(text: pastedText)
+                    self.inputManager.userReplacedSelectedText(text: pastedText)
                 }else{
                     debug("user operation id: 8")
-                    self.inputStateHolder.userPastedText(text: pastedText)
+                    self.inputManager.userPastedText(text: pastedText)
                 }
                 return
             }
@@ -811,7 +811,7 @@ final class ActionDepartment{
         
         //上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
         debug("user operation id: 10, \((a_left,a_center,a_right)), \((b_left, b_center, b_right))")
-        self.inputStateHolder.clear()
+        self.inputManager.clear()
     }
 
     private func hideLearningMemory(){
@@ -819,7 +819,7 @@ final class ActionDepartment{
     }
 
     func setDebugPrint(_ text: String){
-        self.inputStateHolder.setDebugResult(text: text)
+        self.inputManager.setDebugResult(text: text)
     }
 
     func openApp(scheme: String){
