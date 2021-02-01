@@ -801,7 +801,6 @@
 		1A3DC2282500D64D002CAA93 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2272500D64D002CAA93 /* ResultView.swift */; };
 		1A3DC22A2500D65C002CAA93 /* extension CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */; };
 		1A3DC22D2500D6C6002CAA93 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC22C2500D6C6002CAA93 /* Converter.swift */; };
-		1A3DC28A2500D71D002CAA93 /* plist.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC2872500D71C002CAA93 /* plist.csv */; };
 		1A3DC2FB2500D72D002CAA93 /* Kana2Kanji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2FA2500D72D002CAA93 /* Kana2Kanji.swift */; };
 		1A3DC2FF2500F837002CAA93 /* extension Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2FE2500F837002CAA93 /* extension Character.swift */; };
 		1A4057D8255841C70073C6F7 /* LearningType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057D7255841C70073C6F7 /* LearningType.swift */; };
@@ -3196,7 +3195,6 @@
 		1A3DC2272500D64D002CAA93 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension CGPoint.swift"; sourceTree = "<group>"; };
 		1A3DC22C2500D6C6002CAA93 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
-		1A3DC2872500D71C002CAA93 /* plist.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plist.csv; sourceTree = "<group>"; };
 		1A3DC2FA2500D72D002CAA93 /* Kana2Kanji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Kana2Kanji.swift; path = "../New Group/Kana2Kanji.swift"; sourceTree = "<group>"; };
 		1A3DC2FE2500F837002CAA93 /* extension Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension Character.swift"; sourceTree = "<group>"; };
 		1A4057D7255841C70073C6F7 /* LearningType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningType.swift; sourceTree = "<group>"; };
@@ -5738,7 +5736,6 @@
 				1A12E26525C5095500316009 /* louds2 */,
 				1A40E9EB25A3689C008A6298 /* p */,
 				1A40DF9C25A3687F008A6298 /* cb */,
-				1A3DC2872500D71C002CAA93 /* plist.csv */,
 				1AFA5D302585069500477DC2 /* mm.binary */,
 			);
 			path = Dictionary;
@@ -9650,7 +9647,6 @@
 				1A40E5BD25A36895008A6298 /* 173.binary in Resources */,
 				1A40E50D25A36894008A6298 /* 911.binary in Resources */,
 				1A12E6FF25C5096300316009 /* セ0.loudstxt2 in Resources */,
-				1A3DC28A2500D71D002CAA93 /* plist.csv in Resources */,
 				1A12E7A325C5096300316009 /* フ.louds in Resources */,
 				1A12E77225C5096300316009 /* ’.louds in Resources */,
 				1A12E5BD25C5096100316009 /* ジ2.loudstxt2 in Resources */,
