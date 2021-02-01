@@ -1068,6 +1068,7 @@ private final class InputStateHolder{
     fileprivate func delete(count: Int, requireSetResult: Bool = true){
         //選択状態ではオール削除になる
         if self.isSelected{
+            self.proxy.deleteBackward()
             self.clear()
             return
         }
@@ -1098,6 +1099,12 @@ private final class InputStateHolder{
     }
 
     fileprivate func smoothDelete(){
+        //選択状態ではオール削除になる
+        if self.isSelected{
+            self.proxy.deleteBackward()
+            self.clear()
+            return
+        }
         //入力中の場合
         if !self.inputtedText.isEmpty{
             let leftSideText = self.inputtedText.prefix(self.cursorPosition)
