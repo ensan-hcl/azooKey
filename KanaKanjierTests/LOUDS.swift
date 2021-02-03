@@ -92,36 +92,9 @@ extension UInt8: LOUDSUnit{
     }
 }
 
-extension UInt16: LOUDSUnit{
-    static let prefixOne: UInt16 = 0b1000000000000000
-
-    var popCount: Int {
-        return self.nonzeroBitCount
-        var cnt = 0
-        var bits = self
-        while bits != 0{
-            cnt &+= Int(bits & 1)
-            bits = bits >> 1
-        }
-        return cnt
-    }
-}
-
 extension UInt64:LOUDSUnit{
     var popCount: Int {
-        return self.nonzeroBitCount
-        var x = self
-        // 2bitごとの組に分け、立っているビット数を2bitで表現する
-        x &-= ((x >> 1) & 0x5555555555555555)
-
-        // 4bit整数に 上位2bit + 下位2bit を計算した値を入れる
-        x = (x & 0x3333333333333333) &+ ((x >> 2) & 0x3333333333333333)
-
-        x = (x &+ (x >> 4)) & 0x0f0f0f0f0f0f0f0f // 8bitごと
-        x &+= (x >> 8) // 16bitごと
-        x &+= (x >> 16) // 32bitごと
-        x &+= (x >> 32) // 64bitごと = 全部の合計
-        return Int(x & 0x0000007f)
+        self.nonzeroBitCount
     }
     
     static let prefixOne: UInt64 = 0b1000000000000000000000000000000000000000000000000000000000000000
@@ -312,9 +285,9 @@ struct FastLOUDSUIntTrie{
         self.rankLarge = bytes.reduce([0], {
             $0 + [($0.last ?? 0) &+ $1.nonzeroBitCount]
         })
-        self.rankLarge0 = bytes.reduce([0], {
-            $0 + [($0.last ?? 0) &+ (Self.unit &- $1.nonzeroBitCount)]
-        })
+        self.rankLarge0 = bytes.reduce(into: [0]){
+            $0.append(($0.last ?? 0) &+ (Self.unit &- $1.nonzeroBitCount))
+        }
 
         self.rankSmall = bytes.map{uint64 in
             [0] + (1..<8).reversed().map{i in
@@ -378,55 +351,6 @@ struct FastLOUDSUIntTrie{
         return total
     }
     
-    func childIndices2(from parentNodeIndex: Int) -> Range<Int> {
-        var lowerIndex = 0
-        var upperIndex = self.bits.count >> Self.uExp - 1
-        var childNodeIndex = 0
-        while true{
-            let currentIndex = (lowerIndex + upperIndex)/2
-            let value = self.nodeIndex(from: currentIndex)
-            if (currentIndex+1) - value == parentNodeIndex{
-                childNodeIndex = currentIndex
-                break
-            } else if (lowerIndex > upperIndex) {
-                return 0..<0
-            } else {
-                if (currentIndex+1) - value > parentNodeIndex {
-                    upperIndex = currentIndex - 1
-                } else {
-                    lowerIndex = currentIndex + 1
-                }
-            }
-        }
-        let begin: Int
-        let last: Int
-        let cur = self.nodeIndex(from: childNodeIndex)
-        do{
-            var curPopCount = cur
-            var start = childNodeIndex-1
-            var nextPopCount = self.nodeIndex(from: start)
-            while curPopCount > nextPopCount && start >= 0{
-                curPopCount = nextPopCount
-                start -= 1
-                nextPopCount = self.nodeIndex(from: start)
-            }
-            begin = start+1
-        }
-        do{
-            var curPopCount = cur
-            var end = childNodeIndex+1
-            var nextPopCount = self.nodeIndex(from: end)
-            while curPopCount < nextPopCount && end < (self.bits.count >> Self.uExp){
-                curPopCount = nextPopCount
-                end += 1
-                nextPopCount = self.nodeIndex(from: end)
-            }
-            last = end
-        }
-        return begin+1..<last
-    }
-    
-
     func childIndices5(from parentNodeIndex: Int) -> Range<Int> {
 
         /*
@@ -751,39 +675,89 @@ struct FastLOUDSUIntTrie{
                 break
             }
         }
-        guard let i = (left + 1 ..< self.bits.count).first(where: {(index: Int) in self.rankLarge0[index &+ 1] >= parentNodeIndex}) else{
+        guard let i = (left &+ 1 ..< self.bits.count).first(where: {(index: Int) in self.rankLarge0[index &+ 1] >= parentNodeIndex}) else{
             return 0..<0
         }
 
-        let byte = (pbits + i).pointee
-        let dif = self.rankLarge0[i &+ 1] &- parentNodeIndex   //0の数の超過分
-        var count = Unit(Self.unit &- byte.nonzeroBitCount) //0の数
-        var k = Self.unit
+        return self.bits.withUnsafeBufferPointer{(buffer: UnsafeBufferPointer<Unit>) -> Range<Int> in
+            let byte = buffer[i]
+            let dif = self.rankLarge0[i &+ 1] &- parentNodeIndex   //0の数の超過分
+            var count = Unit(Self.unit &- byte.nonzeroBitCount) //0の数
+            var k = Self.unit
 
-        for c in 0..<Self.unit{
-            if count == dif{
-                k = c
-                break
+            for c in 0..<Self.unit{
+                if count == dif{
+                    k = c
+                    break
+                }
+                //byteの上からc桁めが0なら == (byte << 0)が100………00より小さければ == 最初の1桁を一番下に持ってきた値そのもの
+                count &-= (byte << c) < Unit.prefixOne ? 1:0
             }
-            //byteの上からc桁めが0なら == (byte << 0)が100………00より小さければ == 最初の1桁を一番下に持ってきた値そのもの
-            count &-= (byte << c).leadingZeroBitCount > 0 ? 1:0
+
+            let start = (i << Self.uExp) &+ k &- parentNodeIndex &+ 1
+            if dif == .zero{
+                var j = i &+ 1
+                while buffer[j] == Unit.max{
+                    j &+= 1
+                }
+                let byte2 = buffer[j]
+                //最初の0を探す作業
+                let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+                return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
+            }else{
+                //次の0を探す作業
+                let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+                return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
+            }
         }
+    }
 
-
-        let start = (i << Self.uExp) &+ k &- parentNodeIndex &+ 1
-        if dif == 0{
-            var j = i &+ 1
-            while (pbits + j).pointee == Unit.max{
-                j &+= 1
+    func childNodeIndices3(from parentNodeIndex: Int) -> Range<Int> {
+        let _i: Int? = rankLarge0.withUnsafeBufferPointer{buffer in
+            var left = -1
+            while true{
+                let dif = parentNodeIndex &- buffer[left &+ 1]
+                if dif >= Self.unit{
+                    left &+= dif >> Self.uExp
+                }else{
+                    break
+                }
             }
-            let byte2 = (pbits+j).pointee
-            //最初の0を探す作業
-            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
-            return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
-        }else{
-            //反転させたビットで最初の1を探す作業(次の0を探す作業)
-            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
-            return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
+            return (left &+ 1 ..< self.bits.count).first(where: {(index: Int) in buffer[index &+ 1] >= parentNodeIndex})
+        }
+        guard let i = _i else {
+            return 0..<0
+        }
+        return self.bits.withUnsafeBufferPointer{(buffer: UnsafeBufferPointer<Unit>) -> Range<Int> in
+            let byte = buffer[i]
+            let dif = self.rankLarge0[i &+ 1] &- parentNodeIndex   //0の数の超過分
+            var count = Unit(Self.unit &- byte.nonzeroBitCount) //0の数
+            var k = Self.unit
+
+            for c in 0..<Self.unit{
+                if count == dif{
+                    k = c
+                    break
+                }
+                //byteの上からc桁めが0なら == (byte << 0)が100………00より小さければ == 最初の1桁を一番下に持ってきた値そのもの
+                count &-= (byte << c) < Unit.prefixOne ? 1:0
+            }
+
+            let start = (i << Self.uExp) &+ k &- parentNodeIndex &+ 1
+            if dif == .zero{
+                var j = i &+ 1
+                while buffer[j] == Unit.max{
+                    j &+= 1
+                }
+                let byte2 = buffer[j]
+                //最初の0を探す作業
+                let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+                return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
+            }else{
+                //次の0を探す作業
+                let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+                return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
+            }
         }
     }
 
