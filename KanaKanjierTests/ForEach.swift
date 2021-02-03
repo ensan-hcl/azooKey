@@ -50,7 +50,6 @@ class ForEachTest: XCTestCase {
 
 
     func testPerformanceForEachIndices() throws{
-        print()
         var array: [Int] = []
         let values = (0..<1000000).map{_ in Int.random(in: 0..<1000000)}
         self.measure {
@@ -62,7 +61,6 @@ class ForEachTest: XCTestCase {
     }
     
     func testPerformanceForInIndices() throws{
-        print()
         var array: [Int] = []
         let values = (0..<1000000).map{_ in Int.random(in: 0..<1000000)}
         self.measure {
