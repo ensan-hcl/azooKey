@@ -42,7 +42,7 @@ struct LOUDS{
             return 0..<0
         }
 
-        return self.bits.withUnsafeBufferPointer{buffer -> Range<Int> in
+        return self.bits.withUnsafeBufferPointer{(buffer: UnsafeBufferPointer<Unit>) -> Range<Int> in
             let byte = buffer[i]
             let dif = self.rankLarge[i &+ 1] &- parentNodeIndex   //0の数の超過分
             var count = Unit(Self.unit &- byte.nonzeroBitCount) //0の数
