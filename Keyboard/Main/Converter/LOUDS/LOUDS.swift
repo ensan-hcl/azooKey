@@ -17,14 +17,12 @@ struct LOUDS{
     private let bits: [Unit]
     private let indices: Range<Int>
     private let nodeIndex2ID: [UInt8]
-    private let pbits: UnsafePointer<Unit>
     private let rankLarge: [Int]
 
     init(bytes: [Unit], nodeIndex2ID: [UInt8]){
         self.bits = bytes
         self.nodeIndex2ID = nodeIndex2ID
         self.indices = self.bits.indices
-        self.pbits = UnsafePointer<Unit>(self.bits)
         self.rankLarge = bytes.reduce(into: [0]){
             $0.append(($0.last ?? 0) &+ (Self.unit &- $1.nonzeroBitCount))
         }
@@ -44,34 +42,36 @@ struct LOUDS{
             return 0..<0
         }
 
-        let byte = (pbits + i).pointee
-        let dif = self.rankLarge[i &+ 1] &- parentNodeIndex   //0の数の超過分
-        var count = Unit(Self.unit &- byte.nonzeroBitCount) //0の数
-        var k = Self.unit
+        return self.bits.withUnsafeBufferPointer{buffer -> Range<Int> in
+            let byte = buffer[i]
+            let dif = self.rankLarge[i &+ 1] &- parentNodeIndex   //0の数の超過分
+            var count = Unit(Self.unit &- byte.nonzeroBitCount) //0の数
+            var k = Self.unit
 
-        for c in 0..<Self.unit{
-            if count == dif{
-                k = c
-                break
+            for c in 0..<Self.unit{
+                if count == dif{
+                    k = c
+                    break
+                }
+                //byteの上からc桁めが0なら == (byte << 0)が100………00より小さければ == 最初の1桁を一番下に持ってきた値そのもの
+                count &-= (byte << c) < Unit.prefixOne ? 1:0
             }
-            //byteの上からc桁めが0なら == (byte << 0)が100………00より小さければ == 最初の1桁を一番下に持ってきた値そのもの
-            count &-= (byte << c).leadingZeroBitCount > 0 ? 1:0
-        }
 
-        let start = (i << Self.uExp) &+ k &- parentNodeIndex &+ 1
-        if dif == .zero{
-            var j = i &+ 1
-            while (pbits + j).pointee == Unit.max{
-                j &+= 1
+            let start = (i << Self.uExp) &+ k &- parentNodeIndex &+ 1
+            if dif == .zero{
+                var j = i &+ 1
+                while buffer[j] == Unit.max{
+                    j &+= 1
+                }
+                let byte2 = buffer[j]
+                //最初の0を探す作業
+                let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+                return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
+            }else{
+                //次の0を探す作業
+                let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+                return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
             }
-            let byte2 = (pbits+j).pointee
-            //最初の0を探す作業
-            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
-            return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
-        }else{
-            //次の0を探す作業
-            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
-            return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
         }
     }
 
