@@ -2334,6 +2334,8 @@
 		1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28D05253DE4B60012CF94 /* KeyLabel.swift */; };
 		1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */; };
 		1AF616BB256D40CB001A0B32 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
+		1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6784925CC20B400F3987B /* ThemeTab.swift */; };
+		1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
 		1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA4BB2257E169100477DC2 /* PasteButton.swift */; };
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
@@ -4718,6 +4720,8 @@
 		1AF28D05253DE4B60012CF94 /* KeyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyLabel.swift; sourceTree = "<group>"; };
 		1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetSetting.swift; sourceTree = "<group>"; };
 		1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetCondition.swift; sourceTree = "<group>"; };
+		1AF6784925CC20B400F3987B /* ThemeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTab.swift; sourceTree = "<group>"; };
+		1AF6785525CC4FF500F3987B /* ThemeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeData.swift; sourceTree = "<group>"; };
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
@@ -5607,6 +5611,7 @@
 				1ACEEFCE25665E2600899DA2 /* General */,
 				1A3A16022528BFE700A5BA4F /* Tips */,
 				1AC0316225121384004CA505 /* Setting */,
+				1AF6784825CC209400F3987B /* Theme */,
 				1A12E25625C447D800316009 /* DataUpdateView */,
 				1A9B0A4E25642C23004203BB /* EnableAzooKeyView */,
 				1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */,
@@ -7323,6 +7328,7 @@
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */,
 				1A12E24725C41A7100316009 /* Message.swift */,
+				1AF6785B25CC4FF800F3987B /* ThemeData */,
 				1A36B146258D0BA90084DFE0 /* SettingData */,
 			);
 			path = Shared;
@@ -7479,6 +7485,22 @@
 				1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */,
 			);
 			path = MemoryResetSetting;
+			sourceTree = "<group>";
+		};
+		1AF6784825CC209400F3987B /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				1AF6784925CC20B400F3987B /* ThemeTab.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		1AF6785B25CC4FF800F3987B /* ThemeData */ = {
+			isa = PBXGroup;
+			children = (
+				1AF6785525CC4FF500F3987B /* ThemeData.swift */,
+			);
+			path = ThemeData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -9836,6 +9858,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AC031612512129A004CA505 /* Store.swift in Sources */,
+				1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */,
 				1A12E25125C4428D00316009 /* Message.swift in Sources */,
 				1ACEEFDE25665F0100899DA2 /* CenterAlignedView.swift in Sources */,
 				1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */,
@@ -9876,6 +9899,7 @@
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */,
 				1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */,
+				1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
 				1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */,
 				1A4057F7255843850073C6F7 /* LearningTypeSettingItemView.swift in Sources */,

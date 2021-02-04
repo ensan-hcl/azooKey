@@ -25,7 +25,8 @@ struct ContentView: View {
                 TipsTabView()
                     .tabItem {
                         VStack {
-                            Image(systemName: "lightbulb.fill").font(.system(size: 20, weight: .light)).foregroundColor(.systemGray2)
+                            Image(systemName: "lightbulb.fill").font(.system(size: 20, weight: .light))
+                                .foregroundColor(.systemGray2)
                             Text("使い方")
                         }
                     }
@@ -33,11 +34,21 @@ struct ContentView: View {
                 SettingTabView()
                     .tabItem {
                         VStack {
-                            Image(systemName: "wrench.fill").font(.system(size: 20, weight: .light)).foregroundColor(.systemGray2)
+                            Image(systemName: "wrench.fill").font(.system(size: 20, weight: .light))
+                                .foregroundColor(.systemGray2)
                             Text("設定")
                         }
                     }
                     .tag(1)
+                ThemeTabView()
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "photo").font(.system(size: 20, weight: .light))
+                                .foregroundColor(.systemGray2)
+                            Text("着せ替え")
+                        }
+                    }
+                    .tag(2)
             }.fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()
             }
