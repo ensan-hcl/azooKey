@@ -15,6 +15,8 @@ struct ThemeData: Codable {
     let textFont: ThemeFontWeight
     let borderColor: Color
     let keyBackgroundColorOpacity: CGFloat
+
+    static let mock: Self = Self.init(pictureFileName: "wallPaperMock", textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, borderColor: Color(.displayP3, white: 0, opacity: 0), keyBackgroundColorOpacity: 0.3)
 }
 
 enum ThemeFontWeight: Int, Codable {
