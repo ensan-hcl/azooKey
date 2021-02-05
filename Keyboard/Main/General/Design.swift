@@ -23,25 +23,7 @@ final class Design{
 
     ///KeyViewのサイズを自動で計算して返す。
     var keyViewSize: CGSize {
-        switch (keyboardLayout, orientation){
-        case (.flick, .vertical):
-            if UIDevice.current.userInterfaceIdiom == .pad{
-                return CGSize(width: screenWidth/5.6, height: screenWidth/12)
-            }
-            return CGSize(width: screenWidth/5.6, height: screenWidth/8)
-        case (.flick, .horizontal):
-            if UIDevice.current.userInterfaceIdiom == .pad{
-                return CGSize(width: screenWidth/9, height: screenWidth/22)
-            }
-            return CGSize(width: screenWidth/9, height: screenWidth/18)
-        case (.qwerty, .vertical):
-            if UIDevice.current.userInterfaceIdiom == .pad{
-                return CGSize(width: screenWidth/12.2, height: screenWidth/12)
-            }
-            return CGSize(width: screenWidth/12.2, height: screenWidth/8.3)
-        case (.qwerty, .horizontal):
-            return CGSize(width: screenWidth/13, height: screenWidth/20)
-        }
+        DesignLogic.keyViewSize(keyboardLayout: layout, orientation: orientation, screenWidth: screenWidth)
     }
 
     var keyboardWidth: CGFloat {
