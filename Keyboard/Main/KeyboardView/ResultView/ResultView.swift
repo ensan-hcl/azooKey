@@ -150,8 +150,8 @@ struct ResultButtonStyle: ButtonStyle {
             .foregroundColor(Design.shared.themeManager.theme.resultTextColor) //文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
-                    Color(UIColor.systemGray4).opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity) :
-                    Design.shared.colors.backGroundColor.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity))
+                    Color(UIColor.systemGray4).opacity(Design.shared.themeManager.mainOpacity) :
+                    Design.shared.colors.backGroundColor.opacity(Design.shared.themeManager.mainOpacity))
             .cornerRadius(5.0)
     }
 }

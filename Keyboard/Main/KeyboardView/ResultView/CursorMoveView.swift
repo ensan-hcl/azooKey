@@ -45,7 +45,7 @@ struct CursorMoveView: View{
     }
 
     private var opacity: Double {
-        sqrt(Design.shared.themeManager.theme.keyBackgroundColorOpacity)
+        sqrt(Design.shared.themeManager.mainOpacity)
     }
 
     private var centerColor: Color {
