@@ -23,9 +23,14 @@ struct ResultData: Identifiable{
 struct ResultView: View{
     private let model: ResultModel
     @ObservedObject private var modelVariableSection: ResultModelVariableSection
-    init(model: ResultModel){
+    @ObservedObject private var sharedResultData: SharedResultData
+    @Binding private var isResultViewExpanded: Bool
+
+    init(model: ResultModel, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData){
         self.model = model
         self.modelVariableSection = model.variableSection
+        self.sharedResultData = sharedResultData
+        self._isResultViewExpanded = isResultViewExpanded
     }
 
     var body: some View {
@@ -41,7 +46,7 @@ struct ResultView: View{
                                     if data.candidate.inputable{
                                         Button{
                                             Sound.click()
-                                            self.model.pressed(candidate: data.candidate)
+                                            self.pressed(candidate: data.candidate)
                                         } label: {
                                             Text(data.candidate.text)
                                         }
@@ -66,7 +71,7 @@ struct ResultView: View{
                     if modelVariableSection.results.count > 1{
                         //候補を展開するボタン
                         Button(action: {
-                            self.model.expand()
+                            self.expand()
                         }){
                             Image(systemName: "chevron.down")
                                 .font(Design.shared.fonts.iconImageFont)
@@ -79,6 +84,16 @@ struct ResultView: View{
             }
         }
     }
+
+    private func pressed(candidate: Candidate){
+        Store.shared.action.notifyComplete(candidate)
+    }
+
+    private func expand(){
+        self.isResultViewExpanded = true
+        self.sharedResultData.results = self.modelVariableSection.results
+    }
+
 }
 
 
@@ -94,7 +109,6 @@ struct ResultContextMenuView: View {
                 Image(systemName: "plus.magnifyingglass")
             }
         }
-
     }
 }
 
@@ -112,7 +126,6 @@ struct ResultModel{
         }else{
             debug("proxyが失われていて、先頭にスクロールできませんでした")
         }
-
     }
 
     func showMoveCursorView(_ bool: Bool){
@@ -124,15 +137,6 @@ struct ResultModel{
     func toggleShowMoveCursorView(){
         self.variableSection.showMoveCursorView.toggle()
     }
-
-    fileprivate func pressed(candidate: Candidate){
-        Store.shared.action.notifyComplete(candidate)
-    }
-
-    fileprivate func expand(){
-        Store.shared.expandResult(results: self.variableSection.results)
-    }
-
 }
 
 struct ResultButtonStyle: ButtonStyle {

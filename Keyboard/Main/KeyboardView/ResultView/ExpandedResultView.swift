@@ -9,24 +9,31 @@
 import Foundation
 import SwiftUI
 
-struct ExpandedResultView: View {
-    private let model: ExpandedResultModel
-    @ObservedObject private var modelVariableSection: ExpandedResultModelVariableSection
+class SharedResultData: ObservableObject{
+    @Published var results: [ResultData] = []
+}
 
-    init(model: ExpandedResultModel){
-        self.model = model
-        self.modelVariableSection = model.variableSection
+struct ExpandedResultView: View {
+    @ObservedObject private var sharedResultData: SharedResultData
+    @Binding private var isResultViewExpanded: Bool
+
+    @State private var splitedResults: [SplitedResultData]
+
+    init(isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData){
+        self.sharedResultData = sharedResultData
+        self._isResultViewExpanded = isResultViewExpanded
+        self._splitedResults = State(initialValue: Self.registerResults(results: sharedResultData.results))
     }
 
     // FIXME: これはGridViewが使えないからこうなっている。
     var body: some View {
-        VStack{[unowned modelVariableSection] in
+        VStack{
             HStack(alignment: .center){
                 Spacer()
                     .frame(height: 18)
                 //候補をしまうボタン
                 Button(action: {
-                    self.model.collapse()
+                    self.collapse()
                 }){
                     Image(systemName: "chevron.up")
                         .font(Design.shared.fonts.iconImageFont)
@@ -38,12 +45,12 @@ struct ExpandedResultView: View {
             .padding(.top, 10)
             ScrollView{
                 LazyVStack(alignment: .leading){
-                    ForEach(modelVariableSection.splitedResults, id: \.id){results in
+                    ForEach(splitedResults, id: \.id){results in
                         Divider()
                         HStack{
                             ForEach(results.results, id: \.id){datum in
                                 Button(action: {
-                                    self.model.pressed(data: datum)
+                                    self.pressed(data: datum)
                                 }){
                                     Text(datum.candidate.text)
                                 }
@@ -62,17 +69,17 @@ struct ExpandedResultView: View {
         }
         .frame(height: Design.shared.keyboardHeight, alignment: .bottom)
     }
-}
 
+    private func pressed(data: ResultData){
+        Store.shared.action.notifyComplete(data.candidate)
+        self.collapse()
+    }
 
-private final class ExpandedResultModelVariableSection: ObservableObject{
-    @Published fileprivate var splitedResults: [SplitedResultData] = []
-}
+    private func collapse(){
+        isResultViewExpanded = false
+    }
 
-struct ExpandedResultModel{
-    fileprivate var variableSection = ExpandedResultModelVariableSection()
-
-    private func registerResults(results: [ResultData]){
+    private static func registerResults(results: [ResultData]) -> [SplitedResultData] {
         var curSum: CGFloat = .zero
         var splited: [SplitedResultData] = []
         var curResult: [ResultData] = []
@@ -89,22 +96,9 @@ struct ExpandedResultModel{
             }
         }
         splited.append(SplitedResultData(id: splited.count, results: curResult))
-        self.variableSection.splitedResults = splited
+        return splited
     }
 
-    fileprivate func pressed(data: ResultData){
-        Store.shared.action.notifyComplete(data.candidate)
-        self.collapse()
-    }
-
-    func expand(results: [ResultData]){
-        self.registerResults(results: results)
-    }
-
-    fileprivate func collapse(){
-        Store.shared.collapseResult()
-        self.variableSection.splitedResults = []
-    }
 }
 
 struct SplitedResultData: Identifiable{

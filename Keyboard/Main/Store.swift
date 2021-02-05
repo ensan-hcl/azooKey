@@ -144,14 +144,6 @@ final class Store{
     fileprivate func registerResult(_ result: [Candidate]){
         self.keyboardViewModel.resultModel.setResults(result)
     }
-    
-    func expandResult(results: [ResultData]){
-        self.keyboardViewModel.expandResultView(results)
-    }
-    
-    func collapseResult(){
-        self.keyboardViewModel.collapseResultView()
-    }
 
     func setMagnifyingText(_ text: String){
         self.keyboardModelVariableSection.magnifyingText = text
@@ -953,7 +945,6 @@ private final class InputManager{
         self.kanaRomanStateHolder = KanaRomanStateHolder()
         self._romanConverter?.clear()
         self._directConverter?.clear()
-        Store.shared.collapseResult()
         Store.shared.setEnterKeyState(.return)
     }
 

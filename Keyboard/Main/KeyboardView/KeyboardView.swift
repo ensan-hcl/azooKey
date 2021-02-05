@@ -35,7 +35,6 @@ enum KeyboardLanguage{
 final class KeyboardModelVariableSection: ObservableObject{
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published var isTextMagnifying = false
-    @Published var isResultViewExpanded = false
     @Published var magnifyingText = ""
     @Published var refreshing = true
     func refreshView(){
@@ -44,27 +43,17 @@ final class KeyboardModelVariableSection: ObservableObject{
 }
 
 struct KeyboardModel {
-    let expandedResultModel = ExpandedResultModel()
     let resultModel = ResultModel()
-
     let variableSection: KeyboardModelVariableSection = KeyboardModelVariableSection()
-    func expandResultView(_ results: [ResultData]) {
-        self.variableSection.isResultViewExpanded = true
-        self.expandedResultModel.expand(results: results)
-    }
-    func collapseResultView(){
-        self.variableSection.isResultViewExpanded = false
-    }
-
 }
-
 
 struct KeyboardView: View {
     //二つ以上になったらまとめてvariableSectioinにすること！
     @ObservedObject private var modelVariableSection: KeyboardModelVariableSection
     private let model: KeyboardModel
-
     @State private var messageManager: MessageManager = MessageManager()
+    @State private var isResultViewExpanded: Bool = false
+    private var sharedResultData = SharedResultData()
 
     init(){
         self.model = Store.shared.keyboardViewModel
@@ -86,12 +75,12 @@ struct KeyboardView: View {
                         }
                     }
                 )
-            if modelVariableSection.isResultViewExpanded{
-                ExpandedResultView(model: self.model.expandedResultModel)
+            if isResultViewExpanded{
+                ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                     .padding(.bottom, 2)
             }else{
                 VStack(spacing: 0){
-                    ResultView(model: model.resultModel)
+                    ResultView(model: model.resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if modelVariableSection.refreshing{
                         switch (modelVariableSection.keyboardOrientation, Design.shared.layout){
