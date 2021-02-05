@@ -2337,6 +2337,7 @@
 		1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6784925CC20B400F3987B /* ThemeTab.swift */; };
 		1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
 		1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
+		1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */; };
 		1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA4BB2257E169100477DC2 /* PasteButton.swift */; };
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
@@ -4723,6 +4724,7 @@
 		1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetCondition.swift; sourceTree = "<group>"; };
 		1AF6784925CC20B400F3987B /* ThemeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTab.swift; sourceTree = "<group>"; };
 		1AF6785525CC4FF500F3987B /* ThemeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeData.swift; sourceTree = "<group>"; };
+		1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderedRectangle.swift; sourceTree = "<group>"; };
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
@@ -7254,6 +7256,7 @@
 				1AF28D05253DE4B60012CF94 /* KeyLabel.swift */,
 				1A2602DB2514CC9C00EAD647 /* KeyStates.swift */,
 				1A3DC2162500D5AB002CAA93 /* Action.swift */,
+				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
 				1A12E24125C3E1CA00316009 /* MessageView.swift */,
 				1A58AB0B25037E8800EB1864 /* ResultView */,
 				1A6F95912514446A007399AC /* QwertyKeyboard */,
@@ -9995,6 +9998,7 @@
 				1AA346872567D8CA00B41A16 /* UserSetting.swift in Sources */,
 				1A3DC21F2500D5F2002CAA93 /* FlickEnterKeyModel.swift in Sources */,
 				1A64C8BE251315AD00ACD537 /* DicDataStore.swift in Sources */,
+				1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,
 				1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */,
 				1A3DC2122500D586002CAA93 /* HorizontalFlickKeyboardModel.swift in Sources */,
