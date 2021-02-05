@@ -31,7 +31,7 @@ enum KeyboardLanguage{
     case japanese
 }
 
-//layout, orientation, language, inputstyleに関わらず保持すべきデータ。
+//Storeからアクセス出来るべきデータ。
 final class KeyboardModelVariableSection: ObservableObject{
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published var isTextMagnifying = false
