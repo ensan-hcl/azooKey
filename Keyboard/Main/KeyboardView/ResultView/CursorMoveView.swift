@@ -43,19 +43,34 @@ struct CursorMoveView: View{
             self.gestureState = .unactive
         }
     }
+
+    private var opacity: Double {
+        sqrt(Design.shared.themeManager.theme.keyBackgroundColorOpacity)
+    }
+
+    private var centerColor: Color {
+        Design.shared.colors.highlightedKeyColor.opacity(opacity)
+    }
+
+    private var edgeColor: Color {
+        Design.shared.colors.backGroundColor.opacity(opacity)
+    }
+
+    private var symbolsFontWeight: Font.Weight {
+        Design.shared.themeManager.weight
+    }
+
+    private var symbolsColor: Color {
+        Design.shared.themeManager.theme.resultTextColor
+    }
+
+
     var body: some View {
         Group{
          //   Rectangle()
-            RadialGradient(gradient: Gradient(colors: [Design.shared.colors.highlightedKeyColor, Design.shared.colors.backGroundColor]), center: .center, startRadius: 1, endRadius: 200)
+            RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: 200)
                 .frame(height: Design.shared.resultViewHeight)
-                .foregroundColor(Color(UIColor.systemGray6))
                 .cornerRadius(20)
-                /*
-                .border(
-                    RadialGradient(gradient: Gradient(colors: [Color(UIColor.systemGray2), Color(UIColor.systemGray6)]), center: .center, startRadius: 1, endRadius: 180),
-                    width: 5
-                )
-                */
                 .gesture(gesture)
                 .overlay(HStack{
                     Spacer()
@@ -63,20 +78,20 @@ struct CursorMoveView: View{
                     Button(action: {
                         Store.shared.action.registerAction(.moveCursor(-1))
                     }, label: {
-                        Image(systemName: "chevron.left.2").font(.system(size: 18, weight: .light, design: .default))
+                        Image(systemName: "chevron.left.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                             .padding()
                     })
                     Spacer()
-                    Image(systemName: "circle.fill").font(.system(size: 22, weight: .light, design: .default))
+                    Image(systemName: "circle.fill").font(.system(size: 22, weight: symbolsFontWeight, design: .default))
                     Spacer()
                     Button(action: {
                         Store.shared.action.registerAction(.moveCursor(1))
                     }, label: {
-                        Image(systemName: "chevron.right.2").font(.system(size: 18, weight: .light, design: .default))
+                        Image(systemName: "chevron.right.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                             .padding()
                     })
                     Spacer()
-                }.foregroundColor(.primary))
+                }.foregroundColor(symbolsColor))
         }.frame(height: Design.shared.resultViewHeight)
 
     }

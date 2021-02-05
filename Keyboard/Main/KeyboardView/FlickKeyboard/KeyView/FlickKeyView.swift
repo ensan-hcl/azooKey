@@ -211,13 +211,22 @@ struct FlickKeyView: View{
             })
         
     }
-    
+
+    private var keyFillColor: Color {
+        if self.modelVariableSection.pressState.isActive(){
+            return model.backGroundColorWhenPressed.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity)
+        }else{
+            return model.backGroundColorWhenUnpressed.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity)
+        }
+    }
+
+    private var keyBorderColor: Color {
+        return Design.shared.themeManager.theme.borderColor
+    }
+
     var body: some View {
-        RoundedRectangle(cornerRadius: 5.0)
+        RoundedBorderedRectangle(cornerRadius: 5.0, fillColor: keyFillColor, borderColor: keyBorderColor)
             .frame(width: model.keySize.width, height: model.keySize.height)
-            .foregroundColor(self.modelVariableSection.pressState.isActive() ?
-                                model.backGroundColorWhenPressed.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity) :
-                                model.backGroundColorWhenUnpressed).opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity)
             .gesture(gesture)
             .overlay(model.label)
     }
