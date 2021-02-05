@@ -147,8 +147,11 @@ struct ResultButtonStyle: ButtonStyle {
             .font(Design.shared.fonts.resultViewFont)
             .frame(height: height)
             .padding(.all, 5)
-            .foregroundColor(.primary)
-            .background(configuration.isPressed ? Color(UIColor.systemGray4):Design.shared.colors.backGroundColor)
+            .foregroundColor(Design.shared.themeManager.theme.resultTextColor) //文字色は常に不透明度1で描画する
+            .background(
+                configuration.isPressed ?
+                    Color(UIColor.systemGray4).opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity) :
+                    Design.shared.colors.backGroundColor.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity))
             .cornerRadius(5.0)
     }
 }

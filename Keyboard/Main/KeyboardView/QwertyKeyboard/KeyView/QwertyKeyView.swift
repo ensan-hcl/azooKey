@@ -75,14 +75,16 @@ struct QwertyKeyView: View{
         ZStack(alignment: .bottom){
             Group{
                 let vSpacing = Design.shared.verticalSpacing
-                Rectangle()
+                RoundedRectangle(cornerRadius: 6)
                     .frame(width: self.model.keySize.width, height: self.model.keySize.height)
                     .contentShape(
                         Rectangle()
                             .size(CGSize(width: self.model.keySize.width + Design.shared.horizontalSpacing, height: self.model.keySize.height + vSpacing))
                     )
-                    .foregroundColor(self.modelVariableSection.pressState.isActive ? self.model.backGroundColorWhenPressed:self.model.backGroundColorWhenUnpressed)
-                    .cornerRadius(6)
+                    .foregroundColor(self.modelVariableSection.pressState.isActive ?
+                                        self.model.backGroundColorWhenPressed.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity) :
+                                        self.model.backGroundColorWhenUnpressed.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity)
+                    )
                     .gesture(self.gesture)
                     .overlay(self.model.getLabel())
             }

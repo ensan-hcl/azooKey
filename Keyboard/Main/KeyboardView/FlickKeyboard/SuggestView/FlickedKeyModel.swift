@@ -43,10 +43,9 @@ struct FlickedKeyModel{
     
     func getSuggestView(size: CGSize, isHidden: Bool = false, isPointed: Bool = false) -> some View {
         let color = Color(isPointed ? UIColor.systemGray4:UIColor.systemGray5)
-        return Rectangle()
+        return RoundedRectangle(cornerRadius: 5.0)
             .frame(width: size.width, height: size.height)
             .foregroundColor(color)
-            .cornerRadius(5.0)
             .overlay(self.label(width: size.width))
             .allowsHitTesting(false)
             .opacity(isHidden ? 0:1)

@@ -13,10 +13,16 @@ struct ThemeData: Codable {
     let pictureFileName: String?
     let textColor: Color
     let textFont: ThemeFontWeight
+    let resultTextColor: Color
     let borderColor: Color
-    let keyBackgroundColorOpacity: CGFloat
+    let keyBackgroundColorOpacity: Double
 
-    static let mock: Self = Self.init(pictureFileName: "wallPaperMock", textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, borderColor: Color(.displayP3, white: 0, opacity: 0), keyBackgroundColorOpacity: 0.3)
+    static let `default`: Self = Self.init(pictureFileName: nil, textColor: .primary, textFont: .normal, resultTextColor: .primary, borderColor: .clear, keyBackgroundColorOpacity: 1)
+
+    static let mock: Self = Self.init(pictureFileName: "wallPaperMock", textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, resultTextColor: Color(.displayP3, white: 1, opacity: 1), borderColor: Color(.displayP3, white: 0, opacity: 0), keyBackgroundColorOpacity: 0.3)
+
+    static let clear: Self = Self.init(pictureFileName: "wallPaperMock", textColor: Color(.displayP3, white: 1, opacity: 0), textFont: .bold, resultTextColor: Color(.displayP3, white: 1, opacity: 1), borderColor: Color(.displayP3, white: 0, opacity: 0), keyBackgroundColorOpacity: 0.05)
+
 }
 
 enum ThemeFontWeight: Int, Codable {

@@ -80,6 +80,17 @@ struct KeyboardView: View {
         ZStack{[unowned modelVariableSection] in
             Design.shared.colors.backGroundColor
                 .frame(maxWidth: .infinity)
+                .overlay(
+                    Group{
+                        if let name = Design.shared.themeManager.theme.pictureFileName{
+                            Image(name)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: Design.shared.screenWidth)
+                                .clipped()
+                        }
+                    }
+                )
             if modelVariableSection.isResultViewExpanded{
                 ExpandedResultView(model: self.model.expandedResultModel)
                     .padding(.bottom, 2)

@@ -213,10 +213,11 @@ struct FlickKeyView: View{
     }
     
     var body: some View {
-        Rectangle()
+        RoundedRectangle(cornerRadius: 5.0)
             .frame(width: model.keySize.width, height: model.keySize.height)
-            .foregroundColor(self.modelVariableSection.pressState.isActive() ? model.backGroundColorWhenPressed:model.backGroundColorWhenUnpressed)
-            .cornerRadius(5.0)
+            .foregroundColor(self.modelVariableSection.pressState.isActive() ?
+                                model.backGroundColorWhenPressed.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity) :
+                                model.backGroundColorWhenUnpressed).opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity)
             .gesture(gesture)
             .overlay(model.label)
     }

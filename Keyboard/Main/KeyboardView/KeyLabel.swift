@@ -43,6 +43,10 @@ struct KeyLabel: View {
     private var width: CGFloat
     private let textSize: TextSize
 
+    private var mainKeyColor: Color {
+        Design.shared.themeManager.theme.textColor
+    }
+
     init(_ type: KeyLabelType, width: CGFloat, textSize: TextSize = .large){
         self.labelType = type
         self.width = width
@@ -56,7 +60,9 @@ struct KeyLabel: View {
                 let font = Design.shared.fonts.keyLabelFont(text: text, width: width, scale: self.textSize.scale)
                 Text(text)
                     .font(font)
+                    .foregroundColor(mainKeyColor)
                     .allowsHitTesting(false)
+
             case let .symbols(symbols):
                 let mainText = symbols.first!
                 let font = Design.shared.fonts.keyLabelFont(text: mainText, width: width, scale: self.textSize.scale)
@@ -68,19 +74,25 @@ struct KeyLabel: View {
                     Text(subText)
                         .font(subFont)
                 }
+                .foregroundColor(mainKeyColor)
                 .allowsHitTesting(false)
 
             case let .image(imageName):
                 Image(systemName: imageName)
                     .font(Design.shared.fonts.iconImageFont)
+                    .foregroundColor(mainKeyColor)
                     .allowsHitTesting(false)
+
             case let .customImage(imageName):
                 Image(imageName)
                     .resizable()
                     .frame(width: 30, height: 30, alignment: .leading)
                     .allowsHitTesting(false)
+
             case .changeKeyboard:
                 Store.shared.action.makeChangeKeyboardButtonView()
+                    .foregroundColor(mainKeyColor)
+
             case let .selectable(primary, secondery):
                 let font = Design.shared.fonts.keyLabelFont(text: primary+primary, width: width, scale: self.textSize.scale)
                 let subFont = Design.shared.fonts.keyLabelFont(text: secondery+secondery, width: width, scale: TextSize.small.scale)
@@ -89,6 +101,7 @@ struct KeyLabel: View {
                     Text(primary)
                         .font(font)
                         .padding(.trailing, -5)
+                        .foregroundColor(mainKeyColor)
                     Text(secondery)
                         .font(subFont)
                         .bold()

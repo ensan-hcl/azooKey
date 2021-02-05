@@ -36,7 +36,6 @@ struct ExpandedResultView: View {
                 .padding(.trailing, 10)
             }
             .padding(.top, 10)
-            .background(Design.shared.colors.backGroundColor)
             ScrollView{
                 LazyVStack(alignment: .leading){
                     ForEach(modelVariableSection.splitedResults, id: \.id){results in
@@ -56,7 +55,6 @@ struct ExpandedResultView: View {
                         }
                     }
                 }
-                .background(Design.shared.colors.backGroundColor)
                 .padding(.vertical, 3)
                 .padding(.leading, 15)
 

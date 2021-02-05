@@ -56,13 +56,11 @@ struct SuggestView: View {
                 
                 HStack(spacing: Design.shared.horizontalSpacing){
                     self.neededApeearView(direction: .left)
-                    Rectangle()
+                    RoundedRectangle(cornerRadius: 5.0)
                         .frame(width: self.model.keySize.width, height: self.model.keySize.height)
-                        .foregroundColor(Design.shared.colors.highlightedKeyColor)
-                        .cornerRadius(5.0)
+                        .foregroundColor(Design.shared.colors.highlightedKeyColor.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity))
                     self.neededApeearView(direction: .right)
                 }
- 
                 self.neededApeearView(direction: .bottom)
             }
  

@@ -79,12 +79,20 @@ final class KeyboardViewController: UIInputViewController {
 
     func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
         let button = UIButton(type: .custom)
+        var weight: UIImage.SymbolWeight {
+            switch Design.shared.themeManager.theme.textFont{
+            case .normal:
+                return .light
+            case .bold:
+                return .semibold
+            }
+        }
         button.addTarget(self, action: #selector(self.handleInputModeList(from:with:)), for: .allTouchEvents)
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .default)
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)
         let largeBoldDoc = UIImage(systemName: "globe", withConfiguration: largeConfig)
         button.setImage(largeBoldDoc, for: .normal)
-        button.setTitleColor(.label, for: [.normal, .highlighted])
-        button.tintColor = .label
+        button.setTitleColor(UIColor(Design.shared.themeManager.theme.textColor), for: [.normal, .highlighted])
+        button.tintColor = UIColor(Design.shared.themeManager.theme.textColor)
         let view = ChangeKeyboardButtonView(button)
         return view
     }
