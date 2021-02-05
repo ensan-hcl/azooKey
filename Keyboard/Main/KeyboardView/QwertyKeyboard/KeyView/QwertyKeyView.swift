@@ -73,8 +73,8 @@ struct QwertyKeyView: View{
 
     var keyFillColor: Color {
         self.modelVariableSection.pressState.isActive ?
-            self.model.backGroundColorWhenPressed.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity) :
-            self.model.backGroundColorWhenUnpressed.opacity(Design.shared.themeManager.theme.keyBackgroundColorOpacity)
+            self.model.backGroundColorWhenPressed.opacity(Design.shared.themeManager.weakOpacity) :
+            self.model.backGroundColorWhenUnpressed.opacity(Design.shared.themeManager.mainOpacity)
     }
 
     var keyBorderColor: Color {

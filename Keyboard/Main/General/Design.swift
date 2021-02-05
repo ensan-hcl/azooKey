@@ -277,6 +277,16 @@ struct ThemeManager{
         }
     }
 
+    ///少し濃い透明度
+    var weakOpacity: Double {
+        sqrt(self.theme.keyBackgroundColorOpacity)
+    }
+
+    ///指定された透明度
+    var mainOpacity: Double {
+        self.theme.keyBackgroundColorOpacity
+    }
+
     fileprivate init(){
         self.theme = Self.getSelectedTheme()
     }
