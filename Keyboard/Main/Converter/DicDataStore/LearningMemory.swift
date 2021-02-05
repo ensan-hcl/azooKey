@@ -84,7 +84,7 @@ struct LearningMemorys{
     }
 
     mutating func update(_ data: [DicDataElementProtocol], lastData: DicDataElementProtocol?){
-        if !Store.shared.userSetting.learningType.needUpdateMemory{
+        if !SettingData.shared.learningType.needUpdateMemory{
             return
         }
 
@@ -148,7 +148,7 @@ struct LearningMemorys{
     }
 
     func save(force: Bool = false){
-        if !force && !Store.shared.userSetting.learningType.needUpdateMemory{
+        if !force && !SettingData.shared.learningType.needUpdateMemory{
             return
         }
         let string: String = self.values.map{
@@ -165,14 +165,14 @@ struct LearningMemorys{
     }
 
     init(){
-        if UserSettingDepartment.checkResetSetting(){
+        if SettingData.checkResetSetting(){
             //リセットする。
             self.values = []
             self.index2order = []
             self.save(force: true)
         }
 
-        if !Store.shared.userSetting.learningType.needUsingMemory{
+        if !SettingData.shared.learningType.needUsingMemory{
             self.values = []
             self.index2order = []
             return

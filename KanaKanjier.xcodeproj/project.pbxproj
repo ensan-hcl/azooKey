@@ -2340,6 +2340,7 @@
 		1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */; };
 		1AF6789225CD505300F3987B /* DesignLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6789125CD505300F3987B /* DesignLogic.swift */; };
 		1AF6789B25CD506900F3987B /* DesignLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6789125CD505300F3987B /* DesignLogic.swift */; };
+		1AF678A125CDA07A00F3987B /* SettingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678A025CDA07A00F3987B /* SettingData.swift */; };
 		1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA4BB2257E169100477DC2 /* PasteButton.swift */; };
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
@@ -4728,6 +4729,7 @@
 		1AF6785525CC4FF500F3987B /* ThemeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeData.swift; sourceTree = "<group>"; };
 		1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderedRectangle.swift; sourceTree = "<group>"; };
 		1AF6789125CD505300F3987B /* DesignLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignLogic.swift; sourceTree = "<group>"; };
+		1AF678A025CDA07A00F3987B /* SettingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingData.swift; sourceTree = "<group>"; };
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
@@ -7244,6 +7246,7 @@
 			isa = PBXGroup;
 			children = (
 				1A67736F256F7AC30037AF22 /* Sound.swift */,
+				1AF678A025CDA07A00F3987B /* SettingData.swift */,
 				1AC8A593259587A200B71E5A /* Design.swift */,
 				1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */,
 			);
@@ -9996,6 +9999,7 @@
 				1AFB8B24251B648F00C649C4 /* KeyboardModelProtocol.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,
+				1AF678A125CDA07A00F3987B /* SettingData.swift in Sources */,
 				1A3DC20E2500D55F002CAA93 /* VerticalFlickKeyboardModel.swift in Sources */,
 				1A2602A42514820300EAD647 /* VerticalQwertyKeyboardModel.swift in Sources */,
 				1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */,

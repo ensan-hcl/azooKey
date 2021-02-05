@@ -19,7 +19,7 @@ struct KogakiKeyModel: FlickKeyModelProtocol{
 
     var labelType: KeyLabelType
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        return Store.shared.userSetting.kogakiFlickSetting
+        SettingData.shared.kogakiFlickSetting
     }
     
     var suggestModel: SuggestModel = SuggestModel(keyType: .kogaki)

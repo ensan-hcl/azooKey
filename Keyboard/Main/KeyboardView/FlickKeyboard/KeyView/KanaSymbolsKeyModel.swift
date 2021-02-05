@@ -14,16 +14,16 @@ struct KanaSymbolsKeyModel: FlickKeyModelProtocol{
     static let shared = KanaSymbolsKeyModel()
 
     var pressActions: [ActionType] {
-        Store.shared.userSetting.kanaSymbolsFlickSetting.actions
+        SettingData.shared.kanaSymbolsFlickSetting.actions
     }
     var longPressActions: [KeyLongPressActionType] = []
     var variableSection: KeyModelVariableSection = KeyModelVariableSection()
 
     var labelType: KeyLabelType {
-        Store.shared.userSetting.kanaSymbolsFlickSetting.labelType
+        SettingData.shared.kanaSymbolsFlickSetting.labelType
     }
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        Store.shared.userSetting.kanaSymbolsFlickSetting.flick
+        SettingData.shared.kanaSymbolsFlickSetting.flick
     }
 
     var suggestModel: SuggestModel = SuggestModel(keyType: .kanaSymbols)

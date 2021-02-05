@@ -164,7 +164,7 @@ final class Design{
         }
 
         var iconFontSize: CGFloat {
-            let userDecidedSize = Store.shared.userSetting.keyViewFontSize
+            let userDecidedSize = SettingData.shared.keyViewFontSize
             if userDecidedSize != -1{
                 return UIFontMetrics.default.scaledValue(for: CGFloat(userDecidedSize))
             }
@@ -177,7 +177,7 @@ final class Design{
         }
 
         var resultViewFontSize: CGFloat {
-            let size = Store.shared.userSetting.resultViewFontSize
+            let size = SettingData.shared.resultViewFontSize
             return CGFloat(size == -1 ? 18: size)
         }
 
@@ -186,7 +186,7 @@ final class Design{
         }
 
         func keyLabelFont(text: String, width: CGFloat, scale: CGFloat) -> Font {
-            let userDecidedSize = Store.shared.userSetting.keyViewFontSize
+            let userDecidedSize = SettingData.shared.keyViewFontSize
             if userDecidedSize != -1 {
                 return .system(size: CGFloat(userDecidedSize) * scale, weight: themeFontWeight, design: .default)
             }

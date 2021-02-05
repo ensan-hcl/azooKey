@@ -202,7 +202,7 @@ struct VerticalQwertyKeyboardModel: KeyboardModelProtocol{
 
         [
             QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]),
-        ] + Store.shared.userSetting.qwertyNumberTabKeySetting +
+        ] + SettingData.shared.qwertyNumberTabKeySetting +
         [
             QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
         ],

@@ -25,9 +25,9 @@ struct SuggestModel{
         case .normal, .enter:
             return _flickModels
         case .kogaki:
-            return Store.shared.userSetting.kogakiFlickSetting
+            return SettingData.shared.kogakiFlickSetting
         case .kanaSymbols:
-            return Store.shared.userSetting.kanaSymbolsFlickSetting.flick
+            return SettingData.shared.kanaSymbolsFlickSetting.flick
         case .aA:
             return FlickAaKeyModel.shared.flickKeys
         }
