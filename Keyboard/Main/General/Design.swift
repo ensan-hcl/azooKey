@@ -14,14 +14,12 @@ final class Design{
     static let shared = Design()
 
     var orientation: KeyboardOrientation = .vertical
+    var layout: KeyboardLayout = .flick
+
     var themeManager = ThemeManager()
 
     ///do not  consider using screenHeight
     private(set) var screenWidth: CGFloat = .zero
-
-    private var keyboardLayout: KeyboardLayout {
-        Store.shared.keyboardLayout
-    }
 
     ///KeyViewのサイズを自動で計算して返す。
     var keyViewSize: CGSize {
@@ -53,7 +51,7 @@ final class Design{
     var keyboardHeight: CGFloat {
         let viewheight = self.keyViewSize.height * CGFloat(self.verticalKeyCount) + self.resultViewHeight
         let vSpacing = self.verticalSpacing
-        switch keyboardLayout{
+        switch layout{
         case .flick:
             //ビューの実装では、フリックでは縦に4列なので3つの縦スペーシング + 上下6pxのpadding
             let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
@@ -66,7 +64,7 @@ final class Design{
     }
 
     var verticalKeyCount: Int {
-        switch keyboardLayout{
+        switch layout{
         case .flick:
             return 4
         case .qwerty:
@@ -75,7 +73,7 @@ final class Design{
     }
 
     var horizontalKeyCount: Int {
-        switch keyboardLayout{
+        switch layout{
         case .flick:
             return 5
         case .qwerty:
@@ -84,7 +82,7 @@ final class Design{
     }
 
     var verticalSpacing: CGFloat {
-        switch (keyboardLayout, orientation){
+        switch (layout, orientation){
         case (.flick, .vertical):
             return horizontalSpacing
         case (.flick, .horizontal):
@@ -97,7 +95,7 @@ final class Design{
     }
 
     var horizontalSpacing: CGFloat {
-        switch (keyboardLayout, orientation){
+        switch (layout, orientation){
         case (.flick, .vertical):
             return (screenWidth - keyViewSize.width * 5)/5
         case (.flick, .horizontal):
@@ -210,7 +208,7 @@ final class Design{
                 return .system(size: CGFloat(userDecidedSize) * scale, weight: themeFontWeight, design: .default)
             }
             let maxFontSize: Int
-            switch Store.shared.keyboardLayout{
+            switch Design.shared.layout{
             case .flick:
                 maxFontSize = Int(21*scale)
             case .qwerty:
@@ -239,7 +237,7 @@ final class Design{
             return Color("OpenKeyColor")
         }
         var normalKeyColor: Color {
-            switch Store.shared.keyboardLayout{
+            switch Design.shared.layout{
             case .flick:
                 return Color("NormalKeyColor")
             case .qwerty:
@@ -247,7 +245,7 @@ final class Design{
             }
         }
         var specialKeyColor: Color {
-            switch Store.shared.keyboardLayout{
+            switch Design.shared.layout{
             case .flick:
                 return Color("TabKeyColor")
             case .qwerty:
@@ -255,7 +253,7 @@ final class Design{
             }
         }
         var highlightedKeyColor: Color {
-            switch Store.shared.keyboardLayout{
+            switch Design.shared.layout{
             case .flick:
                 return Color("HighlightedKeyColor")
             case .qwerty:

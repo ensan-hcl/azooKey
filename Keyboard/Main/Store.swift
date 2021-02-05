@@ -12,7 +12,6 @@ import SwiftUI
 ///ビュー間の情報の受け渡しを担うクラス
 final class Store{
     static let shared = Store()
-    private(set) var keyboardLayout: KeyboardLayout = .qwerty
     private(set) var inputStyle: InputStyle = .direct
     private(set) var keyboardLanguage: KeyboardLanguage = .japanese
     private var enterKeyType: UIReturnKeyType = .default
@@ -114,7 +113,7 @@ final class Store{
     }
 
     fileprivate func refreshKeyboardModel(absolutely: Bool = false){
-        switch (self.keyboardLayout, Design.shared.orientation){
+        switch (Design.shared.layout, Design.shared.orientation){
         case (.flick, .vertical):
             if absolutely || !(self.keyboardModel is VerticalFlickKeyboardModel){
                 self.keyboardModel = VerticalFlickKeyboardModel()
@@ -226,11 +225,11 @@ final class Store{
         case .abc:
             type = self.userSetting.keyboardLayout(for: .englishKeyboardLayout)
         default:
-            type = self.keyboardLayout
+            type = Design.shared.layout
         }
         self.inputStyle = japaneseLayout == .flick ? .direct : .roman
-        if type != self.keyboardLayout{
-            self.keyboardLayout = type
+        if type != Design.shared.layout{
+            Design.shared.layout = type
             self.refreshKeyboardModel()
             self.keyboardModelVariableSection.refreshView()
             return

@@ -2338,6 +2338,8 @@
 		1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
 		1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
 		1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */; };
+		1AF6789225CD505300F3987B /* DesignLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6789125CD505300F3987B /* DesignLogic.swift */; };
+		1AF6789B25CD506900F3987B /* DesignLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6789125CD505300F3987B /* DesignLogic.swift */; };
 		1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA4BB2257E169100477DC2 /* PasteButton.swift */; };
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
@@ -4725,6 +4727,7 @@
 		1AF6784925CC20B400F3987B /* ThemeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTab.swift; sourceTree = "<group>"; };
 		1AF6785525CC4FF500F3987B /* ThemeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeData.swift; sourceTree = "<group>"; };
 		1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderedRectangle.swift; sourceTree = "<group>"; };
+		1AF6789125CD505300F3987B /* DesignLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignLogic.swift; sourceTree = "<group>"; };
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
@@ -7332,6 +7335,7 @@
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */,
 				1A12E24725C41A7100316009 /* Message.swift */,
+				1AF6789025CD504500F3987B /* KeyboardDesignLogic */,
 				1AF6785B25CC4FF800F3987B /* ThemeData */,
 				1A36B146258D0BA90084DFE0 /* SettingData */,
 			);
@@ -7505,6 +7509,14 @@
 				1AF6785525CC4FF500F3987B /* ThemeData.swift */,
 			);
 			path = ThemeData;
+			sourceTree = "<group>";
+		};
+		1AF6789025CD504500F3987B /* KeyboardDesignLogic */ = {
+			isa = PBXGroup;
+			children = (
+				1AF6789125CD505300F3987B /* DesignLogic.swift */,
+			);
+			path = KeyboardDesignLogic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -9909,6 +9921,7 @@
 				1A4057F7255843850073C6F7 /* LearningTypeSettingItemView.swift in Sources */,
 				1AFA57662584815B00477DC2 /* RomanCustomKeysSettingView.swift in Sources */,
 				1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */,
+				1AF6789B25CD506900F3987B /* DesignLogic.swift in Sources */,
 				1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */,
 				1ACE00752567525000899DA2 /* RomanCustomKeys.swift in Sources */,
 				1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */,
@@ -9979,6 +9992,7 @@
 				1AE4DBC02518578200A24158 /* HorizontalQwertyKeyboardView.swift in Sources */,
 				1A3DC2FF2500F837002CAA93 /* extension Character.swift in Sources */,
 				1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */,
+				1AF6789225CD505300F3987B /* DesignLogic.swift in Sources */,
 				1AFB8B24251B648F00C649C4 /* KeyboardModelProtocol.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,

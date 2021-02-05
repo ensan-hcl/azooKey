@@ -31,11 +31,6 @@ enum KeyboardLanguage{
     case japanese
 }
 
-enum KeyboardOrientation{
-    case vertical       //width<height
-    case horizontal     //height<width
-}
-
 //layout, orientation, language, inputstyleに関わらず保持すべきデータ。
 final class KeyboardModelVariableSection: ObservableObject{
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
@@ -99,7 +94,7 @@ struct KeyboardView: View {
                     ResultView(model: model.resultModel)
                         .padding(.vertical, 6)
                     if modelVariableSection.refreshing{
-                        switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayout){
+                        switch (modelVariableSection.keyboardOrientation, Design.shared.layout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
                         case (.vertical, .qwerty):
@@ -110,7 +105,7 @@ struct KeyboardView: View {
                             HorizontalQwertyKeyboardView(Store.shared.keyboardModel as! HorizontalQwertyKeyboardModel)
                         }
                     }else{
-                        switch (modelVariableSection.keyboardOrientation, Store.shared.keyboardLayout){
+                        switch (modelVariableSection.keyboardOrientation, Design.shared.layout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
                         case (.vertical, .qwerty):
