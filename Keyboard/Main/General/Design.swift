@@ -154,6 +154,7 @@ final class Design{
 
     let colors = Colors.default
     let fonts = Fonts.default
+    let language = Language.default
 
     enum Fonts{
         case `default`
@@ -240,6 +241,47 @@ final class Design{
                 return Color("HighlightedKeyColor")
             case .qwerty:
                 return Color("RomanHighlightedKeyColor")
+            }
+        }
+    }
+
+    enum Language{
+        case `default`
+        func getEnterKeyText(_ state: EnterKeyState) -> String {
+            switch state {
+            case .complete:
+                return "確定"
+            case let .return(type):
+                switch type{
+                case .default:
+                    return "改行"
+                case .go:
+                    return "開く"
+                case .google:
+                    return "ググる"
+                case .join:
+                    return "参加"
+                case .next:
+                    return "次へ"
+                case .route:
+                    return "経路"
+                case .search:
+                    return "検索"
+                case .send:
+                    return "送信"
+                case .yahoo:
+                    return "Yahoo!"
+                case .done:
+                    return "完了"
+                case .emergencyCall:
+                    return "緊急連絡"
+                case .continue:
+                    return "続行"
+                @unknown default:
+                    return "改行"
+                }
+            case .edit:
+                return "編集"
             }
         }
     }

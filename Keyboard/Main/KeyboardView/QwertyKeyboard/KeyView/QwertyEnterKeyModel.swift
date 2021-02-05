@@ -37,7 +37,7 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol, EnterKeyModelProtocol{
     }
     
     func getLabel() -> KeyLabel {
-        let text = Store.shared.languageDepartment.getEnterKeyText(variableSection.enterKeyState)
+        let text = Design.shared.language.getEnterKeyText(variableSection.enterKeyState)
         return KeyLabel(.text(text), width: self.keySize.width, textSize: .small)
     }
     

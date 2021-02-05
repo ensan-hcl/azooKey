@@ -20,8 +20,6 @@ final class Store{
     private(set) var keyboardViewModel = KeyboardModel()
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     private(set) var action = ActionDepartment()
-    ///Storeの記述部門を全て切り出したオブジェクト。
-    let languageDepartment = LanguageDepartment()
     ///Storeの設定部門を全て切り出したオブジェクト。
     var userSetting = UserSettingDepartment()
 
@@ -423,50 +421,6 @@ struct UserSettingDepartment{
         }
     }
 }
-
-//MARK:Storeの記述部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
-struct LanguageDepartment{
-    fileprivate init(){}
-
-    func getEnterKeyText(_ state: EnterKeyState) -> String {
-        switch state {
-        case .complete:
-            return "確定"
-        case let .return(type):
-            switch type{
-            case .default:
-                return "改行"
-            case .go:
-                return "開く"
-            case .google:
-                return "ググる"
-            case .join:
-                return "参加"
-            case .next:
-                return "次へ"
-            case .route:
-                return "経路"
-            case .search:
-                return "検索"
-            case .send:
-                return "送信"
-            case .yahoo:
-                return "Yahoo!"
-            case .done:
-                return "完了"
-            case .emergencyCall:
-                return "緊急連絡"
-            case .continue:
-                return "続行"
-            @unknown default:
-                return "改行"
-            }
-        case .edit:
-            return "編集"
-        }
-    }
-}
-
 
 //MARK:Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
 final class ActionDepartment{

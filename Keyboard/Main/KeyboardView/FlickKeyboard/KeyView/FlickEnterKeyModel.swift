@@ -43,7 +43,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
     }
     
     var label: KeyLabel {
-        let text = Store.shared.languageDepartment.getEnterKeyText(variableSection.enterKeyState)
+        let text = Design.shared.language.getEnterKeyText(variableSection.enterKeyState)
         return KeyLabel(.text(text), width: keySize.width)
     }
 
