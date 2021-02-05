@@ -108,7 +108,7 @@ struct KeyboardView: View {
                 }.padding(.bottom, 2)
             }
             if modelVariableSection.isTextMagnifying{
-                LargeTextView(modelVariableSection.magnifyingText)
+                LargeTextView(modelVariableSection.magnifyingText, isTextMagnifying: $modelVariableSection.isTextMagnifying)
             }
             
             ForEach(messageManager.necessaryMessages, id: \.id){data in

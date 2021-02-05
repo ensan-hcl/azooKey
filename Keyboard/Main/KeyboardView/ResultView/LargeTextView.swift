@@ -10,9 +10,11 @@ import Foundation
 import SwiftUI
 
 struct LargeTextView: View {
+    @Binding private var isTextMagnifying: Bool
     private let text: String
-    init(_ text: String){
+    init(_ text: String, isTextMagnifying: Binding<Bool>){
         self.text = text
+        self._isTextMagnifying = isTextMagnifying
     }
     
     private var font: Font {
@@ -25,7 +27,7 @@ struct LargeTextView: View {
                     .font(font)
             })
             Button(action: {
-                Store.shared.keyboardModelVariableSection.isTextMagnifying = false
+                self.isTextMagnifying = false
             }) {
                 Image(systemName: "xmark")
                 Text("閉じる")
