@@ -29,7 +29,7 @@ struct KogakiKeyModel: FlickKeyModelProtocol{
         self.labelType = labelType
     }
 
-    var label: KeyLabel {
+    func label(states: VariableStates) -> KeyLabel {
         return KeyLabel(self.labelType, width: keySize.width)
     }
 

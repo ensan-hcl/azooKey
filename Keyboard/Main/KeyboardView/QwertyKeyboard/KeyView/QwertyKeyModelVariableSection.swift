@@ -37,6 +37,4 @@ enum QwertyKeyPressState{
 
 final class QwertyKeyModelVariableSection: ObservableObject {
     @Published var pressState: QwertyKeyPressState = .unpressed
-    @Published var enterKeyState: EnterKeyState = .return(.default)
-    @Published var aAKeyState: AaKeyState = .normal
 }

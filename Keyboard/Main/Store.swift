@@ -20,14 +20,21 @@ final class SemiStaticStates{
     }
 }
 
+///実行中変更され、かつ変更を検知できるべき値。収容アプリでも共有できる形にすること。
+final class VariableStates: ObservableObject{
+    static let shared = VariableStates()
+    private init(){}
+
+    @Published var keyboardLanguage: KeyboardLanguage = .japanese
+    @Published var aAKeyState: AaKeyState = .normal
+    @Published var enterKeyType: UIReturnKeyType = .default
+    @Published var enterKeyState: EnterKeyState = .return(.default)
+}
+
 ///ビュー間の情報の受け渡しを担うクラス
 final class Store{
     static let shared = Store()
     private(set) var inputStyle: InputStyle = .direct
-    private(set) var keyboardLanguage: KeyboardLanguage = .japanese
-    private var enterKeyType: UIReturnKeyType = .default
-    private var enterKeyState: EnterKeyState = .return(.default)
-    fileprivate var aAKeyState: AaKeyState = .normal
     private(set) var keyboardViewModel = KeyboardModel()
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     private(set) var action = ActionDepartment()
@@ -160,29 +167,29 @@ final class Store{
 
     fileprivate func setAaKeyState(_ state: AaKeyState){
         self.keyboardModel.aAKeyModel.setKeyState(new: state)
-        self.aAKeyState = state
+        VariableStates.shared.aAKeyState = state
     }
     
     fileprivate func setEnterKeyState(_ state: RoughEnterKeyState){
         switch state{
         case .return:
-            self.keyboardModel.enterKeyModel.setKeyState(new: .return(self.enterKeyType))
-            self.enterKeyState = .return(self.enterKeyType)
+            self.keyboardModel.enterKeyModel.setKeyState(new: .return(VariableStates.shared.enterKeyType))
+            VariableStates.shared.enterKeyState = .return(VariableStates.shared.enterKeyType)
         case .edit:
             self.keyboardModel.enterKeyModel.setKeyState(new: .edit)
-            self.enterKeyState = .edit
+            VariableStates.shared.enterKeyState = .edit
         case .complete:
             self.keyboardModel.enterKeyModel.setKeyState(new: .complete)
-            self.enterKeyState = .complete
+            VariableStates.shared.enterKeyState = .complete
         }
     }
     
     fileprivate func setTabState(_ state: TabState){
         if state == .abc{
-            self.keyboardLanguage = .english
+            VariableStates.shared.keyboardLanguage = .english
         }
         if state == .hira{
-            self.keyboardLanguage = .japanese
+            VariableStates.shared.keyboardLanguage = .japanese
         }
         self.setKeyboardType(for: state)
         self.keyboardModel.setTabState(state: state)
@@ -204,8 +211,8 @@ final class Store{
     }
 
     func setUIReturnKeyType(type: UIReturnKeyType){
-        self.enterKeyType = type
-        if case let .return(prev) = self.enterKeyState, prev != type{
+        VariableStates.shared.enterKeyType = type
+        if case let .return(prev) = VariableStates.shared.enterKeyState, prev != type{
             self.setEnterKeyState(.return)
         }
     }
@@ -297,7 +304,7 @@ final class ActionDepartment{
         switch action{
         case let .input(text):
             Store.shared.showMoveCursorView(false)
-            if Store.shared.keyboardModel.tabState == .abc && Store.shared.aAKeyState == .capslock{
+            if Store.shared.keyboardModel.tabState == .abc && VariableStates.shared.aAKeyState == .capslock{
                 let input = text.uppercased()
                 self.inputManager.input(text: input)
             }else{

@@ -40,14 +40,13 @@ struct TabKeyModel: FlickKeyModelProtocol{
         self.suggestModel = SuggestModel(flickKeys)
     }
 
-    var label: KeyLabel {
-        return KeyLabel(self.labelType, width: keySize.width)
+    func label(states: VariableStates) -> KeyLabel {
+        KeyLabel(self.labelType, width: keySize.width)
     }
 
-    var backGroundColorWhenUnpressed: Color {
+    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
         if self.variableSection.keyboardState == self.tabType{
             return Design.shared.colors.highlightedKeyColor
-
         }
         return Design.shared.colors.specialKeyColor
 

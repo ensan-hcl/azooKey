@@ -12,6 +12,7 @@ import SwiftUI
 struct QwertyKeyView: View{
     private let model: QwertyKeyModelProtocol
     @ObservedObject private var modelVariableSection: QwertyKeyModelVariableSection
+    @ObservedObject private var variableStates = VariableStates.shared
 
     @State private var suggest = false
     
@@ -72,27 +73,34 @@ struct QwertyKeyView: View{
     }
 
     var keyFillColor: Color {
-        self.modelVariableSection.pressState.isActive ?
-            self.model.backGroundColorWhenPressed.opacity(Design.shared.themeManager.weakOpacity) :
-            self.model.backGroundColorWhenUnpressed.opacity(Design.shared.themeManager.mainOpacity)
+        if modelVariableSection.pressState.isActive{
+            return self.model.backGroundColorWhenPressed(states: variableStates)
+                .opacity(Design.shared.themeManager.weakOpacity)
+        }else{
+            return self.model.backGroundColorWhenUnpressed(states: variableStates)
+                .opacity(Design.shared.themeManager.mainOpacity)
+        }
     }
 
     var keyBorderColor: Color {
         Design.shared.themeManager.theme.borderColor
     }
 
+    var label: KeyLabel {
+        self.model.label(states: self.variableStates)
+    }
+
     var body: some View{
         ZStack(alignment: .bottom){
             Group{
-                let vSpacing = Design.shared.verticalSpacing
                 RoundedBorderedRectangle(cornerRadius: 6, fillColor: keyFillColor, borderColor: keyBorderColor)
                     .frame(width: self.model.keySize.width, height: self.model.keySize.height)
                     .contentShape(
                         Rectangle()
-                            .size(CGSize(width: self.model.keySize.width + Design.shared.horizontalSpacing, height: self.model.keySize.height + vSpacing))
+                            .size(CGSize(width: self.model.keySize.width + Design.shared.horizontalSpacing, height: self.model.keySize.height + Design.shared.verticalSpacing))
                     )
-                    .gesture(self.gesture)
-                    .overlay(self.model.getLabel())
+                    .gesture(gesture)
+                    .overlay(label)
             }
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
@@ -118,7 +126,7 @@ struct QwertyKeyView: View{
                             color: Design.shared.colors.highlightedKeyColor
                         )
                         .overlay(
-                            self.model.getLabel()
+                            self.model.label(states: variableStates)
                                 .padding(.bottom, height)
                         )
                     }

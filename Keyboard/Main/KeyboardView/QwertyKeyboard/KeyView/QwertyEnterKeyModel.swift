@@ -22,7 +22,7 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol, EnterKeyModelProtocol{
     let needSuggestView: Bool = false
 
     var pressActions: [ActionType] {
-        switch variableSection.enterKeyState{
+        switch VariableStates.shared.enterKeyState{
         case .complete:
             return [.enter]
         case .return:
@@ -36,13 +36,13 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol, EnterKeyModelProtocol{
         return []
     }
     
-    func getLabel() -> KeyLabel {
-        let text = Design.shared.language.getEnterKeyText(variableSection.enterKeyState)
+    func label(states: VariableStates) -> KeyLabel {
+        let text = Design.shared.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: self.keySize.width, textSize: .small)
     }
     
-    var backGroundColorWhenUnpressed: Color {
-        switch variableSection.enterKeyState{
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
+        switch states.enterKeyState{
         case .complete, .edit:
             return Design.shared.colors.specialKeyColor
         case let .return(type):
@@ -56,11 +56,11 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol, EnterKeyModelProtocol{
     }
     
     func setKeyState(new state: EnterKeyState){
-        self.variableSection.enterKeyState = state
+        VariableStates.shared.enterKeyState = state
     }
 
     func sound() {
-        switch variableSection.enterKeyState{
+        switch VariableStates.shared.enterKeyState{
         case .complete, .edit:
             Sound.tabOrOtherKey()
         case let .return(type):

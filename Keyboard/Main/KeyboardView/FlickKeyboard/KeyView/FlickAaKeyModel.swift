@@ -14,7 +14,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol, AaKeyModelProtocol{
     static let shared = FlickAaKeyModel()
 
     var pressActions: [ActionType] {
-        switch variableSection.aAKeyState{
+        switch VariableStates.shared.aAKeyState{
         case .normal:
             return [.changeCharacterType]
         case .capslock:
@@ -25,7 +25,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol, AaKeyModelProtocol{
     var longPressActions: [KeyLongPressActionType] = []
     var variableSection: KeyModelVariableSection = KeyModelVariableSection()
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        switch variableSection.aAKeyState{
+        switch VariableStates.shared.aAKeyState{
         case .normal:
             return [
                 .top: FlickedKeyModel(labelType: .image("capslock"), pressActions: [.changeCapsLockState(state: .capslock)])
@@ -39,8 +39,8 @@ struct FlickAaKeyModel: FlickKeyModelProtocol, AaKeyModelProtocol{
 
     var suggestModel: SuggestModel = SuggestModel([:], keyType: .aA)
 
-    var label: KeyLabel {
-        switch variableSection.aAKeyState{
+    func label(states: VariableStates) -> KeyLabel {
+        switch states.aAKeyState{
         case .normal:
             return KeyLabel(.text("a/A"), width: keySize.width)
         case .capslock:
@@ -52,8 +52,8 @@ struct FlickAaKeyModel: FlickKeyModelProtocol, AaKeyModelProtocol{
         Sound.tabOrOtherKey()
     }
 
-    var backGroundColorWhenUnpressed: Color {
-        switch variableSection.aAKeyState{
+    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+        switch states.aAKeyState{
         case .normal:
             return Design.shared.colors.normalKeyColor
         case .capslock:
@@ -62,6 +62,6 @@ struct FlickAaKeyModel: FlickKeyModelProtocol, AaKeyModelProtocol{
     }
 
     func setKeyState(new state: AaKeyState) {
-        self.variableSection.aAKeyState = state
+        VariableStates.shared.aAKeyState = state
     }
 }

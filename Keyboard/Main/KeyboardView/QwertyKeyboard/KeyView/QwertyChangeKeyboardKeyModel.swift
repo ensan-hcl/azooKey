@@ -46,7 +46,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         )
     }
 
-    var backGroundColorWhenUnpressed: Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         return Design.shared.colors.specialKeyColor
     }
 
@@ -54,7 +54,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         self.rowInfo = rowInfo
     }
 
-    func getLabel() -> KeyLabel {
+    func label(states: VariableStates) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             return KeyLabel(.changeKeyboard, width: self.keySize.width)

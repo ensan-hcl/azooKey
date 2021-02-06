@@ -28,6 +28,8 @@ enum KeyPressState{
 struct FlickKeyView: View{
     private let model: FlickKeyModelProtocol
     @ObservedObject private var modelVariableSection: KeyModelVariableSection
+    @ObservedObject private var variableStates = VariableStates.shared
+
     init(model: FlickKeyModelProtocol){
         self.model = model
         self.modelVariableSection = model.variableSection
@@ -214,9 +216,9 @@ struct FlickKeyView: View{
 
     private var keyFillColor: Color {
         if self.modelVariableSection.pressState.isActive(){
-            return model.backGroundColorWhenPressed.opacity(Design.shared.themeManager.weakOpacity)
+            return model.backGroundColorWhenPressed(states: variableStates).opacity(Design.shared.themeManager.weakOpacity)
         }else{
-            return model.backGroundColorWhenUnpressed.opacity(Design.shared.themeManager.mainOpacity)
+            return model.backGroundColorWhenPressed(states: variableStates).opacity(Design.shared.themeManager.mainOpacity)
         }
     }
 
@@ -228,6 +230,6 @@ struct FlickKeyView: View{
         RoundedBorderedRectangle(cornerRadius: 5.0, fillColor: keyFillColor, borderColor: keyBorderColor)
             .frame(width: model.keySize.width, height: model.keySize.height)
             .gesture(gesture)
-            .overlay(model.label)
+            .overlay(model.label(states: variableStates))
     }
 }

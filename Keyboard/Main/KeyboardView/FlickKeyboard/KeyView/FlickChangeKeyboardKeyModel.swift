@@ -32,7 +32,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
         self.suggestModel = SuggestModel([:])
     }
 
-    var label: KeyLabel {
+    func label(states: VariableStates) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             return KeyLabel(.changeKeyboard, width: self.keySize.width)
@@ -41,7 +41,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
         }
     }
 
-    var backGroundColorWhenUnpressed: Color {
+    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
         return Design.shared.colors.specialKeyColor
     }
 

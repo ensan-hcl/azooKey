@@ -5546,10 +5546,10 @@
 			isa = PBXGroup;
 			children = (
 				1A26029025147FEC00EAD647 /* QwertyKeyView.swift */,
+				1A2602AD251489C700EAD647 /* QwertyKeyModelProtocol.swift */,
 				1A2602F32514FB6E00EAD647 /* VariationsModel.swift */,
 				1A2602E92514F7D100EAD647 /* QwertyVariationsView.swift */,
 				1A26028A251476A800EAD647 /* QwertySuggestView.swift */,
-				1A2602AD251489C700EAD647 /* QwertyKeyModelProtocol.swift */,
 				1A2602962514801F00EAD647 /* QwertyKeyModel.swift */,
 				1A26029C2514808D00EAD647 /* QwertyKeyModelVariableSection.swift */,
 				1A2602B3251489E400EAD647 /* QwertySpaceKeyModel.swift */,

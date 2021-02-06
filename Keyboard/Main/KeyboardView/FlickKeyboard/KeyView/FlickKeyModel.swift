@@ -33,11 +33,11 @@ struct FlickKeyModel: FlickKeyModelProtocol{
         self.keycolorType = keycolorType
     }
 
-    var backGroundColorWhenUnpressed: Color {
-        return keycolorType.color
+    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+        keycolorType.color
     }
-    
-    var label: KeyLabel {
+
+    func label(states: VariableStates) -> KeyLabel {
         KeyLabel(self.labelType, width: keySize.width)
     }
 

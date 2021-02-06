@@ -22,7 +22,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol, AaKeyModelProtocol{
     private let scale: (normalCount: Int, forCount: Int) = (1, 1)
 
     var pressActions: [ActionType] {
-        switch variableSection.aAKeyState{
+        switch VariableStates.shared.aAKeyState{
         case .normal:
             return [.changeCharacterType]
         case .capslock:
@@ -31,7 +31,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol, AaKeyModelProtocol{
     }
 
     var longPressActions: [KeyLongPressActionType] {
-        switch variableSection.aAKeyState{
+        switch VariableStates.shared.aAKeyState{
         case .normal:
             return [.changeCapsLockState(state: .capslock)]
         case .capslock:
@@ -39,8 +39,8 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol, AaKeyModelProtocol{
         }
     }
 
-    func getLabel() -> KeyLabel {
-        switch variableSection.aAKeyState{
+    func label(states: VariableStates) -> KeyLabel {
+        switch states.aAKeyState{
         case .normal:
             return KeyLabel(.image("textformat.alt"), width: keySize.width)
         case .capslock:
@@ -48,12 +48,12 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol, AaKeyModelProtocol{
         }
     }
 
-    var backGroundColorWhenUnpressed: Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         return Design.shared.colors.specialKeyColor
     }
 
     func setKeyState(new state: AaKeyState){
-        self.variableSection.aAKeyState = state
+        VariableStates.shared.aAKeyState = state
     }
 
     func sound() {

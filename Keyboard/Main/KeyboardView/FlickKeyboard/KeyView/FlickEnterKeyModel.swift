@@ -20,7 +20,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
     }
     
     var pressActions: [ActionType] {
-        switch variableSection.enterKeyState{
+        switch VariableStates.shared.enterKeyState{
         case .complete:
             return [.enter]
         case .return:
@@ -41,14 +41,14 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
     var keySize: CGSize {
         return Design.shared.flickEnterKeySize
     }
-    
-    var label: KeyLabel {
-        let text = Design.shared.language.getEnterKeyText(variableSection.enterKeyState)
+
+    func label(states: VariableStates) -> KeyLabel {
+        let text = Design.shared.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: keySize.width)
     }
 
-    var backGroundColorWhenUnpressed: Color {
-        switch variableSection.enterKeyState{
+    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+        switch states.enterKeyState{
         case .complete, .edit:
             return Design.shared.colors.specialKeyColor
         case let .return(type):
@@ -62,11 +62,11 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
     }
     
     func setKeyState(new state: EnterKeyState){
-        self.variableSection.enterKeyState = state
+        VariableStates.shared.enterKeyState = state
     }
 
     func sound() {
-        switch variableSection.enterKeyState{
+        switch VariableStates.shared.enterKeyState{
         case .complete, .edit:
             Sound.tabOrOtherKey()
         case let .return(type):

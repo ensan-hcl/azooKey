@@ -16,7 +16,7 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
     var pressActions: [ActionType]{
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
-            switch Store.shared.keyboardLanguage{
+            switch VariableStates.shared.keyboardLanguage{
             case .japanese:
                 return [.moveTab(.hira)]
             case .english:
@@ -41,7 +41,7 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         )
     }
 
-    var backGroundColorWhenUnpressed: Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         return Design.shared.colors.specialKeyColor
     }
 
@@ -49,10 +49,10 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         self.rowInfo = rowInfo
     }
 
-    func getLabel() -> KeyLabel {
+    func label(states: VariableStates) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
-            switch Store.shared.keyboardLanguage{
+            switch states.keyboardLanguage{
             case .japanese:
                 return KeyLabel(.text("あ"), width: self.keySize.width)
             case .english:

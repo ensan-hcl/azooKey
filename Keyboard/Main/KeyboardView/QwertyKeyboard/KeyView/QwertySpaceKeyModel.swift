@@ -20,15 +20,15 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
     var keySize: CGSize {
         return CGSize(width: Design.shared.qwertySpaceKeyWidth, height: Design.shared.keyViewSize.height)
     }
-    var backGroundColorWhenUnpressed: Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         return Design.shared.colors.normalKeyColor
     }
     
     init(){}
 
-    func getLabel() -> KeyLabel {
+    func label(states: VariableStates) -> KeyLabel {
         let width = self.keySize.width
-        switch Store.shared.keyboardLanguage{
+        switch states.keyboardLanguage{
         case .english:
             return KeyLabel(.text("space"), width: width, textSize: .small)
         case .japanese:
