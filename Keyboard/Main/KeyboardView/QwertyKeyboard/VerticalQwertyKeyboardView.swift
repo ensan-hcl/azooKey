@@ -12,15 +12,14 @@ import SwiftUI
 
 struct VerticalQwertyKeyboardView: View{
     private let model: VerticalQwertyKeyboardModel
-    @ObservedObject private var modelVariableSection: VerticalQwertyKeyboardModelVariableSection
-    
+    @ObservedObject private var variableStates = VariableStates.shared
+
     init(_ model: VerticalQwertyKeyboardModel){
         self.model = model
-        self.modelVariableSection = self.model.variableSection
     }
     
     private var verticalIndices: Range<Int> {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard.indices
         case .abc:
@@ -37,7 +36,7 @@ struct VerticalQwertyKeyboardView: View{
     }
     
     private func horizontalIndices(v: Int) -> Range<Int> {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard[v].indices
         case .abc:
@@ -54,7 +53,7 @@ struct VerticalQwertyKeyboardView: View{
     }
     
     private var keyModels: [[QwertyKeyModelProtocol]] {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard
         case .abc:

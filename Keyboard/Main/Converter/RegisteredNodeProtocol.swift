@@ -106,7 +106,7 @@ extension RegisteredNodeProtocol{
             case .direct:
                 break
             case .roman:
-                if Store.shared.keyboardModel.tabState != .abc{
+                if VariableStates.shared.tabState != .abc{
                     lastClause.ruby = lastClause.ruby.roman2katakana
                 }
             }

@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 final class KeyModelVariableSection: ObservableObject{
-    @Published var keyboardState: TabState = .hira
     @Published var suggestState: SuggestState = .nothing
     @Published var pressState: KeyPressState = .inactive
 }

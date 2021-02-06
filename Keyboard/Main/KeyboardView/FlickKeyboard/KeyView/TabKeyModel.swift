@@ -45,19 +45,13 @@ struct TabKeyModel: FlickKeyModelProtocol{
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        if self.variableSection.keyboardState == self.tabType{
+        if states.tabState == self.tabType{
             return Design.shared.colors.highlightedKeyColor
         }
         return Design.shared.colors.specialKeyColor
 
     }
     
-    func setKeyboardState(new state: TabState){
-        if self.variableSection.keyboardState != state{
-            self.variableSection.keyboardState = state
-        }
-    }
-
     func sound() {
         Sound.tabOrOtherKey()
     }

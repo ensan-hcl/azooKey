@@ -20,7 +20,7 @@ final class SemiStaticStates{
     }
 }
 
-///実行中変更され、かつ変更を検知できるべき値。収容アプリでも共有できる形にすること。
+///実行中変更され、かつViewが変更を検知できるべき値。収容アプリでも共有できる形にすること。
 final class VariableStates: ObservableObject{
     static let shared = VariableStates()
     private init(){}
@@ -29,6 +29,7 @@ final class VariableStates: ObservableObject{
     @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
+    @Published var tabState: TabState = .hira
 
     fileprivate enum RoughEnterKeyState{
         case `return`
@@ -46,6 +47,17 @@ final class VariableStates: ObservableObject{
             VariableStates.shared.enterKeyState = .complete
         }
     }
+
+    fileprivate func setTabState(_ state: TabState){
+        if state == .abc{
+            VariableStates.shared.keyboardLanguage = .english
+        }
+        if state == .hira{
+            VariableStates.shared.keyboardLanguage = .japanese
+        }
+        VariableStates.shared.tabState = state
+        Store.shared.setKeyboardType(for: state)    //FIXME: これはStoreに依存するので良くない。
+    }
 }
 
 ///ビュー間の情報の受け渡しを担うクラス
@@ -60,7 +72,7 @@ final class Store{
     
     fileprivate var lastVerticalTabState: TabState? = nil
     private(set) var keyboardModelVariableSection: KeyboardModelVariableSection   //ビューに関わる部分
-    private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
+    private(set) var keyboardModel: KeyboardDataProviderProtocol = VerticalFlickKeyboardModel()
     private init(){
         self.keyboardModelVariableSection = self.keyboardViewModel.variableSection
     }
@@ -69,10 +81,10 @@ final class Store{
         SettingData.shared.reload()
         self.action.initialize()
         if let lastTabState = self.lastVerticalTabState{
-            self.setTabState(lastTabState)
+            VariableStates.shared.setTabState(lastTabState)
             lastVerticalTabState = nil
         }
-        self.setKeyboardType(for: self.keyboardModel.tabState)
+        self.setKeyboardType(for: VariableStates.shared.tabState)
         self.refreshKeyboardModel()
     }
 
@@ -174,17 +186,6 @@ final class Store{
     func setMagnifyingText(_ text: String){
         self.keyboardModelVariableSection.magnifyingText = text
         self.keyboardModelVariableSection.isTextMagnifying = true
-    }
-
-    fileprivate func setTabState(_ state: TabState){
-        if state == .abc{
-            VariableStates.shared.keyboardLanguage = .english
-        }
-        if state == .hira{
-            VariableStates.shared.keyboardLanguage = .japanese
-        }
-        self.setKeyboardType(for: state)
-        self.keyboardModel.setTabState(state: state)
     }
 
     ///workarounds
@@ -296,7 +297,7 @@ final class ActionDepartment{
         switch action{
         case let .input(text):
             Store.shared.showMoveCursorView(false)
-            if Store.shared.keyboardModel.tabState == .abc && VariableStates.shared.aAKeyState == .capslock{
+            if VariableStates.shared.tabState == .abc && VariableStates.shared.aAKeyState == .capslock{
                 let input = text.uppercased()
                 self.inputManager.input(text: input)
             }else{
@@ -342,7 +343,7 @@ final class ActionDepartment{
             self.inputManager.changeCharacter()
 
         case let .moveTab(type):
-            Store.shared.setTabState(type)
+            VariableStates.shared.setTabState(type)
             Store.shared.lastVerticalTabState = type
         case .hideLearningMemory:
             self.hideLearningMemory()
@@ -641,7 +642,7 @@ private final class InputManager{
         case .direct:
             return false
         case .roman:
-            return Store.shared.keyboardModel.tabState == .hira
+            return VariableStates.shared.tabState == .hira
         }
     }
 
@@ -1088,8 +1089,8 @@ private final class InputManager{
                     result = self.directConverter.requestCandidates(inputData, N_best: 10)
                 case .roman:
                     let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
-                    let requirePrediction = Store.shared.keyboardModel.tabState == .hira
-                    let requireEnglishPrediction = Store.shared.keyboardModel.tabState != .hira
+                    let requirePrediction = VariableStates.shared.tabState == .hira
+                    let requireEnglishPrediction = VariableStates.shared.tabState != .hira
 
                     result = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requirePrediction, requireEnglishPrediction: requireEnglishPrediction)
                 }

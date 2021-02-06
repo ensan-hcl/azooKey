@@ -11,15 +11,14 @@ import SwiftUI
 
 struct VerticalFlickKeyboardView: View{
     private let model: VerticalFlickKeyboardModel
-    @ObservedObject private var modelVariableSection: VerticalFlickKeyboardModelVariableSection
-    
+    @ObservedObject private var variableStates = VariableStates.shared
+
     init(_ model: VerticalFlickKeyboardModel, size: CGSize? = nil){
         self.model = model
-        self.modelVariableSection = model.variableSection
     }
     
     private var horizontalIndices: Range<Int> {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard.indices
         case .abc:
@@ -34,7 +33,7 @@ struct VerticalFlickKeyboardView: View{
     }
     
     private func verticalIndices(h: Int) -> Range<Int> {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard[h].indices
         case .abc:
@@ -49,7 +48,7 @@ struct VerticalFlickKeyboardView: View{
     }
     
     private var keyModels: [[FlickKeyModelProtocol]] {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard
         case .abc:

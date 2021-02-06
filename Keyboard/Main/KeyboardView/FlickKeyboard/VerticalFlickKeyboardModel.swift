@@ -10,29 +10,8 @@ import Foundation
 import SwiftUI
 
 
-final class VerticalFlickKeyboardModelVariableSection: ObservableObject{
-    @Published var tabState: TabState = .hira
-}
-
 //M：基本は変わらないx
-struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
-    //変更の可能性がある部分
-    var variableSection = VerticalFlickKeyboardModelVariableSection()
-
-    let hiraTabKeyModel = TabKeyModel.hiraTabKeyModel
-    let abcTabKeyModel = TabKeyModel.abcTabKeyModel
-    let numberTabKeyModel = TabKeyModel.numberTabKeyModel
-
-    var tabState: TabState {
-        return self.variableSection.tabState
-    }
-
-    func setTabState(state: TabState){
-        self.variableSection.tabState = state
-        self.hiraTabKeyModel.setKeyboardState(new: state)
-        self.abcTabKeyModel.setKeyboardState(new: state)
-        self.numberTabKeyModel.setKeyboardState(new: state)
-    }
+struct VerticalFlickKeyboardModel: KeyboardDataProviderProtocol {
     //縦に並べる
     var hiraKeyboard:[[FlickKeyModelProtocol]] = [
         //第1列

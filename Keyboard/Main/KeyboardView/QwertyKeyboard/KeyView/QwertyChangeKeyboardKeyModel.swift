@@ -17,7 +17,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         case true:
             return []
         case false:
-            switch Store.shared.keyboardModel.tabState{
+            switch VariableStates.shared.tabState{
             case .hira:
                 return [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]
             case .abc:
@@ -59,7 +59,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         case true:
             return KeyLabel(.changeKeyboard, width: self.keySize.width)
         case false:
-            switch Store.shared.keyboardModel.tabState{
+            switch states.tabState{
             case .hira:
                 return KeyLabel(.text("#+="), width: self.keySize.width)
             case .abc:

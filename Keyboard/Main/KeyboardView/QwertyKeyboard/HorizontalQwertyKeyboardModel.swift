@@ -7,21 +7,8 @@
 //
 
 import Foundation
-final class HorizontalQwertyKeyboardModelVariableSection: ObservableObject{
-    @Published var tabState: TabState = .hira
-}
 
-struct HorizontalQwertyKeyboardModel: KeyboardModelProtocol{
-    var variableSection = HorizontalQwertyKeyboardModelVariableSection()
-    
-    func setTabState(state: TabState){
-        self.variableSection.tabState = state
-    }
-
-    var tabState: TabState {
-        return self.variableSection.tabState
-    }
-
+struct HorizontalQwertyKeyboardModel: KeyboardDataProviderProtocol {
     //横に並べる
     var numberKeyboard: [[QwertyKeyModelProtocol]] = [
         [

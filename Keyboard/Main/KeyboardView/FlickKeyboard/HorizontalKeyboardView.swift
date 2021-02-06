@@ -15,15 +15,15 @@ fileprivate enum KeyboardAlignment{
 //V=VM
 struct HorizontalKeyboardView: View {
     private let model: HorizontalFlickKeyboardModel
-    @ObservedObject private var modelVariableSection: HorizontalKeyboardModelVariableSection
+    @ObservedObject private var variableStates = VariableStates.shared
     @State private var alignmnet: KeyboardAlignment = .center
+    
     init(_ model: HorizontalFlickKeyboardModel){
         self.model = model
-        self.modelVariableSection = model.variableSection
     }
 
     private var horizontalIndices: Range<Int> {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard.indices
         case .abc:
@@ -38,7 +38,7 @@ struct HorizontalKeyboardView: View {
     }
 
     private func verticalIndices(h: Int) -> Range<Int> {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard[h].indices
         case .abc:
@@ -53,7 +53,7 @@ struct HorizontalKeyboardView: View {
     }
 
     private var keyModels: [[FlickKeyModelProtocol]] {
-        switch modelVariableSection.tabState{
+        switch variableStates.tabState{
         case .hira:
             return self.model.hiraKeyboard
         case .abc:
