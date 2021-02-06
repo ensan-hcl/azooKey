@@ -29,6 +29,23 @@ final class VariableStates: ObservableObject{
     @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
+
+    fileprivate enum RoughEnterKeyState{
+        case `return`
+        case edit
+        case complete
+    }
+
+    fileprivate func setEnterKeyState(_ state: RoughEnterKeyState){
+        switch state{
+        case .return:
+            VariableStates.shared.enterKeyState = .return(enterKeyType)
+        case .edit:
+            VariableStates.shared.enterKeyState = .edit
+        case .complete:
+            VariableStates.shared.enterKeyState = .complete
+        }
+    }
 }
 
 ///ビュー間の情報の受け渡しを担うクラス
@@ -159,26 +176,6 @@ final class Store{
         self.keyboardModelVariableSection.isTextMagnifying = true
     }
 
-    fileprivate enum RoughEnterKeyState{
-        case `return`
-        case edit
-        case complete
-    }
-
-    fileprivate func setEnterKeyState(_ state: RoughEnterKeyState){
-        switch state{
-        case .return:
-            self.keyboardModel.enterKeyModel.setKeyState(new: .return(VariableStates.shared.enterKeyType))
-            VariableStates.shared.enterKeyState = .return(VariableStates.shared.enterKeyType)
-        case .edit:
-            self.keyboardModel.enterKeyModel.setKeyState(new: .edit)
-            VariableStates.shared.enterKeyState = .edit
-        case .complete:
-            self.keyboardModel.enterKeyModel.setKeyState(new: .complete)
-            VariableStates.shared.enterKeyState = .complete
-        }
-    }
-    
     fileprivate func setTabState(_ state: TabState){
         if state == .abc{
             VariableStates.shared.keyboardLanguage = .english
@@ -208,7 +205,7 @@ final class Store{
     func setUIReturnKeyType(type: UIReturnKeyType){
         VariableStates.shared.enterKeyType = type
         if case let .return(prev) = VariableStates.shared.enterKeyState, prev != type{
-            self.setEnterKeyState(.return)
+            VariableStates.shared.setEnterKeyState(.return)
         }
     }
 
@@ -673,7 +670,7 @@ private final class InputManager{
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.correspondingCount))
             if candidate.correspondingCount == inputtedText.count{
                 self.clear()
-                Store.shared.setEnterKeyState(.return)
+                VariableStates.shared.setEnterKeyState(.return)
                 return
             }
             self.cursorPosition -= candidate.correspondingCount
@@ -686,7 +683,7 @@ private final class InputManager{
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(displayedTextCount))
             if self.kanaRomanStateHolder.components.isEmpty{
                 self.clear()
-                Store.shared.setEnterKeyState(.return)
+                VariableStates.shared.setEnterKeyState(.return)
                 return
             }
             self.cursorPosition -= displayedTextCount
@@ -713,7 +710,7 @@ private final class InputManager{
         self.kanaRomanStateHolder = KanaRomanStateHolder()
         self._romanConverter?.clear()
         self._directConverter?.clear()
-        Store.shared.setEnterKeyState(.return)
+        VariableStates.shared.setEnterKeyState(.return)
     }
 
     fileprivate func closeKeyboard(){
@@ -775,7 +772,7 @@ private final class InputManager{
             self.proxy.insertText(text)
             setResult()
             
-            Store.shared.setEnterKeyState(.complete)
+            VariableStates.shared.setEnterKeyState(.complete)
             return
         }
         
@@ -818,7 +815,7 @@ private final class InputManager{
             }
         }
         
-        Store.shared.setEnterKeyState(.complete)
+        VariableStates.shared.setEnterKeyState(.complete)
 
         setResult()
     }
@@ -852,7 +849,7 @@ private final class InputManager{
         }
 
         if self.inputtedText.isEmpty{
-            Store.shared.setEnterKeyState(.return)
+            VariableStates.shared.setEnterKeyState(.return)
         }
     }
 
@@ -905,7 +902,7 @@ private final class InputManager{
             let selectedText = self.inputtedText
             self.delete(count: 1)
             self.input(text: selectedText)
-            Store.shared.setEnterKeyState(.complete)
+            VariableStates.shared.setEnterKeyState(.complete)
         }
     }
     
@@ -1022,7 +1019,7 @@ private final class InputManager{
         self.cursorPosition = self.cursorMaximumPosition
         self.isSelected = false
         setResult()
-        Store.shared.setEnterKeyState(.complete)
+        VariableStates.shared.setEnterKeyState(.complete)
     }
     
     fileprivate func userCutText(text: String){
@@ -1030,7 +1027,7 @@ private final class InputManager{
         self.cursorPosition = .zero
         self.isSelected = false
         self.setResult()
-        Store.shared.setEnterKeyState(.return)
+        VariableStates.shared.setEnterKeyState(.return)
     }
     
     fileprivate func userReplacedSelectedText(text: String){
@@ -1040,7 +1037,7 @@ private final class InputManager{
         self.isSelected = false
         
         setResult()
-        Store.shared.setEnterKeyState(.complete)
+        VariableStates.shared.setEnterKeyState(.complete)
     }
     
     //ユーザが文章を選択した場合、その部分を入力中であるとみなす
@@ -1062,13 +1059,13 @@ private final class InputManager{
             //参照: https://qiita.com/En3_HCl/items/476ffb665cd37cb312da
             self.setResult(options: [.convertInput])
         }
-        Store.shared.setEnterKeyState(.edit)
+        VariableStates.shared.setEnterKeyState(.edit)
     }
     
     //選択を解除した場合、clearとみなす
     fileprivate func userDeselectedText(){
         self.clear()
-        Store.shared.setEnterKeyState(.return)
+        VariableStates.shared.setEnterKeyState(.return)
     }
 
     fileprivate enum ResultOptions{

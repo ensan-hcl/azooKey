@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
+struct FlickEnterKeyModel: FlickKeyModelProtocol{
     static var shared = FlickEnterKeyModel()
     var variableSection: KeyModelVariableSection = KeyModelVariableSection()
     let suggestModel: SuggestModel
@@ -47,7 +47,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
         return KeyLabel(.text(text), width: keySize.width)
     }
 
-    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         switch states.enterKeyState{
         case .complete, .edit:
             return Design.shared.colors.specialKeyColor
@@ -61,10 +61,6 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol, EnterKeyModelProtocol{
         }
     }
     
-    func setKeyState(new state: EnterKeyState){
-        VariableStates.shared.enterKeyState = state
-    }
-
     func sound() {
         switch VariableStates.shared.enterKeyState{
         case .complete, .edit:

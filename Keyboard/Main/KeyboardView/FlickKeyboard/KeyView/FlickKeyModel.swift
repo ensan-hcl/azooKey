@@ -33,7 +33,7 @@ struct FlickKeyModel: FlickKeyModelProtocol{
         self.keycolorType = keycolorType
     }
 
-    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         keycolorType.color
     }
 
@@ -44,7 +44,5 @@ struct FlickKeyModel: FlickKeyModelProtocol{
     func sound(){
         self.pressActions.first?.sound()
     }
-
-
 }
 

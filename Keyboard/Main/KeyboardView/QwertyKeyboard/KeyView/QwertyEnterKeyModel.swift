@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct QwertyEnterKeyModel: QwertyKeyModelProtocol, EnterKeyModelProtocol{
+struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
     init(){}
 
     static var shared = QwertyEnterKeyModel()
@@ -53,10 +53,6 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol, EnterKeyModelProtocol{
                 return Design.shared.colors.specialEnterKeyColor
             }
         }
-    }
-    
-    func setKeyState(new state: EnterKeyState){
-        VariableStates.shared.enterKeyState = state
     }
 
     func sound() {

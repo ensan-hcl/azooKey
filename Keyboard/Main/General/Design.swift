@@ -314,6 +314,6 @@ struct ThemeManager{
     }
 
     static func getSelectedTheme() -> ThemeData {
-        return ThemeData.clear
+        return ThemeData.default
     }
 }

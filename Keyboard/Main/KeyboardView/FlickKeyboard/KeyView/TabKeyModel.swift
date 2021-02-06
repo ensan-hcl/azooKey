@@ -44,7 +44,7 @@ struct TabKeyModel: FlickKeyModelProtocol{
         KeyLabel(self.labelType, width: keySize.width)
     }
 
-    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         if self.variableSection.keyboardState == self.tabType{
             return Design.shared.colors.highlightedKeyColor
         }

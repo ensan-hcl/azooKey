@@ -12,7 +12,6 @@ final class VerticalQwertyKeyboardModelVariableSection: ObservableObject{
 }
 
 struct VerticalQwertyKeyboardModel: KeyboardModelProtocol{
-    let enterKeyModel: EnterKeyModelProtocol = QwertyEnterKeyModel.shared
     var variableSection = VerticalQwertyKeyboardModelVariableSection()
     
     func setTabState(state: TabState){

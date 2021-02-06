@@ -41,7 +41,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
         }
     }
 
-    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         return Design.shared.colors.specialKeyColor
     }
 

@@ -19,8 +19,6 @@ struct VerticalFlickKeyboardModel: KeyboardModelProtocol{
     //変更の可能性がある部分
     var variableSection = VerticalFlickKeyboardModelVariableSection()
 
-    let enterKeyModel: EnterKeyModelProtocol = FlickEnterKeyModel.shared
-
     let hiraTabKeyModel = TabKeyModel.hiraTabKeyModel
     let abcTabKeyModel = TabKeyModel.abcTabKeyModel
     let numberTabKeyModel = TabKeyModel.numberTabKeyModel

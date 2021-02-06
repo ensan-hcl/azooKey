@@ -36,7 +36,7 @@ protocol FlickKeyModelProtocol {
     //描画に関わるものは変数としてVariableStatesを受け取る。こうすることでVariableStatesの更新に合わせて変更されるようになる。
     func label(states: VariableStates) -> KeyLabel
     func backGroundColorWhenPressed(states: VariableStates) -> Color
-    func backGroundColorWhenUnPressed(states: VariableStates) -> Color
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color
 
     func isFlickAble(to direction: FlickDirection) -> Bool
     func press()
@@ -99,7 +99,7 @@ extension FlickKeyModelProtocol{
     func backGroundColorWhenPressed(states: VariableStates) -> Color {
         Design.shared.colors.highlightedKeyColor
     }
-    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         Design.shared.colors.normalKeyColor
     }
     func flickSensitivity(to direction: FlickDirection) -> CGFloat {

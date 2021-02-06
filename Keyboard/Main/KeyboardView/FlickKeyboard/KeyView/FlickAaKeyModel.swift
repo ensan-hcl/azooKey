@@ -52,7 +52,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
         Sound.tabOrOtherKey()
     }
 
-    func backGroundColorWhenUnPressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         switch states.aAKeyState{
         case .normal:
             return Design.shared.colors.normalKeyColor
