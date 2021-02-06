@@ -26,21 +26,17 @@ enum TabState: Equatable{
     }
 }
 
-struct KeyboardModel {
-    let resultModel = ResultModel()
-}
-
 struct KeyboardView: View {
     @ObservedObject private var variableStates = VariableStates.shared
-    private let model: KeyboardModel
+    private let resultModel: ResultModel
 
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
 
     private var sharedResultData = SharedResultData()
 
-    init(){
-        self.model = Store.shared.keyboardViewModel
+    init(resultModel: ResultModel){
+        self.resultModel = resultModel
     }
 
     var body: some View {
@@ -63,7 +59,7 @@ struct KeyboardView: View {
                     .padding(.bottom, 2)
             }else{
                 VStack(spacing: 0){
-                    ResultView(model: model.resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                    ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if variableStates.refreshing{
                         switch (variableStates.keyboardOrientation, Design.shared.layout){

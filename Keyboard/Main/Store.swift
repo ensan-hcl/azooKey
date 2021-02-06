@@ -94,7 +94,7 @@ final class VariableStates: ObservableObject{
 final class Store{
     static let shared = Store()
     private(set) var inputStyle: InputStyle = .direct
-    private(set) var keyboardViewModel = KeyboardModel()
+    private(set) var resultModel = ResultModel()
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     private(set) var action = ActionDepartment()
 
@@ -132,7 +132,7 @@ final class Store{
     }
 
     fileprivate func registerResult(_ result: [Candidate]){
-        self.keyboardViewModel.resultModel.setResults(result)
+        self.resultModel.setResults(result)
     }
 
     func setKeyboardType(for tab: TabState){

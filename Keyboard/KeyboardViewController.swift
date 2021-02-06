@@ -29,7 +29,7 @@ final class KeyboardViewController: UIInputViewController {
         super.viewDidLoad()
         //初期化の順序としてこの位置に置くこと
         Store.shared.initialize()
-        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView())
+        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView(resultModel: Store.shared.resultModel))
         //コントロールセンターを出しにくくする。
         keyboardViewHost.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
