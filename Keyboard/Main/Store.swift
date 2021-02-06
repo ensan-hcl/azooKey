@@ -23,6 +23,8 @@ final class SemiStaticStates{
 ///実行中変更され、かつViewが変更を検知できるべき値。収容アプリでも共有できる形にすること。
 final class VariableStates: ObservableObject{
     static let shared = VariableStates()
+    fileprivate var lastVerticalTabState: TabState? = nil
+
     private init(){}
 
     @Published var keyboardLanguage: KeyboardLanguage = .japanese
@@ -38,7 +40,15 @@ final class VariableStates: ObservableObject{
     @Published var showMoveCursorView = false
 
     @Published var refreshing = true
-    
+
+    func initialize(){
+        if let lastTabState = self.lastVerticalTabState{
+            self.setTabState(lastTabState)
+            self.lastVerticalTabState = nil
+        }
+        self.setKeyboardType(for: self.tabState)
+    }
+
     func refreshView(){
         refreshing.toggle()
     }
@@ -119,19 +129,13 @@ final class Store{
     private(set) var action = ActionDepartment()
 
     let feedbackGenerator = UINotificationFeedbackGenerator()
-    
-    fileprivate var lastVerticalTabState: TabState? = nil
 
     private init(){}
     
     func initialize(){
         SettingData.shared.reload()
+        VariableStates.shared.initialize()
         self.action.initialize()
-        if let lastTabState = self.lastVerticalTabState{
-            VariableStates.shared.setTabState(lastTabState)
-            lastVerticalTabState = nil
-        }
-        self.setKeyboardType(for: VariableStates.shared.tabState)
     }
 
     func appearedAgain(){
@@ -268,7 +272,7 @@ final class ActionDepartment{
 
         case let .moveTab(type):
             VariableStates.shared.setTabState(type)
-            Store.shared.lastVerticalTabState = type
+            VariableStates.shared.lastVerticalTabState = type
         case .hideLearningMemory:
             self.hideLearningMemory()
 
