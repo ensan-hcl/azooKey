@@ -9,6 +9,17 @@
 import Foundation
 import SwiftUI
 
+///実行中変更されない値。収容アプリでも共有できる形にすること。
+final class SemiStaticStates{
+    static let shared = SemiStaticStates()
+    private init(){}
+
+    private(set) var needsInputModeSwitchKey = true //端末が変化しない限り変更が必要ない
+    func setNeedsInputModeSwitchKeyMode(_ bool: Bool){
+        self.needsInputModeSwitchKey = bool
+    }
+}
+
 ///ビュー間の情報の受け渡しを担うクラス
 final class Store{
     static let shared = Store()
@@ -24,7 +35,6 @@ final class Store{
     let feedbackGenerator = UINotificationFeedbackGenerator()
     
     fileprivate var lastVerticalTabState: TabState? = nil
-    private(set) var needsInputModeSwitchKey = true   //ビューに関わる部分
     private(set) var keyboardModelVariableSection: KeyboardModelVariableSection   //ビューに関わる部分
     private(set) var keyboardModel: KeyboardModelProtocol = VerticalFlickKeyboardModel()
     private init(){
@@ -45,10 +55,6 @@ final class Store{
     func appearedAgain(){
         SettingData.shared.reload()
         self.action.appearedAgain()
-    }
-
-    func setNeedsInputModeSwitchKeyMode(_ bool: Bool){
-        self.needsInputModeSwitchKey = bool
     }
 
     enum DicDataStoreNotification{

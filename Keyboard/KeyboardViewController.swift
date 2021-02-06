@@ -66,7 +66,7 @@ final class KeyboardViewController: UIInputViewController {
         gr0.delaysTouchesBegan = false
         gr1.delaysTouchesBegan = false
 
-        Store.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
+        SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
         Store.shared.action.appearedAgain()
     }
 

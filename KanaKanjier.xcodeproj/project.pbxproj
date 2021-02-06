@@ -2341,6 +2341,8 @@
 		1AF6789225CD505300F3987B /* DesignLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6789125CD505300F3987B /* DesignLogic.swift */; };
 		1AF6789B25CD506900F3987B /* DesignLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6789125CD505300F3987B /* DesignLogic.swift */; };
 		1AF678A125CDA07A00F3987B /* SettingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678A025CDA07A00F3987B /* SettingData.swift */; };
+		1AF678AF25CE3B4A00F3987B /* EnvironmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* EnvironmentValue.swift */; };
+		1AF678B425CE3B7000F3987B /* EnvironmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* EnvironmentValue.swift */; };
 		1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA4BB2257E169100477DC2 /* PasteButton.swift */; };
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
@@ -4730,6 +4732,7 @@
 		1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderedRectangle.swift; sourceTree = "<group>"; };
 		1AF6789125CD505300F3987B /* DesignLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignLogic.swift; sourceTree = "<group>"; };
 		1AF678A025CDA07A00F3987B /* SettingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingData.swift; sourceTree = "<group>"; };
+		1AF678AE25CE3B4A00F3987B /* EnvironmentValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentValue.swift; sourceTree = "<group>"; };
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
@@ -7338,6 +7341,7 @@
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */,
 				1A12E24725C41A7100316009 /* Message.swift */,
+				1AF678AE25CE3B4A00F3987B /* EnvironmentValue.swift */,
 				1AF6789025CD504500F3987B /* KeyboardDesignLogic */,
 				1AF6785B25CC4FF800F3987B /* ThemeData */,
 				1A36B146258D0BA90084DFE0 /* SettingData */,
@@ -9895,6 +9899,7 @@
 				1A3A162C2529671300A5BA4F /* KeyFlickSetting.swift in Sources */,
 				1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */,
 				1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */,
+				1AF678B425CE3B7000F3987B /* EnvironmentValue.swift in Sources */,
 				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
 				1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */,
 				1AA346822567D8B100B41A16 /* UserSetting.swift in Sources */,
@@ -10064,6 +10069,7 @@
 				1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */,
 				1A6F959725144481007399AC /* VerticalQwertyKeyboardView.swift in Sources */,
 				1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */,
+				1AF678AF25CE3B4A00F3987B /* EnvironmentValue.swift in Sources */,
 				1AF1C55F252DD10F002FCC66 /* added_last_n_character.swift in Sources */,
 				1AA346912567F01E00B41A16 /* SettingItemProtocol.swift in Sources */,
 				1A3DC20C2500D53B002CAA93 /* VerticalFlickKeyboardView.swift in Sources */,

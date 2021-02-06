@@ -15,7 +15,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
     static let shared = FlickChangeKeyboardModel()
 
     var pressActions: [ActionType]{
-        switch Store.shared.needsInputModeSwitchKey{
+        switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             return []
         case false:
@@ -33,7 +33,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
     }
 
     var label: KeyLabel {
-        switch Store.shared.needsInputModeSwitchKey{
+        switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             return KeyLabel(.changeKeyboard, width: self.keySize.width)
         case false:

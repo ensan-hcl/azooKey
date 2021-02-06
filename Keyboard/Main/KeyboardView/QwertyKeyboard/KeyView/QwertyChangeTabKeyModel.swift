@@ -14,7 +14,7 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
     var variableSection = QwertyKeyModelVariableSection()
 
     var pressActions: [ActionType]{
-        switch Store.shared.needsInputModeSwitchKey{
+        switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch Store.shared.keyboardLanguage{
             case .japanese:
@@ -50,7 +50,7 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
     }
 
     func getLabel() -> KeyLabel {
-        switch Store.shared.needsInputModeSwitchKey{
+        switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch Store.shared.keyboardLanguage{
             case .japanese:

@@ -14,7 +14,6 @@ struct VerticalFlickKeyboardView: View{
     @ObservedObject private var modelVariableSection: VerticalFlickKeyboardModelVariableSection
     
     init(_ model: VerticalFlickKeyboardModel, size: CGSize? = nil){
-        debug(size)
         self.model = model
         self.modelVariableSection = model.variableSection
     }
@@ -64,8 +63,7 @@ struct VerticalFlickKeyboardView: View{
             
         }
     }
-    
-    
+
     var body: some View {
         ZStack{
             HStack(spacing: Design.shared.horizontalSpacing){

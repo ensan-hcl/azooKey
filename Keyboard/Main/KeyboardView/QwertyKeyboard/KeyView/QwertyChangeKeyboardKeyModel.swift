@@ -13,7 +13,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
     var variableSection = QwertyKeyModelVariableSection()
 
     var pressActions: [ActionType]{
-        switch Store.shared.needsInputModeSwitchKey{
+        switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             return []
         case false:
@@ -55,7 +55,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
     }
 
     func getLabel() -> KeyLabel {
-        switch Store.shared.needsInputModeSwitchKey{
+        switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             return KeyLabel(.changeKeyboard, width: self.keySize.width)
         case false:
