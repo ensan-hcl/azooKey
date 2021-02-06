@@ -155,7 +155,7 @@ struct LearningMemorys{
             let nextString = $0.next.map{"\($0.index),\($0.count)"}.joined(separator: "\0")
             return "\($0.count)\t\($0.data.ruby)\t\($0.data.word)\t\($0.data.lcid)\t\($0.data.rcid)\t\($0.data.mid)\t\($0.data.baseValue)\t\(nextString)"
         }.joined(separator: "\n")
-        Store.shared.saveTextFile(contents: string, to: Self.memoryFileName)
+        FileTools.saveTextFile(contents: string, to: Self.memoryFileName)
     }
 
     mutating func reset(){
@@ -184,7 +184,7 @@ struct LearningMemorys{
     }
 
     private static func load() -> [LearningMemoryElement]{
-        let contents = Store.shared.readTextFile(to: Self.memoryFileName)
+        let contents = FileTools.readTextFile(to: Self.memoryFileName)
         if contents.isEmpty{
             return []
         }

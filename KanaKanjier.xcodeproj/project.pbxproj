@@ -2344,6 +2344,7 @@
 		1AF678AF25CE3B4A00F3987B /* EnvironmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* EnvironmentValue.swift */; };
 		1AF678B425CE3B7000F3987B /* EnvironmentValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* EnvironmentValue.swift */; };
 		1AF678C625CE936900F3987B /* KeyboardDataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678C525CE936900F3987B /* KeyboardDataProviderProtocol.swift */; };
+		1AF678D825CEA5F800F3987B /* FileTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678D725CEA5F800F3987B /* FileTools.swift */; };
 		1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA4BB2257E169100477DC2 /* PasteButton.swift */; };
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
@@ -4734,6 +4735,7 @@
 		1AF678A025CDA07A00F3987B /* SettingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingData.swift; sourceTree = "<group>"; };
 		1AF678AE25CE3B4A00F3987B /* EnvironmentValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentValue.swift; sourceTree = "<group>"; };
 		1AF678C525CE936900F3987B /* KeyboardDataProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDataProviderProtocol.swift; sourceTree = "<group>"; };
+		1AF678D725CEA5F800F3987B /* FileTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTools.swift; sourceTree = "<group>"; };
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
@@ -7251,6 +7253,7 @@
 				1A67736F256F7AC30037AF22 /* Sound.swift */,
 				1AF678A025CDA07A00F3987B /* SettingData.swift */,
 				1AC8A593259587A200B71E5A /* Design.swift */,
+				1AF678D725CEA5F800F3987B /* FileTools.swift */,
 				1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */,
 			);
 			path = General;
@@ -9989,6 +9992,7 @@
 				1A12E24225C3E1CB00316009 /* MessageView.swift in Sources */,
 				1A3DC2FB2500D72D002CAA93 /* Kana2Kanji.swift in Sources */,
 				1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */,
+				1AF678D825CEA5F800F3987B /* FileTools.swift in Sources */,
 				1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */,
 				1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */,
 				1A3DC2212500D600002CAA93 /* TabKeyModel.swift in Sources */,
