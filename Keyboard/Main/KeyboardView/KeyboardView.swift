@@ -25,12 +25,6 @@ enum TabState: Equatable{
         }
     }
 }
-
-enum KeyboardLanguage{
-    case english
-    case japanese
-}
-
 //Storeからアクセス出来るべきデータ。
 final class KeyboardModelVariableSection: ObservableObject{
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
@@ -48,7 +42,6 @@ struct KeyboardModel {
 }
 
 struct KeyboardView: View {
-    //二つ以上になったらまとめてvariableSectioinにすること！
     @ObservedObject private var modelVariableSection: KeyboardModelVariableSection
     private let model: KeyboardModel
     @State private var messageManager: MessageManager = MessageManager()
