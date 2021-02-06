@@ -35,6 +35,8 @@ final class VariableStates: ObservableObject{
     @Published var isTextMagnifying = false
     @Published var magnifyingText = ""
 
+    @Published var showMoveCursorView = false
+
     fileprivate enum RoughEnterKeyState{
         case `return`
         case edit
@@ -123,14 +125,6 @@ final class Store{
 
     func sendToDicDataStore(_ data: DicDataStoreNotification){
         self.action.sendToDicDataStore(data)
-    }
-
-    fileprivate func showMoveCursorView(_ bool: Bool){
-        self.keyboardViewModel.resultModel.showMoveCursorView(bool)
-    }
-    
-    fileprivate func toggleShowMoveCursorView(){
-        self.keyboardViewModel.resultModel.toggleShowMoveCursorView()
     }
 
     fileprivate func registerResult(_ result: [Candidate]){
@@ -222,7 +216,7 @@ final class ActionDepartment{
     private func doAction(_ action: ActionType){
         switch action{
         case let .input(text):
-            Store.shared.showMoveCursorView(false)
+            VariableStates.shared.showMoveCursorView = false
             if VariableStates.shared.tabState == .abc && VariableStates.shared.aAKeyState == .capslock{
                 let input = text.uppercased()
                 self.inputManager.input(text: input)
@@ -230,12 +224,12 @@ final class ActionDepartment{
                 self.inputManager.input(text: text)
             }
         case let .delete(count):
-            Store.shared.showMoveCursorView(false)
+            VariableStates.shared.showMoveCursorView = false
             self.inputManager.delete(count: count)
 
         case .smoothDelete:
             Sound.smoothDelete()
-            Store.shared.showMoveCursorView(false)
+            VariableStates.shared.showMoveCursorView = false
             self.inputManager.smoothDelete()
 
         case .deselectAndUseAsInputting:
@@ -255,17 +249,16 @@ final class ActionDepartment{
         case let .changeCapsLockState(state):
             VariableStates.shared.aAKeyState = state
         case .toggleShowMoveCursorView:
-            Store.shared.toggleShowMoveCursorView()
-
+            VariableStates.shared.showMoveCursorView.toggle()
         case .enter:
-            Store.shared.showMoveCursorView(false)
+            VariableStates.shared.showMoveCursorView = false
             let actions = self.inputManager.enter()
             actions.forEach{
                 self.doAction($0)
             }
 
         case .changeCharacterType:
-            Store.shared.showMoveCursorView(false)
+            VariableStates.shared.showMoveCursorView = false
             self.inputManager.changeCharacter()
 
         case let .moveTab(type):
@@ -354,7 +347,7 @@ final class ActionDepartment{
             self.timers.append(tuple)
         case .toggleShowMoveCursorView:
             let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
-                Store.shared.toggleShowMoveCursorView()
+                VariableStates.shared.showMoveCursorView.toggle()
             })
             let tuple = (type: action, timer: timer)
             self.timers.append(tuple)

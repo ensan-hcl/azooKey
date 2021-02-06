@@ -11,7 +11,6 @@ import SwiftUI
 
 private final class ResultModelVariableSection: ObservableObject{
     @Published fileprivate var results: [ResultData] = []
-    @Published fileprivate var showMoveCursorView = false
     @Published fileprivate var scrollViewProxy: ScrollViewProxy? = nil
 }
 
@@ -24,6 +23,8 @@ struct ResultView: View{
     private let model: ResultModel
     @ObservedObject private var modelVariableSection: ResultModelVariableSection
     @ObservedObject private var sharedResultData: SharedResultData
+    @ObservedObject private var variableStates = VariableStates.shared
+
     @Binding private var isResultViewExpanded: Bool
 
     init(model: ResultModel, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData){
@@ -35,7 +36,7 @@ struct ResultView: View{
 
     var body: some View {
         Group{[unowned modelVariableSection] in
-            if modelVariableSection.showMoveCursorView{
+            if variableStates.showMoveCursorView{
                 CursorMoveView()
             }else{
                 HStack{
@@ -127,16 +128,6 @@ struct ResultModel{
         }else{
             debug("proxyが失われていて、先頭にスクロールできませんでした")
         }
-    }
-
-    func showMoveCursorView(_ bool: Bool){
-        if self.variableSection.showMoveCursorView != bool{
-            self.variableSection.showMoveCursorView = bool
-        }
-    }
-
-    func toggleShowMoveCursorView(){
-        self.variableSection.showMoveCursorView.toggle()
     }
 }
 
