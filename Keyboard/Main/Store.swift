@@ -68,7 +68,7 @@ final class VariableStates: ObservableObject{
             VariableStates.shared.keyboardLanguage = .japanese
         }
         VariableStates.shared.tabState = state
-        Store.shared.setKeyboardType(for: state)    //FIXME: これはStoreに依存するので良くない。
+        self.setKeyboardType(for: state)    //FIXME: これはStoreに依存するので良くない。
     }
 
     func setUIReturnKeyType(type: UIReturnKeyType){
@@ -88,12 +88,32 @@ final class VariableStates: ObservableObject{
         }
         self.keyboardOrientation = orientation
     }
+
+
+    func setKeyboardType(for tab: TabState){
+        let japaneseLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
+        let type: KeyboardLayout
+        switch tab{
+        case .hira:
+            type = japaneseLayout
+        case .abc:
+            type = SettingData.shared.keyboardLayout(for: .englishKeyboardLayout)
+        default:
+            type = Design.shared.layout
+        }
+        Store.shared.inputStyle = japaneseLayout == .flick ? .direct : .roman
+        if type != Design.shared.layout{
+            Design.shared.layout = type
+            VariableStates.shared.refreshView()
+            return
+        }
+    }
 }
 
 ///ビュー間の情報の受け渡しを担うクラス
 final class Store{
     static let shared = Store()
-    private(set) var inputStyle: InputStyle = .direct
+    var inputStyle: InputStyle = .direct
     private(set) var resultModel = ResultModel()
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     private(set) var action = ActionDepartment()
@@ -133,25 +153,6 @@ final class Store{
 
     fileprivate func registerResult(_ result: [Candidate]){
         self.resultModel.setResults(result)
-    }
-
-    func setKeyboardType(for tab: TabState){
-        let japaneseLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
-        let type: KeyboardLayout
-        switch tab{
-        case .hira:
-            type = japaneseLayout
-        case .abc:
-            type = SettingData.shared.keyboardLayout(for: .englishKeyboardLayout)
-        default:
-            type = Design.shared.layout
-        }
-        self.inputStyle = japaneseLayout == .flick ? .direct : .roman
-        if type != Design.shared.layout{
-            Design.shared.layout = type
-            VariableStates.shared.refreshView()
-            return
-        }
     }
 
     func closeKeyboard(){
