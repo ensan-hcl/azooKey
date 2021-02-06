@@ -58,6 +58,13 @@ final class VariableStates: ObservableObject{
         VariableStates.shared.tabState = state
         Store.shared.setKeyboardType(for: state)    //FIXME: これはStoreに依存するので良くない。
     }
+
+    func setUIReturnKeyType(type: UIReturnKeyType){
+        self.enterKeyType = type
+        if case let .return(prev) = self.enterKeyState, prev != type{
+            self.setEnterKeyState(.return)
+        }
+    }
 }
 
 ///ビュー間の情報の受け渡しを担うクラス
@@ -201,13 +208,6 @@ final class Store{
         Design.shared.orientation = orientation
         self.refreshKeyboardModel()
         self.keyboardModelVariableSection.keyboardOrientation = orientation
-    }
-
-    func setUIReturnKeyType(type: UIReturnKeyType){
-        VariableStates.shared.enterKeyType = type
-        if case let .return(prev) = VariableStates.shared.enterKeyState, prev != type{
-            VariableStates.shared.setEnterKeyState(.return)
-        }
     }
 
     func setKeyboardType(for tab: TabState){
