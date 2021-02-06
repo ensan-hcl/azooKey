@@ -24,6 +24,7 @@ final class SemiStaticStates{
 final class VariableStates: ObservableObject{
     static let shared = VariableStates()
     private var lastVerticalTabState: TabState? = nil
+    var inputStyle: InputStyle = .direct
 
     private init(){}
 
@@ -100,7 +101,6 @@ final class VariableStates: ObservableObject{
         self.keyboardOrientation = orientation
     }
 
-
     func setKeyboardType(for tab: TabState){
         let japaneseLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
         let type: KeyboardLayout
@@ -112,24 +112,21 @@ final class VariableStates: ObservableObject{
         default:
             type = Design.shared.layout
         }
-        Store.shared.inputStyle = japaneseLayout == .flick ? .direct : .roman   //FIXME: これはStoreに依存するので良くない。
+        self.inputStyle = japaneseLayout == .flick ? .direct : .roman
         if type != Design.shared.layout{
             Design.shared.layout = type
-            VariableStates.shared.refreshView()
+            self.refreshView()
             return
         }
     }
 }
 
-///ビュー間の情報の受け渡しを担うクラス
+///何者だ？
 final class Store{
     static let shared = Store()
-    var inputStyle: InputStyle = .direct
     private(set) var resultModel = ResultModel()
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     private(set) var action = ActionDepartment()
-
-    let feedbackGenerator = UINotificationFeedbackGenerator()
 
     private init(){}
     
@@ -566,7 +563,7 @@ private final class InputManager{
     }
 
     private var isRomanKanaInputMode: Bool {
-        switch Store.shared.inputStyle{
+        switch VariableStates.shared.inputStyle{
         case .direct:
             return false
         case .roman:
@@ -593,7 +590,7 @@ private final class InputManager{
         }
         self.isSelected = false
 
-        switch Store.shared.inputStyle{
+        switch VariableStates.shared.inputStyle{
         case .direct:
             self.directConverter.updateLearningData(candidate)
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.correspondingCount))
@@ -662,7 +659,7 @@ private final class InputManager{
             ]
         )
         let actions: [ActionType]
-        switch Store.shared.inputStyle{
+        switch VariableStates.shared.inputStyle{
         case .direct:
             actions = self.directConverter.getApporopriateActions(_candidate)
             let candidate = _candidate.withActions(actions)
@@ -685,7 +682,7 @@ private final class InputManager{
 
             self.inputtedText = text
             self.kanaRomanStateHolder = KanaRomanStateHolder()
-            switch Store.shared.inputStyle{
+            switch VariableStates.shared.inputStyle{
             case .direct:
                 break
             case .roman:
@@ -721,7 +718,7 @@ private final class InputManager{
         let leftSideText = inputtedText.prefix(cursorPosition)
         let rightSideText = inputtedText.dropFirst(cursorPosition)
         
-        switch Store.shared.inputStyle{
+        switch VariableStates.shared.inputStyle{
         case .direct:
             self.inputtedText = leftSideText + text + rightSideText
             self.proxy.insertText(text)
@@ -764,7 +761,7 @@ private final class InputManager{
         (0..<count).forEach{_ in
             self.proxy.deleteBackward()
         }
-        if Store.shared.inputStyle == .roman{
+        if VariableStates.shared.inputStyle == .roman{
             //ステートホルダーを調整する
             self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition))
         }
@@ -1011,7 +1008,7 @@ private final class InputManager{
             case .convertInput:
                 let input_hira = self.inputtedText.prefix(self.cursorPosition)
                 let result: [Candidate]
-                switch Store.shared.inputStyle{
+                switch VariableStates.shared.inputStyle{
                 case .direct:
                     let inputData = DirectInputData(String(input_hira))
                     result = self.directConverter.requestCandidates(inputData, N_best: 10)

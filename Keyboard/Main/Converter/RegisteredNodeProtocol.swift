@@ -102,7 +102,7 @@ extension RegisteredNodeProtocol{
             }
             //前の文節の処理
             lastClause.nextLcid = self.data.lcid
-            switch Store.shared.inputStyle{
+            switch VariableStates.shared.inputStyle{
             case .direct:
                 break
             case .roman:

@@ -27,7 +27,7 @@ protocol LatticeNodeProtocol: class {
 extension LatticeNodeProtocol{
     func getCandidateData() -> [CandidateData] {
         let result = self.prevs.map{$0.getCandidateData()}
-        switch Store.shared.inputStyle{
+        switch VariableStates.shared.inputStyle{
         case .direct:
             break
         case .roman:
