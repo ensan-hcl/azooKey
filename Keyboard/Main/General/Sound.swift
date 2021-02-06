@@ -13,7 +13,7 @@ import AudioToolbox
 /// 音を鳴らすためのツールセット
 ///  - important: staticでない関数を追加する際は一考せよ。
 struct Sound{
-    private init()
+    private init(){}
     //使えそうな音
     /* i
      1103: 高いクリック音

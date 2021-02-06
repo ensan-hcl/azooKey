@@ -9,7 +9,7 @@
 import Foundation
 
 struct FileTools{
-    private init()
+    private init(){}
 
     static func saveTextFile(contents: String, to fileName: String, for ex: String = "txt"){
         do {
