@@ -37,6 +37,12 @@ final class VariableStates: ObservableObject{
 
     @Published var showMoveCursorView = false
 
+    @Published var refreshing = true
+    
+    func refreshView(){
+        refreshing.toggle()
+    }
+
     fileprivate enum RoughEnterKeyState{
         case `return`
         case edit
@@ -77,7 +83,7 @@ final class VariableStates: ObservableObject{
     ///* if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
     func setOrientation(_ orientation: KeyboardOrientation){
         if self.keyboardOrientation == orientation{
-            Store.shared.keyboardModelVariableSection.refreshView()    //FIXME: これはStoreに依存するので良くない。
+            self.refreshView()
             return
         }
         self.keyboardOrientation = orientation
@@ -95,10 +101,8 @@ final class Store{
     let feedbackGenerator = UINotificationFeedbackGenerator()
     
     fileprivate var lastVerticalTabState: TabState? = nil
-    private(set) var keyboardModelVariableSection: KeyboardModelVariableSection   //ビューに関わる部分
-    private init(){
-        self.keyboardModelVariableSection = self.keyboardViewModel.variableSection
-    }
+
+    private init(){}
     
     func initialize(){
         SettingData.shared.reload()
@@ -145,7 +149,7 @@ final class Store{
         self.inputStyle = japaneseLayout == .flick ? .direct : .roman
         if type != Design.shared.layout{
             Design.shared.layout = type
-            self.keyboardModelVariableSection.refreshView()
+            VariableStates.shared.refreshView()
             return
         }
     }

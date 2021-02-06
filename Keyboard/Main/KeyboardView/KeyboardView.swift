@@ -25,21 +25,12 @@ enum TabState: Equatable{
         }
     }
 }
-//Storeからアクセス出来るべきデータ。
-final class KeyboardModelVariableSection: ObservableObject{
-    @Published var refreshing = true
-    func refreshView(){
-        refreshing.toggle()
-    }
-}
 
 struct KeyboardModel {
     let resultModel = ResultModel()
-    let variableSection: KeyboardModelVariableSection = KeyboardModelVariableSection()
 }
 
 struct KeyboardView: View {
-    @ObservedObject private var modelVariableSection: KeyboardModelVariableSection
     @ObservedObject private var variableStates = VariableStates.shared
     private let model: KeyboardModel
 
@@ -50,11 +41,10 @@ struct KeyboardView: View {
 
     init(){
         self.model = Store.shared.keyboardViewModel
-        self.modelVariableSection = self.model.variableSection
     }
 
     var body: some View {
-        ZStack{[unowned modelVariableSection] in
+        ZStack{
             Design.shared.colors.backGroundColor
                 .frame(maxWidth: .infinity)
                 .overlay(
@@ -75,7 +65,7 @@ struct KeyboardView: View {
                 VStack(spacing: 0){
                     ResultView(model: model.resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
-                    if modelVariableSection.refreshing{
+                    if variableStates.refreshing{
                         switch (variableStates.keyboardOrientation, Design.shared.layout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView()
