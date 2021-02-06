@@ -83,7 +83,6 @@ final class KeyboardViewController: UIInputViewController {
         return view
     }
 
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Store.shared.closeKeyboard()

@@ -12,6 +12,11 @@ struct ThemeTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
 
     var body: some View {
+        KeyboardPreview()
+            .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardHeight)
+            .scaleEffect(0.5)
+
+        /*
         NavigationView {
             Form {
                 Section(header: Text("作る")){
@@ -19,9 +24,9 @@ struct ThemeTabView: View {
                 }
             }
             .navigationBarTitle(Text("着せ替え"), displayMode: .large)
-
-        }
+                    }
         .navigationViewStyle(StackNavigationViewStyle())
         .font(.body)
+ */
     }
 }
