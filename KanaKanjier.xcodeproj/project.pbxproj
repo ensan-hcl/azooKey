@@ -757,7 +757,7 @@
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
 		1A26029D2514808D00EAD647 /* QwertyKeyModelVariableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029C2514808D00EAD647 /* QwertyKeyModelVariableSection.swift */; };
-		1A2602A42514820300EAD647 /* VerticalQwertyKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602A32514820300EAD647 /* VerticalQwertyKeyboardModel.swift */; };
+		1A2602A42514820300EAD647 /* VerticalQwertyDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602A32514820300EAD647 /* VerticalQwertyDataProvider.swift */; };
 		1A2602AE251489C700EAD647 /* QwertyKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602AD251489C700EAD647 /* QwertyKeyModelProtocol.swift */; };
 		1A2602B4251489E500EAD647 /* QwertySpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602B3251489E400EAD647 /* QwertySpaceKeyModel.swift */; };
 		1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602BD25148BB100EAD647 /* QwertyEnterKeyModel.swift */; };
@@ -787,9 +787,9 @@
 		1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2062500D4FF002CAA93 /* Store.swift */; };
 		1A3DC20A2500D51F002CAA93 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1A3DC20C2500D53B002CAA93 /* VerticalFlickKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20B2500D53B002CAA93 /* VerticalFlickKeyboardView.swift */; };
-		1A3DC20E2500D55F002CAA93 /* VerticalFlickKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20D2500D55F002CAA93 /* VerticalFlickKeyboardModel.swift */; };
+		1A3DC20E2500D55F002CAA93 /* VerticalFlickDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20D2500D55F002CAA93 /* VerticalFlickDataProvider.swift */; };
 		1A3DC2102500D571002CAA93 /* HorizontalKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */; };
-		1A3DC2122500D586002CAA93 /* HorizontalFlickKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2112500D586002CAA93 /* HorizontalFlickKeyboardModel.swift */; };
+		1A3DC2122500D586002CAA93 /* HorizontalFlickDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2112500D586002CAA93 /* HorizontalFlickDataProvider.swift */; };
 		1A3DC2152500D59F002CAA93 /* FlickKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2142500D59F002CAA93 /* FlickKeyView.swift */; };
 		1A3DC2172500D5AB002CAA93 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2162500D5AB002CAA93 /* Action.swift */; };
 		1A3DC2192500D5C1002CAA93 /* KeyModelVariableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2182500D5C1002CAA93 /* KeyModelVariableSection.swift */; };
@@ -2310,7 +2310,7 @@
 		1AE4DB7C25163C6B00A24158 /* DirectInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */; };
 		1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB852516D0D600A24158 /* RomanInputData.swift */; };
 		1AE4DBC02518578200A24158 /* HorizontalQwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBBF2518578200A24158 /* HorizontalQwertyKeyboardView.swift */; };
-		1AE4DBC6251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBC5251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift */; };
+		1AE4DBC6251857AA00A24158 /* HorizontalQwertyDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBC5251857AA00A24158 /* HorizontalQwertyDataProvider.swift */; };
 		1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */; };
 		1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */; };
 		1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
@@ -3156,7 +3156,7 @@
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
 		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
 		1A26029C2514808D00EAD647 /* QwertyKeyModelVariableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModelVariableSection.swift; sourceTree = "<group>"; };
-		1A2602A32514820300EAD647 /* VerticalQwertyKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalQwertyKeyboardModel.swift; sourceTree = "<group>"; };
+		1A2602A32514820300EAD647 /* VerticalQwertyDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalQwertyDataProvider.swift; sourceTree = "<group>"; };
 		1A2602AD251489C700EAD647 /* QwertyKeyModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModelProtocol.swift; sourceTree = "<group>"; };
 		1A2602B3251489E400EAD647 /* QwertySpaceKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySpaceKeyModel.swift; sourceTree = "<group>"; };
 		1A2602BD25148BB100EAD647 /* QwertyEnterKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyEnterKeyModel.swift; sourceTree = "<group>"; };
@@ -3191,9 +3191,9 @@
 		1A3DC2062500D4FF002CAA93 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		1A3DC2092500D51F002CAA93 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		1A3DC20B2500D53B002CAA93 /* VerticalFlickKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalFlickKeyboardView.swift; sourceTree = "<group>"; };
-		1A3DC20D2500D55F002CAA93 /* VerticalFlickKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalFlickKeyboardModel.swift; sourceTree = "<group>"; };
+		1A3DC20D2500D55F002CAA93 /* VerticalFlickDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalFlickDataProvider.swift; sourceTree = "<group>"; };
 		1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalKeyboardView.swift; sourceTree = "<group>"; };
-		1A3DC2112500D586002CAA93 /* HorizontalFlickKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalFlickKeyboardModel.swift; sourceTree = "<group>"; };
+		1A3DC2112500D586002CAA93 /* HorizontalFlickDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalFlickDataProvider.swift; sourceTree = "<group>"; };
 		1A3DC2142500D59F002CAA93 /* FlickKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKeyView.swift; sourceTree = "<group>"; };
 		1A3DC2162500D5AB002CAA93 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		1A3DC2182500D5C1002CAA93 /* KeyModelVariableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyModelVariableSection.swift; sourceTree = "<group>"; };
@@ -4707,7 +4707,7 @@
 		1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectInputData.swift; sourceTree = "<group>"; };
 		1AE4DB852516D0D600A24158 /* RomanInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanInputData.swift; sourceTree = "<group>"; };
 		1AE4DBBF2518578200A24158 /* HorizontalQwertyKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalQwertyKeyboardView.swift; sourceTree = "<group>"; };
-		1AE4DBC5251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalQwertyKeyboardModel.swift; sourceTree = "<group>"; };
+		1AE4DBC5251857AA00A24158 /* HorizontalQwertyDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalQwertyDataProvider.swift; sourceTree = "<group>"; };
 		1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListView.swift; sourceTree = "<group>"; };
 		1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateEditingView.swift; sourceTree = "<group>"; };
 		1AE70BF0258E5798009B9B8B /* TemplateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateData.swift; sourceTree = "<group>"; };
@@ -5703,9 +5703,9 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC20B2500D53B002CAA93 /* VerticalFlickKeyboardView.swift */,
-				1A3DC20D2500D55F002CAA93 /* VerticalFlickKeyboardModel.swift */,
+				1A3DC20D2500D55F002CAA93 /* VerticalFlickDataProvider.swift */,
 				1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */,
-				1A3DC2112500D586002CAA93 /* HorizontalFlickKeyboardModel.swift */,
+				1A3DC2112500D586002CAA93 /* HorizontalFlickDataProvider.swift */,
 				1A58AAFF2502905F00EB1864 /* SuggestView */,
 				1A3DC2132500D595002CAA93 /* KeyView */,
 			);
@@ -7279,9 +7279,9 @@
 			children = (
 				1A86F47F2535643C00B92B49 /* QwertyKeyboard.swift */,
 				1A6F959625144481007399AC /* VerticalQwertyKeyboardView.swift */,
-				1A2602A32514820300EAD647 /* VerticalQwertyKeyboardModel.swift */,
+				1A2602A32514820300EAD647 /* VerticalQwertyDataProvider.swift */,
 				1AE4DBBF2518578200A24158 /* HorizontalQwertyKeyboardView.swift */,
-				1AE4DBC5251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift */,
+				1AE4DBC5251857AA00A24158 /* HorizontalQwertyDataProvider.swift */,
 				1A2602A2251481E600EAD647 /* KeyView */,
 			);
 			path = QwertyKeyboard;
@@ -10004,8 +10004,8 @@
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,
 				1AF678A125CDA07A00F3987B /* SettingData.swift in Sources */,
-				1A3DC20E2500D55F002CAA93 /* VerticalFlickKeyboardModel.swift in Sources */,
-				1A2602A42514820300EAD647 /* VerticalQwertyKeyboardModel.swift in Sources */,
+				1A3DC20E2500D55F002CAA93 /* VerticalFlickDataProvider.swift in Sources */,
+				1A2602A42514820300EAD647 /* VerticalQwertyDataProvider.swift in Sources */,
 				1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */,
 				1A8A8404250F65410093A701 /* added_last_1_character.swift in Sources */,
 				1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */,
@@ -10024,7 +10024,7 @@
 				1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,
 				1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */,
-				1A3DC2122500D586002CAA93 /* HorizontalFlickKeyboardModel.swift in Sources */,
+				1A3DC2122500D586002CAA93 /* HorizontalFlickDataProvider.swift in Sources */,
 				1AA3469F2567F08100B41A16 /* KeyboardLayout.swift in Sources */,
 				1A677370256F7AC30037AF22 /* Sound.swift in Sources */,
 				1AFA57542582EFAE00477DC2 /* QwertyAaKeyModel.swift in Sources */,
@@ -10052,7 +10052,7 @@
 				1A2602F42514FB6E00EAD647 /* VariationsModel.swift in Sources */,
 				1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */,
 				1AA346A42567F12A00B41A16 /* LearningType.swift in Sources */,
-				1AE4DBC6251857AA00A24158 /* HorizontalQwertyKeyboardModel.swift in Sources */,
+				1AE4DBC6251857AA00A24158 /* HorizontalQwertyDataProvider.swift in Sources */,
 				1A86F4802535643C00B92B49 /* QwertyKeyboard.swift in Sources */,
 				1A2602AE251489C700EAD647 /* QwertyKeyModelProtocol.swift in Sources */,
 				1A3DC22A2500D65C002CAA93 /* extension CGPoint.swift in Sources */,

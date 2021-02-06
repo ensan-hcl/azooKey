@@ -78,24 +78,24 @@ struct KeyboardView: View {
                     if modelVariableSection.refreshing{
                         switch (modelVariableSection.keyboardOrientation, Design.shared.layout){
                         case (.vertical, .flick):
-                            VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
+                            VerticalFlickKeyboardView()
                         case (.vertical, .qwerty):
-                            VerticalQwertyKeyboardView(Store.shared.keyboardModel as! VerticalQwertyKeyboardModel)
+                            VerticalQwertyKeyboardView()
                         case (.horizontal, .flick):
-                            HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
+                            HorizontalKeyboardView()
                         case (.horizontal, .qwerty):
-                            HorizontalQwertyKeyboardView(Store.shared.keyboardModel as! HorizontalQwertyKeyboardModel)
+                            HorizontalQwertyKeyboardView()
                         }
                     }else{
                         switch (modelVariableSection.keyboardOrientation, Design.shared.layout){
                         case (.vertical, .flick):
-                            VerticalFlickKeyboardView(Store.shared.keyboardModel as! VerticalFlickKeyboardModel)
+                            VerticalFlickKeyboardView()
                         case (.vertical, .qwerty):
-                            VerticalQwertyKeyboardView(Store.shared.keyboardModel as! VerticalQwertyKeyboardModel)
+                            VerticalQwertyKeyboardView()
                         case (.horizontal, .flick):
-                            HorizontalKeyboardView(Store.shared.keyboardModel as! HorizontalFlickKeyboardModel)
+                            HorizontalKeyboardView()
                         case (.horizontal, .qwerty):
-                            HorizontalQwertyKeyboardView(Store.shared.keyboardModel as! HorizontalQwertyKeyboardModel)
+                            HorizontalQwertyKeyboardView()
                         }
                     }
                 }.padding(.bottom, 2)

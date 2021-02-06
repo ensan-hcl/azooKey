@@ -79,7 +79,6 @@ final class Store{
     
     fileprivate var lastVerticalTabState: TabState? = nil
     private(set) var keyboardModelVariableSection: KeyboardModelVariableSection   //ビューに関わる部分
-    private(set) var keyboardModel: KeyboardDataProviderProtocol = VerticalFlickKeyboardModel()
     private init(){
         self.keyboardModelVariableSection = self.keyboardViewModel.variableSection
     }
@@ -92,7 +91,6 @@ final class Store{
             lastVerticalTabState = nil
         }
         self.setKeyboardType(for: VariableStates.shared.tabState)
-        self.refreshKeyboardModel()
     }
 
     func appearedAgain(){
@@ -157,27 +155,6 @@ final class Store{
         }
     }
 
-    fileprivate func refreshKeyboardModel(absolutely: Bool = false){
-        switch (Design.shared.layout, Design.shared.orientation){
-        case (.flick, .vertical):
-            if absolutely || !(self.keyboardModel is VerticalFlickKeyboardModel){
-                self.keyboardModel = VerticalFlickKeyboardModel()
-            }
-        case (.flick, .horizontal):
-            if absolutely || !(self.keyboardModel is HorizontalFlickKeyboardModel){
-                self.keyboardModel = HorizontalFlickKeyboardModel()
-            }
-        case (.qwerty, .vertical):
-            if absolutely || !(self.keyboardModel is VerticalQwertyKeyboardModel){
-                self.keyboardModel = VerticalQwertyKeyboardModel()
-            }
-        case (.qwerty, .horizontal):
-            if absolutely || !(self.keyboardModel is HorizontalQwertyKeyboardModel){
-                self.keyboardModel = HorizontalQwertyKeyboardModel()
-            }
-        }
-    }
-    
     fileprivate func showMoveCursorView(_ bool: Bool){
         self.keyboardViewModel.resultModel.showMoveCursorView(bool)
     }
@@ -200,13 +177,11 @@ final class Store{
     ///* if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
     func setOrientation(_ orientation: KeyboardOrientation){
         if Design.shared.orientation == orientation{
-            self.refreshKeyboardModel()
             self.keyboardModelVariableSection.keyboardOrientation = orientation
             self.keyboardModelVariableSection.refreshView()
             return
         }
         Design.shared.orientation = orientation
-        self.refreshKeyboardModel()
         self.keyboardModelVariableSection.keyboardOrientation = orientation
     }
 
@@ -224,7 +199,6 @@ final class Store{
         self.inputStyle = japaneseLayout == .flick ? .direct : .roman
         if type != Design.shared.layout{
             Design.shared.layout = type
-            self.refreshKeyboardModel()
             self.keyboardModelVariableSection.refreshView()
             return
         }

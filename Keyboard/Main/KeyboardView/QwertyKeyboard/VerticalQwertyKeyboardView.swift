@@ -9,14 +9,9 @@
 import Foundation
 import SwiftUI
 
-
 struct VerticalQwertyKeyboardView: View{
-    private let model: VerticalQwertyKeyboardModel
+    private let model = VerticalQwertyDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
-
-    init(_ model: VerticalQwertyKeyboardModel){
-        self.model = model
-    }
     
     private var verticalIndices: Range<Int> {
         switch variableStates.tabState{

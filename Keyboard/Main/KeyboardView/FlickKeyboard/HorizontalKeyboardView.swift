@@ -14,13 +14,9 @@ fileprivate enum KeyboardAlignment{
 }
 //V=VM
 struct HorizontalKeyboardView: View {
-    private let model: HorizontalFlickKeyboardModel
+    private let model = HorizontalFlickDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
     @State private var alignmnet: KeyboardAlignment = .center
-    
-    init(_ model: HorizontalFlickKeyboardModel){
-        self.model = model
-    }
 
     private var horizontalIndices: Range<Int> {
         switch variableStates.tabState{

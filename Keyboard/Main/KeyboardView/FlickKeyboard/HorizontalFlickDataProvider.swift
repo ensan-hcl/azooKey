@@ -1,5 +1,5 @@
 //
-//  KeyboardModel.swift
+//  HorizontalFlickDataProvider.swift
 //  Keyboard
 //
 //  Created by β α on 2020/04/12.
@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 //M：基本は変わらない
-struct HorizontalFlickKeyboardModel: KeyboardDataProviderProtocol {
+struct HorizontalFlickDataProvider: KeyboardDataProviderProtocol {
     //縦に並べる
     var hiraKeyboard:[[FlickKeyModelProtocol]] = [
         //第1列

@@ -10,12 +10,8 @@ import Foundation
 import SwiftUI
 
 struct VerticalFlickKeyboardView: View{
-    private let model: VerticalFlickKeyboardModel
+    private let model = VerticalFlickDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
-
-    init(_ model: VerticalFlickKeyboardModel, size: CGSize? = nil){
-        self.model = model
-    }
     
     private var horizontalIndices: Range<Int> {
         switch variableStates.tabState{

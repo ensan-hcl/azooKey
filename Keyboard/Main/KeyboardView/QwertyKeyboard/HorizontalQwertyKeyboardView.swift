@@ -10,12 +10,8 @@ import Foundation
 import SwiftUI
 
 struct HorizontalQwertyKeyboardView: View{
-    private let model: HorizontalQwertyKeyboardModel
+    private let model = HorizontalQwertyDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
-
-    init(_ model: HorizontalQwertyKeyboardModel){
-        self.model = model
-    }
     
     private var verticalIndices: Range<Int> {
         switch variableStates.tabState{

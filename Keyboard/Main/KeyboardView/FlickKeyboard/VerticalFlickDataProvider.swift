@@ -9,9 +9,8 @@
 import Foundation
 import SwiftUI
 
-
 //M：基本は変わらないx
-struct VerticalFlickKeyboardModel: KeyboardDataProviderProtocol {
+struct VerticalFlickDataProvider: KeyboardDataProviderProtocol {
     //縦に並べる
     var hiraKeyboard:[[FlickKeyModelProtocol]] = [
         //第1列
