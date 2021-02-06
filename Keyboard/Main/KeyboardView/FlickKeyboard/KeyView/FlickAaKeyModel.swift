@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct FlickAaKeyModel: FlickKeyModelProtocol, AaKeyModelProtocol{
+struct FlickAaKeyModel: FlickKeyModelProtocol{
     let needSuggestView: Bool = true
 
     static let shared = FlickAaKeyModel()
@@ -59,9 +59,5 @@ struct FlickAaKeyModel: FlickKeyModelProtocol, AaKeyModelProtocol{
         case .capslock:
             return Design.shared.colors.specialKeyColor
         }
-    }
-
-    func setKeyState(new state: AaKeyState) {
-        VariableStates.shared.aAKeyState = state
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct QwertyAaKeyModel: QwertyKeyModelProtocol, AaKeyModelProtocol{
+struct QwertyAaKeyModel: QwertyKeyModelProtocol{
     static var shared = QwertyAaKeyModel()
 
     var variableSection = QwertyKeyModelVariableSection()
@@ -50,10 +50,6 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol, AaKeyModelProtocol{
 
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         return Design.shared.colors.specialKeyColor
-    }
-
-    func setKeyState(new state: AaKeyState){
-        VariableStates.shared.aAKeyState = state
     }
 
     func sound() {

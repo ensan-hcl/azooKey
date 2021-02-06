@@ -13,7 +13,6 @@ final class HorizontalQwertyKeyboardModelVariableSection: ObservableObject{
 
 struct HorizontalQwertyKeyboardModel: KeyboardModelProtocol{
     let enterKeyModel: EnterKeyModelProtocol = QwertyEnterKeyModel.shared
-    let aAKeyModel: AaKeyModelProtocol = QwertyAaKeyModel.shared
     var variableSection = HorizontalQwertyKeyboardModelVariableSection()
     
     func setTabState(state: TabState){

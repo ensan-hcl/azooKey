@@ -165,11 +165,6 @@ final class Store{
         case complete
     }
 
-    fileprivate func setAaKeyState(_ state: AaKeyState){
-        self.keyboardModel.aAKeyModel.setKeyState(new: state)
-        VariableStates.shared.aAKeyState = state
-    }
-    
     fileprivate func setEnterKeyState(_ state: RoughEnterKeyState){
         switch state{
         case .return:
@@ -333,9 +328,8 @@ final class ActionDepartment{
             }
         case let .moveCursor(count):
             self.inputManager.moveCursor(count: count)
-            //self.openApp(scheme: "azooKey://")
         case let .changeCapsLockState(state):
-            Store.shared.setAaKeyState(state)
+            VariableStates.shared.aAKeyState = state
         case .toggleShowMoveCursorView:
             Store.shared.toggleShowMoveCursorView()
 
@@ -442,7 +436,7 @@ final class ActionDepartment{
             self.timers.append(tuple)
         case let .changeCapsLockState(state):
             let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
-                Store.shared.setAaKeyState(state)
+                VariableStates.shared.aAKeyState = state
             })
             let tuple = (type: action, timer: timer)
             self.timers.append(tuple)

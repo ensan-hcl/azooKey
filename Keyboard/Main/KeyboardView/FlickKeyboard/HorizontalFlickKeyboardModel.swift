@@ -20,7 +20,6 @@ struct HorizontalFlickKeyboardModel: KeyboardModelProtocol{
     var variableSection = HorizontalKeyboardModelVariableSection()
 
     let enterKeyModel: EnterKeyModelProtocol = FlickEnterKeyModel.shared
-    let aAKeyModel: AaKeyModelProtocol = FlickAaKeyModel.shared
     let hiraTabKeyModel = TabKeyModel.hiraTabKeyModel
     let abcTabKeyModel = TabKeyModel.abcTabKeyModel
     let numberTabKeyModel = TabKeyModel.numberTabKeyModel
