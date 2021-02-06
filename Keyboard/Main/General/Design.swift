@@ -16,7 +16,9 @@ final class Design{
     var orientation: KeyboardOrientation {
         VariableStates.shared.keyboardOrientation
     }
-    var layout: KeyboardLayout = .flick
+    var layout: KeyboardLayout {
+        VariableStates.shared.keyboardLayout
+    }
 
     var themeManager = ThemeManager()
 

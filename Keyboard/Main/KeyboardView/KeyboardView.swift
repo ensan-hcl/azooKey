@@ -62,7 +62,7 @@ struct KeyboardView: View {
                     ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if variableStates.refreshing{
-                        switch (variableStates.keyboardOrientation, Design.shared.layout){
+                        switch (variableStates.keyboardOrientation, variableStates.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView()
                         case (.vertical, .qwerty):
@@ -73,7 +73,7 @@ struct KeyboardView: View {
                             HorizontalQwertyKeyboardView()
                         }
                     }else{
-                        switch (variableStates.keyboardOrientation, Design.shared.layout){
+                        switch (variableStates.keyboardOrientation, variableStates.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView()
                         case (.vertical, .qwerty):

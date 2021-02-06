@@ -30,6 +30,8 @@ final class VariableStates: ObservableObject{
 
     @Published var keyboardLanguage: KeyboardLanguage = .japanese
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
+    @Published var keyboardLayout: KeyboardLayout = .flick
+
     @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
@@ -113,8 +115,8 @@ final class VariableStates: ObservableObject{
             type = Design.shared.layout
         }
         self.inputStyle = japaneseLayout == .flick ? .direct : .roman
-        if type != Design.shared.layout{
-            Design.shared.layout = type
+        if self.keyboardLayout != type{
+            self.keyboardLayout = type
             self.refreshView()
             return
         }
