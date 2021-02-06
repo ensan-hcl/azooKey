@@ -68,7 +68,7 @@ final class VariableStates: ObservableObject{
             VariableStates.shared.keyboardLanguage = .japanese
         }
         VariableStates.shared.tabState = state
-        self.setKeyboardType(for: state)    //FIXME: これはStoreに依存するので良くない。
+        self.setKeyboardType(for: state)
     }
 
     func setUIReturnKeyType(type: UIReturnKeyType){
@@ -101,7 +101,7 @@ final class VariableStates: ObservableObject{
         default:
             type = Design.shared.layout
         }
-        Store.shared.inputStyle = japaneseLayout == .flick ? .direct : .roman
+        Store.shared.inputStyle = japaneseLayout == .flick ? .direct : .roman   //FIXME: これはStoreに依存するので良くない。
         if type != Design.shared.layout{
             Design.shared.layout = type
             VariableStates.shared.refreshView()
