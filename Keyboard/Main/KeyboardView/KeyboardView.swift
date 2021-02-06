@@ -27,9 +27,6 @@ enum TabState: Equatable{
 }
 //Storeからアクセス出来るべきデータ。
 final class KeyboardModelVariableSection: ObservableObject{
-    @Published var keyboardOrientation: KeyboardOrientation = .vertical
-    @Published var isTextMagnifying = false
-    @Published var magnifyingText = ""
     @Published var refreshing = true
     func refreshView(){
         refreshing.toggle()
@@ -43,9 +40,12 @@ struct KeyboardModel {
 
 struct KeyboardView: View {
     @ObservedObject private var modelVariableSection: KeyboardModelVariableSection
+    @ObservedObject private var variableStates = VariableStates.shared
     private let model: KeyboardModel
+
     @State private var messageManager: MessageManager = MessageManager()
-    @State private var isResultViewExpanded: Bool = false
+    @State private var isResultViewExpanded = false
+
     private var sharedResultData = SharedResultData()
 
     init(){
@@ -76,7 +76,7 @@ struct KeyboardView: View {
                     ResultView(model: model.resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if modelVariableSection.refreshing{
-                        switch (modelVariableSection.keyboardOrientation, Design.shared.layout){
+                        switch (variableStates.keyboardOrientation, Design.shared.layout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView()
                         case (.vertical, .qwerty):
@@ -87,7 +87,7 @@ struct KeyboardView: View {
                             HorizontalQwertyKeyboardView()
                         }
                     }else{
-                        switch (modelVariableSection.keyboardOrientation, Design.shared.layout){
+                        switch (variableStates.keyboardOrientation, Design.shared.layout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView()
                         case (.vertical, .qwerty):
@@ -100,8 +100,8 @@ struct KeyboardView: View {
                     }
                 }.padding(.bottom, 2)
             }
-            if modelVariableSection.isTextMagnifying{
-                LargeTextView(modelVariableSection.magnifyingText, isTextMagnifying: $modelVariableSection.isTextMagnifying)
+            if variableStates.isTextMagnifying{
+                LargeTextView()
             }
             
             ForEach(messageManager.necessaryMessages, id: \.id){data in

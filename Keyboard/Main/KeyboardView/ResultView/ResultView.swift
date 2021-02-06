@@ -99,11 +99,12 @@ struct ResultView: View{
 
 struct ResultContextMenuView: View {
     let text: String
+    
     var body: some View {
         Group{
             Button(action: {
-                Store.shared.keyboardModelVariableSection.magnifyingText = text
-                Store.shared.keyboardModelVariableSection.isTextMagnifying = true
+                VariableStates.shared.magnifyingText = text
+                VariableStates.shared.isTextMagnifying = true
             }) {
                 Text("大きな文字で表示する")
                 Image(systemName: "plus.magnifyingglass")

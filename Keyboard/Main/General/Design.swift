@@ -13,7 +13,9 @@ final class Design{
     private init(){}
     static let shared = Design()
 
-    var orientation: KeyboardOrientation = .vertical
+    var orientation: KeyboardOrientation {
+        VariableStates.shared.keyboardOrientation
+    }
     var layout: KeyboardLayout = .flick
 
     var themeManager = ThemeManager()
@@ -149,7 +151,7 @@ final class Design{
         }
         self.screenWidth = size.width
         let orientation: KeyboardOrientation = size.width<size.height ? .vertical : .horizontal
-        Store.shared.setOrientation(orientation)
+        VariableStates.shared.setOrientation(orientation)
     }
 
     let colors = Colors.default

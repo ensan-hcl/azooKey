@@ -26,10 +26,14 @@ final class VariableStates: ObservableObject{
     private init(){}
 
     @Published var keyboardLanguage: KeyboardLanguage = .japanese
+    @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
     @Published var tabState: TabState = .hira
+
+    @Published var isTextMagnifying = false
+    @Published var magnifyingText = ""
 
     fileprivate enum RoughEnterKeyState{
         case `return`
@@ -64,6 +68,17 @@ final class VariableStates: ObservableObject{
         if case let .return(prev) = self.enterKeyState, prev != type{
             self.setEnterKeyState(.return)
         }
+    }
+
+    ///workarounds
+    ///* 1回目に値を保存してしまう
+    ///* if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
+    func setOrientation(_ orientation: KeyboardOrientation){
+        if self.keyboardOrientation == orientation{
+            Store.shared.keyboardModelVariableSection.refreshView()    //FIXME: これはStoreに依存するので良くない。
+            return
+        }
+        self.keyboardOrientation = orientation
     }
 }
 
@@ -165,24 +180,6 @@ final class Store{
 
     fileprivate func registerResult(_ result: [Candidate]){
         self.keyboardViewModel.resultModel.setResults(result)
-    }
-
-    func setMagnifyingText(_ text: String){
-        self.keyboardModelVariableSection.magnifyingText = text
-        self.keyboardModelVariableSection.isTextMagnifying = true
-    }
-
-    ///workarounds
-    ///* 1回目に値を保存してしまう
-    ///* if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
-    func setOrientation(_ orientation: KeyboardOrientation){
-        if Design.shared.orientation == orientation{
-            self.keyboardModelVariableSection.keyboardOrientation = orientation
-            self.keyboardModelVariableSection.refreshView()
-            return
-        }
-        Design.shared.orientation = orientation
-        self.keyboardModelVariableSection.keyboardOrientation = orientation
     }
 
     func setKeyboardType(for tab: TabState){
