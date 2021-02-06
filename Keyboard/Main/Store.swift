@@ -23,7 +23,7 @@ final class SemiStaticStates{
 ///実行中変更され、かつViewが変更を検知できるべき値。収容アプリでも共有できる形にすること。
 final class VariableStates: ObservableObject{
     static let shared = VariableStates()
-    fileprivate var lastVerticalTabState: TabState? = nil
+    private var lastVerticalTabState: TabState? = nil
 
     private init(){}
 
@@ -62,22 +62,23 @@ final class VariableStates: ObservableObject{
     fileprivate func setEnterKeyState(_ state: RoughEnterKeyState){
         switch state{
         case .return:
-            VariableStates.shared.enterKeyState = .return(enterKeyType)
+            self.enterKeyState = .return(enterKeyType)
         case .edit:
-            VariableStates.shared.enterKeyState = .edit
+            self.enterKeyState = .edit
         case .complete:
-            VariableStates.shared.enterKeyState = .complete
+            self.enterKeyState = .complete
         }
     }
 
     fileprivate func setTabState(_ state: TabState){
         if state == .abc{
-            VariableStates.shared.keyboardLanguage = .english
+            self.keyboardLanguage = .english
         }
         if state == .hira{
-            VariableStates.shared.keyboardLanguage = .japanese
+            self.keyboardLanguage = .japanese
         }
-        VariableStates.shared.tabState = state
+        self.lastVerticalTabState = self.tabState
+        self.tabState = state
         self.setKeyboardType(for: state)
     }
 
@@ -272,7 +273,6 @@ final class ActionDepartment{
 
         case let .moveTab(type):
             VariableStates.shared.setTabState(type)
-            VariableStates.shared.lastVerticalTabState = type
         case .hideLearningMemory:
             self.hideLearningMemory()
 
