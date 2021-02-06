@@ -28,6 +28,8 @@ enum ActionType{
     case hideLearningMemory
     //タブの変更
     case moveTab(TabState)
+    //アプリを開く
+    case openApp(String)    //アプリを開く
     //デバッグ用
     case DEBUG_DATA_INPUT
 }

@@ -29,11 +29,11 @@ struct CursorMoveView: View{
                 let newCount = count + Int(dx/abs(dx))
                 if newCount > 1{
                     self.gestureState = .moving(value.location, 0)
-                    Store.shared.action.registerAction(.moveCursor(1))
+                    VariableStates.shared.action.registerAction(.moveCursor(1))
                 }
                 else if newCount < -1{
                     self.gestureState = .moving(value.location, 0)
-                    Store.shared.action.registerAction(.moveCursor(-1))
+                    VariableStates.shared.action.registerAction(.moveCursor(-1))
                 }
                 else{
                     self.gestureState = .moving(value.location, newCount)
@@ -76,7 +76,7 @@ struct CursorMoveView: View{
                     Spacer()
 
                     Button(action: {
-                        Store.shared.action.registerAction(.moveCursor(-1))
+                        VariableStates.shared.action.registerAction(.moveCursor(-1))
                     }, label: {
                         Image(systemName: "chevron.left.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                             .padding()
@@ -85,7 +85,7 @@ struct CursorMoveView: View{
                     Image(systemName: "circle.fill").font(.system(size: 22, weight: symbolsFontWeight, design: .default))
                     Spacer()
                     Button(action: {
-                        Store.shared.action.registerAction(.moveCursor(1))
+                        VariableStates.shared.action.registerAction(.moveCursor(1))
                     }, label: {
                         Image(systemName: "chevron.right.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                             .padding()

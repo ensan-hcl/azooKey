@@ -56,15 +56,15 @@ struct FlickedKeyModel{
     }
     
     func flick(){
-        self.pressActions.forEach{Store.shared.action.registerAction($0)}
+        self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
     }
     
     func longFlickReserve(){
-        self.longPressActions.forEach{Store.shared.action.reserveLongPressAction($0)}
+        self.longPressActions.forEach{VariableStates.shared.action.reserveLongPressAction($0)}
     }
     
     func longFlickEnd(){
-        self.longPressActions.forEach{Store.shared.action.registerLongPressActionEnd($0)}
+        self.longPressActions.forEach{VariableStates.shared.action.registerLongPressActionEnd($0)}
     }
     
 }

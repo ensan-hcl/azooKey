@@ -31,7 +31,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
     /// - Parameters:
     ///   - data: 行うべき操作。
-    func sendToDicDataStore(_ data: Store.DicDataStoreNotification){
+    func sendToDicDataStore(_ data: ActionDepartment.DicDataStoreNotification){
         self.converter.dicdataStore.sendToDicDataStore(data)
     }
     ///確定操作後、内部状態のキャッシュを変更する関数。

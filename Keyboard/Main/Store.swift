@@ -9,128 +9,16 @@
 import Foundation
 import SwiftUI
 
-///実行中変更されない値。収容アプリでも共有できる形にすること。
-final class SemiStaticStates{
-    static let shared = SemiStaticStates()
-    private init(){}
-
-    private(set) var needsInputModeSwitchKey = true //端末が変化しない限り変更が必要ない
-    func setNeedsInputModeSwitchKeyMode(_ bool: Bool){
-        self.needsInputModeSwitchKey = bool
-    }
-}
-
-///実行中変更され、かつViewが変更を検知できるべき値。収容アプリでも共有できる形にすること。
-final class VariableStates: ObservableObject{
-    static let shared = VariableStates()
-    private var lastVerticalTabState: TabState? = nil
-    var inputStyle: InputStyle = .direct
-
-    private init(){}
-
-    @Published var keyboardLanguage: KeyboardLanguage = .japanese
-    @Published var keyboardOrientation: KeyboardOrientation = .vertical
-    @Published var keyboardLayout: KeyboardLayout = .flick
-
-    @Published var aAKeyState: AaKeyState = .normal
-    @Published var enterKeyType: UIReturnKeyType = .default
-    @Published var enterKeyState: EnterKeyState = .return(.default)
-    @Published var tabState: TabState = .hira
-
-    @Published var isTextMagnifying = false
-    @Published var magnifyingText = ""
-
-    @Published var showMoveCursorView = false
-
-    @Published var refreshing = true
-
-    func initialize(){
-        if let lastTabState = self.lastVerticalTabState{
-            self.setTabState(lastTabState)
-            self.lastVerticalTabState = nil
-        }
-        self.setKeyboardType(for: self.tabState)
-    }
-
-    func refreshView(){
-        refreshing.toggle()
-    }
-
-    fileprivate enum RoughEnterKeyState{
-        case `return`
-        case edit
-        case complete
-    }
-
-    fileprivate func setEnterKeyState(_ state: RoughEnterKeyState){
-        switch state{
-        case .return:
-            self.enterKeyState = .return(enterKeyType)
-        case .edit:
-            self.enterKeyState = .edit
-        case .complete:
-            self.enterKeyState = .complete
-        }
-    }
-
-    fileprivate func setTabState(_ state: TabState){
-        if state == .abc{
-            self.keyboardLanguage = .english
-        }
-        if state == .hira{
-            self.keyboardLanguage = .japanese
-        }
-        self.lastVerticalTabState = self.tabState
-        self.tabState = state
-        self.setKeyboardType(for: state)
-    }
-
-    func setUIReturnKeyType(type: UIReturnKeyType){
-        self.enterKeyType = type
-        if case let .return(prev) = self.enterKeyState, prev != type{
-            self.setEnterKeyState(.return)
-        }
-    }
-
-    ///workarounds
-    ///* 1回目に値を保存してしまう
-    ///* if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
-    func setOrientation(_ orientation: KeyboardOrientation){
-        if self.keyboardOrientation == orientation{
-            self.refreshView()
-            return
-        }
-        self.keyboardOrientation = orientation
-    }
-
-    func setKeyboardType(for tab: TabState){
-        let japaneseLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
-        let type: KeyboardLayout
-        switch tab{
-        case .hira:
-            type = japaneseLayout
-        case .abc:
-            type = SettingData.shared.keyboardLayout(for: .englishKeyboardLayout)
-        default:
-            type = Design.shared.layout
-        }
-        self.inputStyle = japaneseLayout == .flick ? .direct : .roman
-        if self.keyboardLayout != type{
-            self.keyboardLayout = type
-            self.refreshView()
-            return
-        }
-    }
-}
-
 ///何者だ？
 final class Store{
     static let shared = Store()
-    private(set) var resultModel = ResultModel()
+    private(set) var resultModel = ResultModel<Candidate>()
     ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
-    private(set) var action = ActionDepartment()
+    private(set) var action = KeyboardActionDepartment()
 
-    private init(){}
+    private init(){
+        VariableStates.shared.action = action
+    }
     
     func initialize(){
         SettingData.shared.reload()
@@ -143,15 +31,7 @@ final class Store{
         self.action.appearedAgain()
     }
 
-    enum DicDataStoreNotification{
-        case notifyLearningType(LearningType)
-        case notifyAppearAgain
-        case reloadUserDict
-        case closeKeyboard
-        case resetMemory
-    }
-
-    func sendToDicDataStore(_ data: DicDataStoreNotification){
+    private func sendToDicDataStore(_ data: ActionDepartment.DicDataStoreNotification){
         self.action.sendToDicDataStore(data)
     }
 
@@ -165,8 +45,8 @@ final class Store{
 }
 
 //MARK:Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
-final class ActionDepartment{
-    fileprivate init(){}
+final class KeyboardActionDepartment: ActionDepartment{
+    fileprivate override init(){}
     
     private var inputManager = InputManager()
     private weak var delegate: KeyboardViewController!
@@ -199,7 +79,7 @@ final class ActionDepartment{
         self.inputManager.setTextDocumentProxy(proxy)
     }
 
-    func sendToDicDataStore(_ data: Store.DicDataStoreNotification){
+    override func sendToDicDataStore(_ data: DicDataStoreNotification){
         self.inputManager.sendToDicDataStore(data)
     }
 
@@ -207,7 +87,7 @@ final class ActionDepartment{
         self.delegate = controller
     }
 
-    func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView{
+    override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
         return delegate.makeChangeKeyboardButtonView(size: Design.shared.fonts.iconFontSize)
     }
     
@@ -215,7 +95,11 @@ final class ActionDepartment{
     /// - Parameters:
     ///   - text: String。確定された文字列。
     ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
-    func notifyComplete(_ candidate: Candidate){
+    override func notifyComplete(_ candidate: ResultViewItemData){
+        guard let candidate = candidate as? Candidate else {
+            debug("確定できません")
+            return
+        }
         self.inputManager.complete(candidate: candidate)
         candidate.actions.forEach{
             self.doAction($0)
@@ -275,6 +159,8 @@ final class ActionDepartment{
         case .hideLearningMemory:
             self.hideLearningMemory()
 
+        case let .openApp(scheme):
+            delegate.openApp(scheme: scheme)
         //MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
             #if DEBUG
@@ -305,14 +191,14 @@ final class ActionDepartment{
     ///押した場合に行われる。
     /// - Parameters:
     ///   - action: 行われた動作。
-    func registerAction(_ action: ActionType){
+    override func registerAction(_ action: ActionType){
         self.doAction(action)
     }
     
     ///長押しを予約する関数。
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
-    func reserveLongPressAction(_ action: KeyLongPressActionType){
+    override func reserveLongPressAction(_ action: KeyLongPressActionType){
         timers.forEach{timer in
             if timer.type == action{
                 //すでにあるので切り上げる
@@ -372,7 +258,7 @@ final class ActionDepartment{
     ///長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。
     /// - Parameters:
     ///   - action: どの動作を終了するか判定するために用いる。
-    func registerLongPressActionEnd(_ action: KeyLongPressActionType){
+    override func registerLongPressActionEnd(_ action: KeyLongPressActionType){
         for i in timers.indices{
             if timers[i].type == action{
                 timers[i].timer.invalidate()
@@ -384,7 +270,7 @@ final class ActionDepartment{
     }
     
     ///何かが変化する前に状態の保存を行う関数。
-    func notifySomethingWillChange(left: String, center: String, right: String){
+    override func notifySomethingWillChange(left: String, center: String, right: String){
         self.tempTextData = (left: left, center: center, right: right)
     }
     //MARK: left/center/rightとして得られる情報は以下の通り
@@ -417,7 +303,7 @@ final class ActionDepartment{
      */
     
     ///何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String){
+    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String){
         if self.inputManager.isAfterAdjusted(){
             return
         }
@@ -505,11 +391,6 @@ final class ActionDepartment{
     func setDebugPrint(_ text: String){
         self.inputManager.setDebugResult(text: text)
     }
-
-    func openApp(scheme: String){
-        delegate.openApp(scheme: scheme)
-    }
-
 }
 
 //ActionDepartmentの状態を保存する部分
@@ -555,7 +436,7 @@ private final class InputManager{
         return self._directConverter!
     }
 
-    func sendToDicDataStore(_ data: Store.DicDataStoreNotification){
+    func sendToDicDataStore(_ data: ActionDepartment.DicDataStoreNotification){
         self._romanConverter?.sendToDicDataStore(data)
         self._directConverter?.sendToDicDataStore(data)
     }

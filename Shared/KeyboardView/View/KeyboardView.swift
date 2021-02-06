@@ -9,33 +9,16 @@
 import Foundation
 import SwiftUI
 
-//キーボードの状態管理
-enum TabState: Equatable{
-    case hira
-    case abc
-    case number
-    case other(String)
-
-    static func ==(lhs: TabState, rhs: TabState) -> Bool {
-        switch (lhs, rhs) {
-        case (.hira, .hira), (.abc, .abc), (.number, .number): return true
-        case let (.other(ls), .other(rs)): return ls == rs
-        default:
-            return false
-        }
-    }
-}
-
-struct KeyboardView: View {
+struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
-    private let resultModel: ResultModel
+    private let resultModel: ResultModel<Candidate>
 
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
 
-    private var sharedResultData = SharedResultData()
+    private var sharedResultData = SharedResultData<Candidate>()
 
-    init(resultModel: ResultModel){
+    init(resultModel: ResultModel<Candidate>){
         self.resultModel = resultModel
     }
 

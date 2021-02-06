@@ -10,26 +10,6 @@ import Foundation
 import SwiftUI
 import AudioToolbox
 
-extension CGPoint{
-    func distance(to point: CGPoint) -> CGFloat {
-        let x1: CGFloat = self.x
-        let x2: CGFloat = point.x
-        let y1: CGFloat = self.y
-        let y2: CGFloat = point.y
-        let d2: CGFloat = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)
-        let d: CGFloat = sqrt(d2)
-        return d
-    }
-
-    func direction(to point: CGPoint) -> Int {
-
-        let value = atan2((point.x - self.x), (point.y - self.y))
-        let result = (-value + .pi)/(2*CGFloat.pi)*5
-        return (Int(result) + 4) % 5
-    }
-}
-
-
 /*
  struct DoubleSwipeGesture: Gesture {
  typealias Value = <#type#>

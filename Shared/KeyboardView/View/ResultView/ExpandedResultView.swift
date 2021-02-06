@@ -9,17 +9,17 @@
 import Foundation
 import SwiftUI
 
-class SharedResultData: ObservableObject{
-    @Published var results: [ResultData] = []
+class SharedResultData<Candidate: ResultViewItemData>: ObservableObject{
+    @Published var results: [ResultData<Candidate>] = []
 }
 
-struct ExpandedResultView: View {
-    @ObservedObject private var sharedResultData: SharedResultData
+struct ExpandedResultView<Candidate: ResultViewItemData>: View {
+    @ObservedObject private var sharedResultData: SharedResultData<Candidate>
     @Binding private var isResultViewExpanded: Bool
 
-    @State private var splitedResults: [SplitedResultData]
+    @State private var splitedResults: [SplitedResultData<Candidate>]
 
-    init(isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData){
+    init(isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
         self.sharedResultData = sharedResultData
         self._isResultViewExpanded = isResultViewExpanded
         self._splitedResults = State(initialValue: Self.registerResults(results: sharedResultData.results))
@@ -70,8 +70,8 @@ struct ExpandedResultView: View {
         .frame(height: Design.shared.keyboardHeight, alignment: .bottom)
     }
 
-    private func pressed(data: ResultData){
-        Store.shared.action.notifyComplete(data.candidate)
+    private func pressed(data: ResultData<Candidate>){
+        VariableStates.shared.action.notifyComplete(data.candidate)
         self.collapse()
     }
 
@@ -79,10 +79,10 @@ struct ExpandedResultView: View {
         isResultViewExpanded = false
     }
 
-    private static func registerResults(results: [ResultData]) -> [SplitedResultData] {
+    private static func registerResults(results: [ResultData<Candidate>]) -> [SplitedResultData<Candidate>] {
         var curSum: CGFloat = .zero
-        var splited: [SplitedResultData] = []
-        var curResult: [ResultData] = []
+        var splited: [SplitedResultData<Candidate>] = []
+        var curResult: [ResultData<Candidate>] = []
         let font = UIFont.systemFont(ofSize: Design.shared.fonts.resultViewFontSize+1)
         results.forEach{[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
@@ -101,7 +101,7 @@ struct ExpandedResultView: View {
 
 }
 
-struct SplitedResultData: Identifiable{
+struct SplitedResultData<Candidate: ResultViewItemData>: Identifiable{
     let id: Int
-    let results: [ResultData]
+    let results: [ResultData<Candidate>]
 }

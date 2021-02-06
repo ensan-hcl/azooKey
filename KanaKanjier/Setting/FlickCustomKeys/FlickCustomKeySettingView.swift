@@ -153,17 +153,17 @@ struct FlickCustomKeysSettingView: View {
                 .font(.caption)
 
             VStack{
-                FlickKeyView(.top, label: label(.top), selectState: selectState)
+                CustomKeySettingFlickKeyView(.top, label: label(.top), selectState: selectState)
                     .frame(width: keySize.width, height: keySize.height)
                 HStack{
-                    FlickKeyView(.left, label: label(.left), selectState: selectState)
+                    CustomKeySettingFlickKeyView(.left, label: label(.left), selectState: selectState)
                         .frame(width: keySize.width, height: keySize.height)
-                    FlickKeyView(.center, label: label(.center), selectState: selectState)
+                    CustomKeySettingFlickKeyView(.center, label: label(.center), selectState: selectState)
                         .frame(width: keySize.width, height: keySize.height)
-                    FlickKeyView(.right, label: label(.right), selectState: selectState)
+                    CustomKeySettingFlickKeyView(.right, label: label(.right), selectState: selectState)
                         .frame(width: keySize.width, height: keySize.height)
                 }
-                FlickKeyView(.bottom, label: label(.bottom), selectState: selectState)
+                CustomKeySettingFlickKeyView(.bottom, label: label(.bottom), selectState: selectState)
                     .frame(width: keySize.width, height: keySize.height)
             }
             Spacer()
@@ -284,7 +284,7 @@ private struct ToolBarButton: View{
     }
 }
 
-private struct FlickKeyView: View {
+private struct CustomKeySettingFlickKeyView: View {
     let position: FlickKeyPosition
     let label: String
     @ObservedObject private var selectState: SelectState

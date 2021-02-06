@@ -26,22 +26,22 @@ protocol QwertyKeyModelProtocol{
     func press()
     func longPressReserve()
     func longPressEnd()
-    
+
     func sound()
 }
 
 
 extension QwertyKeyModelProtocol{
     func press(){
-        self.pressActions.forEach{Store.shared.action.registerAction($0)}
+        self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
     }
     
     func longPressReserve(){
-        self.longPressActions.forEach{Store.shared.action.reserveLongPressAction($0)}
+        self.longPressActions.forEach{VariableStates.shared.action.reserveLongPressAction($0)}
     }
     
     func longPressEnd(){
-        self.longPressActions.forEach{Store.shared.action.registerLongPressActionEnd($0)}
+        self.longPressActions.forEach{VariableStates.shared.action.registerLongPressActionEnd($0)}
     }
         
     func backGroundColorWhenPressed(states: VariableStates) -> Color {

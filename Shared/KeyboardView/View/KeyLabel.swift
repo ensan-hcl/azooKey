@@ -90,7 +90,7 @@ struct KeyLabel: View {
                     .allowsHitTesting(false)
 
             case .changeKeyboard:
-                Store.shared.action.makeChangeKeyboardButtonView()
+                VariableStates.shared.action.makeChangeKeyboardButtonView()
                     .foregroundColor(mainKeyColor)
 
             case let .selectable(primary, secondery):

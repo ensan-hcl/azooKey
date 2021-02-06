@@ -46,7 +46,7 @@ struct CandidateData{
 }
 
 /// 変換候補のデータ
-struct Candidate{
+struct Candidate: ResultViewItemData {
     ///入力となるテキスト
     let text: String
     ///評価値

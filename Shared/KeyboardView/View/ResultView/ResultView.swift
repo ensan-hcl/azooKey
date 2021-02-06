@@ -9,25 +9,30 @@
 import Foundation
 import SwiftUI
 
-private final class ResultModelVariableSection: ObservableObject{
-    @Published fileprivate var results: [ResultData] = []
+protocol ResultViewItemData{
+    var text: String {get}
+    var inputable: Bool {get}
+}
+
+private final class ResultModelVariableSection<Candidate: ResultViewItemData>: ObservableObject{
+    @Published fileprivate var results: [ResultData<Candidate>] = []
     @Published fileprivate var scrollViewProxy: ScrollViewProxy? = nil
 }
 
-struct ResultData: Identifiable{
+struct ResultData<Candidate: ResultViewItemData>: Identifiable{
     var id: Int
     var candidate: Candidate
 }
 
-struct ResultView: View{
-    private let model: ResultModel
-    @ObservedObject private var modelVariableSection: ResultModelVariableSection
-    @ObservedObject private var sharedResultData: SharedResultData
+struct ResultView<Candidate: ResultViewItemData>: View {
+    private let model: ResultModel<Candidate>
+    @ObservedObject private var modelVariableSection: ResultModelVariableSection<Candidate>
+    @ObservedObject private var sharedResultData: SharedResultData<Candidate>
     @ObservedObject private var variableStates = VariableStates.shared
 
     @Binding private var isResultViewExpanded: Bool
 
-    init(model: ResultModel, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData){
+    init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
         self.model = model
         self.modelVariableSection = model.variableSection
         self.sharedResultData = sharedResultData
@@ -43,7 +48,7 @@ struct ResultView: View{
                     ScrollView(.horizontal, showsIndicators: false){
                         ScrollViewReader{scrollViewProxy in
                             LazyHStack(spacing: 10) {
-                                ForEach(modelVariableSection.results, id: \.id){data in
+                                ForEach(modelVariableSection.results, id: \.id){(data: ResultData<Candidate>) in
                                     if data.candidate.inputable{
                                         Button{
                                             Sound.click()
@@ -87,7 +92,7 @@ struct ResultView: View{
     }
 
     private func pressed(candidate: Candidate){
-        Store.shared.action.notifyComplete(candidate)
+        VariableStates.shared.action.notifyComplete(candidate)
     }
 
     private func expand(){
@@ -114,8 +119,8 @@ struct ResultContextMenuView: View {
     }
 }
 
-struct ResultModel{
-    fileprivate var variableSection = ResultModelVariableSection()
+struct ResultModel<Candidate: ResultViewItemData>{
+    fileprivate var variableSection = ResultModelVariableSection<Candidate>()
 
     func setResults(_ results: [Candidate]){
         self.variableSection.results = results.indices.map{ResultData(id: $0, candidate: results[$0])}

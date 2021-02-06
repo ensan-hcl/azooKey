@@ -42,7 +42,7 @@ struct MessageView: View {
                             HStack{
                                 Spacer()
                                 Button{
-                                    Store.shared.action.openApp(scheme: urlString)
+                                    VariableStates.shared.action.registerAction(.openApp(urlString))
                                 }label: {
                                     Text("詳細")
                                 }
@@ -54,7 +54,7 @@ struct MessageView: View {
                             HStack{
                                 Spacer()
                                 Button{
-                                    Store.shared.action.openApp(scheme: "azooKey://")
+                                    VariableStates.shared.action.registerAction(.openApp("azooKey://"))
                                 }label: {
                                     Text("更新").bold()
                                 }

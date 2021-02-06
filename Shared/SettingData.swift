@@ -43,7 +43,7 @@ struct SettingData{
         self.keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
 
         if Self.checkResetSetting(){
-            Store.shared.sendToDicDataStore(.resetMemory)
+            VariableStates.shared.action.sendToDicDataStore(.resetMemory)
         }
     }
 
@@ -150,7 +150,7 @@ struct SettingData{
             result = DefaultSetting.shared.memorySettingDefault
         }
         if !initialize{
-            Store.shared.sendToDicDataStore(.notifyLearningType(result))
+            VariableStates.shared.action.sendToDicDataStore(.notifyLearningType(result))
         }
         return result
     }
@@ -170,7 +170,7 @@ struct SettingData{
     mutating func writeLearningTypeSetting(to type: LearningType) {
         Self.userDefaults.set(type.saveValue, forKey: Setting.learningType.key)
         self.learningType = type
-        Store.shared.sendToDicDataStore(.notifyLearningType(type))
+        VariableStates.shared.action.sendToDicDataStore(.notifyLearningType(type))
     }
 
     var qwertyNumberTabKeySetting: [QwertyKeyModel] {

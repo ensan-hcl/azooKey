@@ -23,13 +23,13 @@ extension UIInputView: UIInputViewAudioFeedback {
 
 
 final class KeyboardViewController: UIInputViewController {
-    private var keyboardViewHost: KeyboardHostingController<KeyboardView>! = nil
+    private var keyboardViewHost: KeyboardHostingController<KeyboardView<Candidate>>! = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
         //初期化の順序としてこの位置に置くこと
         Store.shared.initialize()
-        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView(resultModel: Store.shared.resultModel))
+        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView<Candidate>(resultModel: Store.shared.resultModel))
         //コントロールセンターを出しにくくする。
         keyboardViewHost.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
@@ -78,22 +78,8 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
-        let button = UIButton(type: .custom)
-        var weight: UIImage.SymbolWeight {
-            switch Design.shared.themeManager.theme.textFont{
-            case .normal:
-                return .light
-            case .bold:
-                return .semibold
-            }
-        }
-        button.addTarget(self, action: #selector(self.handleInputModeList(from:with:)), for: .allTouchEvents)
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)
-        let largeBoldDoc = UIImage(systemName: "globe", withConfiguration: largeConfig)
-        button.setImage(largeBoldDoc, for: .normal)
-        button.setTitleColor(UIColor(Design.shared.themeManager.theme.textColor), for: [.normal, .highlighted])
-        button.tintColor = UIColor(Design.shared.themeManager.theme.textColor)
-        let view = ChangeKeyboardButtonView(button)
+        let selector = #selector(self.handleInputModeList(from:with:))
+        let view = ChangeKeyboardButtonView(selector: selector, size: size)
         return view
     }
 
@@ -138,7 +124,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        Store.shared.action.notifySomethingWillChange(left: left, center: center, right: right)
+        VariableStates.shared.action.notifySomethingWillChange(left: left, center: center, right: right)
     }
     
     override func textDidChange(_ textInput: UITextInput?) {
@@ -149,7 +135,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        Store.shared.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
+        VariableStates.shared.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
     }
 
     @objc func openURL(_ url: URL) {}
@@ -170,19 +156,5 @@ final class KeyboardViewController: UIInputViewController {
             return
         }
         self.openUrl(url: url)
-    }
-}
-
-struct ChangeKeyboardButtonView: UIViewRepresentable {
-    private var button: UIButton
-    init(_ button: UIButton){
-        self.button = button
-    }
-    func makeUIView(context: Context) -> UIButton {
-        return button
-    }
-
-    func updateUIView(_ uiView: UIButton, context: Context) {
-        return
     }
 }
