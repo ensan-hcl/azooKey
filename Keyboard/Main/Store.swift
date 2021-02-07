@@ -199,11 +199,8 @@ final class KeyboardActionDepartment: ActionDepartment{
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
     override func reserveLongPressAction(_ action: KeyLongPressActionType){
-        timers.forEach{timer in
-            if timer.type == action{
-                //すでにあるので切り上げる
-                return
-            }
+        if timers.contains{$0.type == action}{
+            return
         }
         let startTime = Date()
 
@@ -259,14 +256,13 @@ final class KeyboardActionDepartment: ActionDepartment{
     /// - Parameters:
     ///   - action: どの動作を終了するか判定するために用いる。
     override func registerLongPressActionEnd(_ action: KeyLongPressActionType){
-        for i in timers.indices{
-            if timers[i].type == action{
-                timers[i].timer.invalidate()
-                timers.remove(at: i)
-                break
+        timers = timers.compactMap{timer in
+            if timer.type == action {
+                timer.timer.invalidate()
+                return nil
             }
+            return timer
         }
-
     }
     
     ///何かが変化する前に状態の保存を行う関数。

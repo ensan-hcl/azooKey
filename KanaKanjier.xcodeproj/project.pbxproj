@@ -2292,6 +2292,8 @@
 		1AC8A5B92595C10A00B71E5A /* StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */; };
 		1AC8A5D3259815C300B71E5A /* FlickCustomKeySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */; };
 		1AC8A5DD25986CA500B71E5A /* KanaSymbolsKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */; };
+		1ACC0F0725CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */; };
+		1ACC0F0825CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */; };
 		1ACE00752567525000899DA2 /* RomanCustomKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE00742567525000899DA2 /* RomanCustomKeys.swift */; };
 		1ACE007F2567534F00899DA2 /* RomanCustomKeysItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */; };
 		1ACE61C3257286E5008078D3 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE61C2257286E5008078D3 /* Color.swift */; };
@@ -4746,6 +4748,7 @@
 		1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringInterpolation.swift; sourceTree = "<group>"; };
 		1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickCustomKeySettingView.swift; sourceTree = "<group>"; };
 		1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaSymbolsKeyModel.swift; sourceTree = "<group>"; };
+		1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickSpaceKeyModel.swift; sourceTree = "<group>"; };
 		1ACE00742567525000899DA2 /* RomanCustomKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeys.swift; sourceTree = "<group>"; };
 		1ACE007E2567534F00899DA2 /* RomanCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1ACE61C2257286E5008078D3 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -5739,7 +5742,6 @@
 			children = (
 				1AC0315F25120B3B004CA505 /* Keyboard.entitlements */,
 				1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */,
-				1AC03158251103EF004CA505 /* Designs.xcassets */,
 				1A3DC1FD2500D488002CAA93 /* Info.plist */,
 				1A3DC2052500D4F3002CAA93 /* Main */,
 			);
@@ -5779,6 +5781,7 @@
 				1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */,
 				1A3DC2202500D600002CAA93 /* TabKeyModel.swift */,
 				1AF28CEB253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift */,
+				1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */,
 				1A3A16312529712300A5BA4F /* KogakiKeyModel.swift */,
 				1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */,
 				1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */,
@@ -7389,6 +7392,7 @@
 		1AA346B42567F26000B41A16 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				1AC03158251103EF004CA505 /* Designs.xcassets */,
 				1AA346812567D8B100B41A16 /* UserSetting.swift */,
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */,
@@ -9959,6 +9963,7 @@
 				1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */,
 				1AF6797825CEDB9B00F3987B /* QwertyKeyModelVariableSection.swift in Sources */,
 				1AF28CE0253C9FFC0012CF94 /* CursorMoveTips.swift in Sources */,
+				1ACC0F0725CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */,
 				1AF6797A25CEDB9B00F3987B /* QwertyChangeTabKeyModel.swift in Sources */,
 				1AF6799525CEDBB500F3987B /* FlickKeyModel.swift in Sources */,
 				1AC0315D25120A17004CA505 /* SettingTab.swift in Sources */,
@@ -10120,6 +10125,7 @@
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,
 				1AF678A125CDA07A00F3987B /* SettingData.swift in Sources */,
 				1A3DC20E2500D55F002CAA93 /* VerticalFlickDataProvider.swift in Sources */,
+				1ACC0F0825CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */,
 				1A2602A42514820300EAD647 /* VerticalQwertyDataProvider.swift in Sources */,
 				1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */,
 				1A8A8404250F65410093A701 /* added_last_1_character.swift in Sources */,

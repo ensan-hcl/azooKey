@@ -224,22 +224,7 @@ struct HorizontalFlickDataProvider: KeyboardDataProviderProtocol {
                     pressActions: [.smoothDelete]
                 )
             ], needSuggestView: false, keycolorType: .tabkey),
-            FlickKeyModel(labelType: .text("空白"), pressActions: [.input(" ")], longPressActions: [.toggleShowMoveCursorView], flickKeys: [
-                .left: FlickedKeyModel(
-                    labelType: .text("←"),
-                    pressActions: [.moveCursor(-1)],
-                    longPressActions: [.moveCursor(.left)]
-                ),
-                .top: FlickedKeyModel(
-                    labelType: .text("全角"),
-                    pressActions: [.input("　")]
-                ),
-                .bottom: FlickedKeyModel(
-                    labelType: .text("Tab"),
-                    pressActions: [.input("\u{0009}")]
-                )
-
-            ], needSuggestView: false, keycolorType: .tabkey),
+            FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
         ],
 
@@ -410,22 +395,7 @@ struct HorizontalFlickDataProvider: KeyboardDataProviderProtocol {
                     pressActions: [.smoothDelete]
                 )
             ], needSuggestView: false, keycolorType: .tabkey),
-            FlickKeyModel(labelType: .text("空白"), pressActions: [.input(" ")], longPressActions: [.toggleShowMoveCursorView], flickKeys: [
-                .left: FlickedKeyModel(
-                    labelType: .text("←"),
-                    pressActions: [.moveCursor(-1)],
-                    longPressActions: [.moveCursor(.left)]
-                ),
-                .top: FlickedKeyModel(
-                    labelType: .text("全角"),
-                    pressActions: [.input("　")]
-                ),
-                .bottom: FlickedKeyModel(
-                    labelType: .text("Tab"),
-                    pressActions: [.input("\u{0009}")]
-                )
-
-            ], needSuggestView: false, keycolorType: .tabkey),
+            FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
         ],
 
@@ -624,22 +594,7 @@ struct HorizontalFlickDataProvider: KeyboardDataProviderProtocol {
                     pressActions: [.smoothDelete]
                 )
             ], needSuggestView: false, keycolorType: .tabkey),
-            FlickKeyModel(labelType: .text("空白"), pressActions: [.input(" ")], longPressActions: [.toggleShowMoveCursorView], flickKeys: [
-                .left: FlickedKeyModel(
-                    labelType: .text("←"),
-                    pressActions: [.moveCursor(-1)],
-                    longPressActions: [.moveCursor(.left)]
-                ),
-                .top: FlickedKeyModel(
-                    labelType: .text("全角"),
-                    pressActions: [.input("　")]
-                ),
-                .bottom: FlickedKeyModel(
-                    labelType: .text("Tab"),
-                    pressActions: [.input("\u{0009}")]
-                )
-
-            ], needSuggestView: false, keycolorType: .tabkey),
+            FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
         ],
 

@@ -24,8 +24,7 @@ enum KeyPressState{
     }
 }
 
-//V：ビュー
-struct FlickKeyView: View{
+struct FlickKeyView: View {
     private let model: FlickKeyModelProtocol
     @ObservedObject private var modelVariableSection: KeyModelVariableSection
     @ObservedObject private var variableStates = VariableStates.shared
@@ -41,17 +40,21 @@ struct FlickKeyView: View{
 
     //これはどちらかというとViewに属すると判断した
     private var gesture: some Gesture {
-        DragGesture(minimumDistance: .zero)
+        DragGesture(minimumDistance: .zero, coordinateSpace: .global)
             .onChanged({[unowned modelVariableSection] (value: DragGesture.Value) in
+                let startLocation = modelVariableSection.startLocation ?? value.startLocation
+                let d = startLocation.direction(to: value.location)
+                debug("flickdebug: onChanged", d, startLocation, modelVariableSection.pressState)
                 switch modelVariableSection.pressState{
                 //押していない状態の場合
                 case .inactive:
                     //押し始めの時間を記録する。
                     modelVariableSection.pressState = .started(Date())
+                    modelVariableSection.startLocation = value.startLocation
                     self.model.sound()
                     withAnimation(suggestAnimation) {
                         //サジェストが必要な設定なら
-                        if self.model.needSuggestView{
+                        if self.model.needSuggestView && self.model.longPressActions.isEmpty{
                             //全てのサジェストを表示する
                             modelVariableSection.suggestState = .all
                             //変化を通告する。
@@ -60,13 +63,10 @@ struct FlickKeyView: View{
                         //長押しの予約をする。
                         self.model.longPressReserve()
                     }
-                    
                 //押し始めた後の変化である場合。
                 case let .started(date):
-                    //方向を取得する。
-                    let d = value.startLocation.direction(to: value.location)
                     //押したところから25px以上離れてて、サジェストが必要な設定だったら
-                    if self.model.isFlickAble(to: d) && value.startLocation.distance(to: value.location) > self.model.flickSensitivity(to: d){
+                    if self.model.isFlickAble(to: d) && startLocation.distance(to: value.location) > self.model.flickSensitivity(to: d){
                         //サジェストの状態を一度非表示にする。
                         modelVariableSection.suggestState = .nothing
                         //通告する。
@@ -78,38 +78,32 @@ struct FlickKeyView: View{
                         //長フリックを予約する
                         self.model.flickKeys[d]?.longFlickReserve()
                     }
-                    //もし0.4秒以上押していたら
+                    //もしstartedのまま0.4秒以上押していたら
                     if Date().timeIntervalSince(date) >= 0.4{
                         //長押し状態に設定する。
                         modelVariableSection.pressState = .longPressed
                     }
-                    
                 //一方向にサジェストが表示(予定)されている状態だったら
                 case let .oneDirectionSuggested(direction, startTime):
                     //もし同じ方向で0.4秒以上フリックされていたら長フリックと判定する。
                     if Date().timeIntervalSince(startTime) >= 0.4{
                         //長いフリックを登録する。
                         modelVariableSection.pressState = .longFlicked(direction)
+                        return
                     }
                     //もし距離が閾値以上離れていて
-                    if value.startLocation.distance(to: value.location) > self.model.flickSensitivity(to: direction){
-                        //方向を取得する
-                        let d = value.startLocation.direction(to: value.location)
+                    if startLocation.distance(to: value.location) > self.model.flickSensitivity(to: direction){
                         //状態がoneDirectionでなかったら
                         if case .oneDirection = modelVariableSection.suggestState {}
                         else{
-                            //アニメーションをつけながら
-                            withAnimation(.easeIn(duration: .zero)) {
-                                //サジェストの方向を登録する。
-                                modelVariableSection.suggestState = .oneDirection(d)
-                                //サジェストを通告する。
-                                self.model.suggestStateChanged(.oneDirection(d))
-                            }
+                            //サジェストの方向を登録する。
+                            modelVariableSection.suggestState = .oneDirection(d)
+                            //サジェストを通告する。
+                            self.model.suggestStateChanged(.oneDirection(d))
                         }
-                        
                         //指す方向が変わっていた場合
                         if  (d != direction && self.model.isFlickAble(to: d)){
-                            //長フリックは停止する。
+                            //長フリックの予約は停止する。
                             self.model.flickKeys[direction]?.longFlickEnd()
                             //新しい方向の長フリックを予約する。
                             self.model.flickKeys[d]?.longFlickReserve()
@@ -121,32 +115,23 @@ struct FlickKeyView: View{
                             modelVariableSection.pressState = .oneDirectionSuggested(d, Date())
                         }
                     }
-                    
                 case .longPressed:
-                    //方向を取得する
-                    let d = value.startLocation.direction(to: value.location)
                     //もし距離が25px以上離れていて、サジェストが必要な設定だったら
-                    if value.startLocation.distance(to: value.location) > self.model.flickSensitivity(to: d) &&  self.model.needSuggestView{
+                    if startLocation.distance(to: value.location) > self.model.flickSensitivity(to: d) &&  self.model.needSuggestView{
                         //状態がoneDirectionでなかったら
                         if case .oneDirection = modelVariableSection.suggestState {}
                         else{
-                            //アニメーションをつけながら
-                            withAnimation(.easeIn(duration: .zero)) {
-                                modelVariableSection.pressState = .oneDirectionSuggested(d, Date())
-                                //サジェストの方向を登録する。
-                                modelVariableSection.suggestState = .oneDirection(d)
-                                //サジェストを通告する。
-                                self.model.suggestStateChanged(.oneDirection(d))
-                            }
+                            modelVariableSection.pressState = .oneDirectionSuggested(d, Date())
+                            //サジェストの方向を登録する。
+                            modelVariableSection.suggestState = .oneDirection(d)
+                            //サジェストを通告する。
+                            self.model.suggestStateChanged(.oneDirection(d))
                         }
                     }
-                    
                 case let .longFlicked(direction):
-                    //現在さしている方向を取得する。
-                    let d = value.startLocation.direction(to: value.location)
                     //指す方向が変わっていた場合
                     if  (d != direction && self.model.isFlickAble(to: d)){
-                        //長フリックは停止する。
+                        //実行中の長フリックを停止する。
                         self.model.flickKeys[direction]?.longFlickEnd()
                         //新しい方向の長フリックを予約する。
                         self.model.flickKeys[d]?.longFlickReserve()
@@ -161,13 +146,12 @@ struct FlickKeyView: View{
             })
             //タップの終了時
             .onEnded({[unowned modelVariableSection] value in
-                withAnimation(.easeOut(duration: .zero)) {
-                    //サジェストを解除する
-                    modelVariableSection.suggestState = .nothing
-                    //通告する。
-                    self.model.suggestStateChanged(.nothing)
-                }
-                
+                debug("flickdebug: onEnded", modelVariableSection.pressState)
+                //サジェストを解除する
+                modelVariableSection.suggestState = .nothing
+                //通告する。
+                self.model.suggestStateChanged(.nothing)
+
                 //押しはじめて、そのあと動きがなかった場合ここに来る。
                 if case let .started(date) = modelVariableSection.pressState{
                     //もし0.4秒以上経っていたら
@@ -209,9 +193,7 @@ struct FlickKeyView: View{
                     }
                 }
                 modelVariableSection.pressState = .inactive
-                
             })
-        
     }
 
     private var keyFillColor: Color {
