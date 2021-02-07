@@ -12,6 +12,7 @@ import SwiftUI
 ///実行中変更され、かつViewが変更を検知できるべき値。
 final class VariableStates: ObservableObject{
     var action: ActionDepartment = ActionDepartment()
+    var themeManager = ThemeManager()
     static let shared = VariableStates()
     private var lastVerticalTabState: TabState? = nil
     var inputStyle: InputStyle = .direct

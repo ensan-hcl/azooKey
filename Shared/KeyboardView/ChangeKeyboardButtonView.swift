@@ -21,7 +21,7 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
     func makeUIView(context: Context) -> UIButton {
         let button = UIButton(type: .custom)
         var weight: UIImage.SymbolWeight {
-            switch Design.shared.themeManager.theme.textFont{
+            switch VariableStates.shared.themeManager.theme.textFont{
             case .normal:
                 return .light
             case .bold:
@@ -34,8 +34,8 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)
         let largeBoldDoc = UIImage(systemName: "globe", withConfiguration: largeConfig)
         button.setImage(largeBoldDoc, for: .normal)
-        button.setTitleColor(UIColor(Design.shared.themeManager.theme.textColor), for: [.normal, .highlighted])
-        button.tintColor = UIColor(Design.shared.themeManager.theme.textColor)
+        button.setTitleColor(UIColor(VariableStates.shared.themeManager.theme.textColor), for: [.normal, .highlighted])
+        button.tintColor = UIColor(VariableStates.shared.themeManager.theme.textColor)
         return button
     }
 

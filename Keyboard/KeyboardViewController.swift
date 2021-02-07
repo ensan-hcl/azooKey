@@ -47,7 +47,7 @@ final class KeyboardViewController: UIInputViewController {
 
         Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
         Store.shared.action.setDelegateViewController(self)
-        Design.shared.setScreenSize(size: UIScreen.main.bounds.size)
+        SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
         var entries: [UILexiconEntry] = []
         self.requestSupplementaryLexicon(completion: {
             $0.entries.forEach{entry in
@@ -73,7 +73,7 @@ final class KeyboardViewController: UIInputViewController {
     func registerScreenActualSize(){
         if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds{
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
-            Design.shared.setScreenSize(size: size)
+            SemiStaticStates.shared.setScreenSize(size: size)
         }
     }
 
@@ -93,7 +93,7 @@ final class KeyboardViewController: UIInputViewController {
         super.viewWillTransition(to: size, with: coordinator)
         if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds{
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
-            Design.shared.setScreenSize(size: size)
+            SemiStaticStates.shared.setScreenSize(size: size)
         }
     }
     

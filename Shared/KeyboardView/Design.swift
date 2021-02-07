@@ -46,10 +46,9 @@ final class Design{
         VariableStates.shared.keyboardLayout
     }
 
-    var themeManager = ThemeManager()
-
-    ///do not  consider using screenHeight
-    private(set) var screenWidth: CGFloat = .zero
+    var screenWidth: CGFloat {
+        SemiStaticStates.shared.screenWidth
+    }
 
     ///KeyViewのサイズを自動で計算して返す。
     var keyViewSize: CGSize {
@@ -173,15 +172,6 @@ final class Design{
         return screenWidth < value
     }
 
-    func setScreenSize(size: CGSize){
-        if self.screenWidth == size.width{
-            return
-        }
-        self.screenWidth = size.width
-        let orientation: KeyboardOrientation = size.width<size.height ? .vertical : .horizontal
-        VariableStates.shared.setOrientation(orientation)
-    }
-
     let colors = Colors.default
     let fonts = Fonts.default
     let language = Language.default
@@ -190,7 +180,7 @@ final class Design{
         case `default`
 
         var themeFontWeight: Font.Weight {
-            Design.shared.themeManager.weight
+            VariableStates.shared.themeManager.weight
         }
 
         var iconFontSize: CGFloat {
@@ -339,7 +329,7 @@ struct ThemeManager{
         self.theme.keyBackgroundColorOpacity
     }
 
-    fileprivate init(){
+    init(){
         self.theme = Self.getSelectedTheme()
     }
 

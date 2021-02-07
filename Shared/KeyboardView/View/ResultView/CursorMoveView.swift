@@ -45,7 +45,7 @@ struct CursorMoveView: View{
     }
 
     private var opacity: Double {
-        sqrt(Design.shared.themeManager.mainOpacity)
+        sqrt(VariableStates.shared.themeManager.mainOpacity)
     }
 
     private var centerColor: Color {
@@ -57,11 +57,11 @@ struct CursorMoveView: View{
     }
 
     private var symbolsFontWeight: Font.Weight {
-        Design.shared.themeManager.weight
+        VariableStates.shared.themeManager.weight
     }
 
     private var symbolsColor: Color {
-        Design.shared.themeManager.theme.resultTextColor
+        VariableStates.shared.themeManager.theme.resultTextColor
     }
 
 

@@ -18,8 +18,12 @@ struct KeyboardPreview: View {
     let resultModel = ResultModel<CandidateMock>()
 
     init(){
-        Design.shared.setScreenSize(size: UIScreen.main.bounds.size)
-        resultModel.setResults([CandidateMock(text: "azooKey"), CandidateMock(text: "あずーきー"), CandidateMock(text: "アズーキー")])
+        SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
+        resultModel.setResults([
+            CandidateMock(text: "azooKey"),
+            CandidateMock(text: "あずーきー"),
+            CandidateMock(text: "アズーキー")
+        ])
     }
 
     var body: some View {

@@ -28,7 +28,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 .frame(maxWidth: .infinity)
                 .overlay(
                     Group{
-                        if let name = Design.shared.themeManager.theme.pictureFileName{
+                        if let name = VariableStates.shared.themeManager.theme.pictureFileName{
                             Image(name)
                                 .resizable()
                                 .scaledToFill()

@@ -56,4 +56,14 @@ final class SemiStaticStates{
     func setNeedsInputModeSwitchKeyMode(_ bool: Bool){
         self.needsInputModeSwitchKey = bool
     }
+
+    /// - do not  consider using screenHeight
+    private(set) var screenWidth: CGFloat = .zero
+    func setScreenSize(size: CGSize){
+        if self.screenWidth == size.width{
+            return
+        }
+        self.screenWidth = size.width
+        VariableStates.shared.setOrientation(size.width<size.height ? .vertical : .horizontal)
+    }
 }
