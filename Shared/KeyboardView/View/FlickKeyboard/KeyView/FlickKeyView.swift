@@ -169,8 +169,11 @@ struct FlickKeyView: View {
                         modelVariableSection.pressState = .longFlicked(direction)
                     }
                 }
+                //有無を言わさず終わらせる
                 self.model.longPressEnd()
-                
+                self.model.flickKeys.forEach{_, flickKey in
+                    flickKey.longFlickEnd()
+                }
                 //状態に基づいて、必要な変更を加える
                 switch modelVariableSection.pressState{
                 case .inactive:
@@ -178,18 +181,12 @@ struct FlickKeyView: View {
                 case .started(_):
                     self.model.press() 
                 case let .oneDirectionSuggested(direction, _):
-                    if let flickKey = self.model.flickKeys[direction]{
-                        self.model.flick(to: direction)
-                        flickKey.longFlickEnd()
-                    }
+                    self.model.flick(to: direction)
                 case .longPressed:
                     break
                 case let .longFlicked(direction):
-                    if let flickKey = self.model.flickKeys[direction]{
-                        flickKey.longFlickEnd()
-                        if flickKey.longPressActions.isEmpty{
-                            self.model.flick(to: direction)
-                        }
+                    if let flickKey = self.model.flickKeys[direction], flickKey.longPressActions.isEmpty{
+                        self.model.flick(to: direction)
                     }
                 }
                 modelVariableSection.pressState = .inactive

@@ -49,6 +49,7 @@ struct QwertyKeyView: View{
             })
             //タップの終了時
             .onEnded({value in
+                self.model.longPressEnd()   //何もなければ何も起こらない。
                 self.suggest = false
                 //状態に基づいて、必要な変更を加える
                 switch self.modelVariableSection.pressState{
@@ -56,16 +57,12 @@ struct QwertyKeyView: View{
                     break
                 case let .started(date):
                     //もし0.4秒以上押していたら
-                    if Date().timeIntervalSince(date) >= 0.4{
-                        self.model.longPressEnd()
-                    }else{
+                    if Date().timeIntervalSince(date) < 0.4{
                         self.model.press()
-                        self.model.longPressEnd()
                     }
                 case .longPressed:
-                    self.model.longPressEnd()
+                    break
                 case .variations:
-                    self.model.longPressEnd()
                     self.model.variationsModel.performSelected()
                 }
                 self.modelVariableSection.pressState = .unpressed
