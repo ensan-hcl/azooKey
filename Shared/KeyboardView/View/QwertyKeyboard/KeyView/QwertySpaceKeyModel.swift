@@ -21,7 +21,7 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
         return CGSize(width: Design.shared.qwertySpaceKeyWidth, height: Design.shared.keyViewSize.height)
     }
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        return Design.shared.colors.normalKeyColor
+        Design.colors.normalKeyColor
     }
     
     init(){}

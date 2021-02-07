@@ -47,7 +47,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        return Design.shared.colors.specialKeyColor
+        Design.colors.specialKeyColor
     }
 
     init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)){

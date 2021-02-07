@@ -35,9 +35,12 @@ struct DesignLogic{
 }
 
 //MARK:デザイン部門のロジックを全て切り出したオブジェクト。
-final class Design{
+struct Design{
     private init(){}
     static let shared = Design()
+    static let colors = Colors.default
+    static let fonts = Fonts.default
+    static let language = Language.default
 
     var orientation: KeyboardOrientation {
         VariableStates.shared.keyboardOrientation
@@ -171,10 +174,6 @@ final class Design{
     func isOverScreenWidth(_ value: CGFloat) -> Bool {
         return screenWidth < value
     }
-
-    let colors = Colors.default
-    let fonts = Fonts.default
-    let language = Language.default
 
     enum Fonts{
         case `default`

@@ -43,20 +43,20 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
     }
 
     func label(states: VariableStates) -> KeyLabel {
-        let text = Design.shared.language.getEnterKeyText(states.enterKeyState)
+        let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: keySize.width)
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         switch states.enterKeyState{
         case .complete, .edit:
-            return Design.shared.colors.specialKeyColor
+            return Design.colors.specialKeyColor
         case let .return(type):
             switch type{
             case .default:
-                return Design.shared.colors.specialKeyColor
+                return Design.colors.specialKeyColor
             default:
-                return Design.shared.colors.specialEnterKeyColor
+                return Design.colors.specialEnterKeyColor
             }
         }
     }

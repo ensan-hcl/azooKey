@@ -110,7 +110,7 @@ struct QwertyKeyView: View{
                             keyWidth: self.model.keySize.width,
                             scale_y: 1,
                             variationsCount: self.model.variationsModel.variations.count,
-                            color: Design.shared.colors.highlightedKeyColor,
+                            color: Design.colors.highlightedKeyColor,
                             direction: model.variationsModel.direction
                         )
                         .overlay(
@@ -123,7 +123,7 @@ struct QwertyKeyView: View{
                         QwertySuggestView.scaleToFrameSize(
                             keyWidth: self.model.keySize.width,
                             scale_y: 1,
-                            color: Design.shared.colors.highlightedKeyColor
+                            color: Design.colors.highlightedKeyColor
                         )
                         .overlay(
                             self.model.label(states: variableStates)

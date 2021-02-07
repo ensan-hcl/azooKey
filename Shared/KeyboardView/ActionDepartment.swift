@@ -19,7 +19,7 @@ class ActionDepartment{
     func notifyComplete(_ candidate: ResultViewItemData){}
 
     func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
-        ChangeKeyboardButtonView(selector: nil, size: Design.shared.fonts.iconFontSize)
+        ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize)
     }
 
     func sendToDicDataStore(_ data: DicDataStoreNotification){}

@@ -45,9 +45,9 @@ extension QwertyKeyModelProtocol{
     }
         
     func backGroundColorWhenPressed(states: VariableStates) -> Color {
-        Design.shared.colors.highlightedKeyColor
+        Design.colors.highlightedKeyColor
     }
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        Design.shared.colors.normalKeyColor
+        Design.colors.normalKeyColor
     }
 }

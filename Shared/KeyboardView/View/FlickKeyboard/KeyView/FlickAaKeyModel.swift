@@ -55,9 +55,9 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         switch states.aAKeyState{
         case .normal:
-            return Design.shared.colors.normalKeyColor
+            return Design.colors.normalKeyColor
         case .capslock:
-            return Design.shared.colors.specialKeyColor
+            return Design.colors.specialKeyColor
         }
     }
 }

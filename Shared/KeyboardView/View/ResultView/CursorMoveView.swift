@@ -49,11 +49,11 @@ struct CursorMoveView: View{
     }
 
     private var centerColor: Color {
-        Design.shared.colors.highlightedKeyColor.opacity(opacity)
+        Design.colors.highlightedKeyColor.opacity(opacity)
     }
 
     private var edgeColor: Color {
-        Design.shared.colors.backGroundColor.opacity(opacity)
+        Design.colors.backGroundColor.opacity(opacity)
     }
 
     private var symbolsFontWeight: Font.Weight {

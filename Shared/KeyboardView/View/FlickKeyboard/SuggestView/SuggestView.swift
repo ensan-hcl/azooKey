@@ -58,7 +58,7 @@ struct SuggestView: View {
                     self.neededApeearView(direction: .left)
                     RoundedRectangle(cornerRadius: 5.0)
                         .frame(width: self.model.keySize.width, height: self.model.keySize.height)
-                        .foregroundColor(Design.shared.colors.highlightedKeyColor.opacity(VariableStates.shared.themeManager.weakOpacity))
+                        .foregroundColor(Design.colors.highlightedKeyColor.opacity(VariableStates.shared.themeManager.weakOpacity))
                     self.neededApeearView(direction: .right)
                 }
                 self.neededApeearView(direction: .bottom)

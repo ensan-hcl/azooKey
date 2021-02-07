@@ -36,7 +36,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                     self.collapse()
                 }){
                     Image(systemName: "chevron.up")
-                        .font(Design.shared.fonts.iconImageFont)
+                        .font(Design.fonts.iconImageFont)
                         .frame(height: 18)
                 }
                 .buttonStyle(ResultButtonStyle(height: 18))
@@ -83,7 +83,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         var curSum: CGFloat = .zero
         var splited: [SplitedResultData<Candidate>] = []
         var curResult: [ResultData<Candidate>] = []
-        let font = UIFont.systemFont(ofSize: Design.shared.fonts.resultViewFontSize+1)
+        let font = UIFont.systemFont(ofSize: Design.fonts.resultViewFontSize+1)
         results.forEach{[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
             if !Design.shared.isOverScreenWidth(curSum + width){

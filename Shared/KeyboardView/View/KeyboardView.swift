@@ -24,7 +24,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
 
     var body: some View {
         ZStack{
-            Design.shared.colors.backGroundColor
+            Design.colors.backGroundColor
                 .frame(maxWidth: .infinity)
                 .overlay(
                     Group{

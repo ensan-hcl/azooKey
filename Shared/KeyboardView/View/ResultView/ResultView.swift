@@ -63,7 +63,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                         .id(data.id)
                                     }else{
                                         Text(data.candidate.text)
-                                            .font(Design.shared.fonts.resultViewFont)
+                                            .font(Design.fonts.resultViewFont)
                                             .underline(true, color: .accentColor)
                                     }
                                 }
@@ -80,7 +80,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                             self.expand()
                         }){
                             Image(systemName: "chevron.down")
-                                .font(Design.shared.fonts.iconImageFont)
+                                .font(Design.fonts.iconImageFont)
                                 .frame(height: 18)
                         }
                         .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6))
@@ -145,14 +145,14 @@ struct ResultButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Design.shared.fonts.resultViewFont)
+            .font(Design.fonts.resultViewFont)
             .frame(height: height)
             .padding(.all, 5)
             .foregroundColor(VariableStates.shared.themeManager.theme.resultTextColor) //文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
                     Color(UIColor.systemGray4).opacity(VariableStates.shared.themeManager.mainOpacity) :
-                    Design.shared.colors.backGroundColor.opacity(VariableStates.shared.themeManager.mainOpacity))
+                    Design.colors.backGroundColor.opacity(VariableStates.shared.themeManager.mainOpacity))
             .cornerRadius(5.0)
     }
 }

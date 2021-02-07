@@ -22,7 +22,7 @@ struct QwertyVariationsView: View {
             ForEach(model.variations.indices, id: \.self){(index: Int) in
                 ZStack{
                     Rectangle()
-                        .foregroundColor(index == self.modelVariableSection.selection ? Color.blue:Design.shared.colors.highlightedKeyColor)
+                        .foregroundColor(index == self.modelVariableSection.selection ? Color.blue:Design.colors.highlightedKeyColor)
                         .frame(width: Design.shared.keyViewSize.width, height: Design.shared.keyViewSize.height*0.9, alignment: .center)
                         .cornerRadius(10.0)
                     getLabel(model.variations[index].label)

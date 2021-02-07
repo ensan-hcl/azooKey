@@ -88,7 +88,7 @@ final class KeyboardActionDepartment: ActionDepartment{
     }
 
     override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
-        return delegate.makeChangeKeyboardButtonView(size: Design.shared.fonts.iconFontSize)
+        return delegate.makeChangeKeyboardButtonView(size: Design.fonts.iconFontSize)
     }
     
     ///変換を確定した場合に呼ばれる。
