@@ -19,23 +19,41 @@ struct ThemeEditView: View {
         VariableStates.shared.themeManager.theme = self.theme
     }
 
+    @State private var useImage = false
     @State private var refresh = false
 
     var body: some View {
         VStack{
-            if refresh{
-                KeyboardPreview()
-                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardHeight)
-                    .scaleEffect(0.9, anchor: .center)
-            }else{
-                KeyboardPreview()
-                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardHeight)
-                    .scaleEffect(0.9, anchor: .center)
-            }
             Form{
+                Section(header: Text("背景")){
+                    if useImage{
+                        Button{
+
+                        } label: {
+                            HStack{
+                                Text("\(systemImage: "photo")画像を選び直す")
+                            }
+                        }
+
+                        Button{
+
+                        } label: {
+                            HStack{
+                                Text("画像を削除")
+                            }
+                        }
+                    } else {
+                        Button{
+
+                        } label: {
+                            HStack{
+                                Text("\(systemImage: "photo")画像を選ぶ")
+                            }
+                        }
+                        ColorPicker("背景の色", selection: $theme.textColor)
+                    }
+                }
                 Section(header: Text("文字")){
-                    ColorPicker("キーの文字の色", selection: $theme.textColor)
-                    ColorPicker("変換候補の文字の色", selection: $theme.resultTextColor)
                     HStack{
                         Text("文字の太さ")
                         Slider(value: $selectFontRowValue, in: 1...9.9){editing in
@@ -44,14 +62,44 @@ struct ThemeEditView: View {
                     }
                 }
 
-                Section(header: Text("キーのデザイン")){
-                    HStack{
-                        Text("背景の透明度")
-                        Slider(value: $theme.keyBackgroundColorOpacity, in: 0.001...1)
-                    }
+                Section(header: Text("キー")){
+                    ColorPicker("キーの文字の色", selection: $theme.textColor)
+
+                    ColorPicker("通常キーの背景色", selection: $theme.borderColor)
+                    ColorPicker("特殊キーの背景色", selection: $theme.borderColor)
+
                     ColorPicker("枠線の色", selection: $theme.borderColor)
+                    HStack{
+                        Text("枠線の太さ")
+                        Slider(value: $selectFontRowValue, in: 1...9.9){editing in
+                            theme.textFont = ThemeFontWeight.init(rawValue: Int(selectFontRowValue)) ?? .regular
+                        }
+                    }
                 }
 
+                Section(header: Text("変換候補")){
+                    ColorPicker("変換候補の文字の色", selection: $theme.resultTextColor)
+                    ColorPicker("変換候補の背景の色", selection: $theme.resultTextColor)
+                }
+
+                Section{
+                    Button{
+                        self.theme = .default
+                    } label: {
+                        Text("リセットする")
+                            .foregroundColor(.red)
+                    }
+                }
+
+            }
+            if refresh{
+                KeyboardPreview()
+                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardHeight)
+                    .scaleEffect(0.9, anchor: .center)
+            }else{
+                KeyboardPreview()
+                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardHeight)
+                    .scaleEffect(0.9, anchor: .center)
             }
         }
         .background(backgroundColor)
