@@ -21,7 +21,7 @@ struct ThemeData: Codable {
 
     static let mock: Self = Self.init(pictureFileName: "wallPaperMock", textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, resultTextColor: Color(.displayP3, white: 1, opacity: 1), borderColor: Color(.displayP3, white: 0, opacity: 0), keyBackgroundColorOpacity: 0.3)
 
-    static let clear: Self = Self.init(pictureFileName: "wallPaperMock2", textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, resultTextColor: Color(.displayP3, white: 1, opacity: 1), borderColor: Color(.displayP3, white: 1, opacity: 0), keyBackgroundColorOpacity: 0.01)
+    static let clear: Self = Self.init(pictureFileName: "wallPaperMock", textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, resultTextColor: Color(.displayP3, white: 1, opacity: 1), borderColor: Color(.displayP3, white: 1, opacity: 0), keyBackgroundColorOpacity: 0.001)
 
 }
 
