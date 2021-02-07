@@ -86,7 +86,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         let font = UIFont.systemFont(ofSize: Design.fonts.resultViewFontSize+1)
         results.forEach{[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
-            if !Design.shared.isOverScreenWidth(curSum + width){
+            if (curSum + width) < Design.shared.screenWidth{
                 curResult.append(datum)
                 curSum += width
             }else{

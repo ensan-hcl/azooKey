@@ -59,7 +59,7 @@ struct Design{
     }
 
     var keyboardWidth: CGFloat {
-        return self.keyViewSize.width * CGFloat(self.horizontalKeyCount) + self.horizontalSpacing * CGFloat(self.horizontalKeyCount-1)
+        self.keyViewSize.width * CGFloat(self.horizontalKeyCount) + self.horizontalSpacing * CGFloat(self.horizontalKeyCount - 1)
     }
 
     var keyboardHeight: CGFloat {
@@ -100,25 +100,25 @@ struct Design{
         case (.flick, .vertical):
             return horizontalSpacing
         case (.flick, .horizontal):
-            return horizontalSpacing/2
+            return horizontalSpacing / 2
         case (.qwerty, .vertical):
-            return keyViewSize.width/3
+            return keyViewSize.width / 3
         case (.qwerty, .horizontal):
-            return keyViewSize.width/5
+            return keyViewSize.width / 5
         }
     }
 
     var horizontalSpacing: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
-            return (screenWidth - keyViewSize.width * 5)/5
+            return (screenWidth - keyViewSize.width * 5) / 5
         case (.flick, .horizontal):
-            return (screenWidth - screenWidth*10/13)/12 - 0.5
+            return (screenWidth - screenWidth * 10 / 13) / 12 - 0.5
         case (.qwerty, .vertical):
-            //9だとself.horizontalKeyCount-1で画面ぴったりになるが、それだとあまりにピシピシなので0.1を加えて調整する。
-            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount))/(9+0.5)
+            //9だとself.horizontalKeyCount-1で画面ぴったりになるが、それだとあまりにピシピシなので0.5を加えて調整する。
+            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount)) / (9 + 0.5)
         case (.qwerty, .horizontal):
-            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount))/10
+            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount)) / 10
         }
     }
 
@@ -126,28 +126,28 @@ struct Design{
         switch orientation{
         case .vertical:
             if UIDevice.current.userInterfaceIdiom == .pad{
-                return screenWidth/12
+                return screenWidth / 12
             }
-            return screenWidth/8
+            return screenWidth / 8
         case .horizontal:
             if UIDevice.current.userInterfaceIdiom == .pad{
-                return screenWidth/22
+                return screenWidth / 22
             }
-            return screenWidth/18
+            return screenWidth / 18
         }
     }
 
     var flickEnterKeySize: CGSize {
         let size = keyViewSize
-        return CGSize(width: size.width, height: size.height*2 + verticalSpacing)
+        return CGSize(width: size.width, height: size.height * 2 + verticalSpacing)
     }
 
     var qwertySpaceKeyWidth: CGFloat {
-        return keyViewSize.width*5
+        keyViewSize.width * 5
     }
 
     var qwertyEnterKeyWidth: CGFloat {
-        return keyViewSize.width*3
+        keyViewSize.width * 3
     }
 
     func qwertyScaledKeyWidth(normal: Int, for count: Int) -> CGFloat {
@@ -168,11 +168,7 @@ struct Design{
     func getMaximumTextSize(_ text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 10)
         let size = text.size(withAttributes: [.font: font])
-        return (self.keyboardHeight - self.keyViewSize.height*1.2)/size.height * 10
-    }
-
-    func isOverScreenWidth(_ value: CGFloat) -> Bool {
-        return screenWidth < value
+        return (self.keyboardHeight - self.keyViewSize.height * 1.2) / size.height * 10
     }
 
     enum Fonts{
@@ -201,7 +197,7 @@ struct Design{
         }
 
         var resultViewFont: Font {
-            return Font.system(size: resultViewFontSize).weight(themeFontWeight)
+            Font.system(size: resultViewFontSize).weight(themeFontWeight)
         }
 
         func keyLabelFont(text: String, width: CGFloat, scale: CGFloat) -> Font {
@@ -212,16 +208,16 @@ struct Design{
             let maxFontSize: Int
             switch Design.shared.layout{
             case .flick:
-                maxFontSize = Int(21*scale)
+                maxFontSize = Int(21 * scale)
             case .qwerty:
-                maxFontSize = Int(25*scale)
+                maxFontSize = Int(25 * scale)
             }
             //段階的フォールバック
             for fontsize in (10...maxFontSize).reversed(){
                 let size = UIFontMetrics.default.scaledValue(for: CGFloat(fontsize))
                 let font = UIFont.systemFont(ofSize: size, weight: .regular)
                 let title_size = text.size(withAttributes: [.font: font])
-                if title_size.width < width*0.95{
+                if title_size.width < width * 0.95{
                     return Font.system(size: size, weight: themeFontWeight, design: .default)
                 }
             }
@@ -233,10 +229,10 @@ struct Design{
     enum Colors{
         case `default`
         var backGroundColor: Color {
-            return Color("BackGroundColor")
+            Color("BackGroundColor")
         }
         var specialEnterKeyColor: Color {
-            return Color("OpenKeyColor")
+            Color("OpenKeyColor")
         }
         var normalKeyColor: Color {
             switch Design.shared.layout{
