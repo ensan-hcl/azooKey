@@ -9,15 +9,15 @@
 import Foundation
 import SwiftUI
 
-struct ThemeData: Codable {
-    let pictureFileName: String?
-    let textColor: Color
-    let textFont: ThemeFontWeight
-    let resultTextColor: Color
-    let borderColor: Color
-    let keyBackgroundColorOpacity: Double
+struct ThemeData: Codable, Equatable {
+    var pictureFileName: String?
+    var textColor: Color
+    var textFont: ThemeFontWeight
+    var resultTextColor: Color
+    var borderColor: Color
+    var keyBackgroundColorOpacity: Double
 
-    static let `default`: Self = Self.init(pictureFileName: nil, textColor: .primary, textFont: .normal, resultTextColor: .primary, borderColor: .clear, keyBackgroundColorOpacity: 1)
+    static let `default`: Self = Self.init(pictureFileName: nil, textColor: .primary, textFont: .regular, resultTextColor: .primary, borderColor: .clear, keyBackgroundColorOpacity: 1)
 
     static let mock: Self = Self.init(pictureFileName: "wallPaperMock", textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, resultTextColor: Color(.displayP3, white: 1, opacity: 1), borderColor: Color(.displayP3, white: 0, opacity: 0), keyBackgroundColorOpacity: 0.3)
 
@@ -26,8 +26,15 @@ struct ThemeData: Codable {
 }
 
 enum ThemeFontWeight: Int, Codable {
-    case normal = 3
-    case bold = 6
+    case ultraLight = 1
+    case thin = 2
+    case light = 3
+    case regular = 4
+    case medium = 5
+    case semibold = 6
+    case bold = 7
+    case heavy = 8
+    case black = 9
 }
 
 extension Color: Codable {
@@ -37,6 +44,7 @@ extension Color: Codable {
         case blue
         case opacity
     }
+    
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let red = try values.decode(Double.self, forKey: .red)

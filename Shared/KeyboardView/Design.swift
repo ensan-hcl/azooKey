@@ -303,14 +303,28 @@ struct Design{
 }
 
 struct ThemeManager{
-    let theme: ThemeData
+    var theme: ThemeData
 
     var weight: Font.Weight {
         switch theme.textFont {
-        case .normal:
+        case .ultraLight:
+            return .ultraLight
+        case .thin:
+            return .thin
+        case .light:
+            return .light
+        case .regular:
             return .regular
+        case .medium:
+            return .medium
+        case .semibold:
+            return .semibold
         case .bold:
             return .bold
+        case .heavy:
+            return .heavy
+        case .black:
+            return .black
         }
     }
 
@@ -329,6 +343,6 @@ struct ThemeManager{
     }
 
     static func getSelectedTheme() -> ThemeData {
-        return ThemeData.clear
+        return ThemeData.default
     }
 }

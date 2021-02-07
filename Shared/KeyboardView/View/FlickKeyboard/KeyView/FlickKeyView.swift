@@ -44,7 +44,6 @@ struct FlickKeyView: View {
             .onChanged({[unowned modelVariableSection] (value: DragGesture.Value) in
                 let startLocation = modelVariableSection.startLocation ?? value.startLocation
                 let d = startLocation.direction(to: value.location)
-                debug("flickdebug: onChanged", d, startLocation, modelVariableSection.pressState)
                 switch modelVariableSection.pressState{
                 //押していない状態の場合
                 case .inactive:
@@ -146,7 +145,6 @@ struct FlickKeyView: View {
             })
             //タップの終了時
             .onEnded({[unowned modelVariableSection] value in
-                debug("flickdebug: onEnded", modelVariableSection.pressState)
                 //サジェストを解除する
                 modelVariableSection.suggestState = .nothing
                 //通告する。

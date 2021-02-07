@@ -22,10 +22,20 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
         let button = UIButton(type: .custom)
         var weight: UIImage.SymbolWeight {
             switch VariableStates.shared.themeManager.theme.textFont{
-            case .normal:
+            case .ultraLight:
+                return .ultraLight
+            case .thin:
+                return .thin
+            case  .light, .regular:
                 return .light
-            case .bold:
+            case .medium:
+                return .medium
+            case .semibold, .bold:
                 return .semibold
+            case .heavy:
+                return .heavy
+            case .black:
+                return .black
             }
         }
         if let selector = selector{
