@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import PhotosUI
 
 struct ThemeEditView: View {
     @State private var theme: ThemeData = ThemeData.default
@@ -19,6 +20,17 @@ struct ThemeEditView: View {
         VariableStates.shared.themeManager.theme = self.theme
     }
 
+    @State private var image: UIImage? = nil
+    @State private var isPhotoPickerPresented = false
+
+    // PHPickerの設定
+    var config: PHPickerConfiguration {
+        var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+        config.filter = .images
+        config.selectionLimit = 1
+        return config
+    }
+
     @State private var useImage = false
     @State private var refresh = false
 
@@ -26,9 +38,9 @@ struct ThemeEditView: View {
         VStack{
             Form{
                 Section(header: Text("背景")){
-                    if useImage{
+                    if let _ = image{
                         Button{
-
+                            self.isPhotoPickerPresented = true
                         } label: {
                             HStack{
                                 Text("\(systemImage: "photo")画像を選び直す")
@@ -36,7 +48,7 @@ struct ThemeEditView: View {
                         }
 
                         Button{
-
+                            image = nil
                         } label: {
                             HStack{
                                 Text("画像を削除")
@@ -44,7 +56,7 @@ struct ThemeEditView: View {
                         }
                     } else {
                         Button{
-
+                            self.isPhotoPickerPresented = true
                         } label: {
                             HStack{
                                 Text("\(systemImage: "photo")画像を選ぶ")
@@ -103,9 +115,22 @@ struct ThemeEditView: View {
             }
         }
         .background(backgroundColor)
+        .onChange(of: image){value in
+            if let value = value{
+                self.theme.picture = .uiImage(value)
+            }else{
+                self.theme.picture = .none
+            }
+
+        }
         .onChange(of: theme){value in
             VariableStates.shared.themeManager.theme = self.theme
             self.refresh.toggle()
+        }
+        .sheet(isPresented: $isPhotoPickerPresented){
+            PhotoPicker(configuration: self.config,
+                        pickerResult: $image,
+                        isPresented: $isPhotoPickerPresented)
         }
         .navigationBarTitle(Text("着せ替えの編集"), displayMode: .inline)
     }
