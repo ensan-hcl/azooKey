@@ -50,12 +50,12 @@ struct ThemeEditView: View {
                                 Text("\(systemImage: "photo")画像を選び直す")
                             }
                         }
-
                         Button{
                             image = nil
                         } label: {
                             HStack{
                                 Text("画像を削除")
+                                    .foregroundColor(.red)
                             }
                         }
                     } else {
@@ -78,6 +78,10 @@ struct ThemeEditView: View {
                     }
                 }
 
+                Section(header: Text("変換候補")){
+                    ColorPicker("変換候補の文字の色", selection: $theme.resultTextColor)
+                }
+
                 Section(header: Text("キー")){
                     ColorPicker("キーの文字の色", selection: $theme.textColor)
 
@@ -89,10 +93,6 @@ struct ThemeEditView: View {
                         Text("枠線の太さ")
                         Slider(value: $theme.borderWidth, in: 0...10)
                     }
-                }
-
-                Section(header: Text("変換候補")){
-                    ColorPicker("変換候補の文字の色", selection: $theme.resultTextColor)
                 }
 
                 Section{
@@ -138,14 +138,14 @@ struct ThemeEditView: View {
             }
             if let pushedKeyColor = ColorTools.hsv(value, process: {h, s, v, opacity in
                 let base = (floor(v-0.5) + 0.5)*2
-                return Color(hue: h, saturation: s, brightness: v - base * 0.1, opacity: sqrt(opacity))
+                return Color(hue: h, saturation: s, brightness: v - base * 0.1, opacity: max(0.05, sqrt(opacity)))
             }){
                 self.theme.pushedKeyFillColor = .color(pushedKeyColor)
             }
         }
         .onChange(of: specialKeyColor){value in
             if let specialKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
-                return Color(red: r, green: g, blue: b, opacity: max(0.001, opacity))
+                return Color(red: r, green: g, blue: b, opacity: max(0.005, opacity))
             }){
                 self.theme.specialKeyFillColor = .color(specialKeyColor)
             }
