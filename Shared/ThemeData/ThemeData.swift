@@ -10,18 +10,47 @@ import Foundation
 import SwiftUI
 
 struct ThemeData: Codable, Equatable {
+    var backgroundColor: Color
     var picture: ThemePicture
     var textColor: Color
     var textFont: ThemeFontWeight
     var resultTextColor: Color
     var borderColor: Color
+    var borderWidth: Double
     var keyBackgroundColorOpacity: Double
 
-    static let `default`: Self = Self.init(picture: .none, textColor: .primary, textFont: .regular, resultTextColor: .primary, borderColor: .clear, keyBackgroundColorOpacity: 1)
+    static let `default`: Self = Self.init(
+        backgroundColor: Design.colors.backGroundColor,
+        picture: .none,
+        textColor: .primary,
+        textFont: .regular,
+        resultTextColor: .primary,
+        borderColor: .clear,
+        borderWidth: 1,
+        keyBackgroundColorOpacity: 1
+    )
 
-    static let mock: Self = Self.init(picture: .asset("wallPaperMock"), textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, resultTextColor: Color(.displayP3, white: 1, opacity: 1), borderColor: Color(.displayP3, white: 0, opacity: 0), keyBackgroundColorOpacity: 0.3)
+    static let mock: Self = Self.init(
+        backgroundColor: Design.colors.backGroundColor,
+        picture: .asset("wallPaperMock"),
+        textColor: Color(.displayP3, white: 1, opacity: 1),
+        textFont: .bold,
+        resultTextColor: Color(.displayP3, white: 1, opacity: 1),
+        borderColor: Color(.displayP3, white: 0, opacity: 0),
+        borderWidth: 1,
+        keyBackgroundColorOpacity: 0.3
+    )
 
-    static let clear: Self = Self.init(picture: .asset("wallPaperMock"), textColor: Color(.displayP3, white: 1, opacity: 1), textFont: .bold, resultTextColor: Color(.displayP3, white: 1, opacity: 1), borderColor: Color(.displayP3, white: 1, opacity: 0), keyBackgroundColorOpacity: 0.001)
+    static let clear: Self = Self.init(
+        backgroundColor: Design.colors.backGroundColor,
+        picture: .asset("wallPaperMock"),
+        textColor: Color(.displayP3, white: 1, opacity: 1),
+        textFont: .bold,
+        resultTextColor: Color(.displayP3, white: 1, opacity: 1),
+        borderColor: Color(.displayP3, white: 1, opacity: 0),
+        borderWidth: 1,
+        keyBackgroundColorOpacity: 0.001
+    )
 }
 
 enum ThemeFontWeight: Int, Codable {

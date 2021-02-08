@@ -62,7 +62,7 @@ struct ThemeEditView: View {
                                 Text("\(systemImage: "photo")画像を選ぶ")
                             }
                         }
-                        ColorPicker("背景の色", selection: $theme.textColor)
+                        ColorPicker("背景の色", selection: $theme.backgroundColor)
                     }
                 }
                 Section(header: Text("文字")){
@@ -104,11 +104,13 @@ struct ThemeEditView: View {
             }
             if refresh{
                 KeyboardPreview()
-                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardHeight)
+                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
+                    .clipped()
                     .scaleEffect(0.9, anchor: .center)
             }else{
                 KeyboardPreview()
-                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardHeight)
+                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
+                    .clipped()
                     .scaleEffect(0.9, anchor: .center)
             }
         }
