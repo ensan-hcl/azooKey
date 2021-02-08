@@ -152,7 +152,7 @@ struct ResultButtonStyle: ButtonStyle {
             .background(
                 configuration.isPressed ?
                     Color(UIColor.systemGray4).opacity(VariableStates.shared.themeManager.mainOpacity) :
-                    Design.colors.backGroundColor.opacity(VariableStates.shared.themeManager.mainOpacity))
+                    VariableStates.shared.themeManager.theme.backgroundColor.opacity(VariableStates.shared.themeManager.mainOpacity))
             .cornerRadius(5.0)
     }
 }

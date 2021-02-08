@@ -18,6 +18,7 @@ struct ThemeEditView: View {
 
     init(){
         VariableStates.shared.themeManager.theme = self.theme
+        VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
     }
 
     @State private var image: UIImage? = nil
@@ -89,7 +90,6 @@ struct ThemeEditView: View {
 
                 Section(header: Text("変換候補")){
                     ColorPicker("変換候補の文字の色", selection: $theme.resultTextColor)
-                    ColorPicker("変換候補の背景の色", selection: $theme.resultTextColor)
                 }
 
                 Section{
@@ -118,6 +118,7 @@ struct ThemeEditView: View {
         .onChange(of: image){value in
             if let value = value{
                 self.theme.picture = .uiImage(value)
+                self.theme.backgroundColor = Color.white.opacity(0)
             }else{
                 self.theme.picture = .none
             }
