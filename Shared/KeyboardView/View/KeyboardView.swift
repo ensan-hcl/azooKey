@@ -32,7 +32,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: Design.shared.screenWidth)
+                                .frame(width: Design.shared.screenWidth, height: Design.shared.keyboardScreenHeight)
                                 .clipped()
                         }
                     }

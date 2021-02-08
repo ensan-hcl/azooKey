@@ -62,6 +62,10 @@ struct Design{
         self.keyViewSize.width * CGFloat(self.horizontalKeyCount) + self.horizontalSpacing * CGFloat(self.horizontalKeyCount - 1)
     }
 
+    var keyboardScreenHeight: CGFloat {
+        return keyboardHeight + 2
+    }
+
     var keyboardHeight: CGFloat {
         let viewheight = self.keyViewSize.height * CGFloat(self.verticalKeyCount) + self.resultViewHeight
         let vSpacing = self.verticalSpacing
@@ -343,6 +347,6 @@ struct ThemeManager{
     }
 
     static func getSelectedTheme() -> ThemeData {
-        return ThemeData.default
+        return ThemeData.clear
     }
 }

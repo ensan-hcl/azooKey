@@ -79,18 +79,22 @@ struct QwertyKeyView: View{
         }
     }
 
-    var keyBorderColor: Color {
+    private var keyBorderColor: Color {
         VariableStates.shared.themeManager.theme.borderColor
     }
 
-    var label: KeyLabel {
+    private var keyBorderWidth: CGFloat {
+        CGFloat(VariableStates.shared.themeManager.theme.borderWidth)
+    }
+
+    private var label: KeyLabel {
         self.model.label(states: self.variableStates)
     }
 
     var body: some View{
         ZStack(alignment: .bottom){
             Group{
-                RoundedBorderedRectangle(cornerRadius: 6, fillColor: keyFillColor, borderColor: keyBorderColor)
+                RoundedBorderedRectangle(cornerRadius: 6, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
                     .frame(width: self.model.keySize.width, height: self.model.keySize.height)
                     .contentShape(
                         Rectangle()

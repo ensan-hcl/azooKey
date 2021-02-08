@@ -83,9 +83,7 @@ struct ThemeEditView: View {
                     ColorPicker("枠線の色", selection: $theme.borderColor)
                     HStack{
                         Text("枠線の太さ")
-                        Slider(value: $selectFontRowValue, in: 1...9.9){editing in
-                            theme.textFont = ThemeFontWeight.init(rawValue: Int(selectFontRowValue)) ?? .regular
-                        }
+                        Slider(value: $theme.borderWidth, in: 0...10)
                     }
                 }
 
