@@ -19,7 +19,7 @@ protocol QwertyKeyModelProtocol{
     
     var variationsModel: VariationsModel {get}
 
-    func label(states: VariableStates) -> KeyLabel
+    func label(states: VariableStates, color: Color?) -> KeyLabel
     func backGroundColorWhenPressed(states: VariableStates) -> Color
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color
 
@@ -45,9 +45,9 @@ extension QwertyKeyModelProtocol{
     }
         
     func backGroundColorWhenPressed(states: VariableStates) -> Color {
-        Design.colors.highlightedKeyColor
+        states.themeManager.theme.pushedKeyFillColor.color
     }
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        Design.colors.normalKeyColor
+        states.themeManager.theme.normalKeyFillColor.color
     }
 }

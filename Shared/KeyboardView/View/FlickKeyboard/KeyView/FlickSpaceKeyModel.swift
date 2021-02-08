@@ -44,7 +44,7 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol{
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        Design.colors.specialKeyColor
+        states.themeManager.theme.specialKeyFillColor.color
     }
 
     func sound() {

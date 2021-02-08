@@ -72,10 +72,8 @@ struct QwertyKeyView: View{
     var keyFillColor: Color {
         if modelVariableSection.pressState.isActive{
             return self.model.backGroundColorWhenPressed(states: variableStates)
-                .opacity(VariableStates.shared.themeManager.weakOpacity)
         }else{
             return self.model.backGroundColorWhenUnpressed(states: variableStates)
-                .opacity(VariableStates.shared.themeManager.mainOpacity)
         }
     }
 
@@ -87,8 +85,12 @@ struct QwertyKeyView: View{
         CGFloat(VariableStates.shared.themeManager.theme.borderWidth)
     }
 
-    private var label: KeyLabel {
-        self.model.label(states: self.variableStates)
+    private var suggestColor: Color {
+        VariableStates.shared.themeManager.theme != .default ? .white : Design.colors.suggestKeyColor
+    }
+
+    private var suggestTextColor: Color? {
+        VariableStates.shared.themeManager.theme != .default ? .black : nil
     }
 
     var body: some View{
@@ -101,7 +103,7 @@ struct QwertyKeyView: View{
                             .size(CGSize(width: self.model.keySize.width + Design.shared.horizontalSpacing, height: self.model.keySize.height + Design.shared.verticalSpacing))
                     )
                     .gesture(gesture)
-                    .overlay(label)
+                    .overlay(self.model.label(states: variableStates, color: nil))
             }
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
@@ -111,7 +113,7 @@ struct QwertyKeyView: View{
                             keyWidth: self.model.keySize.width,
                             scale_y: 1,
                             variationsCount: self.model.variationsModel.variations.count,
-                            color: Design.colors.highlightedKeyColor,
+                            color: suggestColor,
                             direction: model.variationsModel.direction
                         )
                         .overlay(
@@ -124,10 +126,10 @@ struct QwertyKeyView: View{
                         QwertySuggestView.scaleToFrameSize(
                             keyWidth: self.model.keySize.width,
                             scale_y: 1,
-                            color: Design.colors.highlightedKeyColor
+                            color: suggestColor
                         )
                         .overlay(
-                            self.model.label(states: variableStates)
+                            self.model.label(states: variableStates, color: suggestTextColor)
                                 .padding(.bottom, height)
                         )
                     }

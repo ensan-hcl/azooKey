@@ -193,9 +193,9 @@ struct FlickKeyView: View {
 
     private var keyFillColor: Color {
         if self.modelVariableSection.pressState.isActive(){
-            return model.backGroundColorWhenPressed(states: variableStates).opacity(VariableStates.shared.themeManager.weakOpacity)
+            return model.backGroundColorWhenPressed(states: variableStates)
         }else{
-            return model.backGroundColorWhenUnpressed(states: variableStates).opacity(VariableStates.shared.themeManager.mainOpacity)
+            return model.backGroundColorWhenUnpressed(states: variableStates)
         }
     }
 

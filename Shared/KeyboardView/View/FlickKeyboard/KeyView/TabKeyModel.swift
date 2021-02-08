@@ -46,9 +46,9 @@ struct TabKeyModel: FlickKeyModelProtocol{
 
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         if states.tabState == self.tabType{
-            return Design.colors.highlightedKeyColor
+            return states.themeManager.theme.pushedKeyFillColor.color
         }
-        return Design.colors.specialKeyColor
+        return states.themeManager.theme.specialKeyFillColor.color
     }
     
     func sound() {

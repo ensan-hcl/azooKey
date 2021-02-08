@@ -17,7 +17,10 @@ struct ThemeData: Codable, Equatable {
     var resultTextColor: Color
     var borderColor: Color
     var borderWidth: Double
-    var keyBackgroundColorOpacity: Double
+    var normalKeyFillColor: ThemeColor
+    var specialKeyFillColor: ThemeColor
+    var pushedKeyFillColor: ThemeColor   //自動で設定する
+    var suggestKeyFillColor: ThemeColor?  //自動で設定する
 
     static let `default`: Self = Self.init(
         backgroundColor: Design.colors.backGroundColor,
@@ -27,7 +30,10 @@ struct ThemeData: Codable, Equatable {
         resultTextColor: .primary,
         borderColor: .clear,
         borderWidth: 1,
-        keyBackgroundColorOpacity: 1
+        normalKeyFillColor: .system(.normalKeyColor),
+        specialKeyFillColor: .system(.specialKeyColor),
+        pushedKeyFillColor: .system(.highlightedKeyColor),
+        suggestKeyFillColor: nil
     )
 
     static let mock: Self = Self.init(
@@ -38,18 +44,24 @@ struct ThemeData: Codable, Equatable {
         resultTextColor: Color(.displayP3, white: 1, opacity: 1),
         borderColor: Color(.displayP3, white: 0, opacity: 0),
         borderWidth: 1,
-        keyBackgroundColorOpacity: 0.3
+        normalKeyFillColor: .system(.normalKeyColor),
+        specialKeyFillColor: .system(.specialKeyColor),
+        pushedKeyFillColor: .system(.highlightedKeyColor),
+        suggestKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 1))
     )
 
     static let clear: Self = Self.init(
-        backgroundColor: Design.colors.backGroundColor,
+        backgroundColor: Color(.displayP3, white: 1, opacity: 0),
         picture: .asset("wallPaperMock"),
         textColor: Color(.displayP3, white: 1, opacity: 1),
         textFont: .bold,
         resultTextColor: Color(.displayP3, white: 1, opacity: 1),
         borderColor: Color(.displayP3, white: 1, opacity: 0),
         borderWidth: 1,
-        keyBackgroundColorOpacity: 0.001
+        normalKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 0.001)),
+        specialKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 0.001)),
+        pushedKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 0.05)),
+        suggestKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 1))
     )
 }
 
@@ -64,33 +76,3 @@ enum ThemeFontWeight: Int, Codable {
     case heavy = 8
     case black = 9
 }
-
-extension Color: Codable {
-    enum CodingKeys: String, CodingKey {
-        case red
-        case green
-        case blue
-        case opacity
-    }
-
-    public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        let red = try values.decode(Double.self, forKey: .red)
-        let green = try values.decode(Double.self, forKey: .green)
-        let blue = try values.decode(Double.self, forKey: .blue)
-        let opacity = try values.decode(Double.self, forKey: .blue)
-        self.init(.displayP3, red: red, green: green, blue: blue, opacity: opacity)
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        guard let rgba = self.cgColor?.components else{
-            throw NSError(domain: "Color.encode", code: 34, userInfo: [:])
-        }
-        try container.encode(rgba[0], forKey: .red)
-        try container.encode(rgba[1], forKey: .green)
-        try container.encode(rgba[2], forKey: .blue)
-        try container.encode(rgba[3], forKey: .opacity)
-    }
-}
-

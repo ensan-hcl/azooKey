@@ -16,9 +16,9 @@ enum FlickKeyColorType{
     var color: Color {
         switch self {
         case .normal:
-            return Design.colors.normalKeyColor
+            return VariableStates.shared.themeManager.theme.normalKeyFillColor.color
         case .tabkey:
-            return Design.colors.specialKeyColor
+            return VariableStates.shared.themeManager.theme.specialKeyFillColor.color
         }
     }
 }
@@ -97,10 +97,10 @@ extension FlickKeyModelProtocol{
     }
     
     func backGroundColorWhenPressed(states: VariableStates) -> Color {
-        Design.colors.highlightedKeyColor
+        states.themeManager.theme.pushedKeyFillColor.color
     }
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        Design.colors.normalKeyColor
+        states.themeManager.theme.normalKeyFillColor.color
     }
     func flickSensitivity(to direction: FlickDirection) -> CGFloat {
         return 25

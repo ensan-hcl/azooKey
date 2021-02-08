@@ -36,21 +36,25 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
         return []
     }
     
-    func label(states: VariableStates) -> KeyLabel {
+    func label(states: VariableStates, color: Color? = nil) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
-        return KeyLabel(.text(text), width: self.keySize.width, textSize: .small)
+        return KeyLabel(.text(text), width: self.keySize.width, textSize: .small, textColor: color)
     }
     
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         switch states.enterKeyState{
         case .complete, .edit:
-            return Design.colors.specialKeyColor
+            return states.themeManager.theme.specialKeyFillColor.color
         case let .return(type):
             switch type{
             case .default:
-                return Design.colors.specialKeyColor
+                return states.themeManager.theme.specialKeyFillColor.color
             default:
-                return Design.colors.specialEnterKeyColor
+                if VariableStates.shared.themeManager.theme == .default{
+                    return Design.colors.specialEnterKeyColor
+                }else{
+                    return states.themeManager.theme.specialKeyFillColor.color
+                }
             }
         }
     }

@@ -48,7 +48,11 @@ struct SuggestView: View {
         }
         return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true)
     }
-    
+
+    private var centerFillColor: Color {
+        VariableStates.shared.themeManager.theme.specialKeyFillColor.color
+    }
+
     var body: some View {
         VStack(spacing: Design.shared.verticalSpacing){
             if self.modelVariableSection.suggestState.isActive{
@@ -58,7 +62,7 @@ struct SuggestView: View {
                     self.neededApeearView(direction: .left)
                     RoundedRectangle(cornerRadius: 5.0)
                         .frame(width: self.model.keySize.width, height: self.model.keySize.height)
-                        .foregroundColor(Design.colors.highlightedKeyColor.opacity(VariableStates.shared.themeManager.weakOpacity))
+                        .foregroundColor(centerFillColor)
                     self.neededApeearView(direction: .right)
                 }
                 self.neededApeearView(direction: .bottom)

@@ -41,15 +41,17 @@ struct KeyLabel: View {
 
     private var labelType: KeyLabelType
     private var width: CGFloat
+    private var textColor: Color?
     private let textSize: TextSize
 
     private var mainKeyColor: Color {
-        VariableStates.shared.themeManager.theme.textColor
+        textColor ?? VariableStates.shared.themeManager.theme.textColor
     }
 
-    init(_ type: KeyLabelType, width: CGFloat, textSize: TextSize = .large){
+    init(_ type: KeyLabelType, width: CGFloat, textSize: TextSize = .large, textColor: Color? = nil){
         self.labelType = type
         self.width = width
+        self.textColor = textColor
         self.textSize = textSize
     }
 

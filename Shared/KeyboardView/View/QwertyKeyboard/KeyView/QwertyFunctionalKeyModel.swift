@@ -29,7 +29,7 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
     }
     
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        Design.colors.specialKeyColor
+        states.themeManager.theme.specialKeyFillColor.color
     }
     
     init(labelType: KeyLabelType, rowInfo: (normal: Int, functional: Int, space: Int, enter: Int), pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], needSuggestView: Bool = false){
@@ -40,8 +40,8 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
         self.rowInfo = rowInfo
     }
 
-    func label(states: VariableStates) -> KeyLabel {
-        return KeyLabel(self.labelType, width: self.keySize.width)
+    func label(states: VariableStates, color: Color? = nil) -> KeyLabel {
+        return KeyLabel(self.labelType, width: self.keySize.width, textColor: color)
     }
 
     func sound() {

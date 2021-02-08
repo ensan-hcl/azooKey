@@ -50,13 +50,17 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
     func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
         switch states.enterKeyState{
         case .complete, .edit:
-            return Design.colors.specialKeyColor
+            return states.themeManager.theme.specialKeyFillColor.color
         case let .return(type):
             switch type{
             case .default:
-                return Design.colors.specialKeyColor
+                return states.themeManager.theme.specialKeyFillColor.color
             default:
-                return Design.colors.specialEnterKeyColor
+                if VariableStates.shared.themeManager.theme == .default{
+                    return Design.colors.specialEnterKeyColor
+                }else{
+                    return states.themeManager.theme.specialKeyFillColor.color
+                }
             }
         }
     }

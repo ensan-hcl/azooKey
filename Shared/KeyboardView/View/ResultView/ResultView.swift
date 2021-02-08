@@ -151,8 +151,9 @@ struct ResultButtonStyle: ButtonStyle {
             .foregroundColor(VariableStates.shared.themeManager.theme.resultTextColor) //文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
-                    Color(UIColor.systemGray4).opacity(VariableStates.shared.themeManager.mainOpacity) :
-                    VariableStates.shared.themeManager.theme.backgroundColor.opacity(VariableStates.shared.themeManager.mainOpacity))
+                    VariableStates.shared.themeManager.theme.pushedKeyFillColor.color.opacity(0.5) :
+                    VariableStates.shared.themeManager.theme.backgroundColor
+            )
             .cornerRadius(5.0)
     }
 }

@@ -44,16 +44,12 @@ struct CursorMoveView: View{
         }
     }
 
-    private var opacity: Double {
-        sqrt(VariableStates.shared.themeManager.mainOpacity)
-    }
-
     private var centerColor: Color {
-        Design.colors.highlightedKeyColor.opacity(opacity)
+        VariableStates.shared.themeManager.theme.pushedKeyFillColor.color
     }
 
     private var edgeColor: Color {
-        Design.colors.backGroundColor.opacity(opacity)
+        VariableStates.shared.themeManager.theme.pushedKeyFillColor.color
     }
 
     private var symbolsFontWeight: Font.Weight {

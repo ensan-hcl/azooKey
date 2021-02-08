@@ -262,6 +262,14 @@ struct Design{
                 return Color("RomanHighlightedKeyColor")
             }
         }
+        var suggestKeyColor: Color {
+            switch Design.shared.layout{
+            case .flick:
+                return Color(UIColor.systemGray4)
+            case .qwerty:
+                return Color("RomanHighlightedKeyColor")
+            }
+        }
     }
 
     enum Language{
@@ -330,16 +338,6 @@ struct ThemeManager{
         case .black:
             return .black
         }
-    }
-
-    ///少し濃い透明度
-    var weakOpacity: Double {
-        sqrt(self.theme.keyBackgroundColorOpacity)
-    }
-
-    ///指定された透明度
-    var mainOpacity: Double {
-        self.theme.keyBackgroundColorOpacity
     }
 
     init(){

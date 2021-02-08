@@ -18,11 +18,15 @@ struct ThemeEditView: View {
 
     init(){
         VariableStates.shared.themeManager.theme = self.theme
+        self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
         VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
     }
 
     @State private var image: UIImage? = nil
     @State private var isPhotoPickerPresented = false
+
+    @State private var normalKeyColor = Design.colors.normalKeyColor
+    @State private var specialKeyColor = Design.colors.specialKeyColor
 
     // PHPickerの設定
     var config: PHPickerConfiguration {
@@ -32,7 +36,6 @@ struct ThemeEditView: View {
         return config
     }
 
-    @State private var useImage = false
     @State private var refresh = false
 
     var body: some View {
@@ -78,8 +81,8 @@ struct ThemeEditView: View {
                 Section(header: Text("キー")){
                     ColorPicker("キーの文字の色", selection: $theme.textColor)
 
-                    ColorPicker("通常キーの背景色", selection: $theme.borderColor)
-                    ColorPicker("特殊キーの背景色", selection: $theme.borderColor)
+                    ColorPicker("通常キーの背景色", selection: $normalKeyColor)
+                    ColorPicker("特殊キーの背景色", selection: $specialKeyColor)
 
                     ColorPicker("枠線の色", selection: $theme.borderColor)
                     HStack{
@@ -94,6 +97,10 @@ struct ThemeEditView: View {
 
                 Section{
                     Button{
+                        self.image = nil
+                        self.normalKeyColor = Design.colors.normalKeyColor
+                        self.specialKeyColor = Design.colors.specialKeyColor
+                        self.selectFontRowValue = 4
                         self.theme = .default
                     } label: {
                         Text("リセットする")
@@ -122,7 +129,26 @@ struct ThemeEditView: View {
             }else{
                 self.theme.picture = .none
             }
-
+        }
+        .onChange(of: normalKeyColor){value in
+            if let normalKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
+                return Color(red: r, green: g, blue: b, opacity: max(0.001, opacity))
+            }){
+                self.theme.normalKeyFillColor = .color(normalKeyColor)
+            }
+            if let pushedKeyColor = ColorTools.hsv(value, process: {h, s, v, opacity in
+                let base = (floor(v-0.5) + 0.5)*2
+                return Color(hue: h, saturation: s, brightness: v - base * 0.1, opacity: sqrt(opacity))
+            }){
+                self.theme.pushedKeyFillColor = .color(pushedKeyColor)
+            }
+        }
+        .onChange(of: specialKeyColor){value in
+            if let specialKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
+                return Color(red: r, green: g, blue: b, opacity: max(0.001, opacity))
+            }){
+                self.theme.specialKeyFillColor = .color(specialKeyColor)
+            }
         }
         .onChange(of: theme){value in
             VariableStates.shared.themeManager.theme = self.theme

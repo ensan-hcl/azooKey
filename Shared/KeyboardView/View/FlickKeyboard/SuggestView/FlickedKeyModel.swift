@@ -40,9 +40,17 @@ struct FlickedKeyModel{
         self.pressActions = pressActions
         self.longPressActions = longPressActions
     }
-    
+
+    private var pointedColor: Color {
+        VariableStates.shared.themeManager.theme != .default ? .white : Color(UIColor.systemGray4)
+    }
+
+    private var unpointedColor: Color {
+        VariableStates.shared.themeManager.theme != .default ? .white : Color(UIColor.systemGray5)
+    }
+
     func getSuggestView(size: CGSize, isHidden: Bool = false, isPointed: Bool = false) -> some View {
-        let color = Color(isPointed ? UIColor.systemGray4:UIColor.systemGray5)
+        let color = isPointed ? pointedColor : unpointedColor
         return RoundedRectangle(cornerRadius: 5.0)
             .frame(width: size.width, height: size.height)
             .foregroundColor(color)
@@ -52,6 +60,9 @@ struct FlickedKeyModel{
     }
     
     func label(width: CGFloat) -> some View {
+        if VariableStates.shared.themeManager.theme != .default{
+            return KeyLabel(self.labelType, width: width, textColor: .black)
+        }
         return KeyLabel(self.labelType, width: width)
     }
     
