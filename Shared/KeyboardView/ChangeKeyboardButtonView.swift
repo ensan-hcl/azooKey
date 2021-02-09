@@ -20,26 +20,27 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
         self.theme = theme
     }
 
+    private var weight: UIImage.SymbolWeight {
+        switch theme.textFont{
+        case .ultraLight:
+            return .ultraLight
+        case .thin:
+            return .thin
+        case  .light, .regular:
+            return .light
+        case .medium:
+            return .medium
+        case .semibold, .bold:
+            return .semibold
+        case .heavy:
+            return .heavy
+        case .black:
+            return .black
+        }
+    }
+
     func makeUIView(context: Context) -> UIButton {
         let button = UIButton(type: .custom)
-        var weight: UIImage.SymbolWeight {
-            switch theme.textFont{
-            case .ultraLight:
-                return .ultraLight
-            case .thin:
-                return .thin
-            case  .light, .regular:
-                return .light
-            case .medium:
-                return .medium
-            case .semibold, .bold:
-                return .semibold
-            case .heavy:
-                return .heavy
-            case .black:
-                return .black
-            }
-        }
         if let selector = selector{
             button.addTarget(nil, action: selector, for: .allTouchEvents)
         }
@@ -52,6 +53,10 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIButton, context: Context) {
-        return
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)
+        let largeBoldDoc = UIImage(systemName: "globe", withConfiguration: largeConfig)
+        uiView.setImage(largeBoldDoc, for: .normal)
+        uiView.setTitleColor(UIColor(theme.textColor), for: [.normal, .highlighted])
+        uiView.tintColor = UIColor(theme.textColor)
     }
 }

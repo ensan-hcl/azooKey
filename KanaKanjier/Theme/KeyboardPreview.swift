@@ -16,17 +16,19 @@ struct CandidateMock: ResultViewItemData {
 
 struct KeyboardPreview: View {
     let resultModel = ResultModel<CandidateMock>()
+    let theme: ThemeData
 
-    init(){
+    init(theme: ThemeData){
         SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
         resultModel.setResults([
             CandidateMock(text: "azooKey"),
             CandidateMock(text: "あずーきー"),
             CandidateMock(text: "アズーキー")
         ])
+        self.theme = theme
     }
 
     var body: some View {
-        KeyboardView<CandidateMock>(theme: VariableStates.shared.themeManager.theme, resultModel: resultModel)
+        KeyboardView<CandidateMock>(theme: theme, resultModel: resultModel)
     }
 }

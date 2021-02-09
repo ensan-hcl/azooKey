@@ -65,7 +65,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                         .id(data.id)
                                     }else{
                                         Text(data.candidate.text)
-                                            .font(Design.fonts.resultViewFont)
+                                            .font(Design.fonts.resultViewFont(theme: theme))
                                             .underline(true, color: .accentColor)
                                     }
                                 }
@@ -82,7 +82,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                             self.expand()
                         }){
                             Image(systemName: "chevron.down")
-                                .font(Design.fonts.iconImageFont)
+                                .font(Design.fonts.iconImageFont(theme: theme))
                                 .frame(height: 18)
                         }
                         .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6, theme: theme))
@@ -148,7 +148,7 @@ struct ResultButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Design.fonts.resultViewFont)
+            .font(Design.fonts.resultViewFont(theme: theme))
             .frame(height: height)
             .padding(.all, 5)
             .foregroundColor(theme.resultTextColor) //文字色は常に不透明度1で描画する

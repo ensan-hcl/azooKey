@@ -113,18 +113,8 @@ struct ThemeEditView: View {
                 }
 
             }
-            Group{
-                if refresh{
-                    KeyboardPreview()
-                        .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
-                        .clipped()
-                }else{
-                    KeyboardPreview()
-                        .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
-                        .clipped()
-                }
-            }
-            .background(RectangleGetter(rect: $captureRect))
+            KeyboardPreview(theme: self.theme)
+                .background(RectangleGetter(rect: $captureRect))
 
         }
         .background(backgroundColor)
@@ -155,10 +145,6 @@ struct ThemeEditView: View {
             }){
                 self.theme.specialKeyFillColor = .color(specialKeyColor)
             }
-        }
-        .onChange(of: theme){value in
-            VariableStates.shared.themeManager.theme = self.theme
-            self.refresh.toggle()
         }
         .sheet(isPresented: $isPhotoPickerPresented){
             PhotoPicker(configuration: self.config,

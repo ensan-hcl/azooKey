@@ -178,10 +178,6 @@ struct Design{
     enum Fonts{
         case `default`
 
-        var themeFontWeight: Font.Weight {
-            VariableStates.shared.themeManager.theme.textFont.weight
-        }
-
         var iconFontSize: CGFloat {
             let userDecidedSize = SettingData.shared.keyViewFontSize
             if userDecidedSize != -1{
@@ -190,9 +186,8 @@ struct Design{
             return UIFontMetrics.default.scaledValue(for: 20)
         }
 
-        var iconImageFont: Font {
-            let size = self.iconFontSize
-            return Font.system(size: size, weight: themeFontWeight)
+        func iconImageFont(theme: ThemeData) -> Font {
+            return Font.system(size: self.iconFontSize, weight: theme.textFont.weight)
         }
 
         var resultViewFontSize: CGFloat {
@@ -200,14 +195,14 @@ struct Design{
             return CGFloat(size == -1 ? 18: size)
         }
 
-        var resultViewFont: Font {
-            Font.system(size: resultViewFontSize).weight(themeFontWeight)
+        func resultViewFont(theme: ThemeData) -> Font {
+            Font.system(size: resultViewFontSize).weight(theme.textFont.weight)
         }
 
-        func keyLabelFont(text: String, width: CGFloat, scale: CGFloat) -> Font {
+        func keyLabelFont(text: String, width: CGFloat, scale: CGFloat, theme: ThemeData) -> Font {
             let userDecidedSize = SettingData.shared.keyViewFontSize
             if userDecidedSize != -1 {
-                return .system(size: CGFloat(userDecidedSize) * scale, weight: themeFontWeight, design: .default)
+                return .system(size: CGFloat(userDecidedSize) * scale, weight: theme.textFont.weight, design: .default)
             }
             let maxFontSize: Int
             switch Design.shared.layout{
@@ -222,11 +217,11 @@ struct Design{
                 let font = UIFont.systemFont(ofSize: size, weight: .regular)
                 let title_size = text.size(withAttributes: [.font: font])
                 if title_size.width < width * 0.95{
-                    return Font.system(size: size, weight: themeFontWeight, design: .default)
+                    return Font.system(size: size, weight: theme.textFont.weight, design: .default)
                 }
             }
             let size = UIFontMetrics.default.scaledValue(for: 9)
-            return Font.system(size: size, weight: themeFontWeight, design: .default)
+            return Font.system(size: size, weight: theme.textFont.weight, design: .default)
         }
     }
 

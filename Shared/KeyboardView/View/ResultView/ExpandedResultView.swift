@@ -39,7 +39,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                     self.collapse()
                 }){
                     Image(systemName: "chevron.up")
-                        .font(Design.fonts.iconImageFont)
+                        .font(Design.fonts.iconImageFont(theme: theme))
                         .frame(height: 18)
                 }
                 .buttonStyle(ResultButtonStyle(height: 18, theme: theme))
