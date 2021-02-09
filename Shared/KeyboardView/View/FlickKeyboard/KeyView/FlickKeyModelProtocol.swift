@@ -13,12 +13,12 @@ enum FlickKeyColorType{
     case normal
     case tabkey
 
-    var color: Color {
+    func color(theme: ThemeData) -> Color {
         switch self {
         case .normal:
-            return VariableStates.shared.themeManager.theme.normalKeyFillColor.color
+            return theme.normalKeyFillColor.color
         case .tabkey:
-            return VariableStates.shared.themeManager.theme.specialKeyFillColor.color
+            return theme.specialKeyFillColor.color
         }
     }
 }
@@ -34,9 +34,9 @@ protocol FlickKeyModelProtocol {
     var variableSection: KeyModelVariableSection {get set}
 
     //描画に関わるものは変数としてVariableStatesを受け取る。こうすることでVariableStatesの更新に合わせて変更されるようになる。
-    func label(states: VariableStates) -> KeyLabel
-    func backGroundColorWhenPressed(states: VariableStates) -> Color
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color
+    func label(states: VariableStates, theme: ThemeData) -> KeyLabel
+    func backGroundColorWhenPressed(theme: ThemeData) -> Color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 
     func isFlickAble(to direction: FlickDirection) -> Bool
     func press()
@@ -96,11 +96,11 @@ extension FlickKeyModelProtocol{
         return Design.shared.keyViewSize
     }
     
-    func backGroundColorWhenPressed(states: VariableStates) -> Color {
-        states.themeManager.theme.pushedKeyFillColor.color
+    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
+        theme.pushedKeyFillColor.color
     }
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        states.themeManager.theme.normalKeyFillColor.color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+        theme.normalKeyFillColor.color
     }
     func flickSensitivity(to direction: FlickDirection) -> CGFloat {
         return 25

@@ -39,12 +39,12 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol{
         )
     ]
 
-    func label(states: VariableStates) -> KeyLabel {
-        KeyLabel(.text("空白"), width: keySize.width)
+    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
+        KeyLabel(.text("空白"), width: keySize.width, theme: theme)
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        states.themeManager.theme.specialKeyFillColor.color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+        theme.specialKeyFillColor.color
     }
 
     func sound() {

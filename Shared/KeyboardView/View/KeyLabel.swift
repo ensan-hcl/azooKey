@@ -39,20 +39,22 @@ struct KeyLabel: View {
         }
     }
 
-    private var labelType: KeyLabelType
-    private var width: CGFloat
-    private var textColor: Color?
+    private let labelType: KeyLabelType
+    private let width: CGFloat
+    private let textColor: Color?
     private let textSize: TextSize
+    private let theme: ThemeData
 
     private var mainKeyColor: Color {
-        textColor ?? VariableStates.shared.themeManager.theme.textColor
+        textColor ?? theme.textColor
     }
 
-    init(_ type: KeyLabelType, width: CGFloat, textSize: TextSize = .large, textColor: Color? = nil){
+    init(_ type: KeyLabelType, width: CGFloat, theme: ThemeData, textSize: TextSize = .large, textColor: Color? = nil){
         self.labelType = type
         self.width = width
         self.textColor = textColor
         self.textSize = textSize
+        self.theme = theme
     }
 
     var body: some View {
@@ -92,7 +94,7 @@ struct KeyLabel: View {
                     .allowsHitTesting(false)
 
             case .changeKeyboard:
-                VariableStates.shared.action.makeChangeKeyboardButtonView()
+                VariableStates.shared.action.makeChangeKeyboardButtonView(theme: theme)
                     .foregroundColor(mainKeyColor)
 
             case let .selectable(primary, secondery):

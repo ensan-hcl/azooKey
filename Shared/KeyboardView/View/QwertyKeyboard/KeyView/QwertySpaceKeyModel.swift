@@ -22,13 +22,13 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
     }
     init(){}
 
-    func label(states: VariableStates, color: Color? = nil) -> KeyLabel {
+    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         let width = self.keySize.width
         switch states.keyboardLanguage{
         case .english:
-            return KeyLabel(.text("space"), width: width, textSize: .small, textColor: color)
+            return KeyLabel(.text("space"), width: width, theme: theme, textSize: .small, textColor: color)
         case .japanese:
-            return KeyLabel(.text("空白"), width: width, textSize: .small, textColor: color)
+            return KeyLabel(.text("空白"), width: width, theme: theme, textSize: .small, textColor: color)
         }
     }
 

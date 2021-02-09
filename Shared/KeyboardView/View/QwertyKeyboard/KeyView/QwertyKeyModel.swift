@@ -34,8 +34,8 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
         self.variationsModel = variationsModel
     }
 
-    func label(states: VariableStates, color: Color? = nil) -> KeyLabel {
-        KeyLabel(self.labelType, width: keySize.width, textColor: color)
+    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+        KeyLabel(self.labelType, width: keySize.width, theme: theme, textColor: color)
     }
 
     func sound(){

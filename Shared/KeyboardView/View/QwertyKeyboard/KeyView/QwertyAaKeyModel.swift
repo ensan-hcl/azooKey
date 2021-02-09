@@ -39,17 +39,17 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
         }
     }
 
-    func label(states: VariableStates, color: Color? = nil) -> KeyLabel {
+    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         switch states.aAKeyState{
         case .normal:
-            return KeyLabel(.image("textformat.alt"), width: keySize.width, textColor: color)
+            return KeyLabel(.image("textformat.alt"), width: keySize.width, theme: theme, textColor: color)
         case .capslock:
-            return KeyLabel(.image("capslock.fill"), width: keySize.width, textColor: color)
+            return KeyLabel(.image("capslock.fill"), width: keySize.width, theme: theme, textColor: color)
         }
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        states.themeManager.theme.specialKeyFillColor.color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+        theme.specialKeyFillColor.color
     }
 
     func sound() {

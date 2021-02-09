@@ -15,10 +15,13 @@ struct QwertyKeyView: View{
     @ObservedObject private var variableStates = VariableStates.shared
 
     @State private var suggest = false
+
+    private let theme: ThemeData
     
-    init(_ model: QwertyKeyModelProtocol){
+    init(_ model: QwertyKeyModelProtocol, theme: ThemeData){
         self.model = model
         self.modelVariableSection = model.variableSection
+        self.theme = theme
     }
     
     private var gesture: some Gesture {
@@ -71,26 +74,26 @@ struct QwertyKeyView: View{
 
     var keyFillColor: Color {
         if modelVariableSection.pressState.isActive{
-            return self.model.backGroundColorWhenPressed(states: variableStates)
+            return self.model.backGroundColorWhenPressed(theme: theme)
         }else{
-            return self.model.backGroundColorWhenUnpressed(states: variableStates)
+            return self.model.backGroundColorWhenUnpressed(states: variableStates, theme: theme)
         }
     }
 
     private var keyBorderColor: Color {
-        VariableStates.shared.themeManager.theme.borderColor
+        theme.borderColor
     }
 
     private var keyBorderWidth: CGFloat {
-        CGFloat(VariableStates.shared.themeManager.theme.borderWidth)
+        CGFloat(theme.borderWidth)
     }
 
     private var suggestColor: Color {
-        VariableStates.shared.themeManager.theme != .default ? .white : Design.colors.suggestKeyColor
+        theme != .default ? .white : Design.colors.suggestKeyColor
     }
 
     private var suggestTextColor: Color? {
-        VariableStates.shared.themeManager.theme != .default ? .black : nil
+        theme != .default ? .black : nil
     }
 
     var body: some View{
@@ -103,7 +106,7 @@ struct QwertyKeyView: View{
                             .size(CGSize(width: self.model.keySize.width + Design.shared.horizontalSpacing, height: self.model.keySize.height + Design.shared.verticalSpacing))
                     )
                     .gesture(gesture)
-                    .overlay(self.model.label(states: variableStates, color: nil))
+                    .overlay(self.model.label(states: variableStates, color: nil, theme: theme))
             }
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
@@ -117,7 +120,7 @@ struct QwertyKeyView: View{
                             direction: model.variationsModel.direction
                         )
                         .overlay(
-                            QwertyVariationsView(model: self.model.variationsModel)
+                            QwertyVariationsView(model: self.model.variationsModel, theme: theme)
                                 .padding(.bottom, height)
                                 .padding(self.model.variationsModel.direction.edge, 15),
                             alignment: self.model.variationsModel.direction.alignment
@@ -129,7 +132,7 @@ struct QwertyKeyView: View{
                             color: suggestColor
                         )
                         .overlay(
-                            self.model.label(states: variableStates, color: suggestTextColor)
+                            self.model.label(states: variableStates, color: suggestTextColor, theme: theme)
                                 .padding(.bottom, height)
                         )
                     }

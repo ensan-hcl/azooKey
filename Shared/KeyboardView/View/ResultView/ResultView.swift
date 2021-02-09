@@ -31,9 +31,11 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
 
     @Binding private var isResultViewExpanded: Bool
+    private let theme: ThemeData
 
-    init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
+    init(model: ResultModel<Candidate>, theme: ThemeData, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
         self.model = model
+        self.theme = theme
         self.modelVariableSection = model.variableSection
         self.sharedResultData = sharedResultData
         self._isResultViewExpanded = isResultViewExpanded
@@ -42,7 +44,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     var body: some View {
         Group{[unowned modelVariableSection] in
             if variableStates.showMoveCursorView{
-                CursorMoveView()
+                CursorMoveView(theme: theme)
             }else{
                 HStack{
                     ScrollView(.horizontal, showsIndicators: false){
@@ -56,7 +58,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                         } label: {
                                             Text(data.candidate.text)
                                         }
-                                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6))
+                                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6, theme: theme))
                                         .contextMenu{
                                             ResultContextMenuView(text: data.candidate.text)
                                         }
@@ -83,7 +85,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                 .font(Design.fonts.iconImageFont)
                                 .frame(height: 18)
                         }
-                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6))
+                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6, theme: theme))
                         .padding(.trailing, 10)
                     }
                 }.frame(height: Design.shared.resultViewHeight)
@@ -92,14 +94,13 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 
     private func pressed(candidate: Candidate){
-        VariableStates.shared.action.notifyComplete(candidate)
+        variableStates.action.notifyComplete(candidate)
     }
 
     private func expand(){
         self.isResultViewExpanded = true
         self.sharedResultData.results = self.modelVariableSection.results
     }
-
 }
 
 
@@ -137,9 +138,11 @@ struct ResultModel<Candidate: ResultViewItemData>{
 }
 
 struct ResultButtonStyle: ButtonStyle {
-    let height: CGFloat
+    private let height: CGFloat
+    private let theme: ThemeData
 
-    init(height: CGFloat){
+    init(height: CGFloat, theme: ThemeData){
+        self.theme = theme
         self.height = height
     }
 
@@ -148,11 +151,11 @@ struct ResultButtonStyle: ButtonStyle {
             .font(Design.fonts.resultViewFont)
             .frame(height: height)
             .padding(.all, 5)
-            .foregroundColor(VariableStates.shared.themeManager.theme.resultTextColor) //文字色は常に不透明度1で描画する
+            .foregroundColor(theme.resultTextColor) //文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
-                    VariableStates.shared.themeManager.theme.pushedKeyFillColor.color.opacity(0.5) :
-                    VariableStates.shared.themeManager.theme.backgroundColor
+                    theme.pushedKeyFillColor.color.opacity(0.5) :
+                    theme.backgroundColor
             )
             .cornerRadius(5.0)
     }

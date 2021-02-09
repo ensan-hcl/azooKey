@@ -19,7 +19,10 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
     @State private var splitedResults: [SplitedResultData<Candidate>]
 
-    init(isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
+    private let theme: ThemeData
+
+    init(theme: ThemeData, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
+        self.theme = theme
         self.sharedResultData = sharedResultData
         self._isResultViewExpanded = isResultViewExpanded
         self._splitedResults = State(initialValue: Self.registerResults(results: sharedResultData.results))
@@ -39,7 +42,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                         .font(Design.fonts.iconImageFont)
                         .frame(height: 18)
                 }
-                .buttonStyle(ResultButtonStyle(height: 18))
+                .buttonStyle(ResultButtonStyle(height: 18, theme: theme))
                 .padding(.trailing, 10)
             }
             .padding(.top, 10)
@@ -54,7 +57,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                                 }){
                                     Text(datum.candidate.text)
                                 }
-                                .buttonStyle(ResultButtonStyle(height: 18))
+                                .buttonStyle(ResultButtonStyle(height: 18, theme: theme))
                                 .contextMenu{
                                     ResultContextMenuView(text: datum.candidate.text)
                                 }

@@ -16,6 +16,12 @@ private enum CursorMoveViewGestureState{
 
 struct CursorMoveView: View{
     @State private var gestureState: CursorMoveViewGestureState = .unactive
+    private let theme: ThemeData
+
+    init(theme: ThemeData){
+        self.theme = theme
+    }
+
     private var gesture: some Gesture {
         DragGesture(minimumDistance: 0).onChanged({value in
             switch self.gestureState{
@@ -45,19 +51,19 @@ struct CursorMoveView: View{
     }
 
     private var centerColor: Color {
-        VariableStates.shared.themeManager.theme.pushedKeyFillColor.color
+        theme.pushedKeyFillColor.color
     }
 
     private var edgeColor: Color {
-        VariableStates.shared.themeManager.theme.pushedKeyFillColor.color
+        theme.pushedKeyFillColor.color
     }
 
     private var symbolsFontWeight: Font.Weight {
-        VariableStates.shared.themeManager.theme.textFont.weight
+        theme.textFont.weight
     }
 
     private var symbolsColor: Color {
-        VariableStates.shared.themeManager.theme.resultTextColor
+        theme.resultTextColor
     }
 
 

@@ -39,12 +39,12 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
 
     var suggestModel: SuggestModel = SuggestModel([:], keyType: .aA)
 
-    func label(states: VariableStates) -> KeyLabel {
+    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
         switch states.aAKeyState{
         case .normal:
-            return KeyLabel(.text("a/A"), width: keySize.width)
+            return KeyLabel(.text("a/A"), width: keySize.width, theme: theme)
         case .capslock:
-            return KeyLabel(.image("capslock.fill"), width: keySize.width)
+            return KeyLabel(.image("capslock.fill"), width: keySize.width, theme: theme)
         }
     }
 
@@ -52,12 +52,12 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
         Sound.tabOrOtherKey()
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
         switch states.aAKeyState{
         case .normal:
-            return states.themeManager.theme.normalKeyFillColor.color
+            return theme.normalKeyFillColor.color
         case .capslock:
-            return states.themeManager.theme.specialKeyFillColor.color
+            return theme.specialKeyFillColor.color
         }
     }
 }

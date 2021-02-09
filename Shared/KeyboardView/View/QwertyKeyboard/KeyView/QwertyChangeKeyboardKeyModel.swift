@@ -46,30 +46,30 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         )
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        states.themeManager.theme.specialKeyFillColor.color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+        theme.specialKeyFillColor.color
     }
 
     init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)){
         self.rowInfo = rowInfo
     }
 
-    func label(states: VariableStates, color: Color? = nil) -> KeyLabel {
+    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
-            return KeyLabel(.changeKeyboard, width: self.keySize.width, textColor: color)
+            return KeyLabel(.changeKeyboard, width: self.keySize.width, theme: theme, textColor: color)
         case false:
             switch states.tabState{
             case .hira:
-                return KeyLabel(.text("#+="), width: self.keySize.width, textColor: color)
+                return KeyLabel(.text("#+="), width: self.keySize.width, theme: theme, textColor: color)
             case .abc:
-                return KeyLabel(.text("#+="), width: self.keySize.width, textColor: color)
+                return KeyLabel(.text("#+="), width: self.keySize.width, theme: theme, textColor: color)
             case .number:
-                return KeyLabel(.text("A"), width: self.keySize.width, textColor: color)
+                return KeyLabel(.text("A"), width: self.keySize.width, theme: theme, textColor: color)
             case let .other(string) where string == "symbols":
-                return KeyLabel(.text("A"), width: self.keySize.width, textColor: color)
+                return KeyLabel(.text("A"), width: self.keySize.width, theme: theme, textColor: color)
             default:
-                return KeyLabel(.text("#+="), width: self.keySize.width, textColor: color)
+                return KeyLabel(.text("#+="), width: self.keySize.width, theme: theme, textColor: color)
             }
         }
     }

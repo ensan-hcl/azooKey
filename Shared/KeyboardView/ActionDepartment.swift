@@ -18,8 +18,8 @@ class ActionDepartment{
     func notifySomethingDidChange(a_left: String, a_center: String, a_right: String){}
     func notifyComplete(_ candidate: ResultViewItemData){}
 
-    func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
-        ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize)
+    func makeChangeKeyboardButtonView(theme: ThemeData) -> ChangeKeyboardButtonView {
+        ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize, theme: theme)
     }
 
     func sendToDicDataStore(_ data: DicDataStoreNotification){}

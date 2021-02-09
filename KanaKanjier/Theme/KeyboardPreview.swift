@@ -27,6 +27,6 @@ struct KeyboardPreview: View {
     }
 
     var body: some View {
-        KeyboardView<CandidateMock>(resultModel: resultModel)
+        KeyboardView<CandidateMock>(theme: VariableStates.shared.themeManager.theme, resultModel: resultModel)
     }
 }

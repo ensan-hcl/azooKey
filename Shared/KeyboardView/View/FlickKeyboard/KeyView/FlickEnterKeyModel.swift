@@ -42,24 +42,24 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
         return Design.shared.flickEnterKeySize
     }
 
-    func label(states: VariableStates) -> KeyLabel {
+    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
-        return KeyLabel(.text(text), width: keySize.width)
+        return KeyLabel(.text(text), width: keySize.width, theme: theme)
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
         switch states.enterKeyState{
         case .complete, .edit:
-            return states.themeManager.theme.specialKeyFillColor.color
+            return theme.specialKeyFillColor.color
         case let .return(type):
             switch type{
             case .default:
-                return states.themeManager.theme.specialKeyFillColor.color
+                return theme.specialKeyFillColor.color
             default:
-                if VariableStates.shared.themeManager.theme == .default{
+                if theme == .default{
                     return Design.colors.specialEnterKeyColor
                 }else{
-                    return states.themeManager.theme.specialKeyFillColor.color
+                    return theme.specialKeyFillColor.color
                 }
             }
         }

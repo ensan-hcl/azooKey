@@ -29,7 +29,7 @@ final class KeyboardViewController: UIInputViewController {
         super.viewDidLoad()
         //初期化の順序としてこの位置に置くこと
         Store.shared.initialize()
-        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView<Candidate>(resultModel: Store.shared.resultModel))
+        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView<Candidate>(theme: VariableStates.shared.themeManager.theme, resultModel: Store.shared.resultModel))
         //コントロールセンターを出しにくくする。
         keyboardViewHost.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
@@ -77,9 +77,9 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
-    func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
+    func makeChangeKeyboardButtonView(size: CGFloat, theme: ThemeData) -> ChangeKeyboardButtonView {
         let selector = #selector(self.handleInputModeList(from:with:))
-        let view = ChangeKeyboardButtonView(selector: selector, size: size)
+        let view = ChangeKeyboardButtonView(selector: selector, size: size, theme: theme)
         return view
     }
 

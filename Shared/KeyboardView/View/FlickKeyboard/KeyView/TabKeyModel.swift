@@ -40,15 +40,15 @@ struct TabKeyModel: FlickKeyModelProtocol{
         self.suggestModel = SuggestModel(flickKeys)
     }
 
-    func label(states: VariableStates) -> KeyLabel {
-        KeyLabel(self.labelType, width: keySize.width)
+    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
+        KeyLabel(self.labelType, width: keySize.width, theme: theme)
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
         if states.tabState == self.tabType{
-            return states.themeManager.theme.pushedKeyFillColor.color
+            return theme.pushedKeyFillColor.color
         }
-        return states.themeManager.theme.specialKeyFillColor.color
+        return theme.specialKeyFillColor.color
     }
     
     func sound() {

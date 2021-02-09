@@ -29,9 +29,12 @@ struct FlickKeyView: View {
     @ObservedObject private var modelVariableSection: KeyModelVariableSection
     @ObservedObject private var variableStates = VariableStates.shared
 
-    init(model: FlickKeyModelProtocol){
+    private let theme: ThemeData
+
+    init(model: FlickKeyModelProtocol, theme: ThemeData){
         self.model = model
         self.modelVariableSection = model.variableSection
+        self.theme = theme
     }
 
     private var suggestAnimation: Animation {
@@ -193,24 +196,24 @@ struct FlickKeyView: View {
 
     private var keyFillColor: Color {
         if self.modelVariableSection.pressState.isActive(){
-            return model.backGroundColorWhenPressed(states: variableStates)
+            return model.backGroundColorWhenPressed(theme: theme)
         }else{
-            return model.backGroundColorWhenUnpressed(states: variableStates)
+            return model.backGroundColorWhenUnpressed(states: variableStates, theme: theme)
         }
     }
 
     private var keyBorderColor: Color {
-        VariableStates.shared.themeManager.theme.borderColor
+        theme.borderColor
     }
 
     private var keyBorderWidth: CGFloat {
-        CGFloat(VariableStates.shared.themeManager.theme.borderWidth)
+        CGFloat(theme.borderWidth)
     }
 
     var body: some View {
         RoundedBorderedRectangle(cornerRadius: 5.0, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
             .frame(width: model.keySize.width, height: model.keySize.height)
             .gesture(gesture)
-            .overlay(model.label(states: variableStates))
+            .overlay(model.label(states: variableStates, theme: theme))
     }
 }

@@ -10,18 +10,20 @@ import Foundation
 import SwiftUI
 
 struct ChangeKeyboardButtonView: UIViewRepresentable {
-    private var selector: Selector?
-    private var size: CGFloat
+    private let selector: Selector?
+    private let size: CGFloat
+    private let theme: ThemeData
 
-    init(selector: Selector? = nil, size: CGFloat){
+    init(selector: Selector? = nil, size: CGFloat, theme: ThemeData){
         self.selector = selector
         self.size = size
+        self.theme = theme
     }
 
     func makeUIView(context: Context) -> UIButton {
         let button = UIButton(type: .custom)
         var weight: UIImage.SymbolWeight {
-            switch VariableStates.shared.themeManager.theme.textFont{
+            switch theme.textFont{
             case .ultraLight:
                 return .ultraLight
             case .thin:
@@ -44,8 +46,8 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)
         let largeBoldDoc = UIImage(systemName: "globe", withConfiguration: largeConfig)
         button.setImage(largeBoldDoc, for: .normal)
-        button.setTitleColor(UIColor(VariableStates.shared.themeManager.theme.textColor), for: [.normal, .highlighted])
-        button.tintColor = UIColor(VariableStates.shared.themeManager.theme.textColor)
+        button.setTitleColor(UIColor(theme.textColor), for: [.normal, .highlighted])
+        button.tintColor = UIColor(theme.textColor)
         return button
     }
 

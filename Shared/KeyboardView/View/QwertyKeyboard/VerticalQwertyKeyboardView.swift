@@ -12,7 +12,12 @@ import SwiftUI
 struct VerticalQwertyKeyboardView: View{
     private let model = VerticalQwertyDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
-    
+    private let theme: ThemeData
+
+    init(theme: ThemeData){
+        self.theme = theme
+    }
+
     private var verticalIndices: Range<Int> {
         switch variableStates.tabState{
         case .hira:
@@ -70,7 +75,7 @@ struct VerticalQwertyKeyboardView: View{
             ForEach(self.verticalIndices, id: \.self){(v: Int) in
                 HStack(spacing: Design.shared.horizontalSpacing){
                     ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
-                        QwertyKeyView(self.keyModels[v][h])
+                        QwertyKeyView(self.keyModels[v][h], theme: theme)
                     }
                 }
             }

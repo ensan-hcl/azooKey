@@ -32,17 +32,17 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
         self.suggestModel = SuggestModel([:])
     }
 
-    func label(states: VariableStates) -> KeyLabel {
+    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
-            return KeyLabel(.changeKeyboard, width: self.keySize.width)
+            return KeyLabel(.changeKeyboard, width: self.keySize.width, theme: theme)
         case false:
-            return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: self.keySize.width)
+            return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: self.keySize.width, theme: theme)
         }
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        states.themeManager.theme.specialKeyFillColor.color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+        theme.specialKeyFillColor.color
     }
 
     func sound() {

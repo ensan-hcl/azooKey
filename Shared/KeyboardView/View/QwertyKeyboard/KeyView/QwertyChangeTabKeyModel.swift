@@ -41,25 +41,25 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         )
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        states.themeManager.theme.specialKeyFillColor.color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+        theme.specialKeyFillColor.color
     }
 
     init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)){
         self.rowInfo = rowInfo
     }
 
-    func label(states: VariableStates, color: Color? = nil) -> KeyLabel {
+    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch states.keyboardLanguage{
             case .japanese:
-                return KeyLabel(.text("あ"), width: self.keySize.width, textColor: color)
+                return KeyLabel(.text("あ"), width: self.keySize.width, theme: theme, textColor: color)
             case .english:
-                return KeyLabel(.text("A"), width: self.keySize.width, textColor: color)
+                return KeyLabel(.text("A"), width: self.keySize.width, theme: theme, textColor: color)
             }
         case false:
-            return KeyLabel(.text("あ"), width: self.keySize.width, textColor: color)
+            return KeyLabel(.text("あ"), width: self.keySize.width, theme: theme, textColor: color)
         }
     }
 

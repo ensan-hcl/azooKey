@@ -15,8 +15,14 @@ fileprivate enum KeyboardAlignment{
 //V=VM
 struct HorizontalKeyboardView: View {
     private let model = HorizontalFlickDataProvider()
-    @ObservedObject private var variableStates = VariableStates.shared
     @State private var alignmnet: KeyboardAlignment = .center
+
+    @ObservedObject private var variableStates = VariableStates.shared
+    private let theme: ThemeData
+
+    init(theme: ThemeData){
+        self.theme = theme
+    }
 
     private var horizontalIndices: Range<Int> {
         switch variableStates.tabState{
@@ -94,7 +100,7 @@ struct HorizontalKeyboardView: View {
                         VStack(spacing: Design.shared.verticalSpacing){
                             //IDを明示する必要がある。
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
-                                return FlickKeyView(model: self.keyModels[h][v])
+                                return FlickKeyView(model: self.keyModels[h][v], theme: theme)
                             }
                         }
                     }
@@ -103,7 +109,7 @@ struct HorizontalKeyboardView: View {
                     ForEach(self.horizontalIndices, id: \.self){h in
                         VStack(spacing: Design.shared.verticalSpacing){
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
-                                return SuggestView(model: self.keyModels[h][v].suggestModel)
+                                return SuggestView(model: self.keyModels[h][v].suggestModel, theme: theme)
                             }
                         }
                     }

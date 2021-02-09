@@ -19,9 +19,9 @@ protocol QwertyKeyModelProtocol{
     
     var variationsModel: VariationsModel {get}
 
-    func label(states: VariableStates, color: Color?) -> KeyLabel
-    func backGroundColorWhenPressed(states: VariableStates) -> Color
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color
+    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel
+    func backGroundColorWhenPressed(theme: ThemeData) -> Color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 
     func press()
     func longPressReserve()
@@ -44,10 +44,10 @@ extension QwertyKeyModelProtocol{
         self.longPressActions.forEach{VariableStates.shared.action.registerLongPressActionEnd($0)}
     }
         
-    func backGroundColorWhenPressed(states: VariableStates) -> Color {
-        states.themeManager.theme.pushedKeyFillColor.color
+    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
+        theme.pushedKeyFillColor.color
     }
-    func backGroundColorWhenUnpressed(states: VariableStates) -> Color {
-        states.themeManager.theme.normalKeyFillColor.color
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+        theme.normalKeyFillColor.color
     }
 }

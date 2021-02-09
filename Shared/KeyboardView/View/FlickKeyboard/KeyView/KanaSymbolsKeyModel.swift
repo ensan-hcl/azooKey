@@ -31,8 +31,8 @@ struct KanaSymbolsKeyModel: FlickKeyModelProtocol{
 
     private init(){}
 
-    func label(states: VariableStates) -> KeyLabel {
-        return KeyLabel(self.labelType, width: keySize.width)
+    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
+        KeyLabel(self.labelType, width: keySize.width, theme: theme)
     }
 
     func sound() {

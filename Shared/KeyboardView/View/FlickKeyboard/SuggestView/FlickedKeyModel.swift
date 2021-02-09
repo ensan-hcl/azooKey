@@ -41,29 +41,28 @@ struct FlickedKeyModel{
         self.longPressActions = longPressActions
     }
 
-    private var pointedColor: Color {
-        VariableStates.shared.themeManager.theme != .default ? .white : Color(UIColor.systemGray4)
-    }
+    func getSuggestView(size: CGSize, isHidden: Bool = false, isPointed: Bool = false, theme: ThemeData) -> some View {
+        var pointedColor: Color {
+            theme != .default ? .white : Color(UIColor.systemGray4)
+        }
+        var unpointedColor: Color {
+            theme != .default ? .white : Color(UIColor.systemGray5)
+        }
 
-    private var unpointedColor: Color {
-        VariableStates.shared.themeManager.theme != .default ? .white : Color(UIColor.systemGray5)
-    }
-
-    func getSuggestView(size: CGSize, isHidden: Bool = false, isPointed: Bool = false) -> some View {
         let color = isPointed ? pointedColor : unpointedColor
         return RoundedRectangle(cornerRadius: 5.0)
             .frame(width: size.width, height: size.height)
             .foregroundColor(color)
-            .overlay(self.label(width: size.width))
+            .overlay(self.label(width: size.width, theme: theme))
             .allowsHitTesting(false)
             .opacity(isHidden ? 0:1)
     }
     
-    func label(width: CGFloat) -> some View {
-        if VariableStates.shared.themeManager.theme != .default{
-            return KeyLabel(self.labelType, width: width, textColor: .black)
+    func label(width: CGFloat, theme: ThemeData) -> some View {
+        if theme != .default{
+            return KeyLabel(self.labelType, width: width, theme: theme, textColor: .black)
         }
-        return KeyLabel(self.labelType, width: width)
+        return KeyLabel(self.labelType, width: width, theme: theme)
     }
     
     func flick(){

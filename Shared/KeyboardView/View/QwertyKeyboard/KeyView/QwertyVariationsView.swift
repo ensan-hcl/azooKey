@@ -12,13 +12,15 @@ import SwiftUI
 struct QwertyVariationsView: View {
     private let model: VariationsModel
     @ObservedObject private var modelVariableSection: VariationsModelVariableSection
-    init(model: VariationsModel){
+    private let theme: ThemeData
+    init(model: VariationsModel, theme: ThemeData){
         self.model = model
         self.modelVariableSection = model.variableSection
+        self.theme = theme
     }
 
     private var suggestColor: Color {
-        VariableStates.shared.themeManager.theme != .default ? .white : Design.colors.suggestKeyColor
+        theme != .default ? .white : Design.colors.suggestKeyColor
     }
 
     var body: some View {
@@ -38,10 +40,10 @@ struct QwertyVariationsView: View {
     
     func getLabel(_ labelType: KeyLabelType) -> KeyLabel {
         let width = Design.shared.keyViewSize.width
-        if VariableStates.shared.themeManager.theme != .default{
-            return KeyLabel(labelType, width: width, textColor: .black)
+        if theme != .default{
+            return KeyLabel(labelType, width: width, theme: theme, textColor: .black)
         }
-        return KeyLabel(labelType, width: width)
+        return KeyLabel(labelType, width: width, theme: theme)
     }
 
 }

@@ -12,7 +12,12 @@ import SwiftUI
 struct VerticalFlickKeyboardView: View{
     private let model = VerticalFlickDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
-    
+    private let theme: ThemeData
+
+    init(theme: ThemeData){
+        self.theme = theme
+    }
+
     private var horizontalIndices: Range<Int> {
         switch variableStates.tabState{
         case .hira:
@@ -66,7 +71,7 @@ struct VerticalFlickKeyboardView: View{
                     VStack(spacing: Design.shared.verticalSpacing){
                         //IDを明示する必要がある。
                         ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
-                            return FlickKeyView(model: self.keyModels[h][v])
+                            return FlickKeyView(model: self.keyModels[h][v], theme: theme)
                         }
                     }
                 }
@@ -75,7 +80,7 @@ struct VerticalFlickKeyboardView: View{
                 ForEach(self.horizontalIndices, id: \.self){h in
                     VStack(spacing: Design.shared.verticalSpacing){
                         ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
-                            return SuggestView(model: self.keyModels[h][v].suggestModel)
+                            return SuggestView(model: self.keyModels[h][v].suggestModel, theme: theme)
                         }
                     }
                 }

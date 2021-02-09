@@ -25,32 +25,34 @@ enum SuggestState{
 struct SuggestView: View {
     private let model: SuggestModel
     @ObservedObject private var modelVariableSection: SuggestModelVariableSection
-    
-    init(model: SuggestModel){
+    private let theme: ThemeData
+
+    init(model: SuggestModel, theme: ThemeData){
         self.model = model
         self.modelVariableSection = model.variableSection
+        self.theme = theme
     }
      
     private func neededApeearView(direction: FlickDirection) -> some View {
         if case .oneDirection(direction) = self.modelVariableSection.suggestState{
             if let model = self.model.flickModels[direction]{
-                return model.getSuggestView(size: self.model.keySize, isPointed: true)
+                return model.getSuggestView(size: self.model.keySize, isPointed: true, theme: theme)
             }else{
-                return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true)
+                return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true, theme: theme)
             }
         }
         if case .all = self.modelVariableSection.suggestState{
             if let model = self.model.flickModels[direction]{
-                return model.getSuggestView(size: self.model.keySize)
+                return model.getSuggestView(size: self.model.keySize, theme: theme)
             }else{
-                return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true)
+                return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true, theme: theme)
             }
         }
-        return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true)
+        return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true, theme: theme)
     }
 
     private var centerFillColor: Color {
-        VariableStates.shared.themeManager.theme.specialKeyFillColor.color
+        theme.specialKeyFillColor.color
     }
 
     var body: some View {

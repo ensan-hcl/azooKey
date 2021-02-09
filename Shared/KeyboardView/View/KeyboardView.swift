@@ -16,19 +16,22 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
 
+    let theme: ThemeData
+
     private var sharedResultData = SharedResultData<Candidate>()
 
-    init(resultModel: ResultModel<Candidate>){
+    init(theme: ThemeData, resultModel: ResultModel<Candidate>){
+        self.theme = theme
         self.resultModel = resultModel
     }
 
     var body: some View {
         ZStack{
-            VariableStates.shared.themeManager.theme.backgroundColor
+            theme.backgroundColor
                 .frame(maxWidth: .infinity)
                 .overlay(
                     Group{
-                        if let image = VariableStates.shared.themeManager.theme.picture.image{
+                        if let image = theme.picture.image{
                             image
                                 .resizable()
                                 .scaledToFill()
@@ -38,33 +41,33 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                     }
                 )
             if isResultViewExpanded{
-                ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                ExpandedResultView(theme: theme, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                     .padding(.bottom, 2)
             }else{
                 VStack(spacing: 0){
-                    ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                    ResultView(model: resultModel, theme: theme, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if variableStates.refreshing{
                         switch (variableStates.keyboardOrientation, variableStates.keyboardLayout){
                         case (.vertical, .flick):
-                            VerticalFlickKeyboardView()
+                            VerticalFlickKeyboardView(theme: theme)
                         case (.vertical, .qwerty):
-                            VerticalQwertyKeyboardView()
+                            VerticalQwertyKeyboardView(theme: theme)
                         case (.horizontal, .flick):
-                            HorizontalKeyboardView()
+                            HorizontalKeyboardView(theme: theme)
                         case (.horizontal, .qwerty):
-                            HorizontalQwertyKeyboardView()
+                            HorizontalQwertyKeyboardView(theme: theme)
                         }
                     }else{
                         switch (variableStates.keyboardOrientation, variableStates.keyboardLayout){
                         case (.vertical, .flick):
-                            VerticalFlickKeyboardView()
+                            VerticalFlickKeyboardView(theme: theme)
                         case (.vertical, .qwerty):
-                            VerticalQwertyKeyboardView()
+                            VerticalQwertyKeyboardView(theme: theme)
                         case (.horizontal, .flick):
-                            HorizontalKeyboardView()
+                            HorizontalKeyboardView(theme: theme)
                         case (.horizontal, .qwerty):
-                            HorizontalQwertyKeyboardView()
+                            HorizontalQwertyKeyboardView(theme: theme)
                         }
                     }
                 }.padding(.bottom, 2)
