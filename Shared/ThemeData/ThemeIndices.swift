@@ -38,6 +38,7 @@ struct ThemeIndexManager {
     private static func directoryExistCheck() {
         let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
         let filePath = directoryPath.appendingPathComponent("themes/").path
+        //try! FileManager.default.removeItem(atPath: filePath)
         if !FileManager.default.fileExists(atPath: filePath){
             debug("ファイルを新規作成")
             try! FileManager.default.createDirectory(atPath: filePath, withIntermediateDirectories: true)
@@ -77,16 +78,11 @@ struct ThemeIndexManager {
         var themeData = try JSONDecoder().decode(ThemeData.self, from: data)
 
         //背景画像を設定する
-        if case let .path(path) = themeData.picture, let uiImage = UIImage(contentsOfFile: path){
+        if case let .path(path) = themeData.picture, let uiImage = UIImage(contentsOfFile: Self.fileURL(name: path).path){
             themeData.picture = .uiImage(uiImage)
         }
 
         return themeData
-    }
-
-    func preview(at index: Int) throws -> UIImage? {
-        let previewFilePath = Self.fileURL(name: "themes/theme_\(index)_ss.png").path
-        return UIImage(contentsOfFile: previewFilePath)
     }
 
     mutating func saveTheme(theme: ThemeData, capturedImage: Data) throws -> Int {
@@ -102,15 +98,10 @@ struct ThemeIndexManager {
 
         //背景画像を設定する
         if case let .uiImage(image) = saveData.picture, let pngImageData = image.pngData(){
-            let fileURL = Self.fileURL(name: "themes/theme_\(id)_bg.png")
+            let imagePath = "themes/theme_\(id)_bg.png"
+            let fileURL = Self.fileURL(name: imagePath)
             try pngImageData.write(to: fileURL)
-            saveData.picture = .path(fileURL.path)
-        }
-
-        //キャプチャを保存する
-        do{
-            let fileURL = Self.fileURL(name: "themes/theme_\(id)_ss.png")
-            try capturedImage.write(to: fileURL)
+            saveData.picture = .path(imagePath)
         }
 
         //テーマを保存する

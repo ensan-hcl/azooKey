@@ -41,8 +41,8 @@ extension ThemePicture: Codable{
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        let valueType = try values.decode(ValueType.self, forKey: .value)
-        let value = try values.decode(String?.self, forKey: .value)
+        let valueType = try values.decode(ValueType.self, forKey: .valueType)
+        let value = try values.decodeIfPresent(String.self, forKey: .value)
         switch valueType{
         case .none:
             self = .none

@@ -101,7 +101,7 @@ extension Color: Codable {
         let red = try values.decode(Double.self, forKey: .red)
         let green = try values.decode(Double.self, forKey: .green)
         let blue = try values.decode(Double.self, forKey: .blue)
-        let opacity = try values.decode(Double.self, forKey: .blue)
+        let opacity = try values.decode(Double.self, forKey: .opacity)
         self.init(.displayP3, red: red, green: green, blue: blue, opacity: opacity)
     }
 
