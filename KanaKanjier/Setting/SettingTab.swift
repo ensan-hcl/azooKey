@@ -25,7 +25,7 @@ struct SettingTabView: View {
                         }
                     }
                 }
-                switch (storeVariableSection.keyboardType, storeVariableSection.englishKeyboardLayout){
+                switch (storeVariableSection.japaneseKeyboardLayout, storeVariableSection.englishKeyboardLayout){
                 case (.flick, .flick):
                     Section(header: Text("カスタムキー")){
                         VStack{
@@ -133,7 +133,7 @@ struct SettingTabView: View {
                     ])
                 }
                 Section(header: Text("変換")){
-                    switch storeVariableSection.keyboardType{
+                    switch storeVariableSection.japaneseKeyboardLayout{
                     case .flick:
                         EmptyView()
                     case .qwerty:

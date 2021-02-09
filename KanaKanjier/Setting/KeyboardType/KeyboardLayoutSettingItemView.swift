@@ -92,7 +92,7 @@ struct KeyboardLayoutSettingItemView: View {
             self.viewModel.value = type
             switch language{
             case .japanese:
-                Store.variableSection.keyboardType = type
+                Store.variableSection.japaneseKeyboardLayout = type
             case .english:
                 Store.variableSection.englishKeyboardLayout = type
             }

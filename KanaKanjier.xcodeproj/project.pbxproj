@@ -2317,6 +2317,7 @@
 		1AE1025625D1788300CA7277 /* Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025525D1788300CA7277 /* Capture.swift */; };
 		1AE1025C25D21A9C00CA7277 /* ThemeIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025B25D21A9C00CA7277 /* ThemeIndices.swift */; };
 		1AE1025D25D21A9C00CA7277 /* ThemeIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025B25D21A9C00CA7277 /* ThemeIndices.swift */; };
+		1AE102B525D2DB5D00CA7277 /* RefreshableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102B425D2DB5D00CA7277 /* RefreshableView.swift */; };
 		1AE3DF02258A20A2007C7C4A /* KeyFlickSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */; };
 		1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */; };
 		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
@@ -4778,6 +4779,7 @@
 		1AE1024A25D118ED00CA7277 /* ColorTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTools.swift; sourceTree = "<group>"; };
 		1AE1025525D1788300CA7277 /* Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
 		1AE1025B25D21A9C00CA7277 /* ThemeIndices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeIndices.swift; sourceTree = "<group>"; };
+		1AE102B425D2DB5D00CA7277 /* RefreshableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableView.swift; sourceTree = "<group>"; };
 		1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDataProtocol.swift; sourceTree = "<group>"; };
 		1AE4DB742515FE1C00A24158 /* KanaComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaComponent.swift; sourceTree = "<group>"; };
 		1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectInputData.swift; sourceTree = "<group>"; };
@@ -7512,6 +7514,7 @@
 			isa = PBXGroup;
 			children = (
 				1ACE61C2257286E5008078D3 /* Color.swift */,
+				1AE102B425D2DB5D00CA7277 /* RefreshableView.swift */,
 				1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */,
 				1ACEEFCF25665E3600899DA2 /* FallbackLink.swift */,
 				1AFA575F2584810800477DC2 /* Focus.swift */,
@@ -10041,6 +10044,7 @@
 				1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */,
 				1AF6791A25CEDAF300F3987B /* SettingData.swift in Sources */,
 				1ACE61C3257286E5008078D3 /* Color.swift in Sources */,
+				1AE102B525D2DB5D00CA7277 /* RefreshableView.swift in Sources */,
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */,
 				1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */,

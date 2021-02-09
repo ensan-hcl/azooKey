@@ -29,7 +29,9 @@ final class KeyboardViewController: UIInputViewController {
         super.viewDidLoad()
         //初期化の順序としてこの位置に置くこと
         Store.shared.initialize()
-        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView<Candidate>(theme: VariableStates.shared.themeManager.theme, resultModel: Store.shared.resultModel))
+        let indexManager = ThemeIndexManager.load()
+        let theme = (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
+        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView<Candidate>(theme: theme, resultModel: Store.shared.resultModel))
         //コントロールセンターを出しにくくする。
         keyboardViewHost.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 

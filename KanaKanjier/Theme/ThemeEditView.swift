@@ -18,7 +18,6 @@ struct ThemeEditView: View {
     @State private var selectFontRowValue: Double = 4
 
     init(){
-        VariableStates.shared.themeManager.theme = self.theme
         self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
         VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
     }

@@ -14,18 +14,6 @@ struct ThemeIndices: Codable {
     var selectedIndex: Int = 0
 }
 
-struct ThemeManager{
-    var theme: ThemeData
-
-    init(){
-        self.theme = Self.getSelectedTheme()
-    }
-
-    static func getSelectedTheme() -> ThemeData {
-        return ThemeData.clear
-    }
-}
-
 struct ThemeIndexManager {
     private var index: ThemeIndices
 

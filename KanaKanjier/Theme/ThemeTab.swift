@@ -10,7 +10,63 @@ import SwiftUI
 
 struct ThemeTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
-    @State private var selection = 0
+    @State private var selection = Store.shared.themeIndexManager.selectedIndex
+
+    @State private var refresh = false
+    func theme(at index: Int) -> ThemeData? {
+        do{
+            return try Store.shared.themeIndexManager.theme(at: index)
+        } catch {
+            debug(error)
+            return nil
+        }
+    }
+
+    private var listSection: some View {
+        ForEach(Store.shared.themeIndexManager.indices.reversed(), id: \.self) { index in
+            if let theme = theme(at: index){
+                HStack{
+                    KeyboardPreview(theme: theme, scale: 0.6)
+                        .disabled(true)
+                    GeometryReader{geometry in
+                        CenterAlignedView{
+                            VStack{
+                                Spacer()
+                                Circle()
+                                    .fill(selection == index ? Color.blue : Color.systemGray4)
+                                    .frame(width: geometry.size.width/1.5, height: geometry.size.width/1.5)
+                                    .overlay(
+                                        Image(systemName: "checkmark")
+                                            .font(Font.system(size: geometry.size.width/3).weight(.bold))
+                                            .foregroundColor(.white)
+                                    )
+                                    .onTapGesture {
+                                        selection = index
+                                        Store.shared.themeIndexManager.select(at: index)
+                                    }
+                                Spacer()
+                            }
+                        }
+                    }
+                }
+                .contextMenu{
+                    Button{
+
+                    }label: {
+                        Image(systemName: "pencil")
+                        Text("編集する")
+                    }
+
+                    Button{
+
+                    }label: {
+                        Image(systemName: "trash")
+                        Text("削除する")
+                    }
+                }
+            }
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -19,28 +75,10 @@ struct ThemeTabView: View {
                     NavigationLink("テーマを作成", destination: ThemeEditView())
                 }
                 Section(header: Text("選ぶ")){
-                    LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) { // カラム数の指定
-                        ForEach(Store.shared.themeIndexManager.indices.reversed(), id: \.self) { index in
-                            if let _preview = try? Store.shared.themeIndexManager.preview(at: index),
-                               let preview = _preview{
-                                Image(uiImage: preview)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .overlay(
-                                        Group{
-                                            if selection == index{
-                                                Image(systemName: "checkmark.circle.fill")
-                                                    .renderingMode(.original)
-                                                    .font(.system(size: 50))
-                                            }
-                                        }
-                                    )
-                                    .onTapGesture {
-                                        selection = index
-                                        Store.shared.themeIndexManager.select(at: index)
-                                    }
-                            }
-                        }
+                    if refresh{
+                        listSection
+                    }else{
+                        listSection
                     }
                 }
             }
@@ -48,5 +86,9 @@ struct ThemeTabView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .font(.body)
+        .onChange(of: storeVariableSection.japaneseKeyboardLayout){_ in
+            SettingData.shared.reload() //設定をリロードする
+            self.refresh.toggle()
+        }
     }
 }
