@@ -14,7 +14,7 @@ final class Store{
     static var variableSection = StoreVariableSection()
     var feedbackGenerator = UINotificationFeedbackGenerator()
     private init(){
-        print(themeIndexManager.indices)
+        debug(themeIndexManager)
     }
 
     var messageManager = MessageManager()

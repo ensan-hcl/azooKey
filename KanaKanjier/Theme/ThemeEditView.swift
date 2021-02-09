@@ -152,16 +152,22 @@ struct ThemeEditView: View {
         }
         .navigationBarTitle(Text("着せ替えの編集"), displayMode: .inline)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(trailing: Button{
-            do{
-                try self.save()
-            }catch{
-                debug(error)
-            }
-            presentationMode.wrappedValue.dismiss()
-        }label: {
-            Text("完了")
-        })
+        .navigationBarItems(
+            leading: Button{
+                presentationMode.wrappedValue.dismiss()
+            } label: {
+                Text("キャンセル")
+            },
+            trailing: Button{
+                do{
+                    try self.save()
+                }catch{
+                    debug(error)
+                }
+                presentationMode.wrappedValue.dismiss()
+            }label: {
+                Text("完了")
+            })
     }
 
     var backgroundColor: Color {
@@ -180,9 +186,5 @@ struct ThemeEditView: View {
         if let capturedImage = UIApplication.shared.windows[0].rootViewController?.view?.getImage(rect: self.captureRect), let pngImageData = capturedImage.pngData(){
             self.theme.id = try Store.shared.themeIndexManager.saveTheme(theme: self.theme, capturedImage: pngImageData)
         }
-    }
-
-    static func load(){
-
     }
 }

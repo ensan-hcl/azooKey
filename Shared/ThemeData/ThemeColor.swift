@@ -12,13 +12,64 @@ import SwiftUI
 enum ThemeColor{
     case color(Color)
     case system(SystemColor)
+    case dynamic(DynamicColor)
 
     var color: Color {
         switch self{
         case let .color(color):
             return color
         case let .system(systemColor):
-            switch systemColor{
+            return systemColor.color
+        case let .dynamic(dynamicColor):
+            return dynamicColor.color
+        }
+    }
+
+    enum DynamicColor: String, Codable, CaseIterable{
+        case accentColor
+        case black
+        case blue
+        case clear
+        case gray
+        case green
+        case orange
+        case pink
+        case primary
+        case purple
+        case red
+        case secondary
+        case yellow
+        case white
+
+        var color: Color {
+            switch self{
+            case .accentColor: return .accentColor
+            case .black: return .black
+            case .blue: return .blue
+            case .clear: return .clear
+            case .gray: return .gray
+            case .green: return .green
+            case .orange: return .orange
+            case .pink: return .pink
+            case .primary: return .primary
+            case .purple: return .purple
+            case .red: return .red
+            case .secondary: return .secondary
+            case .yellow: return .yellow
+            case .white: return .white
+            }
+        }
+    }
+
+    enum SystemColor: String, Codable{
+        case normalKeyColor
+        case specialKeyColor
+        case highlightedKeyColor
+        case suggestKeyColor
+        case backgroundColor
+
+        var color: Color {
+            switch self{
             case .backgroundColor:
                 return Design.colors.backGroundColor
             case .normalKeyColor:
@@ -32,14 +83,6 @@ enum ThemeColor{
             }
         }
     }
-
-    enum SystemColor: String, Codable{
-        case normalKeyColor
-        case specialKeyColor
-        case highlightedKeyColor
-        case suggestKeyColor
-        case backgroundColor
-    }
 }
 
 extension ThemeColor: Codable, Equatable {
@@ -52,11 +95,14 @@ extension ThemeColor: Codable, Equatable {
 
         let color = try values.decode(Color?.self, forKey: .color)
         let systemColor = try values.decode(SystemColor?.self, forKey: .systemColor)
+        let dynamicColor = try? values.decode(DynamicColor?.self, forKey: .dynamicColor) ?? nil //FIXME: 開発環境でしか起こらないので、本番環境にするときにtry?->try
 
         if let color = color{
             self = .color(color)
         }else if let systemColor = systemColor{
             self = .system(systemColor)
+        }else if let dynamicColor = dynamicColor{
+            self = .dynamic(dynamicColor)
         }else{
             throw DecodeError.emptyData
         }
@@ -65,6 +111,7 @@ extension ThemeColor: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case color
         case systemColor
+        case dynamicColor
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -72,23 +119,40 @@ extension ThemeColor: Codable, Equatable {
 
         let color: Color?
         let systemColor: SystemColor?
-
+        let dynamicColor: DynamicColor?
         switch self{
         case let .color(_color):
-            color = _color
-            systemColor = nil
+            if let matchedDynamicColor = DynamicColor.allCases.filter{$0.color == _color}.first{
+                color = nil
+                systemColor = nil
+                dynamicColor = matchedDynamicColor
+            }else{
+                color = _color
+                systemColor = nil
+                dynamicColor = nil
+            }
         case let .system(_systemColor):
             color = nil
             systemColor = _systemColor
+            dynamicColor = nil
+        case let .dynamic(_dynamicColor):
+            color = nil
+            systemColor = nil
+            dynamicColor = _dynamicColor
         }
 
         try container.encode(color, forKey: .color)
         try container.encode(systemColor, forKey: .systemColor)
+        try container.encode(dynamicColor, forKey: .dynamicColor)
     }
 
 }
 
 extension Color: Codable {
+    enum EncodeError: Error {
+        case dynamicColor
+    }
+
     enum CodingKeys: String, CodingKey {
         case red
         case green
@@ -108,7 +172,7 @@ extension Color: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         guard let rgba = self.cgColor?.components else{
-            throw NSError(domain: "Color.encode", code: 34, userInfo: [:])
+            throw EncodeError.dynamicColor
         }
         try container.encode(rgba[0], forKey: .red)
         try container.encode(rgba[1], forKey: .green)

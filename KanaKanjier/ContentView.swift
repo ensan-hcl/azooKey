@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selection = 0
+    @State private var selection = 1
     @ObservedObject private var storeVariableSection = Store.variableSection
     @State private var isPresented = true
 
@@ -22,6 +22,15 @@ struct ContentView: View {
     var body: some View {
         ZStack{
             TabView(selection: $selection){
+                ThemeTabView()
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "photo").font(.system(size: 20, weight: .light))
+                                .foregroundColor(.systemGray2)
+                            Text("着せ替え")
+                        }
+                    }
+                    .tag(0)
                 TipsTabView()
                     .tabItem {
                         VStack {
@@ -30,22 +39,13 @@ struct ContentView: View {
                             Text("使い方")
                         }
                     }
-                    .tag(0)
+                    .tag(1)
                 SettingTabView()
                     .tabItem {
                         VStack {
                             Image(systemName: "wrench.fill").font(.system(size: 20, weight: .light))
                                 .foregroundColor(.systemGray2)
                             Text("設定")
-                        }
-                    }
-                    .tag(1)
-                ThemeTabView()
-                    .tabItem {
-                        VStack {
-                            Image(systemName: "photo").font(.system(size: 20, weight: .light))
-                                .foregroundColor(.systemGray2)
-                            Text("着せ替え")
                         }
                     }
                     .tag(2)
