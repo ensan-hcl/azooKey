@@ -179,7 +179,7 @@ struct Design{
         case `default`
 
         var themeFontWeight: Font.Weight {
-            VariableStates.shared.themeManager.weight
+            VariableStates.shared.themeManager.theme.textFont.weight
         }
 
         var iconFontSize: CGFloat {
@@ -311,40 +311,5 @@ struct Design{
                 return "編集"
             }
         }
-    }
-}
-
-struct ThemeManager{
-    var theme: ThemeData
-
-    var weight: Font.Weight {
-        switch theme.textFont {
-        case .ultraLight:
-            return .ultraLight
-        case .thin:
-            return .thin
-        case .light:
-            return .light
-        case .regular:
-            return .regular
-        case .medium:
-            return .medium
-        case .semibold:
-            return .semibold
-        case .bold:
-            return .bold
-        case .heavy:
-            return .heavy
-        case .black:
-            return .black
-        }
-    }
-
-    init(){
-        self.theme = Self.getSelectedTheme()
-    }
-
-    static func getSelectedTheme() -> ThemeData {
-        return ThemeData.clear
     }
 }

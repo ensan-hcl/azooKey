@@ -31,6 +31,9 @@ enum ThemePicture: Equatable {
 }
 
 extension ThemePicture: Codable{
+    enum EncodeError: Error {
+        case uiImageCannotEncode
+    }
 
     enum DecodeError: Error {
         case emptyPath
@@ -78,10 +81,8 @@ extension ThemePicture: Codable{
         case let .asset(name):
             valueType = .asset
             value = name
-        case let .uiImage(uiImage):
-            //ここでuiImageを保存する
-            valueType = .path
-            value = "path"
+        case .uiImage(_):
+            throw EncodeError.uiImageCannotEncode
         }
 
         try container.encode(valueType, forKey: .valueType)

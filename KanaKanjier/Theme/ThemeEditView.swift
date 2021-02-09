@@ -13,6 +13,7 @@ import PhotosUI
 struct ThemeEditView: View {
     @State private var theme: ThemeData = ThemeData.default
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     @State private var selectFontRowValue: Double = 4
 
@@ -37,6 +38,9 @@ struct ThemeEditView: View {
     }
 
     @State private var refresh = false
+
+    //キャプチャ用
+    @State private var captureRect: CGRect = .zero
 
     var body: some View {
         VStack{
@@ -109,17 +113,19 @@ struct ThemeEditView: View {
                 }
 
             }
-            if refresh{
-                KeyboardPreview()
-                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
-                    .clipped()
-                    .scaleEffect(0.9, anchor: .center)
-            }else{
-                KeyboardPreview()
-                    .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
-                    .clipped()
-                    .scaleEffect(0.9, anchor: .center)
+            Group{
+                if refresh{
+                    KeyboardPreview()
+                        .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
+                        .clipped()
+                }else{
+                    KeyboardPreview()
+                        .frame(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
+                        .clipped()
+                }
             }
+            .background(RectangleGetter(rect: $captureRect))
+
         }
         .background(backgroundColor)
         .onChange(of: image){value in
@@ -160,6 +166,17 @@ struct ThemeEditView: View {
                         isPresented: $isPhotoPickerPresented)
         }
         .navigationBarTitle(Text("着せ替えの編集"), displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(trailing: Button{
+            do{
+                try self.save()
+            }catch{
+                debug(error)
+            }
+            presentationMode.wrappedValue.dismiss()
+        }label: {
+            Text("完了")
+        })
     }
 
     var backgroundColor: Color {
@@ -171,5 +188,16 @@ struct ThemeEditView: View {
         @unknown default:
             return Color.systemGray6
         }
+    }
+
+    func save() throws {
+        //テーマを保存する
+        if let capturedImage = UIApplication.shared.windows[0].rootViewController?.view?.getImage(rect: self.captureRect), let pngImageData = capturedImage.pngData(){
+            self.theme.id = try Store.shared.themeIndexManager.saveTheme(theme: self.theme, capturedImage: pngImageData)
+        }
+    }
+
+    static func load(){
+
     }
 }

@@ -2314,6 +2314,9 @@
 		1AE1023E25D0E3FD00CA7277 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */; };
 		1AE1024B25D118ED00CA7277 /* ColorTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1024A25D118ED00CA7277 /* ColorTools.swift */; };
 		1AE1025025D1265A00CA7277 /* ColorTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1024A25D118ED00CA7277 /* ColorTools.swift */; };
+		1AE1025625D1788300CA7277 /* Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025525D1788300CA7277 /* Capture.swift */; };
+		1AE1025C25D21A9C00CA7277 /* ThemeIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025B25D21A9C00CA7277 /* ThemeIndices.swift */; };
+		1AE1025D25D21A9C00CA7277 /* ThemeIndices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025B25D21A9C00CA7277 /* ThemeIndices.swift */; };
 		1AE3DF02258A20A2007C7C4A /* KeyFlickSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */; };
 		1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */; };
 		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
@@ -4773,6 +4776,8 @@
 		1AE1023525D0C99200CA7277 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		1AE1024A25D118ED00CA7277 /* ColorTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTools.swift; sourceTree = "<group>"; };
+		1AE1025525D1788300CA7277 /* Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
+		1AE1025B25D21A9C00CA7277 /* ThemeIndices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeIndices.swift; sourceTree = "<group>"; };
 		1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDataProtocol.swift; sourceTree = "<group>"; };
 		1AE4DB742515FE1C00A24158 /* KanaComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaComponent.swift; sourceTree = "<group>"; };
 		1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectInputData.swift; sourceTree = "<group>"; };
@@ -7577,6 +7582,7 @@
 			children = (
 				1AF6784925CC20B400F3987B /* ThemeTab.swift */,
 				1ACC0F0D25CFE7FF00FC1B8A /* ThemeEditView.swift */,
+				1AE1025525D1788300CA7277 /* Capture.swift */,
 				1AE1024A25D118ED00CA7277 /* ColorTools.swift */,
 				1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */,
 				1AE1023525D0C99200CA7277 /* PhotoPicker.swift */,
@@ -7588,6 +7594,7 @@
 			isa = PBXGroup;
 			children = (
 				1AF6785525CC4FF500F3987B /* ThemeData.swift */,
+				1AE1025B25D21A9C00CA7277 /* ThemeIndices.swift */,
 				1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */,
 				1AE1022E25D0C86500CA7277 /* ThemePicture.swift */,
 			);
@@ -9973,6 +9980,7 @@
 				1ACEEFDE25665F0100899DA2 /* CenterAlignedView.swift in Sources */,
 				1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */,
 				1AC031662512302F004CA505 /* KeyFlickSettingItemView.swift in Sources */,
+				1AE1025C25D21A9C00CA7277 /* ThemeIndices.swift in Sources */,
 				1A3A16042528BFF900A5BA4F /* SelctInputStyle.swift in Sources */,
 				1AF6799425CEDBB500F3987B /* KeyModelVariableSection.swift in Sources */,
 				1AF6790A25CED97500F3987B /* Action.swift in Sources */,
@@ -10058,6 +10066,7 @@
 				1AF6794225CEDB7E00F3987B /* CursorMoveView.swift in Sources */,
 				1AF6795725CEDB8E00F3987B /* VerticalQwertyKeyboardView.swift in Sources */,
 				1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */,
+				1AE1025625D1788300CA7277 /* Capture.swift in Sources */,
 				1AF6793825CEDB7800F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1AF6799B25CEDBC000F3987B /* Design.swift in Sources */,
 				1ACE00752567525000899DA2 /* RomanCustomKeys.swift in Sources */,
@@ -10225,6 +10234,7 @@
 				1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */,
 				1AE1023725D0C99200CA7277 /* PhotoPicker.swift in Sources */,
 				1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */,
+				1AE1025D25D21A9C00CA7277 /* ThemeIndices.swift in Sources */,
 				1A3A16322529712300A5BA4F /* KogakiKeyModel.swift in Sources */,
 				1AE1023025D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1AC8A594259587A200B71E5A /* Design.swift in Sources */,

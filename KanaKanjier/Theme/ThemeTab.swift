@@ -20,22 +20,26 @@ struct ThemeTabView: View {
                 }
                 Section(header: Text("選ぶ")){
                     LazyVGrid(columns: Array(repeating: GridItem(), count: 2)) { // カラム数の指定
-                        ForEach((1...10), id: \.self) { index in
-                            Image("themeImage0")
-                                .resizable()
-                                .scaledToFit()
-                                .overlay(
-                                    Group{
-                                        if selection == index{
-                                            Image(systemName: "checkmark.circle.fill")
-                                                .renderingMode(.original)
-                                                .font(.system(size: 50))
+                        ForEach(Store.shared.themeIndexManager.indices.reversed(), id: \.self) { index in
+                            if let _preview = try? Store.shared.themeIndexManager.preview(at: index),
+                               let preview = _preview{
+                                Image(uiImage: preview)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .overlay(
+                                        Group{
+                                            if selection == index{
+                                                Image(systemName: "checkmark.circle.fill")
+                                                    .renderingMode(.original)
+                                                    .font(.system(size: 50))
+                                            }
                                         }
+                                    )
+                                    .onTapGesture {
+                                        selection = index
+                                        Store.shared.themeIndexManager.select(at: index)
                                     }
-                                )
-                                .onTapGesture {
-                                    selection = index
-                                }
+                            }
                         }
                     }
                 }

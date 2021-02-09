@@ -53,7 +53,7 @@ struct CursorMoveView: View{
     }
 
     private var symbolsFontWeight: Font.Weight {
-        VariableStates.shared.themeManager.weight
+        VariableStates.shared.themeManager.theme.textFont.weight
     }
 
     private var symbolsColor: Color {
