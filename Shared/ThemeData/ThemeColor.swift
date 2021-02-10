@@ -123,10 +123,12 @@ extension ThemeColor: Codable, Equatable {
         switch self{
         case let .color(_color):
             if let matchedDynamicColor = DynamicColor.allCases.filter{$0.color == _color}.first{
+                debug("match", self)
                 color = nil
                 systemColor = nil
                 dynamicColor = matchedDynamicColor
             }else{
+                debug("didn't match", self, DynamicColor.allCases.map{$0.color})
                 color = _color
                 systemColor = nil
                 dynamicColor = nil
@@ -150,7 +152,7 @@ extension ThemeColor: Codable, Equatable {
 
 extension Color: Codable {
     enum EncodeError: Error {
-        case dynamicColor
+        case dynamicColor(Color)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -172,7 +174,7 @@ extension Color: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         guard let rgba = self.cgColor?.components else{
-            throw EncodeError.dynamicColor
+            throw EncodeError.dynamicColor(self)
         }
         try container.encode(rgba[0], forKey: .red)
         try container.encode(rgba[1], forKey: .green)

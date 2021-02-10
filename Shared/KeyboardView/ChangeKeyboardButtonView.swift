@@ -47,8 +47,8 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)
         let largeBoldDoc = UIImage(systemName: "globe", withConfiguration: largeConfig)
         button.setImage(largeBoldDoc, for: .normal)
-        button.setTitleColor(UIColor(theme.textColor), for: [.normal, .highlighted])
-        button.tintColor = UIColor(theme.textColor)
+        button.setTitleColor(UIColor(theme.textColor.color), for: [.normal, .highlighted])
+        button.tintColor = UIColor(theme.textColor.color)
         return button
     }
 
@@ -56,7 +56,7 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)
         let largeBoldDoc = UIImage(systemName: "globe", withConfiguration: largeConfig)
         uiView.setImage(largeBoldDoc, for: .normal)
-        uiView.setTitleColor(UIColor(theme.textColor), for: [.normal, .highlighted])
-        uiView.tintColor = UIColor(theme.textColor)
+        uiView.setTitleColor(UIColor(theme.textColor.color), for: [.normal, .highlighted])
+        uiView.tintColor = UIColor(theme.textColor.color)
     }
 }

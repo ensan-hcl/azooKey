@@ -63,7 +63,7 @@ struct CursorMoveView: View{
     }
 
     private var symbolsColor: Color {
-        theme.resultTextColor
+        theme.resultTextColor.color
     }
 
 

@@ -81,7 +81,7 @@ struct QwertyKeyView: View{
     }
 
     private var keyBorderColor: Color {
-        theme.borderColor
+        theme.borderColor.color
     }
 
     private var keyBorderWidth: CGFloat {

@@ -16,8 +16,10 @@ struct ThemeEditView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     @State private var selectFontRowValue: Double = 4
+    @Binding private var manager: ThemeIndexManager
 
-    init(){
+    init(manager: Binding<ThemeIndexManager>){
+        self._manager = manager
         self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
         VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
     }
@@ -27,6 +29,10 @@ struct ThemeEditView: View {
 
     @State private var normalKeyColor = Design.colors.normalKeyColor
     @State private var specialKeyColor = Design.colors.specialKeyColor
+    @State private var backGroundColor = Design.colors.backGroundColor
+    @State private var borderColor = Color(.displayP3, white: 1, opacity: 0)
+    @State private var keyLabelColor = Color.primary
+    @State private var resultTextColor = Color.primary
 
     // PHPickerの設定
     var config: PHPickerConfiguration {
@@ -69,7 +75,7 @@ struct ThemeEditView: View {
                                 Text("\(systemImage: "photo")画像を選ぶ")
                             }
                         }
-                        ColorPicker("背景の色", selection: $theme.backgroundColor)
+                        ColorPicker("背景の色", selection: $backGroundColor)
                     }
                 }
                 Section(header: Text("文字")){
@@ -82,16 +88,16 @@ struct ThemeEditView: View {
                 }
 
                 Section(header: Text("変換候補")){
-                    ColorPicker("変換候補の文字の色", selection: $theme.resultTextColor)
+                    ColorPicker("変換候補の文字の色", selection: $resultTextColor)
                 }
 
                 Section(header: Text("キー")){
-                    ColorPicker("キーの文字の色", selection: $theme.textColor)
+                    ColorPicker("キーの文字の色", selection: $keyLabelColor)
 
                     ColorPicker("通常キーの背景色", selection: $normalKeyColor)
                     ColorPicker("特殊キーの背景色", selection: $specialKeyColor)
 
-                    ColorPicker("枠線の色", selection: $theme.borderColor)
+                    ColorPicker("枠線の色", selection: $borderColor)
                     HStack{
                         Text("枠線の太さ")
                         Slider(value: $theme.borderWidth, in: 0...10)
@@ -103,6 +109,10 @@ struct ThemeEditView: View {
                         self.image = nil
                         self.normalKeyColor = Design.colors.normalKeyColor
                         self.specialKeyColor = Design.colors.specialKeyColor
+                        self.backGroundColor = Design.colors.backGroundColor
+                        self.borderColor = Color(.displayP3, white: 1, opacity: 0)
+                        self.keyLabelColor = .primary
+                        self.resultTextColor = .primary
                         self.selectFontRowValue = 4
                         self.theme = .default
                     } label: {
@@ -116,11 +126,12 @@ struct ThemeEditView: View {
                 .background(RectangleGetter(rect: $captureRect))
 
         }
-        .background(backgroundColor)
+        .background(viewBackgroundColor)
         .onChange(of: image){value in
             if let value = value{
                 self.theme.picture = .uiImage(value)
-                self.theme.backgroundColor = Color.white.opacity(0)
+                backGroundColor = Color.white.opacity(0)
+                self.theme.backgroundColor = .color(Color.white.opacity(0))
             }else{
                 self.theme.picture = .none
             }
@@ -144,6 +155,18 @@ struct ThemeEditView: View {
             }){
                 self.theme.specialKeyFillColor = .color(specialKeyColor)
             }
+        }
+        .onChange(of: backGroundColor){value in
+            self.theme.backgroundColor = .color(value)
+        }
+        .onChange(of: borderColor){value in
+            self.theme.borderColor = .color(value)
+        }
+        .onChange(of: keyLabelColor){value in
+            self.theme.textColor = .color(value)
+        }
+        .onChange(of: resultTextColor){value in
+            self.theme.resultTextColor = .color(value)
         }
         .sheet(isPresented: $isPhotoPickerPresented){
             PhotoPicker(configuration: self.config,
@@ -170,7 +193,7 @@ struct ThemeEditView: View {
             })
     }
 
-    var backgroundColor: Color {
+    var viewBackgroundColor: Color {
         switch colorScheme{
         case .light:
             return Color.systemGray6
@@ -184,7 +207,7 @@ struct ThemeEditView: View {
     func save() throws {
         //テーマを保存する
         if let capturedImage = UIApplication.shared.windows[0].rootViewController?.view?.getImage(rect: self.captureRect), let pngImageData = capturedImage.pngData(){
-            self.theme.id = try Store.shared.themeIndexManager.saveTheme(theme: self.theme, capturedImage: pngImageData)
+            self.theme.id = try manager.saveTheme(theme: self.theme, capturedImage: pngImageData)
         }
     }
 }

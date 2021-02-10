@@ -13,12 +13,7 @@ final class Store{
     static let shared = Store()
     static var variableSection = StoreVariableSection()
     var feedbackGenerator = UINotificationFeedbackGenerator()
-    private init(){
-        debug(themeIndexManager)
-    }
-
     var messageManager = MessageManager()
-    var themeIndexManager = ThemeIndexManager.load()
 
     func appDidOpen(){
         //ユーザ辞書に登録がない場合

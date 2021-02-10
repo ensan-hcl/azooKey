@@ -131,8 +131,6 @@ struct ResultModel<Candidate: ResultViewItemData>{
     func scrollTop(){
         if let proxy = self.variableSection.scrollViewProxy{
             proxy.scrollTo(0, anchor: .trailing)
-        }else{
-            debug("proxyが失われていて、先頭にスクロールできませんでした")
         }
     }
 }
@@ -151,11 +149,11 @@ struct ResultButtonStyle: ButtonStyle {
             .font(Design.fonts.resultViewFont(theme: theme))
             .frame(height: height)
             .padding(.all, 5)
-            .foregroundColor(theme.resultTextColor) //文字色は常に不透明度1で描画する
+            .foregroundColor(theme.resultTextColor.color) //文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
                     theme.pushedKeyFillColor.color.opacity(0.5) :
-                    theme.backgroundColor
+                    theme.backgroundColor.color
             )
             .cornerRadius(5.0)
     }

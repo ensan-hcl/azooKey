@@ -46,7 +46,7 @@ struct KeyLabel: View {
     private let theme: ThemeData
 
     private var mainKeyColor: Color {
-        textColor ?? theme.textColor
+        textColor ?? theme.textColor.color
     }
 
     init(_ type: KeyLabelType, width: CGFloat, theme: ThemeData, textSize: TextSize = .large, textColor: Color? = nil){

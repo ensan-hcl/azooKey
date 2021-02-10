@@ -11,12 +11,12 @@ import SwiftUI
 
 struct ThemeData: Codable, Equatable {
     var id: Int? = nil
-    var backgroundColor: Color
+    var backgroundColor: ThemeColor
     var picture: ThemePicture
-    var textColor: Color
+    var textColor: ThemeColor
     var textFont: ThemeFontWeight
-    var resultTextColor: Color
-    var borderColor: Color
+    var resultTextColor: ThemeColor
+    var borderColor: ThemeColor
     var borderWidth: Double
     var normalKeyFillColor: ThemeColor
     var specialKeyFillColor: ThemeColor
@@ -24,12 +24,12 @@ struct ThemeData: Codable, Equatable {
     var suggestKeyFillColor: ThemeColor?  //自動で設定する
 
     static let `default`: Self = Self.init(
-        backgroundColor: Design.colors.backGroundColor,
+        backgroundColor: .system(.backgroundColor),
         picture: .none,
-        textColor: .primary,
+        textColor: .dynamic(.primary),
         textFont: .regular,
-        resultTextColor: .primary,
-        borderColor: .clear,
+        resultTextColor: .dynamic(.primary),
+        borderColor: .color(Color(white: 0, opacity: 0)),
         borderWidth: 1,
         normalKeyFillColor: .system(.normalKeyColor),
         specialKeyFillColor: .system(.specialKeyColor),
@@ -38,12 +38,12 @@ struct ThemeData: Codable, Equatable {
     )
 
     static let mock: Self = Self.init(
-        backgroundColor: Design.colors.backGroundColor,
+        backgroundColor: .system(.backgroundColor),
         picture: .asset("wallPaperMock"),
-        textColor: Color(.displayP3, white: 1, opacity: 1),
+        textColor: .color(Color(.displayP3, white: 1, opacity: 1)),
         textFont: .bold,
-        resultTextColor: Color(.displayP3, white: 1, opacity: 1),
-        borderColor: Color(.displayP3, white: 0, opacity: 0),
+        resultTextColor: .color(Color(.displayP3, white: 1, opacity: 1)),
+        borderColor: .color(Color(.displayP3, white: 0, opacity: 0)),
         borderWidth: 1,
         normalKeyFillColor: .system(.normalKeyColor),
         specialKeyFillColor: .system(.specialKeyColor),
@@ -52,12 +52,12 @@ struct ThemeData: Codable, Equatable {
     )
 
     static let clear: Self = Self.init(
-        backgroundColor: Color(.displayP3, white: 1, opacity: 0),
+        backgroundColor: .color(Color(.displayP3, white: 1, opacity: 0)),
         picture: .asset("wallPaperMock"),
-        textColor: Color(.displayP3, white: 1, opacity: 1),
+        textColor: .color(Color(.displayP3, white: 1, opacity: 1)),
         textFont: .bold,
-        resultTextColor: Color(.displayP3, white: 1, opacity: 1),
-        borderColor: Color(.displayP3, white: 1, opacity: 0),
+        resultTextColor: .color(Color(.displayP3, white: 1, opacity: 1)),
+        borderColor: .color(Color(.displayP3, white: 1, opacity: 0)),
         borderWidth: 1,
         normalKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 0.001)),
         specialKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 0.001)),

@@ -10,12 +10,12 @@ import SwiftUI
 
 struct ThemeTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
-    @State private var selection = Store.shared.themeIndexManager.selectedIndex
-
     @State private var refresh = false
+    @State private var manager = ThemeIndexManager.load()
+
     func theme(at index: Int) -> ThemeData? {
         do{
-            return try Store.shared.themeIndexManager.theme(at: index)
+            return try manager.theme(at: index)
         } catch {
             debug(error)
             return nil
@@ -23,7 +23,7 @@ struct ThemeTabView: View {
     }
 
     private var listSection: some View {
-        ForEach(Store.shared.themeIndexManager.indices.reversed(), id: \.self) { index in
+        ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index){
                 HStack{
                     KeyboardPreview(theme: theme, scale: 0.6)
@@ -33,7 +33,7 @@ struct ThemeTabView: View {
                             VStack{
                                 Spacer()
                                 Circle()
-                                    .fill(selection == index ? Color.blue : Color.systemGray4)
+                                    .fill(manager.selectedIndex == index ? Color.blue : Color.systemGray4)
                                     .frame(width: geometry.size.width/1.5, height: geometry.size.width/1.5)
                                     .overlay(
                                         Image(systemName: "checkmark")
@@ -41,8 +41,7 @@ struct ThemeTabView: View {
                                             .foregroundColor(.white)
                                     )
                                     .onTapGesture {
-                                        selection = index
-                                        Store.shared.themeIndexManager.select(at: index)
+                                        manager.select(at: index)
                                     }
                                 Spacer()
                             }
@@ -55,14 +54,14 @@ struct ThemeTabView: View {
                     }label: {
                         Image(systemName: "pencil")
                         Text("編集する")
-                    }
+                    }.disabled(index == 0)
 
                     Button{
-
+                        manager.remove(index: index)
                     }label: {
                         Image(systemName: "trash")
                         Text("削除する")
-                    }
+                    }.disabled(index == 0)
                 }
             }
         }
@@ -72,7 +71,7 @@ struct ThemeTabView: View {
         NavigationView {
             Form {
                 Section(header: Text("作る")){
-                    NavigationLink("テーマを作成", destination: ThemeEditView())
+                    NavigationLink("テーマを作成", destination: ThemeEditView(manager: $manager))
                 }
                 Section(header: Text("選ぶ")){
                     if refresh{
@@ -83,6 +82,9 @@ struct ThemeTabView: View {
                 }
             }
             .navigationBarTitle(Text("着せ替え"), displayMode: .large)
+        }
+        .onChange(of: manager){value in
+            debug("変更検知")
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .font(.body)
