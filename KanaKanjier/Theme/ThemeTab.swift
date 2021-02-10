@@ -13,6 +13,9 @@ struct ThemeTabView: View {
     @State private var refresh = false
     @State private var manager = ThemeIndexManager.load()
 
+    @State private var editViewIndex: Int? = nil
+    @State private var editViewEnabled = false
+
     func theme(at index: Int) -> ThemeData? {
         do{
             return try manager.theme(at: index)
@@ -50,7 +53,8 @@ struct ThemeTabView: View {
                 }
                 .contextMenu{
                     Button{
-
+                        editViewIndex = index
+                        editViewEnabled = true
                     }label: {
                         Image(systemName: "pencil")
                         Text("編集する")
@@ -71,7 +75,19 @@ struct ThemeTabView: View {
         NavigationView {
             Form {
                 Section(header: Text("作る")){
-                    NavigationLink("テーマを作成", destination: ThemeEditView(manager: $manager))
+                    HStack{
+                        Button{
+                            debug("呼ばれている")
+                            editViewIndex = nil
+                            editViewEnabled = true
+                        }label: {
+                            Text("テーマを作成")
+                                .foregroundColor(.primary)
+                        }
+                        NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled){
+                            EmptyView()
+                        }.frame(maxWidth: 1)
+                    }
                 }
                 Section(header: Text("選ぶ")){
                     if refresh{
@@ -82,12 +98,16 @@ struct ThemeTabView: View {
                 }
             }
             .navigationBarTitle(Text("着せ替え"), displayMode: .large)
-        }
-        .onChange(of: manager){value in
-            debug("変更検知")
+            .onAppear{
+                //この位置にonAppearを置く。NavigationViewは画面の遷移中常に現れている。
+                self.refresh.toggle()
+            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .font(.body)
+        .onChange(of: manager){value in
+            debug("変更検知")
+        }
         .onChange(of: storeVariableSection.japaneseKeyboardLayout){_ in
             SettingData.shared.reload() //設定をリロードする
             self.refresh.toggle()

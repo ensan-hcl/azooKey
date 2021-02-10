@@ -39,17 +39,36 @@ struct PhotoPicker: UIViewControllerRepresentable {
         // PHPickerViewControllerDelegateの設定
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             for image in results {
-                image.itemProvider.loadObject(ofClass: UIImage.self) { (selectedImage, error) in
-                    if let error = error {
-                        print("error: \(error.localizedDescription)")
-                        return
+                if image.itemProvider.canLoadObject(ofClass: PHLivePhoto.self){
+                    image.itemProvider.loadObject(ofClass: PHLivePhoto.self) { (livePhotoObject, error) in
+                        // PHLivePhotoとして取得
+                        if let livePhoto = livePhotoObject as? PHLivePhoto,
+                           let imageUrl = livePhoto.value(forKey: "imageURL") as? URL {
+                            do {
+                                // Dataで取得
+                                let imageData: Data = try Data(contentsOf: imageUrl)
+                                if let uiImage = UIImage(data: imageData), let cgImage = uiImage.cgImage{
+                                    debug("取得データ", uiImage.imageOrientation)
+                                    self.parent.pickerResult = UIImage(cgImage: cgImage, scale: 1, orientation: uiImage.imageOrientation)
+                                }
+                            } catch {
+                                print(error)
+                            }
+                        }
                     }
-                    guard let wrapImage = selectedImage as? UIImage else {
-                        print("wrap error")
-                        return
+                }else if image.itemProvider.canLoadObject(ofClass: UIImage.self) {
+                    image.itemProvider.loadObject(ofClass: UIImage.self) { (selectedImage, error) in
+                        if let error = error {
+                            debug("error: \(error.localizedDescription)")
+                            return
+                        }
+                        guard let wrapImage = selectedImage as? UIImage else {
+                            debug("wrap error")
+                            return
+                        }
+                        // 選択したImageをpickerResultに格納
+                        self.parent.pickerResult = wrapImage
                     }
-                    // 選択したImageをpickerResultに格納
-                    self.parent.pickerResult = wrapImage
                 }
             }
             // 閉じる

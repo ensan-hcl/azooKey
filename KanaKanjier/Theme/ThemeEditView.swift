@@ -18,14 +18,30 @@ struct ThemeEditView: View {
     @State private var selectFontRowValue: Double = 4
     @Binding private var manager: ThemeIndexManager
 
-    init(manager: Binding<ThemeIndexManager>){
+    @State private var isTrimmingViewPresented = false
+    @State private var trimmedImage: UIImage? = nil
+    @State private var pickedImage: UIImage? = nil
+    @State private var isPhotoPickerPresented = false
+
+    let title: String
+
+    init(index: Int?, manager: Binding<ThemeIndexManager>){
         self._manager = manager
+        if let index = index{
+            do{
+                var theme = try manager.wrappedValue.theme(at: index)
+                theme.id = index
+                self._theme = State(initialValue: theme)
+            } catch {
+                print(error)
+            }
+            self.title = "着せ替えを編集"
+        }else{
+            self.title = "着せ替えを作成"
+        }
         self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
         VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
     }
-
-    @State private var image: UIImage? = nil
-    @State private var isPhotoPickerPresented = false
 
     @State private var normalKeyColor = Design.colors.normalKeyColor
     @State private var specialKeyColor = Design.colors.specialKeyColor
@@ -51,7 +67,7 @@ struct ThemeEditView: View {
         VStack{
             Form{
                 Section(header: Text("背景")){
-                    if let _ = image{
+                    if let _ = trimmedImage{
                         Button{
                             self.isPhotoPickerPresented = true
                         } label: {
@@ -60,7 +76,8 @@ struct ThemeEditView: View {
                             }
                         }
                         Button{
-                            image = nil
+                            pickedImage = nil
+                            trimmedImage = nil
                         } label: {
                             HStack{
                                 Text("画像を削除")
@@ -106,7 +123,8 @@ struct ThemeEditView: View {
 
                 Section{
                     Button{
-                        self.image = nil
+                        self.pickedImage = nil
+                        self.trimmedImage = nil
                         self.normalKeyColor = Design.colors.normalKeyColor
                         self.specialKeyColor = Design.colors.specialKeyColor
                         self.backGroundColor = Design.colors.backGroundColor
@@ -124,10 +142,28 @@ struct ThemeEditView: View {
             }
             KeyboardPreview(theme: self.theme)
                 .background(RectangleGetter(rect: $captureRect))
+            NavigationLink(destination: Group{
+                if let image = pickedImage{
+                TrimmingView(
+                    uiImage: image,
+                    resultImage: $trimmedImage,
+                    maxSize: CGSize(width: 1280, height: 720),
+                    aspectRatio: CGSize(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
+                )}
+            }, isActive: $isTrimmingViewPresented){
+                EmptyView()
+            }
 
         }
         .background(viewBackgroundColor)
-        .onChange(of: image){value in
+        .onChange(of: pickedImage){value in
+            if let _ = value{
+                self.isTrimmingViewPresented = true
+            }else{
+                self.theme.picture = .none
+            }
+        }
+        .onChange(of: trimmedImage){value in
             if let value = value{
                 self.theme.picture = .uiImage(value)
                 backGroundColor = Color.white.opacity(0)
@@ -170,10 +206,10 @@ struct ThemeEditView: View {
         }
         .sheet(isPresented: $isPhotoPickerPresented){
             PhotoPicker(configuration: self.config,
-                        pickerResult: $image,
+                        pickerResult: $pickedImage,
                         isPresented: $isPhotoPickerPresented)
         }
-        .navigationBarTitle(Text("着せ替えの編集"), displayMode: .inline)
+        .navigationBarTitle(Text(self.title), displayMode: .inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: Button{
