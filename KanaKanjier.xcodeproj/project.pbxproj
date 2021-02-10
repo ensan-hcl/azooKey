@@ -2317,6 +2317,8 @@
 		1AE1025C25D21A9C00CA7277 /* ThemeIndexManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025B25D21A9C00CA7277 /* ThemeIndexManager.swift */; };
 		1AE1025D25D21A9C00CA7277 /* ThemeIndexManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025B25D21A9C00CA7277 /* ThemeIndexManager.swift */; };
 		1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102CE25D3713C00CA7277 /* TrimmingView.swift */; };
+		1AE102DA25D43E9100CA7277 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102D925D43E9100CA7277 /* ThemeManager.swift */; };
+		1AE102E425D43E9700CA7277 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102D925D43E9100CA7277 /* ThemeManager.swift */; };
 		1AE3DF02258A20A2007C7C4A /* KeyFlickSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */; };
 		1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */; };
 		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
@@ -4779,6 +4781,7 @@
 		1AE1025525D1788300CA7277 /* Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
 		1AE1025B25D21A9C00CA7277 /* ThemeIndexManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeIndexManager.swift; sourceTree = "<group>"; };
 		1AE102CE25D3713C00CA7277 /* TrimmingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrimmingView.swift; sourceTree = "<group>"; };
+		1AE102D925D43E9100CA7277 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDataProtocol.swift; sourceTree = "<group>"; };
 		1AE4DB742515FE1C00A24158 /* KanaComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaComponent.swift; sourceTree = "<group>"; };
 		1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectInputData.swift; sourceTree = "<group>"; };
@@ -7597,6 +7600,7 @@
 			children = (
 				1AF6785525CC4FF500F3987B /* ThemeData.swift */,
 				1AE1025B25D21A9C00CA7277 /* ThemeIndexManager.swift */,
+				1AE102D925D43E9100CA7277 /* ThemeManager.swift */,
 				1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */,
 				1AE1022E25D0C86500CA7277 /* ThemePicture.swift */,
 			);
@@ -10001,6 +10005,7 @@
 				1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */,
 				1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */,
 				1A39A1A2259325D7008DDCFE /* AzooKeyUserDictionaryData.swift in Sources */,
+				1AE102DA25D43E9100CA7277 /* ThemeManager.swift in Sources */,
 				1A3A162C2529671300A5BA4F /* KeyFlickSetting.swift in Sources */,
 				1ACC0F0E25CFE7FF00FC1B8A /* ThemeEditView.swift in Sources */,
 				1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */,
@@ -10160,6 +10165,7 @@
 				1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,
+				1AE102E425D43E9700CA7277 /* ThemeManager.swift in Sources */,
 				1AF678A125CDA07A00F3987B /* SettingData.swift in Sources */,
 				1A3DC20E2500D55F002CAA93 /* VerticalFlickDataProvider.swift in Sources */,
 				1ACC0F0825CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */,
