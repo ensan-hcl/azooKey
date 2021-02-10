@@ -95,7 +95,7 @@ extension ThemeColor: Codable, Equatable {
 
         let color = try values.decode(Color?.self, forKey: .color)
         let systemColor = try values.decode(SystemColor?.self, forKey: .systemColor)
-        let dynamicColor = try? values.decode(DynamicColor?.self, forKey: .dynamicColor) ?? nil //FIXME: 開発環境でしか起こらないので、本番環境にするときにtry?->try
+        let dynamicColor = try values.decode(DynamicColor?.self, forKey: .dynamicColor)
 
         if let color = color{
             self = .color(color)
