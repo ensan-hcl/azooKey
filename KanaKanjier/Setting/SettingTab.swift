@@ -150,6 +150,9 @@ struct SettingTabView: View {
                             Spacer()
                         }
                     }
+                }
+                Section(header: Text("ユーザ辞書")){
+                    BooleanSettingItemView(Store.shared.iOSUserDictSetting)
                     NavigationLink(destination: AzooKeyUserDictionaryView()) {
                         HStack{
                             Text("azooKeyユーザ辞書")

@@ -26,6 +26,7 @@ enum Setting: String {
     case enableSound = "sound_enable_setting"
     case resultViewFontSize = "result_view_font_size"
     case keyViewFontSize = "key_view_font_size"
+    case useOSuserDict = "use_OS_user_dict"
 
     var key: String {
         self.rawValue
@@ -69,6 +70,8 @@ enum Setting: String {
             return "変換候補の表示サイズ"
         case .keyViewFontSize:
             return "キーの表示サイズ"
+        case .useOSuserDict:
+            return "OSのユーザ辞書の利用"
         }
     }
 
@@ -108,6 +111,8 @@ enum Setting: String {
             return "変換候補の文字の大きさを指定できます。"
         case .keyViewFontSize:
             return "キーの文字の大きさを指定できます。文字が大きすぎる場合表示が崩れることがあります。"
+        case .useOSuserDict:
+            return "iOS標準のユーザ辞書を利用します。"
         }
     }
 }
@@ -120,7 +125,7 @@ struct DefaultSetting{
         switch setting{
         case .wesJapCalender, .typographyLetter, .halfKana, .fullRoman, .unicodeCandidate, .englishCandidate:
             return true
-        case .stopLearningWhenSearch, .enableSound:
+        case .stopLearningWhenSearch, .enableSound, .useOSuserDict:
             return false
         default:
             return nil

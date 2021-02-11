@@ -111,6 +111,11 @@ final class Store{
         defaultValue: .none
     ))
 
+    var iOSUserDictSetting = SettingItemViewModel(SettingItem<Bool>(
+        identifier: .useOSuserDict,
+        defaultValue: false
+    ))
+
     func noticeReloadUserDict(){
         let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
         userDefaults.set(true, forKey: "reloadUserDict")

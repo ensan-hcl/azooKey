@@ -63,7 +63,7 @@ final class DicDataStore{
         self.loadLOUDS(identifier: "user")
     }
 
-    func sendToDicDataStore(_ data: ActionDepartment.DicDataStoreNotification){
+    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification){
         switch data{
         case .notifyAppearAgain:
             break

@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 
-///何者だ？
 final class Store{
     static let shared = Store()
     private(set) var resultModel = ResultModel<Candidate>()
@@ -18,20 +17,30 @@ final class Store{
 
     private init(){
         VariableStates.shared.action = action
+        self.settingCheck()
+    }
+
+    func settingCheck(){
+        if SettingData.checkResetSetting(){
+            self.action.sendToDicDataStore(.resetMemory)
+        }
+        action.sendToDicDataStore(.notifyLearningType(SettingData.shared.learningType))
     }
     
     func initialize(){
         SettingData.shared.reload()
+        self.settingCheck()
         VariableStates.shared.initialize()
         self.action.initialize()
     }
 
     func appearedAgain(){
         SettingData.shared.reload()
+        self.settingCheck()
         self.action.appearedAgain()
     }
 
-    private func sendToDicDataStore(_ data: ActionDepartment.DicDataStoreNotification){
+    private func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification){
         self.action.sendToDicDataStore(data)
     }
 
@@ -79,7 +88,15 @@ final class KeyboardActionDepartment: ActionDepartment{
         self.inputManager.setTextDocumentProxy(proxy)
     }
 
-    override func sendToDicDataStore(_ data: DicDataStoreNotification){
+    enum DicDataStoreNotification{
+        case notifyLearningType(LearningType)
+        case notifyAppearAgain
+        case reloadUserDict
+        case closeKeyboard
+        case resetMemory
+    }
+
+    func sendToDicDataStore(_ data: DicDataStoreNotification){
         self.inputManager.sendToDicDataStore(data)
     }
 
@@ -382,11 +399,14 @@ final class KeyboardActionDepartment: ActionDepartment{
 
     private func hideLearningMemory(){
         SettingData.shared.writeLearningTypeSetting(to: .nothing)
+        self.sendToDicDataStore(.notifyLearningType(.nothing))
     }
 
+    #if DEBUG
     func setDebugPrint(_ text: String){
         self.inputManager.setDebugResult(text: text)
     }
+    #endif
 }
 
 //ActionDepartmentの状態を保存する部分
@@ -432,7 +452,7 @@ private final class InputManager{
         return self._directConverter!
     }
 
-    func sendToDicDataStore(_ data: ActionDepartment.DicDataStoreNotification){
+    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification){
         self._romanConverter?.sendToDicDataStore(data)
         self._directConverter?.sendToDicDataStore(data)
     }

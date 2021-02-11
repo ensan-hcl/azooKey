@@ -22,13 +22,4 @@ class ActionDepartment{
         ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize, theme: theme)
     }
 
-    func sendToDicDataStore(_ data: DicDataStoreNotification){}
-
-    enum DicDataStoreNotification{
-        case notifyLearningType(LearningType)
-        case notifyAppearAgain
-        case reloadUserDict
-        case closeKeyboard
-        case resetMemory
-    }
 }

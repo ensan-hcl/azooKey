@@ -11,7 +11,7 @@ import SwiftUI
 
 struct SettingData{
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-    private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate]
+    private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate, .useOSuserDict]
     private var boolSettings: [Setting: Bool]
     private var keyboardLayoutSetting: [Setting: KeyboardLayout]
 
@@ -41,10 +41,6 @@ struct SettingData{
 
         self.resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
         self.keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
-
-        if Self.checkResetSetting(){
-            VariableStates.shared.action.sendToDicDataStore(.resetMemory)
-        }
     }
 
     internal func bool(for key: Setting) -> Bool {
@@ -105,7 +101,7 @@ struct SettingData{
     var kogakiFlickSetting: [FlickDirection: FlickedKeyModel] = Self.getKogakiFlickSetting()
     var kanaSymbolsFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick:  [FlickDirection: FlickedKeyModel]) = Self.getKanaSymbolsFlickSetting()
 
-    var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput, initialize: true)
+    var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput)
 
     var resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
     var keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
@@ -141,16 +137,13 @@ struct SettingData{
         return nil
     }
 
-    private static func learningTypeSetting(_ current: LearningType, initialize: Bool = false) -> LearningType {
+    private static func learningTypeSetting(_ current: LearningType) -> LearningType {
         let result: LearningType
         if let object = Self.userDefaults.object(forKey: Setting.learningType.key),
            let value = LearningType.get(object){
             result = value
         }else{
             result = DefaultSetting.shared.memorySettingDefault
-        }
-        if !initialize{
-            VariableStates.shared.action.sendToDicDataStore(.notifyLearningType(result))
         }
         return result
     }
@@ -170,7 +163,6 @@ struct SettingData{
     mutating func writeLearningTypeSetting(to type: LearningType) {
         Self.userDefaults.set(type.saveValue, forKey: Setting.learningType.key)
         self.learningType = type
-        VariableStates.shared.action.sendToDicDataStore(.notifyLearningType(type))
     }
 
     var qwertyNumberTabKeySetting: [QwertyKeyModel] {
