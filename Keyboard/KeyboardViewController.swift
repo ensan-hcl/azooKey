@@ -46,14 +46,6 @@ final class KeyboardViewController: UIInputViewController {
         keyboardViewHost.view.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         keyboardViewHost.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
-        if SettingData.shared.bool(for: .useOSuserDict){
-            let osuserdict = OSUserDict()
-            self.requestSupplementaryLexicon{[unowned osuserdict] in
-                osuserdict.dict = $0.entries.map{entry in LRE_DicDataElement(word: entry.documentText, ruby: entry.userInput.applyingTransform(.hiraganaToKatakana, reverse: false)!, cid: 1288, mid: 501, value: -6)}
-            }
-            Store.shared.action.sendToDicDataStore(.importOSUserDict(osuserdict))
-        }
-
         Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
         Store.shared.action.setDelegateViewController(self)
         SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
@@ -69,6 +61,15 @@ final class KeyboardViewController: UIInputViewController {
         gr1.delaysTouchesBegan = false
 
         SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
+
+        if SettingData.shared.bool(for: .useOSuserDict){
+            let osuserdict = OSUserDict()
+            self.requestSupplementaryLexicon{[unowned osuserdict] in
+                osuserdict.dict = $0.entries.map{entry in LRE_DicDataElement(word: entry.documentText, ruby: entry.userInput.applyingTransform(.hiraganaToKatakana, reverse: false)!, cid: 1288, mid: 501, value: -6)}
+            }
+            Store.shared.action.sendToDicDataStore(.importOSUserDict(osuserdict))
+        }
+
         Store.shared.action.appearedAgain()
     }
 
@@ -103,17 +104,6 @@ final class KeyboardViewController: UIInputViewController {
         super.viewDidLayoutSubviews()
         self.registerScreenActualSize()
         debug("描画終わり", self.view.frame.size)
-    }
-
-    var userDictData: [LRE_DicDataElement] {
-        var elements: [LRE_DicDataElement] = []
-        self.requestSupplementaryLexicon(completion: {
-            $0.entries.forEach{entry in
-                elements.append(LRE_DicDataElement(word: entry.documentText, ruby: entry.userInput, cid: 1286, mid: 501, value: 6))
-            }
-        })
-        debug(elements)
-        return elements
     }
 
     /*
