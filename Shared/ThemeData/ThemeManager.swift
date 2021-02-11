@@ -73,7 +73,7 @@ struct ThemeIndexManager: Equatable {
         return themeData
     }
 
-    mutating func saveTheme(theme: ThemeData, capturedImage: Data) throws -> Int {
+    mutating func saveTheme(theme: ThemeData) throws -> Int {
         var saveData = theme
         let id: Int
         if let _id = saveData.id{
