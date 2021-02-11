@@ -43,13 +43,18 @@ struct ThemeTabView: View {
                                             .font(Font.system(size: geometry.size.width/3).weight(.bold))
                                             .foregroundColor(.white)
                                     )
-                                    .onTapGesture {
-                                        manager.select(at: index)
-                                    }
                                 Spacer()
                             }
                         }
                     }
+                    if editViewIndex == index{
+                        NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled){
+                            EmptyView()
+                        }.frame(maxWidth: 1)
+                    }
+                }
+                .onTapGesture {
+                    manager.select(at: index)
                 }
                 .contextMenu{
                     Button{
@@ -76,17 +81,19 @@ struct ThemeTabView: View {
             Form {
                 Section(header: Text("作る")){
                     HStack{
-                        Button{
-                            debug("呼ばれている")
-                            editViewIndex = nil
-                            editViewEnabled = true
-                        }label: {
-                            Text("テーマを作成")
-                                .foregroundColor(.primary)
-                        }
-                        NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled){
-                            EmptyView()
-                        }.frame(maxWidth: 1)
+                            Button{
+                                debug("呼ばれている")
+                                editViewIndex = nil
+                                editViewEnabled = true
+                            }label: {
+                                Text("テーマを作成")
+                                    .foregroundColor(.primary)
+                            }
+                            if editViewIndex == nil{
+                                NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled){
+                                    EmptyView()
+                                }.frame(maxWidth: 1)
+                            }
                     }
                 }
                 Section(header: Text("選ぶ")){

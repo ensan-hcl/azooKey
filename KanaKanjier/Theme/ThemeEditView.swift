@@ -239,7 +239,7 @@ struct ThemeEditView: View {
                 presentationMode.wrappedValue.dismiss()
             }
             .navigationBarTitle(Text("完了"), displayMode: .inline)
-            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: EmptyView(), trailing: EmptyView())
         }
     }
 
