@@ -14,6 +14,7 @@ struct UpdateInfomationView: View {
                 VersionView("1.5", releaseDate: "2021年02月xx日"){
                     ParagraphView("機能を追加しました。"){
                         "着せ替え機能を追加"
+                        "端末の標準のユーザ辞書を読み込む設定を追加"
                         "URL scheme(azooKey://)に対応"
                     }
                     ParagraphView("機能を改善しました。"){
