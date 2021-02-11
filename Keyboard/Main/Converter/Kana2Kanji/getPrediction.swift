@@ -40,6 +40,7 @@ extension Kana2Kanji{
         TimeMesureTools.endAndStart("処理3.1.1")
 
         let memory: [DicDataElementProtocol] = dicdataStore.getPrefixMemory(lastRuby)
+        let osuserdict: [DicDataElementProtocol] = dicdataStore.getPrefixMatchOSUserDict(lastRuby)
         TimeMesureTools.endAndStart("処理3.1.2")
 
         let dicdata: DicDataStore.DicData
@@ -78,7 +79,7 @@ extension Kana2Kanji{
         var result: [Candidate] = []
 
         result.reserveCapacity(N_best &+ 1)
-        (dicdata+memory).forEach{(data: DicDataElementProtocol) in
+        (dicdata + memory + osuserdict).forEach{(data: DicDataElementProtocol) in
             let includeMMValueCalculation = DicDataStore.includeMMValueCalculation(data)
             let mmValue: PValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
             let ccValue: PValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)

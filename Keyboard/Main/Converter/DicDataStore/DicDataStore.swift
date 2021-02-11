@@ -8,6 +8,10 @@
 
 import Foundation
 
+final class OSUserDict{
+    var dict: DicDataStore.DicData = []
+}
+
 final class DicDataStore{
     init(){
         debug("DicDataStoreが初期化されました")
@@ -24,6 +28,8 @@ final class DicDataStore{
     private var charsID: [Character: UInt8] = [:]
     private var memory: LearningMemorys = LearningMemorys()
     private var zeroHintPredictionDicData: DicData? = nil
+
+    private var osUserDict = OSUserDict()
 
     internal let maxlength: Int = 20
     private let midCount = 502
@@ -75,6 +81,8 @@ final class DicDataStore{
             self.closeKeyboard()
         case .resetMemory:
             self.memory.reset()
+        case let .importOSUserDict(osUserDict):
+            self.osUserDict = osUserDict
         }
     }
 
@@ -175,6 +183,7 @@ final class DicDataStore{
         let segments = (index ..< toIndex).map{inputData[index...$0]}
         let wisedicdata: DicData = (index ..< toIndex).flatMap{self.getWiseDicData(head: segments[$0-index], allowRomanLetter: $0+1 == toIndex)}
         let memorydicdata: DicData = (index ..< toIndex).flatMap{self.getMatch(segments[$0-index])}
+        let osuserdictdicdata: DicData = (index ..< toIndex).flatMap{self.getMatchOSUserDict(segments[$0-index])}
 
         debug("計算所要時間: wisedicdata", -start_0.timeIntervalSinceNow)
 
@@ -188,7 +197,6 @@ final class DicDataStore{
             }
             return inputData.getRangeWithTypos(index, end)
         }
-
 
         let strings = stringWithTypoData.map{$0.string}
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
@@ -237,9 +245,15 @@ final class DicDataStore{
         }
         debug("計算所要時間: 辞書データの生成", -start_3.timeIntervalSinceNow)
 
+        var totaldicdata: DicData = []
+        totaldicdata.append(contentsOf: dicdata)
+        totaldicdata.append(contentsOf: wisedicdata)
+        totaldicdata.append(contentsOf: memorydicdata)
+        totaldicdata.append(contentsOf: osuserdictdicdata)
+
         let start_4 = Date()
         if index == .zero{
-            let result: [LatticeNode] = (dicdata + wisedicdata + memorydicdata).map{
+            let result: [LatticeNode] = totaldicdata.map{
                 let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]])
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 //node.prevs.append(PreviousNodes(LatticeNode.PreviousNode.BOSNode))
@@ -251,7 +265,7 @@ final class DicDataStore{
             return result
 
         }else{
-            let result: [LatticeNode] = (dicdata + wisedicdata + memorydicdata).map{LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]])}
+            let result: [LatticeNode] = totaldicdata.map{LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]])}
             debug("計算所要時間: ノードの生成", -start_4.timeIntervalSinceNow)
             debug("計算所要時間: 辞書検索全体", -start_0.timeIntervalSinceNow)
             return result
@@ -266,6 +280,7 @@ final class DicDataStore{
         let segment = inputData[fromIndex...toIndex]
         let wisedicdata: DicData = self.getWiseDicData(head: segment, allowRomanLetter: toIndex == inputData.count - 1)
         let memorydicdata: DicData = self.getMatch(segment)
+        let osuserdictdicdata: DicData = self.getMatchOSUserDict(segment)
 
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
@@ -295,15 +310,22 @@ final class DicDataStore{
             }
             return result
         }
+
+        var totaldicdata: DicData = []
+        totaldicdata.append(contentsOf: dicdata)
+        totaldicdata.append(contentsOf: wisedicdata)
+        totaldicdata.append(contentsOf: memorydicdata)
+        totaldicdata.append(contentsOf: osuserdictdicdata)
+
         if fromIndex == .zero{
-            let result: [LatticeNode] = (dicdata + wisedicdata + memorydicdata).map{
+            let result: [LatticeNode] = totaldicdata.map{
                 let node = LatticeNode(data: $0, romanString: segment)
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 return node
             }
             return result
         }else{
-            let result: [LatticeNode] = (dicdata + wisedicdata + memorydicdata).map{LatticeNode(data: $0, romanString: segment)}
+            let result: [LatticeNode] = totaldicdata.map{LatticeNode(data: $0, romanString: segment)}
             return result
         }
     }
@@ -460,22 +482,33 @@ final class DicDataStore{
         }
     }
 
+    ///OSのユーザ辞書からrubyに等しい語を返す。
+    private func getMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> DicData {
+        return self.osUserDict.dict.filter{$0.ruby == ruby}
+    }
+
+    ///OSのユーザ辞書からrubyに先頭一致する語を返す。
+    internal func getPrefixMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> DicData {
+        return self.osUserDict.dict.filter{$0.ruby.hasPrefix(ruby)}
+    }
+
+    ///rubyに等しい語を返す。
     private func getMatch<S: StringProtocol>(_ ruby: S) -> DicData {
         return self.memory.match(ruby)
     }
-
+    ///rubyに等しい語の回数を返す。
     internal func getSingleMemory(_ data: DicDataElementProtocol) -> Int {
         return self.memory.getSingle(data)
     }
-
+    ///rubyを先頭にもつ語を返す。
     internal func getPrefixMemory<S: StringProtocol>(_ prefix: S) -> DicData {
         return self.memory.getPrefixDicData(prefix)
     }
-
+    ///二つの語の並び回数を返す。
     internal func getMatch(_ previous: DicDataElementProtocol, next: DicDataElementProtocol) -> Int {
         return self.memory.matchNext(previous, next: next)
     }
-
+    ///一つの後から連結する次の語を返す。
     internal func getNextMemory(_ data: DicDataElementProtocol) -> [(next: DicDataElementProtocol, count: Int)] {
         return self.memory.getNextData(data)
     }

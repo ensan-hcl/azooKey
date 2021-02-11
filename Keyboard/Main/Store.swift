@@ -90,6 +90,7 @@ final class KeyboardActionDepartment: ActionDepartment{
 
     enum DicDataStoreNotification{
         case notifyLearningType(LearningType)
+        case importOSUserDict(OSUserDict)
         case notifyAppearAgain
         case reloadUserDict
         case closeKeyboard
