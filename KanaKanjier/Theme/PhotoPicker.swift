@@ -52,7 +52,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                                     self.parent.pickerResult = UIImage(cgImage: cgImage, scale: 1, orientation: uiImage.imageOrientation)
                                 }
                             } catch {
-                                print(error)
+                                debug(error)
                             }
                         }
                     }

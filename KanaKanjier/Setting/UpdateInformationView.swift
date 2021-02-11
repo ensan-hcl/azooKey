@@ -11,6 +11,19 @@ struct UpdateInfomationView: View {
     var body: some View {
         Form{
             Group{
+                VersionView("1.5", releaseDate: "2021年02月xx日"){
+                    ParagraphView("機能を追加しました。"){
+                        "着せ替え機能を追加"
+                        "URL scheme(azooKey://)に対応"
+                    }
+                    ParagraphView("機能を改善しました。"){
+                        "パフォーマンスの改善を行いました。これに伴いアップデート直後にデータの更新を求めるアラートをキーボード内で表示します。"
+                    }
+                    ParagraphView("不具合を修正しました。"){
+                        "文章を選択中、削除が一度で反応しない問題"
+                    }
+                    ParagraphView("その他デザイン・変換機能・操作性の軽微な改善を行いました。")
+                }
                 VersionView("1.4.4", releaseDate: "2021年01月30日"){
                     ParagraphView("不具合を修正しました。"){
                         "テンプレートの編集が完了できないことがある不具合"

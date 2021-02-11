@@ -40,7 +40,6 @@ struct ThemeShareView: View {
             Text("着せ替えが完成しました🎉").font(.title).bold()
             Button{
                 shareImage.setImage(UIApplication.shared.windows[0].rootViewController?.view!.getImage(rect: self.captureRect))
-                debug("代入したよ", shareImage.image)
                 showActivityView = true
             }label: {
                 HStack{
@@ -70,7 +69,6 @@ struct ThemeShareView: View {
             }
 
         }.sheet(isPresented: self.$showActivityView) {
-            let _ = print("sheet", shareImage.image)
             if let image = shareImage.image{
                 ActivityView(
                     activityItems: [TextActivityItem("azooKeyで着せ替えました！", hashtags: ["#azooKey"], links: ["https://apps.apple.com/jp/app/azookey/id1542709230"]), ImageActivityItem(image)],

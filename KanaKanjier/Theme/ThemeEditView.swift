@@ -39,7 +39,7 @@ struct ThemeEditView: View {
                 theme.id = index
                 self._theme = State(initialValue: theme)
             } catch {
-                print(error)
+                debug(error)
             }
             self.title = "着せ替えを編集"
         }else{

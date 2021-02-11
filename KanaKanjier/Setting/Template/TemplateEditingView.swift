@@ -334,7 +334,6 @@ struct DateTemplateLiteralSettingView: View {
                         Text(Self.yyyy_MM_dd.string(from: date)).tag("yyyy/MM/dd")
                         Text("カスタム").tag("カスタム")
                     }.onChange(of: formatSelection) {value in
-                        print(value)
                         if value != "カスタム"{
                             formatter.dateFormat = value
                             formatter.locale = Locale(identifier: "ja_JP")
