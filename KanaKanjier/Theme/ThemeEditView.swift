@@ -32,6 +32,8 @@ struct ThemeEditView: View {
     let title: String
 
     init(index: Int?, manager: Binding<ThemeIndexManager>){
+        VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
+
         self._manager = manager
         if let index = index{
             do{
@@ -46,7 +48,6 @@ struct ThemeEditView: View {
             self.title = "着せ替えを作成"
         }
         self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
-        VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
     }
 
     @State private var normalKeyColor = Design.colors.normalKeyColor
