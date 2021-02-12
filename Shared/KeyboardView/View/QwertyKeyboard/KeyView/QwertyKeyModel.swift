@@ -35,7 +35,10 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     }
 
     func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
-        KeyLabel(self.labelType, width: keySize.width, theme: theme, textColor: color)
+        if states.aAKeyState == .capslock, states.tabState == .abc, case let .text(text) = self.labelType{
+            return KeyLabel(.text(text.uppercased()), width: keySize.width, theme: theme, textColor: color)
+        }
+        return KeyLabel(self.labelType, width: keySize.width, theme: theme, textColor: color)
     }
 
     func sound(){
