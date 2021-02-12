@@ -55,7 +55,7 @@ struct CursorMoveView: View{
     }
 
     private var edgeColor: Color {
-        theme.pushedKeyFillColor.color
+        theme.backgroundColor.color
     }
 
     private var symbolsFontWeight: Font.Weight {

@@ -39,7 +39,7 @@ struct ThemeData: Codable, Equatable {
 
     static let mock: Self = Self.init(
         backgroundColor: .system(.backgroundColor),
-        picture: .asset("wallPaperMock"),
+        picture: .asset("wallPaperMock2"),
         textColor: .color(Color(.displayP3, white: 1, opacity: 1)),
         textFont: .bold,
         resultTextColor: .color(Color(.displayP3, white: 1, opacity: 1)),
@@ -53,7 +53,7 @@ struct ThemeData: Codable, Equatable {
 
     static let clear: Self = Self.init(
         backgroundColor: .color(Color(.displayP3, white: 1, opacity: 0)),
-        picture: .asset("wallPaperMock"),
+        picture: .asset("wallPaperMock2"),
         textColor: .color(Color(.displayP3, white: 1, opacity: 1)),
         textFont: .bold,
         resultTextColor: .color(Color(.displayP3, white: 1, opacity: 1)),
