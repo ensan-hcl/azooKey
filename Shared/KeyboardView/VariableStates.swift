@@ -70,8 +70,8 @@ final class VariableStates: ObservableObject{
         if state == .hira{
             self.keyboardLanguage = .japanese
         }
-        self.lastVerticalTabState = self.tabState
         self.tabState = state
+        self.lastVerticalTabState = state
         self.setKeyboardType(for: state)
     }
 
