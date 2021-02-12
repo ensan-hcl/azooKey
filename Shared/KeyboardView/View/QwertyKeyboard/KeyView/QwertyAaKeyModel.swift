@@ -35,7 +35,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
         case .normal:
             return [.changeCapsLockState(state: .capslock)]
         case .capslock:
-            return []
+            return [.changeCapsLockState(state: .normal)]
         }
     }
 
