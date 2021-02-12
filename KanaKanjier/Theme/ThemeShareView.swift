@@ -37,7 +37,12 @@ struct ThemeShareView: View {
 
     var body: some View {
         VStack{
-            Text("着せ替えが完成しました🎉").font(.title).bold()
+            Text("着せ替えが完成しました🎉")
+                .font(.title)
+                .bold()
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
+
             Button{
                 shareImage.setImage(UIApplication.shared.windows[0].rootViewController?.view!.getImage(rect: self.captureRect))
                 showActivityView = true
