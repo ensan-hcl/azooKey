@@ -44,7 +44,6 @@ struct KeyboardLayoutSettingItemView: View {
         self.item = viewModel.item
         self.viewModel = viewModel
         self._selection = State(initialValue: viewModel.value)
-        debug("layout_setting", "init", id)
         self.id = id
     }
 
@@ -87,7 +86,6 @@ struct KeyboardLayoutSettingItemView: View {
             if ignoreChange{
                 return
             }
-            debug("layout_setting", id, setTogether, language, ignoreChange)
             let type = selection
             self.viewModel.value = type
             switch language{
@@ -108,7 +106,6 @@ struct KeyboardLayoutSettingItemView: View {
         }
         .onDisappear{
             self.ignoreChange = true
-            debug("layout_setting", "remove author", id, language, ignoreChange)
         }
     }
 }

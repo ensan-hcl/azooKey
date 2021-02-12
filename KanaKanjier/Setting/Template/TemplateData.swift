@@ -138,7 +138,6 @@ struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
         let language = parse(splited: splited, key: "language")
         let delta = parse(splited: splited, key: "delta")
         let deltaUnit = parse(splited: splited, key: "deltaunit")
-        debug(format, type, language, delta, deltaUnit)
         return DateTemplateLiteral(
             format: format.unescaped(),
             type: CalendarType.init(rawValue: String(type))!,

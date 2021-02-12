@@ -43,7 +43,7 @@ extension LOUDS{
             }
             return ui64array
         } catch {
-            debug("Failed to read the file.")
+            debug(error)
             return []
         }
     }

@@ -35,15 +35,3 @@ extension UIView {
     }
 }
 
-
-class ImageSaver: NSObject {
-    func writeToPhotoAlbum(image: UIImage) {
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(didFinishSavingImage), nil)
-    }
-
-    @objc func didFinishSavingImage(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if error != nil {
-            debug("保存に失敗しました。")
-        }
-    }
-}

@@ -48,7 +48,6 @@ struct PhotoPicker: UIViewControllerRepresentable {
                                 // Dataで取得
                                 let imageData: Data = try Data(contentsOf: imageUrl)
                                 if let uiImage = UIImage(data: imageData), let cgImage = uiImage.cgImage{
-                                    debug("取得データ", uiImage.imageOrientation)
                                     self.parent.pickerResult = UIImage(cgImage: cgImage, scale: 1, orientation: uiImage.imageOrientation)
                                 }
                             } catch {

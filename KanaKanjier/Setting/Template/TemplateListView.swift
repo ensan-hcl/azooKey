@@ -43,7 +43,6 @@ struct TemplateListView: View {
     @ObservedObject private var data = TemplateDataList()
     @State private var previewStrings: [String] = []
     init(){
-        debug("ListViewの初期化")
         if let savedData = TemplateData.load(){
             self.data.templates = savedData.map{TemplateDataModel($0)}
         } else {
@@ -58,10 +57,7 @@ struct TemplateListView: View {
     }
 
     var indices: Range<Int> {
-        //let pindices = previewStrings.indices
         let dindices = data.templates.indices
-        //debug("previewStrings.indices", pindices)
-        //debug("data.templates.indices", dindices)
         return dindices
     }
 

@@ -82,7 +82,6 @@ struct ThemeTabView: View {
                 Section(header: Text("作る")){
                     HStack{
                             Button{
-                                debug("呼ばれている")
                                 editViewIndex = nil
                                 editViewEnabled = true
                             }label: {
@@ -112,9 +111,6 @@ struct ThemeTabView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .font(.body)
-        .onChange(of: manager){value in
-            debug("変更検知")
-        }
         .onChange(of: storeVariableSection.japaneseKeyboardLayout){_ in
             SettingData.shared.reload() //設定をリロードする
             self.refresh.toggle()
