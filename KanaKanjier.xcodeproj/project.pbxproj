@@ -2276,7 +2276,6 @@
 		1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */; };
 		1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5076A255ECC3C003C0BF2 /* Trie.swift */; };
 		1AB50779255ECC6C003C0BF2 /* LOUDSBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB50778255ECC6C003C0BF2 /* LOUDSBuilder.swift */; };
-		1ABB671C256BD22B008AF0C8 /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1ABB671B256BD22B008AF0C8 /* AzooKeyIcon-Regular.otf */; };
 		1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD077725479B6500DD0F7C /* Dictionary.swift */; };
 		1AC03159251103EF004CA505 /* Designs.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC03158251103EF004CA505 /* Designs.xcassets */; };
 		1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */; };
@@ -2317,6 +2316,7 @@
 		1AE102DA25D43E9100CA7277 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102D925D43E9100CA7277 /* ThemeManager.swift */; };
 		1AE102E425D43E9700CA7277 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102D925D43E9100CA7277 /* ThemeManager.swift */; };
 		1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1913525D4A3370044EE4B /* ThemeShareView.swift */; };
+		1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
 		1AE3DF02258A20A2007C7C4A /* KeyFlickSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */; };
 		1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */; };
 		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
@@ -4741,7 +4741,6 @@
 		1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalDictManageView.swift; sourceTree = "<group>"; };
 		1AB5076A255ECC3C003C0BF2 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
 		1AB50778255ECC6C003C0BF2 /* LOUDSBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDSBuilder.swift; sourceTree = "<group>"; };
-		1ABB671B256BD22B008AF0C8 /* AzooKeyIcon-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AzooKeyIcon-Regular.otf"; sourceTree = "<group>"; };
 		1ABD077725479B6500DD0F7C /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		1AC03158251103EF004CA505 /* Designs.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Designs.xcassets; sourceTree = "<group>"; };
 		1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteredNodeProtocol.swift; sourceTree = "<group>"; };
@@ -4777,6 +4776,7 @@
 		1AE102CE25D3713C00CA7277 /* TrimmingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrimmingView.swift; sourceTree = "<group>"; };
 		1AE102D925D43E9100CA7277 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1AE1913525D4A3370044EE4B /* ThemeShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeShareView.swift; sourceTree = "<group>"; };
+		1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AzooKeyIcon-Regular.otf"; sourceTree = "<group>"; };
 		1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDataProtocol.swift; sourceTree = "<group>"; };
 		1AE4DB742515FE1C00A24158 /* KanaComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaComponent.swift; sourceTree = "<group>"; };
 		1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectInputData.swift; sourceTree = "<group>"; };
@@ -5704,7 +5704,7 @@
 				1A12E25625C447D800316009 /* DataUpdateView */,
 				1A9B0A4E25642C23004203BB /* EnableAzooKeyView */,
 				1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */,
-				1ABB671B256BD22B008AF0C8 /* AzooKeyIcon-Regular.otf */,
+				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
 				1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */,
 				1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */,
 				1A3DC1D02500D44E002CAA93 /* LaunchScreen.storyboard */,
@@ -7770,10 +7770,10 @@
 			files = (
 				1ACEEFF72566786A00899DA2 /* kaomoji_dict.tsv in Resources */,
 				1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */,
+				1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */,
 				1A7817B22575C89D007661D8 /* emoji...12_dict.tsv in Resources */,
 				1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */,
 				1A60058525275CB9008E2B92 /* Settings.bundle in Resources */,
-				1ABB671C256BD22B008AF0C8 /* AzooKeyIcon-Regular.otf in Resources */,
 				1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */,
 				1A7817AC2575C898007661D8 /* emoji13_dict.tsv in Resources */,
 				1A40EA8325A368D2008A6298 /* charID.chid in Resources */,
