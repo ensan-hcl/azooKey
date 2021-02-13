@@ -15,10 +15,10 @@ private final class TrimmingViewModel{
 }
 
 struct TrimmingView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
 
-    let maxSize: CGSize
-    let aspectRatio: CGSize
+    private let maxSize: CGSize
+    private let aspectRatio: CGSize
 
     @State private var magnify: CGFloat = 1
     @State private var lastMagnify: CGFloat = 1
@@ -44,7 +44,7 @@ struct TrimmingView: View {
         self.imageAspectRatio = imageSize.width / imageSize.height
     }
 
-    func fitratio(screenSize: CGSize) -> CGFloat {
+    private func fitratio(screenSize: CGSize) -> CGFloat {
         if self.imageAspectRatio < screenSize.width / screenSize.height {
             return screenSize.height / imageSize.height
         }else{
@@ -52,7 +52,7 @@ struct TrimmingView: View {
         }
     }
 
-    func frameSize(screenSize: CGSize) -> CGSize {
+    private func frameSize(screenSize: CGSize) -> CGSize {
         let ratio: CGFloat = 1
         let height = screenSize.width * aspectRatio.height / aspectRatio.width
         if height > screenSize.height{
@@ -71,7 +71,7 @@ struct TrimmingView: View {
         return model.frameSize
     }
 
-    func updateResult() {
+    private func updateResult() {
         guard let cgImage = self.cgImage else {
             return
         }
@@ -180,7 +180,7 @@ struct TrimmingView: View {
 
     }
 
-    func validation(magnifyValue: CGFloat, positionValue: CGPoint){
+    private func validation(magnifyValue: CGFloat, positionValue: CGPoint){
         //最も基本的な状態
         let scale = model.initialScale * magnify
 
@@ -218,7 +218,7 @@ struct TrimmingView: View {
 }
 
 extension UIImage {
-    func fixedOrientation() -> UIImage? {
+    fileprivate func fixedOrientation() -> UIImage? {
         if self.imageOrientation == .up { return self }
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         self.draw(in: CGRect(origin: .zero, size: self.size))
@@ -227,7 +227,7 @@ extension UIImage {
         return image
     }
 
-    func scaled(fit maxSize: CGSize) -> UIImage? {
+    fileprivate func scaled(fit maxSize: CGSize) -> UIImage? {
         if size.width < maxSize.width && size.height < maxSize.height{ return self }
         let r_w = size.width / maxSize.width
         let r_h = size.height / maxSize.height
