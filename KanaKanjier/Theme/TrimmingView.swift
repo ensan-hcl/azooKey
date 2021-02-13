@@ -140,6 +140,22 @@ struct TrimmingView: View {
                                     }
                             )
                     }
+                    Path{path in
+                        path.move(to: CGPoint(x: 0, y: 0))
+                        path.addLine(to: CGPoint(x: geometry.size.width, y: 0))
+                        path.addLine(to: CGPoint(x: geometry.size.width, y: geometry.size.height))
+                        path.addLine(to: CGPoint(x: 0, y: geometry.size.height))
+                        path.addLine(to: CGPoint(x: 0, y: 0))
+
+                        let dx = geometry.size.width / 2
+                        let dy = geometry.size.height / 2
+                        path.move(to: CGPoint(x: -size.width / 2 + dx, y: -size.height / 2 + dy))
+                        path.addLine(to: CGPoint(x: -size.width / 2 + dx, y: size.height / 2 + dy))
+                        path.addLine(to: CGPoint(x: size.width / 2 + dx, y: size.height / 2 + dy))
+                        path.addLine(to: CGPoint(x: size.width / 2 + dx, y: -size.height / 2 + dy))
+                        path.addLine(to: CGPoint(x: -size.width / 2 + dx, y: -size.height / 2 + dy))
+                    }.fill(Color.black.opacity(0.5)).allowsHitTesting(false)
+
                     Rectangle()
                         .stroke(Color.white, lineWidth: 1.5)
                         .frame(width: size.width, height: size.height)
