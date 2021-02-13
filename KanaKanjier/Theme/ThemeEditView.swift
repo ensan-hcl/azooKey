@@ -53,9 +53,9 @@ struct ThemeEditView: View {
     @State private var normalKeyColor = ThemeData.base.normalKeyFillColor.color
     @State private var specialKeyColor = ThemeData.base.specialKeyFillColor.color
     @State private var backGroundColor = ThemeData.base.backgroundColor.color
-    @State private var borderColor = Color(.displayP3, white: 1, opacity: 0)
-    @State private var keyLabelColor = Color.primary
-    @State private var resultTextColor = Color.primary
+    @State private var borderColor = ThemeData.base.borderColor.color
+    @State private var keyLabelColor = ThemeData.base.textColor.color
+    @State private var resultTextColor = ThemeData.base.resultTextColor.color
 
     private var shareImage = ShareImage()
 
@@ -136,9 +136,9 @@ struct ThemeEditView: View {
                             self.normalKeyColor = ThemeData.base.normalKeyFillColor.color
                             self.specialKeyColor = ThemeData.base.specialKeyFillColor.color
                             self.backGroundColor = ThemeData.base.backgroundColor.color
-                            self.borderColor = Color(.displayP3, white: 1, opacity: 0)
-                            self.keyLabelColor = .primary
-                            self.resultTextColor = .primary
+                            self.borderColor = ThemeData.base.borderColor.color
+                            self.keyLabelColor = ThemeData.base.textColor.color
+                            self.resultTextColor = ThemeData.base.resultTextColor.color
                             self.selectFontRowValue = 4
                             self.theme = ThemeData.base
                         } label: {
