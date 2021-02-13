@@ -91,7 +91,7 @@ struct ThemeTabView: View {
                             if editViewIndex == nil{
                                 NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled){
                                     EmptyView()
-                                }.frame(maxWidth: 1)
+                                }
                             }
                     }
                 }

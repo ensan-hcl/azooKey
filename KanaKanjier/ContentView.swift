@@ -15,10 +15,6 @@ struct ContentView: View {
 
     @State private var messageManager = MessageManager()
 
-    init(){
-        Store.shared.appDidOpen()
-    }
-
     var body: some View {
         ZStack{
             TabView(selection: $selection){

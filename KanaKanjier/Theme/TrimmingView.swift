@@ -86,7 +86,7 @@ struct TrimmingView: View {
     }
 
     var body: some View {
-        VStack{
+        VStack{[unowned cgImage] in
             ZStack{
                 GeometryReader{geometry in
                     Color.black
