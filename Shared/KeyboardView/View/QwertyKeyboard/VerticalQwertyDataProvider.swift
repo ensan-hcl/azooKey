@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct VerticalQwertyDataProvider: KeyboardDataProviderProtocol {
+struct VerticalQwertyDataProvider {
         //横に並べる
     var numberKeyboard: [[QwertyKeyModelProtocol]] {[
         [

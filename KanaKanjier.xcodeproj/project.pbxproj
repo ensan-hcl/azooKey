@@ -2354,7 +2354,6 @@
 		1AF678A125CDA07A00F3987B /* SettingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678A025CDA07A00F3987B /* SettingData.swift */; };
 		1AF678AF25CE3B4A00F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
 		1AF678B425CE3B7000F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
-		1AF678C625CE936900F3987B /* KeyboardDataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678C525CE936900F3987B /* KeyboardDataProviderProtocol.swift */; };
 		1AF678D825CEA5F800F3987B /* FileTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678D725CEA5F800F3987B /* FileTools.swift */; };
 		1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678DE25CED86500F3987B /* VariableStates.swift */; };
 		1AF678E825CED88100F3987B /* VariableStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678DE25CED86500F3987B /* VariableStates.swift */; };
@@ -2367,7 +2366,6 @@
 		1AF6792325CEDB6800F3987B /* extension CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */; };
 		1AF6792825CEDB6B00F3987B /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1AF6792D25CEDB7000F3987B /* KeyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28D05253DE4B60012CF94 /* KeyLabel.swift */; };
-		1AF6793325CEDB7500F3987B /* KeyboardDataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678C525CE936900F3987B /* KeyboardDataProviderProtocol.swift */; };
 		1AF6793825CEDB7800F3987B /* RoundedBorderedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */; };
 		1AF6793D25CEDB7A00F3987B /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24125C3E1CA00316009 /* MessageView.swift */; };
 		1AF6794225CEDB7E00F3987B /* CursorMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */; };
@@ -4809,7 +4807,6 @@
 		1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderedRectangle.swift; sourceTree = "<group>"; };
 		1AF678A025CDA07A00F3987B /* SettingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingData.swift; sourceTree = "<group>"; };
 		1AF678AE25CE3B4A00F3987B /* States.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = States.swift; sourceTree = "<group>"; };
-		1AF678C525CE936900F3987B /* KeyboardDataProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDataProviderProtocol.swift; sourceTree = "<group>"; };
 		1AF678D725CEA5F800F3987B /* FileTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTools.swift; sourceTree = "<group>"; };
 		1AF678DE25CED86500F3987B /* VariableStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableStates.swift; sourceTree = "<group>"; };
 		1AF678F525CED91900F3987B /* ActionDepartment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionDepartment.swift; sourceTree = "<group>"; };
@@ -7339,7 +7336,6 @@
 			children = (
 				1A3DC2092500D51F002CAA93 /* KeyboardView.swift */,
 				1AF28D05253DE4B60012CF94 /* KeyLabel.swift */,
-				1AF678C525CE936900F3987B /* KeyboardDataProviderProtocol.swift */,
 				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
 				1A12E24125C3E1CA00316009 /* MessageView.swift */,
 				1A58AB0B25037E8800EB1864 /* ResultView */,
@@ -10085,7 +10081,6 @@
 				1AE1023D25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
 				1AF6795A25CEDB8E00F3987B /* HorizontalQwertyDataProvider.swift in Sources */,
 				1A64A8D5257C91500022C081 /* FontSizeSetting.swift in Sources */,
-				1AF6793325CEDB7500F3987B /* KeyboardDataProviderProtocol.swift in Sources */,
 				1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */,
 				1AC8A5B92595C10A00B71E5A /* StringInterpolation.swift in Sources */,
 				1AFA57602584810800477DC2 /* Focus.swift in Sources */,
@@ -10168,7 +10163,6 @@
 				1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */,
 				1A8A8404250F65410093A701 /* added_last_1_character.swift in Sources */,
 				1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */,
-				1AF678C625CE936900F3987B /* KeyboardDataProviderProtocol.swift in Sources */,
 				1A3DC2232500D60F002CAA93 /* FlickedKeyModel.swift in Sources */,
 				1AFB68502518F18A00C649C4 /* CursorMoveView.swift in Sources */,
 				1A9218F7255238E9005F45C4 /* Unicode.swift in Sources */,
