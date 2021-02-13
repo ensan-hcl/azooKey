@@ -105,7 +105,11 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
 
 struct ResultContextMenuView: View {
-    let text: String
+    private let text: String
+
+    init(text: String){
+        self.text = text
+    }
     
     var body: some View {
         Group{

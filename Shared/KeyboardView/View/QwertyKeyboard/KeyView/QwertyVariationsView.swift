@@ -38,7 +38,7 @@ struct QwertyVariationsView: View {
         }
     }
     
-    func getLabel(_ labelType: KeyLabelType) -> KeyLabel {
+    private func getLabel(_ labelType: KeyLabelType) -> KeyLabel {
         let width = Design.shared.keyViewSize.width
         if theme != .default{
             return KeyLabel(labelType, width: width, theme: theme, textColor: .black)

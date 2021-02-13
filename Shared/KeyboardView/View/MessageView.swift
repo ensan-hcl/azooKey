@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct MessageView: View {
-    let data: MessageData
+    private let data: MessageData
     @Binding private var manager: MessageManager
 
     init(data: MessageData, manager: Binding<MessageManager>){

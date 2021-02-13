@@ -9,6 +9,8 @@
 import Foundation
 import SwiftUI
 
+///キーボードの操作を管理するためのクラス
+/// - finalにはできない
 class ActionDepartment{
     init(){}
     func registerAction(_ action: ActionType){}
@@ -21,5 +23,4 @@ class ActionDepartment{
     func makeChangeKeyboardButtonView(theme: ThemeData) -> ChangeKeyboardButtonView {
         ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize, theme: theme)
     }
-
 }

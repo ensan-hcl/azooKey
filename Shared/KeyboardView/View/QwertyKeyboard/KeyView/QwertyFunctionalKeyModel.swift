@@ -22,7 +22,7 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
     private let rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)
     
     var keySize: CGSize {
-        return CGSize(
+        CGSize(
             width: Design.shared.qwertyFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
             height: Design.shared.keyViewSize.height
         )

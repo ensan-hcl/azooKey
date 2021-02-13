@@ -16,7 +16,7 @@ enum KeyPressState{
     case longPressed
     case longFlicked(FlickDirection)
     
-    func isActive() -> Bool {
+    fileprivate func isActive() -> Bool {
         if case .inactive = self{
             return false
         }

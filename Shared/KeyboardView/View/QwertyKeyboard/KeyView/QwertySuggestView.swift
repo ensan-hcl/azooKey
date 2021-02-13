@@ -32,7 +32,7 @@ enum VariationsViewDirection{
 
 struct QwertySuggestView{
     static func expandedPath(rdw: CGFloat, ldw: CGFloat, width: CGFloat) -> some Shape {
-        return Path { path in
+        Path { path in
             path.move(to: CGPoint(x: 122, y: 281))
             path.addLine(to: CGPoint(x: 53, y: 281))
             path.addCurve(
@@ -82,7 +82,8 @@ struct QwertySuggestView{
                 control1: CGPoint(x: 142, y: 274),
                 control2: CGPoint(x: 135, y: 281)
             )
-        }.offsetBy(dx:-175/2 + width/2, dy: 0 )
+        }
+        .offsetBy(dx:-175/2 + width/2, dy: 0 )
         .scale(x: width/109, y: (Design.shared.keyViewSize.height*2+Design.shared.verticalSpacing)/281, anchor: .top)
     }
     

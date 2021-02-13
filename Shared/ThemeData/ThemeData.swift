@@ -50,34 +50,6 @@ struct ThemeData: Codable, Equatable {
         pushedKeyFillColor: .color(Color(.displayP3, red: 0.929, green: 0.929, blue: 0.945)),
         suggestKeyFillColor: nil
     )
-
-    static let mock: Self = Self.init(
-        backgroundColor: .system(.backgroundColor),
-        picture: .asset("wallPaperMock2"),
-        textColor: .color(Color(.displayP3, white: 1, opacity: 1)),
-        textFont: .bold,
-        resultTextColor: .color(Color(.displayP3, white: 1, opacity: 1)),
-        borderColor: .color(Color(.displayP3, white: 0, opacity: 0)),
-        borderWidth: 1,
-        normalKeyFillColor: .system(.normalKeyColor),
-        specialKeyFillColor: .system(.specialKeyColor),
-        pushedKeyFillColor: .system(.highlightedKeyColor),
-        suggestKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 1))
-    )
-
-    static let clear: Self = Self.init(
-        backgroundColor: .color(Color(.displayP3, white: 1, opacity: 0)),
-        picture: .asset("wallPaperMock2"),
-        textColor: .color(Color(.displayP3, white: 1, opacity: 1)),
-        textFont: .bold,
-        resultTextColor: .color(Color(.displayP3, white: 1, opacity: 1)),
-        borderColor: .color(Color(.displayP3, white: 1, opacity: 0)),
-        borderWidth: 1,
-        normalKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 0.001)),
-        specialKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 0.001)),
-        pushedKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 0.05)),
-        suggestKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 1))
-    )
 }
 
 enum ThemeFontWeight: Int, Codable {

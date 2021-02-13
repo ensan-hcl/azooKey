@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-class SharedResultData<Candidate: ResultViewItemData>: ObservableObject{
+final class SharedResultData<Candidate: ResultViewItemData>: ObservableObject{
     @Published var results: [ResultData<Candidate>] = []
 }
 
@@ -104,7 +104,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
 }
 
-struct SplitedResultData<Candidate: ResultViewItemData>: Identifiable{
+fileprivate struct SplitedResultData<Candidate: ResultViewItemData>: Identifiable{
     let id: Int
     let results: [ResultData<Candidate>]
 }

@@ -16,7 +16,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
 
-    let theme: ThemeData
+    private let theme: ThemeData
 
     private var sharedResultData = SharedResultData<Candidate>()
 
