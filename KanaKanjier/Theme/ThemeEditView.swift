@@ -11,7 +11,7 @@ import SwiftUI
 import PhotosUI
 
 struct ThemeEditView: View {
-    @State private var theme: ThemeData = ThemeData.base
+    @State private var theme = ThemeData.base
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
@@ -50,9 +50,9 @@ struct ThemeEditView: View {
         self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
     }
 
-    @State private var normalKeyColor = Design.colors.normalKeyColor
-    @State private var specialKeyColor = Design.colors.specialKeyColor
-    @State private var backGroundColor = Design.colors.backGroundColor
+    @State private var normalKeyColor = ThemeData.base.normalKeyFillColor.color
+    @State private var specialKeyColor = ThemeData.base.specialKeyFillColor.color
+    @State private var backGroundColor = ThemeData.base.backgroundColor.color
     @State private var borderColor = Color(.displayP3, white: 1, opacity: 0)
     @State private var keyLabelColor = Color.primary
     @State private var resultTextColor = Color.primary
@@ -133,14 +133,14 @@ struct ThemeEditView: View {
                         Button{
                             self.pickedImage = nil
                             self.trimmedImage = nil
-                            self.normalKeyColor = Design.colors.normalKeyColor
-                            self.specialKeyColor = Design.colors.specialKeyColor
-                            self.backGroundColor = Design.colors.backGroundColor
+                            self.normalKeyColor = ThemeData.base.normalKeyFillColor.color
+                            self.specialKeyColor = ThemeData.base.specialKeyFillColor.color
+                            self.backGroundColor = ThemeData.base.backgroundColor.color
                             self.borderColor = Color(.displayP3, white: 1, opacity: 0)
                             self.keyLabelColor = .primary
                             self.resultTextColor = .primary
                             self.selectFontRowValue = 4
-                            self.theme = .default
+                            self.theme = ThemeData.base
                         } label: {
                             Text("リセットする")
                                 .foregroundColor(.red)
