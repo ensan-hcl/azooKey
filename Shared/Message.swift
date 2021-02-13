@@ -8,9 +8,9 @@
 
 import Foundation
 
-enum MessageIdentifier: String, Hashable{
+enum MessageIdentifier: String, Hashable, CaseIterable{
     case mock = "mock_alert0"
-    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"
+    case ver1_5_update_loudstxt = "debug_c_ver1_5_update_loudstxt"
 
     var key: String {
         return self.rawValue + "_status"
@@ -32,17 +32,39 @@ struct MessageData: Identifiable{
 
     ///詳細な情報の説明リンク
     let detailsURL: String?
+
+    ///メッセージを表示する前提条件
+    let precondition: () -> Bool
+
+    ///収容アプリがDoneにすべき条件
+    let containerAppShouldMakeItDone: () -> Bool
 }
 
 struct MessageManager{
     static let userDefaults = UserDefaults.init(suiteName: SharedStore.appGroupKey)!
+    func getMessagesContainerAppShouldMakeWhichDone() -> [MessageData] {
+        necessaryMessages.filter{$0.containerAppShouldMakeItDone()}
+    }
+
     let necessaryMessages: [MessageData] = [
         MessageData(
             id: .ver1_5_update_loudstxt,
             title: "お願い",
             description: "内部データの更新のため本体アプリを開く必要があります。よろしいですか？",
             needOpenContainer: true,
-            detailsURL: "https://azookey.netlify.app/messages/ver1_5"
+            detailsURL: "https://azookey.netlify.app/messages/ver1_5",
+            precondition: {
+                //ユーザ辞書に登録がない場合
+                let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
+                let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
+                return FileManager.default.fileExists(atPath: binaryFilePath)
+            },
+            containerAppShouldMakeItDone: {
+                //ユーザ辞書に登録がない場合
+                let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
+                let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
+                return !FileManager.default.fileExists(atPath: binaryFilePath)
+            }
         ),
         /*
         MessageData(
@@ -50,7 +72,9 @@ struct MessageManager{
             title: "お願い",
             description: "内部データの更新のため本体アプリを開く必要があります。よろしいですか？",
             needOpenContainer: true,
-            detailsURL: "https://azookey.netlify.app/"
+            detailsURL: "https://azookey.netlify.app/",
+            precondition: { true },
+            containerAppShouldMakeItDone: { false }
         )*/
 
     ]
@@ -59,7 +83,7 @@ struct MessageManager{
 
     init(){
         self.needShow = necessaryMessages.reduce(into: [:]){dict, value in
-            dict[value.id] = Self.userDefaults.string(forKey: value.id.key) != "done"
+            dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != "done"
         }
     }
 

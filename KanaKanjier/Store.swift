@@ -17,11 +17,8 @@ final class Store{
 
     init(){
         //ユーザ辞書に登録がない場合
-        let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-        let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
-
-        if !FileManager.default.fileExists(atPath: binaryFilePath){
-            messageManager.done(.ver1_5_update_loudstxt)
+        self.messageManager.getMessagesContainerAppShouldMakeWhichDone().forEach{
+            messageManager.done($0.id)
         }
         /*
         let contents = ["user0.loudstxt2", "user.loudschars2", "user1.loudstxt2", "user.louds", "user4.loudstxt2", "user2.loudstxt2", "user5.loudstxt2", "user3.loudstxt2"]

@@ -11,7 +11,7 @@ struct UpdateInfomationView: View {
     var body: some View {
         Form{
             Group{
-                VersionView("1.5", releaseDate: "2021年02月xx日"){
+                VersionView("1.5", releaseDate: "2021年02月14日"){
                     ParagraphView("機能を追加しました。"){
                         "着せ替え機能を追加"
                         "端末の標準のユーザ辞書を読み込む設定を追加"
