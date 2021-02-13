@@ -37,6 +37,20 @@ struct ThemeData: Codable, Equatable {
         suggestKeyFillColor: nil
     )
 
+    static let base: Self = Self.init(
+        backgroundColor: .color(Color(.displayP3, red: 0.839, green: 0.843, blue: 0.862)),
+        picture: .none,
+        textColor: .color(Color(.displayP3, white: 0, opacity: 1)),
+        textFont: .regular,
+        resultTextColor: .color(Color(.displayP3, white: 0, opacity: 1)),
+        borderColor: .color(Color(white: 0, opacity: 0)),
+        borderWidth: 1,
+        normalKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 1)),
+        specialKeyFillColor: .color(Color(.displayP3, red: 0.804, green: 0.808, blue: 0.835)),
+        pushedKeyFillColor: .color(Color(.displayP3, red: 0.929, green: 0.929, blue: 0.945)),
+        suggestKeyFillColor: nil
+    )
+
     static let mock: Self = Self.init(
         backgroundColor: .system(.backgroundColor),
         picture: .asset("wallPaperMock2"),

@@ -11,7 +11,7 @@ import SwiftUI
 import PhotosUI
 
 struct ThemeEditView: View {
-    @State private var theme: ThemeData = ThemeData.default
+    @State private var theme: ThemeData = ThemeData.base
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
@@ -29,7 +29,7 @@ struct ThemeEditView: View {
         case themeShareView
     }
 
-    let title: String
+    private let title: String
 
     init(index: Int?, manager: Binding<ThemeIndexManager>){
         VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
@@ -60,7 +60,7 @@ struct ThemeEditView: View {
     private var shareImage = ShareImage()
 
     // PHPickerの設定
-    var config: PHPickerConfiguration {
+    private var config: PHPickerConfiguration {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         config.filter = .images
         config.selectionLimit = 1
@@ -244,7 +244,7 @@ struct ThemeEditView: View {
         }
     }
 
-    var viewBackgroundColor: Color {
+    private var viewBackgroundColor: Color {
         switch colorScheme{
         case .light:
             return Color.systemGray6
@@ -255,7 +255,7 @@ struct ThemeEditView: View {
         }
     }
 
-    func save() throws {
+    private func save() throws {
         //テーマを保存する
         let id = try manager.saveTheme(theme: self.theme)
         self.theme.id = id
