@@ -10,7 +10,7 @@ import Foundation
 
 enum MessageIdentifier: String, Hashable, CaseIterable{
     case mock = "mock_alert0"
-    case ver1_5_update_loudstxt = "debug_c_ver1_5_update_loudstxt"
+    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"  //frozen
 
     var key: String {
         return self.rawValue + "_status"
@@ -54,13 +54,13 @@ struct MessageManager{
             needOpenContainer: true,
             detailsURL: "https://azookey.netlify.app/messages/ver1_5",
             precondition: {
-                //ユーザ辞書に登録がない場合
+                //ユーザ辞書に登録があるのが条件。
                 let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
                 let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
                 return FileManager.default.fileExists(atPath: binaryFilePath)
             },
             containerAppShouldMakeItDone: {
-                //ユーザ辞書に登録がない場合
+                //ユーザ辞書に登録がない場合はDoneにして良い。
                 let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
                 let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
                 return !FileManager.default.fileExists(atPath: binaryFilePath)
