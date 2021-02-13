@@ -27,8 +27,10 @@ struct TrimmingView: View {
     @State private var position: CGPoint = .zero
     @State private var lastPosition: CGPoint = .zero
 
-    //private let uiImage: UIImage
     private let cgImage: CGImage?
+    private let imageSize: CGSize
+    private let imageAspectRatio: CGFloat
+
     @Binding private var resultImage: UIImage?
 
     private let model = TrimmingViewModel()
@@ -37,25 +39,21 @@ struct TrimmingView: View {
         self.maxSize = maxSize
         self.aspectRatio = aspectRatio
         self._resultImage = resultImage
-
-        self.cgImage = uiImage.fixedOrientation()?.cgImage//.fixed(uiImage.imageOrientation)
+        self.cgImage = uiImage.fixedOrientation()?.cgImage
+        self.imageSize = cgImage.flatMap{CGSize(width: $0.width, height: $0.height)} ?? CGSize(width: uiImage.size.width * uiImage.scale, height: uiImage.size.height * uiImage.scale)
+        self.imageAspectRatio = imageSize.width / imageSize.height
     }
 
-    func setImageInitialScale(screenSize: CGSize) {
-        guard let cgImage = self.cgImage else {
-            return
-        }
-        let scale_w = screenSize.width / CGFloat(cgImage.width)
-        if scale_w * CGFloat(cgImage.height) < screenSize.height{
-            model.initialScale = scale_w
+    func fitratio(screenSize: CGSize) -> CGFloat {
+        if self.imageAspectRatio < screenSize.width / screenSize.height {
+            return screenSize.height / imageSize.height
         }else{
-            model.initialScale = screenSize.height / CGFloat(cgImage.height)
+            return screenSize.width / imageSize.width
         }
     }
 
     func frameSize(screenSize: CGSize) -> CGSize {
-        self.setImageInitialScale(screenSize: screenSize)
-        let ratio: CGFloat = 0.98
+        let ratio: CGFloat = 1
         let height = screenSize.width * aspectRatio.height / aspectRatio.width
         if height > screenSize.height{
             let width = screenSize.height * aspectRatio.width / aspectRatio.height
@@ -63,6 +61,13 @@ struct TrimmingView: View {
         }else{
             model.frameSize = CGSize(width: screenSize.width * ratio, height: height * ratio)
         }
+
+        if self.imageAspectRatio <= self.aspectRatio.width / self.aspectRatio.height{
+            model.initialScale = model.frameSize.width / imageSize.width
+        }else{
+            model.initialScale = model.frameSize.height / imageSize.height
+        }
+
         return model.frameSize
     }
 
@@ -76,8 +81,8 @@ struct TrimmingView: View {
             height: model.frameSize.height / scale
         )
         let originPosition = CGPoint(
-            x: CGFloat(cgImage.width) / 2 - (size.width / 2 + position.x / scale),
-            y: CGFloat(cgImage.height) / 2 - (size.height / 2 + position.y / scale)
+            x: imageSize.width / 2 - (size.width / 2 + position.x / scale),
+            y: imageSize.height / 2 - (size.height / 2 + position.y / scale)
         )
         if let crop = cgImage.cropping(to: CGRect(origin: originPosition, size: size)),
            let result = UIImage(cgImage: crop).scaled(fit: self.maxSize) {
@@ -90,17 +95,33 @@ struct TrimmingView: View {
             ZStack{
                 GeometryReader{geometry in
                     Color.black
+                    let ratio = fitratio(screenSize: geometry.size) //scaledToFitによる縮小比
+                    let size = frameSize(screenSize: geometry.size) //フレームのサイズ
                     if let cgImage = cgImage{
-                        Image(uiImage: UIImage(cgImage: cgImage))
-                            .resizable()
-                            .scaledToFit()
+                            Group{
+                                //画像の縦に対する横の長さが、フレームの縦に対する横の長さよりも小さい場合
+                                if self.imageAspectRatio <= self.aspectRatio.width / self.aspectRatio.height{
+                                    Image(uiImage: UIImage(cgImage: cgImage))
+                                        .resizable()
+                                        .scaledToFit()
+                                        .scaleEffect(size.width / (imageSize.width * ratio))
+                                }else{
+                                    Image(uiImage: UIImage(cgImage: cgImage))
+                                        .resizable()
+                                        .scaledToFit()
+                                        .scaleEffect(size.height / (imageSize.height * ratio))
+                                }
+                            }
                             .scaleEffect(self.magnify)
                             .rotationEffect(self.angle)
                             .position(x: self.position.x + geometry.size.width / 2, y: self.position.y + geometry.size.height / 2)
                             .gesture(
                                 MagnificationGesture()
                                     .onChanged{ v in
-                                        self.magnify = self.lastMagnify * v
+                                        let newValue = self.lastMagnify * v
+                                        if 1 <= newValue && newValue <= 10{
+                                            self.magnify = newValue
+                                        }
                                     }
                                     .onEnded{ v in
                                         self.lastMagnify = self.magnify
@@ -119,9 +140,8 @@ struct TrimmingView: View {
                                     }
                             )
                     }
-                    let size = frameSize(screenSize: geometry.size)
                     Rectangle()
-                        .stroke(Color.white)
+                        .stroke(Color.white, lineWidth: 1.5)
                         .frame(width: size.width, height: size.height)
                         .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
                 }
@@ -145,15 +165,6 @@ struct TrimmingView: View {
     }
 
     func validation(magnifyValue: CGFloat, positionValue: CGPoint){
-        if magnifyValue > 10 {
-            magnify = 10
-        }
-        if magnifyValue < 0.98 {
-            magnify = 0.98
-        }
-        guard let cgImage = self.cgImage else {
-            return
-        }
         //最も基本的な状態
         let scale = model.initialScale * magnify
 
@@ -161,21 +172,21 @@ struct TrimmingView: View {
         var change_y: CGFloat? = nil
 
         //左のはみ出し
-        if positionValue.x > (CGFloat(cgImage.width) * scale - model.frameSize.width) / 2{
-            change_x = (CGFloat(cgImage.width) * scale - model.frameSize.width) / 2
+        if positionValue.x > (imageSize.width * scale - model.frameSize.width) / 2{
+            change_x = (imageSize.width * scale - model.frameSize.width) / 2
         }
         //左のはみ出し
-        if positionValue.y > (CGFloat(cgImage.height) * scale - model.frameSize.height) / 2{
-            change_y = (CGFloat(cgImage.height) * scale - model.frameSize.height) / 2
+        if positionValue.y > (imageSize.height * scale - model.frameSize.height) / 2{
+            change_y = (imageSize.height * scale - model.frameSize.height) / 2
         }
 
         //→のはみ出し
-        if positionValue.x < (-CGFloat(cgImage.width) * scale + model.frameSize.width) / 2{
-            change_x = (-CGFloat(cgImage.width) * scale + model.frameSize.width) / 2
+        if positionValue.x < (-imageSize.width * scale + model.frameSize.width) / 2{
+            change_x = (-imageSize.width * scale + model.frameSize.width) / 2
         }
         //→のはみ出し
-        if positionValue.y < (-CGFloat(cgImage.height) * scale + model.frameSize.height) / 2{
-            change_y = (-CGFloat(cgImage.height) * scale + model.frameSize.height) / 2
+        if positionValue.y < (-imageSize.height * scale + model.frameSize.height) / 2{
+            change_y = (-imageSize.height * scale + model.frameSize.height) / 2
         }
         if let x = change_x,
            let y = change_y{
