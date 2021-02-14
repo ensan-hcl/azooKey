@@ -29,7 +29,6 @@
 "背景の色" = "Background color";
 
 "画像をトリミング" = "Trim image";
-"画像をトリミング" = "Trim image";
 
 "文字の太さ" = "Font weight";
 
@@ -99,7 +98,7 @@
 
 "設定する" = "Set";
 "「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。" = "You can register at most three letters on both keys 「小ﾞﾟ」 and 「､｡?!」.";
-"数字タブの青枠部分に好きな記号や文字を割り当てられます。" = "You can register your favorite letters on blue frameed keys.";
+"数字タブの青枠部分に好きな記号や文字を割り当てられます。" = "You can register your favorite letters on blue framed keys.";
 
 "編集したい方向を選択してください。" = "Select key to which you want to register.";
 "編集したいキーを選択してください。" = "Select key to which you want to register.";
@@ -149,7 +148,7 @@
 "絵文字" = "Emoji";
 "顔文字" = "Kaomoji";
 "利用するもの" = "You use";
-"不快な絵文字を表示しない" = "Block unplesant Emojis";
+"不快な絵文字を表示しない" = "Block unpleasant Emojis";
 "ゴキブリの絵文字を非表示" = "Forbid cockroach emojis";
 
 "ユーザ辞書" = "Text replacement";
@@ -211,7 +210,7 @@
 "プライバシーポリシー" = "Privacy Policy (Japanese)";
 "利用規約" = "Terms of use (Japanese)";
 "更新履歴" = "Update histories (Japanese)";
-"オープンソースソフトウェア" = "Opensource softwares (Japanese)";
+"オープンソースソフトウェア" = "Open source softwares (Japanese)";
 "バージョン" = "Version";
 
 
