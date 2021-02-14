@@ -264,7 +264,7 @@ struct FlickCustomKeysSettingView: View {
 
 private struct ToolBarButton: View{
     let systemImage: String
-    let labelText: String
+    let labelText: LocalizedStringKey
     let action: () -> ()
 
     var body: some View {
@@ -285,8 +285,8 @@ private struct ToolBarButton: View{
 }
 
 private struct CustomKeySettingFlickKeyView: View {
-    let position: FlickKeyPosition
-    let label: String
+    private let position: FlickKeyPosition
+    private let label: String
     @ObservedObject private var selectState: SelectState
 
     init(_ position: FlickKeyPosition, label: String, selectState: SelectState){
@@ -295,11 +295,11 @@ private struct CustomKeySettingFlickKeyView: View {
         self.selectState = selectState
     }
 
-    var focused: Bool {
+    private var focused: Bool {
         return selectState.selectedPosition == position
     }
 
-    var strokeColor: Color {
+    private var strokeColor: Color {
         if focused{
             return .accentColor
         }

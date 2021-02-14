@@ -58,7 +58,7 @@ struct FontSizeSettingItemView: View {
             Spacer()
             Picker(selection: $viewModel.value, label: Text("")) {
                 ForEach(self.availableValues) {data in
-                    Text("\(data.description)").tag(data)
+                    Text(data.display).tag(data)
                 }
             }
             .labelsHidden()

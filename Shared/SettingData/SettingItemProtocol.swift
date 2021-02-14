@@ -6,7 +6,7 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 protocol Savable{
     associatedtype SaveValue
@@ -44,7 +44,7 @@ struct SettingItem <Value: Savable> {
         }
     }
 
-    var description: String {
+    var description: LocalizedStringKey {
         identifier.explanation
     }
 

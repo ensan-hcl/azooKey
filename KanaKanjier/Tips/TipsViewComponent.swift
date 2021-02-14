@@ -10,9 +10,9 @@ import SwiftUI
 
 struct TipsContentView<Content: View>: View {
     private let content: () -> Content
-    private let title: String
+    private let title: LocalizedStringKey
 
-    init(_ title: String, @ViewBuilder _ content: @escaping () -> Content){
+    init(_ title: LocalizedStringKey, @ViewBuilder _ content: @escaping () -> Content){
         self.content = content
         self.title = title
     }

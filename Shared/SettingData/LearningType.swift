@@ -6,14 +6,14 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 enum LearningType: Int, CaseIterable{
     case inputAndOutput = 0
     case onlyOutput = 1
     case nothing = 2
 
-    var string: String {
+    var string: LocalizedStringKey {
         switch self{
         case .inputAndOutput: return "学習する(デフォルト)"
         case .onlyOutput: return "新たな学習を停止"

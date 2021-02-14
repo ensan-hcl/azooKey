@@ -150,6 +150,8 @@
 		1AC031642512138F004CA505 /* SettingItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC031632512138F004CA505 /* SettingItemProtocol.swift */; };
 		1AC031662512302F004CA505 /* KeyFlickSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC031652512302F004CA505 /* KeyFlickSettingItemView.swift */; };
 		1AC19AF22531AA800077BF8D /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC19AF12531AA800077BF8D /* Set.swift */; };
+		1AC5876525D930D000BB060E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
+		1AC5876625D930D000BB060E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
 		1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */; };
 		1AC8A594259587A200B71E5A /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A593259587A200B71E5A /* Design.swift */; };
 		1AC8A5AA2595934C00B71E5A /* ArrayBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */; };
@@ -2623,6 +2625,9 @@
 		1AC031632512138F004CA505 /* SettingItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingItemProtocol.swift; sourceTree = "<group>"; };
 		1AC031652512302F004CA505 /* KeyFlickSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyFlickSettingItemView.swift; sourceTree = "<group>"; };
 		1AC19AF12531AA800077BF8D /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
+		1AC5875925D9309500BB060E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1AC5876725D930D000BB060E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1AC5876D25D930E700BB060E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSettingTipsView.swift; sourceTree = "<group>"; };
 		1AC8A593259587A200B71E5A /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
 		1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayBuilder.swift; sourceTree = "<group>"; };
@@ -5272,6 +5277,7 @@
 				1AF678DD25CED84F00F3987B /* KeyboardView */,
 				1AF6785B25CC4FF800F3987B /* ThemeData */,
 				1A36B146258D0BA90084DFE0 /* SettingData */,
+				1AC5876825D930D000BB060E /* Localizable.strings */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -5300,14 +5306,14 @@
 			isa = PBXGroup;
 			children = (
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
+				1ACE00712567518100899DA2 /* KeyboardLayout */,
+				1ACE006F2567514400899DA2 /* FlickCustomKeys */,
+				1ACE00732567521200899DA2 /* RomanCustomKeys */,
 				1AE70BDF258DB4A0009B9B8B /* Template */,
 				1AF616B9256D40A5001A0B32 /* MemoryResetSetting */,
 				1A64A8DA257C91550022C081 /* FontSizeSetting */,
-				1ACE00712567518100899DA2 /* KeyboardType */,
 				1ACE00722567519D00899DA2 /* LearningType */,
 				1ACE00702567515300899DA2 /* BooleanSetting */,
-				1ACE00732567521200899DA2 /* RomanCustomKeys */,
-				1ACE006F2567514400899DA2 /* FlickCustomKeys */,
 				1AB5075E255EC21D003C0BF2 /* AdditionalDict */,
 				1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */,
 				1A9B0A6D2565797E004203BB /* ContactView.swift */,
@@ -5334,13 +5340,13 @@
 			path = BooleanSetting;
 			sourceTree = "<group>";
 		};
-		1ACE00712567518100899DA2 /* KeyboardType */ = {
+		1ACE00712567518100899DA2 /* KeyboardLayout */ = {
 			isa = PBXGroup;
 			children = (
 				1A4057E8255843460073C6F7 /* KeyboardLayoutSettingItemView.swift */,
 				1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */,
 			);
-			path = KeyboardType;
+			path = KeyboardLayout;
 			sourceTree = "<group>";
 		};
 		1ACE00722567519D00899DA2 /* LearningType */ = {
@@ -7765,6 +7771,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 1A3DC1B92500D44A002CAA93;
 			packageReferences = (
@@ -7789,6 +7796,7 @@
 			files = (
 				1ACEEFF72566786A00899DA2 /* kaomoji_dict.tsv in Resources */,
 				1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */,
+				1AC5876525D930D000BB060E /* Localizable.strings in Resources */,
 				1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */,
 				1A7817B22575C89D007661D8 /* emoji...12_dict.tsv in Resources */,
 				1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */,
@@ -8053,6 +8061,7 @@
 				1AE1962A25D89D7A0044EE4B /* △0.loudstxt2 in Resources */,
 				1AE1A2BE25D89DB90044EE4B /* 1077.binary in Resources */,
 				1AE196F425D89D7B0044EE4B /* *.loudschars2 in Resources */,
+				1AC5876625D930D000BB060E /* Localizable.strings in Resources */,
 				1AE19F5C25D89DB60044EE4B /* 1284.binary in Resources */,
 				1AE19F4825D89DB60044EE4B /* 1005.binary in Resources */,
 				1AE194FD25D89D790044EE4B /* 〇.louds in Resources */,
@@ -10302,8 +10311,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				1A3DC1D12500D44E002CAA93 /* Base */,
+				1AC5875925D9309500BB060E /* ja */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		1AC5876825D930D000BB060E /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1AC5876725D930D000BB060E /* ja */,
+				1AC5876D25D930E700BB060E /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

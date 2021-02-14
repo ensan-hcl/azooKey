@@ -1,0 +1,270 @@
+/* 
+  Localizable.strings
+  KanaKanjier
+
+  Created by β α on 2021/02/14.
+  Copyright © 2021 DevEn3. All rights reserved.
+*/
+"着せ替え" = "Themes";
+"使い方" = "Usage";
+"設定" = "Settings";
+
+"作る" = "Make";
+"選ぶ" = "Select";
+"着せ替えを作成" = "Make a new theme";
+"着せ替えを編集" = "Edit theme";
+
+"キャンセル" = "Cancel";
+"完了" = "Done";
+
+"背景" = "Background";
+"文字" = "Letters";
+"変換候補" = "Candidates";
+"キー" = "Keys";
+
+
+"画像を選ぶ" = "Select image";
+"画像を選び直す" = "Change image";
+"画像を削除" = "Remove image";
+"背景の色" = "Background color";
+
+"画像をトリミング" = "Trim image";
+"画像をトリミング" = "Trim image";
+
+"文字の太さ" = "Font weight";
+
+"変換候補の文字の色" = "Color of candidates";
+
+"キーの文字の色" = "Color of key labels";
+"通常キーの背景色" = "Background color of normal keys";
+"特殊キーの背景色" = "Background color of special keys";
+"枠線の色" = "Border color";
+"枠線の太さ" = "Border line width";
+
+"リセットする" = "Reset";
+
+"編集する" = "Edit";
+"削除する" = "Remove";
+
+"着せ替えが完成しました🎉" = "Your theme is completed 🎉";
+"シェアする" = "Share";
+"閉じる" = "Close";
+
+"キーボードを使えるようにする" = "Make keyboard able to use";
+"キーボードを有効化する" = "Enable Keyboard";
+"便利な使い方" = "Useful tips";
+"困ったときは" = "When in trouble";
+
+"入力方法を選ぶ" = "Select input style";
+"キーボードの入力方式" = "Select input style";
+"キーボードの種類を設定する" = "Select input style";
+"カーソルを自由に移動する" = "Move cursor easily (Japanese)";
+"カーソルを移動する" = "Move cursor easily";
+"文頭まで一気に消す" = "Delete to beginning of the sentence (Japanese)";
+"文頭まで削除する" = "Delete to beginning of the sentence";
+"漢字を拡大表示する" = "Zooming difficult letters (Japanese)";
+"文字を拡大表示する" = "Zooming difficult letters";
+"大文字に固定する" = "Caps Lock (Japanese)";
+"タイムスタンプを使う" = "Use timestamp (Japanese)";
+"タイムスタンプを設定する" = "Use timestamp";
+"キーをカスタマイズする" = "Customize keys";
+
+
+"端末の文字サイズ設定が反映されない" = "Setting of device's font size doesn't effect (Japanese)";
+"絵文字や顔文字の変換候補を表示したい" = "Show Emoji and Kaomoji candidates (Japanese)";
+"バグの報告や機能のリクエストをしたい" = "Report bugs or request new features";
+"お問い合わせ" = "Contact";
+
+"日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。" = "You can select Qwerty and Flick input style for each of Japanese and English.";
+"現在は携帯電話式の入力については対応していません。" = "Currently azooKey doesn't support Japanese flip phone input style.";
+
+"日本語" = "Japanese";
+"英語" = "English";
+"現在" = "Current";
+"キーボードの種類" = "Keyboard Layout";
+"フリック入力" = "Flick";
+"ローマ字入力" = "Qwerty";
+
+"azooKeyでは一部キーのカスタマイズが可能です。「設定」タブから変更できます。" = "With azooKey, you can customize some of keys. You can change keys on the Settings tab.";
+"フリック入力では、ひらがなタブの「小ﾞﾟ」キーと「､｡?!」キーのフリックに最大3方向まで好きな文字を登録することができます。" = "Using flick input style, you can register at most three letters on the key 「小ﾞﾟ」 and 「､｡?!」.";
+"ローマ字入力では、数字タブの一部キーに好きな文字と長押ししたときの候補を登録することができます。" = "Using qwerty input style, you can register favorite letter on some of keys in number tab and on some of variations which you can select by longpressing.";
+
+"お問い合わせ内容を選んでください。ブラウザでGoogle Formが開きます。「質問・連絡・その他」では返信のためメールアドレスが必要となります。" = "Please select your contents of contact. Google form opens on your browser. If you select 'Question, contacts, and others', you have to prepare mail address for the sake of our reply.";
+"不具合報告" = "Report bugs";
+"機能の改善・追加" = "Request improvements and new features";
+"変換候補の追加" = "Add candidates";
+"質問・連絡・その他" = "Question, contacts, and others";
+
+"カスタムキー" = "Custom keys";
+
+"設定する" = "Set";
+"「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。" = "You can register at most three letters on both keys 「小ﾞﾟ」 and 「､｡?!」.";
+"数字タブの青枠部分に好きな記号や文字を割り当てられます。" = "You can register your favorite letters on blue frameed keys.";
+
+"編集したい方向を選択してください。" = "Select key to which you want to register.";
+"編集したいキーを選択してください。" = "Select key to which you want to register.";
+"リセット" = "Reset";
+"入力" = "Input";
+"ラベル" = "Labels";
+"キーに表示される文字を設定します。" = "Set the label.";
+"入力される文字とは異なっていても構いません。" = "Not necessarily equal to input letter.";
+"キーを押して入力される文字を設定します。" = "Set letters inputted when you press this key.";
+"入力される文字" = "Inputted letters";
+"キーの見た目は「ラベル」で設定できます。" = "You can set labels for the appearance.";
+"キーを追加する" = "Add a new key";
+"デフォルトに戻す" = "Reset";
+
+"長押しした時の候補" = "Selectable variations when you longpress this key";
+"削除" = "Remove";
+"移動" = "Move";
+"追加" = "Add";
+
+"サウンド" = "Sounds";
+"キー音のON/OFF" = "Enable keyboard sounds";
+"キーを押した際に音を鳴らします。" = "Make sounds when you press keys.";
+
+"表示" = "Display";
+"キーの表示サイズ" = "Font size of key labels";
+"キーの文字の大きさを指定できます。文字が大きすぎる場合表示が崩れることがあります。" = "You can set the font size of keys. If the size is too large, the appearance can get collapsed.";
+"変換候補の表示サイズ" = "Font size of candidates";
+"変換候補の文字の大きさを指定できます。" = "You can set the font size of candidates.";
+"サンプル" = "Sample";
+"自動" = "Auto";
+
+
+"変換" = "Candidates";
+"日本語入力中の英単語変換" = "Conversion to English words during Japanese input";
+"「いんてれsちんg」→「interesting」のように、ローマ字日本語入力中も英語への変換候補を表示します。" = "Display English word candidates during qwerty Japanese inputting like 「いんてれsちんg」→「interesting」.";
+"半角カナ変換" = "Half width kana candidates";
+"半角ｶﾀｶﾅへの変換を候補に表示します。" = "Display half width ｶﾀｶﾅ(katakana) candidates.";
+"全角英数字変換" = "Full width numbers and roman letters candidates";
+"全角英数字(ａｂｃ１２３)への変換候補を表示します。" = "Display full width numbers and roman letters candidates like 'ａｂｃ１２３'";
+"装飾英字変換" = "Decorated letters candidates";
+"英字入力をした際、「𝕥𝕪𝕡𝕠𝕘𝕣𝕒𝕡𝕙𝕪」のような装飾字体を候補に表示します。" = "Display decorated font candidates like '𝕥𝕪𝕡𝕠𝕘𝕣𝕒𝕡𝕙𝕪' during English inputting.";
+"西暦⇄和暦変換" = "Gregorian - Japanese calendar conversion";
+"「2020ねん→令和2年」「れいわ2ねん→2020年」のように西暦と和暦を相互に変換して候補に表示します。" = "Convert Gregorian year and Japanese year mutually and display candidates like 「2020ねん→令和2年」「れいわ2ねん→2020年」.";
+"unicode変換" = "Unicode letters conversion";
+"「u3042→あ」のように、入力されたunicode番号に対応する文字に変換します。接頭辞にはu, u+, U, U+が使えます。" = "Convert unicode order to letter and display candidates like 「u3042→あ」";
+"絵文字と顔文字" = "Emoji and Kaomoji";
+"絵文字" = "Emoji";
+"顔文字" = "Kaomoji";
+"利用するもの" = "You use";
+"不快な絵文字を表示しない" = "Block unplesant Emojis";
+"ゴキブリの絵文字を非表示" = "Forbid cockroach emojis";
+
+"ユーザ辞書" = "Text replacement";
+"OSのユーザ辞書の利用" = "Use OS Text replacement";
+"iOS標準のユーザ辞書を利用します。" = "Use OS Text replacement and display the candidates.";
+"azooKeyユーザ辞書" = "azooKey's Text replacement";
+"変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。" = "You can add text replacements. It is different from OS's text replacements.";
+
+"追加する" = "Add";
+"詳細設定" = "Details";
+"単語" = "Word";
+"読み" = "Ruby";
+"読みと単語" = "Ruby and word";
+"詳細な設定" = "High-level settings";
+"人・動物・会社などの名前である" = "It is the name of persons, pets and groups.";
+"場所・建物などの名前である" = "It is the name of places and buildings";
+"読みが空です" = "Ruby is empty";
+"単語が空です" = "Word is empty";
+"読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください" = "Contains unusable character. Please use hiragana, roman letters, and numbers.";
+
+"テンプレート" = "Templates";
+"テンプレートの管理" = "Manage templates";
+"テンプレートを編集" = "Edit template";
+"時刻" = "Dates";
+"ランダム" = "Random";
+"書式の設定" = "Format";
+"書式" = "Format";
+"プレビュー" = "Preview";
+"更新" = "Update";
+"ズレ" = "Delta";
+"暦の種類" = "Calendar";
+"言語" = "Language";
+"西暦" = "Gregorian";
+"和暦" = "Japanese";
+"秒" = "Seconds";
+"分" = "Minutes";
+"時間" = "Hours";
+"日" = "Days";
+"書式はyyyyMMddhhmmssフォーマットで記述します。詳しい記法はインターネット等で確認できます。" = "Formats can be specified by yyyyMMddhhmmss style. You can check details in the Internet.";
+"Web検索" = "Google search";
+"値の種類" = "Type of value";
+"整数" = "Integers";
+"小数" = "Decimals";
+"文字列" = "Words";
+"から" = "starts";
+"まで" = "ends";
+"名前" = "Name";
+
+"学習機能" = "Memories";
+"学習の使用" = "Use memorizing";
+"学習のリセット" = "Reset memories";
+"学習する(デフォルト)" = "Use memorizing (default)";
+"新たな学習を停止" = "Stop memorizing";
+"これまでの学習を反映しない" = "Ignore memories";
+"学習履歴をリセットします。よろしいですか？" = "Reset memories. Is it OK?";
+"この操作は取り消せません。" = "This operation cannot be canceled.";
+
+"このアプリについて" = "About azooKey";
+"プライバシーポリシー" = "Privacy Policy (Japanese)";
+"利用規約" = "Terms of use (Japanese)";
+"更新履歴" = "Update histories (Japanese)";
+"オープンソースソフトウェア" = "Opensource softwares (Japanese)";
+"バージョン" = "Version";
+
+
+/*"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+"" = "";
+*/

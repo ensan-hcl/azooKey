@@ -6,7 +6,7 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 enum Setting: String {
     case japaneseKeyboardLayout = "keyboard_type"
@@ -34,7 +34,7 @@ enum Setting: String {
 
     static let boolSetting: [Self] = [.wesJapCalender, .typographyLetter, .halfKana, .unicodeCandidate, .englishCandidate, .stopLearningWhenSearch, .enableSound]
 
-    var title: String {
+    var title: LocalizedStringKey {
         switch self{
         case .japaneseKeyboardLayout:
             return "日本語キーボードの種類"
@@ -75,7 +75,7 @@ enum Setting: String {
         }
     }
 
-    var explanation: String {
+    var explanation: LocalizedStringKey {
         switch self{
         case .japaneseKeyboardLayout:
             return "日本語の入力方法をフリック入力とローマ字入力から選択できます。"
@@ -86,7 +86,7 @@ enum Setting: String {
         case .koganaKeyFlick:
             return "「小ﾞﾟ」キーの「左」「上」「右」フリックに、好きな文字列を割り当てて利用することができます。"
         case .kanaSymbolsKeyFlick:
-            return "「､｡?!」キーと「左」「上」「右」フリックに割り当てられた文字を変更することができます。"
+            return "「､｡?!」キーの「左」「上」「右」フリックに割り当てられた文字を変更することができます。"
         case .learningType:
             return "「新たに学習し、反映する(デフォルト)」「新たな学習を停止する」「新たに学習せず、これまでの学習も反映しない」選択できます。この設定の変更で学習結果が消えることはありません。"
         case .stopLearningWhenSearch:

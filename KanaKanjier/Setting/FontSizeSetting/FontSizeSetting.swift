@@ -6,7 +6,7 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 enum FontSizeSetting: Savable{
     typealias SaveValue = Double
@@ -43,6 +43,10 @@ extension FontSizeSetting: ExpressibleByIntegerLiteral{
 }
 
 extension FontSizeSetting: CustomStringConvertible{
+    var display: LocalizedStringKey {
+        LocalizedStringKey(stringLiteral: description)
+    }
+
     var description: String {
         switch self{
         case let .value(value):

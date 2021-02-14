@@ -29,7 +29,7 @@ struct ThemeEditView: View {
         case themeShareView
     }
 
-    private let title: String
+    private let title: LocalizedStringKey
 
     init(index: Int?, manager: Binding<ThemeIndexManager>){
         VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)

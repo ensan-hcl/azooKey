@@ -85,7 +85,7 @@ struct ThemeTabView: View {
                                 editViewIndex = nil
                                 editViewEnabled = true
                             }label: {
-                                Text("テーマを作成")
+                                Text("着せ替えを作成")
                                     .foregroundColor(.primary)
                             }
                             if editViewIndex == nil{

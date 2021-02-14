@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 final class EditableUserDictionaryData: ObservableObject {
     lazy var availableChars: [Character] = {
@@ -54,7 +55,7 @@ final class EditableUserDictionaryData: ObservableObject {
         case wordEmpty
         case unavailableCharacter
 
-        var message: String {
+        var message: LocalizedStringKey {
             switch self{
             case .rubyEmpty:
                 return "読みが空です"

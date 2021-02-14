@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum InputStyle: String{
     ///常に入力された文字を直接入力するスタイル
@@ -21,7 +22,7 @@ enum KeyboardLayout: String, CaseIterable{
     ///qwerty入力式のレイアウトで表示するスタイル
     case qwerty = "roman"
     
-    var string: String {
+    var string: LocalizedStringKey {
         switch self{
         case .flick:
             return "フリック入力"

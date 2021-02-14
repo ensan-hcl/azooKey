@@ -26,7 +26,7 @@ struct KeyboardLayoutSettingItemView: View {
         case japanese
         case english
 
-        var name: String {
+        var name: LocalizedStringKey {
             switch self {
             case .japanese:
                 return "日本語"
@@ -57,11 +57,11 @@ struct KeyboardLayoutSettingItemView: View {
         }
     }
 
-    var labelText: String {
+    var labelText: LocalizedStringKey {
         if setTogether{
-            return "キーボードの種類" + "(現在: \(viewModel.value.string))"
+            return "\(Text("キーボードの種類"))(\(Text("現在")): \(Text(viewModel.value.string)))"
         }else{
-            return "\(language.name)"+"キーボードの種類" + "(現在: \(viewModel.value.string))"
+            return "\(Text(language.name)) \(Text("キーボードの種類"))(\(Text("現在")): \(Text(viewModel.value.string)))"
         }
     }
 

@@ -16,6 +16,6 @@ struct KeyboardLayoutTypeDetailsView: View {
                 KeyboardLayoutSettingItemView(Store.shared.keyboardTypeSetting, language: .japanese, id: 10).padding(.vertical)
                 KeyboardLayoutSettingItemView(Store.shared.englishKeyboardTypeSetting, language: .english, id: 20).padding(.vertical)
             }
-        }.navigationBarTitle(Text("キーボードの詳細設定"), displayMode: .inline)
+        }.navigationBarTitle(Text("キーボードの入力方式"), displayMode: .inline)
     }
 }

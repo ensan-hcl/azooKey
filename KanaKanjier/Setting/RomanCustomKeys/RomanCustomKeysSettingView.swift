@@ -303,7 +303,7 @@ struct RomanCustomKeysItemView: View {
         .padding()
     }
 
-    private func pointedIndex(index: Int, delta: CGFloat) -> Int{
+    private func pointedIndex(index: Int, delta: CGFloat) -> Int {
         if delta.isZero{
             return index
         }
@@ -397,7 +397,7 @@ struct RomanCustomKeysItemView: View {
 
 private struct ToolBarButton: View{
     let systemImage: String
-    let labelText: String
+    let labelText: LocalizedStringKey
     let action: () -> ()
 
     var body: some View {
