@@ -96,7 +96,7 @@ struct QwertyKeyView: View{
         theme != .default ? .black : nil
     }
 
-    var body: some View{
+    var body: some View {
         ZStack(alignment: .bottom){
             Group{
                 RoundedBorderedRectangle(cornerRadius: 6, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
