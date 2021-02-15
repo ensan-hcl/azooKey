@@ -179,9 +179,10 @@ final class KeyboardActionDepartment: ActionDepartment{
 
         case let .openApp(scheme):
             delegate.openApp(scheme: scheme)
+
+        #if DEBUG
         //MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
-            #if DEBUG
             self.inputManager.isDebugMode.toggle()
             if self.inputManager.isDebugMode{
                 var left = self.inputManager.proxy.documentContextBeforeInput ?? "nil"
@@ -202,7 +203,7 @@ final class KeyboardActionDepartment: ActionDepartment{
 
                 self.setDebugPrint("left:\(Array(left.unicodeScalars))/center:\(Array(center.unicodeScalars))/right:\(Array(right.unicodeScalars))")
             }
-            #endif
+        #endif
         }
     }
 
