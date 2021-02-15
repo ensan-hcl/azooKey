@@ -5,13 +5,32 @@
   Created by β α on 2021/02/14.
   Copyright © 2021 DevEn3. All rights reserved.
 */
+"azooKeyを使う前に、iPhoneのキーボードのリストにazooKeyを追加する必要があります" = "Before using azooKey, you need to add azooKey into the list of device keyboards";
+"手順を見る" = "Check steps";
+"追加する" = "Adding";
+"下にスクロールして「追加する」を押して" = "Scroll down and push 'add'";
+"「キーボード」を押して" = "Push 'Keyboard'";
+"azooKeyをオンにして" = "Turn on azooKey";
+"このアプリを再び開いてください" = "Open this app again";
+"この設定をしないとキーボードが使えません" = "Without this operation you cannot use azooKey";
+"最初の設定" = "First settings";
+"キーボードの種類をお選びください" = "Select input style";
+"絵文字と顔文字を設定しましょう" = "Let's use emoji and kaomoji";
+"設定は「設定タブ」でいつでも変えられます" = "You can change settings on Settings tab anytime";
+"azooKeyが使えます！" = "You can use azooKey now!";
+"準備は完了です！" = "Preparation completed!";
+"キーボードの地球儀ボタンを長押しし、azooKeyを選択してください" = "Tap and hold the globe button on keyboard, and select azooKey";
+"キーボードを開く" = "Open keyboard";
+"azooKeyをお楽しみください！" = "Enjoy azooKey!";
+"始める" = "Start";
+
 "着せ替え" = "Themes";
 "使い方" = "Usage";
 "設定" = "Settings";
 
 "作る" = "Make";
 "選ぶ" = "Select";
-"着せ替えを作成" = "Make a new theme";
+"着せ替えを作成" = "Make your theme";
 "着せ替えを編集" = "Edit theme";
 
 "キャンセル" = "Cancel";
@@ -88,7 +107,7 @@
 "フリック入力では、ひらがなタブの「小ﾞﾟ」キーと「､｡?!」キーのフリックに最大3方向まで好きな文字を登録することができます。" = "Using flick input style, you can register at most three letters on the key 「小ﾞﾟ」 and 「､｡?!」.";
 "ローマ字入力では、数字タブの一部キーに好きな文字と長押ししたときの候補を登録することができます。" = "Using qwerty input style, you can register favorite letter on some of keys in number tab and on some of variations which you can select by longpressing.";
 
-"お問い合わせ内容を選んでください。ブラウザでGoogle Formが開きます。「質問・連絡・その他」では返信のためメールアドレスが必要となります。" = "Please select your contents of contact. Google form opens on your browser. If you select 'Question, contacts, and others', you have to prepare mail address for the sake of our reply.";
+"お問い合わせ内容を選んでください。ブラウザでGoogle Formが開きます。「質問・連絡・その他」では返信のためメールアドレスが必要となります。" = "Please select your contents of contact. Google form opens on your browser. If you select 'Question, contacts, and others', you have to prepare email address for the sake of our reply.";
 "不具合報告" = "Report bugs";
 "機能の改善・追加" = "Request improvements and new features";
 "変換候補の追加" = "Add candidates";
@@ -134,10 +153,10 @@
 "変換" = "Candidates";
 "日本語入力中の英単語変換" = "Conversion to English words during Japanese input";
 "「いんてれsちんg」→「interesting」のように、ローマ字日本語入力中も英語への変換候補を表示します。" = "Display English word candidates during qwerty Japanese inputting like 「いんてれsちんg」→「interesting」.";
-"半角カナ変換" = "Half width kana candidates";
-"半角ｶﾀｶﾅへの変換を候補に表示します。" = "Display half width ｶﾀｶﾅ(katakana) candidates.";
+"半角カナ変換" = "Half-width kana candidates";
+"半角ｶﾀｶﾅへの変換を候補に表示します。" = "Display half-width ｶﾀｶﾅ(katakana) candidates.";
 "全角英数字変換" = "Full width numbers and roman letters candidates";
-"全角英数字(ａｂｃ１２３)への変換候補を表示します。" = "Display full width numbers and roman letters candidates like 'ａｂｃ１２３'";
+"全角英数字(ａｂｃ１２３)への変換候補を表示します。" = "Display full-width numbers and roman letters candidates like 'ａｂｃ１２３'";
 "装飾英字変換" = "Decorated letters candidates";
 "英字入力をした際、「𝕥𝕪𝕡𝕠𝕘𝕣𝕒𝕡𝕙𝕪」のような装飾字体を候補に表示します。" = "Display decorated font candidates like '𝕥𝕪𝕡𝕠𝕘𝕣𝕒𝕡𝕙𝕪' during English inputting.";
 "西暦⇄和暦変換" = "Gregorian - Japanese calendar conversion";
@@ -152,10 +171,10 @@
 "ゴキブリの絵文字を非表示" = "Forbid cockroach emojis";
 
 "ユーザ辞書" = "Text replacement";
-"OSのユーザ辞書の利用" = "Use OS Text replacement";
-"iOS標準のユーザ辞書を利用します。" = "Use OS Text replacement and display the candidates.";
+"OSのユーザ辞書の利用" = "Use device text replacement";
+"iOS標準のユーザ辞書を利用します。" = "Use device text replacement and display the candidates.";
 "azooKeyユーザ辞書" = "azooKey's Text replacement";
-"変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。" = "You can add text replacements. It is different from OS's text replacements.";
+"変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。" = "You can add text replacements. It is different from device's text replacements.";
 
 "追加する" = "Add";
 "詳細設定" = "Details";

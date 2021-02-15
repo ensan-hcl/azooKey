@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct EnableAzooKeyViewHeader: View {
-    let text: String
-    init(_ text: String){
+    private let text: LocalizedStringKey
+    init(_ text: LocalizedStringKey){
         self.text = text
     }
 
@@ -31,9 +31,9 @@ struct EnableAzooKeyViewHeader: View {
 }
 
 struct EnableAzooKeyViewText: View {
-    let text: String
-    let systemName: String
-    init(_ text: String, with systemName: String){
+    private let text: LocalizedStringKey
+    private let systemName: String
+    init(_ text: LocalizedStringKey, with systemName: String){
         self.text = text
         self.systemName = systemName
     }
@@ -53,12 +53,12 @@ struct EnableAzooKeyViewButton: View {
     enum Style{
         case emphisized, normal
     }
-    let text: String
-    let systemName: String?
-    let style: Style
-    let action: () -> Void
+    private let text: LocalizedStringKey
+    private let systemName: String?
+    private let style: Style
+    private let action: () -> Void
     
-    init(_ text: String, systemName: String? = nil, style: Style = .normal, action: @escaping () -> Void){
+    init(_ text: LocalizedStringKey, systemName: String? = nil, style: Style = .normal, action: @escaping () -> Void){
         self.text = text
         self.systemName = systemName
         self.style = style
@@ -89,7 +89,7 @@ struct EnableAzooKeyViewButton: View {
 }
 
 struct EnableAzooKeyViewImage: View {
-    let identifier: String
+    private let identifier: String
     init(_ identifier: String){
         self.identifier = identifier
     }
