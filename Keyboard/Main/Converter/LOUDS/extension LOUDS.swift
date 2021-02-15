@@ -30,7 +30,7 @@ extension Array{
 }
 */
 extension LOUDS{
-    private static func loadLOUDSBinary(from url: URL) -> [UInt64] {
+    private static func loadLOUDSBinary(from url: URL) -> [UInt64]? {
         do {
             let binaryData = try Data(contentsOf: url, options: [.uncached]) //2度読み込むことはないのでキャッシュ不要
             let ui64array = binaryData.withUnsafeBytes{pointer -> [UInt64] in
@@ -44,7 +44,7 @@ extension LOUDS{
             return ui64array
         } catch {
             debug(error)
-            return []
+            return nil
         }
     }
 
@@ -86,12 +86,14 @@ extension LOUDS{
             nodeIndex2ID = try Array(Data(contentsOf: charsURL, options: [.uncached]))   //2度読み込むことはないのでキャッシュ不要
         } catch {
             debug("ファイルが存在しません: \(error)")
-            nodeIndex2ID = []
+            return nil
         }
 
-        let bytes = LOUDS.loadLOUDSBinary(from: loudsURL).map{$0.littleEndian}
-        let louds = LOUDS(bytes: bytes, nodeIndex2ID: nodeIndex2ID)
-        return louds
+        if let bytes = LOUDS.loadLOUDSBinary(from: loudsURL){
+            let louds = LOUDS(bytes: bytes.map{$0.littleEndian}, nodeIndex2ID: nodeIndex2ID)
+            return louds
+        }
+        return nil
     }
     /*
     internal static func getData(_ identifier: String, indices: [Int]) -> [String] {
