@@ -11,7 +11,8 @@ import SwiftUI
 import PhotosUI
 
 struct ThemeEditView: View {
-    @State private var theme = ThemeData.base
+    private let base: ThemeData
+    @State private var theme: ThemeData = .base
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
@@ -40,11 +41,20 @@ struct ThemeEditView: View {
                 var theme = try manager.wrappedValue.theme(at: index)
                 theme.id = index
                 self._theme = State(initialValue: theme)
+                self.base = theme
+                self._normalKeyColor = State(initialValue: theme.normalKeyFillColor.color)
+                self._specialKeyColor = State(initialValue: theme.specialKeyFillColor.color)
+                self._backGroundColor = State(initialValue: theme.backgroundColor.color)
+                self._borderColor = State(initialValue: theme.borderColor.color)
+                self._keyLabelColor = State(initialValue: theme.textColor.color)
+                self._resultTextColor = State(initialValue: theme.resultTextColor.color)
             } catch {
                 debug(error)
+                self.base = .base
             }
             self.title = "着せ替えを編集"
         }else{
+            self.base = .base
             self.title = "着せ替えを作成"
         }
         self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
@@ -133,14 +143,14 @@ struct ThemeEditView: View {
                         Button{
                             self.pickedImage = nil
                             self.trimmedImage = nil
-                            self.normalKeyColor = ThemeData.base.normalKeyFillColor.color
-                            self.specialKeyColor = ThemeData.base.specialKeyFillColor.color
-                            self.backGroundColor = ThemeData.base.backgroundColor.color
-                            self.borderColor = ThemeData.base.borderColor.color
-                            self.keyLabelColor = ThemeData.base.textColor.color
-                            self.resultTextColor = ThemeData.base.resultTextColor.color
+                            self.normalKeyColor = self.base.normalKeyFillColor.color
+                            self.specialKeyColor = self.base.specialKeyFillColor.color
+                            self.backGroundColor = self.base.backgroundColor.color
+                            self.borderColor = self.base.borderColor.color
+                            self.keyLabelColor = self.base.textColor.color
+                            self.resultTextColor = self.base.resultTextColor.color
                             self.selectFontRowValue = 4
-                            self.theme = ThemeData.base
+                            self.theme = self.base
                         } label: {
                             Text("リセットする")
                                 .foregroundColor(.red)
