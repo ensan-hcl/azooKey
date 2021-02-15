@@ -4974,6 +4974,7 @@
 				1A12E25625C447D800316009 /* DataUpdateView */,
 				1A9B0A4E25642C23004203BB /* EnableAzooKeyView */,
 				1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */,
+				1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */,
 				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
 				1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */,
 				1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */,
@@ -5318,7 +5319,6 @@
 				1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */,
 				1A9B0A6D2565797E004203BB /* ContactView.swift */,
 				1A4057FC2558472B0073C6F7 /* AboutFullAccessView.swift */,
-				1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";

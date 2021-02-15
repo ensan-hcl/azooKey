@@ -86,6 +86,7 @@
 "文字を拡大表示する" = "Zooming difficult letters";
 "azooKeyではキーボード上で文字を拡大して表示することができます。" = "On azooKey, you can zoom letters and check them.";
 "文字を拡大するには、まず拡大したい文字を入力した上で変換候補を長押しします。" = "To zoom letters, you need to input the letters you want to zoom, and tap candidate and hold.";
+"大きな文字で表示する" = "Zoom in";
 "長押し後表示される画面で「大きな文字で表示する」をタップします。" = "Tap the button 「大きな文字で表示する」";
 "最大限大きなサイズで文字が表示されます。右にスクロールすると途切れている文字を確認することができます。" = "The letter is zoomed as large as possible. Scroll right to check cut off letters.";
 "フォントはiOSで標準的に利用される「ヒラギノ明朝」を用いています。明朝体の字形は手書きする際の規範的な字形と必ずしも一致しません。ご了承ください。" = "The font is 'Hiragino Mincho' which is commonly used in iOS. Please note that the glyphs of Mincho style are not always consistent with normative glyphs in handwriting.";
