@@ -108,7 +108,7 @@
 "フリック入力では、ひらがなタブの「小ﾞﾟ」キーと「､｡?!」キーのフリックに最大3方向まで好きな文字を登録することができます。" = "Using flick input style, you can register at most three letters on the key 「小ﾞﾟ」 and 「､｡?!」.";
 "ローマ字入力では、数字タブの一部キーに好きな文字と長押ししたときの候補を登録することができます。" = "Using qwerty input style, you can register favorite letter on some of keys in number tab and on some of variations which you can select by longpressing.";
 
-"お問い合わせ内容を選んでください。ブラウザでGoogle Formが開きます。「質問・連絡・その他」では返信のためメールアドレスが必要となります。" = "Please select your contents of contact. Google form opens on your browser. If you select 'Question, contacts, and others', you have to prepare email address for the sake of our reply.";
+"お問い合わせ内容を選んでください。ブラウザでGoogle Formが開きます。「質問・連絡・その他」では返信のためメールアドレスが必要となります。" = "Please select your contents of contact. Google form opens on your browser. If you select 'Question, contacts, and others', you have to prepare your email address for the sake of our reply.";
 "不具合報告" = "Report bugs";
 "機能の改善・追加" = "Request improvements and new features";
 "変換候補の追加" = "Add candidates";
