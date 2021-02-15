@@ -33,9 +33,9 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
     var longPressActions: [KeyLongPressActionType] {
         switch VariableStates.shared.aAKeyState{
         case .normal:
-            return [.changeCapsLockState(state: .capslock)]
+            return [.doOnce(.changeCapsLockState(state: .capslock))]
         case .capslock:
-            return [.changeCapsLockState(state: .normal)]
+            return [.doOnce(.changeCapsLockState(state: .normal))]
         }
     }
 

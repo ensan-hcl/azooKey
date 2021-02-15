@@ -254,18 +254,23 @@ final class KeyboardActionDepartment: ActionDepartment{
             })
             let tuple = (type: action, timer: timer)
             self.timers.append(tuple)
-        case .toggleShowMoveCursorView:
-            let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
-                VariableStates.shared.showMoveCursorView.toggle()
-            })
-            let tuple = (type: action, timer: timer)
-            self.timers.append(tuple)
-        case let .changeCapsLockState(state):
-            let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
-                VariableStates.shared.aAKeyState = state
-            })
-            let tuple = (type: action, timer: timer)
-            self.timers.append(tuple)
+        case let .doOnce(actionType):
+            switch actionType{
+            case .toggleShowMoveCursorView:
+                let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
+                    VariableStates.shared.showMoveCursorView.toggle()
+                })
+                let tuple = (type: action, timer: timer)
+                self.timers.append(tuple)
+            case let .changeCapsLockState(state):
+                let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
+                    VariableStates.shared.aAKeyState = state
+                })
+                let tuple = (type: action, timer: timer)
+                self.timers.append(tuple)
+            default:
+                return
+            }
         }
 
     }

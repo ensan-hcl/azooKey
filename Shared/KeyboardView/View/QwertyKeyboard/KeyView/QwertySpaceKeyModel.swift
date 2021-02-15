@@ -13,7 +13,7 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
     var variableSection = QwertyKeyModelVariableSection()
     
     let pressActions: [ActionType] = [.input(" ")]
-    var longPressActions: [KeyLongPressActionType] = [.toggleShowMoveCursorView]
+    var longPressActions: [KeyLongPressActionType] = [.doOnce(.toggleShowMoveCursorView)]
 
     let needSuggestView: Bool = false
     let variationsModel = VariationsModel([])
