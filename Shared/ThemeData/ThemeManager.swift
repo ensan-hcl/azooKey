@@ -28,8 +28,12 @@ struct ThemeIndexManager: Equatable {
         let filePath = directoryPath.appendingPathComponent("themes/").path
         //try! FileManager.default.removeItem(atPath: filePath)
         if !FileManager.default.fileExists(atPath: filePath){
-            debug("ファイルを新規作成")
-            try! FileManager.default.createDirectory(atPath: filePath, withIntermediateDirectories: true)
+            do{
+                debug("ファイルを新規作成")
+                try FileManager.default.createDirectory(atPath: filePath, withIntermediateDirectories: true)
+            } catch {
+                debug(error)
+            }
         }
     }
 
