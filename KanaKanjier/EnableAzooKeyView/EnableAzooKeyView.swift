@@ -18,6 +18,7 @@ private enum EnableAzooKeyViewStep{
 struct EnableAzooKeyView: View {
     @State private var step: EnableAzooKeyViewStep = .menu
     @State private var text = ""
+    @State private var showDoneMessage = false
 
     var body: some View {
         ScrollView{
@@ -92,7 +93,16 @@ struct EnableAzooKeyView: View {
                         VStack(alignment: .leading, spacing: 20){
                             EnableAzooKeyViewHeader("azooKeyが使えます！")
                             EnableAzooKeyViewText("準備は完了です！", with: "checkmark")
-                            EnableAzooKeyViewText("キーボードの地球儀ボタンを長押しし、azooKeyを選択してください", with: "globe")
+                            if showDoneMessage{
+                                EnableAzooKeyViewText("azooKeyが開かれました！", with: "checkmark")
+                                CenterAlignedView{
+                                    EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill", style: .emphisized){
+                                        Store.variableSection.requireFirstOpenView = false
+                                    }
+                                }
+                            }else{
+                                EnableAzooKeyViewText("キーボードの地球儀ボタンを長押しし、azooKeyを選択してください", with: "globe")
+                            }
                             TextField("キーボードを開く", text: $text).textFieldStyle(RoundedBorderTextFieldStyle())
                             EnableAzooKeyViewImage("initSettingGlobeTapImage")
                             EnableAzooKeyViewText("azooKeyをお楽しみください！", with: "star.fill")
@@ -107,7 +117,17 @@ struct EnableAzooKeyView: View {
                         }.onTapGesture {
                             UIApplication.shared.closeKeyboard()
                         }
-
+                        .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)){notification in
+                            //キーボードが開いた時
+                            //参考：https://stackoverflow.com/questions/26153336/how-do-i-find-out-the-current-keyboard-used-on-ios8
+                            let currentKeyboardIdentifier = NSArray(array: UITextInputMode.activeInputModes)
+                                .filtered(using: NSPredicate(format: "isDisplayed = YES"))
+                                .first
+                                .flatMap{($0 as? UITextInputMode)?.value(forKey: "identifier") as? String}
+                            if currentKeyboardIdentifier == SharedStore.bundleName{
+                                showDoneMessage = true
+                            }
+                        }
                     }
                 }
                 .id(0)
