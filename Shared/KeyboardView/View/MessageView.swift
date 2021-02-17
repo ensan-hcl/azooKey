@@ -38,7 +38,8 @@ struct MessageView: View {
                     }
                     Divider()
                     HStack{
-                        if let urlString = data.detailsURL{
+                        switch data.leftsideButton{
+                        case let .details(urlString):
                             HStack{
                                 Spacer()
                                 Button{
@@ -47,24 +48,35 @@ struct MessageView: View {
                                     Text("詳細")
                                 }
                                 Spacer()
+                                Divider()
                             }
-                            Divider()
+                        case .later:
+                            HStack{
+                                Spacer()
+                                Button{
+                                    self.manager.done(data.id)
+                                }label: {
+                                    Text("後で")
+                                }
+                                Spacer()
+                                Divider()
+                            }
                         }
-                        if data.needOpenContainer{
+                        switch data.rightsideButton{
+                        case let .openContainer(text):
                             HStack{
                                 Spacer()
                                 Button{
                                     VariableStates.shared.action.registerAction(.openApp("azooKey://"))
                                 }label: {
-                                    Text("更新").bold()
+                                    Text(text).bold()
                                 }
                                 Spacer()
                             }
-                        }else{
+                        case .OK:
                             HStack{
                                 Spacer()
                                 Button{
-                                    //FIXME: このコードは動作しない。
                                     self.manager.done(data.id)
                                 }label: {
                                     Text("了解").bold()

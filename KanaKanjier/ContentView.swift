@@ -54,10 +54,16 @@ struct ContentView: View {
                     case .mock:
                         EmptyView()
                     case .ver1_5_update_loudstxt:
+                        //ユーザ辞書を更新する
                         DataUpdateView(id: data.id, manager: $messageManager){
                             let builder = LOUDSBuilder(txtFileSplit: 2048)
                             builder.process()
                             Store.shared.noticeReloadUserDict()
+                        }
+                    case .iOS14_5_new_emoji:
+                        //絵文字を更新する
+                        DataUpdateView(id: data.id, manager: $messageManager){
+                            AdditionalDictManager().userDictUpdate()
                         }
                     }
                 }

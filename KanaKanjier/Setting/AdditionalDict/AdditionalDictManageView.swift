@@ -30,18 +30,21 @@ enum AdditionalDict: String {
 }
 
 enum AdditionalDictBlockTarget: String {
-    case gokiburi = "gokiburi"
+    case gokiburi
+    case spiders
 
     var target: [String] {
         switch self{
         case .gokiburi:
             return ["\u{1FAB3}"]
+        case .spiders:
+            return ["🕸","🕷"]
         }
     }
 }
 
 
-final private class AdditionalDictManageViewModel: ObservableObject {
+final class AdditionalDictManager: ObservableObject {
     @Published var kaomoji: Bool {
         didSet{
             self.userDictUpdate()
@@ -60,6 +63,12 @@ final private class AdditionalDictManageViewModel: ObservableObject {
         }
     }
 
+    @Published var spiders: Bool {
+        didSet{
+            self.userDictUpdate()
+        }
+    }
+
     init(){
         if let list = UserDefaults.standard.array(forKey: "additional_dict") as? [String]{
             self.kaomoji = list.contains("kaomoji")
@@ -71,8 +80,10 @@ final private class AdditionalDictManageViewModel: ObservableObject {
 
         if let list = UserDefaults.standard.array(forKey: "additional_dict_blocks") as? [String]{
             self.gokiburi = list.contains("gokiburi")
+            self.spiders = list.contains("spiders")
         }else{
             self.gokiburi = true
+            self.spiders = false
         }
     }
 
@@ -94,6 +105,10 @@ final private class AdditionalDictManageViewModel: ObservableObject {
             blocklist.append("gokiburi")
             blockTargets.append(contentsOf: AdditionalDictBlockTarget.gokiburi.target)    //ゴキブリの絵文字
         }
+        if spiders{
+            blocklist.append("spiders")
+            blockTargets.append(contentsOf: AdditionalDictBlockTarget.spiders.target)    //クモの絵文字
+        }
         UserDefaults.standard.setValue(list, forKey: "additional_dict")
         UserDefaults.standard.setValue(blocklist, forKey: "additional_dict_blocks")
 
@@ -110,7 +125,7 @@ struct AdditionalDictManageViewMain: View {
         case all
     }
     private let style: Style
-    @ObservedObject private var viewModel = AdditionalDictManageViewModel()
+    @ObservedObject private var viewModel = AdditionalDictManager()
 
     init(style: Style = .all){
         self.style = style
@@ -127,10 +142,15 @@ struct AdditionalDictManageViewMain: View {
                 Text("(◍•ᴗ•◍)")
             }
         }
-        if #available(iOS 14.2, *), self.style == .all{
-            Section(header: Text("不快な絵文字を表示しない")){
-                Toggle(isOn: $viewModel.gokiburi){
-                    Text("ゴキブリの絵文字を非表示")
+        Section(header: Text("不快な絵文字を表示しない")){
+            if self.style == .all{
+                if #available(iOS 14.2, *){
+                    Toggle(isOn: $viewModel.gokiburi){
+                        Text("ゴキブリの絵文字を非表示")
+                    }
+                }
+                Toggle(isOn: $viewModel.spiders){
+                    Text("クモの絵文字を非表示")
                 }
             }
         }
