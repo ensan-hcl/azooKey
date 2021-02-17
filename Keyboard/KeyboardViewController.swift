@@ -37,7 +37,6 @@ final class KeyboardViewController: UIInputViewController {
         keyboardViewHost.view.translatesAutoresizingMaskIntoConstraints = false
         self.addChild(keyboardViewHost)
         self.view.addSubview(keyboardViewHost.view)
-
         keyboardViewHost.didMove(toParent: self)
 
         keyboardViewHost.view.translatesAutoresizingMaskIntoConstraints = false
@@ -60,6 +59,7 @@ final class KeyboardViewController: UIInputViewController {
         gr0.delaysTouchesBegan = false
         gr1.delaysTouchesBegan = false
 
+        self.view.becomeFirstResponder()
         SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
 
         if SettingData.shared.bool(for: .useOSuserDict){
