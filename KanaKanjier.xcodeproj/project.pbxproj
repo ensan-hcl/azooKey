@@ -172,6 +172,7 @@
 		1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1AD4DDD1258718F600A6FA18 /* QwertyChangeTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDD0258718F600A6FA18 /* QwertyChangeTabKeyModel.swift */; };
 		1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDE8652545D48900E524E1 /* Candidate.swift */; };
+		1ADEBD9D25DCA9C700114F47 /* emoji13.1_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */; };
 		1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1022E25D0C86500CA7277 /* ThemePicture.swift */; };
 		1AE1023025D0C86500CA7277 /* ThemePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1022E25D0C86500CA7277 /* ThemePicture.swift */; };
 		1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1023525D0C99200CA7277 /* PhotoPicker.swift */; };
@@ -2645,6 +2646,7 @@
 		1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMesureTools.swift; sourceTree = "<group>"; };
 		1AD4DDD0258718F600A6FA18 /* QwertyChangeTabKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyChangeTabKeyModel.swift; sourceTree = "<group>"; };
 		1ADDE8652545D48900E524E1 /* Candidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Candidate.swift; sourceTree = "<group>"; };
+		1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji13.1_dict.tsv; sourceTree = "<group>"; };
 		1AE1022E25D0C86500CA7277 /* ThemePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicture.swift; sourceTree = "<group>"; };
 		1AE1023525D0C99200CA7277 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
@@ -5253,6 +5255,7 @@
 				1ACEEFF62566786A00899DA2 /* kaomoji_dict.tsv */,
 				1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */,
 				1A7817AB2575C898007661D8 /* emoji13_dict.tsv */,
+				1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */,
 			);
 			path = DataSet;
 			sourceTree = "<group>";
@@ -7801,6 +7804,7 @@
 				1A7817B22575C89D007661D8 /* emoji...12_dict.tsv in Resources */,
 				1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */,
 				1A60058525275CB9008E2B92 /* Settings.bundle in Resources */,
+				1ADEBD9D25DCA9C700114F47 /* emoji13.1_dict.tsv in Resources */,
 				1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */,
 				1A7817AC2575C898007661D8 /* emoji13_dict.tsv in Resources */,
 				1A40EA8325A368D2008A6298 /* charID.chid in Resources */,

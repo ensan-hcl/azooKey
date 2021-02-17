@@ -16,7 +16,9 @@ enum AdditionalDict: String {
     var dictFileIdentifiers: [String] {
         switch self{
         case .emoji:
-            if #available(iOS 14.2, *){
+            if #available(iOS 14.5, *){
+                return ["emoji...12_dict.tsv", "emoji13_dict.tsv", "emji13.1_dict.tsv"]
+            }else if #available(iOS 14.2, *){
                 return ["emoji...12_dict.tsv", "emoji13_dict.tsv"]
             }else{
                 return ["emoji...12_dict.tsv"]
@@ -125,12 +127,10 @@ struct AdditionalDictManageViewMain: View {
                 Text("(◍•ᴗ•◍)")
             }
         }
-        if self.style == .all{
-            if #available(iOS 14.2, *){
-                Section(header: Text("不快な絵文字を表示しない")){
-                    Toggle(isOn: $viewModel.gokiburi){
-                        Text("ゴキブリの絵文字を非表示")
-                    }
+        if #available(iOS 14.2, *), self.style == .all{
+            Section(header: Text("不快な絵文字を表示しない")){
+                Toggle(isOn: $viewModel.gokiburi){
+                    Text("ゴキブリの絵文字を非表示")
                 }
             }
         }
