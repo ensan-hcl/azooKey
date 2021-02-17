@@ -212,6 +212,11 @@ struct SettingTabView: View {
                         }
                     }
                     HStack{
+                        Text("URL Scheme")
+                        Spacer()
+                        Text("azooKey://").font(Font.system(.body, design: .monospaced))
+                    }
+                    HStack{
                         Text("バージョン")
                         Spacer()
                         Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "取得中です")

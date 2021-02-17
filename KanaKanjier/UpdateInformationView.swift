@@ -10,10 +10,18 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
-            Group{
+                Group{
+                    VersionView("1.5.2", releaseDate: "2021年??月??日"){
+                    ParagraphView("機能を追加しました。"){
+                        "iOS14.5以降で利用可能なUnicode13.1に対応した絵文字のデータを追加"
+                    }
+                    ParagraphView("機能を改善しました。"){
+                        "ほとんどの機能を英語対応"
+                    }
+                }
                 VersionView("1.5.1", releaseDate: "2021年02月15日"){
                     ParagraphView("機能を改善しました。"){
-                        "一部機能を英語対応しました"
+                        "一部機能を英語対応"
                     }
                 }
                 VersionView("1.5", releaseDate: "2021年02月14日"){
