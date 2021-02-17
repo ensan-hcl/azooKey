@@ -43,8 +43,8 @@
 "キー" = "Keys";
 
 
-"画像を選ぶ" = "Select image";
-"画像を選び直す" = "Change image";
+"%@画像を選ぶ" = "%@Select image";
+"%@画像を選び直す" = "%@Change image";
 "画像を削除" = "Remove image";
 "背景の色" = "Background color";
 
@@ -77,28 +77,66 @@
 "入力方法を選ぶ" = "Select input style";
 "キーボードの入力方式" = "Select input style";
 "キーボードの種類を設定する" = "Select input style";
-"カーソルを自由に移動する" = "Move cursor easily (Japanese)";
+"カーソルを自由に移動する" = "Move cursor easily";
 "カーソルを移動する" = "Move cursor easily";
-"文頭まで一気に消す" = "Delete to beginning of the sentence (Japanese)";
+"「空白」を長押しすると、カーソル移動ボタンが現れます。ホームボタンのない端末のフリック入力では左下の%@を押して表示することも可能です。" = "Tap and hold \"空白\" key, moving cursor button appears. If you are using device without home button, you can push %@ and then the button appears.";
+"黄色枠部分" = "Yellow framed part";
+"青枠部分" = "Blue framed part";
+"%@ %@に指を置いて左右になぞることでカーソルが滑らかに移動します。" = "By putting your finger on the %1$@ %2$@ and tracing it, the cursor moves smoothly as you move your finger.";
+"1文字ずつ移動したい場合は%@の%@部分または%@部分をタップすることでそれぞれの方向に1文字ずつ移動します。" = "When you'd like to move by one character, tap the %1$@ %2$@ or %3$@ and the cursor moves each direction for one character.";
+"カーソル移動ボタンを消すには、入力/削除を行うか、再び空白を長押ししてください。" = "To hide the button, you can simply input or delete letters, or tap and hold \"空白\" key again.";
+
+"文頭まで一気に消す" = "Delete to beginning of the sentence";
 "文頭まで削除する" = "Delete to beginning of the sentence";
+"フリックのキーボードでは削除%@キーを左にフリックすると、文頭まで削除することができます。" = "If you are using flick input style, by flicking delete key %@ left, you can delete to the beginning of the sentence.";
+"誤って削除してしまった場合は端末を振るか、入力欄を三本指でスワイプすることで取り消し操作を行うことが可能です。" = "If you mistakenly deleted, you could shake your device or swipe input field by three fingers, and you can undo it.";
 
 "漢字を拡大表示する" = "Zooming difficult letters";
 "文字を拡大表示する" = "Zooming difficult letters";
 "azooKeyではキーボード上で文字を拡大して表示することができます。" = "On azooKey, you can zoom letters and check them.";
 "文字を拡大するには、まず拡大したい文字を入力した上で変換候補を長押しします。" = "To zoom letters, you need to input the letters you want to zoom, and tap candidate and hold.";
 "大きな文字で表示する" = "Zoom in";
-"長押し後表示される画面で「大きな文字で表示する」をタップします。" = "Tap the button 「大きな文字で表示する」";
+"長押し後表示される画面で「大きな文字で表示する」をタップします。" = "Tap the button 'Zoom in'.";
 "最大限大きなサイズで文字が表示されます。右にスクロールすると途切れている文字を確認することができます。" = "The letter is zoomed as large as possible. Scroll right to check cut off letters.";
 "フォントはiOSで標準的に利用される「ヒラギノ明朝」を用いています。明朝体の字形は手書きする際の規範的な字形と必ずしも一致しません。ご了承ください。" = "The font is 'Hiragino Mincho' which is commonly used in iOS. Please note that the glyphs of Mincho style are not always consistent with normative glyphs in handwriting.";
 
-"大文字に固定する" = "Caps Lock (Japanese)";
-"タイムスタンプを使う" = "Use timestamp (Japanese)";
+"大文字に固定する" = "Caps Lock";
+
+"大文字のみ入力するモード(Caps Lock)を利用できます。" = "You can use caps lock in azooKey.";
+"フリック入力では「a/A」キーを上にフリックします。" = "Using flick style, to flick \"a/A\" key, you can turn on caps lock.";
+"ローマ字入力では「Aa」キーを長押しします。" = "Using roman style, tap and hold \"Aa\" key, you can turn on caps lock.";
+"どちらの入力方式でも%@は大文字固定になっていることを意味します。" = "In both input style, the mark %@ means that currently the keyboard is caps locked.";
+"解除するにはもう一度キーを押してください。" = "To unlock, push the key again.";
+
+"タイムスタンプを使う" = "Use timestamp";
 "タイムスタンプを設定する" = "Use timestamp";
+"azooKeyでは「テンプレート」という機能を使うことで、時刻や乱数などを用いた高度な変換を定義することが可能です。" = "Using 'Template' feature, you can define special conversion relating to dates and random values.";
+"ここでは「2020/01/23 01:23」という形式のタイムスタンプを作ってみます。" = "Here we make '2020/01/23 01:23' style time stamp.";
+"まず「テンプレートの管理」から新しいテンプレートを作成します。画面右上の%@を押して、テンプレートを追加しましょう。" = "To begin with, let's make a new template on 'Manage templates'. Push the button %@ and add a new template.";
+"追加したテンプレートを選ぶと編集画面が開きます。" = "Select the template you added, and editing view opens.";
+"編集画面で次のように設定します。" = "On editing view, set as following:";
+"・名前を「タイムスタンプ」に設定" = "Set 'Name' as 'TimeStamp'.";
+"・書式で「カスタム」を選択" = "Select 'カスタム' for 'Format'.";
+"・カスタム書式に「yyyy/MM/dd hh:mm」と入力" = "Input custom format as 'yyyy/MM/dd hh:mm'.";
+"編集が終わったら完了ボタンを押してください。" = "When you finish editing, push 'Done' button.";
+"次にユーザ辞書でテンプレートを使います。「追加する」から新規に単語を登録し、編集画面が開きます。" = "Next, let's use template in the text replacement. Tap 'Add' and new text replacement editing view opens.";
+"ユーザ辞書で作成したテンプレートを使う際は、%@という形式で記述します。" = "When you use the template in the text replacement, input as '%@'.";
+"今回は「タイムスタンプ」というテンプレートなので、%@と入力します。" = "We created 'Timestamp' template, so input %@.";
+"以上で設定が完了です。あとは実際に使ってみましょう。" = "Setting is all done. Let's use it.";
+"「yyyy/MM/dd hh:mm」というのは日付の書式の書き方で、「yyyy」が4桁の年、「MM」が2桁の月、「dd」は2桁の日付を指しています。「hh」と「mm」も同様に時間と分です。" = "'yyyy/MM/dd hh:mm' is the format of dates. 'yyyy' represents current year in 4 digits, 'MM' represents current month in 2 digits, 'dd' represents current date in 2 digits. 'hh' and 'mm' represent current hour and minute.";
+"この書式を使って他にもカスタマイズが可能です。「hh」ではなく「HH」を使うことで24時間表記にすることができます。また「M」一文字を使った場合は「01」月ではなく「1」月と表示されます。「ss」で秒を、「EEE」で曜日を、「a」で午前/午後を表示することもできます。" = "Using this format, you can define other styles. Using 'HH' instead of 'hh', you can get 24-hour notation. Using only 'M', it displays '1月', not '01月'. 'ss' represents current second, 'EEE' represents current day, 'a' represents AM or PM.";
+"azooKeyではこの他にも、「ズレ」を設定することで昨日や明日の日付を表示したり、乱数を用いるテンプレートを設定したりすることができます。お試しください。" = "In azooKey, you can also set yesterday or tomorrow's date using 'delta' and templates that use random values. Let's try!";
+"{{テンプレート名}}" = "{{TemplateName}}";
+"{{タイムスタンプ}}" = "{{TimeStamp}}";
 "キーをカスタマイズする" = "Customize keys";
 
 
-"端末の文字サイズ設定が反映されない" = "Setting of device's font size doesn't effect (Japanese)";
-"絵文字や顔文字の変換候補を表示したい" = "Show Emoji and Kaomoji candidates (Japanese)";
+"端末の文字サイズ設定が反映されない" = "Setting of device's font size doesn't effect";
+"端末の文字サイズの設定を変更しても、キーボードに表示される文字の大きさが変わらないことがあります。" = "Sometimes the setting of device's font size doesn't effect to the keyboard.";
+"一度端末を再起動していただくと設定が反映されます。" = "Please reboot your device, and the setting can work.";
+"azooKeyの設定タブよりキーの文字サイズを設定することが可能です。そちらもお試しください。" = "On Settings tab in azooKey, you can set key font size. Please try it.";
+
+"絵文字や顔文字の変換候補を表示したい" = "Show Emoji and Kaomoji candidates";
 "バグの報告や機能のリクエストをしたい" = "Report bugs or request new features";
 "お問い合わせ" = "Contact";
 
@@ -123,7 +161,7 @@
 "質問・連絡・その他" = "Question, contacts, and others";
 
 "カスタムキー" = "Custom keys";
-
+"カスタムキーの設定" = "Edit custom keys";
 "設定する" = "Set";
 "「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。" = "You can register at most three letters on both keys 「小ﾞﾟ」 and 「､｡?!」.";
 "数字タブの青枠部分に好きな記号や文字を割り当てられます。" = "You can register your favorite letters on blue framed keys.";
@@ -175,9 +213,12 @@
 "絵文字と顔文字" = "Emoji and Kaomoji";
 "絵文字" = "Emoji";
 "顔文字" = "Kaomoji";
+"絵文字と顔文字は別々にオン・オフを選択可能です。" = "You can decide whether you use emoji and whether you use kaomoji.";
+"絵文字の一覧を表示したい場合、標準の絵文字キーボードをご利用ください。" = "If you want to get the list of emoji, please use the device's emoji keyboard.";
 "利用するもの" = "You use";
 "不快な絵文字を表示しない" = "Block unpleasant Emojis";
 "ゴキブリの絵文字を非表示" = "Forbid cockroach emojis";
+"クモの絵文字を非表示" = "Forbid spider emojis";
 
 "ユーザ辞書" = "Text replacement";
 "OSのユーザ辞書の利用" = "Use device text replacement";
@@ -215,6 +256,7 @@
 "分" = "Minutes";
 "時間" = "Hours";
 "日" = "Days";
+"カスタム書式" = "Custom format";
 "書式はyyyyMMddhhmmssフォーマットで記述します。詳しい記法はインターネット等で確認できます。" = "Formats can be specified by yyyyMMddhhmmss style. You can check details in the Internet.";
 "Web検索" = "Google search";
 "値の種類" = "Type of value";

@@ -4970,9 +4970,9 @@
 				1A9B09BD25600445004203BB /* DataSet */,
 				1AB50769255ECC32003C0BF2 /* LOUDSLogic */,
 				1ACEEFCE25665E2600899DA2 /* General */,
+				1AF6784825CC209400F3987B /* Theme */,
 				1A3A16022528BFE700A5BA4F /* Tips */,
 				1AC0316225121384004CA505 /* Setting */,
-				1AF6784825CC209400F3987B /* Theme */,
 				1A12E25625C447D800316009 /* DataUpdateView */,
 				1A9B0A4E25642C23004203BB /* EnableAzooKeyView */,
 				1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */,
@@ -5387,12 +5387,12 @@
 			isa = PBXGroup;
 			children = (
 				1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */,
-				1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */,
-				1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */,
-				1AFA57592583051500477DC2 /* CapslockTips.swift */,
 				1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */,
-				1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */,
+				1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */,
 				1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */,
+				1AFA57592583051500477DC2 /* CapslockTips.swift */,
+				1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */,
+				1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */,
 				1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */,
 				1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */,
 			);
