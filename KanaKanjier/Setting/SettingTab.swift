@@ -17,7 +17,6 @@ struct SettingTabView: View {
         NavigationView {
             Form {
                 Section(header: Text("キーボードの種類")){
-                    //KeyboardLayoutSettingItemView(Store.shared.keyboardTypeSetting, setTogether: true, id: 11)
                     NavigationLink(destination: KeyboardLayoutTypeDetailsView()){
                         HStack{
                             Text("キーボードの種類を設定する")
@@ -182,19 +181,6 @@ struct SettingTabView: View {
                             Spacer()
                         }
                     }
-                    /*
-                    HStack{
-                        Button{
-                            if let windowScene = UIApplication.shared.windows.first?.windowScene {
-                                SKStoreReviewController.requestReview(in: windowScene)
-                            }
-                        }label: {
-                            Text("レビューする")
-                        }
-
-                        Spacer()
-                    }.foregroundColor(.primary)
- */
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
                         .foregroundColor(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
@@ -214,7 +200,7 @@ struct SettingTabView: View {
                     HStack{
                         Text("URL Scheme")
                         Spacer()
-                        Text("azooKey://").font(Font.system(.body, design: .monospaced))
+                        Text("azooKey://").font(.system(.body, design: .monospaced))
                     }
                     HStack{
                         Text("バージョン")
