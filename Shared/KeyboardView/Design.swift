@@ -28,6 +28,7 @@ struct Design{
         SemiStaticStates.shared.screenWidth
     }
 
+    /*
     ///KeyViewのサイズを自動で計算して返す。
     var keyViewSize: CGSize {
         let interface = UIDevice.current.userInterfaceIdiom
@@ -51,6 +52,24 @@ struct Design{
             return CGSize(width: screenWidth/13, height: screenWidth/20)
         }
     }
+    */
+
+    var keyViewSize: CGSize {
+        let keyWidth: CGFloat
+        switch (layout, orientation){
+        case (.flick, .vertical):
+            keyWidth = screenWidth/5.6
+        case (.flick, .horizontal):
+            keyWidth = screenWidth/9
+        case (.qwerty, .vertical):
+            keyWidth = screenWidth/12.2
+        case (.qwerty, .horizontal):
+            keyWidth = screenWidth/13
+        }
+        let keysViewHeight = keyboardHeight - (resultViewHeight + 12)
+        let keyHeight = (keysViewHeight - CGFloat(verticalKeyCount-1) * verticalSpacing)/CGFloat(verticalKeyCount)
+        return CGSize(width: keyWidth, height: keyHeight)
+    }
 
     var keyboardWidth: CGFloat {
         self.keyViewSize.width * CGFloat(self.horizontalKeyCount) + self.horizontalSpacing * CGFloat(self.horizontalKeyCount - 1)
@@ -60,20 +79,26 @@ struct Design{
         return keyboardHeight + 2
     }
 
+    /*
     var keyboardHeight: CGFloat {
         let viewheight = self.keyViewSize.height * CGFloat(self.verticalKeyCount) + self.resultViewHeight
-        let vSpacing = self.verticalSpacing
-        switch layout{
-        case .flick:
-            //ビューの実装では、フリックでは縦に4列なので3つの縦スペーシング + 上下6pxのpadding
-            let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
-            return viewheight + spaceheight
-        case .qwerty:
-            //4つなので3つの縦スペーシング + 上下6pxのpadding
-            let spaceheight = vSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
-            return viewheight + spaceheight
-        }
+        let spaceheight = self.verticalSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
+        return viewheight + spaceheight
     }
+    */
+
+    var keyboardHeight: CGFloat {
+        switch (orientation, UIDevice.current.userInterfaceIdiom == .pad){
+        case (.vertical, false):
+            return 51/74 * screenWidth + 12
+        case (.horizontal, false):
+            return 17/56 * screenWidth + 12
+        case (.vertical, true):
+            return 15/31 * screenWidth + 12
+        case (.horizontal, true):
+            return 5/18 * screenWidth + 12
+        }
+     }
 
     var verticalKeyCount: Int {
         switch layout{
@@ -96,20 +121,24 @@ struct Design{
     var verticalSpacing: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
-            return horizontalSpacing
+            //return horizontalSpacing
+            return (screenWidth - screenWidth*CGFloat(self.horizontalKeyCount)/5.6) / 5
         case (.flick, .horizontal):
-            return horizontalSpacing / 2
+            //return horizontalSpacing / 2
+            return (screenWidth - screenWidth * 10 / 13) / 24 - 0.25
         case (.qwerty, .vertical):
-            return keyViewSize.width / 3
+            //return keyViewSize.width / 3
+            return screenWidth/36.6
         case (.qwerty, .horizontal):
-            return keyViewSize.width / 5
+            //return keyViewSize.width / 5
+            return screenWidth/65
         }
     }
 
     var horizontalSpacing: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
-            return (screenWidth - keyViewSize.width * 5) / 5
+            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount)) / 5
         case (.flick, .horizontal):
             return (screenWidth - screenWidth * 10 / 13) / 12 - 0.5
         case (.qwerty, .vertical):
@@ -121,17 +150,15 @@ struct Design{
     }
 
     var resultViewHeight: CGFloat {
-        switch orientation{
-        case .vertical:
-            if UIDevice.current.userInterfaceIdiom == .pad{
-                return screenWidth / 12
-            }
+        switch (orientation, UIDevice.current.userInterfaceIdiom == .pad){
+        case (.vertical, false):
             return screenWidth / 8
-        case .horizontal:
-            if UIDevice.current.userInterfaceIdiom == .pad{
-                return screenWidth / 22
-            }
+        case (.vertical, true):
+            return screenWidth / 12
+        case (.horizontal, false):
             return screenWidth / 18
+        case (.horizontal, true):
+            return screenWidth / 22
         }
     }
 
