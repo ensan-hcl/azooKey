@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-enum FlickDirection: CustomStringConvertible {
+enum FlickDirection: String, CustomStringConvertible, Codable {
     case left
     case top
     case right

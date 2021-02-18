@@ -1,5 +1,5 @@
 //
-//  QwertyKeyboard.swift
+//  QwertyAdditionalTabs.swift
 //  Keyboard
 //
 //  Created by β α on 2020/10/13.
