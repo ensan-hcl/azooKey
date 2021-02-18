@@ -157,12 +157,7 @@ struct VerticalCustomKeyboardView: View {
                 ForEach(0..<value.width, id: \.self){x in
                     ForEach(0..<value.height, id: \.self){y in
                         if let item = custard.interface.keys[.grid(GridCoordinator(x: x, y: y))]{
-                            switch custard.interface.key_style{
-                            case .flick:
-                                FlickKeyView(model: item.flickKeyModel, theme: theme)
-                            case .qwerty:
-                                QwertyKeyView(item.qwertyKeyModel, theme: theme)
-                            }
+                            QwertyKeyView(model: item.qwertyKeyModel, theme: theme)
                         }
                     }
                 }

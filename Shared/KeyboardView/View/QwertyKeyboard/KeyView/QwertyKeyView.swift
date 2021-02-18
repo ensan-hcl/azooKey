@@ -18,7 +18,7 @@ struct QwertyKeyView: View{
 
     private let theme: ThemeData
     
-    init(_ model: QwertyKeyModelProtocol, theme: ThemeData){
+    init(model: QwertyKeyModelProtocol, theme: ThemeData){
         self.model = model
         self.modelVariableSection = model.variableSection
         self.theme = theme

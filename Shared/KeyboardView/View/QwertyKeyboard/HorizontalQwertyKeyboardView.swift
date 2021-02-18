@@ -75,7 +75,7 @@ struct HorizontalQwertyKeyboardView: View{
             ForEach(self.verticalIndices, id: \.self){(v: Int) in
                 HStack(spacing: Design.shared.horizontalSpacing){
                     ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
-                        QwertyKeyView(self.keyModels[v][h], theme: theme)
+                        QwertyKeyView(model: self.keyModels[v][h], theme: theme)
                     }
                 }
             }
