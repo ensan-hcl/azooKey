@@ -13,6 +13,7 @@
 		1A12E24825C41A7100316009 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24725C41A7100316009 /* Message.swift */; };
 		1A12E25125C4428D00316009 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24725C41A7100316009 /* Message.swift */; };
 		1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E25725C4484200316009 /* DataUpdateView.swift */; };
+		1A18424325DD6857003985AB /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18424225DD6857003985AB /* FontPicker.swift */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
@@ -2488,6 +2489,7 @@
 		1A12E24125C3E1CA00316009 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		1A12E24725C41A7100316009 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		1A12E25725C4484200316009 /* DataUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUpdateView.swift; sourceTree = "<group>"; };
+		1A18424225DD6857003985AB /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
 		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
@@ -7612,6 +7614,7 @@
 				1AE1024A25D118ED00CA7277 /* ColorTools.swift */,
 				1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */,
 				1AE1023525D0C99200CA7277 /* PhotoPicker.swift */,
+				1A18424225DD6857003985AB /* FontPicker.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -10123,6 +10126,7 @@
 				1AC8A5B92595C10A00B71E5A /* StringInterpolation.swift in Sources */,
 				1AFA57602584810800477DC2 /* Focus.swift in Sources */,
 				1AF616BB256D40CB001A0B32 /* MemoryResetCondition.swift in Sources */,
+				1A18424325DD6857003985AB /* FontPicker.swift in Sources */,
 				1A9B0A2D25635090004203BB /* EmojiKaomojiView.swift in Sources */,
 				1AF6795925CEDB8E00F3987B /* HorizontalQwertyKeyboardView.swift in Sources */,
 				1AF6795625CEDB8E00F3987B /* QwertyKeyboard.swift in Sources */,

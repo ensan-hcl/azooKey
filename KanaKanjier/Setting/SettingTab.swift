@@ -221,7 +221,6 @@ struct SettingTabView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .font(.body)
     }
 }
 

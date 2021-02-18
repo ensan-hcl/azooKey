@@ -196,6 +196,7 @@ struct Design{
         }
 
         func resultViewFont(theme: ThemeData) -> Font {
+            //Font.custom("Mplus 1p Bold", size: resultViewFontSize).weight(theme.textFont.weight)
             Font.system(size: resultViewFontSize).weight(theme.textFont.weight)
         }
 

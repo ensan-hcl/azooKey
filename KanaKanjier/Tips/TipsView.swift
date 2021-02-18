@@ -88,7 +88,6 @@ struct TipsTabView: View {
                 .navigationBarTitle(Text("使い方"), displayMode: .large)
 
             }
-            .font(.body)
             .navigationViewStyle(StackNavigationViewStyle())
 
         }

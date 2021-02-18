@@ -110,7 +110,6 @@ struct ThemeTabView: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .font(.body)
         .onChange(of: storeVariableSection.japaneseKeyboardLayout){_ in
             SettingData.shared.reload() //設定をリロードする
             self.refresh.toggle()
