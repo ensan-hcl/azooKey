@@ -10,13 +10,15 @@ import Foundation
 import SwiftUI
 
 struct FlickEnterKeyModel: FlickKeyModelProtocol{
-    static var shared = FlickEnterKeyModel()
+    static var shared = FlickEnterKeyModel(keySizeType: .enter)
     var variableSection: KeyModelVariableSection = KeyModelVariableSection()
     let suggestModel: SuggestModel
+    let keySizeType: FlickKeySizeType
     let needSuggestView = false
     
-    init(){
-        self.suggestModel = SuggestModel([:], keyType: .enter)
+    init(keySizeType: FlickKeySizeType){
+        self.keySizeType = keySizeType
+        self.suggestModel = SuggestModel([:], keyType: keySizeType == .enter ? .enter : .normal)
     }
     
     var pressActions: [ActionType] {
@@ -37,8 +39,6 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
     var flickKeys: [FlickDirection: FlickedKeyModel] {
         return [:]
     }
-    
-    let keySizeType: FlickKeySizeType = .enter
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)

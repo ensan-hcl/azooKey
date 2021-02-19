@@ -44,8 +44,8 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         theme.specialKeyFillColor.color
     }
 
-    init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)){
-        self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
+    init(keySizeType: QwertyKeySizeType){
+        self.keySizeType = keySizeType
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {

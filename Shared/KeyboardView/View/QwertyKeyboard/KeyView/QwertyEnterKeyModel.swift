@@ -10,11 +10,13 @@ import Foundation
 import SwiftUI
 
 struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
-    init(){}
+    let keySizeType: QwertyKeySizeType
+    init(keySizeType: QwertyKeySizeType){
+        self.keySizeType = keySizeType
+    }
 
-    static var shared = QwertyEnterKeyModel()
+    static var shared = QwertyEnterKeyModel(keySizeType: .enter)
     var variableSection = QwertyKeyModelVariableSection()
-    let keySizeType: QwertyKeySizeType = .enter
     
     var variationsModel = VariationsModel([])
 

@@ -4928,8 +4928,8 @@
 				1A2602962514801F00EAD647 /* QwertyKeyModel.swift */,
 				1A2602C725148CDF00EAD647 /* QwertyFunctionalKeyModel.swift */,
 				1A2602B3251489E400EAD647 /* QwertySpaceKeyModel.swift */,
-				1AF28CF5253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift */,
 				1AD4DDD0258718F600A6FA18 /* QwertyChangeTabKeyModel.swift */,
+				1AF28CF5253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift */,
 				1A2602BD25148BB100EAD647 /* QwertyEnterKeyModel.swift */,
 				1AFA57532582EFAE00477DC2 /* QwertyAaKeyModel.swift */,
 			);

@@ -194,7 +194,7 @@ struct HorizontalQwertyDataProvider {
 
         [
             QwertyFunctionalKeyModel(labelType: .text("あいう"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.hira)]),
-            QwertyChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],
@@ -239,7 +239,7 @@ struct HorizontalQwertyDataProvider {
         ],
         [
             QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
-            QwertyChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],
@@ -284,7 +284,7 @@ struct HorizontalQwertyDataProvider {
         ],
         [
             QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
-            QwertyChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],
@@ -434,7 +434,7 @@ struct HorizontalQwertyDataProvider {
         ],
         [
             QwertyChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
-            QwertyChangeKeyboardKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
+            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],

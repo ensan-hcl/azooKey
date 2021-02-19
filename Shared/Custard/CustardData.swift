@@ -114,8 +114,18 @@ struct GridCoordinator: Codable, Hashable {
     }
 }
 
+struct ScrollCoordinator: Codable, Hashable {
+    let index: Int
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(index)
+    }
+}
+
+
 enum CustardKeyCoordinator: Codable, Hashable {
     case grid(GridCoordinator)
+    case scroll(ScrollCoordinator)
 }
 
 extension CustardKeyCoordinator {
@@ -124,12 +134,16 @@ extension CustardKeyCoordinator {
         case let .grid(value):
             hasher.combine(CodingKeys.grid)
             hasher.combine(value)
+        case let .scroll(value):
+            hasher.combine(CodingKeys.scroll)
+            hasher.combine(value)
         }
     }
 }
 extension CustardKeyCoordinator{
     enum CodingKeys: CodingKey{
         case grid
+        case scroll
     }
 
     func encode(to encoder: Encoder) throws {
@@ -137,6 +151,8 @@ extension CustardKeyCoordinator{
         switch self {
         case let .grid(value):
             try container.encode(value, forKey: .grid)
+        case let .scroll(value):
+            try container.encode(value, forKey: .scroll)
         }
     }
 
@@ -157,6 +173,12 @@ extension CustardKeyCoordinator{
                 forKey: .grid
             )
             self = .grid(value)
+        case .scroll:
+            let value = try container.decode(
+                ScrollCoordinator.self,
+                forKey: .scroll
+            )
+            self = .scroll(value)
         }
     }
 }
@@ -365,6 +387,7 @@ extension CustardKeyVariationType{
 
 enum CustardInterfaceSystemKey: String, Codable {
     case change_keyboard
+    case enter
 }
 
 enum CustardInterfaceKey: Codable {
@@ -434,53 +457,36 @@ struct CustardInterfaceVariationKey: Codable {
 }
 
 extension Custard{
-    static let mock = Custard(
+    static let mock_flick_grid = Custard(
         identifier: "my_custard",
         display_name: "マイカスタード",
         language: .japanese,
         input_style: .direct,
         interface: .init(
             key_style: .flick,
-            key_layout: .gridFit(.init(width: 2, height: 2)),
+            key_layout: .gridFit(.init(width: 3, height: 5)),
             keys: [
-                .grid(.init(x: 0, y: 0)): .custom(
-                    .init(
-                        label: .text("削除"),
-                        press_action: [.delete(1)],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
+                .grid(.init(x: 0, y: 0)): .system(.change_keyboard),
                 .grid(.init(x: 1, y: 0)): .custom(
                     .init(
-                        label: .text("入力"),
-                        press_action: [.input("あ")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
+                        label: .text("←"),
+                        press_action: [.moveCursor(-1)],
+                        longpress_action: [.moveCursor(-1)],
+                        variation: []
+                    )
+                ),
+                .grid(.init(x: 2, y: 0)): .custom(
+                    .init(
+                        label: .text("→"),
+                        press_action: [.moveCursor(1)],
+                        longpress_action: [.moveCursor(1)],
+                        variation: []
                     )
                 ),
                 .grid(.init(x: 0, y: 1)): .custom(
                     .init(
-                        label: .text("削除"),
-                        press_action: [.delete(1)],
+                        label: .text("①"),
+                        press_action: [.input("①")],
                         longpress_action: [],
                         variation: [
                             .init(
@@ -496,9 +502,154 @@ extension Custard{
                 ),
                 .grid(.init(x: 1, y: 1)): .custom(
                     .init(
-                        label: .text("削除"),
-                        press_action: [.delete(1)],
+                        label: .text("②"),
+                        press_action: [.input("②")],
                         longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 2, y: 1)): .custom(
+                    .init(
+                        label: .text("③"),
+                        press_action: [.input("③")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 0, y: 2)): .custom(
+                    .init(
+                        label: .text("④"),
+                        press_action: [.input("④")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 1, y: 2)): .custom(
+                    .init(
+                        label: .text("⑤"),
+                        press_action: [.input("⑤")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 2, y: 2)): .custom(
+                    .init(
+                        label: .text("⑥"),
+                        press_action: [.input("⑥")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 0, y: 3)): .custom(
+                    .init(
+                        label: .text("⑦"),
+                        press_action: [.input("⑦")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 1, y: 3)): .custom(
+                    .init(
+                        label: .text("⑧"),
+                        press_action: [.input("⑧")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 2, y: 3)): .custom(
+                    .init(
+                        label: .text("⑨"),
+                        press_action: [.input("⑨")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 0, y: 4)): .custom(
+                    .init(
+                        label: .text("空白"),
+                        press_action: [.input(" ")],
+                        longpress_action: [.toggleCursorMovingView],
+                        variation: []
+                    )
+                ),
+                .grid(.init(x: 1, y: 4)): .system(.enter),
+                .grid(.init(x: 2, y: 4)): .custom(
+                    .init(
+                        label: .systemImage("delete.left"),
+                        press_action: [.delete(1)],
+                        longpress_action: [.delete(1)],
                         variation: [
                             .init(
                                 type: .flick(.left),
@@ -514,4 +665,214 @@ extension Custard{
             ]
         )
     )
+
+    static let mock_qwerty_grid = Custard(
+        identifier: "my_custard_qwerty",
+        display_name: "マイカスタード_qwerty",
+        language: .japanese,
+        input_style: .direct,
+        interface: .init(
+            key_style: .qwerty,
+            key_layout: .gridFit(.init(width: 3, height: 5)),
+            keys: [
+                .grid(.init(x: 0, y: 0)): .system(.change_keyboard),
+                .grid(.init(x: 1, y: 0)): .custom(
+                    .init(
+                        label: .text("←"),
+                        press_action: [.moveCursor(-1)],
+                        longpress_action: [.moveCursor(-1)],
+                        variation: []
+                    )
+                ),
+                .grid(.init(x: 2, y: 0)): .custom(
+                    .init(
+                        label: .text("→"),
+                        press_action: [.moveCursor(1)],
+                        longpress_action: [.moveCursor(1)],
+                        variation: []
+                    )
+                ),
+                .grid(.init(x: 0, y: 1)): .custom(
+                    .init(
+                        label: .text("①"),
+                        press_action: [.input("①")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .variations,
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 1, y: 1)): .custom(
+                    .init(
+                        label: .text("②"),
+                        press_action: [.input("②")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .variations,
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 2, y: 1)): .custom(
+                    .init(
+                        label: .text("③"),
+                        press_action: [.input("③")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .variations,
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 0, y: 2)): .custom(
+                    .init(
+                        label: .text("④"),
+                        press_action: [.input("④")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .variations,
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 1, y: 2)): .custom(
+                    .init(
+                        label: .text("⑤"),
+                        press_action: [.input("⑤")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .variations,
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 2, y: 2)): .custom(
+                    .init(
+                        label: .text("⑥"),
+                        press_action: [.input("⑥")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 0, y: 3)): .custom(
+                    .init(
+                        label: .text("⑦"),
+                        press_action: [.input("⑦")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 1, y: 3)): .custom(
+                    .init(
+                        label: .text("⑧"),
+                        press_action: [.input("⑧")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 2, y: 3)): .custom(
+                    .init(
+                        label: .text("⑨"),
+                        press_action: [.input("⑨")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .grid(.init(x: 0, y: 4)): .custom(
+                    .init(
+                        label: .text("空白"),
+                        press_action: [.input(" ")],
+                        longpress_action: [.toggleCursorMovingView],
+                        variation: []
+                    )
+                ),
+                .grid(.init(x: 1, y: 4)): .system(.enter),
+                .grid(.init(x: 2, y: 4)): .custom(
+                    .init(
+                        label: .systemImage("delete.left"),
+                        press_action: [.delete(1)],
+                        longpress_action: [.delete(1)],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                )
+            ]
+        )
+    )
+
 }

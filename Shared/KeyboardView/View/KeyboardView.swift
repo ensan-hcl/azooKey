@@ -48,6 +48,8 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                     ResultView(model: resultModel, theme: theme, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if variableStates.refreshing{
+                        CustomKeyboardView(theme: theme)
+                        /*
                         switch (variableStates.keyboardOrientation, variableStates.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(theme: theme)
@@ -58,7 +60,10 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                         case (.horizontal, .qwerty):
                             HorizontalQwertyKeyboardView(theme: theme)
                         }
+ */
                     }else{
+                        CustomKeyboardView(theme: theme)
+                        /*
                         switch (variableStates.keyboardOrientation, variableStates.keyboardLayout){
                         case (.vertical, .flick):
                             VerticalFlickKeyboardView(theme: theme)
@@ -69,6 +74,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                         case (.horizontal, .qwerty):
                             HorizontalQwertyKeyboardView(theme: theme)
                         }
+ */
                     }
                 }.padding(.bottom, 2)
             }
