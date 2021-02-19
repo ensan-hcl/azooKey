@@ -133,6 +133,7 @@ struct Design{
         keyboardHeight + 2
     }
 
+    ///screenWidthに依存して決定する
     var keyboardHeight: CGFloat {
         switch (orientation, UIDevice.current.userInterfaceIdiom == .pad){
         case (.vertical, false):
@@ -146,6 +147,7 @@ struct Design{
         }
      }
 
+    ///screenWidthに依存して決定する
     var resultViewHeight: CGFloat {
         switch (orientation, UIDevice.current.userInterfaceIdiom == .pad){
         case (.vertical, false):
