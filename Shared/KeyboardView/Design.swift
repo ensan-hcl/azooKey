@@ -69,7 +69,7 @@ struct Design{
         }
     }
     */
-    
+
     ///This property calculate suitable width for normal keyView.
     var keyViewWidth: CGFloat {
         let coefficient: CGFloat
@@ -102,7 +102,7 @@ struct Design{
     }
 
     var keyboardScreenHeight: CGFloat {
-        return keyboardHeight + 2
+        keyboardHeight + 2
     }
 
     /*
@@ -150,8 +150,8 @@ struct Design{
             //return horizontalSpacing
             return screenWidth*3/140
         case (.flick, .horizontal):
-            //return horizontalSpacing / 2
-            return screenWidth/104 - 0.25
+            //return horizontalSpacing / 2の近似値
+            return screenWidth/107
         case (.qwerty, .vertical):
             //return keyViewSize.width / 3
             return screenWidth/36.6
@@ -206,8 +206,8 @@ struct Design{
             //理想値は(screenWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1)
             //実際にはこの値はscreenWidth*3/(13*(horizontalKeyCount-1))
             //hkc=10でこの値はscreenWidth/39
-            //一方元の値は(screenWidth-keyViewWidth*10/13))/11=screenWidth*3/143
-            //そこで9/11を係数とする。
+            //一方元の値は(screenWidth-keyViewWidth*10/13))/10=screenWidth*3/130
+            //そこで9/10を係数とする。
             coefficient = 9/10
         }
         return (screenWidth - keyViewWidth * CGFloat(horizontalKeyCount)) / CGFloat(horizontalKeyCount-1) * coefficient
