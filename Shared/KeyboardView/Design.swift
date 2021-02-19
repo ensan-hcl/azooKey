@@ -54,25 +54,31 @@ struct Design{
     }
     */
 
-    var keyViewSize: CGSize {
-        let keyWidth: CGFloat
+    var keyViewWidth: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
-            keyWidth = screenWidth/5.6
+            return screenWidth/5.6
         case (.flick, .horizontal):
-            keyWidth = screenWidth/9
+            return screenWidth/9
         case (.qwerty, .vertical):
-            keyWidth = screenWidth/12.2
+            return screenWidth/12.2
         case (.qwerty, .horizontal):
-            keyWidth = screenWidth/13
+            return screenWidth/13
         }
+    }
+
+    var keyViewHeight: CGFloat {
         let keysViewHeight = keyboardHeight - (resultViewHeight + 12)
         let keyHeight = (keysViewHeight - CGFloat(verticalKeyCount-1) * verticalSpacing)/CGFloat(verticalKeyCount)
-        return CGSize(width: keyWidth, height: keyHeight)
+        return keyHeight
+    }
+
+    var keyViewSize: CGSize {
+        CGSize(width: keyViewWidth, height: keyViewHeight)
     }
 
     var keyboardWidth: CGFloat {
-        self.keyViewSize.width * CGFloat(self.horizontalKeyCount) + self.horizontalSpacing * CGFloat(self.horizontalKeyCount - 1)
+        self.keyViewWidth * CGFloat(self.horizontalKeyCount) + self.horizontalSpacing * CGFloat(self.horizontalKeyCount - 1)
     }
 
     var keyboardScreenHeight: CGFloat {
@@ -138,14 +144,15 @@ struct Design{
     var horizontalSpacing: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
-            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount)) / 5
+            //スクリーンの幅 - (キーの幅 * 個数) を(隙間の数+1)で割る
+            return (screenWidth - keyViewWidth * CGFloat(self.horizontalKeyCount)) / 5
         case (.flick, .horizontal):
             return (screenWidth - screenWidth * 10 / 13) / 12 - 0.5
         case (.qwerty, .vertical):
             //9だとself.horizontalKeyCount-1で画面ぴったりになるが、それだとあまりにピシピシなので0.5を加えて調整する。
-            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount)) / (9 + 0.5)
+            return (screenWidth - keyViewWidth * CGFloat(self.horizontalKeyCount)) / (9 + 0.5)
         case (.qwerty, .horizontal):
-            return (screenWidth - keyViewSize.width * CGFloat(self.horizontalKeyCount)) / 10
+            return (screenWidth - keyViewWidth * CGFloat(self.horizontalKeyCount)) / 10
         }
     }
 
@@ -163,20 +170,19 @@ struct Design{
     }
 
     var flickEnterKeySize: CGSize {
-        let size = keyViewSize
-        return CGSize(width: size.width, height: size.height * 2 + verticalSpacing)
+        CGSize(width: keyViewWidth, height: keyViewHeight * 2 + verticalSpacing)
     }
 
     var qwertySpaceKeyWidth: CGFloat {
-        keyViewSize.width * 5
+        keyViewWidth * 5
     }
 
     var qwertyEnterKeyWidth: CGFloat {
-        keyViewSize.width * 3
+        keyViewWidth * 3
     }
 
     func qwertyScaledKeyWidth(normal: Int, for count: Int) -> CGFloat {
-        let width = keyViewSize.width * CGFloat(normal) + horizontalSpacing * CGFloat(normal - 1)
+        let width = keyViewWidth * CGFloat(normal) + horizontalSpacing * CGFloat(normal - 1)
         let spacing = horizontalSpacing * CGFloat(count - 1)
         return (width - spacing) / CGFloat(count)
     }
@@ -184,7 +190,7 @@ struct Design{
     func qwertyFunctionalKeyWidth(normal: Int, functional: Int, enter: Int = 0, space: Int = 0) -> CGFloat {
         let maxWidth = keyboardWidth
         let spacing = horizontalSpacing * CGFloat(normal + functional + space + enter - 1)
-        let normalKeyWidth = keyViewSize.width * CGFloat(normal)
+        let normalKeyWidth = keyViewWidth * CGFloat(normal)
         let spaceKeyWidth = qwertySpaceKeyWidth * CGFloat(space)
         let enterKeyWidth = qwertyEnterKeyWidth * CGFloat(enter)
         return (maxWidth - (spacing + normalKeyWidth + spaceKeyWidth + enterKeyWidth)) / CGFloat(functional)
@@ -193,7 +199,7 @@ struct Design{
     func getMaximumTextSize(_ text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 10)
         let size = text.size(withAttributes: [.font: font])
-        return (self.keyboardHeight - self.keyViewSize.height * 1.2) / size.height * 10
+        return (self.keyboardHeight - self.keyViewHeight * 1.2) / size.height * 10
     }
 
     enum Fonts{
