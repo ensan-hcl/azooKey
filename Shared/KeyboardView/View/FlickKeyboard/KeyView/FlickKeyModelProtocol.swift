@@ -23,18 +23,36 @@ enum FlickKeyColorType{
     }
 }
 
+enum FlickKeySizeType{
+    case normal
+    case enter
+
+    func width(design: Design) -> CGFloat {
+        return design.keyViewWidth
+    }
+
+    func height(design: Design) -> CGFloat {
+        switch self{
+        case .normal:
+            return design.keyViewHeight
+        case .enter:
+            return design.flickEnterKeySize.height
+        }
+    }
+}
+
 protocol FlickKeyModelProtocol {
     var suggestModel: SuggestModel {get}
     var pressActions: [ActionType] {get}
     var longPressActions: [KeyLongPressActionType] {get}
     var flickKeys: [FlickDirection: FlickedKeyModel] {get}
-    var keySize: CGSize {get}
+    var keySizeType: FlickKeySizeType {get}
     var needSuggestView: Bool {get}
     
     var variableSection: KeyModelVariableSection {get set}
 
     //描画に関わるものは変数としてVariableStatesを受け取る。こうすることでVariableStatesの更新に合わせて変更されるようになる。
-    func label(states: VariableStates, theme: ThemeData) -> KeyLabel
+    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 
@@ -92,8 +110,8 @@ extension FlickKeyModelProtocol{
         self.suggestModel.setSuggestState(type)
     }
     
-    var keySize: CGSize {
-        return Design.shared.keyViewSize
+    var keySizeType: FlickKeySizeType {
+        .normal
     }
     
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {

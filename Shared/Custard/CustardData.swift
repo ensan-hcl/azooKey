@@ -40,7 +40,9 @@ enum CustardInterfaceLayout: Codable {
 }
 
 struct CustardInterfaceLayoutGridValue: Codable {
+    ///横方向に配置するキーの数。3以上を推奨。
     let width: Int
+    ///縦方向に配置するキーの数。4以上を推奨。
     let height: Int
 }
 
@@ -49,6 +51,8 @@ struct CustardInterfaceLayoutScrollValue: Codable {
     let direction: ScrollDirection
     ///一列に配置するキーの数
     let columnKeyCount: Int
+    ///画面内に収まるスクロール方向のキーの数
+    let screenRowKeyCount: Double
 
     enum ScrollDirection: String, Codable{
         case vertical

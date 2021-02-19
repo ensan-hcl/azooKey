@@ -37,8 +37,8 @@ struct FlickKeyModel: FlickKeyModelProtocol{
         keycolorType.color(theme: theme)
     }
 
-    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
-        KeyLabel(self.labelType, width: keySize.width, theme: theme)
+    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+        KeyLabel(self.labelType, width: width, theme: theme)
     }
 
     func sound(){

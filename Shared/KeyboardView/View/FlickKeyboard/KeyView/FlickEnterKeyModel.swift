@@ -38,13 +38,11 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
         return [:]
     }
     
-    var keySize: CGSize {
-        return Design.shared.flickEnterKeySize
-    }
+    let keySizeType: FlickKeySizeType = .enter
 
-    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
-        return KeyLabel(.text(text), width: keySize.width, theme: theme)
+        return KeyLabel(.text(text), width: width, theme: theme)
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {

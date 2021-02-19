@@ -211,9 +211,10 @@ struct FlickKeyView: View {
     }
 
     var body: some View {
-        RoundedBorderedRectangle(cornerRadius: 5.0, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
-            .frame(width: model.keySize.width, height: model.keySize.height)
+        let keySize = (width: model.keySizeType.width(design: Design.shared), height: model.keySizeType.height(design: Design.shared))
+        return RoundedBorderedRectangle(cornerRadius: 5.0, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
+            .frame(width: keySize.width, height: keySize.height)
             .gesture(gesture)
-            .overlay(model.label(states: variableStates, theme: theme))
+            .overlay(model.label(width: keySize.width, states: variableStates, theme: theme))
     }
 }

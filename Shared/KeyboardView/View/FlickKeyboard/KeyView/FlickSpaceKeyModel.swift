@@ -39,8 +39,8 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol{
         )
     ]
 
-    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
-        KeyLabel(.text("空白"), width: keySize.width, theme: theme)
+    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+        KeyLabel(.text("空白"), width: width, theme: theme)
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {

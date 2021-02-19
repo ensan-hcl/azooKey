@@ -40,8 +40,8 @@ struct TabKeyModel: FlickKeyModelProtocol{
         self.suggestModel = SuggestModel(flickKeys)
     }
 
-    func label(states: VariableStates, theme: ThemeData) -> KeyLabel {
-        KeyLabel(self.labelType, width: keySize.width, theme: theme)
+    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+        KeyLabel(self.labelType, width: width, theme: theme)
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
