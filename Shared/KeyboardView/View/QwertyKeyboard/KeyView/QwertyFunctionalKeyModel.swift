@@ -19,15 +19,8 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
 
     let labelType: KeyLabelType
     let needSuggestView: Bool
-    private let rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)
-    
-    var keySize: CGSize {
-        CGSize(
-            width: Design.shared.qwertyFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
-            height: Design.shared.keyViewHeight
-        )
-    }
-    
+    let keySizeType: QwertyKeySizeType
+
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
         theme.specialKeyFillColor.color
     }
@@ -37,11 +30,11 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
         self.pressActions = pressActions
         self.longPressActions = longPressActions
         self.needSuggestView = needSuggestView
-        self.rowInfo = rowInfo
+        self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
     }
 
-    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
-        KeyLabel(self.labelType, width: self.keySize.width, theme: theme, textColor: color)
+    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+        KeyLabel(self.labelType, width: width, theme: theme, textColor: color)
     }
 
     func sound() {

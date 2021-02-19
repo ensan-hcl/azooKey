@@ -14,9 +14,8 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
 
     static var shared = QwertyEnterKeyModel()
     var variableSection = QwertyKeyModelVariableSection()
-    var keySize: CGSize {
-        return CGSize(width: Design.shared.qwertyEnterKeyWidth, height: Design.shared.keyViewHeight)
-    }
+    let keySizeType: QwertyKeySizeType = .enter
+    
     var variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
@@ -36,9 +35,9 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
         return []
     }
     
-    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
-        return KeyLabel(.text(text), width: self.keySize.width, theme: theme, textSize: .small, textColor: color)
+        return KeyLabel(.text(text), width: width, theme: theme, textSize: .small, textColor: color)
     }
     
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {

@@ -19,26 +19,22 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     let needSuggestView: Bool
     let variationsModel: VariationsModel
 
-    private let scale: (normalCount: Int, forCount: Int)
-    
-    var keySize: CGSize {
-        CGSize(width: Design.shared.qwertyScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewHeight)
-    }
+    let keySizeType: QwertyKeySizeType
 
     init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], variationsModel: VariationsModel = VariationsModel([]),  needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions
         self.needSuggestView = needSuggestView
-        self.scale = scale
         self.variationsModel = variationsModel
+        self.keySizeType = .normal(of: scale.normalCount, for: scale.forCount)
     }
 
-    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         if states.aAKeyState == .capslock, states.tabState == .abc, case let .text(text) = self.labelType{
-            return KeyLabel(.text(text.uppercased()), width: keySize.width, theme: theme, textColor: color)
+            return KeyLabel(.text(text.uppercased()), width: width, theme: theme, textColor: color)
         }
-        return KeyLabel(self.labelType, width: keySize.width, theme: theme, textColor: color)
+        return KeyLabel(self.labelType, width: width, theme: theme, textColor: color)
     }
 
     func sound(){

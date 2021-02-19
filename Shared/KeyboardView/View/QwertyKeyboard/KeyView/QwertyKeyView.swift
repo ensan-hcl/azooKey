@@ -97,23 +97,24 @@ struct QwertyKeyView: View{
     }
 
     var body: some View {
+        let keySize = CGSize(width: model.keySizeType.width(design: .shared), height: model.keySizeType.height(design: .shared))
         ZStack(alignment: .bottom){
             Group{
                 RoundedBorderedRectangle(cornerRadius: 6, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
-                    .frame(width: self.model.keySize.width, height: self.model.keySize.height)
+                    .frame(width: keySize.width, height: keySize.height)
                     .contentShape(
                         Rectangle()
-                            .size(CGSize(width: self.model.keySize.width + Design.shared.horizontalSpacing, height: self.model.keySize.height + Design.shared.verticalSpacing))
+                            .size(CGSize(width: keySize.width + Design.shared.horizontalSpacing, height: keySize.height + Design.shared.verticalSpacing))
                     )
                     .gesture(gesture)
-                    .overlay(self.model.label(states: variableStates, color: nil, theme: theme))
+                    .overlay(self.model.label(width: keySize.width, states: variableStates, color: nil, theme: theme))
             }
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
-                    let height = Design.shared.verticalSpacing + self.model.keySize.height
+                    let height = Design.shared.verticalSpacing + keySize.height
                     if self.modelVariableSection.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty{
                         QwertySuggestView.scaleToVariationsSize(
-                            keyWidth: self.model.keySize.width,
+                            keyWidth: keySize.width,
                             scale_y: 1,
                             variationsCount: self.model.variationsModel.variations.count,
                             color: suggestColor,
@@ -127,12 +128,12 @@ struct QwertyKeyView: View{
                         )
                     }else{
                         QwertySuggestView.scaleToFrameSize(
-                            keyWidth: self.model.keySize.width,
+                            keyWidth: keySize.width,
                             scale_y: 1,
                             color: suggestColor
                         )
                         .overlay(
-                            self.model.label(states: variableStates, color: suggestTextColor, theme: theme)
+                            self.model.label(width: keySize.width, states: variableStates, color: suggestTextColor, theme: theme)
                                 .padding(.bottom, height)
                         )
                     }

@@ -12,14 +12,10 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
     static var shared = QwertyAaKeyModel()
 
     var variableSection = QwertyKeyModelVariableSection()
-    var keySize: CGSize {
-        CGSize(width: Design.shared.qwertyScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewHeight)
-    }
+    let keySizeType: QwertyKeySizeType = .normal(of: 1, for: 1)
     var variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
-
-    private let scale: (normalCount: Int, forCount: Int) = (1, 1)
 
     var pressActions: [ActionType] {
         switch VariableStates.shared.aAKeyState{
@@ -39,12 +35,12 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
         }
     }
 
-    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         switch states.aAKeyState{
         case .normal:
-            return KeyLabel(.image("textformat.alt"), width: keySize.width, theme: theme, textColor: color)
+            return KeyLabel(.image("textformat.alt"), width: width, theme: theme, textColor: color)
         case .capslock:
-            return KeyLabel(.image("capslock.fill"), width: keySize.width, theme: theme, textColor: color)
+            return KeyLabel(.image("capslock.fill"), width: width, theme: theme, textColor: color)
         }
     }
 

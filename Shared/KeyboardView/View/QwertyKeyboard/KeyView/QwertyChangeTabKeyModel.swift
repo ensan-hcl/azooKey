@@ -32,34 +32,28 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
     let variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
-    private let rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)
 
-    var keySize: CGSize {
-        return CGSize(
-            width: Design.shared.qwertyFunctionalKeyWidth(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space),
-            height: Design.shared.keyViewHeight
-        )
-    }
+    let keySizeType: QwertyKeySizeType
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
         theme.specialKeyFillColor.color
     }
 
     init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)){
-        self.rowInfo = rowInfo
+        self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
     }
 
-    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch states.keyboardLanguage{
             case .japanese:
-                return KeyLabel(.text("あ"), width: self.keySize.width, theme: theme, textColor: color)
+                return KeyLabel(.text("あ"), width: width, theme: theme, textColor: color)
             case .english:
-                return KeyLabel(.text("A"), width: self.keySize.width, theme: theme, textColor: color)
+                return KeyLabel(.text("A"), width: width, theme: theme, textColor: color)
             }
         case false:
-            return KeyLabel(.text("あ"), width: self.keySize.width, theme: theme, textColor: color)
+            return KeyLabel(.text("あ"), width: width, theme: theme, textColor: color)
         }
     }
 

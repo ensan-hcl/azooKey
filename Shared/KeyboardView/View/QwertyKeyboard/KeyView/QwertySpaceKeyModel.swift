@@ -17,13 +17,10 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
 
     let needSuggestView: Bool = false
     let variationsModel = VariationsModel([])
-    var keySize: CGSize {
-        return CGSize(width: Design.shared.qwertySpaceKeyWidth, height: Design.shared.keyViewHeight)
-    }
+    let keySizeType: QwertyKeySizeType = .space
     init(){}
 
-    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
-        let width = self.keySize.width
+    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
         switch states.keyboardLanguage{
         case .english:
             return KeyLabel(.text("space"), width: width, theme: theme, textSize: .small, textColor: color)

@@ -9,17 +9,42 @@
 import Foundation
 import SwiftUI
 
+enum QwertyKeySizeType{
+    case normal(of: Int, for: Int)
+    case functional(normal: Int, functional: Int, enter: Int, space: Int)
+    case enter
+    case space
+
+    func width(design: Design) -> CGFloat {
+        switch self{
+        case let .normal(of: normalCount, for: keyCount):
+            return design.qwertyScaledKeyWidth(normal: normalCount, for: keyCount)
+        case let .functional(normal: normal, functional: functional, enter: enter, space: space):
+            return design.qwertyFunctionalKeyWidth(normal: normal, functional: functional, enter: enter, space: space)
+        case .enter:
+            return design.qwertyEnterKeyWidth
+        case .space:
+            return design.qwertySpaceKeyWidth
+        }
+    }
+
+    func height(design: Design) -> CGFloat {
+        design.keyViewHeight
+    }
+
+}
+
 protocol QwertyKeyModelProtocol{
     var pressActions: [ActionType] {get}
     var longPressActions: [KeyLongPressActionType] {get}
-    var keySize: CGSize {get}
+    var keySizeType: QwertyKeySizeType {get}
     var needSuggestView: Bool {get}
     
     var variableSection: QwertyKeyModelVariableSection {get set}
     
     var variationsModel: VariationsModel {get}
 
-    func label(states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel
+    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 
