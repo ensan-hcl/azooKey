@@ -22,7 +22,7 @@ struct MessageView: View {
             Color.black.opacity(0.5)
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.white)
-                .frame(width: Design.shared.keyboardWidth*0.8, height: Design.shared.keyboardHeight*0.8)
+                .frame(width: Design.shared.screenWidth*0.8, height: Design.shared.keyboardHeight*0.8)
                 .overlay(VStack{
                     Text(data.title)
                         .font(.title)

@@ -165,7 +165,7 @@ struct ThemeEditView: View {
                             uiImage: image,
                             resultImage: $trimmedImage,
                             maxSize: CGSize(width: 1280, height: 720),
-                            aspectRatio: CGSize(width: Design.shared.keyboardWidth, height: Design.shared.keyboardScreenHeight)
+                            aspectRatio: CGSize(width: Design.shared.screenWidth, height: Design.shared.keyboardScreenHeight)
                         )}
                 }, isActive: $isTrimmingViewPresented){
                     EmptyView()
