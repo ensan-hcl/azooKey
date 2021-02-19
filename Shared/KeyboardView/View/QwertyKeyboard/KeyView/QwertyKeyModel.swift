@@ -22,7 +22,7 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     private let scale: (normalCount: Int, forCount: Int)
     
     var keySize: CGSize {
-        CGSize(width: Design.shared.qwertyScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewSize.height)
+        CGSize(width: Design.shared.qwertyScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewHeight)
     }
 
     init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], variationsModel: VariationsModel = VariationsModel([]),  needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){

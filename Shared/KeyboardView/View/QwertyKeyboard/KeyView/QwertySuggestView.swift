@@ -84,11 +84,11 @@ struct QwertySuggestView{
             )
         }
         .offsetBy(dx:-175/2 + width/2, dy: 0 )
-        .scale(x: width/109, y: (Design.shared.keyViewSize.height*2+Design.shared.verticalSpacing)/281, anchor: .top)
+        .scale(x: width/109, y: (Design.shared.keyViewHeight*2+Design.shared.verticalSpacing)/281, anchor: .top)
     }
     
     static func scaleToFrameSize(keyWidth: CGFloat, scale_y: CGFloat, color: Color) -> some View {
-        let height = (Design.shared.keyViewSize.height*2 + Design.shared.verticalSpacing) * scale_y
+        let height = (Design.shared.keyViewHeight*2 + Design.shared.verticalSpacing) * scale_y
         return expandedPath(rdw: 0, ldw: 0, width: keyWidth).fill(color).frame(width: keyWidth, height: height)
     }
 

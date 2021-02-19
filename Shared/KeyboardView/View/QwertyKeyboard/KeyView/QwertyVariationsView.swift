@@ -29,7 +29,7 @@ struct QwertyVariationsView: View {
                 ZStack{
                     Rectangle()
                         .foregroundColor(index == self.modelVariableSection.selection ? Color.blue:suggestColor)
-                        .frame(width: Design.shared.keyViewSize.width, height: Design.shared.keyViewSize.height*0.9, alignment: .center)
+                        .frame(width: Design.shared.keyViewWidth, height: Design.shared.keyViewHeight*0.9, alignment: .center)
                         .cornerRadius(10.0)
                     getLabel(model.variations[index].label)
                 }
@@ -39,7 +39,7 @@ struct QwertyVariationsView: View {
     }
     
     private func getLabel(_ labelType: KeyLabelType) -> KeyLabel {
-        let width = Design.shared.keyViewSize.width
+        let width = Design.shared.keyViewWidth
         if theme != .default{
             return KeyLabel(labelType, width: width, theme: theme, textColor: .black)
         }

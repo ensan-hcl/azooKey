@@ -54,6 +54,7 @@ struct Design{
     }
     */
 
+    ///This property calculate suitable width for normal keyView.
     var keyViewWidth: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
@@ -67,12 +68,14 @@ struct Design{
         }
     }
 
+    ///This property calculate suitable height for normal keyView.
     var keyViewHeight: CGFloat {
         let keysViewHeight = keyboardHeight - (resultViewHeight + 12)
         let keyHeight = (keysViewHeight - CGFloat(verticalKeyCount-1) * verticalSpacing)/CGFloat(verticalKeyCount)
         return keyHeight
     }
 
+    ///This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
     var keyViewSize: CGSize {
         CGSize(width: keyViewWidth, height: keyViewHeight)
     }

@@ -13,7 +13,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
 
     var variableSection = QwertyKeyModelVariableSection()
     var keySize: CGSize {
-        CGSize(width: Design.shared.qwertyScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewSize.height)
+        CGSize(width: Design.shared.qwertyScaledKeyWidth(normal: scale.normalCount, for: scale.forCount), height: Design.shared.keyViewHeight)
     }
     var variationsModel = VariationsModel([])
 

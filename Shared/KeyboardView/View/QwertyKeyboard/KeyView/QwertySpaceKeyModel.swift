@@ -18,7 +18,7 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
     let needSuggestView: Bool = false
     let variationsModel = VariationsModel([])
     var keySize: CGSize {
-        return CGSize(width: Design.shared.qwertySpaceKeyWidth, height: Design.shared.keyViewSize.height)
+        return CGSize(width: Design.shared.qwertySpaceKeyWidth, height: Design.shared.keyViewHeight)
     }
     init(){}
 

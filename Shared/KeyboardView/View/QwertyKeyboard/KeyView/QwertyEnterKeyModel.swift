@@ -15,7 +15,7 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
     static var shared = QwertyEnterKeyModel()
     var variableSection = QwertyKeyModelVariableSection()
     var keySize: CGSize {
-        return CGSize(width: Design.shared.qwertyEnterKeyWidth, height: Design.shared.keyViewSize.height)
+        return CGSize(width: Design.shared.qwertyEnterKeyWidth, height: Design.shared.keyViewHeight)
     }
     var variationsModel = VariationsModel([])
 
