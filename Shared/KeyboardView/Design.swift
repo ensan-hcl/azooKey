@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 
+///タブに依存するデザイン上の数値を計算するクラス
 final class TabDependentDesign{
     private let horizontalKeyCount: Int
     private let verticalKeyCount: Int
@@ -56,16 +57,12 @@ final class TabDependentDesign{
     var verticalSpacing: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
-            //return horizontalSpacing
             return screenWidth*3/140
         case (.flick, .horizontal):
-            //return horizontalSpacing / 2の近似値
             return screenWidth/107
         case (.qwerty, .vertical):
-            //return keyViewSize.width / 3
             return screenWidth/36.6
         case (.qwerty, .horizontal):
-            //return keyViewSize.width / 5
             return screenWidth/65
         }
     }
@@ -131,60 +128,10 @@ struct Design{
         SemiStaticStates.shared.screenWidth
     }
 
-    /*
-    ///KeyViewのサイズを自動で計算して返す。
-    var keyViewSize: CGSize {
-        let interface = UIDevice.current.userInterfaceIdiom
-        switch (layout, orientation){
-        case (.flick, .vertical):
-            if interface == .pad{
-                return CGSize(width: screenWidth/5.6, height: screenWidth/12)
-            }
-            return CGSize(width: screenWidth/5.6, height: screenWidth/8)
-        case (.flick, .horizontal):
-            if interface == .pad{
-                return CGSize(width: screenWidth/9, height: screenWidth/22)
-            }
-            return CGSize(width: screenWidth/9, height: screenWidth/18)
-        case (.qwerty, .vertical):
-            if interface == .pad{
-                return CGSize(width: screenWidth/12.2, height: screenWidth/12)
-            }
-            return CGSize(width: screenWidth/12.2, height: screenWidth/8.3)
-        case (.qwerty, .horizontal):
-            return CGSize(width: screenWidth/13, height: screenWidth/20)
-        }
-    }
-    */
-
-    /*
-    ///This property calculate suitable width for normal keyView.
-    var keyViewWidth2: CGFloat {
-        switch (layout, orientation){
-        case (.flick, .vertical):
-            return screenWidth/5.6
-        case (.flick, .horizontal):
-            return screenWidth/9
-        case (.qwerty, .vertical):
-            return screenWidth/12.2
-        case (.qwerty, .horizontal):
-            return screenWidth/13
-        }
-    }
-    */
-
     ///This property calculate suitable width for normal keyView.
     var keyboardScreenHeight: CGFloat {
         keyboardHeight + 2
     }
-
-    /*
-    var keyboardHeight: CGFloat {
-        let viewheight = self.keyViewSize.height * CGFloat(self.verticalKeyCount) + self.resultViewHeight
-        let spaceheight = self.verticalSpacing * CGFloat(self.verticalKeyCount - 1) + 12.0
-        return viewheight + spaceheight
-    }
-    */
 
     var keyboardHeight: CGFloat {
         switch (orientation, UIDevice.current.userInterfaceIdiom == .pad){
