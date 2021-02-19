@@ -44,16 +44,14 @@ struct SuggestModel{
         self.variableSection.suggestState = state
     }
     
-    var keySize: CGSize {
+    var keySizeType: FlickKeySizeType {
         switch self.keyType{
         case .normal, .kogaki, .kanaSymbols, .aA:
-            return Design.shared.keyViewSize
+            return .normal
         case .enter:
-            return Design.shared.flickEnterKeySize
+            return .enter
         }
     }
-
-
 }
 
 final class SuggestModelVariableSection: ObservableObject{

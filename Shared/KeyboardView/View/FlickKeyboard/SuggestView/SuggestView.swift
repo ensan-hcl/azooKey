@@ -34,21 +34,22 @@ struct SuggestView: View {
     }
      
     private func neededApeearView(direction: FlickDirection) -> some View {
+        let keySize = CGSize(width: model.keySizeType.width(design: Design.shared), height:model.keySizeType.height(design: Design.shared))
         if case .oneDirection(direction) = self.modelVariableSection.suggestState{
             if let model = self.model.flickModels[direction]{
-                return model.getSuggestView(size: self.model.keySize, isPointed: true, theme: theme)
+                return model.getSuggestView(size: keySize, isPointed: true, theme: theme)
             }else{
-                return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true, theme: theme)
+                return FlickedKeyModel.zero.getSuggestView(size: keySize, isHidden: true, theme: theme)
             }
         }
         if case .all = self.modelVariableSection.suggestState{
             if let model = self.model.flickModels[direction]{
-                return model.getSuggestView(size: self.model.keySize, theme: theme)
+                return model.getSuggestView(size: keySize, theme: theme)
             }else{
-                return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true, theme: theme)
+                return FlickedKeyModel.zero.getSuggestView(size: keySize, isHidden: true, theme: theme)
             }
         }
-        return FlickedKeyModel.zero.getSuggestView(size: self.model.keySize, isHidden: true, theme: theme)
+        return FlickedKeyModel.zero.getSuggestView(size: keySize, isHidden: true, theme: theme)
     }
 
     private var centerFillColor: Color {
@@ -56,6 +57,7 @@ struct SuggestView: View {
     }
 
     var body: some View {
+        let keySize = CGSize(width: model.keySizeType.width(design: Design.shared), height:model.keySizeType.height(design: Design.shared))
         VStack(spacing: Design.shared.verticalSpacing){
             if self.modelVariableSection.suggestState.isActive{
                 self.neededApeearView(direction: .top)
@@ -63,7 +65,7 @@ struct SuggestView: View {
                 HStack(spacing: Design.shared.horizontalSpacing){
                     self.neededApeearView(direction: .left)
                     RoundedRectangle(cornerRadius: 5.0)
-                        .frame(width: self.model.keySize.width, height: self.model.keySize.height)
+                        .frame(width: keySize.width, height: keySize.height)
                         .foregroundColor(centerFillColor)
                     self.neededApeearView(direction: .right)
                 }
@@ -71,7 +73,7 @@ struct SuggestView: View {
             }
  
         }
-        .frame(width: model.keySize.width, height: model.keySize.height)
+        .frame(width: keySize.width, height: keySize.height)
         .allowsHitTesting(false)
     }
 }
