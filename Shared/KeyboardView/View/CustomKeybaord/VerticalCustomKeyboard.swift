@@ -56,7 +56,20 @@ fileprivate extension CustardKeyAction{
             return .doOnce(self.actionType)
         }
     }
+}
 
+fileprivate extension CustardInterface{
+    var flickKeyModels: [CustardKeyCoordinator: FlickKeyModelProtocol] {
+        self.keys.mapValues{
+            $0.flickKeyModel
+        }
+    }
+
+    var qwertyKeyModels: [CustardKeyCoordinator: QwertyKeyModelProtocol] {
+        self.keys.mapValues{
+            $0.qwertyKeyModel
+        }
+    }
 }
 
 fileprivate extension CustardInterfaceKey {
@@ -136,28 +149,29 @@ struct VerticalCustomKeyboardView: View {
         case let .gridFit(value):
             switch custard.interface.key_style{
             case .flick:
+                let models = custard.interface.flickKeyModels
                 ZStack{
                     ForEach(0..<value.width, id: \.self){x in
                         ForEach(0..<value.height, id: \.self){y in
-                            if let item = custard.interface.keys[.grid(GridCoordinator(x: x, y: y))]{
-                                FlickKeyView(model: item.flickKeyModel, theme: theme)
+                            if let model = models[.grid(GridCoordinator(x: x, y: y))]{
+                                FlickKeyView(model: model, theme: theme)
                             }
                         }
                     }
                     ForEach(0..<value.width, id: \.self){x in
                         ForEach(0..<value.height, id: \.self){y in
-                            if let item = custard.interface.keys[.grid(GridCoordinator(x: x, y: y))]{
-                                let model = SuggestModel(item.flickKeyModel.flickKeys, keyType: .normal)
-                                SuggestView(model: model, theme: theme)
+                            if let model = models[.grid(GridCoordinator(x: x, y: y))]{
+                                SuggestView(model: model.suggestModel, theme: theme)
                             }
                         }
                     }
                 }
             case .qwerty:
+                let models = custard.interface.qwertyKeyModels
                 ForEach(0..<value.width, id: \.self){x in
                     ForEach(0..<value.height, id: \.self){y in
-                        if let item = custard.interface.keys[.grid(GridCoordinator(x: x, y: y))]{
-                            QwertyKeyView(model: item.qwertyKeyModel, theme: theme)
+                        if let model = models[.grid(GridCoordinator(x: x, y: y))]{
+                            QwertyKeyView(model: model, theme: theme)
                         }
                     }
                 }
