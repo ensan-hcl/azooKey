@@ -110,7 +110,7 @@ final class TabDependentDesign{
     }
 }
 
-//MARK:デザイン部門のロジックを全て切り出したオブジェクト。
+///タブに依存せず、キーボード全体で共通するデザイン上の数値を切り出した構造体。
 struct Design{
     private init(){}
     static let shared = Design()
