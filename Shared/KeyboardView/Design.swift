@@ -54,8 +54,9 @@ struct Design{
     }
     */
 
+    /*
     ///This property calculate suitable width for normal keyView.
-    var keyViewWidth: CGFloat {
+    var keyViewWidth2: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
             return screenWidth/5.6
@@ -67,7 +68,23 @@ struct Design{
             return screenWidth/13
         }
     }
-
+    */
+    
+    ///This property calculate suitable width for normal keyView.
+    var keyViewWidth: CGFloat {
+        let coefficient: CGFloat
+        switch (layout, orientation){
+        case (.flick, .vertical):
+            coefficient = 5/5.6
+        case (.flick, .horizontal):
+            coefficient = 5/9
+        case (.qwerty, .vertical):
+            coefficient = 10/12.2
+        case (.qwerty, .horizontal):
+            coefficient = 10/13
+        }
+        return screenWidth / CGFloat(horizontalKeyCount) * coefficient
+    }
     ///This property calculate suitable height for normal keyView.
     var keyViewHeight: CGFloat {
         let keysViewHeight = keyboardHeight - (resultViewHeight + 12)
@@ -131,10 +148,10 @@ struct Design{
         switch (layout, orientation){
         case (.flick, .vertical):
             //return horizontalSpacing
-            return (screenWidth - screenWidth*CGFloat(self.horizontalKeyCount)/5.6) / 5
+            return screenWidth*3/140
         case (.flick, .horizontal):
             //return horizontalSpacing / 2
-            return (screenWidth - screenWidth * 10 / 13) / 24 - 0.25
+            return screenWidth/104 - 0.25
         case (.qwerty, .vertical):
             //return keyViewSize.width / 3
             return screenWidth/36.6
@@ -144,7 +161,8 @@ struct Design{
         }
     }
 
-    var horizontalSpacing: CGFloat {
+    /*
+    var horizontalSpacing2: CGFloat {
         switch (layout, orientation){
         case (.flick, .vertical):
             //スクリーンの幅 - (キーの幅 * 個数) を(隙間の数+1)で割る
@@ -158,6 +176,44 @@ struct Design{
             return (screenWidth - keyViewWidth * CGFloat(self.horizontalKeyCount)) / 10
         }
     }
+    */
+
+    var horizontalSpacing: CGFloat {
+        let coefficient: CGFloat
+        switch (layout, orientation){
+        case (.flick, .vertical):
+            //理想値は(screenWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1)
+            //この値は実際にはscreenWidth*0.6/(5.6*(horizontalKeyCount-1))に等しい
+            //hkc = 5でこの値は6/224*screenWidth
+            //一方元の値は(screenWidth - keyViewWidth * CGFloat(horizontalKeyCount)) / 5 = 6/280*screenWidth
+            //そこで係数を224/280=0.8とし、この値を掛けた値を返す。
+            coefficient = 4/5
+        case (.flick, .horizontal):
+            //理想値は(screenWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1)
+            //この値は実際にはscreenWidth*4/(9*(horizontalKeyCount-1))に等しい
+            //hkc=5でこの値はscreenWidth/9
+            //一方元の値は(screenWidth - screenWidth * 10 / 13) / 12 - 0.5 = 3/156*screenWidth-0.5
+            //そこで係数を1/6として、この値をかけた値を返す。
+            coefficient = 1/6
+        case (.qwerty, .vertical):
+            //理想値は(screenWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1)
+            //この値は実際にはscreenWidth*2.2 / (12.2*(horizontalKeyCount-1))に等しい
+            //hkc=10でこの値は11/549*screenWidthに等しい
+            //一方元の値は(screenWidth*2.2/12.2) / 10.5 = 22/1281 * screenWidth
+            //そこで366/427を係数としてこの値をかけた値を返す。
+            coefficient = 366/427
+        case (.qwerty, .horizontal):
+            //理想値は(screenWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1)
+            //実際にはこの値はscreenWidth*3/(13*(horizontalKeyCount-1))
+            //hkc=10でこの値はscreenWidth/39
+            //一方元の値は(screenWidth-keyViewWidth*10/13))/11=screenWidth*3/143
+            //そこで9/11を係数とする。
+            coefficient = 9/10
+        }
+        return (screenWidth - keyViewWidth * CGFloat(horizontalKeyCount)) / CGFloat(horizontalKeyCount-1) * coefficient
+    }
+
+
 
     var resultViewHeight: CGFloat {
         switch (orientation, UIDevice.current.userInterfaceIdiom == .pad){
