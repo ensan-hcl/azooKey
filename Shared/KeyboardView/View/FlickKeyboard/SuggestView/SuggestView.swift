@@ -26,15 +26,17 @@ struct SuggestView: View {
     private let model: SuggestModel
     @ObservedObject private var modelVariableSection: SuggestModelVariableSection
     private let theme: ThemeData
+    private let tabDesign: TabDependentDesign
 
-    init(model: SuggestModel, theme: ThemeData){
+    init(model: SuggestModel, theme: ThemeData, tabDesign: TabDependentDesign){
         self.model = model
         self.modelVariableSection = model.variableSection
         self.theme = theme
+        self.tabDesign = tabDesign
     }
      
     private func neededApeearView(direction: FlickDirection) -> some View {
-        let keySize = CGSize(width: model.keySizeType.width(design: Design.shared), height:model.keySizeType.height(design: Design.shared))
+        let keySize = CGSize(width: model.keySizeType.width(design: tabDesign), height:model.keySizeType.height(design: tabDesign))
         if case .oneDirection(direction) = self.modelVariableSection.suggestState{
             if let model = self.model.flickModels[direction]{
                 return model.getSuggestView(size: keySize, isPointed: true, theme: theme)
@@ -57,12 +59,12 @@ struct SuggestView: View {
     }
 
     var body: some View {
-        let keySize = CGSize(width: model.keySizeType.width(design: Design.shared), height:model.keySizeType.height(design: Design.shared))
-        VStack(spacing: Design.shared.verticalSpacing){
+        let keySize = CGSize(width: model.keySizeType.width(design: tabDesign), height:model.keySizeType.height(design: tabDesign))
+        VStack(spacing: tabDesign.verticalSpacing){
             if self.modelVariableSection.suggestState.isActive{
                 self.neededApeearView(direction: .top)
                 
-                HStack(spacing: Design.shared.horizontalSpacing){
+                HStack(spacing: tabDesign.horizontalSpacing){
                     self.neededApeearView(direction: .left)
                     RoundedRectangle(cornerRadius: 5.0)
                         .frame(width: keySize.width, height: keySize.height)

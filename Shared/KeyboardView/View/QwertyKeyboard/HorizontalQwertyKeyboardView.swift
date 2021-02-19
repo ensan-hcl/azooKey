@@ -13,6 +13,7 @@ struct HorizontalQwertyKeyboardView: View{
     private let model = HorizontalQwertyDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
     private let theme: ThemeData
+    private let tabDesign = TabDependentDesign(width: 10, height: 4, layout: .qwerty, orientation: .horizontal)
 
     init(theme: ThemeData){
         self.theme = theme
@@ -71,11 +72,11 @@ struct HorizontalQwertyKeyboardView: View{
     
     
     var body: some View {
-        VStack(spacing: Design.shared.verticalSpacing){
+        VStack(spacing: tabDesign.verticalSpacing){
             ForEach(self.verticalIndices, id: \.self){(v: Int) in
-                HStack(spacing: Design.shared.horizontalSpacing){
+                HStack(spacing: tabDesign.horizontalSpacing){
                     ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
-                        QwertyKeyView(model: self.keyModels[v][h], theme: theme)
+                        QwertyKeyView(model: self.keyModels[v][h], theme: theme, tabDesign: tabDesign)
                     }
                 }
             }

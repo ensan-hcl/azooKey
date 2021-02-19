@@ -19,6 +19,7 @@ struct HorizontalKeyboardView: View {
 
     @ObservedObject private var variableStates = VariableStates.shared
     private let theme: ThemeData
+    private let tabDesign = TabDependentDesign(width: 5, height: 4, layout: .flick, orientation: .horizontal)
 
     init(theme: ThemeData){
         self.theme = theme
@@ -95,21 +96,21 @@ struct HorizontalKeyboardView: View {
                 EmptyView()
             }
             ZStack{
-                HStack(spacing: Design.shared.horizontalSpacing){
+                HStack(spacing: tabDesign.horizontalSpacing){
                     ForEach(self.horizontalIndices, id: \.self){h in
-                        VStack(spacing: Design.shared.verticalSpacing){
+                        VStack(spacing: tabDesign.verticalSpacing){
                             //IDを明示する必要がある。
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
-                                return FlickKeyView(model: self.keyModels[h][v], theme: theme)
+                                return FlickKeyView(model: self.keyModels[h][v], theme: theme, tabDesign: tabDesign)
                             }
                         }
                     }
                 }
-                HStack(spacing: Design.shared.horizontalSpacing){
+                HStack(spacing: tabDesign.horizontalSpacing){
                     ForEach(self.horizontalIndices, id: \.self){h in
-                        VStack(spacing: Design.shared.verticalSpacing){
+                        VStack(spacing: tabDesign.verticalSpacing){
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
-                                return SuggestView(model: self.keyModels[h][v].suggestModel, theme: theme)
+                                return SuggestView(model: self.keyModels[h][v].suggestModel, theme: theme, tabDesign: tabDesign)
                             }
                         }
                     }

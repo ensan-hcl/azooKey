@@ -31,10 +31,10 @@ struct VariationsModel{
         self.variations[selected].actions.forEach{VariableStates.shared.action.registerAction($0)}
     }
     
-    func registerLocation(dx: CGFloat){
+    func registerLocation(dx: CGFloat, tabDesign: TabDependentDesign){
         let count = CGFloat(self.variations.count)
-        let width = Design.shared.keyViewWidth
-        let spacing = Design.shared.horizontalSpacing
+        let width = tabDesign.keyViewWidth
+        let spacing = tabDesign.horizontalSpacing
         let start: CGFloat
         switch self.direction {
         case .center:

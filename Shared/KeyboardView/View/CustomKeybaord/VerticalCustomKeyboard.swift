@@ -58,7 +58,28 @@ fileprivate extension CustardKeyAction{
     }
 }
 
+fileprivate extension CustardInterfaceStyle{
+    var keyboardLayout: KeyboardLayout {
+        switch self{
+        case .flick:
+            return .flick
+        case .qwerty:
+            return .qwerty
+        }
+    }
+}
+
 fileprivate extension CustardInterface{
+    var tabDesign: TabDependentDesign {
+        switch self.key_layout{
+        case let .gridFit(value):
+            return TabDependentDesign(width: value.width, height: value.height, layout: key_style.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
+        case let .scrollFit(value):
+            //FIXME: 未実装
+            return TabDependentDesign(width: 5, height: 5, layout: key_style.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
+        }
+    }
+
     var flickKeyModels: [CustardKeyCoordinator: FlickKeyModelProtocol] {
         self.keys.mapValues{
             $0.flickKeyModel
@@ -138,10 +159,12 @@ struct VerticalCustomKeyboardView: View {
     @ObservedObject private var variableStates = VariableStates.shared
     private let theme: ThemeData
     private let custard: Custard
+    private let tabDesign: TabDependentDesign
 
     init(theme: ThemeData, custard: Custard = .mock){
         self.theme = theme
         self.custard = custard
+        self.tabDesign = custard.interface.tabDesign
     }
 
     var body: some View {
@@ -154,14 +177,14 @@ struct VerticalCustomKeyboardView: View {
                     ForEach(0..<value.width, id: \.self){x in
                         ForEach(0..<value.height, id: \.self){y in
                             if let model = models[.grid(GridCoordinator(x: x, y: y))]{
-                                FlickKeyView(model: model, theme: theme)
+                                FlickKeyView(model: model, theme: theme, tabDesign: tabDesign)
                             }
                         }
                     }
                     ForEach(0..<value.width, id: \.self){x in
                         ForEach(0..<value.height, id: \.self){y in
                             if let model = models[.grid(GridCoordinator(x: x, y: y))]{
-                                SuggestView(model: model.suggestModel, theme: theme)
+                                SuggestView(model: model.suggestModel, theme: theme, tabDesign: tabDesign)
                             }
                         }
                     }
@@ -171,12 +194,13 @@ struct VerticalCustomKeyboardView: View {
                 ForEach(0..<value.width, id: \.self){x in
                     ForEach(0..<value.height, id: \.self){y in
                         if let model = models[.grid(GridCoordinator(x: x, y: y))]{
-                            QwertyKeyView(model: model, theme: theme)
+                            QwertyKeyView(model: model, theme: theme, tabDesign: tabDesign)
                         }
                     }
                 }
             }
         case let .scrollFit(value):
+            //FIXME: 未実装
             ScrollView{
                 Text("not implemented")
             }

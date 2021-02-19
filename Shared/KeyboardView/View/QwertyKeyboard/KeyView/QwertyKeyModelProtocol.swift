@@ -15,7 +15,7 @@ enum QwertyKeySizeType{
     case enter
     case space
 
-    func width(design: Design) -> CGFloat {
+    func width(design: TabDependentDesign) -> CGFloat {
         switch self{
         case let .normal(of: normalCount, for: keyCount):
             return design.qwertyScaledKeyWidth(normal: normalCount, for: keyCount)
@@ -28,7 +28,7 @@ enum QwertyKeySizeType{
         }
     }
 
-    func height(design: Design) -> CGFloat {
+    func height(design: TabDependentDesign) -> CGFloat {
         design.keyViewHeight
     }
 

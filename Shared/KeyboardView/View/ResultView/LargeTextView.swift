@@ -27,7 +27,7 @@ struct LargeTextView: View {
                 Image(systemName: "xmark")
                 Text("閉じる")
                     .font(.body)
-            }.frame(width: nil, height: Design.shared.keyViewHeight)
+            }.frame(width: nil, height: Design.shared.keyboardHeight*0.15)
         }
         .background(Color(UIColor.systemBackground))
         .frame(height: Design.shared.keyboardScreenHeight, alignment: .bottom)

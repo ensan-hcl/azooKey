@@ -17,11 +17,13 @@ struct QwertyKeyView: View{
     @State private var suggest = false
 
     private let theme: ThemeData
+    private let tabDesign: TabDependentDesign
     
-    init(model: QwertyKeyModelProtocol, theme: ThemeData){
+    init(model: QwertyKeyModelProtocol, theme: ThemeData, tabDesign: TabDependentDesign){
         self.model = model
         self.modelVariableSection = model.variableSection
         self.theme = theme
+        self.tabDesign = tabDesign
     }
     
     private var gesture: some Gesture {
@@ -47,7 +49,7 @@ struct QwertyKeyView: View{
                     break
                 case .variations:
                     let dx = value.location.x - value.startLocation.x
-                    self.model.variationsModel.registerLocation(dx: dx)
+                    self.model.variationsModel.registerLocation(dx: dx, tabDesign: tabDesign)
                 }
             })
             //タップの終了時
@@ -97,31 +99,32 @@ struct QwertyKeyView: View{
     }
 
     var body: some View {
-        let keySize = CGSize(width: model.keySizeType.width(design: .shared), height: model.keySizeType.height(design: .shared))
+        let keySize = CGSize(width: model.keySizeType.width(design: tabDesign), height: model.keySizeType.height(design: tabDesign))
         ZStack(alignment: .bottom){
             Group{
                 RoundedBorderedRectangle(cornerRadius: 6, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
                     .frame(width: keySize.width, height: keySize.height)
                     .contentShape(
                         Rectangle()
-                            .size(CGSize(width: keySize.width + Design.shared.horizontalSpacing, height: keySize.height + Design.shared.verticalSpacing))
+                            .size(CGSize(width: keySize.width + tabDesign.horizontalSpacing, height: keySize.height + tabDesign.verticalSpacing))
                     )
                     .gesture(gesture)
                     .overlay(self.model.label(width: keySize.width, states: variableStates, color: nil, theme: theme))
             }
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
-                    let height = Design.shared.verticalSpacing + keySize.height
+                    let height = tabDesign.verticalSpacing + keySize.height
                     if self.modelVariableSection.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty{
                         QwertySuggestView.scaleToVariationsSize(
                             keyWidth: keySize.width,
                             scale_y: 1,
                             variationsCount: self.model.variationsModel.variations.count,
                             color: suggestColor,
-                            direction: model.variationsModel.direction
+                            direction: model.variationsModel.direction,
+                            tabDesign: tabDesign
                         )
                         .overlay(
-                            QwertyVariationsView(model: self.model.variationsModel, theme: theme)
+                            QwertyVariationsView(model: self.model.variationsModel, theme: theme, tabDesign: tabDesign)
                                 .padding(.bottom, height)
                                 .padding(self.model.variationsModel.direction.edge, 15),
                             alignment: self.model.variationsModel.direction.alignment
@@ -130,7 +133,8 @@ struct QwertyKeyView: View{
                         QwertySuggestView.scaleToFrameSize(
                             keyWidth: keySize.width,
                             scale_y: 1,
-                            color: suggestColor
+                            color: suggestColor,
+                            tabDesign: tabDesign
                         )
                         .overlay(
                             self.model.label(width: keySize.width, states: variableStates, color: suggestTextColor, theme: theme)

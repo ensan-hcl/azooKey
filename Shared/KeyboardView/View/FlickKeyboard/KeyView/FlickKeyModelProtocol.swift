@@ -27,11 +27,11 @@ enum FlickKeySizeType{
     case normal
     case enter
 
-    func width(design: Design) -> CGFloat {
+    func width(design: TabDependentDesign) -> CGFloat {
         return design.keyViewWidth
     }
 
-    func height(design: Design) -> CGFloat {
+    func height(design: TabDependentDesign) -> CGFloat {
         switch self{
         case .normal:
             return design.keyViewHeight

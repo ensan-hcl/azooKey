@@ -13,10 +13,12 @@ struct QwertyVariationsView: View {
     private let model: VariationsModel
     @ObservedObject private var modelVariableSection: VariationsModelVariableSection
     private let theme: ThemeData
-    init(model: VariationsModel, theme: ThemeData){
+    private let tabDesign: TabDependentDesign
+    init(model: VariationsModel, theme: ThemeData, tabDesign: TabDependentDesign){
         self.model = model
         self.modelVariableSection = model.variableSection
         self.theme = theme
+        self.tabDesign = tabDesign
     }
 
     private var suggestColor: Color {
@@ -24,12 +26,12 @@ struct QwertyVariationsView: View {
     }
 
     var body: some View {
-        HStack(spacing: Design.shared.horizontalSpacing){
+        HStack(spacing: tabDesign.horizontalSpacing){
             ForEach(model.variations.indices, id: \.self){(index: Int) in
                 ZStack{
                     Rectangle()
-                        .foregroundColor(index == self.modelVariableSection.selection ? Color.blue:suggestColor)
-                        .frame(width: Design.shared.keyViewWidth, height: Design.shared.keyViewHeight*0.9, alignment: .center)
+                        .foregroundColor(index == self.modelVariableSection.selection ? Color.blue : suggestColor)
+                        .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight*0.9, alignment: .center)
                         .cornerRadius(10.0)
                     getLabel(model.variations[index].label)
                 }
@@ -39,7 +41,7 @@ struct QwertyVariationsView: View {
     }
     
     private func getLabel(_ labelType: KeyLabelType) -> KeyLabel {
-        let width = Design.shared.keyViewWidth
+        let width = tabDesign.keyViewWidth
         if theme != .default{
             return KeyLabel(labelType, width: width, theme: theme, textColor: .black)
         }

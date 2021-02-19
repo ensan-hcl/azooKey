@@ -30,11 +30,13 @@ struct FlickKeyView: View {
     @ObservedObject private var variableStates = VariableStates.shared
 
     private let theme: ThemeData
+    private let tabDesign: TabDependentDesign
 
-    init(model: FlickKeyModelProtocol, theme: ThemeData){
+    init(model: FlickKeyModelProtocol, theme: ThemeData, tabDesign: TabDependentDesign){
         self.model = model
         self.modelVariableSection = model.variableSection
         self.theme = theme
+        self.tabDesign = tabDesign
     }
 
     private var suggestAnimation: Animation {
@@ -211,7 +213,7 @@ struct FlickKeyView: View {
     }
 
     var body: some View {
-        let keySize = (width: model.keySizeType.width(design: Design.shared), height: model.keySizeType.height(design: Design.shared))
+        let keySize = (width: model.keySizeType.width(design: tabDesign), height: model.keySizeType.height(design: tabDesign))
         return RoundedBorderedRectangle(cornerRadius: 5.0, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
             .frame(width: keySize.width, height: keySize.height)
             .gesture(gesture)
