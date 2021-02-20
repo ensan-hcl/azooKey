@@ -11,8 +11,8 @@ import SwiftUI
 
 ///タブに依存するデザイン上の数値を計算するクラス
 final class TabDependentDesign{
-    private let horizontalKeyCount: Int
-    private let verticalKeyCount: Int
+    private let horizontalKeyCount: CGFloat
+    private let verticalKeyCount: CGFloat
     private let layout: KeyboardLayout
     private let orientation: KeyboardOrientation
 
@@ -21,6 +21,13 @@ final class TabDependentDesign{
     }
 
     init(width: Int, height: Int, layout: KeyboardLayout, orientation: KeyboardOrientation){
+        self.horizontalKeyCount = CGFloat(width)
+        self.verticalKeyCount = CGFloat(height)
+        self.layout = layout
+        self.orientation = orientation
+    }
+
+    init(width: CGFloat, height: CGFloat, layout: KeyboardLayout, orientation: KeyboardOrientation){
         self.horizontalKeyCount = width
         self.verticalKeyCount = height
         self.layout = layout
@@ -40,12 +47,12 @@ final class TabDependentDesign{
         case (.qwerty, .horizontal):
             coefficient = 10/13
         }
-        return screenWidth / CGFloat(horizontalKeyCount) * coefficient
+        return screenWidth / horizontalKeyCount * coefficient
     }
     ///This property calculate suitable height for normal keyView.
     var keyViewHeight: CGFloat {
         let keysViewHeight = Design.shared.keyboardHeight - (Design.shared.resultViewHeight + 12)
-        let keyHeight = (keysViewHeight - CGFloat(verticalKeyCount-1) * verticalSpacing)/CGFloat(verticalKeyCount)
+        let keyHeight = (keysViewHeight - (verticalKeyCount-1) * verticalSpacing)/verticalKeyCount
         return keyHeight
     }
 
@@ -79,7 +86,7 @@ final class TabDependentDesign{
         case (.qwerty, .horizontal):
             coefficient = 9/10
         }
-        return (screenWidth - keyViewWidth * CGFloat(horizontalKeyCount)) / CGFloat(horizontalKeyCount-1) * coefficient
+        return (screenWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1) * coefficient
     }
 
     var flickEnterKeySize: CGSize {
@@ -101,7 +108,7 @@ final class TabDependentDesign{
     }
 
     func qwertyFunctionalKeyWidth(normal: Int, functional: Int, enter: Int = 0, space: Int = 0) -> CGFloat {
-        let maxWidth = keyViewWidth * CGFloat(horizontalKeyCount) + horizontalSpacing * CGFloat(horizontalKeyCount - 1)
+        let maxWidth = keyViewWidth * horizontalKeyCount + horizontalSpacing * (horizontalKeyCount - 1)
         let spacing = horizontalSpacing * CGFloat(normal + functional + space + enter - 1)
         let normalKeyWidth = keyViewWidth * CGFloat(normal)
         let spaceKeyWidth = qwertySpaceKeyWidth * CGFloat(space)
