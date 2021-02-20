@@ -36,7 +36,6 @@ struct QwertyVariationsView: View {
                     getLabel(model.variations[index].label)
                 }
             }
-
         }
     }
     

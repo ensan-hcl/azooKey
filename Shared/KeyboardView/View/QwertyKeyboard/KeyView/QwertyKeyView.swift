@@ -129,6 +129,7 @@ struct QwertyKeyView: View{
                                 .padding(self.model.variationsModel.direction.edge, 15),
                             alignment: self.model.variationsModel.direction.alignment
                         )
+                        .allowsHitTesting(false)
                     }else{
                         QwertySuggestView.scaleToFrameSize(
                             keyWidth: keySize.width,
@@ -140,6 +141,7 @@ struct QwertyKeyView: View{
                             self.model.label(width: keySize.width, states: variableStates, color: suggestTextColor, theme: theme)
                                 .padding(.bottom, height)
                         )
+                        .allowsHitTesting(false)
                     }
                 }
             }, alignment: .bottom)
