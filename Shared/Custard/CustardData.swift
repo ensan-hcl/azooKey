@@ -34,8 +34,8 @@ enum CustardInterfaceStyle: String, Codable {
 enum CustardInterfaceLayout: Codable {
     ///画面いっぱいにマス目状で均等に配置されます。
     case gridFit(CustardInterfaceLayoutGridValue)
-    ///はみ出した分はスクロールできる形で配置されます。スクロール方向と垂直方向には画面いっぱいに配置します。
-    case scrollFit(CustardInterfaceLayoutScrollValue)
+    ///はみ出した分はスクロールできる形でマス目状に均等に配置されます。
+    case gridScroll(CustardInterfaceLayoutScrollValue)
 
 }
 
@@ -64,7 +64,7 @@ struct CustardInterfaceLayoutScrollValue: Codable {
 extension CustardInterfaceLayout{
     enum CodingKeys: CodingKey{
         case grid_fit
-        case scroll_fit
+        case grid_scroll
     }
 
     func encode(to encoder: Encoder) throws {
@@ -72,8 +72,8 @@ extension CustardInterfaceLayout{
         switch self {
         case let .gridFit(value):
             try container.encode(value, forKey: .grid_fit)
-        case let .scrollFit(value):
-            try container.encode(value, forKey: .scroll_fit)
+        case let .gridScroll(value):
+            try container.encode(value, forKey: .grid_scroll)
         }
     }
 
@@ -94,17 +94,17 @@ extension CustardInterfaceLayout{
                 forKey: .grid_fit
             )
             self = .gridFit(value)
-        case .scroll_fit:
+        case .grid_scroll:
             let value = try container.decode(
                 CustardInterfaceLayoutScrollValue.self,
-                forKey: .scroll_fit
+                forKey: .grid_scroll
             )
-            self = .scrollFit(value)
+            self = .gridScroll(value)
         }
     }
 }
 
-struct GridCoordinator: Codable, Hashable {
+struct GridFitCoordinator: Codable, Hashable {
     let x: Int
     let y: Int
 
@@ -114,18 +114,29 @@ struct GridCoordinator: Codable, Hashable {
     }
 }
 
-struct ScrollCoordinator: Codable, Hashable {
+struct GridScrollCoordinator: Codable, Hashable {
     let index: Int
+
+    init(_ index: Int){
+        self.index = index
+    }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(index)
     }
 }
 
+extension GridScrollCoordinator: ExpressibleByIntegerLiteral {
+    typealias IntegerLiteralType = Int
+
+    init(integerLiteral value: Int) {
+        self.index = value
+    }
+}
 
 enum CustardKeyCoordinator: Codable, Hashable {
-    case grid(GridCoordinator)
-    case scroll(ScrollCoordinator)
+    case grid(GridFitCoordinator)
+    case scroll(GridScrollCoordinator)
 }
 
 extension CustardKeyCoordinator {
@@ -169,13 +180,13 @@ extension CustardKeyCoordinator{
         switch key {
         case .grid:
             let value = try container.decode(
-                GridCoordinator.self,
+                GridFitCoordinator.self,
                 forKey: .grid
             )
             self = .grid(value)
         case .scroll:
             let value = try container.decode(
-                ScrollCoordinator.self,
+                GridScrollCoordinator.self,
                 forKey: .scroll
             )
             self = .scroll(value)
@@ -875,4 +886,212 @@ extension Custard{
         )
     )
 
+    static let mock_qwerty_scroll = Custard(
+        identifier: "my_custard",
+        display_name: "マイカスタード",
+        language: .japanese,
+        input_style: .direct,
+        interface: .init(
+            key_style: .qwerty,
+            key_layout: .gridScroll(.init(direction: .horizontal, columnKeyCount: 4, screenRowKeyCount: 2.2)),
+            keys: [
+                .scroll(0): .system(.change_keyboard),
+                .scroll(1): .custom(
+                    .init(
+                        label: .text("←"),
+                        press_action: [.moveCursor(-1)],
+                        longpress_action: [.moveCursor(-1)],
+                        variation: []
+                    )
+                ),
+                .scroll(2): .custom(
+                    .init(
+                        label: .text("→"),
+                        press_action: [.moveCursor(1)],
+                        longpress_action: [.moveCursor(1)],
+                        variation: []
+                    )
+                ),
+                .scroll(3): .custom(
+                    .init(
+                        label: .text("①"),
+                        press_action: [.input("①")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(4): .custom(
+                    .init(
+                        label: .text("②"),
+                        press_action: [.input("②")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(5): .custom(
+                    .init(
+                        label: .text("③"),
+                        press_action: [.input("③")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(6): .custom(
+                    .init(
+                        label: .text("④"),
+                        press_action: [.input("④")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(7): .custom(
+                    .init(
+                        label: .text("⑤"),
+                        press_action: [.input("⑤")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(8): .custom(
+                    .init(
+                        label: .text("⑥"),
+                        press_action: [.input("⑥")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(9): .custom(
+                    .init(
+                        label: .text("⑦"),
+                        press_action: [.input("⑦")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(10): .custom(
+                    .init(
+                        label: .text("⑧"),
+                        press_action: [.input("⑧")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(11): .custom(
+                    .init(
+                        label: .text("⑨"),
+                        press_action: [.input("⑨")],
+                        longpress_action: [],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                ),
+                .scroll(12): .custom(
+                    .init(
+                        label: .text("空白"),
+                        press_action: [.input(" ")],
+                        longpress_action: [.toggleCursorMovingView],
+                        variation: []
+                    )
+                ),
+                .scroll(13): .system(.enter),
+                .scroll(14): .custom(
+                    .init(
+                        label: .systemImage("delete.left"),
+                        press_action: [.delete(1)],
+                        longpress_action: [.delete(1)],
+                        variation: [
+                            .init(
+                                type: .flick(.left),
+                                key: .init(
+                                    label: .text("❌"),
+                                    press_action: [.smoothDelete],
+                                    longpress_action: []
+                                )
+                            )
+                        ]
+                    )
+                )
+            ]
+        )
+    )
 }

@@ -16,6 +16,18 @@ fileprivate extension CustardKeyLabelStyle{
             return .text(value)
         case let .systemImage(value):
             return .image(value)
+
+        }
+    }
+}
+
+fileprivate extension CustardInterfaceLayoutScrollValue{
+    var scrollDirection: Axis.Set {
+        switch self.direction {
+        case .horizontal:
+            return .horizontal
+        case .vertical:
+            return .vertical
         }
     }
 }
@@ -74,9 +86,13 @@ fileprivate extension CustardInterface{
         switch self.key_layout{
         case let .gridFit(value):
             return TabDependentDesign(width: value.width, height: value.height, layout: key_style.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
-        case let .scrollFit(value):
-            //FIXME: 未実装
-            return TabDependentDesign(width: 5, height: 5, layout: key_style.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
+        case let .gridScroll(value):
+            switch value.direction{
+            case .vertical:
+                return TabDependentDesign(width: CGFloat(value.columnKeyCount), height: CGFloat(value.screenRowKeyCount), layout: key_style.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
+            case .horizontal:
+                return TabDependentDesign(width: CGFloat(value.screenRowKeyCount), height: CGFloat(value.columnKeyCount), layout: key_style.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
+            }
         }
     }
 
@@ -131,7 +147,7 @@ fileprivate extension CustardInterfaceKey {
         switch layout{
         case let .gridFit(value):
             horizontalKeyCount = value.width
-        case let .scrollFit(value):
+        case let .gridScroll(value):
             horizontalKeyCount = value.columnKeyCount
         }
 
@@ -165,15 +181,35 @@ fileprivate extension CustardInterfaceKey {
         }
     }
 
+    var simpleKeyModel: SimpleKeyModelProtocol {
+        switch self {
+        case let .system(value):
+            switch value{
+            case .change_keyboard:
+                return SimpleChangeKeyboardKeyModel()
+            case .enter:
+                return SimpleEnterKeyModel()
+            }
+        case let .custom(value):
+            return SimpleKeyModel(
+                keyType: .normal,
+                keyLabelType: value.label.keyLabelType,
+                pressActions: value.press_action.map{$0.actionType},
+                longPressActions: value.longpress_action.map{$0.longpressActionType}
+            )
+        }
+    }
+
 }
 
 struct CustomKeyboardView: View {
     @ObservedObject private var variableStates = VariableStates.shared
+    @State private var allowHitTesting = true
     private let theme: ThemeData
     private let custard: Custard
     private let tabDesign: TabDependentDesign
 
-    init(theme: ThemeData, custard: Custard = .mock_qwerty_grid){
+    init(theme: ThemeData, custard: Custard = .mock_qwerty_scroll){
         self.theme = theme
         self.custard = custard
         self.tabDesign = custard.interface.tabDesign
@@ -190,7 +226,7 @@ struct CustomKeyboardView: View {
                         ForEach(0..<value.width, id: \.self){x in
                             VStack(spacing: tabDesign.verticalSpacing){
                                 ForEach(0..<value.height, id: \.self){y in
-                                    if let model = models[.grid(GridCoordinator(x: x, y: y))]{
+                                    if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
                                         FlickKeyView(model: model, theme: theme, tabDesign: tabDesign)
                                     }
                                 }
@@ -201,7 +237,7 @@ struct CustomKeyboardView: View {
                         ForEach(0..<value.width, id: \.self){x in
                             VStack(spacing: tabDesign.verticalSpacing){
                                 ForEach(0..<value.height, id: \.self){y in
-                                    if let model = models[.grid(GridCoordinator(x: x, y: y))]{
+                                    if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
                                         SuggestView(model: model.suggestModel, theme: theme, tabDesign: tabDesign)
                                     }
                                 }
@@ -215,7 +251,7 @@ struct CustomKeyboardView: View {
                     ForEach(0..<value.height, id: \.self){y in
                         HStack(spacing: tabDesign.horizontalSpacing){
                             ForEach(0..<value.width, id: \.self){x in
-                                if let model = models[.grid(GridCoordinator(x: x, y: y))]{
+                                if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
                                     QwertyKeyView(model: model, theme: theme, tabDesign: tabDesign)
                                 }
                             }
@@ -223,10 +259,29 @@ struct CustomKeyboardView: View {
                     }
                 }
             }
-        case let .scrollFit(value):
+        case let .gridScroll(value):
             //FIXME: 未実装
-            ScrollView{
-                Text("not implemented")
+            let height = Design.shared.keyboardHeight - (Design.shared.resultViewHeight + 12)
+            let models = (0..<custard.interface.keys.count).compactMap{custard.interface.keys[.scroll(GridScrollCoordinator($0))]}
+            switch value.direction{
+            case .vertical:
+                let gridItem = GridItem(.fixed(tabDesign.keyViewWidth))
+                ScrollView(.vertical){
+                    LazyVGrid(columns: Array(repeating: gridItem, count: value.columnKeyCount), spacing: tabDesign.verticalSpacing){
+                        ForEach(0..<models.count){i in
+                            SimpleKeyView(model: models[i].simpleKeyModel, theme: theme, tabDesign: tabDesign)
+                        }
+                    }
+                }.frame(height: height)
+            case .horizontal:
+                let gridItem = GridItem(.fixed(tabDesign.keyViewHeight))
+                ScrollView(.horizontal){
+                    LazyHGrid(rows: Array(repeating: gridItem, count: value.columnKeyCount), spacing: tabDesign.horizontalSpacing){
+                        ForEach(0..<models.count){i in
+                            SimpleKeyView(model: models[i].simpleKeyModel, theme: theme, tabDesign: tabDesign)
+                        }
+                    }
+                }.frame(height: height)
             }
         }
     }
