@@ -7,6 +7,7 @@
 //
 
 import Foundation
+/*
 enum QwertyAdditionalTabs{
     case symbols
     var identifier: String {
@@ -16,3 +17,4 @@ enum QwertyAdditionalTabs{
         }
     }
 }
+*/

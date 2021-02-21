@@ -30,23 +30,6 @@ enum AaKeyState{
     case capslock
 }
 
-//キーボードの状態管理
-enum TabState: Equatable{
-    case hira
-    case abc
-    case number
-    case other(String)
-
-    static func ==(lhs: TabState, rhs: TabState) -> Bool {
-        switch (lhs, rhs) {
-        case (.hira, .hira), (.abc, .abc), (.number, .number): return true
-        case let (.other(ls), .other(rs)): return ls == rs
-        default:
-            return false
-        }
-    }
-}
-
 ///実行中変更されない値。収容アプリでも共有できる形にすること。
 final class SemiStaticStates{
     static let shared = SemiStaticStates()

@@ -10,9 +10,9 @@ import Foundation
 import SwiftUI
 
 enum InputStyle: String{
-    ///常に入力された文字を直接入力するスタイル
+    ///入力された文字を直接入力するスタイル
     case direct = "direct"
-    ///「ひらがな」タブの状態にあるときのみローマ字入力とし、そのほかでは`direct`と同様に動作するスタイル
+    ///ローマ字日本語入力とするスタイル
     case roman = "roman"
 }
 
