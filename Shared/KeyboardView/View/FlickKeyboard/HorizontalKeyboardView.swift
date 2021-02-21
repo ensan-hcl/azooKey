@@ -13,7 +13,7 @@ fileprivate enum KeyboardAlignment{
     case right, left, center
 }
 //V=VM
-struct HorizontalKeyboardView: View {
+struct HorizontalFlickKeyboardView: View {
     private let model = HorizontalFlickDataProvider()
     @State private var alignmnet: KeyboardAlignment = .center
 

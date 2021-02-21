@@ -81,21 +81,21 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 case .vertical:
                     VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().hiraKeyboard , theme: theme)
                 case .horizontal:
-                    HorizontalKeyboardView(keyModels: HorizontalFlickDataProvider().hiraKeyboard , theme: theme)
+                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().hiraKeyboard , theme: theme)
                 }
             case .flick_abc:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
                     VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().abcKeyboard, theme: theme)
                 case .horizontal:
-                    HorizontalKeyboardView(keyModels: HorizontalFlickDataProvider().abcKeyboard, theme: theme)
+                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().abcKeyboard, theme: theme)
                 }
             case .flick_numbersymbols:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
                     VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().numberKeyboard, theme: theme)
                 case .horizontal:
-                    HorizontalKeyboardView(keyModels: HorizontalFlickDataProvider().numberKeyboard, theme: theme)
+                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().numberKeyboard, theme: theme)
                 }
             case .qwerty_hira:
                 QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard, theme: theme)
