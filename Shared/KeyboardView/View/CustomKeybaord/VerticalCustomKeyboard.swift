@@ -53,6 +53,8 @@ fileprivate extension CustardKeyAction{
             return .toggleShowMoveCursorView
         case .toggleCapsLockState:
             return .changeCapsLockState(state: .capslock) //FIXME: 誤り
+        case .toggleTabNavigationView:
+            return .toggleTabNavigationView
         }
     }
 

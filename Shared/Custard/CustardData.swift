@@ -265,6 +265,7 @@ enum CustardKeyAction: Codable {
     case moveTab(String)
     case toggleCursorMovingView
     case toggleCapsLockState
+    case toggleTabNavigationView
 }
 
 extension CustardKeyAction{
@@ -277,6 +278,7 @@ extension CustardKeyAction{
         case move_cursor
         case move_tab
         case toggle_cursor_moving_view
+        case toggle_tab_navigation_view
         case toggle_caps_lock_state
     }
 
@@ -299,6 +301,8 @@ extension CustardKeyAction{
             try container.encode(destination, forKey: .move_tab)
         case .toggleCursorMovingView:
             try container.encode(true, forKey: .toggle_cursor_moving_view)
+        case .toggleTabNavigationView:
+            try container.encode(true, forKey: .toggle_tab_navigation_view)
         case .toggleCapsLockState:
             try container.encode(true, forKey: .toggle_caps_lock_state)
         }
@@ -349,6 +353,8 @@ extension CustardKeyAction{
             self = .toggleCursorMovingView
         case .toggle_caps_lock_state:
             self = .toggleCapsLockState
+        case .toggle_tab_navigation_view:
+            self = .toggleTabNavigationView
         }
     }
 }
@@ -1020,16 +1026,7 @@ extension Custard{
                         label: .text("⑦"),
                         press_action: [.input("⑦")],
                         longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
+                        variation: []
                     )
                 ),
                 .scroll(10): .custom(
@@ -1037,16 +1034,7 @@ extension Custard{
                         label: .text("⑧"),
                         press_action: [.input("⑧")],
                         longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
+                        variation: []
                     )
                 ),
                 .scroll(11): .custom(
@@ -1054,16 +1042,7 @@ extension Custard{
                         label: .text("⑨"),
                         press_action: [.input("⑨")],
                         longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
+                        variation: []
                     )
                 ),
                 .scroll(12): .custom(
@@ -1091,7 +1070,16 @@ extension Custard{
                             )
                         ]
                     )
+                ),
+                .scroll(15): .custom(
+                    .init(
+                        label: .systemImage("list.dash"),
+                        press_action: [.toggleTabNavigationView],
+                        longpress_action: [],
+                        variation: []
+                    )
                 )
+
             ]
         )
     )

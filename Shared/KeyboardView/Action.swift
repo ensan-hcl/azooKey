@@ -28,6 +28,8 @@ enum ActionType{
     case hideLearningMemory
     //タブの変更
     case moveTab(Tab)
+    case toggleTabNavigationView
+
     //アプリを開く
     case openApp(String)    //アプリを開く
     #if DEBUG
@@ -54,6 +56,8 @@ extension ActionType: Equatable{
             return true
         case let (.moveCursor(l),.moveCursor(r)):
             return l == r
+        case (.toggleTabNavigationView, .toggleTabNavigationView):
+            return true
         case (.toggleShowMoveCursorView,.toggleShowMoveCursorView):
             return true
         case (.enter, .enter):

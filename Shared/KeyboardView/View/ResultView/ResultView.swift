@@ -45,6 +45,8 @@ struct ResultView<Candidate: ResultViewItemData>: View {
         Group{[unowned modelVariableSection] in
             if variableStates.showMoveCursorView{
                 CursorMoveView(theme: theme)
+            }else if variableStates.showTabNavigationView{
+                TabNavigationView(theme: theme)
             }else{
                 HStack{
                     ScrollView(.horizontal, showsIndicators: false){

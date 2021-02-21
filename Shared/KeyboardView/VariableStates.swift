@@ -30,6 +30,7 @@ final class VariableStates: ObservableObject{
     @Published var magnifyingText = ""
 
     @Published var showMoveCursorView = false
+    @Published var showTabNavigationView = false
 
     @Published var refreshing = true
 

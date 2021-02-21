@@ -20,11 +20,11 @@ struct TabKeyModel: FlickKeyModelProtocol{
             longPressActions: [.moveCursor(.right)]
         )
     ])
-    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tab: .flick_numbersymbols, flickKeys: [:])
+    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tab: .flick_numbersymbols, longPressActions: [.doOnce(.toggleTabNavigationView)], flickKeys: [:])
 
 
     var pressActions: [ActionType]{ [.moveTab(self.tab)] }
-    var longPressActions: [KeyLongPressActionType]{ [] }
+    let longPressActions: [KeyLongPressActionType]
     var variableSection: KeyModelVariableSection = KeyModelVariableSection()
 
     let suggestModel: SuggestModel
@@ -32,9 +32,10 @@ struct TabKeyModel: FlickKeyModelProtocol{
     var tab: Tab
     let flickKeys: [FlickDirection: FlickedKeyModel]
 
-    init(labelType: KeyLabelType, tab: Tab, flickKeys: [FlickDirection: FlickedKeyModel]){
+    private init(labelType: KeyLabelType, tab: Tab, longPressActions: [KeyLongPressActionType] = [], flickKeys: [FlickDirection: FlickedKeyModel]){
         self.labelType = labelType
         self.tab = tab
+        self.longPressActions = longPressActions
         self.flickKeys = flickKeys
         self.suggestModel = SuggestModel(flickKeys)
     }

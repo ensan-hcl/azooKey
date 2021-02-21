@@ -124,10 +124,15 @@ final class KeyboardActionDepartment: ActionDepartment{
         }
     }
 
+    private func showResultView(){
+        VariableStates.shared.showTabNavigationView = false
+        VariableStates.shared.showMoveCursorView = false
+    }
+
     private func doAction(_ action: ActionType){
         switch action{
         case let .input(text):
-            VariableStates.shared.showMoveCursorView = false
+            self.showResultView()
             if VariableStates.shared.keyboardLanguage == .english && VariableStates.shared.aAKeyState == .capslock{
                 let input = text.uppercased()
                 self.inputManager.input(text: input)
@@ -135,12 +140,12 @@ final class KeyboardActionDepartment: ActionDepartment{
                 self.inputManager.input(text: text)
             }
         case let .delete(count):
-            VariableStates.shared.showMoveCursorView = false
+            self.showResultView()
             self.inputManager.delete(count: count)
 
         case .smoothDelete:
             Sound.smoothDelete()
-            VariableStates.shared.showMoveCursorView = false
+            self.showResultView()
             self.inputManager.smoothDelete()
 
         case .deselectAndUseAsInputting:
@@ -162,18 +167,20 @@ final class KeyboardActionDepartment: ActionDepartment{
         case .toggleShowMoveCursorView:
             VariableStates.shared.showMoveCursorView.toggle()
         case .enter:
-            VariableStates.shared.showMoveCursorView = false
+            self.showResultView()
             let actions = self.inputManager.enter()
             actions.forEach{
                 self.doAction($0)
             }
-
         case .changeCharacterType:
-            VariableStates.shared.showMoveCursorView = false
+            self.showResultView()
             self.inputManager.changeCharacter()
 
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
+        case .toggleTabNavigationView:
+            VariableStates.shared.showTabNavigationView.toggle()
+            
         case .hideLearningMemory:
             self.hideLearningMemory()
 
@@ -260,22 +267,11 @@ final class KeyboardActionDepartment: ActionDepartment{
             let tuple = (type: action, timer: timer)
             self.timers.append(tuple)
         case let .doOnce(actionType):
-            switch actionType{
-            case .toggleShowMoveCursorView:
-                let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
-                    VariableStates.shared.showMoveCursorView.toggle()
-                })
-                let tuple = (type: action, timer: timer)
-                self.timers.append(tuple)
-            case let .changeCapsLockState(state):
-                let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
-                    VariableStates.shared.aAKeyState = state
-                })
-                let tuple = (type: action, timer: timer)
-                self.timers.append(tuple)
-            default:
-                return
-            }
+            let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
+                self.registerAction(actionType)
+            })
+            let tuple = (type: action, timer: timer)
+            self.timers.append(tuple)
         }
 
     }
