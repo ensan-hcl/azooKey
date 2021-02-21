@@ -46,17 +46,6 @@ enum Tab{
 
     }
 
-    ///deprecated
-    var isAbcTab: Bool {
-        #warning("このプロパティは使用しないことを推奨します。")
-        switch self{
-        case .flick_abc, .qwerty_abc:
-            return true
-        default:
-            return false
-        }
-    }
-
     var inputStyle: InputStyle {
         switch self{
         case .qwerty_hira:
