@@ -39,6 +39,10 @@ final class VariableStates: ObservableObject{
         self.refreshView()
     }
 
+    func closeKeybaord(){
+        self.tabManager.lastTab = self.tabManager.currentTab
+    }
+
     func refreshView(){
         refreshing.toggle()
     }

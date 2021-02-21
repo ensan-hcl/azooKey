@@ -49,6 +49,7 @@ final class Store{
     }
 
     func closeKeyboard(){
+        VariableStates.shared.closeKeybaord()
         self.action.closeKeyboard()
     }
 }
