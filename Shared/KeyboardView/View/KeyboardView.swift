@@ -48,33 +48,9 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                     ResultView(model: resultModel, theme: theme, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if variableStates.refreshing{
-                        CustomKeyboardView(theme: theme)
-                        /*
-                        switch (variableStates.keyboardOrientation, variableStates.keyboardLayout){
-                        case (.vertical, .flick):
-                            VerticalFlickKeyboardView(theme: theme)
-                        case (.vertical, .qwerty):
-                            VerticalQwertyKeyboardView(theme: theme)
-                        case (.horizontal, .flick):
-                            HorizontalKeyboardView(theme: theme)
-                        case (.horizontal, .qwerty):
-                            HorizontalQwertyKeyboardView(theme: theme)
-                        }
- */
+                        keyboardView(tab: variableStates.tabManager.currentTab)
                     }else{
-                        CustomKeyboardView(theme: theme)
-                        /*
-                        switch (variableStates.keyboardOrientation, variableStates.keyboardLayout){
-                        case (.vertical, .flick):
-                            VerticalFlickKeyboardView(theme: theme)
-                        case (.vertical, .qwerty):
-                            VerticalQwertyKeyboardView(theme: theme)
-                        case (.horizontal, .flick):
-                            HorizontalKeyboardView(theme: theme)
-                        case (.horizontal, .qwerty):
-                            HorizontalQwertyKeyboardView(theme: theme)
-                        }
- */
+                        keyboardView(tab: variableStates.tabManager.currentTab)
                     }
                 }.padding(.bottom, 2)
             }
@@ -86,6 +62,53 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 if messageManager.requireShow(data.id){
                     MessageView(data: data, manager: $messageManager)
                 }
+            }
+        }
+    }
+
+    func keyboardView(tab: Tab) -> some View {
+        let actualTab: Tab
+        if case let .user_dependent(type) = tab{
+            actualTab = type.actualTab
+        }else{
+            actualTab = tab
+        }
+
+        return Group{
+            switch actualTab{
+            case .flick_hira:
+                switch variableStates.keyboardOrientation{
+                case .vertical:
+                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().hiraKeyboard , theme: theme)
+                case .horizontal:
+                    HorizontalKeyboardView(keyModels: HorizontalFlickDataProvider().hiraKeyboard , theme: theme)
+                }
+            case .flick_abc:
+                switch variableStates.keyboardOrientation{
+                case .vertical:
+                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().abcKeyboard, theme: theme)
+                case .horizontal:
+                    HorizontalKeyboardView(keyModels: HorizontalFlickDataProvider().abcKeyboard, theme: theme)
+                }
+            case .flick_numbersymbols:
+                switch variableStates.keyboardOrientation{
+                case .vertical:
+                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().numberKeyboard, theme: theme)
+                case .horizontal:
+                    HorizontalKeyboardView(keyModels: HorizontalFlickDataProvider().numberKeyboard, theme: theme)
+                }
+            case .qwerty_hira:
+                QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard, theme: theme)
+            case .qwerty_abc:
+                QwertyKeyboardView(keyModels: QwertyDataProvider().abcKeyboard, theme: theme)
+            case .qwerty_number:
+                QwertyKeyboardView(keyModels: QwertyDataProvider().numberKeyboard, theme: theme)
+            case .qwerty_symbols:
+                QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard, theme: theme)
+            case .user_dependent(_):
+                EmptyView()
+            case let .custard(custard):
+                CustomKeyboardView(theme: theme, custard: custard)
             }
         }
     }

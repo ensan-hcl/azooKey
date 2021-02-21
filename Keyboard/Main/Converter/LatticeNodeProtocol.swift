@@ -31,13 +31,40 @@ extension LatticeNodeProtocol{
         case .direct:
             break
         case .roman:
-            if VariableStates.shared.tabState != .abc{
-                result.forEach{
-                    $0.lastClause?.ruby = $0.lastClause?.ruby.roman2katakana ?? ""
-                }
+            result.forEach{
+                $0.lastClause?.ruby = $0.lastClause?.ruby.roman2katakana ?? ""
             }
         }
         return result
+    }
+
+    func translated<Node: LatticeNodeProtocol>() -> Node {
+        if let node = self as? Node{
+            return node
+        }
+        if self is DirectLatticeNode{
+            if Node.self == RomanLatticeNode.self{
+                let prevs = self.prevs.map{
+                    RomanRegisteredNode(data: $0.data, registered: $0.prev, totalValue: $0.totalValue, rubyCount: $0.rubyCount, romanString: $0.ruby)
+                }
+                let node = RomanLatticeNode(data: self.data, romanString: self.data.ruby)
+                node.prevs = prevs
+                node.values = values
+                return node as! Node
+            }
+        }
+        if self is RomanLatticeNode{
+            if Node.self == DirectLatticeNode.self{
+                let prevs = self.prevs.map{
+                    DirectRegisteredNode(data: $0.data, registered: $0.prev, totalValue: $0.totalValue, rubyCount: $0.rubyCount)
+                }
+                let node = DirectLatticeNode(data: self.data, romanString: self.data.ruby)
+                node.prevs = prevs
+                node.values = values
+                return node as! Node
+            }
+        }
+        fatalError("Exception: Unknown condition")
     }
 }
 ///ラティスのノード。これを用いて計算する。
@@ -76,7 +103,7 @@ final class RomanLatticeNode: LatticeNodeProtocol{
     let data: DicDataElementProtocol
     var prevs: [RegisteredNode] = []
     var values: [PValue] = []
-    private var romanString: String
+    let romanString: String
     
     var rubyCount: Int {
         return self.romanString.count

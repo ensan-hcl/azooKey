@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-
+/*
 struct HorizontalQwertyKeyboardView: View{
     private let model = HorizontalQwertyDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
@@ -83,3 +83,4 @@ struct HorizontalQwertyKeyboardView: View{
         }        
     }
 }
+*/

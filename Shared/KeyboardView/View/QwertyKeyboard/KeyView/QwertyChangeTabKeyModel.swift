@@ -18,12 +18,12 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         case true:
             switch VariableStates.shared.keyboardLanguage{
             case .japanese:
-                return [.moveTab(.hira)]
+                return [.moveTab(.user_dependent(.japanese))]
             case .english:
-                return [.moveTab(.abc)]
+                return [.moveTab(.user_dependent(.english))]
             }
         case false:
-            return [.moveTab(.hira)]
+            return [.moveTab(.user_dependent(.japanese))]
         }
 
     }

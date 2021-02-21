@@ -28,6 +28,38 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         self.lastData = nil
     }
 
+    func translated<S: InputDataProtocol, T: LatticeNodeProtocol>(from conveter: KanaKanjiConverter<S, T>){
+        self.nodes = conveter.translateNodes()
+        self.previousInputData = conveter.previousInputData?.translated()
+    }
+
+    ///translationする関数
+    private func translateNodes<Node: LatticeNodeProtocol>() -> [[Node]] {
+        if let nodes = self.nodes as? [[Node]]{
+            return nodes
+        }
+        if let nodes = self.nodes as? [[DirectLatticeNode]]{
+            if RomanLatticeNode.self == Node.self{
+                return nodes.map{line in
+                    line.map{node in
+                        node.translated() as Node
+                    }
+                }
+            }
+        }
+        if let nodes = self.nodes as? [[RomanLatticeNode]]{
+            if DirectLatticeNode.self == Node.self{
+                return nodes.map{line in
+                    line.map{node in
+                        node.translated() as Node
+                    }
+                }
+            }
+        }
+
+        fatalError("Unknown pattern \(Node.self) \(LatticeNode.self)")
+    }
+
     ///上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
     /// - Parameters:
     ///   - data: 行うべき操作。

@@ -12,30 +12,29 @@ import SwiftUI
 struct TabKeyModel: FlickKeyModelProtocol{
     let needSuggestView: Bool = true
     
-    static let hiraTabKeyModel = TabKeyModel(labelType:.text("あいう"),tabType: .hira, flickKeys: [:])
-    static let abcTabKeyModel = TabKeyModel(labelType:.text("abc"), tabType: .abc, flickKeys: [
+    static let hiraTabKeyModel = TabKeyModel(labelType:.text("あいう"), tab: .user_dependent(.japanese), flickKeys: [:])
+    static let abcTabKeyModel = TabKeyModel(labelType:.text("abc"), tab: .user_dependent(.english), flickKeys: [
         .right: FlickedKeyModel(
             labelType: .text("→"),
             pressActions: [.moveCursor(1)],
             longPressActions: [.moveCursor(.right)]
         )
     ])
-    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tabType: .number, flickKeys: [:])
-       // .top: FlickedKeyModel(labelType: .image("lock"), pressActions: [.hideLearningMemory]) //見送る。
+    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tab: .flick_numbersymbols, flickKeys: [:])
 
 
-    var pressActions: [ActionType]{ [.moveTab(self.tabType)] }
+    var pressActions: [ActionType]{ [.moveTab(self.tab)] }
     var longPressActions: [KeyLongPressActionType]{ [] }
     var variableSection: KeyModelVariableSection = KeyModelVariableSection()
 
     let suggestModel: SuggestModel
     var labelType: KeyLabelType
-    var tabType: TabState
+    var tab: Tab
     let flickKeys: [FlickDirection: FlickedKeyModel]
 
-    init(labelType: KeyLabelType, tabType: TabState, flickKeys: [FlickDirection: FlickedKeyModel]){
+    init(labelType: KeyLabelType, tab: Tab, flickKeys: [FlickDirection: FlickedKeyModel]){
         self.labelType = labelType
-        self.tabType = tabType
+        self.tab = tab
         self.flickKeys = flickKeys
         self.suggestModel = SuggestModel(flickKeys)
     }
@@ -45,7 +44,7 @@ struct TabKeyModel: FlickKeyModelProtocol{
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        if states.tabState == self.tabType{
+        if states.tabManager.currentTab == self.tab{
             return theme.pushedKeyFillColor.color
         }
         return theme.specialKeyFillColor.color
@@ -53,12 +52,5 @@ struct TabKeyModel: FlickKeyModelProtocol{
     
     func sound() {
         Sound.tabOrOtherKey()
-    }
-
-}
-
-extension TabKeyModel{
-    func withFlick(_ flickKeys: [FlickDirection: FlickedKeyModel]) -> TabKeyModel {
-        TabKeyModel(labelType: self.labelType, tabType: self.tabType, flickKeys: flickKeys)
     }
 }

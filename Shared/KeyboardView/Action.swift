@@ -27,7 +27,7 @@ enum ActionType{
     case changeCapsLockState(state: AaKeyState)
     case hideLearningMemory
     //タブの変更
-    case moveTab(TabState)
+    case moveTab(Tab)
     //アプリを開く
     case openApp(String)    //アプリを開く
     #if DEBUG

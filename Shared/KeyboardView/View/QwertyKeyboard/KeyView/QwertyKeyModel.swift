@@ -31,7 +31,7 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
-        if states.aAKeyState == .capslock, states.tabState == .abc, case let .text(text) = self.labelType{
+        if states.aAKeyState == .capslock, states.keyboardLanguage == .english, case let .text(text) = self.labelType{
             return KeyLabel(.text(text.uppercased()), width: width, theme: theme, textColor: color)
         }
         return KeyLabel(self.labelType, width: width, theme: theme, textColor: color)

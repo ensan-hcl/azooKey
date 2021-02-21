@@ -17,17 +17,17 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         case true:
             return []
         case false:
-            switch VariableStates.shared.tabState{
-            case .hira:
-                return [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]
-            case .abc:
-                return [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]
-            case .number:
-                return [.moveTab(.abc)]
-            case let .other(string) where string == QwertyAdditionalTabs.symbols.identifier:
-                return [.moveTab(.abc)]
+            switch VariableStates.shared.tabManager.currentTab{
+            case .qwerty_hira:
+                return [.moveTab(.qwerty_symbols)]
+            case .qwerty_abc:
+                return [.moveTab(.qwerty_symbols)]
+            case .qwerty_number:
+                return [.moveTab(.user_dependent(.english))]
+            case .qwerty_symbols:
+                return [.moveTab(.user_dependent(.english))]
             default:
-                return [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]
+                return [.moveTab(.qwerty_symbols)]
             }
         }
 
@@ -53,14 +53,14 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         case true:
             return KeyLabel(.changeKeyboard, width: width, theme: theme, textColor: color)
         case false:
-            switch states.tabState{
-            case .hira:
+            switch states.tabManager.currentTab{
+            case .qwerty_hira:
                 return KeyLabel(.text("#+="), width: width, theme: theme, textColor: color)
-            case .abc:
+            case .qwerty_abc:
                 return KeyLabel(.text("#+="), width: width, theme: theme, textColor: color)
-            case .number:
+            case .qwerty_number:
                 return KeyLabel(.text("A"), width: width, theme: theme, textColor: color)
-            case let .other(string) where string == "symbols":
+            case .qwerty_symbols:
                 return KeyLabel(.text("A"), width: width, theme: theme, textColor: color)
             default:
                 return KeyLabel(.text("#+="), width: width, theme: theme, textColor: color)

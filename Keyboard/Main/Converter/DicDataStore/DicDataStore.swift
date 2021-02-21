@@ -285,7 +285,7 @@ final class DicDataStore{
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
         let group = [Character: [String]].init(grouping: stringWithTypoData.map{$0.string}, by: {$0.first!})
-
+        debug(group)
         //先頭の文字: そこで検索したい文字列の集合
         let indices: [(String, Set<Int>)] = group.map{dic in
             let key = String(dic.key)
@@ -442,10 +442,12 @@ final class DicDataStore{
             }
         }
 
-        if VariableStates.shared.tabState == .abc && head.onlyRomanAlphabet{
+        //headを英単語として候補に追加する
+        if VariableStates.shared.keyboardLanguage == .english && head.onlyRomanAlphabet{
             result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 40, value: -14))
         }
-        if VariableStates.shared.tabState != .abc && VariableStates.shared.inputStyle == .roman{
+        //入力を全てひらがな、カタカナに変換したものを候補に追加する
+        if VariableStates.shared.keyboardLanguage != .english && VariableStates.shared.inputStyle == .roman{
             if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head]{
                 result.append(LRE_DicDataElement(word: hiragana, ruby: katakana, cid: 1288, mid: 501, value: -13))
                 result.append(LRE_SRE_DicDataElement(ruby: katakana, cid: 1288, mid: 501, value: -14))

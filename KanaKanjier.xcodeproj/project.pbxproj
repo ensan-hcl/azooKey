@@ -153,6 +153,8 @@
 		1AB8C37525E0067700D39BC5 /* SimpleKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C35A25DFE77300D39BC5 /* SimpleKeyView.swift */; };
 		1AB8C38225E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C38125E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift */; };
 		1AB8C38325E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C38125E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift */; };
+		1AB8C38D25E1190900D39BC5 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C38C25E1190900D39BC5 /* TabManager.swift */; };
+		1AB8C38E25E1190900D39BC5 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C38C25E1190900D39BC5 /* TabManager.swift */; };
 		1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD077725479B6500DD0F7C /* Dictionary.swift */; };
 		1AC03159251103EF004CA505 /* Designs.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC03158251103EF004CA505 /* Designs.xcassets */; };
 		1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */; };
@@ -2343,8 +2345,6 @@
 		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
 		1AE4DB7C25163C6B00A24158 /* DirectInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */; };
 		1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB852516D0D600A24158 /* RomanInputData.swift */; };
-		1AE4DBC02518578200A24158 /* HorizontalQwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBBF2518578200A24158 /* HorizontalQwertyKeyboardView.swift */; };
-		1AE4DBC6251857AA00A24158 /* HorizontalQwertyDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBC5251857AA00A24158 /* HorizontalQwertyDataProvider.swift */; };
 		1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */; };
 		1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */; };
 		1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
@@ -2396,8 +2396,6 @@
 		1AF6795625CEDB8E00F3987B /* QwertyAdditionalTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F47F2535643C00B92B49 /* QwertyAdditionalTabs.swift */; };
 		1AF6795725CEDB8E00F3987B /* VerticalQwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* VerticalQwertyKeyboardView.swift */; };
 		1AF6795825CEDB8E00F3987B /* VerticalQwertyDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602A32514820300EAD647 /* VerticalQwertyDataProvider.swift */; };
-		1AF6795925CEDB8E00F3987B /* HorizontalQwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBBF2518578200A24158 /* HorizontalQwertyKeyboardView.swift */; };
-		1AF6795A25CEDB8E00F3987B /* HorizontalQwertyDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DBC5251857AA00A24158 /* HorizontalQwertyDataProvider.swift */; };
 		1AF6797025CEDB9B00F3987B /* VariationsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602F32514FB6E00EAD647 /* VariationsModel.swift */; };
 		1AF6797125CEDB9B00F3987B /* QwertyFunctionalKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602C725148CDF00EAD647 /* QwertyFunctionalKeyModel.swift */; };
 		1AF6797225CEDB9B00F3987B /* QwertySpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602B3251489E400EAD647 /* QwertySpaceKeyModel.swift */; };
@@ -2633,6 +2631,7 @@
 		1AB8C35A25DFE77300D39BC5 /* SimpleKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleKeyView.swift; sourceTree = "<group>"; };
 		1AB8C36125DFE80A00D39BC5 /* SimpleKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleKeyModel.swift; sourceTree = "<group>"; };
 		1AB8C38125E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDownAndTouchUpGesture.swift; sourceTree = "<group>"; };
+		1AB8C38C25E1190900D39BC5 /* TabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
 		1ABD077725479B6500DD0F7C /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		1AC03158251103EF004CA505 /* Designs.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Designs.xcassets; sourceTree = "<group>"; };
 		1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteredNodeProtocol.swift; sourceTree = "<group>"; };
@@ -5236,9 +5235,9 @@
 				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
 				1A12E24125C3E1CA00316009 /* MessageView.swift */,
 				1A58AB0B25037E8800EB1864 /* ResultView */,
-				1A18425B25DE6646003985AB /* CustomKeybaord */,
 				1A6F95912514446A007399AC /* QwertyKeyboard */,
 				1A3DC2082500D514002CAA93 /* FlickKeyboard */,
+				1A18425B25DE6646003985AB /* CustomKeybaord */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7680,6 +7679,7 @@
 				1AF678AE25CE3B4A00F3987B /* States.swift */,
 				1A3DC2162500D5AB002CAA93 /* Action.swift */,
 				1AF678DE25CED86500F3987B /* VariableStates.swift */,
+				1AB8C38C25E1190900D39BC5 /* TabManager.swift */,
 				1AF678F525CED91900F3987B /* ActionDepartment.swift */,
 				1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */,
 				1A67736F256F7AC30037AF22 /* Sound.swift */,
@@ -10086,6 +10086,7 @@
 				1A3A162C2529671300A5BA4F /* KeyFlickSetting.swift in Sources */,
 				1ACC0F0E25CFE7FF00FC1B8A /* ThemeEditView.swift in Sources */,
 				1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */,
+				1AB8C38D25E1190900D39BC5 /* TabManager.swift in Sources */,
 				1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */,
 				1AF678B425CE3B7000F3987B /* States.swift in Sources */,
 				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
@@ -10168,7 +10169,6 @@
 				1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,
 				1AE1023D25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
-				1AF6795A25CEDB8E00F3987B /* HorizontalQwertyDataProvider.swift in Sources */,
 				1A64A8D5257C91500022C081 /* FontSizeSetting.swift in Sources */,
 				1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */,
 				1AC8A5B92595C10A00B71E5A /* StringInterpolation.swift in Sources */,
@@ -10177,7 +10177,6 @@
 				1A18424325DD6857003985AB /* FontPicker.swift in Sources */,
 				1A9B0A2D25635090004203BB /* EmojiKaomojiView.swift in Sources */,
 				1AB8C36225DFE80A00D39BC5 /* SimpleKeyModel.swift in Sources */,
-				1AF6795925CEDB8E00F3987B /* HorizontalQwertyKeyboardView.swift in Sources */,
 				1AF6795625CEDB8E00F3987B /* QwertyAdditionalTabs.swift in Sources */,
 				1AF679AD25CEE66F00F3987B /* KeyboardPreview.swift in Sources */,
 				1AF6797025CEDB9B00F3987B /* VariationsModel.swift in Sources */,
@@ -10243,7 +10242,6 @@
 				1AE4DB7C25163C6B00A24158 /* DirectInputData.swift in Sources */,
 				1AB8C36325DFE80A00D39BC5 /* SimpleKeyModel.swift in Sources */,
 				1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */,
-				1AE4DBC02518578200A24158 /* HorizontalQwertyKeyboardView.swift in Sources */,
 				1A3DC2FF2500F837002CAA93 /* extension Character.swift in Sources */,
 				1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
@@ -10299,7 +10297,6 @@
 				1A2602F42514FB6E00EAD647 /* VariationsModel.swift in Sources */,
 				1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */,
 				1AA346A42567F12A00B41A16 /* LearningType.swift in Sources */,
-				1AE4DBC6251857AA00A24158 /* HorizontalQwertyDataProvider.swift in Sources */,
 				1A86F4802535643C00B92B49 /* QwertyAdditionalTabs.swift in Sources */,
 				1AF678F625CED91900F3987B /* ActionDepartment.swift in Sources */,
 				1A2602AE251489C700EAD647 /* QwertyKeyModelProtocol.swift in Sources */,
@@ -10316,6 +10313,7 @@
 				1AC8A5AB2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1AB8C37525E0067700D39BC5 /* SimpleKeyView.swift in Sources */,
 				1A8A8402250F65110093A701 /* all.swift in Sources */,
+				1AB8C38E25E1190900D39BC5 /* TabManager.swift in Sources */,
 				1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */,
 				1A6F959725144481007399AC /* VerticalQwertyKeyboardView.swift in Sources */,
 				1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */,

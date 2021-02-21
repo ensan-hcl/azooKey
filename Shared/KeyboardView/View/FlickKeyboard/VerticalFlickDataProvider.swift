@@ -12,7 +12,7 @@ import SwiftUI
 //M：基本は変わらないx
 struct VerticalFlickDataProvider {
     //縦に並べる
-    var hiraKeyboard:[[FlickKeyModelProtocol]] = [
+    var hiraKeyboard: [[FlickKeyModelProtocol]] = [
         //第1列
         [
             TabKeyModel.numberTabKeyModel,

@@ -11,6 +11,7 @@ import Foundation
 enum CustardLanguage: String, Codable {
     case english
     case japanese
+    case undefined
 }
 
 enum CustardInputStyle: String, Codable {

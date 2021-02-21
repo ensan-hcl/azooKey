@@ -13,8 +13,8 @@ import SwiftUI
 final class VariableStates: ObservableObject{
     var action: ActionDepartment = ActionDepartment()
     static let shared = VariableStates()
-    private var lastVerticalTabState: TabState? = nil
-    var inputStyle: InputStyle = .direct
+    private(set) var inputStyle: InputStyle = .direct
+    var tabManager = TabManager()
 
     private init(){}
 
@@ -25,7 +25,6 @@ final class VariableStates: ObservableObject{
     @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
-    @Published var tabState: TabState = .hira
 
     @Published var isTextMagnifying = false
     @Published var magnifyingText = ""
@@ -35,11 +34,8 @@ final class VariableStates: ObservableObject{
     @Published var refreshing = true
 
     func initialize(){
-        if let lastTabState = self.lastVerticalTabState{
-            self.setTabState(lastTabState)
-            self.lastVerticalTabState = nil
-        }
-        self.setKeyboardType(for: self.tabState)
+        self.tabManager.initialize()
+        self.refreshView()
     }
 
     func refreshView(){
@@ -63,16 +59,9 @@ final class VariableStates: ObservableObject{
         }
     }
 
-    func setTabState(_ state: TabState){
-        if state == .abc{
-            self.keyboardLanguage = .english
-        }
-        if state == .hira{
-            self.keyboardLanguage = .japanese
-        }
-        self.tabState = state
-        self.lastVerticalTabState = state
-        self.setKeyboardType(for: state)
+    func setTab(_ tab: Tab){
+        self.tabManager.moveTab(to: tab)
+        self.refreshView()
     }
 
     func setUIReturnKeyType(type: UIReturnKeyType){
@@ -80,6 +69,11 @@ final class VariableStates: ObservableObject{
         if case let .return(prev) = self.enterKeyState, prev != type{
             self.setEnterKeyState(.return)
         }
+    }
+
+    func setInputStyle(_ style: InputStyle){
+        self.action.changeInputStyle(from: self.inputStyle, to: style)
+        self.inputStyle = style
     }
 
     ///workarounds
@@ -93,23 +87,5 @@ final class VariableStates: ObservableObject{
         self.keyboardOrientation = orientation
     }
 
-    func setKeyboardType(for tab: TabState){
-        let japaneseLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
-        let type: KeyboardLayout
-        switch tab{
-        case .hira:
-            type = japaneseLayout
-        case .abc:
-            type = SettingData.shared.keyboardLayout(for: .englishKeyboardLayout)
-        default:
-            type = Design.shared.layout
-        }
-        self.inputStyle = japaneseLayout == .flick ? .direct : .roman
-        if self.keyboardLayout != type{
-            self.keyboardLayout = type
-            self.refreshView()
-            return
-        }
-    }
 }
 

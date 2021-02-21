@@ -48,7 +48,7 @@ fileprivate extension CustardKeyAction{
         case let .moveCursor(value):
             return .moveCursor(value)
         case let .moveTab(value):
-            return .moveTab(.abc) //FIXME: 誤り
+            return .moveTab(.qwerty_abc) //FIXME: 誤り
         case .toggleCursorMovingView:
             return .toggleShowMoveCursorView
         case .toggleCapsLockState:

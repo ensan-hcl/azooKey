@@ -106,9 +106,7 @@ extension RegisteredNodeProtocol{
             case .direct:
                 break
             case .roman:
-                if VariableStates.shared.tabState != .abc{
-                    lastClause.ruby = lastClause.ruby.roman2katakana
-                }
+                lastClause.ruby = lastClause.ruby.roman2katakana
             }
             lastcandidate.clauses.append((clause: unit, value: self.totalValue))
             lastcandidate.data.append(self.data)

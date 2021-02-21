@@ -128,7 +128,7 @@ final class KeyboardActionDepartment: ActionDepartment{
         switch action{
         case let .input(text):
             VariableStates.shared.showMoveCursorView = false
-            if VariableStates.shared.tabState == .abc && VariableStates.shared.aAKeyState == .capslock{
+            if VariableStates.shared.keyboardLanguage == .english && VariableStates.shared.aAKeyState == .capslock{
                 let input = text.uppercased()
                 self.inputManager.input(text: input)
             }else{
@@ -173,7 +173,7 @@ final class KeyboardActionDepartment: ActionDepartment{
             self.inputManager.changeCharacter()
 
         case let .moveTab(type):
-            VariableStates.shared.setTabState(type)
+            VariableStates.shared.setTab(type)
         case .hideLearningMemory:
             self.hideLearningMemory()
 
@@ -207,6 +207,10 @@ final class KeyboardActionDepartment: ActionDepartment{
         }
     }
 
+    override func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
+        self.inputManager.changeInputStyle(from: beforeStyle, to: afterStyle)
+    }
+    
     ///押した場合に行われる。
     /// - Parameters:
     ///   - action: 行われた動作。
@@ -459,6 +463,25 @@ private final class InputManager{
         return self._directConverter!
     }
 
+    func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
+        switch (beforeStyle, afterStyle){
+        case (.direct, .roman):
+            let stateHolder = KanaRomanStateHolder(components: [KanaComponent(internalText: self.inputtedText, kana: self.inputtedText, isFreezed: true, escapeRomanKanaConverting: true)])
+            self.kanaRomanStateHolder = stateHolder
+            let converter = RomanConverter()
+            converter.translated(from: self.directConverter)
+            self._romanConverter = converter
+            self._directConverter = nil
+        case (.roman, .direct):
+            let converter = DirectConverter()
+            converter.translated(from: self.romanConverter)
+            self._directConverter = converter
+            self._romanConverter = nil
+        default:
+            return
+        }
+    }
+
     func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification){
         self._romanConverter?.sendToDicDataStore(data)
         self._directConverter?.sendToDicDataStore(data)
@@ -473,7 +496,7 @@ private final class InputManager{
         case .direct:
             return false
         case .roman:
-            return VariableStates.shared.tabState == .hira
+            return true
         }
     }
 
@@ -920,10 +943,10 @@ private final class InputManager{
                     result = self.directConverter.requestCandidates(inputData, N_best: 10)
                 case .roman:
                     let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
-                    let requirePrediction = VariableStates.shared.tabState == .hira
-                    let requireEnglishPrediction = VariableStates.shared.tabState != .hira
+                    let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .japanese
+                    let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .english
 
-                    result = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requirePrediction, requireEnglishPrediction: requireEnglishPrediction)
+                    result = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
                 }
                 results.append(contentsOf: result)
                 //Storeに通知し、ResultViewに表示する。

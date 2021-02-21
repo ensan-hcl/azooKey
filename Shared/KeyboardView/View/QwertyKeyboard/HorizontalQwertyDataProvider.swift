@@ -7,10 +7,10 @@
 //
 
 import Foundation
-
+/*
 struct HorizontalQwertyDataProvider {
     //横に並べる
-    var numberKeyboard: [[QwertyKeyModelProtocol]] = [
+    var numberKeyboard: [[QwertyKeyModelProtocol]] {[
         [
             QwertyKeyModel(
                 labelType: .text("1"),
@@ -160,13 +160,13 @@ struct HorizontalQwertyDataProvider {
             QwertyKeyModel(
                 labelType: .text("」"),
                 pressActions: [.input("」")],
-                          variationsModel: VariationsModel([
-                            (label: .text("」"), actions: [.input("」")] ),
-                            (label: .text("』"), actions: [.input("』")] ),
-                            (label: .text("】"), actions: [.input("】")] ),
-                            (label: .text("）"), actions: [.input("）")] ),
-                            (label: .text("》"), actions: [.input("》")] ),
-                          ])
+                variationsModel: VariationsModel([
+                    (label: .text("」"), actions: [.input("」")] ),
+                    (label: .text("』"), actions: [.input("』")] ),
+                    (label: .text("】"), actions: [.input("】")] ),
+                    (label: .text("）"), actions: [.input("）")] ),
+                    (label: .text("》"), actions: [.input("》")] ),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("¥"),
@@ -180,116 +180,26 @@ struct HorizontalQwertyDataProvider {
                     (label: .text("₿"), actions: [.input("₿")] ),
                     (label: .text("£"), actions: [.input("£")] ),
                     (label: .text("¤"), actions: [.input("¤")] ),
-                ])
+                ], direction: .left)
             ),
             QwertyKeyModel(labelType: .text("&"), pressActions: [.input("&")]),
         ],
-        
+
         [
-            QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]),
+            QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.qwerty_symbols)]),
         ] + SettingData.shared.qwertyNumberTabKeySetting +
         [
             QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
         ],
 
         [
-            QwertyFunctionalKeyModel(labelType: .text("あいう"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.hira)]),
+            QwertyChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
             QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],
     ]
-    
-    //横に並べる
-    var hiraKeyboard: [[QwertyKeyModelProtocol]] = [
-        [
-            QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
-            QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
-            QwertyKeyModel(labelType: .text("e"), pressActions: [.input("e")]),
-            QwertyKeyModel(labelType: .text("r"), pressActions: [.input("r")]),
-            QwertyKeyModel(labelType: .text("t"), pressActions: [.input("t")]),
-            QwertyKeyModel(labelType: .text("y"), pressActions: [.input("y")]),
-            QwertyKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
-            QwertyKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
-            QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
-            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
-        ],
-        [
-            QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
-            QwertyKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
-            QwertyKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
-            QwertyKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
-            QwertyKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
-            QwertyKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
-            QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
-            QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
-            QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
-            QwertyKeyModel(labelType: .text("ー"), pressActions: [.input("ー")]),
-        ],
-        [
-            QwertyFunctionalKeyModel(labelType: .selectable("あ", "Ａ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.abc)]),
-            QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
-            QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
-            QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
-            QwertyKeyModel(labelType: .text("v"), pressActions: [.input("v")]),
-            QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
-            QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
-            QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
-            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
-        ],
-        [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
-            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
-            QwertySpaceKeyModel(),
-            QwertyEnterKeyModel.shared,
-        ],
-    ]
-
-    //横に並べる
-    var abcKeyboard: [[QwertyKeyModelProtocol]] = [
-        [
-            QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
-            QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
-            QwertyKeyModel(labelType: .text("e"), pressActions: [.input("e")]),
-            QwertyKeyModel(labelType: .text("r"), pressActions: [.input("r")]),
-            QwertyKeyModel(labelType: .text("t"), pressActions: [.input("t")]),
-            QwertyKeyModel(labelType: .text("y"), pressActions: [.input("y")]),
-            QwertyKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
-            QwertyKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
-            QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
-            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
-        ],
-        [
-            QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
-            QwertyKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
-            QwertyKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
-            QwertyKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
-            QwertyKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
-            QwertyKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
-            QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
-            QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
-            QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
-            QwertyAaKeyModel.shared,
-        ],
-        [
-            QwertyFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.hira)]),
-            QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
-            QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
-            QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
-            QwertyKeyModel(labelType: .text("v"), pressActions: [.input("v")]),
-            QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
-            QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
-            QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
-            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
-        ],
-        [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
-            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
-            QwertySpaceKeyModel(),
-            QwertyEnterKeyModel.shared,
-        ],
-    ]
-
+    }
     //横に並べる
     var symbolsKeyboard: [[QwertyKeyModelProtocol]] = [
         [
@@ -394,7 +304,7 @@ struct HorizontalQwertyDataProvider {
         ],
 
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.number)]),
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.qwerty_number)]),
             QwertyKeyModel(
                 labelType: .text("."),
                 pressActions: [.input(".")],
@@ -440,5 +350,94 @@ struct HorizontalQwertyDataProvider {
         ],
     ]
 
+    //横に並べる
+    var hiraKeyboard: [[QwertyKeyModelProtocol]] = [
+        [
+            QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
+            QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
+            QwertyKeyModel(labelType: .text("e"), pressActions: [.input("e")]),
+            QwertyKeyModel(labelType: .text("r"), pressActions: [.input("r")]),
+            QwertyKeyModel(labelType: .text("t"), pressActions: [.input("t")]),
+            QwertyKeyModel(labelType: .text("y"), pressActions: [.input("y")]),
+            QwertyKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
+            QwertyKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
+            QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
+            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
+        ],
+        [
+            QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
+            QwertyKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
+            QwertyKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
+            QwertyKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
+            QwertyKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
+            QwertyKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
+            QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
+            QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
+            QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
+            QwertyKeyModel(labelType: .text("ー"), pressActions: [.input("ー")]),
+        ],
+        [
+            QwertyFunctionalKeyModel(labelType: .selectable("あ", "Ａ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.user_dependent(.english))]),
+            QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
+            QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
+            QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
+            QwertyKeyModel(labelType: .text("v"), pressActions: [.input("v")]),
+            QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
+            QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
+            QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
+            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+        ],
+        [
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.qwerty_number)]),
+            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
+            QwertySpaceKeyModel(),
+            QwertyEnterKeyModel.shared,
+        ],
+    ]
 
+    //横に並べる
+    var abcKeyboard: [[QwertyKeyModelProtocol]] = [
+        [
+            QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
+            QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
+            QwertyKeyModel(labelType: .text("e"), pressActions: [.input("e")]),
+            QwertyKeyModel(labelType: .text("r"), pressActions: [.input("r")]),
+            QwertyKeyModel(labelType: .text("t"), pressActions: [.input("t")]),
+            QwertyKeyModel(labelType: .text("y"), pressActions: [.input("y")]),
+            QwertyKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
+            QwertyKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
+            QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
+            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
+        ],
+        [
+            QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
+            QwertyKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
+            QwertyKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
+            QwertyKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
+            QwertyKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
+            QwertyKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
+            QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
+            QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
+            QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
+            QwertyAaKeyModel.shared
+        ],
+        [
+            QwertyFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.user_dependent(.japanese))]),
+            QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
+            QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
+            QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
+            QwertyKeyModel(labelType: .text("v"), pressActions: [.input("v")]),
+            QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
+            QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
+            QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
+            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+        ],
+        [
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.qwerty_number)]),
+            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
+            QwertySpaceKeyModel(),
+            QwertyEnterKeyModel.shared,
+        ],
+    ]
 }
+*/

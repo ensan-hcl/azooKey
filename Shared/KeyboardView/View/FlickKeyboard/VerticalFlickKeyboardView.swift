@@ -14,57 +14,20 @@ struct VerticalFlickKeyboardView: View{
     @ObservedObject private var variableStates = VariableStates.shared
     private let theme: ThemeData
     private let tabDesign = TabDependentDesign(width: 5, height: 4, layout: .flick, orientation: .vertical)
-
-    init(theme: ThemeData){
+    private let keyModels: [[FlickKeyModelProtocol]]
+    init(keyModels: [[FlickKeyModelProtocol]], theme: ThemeData){
+        self.keyModels = keyModels
         self.theme = theme
     }
 
     private var horizontalIndices: Range<Int> {
-        switch variableStates.tabState{
-        case .hira:
-            return self.model.hiraKeyboard.indices
-        case .abc:
-            return self.model.abcKeyboard.indices
-        case .number:
-            return self.model.numberKeyboard.indices
-        case let .other(string):
-            switch string{
-            default: return 0..<0
-            }
-        }
+        keyModels.indices
     }
     
     private func verticalIndices(h: Int) -> Range<Int> {
-        switch variableStates.tabState{
-        case .hira:
-            return self.model.hiraKeyboard[h].indices
-        case .abc:
-            return self.model.abcKeyboard[h].indices
-        case .number:
-            return self.model.numberKeyboard[h].indices
-        case let .other(string):
-            switch string{
-            default: return 0..<0
-            }
-        }
+        keyModels[h].indices
     }
     
-    private var keyModels: [[FlickKeyModelProtocol]] {
-        switch variableStates.tabState{
-        case .hira:
-            return self.model.hiraKeyboard
-        case .abc:
-            return self.model.abcKeyboard
-        case .number:
-            return self.model.numberKeyboard
-        case let .other(string):
-            switch string{
-            default: return []
-            }
-            
-        }
-    }
-
     var body: some View {
         ZStack{
             HStack(spacing: tabDesign.horizontalSpacing){

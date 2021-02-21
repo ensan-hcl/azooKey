@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct VerticalQwertyDataProvider {
+struct QwertyDataProvider {
         //横に並べる
     var numberKeyboard: [[QwertyKeyModelProtocol]] {[
         [
@@ -186,7 +186,7 @@ struct VerticalQwertyDataProvider {
         ],
 
         [
-            QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.other(QwertyAdditionalTabs.symbols.identifier))]),
+            QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.qwerty_symbols)]),
         ] + SettingData.shared.qwertyNumberTabKeySetting +
         [
             QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
@@ -304,7 +304,7 @@ struct VerticalQwertyDataProvider {
         ],
 
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.number)]),
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.qwerty_number)]),
             QwertyKeyModel(
                 labelType: .text("."),
                 pressActions: [.input(".")],
@@ -377,7 +377,7 @@ struct VerticalQwertyDataProvider {
             QwertyKeyModel(labelType: .text("ー"), pressActions: [.input("ー")]),
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .selectable("あ", "Ａ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.abc)]),
+            QwertyFunctionalKeyModel(labelType: .selectable("あ", "Ａ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.user_dependent(.english))]),
             QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
             QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
             QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
@@ -388,7 +388,7 @@ struct VerticalQwertyDataProvider {
             QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.qwerty_number)]),
             QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
@@ -422,7 +422,7 @@ struct VerticalQwertyDataProvider {
             QwertyAaKeyModel.shared
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.hira)]),
+            QwertyFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.user_dependent(.japanese))]),
             QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
             QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
             QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
@@ -433,12 +433,10 @@ struct VerticalQwertyDataProvider {
             QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.number)]),
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.qwerty_number)]),
             QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],
     ]
-
-
 }
