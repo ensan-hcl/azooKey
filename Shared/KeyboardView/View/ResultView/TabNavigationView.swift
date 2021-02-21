@@ -26,7 +26,8 @@ struct TabNavigationView: View{
 
     let items: [TabNavigationViewItem] = [
         .init(label: .text("あいう"), actions: [.moveTab(.user_dependent(.japanese))]),
-        .init(label: .image(systemName: "circle.square"), actions: [.moveTab(.custard(.mock_qwerty_scroll))]),
+        .init(label: .text("ABC"), actions: [.moveTab(.user_dependent(.english))]),
+        .init(label: .text("①②③"), actions: [.moveTab(.custard(.mock_qwerty_scroll))]),
     ]
 
     init(theme: ThemeData){
@@ -58,7 +59,6 @@ struct TabNavigationView: View{
                 }
             }
         }.frame(height: Design.shared.resultViewHeight)
-
     }
 }
 

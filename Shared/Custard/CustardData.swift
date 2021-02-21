@@ -900,7 +900,7 @@ extension Custard{
         input_style: .direct,
         interface: .init(
             key_style: .qwerty,
-            key_layout: .gridScroll(.init(direction: .horizontal, columnKeyCount: 4, screenRowKeyCount: 2.2)),
+            key_layout: .gridScroll(.init(direction: .horizontal, columnKeyCount: 4, screenRowKeyCount: 3.2)),
             keys: [
                 .scroll(0): .system(.change_keyboard),
                 .scroll(1): .custom(
