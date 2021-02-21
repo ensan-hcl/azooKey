@@ -57,19 +57,7 @@ struct RomanInputData: InputDataProtocol {
                 }
                 return []
             }
-            /*
-            (i..<min(count, i + Self.possibleMaxLength)).flatMap{(j: Int) -> [String] in
-                if i == j && freezed[left + i]{
-                    return [String(self.characters[left + i])]
-                }
-                if (left + i ... left + j).allSatisfy{!freezed[$0]}{
-                    return Self.getTypo(String(self.characters[left + i ... left + j]))
-                }
-                return []
-            }
- */
         }
-
         var result: [(lattice: RomanKanaConvertingLattice, penalty: PValue)] = []
         nodes.indices.forEach{(i: Int) in
             let correct = String(self.characters[left + i])
@@ -87,7 +75,7 @@ struct RomanInputData: InputDataProtocol {
                 if lattice.count != i{
                     return [(lattice, penalty)]
                 }
-                if let component = history.freezedData(internalCharacterCount:left + i + 1){
+                if let component = history.freezedData(internalCharacterCount: left + i + 1){
                     return [(lattice: lattice.appending(component.displayedText, isFreezed: true), penalty: penalty)]
                 }
                 if penalty == triple{
@@ -98,7 +86,7 @@ struct RomanInputData: InputDataProtocol {
                     if _lattice.shouldBeRemoved{
                         return nil
                     }
-                    return (lattice: _lattice, penalty: penalty + ($0 == correct ? .zero:unit))
+                    return (lattice: _lattice, penalty: penalty + ($0 == correct ? .zero : unit))
                 }
             }
         }

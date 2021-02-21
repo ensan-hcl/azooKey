@@ -20,24 +20,30 @@ final class KanaRomanStateHolder{
         self.components = components
     }
     
-    //左側=leftSideTextの部分に対してテキストを挿入する
+    ///internalCharacterCount+1文字目から始まるfreezedなデータを返す。
     func freezedData(internalCharacterCount: Int) -> KanaComponent? {
-        var index = 0
+        var index = -1
         let counts = components.map{$0.internalText.count}
         while true{
             if counts.endIndex == index{
                 return nil
             }
-            let sum = counts.prefix(index+1).reduce(0, +)
-            if sum == internalCharacterCount{
-                if components[index].isFreezed{
-                    return components[index]
+            let sum = counts.prefix(index + 1).reduce(0, +)
+            if sum == internalCharacterCount - 1{
+                if components[index + 1].isFreezed{
+                    return components[index + 1]
                 }else{
                     return nil
                 }
             }
-            if sum > internalCharacterCount{
-                return nil
+            if sum > internalCharacterCount - 1{
+                if components[index].isFreezed{
+                    let delta = sum - internalCharacterCount + 1
+                    let splited = components[index].split().suffix(delta)
+                    return KanaComponent(internalText: splited.map{$0.internalText}.joined(), kana: splited.map{$0.displayedText}.joined(), isFreezed: true, escapeRomanKanaConverting: true)
+                }else{
+                    return nil
+                }
             }
             index += 1
         }

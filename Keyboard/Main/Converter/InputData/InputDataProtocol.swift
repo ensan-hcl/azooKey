@@ -28,6 +28,25 @@ protocol InputDataProtocol{
 
 }
 
+extension InputDataProtocol{
+    func translated<InputData: InputDataProtocol>() -> InputData {
+        if let data = self as? InputData{
+            return data
+        }
+        if self is DirectInputData{
+            if InputData.self == RomanInputData.self{
+                return RomanInputData(self.katakanaString, history: KanaRomanStateHolder(components: [KanaComponent(internalText: self.katakanaString, kana: self.katakanaString, isFreezed: true, escapeRomanKanaConverting: true)])) as! InputData
+            }
+        }
+        if self is RomanInputData{
+            if InputData.self == DirectInputData.self{
+                return DirectInputData(self.katakanaString) as! InputData
+            }
+        }
+        fatalError("Unexpected situation")
+    }
+}
+
 extension InputDataProtocol{    
     internal func isAfterAddedCharacter(previous: Self) -> Int? {
         if self.characters.count == previous.count{
