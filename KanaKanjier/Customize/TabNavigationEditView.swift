@@ -76,5 +76,6 @@ struct TabNavigationViewItemLabelEditView: View {
         TextField(placeHolder, text: $labelText){ _ in } onCommit: {
             label = .text(labelText)
         }
+        .textFieldStyle(RoundedBorderTextFieldStyle())
     }
 }

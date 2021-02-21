@@ -32,6 +32,32 @@ fileprivate extension CustardInterfaceLayoutScrollValue{
     }
 }
 
+fileprivate extension CodableTabData{
+    var tab: Tab {
+        switch self{
+        case let .system(tab):
+            switch tab{
+            case .flick_hira:
+                return .flick_hira
+            case .flick_abc:
+                return .flick_abc
+            case .flick_numbersymbols:
+                return .flick_numbersymbols
+            case .qwerty_hira:
+                return .qwerty_hira
+            case .qwerty_abc:
+                return .qwerty_abc
+            case .qwerty_number:
+                return .qwerty_number
+            case .qwerty_symbols:
+                return .qwerty_symbols
+            }
+        case let .custom(identifier):
+            return .custard(.mock_qwerty_scroll)
+        }
+    }
+}
+
 fileprivate extension CustardKeyAction{
     var actionType: ActionType {
         switch self{
@@ -48,13 +74,20 @@ fileprivate extension CustardKeyAction{
         case let .moveCursor(value):
             return .moveCursor(value)
         case let .moveTab(value):
-            return .moveTab(.qwerty_abc) //FIXME: 誤り
+            return .moveTab(value.tab)
         case .toggleCursorMovingView:
             return .toggleShowMoveCursorView
         case .toggleCapsLockState:
-            return .changeCapsLockState(state: .capslock) //FIXME: 誤り
+            switch VariableStates.shared.aAKeyState{
+            case .normal:
+                return .changeCapsLockState(state: .capslock)
+            case .capslock:
+                return .changeCapsLockState(state: .normal)
+            }
         case .toggleTabNavigationView:
             return .toggleTabNavigationView
+        case let .openApp(value):
+            return .openApp(value)
         }
     }
 
