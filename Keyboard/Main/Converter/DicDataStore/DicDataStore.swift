@@ -128,7 +128,7 @@ final class DicDataStore{
         if let louds = LOUDS.build(identifier){
             self.loudses[identifier] = louds
         }else{
-            debug("loudsの読み込みに失敗")
+            debug("loudsの読み込みに失敗、identifierは\(identifier)")
         }
     }
 
@@ -173,7 +173,7 @@ final class DicDataStore{
         return data.filter{$0.count > 5}.map{self.convertDicData(from: $0)}
     }
 
-    ///kana2latticeから参照する。louds版。
+    ///kana2latticeから参照する。
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - from: 起点
@@ -254,7 +254,7 @@ final class DicDataStore{
         let start_4 = Date()
         if index == .zero{
             let result: [LatticeNode] = totaldicdata.map{
-                let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]])
+                let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]], rubyCount: nil)
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 //node.prevs.append(PreviousNodes(LatticeNode.PreviousNode.BOSNode))
 
@@ -265,7 +265,7 @@ final class DicDataStore{
             return result
 
         }else{
-            let result: [LatticeNode] = totaldicdata.map{LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]])}
+            let result: [LatticeNode] = totaldicdata.map{LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]], rubyCount: nil)}
             debug("計算所要時間: ノードの生成", -start_4.timeIntervalSinceNow)
             debug("計算所要時間: 辞書検索全体", -start_0.timeIntervalSinceNow)
             return result
@@ -319,13 +319,13 @@ final class DicDataStore{
 
         if fromIndex == .zero{
             let result: [LatticeNode] = totaldicdata.map{
-                let node = LatticeNode(data: $0, romanString: segment)
+                let node = LatticeNode(data: $0, romanString: segment, rubyCount: nil)
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 return node
             }
             return result
         }else{
-            let result: [LatticeNode] = totaldicdata.map{LatticeNode(data: $0, romanString: segment)}
+            let result: [LatticeNode] = totaldicdata.map{LatticeNode(data: $0, romanString: segment, rubyCount: nil)}
             return result
         }
     }

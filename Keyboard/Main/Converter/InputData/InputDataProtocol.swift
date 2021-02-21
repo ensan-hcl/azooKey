@@ -35,12 +35,12 @@ extension InputDataProtocol{
         }
         if self is DirectInputData{
             if InputData.self == RomanInputData.self{
-                return RomanInputData(self.katakanaString, history: KanaRomanStateHolder(components: [KanaComponent(internalText: self.katakanaString, kana: self.katakanaString, isFreezed: true, escapeRomanKanaConverting: true)])) as! InputData
+                return RomanInputData(self.katakanaString, history: KanaRomanStateHolder(components: [KanaComponent(internalText: self.katakanaString, kana: self.katakanaString, isFreezed: true, escapeRomanKanaConverting: true)]), count: self.count) as! InputData
             }
         }
         if self is RomanInputData{
             if InputData.self == DirectInputData.self{
-                return DirectInputData(self.katakanaString) as! InputData
+                return DirectInputData(self.katakanaString, count: self.count) as! InputData
             }
         }
         fatalError("Unexpected situation")

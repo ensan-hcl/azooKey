@@ -26,13 +26,15 @@ extension Kana2Kanji{
     ///
     ///(4)ノードをアップデートした上で返却する。
     func kana2lattice_addedLast(_ inputData: InputData, N_best: Int, previousResult: (inputData: InputData, nodes: Nodes) ) -> (result: LatticeNode, nodes: Nodes) {
-        debug("一文字追加。追加されたのは「\(inputData.characters.last!)」")
+        debug("一文字追加。内部文字列は\(inputData.characters).\(previousResult.nodes.map{($0.first?.data.ruby, $0.first?.rubyCount)})")
         let START = Date()
         TimeMesureTools.startTimeMesure()
         //(0)
         let nodes = previousResult.nodes
         let count = previousResult.inputData.count
-
+        let actualCount: Int = nodes.reduce(into: 0){value, line in
+            value += (line.max{$0.rubyCount < $1.rubyCount}?.rubyCount ?? 1)
+        }
 
         //(1)
         let addedNodes: [[LatticeNode]] = (0...count).map{(i: Int) in

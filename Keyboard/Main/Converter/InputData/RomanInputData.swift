@@ -15,7 +15,7 @@ struct RomanInputData: InputDataProtocol {
     internal let count: Int
     internal let history: KanaRomanStateHolder
     internal let freezed: [Bool]
-    internal init(_ input: String, history: KanaRomanStateHolder){
+    internal init(_ input: String, history: KanaRomanStateHolder, count: Int? = nil){
         //入力とhistoryが正しく対応するように調整する。
         if input.isEmpty{
             self.history = KanaRomanStateHolder()
@@ -25,7 +25,11 @@ struct RomanInputData: InputDataProtocol {
         }
         self.katakanaString = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
         let romanString = self.history.components.map{$0.internalText}.joined()   //split由来のデータではかな文字が含まれる
-        self.count = romanString.count
+        if let count = count{
+            self.count = count
+        }else{
+            self.count = romanString.count
+        }
         self.characters = Array(romanString)
         self.freezed = self.history.components.reduce(into: []){array, component in
             array.append(contentsOf: [Bool].init(repeating: component.isFreezed, count: component.internalText.count))

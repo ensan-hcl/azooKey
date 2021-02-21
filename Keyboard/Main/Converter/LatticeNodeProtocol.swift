@@ -19,7 +19,7 @@ protocol LatticeNodeProtocol: class {
 
     func getCandidateData() -> [CandidateData]
 
-    init(data: DicDataElementProtocol, romanString: String)
+    init(data: DicDataElementProtocol, romanString: String, rubyCount: Int?)
 
     static var EOSNode: Self {get}
 }
@@ -47,7 +47,7 @@ extension LatticeNodeProtocol{
                 let prevs = self.prevs.map{
                     RomanRegisteredNode(data: $0.data, registered: $0.prev, totalValue: $0.totalValue, rubyCount: $0.rubyCount, romanString: $0.ruby)
                 }
-                let node = RomanLatticeNode(data: self.data, romanString: self.data.ruby)
+                let node = RomanLatticeNode(data: self.data, romanString: self.data.ruby, rubyCount: self.rubyCount)
                 node.prevs = prevs
                 node.values = values
                 return node as! Node
@@ -58,7 +58,7 @@ extension LatticeNodeProtocol{
                 let prevs = self.prevs.map{
                     DirectRegisteredNode(data: $0.data, registered: $0.prev, totalValue: $0.totalValue, rubyCount: $0.rubyCount)
                 }
-                let node = DirectLatticeNode(data: self.data, romanString: self.data.ruby)
+                let node = DirectLatticeNode(data: self.data, romanString: self.data.ruby, rubyCount: self.rubyCount)
                 node.prevs = prevs
                 node.values = values
                 return node as! Node
@@ -70,17 +70,14 @@ extension LatticeNodeProtocol{
 ///ラティスのノード。これを用いて計算する。
 final class DirectLatticeNode: LatticeNodeProtocol{
     typealias RegisteredNode = DirectRegisteredNode
-    init(data: DicDataElementProtocol, romanString: String) {
-        self.data = data
+    convenience init(data: DicDataElementProtocol, romanString: String, rubyCount: Int? = nil) {
+        self.init(data: data, rubyCount: rubyCount)
     }
 
     let data: DicDataElementProtocol
     var prevs: [RegisteredNode] = []
+    let rubyCount: Int
     var values: [PValue] = []
-    
-    var rubyCount: Int {
-        return self.data.ruby.count
-    }
 
     static var EOSNode: DirectLatticeNode {
         return DirectLatticeNode(data: BOSEOSDicDataElement.EOSData)
@@ -90,9 +87,14 @@ final class DirectLatticeNode: LatticeNodeProtocol{
         return DirectRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
     }
 
-    init(data: DicDataElementProtocol){
+    init(data: DicDataElementProtocol, rubyCount: Int? = nil){
         self.data = data
         self.values = [data.value()]
+        if let rubyCount = rubyCount{
+            self.rubyCount = rubyCount
+        }else{
+            self.rubyCount = data.ruby.count
+        }
     }
 }
  
@@ -104,19 +106,21 @@ final class RomanLatticeNode: LatticeNodeProtocol{
     var prevs: [RegisteredNode] = []
     var values: [PValue] = []
     let romanString: String
-    
-    var rubyCount: Int {
-        return self.romanString.count
-    }
-    
+    let rubyCount: Int
+
     static var EOSNode: RomanLatticeNode {
         return RomanLatticeNode(data: BOSEOSDicDataElement.EOSData, romanString: "")
     }
 
-    init(data: DicDataElementProtocol, romanString: String){
+    init(data: DicDataElementProtocol, romanString: String, rubyCount: Int? = nil){
         self.data = data
         self.values = [data.value()]
         self.romanString = romanString
+        if let rubyCount = rubyCount{
+            self.rubyCount = rubyCount
+        }else{
+            self.rubyCount = romanString.count
+        }
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {

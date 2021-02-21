@@ -13,8 +13,12 @@ struct DirectInputData: InputDataProtocol{
     internal let characters: [Character]
     internal let count: Int
     
-    internal init(_ input: String){
-        self.count = input.count
+    internal init(_ input: String, count: Int? = nil){
+        if let count = count{
+            self.count = count
+        }else{
+            self.count = input.count
+        }
         self.katakanaString = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
         self.characters = Array(self.katakanaString)
     }
