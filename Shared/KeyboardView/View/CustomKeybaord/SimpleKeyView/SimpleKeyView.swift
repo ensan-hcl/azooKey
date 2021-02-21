@@ -39,6 +39,7 @@ struct SimpleKeyView: View {
     }
 
     @State private var isPressed = false
+    @State private var pressStartDate = Date()
 
     var body: some View {
         model.label(width: tabDesign.keyViewWidth, states: variableStates, theme: theme)
@@ -52,15 +53,19 @@ struct SimpleKeyView: View {
                     if !(model is SimpleChangeKeyboardKeyModel){
                         TouchDownAndTouchUpGestureView{
                             isPressed = true
+                            pressStartDate = Date()
                             model.sound()
                             model.longPressReserve()
                         } touchMovedCallBack: {
                             isPressed = false
+                            pressStartDate = Date()
                             model.longPressEnd()
                         } touchUpCallBack: {
                             isPressed = false
                             model.longPressEnd()
-                            model.press()
+                            if Date().timeIntervalSince(pressStartDate) < 0.4{
+                                model.press()
+                            }
                         }
                     }
                 }
