@@ -9,28 +9,14 @@
 import Foundation
 import SwiftUI
 
-enum TabNavigationViewItemLabelType{
-    case text(String)
-    case imageAndText(systemName: String, String)
-    case image(systemName: String)
-}
-
-struct TabNavigationViewItem{
-    let label: TabNavigationViewItemLabelType
-    let actions: [ActionType]
-}
-
 struct TabNavigationView: View{
     private let theme: ThemeData
     @ObservedObject private var variableStates = VariableStates.shared
 
-    let items: [TabNavigationViewItem] = [
-        .init(label: .text("あいう"), actions: [.moveTab(.user_dependent(.japanese))]),
-        .init(label: .text("ABC"), actions: [.moveTab(.user_dependent(.english))]),
-        .init(label: .text("①②③"), actions: [.moveTab(.custard(.mock_qwerty_scroll))]),
-    ]
+    let data: TabBarData
 
-    init(theme: ThemeData){
+    init(data: TabBarData, theme: ThemeData){
+        self.data = data
         self.theme = theme
     }
 
@@ -38,17 +24,20 @@ struct TabNavigationView: View{
         Group{
             ScrollView(.horizontal, showsIndicators: false){
                 HStack{
-                    ForEach(items.indices, id: \.self){i in
+                    ForEach(data.items.indices, id: \.self){i in
+                        let item = data.items[i]
                         Button{
-                            items[i].actions.forEach{variableStates.action.registerAction($0)}
+                            item.actions.forEach{(action: CodableActionData) in
+                                variableStates.action.registerAction(action.actionType)
+                            }
                         } label: {
-                            switch items[i].label{
+                            switch item.label{
                             case let .text(text):
                                 Text(text)
-                            case let .imageAndText(image, text):
+                            case let .imageAndText(value):
                                 HStack{
-                                    Image(systemName: image)
-                                    Text(text)
+                                    Image(systemName: value.systemName)
+                                    Text(value.text)
                                 }
                             case let .image(image):
                                 Image(systemName: image)

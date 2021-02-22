@@ -8,13 +8,14 @@
 
 import Foundation
 
-struct CustardIndices: Codable {
+struct CustardManagerIndex: Codable {
     var availableCustards: [String] = []
+    var availableTabBars: [Int] = []
 }
 
 struct CustardManager {
     private static let directoryName = "custard/"
-    private var index: CustardIndices
+    private var index = CustardManagerIndex()
 
     private static func fileURL(name: String) -> URL {
         let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
@@ -40,12 +41,12 @@ struct CustardManager {
         let themeIndexURL = fileURL(name: "index.json")
         do{
             let data = try Data(contentsOf: themeIndexURL)
-            let index = try JSONDecoder().decode(CustardIndices.self, from: data)
+            let index = try JSONDecoder().decode(CustardManagerIndex.self, from: data)
             debug(index)
             return self.init(index: index)
         } catch {
             debug(error)
-            return self.init(index: CustardIndices())
+            return self.init(index: CustardManagerIndex())
         }
     }
 
@@ -66,6 +67,13 @@ struct CustardManager {
         return custard
     }
 
+    func tabbar(identifier: Int) throws -> TabBarData {
+        let fileURL = Self.fileURL(name: "tabbar_\(identifier).tabbar")
+        let data = try Data(contentsOf: fileURL)
+        let custard = try JSONDecoder().decode(TabBarData.self, from: data)
+        return custard
+    }
+
     mutating func saveCustard(custard: Custard) throws {
         //テーマを保存する
         do{
@@ -81,7 +89,22 @@ struct CustardManager {
         self.save()
     }
 
-    mutating func remove(identifier: String){
+    mutating func saveTabBarData(tabBarData: TabBarData) throws {
+        //テーマを保存する
+        do{
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(tabBarData)
+            let fileURL = Self.fileURL(name: "tabbar_\(tabBarData.identifier).tabbar")
+            try data.write(to: fileURL)
+        }
+
+        if !self.index.availableTabBars.contains(tabBarData.identifier){
+            self.index.availableTabBars.append(tabBarData.identifier)
+        }
+        self.save()
+    }
+
+    mutating func removeCustard(identifier: String){
         self.index.availableCustards = self.index.availableCustards.filter{$0 != identifier}
         do{
             let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
@@ -92,7 +115,24 @@ struct CustardManager {
         }
     }
 
+    mutating func removeTabBar(identifier: Int){
+        self.index.availableTabBars = self.index.availableTabBars.filter{$0 != identifier}
+        do{
+            let fileURL = Self.fileURL(name: "tabbar_\(identifier).tabbar")
+            try FileManager.default.removeItem(atPath: fileURL.path)
+            self.save()
+        }catch{
+            debug(error)
+        }
+    }
+
+
     var availableCustards: [String] {
         return index.availableCustards
     }
+
+    var availableTabBars: [Int] {
+        return index.availableTabBars
+    }
+
 }

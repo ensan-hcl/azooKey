@@ -15,6 +15,7 @@ final class VariableStates: ObservableObject{
     static let shared = VariableStates()
     private(set) var inputStyle: InputStyle = .direct
     var tabManager = TabManager()
+    var custardManager = CustardManager.load()
 
     private init(){}
 

@@ -255,178 +255,6 @@ enum CustardKeyActionTrigger: String, Codable {
     case longpress
 }
 
-enum CodableTabData: Codable {
-    case system(SystemTab)
-    case custom(String)
-
-    enum SystemTab: String, Codable {
-        case flick_hira
-        case flick_abc
-        case flick_numbersymbols
-        case qwerty_hira
-        case qwerty_abc
-        case qwerty_number
-        case qwerty_symbols
-    }
-}
-
-extension CodableTabData{
-    enum CodingKeys: CodingKey{
-        case system
-        case custom
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case let .system(value):
-            try container.encode(value, forKey: .system)
-        case let .custom(value):
-            try container.encode(value, forKey: .custom)
-        }
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
-                )
-            )
-        }
-        switch key {
-        case .system:
-            let value = try container.decode(
-                SystemTab.self,
-                forKey: .system
-            )
-            self = .system(value)
-        case .custom:
-            let value = try container.decode(
-                String.self,
-                forKey: .custom
-            )
-            self = .custom(value)
-        }
-    }
-}
-
-enum CustardKeyAction: Codable {
-    case input(String)
-    case exchangeCharacter
-    case delete(Int)
-    case smoothDelete
-    case enter
-    case moveCursor(Int)
-    case moveTab(CodableTabData)
-    case toggleCursorMovingView
-    case toggleCapsLockState
-    case toggleTabNavigationView
-    case openApp(String)    //iOSのバージョンによって消える可能性がある
-}
-
-extension CustardKeyAction{
-    enum CodingKeys: CodingKey{
-        case input
-        case exchange_character
-        case delete
-        case smooth_delete
-        case enter
-        case move_cursor
-        case move_tab
-        case toggle_cursor_moving_view
-        case toggle_tab_navigation_view
-        case toggle_caps_lock_state
-        case open_app
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case let .input(value):
-            try container.encode(value, forKey: .input)
-        case .exchangeCharacter:
-            try container.encode(true, forKey: .exchange_character)
-        case let .delete(value):
-            try container.encode(value, forKey: .delete)
-        case .smoothDelete:
-            try container.encode(true, forKey: .smooth_delete)
-        case .enter:
-            try container.encode(true, forKey: .enter)
-        case let .moveCursor(value):
-            try container.encode(value, forKey: .move_cursor)
-        case let .moveTab(destination):
-            try container.encode(destination, forKey: .move_tab)
-        case .toggleCursorMovingView:
-            try container.encode(true, forKey: .toggle_cursor_moving_view)
-        case .toggleTabNavigationView:
-            try container.encode(true, forKey: .toggle_tab_navigation_view)
-        case .toggleCapsLockState:
-            try container.encode(true, forKey: .toggle_caps_lock_state)
-        case let .openApp(value):
-            try container.encode(value, forKey: .open_app)
-        }
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
-                )
-            )
-        }
-        switch key {
-        case .input:
-            let value = try container.decode(
-                String.self,
-                forKey: .input
-            )
-            self = .input(value)
-        case .exchange_character:
-            self = .exchangeCharacter
-        case .delete:
-            let value = try container.decode(
-                Int.self,
-                forKey: .delete
-            )
-            self = .delete(value)
-        case .smooth_delete:
-            self = .smoothDelete
-        case .enter:
-            self = .enter
-        case .move_cursor:
-            let value = try container.decode(
-                Int.self,
-                forKey: .move_cursor
-            )
-            self = .moveCursor(value)
-        case .move_tab:
-            let destination = try container.decode(
-                CodableTabData.self,
-                forKey: .move_tab
-            )
-            self = .moveTab(destination)
-        case .toggle_cursor_moving_view:
-            self = .toggleCursorMovingView
-        case .toggle_caps_lock_state:
-            self = .toggleCapsLockState
-        case .toggle_tab_navigation_view:
-            self = .toggleTabNavigationView
-        case .open_app:
-            let destination = try container.decode(
-                String.self,
-                forKey: .open_app
-            )
-            self = .openApp(destination)
-        }
-    }
-}
-
 enum CustardKeyVariationType: Codable {
     case flick(FlickDirection)
     case variations
@@ -526,8 +354,8 @@ extension CustardInterfaceKey{
 
 struct CustardInterfaceCustomKey: Codable {
     let label: CustardKeyLabelStyle
-    let press_action: [CustardKeyAction]
-    let longpress_action: [CustardKeyAction]
+    let press_action: [CodableActionData]
+    let longpress_action: [CodableActionData]
     let variation: [CustardInterfaceVariation]
 }
 
@@ -538,8 +366,8 @@ struct CustardInterfaceVariation: Codable {
 
 struct CustardInterfaceVariationKey: Codable {
     let label: CustardKeyLabelStyle
-    let press_action: [CustardKeyAction]
-    let longpress_action: [CustardKeyAction]
+    let press_action: [CodableActionData]
+    let longpress_action: [CodableActionData]
 }
 
 extension Custard{

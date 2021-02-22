@@ -12,6 +12,19 @@ import StoreKit
 
 struct CustomizeTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
+    @State private var tabBarData: TabBarData
+
+    init(){
+        if let tabBarData = try? VariableStates.shared.custardManager.tabbar(identifier: 0){
+            self._tabBarData = State(initialValue: tabBarData)
+        }else{
+            self._tabBarData = State(initialValue: TabBarData(identifier: 0, items: [
+                TabBarItem(label: .text("あいう"), actions: [.moveTab(.system(.user_hira))]),
+                TabBarItem(label: .text("ABC"), actions: [.moveTab(.system(.user_abc))]),
+                TabBarItem(label: .text("①②③"), actions: [.moveTab(.custom("123"))])
+            ]))
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -26,9 +39,9 @@ struct CustomizeTabView: View {
                             Spacer()
                         }
                     }
-                    NavigationLink(destination: TabNavigationEditView()){
+                    NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData)){
                         HStack{
-                            Text("タブ移動ビューを編集")
+                            Text("タブバーを編集")
                             Spacer()
                         }
                     }

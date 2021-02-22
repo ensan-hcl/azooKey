@@ -45,8 +45,8 @@ struct ResultView<Candidate: ResultViewItemData>: View {
         Group{[unowned modelVariableSection] in
             if variableStates.showMoveCursorView{
                 CursorMoveView(theme: theme)
-            }else if variableStates.showTabNavigationView{
-                TabNavigationView(theme: theme)
+            }else if variableStates.showTabNavigationView, let tabBarData = try? variableStates.custardManager.tabbar(identifier: 0){
+                TabNavigationView(data: tabBarData, theme: theme)
             }else{
                 HStack{
                     ScrollView(.horizontal, showsIndicators: false){

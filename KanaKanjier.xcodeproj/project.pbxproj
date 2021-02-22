@@ -154,12 +154,17 @@
 		1AB8C38325E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C38125E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift */; };
 		1AB8C38D25E1190900D39BC5 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C38C25E1190900D39BC5 /* TabManager.swift */; };
 		1AB8C38E25E1190900D39BC5 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C38C25E1190900D39BC5 /* TabManager.swift */; };
-		1AB8C3BF25E2303200D39BC5 /* TabNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3BE25E2303200D39BC5 /* TabNavigationView.swift */; };
-		1AB8C3C025E2303200D39BC5 /* TabNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3BE25E2303200D39BC5 /* TabNavigationView.swift */; };
+		1AB8C3BF25E2303200D39BC5 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3BE25E2303200D39BC5 /* TabBar.swift */; };
+		1AB8C3C025E2303200D39BC5 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3BE25E2303200D39BC5 /* TabBar.swift */; };
 		1AB8C3C625E24D0B00D39BC5 /* CustardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */; };
 		1AB8C3C725E24D0B00D39BC5 /* CustardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */; };
 		1AB8C3CE25E2509300D39BC5 /* CustomizeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */; };
-		1AB8C3D825E256EE00D39BC5 /* TabNavigationEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3D725E256EE00D39BC5 /* TabNavigationEditView.swift */; };
+		1AB8C3D825E256EE00D39BC5 /* EditingTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */; };
+		1AB8C3DE25E2854C00D39BC5 /* KeyActionsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */; };
+		1AB8C3E825E2A1F000D39BC5 /* CodableActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */; };
+		1AB8C3E925E2A1F000D39BC5 /* CodableActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */; };
+		1AB8C3EF25E2A27C00D39BC5 /* TabBarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */; };
+		1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */; };
 		1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD077725479B6500DD0F7C /* Dictionary.swift */; };
 		1AC03159251103EF004CA505 /* Designs.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC03158251103EF004CA505 /* Designs.xcassets */; };
 		1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */; };
@@ -2635,10 +2640,13 @@
 		1AB8C36125DFE80A00D39BC5 /* SimpleKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleKeyModel.swift; sourceTree = "<group>"; };
 		1AB8C38125E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchDownAndTouchUpGesture.swift; sourceTree = "<group>"; };
 		1AB8C38C25E1190900D39BC5 /* TabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
-		1AB8C3BE25E2303200D39BC5 /* TabNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabNavigationView.swift; sourceTree = "<group>"; };
+		1AB8C3BE25E2303200D39BC5 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardManager.swift; sourceTree = "<group>"; };
 		1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabView.swift; sourceTree = "<group>"; };
-		1AB8C3D725E256EE00D39BC5 /* TabNavigationEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabNavigationEditView.swift; sourceTree = "<group>"; };
+		1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTabBarView.swift; sourceTree = "<group>"; };
+		1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyActionsEditView.swift; sourceTree = "<group>"; };
+		1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableActionData.swift; sourceTree = "<group>"; };
+		1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarData.swift; sourceTree = "<group>"; };
 		1ABD077725479B6500DD0F7C /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		1AC03158251103EF004CA505 /* Designs.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Designs.xcassets; sourceTree = "<group>"; };
 		1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteredNodeProtocol.swift; sourceTree = "<group>"; };
@@ -4916,8 +4924,10 @@
 		1A18425325DE614D003985AB /* Custard */ = {
 			isa = PBXGroup;
 			children = (
+				1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */,
 				1A18425425DE6163003985AB /* CustardData.swift */,
 				1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */,
+				1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */,
 			);
 			path = Custard;
 			sourceTree = "<group>";
@@ -5197,7 +5207,7 @@
 			isa = PBXGroup;
 			children = (
 				1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */,
-				1AB8C3BE25E2303200D39BC5 /* TabNavigationView.swift */,
+				1AB8C3BE25E2303200D39BC5 /* TabBar.swift */,
 				1A3DC2272500D64D002CAA93 /* ResultView.swift */,
 				1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */,
 				1AFB68372518A40D00C649C4 /* LargeTextView.swift */,
@@ -5360,7 +5370,8 @@
 			isa = PBXGroup;
 			children = (
 				1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */,
-				1AB8C3D725E256EE00D39BC5 /* TabNavigationEditView.swift */,
+				1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */,
+				1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */,
 			);
 			path = Customize;
 			sourceTree = "<group>";
@@ -10083,7 +10094,7 @@
 				1AC031642512138F004CA505 /* SettingItemProtocol.swift in Sources */,
 				1AF6798125CEDBA400F3987B /* VerticalFlickKeyboardView.swift in Sources */,
 				1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */,
-				1AB8C3D825E256EE00D39BC5 /* TabNavigationEditView.swift in Sources */,
+				1AB8C3D825E256EE00D39BC5 /* EditingTabBarView.swift in Sources */,
 				1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */,
 				1A18425D25DE6678003985AB /* VerticalCustomKeyboard.swift in Sources */,
 				1AF6797825CEDB9B00F3987B /* QwertyKeyModelVariableSection.swift in Sources */,
@@ -10104,7 +10115,7 @@
 				1AB8C38D25E1190900D39BC5 /* TabManager.swift in Sources */,
 				1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */,
 				1AF678B425CE3B7000F3987B /* States.swift in Sources */,
-				1AB8C3BF25E2303200D39BC5 /* TabNavigationView.swift in Sources */,
+				1AB8C3BF25E2303200D39BC5 /* TabBar.swift in Sources */,
 				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
 				1AB8C37025E0067600D39BC5 /* SimpleKeyView.swift in Sources */,
 				1AF679A325CEDC3A00F3987B /* HorizontalKeyboardView.swift in Sources */,
@@ -10113,6 +10124,7 @@
 				1AB8C3C625E24D0B00D39BC5 /* CustardManager.swift in Sources */,
 				1AA346822567D8B100B41A16 /* UserSetting.swift in Sources */,
 				1AF6799225CEDBB500F3987B /* FlickChangeKeyboardKeyModel.swift in Sources */,
+				1AB8C3DE25E2854C00D39BC5 /* KeyActionsEditView.swift in Sources */,
 				1AB8C38225E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift in Sources */,
 				1AF6799025CEDBB500F3987B /* KogakiKeyModel.swift in Sources */,
 				1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */,
@@ -10128,6 +10140,7 @@
 				1AF6797B25CEDB9B00F3987B /* QwertyKeyView.swift in Sources */,
 				1A9B0A6E2565797E004203BB /* ContactView.swift in Sources */,
 				1AF6797425CEDB9B00F3987B /* QwertyVariationsView.swift in Sources */,
+				1AB8C3E825E2A1F000D39BC5 /* CodableActionData.swift in Sources */,
 				1AF6799625CEDBB500F3987B /* FlickEnterKeyModel.swift in Sources */,
 				1AF6798725CEDBAE00F3987B /* FlickedKeyModel.swift in Sources */,
 				1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */,
@@ -10163,6 +10176,7 @@
 				1AF6795125CEDB8800F3987B /* LargeTextView.swift in Sources */,
 				1A4057F7255843850073C6F7 /* LearningTypeSettingItemView.swift in Sources */,
 				1AF6792D25CEDB7000F3987B /* KeyLabel.swift in Sources */,
+				1AB8C3EF25E2A27C00D39BC5 /* TabBarData.swift in Sources */,
 				1AF6792825CEDB6B00F3987B /* KeyboardView.swift in Sources */,
 				1AFA57662584815B00477DC2 /* RomanCustomKeysSettingView.swift in Sources */,
 				1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */,
@@ -10241,6 +10255,7 @@
 				1A12E24825C41A7100316009 /* Message.swift in Sources */,
 				1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */,
 				1AC8A5DD25986CA500B71E5A /* KanaSymbolsKeyModel.swift in Sources */,
+				1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */,
 				1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */,
 				1A3DC22D2500D6C6002CAA93 /* Converter.swift in Sources */,
 				1AB8C3C725E24D0B00D39BC5 /* CustardManager.swift in Sources */,
@@ -10275,6 +10290,7 @@
 				1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */,
 				1A3DC2232500D60F002CAA93 /* FlickedKeyModel.swift in Sources */,
 				1AFB68502518F18A00C649C4 /* CursorMoveView.swift in Sources */,
+				1AB8C3E925E2A1F000D39BC5 /* CodableActionData.swift in Sources */,
 				1A9218F7255238E9005F45C4 /* Unicode.swift in Sources */,
 				1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */,
 				1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */,
@@ -10294,7 +10310,7 @@
 				1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */,
 				1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */,
 				1AF28CEC253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift in Sources */,
-				1AB8C3C025E2303200D39BC5 /* TabNavigationView.swift in Sources */,
+				1AB8C3C025E2303200D39BC5 /* TabBar.swift in Sources */,
 				1AEB864A251CE730000A8379 /* roman2kana.swift in Sources */,
 				1A3DC2262500D63F002CAA93 /* SuggestView.swift in Sources */,
 				1A3DC20A2500D51F002CAA93 /* KeyboardView.swift in Sources */,
