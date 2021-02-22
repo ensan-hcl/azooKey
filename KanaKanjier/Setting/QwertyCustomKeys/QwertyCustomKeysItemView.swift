@@ -239,7 +239,10 @@ struct QwertyCustomKeysItemView: View {
                     .fixedSize()
 
             }
-        }.navigationBarTitle("カスタムキーの設定", displayMode: .inline)
+        }
+        .frame(maxWidth: .infinity)
+        .navigationBarTitle("カスタムキーの設定", displayMode: .inline)
+        .background(Color(.secondarySystemBackground))
     }
 
     var labelEditor: some View {

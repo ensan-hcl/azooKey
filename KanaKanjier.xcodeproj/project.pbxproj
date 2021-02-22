@@ -173,7 +173,6 @@
 		1AC0315D25120A17004CA505 /* SettingTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC0315C25120A17004CA505 /* SettingTab.swift */; };
 		1AC031612512129A004CA505 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC031602512129A004CA505 /* Store.swift */; };
 		1AC031642512138F004CA505 /* SettingItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC031632512138F004CA505 /* SettingItemProtocol.swift */; };
-		1AC031662512302F004CA505 /* KeyFlickSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC031652512302F004CA505 /* KeyFlickSettingItemView.swift */; };
 		1AC19AF22531AA800077BF8D /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC19AF12531AA800077BF8D /* Set.swift */; };
 		1AC5876525D930D000BB060E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
 		1AC5876625D930D000BB060E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
@@ -2659,7 +2658,6 @@
 		1AC0315F25120B3B004CA505 /* Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Keyboard.entitlements; sourceTree = "<group>"; };
 		1AC031602512129A004CA505 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		1AC031632512138F004CA505 /* SettingItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingItemProtocol.swift; sourceTree = "<group>"; };
-		1AC031652512302F004CA505 /* KeyFlickSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyFlickSettingItemView.swift; sourceTree = "<group>"; };
 		1AC19AF12531AA800077BF8D /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 		1AC5875925D9309500BB060E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		1AC5876725D930D000BB060E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -5388,7 +5386,7 @@
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
 				1ACE00712567518100899DA2 /* KeyboardLayout */,
 				1ACE006F2567514400899DA2 /* FlickCustomKeys */,
-				1ACE00732567521200899DA2 /* RomanCustomKeys */,
+				1ACE00732567521200899DA2 /* QwertyCustomKeys */,
 				1AE70BDF258DB4A0009B9B8B /* Template */,
 				1AF616B9256D40A5001A0B32 /* MemoryResetSetting */,
 				1A64A8DA257C91550022C081 /* FontSizeSetting */,
@@ -5405,7 +5403,6 @@
 		1ACE006F2567514400899DA2 /* FlickCustomKeys */ = {
 			isa = PBXGroup;
 			children = (
-				1AC031652512302F004CA505 /* KeyFlickSettingItemView.swift */,
 				1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */,
 			);
 			path = FlickCustomKeys;
@@ -5436,12 +5433,12 @@
 			path = LearningType;
 			sourceTree = "<group>";
 		};
-		1ACE00732567521200899DA2 /* RomanCustomKeys */ = {
+		1ACE00732567521200899DA2 /* QwertyCustomKeys */ = {
 			isa = PBXGroup;
 			children = (
 				1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */,
 			);
-			path = RomanCustomKeys;
+			path = QwertyCustomKeys;
 			sourceTree = "<group>";
 		};
 		1ACEEFCE25665E2600899DA2 /* General */ = {
@@ -10093,7 +10090,6 @@
 				1A12E25125C4428D00316009 /* Message.swift in Sources */,
 				1ACEEFDE25665F0100899DA2 /* CenterAlignedView.swift in Sources */,
 				1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */,
-				1AC031662512302F004CA505 /* KeyFlickSettingItemView.swift in Sources */,
 				1A3A16042528BFF900A5BA4F /* SelctInputStyle.swift in Sources */,
 				1AF6799425CEDBB500F3987B /* KeyModelVariableSection.swift in Sources */,
 				1AF6790A25CED97500F3987B /* Action.swift in Sources */,

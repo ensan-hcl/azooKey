@@ -56,6 +56,7 @@ struct FlickCustomKeysSettingSelectView: View {
                 FlickCustomKeysSettingView(Store.shared.kanaSymbolsKeyFlickSetting)
             }
         }
+        .background(Color(.secondarySystemBackground))
     }
 }
 
