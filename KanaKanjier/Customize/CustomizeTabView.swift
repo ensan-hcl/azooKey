@@ -29,6 +29,17 @@ struct CustomizeTabView: View {
     var body: some View {
         NavigationView {
             Form {
+                Section(header: Text("タブバー")){
+                    Text("タブバーはあなたの入力をサポートします。「記号キー」の長押しで出現し、タブの移動、文字の入力、カーソルの移動、その他たくさんの機能を自由に設定できます。")
+
+                    NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData)){
+                        HStack{
+                            Text("タブバーを編集")
+                            Spacer()
+                        }
+                    }
+
+                }
                 Section(header: Text("カスタムタブ")){
                     VStack{
                         Text("あなたの好きな文字だけを並べたオリジナルのタブを作成することができます。")
@@ -36,12 +47,6 @@ struct CustomizeTabView: View {
                     NavigationLink(destination: FlickCustomKeysSettingSelectView()){
                         HStack{
                             Text("設定する")
-                            Spacer()
-                        }
-                    }
-                    NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData)){
-                        HStack{
-                            Text("タブバーを編集")
                             Spacer()
                         }
                     }

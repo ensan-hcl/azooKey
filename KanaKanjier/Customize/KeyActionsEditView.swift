@@ -9,15 +9,43 @@
 import Foundation
 import SwiftUI
 
+final class EditingCodableActionData: Identifiable, Equatable, ObservableObject {
+    typealias ID = UUID
+    let id = UUID()
+    @Published var data: CodableActionData
+    init(_ data: CodableActionData){
+        self.data = data
+    }
+
+    static func == (lhs: EditingCodableActionData, rhs: EditingCodableActionData) -> Bool {
+        return lhs.id == rhs.id && lhs.data == rhs.data
+    }
+}
+
 struct KeyActionsEditView: View {
     @Binding private var item: EditingTabBarItem
     @State private var newAction: CodableActionData = .input("😊")
     @State private var editMode = EditMode.inactive
 
-    @State private var actions: [CodableActionData]
+    @State private var actions: [EditingCodableActionData]
     init(_ item: Binding<EditingTabBarItem>){
         self._item = item
-        self._actions = State(initialValue: item.wrappedValue.actions)
+        self._actions = State(initialValue: item.wrappedValue.actions.map{EditingCodableActionData($0)})
+    }
+
+    private var newActionPicker: some View {
+        Picker(selection: $newAction, label: Text("追加するアクションを選択")){
+            Text("文字の入力").tag(CodableActionData.input("😊"))
+            Text("文字の削除").tag(CodableActionData.delete(1))
+            Text("文頭まで文字").tag(CodableActionData.smoothDelete)
+            Text("カーソル移動").tag(CodableActionData.moveCursor(-1))
+            Text("大文字/小文字、拗音/濁音/半濁音の切り替え").tag(CodableActionData.exchangeCharacter)
+            Text("タブの移動").tag(CodableActionData.moveTab(.system(.user_hira)))
+            Text("Capslock").tag(CodableActionData.toggleCapsLockState)
+            Text("カーソル移動画面の表示").tag(CodableActionData.toggleCursorMovingView)
+            Text("タブ移動画面の表示").tag(CodableActionData.toggleTabBar)
+            Text("アプリを開く").tag(CodableActionData.openApp("azooKey://"))
+        }
     }
 
     var body: some View {
@@ -26,20 +54,9 @@ struct KeyActionsEditView: View {
                 Text("上から順に実行されます")
             }
             Section{
-                Picker(selection: $newAction, label: Text("追加するアクションを選択")){
-                    Text("文字の入力").tag(CodableActionData.input("😊"))
-                    Text("文字の削除").tag(CodableActionData.delete(1))
-                    Text("文頭まで文字").tag(CodableActionData.smoothDelete)
-                    Text("カーソル移動").tag(CodableActionData.moveCursor(-1))
-                    Text("大文字/小文字、拗音/濁音/半濁音の切り替え").tag(CodableActionData.exchangeCharacter)
-                    Text("タブの移動").tag(CodableActionData.moveTab(.system(.user_hira)))
-                    Text("Capslock").tag(CodableActionData.toggleCapsLockState)
-                    Text("カーソル移動画面の表示").tag(CodableActionData.toggleCursorMovingView)
-                    Text("タブ移動画面の表示").tag(CodableActionData.toggleTabBar)
-                    Text("アプリを開く").tag(CodableActionData.openApp("azooKey://"))
-                }
+                newActionPicker
                 Button{
-                    actions.append(newAction)
+                    actions.append(EditingCodableActionData(newAction))
                 } label: {
                     HStack{
                         Image(systemName: "plus")
@@ -49,35 +66,36 @@ struct KeyActionsEditView: View {
             }
             Section(header: Text("アクション")){
                 List{
-                    ForEach(actions.indices, id: \.self){i in
+                    ForEach(actions){(action: EditingCodableActionData) in
                         HStack{
                             VStack(spacing: 20){
-                                if actions[i].hasAssociatedValue{
+                                if action.data.hasAssociatedValue{
                                     DisclosureGroup{
-                                        switch actions[i]{
+                                        switch action.data{
                                         case .delete:
-                                            ActionDeleteEditView($actions[i])
+                                            ActionDeleteEditView(action)
                                         case .input:
-                                            ActionInputEditView($actions[i])
+                                            ActionInputEditView(action)
                                         case .moveCursor:
-                                            ActionMoveCursorEditView($actions[i])
+                                            ActionMoveCursorEditView(action)
                                             Text("負の値を指定すると左にカーソルが動きます")
                                         case .moveTab:
-                                            ActionMoveTabEditView($actions[i])
+                                            ActionMoveTabEditView(action)
                                         case .openApp:
-                                            ActionOpenAppEditView($actions[i])
+                                            ActionOpenAppEditView(action)
                                             Text("このアクションはiOSのメジャーアップデートで利用できなくなる可能性があります")
                                         default:
                                             EmptyView()
                                         }
                                     } label :{
-                                        Text(actions[i].label)
+                                        Text(action.data.label)
                                     }
                                 }else{
-                                    Text(actions[i].label)
+                                    Text(action.data.label)
                                 }
                             }
                         }
+                        .deleteDisabled(editMode == .inactive)
                     }
                     .onDelete(perform: delete)
                     .onMove(perform: onMove)
@@ -86,7 +104,7 @@ struct KeyActionsEditView: View {
         }
         .onChange(of: actions){value in
             debug("内部的チェンジ")
-            item.actions = value
+            item.actions = value.map{$0.data}
         }
         .navigationBarTitle(Text("動作の編集"), displayMode: .inline)
         .navigationBarItems(trailing: editButton)
@@ -116,6 +134,7 @@ struct KeyActionsEditView: View {
     }
 
     private func delete(at offsets: IndexSet) {
+        debug("削除", Array(offsets))
         actions.remove(atOffsets: offsets)
     }
 
@@ -126,11 +145,11 @@ struct KeyActionsEditView: View {
 }
 
 struct ActionDeleteEditView: View {
-    @Binding private var action: CodableActionData
+    @ObservedObject private var action: EditingCodableActionData
 
-    internal init(_ action: Binding<CodableActionData>) {
-        self._action = action
-        if case let .delete(count) = action.wrappedValue{
+    internal init(_ action: EditingCodableActionData) {
+        self.action = action
+        if case let .delete(count) = action.data{
             self._value = State(initialValue: "\(count)")
         }
     }
@@ -140,7 +159,7 @@ struct ActionDeleteEditView: View {
     var body: some View {
         TextField("削除する文字数", text: $value){ _ in } onCommit: {
             if let count = Int(value){
-                action = .delete(max(count, 0))
+                action.data = .delete(max(count, 0))
             }
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -148,11 +167,11 @@ struct ActionDeleteEditView: View {
 }
 
 struct ActionInputEditView: View {
-    @Binding private var action: CodableActionData
+    @ObservedObject private var action: EditingCodableActionData
 
-    internal init(_ action: Binding<CodableActionData>) {
-        self._action = action
-        if case let .input(value) = action.wrappedValue{
+    internal init(_ action: EditingCodableActionData) {
+        self.action = action
+        if case let .input(value) = action.data{
             self._value = State(initialValue: "\(value)")
         }
     }
@@ -161,18 +180,18 @@ struct ActionInputEditView: View {
 
     var body: some View {
         TextField("入力する文字", text: $value){ _ in } onCommit: {
-            action = .input(value)
+            action.data = .input(value)
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
 }
 
 struct ActionOpenAppEditView: View {
-    @Binding private var action: CodableActionData
+    @ObservedObject private var action: EditingCodableActionData
 
-    internal init(_ action: Binding<CodableActionData>) {
-        self._action = action
-        if case let .openApp(value) = action.wrappedValue{
+    internal init(_ action: EditingCodableActionData) {
+        self.action = action
+        if case let .openApp(value) = action.data{
             self._value = State(initialValue: "\(value)")
         }
     }
@@ -181,7 +200,7 @@ struct ActionOpenAppEditView: View {
 
     var body: some View {
         TextField("URL Scheme", text: $value){ _ in } onCommit: {
-            action = .openApp(value)
+            action.data = .openApp(value)
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
@@ -189,11 +208,11 @@ struct ActionOpenAppEditView: View {
 
 
 struct ActionMoveTabEditView: View {
-    @Binding private var action: CodableActionData
+    @ObservedObject private var action: EditingCodableActionData
 
-    internal init(_ action: Binding<CodableActionData>) {
-        self._action = action
-        if case let .moveTab(value) = action.wrappedValue{
+    internal init(_ action: EditingCodableActionData) {
+        self.action = action
+        if case let .moveTab(value) = action.data{
             switch value{
             case let .system(tab):
                 let initialValue: Int
@@ -236,6 +255,7 @@ struct ActionMoveTabEditView: View {
             }
         }
         .onChange(of: selection){value in
+            let action: CodableActionData?
             switch items[value]{
             case "日本語(設定に合わせる)":
                 action = .moveTab(.system(.user_hira))
@@ -256,14 +276,17 @@ struct ActionMoveTabEditView: View {
             case "英語(ローマ字入力)":
                 action = .moveTab(.system(.qwerty_abc))
             case "カスタム":
-                break
+                action = nil
             default:
-                break
+                action = nil
+            }
+            if let action = action{
+                self.action.data = action
             }
         }
         if items[selection] == "カスタム"{
             TextField("タブの名前", text: $tabName){ _ in } onCommit: {
-                action = .moveTab(.custom(tabName))
+                action.data = .moveTab(.custom(tabName))
             }
             .textFieldStyle(RoundedBorderTextFieldStyle())
         }
@@ -272,11 +295,11 @@ struct ActionMoveTabEditView: View {
 
 
 struct ActionMoveCursorEditView: View {
-    @Binding private var action: CodableActionData
+    @ObservedObject private var action: EditingCodableActionData
 
-    internal init(_ action: Binding<CodableActionData>) {
-        self._action = action
-        if case let .moveCursor(count) = action.wrappedValue{
+    internal init(_ action: EditingCodableActionData) {
+        self.action = action
+        if case let .moveCursor(count) = action.data{
             self._value = State(initialValue: "\(count)")
         }
     }
@@ -286,7 +309,7 @@ struct ActionMoveCursorEditView: View {
     var body: some View {
         TextField("移動する文字数", text: $value){ _ in } onCommit: {
             if let count = Int(value){
-                action = .moveCursor(count)
+                action.data = .moveCursor(count)
             }
         }
         .textFieldStyle(RoundedBorderTextFieldStyle())
