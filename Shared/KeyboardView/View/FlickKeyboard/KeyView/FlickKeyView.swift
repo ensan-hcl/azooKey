@@ -29,13 +29,12 @@ struct FlickKeyView: View {
     @ObservedObject private var modelVariableSection: KeyModelVariableSection
     @ObservedObject private var variableStates = VariableStates.shared
 
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
     private let tabDesign: TabDependentDesign
 
-    init(model: FlickKeyModelProtocol, theme: ThemeData, tabDesign: TabDependentDesign){
+    init(model: FlickKeyModelProtocol, tabDesign: TabDependentDesign){
         self.model = model
         self.modelVariableSection = model.variableSection
-        self.theme = theme
         self.tabDesign = tabDesign
     }
 
@@ -217,6 +216,6 @@ struct FlickKeyView: View {
         return RoundedBorderedRectangle(cornerRadius: 5.0, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
             .frame(width: keySize.width, height: keySize.height)
             .gesture(gesture)
-            .overlay(model.label(width: keySize.width, states: variableStates, theme: theme))
+            .overlay(model.label(width: keySize.width, states: variableStates))
     }
 }

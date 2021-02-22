@@ -44,7 +44,7 @@ protocol QwertyKeyModelProtocol{
     
     var variationsModel: VariationsModel {get}
 
-    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 

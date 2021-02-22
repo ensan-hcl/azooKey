@@ -42,9 +42,9 @@ struct QwertyVariationsView: View {
     private func getLabel(_ labelType: KeyLabelType) -> KeyLabel {
         let width = tabDesign.keyViewWidth
         if theme != .default{
-            return KeyLabel(labelType, width: width, theme: theme, textColor: .black)
+            return KeyLabel(labelType, width: width, textColor: .black)
         }
-        return KeyLabel(labelType, width: width, theme: theme)
+        return KeyLabel(labelType, width: width)
     }
 
 }

@@ -10,14 +10,13 @@ import Foundation
 import SwiftUI
 
 struct QwertyKeyboardView: View{
+    @Environment(\.themeEnvironment) private var theme
     @ObservedObject private var variableStates = VariableStates.shared
-    private let theme: ThemeData
     private let tabDesign: TabDependentDesign
     private let keyModels: [[QwertyKeyModelProtocol]]
 
-    init(keyModels: [[QwertyKeyModelProtocol]], theme: ThemeData){
+    init(keyModels: [[QwertyKeyModelProtocol]]){
         self.keyModels = keyModels
-        self.theme = theme
         self.tabDesign = TabDependentDesign(width: 10, height: 4, layout: .qwerty, orientation: VariableStates.shared.keyboardOrientation)
     }
 
@@ -34,7 +33,7 @@ struct QwertyKeyboardView: View{
             ForEach(self.verticalIndices, id: \.self){(v: Int) in
                 HStack(spacing: tabDesign.horizontalSpacing){
                     ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
-                        QwertyKeyView(model: self.keyModels[v][h], theme: theme, tabDesign: tabDesign)
+                        QwertyKeyView(model: self.keyModels[v][h], tabDesign: tabDesign)
                     }
                 }
             }

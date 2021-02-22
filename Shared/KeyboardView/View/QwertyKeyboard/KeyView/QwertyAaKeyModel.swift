@@ -35,12 +35,12 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
         }
     }
 
-    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         switch states.aAKeyState{
         case .normal:
-            return KeyLabel(.image("textformat.alt"), width: width, theme: theme, textColor: color)
+            return KeyLabel(.image("textformat.alt"), width: width, textColor: color)
         case .capslock:
-            return KeyLabel(.image("capslock.fill"), width: width, theme: theme, textColor: color)
+            return KeyLabel(.image("capslock.fill"), width: width, textColor: color)
         }
     }
 

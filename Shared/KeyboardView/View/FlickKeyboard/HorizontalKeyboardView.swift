@@ -18,13 +18,12 @@ struct HorizontalFlickKeyboardView: View {
     @State private var alignmnet: KeyboardAlignment = .center
 
     @ObservedObject private var variableStates = VariableStates.shared
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
     private let tabDesign = TabDependentDesign(width: 5, height: 4, layout: .flick, orientation: .horizontal)
 
     private let keyModels: [[FlickKeyModelProtocol]]
-    init(keyModels: [[FlickKeyModelProtocol]], theme: ThemeData){
+    init(keyModels: [[FlickKeyModelProtocol]]){
         self.keyModels = keyModels
-        self.theme = theme
     }
 
     private var horizontalIndices: Range<Int> {
@@ -66,7 +65,7 @@ struct HorizontalFlickKeyboardView: View {
                         VStack(spacing: tabDesign.verticalSpacing){
                             //IDを明示する必要がある。
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
-                                return FlickKeyView(model: self.keyModels[h][v], theme: theme, tabDesign: tabDesign)
+                                return FlickKeyView(model: self.keyModels[h][v], tabDesign: tabDesign)
                             }
                         }
                     }
@@ -75,7 +74,7 @@ struct HorizontalFlickKeyboardView: View {
                     ForEach(self.horizontalIndices, id: \.self){h in
                         VStack(spacing: tabDesign.verticalSpacing){
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
-                                return SuggestView(model: self.keyModels[h][v].suggestModel, theme: theme, tabDesign: tabDesign)
+                                return SuggestView(model: self.keyModels[h][v].suggestModel, tabDesign: tabDesign)
                             }
                         }
                     }

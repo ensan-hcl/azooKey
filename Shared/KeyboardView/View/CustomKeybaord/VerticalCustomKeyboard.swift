@@ -156,13 +156,12 @@ fileprivate extension CustardInterfaceKey {
 
 struct CustomKeyboardView: View {
     @ObservedObject private var variableStates = VariableStates.shared
+    @Environment(\.themeEnvironment) private var theme
     @State private var allowHitTesting = true
-    private let theme: ThemeData
     private let custard: Custard
     private let tabDesign: TabDependentDesign
 
-    init(theme: ThemeData, custard: Custard){
-        self.theme = theme
+    init(custard: Custard){
         self.custard = custard
         self.tabDesign = custard.interface.tabDesign
     }
@@ -179,7 +178,7 @@ struct CustomKeyboardView: View {
                             VStack(spacing: tabDesign.verticalSpacing){
                                 ForEach(0..<value.height, id: \.self){y in
                                     if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
-                                        FlickKeyView(model: model, theme: theme, tabDesign: tabDesign)
+                                        FlickKeyView(model: model, tabDesign: tabDesign)
                                     }
                                 }
                             }
@@ -190,7 +189,7 @@ struct CustomKeyboardView: View {
                             VStack(spacing: tabDesign.verticalSpacing){
                                 ForEach(0..<value.height, id: \.self){y in
                                     if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
-                                        SuggestView(model: model.suggestModel, theme: theme, tabDesign: tabDesign)
+                                        SuggestView(model: model.suggestModel, tabDesign: tabDesign)
                                     }
                                 }
                             }
@@ -204,7 +203,7 @@ struct CustomKeyboardView: View {
                         HStack(spacing: tabDesign.horizontalSpacing){
                             ForEach(0..<value.width, id: \.self){x in
                                 if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
-                                    QwertyKeyView(model: model, theme: theme, tabDesign: tabDesign)
+                                    QwertyKeyView(model: model, tabDesign: tabDesign)
                                 }
                             }
                         }
@@ -220,7 +219,7 @@ struct CustomKeyboardView: View {
                 ScrollView(.vertical){
                     LazyVGrid(columns: Array(repeating: gridItem, count: value.columnKeyCount), spacing: tabDesign.verticalSpacing/2){
                         ForEach(0..<models.count){i in
-                            SimpleKeyView(model: models[i].simpleKeyModel, theme: theme, tabDesign: tabDesign)
+                            SimpleKeyView(model: models[i].simpleKeyModel, tabDesign: tabDesign)
                         }
                     }
                 }.frame(height: height)
@@ -229,7 +228,7 @@ struct CustomKeyboardView: View {
                 ScrollView(.horizontal){
                     LazyHGrid(rows: Array(repeating: gridItem, count: value.columnKeyCount), spacing: tabDesign.horizontalSpacing/2){
                         ForEach(0..<models.count){i in
-                            SimpleKeyView(model: models[i].simpleKeyModel, theme: theme, tabDesign: tabDesign)
+                            SimpleKeyView(model: models[i].simpleKeyModel, tabDesign: tabDesign)
                         }
                     }
                 }.frame(height: height)

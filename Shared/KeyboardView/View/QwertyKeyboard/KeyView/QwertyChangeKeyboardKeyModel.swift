@@ -48,22 +48,22 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         self.keySizeType = keySizeType
     }
 
-    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
-            return KeyLabel(.changeKeyboard, width: width, theme: theme, textColor: color)
+            return KeyLabel(.changeKeyboard, width: width, textColor: color)
         case false:
             switch states.tabManager.currentTab{
             case .qwerty_hira:
-                return KeyLabel(.text("#+="), width: width, theme: theme, textColor: color)
+                return KeyLabel(.text("#+="), width: width, textColor: color)
             case .qwerty_abc:
-                return KeyLabel(.text("#+="), width: width, theme: theme, textColor: color)
+                return KeyLabel(.text("#+="), width: width, textColor: color)
             case .qwerty_number:
-                return KeyLabel(.text("A"), width: width, theme: theme, textColor: color)
+                return KeyLabel(.text("A"), width: width, textColor: color)
             case .qwerty_symbols:
-                return KeyLabel(.text("A"), width: width, theme: theme, textColor: color)
+                return KeyLabel(.text("A"), width: width, textColor: color)
             default:
-                return KeyLabel(.text("#+="), width: width, theme: theme, textColor: color)
+                return KeyLabel(.text("#+="), width: width, textColor: color)
             }
         }
     }

@@ -43,17 +43,17 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
     }
 
-    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch states.keyboardLanguage{
             case .japanese:
-                return KeyLabel(.text("あ"), width: width, theme: theme, textColor: color)
+                return KeyLabel(.text("あ"), width: width, textColor: color)
             case .english:
-                return KeyLabel(.text("A"), width: width, theme: theme, textColor: color)
+                return KeyLabel(.text("A"), width: width, textColor: color)
             }
         case false:
-            return KeyLabel(.text("あ"), width: width, theme: theme, textColor: color)
+            return KeyLabel(.text("あ"), width: width, textColor: color)
         }
     }
 

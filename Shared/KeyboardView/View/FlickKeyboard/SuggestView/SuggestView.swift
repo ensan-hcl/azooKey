@@ -25,13 +25,12 @@ enum SuggestState{
 struct SuggestView: View {
     private let model: SuggestModel
     @ObservedObject private var modelVariableSection: SuggestModelVariableSection
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
     private let tabDesign: TabDependentDesign
 
-    init(model: SuggestModel, theme: ThemeData, tabDesign: TabDependentDesign){
+    init(model: SuggestModel, tabDesign: TabDependentDesign){
         self.model = model
         self.modelVariableSection = model.variableSection
-        self.theme = theme
         self.tabDesign = tabDesign
     }
      

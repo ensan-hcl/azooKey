@@ -37,9 +37,9 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
         return []
     }
     
-    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
-        return KeyLabel(.text(text), width: width, theme: theme, textSize: .small, textColor: color)
+        return KeyLabel(.text(text), width: width, textSize: .small, textColor: color)
     }
     
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {

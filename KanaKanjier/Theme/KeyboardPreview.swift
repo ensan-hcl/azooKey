@@ -32,7 +32,8 @@ struct KeyboardPreview: View {
     }
 
     var body: some View {
-        KeyboardView<CandidateMock>(theme: theme, resultModel: resultModel)
+        KeyboardView<CandidateMock>(resultModel: resultModel)
+            .environment(\.themeEnvironment, theme)
             .scaleEffect(scale)
             .frame(width: Design.shared.screenWidth * scale, height: Design.shared.keyboardScreenHeight * scale)
     }

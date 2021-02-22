@@ -20,12 +20,12 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType = .space
     init(){}
 
-    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         switch states.keyboardLanguage{
         case .english:
-            return KeyLabel(.text("space"), width: width, theme: theme, textSize: .small, textColor: color)
+            return KeyLabel(.text("space"), width: width, textSize: .small, textColor: color)
         case .japanese:
-            return KeyLabel(.text("空白"), width: width, theme: theme, textSize: .small, textColor: color)
+            return KeyLabel(.text("空白"), width: width, textSize: .small, textColor: color)
         }
     }
 

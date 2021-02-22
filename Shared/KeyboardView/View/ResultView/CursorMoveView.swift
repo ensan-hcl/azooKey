@@ -16,11 +16,7 @@ private enum CursorMoveViewGestureState{
 
 struct CursorMoveView: View{
     @State private var gestureState: CursorMoveViewGestureState = .unactive
-    private let theme: ThemeData
-
-    init(theme: ThemeData){
-        self.theme = theme
-    }
+    @Environment(\.themeEnvironment) private var theme
 
     private var gesture: some Gesture {
         DragGesture(minimumDistance: 0).onChanged({value in

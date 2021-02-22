@@ -60,9 +60,9 @@ struct FlickedKeyModel{
     
     func label(width: CGFloat, theme: ThemeData) -> some View {
         if theme != .default{
-            return KeyLabel(self.labelType, width: width, theme: theme, textColor: .black)
+            return KeyLabel(self.labelType, width: width, textColor: .black)
         }
-        return KeyLabel(self.labelType, width: width, theme: theme)
+        return KeyLabel(self.labelType, width: width)
     }
     
     func flick(){

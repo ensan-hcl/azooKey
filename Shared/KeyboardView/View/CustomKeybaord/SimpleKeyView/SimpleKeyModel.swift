@@ -60,7 +60,7 @@ struct SimpleKeyModel: SimpleKeyModelProtocol{
     let longPressActions: [KeyLongPressActionType]
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
-        KeyLabel(self.keyLabelType, width: width, theme: theme)
+        KeyLabel(self.keyLabelType, width: width)
     }
 
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
@@ -94,7 +94,7 @@ struct SimpleEnterKeyModel: SimpleKeyModelProtocol{
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
-        return KeyLabel(.text(text), width: width, theme: theme)
+        return KeyLabel(.text(text), width: width)
     }
 
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
@@ -134,9 +134,9 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol{
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
-            return KeyLabel(.changeKeyboard, width: width, theme: theme)
+            return KeyLabel(.changeKeyboard, width: width)
         case false:
-            return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: width, theme: theme)
+            return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: width)
         }
     }
 

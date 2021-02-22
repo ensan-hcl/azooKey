@@ -9,6 +9,25 @@
 import Foundation
 import SwiftUI
 
+
+struct ThemeEnvironmentKey: EnvironmentKey {
+    typealias Value = ThemeData
+
+    static var defaultValue: ThemeData = .default
+}
+
+extension EnvironmentValues {
+    var themeEnvironment: ThemeData {
+        get {
+            return self[ThemeEnvironmentKey.self]
+        }
+        set {
+            self[ThemeEnvironmentKey.self] = newValue
+        }
+    }
+}
+
+
 struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
     private let resultModel: ResultModel<Candidate>
@@ -16,12 +35,11 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
 
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
 
     private var sharedResultData = SharedResultData<Candidate>()
 
-    init(theme: ThemeData, resultModel: ResultModel<Candidate>){
-        self.theme = theme
+    init(resultModel: ResultModel<Candidate>){
         self.resultModel = resultModel
     }
 
@@ -41,11 +59,11 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                     }
                 )
             if isResultViewExpanded{
-                ExpandedResultView(theme: theme, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                     .padding(.bottom, 2)
             }else{
                 VStack(spacing: 0){
-                    ResultView(model: resultModel, theme: theme, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                    ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if variableStates.refreshing{
                         keyboardView(tab: variableStates.tabManager.currentTab)
@@ -79,36 +97,36 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
             case .flick_hira:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
-                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().hiraKeyboard , theme: theme)
+                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().hiraKeyboard)
                 case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().hiraKeyboard , theme: theme)
+                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().hiraKeyboard)
                 }
             case .flick_abc:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
-                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().abcKeyboard, theme: theme)
+                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().abcKeyboard)
                 case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().abcKeyboard, theme: theme)
+                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().abcKeyboard)
                 }
             case .flick_numbersymbols:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
-                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().numberKeyboard, theme: theme)
+                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().numberKeyboard)
                 case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().numberKeyboard, theme: theme)
+                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().numberKeyboard)
                 }
             case .qwerty_hira:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard, theme: theme)
+                QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard)
             case .qwerty_abc:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().abcKeyboard, theme: theme)
+                QwertyKeyboardView(keyModels: QwertyDataProvider().abcKeyboard)
             case .qwerty_number:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().numberKeyboard, theme: theme)
+                QwertyKeyboardView(keyModels: QwertyDataProvider().numberKeyboard)
             case .qwerty_symbols:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard, theme: theme)
+                QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard)
             case .user_dependent(_):
                 EmptyView()
             case let .custard(custard):
-                CustomKeyboardView(theme: theme, custard: custard)
+                CustomKeyboardView(custard: custard)
             }
         }
     }

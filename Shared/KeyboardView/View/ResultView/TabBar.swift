@@ -10,14 +10,13 @@ import Foundation
 import SwiftUI
 
 struct TabBarView: View{
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
     @ObservedObject private var variableStates = VariableStates.shared
 
-    let data: TabBarData
+    private let data: TabBarData
 
-    init(data: TabBarData, theme: ThemeData){
+    init(data: TabBarData){
         self.data = data
-        self.theme = theme
     }
 
     var body: some View {

@@ -39,12 +39,12 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
 
     var suggestModel: SuggestModel = SuggestModel([:], keyType: .aA)
 
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         switch states.aAKeyState{
         case .normal:
-            return KeyLabel(.text("a/A"), width: width, theme: theme)
+            return KeyLabel(.text("a/A"), width: width)
         case .capslock:
-            return KeyLabel(.image("capslock.fill"), width: width, theme: theme)
+            return KeyLabel(.image("capslock.fill"), width: width)
         }
     }
 

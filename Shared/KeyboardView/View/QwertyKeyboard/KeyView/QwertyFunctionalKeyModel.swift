@@ -33,8 +33,8 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
         self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
     }
 
-    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
-        KeyLabel(self.labelType, width: width, theme: theme, textColor: color)
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
+        KeyLabel(self.labelType, width: width, textColor: color)
     }
 
     func sound() {

@@ -16,13 +16,12 @@ struct QwertyKeyView: View{
 
     @State private var suggest = false
 
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
     private let tabDesign: TabDependentDesign
     
-    init(model: QwertyKeyModelProtocol, theme: ThemeData, tabDesign: TabDependentDesign){
+    init(model: QwertyKeyModelProtocol, tabDesign: TabDependentDesign){
         self.model = model
         self.modelVariableSection = model.variableSection
-        self.theme = theme
         self.tabDesign = tabDesign
     }
     
@@ -109,7 +108,7 @@ struct QwertyKeyView: View{
                             .size(CGSize(width: keySize.width + tabDesign.horizontalSpacing, height: keySize.height + tabDesign.verticalSpacing))
                     )
                     .gesture(gesture)
-                    .overlay(self.model.label(width: keySize.width, states: variableStates, color: nil, theme: theme))
+                    .overlay(self.model.label(width: keySize.width, states: variableStates, color: nil))
             }
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
@@ -138,7 +137,7 @@ struct QwertyKeyView: View{
                             tabDesign: tabDesign
                         )
                         .overlay(
-                            self.model.label(width: keySize.width, states: variableStates, color: suggestTextColor, theme: theme)
+                            self.model.label(width: keySize.width, states: variableStates, color: suggestTextColor)
                                 .padding(.bottom, height)
                         )
                         .allowsHitTesting(false)

@@ -12,13 +12,13 @@ import SwiftUI
 struct SimpleKeyView: View {
     private let model: SimpleKeyModelProtocol
     @ObservedObject private var variableStates = VariableStates.shared
+    @Environment(\.themeEnvironment) private var theme
+
     @State private var longpressing = false
-    private let theme: ThemeData
     private let tabDesign: TabDependentDesign
 
-    init(model: SimpleKeyModelProtocol, theme: ThemeData, tabDesign: TabDependentDesign){
+    init(model: SimpleKeyModelProtocol, tabDesign: TabDependentDesign){
         self.model = model
-        self.theme = theme
         self.tabDesign = tabDesign
     }
 

@@ -31,11 +31,10 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
 
     @Binding private var isResultViewExpanded: Bool
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
 
-    init(model: ResultModel<Candidate>, theme: ThemeData, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
+    init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
         self.model = model
-        self.theme = theme
         self.modelVariableSection = model.variableSection
         self.sharedResultData = sharedResultData
         self._isResultViewExpanded = isResultViewExpanded
@@ -44,9 +43,9 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     var body: some View {
         Group{[unowned modelVariableSection] in
             if variableStates.showMoveCursorView{
-                CursorMoveView(theme: theme)
+                CursorMoveView()
             }else if variableStates.showTabBar, let tabBarData = try? variableStates.custardManager.tabbar(identifier: 0){
-                TabBarView(data: tabBarData, theme: theme)
+                TabBarView(data: tabBarData)
             }else{
                 HStack{
                     ScrollView(.horizontal, showsIndicators: false){

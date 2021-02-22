@@ -40,9 +40,9 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
         return [:]
     }
 
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
-        return KeyLabel(.text(text), width: width, theme: theme)
+        return KeyLabel(.text(text), width: width)
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {

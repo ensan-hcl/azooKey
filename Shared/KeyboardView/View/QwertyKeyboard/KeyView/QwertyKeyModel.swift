@@ -30,11 +30,11 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
         self.keySizeType = .normal(of: scale.normalCount, for: scale.forCount)
     }
 
-    func label(width: CGFloat, states: VariableStates, color: Color?, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         if states.aAKeyState == .capslock, states.keyboardLanguage == .english, case let .text(text) = self.labelType{
-            return KeyLabel(.text(text.uppercased()), width: width, theme: theme, textColor: color)
+            return KeyLabel(.text(text.uppercased()), width: width, textColor: color)
         }
-        return KeyLabel(self.labelType, width: width, theme: theme, textColor: color)
+        return KeyLabel(self.labelType, width: width, textColor: color)
     }
 
     func sound(){

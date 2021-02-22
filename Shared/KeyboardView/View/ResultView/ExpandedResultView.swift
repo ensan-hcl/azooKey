@@ -19,10 +19,9 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
     @State private var splitedResults: [SplitedResultData<Candidate>]
 
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
 
-    init(theme: ThemeData, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
-        self.theme = theme
+    init(isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
         self.sharedResultData = sharedResultData
         self._isResultViewExpanded = isResultViewExpanded
         self._splitedResults = State(initialValue: Self.registerResults(results: sharedResultData.results))

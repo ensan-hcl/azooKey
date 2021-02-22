@@ -22,15 +22,23 @@ extension UIInputView: UIInputViewAudioFeedback {
 }
 
 final class KeyboardViewController: UIInputViewController {
-    private var keyboardViewHost: KeyboardHostingController<KeyboardView<Candidate>>! = nil
+    private var keyboardViewHost: KeyboardHostingController<Keyboard>! = nil
 
+    struct Keyboard: View {
+        let theme: ThemeData
+        var body: some View {
+            KeyboardView<Candidate>(resultModel: Store.shared.resultModel)
+                .environment(\.themeEnvironment, theme)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //初期化の順序としてこの位置に置くこと
         Store.shared.initialize()
         let indexManager = ThemeIndexManager.load()
         let theme = (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
-        self.keyboardViewHost = KeyboardHostingController(rootView: KeyboardView<Candidate>(theme: theme, resultModel: Store.shared.resultModel))
+        self.keyboardViewHost = KeyboardHostingController(rootView: Keyboard(theme: theme))
         //コントロールセンターを出しにくくする。
         keyboardViewHost.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
