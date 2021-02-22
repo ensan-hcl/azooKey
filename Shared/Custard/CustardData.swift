@@ -371,6 +371,71 @@ struct CustardInterfaceVariationKey: Codable {
 }
 
 extension Custard{
+
+    static let hieroglyph: Custard = {
+        let hieroglyphs = Array(String.UnicodeScalarView((UInt32(0x13000)...UInt32(0x133FF)).compactMap(UnicodeScalar.init))).map(String.init)
+
+        var keys: [CustardKeyCoordinator: CustardInterfaceKey] = [
+            .scroll(0): .system(.change_keyboard),
+            .scroll(1): .custom(
+                .init(
+                    label: .text("←"),
+                    press_action: [.moveCursor(-1)],
+                    longpress_action: [.moveCursor(-1)],
+                    variation: []
+                )
+            ),
+            .scroll(2): .custom(
+                .init(
+                    label: .systemImage("list.dash"),
+                    press_action: [.toggleTabBar],
+                    longpress_action: [],
+                    variation: []
+                )
+            ),
+            .scroll(3): .custom(
+                .init(
+                    label: .text("→"),
+                    press_action: [.moveCursor(1)],
+                    longpress_action: [.moveCursor(1)],
+                    variation: []
+                )
+            ),
+            .scroll(4): .custom(
+                .init(
+                    label: .systemImage("delete.left"),
+                    press_action: [.delete(1)],
+                    longpress_action: [.delete(1)],
+                    variation: []
+                )
+            ),
+        ]
+
+        hieroglyphs.indices.forEach{
+            keys[.scroll(GridScrollCoordinator(5+$0))] = .custom(
+                .init(
+                    label: .text(hieroglyphs[$0]),
+                    press_action: [.input(hieroglyphs[$0])],
+                    longpress_action: [],
+                    variation: []
+                )
+            )
+        }
+
+        let custard = Custard(
+            identifier: "Hieroglyphs",
+            display_name: "カスタード",
+            language: .undefined,
+            input_style: .direct,
+            interface: .init(
+                key_style: .flick,
+                key_layout: .gridScroll(.init(direction: .vertical, columnKeyCount: 8, screenRowKeyCount: 4.2)),
+                keys: keys
+            )
+        )
+        return custard
+    }()
+
     static let mock_flick_grid = Custard(
         identifier: "my_custard",
         display_name: "マイカスタード",

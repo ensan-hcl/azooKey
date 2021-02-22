@@ -27,10 +27,10 @@ extension TabBarItemLabelType: Equatable {
 struct EditingTabBarItem: Identifiable, Equatable {
     let id = UUID()
     var label: TabBarItemLabelType
-    var actions: [CodableActionData]
+    var actions: EditingCodableActions
     var disclosed: Bool
 
-    init(label: TabBarItemLabelType, actions: [CodableActionData], disclosed: Bool = false){
+    init(label: TabBarItemLabelType, actions: EditingCodableActions, disclosed: Bool = false){
         self.label = label
         self.actions = actions
         self.disclosed = disclosed
@@ -50,7 +50,10 @@ struct EditingTabBarView: View {
     init(tabBarData: Binding<TabBarData>){
         debug("initializer")
         self._items = State(initialValue: tabBarData.wrappedValue.items.indices.map{i in
-            EditingTabBarItem(label: tabBarData.wrappedValue.items[i].label, actions: tabBarData.wrappedValue.items[i].actions)
+            EditingTabBarItem(
+                label: tabBarData.wrappedValue.items[i].label,
+                actions: EditingCodableActions(tabBarData.wrappedValue.items[i].actions.map{EditingCodableActionData($0)})
+            )
         })
         self._tabBarData = tabBarData
     }
@@ -62,7 +65,7 @@ struct EditingTabBarView: View {
                     items.append(
                         EditingTabBarItem(
                             label: .text("アイテム"),
-                            actions: [.moveTab(.system(.user_hira))]
+                            actions: EditingCodableActions([EditingCodableActionData(.moveTab(.system(.user_hira)))])
                         )
                     )
                 } label: {
@@ -84,10 +87,10 @@ struct EditingTabBarView: View {
                                         Spacer()
                                         TabNavigationViewItemLabelEditView("ラベルを設定", item: $items[i])
                                     }
-                                    NavigationLink(destination: KeyActionsEditView($items[i])){
+                                    NavigationLink(destination: KeyActionsEditView($items[i], actions: items[i].actions)){
                                         Text("押した時の動作")
                                         Spacer()
-                                        let label = (items[i].actions.first?.label ?? "動作なし") + (items[i].actions.count > 1 ? "など" : "")
+                                        let label = (items[i].actions.list.first?.data.label ?? "動作なし") + (items[i].actions.list.count > 1 ? "など" : "")
                                         Text(label)
                                             .foregroundColor(.gray)
                                     }
@@ -127,7 +130,7 @@ struct EditingTabBarView: View {
         do{
             debug("セーブする！", self.items)
             self.tabBarData = TabBarData(identifier: tabBarData.identifier, items: self.items.map{
-                TabBarItem(label: $0.label, actions: $0.actions)
+                TabBarItem(label: $0.label, actions: $0.actions.list.map{$0.data})
             })
             try VariableStates.shared.custardManager.saveTabBarData(tabBarData: self.tabBarData)
         } catch {

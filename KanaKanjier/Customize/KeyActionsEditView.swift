@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 final class EditingCodableActionData: Identifiable, Equatable, ObservableObject {
     typealias ID = UUID
@@ -22,20 +23,31 @@ final class EditingCodableActionData: Identifiable, Equatable, ObservableObject 
     }
 }
 
+
+final class EditingCodableActions: Equatable, ObservableObject {
+    @Published var list: [EditingCodableActionData]
+    init(_ list: [EditingCodableActionData]){
+        self.list = list
+    }
+
+    static func == (lhs: EditingCodableActions, rhs: EditingCodableActions) -> Bool {
+        return lhs.list == rhs.list
+    }
+}
+
 struct KeyActionsEditView: View {
     @Binding private var item: EditingTabBarItem
-    @State private var newAction: CodableActionData = .input("😊")
     @State private var editMode = EditMode.inactive
     @State private var bottomSheetShown = false
-    @State private var actions: [EditingCodableActionData]
+    @StateObject private var actions: EditingCodableActions
 
-    init(_ item: Binding<EditingTabBarItem>){
+    init(_ item: Binding<EditingTabBarItem>, actions: EditingCodableActions){
         self._item = item
-        self._actions = State(initialValue: item.wrappedValue.actions.map{EditingCodableActionData($0)})
+        self._actions = StateObject(wrappedValue: actions)
     }
 
     func add(new action: CodableActionData){
-        actions.append(EditingCodableActionData(action))
+        actions.list.append(EditingCodableActionData(action))
     }
 
     var body: some View {
@@ -56,7 +68,7 @@ struct KeyActionsEditView: View {
                 }
                 Section(header: Text("アクション")){
                     List{
-                        ForEach(actions){(action: EditingCodableActionData) in
+                        ForEach(actions.list){(action: EditingCodableActionData) in
                             HStack{
                                 VStack(spacing: 20){
                                     if action.data.hasAssociatedValue{
@@ -134,7 +146,7 @@ struct KeyActionsEditView: View {
         }
         .onChange(of: actions){value in
             debug("内部的チェンジ")
-            item.actions = value.map{$0.data}
+            item.actions = actions
         }
         .navigationBarTitle(Text("動作の編集"), displayMode: .inline)
         .navigationBarItems(trailing: editButton)
@@ -164,11 +176,11 @@ struct KeyActionsEditView: View {
     }
 
     private func delete(at offsets: IndexSet) {
-        actions.remove(atOffsets: offsets)
+        actions.list.remove(atOffsets: offsets)
     }
 
     private func onMove(source: IndexSet, destination: Int) {
-        actions.move(fromOffsets: source, toOffset: destination)
+        actions.list.move(fromOffsets: source, toOffset: destination)
     }
 
 }
@@ -186,12 +198,13 @@ struct ActionDeleteEditView: View {
     @State private var value = ""
 
     var body: some View {
-        TextField("削除する文字数", text: $value){ _ in } onCommit: {
-            if let count = Int(value){
-                action.data = .delete(max(count, 0))
+        TextField("削除する文字数", text: $value)
+            .onChange(of: value){value in
+                if let count = Int(value){
+                    action.data = .delete(max(count, 0))
+                }
             }
-        }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(RoundedBorderTextFieldStyle())
     }
 }
 
@@ -208,10 +221,11 @@ struct ActionInputEditView: View {
     @State private var value = ""
 
     var body: some View {
-        TextField("入力する文字", text: $value){ _ in } onCommit: {
-            action.data = .input(value)
-        }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        TextField("入力する文字", text: $value)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .onChange(of: value){value in
+                action.data = .input(value)
+            }
     }
 }
 
@@ -228,10 +242,11 @@ struct ActionOpenAppEditView: View {
     @State private var value = ""
 
     var body: some View {
-        TextField("URL Scheme", text: $value){ _ in } onCommit: {
-            action.data = .openApp(value)
-        }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
+        TextField("URL Scheme", text: $value)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .onChange(of: value){value in
+                action.data = .openApp(value)
+            }
     }
 }
 
@@ -314,10 +329,11 @@ struct ActionMoveTabEditView: View {
             }
         }
         if items[selection] == "カスタム"{
-            TextField("タブの名前", text: $tabName){ _ in } onCommit: {
-                action.data = .moveTab(.custom(tabName))
-            }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            TextField("タブの名前", text: $tabName)
+                .onChange(of: tabName){value in
+                    action.data = .moveTab(.custom(value))
+                }
+                .textFieldStyle(RoundedBorderTextFieldStyle())
         }
     }
 }
@@ -336,12 +352,13 @@ struct ActionMoveCursorEditView: View {
     @State private var value = ""
 
     var body: some View {
-        TextField("移動する文字数", text: $value){ _ in } onCommit: {
-            if let count = Int(value){
-                action.data = .moveCursor(count)
+        TextField("移動する文字数", text: $value)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .onChange(of: value){ value in
+                if let count = Int(value){
+                    action.data = .moveCursor(count)
+                }
             }
-        }
-        .textFieldStyle(RoundedBorderTextFieldStyle())
     }
 }
 

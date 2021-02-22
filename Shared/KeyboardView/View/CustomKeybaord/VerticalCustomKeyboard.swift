@@ -16,7 +16,6 @@ fileprivate extension CustardKeyLabelStyle{
             return .text(value)
         case let .systemImage(value):
             return .image(value)
-
         }
     }
 }
@@ -161,7 +160,6 @@ fileprivate extension CustardInterfaceKey {
             )
         }
     }
-
 }
 
 struct CustomKeyboardView: View {
@@ -171,7 +169,7 @@ struct CustomKeyboardView: View {
     private let custard: Custard
     private let tabDesign: TabDependentDesign
 
-    init(theme: ThemeData, custard: Custard = .mock_qwerty_scroll){
+    init(theme: ThemeData, custard: Custard){
         self.theme = theme
         self.custard = custard
         self.tabDesign = custard.interface.tabDesign
