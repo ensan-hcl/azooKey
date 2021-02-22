@@ -172,7 +172,7 @@ struct ThemeEditView: View {
                 }
 
             }
-            .background(UIColor.secondarySystemBackground)
+            .background(Color(.secondarySystemBackground))
             .onChange(of: pickedImage){value in
                 if let _ = value{
                     self.isTrimmingViewPresented = true
