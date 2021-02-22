@@ -30,12 +30,13 @@ struct CustomizeTabView: View {
         NavigationView {
             Form {
                 Section(header: Text("タブバー")){
-                    Text("タブバーはあなたの入力をサポートします。「記号キー」の長押しで出現し、タブの移動、文字の入力、カーソルの移動、その他たくさんの機能を自由に設定できます。")
+                    Text("タブバーはカスタムタブを利用した際のタブ移動をサポートします。「記号タブ」キーを長押しすることで表示され、タブを移動することが可能です。")
                     Image("tabBar_1")
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: Store.shared.imageMaximumWidth)
 
+                    Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
                     NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData)){
                         HStack{
                             Text("タブバーを編集")
