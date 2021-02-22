@@ -172,7 +172,7 @@ struct ThemeEditView: View {
                 }
 
             }
-            .background(viewBackgroundColor)
+            .background(UIColor.secondarySystemBackground)
             .onChange(of: pickedImage){value in
                 if let _ = value{
                     self.isTrimmingViewPresented = true
@@ -251,17 +251,6 @@ struct ThemeEditView: View {
             }
             .navigationBarTitle(Text("完了"), displayMode: .inline)
             .navigationBarItems(leading: EmptyView(), trailing: EmptyView())
-        }
-    }
-
-    private var viewBackgroundColor: Color {
-        switch colorScheme{
-        case .light:
-            return Color.systemGray6
-        case .dark:
-            return Color.black
-        @unknown default:
-            return Color.systemGray6
         }
     }
 
