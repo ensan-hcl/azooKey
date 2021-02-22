@@ -26,80 +26,110 @@ struct KeyActionsEditView: View {
     @Binding private var item: EditingTabBarItem
     @State private var newAction: CodableActionData = .input("😊")
     @State private var editMode = EditMode.inactive
-
+    @State private var bottomSheetShown = false
     @State private var actions: [EditingCodableActionData]
+
     init(_ item: Binding<EditingTabBarItem>){
         self._item = item
         self._actions = State(initialValue: item.wrappedValue.actions.map{EditingCodableActionData($0)})
     }
 
-    private var newActionPicker: some View {
-        Picker(selection: $newAction, label: Text("追加するアクションを選択")){
-            Text("文字の入力").tag(CodableActionData.input("😊"))
-            Text("文字の削除").tag(CodableActionData.delete(1))
-            Text("文頭まで文字").tag(CodableActionData.smoothDelete)
-            Text("カーソル移動").tag(CodableActionData.moveCursor(-1))
-            Text("大文字/小文字、拗音/濁音/半濁音の切り替え").tag(CodableActionData.exchangeCharacter)
-            Text("タブの移動").tag(CodableActionData.moveTab(.system(.user_hira)))
-            Text("Capslock").tag(CodableActionData.toggleCapsLockState)
-            Text("カーソル移動画面の表示").tag(CodableActionData.toggleCursorMovingView)
-            Text("タブ移動画面の表示").tag(CodableActionData.toggleTabBar)
-            Text("アプリを開く").tag(CodableActionData.openApp("azooKey://"))
-        }
+    func add(new action: CodableActionData){
+        actions.append(EditingCodableActionData(action))
     }
 
     var body: some View {
-        Form {
-            Section{
-                Text("上から順に実行されます")
-            }
-            Section{
-                newActionPicker
-                Button{
-                    actions.append(EditingCodableActionData(newAction))
-                } label: {
-                    HStack{
-                        Image(systemName: "plus")
-                        Text("アクションを追加")
+        GeometryReader{geometry in
+            Form {
+                Section{
+                    Text("上から順に実行されます")
+                }
+                Section{
+                    Button{
+                        self.bottomSheetShown = true
+                    } label: {
+                        HStack{
+                            Image(systemName: "plus")
+                            Text("アクションを追加")
+                        }
                     }
                 }
-            }
-            Section(header: Text("アクション")){
-                List{
-                    ForEach(actions){(action: EditingCodableActionData) in
-                        HStack{
-                            VStack(spacing: 20){
-                                if action.data.hasAssociatedValue{
-                                    DisclosureGroup{
-                                        switch action.data{
-                                        case .delete:
-                                            ActionDeleteEditView(action)
-                                        case .input:
-                                            ActionInputEditView(action)
-                                        case .moveCursor:
-                                            ActionMoveCursorEditView(action)
-                                            Text("負の値を指定すると左にカーソルが動きます")
-                                        case .moveTab:
-                                            ActionMoveTabEditView(action)
-                                        case .openApp:
-                                            ActionOpenAppEditView(action)
-                                            Text("このアクションはiOSのメジャーアップデートで利用できなくなる可能性があります")
-                                        default:
-                                            EmptyView()
+                Section(header: Text("アクション")){
+                    List{
+                        ForEach(actions){(action: EditingCodableActionData) in
+                            HStack{
+                                VStack(spacing: 20){
+                                    if action.data.hasAssociatedValue{
+                                        DisclosureGroup{
+                                            switch action.data{
+                                            case .delete:
+                                                ActionDeleteEditView(action)
+                                            case .input:
+                                                ActionInputEditView(action)
+                                            case .moveCursor:
+                                                ActionMoveCursorEditView(action)
+                                                Text("負の値を指定すると左にカーソルが動きます")
+                                            case .moveTab:
+                                                ActionMoveTabEditView(action)
+                                            case .openApp:
+                                                ActionOpenAppEditView(action)
+                                                Text("このアクションはiOSのメジャーアップデートで利用できなくなる可能性があります")
+                                            default:
+                                                EmptyView()
+                                            }
+                                        } label :{
+                                            Text(action.data.label)
                                         }
-                                    } label :{
+                                    }else{
                                         Text(action.data.label)
                                     }
-                                }else{
-                                    Text(action.data.label)
                                 }
                             }
                         }
-                        .deleteDisabled(editMode == .inactive)
+                        .onDelete(perform: delete)
+                        .onMove(perform: onMove)
                     }
-                    .onDelete(perform: delete)
-                    .onMove(perform: onMove)
                 }
+            }
+            BottomSheetView(
+                isOpen: self.$bottomSheetShown,
+                maxHeight: geometry.size.height * 0.7
+            ) {
+                let press: (CodableActionData) -> () = { action in
+                    add(new: action)
+                    bottomSheetShown = false
+                }
+                Form{
+                    Button("タブの移動"){
+                        press(.moveTab(.system(.user_hira)))
+                    }
+                    Button("文字の入力"){
+                        press(.input("😁"))
+                    }
+                    Button("文字の削除"){
+                        press(.delete(1))
+                    }
+                    Button("文頭まで削除"){
+                        press(.smoothDelete)
+                    }
+                    Button("タブバーの表示"){
+                        press(.toggleTabBar)
+                    }
+                    Button("カーソル移動"){
+                        press(.moveCursor(-1))
+                    }
+                    Button("Capslock"){
+                        press(.toggleCapsLockState)
+                    }
+                    Button("カーソル移動画面の表示"){
+                        press(.toggleCursorMovingView)
+                    }
+                    Button("アプリを開く"){
+                        press(.openApp("azooKey://"))
+                    }
+                }
+                .foregroundColor(.primary)
+                .listRowBackground(Color.gray)
             }
         }
         .onChange(of: actions){value in
@@ -124,7 +154,7 @@ struct KeyActionsEditView: View {
         } label: {
             switch editMode{
             case .inactive:
-                Text("削除と並び替え")
+                Text("削除と順番")
             case .active, .transient:
                 Text("完了")
             @unknown default:
@@ -134,7 +164,6 @@ struct KeyActionsEditView: View {
     }
 
     private func delete(at offsets: IndexSet) {
-        debug("削除", Array(offsets))
         actions.remove(atOffsets: offsets)
     }
 

@@ -165,6 +165,8 @@
 		1AB8C3E925E2A1F000D39BC5 /* CodableActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */; };
 		1AB8C3EF25E2A27C00D39BC5 /* TabBarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */; };
 		1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */; };
+		1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */; };
+		1AB8C40425E3884200D39BC5 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */; };
 		1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD077725479B6500DD0F7C /* Dictionary.swift */; };
 		1AC03159251103EF004CA505 /* Designs.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC03158251103EF004CA505 /* Designs.xcassets */; };
 		1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */; };
@@ -2647,6 +2649,8 @@
 		1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyActionsEditView.swift; sourceTree = "<group>"; };
 		1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableActionData.swift; sourceTree = "<group>"; };
 		1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarData.swift; sourceTree = "<group>"; };
+		1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCustardView.swift; sourceTree = "<group>"; };
+		1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
 		1ABD077725479B6500DD0F7C /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		1AC03158251103EF004CA505 /* Designs.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Designs.xcassets; sourceTree = "<group>"; };
 		1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteredNodeProtocol.swift; sourceTree = "<group>"; };
@@ -5370,8 +5374,10 @@
 			isa = PBXGroup;
 			children = (
 				1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */,
+				1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */,
 				1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */,
 				1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */,
+				1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */,
 			);
 			path = Customize;
 			sourceTree = "<group>";
@@ -10116,6 +10122,7 @@
 				1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */,
 				1AF678B425CE3B7000F3987B /* States.swift in Sources */,
 				1AB8C3BF25E2303200D39BC5 /* TabBar.swift in Sources */,
+				1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */,
 				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
 				1AB8C37025E0067600D39BC5 /* SimpleKeyView.swift in Sources */,
 				1AF679A325CEDC3A00F3987B /* HorizontalKeyboardView.swift in Sources */,
@@ -10155,6 +10162,7 @@
 				1AF678FB25CED91C00F3987B /* ActionDepartment.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
+				1AB8C40425E3884200D39BC5 /* BottomSheetView.swift in Sources */,
 				1AF6797C25CEDB9B00F3987B /* QwertyKeyModelProtocol.swift in Sources */,
 				1AF6791525CED9A200F3987B /* ChangeKeyboardButtonView.swift in Sources */,
 				1A4057DF255843330073C6F7 /* BooleanSettingItemView.swift in Sources */,

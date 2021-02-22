@@ -31,6 +31,10 @@ struct CustomizeTabView: View {
             Form {
                 Section(header: Text("タブバー")){
                     Text("タブバーはあなたの入力をサポートします。「記号キー」の長押しで出現し、タブの移動、文字の入力、カーソルの移動、その他たくさんの機能を自由に設定できます。")
+                    Image("tabBar_1")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: Store.shared.imageMaximumWidth)
 
                     NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData)){
                         HStack{
@@ -44,16 +48,12 @@ struct CustomizeTabView: View {
                     VStack{
                         Text("あなたの好きな文字だけを並べたオリジナルのタブを作成することができます。")
                     }
-                    NavigationLink(destination: FlickCustomKeysSettingSelectView()){
+                    NavigationLink(destination: ManageCustardView()){
                         HStack{
-                            Text("設定する")
+                            Text("カスタムタブの管理")
                             Spacer()
                         }
                     }
-                    VStack{
-                        Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
-                    }
-                    FallbackLink("カスタムタブファイルの作り方", destination: "https://google.com")
                 }
 
                 Section(header: Text("カスタムキー")){

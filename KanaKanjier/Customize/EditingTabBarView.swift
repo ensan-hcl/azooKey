@@ -153,7 +153,7 @@ struct EditingTabBarView: View {
         } label: {
             switch editMode{
             case .inactive:
-                Text("削除と並び替え")
+                Text("削除と順番")
             case .active, .transient:
                 Text("完了")
             @unknown default:
