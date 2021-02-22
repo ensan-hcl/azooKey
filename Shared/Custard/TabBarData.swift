@@ -7,7 +7,7 @@
 //
 
 import Foundation
-enum TabNavigationViewItemLabelType: Codable {
+enum TabBarItemLabelType: Codable {
     case text(String)
     case imageAndText(ImageAndText)
     case image(String)
@@ -23,7 +23,7 @@ enum TabNavigationViewItemLabelType: Codable {
     }
 }
 
-extension TabNavigationViewItemLabelType{
+extension TabBarItemLabelType{
     enum CodingKeys: CodingKey{
         case text
         case imageAndText
@@ -77,7 +77,7 @@ extension TabNavigationViewItemLabelType{
 
 
 struct TabBarItem: Codable {
-    let label: TabNavigationViewItemLabelType
+    let label: TabBarItemLabelType
     let actions: [CodableActionData]
 }
 

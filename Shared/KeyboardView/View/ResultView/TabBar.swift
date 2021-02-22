@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct TabNavigationView: View{
+struct TabBarView: View{
     private let theme: ThemeData
     @ObservedObject private var variableStates = VariableStates.shared
 

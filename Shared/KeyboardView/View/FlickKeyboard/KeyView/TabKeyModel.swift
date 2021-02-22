@@ -20,7 +20,7 @@ struct TabKeyModel: FlickKeyModelProtocol{
             longPressActions: [.moveCursor(.right)]
         )
     ])
-    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tab: .flick_numbersymbols, longPressActions: [.doOnce(.toggleTabNavigationView)], flickKeys: [:])
+    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tab: .flick_numbersymbols, longPressActions: [.doOnce(.toggleTabBar)], flickKeys: [:])
 
 
     var pressActions: [ActionType]{ [.moveTab(self.tab)] }

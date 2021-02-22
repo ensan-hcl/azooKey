@@ -970,7 +970,7 @@ extension Custard{
                 .scroll(15): .custom(
                     .init(
                         label: .systemImage("list.dash"),
-                        press_action: [.toggleTabNavigationView],
+                        press_action: [.toggleTabBar],
                         longpress_action: [],
                         variation: []
                     )

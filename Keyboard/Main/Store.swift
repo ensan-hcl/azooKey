@@ -126,7 +126,7 @@ final class KeyboardActionDepartment: ActionDepartment{
     }
 
     private func showResultView(){
-        VariableStates.shared.showTabNavigationView = false
+        VariableStates.shared.showTabBar = false
         VariableStates.shared.showMoveCursorView = false
     }
 
@@ -179,8 +179,8 @@ final class KeyboardActionDepartment: ActionDepartment{
 
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
-        case .toggleTabNavigationView:
-            VariableStates.shared.showTabNavigationView.toggle()
+        case .toggleTabBar:
+            VariableStates.shared.showTabBar.toggle()
             
         case .hideLearningMemory:
             self.hideLearningMemory()

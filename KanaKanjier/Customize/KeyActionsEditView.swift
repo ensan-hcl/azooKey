@@ -35,7 +35,7 @@ struct KeyActionsEditView: View {
                     Text("タブの移動").tag(CodableActionData.moveTab(.system(.user_hira)))
                     Text("Capslock").tag(CodableActionData.toggleCapsLockState)
                     Text("カーソル移動画面の表示").tag(CodableActionData.toggleCursorMovingView)
-                    Text("タブ移動画面の表示").tag(CodableActionData.toggleTabNavigationView)
+                    Text("タブ移動画面の表示").tag(CodableActionData.toggleTabBar)
                     Text("アプリを開く").tag(CodableActionData.openApp("azooKey://"))
                 }
                 Button{

@@ -134,13 +134,13 @@ enum CodableActionData: Codable {
     case moveTab(CodableTabData)
     case toggleCursorMovingView
     case toggleCapsLockState
-    case toggleTabNavigationView
+    case toggleTabBar
     case openApp(String)    //iOSのバージョンによって消える可能性がある
 
     var hasAssociatedValue: Bool {
         switch self{
         case .delete(_), .input(_), .moveCursor(_), .moveTab(_), .openApp(_): return true
-        case .enter, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabNavigationView: return false
+        case .enter, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar: return false
         }
     }
 
@@ -156,7 +156,7 @@ enum CodableActionData: Codable {
         case .smoothDelete: return "文頭まで削除"
         case .toggleCapsLockState: return "CapslockのモードのON/OFF"
         case .toggleCursorMovingView: return "カーソル移動画面のON/OFF"
-        case .toggleTabNavigationView: return "タブ移動画面のON/OFF"
+        case .toggleTabBar: return "タブ移動画面のON/OFF"
         }
     }
 }
@@ -187,8 +187,8 @@ extension CodableActionData{
             case .capslock:
                 return .changeCapsLockState(state: .normal)
             }
-        case .toggleTabNavigationView:
-            return .toggleTabNavigationView
+        case .toggleTabBar:
+            return .toggleTabBar
         case let .openApp(value):
             return .openApp(value)
         }
@@ -219,7 +219,7 @@ extension CodableActionData: Hashable {
             return true
         case let (.moveCursor(l),.moveCursor(r)):
             return l == r
-        case (.toggleTabNavigationView, .toggleTabNavigationView):
+        case (.toggleTabBar, .toggleTabBar):
             return true
         case (.toggleCursorMovingView,.toggleCursorMovingView):
             return true
@@ -261,8 +261,8 @@ extension CodableActionData: Hashable {
             key = .move_tab
         case .toggleCursorMovingView:
             key = .toggle_cursor_moving_view
-        case .toggleTabNavigationView:
-            key = .toggle_tab_navigation_view
+        case .toggleTabBar:
+            key = .toggle_tab_bar
         case .toggleCapsLockState:
             key = .toggle_caps_lock_state
         case let .openApp(value):
@@ -283,7 +283,7 @@ extension CodableActionData{
         case move_cursor
         case move_tab
         case toggle_cursor_moving_view
-        case toggle_tab_navigation_view
+        case toggle_tab_bar
         case toggle_caps_lock_state
         case open_app
     }
@@ -307,8 +307,8 @@ extension CodableActionData{
             try container.encode(destination, forKey: .move_tab)
         case .toggleCursorMovingView:
             try container.encode(true, forKey: .toggle_cursor_moving_view)
-        case .toggleTabNavigationView:
-            try container.encode(true, forKey: .toggle_tab_navigation_view)
+        case .toggleTabBar:
+            try container.encode(true, forKey: .toggle_tab_bar)
         case .toggleCapsLockState:
             try container.encode(true, forKey: .toggle_caps_lock_state)
         case let .openApp(value):
@@ -361,8 +361,8 @@ extension CodableActionData{
             self = .toggleCursorMovingView
         case .toggle_caps_lock_state:
             self = .toggleCapsLockState
-        case .toggle_tab_navigation_view:
-            self = .toggleTabNavigationView
+        case .toggle_tab_bar:
+            self = .toggleTabBar
         case .open_app:
             let destination = try container.decode(
                 String.self,

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-extension TabNavigationViewItemLabelType: Equatable {
+extension TabBarItemLabelType: Equatable {
     static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs) {
         case let (.text(l), .text(r)):
@@ -26,12 +26,11 @@ extension TabNavigationViewItemLabelType: Equatable {
 
 struct EditingTabBarItem: Identifiable, Equatable {
     let id: Int
-    var label: TabNavigationViewItemLabelType
+    var label: TabBarItemLabelType
     var actions: [CodableActionData]
     var disclosed: Bool
 
-    init(id: Int, label: TabNavigationViewItemLabelType, actions: [CodableActionData], disclosed: Bool = false){
-        debug("アイテムのinit")
+    init(id: Int, label: TabBarItemLabelType, actions: [CodableActionData], disclosed: Bool = false){
         self.id = id
         self.label = label
         self.actions = actions
