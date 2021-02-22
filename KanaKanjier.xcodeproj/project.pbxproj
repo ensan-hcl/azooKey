@@ -2448,7 +2448,7 @@
 		1AFA57542582EFAE00477DC2 /* QwertyAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57532582EFAE00477DC2 /* QwertyAaKeyModel.swift */; };
 		1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57592583051500477DC2 /* CapslockTips.swift */; };
 		1AFA57602584810800477DC2 /* Focus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA575F2584810800477DC2 /* Focus.swift */; };
-		1AFA57662584815B00477DC2 /* RomanCustomKeysSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */; };
+		1AFA57662584815B00477DC2 /* QwertyCustomKeysItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */; };
 		1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68372518A40D00C649C4 /* LargeTextView.swift */; };
 		1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */; };
 		1AFB68502518F18A00C649C4 /* CursorMoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */; };
@@ -4872,7 +4872,7 @@
 		1AFA57532582EFAE00477DC2 /* QwertyAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyAaKeyModel.swift; sourceTree = "<group>"; };
 		1AFA57592583051500477DC2 /* CapslockTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapslockTips.swift; sourceTree = "<group>"; };
 		1AFA575F2584810800477DC2 /* Focus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Focus.swift; sourceTree = "<group>"; };
-		1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeysSettingView.swift; sourceTree = "<group>"; };
+		1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1AFB68372518A40D00C649C4 /* LargeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextView.swift; sourceTree = "<group>"; };
 		1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceSoftWaresLicenceView.swift; sourceTree = "<group>"; };
 		1AFB684F2518F18A00C649C4 /* CursorMoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorMoveView.swift; sourceTree = "<group>"; };
@@ -5439,7 +5439,7 @@
 		1ACE00732567521200899DA2 /* RomanCustomKeys */ = {
 			isa = PBXGroup;
 			children = (
-				1AFA57652584815A00477DC2 /* RomanCustomKeysSettingView.swift */,
+				1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */,
 			);
 			path = RomanCustomKeys;
 			sourceTree = "<group>";
@@ -10186,7 +10186,7 @@
 				1AF6792D25CEDB7000F3987B /* KeyLabel.swift in Sources */,
 				1AB8C3EF25E2A27C00D39BC5 /* TabBarData.swift in Sources */,
 				1AF6792825CEDB6B00F3987B /* KeyboardView.swift in Sources */,
-				1AFA57662584815B00477DC2 /* RomanCustomKeysSettingView.swift in Sources */,
+				1AFA57662584815B00477DC2 /* QwertyCustomKeysItemView.swift in Sources */,
 				1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */,
 				1AF679A225CEDC3A00F3987B /* HorizontalFlickDataProvider.swift in Sources */,
 				1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */,

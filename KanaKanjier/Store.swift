@@ -95,9 +95,9 @@ final class Store{
         defaultValue: CustomizableFlickKey.kanaSymbols.defaultSetting
     ))
 
-    var numberTabCustomKeysSettingNew = SettingItemViewModel(SettingItem<RomanCustomKeysValue>(
+    var numberTabCustomKeysSettingNew = SettingItemViewModel(SettingItem<QwertyCustomKeysValue>(
         identifier: .numberTabCustomKeys,
-        defaultValue: RomanCustomKeysValue.defaultValue
+        defaultValue: QwertyCustomKeysValue.defaultValue
     ))
 
 

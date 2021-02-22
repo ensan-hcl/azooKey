@@ -1,5 +1,5 @@
 //
-//  RomanCustomKeysSettingView.swift
+//  QwertyCustomKeysItemView.swift
 //  KanaKanjier
 //
 //  Created by β α on 2020/12/12.
@@ -19,6 +19,7 @@ fileprivate final class SelectState: ObservableObject{
         self.targetIndex = -1
     }
 }
+
 fileprivate final class EditState: ObservableObject{
     enum State{
         case none
@@ -46,12 +47,12 @@ fileprivate final class EditState: ObservableObject{
     }
 }
 
-struct RomanCustomKeysItemView: View {
+struct QwertyCustomKeysItemView: View {
     @ObservedObject private var selectState = SelectState()
     @ObservedObject private var editState = EditState()
 
-    typealias ItemViewModel = SettingItemViewModel<RomanCustomKeysValue>
-    typealias ItemModel = SettingItem<RomanCustomKeysValue>
+    typealias ItemViewModel = SettingItemViewModel<QwertyCustomKeysValue>
+    typealias ItemModel = SettingItem<QwertyCustomKeysValue>
 
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
@@ -116,7 +117,7 @@ struct RomanCustomKeysItemView: View {
             if viewModel.value.keys.isEmpty{
                 VStack{
                     Button{
-                        viewModel.value.keys.append(RomanCustomKey(name: "", input: "", longpresses: []))
+                        viewModel.value.keys.append(QwertyCustomKey(name: "", input: "", longpresses: []))
                         selectState.selectedIndex = 0
                         selectState.longpressSelectedIndex = -1
                         editState.state = .action
@@ -124,7 +125,7 @@ struct RomanCustomKeysItemView: View {
                         Text("キーを追加する")
                     }
                     Button{
-                        viewModel.value.keys = RomanCustomKeysValue.defaultValue.keys
+                        viewModel.value.keys = QwertyCustomKeysValue.defaultValue.keys
                         selectState.longpressSelectedIndex = -1
                     }label: {
                         Text("デフォルトに戻す")
@@ -155,7 +156,7 @@ struct RomanCustomKeysItemView: View {
                 }.scaledToFit()
                 if longpresses.isEmpty{
                     Button{
-                        viewModel.value.keys[selectState.selectedIndex].longpresses.append(RomanVariationKey(name: "", input: ""))
+                        viewModel.value.keys[selectState.selectedIndex].longpresses.append(QwertyVariationKey(name: "", input: ""))
                         selectState.longpressSelectedIndex = self.viewModel.value.keys[selectState.selectedIndex].longpresses.endIndex - 1
                         editState.state = .action
                     }label: {
@@ -216,11 +217,11 @@ struct RomanCustomKeysItemView: View {
                             let sIndex = selectState.selectedIndex
                             let lpsIndex = selectState.longpressSelectedIndex
                             if lpsIndex == -1{
-                                self.viewModel.value.keys.append(RomanCustomKey(name: "", longpresses: []))
+                                self.viewModel.value.keys.append(QwertyCustomKey(name: "", longpresses: []))
                                 selectState.selectedIndex = self.viewModel.value.keys.endIndex - 1
                                 editState.state = .action
                             }else{
-                                self.viewModel.value.keys[sIndex].longpresses.append(RomanVariationKey(name: "", input: ""))
+                                self.viewModel.value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", input: ""))
                                 selectState.longpressSelectedIndex = self.viewModel.value.keys[sIndex].longpresses.endIndex - 1
                                 editState.state = .action
                             }

@@ -1,5 +1,5 @@
 //
-//  RomanCustomKeysImageSlideShow.swift
+//  ImageSlideShow.swift
 //  KanaKanjier
 //
 //  Created by β α on 2020/11/21.

@@ -1,5 +1,5 @@
 //
-//  RomanCustomKeys.swift
+//  QwertyCustomKeys.swift
 //  KanaKanjier
 //
 //  Created by β α on 2020/11/20.
@@ -8,16 +8,16 @@
 
 import SwiftUI
 
-struct RomanVariationKey: Codable {
+struct QwertyVariationKey: Codable {
     var name: String
     var input: String
 }
 
-struct RomanCustomKey: Codable {
+struct QwertyCustomKey: Codable {
     var name: String
     var longpress: [String]
     var input: String
-    var longpresses: [RomanVariationKey]
+    var longpresses: [QwertyVariationKey]
     enum CodingKeys: String, CodingKey {
         case name
         case longpress
@@ -25,11 +25,11 @@ struct RomanCustomKey: Codable {
         case longpresses
     }
 
-    init(name: String, input: String? = nil, longpresses: [RomanVariationKey] = []){
+    init(name: String, input: String? = nil, longpresses: [QwertyVariationKey] = []){
         self.name = name
         self.longpress = []
         self.input = input ?? name
-        self.longpresses = longpresses// ?? longpress.map{RomanVariationKey(name: $0, input: $0)}
+        self.longpresses = longpresses
     }
 
     init(from decoder: Decoder) throws {
@@ -39,26 +39,26 @@ struct RomanCustomKey: Codable {
         self.name = name
         self.longpress = []
         self.input = (try? values.decode(String.self, forKey: .input)) ?? name
-        self.longpresses =  (try? values.decode([RomanVariationKey].self, forKey: .longpresses)) ?? longpress.map{RomanVariationKey(name: $0, input: $0)}
+        self.longpresses =  (try? values.decode([QwertyVariationKey].self, forKey: .longpresses)) ?? longpress.map{QwertyVariationKey(name: $0, input: $0)}
     }
 }
 
-private struct RomanCustomKeysArray: Codable {
-    let list: [RomanCustomKey]
+private struct QwertyCustomKeysArray: Codable {
+    let list: [QwertyCustomKey]
 }
 
-struct RomanCustomKeysValue: Savable {
+struct QwertyCustomKeysValue: Savable {
     typealias SaveValue = Data
-    static let defaultValue = RomanCustomKeysValue(keys: [
-        RomanCustomKey(name: "。", input: "。", longpresses: [RomanVariationKey(name: "。", input: "。"), RomanVariationKey(name: ".", input: ".")]),
-        RomanCustomKey(name: "、", input: "、", longpresses: [RomanVariationKey(name: "、", input: "、"), RomanVariationKey(name: ",", input: ",")]),
-        RomanCustomKey(name: "？", input: "？", longpresses: [RomanVariationKey(name: "？", input: "？"), RomanVariationKey(name: "?", input: "?")]),
-        RomanCustomKey(name: "！", input: "！", longpresses: [RomanVariationKey(name: "！", input: "！"), RomanVariationKey(name: "!", input: "!")]),
-        RomanCustomKey(name: "・", input: "・", longpresses: [RomanVariationKey(name: "…", input: "…")]),
+    static let defaultValue = QwertyCustomKeysValue(keys: [
+        QwertyCustomKey(name: "。", input: "。", longpresses: [QwertyVariationKey(name: "。", input: "。"), QwertyVariationKey(name: ".", input: ".")]),
+        QwertyCustomKey(name: "、", input: "、", longpresses: [QwertyVariationKey(name: "、", input: "、"), QwertyVariationKey(name: ",", input: ",")]),
+        QwertyCustomKey(name: "？", input: "？", longpresses: [QwertyVariationKey(name: "？", input: "？"), QwertyVariationKey(name: "?", input: "?")]),
+        QwertyCustomKey(name: "！", input: "！", longpresses: [QwertyVariationKey(name: "！", input: "！"), QwertyVariationKey(name: "!", input: "!")]),
+        QwertyCustomKey(name: "・", input: "・", longpresses: [QwertyVariationKey(name: "…", input: "…")]),
     ])
 
     var saveValue: SaveValue {
-        let array = RomanCustomKeysArray(list: keys)
+        let array = QwertyCustomKeysArray(list: keys)
         let encoder = JSONEncoder()
         if let encodedValue = try? encoder.encode(array) {
             return encodedValue
@@ -67,13 +67,13 @@ struct RomanCustomKeysValue: Savable {
         }
     }
 
-    var keys: [RomanCustomKey]
+    var keys: [QwertyCustomKey]
 
-    static func get(_ value: Any) -> RomanCustomKeysValue? {
+    static func get(_ value: Any) -> QwertyCustomKeysValue? {
         if let value = value as? SaveValue{
             let decoder = JSONDecoder()
-            if let keys = try? decoder.decode(RomanCustomKeysArray.self, from: value) {
-                return RomanCustomKeysValue(keys: keys.list)
+            if let keys = try? decoder.decode(QwertyCustomKeysArray.self, from: value) {
+                return QwertyCustomKeysValue(keys: keys.list)
             }
         }
         return nil

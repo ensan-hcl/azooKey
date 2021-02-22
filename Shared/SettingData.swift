@@ -166,8 +166,8 @@ struct SettingData{
     }
 
     var qwertyNumberTabKeySetting: [QwertyKeyModel] {
-        let customKeys: RomanCustomKeysValue
-        if let value = Self.userDefaults.value(forKey: Setting.numberTabCustomKeys.key), let keys = RomanCustomKeysValue.get(value){
+        let customKeys: QwertyCustomKeysValue
+        if let value = Self.userDefaults.value(forKey: Setting.numberTabCustomKeys.key), let keys = QwertyCustomKeysValue.get(value){
             customKeys = keys
         }else if let defaultValue = DefaultSetting.shared.qwertyCustomKeyDefaultSetting(.numberTabCustomKeys){
             customKeys = defaultValue

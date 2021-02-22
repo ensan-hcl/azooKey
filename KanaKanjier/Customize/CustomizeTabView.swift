@@ -69,9 +69,9 @@ struct CustomizeTabView: View {
                     }
                     VStack{
                         Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
-                        ImageSlideshowView(pictures: ["romanCustomKeySetting0","romanCustomKeySetting1","romanCustomKeySetting2"])
+                        ImageSlideshowView(pictures: ["qwertyCustomKeySetting0","qwertyCustomKeySetting1","qwertyCustomKeySetting2"])
                     }
-                    NavigationLink(destination: RomanCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
+                    NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
                         HStack{
                             Text("設定する")
                             Spacer()
