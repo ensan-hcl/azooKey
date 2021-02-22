@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 
+///参考：https://swiftwithmajid.com/2019/12/11/building-bottom-sheet-in-swiftui/
 struct BottomSheetView<Content: View>: View {
     @Binding var isOpen: Bool
 

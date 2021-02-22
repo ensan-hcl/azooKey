@@ -25,13 +25,12 @@ extension TabBarItemLabelType: Equatable {
 }
 
 struct EditingTabBarItem: Identifiable, Equatable {
-    let id: Int
+    let id = UUID()
     var label: TabBarItemLabelType
     var actions: [CodableActionData]
     var disclosed: Bool
 
-    init(id: Int, label: TabBarItemLabelType, actions: [CodableActionData], disclosed: Bool = false){
-        self.id = id
+    init(label: TabBarItemLabelType, actions: [CodableActionData], disclosed: Bool = false){
         self.label = label
         self.actions = actions
         self.disclosed = disclosed
@@ -51,25 +50,21 @@ struct EditingTabBarView: View {
     init(tabBarData: Binding<TabBarData>){
         debug("initializer")
         self._items = State(initialValue: tabBarData.wrappedValue.items.indices.map{i in
-            EditingTabBarItem(id: i, label: tabBarData.wrappedValue.items[i].label, actions: tabBarData.wrappedValue.items[i].actions)
+            EditingTabBarItem(label: tabBarData.wrappedValue.items[i].label, actions: tabBarData.wrappedValue.items[i].actions)
         })
         self._tabBarData = tabBarData
-
     }
 
     var body: some View {
         Form {
             Section{
                 Button{
-                    let maxID = (items.map{$0.id}.max() ?? -1) + 1
                     items.append(
                         EditingTabBarItem(
-                            id: maxID,
                             label: .text("アイテム"),
                             actions: [.moveTab(.system(.user_hira))]
                         )
                     )
-
                 } label: {
                     HStack{
                         Image(systemName: "plus")
