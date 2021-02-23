@@ -153,7 +153,7 @@ struct LearningMemorys{
         }
         let string: String = self.values.map{
             let nextString = $0.next.map{"\($0.index),\($0.count)"}.joined(separator: "\0")
-            return "\($0.count)\t\($0.data.ruby)\t\($0.data.word)\t\($0.data.lcid)\t\($0.data.rcid)\t\($0.data.mid)\t\($0.data.baseValue)\t\(nextString)"
+            return "\($0.count)\t\($0.data.ruby.escaped())\t\($0.data.word.escaped())\t\($0.data.lcid)\t\($0.data.rcid)\t\($0.data.mid)\t\($0.data.baseValue)\t\(nextString)"
         }.joined(separator: "\n")
         FileTools.saveTextFile(contents: string, to: Self.memoryFileName)
     }
@@ -189,8 +189,11 @@ struct LearningMemorys{
             return []
         }
 
-        let values: [LearningMemoryElement] = contents.split(separator: "\n").map{(line: String.SubSequence) in
+        let values: [LearningMemoryElement] = contents.split(separator: "\n").compactMap{(line: String.SubSequence) in
             let splited: [String.SubSequence] = line.split(separator: "\t", omittingEmptySubsequences: false)
+            if splited.count < 7{
+                return nil
+            }
             let count: Int = Int(splited[0]) ?? 1
             let data: DicDataElementProtocol = Self.convertLatticeNodeData(from: splited[1...6])
             if splited[7].isEmpty{
@@ -210,8 +213,8 @@ struct LearningMemorys{
         let LRE = dataString[3+delta].isEmpty
         let SRE = dataString[1+delta].isEmpty
         let V3E = dataString[5+delta].isEmpty
-        let ruby = String(dataString[0+delta])
-        let word = SRE ? ruby:String(dataString[1+delta])
+        let ruby = String(dataString[0+delta]).unescaped()
+        let word = SRE ? ruby:String(dataString[1+delta]).escaped()
         let lcid = Int(dataString[2+delta]) ?? .zero
         let rcid = Int(dataString[3+delta]) ?? lcid
         let mid = Int(dataString[4+delta]) ?? .zero
