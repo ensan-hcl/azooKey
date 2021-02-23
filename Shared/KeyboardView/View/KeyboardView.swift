@@ -38,9 +38,11 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @Environment(\.themeEnvironment) private var theme
 
     private var sharedResultData = SharedResultData<Candidate>()
+    private let defaultTab: Tab?
 
-    init(resultModel: ResultModel<Candidate>){
+    init(resultModel: ResultModel<Candidate>, defaultTab: Tab? = nil){
         self.resultModel = resultModel
+        self.defaultTab = defaultTab
     }
 
     var body: some View {
@@ -85,11 +87,18 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     }
 
     func keyboardView(tab: Tab) -> some View {
+        let target: Tab
+        if let defaultTab = defaultTab{
+            target = defaultTab
+        }else{
+            target = tab
+        }
+
         let actualTab: Tab
-        if case let .user_dependent(type) = tab{
+        if case let .user_dependent(type) = target{
             actualTab = type.actualTab
         }else{
-            actualTab = tab
+            actualTab = target
         }
 
         return Group{

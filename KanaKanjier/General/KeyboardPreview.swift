@@ -19,8 +19,9 @@ struct KeyboardPreview: View {
     private let theme: ThemeData
 
     private let scale: CGFloat
+    private let defaultTab: Tab?
 
-    init(theme: ThemeData, scale: CGFloat = 1){
+    init(theme: ThemeData, scale: CGFloat = 1, defaultTab: Tab? = nil){
         SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
         resultModel.setResults([
             CandidateMock(text: "azooKey"),
@@ -29,10 +30,11 @@ struct KeyboardPreview: View {
         ])
         self.theme = theme
         self.scale = scale
+        self.defaultTab = defaultTab
     }
 
     var body: some View {
-        KeyboardView<CandidateMock>(resultModel: resultModel)
+        KeyboardView<CandidateMock>(resultModel: resultModel, defaultTab: defaultTab)
             .environment(\.themeEnvironment, theme)
             .scaleEffect(scale)
             .frame(width: Design.shared.screenWidth * scale, height: Design.shared.keyboardScreenHeight * scale)

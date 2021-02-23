@@ -5452,6 +5452,7 @@
 				1ACEEFDD25665F0100899DA2 /* CenterAlignedView.swift */,
 				1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */,
 				1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */,
+				1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -7683,7 +7684,6 @@
 				1AE1913525D4A3370044EE4B /* ThemeShareView.swift */,
 				1AE1025525D1788300CA7277 /* Capture.swift */,
 				1AE1024A25D118ED00CA7277 /* ColorTools.swift */,
-				1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */,
 				1AE1023525D0C99200CA7277 /* PhotoPicker.swift */,
 				1A18424225DD6857003985AB /* FontPicker.swift */,
 			);

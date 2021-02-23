@@ -93,40 +93,51 @@ struct ManageCustardView: View {
 
     var body: some View {
         Form{
+            Section(header: Text("一覧")){
+
+            }
             Section(header: Text("作る")){
                 
             }
             Section(header: Text("読み込む")){
-                Text("カスタムタブファイルをファイルから読み込む")
-                DisclosureGroup{
-                    HStack{
-                        TextField("URLを入力", text: $urlString)
-                    }
-                    if let text = data.processState.description{
-                        ProgressView(text)
-                    }else{
-                        Button{
-                            data.download(from: urlString)
-                        } label: {
-                            Text("読み込む")
-                        }
-                    }
-                } label: {
-                    Text("カスタムタブファイルをURL読み込み")
-                }
-
                 switch data.importedData{
-                case .none:
-                    EmptyView()
+                case .none, .failure:
+                    Text("カスタムタブファイルをファイルから読み込む")
+                    DisclosureGroup{
+                        HStack{
+                            TextField("URLを入力", text: $urlString)
+                        }
+                        if let text = data.processState.description{
+                            ProgressView(text)
+                        }else{
+                            Button{
+                                data.download(from: urlString)
+                            } label: {
+                                Text("読み込む")
+                            }
+                        }
+                        if case let .failure(error) = data.importedData{
+                            Text(verbatim: "\(error)")
+                        }
+                    } label: {
+                        Text("カスタムタブファイルをURL読み込み")
+                    }
+
+                    VStack{
+                        Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
+                        FallbackLink("カスタムタブファイルの作り方", destination: "https://google.com")
+                    }
                 case let .success(custard):
                     Text("「\(custard.identifier)」の読み込みに成功しました")
-                case let .failure(error):
-                    Text(verbatim: "\(error)")
-                }
-
-                VStack{
-                    Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
-                    FallbackLink("カスタムタブファイルの作り方", destination: "https://google.com")
+                    CenterAlignedView{
+                        KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
+                    }
+                    Button("保存"){
+                        
+                    }
+                    Button("クリア"){
+                        data.importedData = nil
+                    }
                 }
             }
 

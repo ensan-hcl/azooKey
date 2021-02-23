@@ -20,7 +20,7 @@ enum CustardInputStyle: String, Codable {
 }
 
 enum CustardVersion: String, Codable {
-    case `v1_0`
+    case v1_0
 }
 
 struct Custard: Codable {
@@ -42,7 +42,6 @@ enum CustardInterfaceLayout: Codable {
     case gridFit(CustardInterfaceLayoutGridValue)
     ///はみ出した分はスクロールできる形でマス目状に均等に配置されます。
     case gridScroll(CustardInterfaceLayoutScrollValue)
-
 }
 
 struct CustardInterfaceLayoutGridValue: Codable {
