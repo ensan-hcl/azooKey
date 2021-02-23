@@ -214,7 +214,7 @@ struct LearningMemorys{
         let SRE = dataString[1+delta].isEmpty
         let V3E = dataString[5+delta].isEmpty
         let ruby = String(dataString[0+delta]).unescaped()
-        let word = SRE ? ruby:String(dataString[1+delta]).escaped()
+        let word = SRE ? ruby:String(dataString[1+delta]).unescaped()
         let lcid = Int(dataString[2+delta]) ?? .zero
         let rcid = Int(dataString[3+delta]) ?? lcid
         let mid = Int(dataString[4+delta]) ?? .zero
