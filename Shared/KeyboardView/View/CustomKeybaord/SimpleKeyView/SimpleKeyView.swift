@@ -30,21 +30,13 @@ struct SimpleKeyView: View {
         CGFloat(theme.borderWidth)
     }
 
-    private var suggestColor: Color {
-        theme != .default ? .white : Design.colors.suggestKeyColor
-    }
-
-    private var suggestTextColor: Color? {
-        theme != .default ? .black : nil
-    }
-
     @State private var isPressed = false
     @State private var pressStartDate = Date()
 
     var body: some View {
         model.label(width: tabDesign.keyViewWidth, states: variableStates, theme: theme)
             .background(
-                RoundedBorderedRectangle(cornerRadius: 6, fillColor: isPressed ? model.backGroundColorWhenPressed(theme: theme) : model.backGroundColorWhenUnpressed(states: variableStates, theme: theme), borderColor: keyBorderColor, borderWidth: keyBorderWidth)
+                RoundedBorderedRectangle(cornerRadius: 6, fillColor: isPressed ? model.backGroundColorWhenPressed(theme: theme) : model.unpressedKeyColorType.color(states: variableStates, theme: theme), borderColor: keyBorderColor, borderWidth: keyBorderWidth)
                     .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
             )
             .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)

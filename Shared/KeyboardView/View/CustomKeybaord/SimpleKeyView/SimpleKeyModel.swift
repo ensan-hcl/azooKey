@@ -9,16 +9,47 @@
 import Foundation
 import SwiftUI
 
+enum SimpleUnpressedKeyColorType{
+    case normal
+    case special
+    case enter
+
+    func color(states: VariableStates, theme: ThemeData) -> Color {
+        switch self{
+        case .normal:
+            return theme.normalKeyFillColor.color
+        case .special:
+            return theme.specialKeyFillColor.color
+        case .enter:
+            switch states.enterKeyState{
+            case .complete, .edit:
+                return theme.specialKeyFillColor.color
+            case let .return(type):
+                switch type{
+                case .default:
+                    return theme.specialKeyFillColor.color
+                default:
+                    if theme == .default{
+                        return Design.colors.specialEnterKeyColor
+                    }else{
+                        return theme.specialKeyFillColor.color
+                    }
+                }
+            }
+        }
+    }
+}
+
 protocol SimpleKeyModelProtocol{
     var pressActions: [ActionType] {get}
     var longPressActions: [KeyLongPressActionType] {get}
+    var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
     func press()
     func longPressReserve()
     func longPressEnd()
     func sound()
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 }
 
 extension SimpleKeyModelProtocol{
@@ -39,12 +70,16 @@ extension SimpleKeyModelProtocol{
         self.pressActions.first?.sound()
     }
 
+    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
+        theme.pushedKeyFillColor.color
+    }
 }
 
 struct SimpleKeyModel: SimpleKeyModelProtocol{
-    init(keyType: SimpleKeyColorType, keyLabelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType]) {
+    init(keyType: SimpleKeyColorType, keyLabelType: KeyLabelType, unpressedKeyColorType: SimpleUnpressedKeyColorType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType]) {
         self.keyType = keyType
         self.keyLabelType = keyLabelType
+        self.unpressedKeyColorType = unpressedKeyColorType
         self.pressActions = pressActions
         self.longPressActions = longPressActions
     }
@@ -55,25 +90,13 @@ struct SimpleKeyModel: SimpleKeyModelProtocol{
     }
 
     let keyType: SimpleKeyColorType
+    let unpressedKeyColorType: SimpleUnpressedKeyColorType
     let keyLabelType: KeyLabelType
     let pressActions: [ActionType]
     let longPressActions: [KeyLongPressActionType]
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         KeyLabel(self.keyLabelType, width: width)
-    }
-
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
-        theme.pushedKeyFillColor.color
-    }
-    
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        switch self.keyType{
-        case .normal:
-            return theme.normalKeyFillColor.color
-        case .functional:
-            return theme.specialKeyFillColor.color
-        }
     }
 }
 
@@ -91,32 +114,10 @@ struct SimpleEnterKeyModel: SimpleKeyModelProtocol{
     }
 
     let longPressActions: [KeyLongPressActionType] = []
-
+    let unpressedKeyColorType: SimpleUnpressedKeyColorType = .enter
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width)
-    }
-
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
-        theme.pushedKeyFillColor.color
-    }
-
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        switch states.enterKeyState{
-        case .complete, .edit:
-            return theme.specialKeyFillColor.color
-        case let .return(type):
-            switch type{
-            case .default:
-                return theme.specialKeyFillColor.color
-            default:
-                if theme == .default{
-                    return Design.colors.specialEnterKeyColor
-                }else{
-                    return theme.specialKeyFillColor.color
-                }
-            }
-        }
     }
 }
 
@@ -129,6 +130,7 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol{
             return [.toggleShowMoveCursorView]
         }
     }
+    let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
     let longPressActions: [KeyLongPressActionType] = []
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
@@ -138,13 +140,5 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol{
         case false:
             return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: width)
         }
-    }
-
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
-        theme.pushedKeyFillColor.color
-    }
-
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        theme.specialKeyFillColor.color
     }
 }

@@ -79,6 +79,25 @@ fileprivate extension CustardKeyDesign.ColorType{
             return .tabkey
         }
     }
+
+    var qwertyKeyColorType: QwertyUnpressedKeyColorType {
+        switch self{
+        case .normal:
+            return .normal
+        case .special:
+            return .special
+        }
+    }
+
+    var simpleKeyColorType: SimpleUnpressedKeyColorType {
+        switch self{
+        case .normal:
+            return .normal
+        case .special:
+            return .special
+        }
+    }
+
 }
 
 fileprivate extension CustardInterfaceKey {
@@ -139,6 +158,7 @@ fileprivate extension CustardInterfaceKey {
                 pressActions: value.press_action.map{$0.actionType},
                 longPressActions: value.longpress_action.map{$0.longpressActionType},
                 variationsModel: VariationsModel(variations),
+                keyColorType: value.design.color.qwertyKeyColorType,
                 needSuggestView: true,
                 for: (1,1)
             )
@@ -159,6 +179,7 @@ fileprivate extension CustardInterfaceKey {
             return SimpleKeyModel(
                 keyType: .normal,
                 keyLabelType: value.design.label.keyLabelType,
+                unpressedKeyColorType: value.design.color.simpleKeyColorType,
                 pressActions: value.press_action.map{$0.actionType},
                 longPressActions: value.longpress_action.map{$0.longpressActionType}
             )
