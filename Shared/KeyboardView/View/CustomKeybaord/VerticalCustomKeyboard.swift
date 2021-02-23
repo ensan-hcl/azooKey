@@ -57,13 +57,13 @@ fileprivate extension CustardInterface{
         }
     }
 
-    var flickKeyModels: [CustardKeyCoordinator: FlickKeyModelProtocol] {
+    var flickKeyModels: [CustardKeyPositionSpecifier: FlickKeyModelProtocol] {
         self.keys.mapValues{
             $0.flickKeyModel
         }
     }
 
-    var qwertyKeyModels: [CustardKeyCoordinator: QwertyKeyModelProtocol] {
+    var qwertyKeyModels: [CustardKeyPositionSpecifier: QwertyKeyModelProtocol] {
         self.keys.mapValues{
             $0.qwertyKeyModel(layout: self.key_layout)
         }
@@ -94,7 +94,7 @@ fileprivate extension CustardInterfaceKey {
                 }
             }
             let model = FlickKeyModel(
-                labelType: value.label.keyLabelType,
+                labelType: value.design.label.keyLabelType,
                 pressActions: value.press_action.map{$0.actionType},
                 longPressActions: value.longpress_action.map{$0.longpressActionType},
                 flickKeys: flickKeyModels
@@ -123,7 +123,7 @@ fileprivate extension CustardInterfaceKey {
             }
 
             let model = QwertyKeyModel(
-                labelType: value.label.keyLabelType,
+                labelType: value.design.label.keyLabelType,
                 pressActions: value.press_action.map{$0.actionType},
                 longPressActions: value.longpress_action.map{$0.longpressActionType},
                 variationsModel: VariationsModel(variations),
@@ -146,7 +146,7 @@ fileprivate extension CustardInterfaceKey {
         case let .custom(value):
             return SimpleKeyModel(
                 keyType: .normal,
-                keyLabelType: value.label.keyLabelType,
+                keyLabelType: value.design.label.keyLabelType,
                 pressActions: value.press_action.map{$0.actionType},
                 longPressActions: value.longpress_action.map{$0.longpressActionType}
             )
@@ -177,7 +177,7 @@ struct CustomKeyboardView: View {
                         ForEach(0..<value.width, id: \.self){x in
                             VStack(spacing: tabDesign.verticalSpacing){
                                 ForEach(0..<value.height, id: \.self){y in
-                                    if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
+                                    if let model = models[.grid_fit(GridFitPositionSpecifier(x: x, y: y))]{
                                         FlickKeyView(model: model, tabDesign: tabDesign)
                                     }
                                 }
@@ -188,7 +188,7 @@ struct CustomKeyboardView: View {
                         ForEach(0..<value.width, id: \.self){x in
                             VStack(spacing: tabDesign.verticalSpacing){
                                 ForEach(0..<value.height, id: \.self){y in
-                                    if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
+                                    if let model = models[.grid_fit(GridFitPositionSpecifier(x: x, y: y))]{
                                         SuggestView(model: model.suggestModel, tabDesign: tabDesign)
                                     }
                                 }
@@ -202,7 +202,7 @@ struct CustomKeyboardView: View {
                     ForEach(0..<value.height, id: \.self){y in
                         HStack(spacing: tabDesign.horizontalSpacing){
                             ForEach(0..<value.width, id: \.self){x in
-                                if let model = models[.grid(GridFitCoordinator(x: x, y: y))]{
+                                if let model = models[.grid_fit(GridFitPositionSpecifier(x: x, y: y))]{
                                     QwertyKeyView(model: model, tabDesign: tabDesign)
                                 }
                             }
@@ -212,7 +212,7 @@ struct CustomKeyboardView: View {
             }
         case let .gridScroll(value):
             let height = Design.shared.keyboardHeight - (Design.shared.resultViewHeight + 12)
-            let models = (0..<custard.interface.keys.count).compactMap{custard.interface.keys[.scroll(GridScrollCoordinator($0))]}
+            let models = (0..<custard.interface.keys.count).compactMap{custard.interface.keys[.grid_scroll(GridScrollPositionSpecifier($0))]}
             switch value.direction{
             case .vertical:
                 let gridItem = GridItem(.fixed(tabDesign.keyViewWidth), spacing: tabDesign.horizontalSpacing/2)
