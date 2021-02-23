@@ -76,6 +76,7 @@ struct CustardInformationView: View {
             }
             if let metadata = metadata {
                 HStack{
+                    Text("由来")
                     Spacer()
                     Text(metadata.origin.description)
                 }
