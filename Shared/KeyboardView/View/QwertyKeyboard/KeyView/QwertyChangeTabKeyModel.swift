@@ -34,10 +34,7 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
     let needSuggestView: Bool = false
 
     let keySizeType: QwertyKeySizeType
-
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        theme.specialKeyFillColor.color
-    }
+    let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
     init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)){
         self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)

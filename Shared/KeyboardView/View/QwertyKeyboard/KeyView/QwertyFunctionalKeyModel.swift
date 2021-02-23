@@ -20,11 +20,8 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
     let labelType: KeyLabelType
     let needSuggestView: Bool
     let keySizeType: QwertyKeySizeType
+    let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        theme.specialKeyFillColor.color
-    }
-    
     init(labelType: KeyLabelType, rowInfo: (normal: Int, functional: Int, space: Int, enter: Int), pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], needSuggestView: Bool = false){
         self.labelType = labelType
         self.pressActions = pressActions

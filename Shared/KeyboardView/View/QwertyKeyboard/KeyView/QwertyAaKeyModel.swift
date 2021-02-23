@@ -44,9 +44,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
         }
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        theme.specialKeyFillColor.color
-    }
+    let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
     func sound() {
         Sound.tabOrOtherKey()

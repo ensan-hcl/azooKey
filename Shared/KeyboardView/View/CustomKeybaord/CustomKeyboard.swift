@@ -70,6 +70,17 @@ fileprivate extension CustardInterface{
     }
 }
 
+fileprivate extension CustardKeyDesign.ColorType{
+    var flickKeyColorType: FlickKeyColorType {
+        switch self{
+        case .normal:
+            return .normal
+        case .special:
+            return .tabkey
+        }
+    }
+}
+
 fileprivate extension CustardInterfaceKey {
     var flickKeyModel: FlickKeyModelProtocol {
         switch self {
@@ -97,7 +108,8 @@ fileprivate extension CustardInterfaceKey {
                 labelType: value.design.label.keyLabelType,
                 pressActions: value.press_action.map{$0.actionType},
                 longPressActions: value.longpress_action.map{$0.longpressActionType},
-                flickKeys: flickKeyModels
+                flickKeys: flickKeyModels,
+                keycolorType: value.design.color.flickKeyColorType
             )
             return model
         }

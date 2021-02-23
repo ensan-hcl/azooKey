@@ -34,6 +34,37 @@ enum QwertyKeySizeType{
 
 }
 
+enum QwertyUnpressedKeyColorType{
+    case normal
+    case special
+    case enter
+
+    func color(states: VariableStates, theme: ThemeData) -> Color {
+        switch self{
+        case .normal:
+            return theme.normalKeyFillColor.color
+        case .special:
+            return theme.specialKeyFillColor.color
+        case .enter:
+            switch states.enterKeyState{
+            case .complete, .edit:
+                return theme.specialKeyFillColor.color
+            case let .return(type):
+                switch type{
+                case .default:
+                    return theme.specialKeyFillColor.color
+                default:
+                    if theme == .default{
+                        return Design.colors.specialEnterKeyColor
+                    }else{
+                        return theme.specialKeyFillColor.color
+                    }
+                }
+            }
+        }
+    }
+}
+
 protocol QwertyKeyModelProtocol{
     var pressActions: [ActionType] {get}
     var longPressActions: [KeyLongPressActionType] {get}
@@ -46,7 +77,7 @@ protocol QwertyKeyModelProtocol{
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
+    var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
 
     func press()
     func longPressReserve()
@@ -71,8 +102,5 @@ extension QwertyKeyModelProtocol{
         
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
         theme.pushedKeyFillColor.color
-    }
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        theme.normalKeyFillColor.color
     }
 }

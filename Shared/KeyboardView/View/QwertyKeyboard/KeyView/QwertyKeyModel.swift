@@ -20,14 +20,16 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     let variationsModel: VariationsModel
 
     let keySizeType: QwertyKeySizeType
+    let unpressedKeyColorType: QwertyUnpressedKeyColorType
 
-    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], variationsModel: VariationsModel = VariationsModel([]),  needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){
+    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], variationsModel: VariationsModel = VariationsModel([]), keyColorType: QwertyUnpressedKeyColorType = .normal, needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions
         self.needSuggestView = needSuggestView
         self.variationsModel = variationsModel
         self.keySizeType = .normal(of: scale.normalCount, for: scale.forCount)
+        self.unpressedKeyColorType = keyColorType
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
@@ -40,4 +42,5 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     func sound(){
         self.pressActions.first?.sound()
     }
+
 }

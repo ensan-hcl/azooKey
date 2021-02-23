@@ -77,7 +77,7 @@ struct QwertyKeyView: View{
         if modelVariableSection.pressState.isActive{
             return self.model.backGroundColorWhenPressed(theme: theme)
         }else{
-            return self.model.backGroundColorWhenUnpressed(states: variableStates, theme: theme)
+            return self.model.unpressedKeyColorType.color(states: variableStates, theme: theme)
         }
     }
 

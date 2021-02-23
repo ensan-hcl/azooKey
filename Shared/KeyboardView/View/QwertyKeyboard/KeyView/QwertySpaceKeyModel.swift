@@ -18,6 +18,8 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
     let needSuggestView: Bool = false
     let variationsModel = VariationsModel([])
     let keySizeType: QwertyKeySizeType = .space
+    let unpressedKeyColorType: QwertyUnpressedKeyColorType = .normal
+
     init(){}
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {

@@ -42,23 +42,7 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
         return KeyLabel(.text(text), width: width, textSize: .small, textColor: color)
     }
     
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        switch states.enterKeyState{
-        case .complete, .edit:
-            return theme.specialKeyFillColor.color
-        case let .return(type):
-            switch type{
-            case .default:
-                return theme.specialKeyFillColor.color
-            default:
-                if theme == .default{
-                    return Design.colors.specialEnterKeyColor
-                }else{
-                    return theme.specialKeyFillColor.color
-                }
-            }
-        }
-    }
+    let unpressedKeyColorType: QwertyUnpressedKeyColorType = .enter
 
     func sound() {
         switch VariableStates.shared.enterKeyState{

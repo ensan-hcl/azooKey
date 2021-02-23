@@ -39,10 +39,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
     let needSuggestView: Bool = false
 
     let keySizeType: QwertyKeySizeType
-
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        theme.specialKeyFillColor.color
-    }
+    let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
     init(keySizeType: QwertyKeySizeType){
         self.keySizeType = keySizeType
