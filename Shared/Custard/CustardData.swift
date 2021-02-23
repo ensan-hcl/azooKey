@@ -19,7 +19,12 @@ enum CustardInputStyle: String, Codable {
     case roman2kana
 }
 
+enum CustardVersion{
+    case `v1_0`
+}
+
 struct Custard: Codable {
+    let custard_version: CustardVersion
     let identifier: String
     let display_name: String
     let language: CustardLanguage
@@ -423,6 +428,7 @@ extension Custard{
         }
 
         let custard = Custard(
+            custard_version: .v1_0,
             identifier: "Hieroglyphs",
             display_name: "カスタード",
             language: .undefined,
@@ -437,6 +443,7 @@ extension Custard{
     }()
 
     static let mock_flick_grid = Custard(
+        custard_version: .v1_0,
         identifier: "my_custard",
         display_name: "マイカスタード",
         language: .japanese,
@@ -646,6 +653,7 @@ extension Custard{
     )
 
     static let mock_qwerty_grid = Custard(
+        custard_version: .v1_0,
         identifier: "my_custard_qwerty",
         display_name: "マイカスタード_qwerty",
         language: .japanese,
@@ -855,6 +863,7 @@ extension Custard{
     )
 
     static let mock_qwerty_scroll = Custard(
+        custard_version: .v1_0,
         identifier: "my_custard",
         display_name: "マイカスタード",
         language: .japanese,
