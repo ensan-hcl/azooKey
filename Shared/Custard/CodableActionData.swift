@@ -132,7 +132,7 @@ enum CodableActionData: Codable {
     case exchangeCharacter
     case delete(Int)
     case smoothDelete
-    case enter
+    case complete
     case moveCursor(Int)
     case moveTab(CodableTabData)
     case toggleCursorMovingView
@@ -143,14 +143,14 @@ enum CodableActionData: Codable {
     var hasAssociatedValue: Bool {
         switch self{
         case .delete(_), .input(_), .moveCursor(_), .moveTab(_), .openApp(_): return true
-        case .enter, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar: return false
+        case .complete, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar: return false
         }
     }
 
     var label: String {
         switch self{
         case let .delete(value): return "\(value)文字削除"
-        case .enter: return "確定"
+        case .complete: return "確定"
         case .exchangeCharacter: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
         case let .input(value): return "「\(value)」を入力"
         case let .moveCursor(value): return "\(value)文字分カーソルを移動"
@@ -175,7 +175,7 @@ extension CodableActionData{
             return .delete(value)
         case .smoothDelete:
             return .smoothDelete
-        case .enter:
+        case .complete:
             return .enter
         case let .moveCursor(value):
             return .moveCursor(value)
@@ -226,7 +226,7 @@ extension CodableActionData: Hashable {
             return true
         case (.toggleCursorMovingView,.toggleCursorMovingView):
             return true
-        case (.enter, .enter):
+        case (.complete, .complete):
             return true
         case (.exchangeCharacter, .exchangeCharacter):
             return true
@@ -254,8 +254,8 @@ extension CodableActionData: Hashable {
             key = .delete
         case .smoothDelete:
             key = .smooth_delete
-        case .enter:
-            key = .enter
+        case .complete:
+            key = .complete
         case let .moveCursor(value):
             hasher.combine(value)
             key = .move_cursor
@@ -282,7 +282,7 @@ extension CodableActionData{
         case exchange_character
         case delete
         case smooth_delete
-        case enter
+        case complete
         case move_cursor
         case move_tab
         case toggle_cursor_moving_view
@@ -302,8 +302,8 @@ extension CodableActionData{
             try container.encode(value, forKey: .delete)
         case .smoothDelete:
             try container.encode(true, forKey: .smooth_delete)
-        case .enter:
-            try container.encode(true, forKey: .enter)
+        case .complete:
+            try container.encode(true, forKey: .complete)
         case let .moveCursor(value):
             try container.encode(value, forKey: .move_cursor)
         case let .moveTab(destination):
@@ -346,8 +346,8 @@ extension CodableActionData{
             self = .delete(value)
         case .smooth_delete:
             self = .smoothDelete
-        case .enter:
-            self = .enter
+        case .complete:
+            self = .complete
         case .move_cursor:
             let value = try container.decode(
                 Int.self,
