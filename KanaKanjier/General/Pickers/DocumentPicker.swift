@@ -11,12 +11,12 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct DocumentPicker: UIViewControllerRepresentable {
-    @Binding var pickerResult: Data
+    @Binding var pickerResult: Data?
     @Binding var isPresented: Bool
     let extensions: [String]
 
     func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let controller = UIDocumentPickerViewController(forOpeningContentTypes: extensions.compactMap{UTType(filenameExtension: $0)}, asCopy: true)
+        let controller = UIDocumentPickerViewController(forOpeningContentTypes: extensions.compactMap{UTType(filenameExtension: $0, conformingTo: .text)}, asCopy: true)
         controller.delegate = context.coordinator
         return controller
     }

@@ -35,52 +35,65 @@ final class ImportedCustardData: ObservableObject {
 
         var description: LocalizedStringKey? {
             switch self{
+            case .none: return nil
             case .getFile: return "ファイルを取得中"
             case .getURL: return "URLを取得中"
-            case .none: return nil
             case .processFile: return "ファイルを処理中"
             }
         }
     }
 
-    @Published var importedData: Result<Custard, ImportError>? = nil
     @Published var processState: ProcessState = .none
 
-    func download(from urlString: String){
-        defer{
-            processState = .none
+    @Published var downloadedData: Data? = nil
+    @Published var failureData: ImportError? = nil
+
+    var custard: Custard? = nil
+
+    func reset(){
+        self.processState = .none
+        self.downloadedData = nil
+        self.failureData = nil
+    }
+
+    func process(data: Data) -> Custard? {
+        self.processState = .processFile
+        guard let custard = try? JSONDecoder().decode(Custard.self, from: data) else {
+            self.failureData = .invalidFile
+            self.downloadedData = nil
+            self.processState = .none
+            return nil
         }
+        self.processState = .none
+        self.custard = custard
+        return custard
+    }
+
+    func download(from urlString: String) {
         self.processState = .getURL
+        print("ダウンロード開始")
         guard let url: URL = URL(string: urlString) else {
-            self.importedData = .failure(.invalidURL)
+            DispatchQueue.main.async{
+                self.failureData = .invalidURL
+                self.processState = .none
+            }
             return
         }
         self.processState = .getFile
         let task: URLSessionTask = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
-            DispatchQueue.main.async{
-                self.processState = .processFile
-            }
             guard let data = data else {
                 DispatchQueue.main.async{
+                    self.failureData = .invalidData
                     self.processState = .none
-                    self.importedData = .failure(.invalidData)
-                }
-                return
-            }
-            
-            guard let custard = try? JSONDecoder().decode(Custard.self, from: data) else {
-                DispatchQueue.main.async{
-                    self.processState = .none
-                    self.importedData = .failure(.invalidFile)
                 }
                 return
             }
             DispatchQueue.main.async{
-                self.processState = .none
-                self.importedData = .success(custard)
+                print("ダウンロード終了")
+                self.downloadedData = data
             }
-            return
         })
+
         task.resume()
     }
 }
@@ -91,6 +104,8 @@ struct ManageCustardView: View {
     @State private var showAlert = false
     @State private var alertType = AlertType.none
     @Binding private var manager: CustardManager
+    @State private var showDocumentPicker = false
+    @State var selectedDocument: Data = Data()
 
     init(manager: Binding<CustardManager>){
         self._manager = manager
@@ -123,52 +138,11 @@ struct ManageCustardView: View {
             Section(header: Text("作る")){
                 
             }
+
             Section(header: Text("読み込む")){
-                switch data.importedData{
-                case .none, .failure:
-                    DisclosureGroup{
-                        if let text = data.processState.description{
-                            ProgressView(text)
-                        }else{
-                            Button{
-                                data.download(from: urlString)
-                            } label: {
-                                Text("読み込む")
-                            }
-                        }
-                    } label: {
-                        Text("iCloudから読み込む")
-                    }
-
-                    DisclosureGroup{
-                        HStack{
-                            TextField("URLを入力", text: $urlString)
-                        }
-                        if let text = data.processState.description{
-                            ProgressView(text)
-                        }else{
-                            Button{
-                                data.download(from: urlString)
-                            } label: {
-                                Text("読み込む")
-                            }
-                        }
-                        if case let .failure(error) = data.importedData{
-                            HStack{
-                                Image(systemName: "exclamationmark.triangle")
-                                Text(error.description)
-                            }
-                        }
-                    } label: {
-                        Text("URLから読み込み")
-                    }
-
-                    VStack{
-                        Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
-                        FallbackLink("カスタムタブファイルの作り方", destination: "https://google.com")
-                    }
-                case let .success(custard):
-                    Text("「\(custard.identifier)」の読み込みに成功しました")
+                if let value = data.downloadedData,
+                   let custard = (data.custard ?? data.process(data: value)){
+                    Text("「\(custard.display_name)(\(custard.identifier))」の読み込みに成功しました")
                     CenterAlignedView{
                         KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
                     }
@@ -181,7 +155,46 @@ struct ManageCustardView: View {
                         }
                     }
                     Button("キャンセル"){
-                        data.importedData = nil
+                        data.reset()
+                    }
+                }else{
+                    if let text = data.processState.description{
+                        ProgressView(text)
+                    }
+                    if let failure = data.failureData{
+                        HStack{
+                            Image(systemName: "exclamationmark.triangle")
+                            Text(failure.description).foregroundColor(.red)
+                        }
+                    }
+                    DisclosureGroup{
+
+                        Button{
+                            showDocumentPicker = true
+                        } label: {
+                            Text("読み込む")
+                        }
+
+                    } label: {
+                        Text("iCloudから読み込む")
+                    }
+
+                    DisclosureGroup{
+                        HStack{
+                            TextField("URLを入力", text: $urlString)
+                        }
+                        Button{
+                            data.download(from: urlString)
+                        } label: {
+                            Text("読み込む")
+                        }
+                    } label: {
+                        Text("URLから読み込み")
+                    }
+
+                    VStack{
+                        Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
+                        FallbackLink("カスタムタブファイルの作り方", destination: "https://google.com")
                     }
                 }
             }
@@ -202,12 +215,19 @@ struct ManageCustardView: View {
                 )
             }
         }
+        .sheet(isPresented: $showDocumentPicker){
+            DocumentPicker(
+                pickerResult: $data.downloadedData,
+                isPresented: $showDocumentPicker,
+                extensions: ["txt","custard","json"]
+            )
+        }
     }
 
     private func saveCustard(custard: Custard){
         do{
             try manager.saveCustard(custard: custard, metadata: .init(origin: .imported))
-            data.importedData = nil
+            data.reset()
             urlString = ""
         } catch {
             debug(error)

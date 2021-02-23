@@ -27,9 +27,9 @@ fileprivate extension CustardInputStyle {
     var label: LocalizedStringKey {
         switch self{
         case .direct:
-            return "ローマ字かな入力"
-        case .roman2kana:
             return "ダイレクト"
+        case .roman2kana:
+            return "ローマ字かな入力"
         }
     }
 }
@@ -53,6 +53,11 @@ struct CustardInformationView: View {
         Form{
             CenterAlignedView{
                 KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
+            }
+            HStack{
+                Text("タブ名")
+                Spacer()
+                Text(custard.display_name).font(.system(.body, design: .monospaced))
             }
             HStack{
                 Text("識別子")

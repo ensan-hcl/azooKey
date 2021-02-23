@@ -111,23 +111,19 @@ struct CustardManager {
     }
 
     mutating func saveCustard(custard: Custard, metadata: CustardMetaData) throws {
-        //テーマを保存する
-        do{
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(custard)
-            let fileURL = Self.fileURL(name: "\(custard.identifier)_main.custard")
-            try data.write(to: fileURL)
-        }
-
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(custard)
+        let fileURL = Self.fileURL(name: "\(custard.identifier)_main.custard")
+        try data.write(to: fileURL)
         if !self.index.availableCustards.contains(custard.identifier){
             self.index.availableCustards.append(custard.identifier)
         }
         self.index.metadata[custard.identifier] = metadata
         self.save()
+
     }
 
     mutating func saveTabBarData(tabBarData: TabBarData) throws {
-        //テーマを保存する
         do{
             let encoder = JSONEncoder()
             let data = try encoder.encode(tabBarData)
@@ -143,10 +139,10 @@ struct CustardManager {
 
     mutating func removeCustard(identifier: String){
         do{
-            let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
-            try FileManager.default.removeItem(atPath: fileURL.path)
             self.index.availableCustards.removeAll{$0 == identifier}
             self.index.metadata.removeValue(forKey: identifier)
+            let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
+            try FileManager.default.removeItem(atPath: fileURL.path)
             self.save()
         }catch{
             debug(error)
