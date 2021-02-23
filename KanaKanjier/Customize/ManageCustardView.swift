@@ -57,16 +57,12 @@ final class ImportedCustardData: ObservableObject {
         }
         self.processState = .getFile
         let task: URLSessionTask = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
-            defer{
-                DispatchQueue.main.async{
-                    self.processState = .none
-                }
-            }
             DispatchQueue.main.async{
                 self.processState = .processFile
             }
             guard let data = data else {
                 DispatchQueue.main.async{
+                    self.processState = .none
                     self.importedData = .failure(.invalidData)
                 }
                 return
@@ -74,11 +70,13 @@ final class ImportedCustardData: ObservableObject {
             
             guard let custard = try? JSONDecoder().decode(Custard.self, from: data) else {
                 DispatchQueue.main.async{
+                    self.processState = .none
                     self.importedData = .failure(.invalidFile)
                 }
                 return
             }
             DispatchQueue.main.async{
+                self.processState = .none
                 self.importedData = .success(custard)
             }
             return
@@ -90,19 +88,55 @@ final class ImportedCustardData: ObservableObject {
 struct ManageCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var urlString: String = ""
+    @State private var showAlert = false
+    @State private var alertType = AlertType.none
+
+    @State private var manager = VariableStates.shared.custardManager
+
+    enum AlertType{
+        case none
+        case overlapCustard(custard: Custard)
+    }
 
     var body: some View {
         Form{
             Section(header: Text("一覧")){
-
+                if manager.availableCustards.isEmpty{
+                    Text("カスタムタブがまだありません")
+                }else{
+                    List{
+                        ForEach(manager.availableCustards, id: \.self){identifier in
+                            if let custard = try? manager.custard(identifier: identifier){
+                                NavigationLink(destination: CustardInformationView(custard: custard)){
+                                    Text(identifier)
+                                }
+                            }
+                        }
+                        .onDelete(perform: delete)
+                    }
+                }
             }
+
             Section(header: Text("作る")){
                 
             }
             Section(header: Text("読み込む")){
                 switch data.importedData{
                 case .none, .failure:
-                    Text("カスタムタブファイルをファイルから読み込む")
+                    DisclosureGroup{
+                        if let text = data.processState.description{
+                            ProgressView(text)
+                        }else{
+                            Button{
+                                data.download(from: urlString)
+                            } label: {
+                                Text("読み込む")
+                            }
+                        }
+                    } label: {
+                        Text("iCloudから読み込む")
+                    }
+
                     DisclosureGroup{
                         HStack{
                             TextField("URLを入力", text: $urlString)
@@ -117,10 +151,13 @@ struct ManageCustardView: View {
                             }
                         }
                         if case let .failure(error) = data.importedData{
-                            Text(verbatim: "\(error)")
+                            HStack{
+                                Image(systemName: "exclamationmark.triangle")
+                                Text(error.description)
+                            }
                         }
                     } label: {
-                        Text("カスタムタブファイルをURL読み込み")
+                        Text("URLから読み込み")
                     }
 
                     VStack{
@@ -133,15 +170,52 @@ struct ManageCustardView: View {
                         KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
                     }
                     Button("保存"){
-                        
+                        if manager.availableCustards.contains(custard.identifier){
+                            self.showAlert = true
+                            self.alertType = .overlapCustard(custard: custard)
+                        }else{
+                            self.saveCustard(custard: custard)
+                        }
                     }
-                    Button("クリア"){
+                    Button("キャンセル"){
                         data.importedData = nil
                     }
                 }
             }
-
         }
         .navigationBarTitle(Text("カスタムタブの管理"), displayMode: .inline)
+        .alert(isPresented: $showAlert){
+            switch alertType{
+            case .none:
+                return Alert(title: Text("アラート"))
+            case let .overlapCustard(custard):
+                return Alert(
+                    title: Text("注意"),
+                    message: Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？"),
+                    primaryButton: .default(Text("上書き")){
+                        self.saveCustard(custard: custard)
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
+        }
     }
+
+    private func saveCustard(custard: Custard){
+        do{
+            try manager.saveCustard(custard: custard)
+            data.importedData = nil
+            urlString = ""
+        } catch {
+            debug(error)
+        }
+    }
+
+    private func delete(at offsets: IndexSet) {
+        let identifiers = offsets.map{manager.availableCustards[$0]}
+        identifiers.forEach{
+            manager.removeCustard(identifier: $0)
+        }
+    }
+
 }

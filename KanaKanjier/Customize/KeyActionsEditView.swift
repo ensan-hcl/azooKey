@@ -253,87 +253,40 @@ struct ActionOpenAppEditView: View {
 
 struct ActionMoveTabEditView: View {
     @ObservedObject private var action: EditingCodableActionData
+    private let items: [(label: String, tab: CodableTabData)]
+    @State private var selectedTab: CodableTabData = .system(.user_hira)
 
     internal init(_ action: EditingCodableActionData) {
         self.action = action
         if case let .moveTab(value) = action.data{
-            switch value{
-            case let .system(tab):
-                let initialValue: Int
-                switch tab{
-                case .user_hira:
-                    initialValue = 1
-                case .user_abc:
-                    initialValue = 2
-                case .flick_hira:
-                    initialValue = 6
-                case .flick_abc:
-                    initialValue = 8
-                case .flick_numbersymbols:
-                    initialValue = 3
-                case .qwerty_hira:
-                    initialValue = 7
-                case .qwerty_abc:
-                    initialValue = 9
-                case .qwerty_number:
-                    initialValue = 4
-                case .qwerty_symbols:
-                    initialValue = 5
-                }
-                self._selection = State(initialValue: initialValue)
-            case let .custom(string):
-                self._selection = State(initialValue: 0)
-                self._tabName = State(initialValue: string)
-            }
+            self._selectedTab = State(initialValue: value)
         }
+        var dict: [(label: String, tab: CodableTabData)] = [
+            ("日本語(設定に合わせる)", .system(.user_hira)),
+            ("英語(設定に合わせる)", .system(.user_abc)),
+            ("記号と数字(フリック入力)", .system(.flick_numbersymbols)),
+            ("数字(ローマ字入力)", .system(.qwerty_number)),
+            ("記号(ローマ字入力)", .system(.qwerty_symbols)),
+            ("日本語(フリック入力)", .system(.flick_hira)),
+            ("日本語(ローマ字入力)", .system(.qwerty_hira)),
+            ("英語(フリック入力)", .system(.flick_abc)),
+            ("英語(ローマ字入力)", .system(.qwerty_abc))
+        ]
+        let custards = VariableStates.shared.custardManager.availableCustards
+        custards.forEach{
+            dict.insert(($0, .custom($0)), at: 0)
+        }
+        self.items = dict
     }
 
-    @State private var selection: Int = 1
-    @State private var tabName: String = ""
-    private let items: [LocalizedStringKey]  = ["カスタム","日本語(設定に合わせる)","英語(設定に合わせる)","記号と数字(フリック入力)","数字(ローマ字入力)","記号(ローマ字入力)","日本語(フリック入力)","日本語(ローマ字入力)","英語(フリック入力)","英語(ローマ字入力)"]
-
     var body: some View {
-        Picker(selection: $selection, label: Text("タブを選択")){
+        Picker(selection: $selectedTab, label: Text("タブを選択")){
             ForEach(items.indices, id: \.self){i in
-                Text(items[i]).tag(i)
+                Text(items[i].label).tag(items[i].tab)
             }
         }
-        .onChange(of: selection){value in
-            let action: CodableActionData?
-            switch items[value]{
-            case "日本語(設定に合わせる)":
-                action = .moveTab(.system(.user_hira))
-            case "英語(設定に合わせる)":
-                action = .moveTab(.system(.user_abc))
-            case "記号と数字(フリック入力)":
-                action = .moveTab(.system(.flick_numbersymbols))
-            case "数字(ローマ字入力)":
-                action = .moveTab(.system(.qwerty_number))
-            case "記号(ローマ字入力)":
-                action = .moveTab(.system(.qwerty_symbols))
-            case "日本語(フリック入力)":
-                action = .moveTab(.system(.flick_hira))
-            case "日本語(ローマ字入力)":
-                action = .moveTab(.system(.qwerty_hira))
-            case "英語(フリック入力)":
-                action = .moveTab(.system(.flick_abc))
-            case "英語(ローマ字入力)":
-                action = .moveTab(.system(.qwerty_abc))
-            case "カスタム":
-                action = nil
-            default:
-                action = nil
-            }
-            if let action = action{
-                self.action.data = action
-            }
-        }
-        if items[selection] == "カスタム"{
-            TextField("タブの名前", text: $tabName)
-                .onChange(of: tabName){value in
-                    action.data = .moveTab(.custom(value))
-                }
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+        .onChange(of: selectedTab){value in
+            self.action.data = .moveTab(value)
         }
     }
 }
