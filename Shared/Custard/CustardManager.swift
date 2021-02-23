@@ -105,10 +105,10 @@ struct CustardManager {
     }
 
     mutating func removeCustard(identifier: String){
-        self.index.availableCustards = self.index.availableCustards.filter{$0 != identifier}
         do{
             let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
             try FileManager.default.removeItem(atPath: fileURL.path)
+            self.index.availableCustards.removeAll{$0 == identifier}
             self.save()
         }catch{
             debug(error)
@@ -116,10 +116,10 @@ struct CustardManager {
     }
 
     mutating func removeTabBar(identifier: Int){
-        self.index.availableTabBars = self.index.availableTabBars.filter{$0 != identifier}
         do{
             let fileURL = Self.fileURL(name: "tabbar_\(identifier).tabbar")
             try FileManager.default.removeItem(atPath: fileURL.path)
+            self.index.availableTabBars = self.index.availableTabBars.filter{$0 != identifier}
             self.save()
         }catch{
             debug(error)

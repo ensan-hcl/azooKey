@@ -44,7 +44,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
         Group{[unowned modelVariableSection] in
             if variableStates.showMoveCursorView{
                 CursorMoveView()
-            }else if variableStates.showTabBar, let tabBarData = try? variableStates.custardManager.tabbar(identifier: 0){
+            }else if variableStates.showTabBar, let tabBarData = try? CustardManager.load().tabbar(identifier: 0){
                 TabBarView(data: tabBarData)
             }else{
                 HStack{

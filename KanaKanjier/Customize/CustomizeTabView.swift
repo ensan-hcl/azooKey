@@ -13,9 +13,12 @@ import StoreKit
 struct CustomizeTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
     @State private var tabBarData: TabBarData
+    @State private var manager: CustardManager
 
     init(){
-        if let tabBarData = try? VariableStates.shared.custardManager.tabbar(identifier: 0){
+        let manager = CustardManager.load()
+        self._manager = State(initialValue: manager)
+        if let tabBarData = try? manager.tabbar(identifier: 0){
             self._tabBarData = State(initialValue: tabBarData)
         }else{
             self._tabBarData = State(initialValue: TabBarData(identifier: 0, items: [
@@ -29,6 +32,17 @@ struct CustomizeTabView: View {
     var body: some View {
         NavigationView {
             Form {
+                Section(header: Text("カスタムタブ")){
+                    VStack{
+                        Text("あなたの好きな文字だけを並べたオリジナルのタブを作成することができます。")
+                    }
+                    NavigationLink(destination: ManageCustardView(manager: $manager)){
+                        HStack{
+                            Text("カスタムタブの管理")
+                            Spacer()
+                        }
+                    }
+                }
                 Section(header: Text("タブバー")){
                     Text("タブバーはカスタムタブを利用した際のタブ移動をサポートします。「記号タブ」キーを長押しすることで表示され、タブを移動することが可能です。")
                     Image("tabBar_1")
@@ -37,21 +51,9 @@ struct CustomizeTabView: View {
                         .frame(maxWidth: Store.shared.imageMaximumWidth)
 
                     Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
-                    NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData)){
+                    NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager)){
                         HStack{
                             Text("タブバーを編集")
-                            Spacer()
-                        }
-                    }
-
-                }
-                Section(header: Text("カスタムタブ")){
-                    VStack{
-                        Text("あなたの好きな文字だけを並べたオリジナルのタブを作成することができます。")
-                    }
-                    NavigationLink(destination: ManageCustardView()){
-                        HStack{
-                            Text("カスタムタブの管理")
                             Spacer()
                         }
                     }

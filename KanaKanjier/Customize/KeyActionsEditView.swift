@@ -40,10 +40,12 @@ struct KeyActionsEditView: View {
     @State private var editMode = EditMode.inactive
     @State private var bottomSheetShown = false
     @StateObject private var actions: EditingCodableActions
+    private let availableCustards: [String]
 
-    init(_ item: Binding<EditingTabBarItem>, actions: EditingCodableActions){
+    init(_ item: Binding<EditingTabBarItem>, actions: EditingCodableActions, availableCustards: [String]){
         self._item = item
         self._actions = StateObject(wrappedValue: actions)
+        self.availableCustards = availableCustards
     }
 
     func add(new action: CodableActionData){
@@ -82,7 +84,7 @@ struct KeyActionsEditView: View {
                                                 ActionMoveCursorEditView(action)
                                                 Text("負の値を指定すると左にカーソルが動きます")
                                             case .moveTab:
-                                                ActionMoveTabEditView(action)
+                                                ActionMoveTabEditView(action, availableCustards: availableCustards)
                                             case .openApp:
                                                 ActionOpenAppEditView(action)
                                                 Text("このアクションはiOSのメジャーアップデートで利用できなくなる可能性があります")
@@ -256,7 +258,7 @@ struct ActionMoveTabEditView: View {
     private let items: [(label: String, tab: CodableTabData)]
     @State private var selectedTab: CodableTabData = .system(.user_hira)
 
-    internal init(_ action: EditingCodableActionData) {
+    internal init(_ action: EditingCodableActionData, availableCustards: [String]) {
         self.action = action
         if case let .moveTab(value) = action.data{
             self._selectedTab = State(initialValue: value)
@@ -272,8 +274,7 @@ struct ActionMoveTabEditView: View {
             ("英語(フリック入力)", .system(.flick_abc)),
             ("英語(ローマ字入力)", .system(.qwerty_abc))
         ]
-        let custards = VariableStates.shared.custardManager.availableCustards
-        custards.forEach{
+        availableCustards.forEach{
             dict.insert(($0, .custom($0)), at: 0)
         }
         self.items = dict

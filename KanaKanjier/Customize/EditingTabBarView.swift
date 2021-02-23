@@ -46,8 +46,9 @@ struct EditingTabBarView: View {
     @Binding private var tabBarData: TabBarData
     @State private var items: [EditingTabBarItem] = []
     @State private var editMode = EditMode.inactive
+    @Binding private var manager: CustardManager
 
-    init(tabBarData: Binding<TabBarData>){
+    init(tabBarData: Binding<TabBarData>, manager: Binding<CustardManager>){
         debug("initializer")
         self._items = State(initialValue: tabBarData.wrappedValue.items.indices.map{i in
             EditingTabBarItem(
@@ -56,6 +57,7 @@ struct EditingTabBarView: View {
             )
         })
         self._tabBarData = tabBarData
+        self._manager = manager
     }
 
     var body: some View {
@@ -87,7 +89,7 @@ struct EditingTabBarView: View {
                                         Spacer()
                                         TabNavigationViewItemLabelEditView("ラベルを設定", item: $items[i])
                                     }
-                                    NavigationLink(destination: KeyActionsEditView($items[i], actions: items[i].actions)){
+                                    NavigationLink(destination: KeyActionsEditView($items[i], actions: items[i].actions, availableCustards: manager.availableCustards)){
                                         Text("押した時の動作")
                                         Spacer()
                                         let label = (items[i].actions.list.first?.data.label ?? "動作なし") + (items[i].actions.list.count > 1 ? "など" : "")
@@ -132,7 +134,7 @@ struct EditingTabBarView: View {
             self.tabBarData = TabBarData(identifier: tabBarData.identifier, items: self.items.map{
                 TabBarItem(label: $0.label, actions: $0.actions.list.map{$0.data})
             })
-            try VariableStates.shared.custardManager.saveTabBarData(tabBarData: self.tabBarData)
+            try manager.saveTabBarData(tabBarData: self.tabBarData)
         } catch {
             debug(error)
         }

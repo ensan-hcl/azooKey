@@ -90,8 +90,11 @@ struct ManageCustardView: View {
     @State private var urlString: String = ""
     @State private var showAlert = false
     @State private var alertType = AlertType.none
+    @Binding private var manager: CustardManager
 
-    @State private var manager = VariableStates.shared.custardManager
+    init(manager: Binding<CustardManager>){
+        self._manager = manager
+    }
 
     enum AlertType{
         case none

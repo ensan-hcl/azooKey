@@ -94,9 +94,11 @@ extension CodableTabData{
                 return .user_dependent(.english)
             }
         case let .custom(identifier):
-            //FIXME: ここをインポートで作業するように変更
-            print("identifier")
-            return .custard(.hieroglyph)
+            if let custard = try? CustardManager.load().custard(identifier: identifier){
+                return .custard(custard)
+            }else{
+                return .custard(.errorMessage)
+            }
         }
     }
 }
