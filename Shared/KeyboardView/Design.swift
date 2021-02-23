@@ -228,12 +228,15 @@ struct Design{
 
     enum Colors{
         case `default`
+
         var backGroundColor: Color {
             Color("BackGroundColor")
         }
+
         var specialEnterKeyColor: Color {
             Color("OpenKeyColor")
         }
+
         var normalKeyColor: Color {
             switch Design.shared.layout{
             case .flick:
@@ -242,14 +245,11 @@ struct Design{
                 return Color("RomanKeyColor")
             }
         }
+
         var specialKeyColor: Color {
-            switch Design.shared.layout{
-            case .flick:
-                return Color("TabKeyColor")
-            case .qwerty:
-                return Color("TabKeyColor")
-            }
+            return Color("TabKeyColor")
         }
+
         var highlightedKeyColor: Color {
             switch Design.shared.layout{
             case .flick:
@@ -258,6 +258,7 @@ struct Design{
                 return Color("RomanHighlightedKeyColor")
             }
         }
+
         var suggestKeyColor: Color {
             switch Design.shared.layout{
             case .flick:
@@ -270,6 +271,7 @@ struct Design{
 
     enum Language{
         case `default`
+        
         func getEnterKeyText(_ state: EnterKeyState) -> String {
             switch state {
             case .complete:
