@@ -8,9 +8,45 @@
 
 import Foundation
 
+struct CustardMetaData: Codable {
+    var origin: Origin
+
+    enum Origin: String, Codable {
+        case userMade
+        case imported
+    }
+}
+
 struct CustardManagerIndex: Codable {
     var availableCustards: [String] = []
     var availableTabBars: [Int] = []
+    var metadata: [String: CustardMetaData] = [:]
+
+    enum CodingKeys: CodingKey{
+        case availableCustards
+        case availableTabBars
+        case metadata
+    }
+
+    internal init(availableCustards: [String] = [], availableTabBars: [Int] = [], metadata: [String : CustardMetaData] = [:]) {
+        self.availableCustards = availableCustards
+        self.availableTabBars = availableTabBars
+        self.metadata = metadata
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(availableCustards, forKey: .availableCustards)
+        try container.encode(availableTabBars, forKey: .availableTabBars)
+        try container.encode(metadata, forKey: .metadata)
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.availableCustards = try container.decode([String].self, forKey: .availableCustards)
+        self.availableTabBars = try container.decode([Int].self, forKey: .availableTabBars)
+        self.metadata = try container.decode([String: CustardMetaData].self, forKey: .metadata)
+    }
 }
 
 struct CustardManager {
@@ -74,7 +110,7 @@ struct CustardManager {
         return custard
     }
 
-    mutating func saveCustard(custard: Custard) throws {
+    mutating func saveCustard(custard: Custard, metadata: CustardMetaData) throws {
         //テーマを保存する
         do{
             let encoder = JSONEncoder()
@@ -86,6 +122,7 @@ struct CustardManager {
         if !self.index.availableCustards.contains(custard.identifier){
             self.index.availableCustards.append(custard.identifier)
         }
+        self.index.metadata[custard.identifier] = metadata
         self.save()
     }
 
@@ -109,6 +146,7 @@ struct CustardManager {
             let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
             try FileManager.default.removeItem(atPath: fileURL.path)
             self.index.availableCustards.removeAll{$0 == identifier}
+            self.index.metadata.removeValue(forKey: identifier)
             self.save()
         }catch{
             debug(error)
@@ -133,6 +171,10 @@ struct CustardManager {
 
     var availableTabBars: [Int] {
         return index.availableTabBars
+    }
+
+    var metadata: [String: CustardMetaData] {
+        return index.metadata
     }
 
 }

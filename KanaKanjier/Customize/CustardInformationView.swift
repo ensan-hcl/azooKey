@@ -34,8 +34,21 @@ fileprivate extension CustardInputStyle {
     }
 }
 
+fileprivate extension CustardMetaData.Origin {
+    var description: LocalizedStringKey {
+        switch self{
+        case .userMade:
+            return "このアプリで作成"
+        case .imported:
+            return "読み込んだデータ"
+        }
+    }
+}
+
 struct CustardInformationView: View {
     let custard: Custard
+    let metadata: CustardMetaData?
+
     var body: some View {
         Form{
             CenterAlignedView{
@@ -55,6 +68,12 @@ struct CustardInformationView: View {
                 Text("入力方式")
                 Spacer()
                 Text(custard.input_style.label)
+            }
+            if let metadata = metadata {
+                HStack{
+                    Spacer()
+                    Text(metadata.origin.description)
+                }
             }
         }
         .navigationBarTitle(Text("カスタムタブの情報"), displayMode: .inline)

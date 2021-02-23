@@ -110,7 +110,7 @@ struct ManageCustardView: View {
                     List{
                         ForEach(manager.availableCustards, id: \.self){identifier in
                             if let custard = try? manager.custard(identifier: identifier){
-                                NavigationLink(destination: CustardInformationView(custard: custard)){
+                                NavigationLink(destination: CustardInformationView(custard: custard, metadata: manager.metadata[identifier])){
                                     Text(identifier)
                                 }
                             }
@@ -206,7 +206,7 @@ struct ManageCustardView: View {
 
     private func saveCustard(custard: Custard){
         do{
-            try manager.saveCustard(custard: custard)
+            try manager.saveCustard(custard: custard, metadata: .init(origin: .imported))
             data.importedData = nil
             urlString = ""
         } catch {

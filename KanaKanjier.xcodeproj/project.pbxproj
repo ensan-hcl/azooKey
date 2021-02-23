@@ -10,6 +10,8 @@
 		1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */; };
 		1A10D80225E4F56D0095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
 		1A10D80725E4F5710095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
+		1A10D80D25E501C80095CB67 /* UserMadeCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */; };
+		1A10D80E25E501C80095CB67 /* UserMadeCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */; };
 		1A12DC5225C1C3EA00316009 /* lines.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DC5025C1C3E900316009 /* lines.txt */; };
 		1A12DC5325C1C3EA00316009 /* lines.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DC5125C1C3E900316009 /* lines.binary */; };
 		1A12E24225C3E1CB00316009 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24125C3E1CA00316009 /* MessageView.swift */; };
@@ -2507,6 +2509,7 @@
 /* Begin PBXFileReference section */
 		1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInformationView.swift; sourceTree = "<group>"; };
 		1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCustard.swift; sourceTree = "<group>"; };
+		1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMadeCustard.swift; sourceTree = "<group>"; };
 		1A12DC5025C1C3E900316009 /* lines.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lines.txt; sourceTree = "<group>"; };
 		1A12DC5125C1C3E900316009 /* lines.binary */ = {isa = PBXFileReference; lastKnownFileType = file; path = lines.binary; sourceTree = "<group>"; };
 		1A12E24125C3E1CA00316009 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
@@ -4935,6 +4938,7 @@
 				1A18425425DE6163003985AB /* CustardData.swift */,
 				1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */,
 				1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */,
+				1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */,
 				1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */,
 			);
 			path = Custard;
@@ -10099,6 +10103,7 @@
 				1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */,
 				1A3A16042528BFF900A5BA4F /* SelctInputStyle.swift in Sources */,
 				1AF6799425CEDBB500F3987B /* KeyModelVariableSection.swift in Sources */,
+				1A10D80D25E501C80095CB67 /* UserMadeCustard.swift in Sources */,
 				1AF6790A25CED97500F3987B /* Action.swift in Sources */,
 				1AC031642512138F004CA505 /* SettingItemProtocol.swift in Sources */,
 				1AF6798125CEDBA400F3987B /* VerticalFlickKeyboardView.swift in Sources */,
@@ -10290,6 +10295,7 @@
 				1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */,
 				1A3DC2FF2500F837002CAA93 /* extension Character.swift in Sources */,
 				1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */,
+				1A10D80E25E501C80095CB67 /* UserMadeCustard.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,
 				1AE102E425D43E9700CA7277 /* ThemeManager.swift in Sources */,
