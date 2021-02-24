@@ -127,7 +127,7 @@ struct EditingScrollCustardView: View {
             custard_version: .v1_0,
             identifier: data.tabName.isEmpty ? "new_tab" : data.tabName,
             display_name: data.tabName.isEmpty ? "新しいカスタムタブ" : data.tabName,
-            language: .undefined,
+            language: .none,
             input_style: .direct,
             interface: .init(
                 key_style: .flick,

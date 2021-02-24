@@ -17,7 +17,7 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch VariableStates.shared.keyboardLanguage{
-            case .japanese:
+            case .japanese, .none:
                 return [.moveTab(.user_dependent(.japanese))]
             case .english:
                 return [.moveTab(.user_dependent(.english))]
@@ -44,7 +44,7 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch states.keyboardLanguage{
-            case .japanese:
+            case .japanese, .none:
                 return KeyLabel(.text("あ"), width: width, textColor: color)
             case .english:
                 return KeyLabel(.text("A"), width: width, textColor: color)

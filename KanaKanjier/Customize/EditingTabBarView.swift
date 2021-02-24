@@ -49,7 +49,6 @@ struct EditingTabBarView: View {
     @Binding private var manager: CustardManager
 
     init(tabBarData: Binding<TabBarData>, manager: Binding<CustardManager>){
-        debug("initializer")
         self._items = State(initialValue: tabBarData.wrappedValue.items.indices.map{i in
             EditingTabBarItem(
                 label: tabBarData.wrappedValue.items[i].label,

@@ -101,6 +101,8 @@ enum Tab{
                 return .english
             case .undefined:
                 return nil
+            case .none:
+                return KeyboardLanguage.none
             }
         default:
             return nil

@@ -26,7 +26,7 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
         switch states.keyboardLanguage{
         case .english:
             return KeyLabel(.text("space"), width: width, textSize: .small, textColor: color)
-        case .japanese:
+        case .japanese, .none:
             return KeyLabel(.text("空白"), width: width, textSize: .small, textColor: color)
         }
     }

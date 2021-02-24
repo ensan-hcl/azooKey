@@ -12,6 +12,7 @@ import SwiftUI
 enum KeyboardLanguage {
     case english
     case japanese
+    case none
 }
 
 enum KeyboardOrientation{

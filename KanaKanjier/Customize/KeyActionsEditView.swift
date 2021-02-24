@@ -132,6 +132,9 @@ struct KeyActionsEditView: View {
                     Button("カーソル移動"){
                         press(.moveCursor(-1))
                     }
+                    Button("入力の確定"){
+                        press(.complete)
+                    }
                     Button("Capslock"){
                         press(.toggleCapsLockState)
                     }

@@ -639,6 +639,13 @@ private final class InputManager{
             self.clear()
             return
         }
+
+        if VariableStates.shared.keyboardLanguage == .none{
+            self.proxy.insertText(text)
+            self.clear()
+            return
+        }
+
         //選択されていない場合
         
         let leftSideText = inputtedText.prefix(cursorPosition)
@@ -925,7 +932,6 @@ private final class InputManager{
         case mojiCount
         case wordCount
     }
-
 
     fileprivate func setResult(options: [ResultOptions] = [.convertInput]){
         var results = [Candidate]()

@@ -12,13 +12,14 @@ import SwiftUI
 fileprivate extension CustardLanguage {
     var label: LocalizedStringKey {
         switch self{
-
         case .english:
             return "英語"
         case .japanese:
             return "日本語"
         case .undefined:
             return "指定なし"
+        case .none:
+            return "変換なし"
         }
     }
 }

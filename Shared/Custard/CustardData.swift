@@ -9,9 +9,14 @@
 import Foundation
 
 enum CustardLanguage: String, Codable {
+    ///英語に変換します
     case english
+    ///日本語に変換します
     case japanese
+    ///特に変換する言語を指定しません
     case undefined
+    ///変換を行いません
+    case none
 }
 
 enum CustardInputStyle: String, Codable {
