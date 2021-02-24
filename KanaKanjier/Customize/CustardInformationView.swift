@@ -61,19 +61,21 @@ fileprivate final class ShareURL{
 }
 
 struct CustardInformationView: View {
-    let custard: Custard
+    let initialCustard: Custard
     let metadata: CustardMetaData?
     @Binding private var manager: CustardManager
     @State private var showActivityView = false
     @State private var exportedData = ShareURL()
-    @State private var exportedString = ""
 
     internal init(custard: Custard, metadata: CustardMetaData?, manager: Binding<CustardManager>) {
-        self.custard = custard
+        self.initialCustard = custard
         self.metadata = metadata
         self._manager = manager
     }
 
+    var custard: Custard {
+        return (try? manager.custard(identifier: initialCustard.identifier)) ?? initialCustard
+    }
 
     var body: some View {
         Form{
@@ -142,20 +144,3 @@ struct CustardInformationView: View {
         }
     }
 }
-
-private final class URLActivityItem: NSObject, UIActivityItemSource{
-    let url: URL
-
-    init(_ url: URL){
-        self.url = url
-    }
-
-    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return NSObject()
-    }
-
-    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        return url
-    }
-}
-
