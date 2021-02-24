@@ -92,7 +92,7 @@ struct CustardInformationView: View {
                 Text(custard.identifier).font(.system(.body, design: .monospaced))
             }
             HStack{
-                Text("言語")
+                Text("変換")
                 Spacer()
                 Text(custard.language.label)
             }

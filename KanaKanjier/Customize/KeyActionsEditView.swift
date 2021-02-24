@@ -115,7 +115,7 @@ struct KeyActionsEditView: View {
                 }
                 Form{
                     Button("タブの移動"){
-                        press(.moveTab(.system(.user_hira)))
+                        press(.moveTab(.system(.user_japanese)))
                     }
                     Button("文字の入力"){
                         press(.input("😁"))
@@ -259,7 +259,7 @@ struct ActionOpenAppEditView: View {
 struct ActionMoveTabEditView: View {
     @ObservedObject private var action: EditingCodableActionData
     private let items: [(label: String, tab: CodableTabData)]
-    @State private var selectedTab: CodableTabData = .system(.user_hira)
+    @State private var selectedTab: CodableTabData = .system(.user_japanese)
 
     internal init(_ action: EditingCodableActionData, availableCustards: [String]) {
         self.action = action
@@ -267,15 +267,15 @@ struct ActionMoveTabEditView: View {
             self._selectedTab = State(initialValue: value)
         }
         var dict: [(label: String, tab: CodableTabData)] = [
-            ("日本語(設定に合わせる)", .system(.user_hira)),
-            ("英語(設定に合わせる)", .system(.user_abc)),
+            ("日本語(設定に合わせる)", .system(.user_japanese)),
+            ("英語(設定に合わせる)", .system(.user_english)),
             ("記号と数字(フリック入力)", .system(.flick_numbersymbols)),
             ("数字(ローマ字入力)", .system(.qwerty_number)),
             ("記号(ローマ字入力)", .system(.qwerty_symbols)),
-            ("日本語(フリック入力)", .system(.flick_hira)),
-            ("日本語(ローマ字入力)", .system(.qwerty_hira)),
-            ("英語(フリック入力)", .system(.flick_abc)),
-            ("英語(ローマ字入力)", .system(.qwerty_abc))
+            ("日本語(フリック入力)", .system(.flick_japanese)),
+            ("日本語(ローマ字入力)", .system(.qwerty_japanese)),
+            ("英語(フリック入力)", .system(.flick_english)),
+            ("英語(ローマ字入力)", .system(.qwerty_english))
         ]
         availableCustards.forEach{
             dict.insert(($0, .custom($0)), at: 0)

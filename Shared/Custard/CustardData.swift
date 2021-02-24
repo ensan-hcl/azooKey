@@ -8,62 +8,114 @@
 
 import Foundation
 
+/// - 変換対象の言語を指定します。
+/// - specify language to convert
 enum CustardLanguage: String, Codable {
-    ///英語に変換します
+    /// - 英語に変換します
+    /// - convert to English
     case english
-    ///日本語に変換します
+
+    /// - 日本語に変換します
+    /// - convert to Japanese
     case japanese
-    ///特に変換する言語を指定しません
-    case undefined
-    ///変換を行いません
+
+    /// - 変換を行いません
+    /// - don't convert
     case none
+
+    /// - 特に変換する言語を指定しません
+    /// - don't specify
+    case undefined
 }
 
+/// - 入力方式を指定します。
+/// - specify input style
 enum CustardInputStyle: String, Codable {
+    /// - 入力された文字をそのまま用います
+    /// - use inputted characters directly
     case direct
+
+    /// - 入力されたローマ字を仮名に変換して用います
+    /// - use roman-kana conversion
     case roman2kana
 }
 
+/// - カスタードのバージョンを指定します。
+/// - specify custard version
 enum CustardVersion: String, Codable {
     case v1_0
 }
 
 struct Custard: Codable {
-    let custard_version: CustardVersion
+    ///version
+    var custard_version: CustardVersion = .v1_0
+
+    ///identifier
+    /// - must be unique
     let identifier: String
+
+    ///display name
+    /// - used in tab bar
     let display_name: String
+
+    ///language to convert
     let language: CustardLanguage
+
+    ///input style
     let input_style: CustardInputStyle
+
+    ///interface
     let interface: CustardInterface
 }
 
+/// - インターフェースのキーのスタイルです
+/// - style of keys
 enum CustardInterfaceStyle: String, Codable {
+    /// - フリック可能なキー
+    /// - flickable keys
     case flick
+
+    /// - 長押しで他の文字を選べるキー
+    /// - keys with variations
     case qwerty
 }
 
+
+/// - インターフェースのレイアウトのスタイルです
+/// - style of layout
 enum CustardInterfaceLayout: Codable {
-    ///画面いっぱいにマス目状で均等に配置されます。
+    /// - 画面いっぱいにマス目状で均等に配置されます
+    /// - keys are evenly layouted in a grid pattern fitting to the screen
     case gridFit(CustardInterfaceLayoutGridValue)
-    ///はみ出した分はスクロールできる形でマス目状に均等に配置されます。
+
+    /// - はみ出した分はスクロールできる形でマス目状に均等に配置されます
+    /// - keys are layouted in a scrollable grid pattern and can be overflown
     case gridScroll(CustardInterfaceLayoutScrollValue)
 }
 
 struct CustardInterfaceLayoutGridValue: Codable {
-    ///横方向に配置するキーの数。3以上を推奨。
+    /// - 横方向に配置するキーの数
+    /// - number of keys placed horizontally
     let width: Int
-    ///縦方向に配置するキーの数。4以上を推奨。
+    /// - 縦方向に配置するキーの数
+    /// - number of keys placed vertically
     let height: Int
 }
 
 struct CustardInterfaceLayoutScrollValue: Codable {
-    ///スクロールの方向
+    /// - スクロールの方向
+    /// - direction of scroll
     let direction: ScrollDirection
-    ///一列に配置するキーの数
+
+    /// - 一列に配置するキーの数
+    /// - number of keys in scroll normal direction
     let columnKeyCount: Int
-    ///画面内に収まるスクロール方向のキーの数
+
+    /// - 画面内に収まるスクロール方向のキーの数
+    /// - number of keys in screen in scroll direction
     let screenRowKeyCount: Double
 
+    /// - direction of scroll
     enum ScrollDirection: String, Codable{
         case vertical
         case horizontal
@@ -91,10 +143,7 @@ extension CustardInterfaceLayout{
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard let key = container.allKeys.first else{
             throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
-                )
+                DecodingError.Context(codingPath: container.codingPath, debugDescription: "Unabled to decode enum.")
             )
         }
         switch key {
@@ -114,39 +163,16 @@ extension CustardInterfaceLayout{
     }
 }
 
-struct GridFitPositionSpecifier: Codable, Hashable {
-    let x: Int
-    let y: Int
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(x)
-        hasher.combine(y)
-    }
-}
-
+/// - 画面内でのキーの位置を決める指定子
+/// - the specifier of key's position in screen
 enum CustardKeyPositionSpecifier: Codable, Hashable {
+    /// - gridFitのレイアウトを利用した際のキーの位置指定子
+    /// - position specifier when you use grid fit layout
     case grid_fit(GridFitPositionSpecifier)
+
+    /// - gridScrollのレイアウトを利用した際のキーの位置指定子
+    /// - position specifier when you use grid scroll layout
     case grid_scroll(GridScrollPositionSpecifier)
-}
-
-struct GridScrollPositionSpecifier: Codable, Hashable {
-    let index: Int
-
-    init(_ index: Int){
-        self.index = index
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(index)
-    }
-}
-
-extension GridScrollPositionSpecifier: ExpressibleByIntegerLiteral {
-    typealias IntegerLiteralType = Int
-
-    init(integerLiteral value: Int) {
-        self.index = value
-    }
 }
 
 extension CustardKeyPositionSpecifier {
@@ -205,12 +231,81 @@ extension CustardKeyPositionSpecifier{
     }
 }
 
+/// - gridFitのレイアウトを利用した際のキーの位置指定子に与える値
+/// - values in position specifier when you use grid fit layout
+struct GridFitPositionSpecifier: Codable, Hashable {
+    /// - 横方向の位置(左をゼロとする)
+    /// - horizontal position (leading edge is zero)
+    let x: Int
+
+    /// - 縦方向の位置(上をゼロとする)
+    /// - vertical positon (top edge is zero)
+    let y: Int
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(x)
+        hasher.combine(y)
+    }
+}
+
+/// - gridScrollのレイアウトを利用した際のキーの位置指定子に与える値
+/// - values in position specifier when you use grid scroll layout
+struct GridScrollPositionSpecifier: Codable, Hashable {
+    /// - 通し番号
+    /// - index
+    let index: Int
+
+    init(_ index: Int){
+        self.index = index
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(index)
+    }
+}
+
+/// - 記述の簡便化のため定義
+/// - conforms to protocol for writability
+extension GridScrollPositionSpecifier: ExpressibleByIntegerLiteral {
+    typealias IntegerLiteralType = Int
+
+    init(integerLiteral value: Int) {
+        self.index = value
+    }
+}
+
+/// - インターフェース
+/// - interface
 struct CustardInterface: Codable {
+    /// - キーのスタイル
+    /// - style of keys
+    /// - warning: Currently when you use gird scroll. layout, key style would be ignored.
     let key_style: CustardInterfaceStyle
+
+    /// - キーのレイアウト
+    /// - layout of keys
     let key_layout: CustardInterfaceLayout
+
+    /// - キーの辞書
+    /// - dictionary of keys
+    /// - warning: You must use specifiers consistent with key layout. When you use inconsistent one, it would be ignored.
     let keys: [CustardKeyPositionSpecifier: CustardInterfaceKey]
 }
 
+/// - キーのデザイン
+/// - design information of key
+struct CustardKeyDesign: Codable {
+    let label: CustardKeyLabelStyle
+    let color: ColorType
+
+    enum ColorType: String, Codable{
+        case normal
+        case special
+    }
+}
+
+/// - キーに指定するラベル
+/// - labels on the key
 enum CustardKeyLabelStyle: Codable {
     case text(String)
     case systemImage(String)
@@ -259,18 +354,15 @@ extension CustardKeyLabelStyle{
     }
 }
 
-struct CustardKeyDesign: Codable {
-    let label: CustardKeyLabelStyle
-    let color: ColorType
-
-    enum ColorType: String, Codable{
-        case normal
-        case special
-    }
-}
-
+/// - キーの変種の種類
+/// - type of key variation
 enum CustardKeyVariationType: Codable {
+    /// - variation of flick
+    /// - warning: when you use qwerty key style, this type of variation would be ignored.
     case flick(FlickDirection)
+
+    /// - variation of qwerty selectable when keys were longoressed
+    /// - warning: when you use flick key style, this type of variation would be ignored.
     case variations
 }
 
@@ -313,11 +405,7 @@ extension CustardKeyVariationType{
     }
 }
 
-enum CustardInterfaceSystemKey: String, Codable {
-    case change_keyboard
-    case enter
-}
-
+/// - key's data in interface
 enum CustardInterfaceKey: Codable {
     case system(CustardInterfaceSystemKey)
     case custom(CustardInterfaceCustomKey)
@@ -366,26 +454,52 @@ extension CustardInterfaceKey{
     }
 }
 
+/// - keys prepared in default
+enum CustardInterfaceSystemKey: String, Codable {
+    /// - the globe key
+    case change_keyboard
+
+    /// - the enter key that changes its label in condition
+    case enter
+}
+
+/// - keys you can defined
 struct CustardInterfaceCustomKey: Codable {
+    /// - design of this key
     let design: CustardKeyDesign
+
+    /// - action done when this key is pressed. actions are done in order.
     let press_action: [CodableActionData]
+
+    /// - action done when this key is longpressed. actions are done in order.
     let longpress_action: [CodableActionData]
+
+    /// - variations available when user flick or longpress this key
     let variation: [CustardInterfaceVariation]
 }
 
+/// - variation of key, includes flick keys and selectable variations in qwerty keyboard.
 struct CustardInterfaceVariation: Codable {
+    /// - type of the variation
     let type: CustardKeyVariationType
+
+    /// - data of variation
     let key: CustardInterfaceVariationKey
 }
 
+/// - data of variation key
 struct CustardInterfaceVariationKey: Codable {
+    /// - label on this variation
     let label: CustardKeyLabelStyle
+
+    /// - action done when you select this variation. actions are done in order..
     let press_action: [CodableActionData]
+
+    /// - action done when you 'long select' this variation, like long-flick. actions are done in order.
     let longpress_action: [CodableActionData]
 }
 
 extension Custard{
-
     static let hieroglyph: Custard = {
         let hieroglyphs = Array(String.UnicodeScalarView((UInt32(0x13000)...UInt32(0x133FF)).compactMap(UnicodeScalar.init))).map(String.init)
 

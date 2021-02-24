@@ -9,19 +9,40 @@
 import Foundation
 import SwiftUI
 
+/// - Tab specifier
 enum CodableTabData: Codable {
+    /// - tabs prepared by default
     case system(SystemTab)
+    /// - tabs made as custom tabs.
     case custom(String)
 
+    /// - system tabs
     enum SystemTab: String, Codable {
-        case user_hira
-        case user_abc
-        case flick_hira
-        case flick_abc
+        ///japanese input tab. the layout and input style depends on user's setting
+        case user_japanese
+
+        ///english input tab. the layout and input style depends on user's setting
+        case user_english
+
+        ///flick japanese input tab
+        case flick_japanese
+
+        ///flick enlgish input tab
+        case flick_english
+
+        ///flick number and symbols input tab
         case flick_numbersymbols
-        case qwerty_hira
-        case qwerty_abc
+
+        ///qwerty japanese input tab
+        case qwerty_japanese
+
+        ///qwerty english input tab
+        case qwerty_english
+
+        ///qwerty number input tab
         case qwerty_number
+
+        ///qwerty symbols input tab
         case qwerty_symbols
     }
 }
@@ -74,23 +95,23 @@ extension CodableTabData{
         switch self{
         case let .system(tab):
             switch tab{
-            case .flick_hira:
+            case .flick_japanese:
                 return .flick_hira
-            case .flick_abc:
+            case .flick_english:
                 return .flick_abc
             case .flick_numbersymbols:
                 return .flick_numbersymbols
-            case .qwerty_hira:
+            case .qwerty_japanese:
                 return .qwerty_hira
-            case .qwerty_abc:
+            case .qwerty_english:
                 return .qwerty_abc
             case .qwerty_number:
                 return .qwerty_number
             case .qwerty_symbols:
                 return .qwerty_symbols
-            case .user_hira:
+            case .user_japanese:
                 return .user_dependent(.japanese)
-            case .user_abc:
+            case .user_english:
                 return .user_dependent(.english)
             }
         case let .custom(identifier):
@@ -127,19 +148,48 @@ extension CodableTabData: Hashable {
     }
 }
 
+/// - アクション
+/// - actions done in key pressing
 enum CodableActionData: Codable {
+    /// - input specified character
     case input(String)
-    case exchangeCharacter
-    case delete(Int)
-    case smoothDelete
-    case complete
-    case moveCursor(Int)
-    case moveTab(CodableTabData)
-    case toggleCursorMovingView
-    case toggleCapsLockState
-    case toggleTabBar
-    case openApp(String)    //iOSのバージョンによって消える可能性がある
 
+    /// - exchange character "あ→ぁ", "は→ば", "a→A".
+    /// - when longpress, delete sequencially.
+    case exchangeCharacter
+
+    /// - delete specified count of characters
+    case delete(Int)
+
+    /// - delete to beginning of the sentence
+    case smoothDelete
+
+    /// - complete current inputting words
+    case complete
+
+    /// - move cursor  specified count forward. when you specify negative number, the cursor moves backword.
+    /// - when longpress, the cursor moves sequencially.
+    case moveCursor(Int)
+
+    /// - move to specified tab
+    case moveTab(CodableTabData)
+
+    /// - toggle show or not show the cursor move bar
+    case toggleCursorMovingView
+
+    /// - toggle capslock or not
+    case toggleCapsLockState
+
+    /// - toggle show or not show the tab bar
+    case toggleTabBar
+
+    /// - open specified url scheme.
+    /// - warning: this action could be deleted in future iOS.
+    /// - warning: some of url schemes doesn't work.
+    case openApp(String)    //iOSのバージョンによって消える可能性がある
+}
+
+extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
         case .delete(_), .input(_), .moveCursor(_), .moveTab(_), .openApp(_): return true

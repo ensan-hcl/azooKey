@@ -680,6 +680,10 @@ private final class InputManager{
     }
 
     fileprivate func delete(count: Int, requireSetResult: Bool = true){
+        //条件
+        if count <= 0 {
+            return
+        }
         //選択状態ではオール削除になる
         if self.isSelected{
             self.proxy.deleteBackward()
@@ -811,6 +815,9 @@ private final class InputManager{
 
     ///キーボード経由でのカーソル移動
     fileprivate func moveCursor(count: Int){
+        if count == 0 {
+            return
+        }
         self.afterAdjusted = true
         if inputtedText.isEmpty{
             let offset = self.getActualOffset(count: count)

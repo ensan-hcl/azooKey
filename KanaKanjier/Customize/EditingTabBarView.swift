@@ -66,7 +66,7 @@ struct EditingTabBarView: View {
                     items.append(
                         EditingTabBarItem(
                             label: .text("アイテム"),
-                            actions: EditingCodableActions([EditingCodableActionData(.moveTab(.system(.user_hira)))])
+                            actions: EditingCodableActions([EditingCodableActionData(.moveTab(.system(.user_japanese)))])
                         )
                     )
                 } label: {

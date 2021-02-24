@@ -44,7 +44,7 @@ extension Custard{
                 .grid_fit(.init(x: 0, y: 3)): .custom(
                     .init(
                         design: .init(label: .text("ひらがなタブに移動"), color: .special),
-                        press_action: [.moveTab(.system(.user_hira))],
+                        press_action: [.moveTab(.system(.user_japanese))],
                         longpress_action: [],
                         variation: [])
                 ),
