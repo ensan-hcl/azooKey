@@ -90,8 +90,8 @@ struct CustardInformationView: View {
                 }
                 if metadata.origin == .userMade,
                    let userdata = try? manager.userMadeCustardData(identifier: custard.identifier),
-                   let editingItem = EditingItem(data: userdata){
-                        NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: editingItem)){
+                   case let .gridScroll(value) = userdata{
+                        NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: value)){
                             Text("編集する")
                         }
                 }

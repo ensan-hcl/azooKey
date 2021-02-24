@@ -117,7 +117,7 @@ struct CustardManager {
         return custard
     }
 
-    mutating func saveCustard(custard: Custard, metadata: CustardMetaData, userData: UserMadeCustard? = nil) throws {
+    mutating func saveCustard(custard: Custard, metadata: CustardMetaData, userData: UserMadeCustard? = nil, updateTabBar: Bool = false) throws {
         let encoder = JSONEncoder()
         let data = try encoder.encode(custard)
         let fileURL = Self.fileURL(name: "\(custard.identifier)_main.custard")
@@ -132,6 +132,18 @@ struct CustardManager {
         if !self.index.availableCustards.contains(custard.identifier){
             self.index.availableCustards.append(custard.identifier)
         }
+
+        if updateTabBar{
+            let tabbar = try self.tabbar(identifier: 0)
+            if !tabbar.items.contains(where: {$0.actions == [.moveTab(.custom(custard.identifier))]}){
+                let newTabBar = TabBarData.init(
+                    identifier: tabbar.identifier,
+                    items: tabbar.items + [.init(label: .text(custard.display_name), actions: [.moveTab(.custom(custard.identifier))])]
+                )
+                try self.saveTabBarData(tabBarData: newTabBar)
+            }
+        }
+
         self.index.metadata[custard.identifier] = metadata
         self.save()
     }

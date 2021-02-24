@@ -9,39 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct EditingItem{
-    init(words: String = "é\n√\nπ\nΩ", identifier: String = "", columnKeyCount: String = "", rowKeyCount: String = "", direction: CustardInterfaceLayoutScrollValue.ScrollDirection = .vertical) {
-        self.words = words
-        self.identifier = identifier
-        self.columnKeyCount = columnKeyCount
-        self.rowKeyCount = rowKeyCount
-        self.direction = direction
-    }
-
-    init?(data: UserMadeCustard){
-        if case let .gridScroll(value) = data{
-            self = EditingItem(words: value.words, identifier: value.tabName, columnKeyCount: value.columnCount, rowKeyCount: value.screenRowCount, direction: value.direction)
-        }else{
-            return nil
-        }
-    }
-
-
-    var words: String = """
-    é
-    √
-    π
-    Ω
-    """
-    var identifier = ""
-    var columnKeyCount = ""
-    var rowKeyCount = ""
-    var direction = CustardInterfaceLayoutScrollValue.ScrollDirection.vertical
-
-}
-
 fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection{
-
     var label: LocalizedStringKey {
         switch self{
         case .vertical:
@@ -63,14 +31,13 @@ struct EditingScrollCustardView: View {
     @Environment(\.presentationMode) private var presentationMode
 
     @State private var showPreview = false
-    @State private var editingItems = EditingItem()
-
+    @State private var editingItem = UserMadeGridScrollCustard(tabName: "", direction: .vertical, columnCount: "", screenRowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
     @Binding private var manager: CustardManager
 
-    init(manager: Binding<CustardManager>, editingItem: EditingItem? = nil){
+    init(manager: Binding<CustardManager>, editingItem: UserMadeGridScrollCustard? = nil){
         self._manager = manager
         if let editingItem = editingItem{
-            self._editingItems = State(initialValue: editingItem)
+            self._editingItem = State(initialValue: editingItem)
         }
     }
 
@@ -79,7 +46,7 @@ struct EditingScrollCustardView: View {
             GeometryReader{geometry in
                 VStack{
                     Form{
-                        TextField("タブの名前", text: $editingItems.identifier)
+                        TextField("タブの名前", text: $editingItem.tabName)
                         Text("一行ずつ登録したい文字や単語を入力してください")
                         Button("プレビュー"){
                             UIApplication.shared.closeKeyboard()
@@ -89,7 +56,7 @@ struct EditingScrollCustardView: View {
                             HStack{
                                 Text("スクロール方向")
                                 Spacer()
-                                Picker("スクロール方向", selection: $editingItems.direction){
+                                Picker("スクロール方向", selection: $editingItem.direction){
                                     Text("縦").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.vertical)
                                     Text("横").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.horizontal)
                                 }
@@ -98,24 +65,26 @@ struct EditingScrollCustardView: View {
                             HStack{
                                 Text("一列のキー数")
                                 Spacer()
-                                TextField("一列のキー数", text: $editingItems.columnKeyCount)
+                                TextField("一列のキー数", text: $editingItem.columnCount)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                             }
                             HStack{
-                                Text("画面\(editingItems.direction.label)方向のキー数")
+                                Text("画面\(editingItem.direction.label)方向のキー数")
                                 Spacer()
-                                TextField("画面\(editingItems.direction.label)方向のキー数", text: $editingItems.rowKeyCount).keyboardType(.numberPad)
+                                TextField("画面\(editingItem.direction.label)方向のキー数", text: $editingItem.screenRowCount).keyboardType(.numberPad)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                             }
-
+                            Toggle(isOn: $editingItem.addTabBarAutomatically){
+                                Text("自動的にタブバーに追加")
+                            }
                         } label: {
                             Text("詳細設定")
                         }
                     }
                     .frame(height: geometry.size.height * 0.4)
 
-                    TextEditor(text: $editingItems.words)
+                    TextEditor(text: $editingItem.words)
                         .frame(height: geometry.size.height * 0.6)
 
                 }
@@ -126,7 +95,7 @@ struct EditingScrollCustardView: View {
                 ) {
                     ZStack(alignment: .top){
                         Color(.secondarySystemBackground)
-                        KeyboardPreview(theme: .default, defaultTab: .custard(makeCustard(data: editingItems)))
+                        KeyboardPreview(theme: .default, defaultTab: .custard(makeCustard(data: editingItem)))
                     }
                 }
             }
@@ -144,7 +113,7 @@ struct EditingScrollCustardView: View {
             })
     }
 
-    func makeCustard(data: EditingItem) -> Custard {
+    func makeCustard(data: UserMadeGridScrollCustard) -> Custard {
         var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = base
 
         for substring in data.words.split(separator: "\n"){
@@ -152,13 +121,12 @@ struct EditingScrollCustardView: View {
             keys[.grid_scroll(.init(keys.count))] = .custom(.init(design: .init(label: .text(string), color: .normal), press_action: [.input(string)], longpress_action: [], variation: []))
         }
 
-        let columnKeyCount = max(Int(data.columnKeyCount) ?? 8, 1)
-        let rowKeyCount = max(Double(data.rowKeyCount) ?? 4, 1)
-        debug(data.identifier, data.identifier.isEmpty ? "new_tab" : data.identifier)
+        let columnKeyCount = max(Int(data.columnCount) ?? 8, 1)
+        let rowKeyCount = max(Double(data.screenRowCount) ?? 4, 1)
         return Custard(
             custard_version: .v1_0,
-            identifier: data.identifier.isEmpty ? "new_tab" : data.identifier,
-            display_name: data.identifier.isEmpty ? "新しいカスタムタブ" : data.identifier,
+            identifier: data.tabName.isEmpty ? "new_tab" : data.tabName,
+            display_name: data.tabName.isEmpty ? "新しいカスタムタブ" : data.tabName,
             language: .undefined,
             input_style: .direct,
             interface: .init(
@@ -172,17 +140,10 @@ struct EditingScrollCustardView: View {
     func save(){
         do{
             try self.manager.saveCustard(
-                custard: makeCustard(data: editingItems),
+                custard: makeCustard(data: editingItem),
                 metadata: .init(origin: .userMade),
-                userData: .gridScroll(
-                    .init(
-                        tabName: editingItems.identifier,
-                        direction: editingItems.direction,
-                        columnCount: editingItems.columnKeyCount,
-                        screenRowCount: editingItems.rowKeyCount,
-                        words: editingItems.words
-                    )
-                )
+                userData: .gridScroll(editingItem),
+                updateTabBar: editingItem.addTabBarAutomatically
             )
         }catch{
             debug(error)

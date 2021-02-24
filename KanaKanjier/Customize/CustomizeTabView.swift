@@ -89,6 +89,9 @@ struct CustomizeTabView: View {
             }
             .navigationBarTitle(Text("拡張"), displayMode: .large)
             .onAppear(){
+                if let tabBarData = try? manager.tabbar(identifier: 0){
+                    self.tabBarData = tabBarData
+                }
                 if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview(){
                     if let windowScene = UIApplication.shared.windows.first?.windowScene {
                         SKStoreReviewController.requestReview(in: windowScene)
