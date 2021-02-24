@@ -62,14 +62,12 @@ fileprivate final class ShareURL{
 
 struct CustardInformationView: View {
     let initialCustard: Custard
-    let metadata: CustardMetaData?
     @Binding private var manager: CustardManager
     @State private var showActivityView = false
     @State private var exportedData = ShareURL()
 
-    internal init(custard: Custard, metadata: CustardMetaData?, manager: Binding<CustardManager>) {
+    internal init(custard: Custard, manager: Binding<CustardManager>) {
         self.initialCustard = custard
-        self.metadata = metadata
         self._manager = manager
     }
 
@@ -102,7 +100,7 @@ struct CustardInformationView: View {
                 Spacer()
                 Text(custard.input_style.label)
             }
-            if let metadata = metadata {
+            if let metadata = manager.metadata[custard.identifier]{
                 HStack{
                     Text("由来")
                     Spacer()

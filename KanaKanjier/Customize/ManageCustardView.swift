@@ -125,7 +125,7 @@ struct ManageCustardView: View {
                     List{
                         ForEach(manager.availableCustards, id: \.self){identifier in
                             if let custard = try? manager.custard(identifier: identifier){
-                                NavigationLink(destination: CustardInformationView(custard: custard, metadata: manager.metadata[identifier], manager: $manager)){
+                                NavigationLink(destination: CustardInformationView(custard: custard, manager: $manager)){
                                     Text(identifier)
                                 }
                             }
