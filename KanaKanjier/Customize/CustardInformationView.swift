@@ -109,35 +109,36 @@ struct CustardInformationView: View {
                 if metadata.origin == .userMade,
                    let userdata = try? manager.userMadeCustardData(identifier: custard.identifier),
                    case let .gridScroll(value) = userdata{
-                        NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: value)){
-                            Text("編集する")
-                        }
+                    NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: value)){
+                        Text("編集する")
+                    }
                 }
             }
             Button("書き出す"){
-                    guard let encoded = try? JSONEncoder().encode(custard) else { return }
-
-                    // 2
-                    let directory = FileManager.default.temporaryDirectory
-                    let path = directory.appendingPathComponent("\(custard.identifier).custard")
-                    // 3
-                    do {
-                        try encoded.write(to: path, options: .atomicWrite)
-                    } catch {
-                        debug(error.localizedDescription)
-                        return
-                    }
-
+                guard let encoded = try? JSONEncoder().encode(custard) else {
+                    debug("書き出しに失敗")
+                    return
+                }
+                //tmpディレクトリを取得
+                let directory = FileManager.default.temporaryDirectory
+                let path = directory.appendingPathComponent("\(custard.identifier).custard")
+                do {
+                    //書き出してpathをセット
+                    try encoded.write(to: path, options: .atomicWrite)
                     exportedData.setURL(path)
                     showActivityView = true
+                } catch {
+                    debug(error.localizedDescription)
+                    return
+                }
             }
         }
         .navigationBarTitle(Text("カスタムタブの情報"), displayMode: .inline)
         .sheet(isPresented: self.$showActivityView) {
-                ActivityView(
-                    activityItems: [exportedData.url].compactMap{$0},
-                    applicationActivities: nil
-                )
+            ActivityView(
+                activityItems: [exportedData.url].compactMap{$0},
+                applicationActivities: nil
+            )
         }
     }
 }
