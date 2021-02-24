@@ -53,7 +53,7 @@ struct CustardManager {
     private static let directoryName = "custard/"
     private var index = CustardManagerIndex()
 
-    private static func fileURL(name: String) -> URL {
+    static func fileURL(name: String) -> URL {
         let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
         let url = directoryPath.appendingPathComponent(directoryName + name)
         return url

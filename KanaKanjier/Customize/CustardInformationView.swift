@@ -45,10 +45,28 @@ fileprivate extension CustardMetaData.Origin {
     }
 }
 
+fileprivate struct ExportedCustardData{
+    let data: Data
+    let fileIdentifier: String
+}
+
+fileprivate final class ShareURL{
+    private(set) var url: URL?
+
+    func setURL(_ url: URL?){
+        if let url = url{
+            self.url = url
+        }
+    }
+}
+
 struct CustardInformationView: View {
     let custard: Custard
     let metadata: CustardMetaData?
     @Binding private var manager: CustardManager
+    @State private var showActivityView = false
+    @State private var exportedData = ShareURL()
+    @State private var exportedString = ""
 
     internal init(custard: Custard, metadata: CustardMetaData?, manager: Binding<CustardManager>) {
         self.custard = custard
@@ -65,7 +83,7 @@ struct CustardInformationView: View {
             HStack{
                 Text("タブ名")
                 Spacer()
-                Text(custard.display_name).font(.system(.body, design: .monospaced))
+                Text(custard.display_name)
             }
             HStack{
                 Text("識別子")
@@ -96,7 +114,47 @@ struct CustardInformationView: View {
                         }
                 }
             }
+            Button("書き出す"){
+                    guard let encoded = try? JSONEncoder().encode(custard) else { return }
+
+                    // 2
+                    let directory = FileManager.default.temporaryDirectory
+                    let path = directory.appendingPathComponent("\(custard.identifier).custard")
+                    // 3
+                    do {
+                        try encoded.write(to: path, options: .atomicWrite)
+                    } catch {
+                        debug(error.localizedDescription)
+                        return
+                    }
+
+                    exportedData.setURL(path)
+                    showActivityView = true
+            }
         }
         .navigationBarTitle(Text("カスタムタブの情報"), displayMode: .inline)
+        .sheet(isPresented: self.$showActivityView) {
+                ActivityView(
+                    activityItems: [exportedData.url].compactMap{$0},
+                    applicationActivities: nil
+                )
+        }
     }
 }
+
+private final class URLActivityItem: NSObject, UIActivityItemSource{
+    let url: URL
+
+    init(_ url: URL){
+        self.url = url
+    }
+
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return NSObject()
+    }
+
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        return url
+    }
+}
+
