@@ -106,7 +106,7 @@ struct ManageCustardView: View {
     @Binding private var manager: CustardManager
     @State private var showDocumentPicker = false
     @State var selectedDocument: Data = Data()
-
+    @State var addTabBar = true
     init(manager: Binding<CustardManager>){
         self._manager = manager
     }
@@ -157,6 +157,9 @@ struct ManageCustardView: View {
                         }else{
                             self.saveCustard(custard: custard)
                         }
+                    }
+                    Toggle(isOn: $addTabBar){
+                        Text("タブバーに追加")
                     }
                     Button("キャンセル"){
                         data.reset()
@@ -228,7 +231,7 @@ struct ManageCustardView: View {
 
     private func saveCustard(custard: Custard){
         do{
-            try manager.saveCustard(custard: custard, metadata: .init(origin: .imported))
+            try manager.saveCustard(custard: custard, metadata: .init(origin: .imported), updateTabBar: addTabBar)
             data.reset()
             urlString = ""
         } catch {
