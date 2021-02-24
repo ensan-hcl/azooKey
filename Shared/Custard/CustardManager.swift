@@ -96,6 +96,13 @@ struct CustardManager {
         }
     }
 
+    func userMadeCustardData(identifier: String) throws -> UserMadeCustard {
+        let fileURL = Self.fileURL(name: "\(identifier)_edit.json")
+        let data = try Data(contentsOf: fileURL)
+        let userMadeCustard = try JSONDecoder().decode(UserMadeCustard.self, from: data)
+        return userMadeCustard
+    }
+
     func custard(identifier: String) throws -> Custard {
         let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
         let data = try Data(contentsOf: fileURL)
@@ -110,17 +117,23 @@ struct CustardManager {
         return custard
     }
 
-    mutating func saveCustard(custard: Custard, metadata: CustardMetaData) throws {
+    mutating func saveCustard(custard: Custard, metadata: CustardMetaData, userData: UserMadeCustard? = nil) throws {
         let encoder = JSONEncoder()
         let data = try encoder.encode(custard)
         let fileURL = Self.fileURL(name: "\(custard.identifier)_main.custard")
         try data.write(to: fileURL)
+
+        if let userData = userData {
+            let fileURL = Self.fileURL(name: "\(custard.identifier)_edit.json")
+            let data = try encoder.encode(userData)
+            try data.write(to: fileURL)
+        }
+
         if !self.index.availableCustards.contains(custard.identifier){
             self.index.availableCustards.append(custard.identifier)
         }
         self.index.metadata[custard.identifier] = metadata
         self.save()
-
     }
 
     mutating func saveTabBarData(tabBarData: TabBarData) throws {

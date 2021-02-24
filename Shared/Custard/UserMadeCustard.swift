@@ -13,9 +13,19 @@ enum UserMadeCustard: Codable {
 }
 
 struct UserMadeGridScrollCustard: Codable {
+    internal init(tabName: String, direction: CustardInterfaceLayoutScrollValue.ScrollDirection, columnCount: String, screenRowCount: String, words: String) {
+        self.tabName = tabName
+        self.direction = direction
+        self.columnCount = columnCount
+        self.screenRowCount = screenRowCount
+        self.words = words
+    }
+
+    var tabName: String
     var direction: CustardInterfaceLayoutScrollValue.ScrollDirection
-    var columnCount: Int
-    var screenRowCount: Int
+    var columnCount: String
+    var screenRowCount: String
+    var words: String
 }
 
 extension UserMadeCustard{

@@ -17,8 +17,12 @@ struct BottomSheetView<Content: View>: View {
     let minHeight: CGFloat
     let content: Content
 
-    init(isOpen: Binding<Bool>, maxHeight: CGFloat, @ViewBuilder content: () -> Content) {
-        self.minHeight = maxHeight * 0.2
+    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, @ViewBuilder content: () -> Content) {
+        if let minHeight = minHeight{
+            self.minHeight = minHeight
+        }else{
+            self.minHeight = maxHeight * 0.2
+        }
         self.maxHeight = maxHeight
         self.content = content()
         self._isOpen = isOpen

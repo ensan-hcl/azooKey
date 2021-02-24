@@ -251,7 +251,7 @@ struct CustomKeyboardView: View {
                 let gridItem = GridItem(.fixed(tabDesign.keyViewWidth), spacing: tabDesign.horizontalSpacing/2)
                 ScrollView(.vertical){
                     LazyVGrid(columns: Array(repeating: gridItem, count: value.columnKeyCount), spacing: tabDesign.verticalSpacing/2){
-                        ForEach(0..<models.count){i in
+                        ForEach(0..<models.count, id: \.self){i in
                             SimpleKeyView(model: models[i].simpleKeyModel, tabDesign: tabDesign)
                         }
                     }
@@ -260,7 +260,7 @@ struct CustomKeyboardView: View {
                 let gridItem = GridItem(.fixed(tabDesign.keyViewHeight), spacing: tabDesign.verticalSpacing/2)
                 ScrollView(.horizontal){
                     LazyHGrid(rows: Array(repeating: gridItem, count: value.columnKeyCount), spacing: tabDesign.horizontalSpacing/2){
-                        ForEach(0..<models.count){i in
+                        ForEach(0..<models.count, id: \.self){i in
                             SimpleKeyView(model: models[i].simpleKeyModel, tabDesign: tabDesign)
                         }
                     }

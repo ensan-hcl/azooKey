@@ -48,6 +48,14 @@ fileprivate extension CustardMetaData.Origin {
 struct CustardInformationView: View {
     let custard: Custard
     let metadata: CustardMetaData?
+    @Binding private var manager: CustardManager
+
+    internal init(custard: Custard, metadata: CustardMetaData?, manager: Binding<CustardManager>) {
+        self.custard = custard
+        self.metadata = metadata
+        self._manager = manager
+    }
+
 
     var body: some View {
         Form{
@@ -79,6 +87,13 @@ struct CustardInformationView: View {
                     Text("由来")
                     Spacer()
                     Text(metadata.origin.description)
+                }
+                if metadata.origin == .userMade,
+                   let userdata = try? manager.userMadeCustardData(identifier: custard.identifier),
+                   let editingItem = EditingItem(data: userdata){
+                        NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: editingItem)){
+                            Text("編集する")
+                        }
                 }
             }
         }

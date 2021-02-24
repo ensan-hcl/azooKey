@@ -125,7 +125,7 @@ struct ManageCustardView: View {
                     List{
                         ForEach(manager.availableCustards, id: \.self){identifier in
                             if let custard = try? manager.custard(identifier: identifier){
-                                NavigationLink(destination: CustardInformationView(custard: custard, metadata: manager.metadata[identifier])){
+                                NavigationLink(destination: CustardInformationView(custard: custard, metadata: manager.metadata[identifier], manager: $manager)){
                                     Text(identifier)
                                 }
                             }
@@ -136,7 +136,11 @@ struct ManageCustardView: View {
             }
 
             Section(header: Text("作る")){
-                
+                Text("登録したい文字を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
+                NavigationLink(destination: EditingScrollCustardView(manager: $manager)){
+                    Text("作る")
+                }
+
             }
 
             Section(header: Text("読み込む")){
@@ -192,10 +196,8 @@ struct ManageCustardView: View {
                         Text("URLから読み込み")
                     }
 
-                    VStack{
-                        Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
-                        FallbackLink("カスタムタブファイルの作り方", destination: "https://google.com")
-                    }
+                    Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
+                    FallbackLink("カスタムタブファイルの作り方", destination: "https://google.com")
                 }
             }
         }

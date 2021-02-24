@@ -189,6 +189,7 @@
 		1AC8A5B92595C10A00B71E5A /* StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */; };
 		1AC8A5D3259815C300B71E5A /* FlickCustomKeySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */; };
 		1AC8A5DD25986CA500B71E5A /* KanaSymbolsKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */; };
+		1ACB07CA25E552940077DE04 /* EditingScrollCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */; };
 		1ACC0F0725CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */; };
 		1ACC0F0825CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */; };
 		1ACC0F0E25CFE7FF00FC1B8A /* ThemeEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC0F0D25CFE7FF00FC1B8A /* ThemeEditView.swift */; };
@@ -2678,6 +2679,7 @@
 		1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringInterpolation.swift; sourceTree = "<group>"; };
 		1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickCustomKeySettingView.swift; sourceTree = "<group>"; };
 		1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaSymbolsKeyModel.swift; sourceTree = "<group>"; };
+		1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingScrollCustardView.swift; sourceTree = "<group>"; };
 		1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickSpaceKeyModel.swift; sourceTree = "<group>"; };
 		1ACC0F0D25CFE7FF00FC1B8A /* ThemeEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEditView.swift; sourceTree = "<group>"; };
 		1ACE00742567525000899DA2 /* RomanCustomKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanCustomKeys.swift; sourceTree = "<group>"; };
@@ -5396,6 +5398,7 @@
 				1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */,
 				1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */,
 				1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */,
+				1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */,
 				1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */,
 				1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */,
 				1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */,
@@ -10197,6 +10200,7 @@
 				1AF6797925CEDB9B00F3987B /* QwertyKeyModel.swift in Sources */,
 				1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
+				1ACB07CA25E552940077DE04 /* EditingScrollCustardView.swift in Sources */,
 				1AF6798E25CEDBB500F3987B /* KanaSymbolsKeyModel.swift in Sources */,
 				1AF6797225CEDB9B00F3987B /* QwertySpaceKeyModel.swift in Sources */,
 				1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */,
