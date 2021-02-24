@@ -40,10 +40,6 @@ final class Store{
         self.action.appearedAgain()
     }
 
-    private func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification){
-        self.action.sendToDicDataStore(data)
-    }
-
     fileprivate func registerResult(_ result: [Candidate]){
         self.resultModel.setResults(result)
     }
