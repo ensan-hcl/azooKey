@@ -53,8 +53,9 @@ struct ContentView: View {
                             Text("設定")
                         }
                     }
-                    .tag(2)
-            }.fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
+                    .tag(3)
+            }
+            .fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()
             }
             ForEach(messageManager.necessaryMessages, id: \.id){data in
