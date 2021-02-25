@@ -62,18 +62,35 @@ struct EditingScrollCustardView: View {
                                 }
                                 .pickerStyle(SegmentedPickerStyle())
                             }
-                            HStack{
-                                Text("一列のキー数")
-                                Spacer()
-                                TextField("一列のキー数", text: $editingItem.columnCount)
-                                    .keyboardType(.numberPad)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                            }
-                            HStack{
-                                Text("画面\(editingItem.direction.label)方向のキー数")
-                                Spacer()
-                                TextField("画面\(editingItem.direction.label)方向のキー数", text: $editingItem.screenRowCount).keyboardType(.numberPad)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                            switch editingItem.direction{
+                            case .horizontal:
+                                HStack{
+                                    Text("縦方向キー数")
+                                    Spacer()
+                                    TextField("縦方向キー数", text: $editingItem.columnCount)
+                                        .keyboardType(.numberPad)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                }
+                                HStack{
+                                    Text("横方向キー数")
+                                    Spacer()
+                                    TextField("横方向キー数", text: $editingItem.screenRowCount).keyboardType(.numberPad)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                }
+                            case .vertical:
+                                HStack{
+                                    Text("横方向キー数")
+                                    Spacer()
+                                    TextField("横方向キー数", text: $editingItem.columnCount)
+                                        .keyboardType(.numberPad)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                }
+                                HStack{
+                                    Text("縦方向キー数")
+                                    Spacer()
+                                    TextField("縦方向キー数", text: $editingItem.screenRowCount).keyboardType(.numberPad)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                }
                             }
                             Toggle(isOn: $editingItem.addTabBarAutomatically){
                                 Text("自動的にタブバーに追加")
@@ -126,7 +143,7 @@ struct EditingScrollCustardView: View {
         return Custard(
             custard_version: .v1_0,
             identifier: data.tabName.isEmpty ? "new_tab" : data.tabName,
-            display_name: data.tabName.isEmpty ? "新しいカスタムタブ" : data.tabName,
+            display_name: data.tabName.isEmpty ? "New tab" : data.tabName,
             language: .none,
             input_style: .direct,
             interface: .init(

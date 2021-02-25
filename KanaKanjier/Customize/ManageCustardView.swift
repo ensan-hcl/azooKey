@@ -54,6 +54,7 @@ final class ImportedCustardData: ObservableObject {
         self.processState = .none
         self.downloadedData = nil
         self.failureData = nil
+        self.custard = nil
     }
 
     func process(data: Data) -> Custard? {
@@ -136,7 +137,7 @@ struct ManageCustardView: View {
             }
 
             Section(header: Text("作る")){
-                Text("登録したい文字を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
+                Text("登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
                 NavigationLink(destination: EditingScrollCustardView(manager: $manager)){
                     Text("作る")
                 }
@@ -162,8 +163,11 @@ struct ManageCustardView: View {
                         Text("タブバーに追加")
                     }
                     Button("キャンセル"){
+                        urlString = ""
+                        selectedDocument = Data()
                         data.reset()
                     }
+                    .foregroundColor(.red)
                 }else{
                     if let text = data.processState.description{
                         ProgressView(text)
@@ -196,7 +200,7 @@ struct ManageCustardView: View {
                             Text("読み込む")
                         }
                     } label: {
-                        Text("URLから読み込み")
+                        Text("URLから読み込む")
                     }
 
                     Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
@@ -234,6 +238,7 @@ struct ManageCustardView: View {
             try manager.saveCustard(custard: custard, metadata: .init(origin: .imported), updateTabBar: addTabBar)
             data.reset()
             urlString = ""
+            selectedDocument = Data()
         } catch {
             debug(error)
         }

@@ -284,6 +284,109 @@
 "オープンソースソフトウェア" = "Open source softwares (Japanese)";
 "バージョン" = "Version";
 
+"カスタムタブ" = "Custom tabs";
+"好きな文字や文章を並べたオリジナルのタブを作成することができます。" = "You can make your original tab includs letters and sentences you need to input daily.";
+"カスタムタブの管理" = "Manage custom tabs";
+"タブバー" = "Tab bar";
+"タブバーはカスタムタブへの移動をサポートします。フリック入力では左上の「記号タブ」キー、ローマ字入力では左下の「数字/記号」キーを長押しすることで表示されます。" = "Tab bar supports moving to custom tabs. Using flick input style, you can show it by longpressing ☆123 key at the left top edge in the keyboard.. Using qwerty input style, you can show it by longpressing #+= key or 123 key at the left bottom edge in the keyboard.";
+"タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。" = "You can edit tab bar. You can rearange, delete, append tabs and also add features like inputting, moving cursor and so on.";
+"タブバーを編集" = "Edit tab bar";
+"一覧" = "List";
+"URLが間違っている可能性があります" = "Wrong URL";
+"データが取得できませんでした" = "Failed to get data from URL";
+"正しくない形式のファイルです" = "Incorrectly formatted file";
+"ファイルを取得中" = "Getting file";
+"URLを取得中" = "Geting URL";
+"ファイルを処理中" = "Processing file";
+"カスタムタブがまだありません" = "Custom tabs have yet created";
+"登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。" = "You can make custom tabs only by list up the words and sentences.";
+"「%@(%@)」の読み込みに成功しました" = "Successfuly imported '%1$@'(%2$@)";
+"保存" = "Save";
+"タブバーに追加" = "Add to tab bar";
+"読み込む" = "Import";
+"iCloudから読み込む" = "Import from iCloud";
+"URLから読み込む" = "Import from URL";
+"URLを入力" = "URL";
+"カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。" = "You can create custom tabs as a files outside of this app and import them. You can create more high-functional tabs. For detail please check below.";
+"カスタムタブファイルの作り方" = "How to make custom tab files.";
+"注意" = "Warning";
+"識別子%@を持つカスタムタブが既に登録されています。上書きしますか？" = "You have already using a custom tab which has identifier %@. Do you overwrap it?";
+"上書き" = "Overwrap";
+"タブ名" = "Tab Name";
+"タブの名前" = "Tab Name";
+"識別子" = "Identifier";
+"入力方式" = "Input style";
+"由来" = "Origin";
+"タブバーに追加済み" = "Already in tab bar";
+"タブバーに追加する" = "Add to tab bar";
+"書き出す" = "Export";
+"変換なし" = "None";
+"指定なし" = "Not specified";
+"ダイレクト" = "Direct";
+"ローマ字かな入力" = "Roman to kana";
+"このアプリで作成" = "Made in this app";
+"読み込んだデータ" = "Imported data";
+"カスタムタブの情報" = "Information of custom tab";
+"カスタムタブを作る" = "Make custom tab";
+"一行ずつ登録したい文字や単語を入力してください" = "List up letters and sentences you want to use in this custom tab in line-separated format";
+"スクロール方向" = "Scroll direction";
+"縦" = "Vertical";
+"横" = "Horizontal";
+"横方向キー数" = "Row key count";
+"縦方向キー数" = "Column key count";
+"自動的にタブバーに追加" = "Add to tab bar automatically";
+
+"タブバーの編集" = "Edit tab bar";
+"アイテムを追加" = "Add new item";
+"アイテム" = "Items";
+"アクション" = "Actions";
+"削除と順番" = "Delete & Rearange";
+"押した時の動作" = "Actions when select";
+"動作の編集" = "Edit actions";
+"上から順に実行されます" = "Actions are executed in order";
+"アクションを追加" = "Add new action";
+
+"基本" = "Basic";
+"高度" = "Advanced";
+"タブバーの表示" = "Show tab bar";
+"文字の入力" = "Input letters";
+"文字の削除" = "Delete letters";
+"入力の確定" = "Complete";
+"カーソル移動" = "Moving cursor";
+"カーソルバーの表示" = "Show cursor bar";
+
+"%@文字削除" = "Delete %@ character";
+"確定" = "Complete";
+"大文字/小文字、拗音/濁音/半濁音の切り替え" = "Change uppercase ⇆ lowercase.";
+"「%@」を入力" = "Input '%@'";
+"入力する文字" = "Letters to input";
+"削除する文字数" = "Count to delete";
+"%@文字分カーソルを移動" = "Move cursor for %@ characters";
+"負の値を指定すると左にカーソルが動きます" = "Negative number means moving backwords";
+"移動する文字数" = "Count of movement";
+"タブの移動" = "Move to tab";
+"タブを選択" = "Select destination tab";
+"文頭まで削除" = "Delete to beginning of the senetence";
+"Capslockのモードの切り替え" = "Toggle capslock";
+"カーソルバーの切り替え" = "Toggle show or not show cursor bar";
+"タブバーの切り替え" = "Toggle show or not show tab bar";
+"キーボードを閉じる" = "Dismiss keyboard";
+"アプリを開く" = "Open app";
+"このアクションはiOSのメジャーアップデートで利用できなくなる可能性があります" = "This action could be invalid in future iOS versions";
+
+"日本語(設定に合わせる)" = "Japnaese (follow your setting)";
+"英語(設定に合わせる)" = "English (follow your setting)";
+"記号と数字(フリック入力)" = "Symbols and numbers (flick style)";
+"数字(ローマ字入力)" = "Numbers (qwerty style)";
+"記号(ローマ字入力)" = "Symbols (qwerty style)";
+"日本語(フリック入力)" = "Japanese (flick style)";
+"日本語(ローマ字入力)" = "Japanese (qwerty style)";
+"英語(フリック入力)" = "English (flick style)";
+"英語(ローマ字入力)" = "English (qwerty style)";
+
+
+
+
 
 /*"" = "";
 "" = "";

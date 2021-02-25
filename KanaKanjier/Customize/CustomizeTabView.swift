@@ -33,7 +33,7 @@ struct CustomizeTabView: View {
             Form {
                 Section(header: Text("カスタムタブ")){
                     VStack{
-                        Text("あなたの好きな文字や文章を並べたオリジナルのタブを作成することができます。")
+                        Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
                     }
                     Image("custard_1")
                         .resizable()
@@ -48,7 +48,7 @@ struct CustomizeTabView: View {
                     }
                 }
                 Section(header: Text("タブバー")){
-                    Text("タブバーはカスタムタブを利用した際のタブ移動をサポートします。「記号タブ」キーを長押しすることで表示され、タブを移動することが可能です。")
+                    Text("タブバーはカスタムタブへの移動をサポートします。フリック入力では左上の「記号タブ」キー、ローマ字入力では左下の「数字/記号」キーを長押しすることで表示されます。")
                     Image("tabBar_1")
                         .resizable()
                         .scaledToFit()

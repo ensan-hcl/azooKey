@@ -20,16 +20,16 @@ extension CodableActionData{
 
     var label: LocalizedStringKey {
         switch self{
-        case let .delete(value): return "\(value)文字削除"
+        case let .delete(value): return "\(String(value))文字削除"
         case .complete: return "確定"
         case .exchangeCharacter: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
         case let .input(value): return "「\(value)」を入力"
-        case let .moveCursor(value): return "\(value)文字分カーソルを移動"
+        case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
         case .moveTab(_): return "タブの移動"
         case .smoothDelete: return "文頭まで削除"
-        case .toggleCapsLockState: return "CapslockのモードのON/OFF"
-        case .toggleCursorMovingView: return "カーソル移動画面のON/OFF"
-        case .toggleTabBar: return "タブ移動画面のON/OFF"
+        case .toggleCapsLockState: return "Capslockのモードの切り替え"
+        case .toggleCursorMovingView: return "カーソルバーの切り替え"
+        case .toggleTabBar: return "タブバーの切り替え"
         case .dismissKeyboard: return "キーボードを閉じる"
         case .openApp(_): return "アプリを開く"
         }
@@ -153,7 +153,7 @@ struct KeyActionsEditView: View {
                         Button("Capslock"){
                             press(.toggleCapsLockState)
                         }
-                        Button("カーソル移動バーの表示"){
+                        Button("カーソルバーの表示"){
                             press(.toggleCursorMovingView)
                         }
                         Button("キーボードを閉じる"){
@@ -300,7 +300,7 @@ struct ActionMoveTabEditView: View {
     var body: some View {
         Picker(selection: $selectedTab, label: Text("タブを選択")){
             ForEach(items.indices, id: \.self){i in
-                Text(items[i].label).tag(items[i].tab)
+                Text(LocalizedStringKey(items[i].label)).tag(items[i].tab)
             }
         }
         .onChange(of: selectedTab){value in
