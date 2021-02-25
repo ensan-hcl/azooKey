@@ -117,6 +117,22 @@ struct CustardManager {
         return custard
     }
 
+    func checkTabExistInTabBar(identifier: Int = 0, tab: CodableTabData) -> Bool {
+        guard let tabbar = try? self.tabbar(identifier: identifier) else {
+            return false
+        }
+        return tabbar.items.contains(where: {$0.actions == [.moveTab(tab)]})
+    }
+
+    mutating func addTabBar(identifier: Int = 0, item: TabBarItem) throws {
+        let tabbar = try self.tabbar(identifier: identifier)
+        let newTabBar = TabBarData.init(
+            identifier: tabbar.identifier,
+            items: tabbar.items + [item]
+        )
+        try self.saveTabBarData(tabBarData: newTabBar)
+    }
+
     mutating func saveCustard(custard: Custard, metadata: CustardMetaData, userData: UserMadeCustard? = nil, updateTabBar: Bool = false) throws {
         let encoder = JSONEncoder()
         let data = try encoder.encode(custard)
@@ -133,15 +149,8 @@ struct CustardManager {
             self.index.availableCustards.append(custard.identifier)
         }
 
-        if updateTabBar{
-            let tabbar = try self.tabbar(identifier: 0)
-            if !tabbar.items.contains(where: {$0.actions == [.moveTab(.custom(custard.identifier))]}){
-                let newTabBar = TabBarData.init(
-                    identifier: tabbar.identifier,
-                    items: tabbar.items + [.init(label: .text(custard.display_name), actions: [.moveTab(.custom(custard.identifier))])]
-                )
-                try self.saveTabBarData(tabBarData: newTabBar)
-            }
+        if updateTabBar && !self.checkTabExistInTabBar(tab: .custom(custard.identifier)){
+            try self.addTabBar(item: .init(label: .text(custard.display_name), actions: [.moveTab(.custom(custard.identifier))]))
         }
 
         self.index.metadata[custard.identifier] = metadata

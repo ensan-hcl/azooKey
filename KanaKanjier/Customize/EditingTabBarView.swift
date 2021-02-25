@@ -27,10 +27,10 @@ extension TabBarItemLabelType: Equatable {
 struct EditingTabBarItem: Identifiable, Equatable {
     let id = UUID()
     var label: TabBarItemLabelType
-    var actions: EditingCodableActions
+    var actions: [EditingCodableActionData]
     var disclosed: Bool
 
-    init(label: TabBarItemLabelType, actions: EditingCodableActions, disclosed: Bool = false){
+    init(label: TabBarItemLabelType, actions: [EditingCodableActionData], disclosed: Bool = false){
         self.label = label
         self.actions = actions
         self.disclosed = disclosed
@@ -42,17 +42,16 @@ struct EditingTabBarItem: Identifiable, Equatable {
 }
 
 struct EditingTabBarView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Binding private var manager: CustardManager
     @Binding private var tabBarData: TabBarData
     @State private var items: [EditingTabBarItem] = []
     @State private var editMode = EditMode.inactive
-    @Binding private var manager: CustardManager
 
     init(tabBarData: Binding<TabBarData>, manager: Binding<CustardManager>){
         self._items = State(initialValue: tabBarData.wrappedValue.items.indices.map{i in
             EditingTabBarItem(
                 label: tabBarData.wrappedValue.items[i].label,
-                actions: EditingCodableActions(tabBarData.wrappedValue.items[i].actions.map{EditingCodableActionData($0)})
+                actions: tabBarData.wrappedValue.items[i].actions.map{EditingCodableActionData($0)}
             )
         })
         self._tabBarData = tabBarData
@@ -66,7 +65,7 @@ struct EditingTabBarView: View {
                     items.append(
                         EditingTabBarItem(
                             label: .text("アイテム"),
-                            actions: EditingCodableActions([EditingCodableActionData(.moveTab(.system(.user_japanese)))])
+                            actions: [EditingCodableActionData(.moveTab(.system(.user_japanese)))]
                         )
                     )
                 } label: {
@@ -79,24 +78,23 @@ struct EditingTabBarView: View {
 
             Section(header: Text("アイテム")){
                 List{
-                    ForEach(items.indices, id: \.self){i in
+                    ForEach($items){item in
                         HStack{
                             VStack(spacing: 20){
                                 DisclosureGroup{
                                     HStack{
                                         Text("表示")
                                         Spacer()
-                                        TabNavigationViewItemLabelEditView("ラベルを設定", item: $items[i])
+                                        TabNavigationViewItemLabelEditView("ラベルを設定", label: item.label)
                                     }
-                                    NavigationLink(destination: KeyActionsEditView($items[i], actions: items[i].actions, availableCustards: manager.availableCustards)){
+                                    NavigationLink(destination: KeyActionsEditView(item.actions, availableCustards: manager.availableCustards)){
                                         Text("押した時の動作")
                                         Spacer()
-                                        let label = (items[i].actions.list.first?.data.label ?? "動作なし") + (items[i].actions.list.count > 1 ? "など" : "")
-                                        Text(label)
+                                        Text(makeLabelText(item: item.wrappedValue))
                                             .foregroundColor(.gray)
                                     }
                                 } label: {
-                                    switch items[i].label{
+                                    switch item.wrappedValue.label{
                                     case let .text(text):
                                         Text(text)
                                     case let .imageAndText(value):
@@ -116,22 +114,30 @@ struct EditingTabBarView: View {
                 }
             }
         }
-        .navigationBarTitle(Text("タブバーの編集"), displayMode: .inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: Button{
+        .onDisappear{
             self.save()
-            presentationMode.wrappedValue.dismiss()
-        }label: {
-            Text("保存")
-        }, trailing: editButton)
+        }
+        .navigationBarTitle(Text("タブバーの編集"), displayMode: .inline)
+        .navigationBarItems(trailing: editButton)
         .environment(\.editMode, $editMode)
+    }
+
+    private func makeLabelText(item: EditingTabBarItem) -> String {
+        if let label = item.actions.first?.data.label{
+            if item.actions.count > 1{
+                return label + "など"
+            }else{
+                return label
+            }
+        }
+        return "動作なし"
     }
 
     private func save(){
         do{
             debug("セーブする！", self.items)
             self.tabBarData = TabBarData(identifier: tabBarData.identifier, items: self.items.map{
-                TabBarItem(label: $0.label, actions: $0.actions.list.map{$0.data})
+                TabBarItem(label: $0.label, actions: $0.actions.map{$0.data})
             })
             try manager.saveTabBarData(tabBarData: self.tabBarData)
         } catch {
@@ -168,14 +174,13 @@ struct EditingTabBarView: View {
     private func onMove(source: IndexSet, destination: Int) {
         items.move(fromOffsets: source, toOffset: destination)
     }
-
 }
 
 struct TabNavigationViewItemLabelEditView: View {
-    internal init(_ placeHolder: LocalizedStringKey, item: Binding<EditingTabBarItem>) {
+    internal init(_ placeHolder: LocalizedStringKey, label: Binding<TabBarItemLabelType>) {
         self.placeHolder = placeHolder
-        self._item = item
-        switch item.wrappedValue.label{
+        self._label = label
+        switch label.wrappedValue{
         case let .text(text):
             self._labelText = State(initialValue: text)
         case let .image(systemName: image):
@@ -185,15 +190,16 @@ struct TabNavigationViewItemLabelEditView: View {
         }
     }
 
-    @Binding private var item: EditingTabBarItem
+    @Binding private var label: TabBarItemLabelType
     @State private var labelText = ""
 
     private let placeHolder: LocalizedStringKey
 
     var body: some View {
-        TextField(placeHolder, text: $labelText){ _ in } onCommit: {
-            item.label = .text(labelText)
-        }
+        TextField(placeHolder, text: $labelText)
+            .onChange(of: labelText){value in
+                label = .text(value)
+            }
         .textFieldStyle(RoundedBorderTextFieldStyle())
     }
 }

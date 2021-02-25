@@ -10,10 +10,10 @@ import Foundation
 import SwiftUI
 import Combine
 
-final class EditingCodableActionData: Identifiable, Equatable, ObservableObject {
+struct EditingCodableActionData: Identifiable, Equatable {
     typealias ID = UUID
     let id = UUID()
-    @Published var data: CodableActionData
+    var data: CodableActionData
     init(_ data: CodableActionData){
         self.data = data
     }
@@ -23,33 +23,19 @@ final class EditingCodableActionData: Identifiable, Equatable, ObservableObject 
     }
 }
 
-
-final class EditingCodableActions: Equatable, ObservableObject {
-    @Published var list: [EditingCodableActionData]
-    init(_ list: [EditingCodableActionData]){
-        self.list = list
-    }
-
-    static func == (lhs: EditingCodableActions, rhs: EditingCodableActions) -> Bool {
-        return lhs.list == rhs.list
-    }
-}
-
 struct KeyActionsEditView: View {
-    @Binding private var item: EditingTabBarItem
     @State private var editMode = EditMode.inactive
     @State private var bottomSheetShown = false
-    @StateObject private var actions: EditingCodableActions
+    @Binding private var actions: [EditingCodableActionData]
     private let availableCustards: [String]
 
-    init(_ item: Binding<EditingTabBarItem>, actions: EditingCodableActions, availableCustards: [String]){
-        self._item = item
-        self._actions = StateObject(wrappedValue: actions)
+    init(_ actions: Binding<[EditingCodableActionData]>, availableCustards: [String]){
+        self._actions = actions
         self.availableCustards = availableCustards
     }
 
     func add(new action: CodableActionData){
-        actions.list.append(EditingCodableActionData(action))
+        actions.append(EditingCodableActionData(action))
     }
 
     var body: some View {
@@ -70,12 +56,12 @@ struct KeyActionsEditView: View {
                 }
                 Section(header: Text("アクション")){
                     List{
-                        ForEach(actions.list){(action: EditingCodableActionData) in
+                        ForEach($actions){(action: Binding<EditingCodableActionData>) in
                             HStack{
                                 VStack(spacing: 20){
-                                    if action.data.hasAssociatedValue{
+                                    if action.wrappedValue.data.hasAssociatedValue{
                                         DisclosureGroup{
-                                            switch action.data{
+                                            switch action.wrappedValue.data{
                                             case .delete:
                                                 ActionDeleteEditView(action)
                                             case .input:
@@ -92,10 +78,10 @@ struct KeyActionsEditView: View {
                                                 EmptyView()
                                             }
                                         } label :{
-                                            Text(action.data.label)
+                                            Text(action.wrappedValue.data.label)
                                         }
                                     }else{
-                                        Text(action.data.label)
+                                        Text(action.wrappedValue.data.label)
                                     }
                                 }
                             }
@@ -146,12 +132,7 @@ struct KeyActionsEditView: View {
                     }
                 }
                 .foregroundColor(.primary)
-                .listRowBackground(Color.gray)
             }
-        }
-        .onChange(of: actions){value in
-            debug("内部的チェンジ")
-            item.actions = actions
         }
         .navigationBarTitle(Text("動作の編集"), displayMode: .inline)
         .navigationBarItems(trailing: editButton)
@@ -181,21 +162,21 @@ struct KeyActionsEditView: View {
     }
 
     private func delete(at offsets: IndexSet) {
-        actions.list.remove(atOffsets: offsets)
+        actions.remove(atOffsets: offsets)
     }
 
     private func onMove(source: IndexSet, destination: Int) {
-        actions.list.move(fromOffsets: source, toOffset: destination)
+        actions.move(fromOffsets: source, toOffset: destination)
     }
 
 }
 
 struct ActionDeleteEditView: View {
-    @ObservedObject private var action: EditingCodableActionData
+    @Binding private var action: EditingCodableActionData
 
-    internal init(_ action: EditingCodableActionData) {
-        self.action = action
-        if case let .delete(count) = action.data{
+    internal init(_ action: Binding<EditingCodableActionData>) {
+        self._action = action
+        if case let .delete(count) = action.wrappedValue.data{
             self._value = State(initialValue: "\(count)")
         }
     }
@@ -214,11 +195,11 @@ struct ActionDeleteEditView: View {
 }
 
 struct ActionInputEditView: View {
-    @ObservedObject private var action: EditingCodableActionData
+    @Binding private var action: EditingCodableActionData
 
-    internal init(_ action: EditingCodableActionData) {
-        self.action = action
-        if case let .input(value) = action.data{
+    internal init(_ action: Binding<EditingCodableActionData>) {
+        self._action = action
+        if case let .input(value) = action.wrappedValue.data{
             self._value = State(initialValue: "\(value)")
         }
     }
@@ -235,11 +216,11 @@ struct ActionInputEditView: View {
 }
 
 struct ActionOpenAppEditView: View {
-    @ObservedObject private var action: EditingCodableActionData
+    @Binding private var action: EditingCodableActionData
 
-    internal init(_ action: EditingCodableActionData) {
-        self.action = action
-        if case let .openApp(value) = action.data{
+    internal init(_ action: Binding<EditingCodableActionData>) {
+        self._action = action
+        if case let .openApp(value) = action.wrappedValue.data{
             self._value = State(initialValue: "\(value)")
         }
     }
@@ -257,13 +238,13 @@ struct ActionOpenAppEditView: View {
 
 
 struct ActionMoveTabEditView: View {
-    @ObservedObject private var action: EditingCodableActionData
+    @Binding private var action: EditingCodableActionData
     private let items: [(label: String, tab: CodableTabData)]
     @State private var selectedTab: CodableTabData = .system(.user_japanese)
 
-    internal init(_ action: EditingCodableActionData, availableCustards: [String]) {
-        self.action = action
-        if case let .moveTab(value) = action.data{
+    internal init(_ action: Binding<EditingCodableActionData>, availableCustards: [String]) {
+        self._action = action
+        if case let .moveTab(value) = action.wrappedValue.data{
             self._selectedTab = State(initialValue: value)
         }
         var dict: [(label: String, tab: CodableTabData)] = [
@@ -297,11 +278,11 @@ struct ActionMoveTabEditView: View {
 
 
 struct ActionMoveCursorEditView: View {
-    @ObservedObject private var action: EditingCodableActionData
+    @Binding private var action: EditingCodableActionData
 
-    internal init(_ action: EditingCodableActionData) {
-        self.action = action
-        if case let .moveCursor(count) = action.data{
+    internal init(_ action: Binding<EditingCodableActionData>) {
+        self._action = action
+        if case let .moveCursor(count) = action.wrappedValue.data{
             self._value = State(initialValue: "\(count)")
         }
     }

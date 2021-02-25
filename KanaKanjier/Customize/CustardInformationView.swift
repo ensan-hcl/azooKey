@@ -66,7 +66,7 @@ struct CustardInformationView: View {
     @Binding private var manager: CustardManager
     @State private var showActivityView = false
     @State private var exportedData = ShareURL()
-
+    @State private var added = false
     internal init(custard: Custard, manager: Binding<CustardManager>) {
         self.initialCustard = custard
         self._manager = manager
@@ -112,6 +112,19 @@ struct CustardInformationView: View {
                    case let .gridScroll(value) = userdata{
                     NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: value)){
                         Text("編集する")
+                    }
+                }
+            }
+
+            if added || manager.checkTabExistInTabBar(tab: .custom(custard.identifier)){
+                Text("タブバーに追加済み")
+            }else{
+                Button("タブバーに追加"){
+                    do{
+                        try manager.addTabBar(item: TabBarItem(label: .text(custard.display_name), actions: [.moveTab(.custom(custard.identifier))]))
+                        added = true
+                    }catch{
+                        debug(error)
                     }
                 }
             }
