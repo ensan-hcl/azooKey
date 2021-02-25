@@ -461,6 +461,9 @@ enum CustardInterfaceSystemKey: String, Codable {
 
     /// - the enter key that changes its label in condition
     case enter
+
+    /// - flick 小ﾞﾟkey
+    case kogaki
 }
 
 /// - keys you can defined

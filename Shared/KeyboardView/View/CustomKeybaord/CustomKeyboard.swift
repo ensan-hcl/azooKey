@@ -109,6 +109,8 @@ fileprivate extension CustardInterfaceKey {
                 return FlickChangeKeyboardModel.shared
             case .enter:
                 return FlickEnterKeyModel(keySizeType: .normal)
+            case .kogaki:
+                return KogakiKeyModel.shared
             }
         case let .custom(value):
             let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variation.reduce(into: [:]){dictionary, variation in
@@ -142,6 +144,10 @@ fileprivate extension CustardInterfaceKey {
                 return QwertyChangeKeyboardKeyModel(keySizeType: .normal(of: 1, for: 1))
             case .enter:
                 return QwertyEnterKeyModel(keySizeType: .normal(of: 1, for: 1))
+            case .kogaki:
+                let flickKogakiKey = KogakiKeyModel.shared
+                let variations = VariationsModel([flickKogakiKey.flickKeys[.left], flickKogakiKey.flickKeys[.top], flickKogakiKey.flickKeys[.right], flickKogakiKey.flickKeys[.bottom]].compactMap{$0}.map{(label: $0.labelType, actions: $0.pressActions)})
+                return QwertyKeyModel(labelType: .text("小ﾞﾟ"), pressActions: [.changeCharacterType], longPressActions: [], variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
             }
         case let .custom(value):
             let variations: [(label: KeyLabelType, actions: [ActionType])] = value.variation.reduce(into: []){array, variation in
@@ -174,6 +180,8 @@ fileprivate extension CustardInterfaceKey {
                 return SimpleChangeKeyboardKeyModel()
             case .enter:
                 return SimpleEnterKeyModel()
+            case .kogaki:
+                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType], longPressActions: [])
             }
         case let .custom(value):
             return SimpleKeyModel(
