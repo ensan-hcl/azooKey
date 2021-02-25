@@ -289,7 +289,8 @@ struct ActionMoveTabEditView: View {
             ("日本語(フリック入力)", .system(.flick_japanese)),
             ("日本語(ローマ字入力)", .system(.qwerty_japanese)),
             ("英語(フリック入力)", .system(.flick_english)),
-            ("英語(ローマ字入力)", .system(.qwerty_english))
+            ("英語(ローマ字入力)", .system(.qwerty_english)),
+            ("最後に表示していたタブ", .system(.last_tab)),
         ]
         availableCustards.forEach{
             dict.insert(($0, .custom($0)), at: 0)

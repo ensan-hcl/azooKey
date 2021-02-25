@@ -20,7 +20,7 @@ struct TabKeyModel: FlickKeyModelProtocol{
             longPressActions: [.moveCursor(.right)]
         )
     ])
-    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tab: .flick_numbersymbols, longPressActions: [.doOnce(.toggleTabBar)], flickKeys: [:])
+    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tab: .existential(.flick_numbersymbols), longPressActions: [.doOnce(.toggleTabBar)], flickKeys: [:])
 
 
     var pressActions: [ActionType]{ [.moveTab(self.tab)] }
@@ -45,7 +45,7 @@ struct TabKeyModel: FlickKeyModelProtocol{
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        if states.tabManager.currentTab == self.tab{
+        if states.tabManager.isCurrentTab(tab: tab){
             return theme.pushedKeyFillColor.color
         }
         return theme.specialKeyFillColor.color

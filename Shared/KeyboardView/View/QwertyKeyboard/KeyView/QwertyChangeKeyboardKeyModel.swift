@@ -17,17 +17,17 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         case true:
             return []
         case false:
-            switch VariableStates.shared.tabManager.currentTab{
+            switch VariableStates.shared.tabManager.currentTab.existential{
             case .qwerty_hira:
-                return [.moveTab(.qwerty_symbols)]
+                return [.moveTab(.existential(.qwerty_symbols))]
             case .qwerty_abc:
-                return [.moveTab(.qwerty_symbols)]
+                return [.moveTab(.existential(.qwerty_symbols))]
             case .qwerty_number:
                 return [.moveTab(.user_dependent(.english))]
             case .qwerty_symbols:
                 return [.moveTab(.user_dependent(.english))]
             default:
-                return [.moveTab(.qwerty_symbols)]
+                return [.moveTab(.existential(.qwerty_symbols))]
             }
         }
 
@@ -50,7 +50,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         case true:
             return KeyLabel(.changeKeyboard, width: width, textColor: color)
         case false:
-            switch states.tabManager.currentTab{
+            switch states.tabManager.currentTab.existential{
             case .qwerty_hira:
                 return KeyLabel(.text("#+="), width: width, textColor: color)
             case .qwerty_abc:

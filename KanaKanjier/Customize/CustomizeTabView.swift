@@ -11,7 +11,6 @@ import SwiftUI
 import StoreKit
 
 struct CustomizeTabView: View {
-    @ObservedObject private var storeVariableSection = Store.variableSection
     @State private var tabBarData: TabBarData
     @State private var manager: CustardManager
 

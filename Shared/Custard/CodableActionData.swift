@@ -44,6 +44,9 @@ enum CodableTabData: Codable {
 
         ///qwerty symbols input tab
         case qwerty_symbols
+
+        ///the last tab
+        case last_tab
     }
 }
 
@@ -96,29 +99,31 @@ extension CodableTabData{
         case let .system(tab):
             switch tab{
             case .flick_japanese:
-                return .flick_hira
+                return .existential(.flick_hira)
             case .flick_english:
-                return .flick_abc
+                return .existential(.flick_abc)
             case .flick_numbersymbols:
-                return .flick_numbersymbols
+                return .existential(.flick_numbersymbols)
             case .qwerty_japanese:
-                return .qwerty_hira
+                return .existential(.qwerty_hira)
             case .qwerty_english:
-                return .qwerty_abc
+                return .existential(.qwerty_abc)
             case .qwerty_number:
-                return .qwerty_number
+                return .existential(.qwerty_number)
             case .qwerty_symbols:
-                return .qwerty_symbols
+                return .existential(.qwerty_symbols)
             case .user_japanese:
                 return .user_dependent(.japanese)
             case .user_english:
                 return .user_dependent(.english)
+            case .last_tab:
+                return .last_tab
             }
         case let .custom(identifier):
             if let custard = try? CustardManager.load().custard(identifier: identifier){
-                return .custard(custard)
+                return .existential(.custard(custard))
             }else{
-                return .custard(.errorMessage)
+                return .existential(.custard(.errorMessage))
             }
         }
     }

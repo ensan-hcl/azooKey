@@ -38,9 +38,9 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @Environment(\.themeEnvironment) private var theme
 
     private var sharedResultData = SharedResultData<Candidate>()
-    private let defaultTab: Tab?
+    private let defaultTab: Tab.ExistentialTab?
 
-    init(resultModel: ResultModel<Candidate>, defaultTab: Tab? = nil){
+    init(resultModel: ResultModel<Candidate>, defaultTab: Tab.ExistentialTab? = nil){
         self.resultModel = resultModel
         self.defaultTab = defaultTab
     }
@@ -68,9 +68,9 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                     ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                         .padding(.vertical, 6)
                     if variableStates.refreshing{
-                        keyboardView(tab: variableStates.tabManager.currentTab)
+                        keyboardView(tab: variableStates.tabManager.currentTab.existential)
                     }else{
-                        keyboardView(tab: variableStates.tabManager.currentTab)
+                        keyboardView(tab: variableStates.tabManager.currentTab.existential)
                     }
                 }.padding(.bottom, 2)
             }
@@ -86,23 +86,16 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
         }
     }
 
-    func keyboardView(tab: Tab) -> some View {
-        let target: Tab
+    func keyboardView(tab: Tab.ExistentialTab) -> some View {
+        let target: Tab.ExistentialTab
         if let defaultTab = defaultTab{
             target = defaultTab
         }else{
             target = tab
         }
 
-        let actualTab: Tab
-        if case let .user_dependent(type) = target{
-            actualTab = type.actualTab
-        }else{
-            actualTab = target
-        }
-
         return Group{
-            switch actualTab{
+            switch target{
             case .flick_hira:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
@@ -132,8 +125,6 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 QwertyKeyboardView(keyModels: QwertyDataProvider().numberKeyboard)
             case .qwerty_symbols:
                 QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard)
-            case .user_dependent(_):
-                EmptyView()
             case let .custard(custard):
                 CustomKeyboardView(custard: custard)
             }
