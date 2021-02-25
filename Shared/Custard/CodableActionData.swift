@@ -193,32 +193,6 @@ enum CodableActionData: Codable {
 }
 
 extension CodableActionData{
-    var hasAssociatedValue: Bool {
-        switch self{
-        case .delete(_), .input(_), .moveCursor(_), .moveTab(_), .openApp(_): return true
-        case .complete, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar, .dismissKeyboard: return false
-        }
-    }
-
-    var label: String {
-        switch self{
-        case let .delete(value): return "\(value)文字削除"
-        case .complete: return "確定"
-        case .exchangeCharacter: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
-        case let .input(value): return "「\(value)」を入力"
-        case let .moveCursor(value): return "\(value)文字分カーソルを移動"
-        case .moveTab(_): return "タブの移動"
-        case .smoothDelete: return "文頭まで削除"
-        case .toggleCapsLockState: return "CapslockのモードのON/OFF"
-        case .toggleCursorMovingView: return "カーソル移動画面のON/OFF"
-        case .toggleTabBar: return "タブ移動画面のON/OFF"
-        case .dismissKeyboard: return "キーボードを閉じる"
-        case .openApp(_): return "アプリを開く"
-        }
-    }
-}
-
-extension CodableActionData{
     var actionType: ActionType {
         switch self{
         case let .input(value):

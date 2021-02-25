@@ -122,10 +122,10 @@ struct EditingTabBarView: View {
         .environment(\.editMode, $editMode)
     }
 
-    private func makeLabelText(item: EditingTabBarItem) -> String {
+    private func makeLabelText(item: EditingTabBarItem) -> LocalizedStringKey {
         if let label = item.actions.first?.data.label{
             if item.actions.count > 1{
-                return label + "など"
+                return "\(label)など"
             }else{
                 return label
             }

@@ -33,7 +33,7 @@ struct CustomizeTabView: View {
             Form {
                 Section(header: Text("カスタムタブ")){
                     VStack{
-                        Text("あなたの好きな文字だけを並べたオリジナルのタブを作成することができます。")
+                        Text("あなたの好きな文字や文章を並べたオリジナルのタブを作成することができます。")
                     }
                     Image("custard_1")
                         .resizable()

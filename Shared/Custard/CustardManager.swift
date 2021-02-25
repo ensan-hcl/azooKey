@@ -177,6 +177,8 @@ struct CustardManager {
             self.index.metadata.removeValue(forKey: identifier)
             let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
             try FileManager.default.removeItem(atPath: fileURL.path)
+            let editFileURL = Self.fileURL(name: "\(identifier)_edit.json")
+            try? FileManager.default.removeItem(atPath: editFileURL.path)
             self.save()
         }catch{
             debug(error)
