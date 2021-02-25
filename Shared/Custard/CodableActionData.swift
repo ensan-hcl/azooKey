@@ -183,6 +183,9 @@ enum CodableActionData: Codable {
     /// - toggle show or not show the tab bar
     case toggleTabBar
 
+    /// - dismiss keyboard
+    case dismissKeyboard
+
     /// - open specified url scheme.
     /// - warning: this action could be deleted in future iOS.
     /// - warning: some of url schemes doesn't work.
@@ -193,7 +196,7 @@ extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
         case .delete(_), .input(_), .moveCursor(_), .moveTab(_), .openApp(_): return true
-        case .complete, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar: return false
+        case .complete, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar, .dismissKeyboard: return false
         }
     }
 
@@ -205,11 +208,12 @@ extension CodableActionData{
         case let .input(value): return "「\(value)」を入力"
         case let .moveCursor(value): return "\(value)文字分カーソルを移動"
         case .moveTab(_): return "タブの移動"
-        case .openApp(_): return "アプリを開く"
         case .smoothDelete: return "文頭まで削除"
         case .toggleCapsLockState: return "CapslockのモードのON/OFF"
         case .toggleCursorMovingView: return "カーソル移動画面のON/OFF"
         case .toggleTabBar: return "タブ移動画面のON/OFF"
+        case .dismissKeyboard: return "キーボードを閉じる"
+        case .openApp(_): return "アプリを開く"
         }
     }
 }
@@ -244,6 +248,8 @@ extension CodableActionData{
             return .toggleTabBar
         case let .openApp(value):
             return .openApp(value)
+        case .dismissKeyboard:
+            return .dismissKeyboard
         }
     }
 
@@ -257,6 +263,111 @@ extension CodableActionData{
             return .moveCursor(value < 0 ? .left : .right)
         default:
             return .doOnce(self.actionType)
+        }
+    }
+}
+
+extension CodableActionData{
+    enum CodingKeys: CodingKey{
+        case input
+        case exchange_character
+        case delete
+        case smooth_delete
+        case complete
+        case move_cursor
+        case move_tab
+        case toggle_cursor_moving_view
+        case toggle_tab_bar
+        case toggle_caps_lock_state
+        case open_app
+        case dismiss_keyboard
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case let .input(value):
+            try container.encode(value, forKey: .input)
+        case .exchangeCharacter:
+            try container.encode(true, forKey: .exchange_character)
+        case let .delete(value):
+            try container.encode(value, forKey: .delete)
+        case .smoothDelete:
+            try container.encode(true, forKey: .smooth_delete)
+        case .complete:
+            try container.encode(true, forKey: .complete)
+        case let .moveCursor(value):
+            try container.encode(value, forKey: .move_cursor)
+        case let .moveTab(destination):
+            try container.encode(destination, forKey: .move_tab)
+        case .toggleCursorMovingView:
+            try container.encode(true, forKey: .toggle_cursor_moving_view)
+        case .toggleTabBar:
+            try container.encode(true, forKey: .toggle_tab_bar)
+        case .toggleCapsLockState:
+            try container.encode(true, forKey: .toggle_caps_lock_state)
+        case .dismissKeyboard:
+            try container.encode(true, forKey: .dismiss_keyboard)
+        case let .openApp(value):
+            try container.encode(value, forKey: .open_app)
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard let key = container.allKeys.first else{
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(
+                    codingPath: container.codingPath,
+                    debugDescription: "Unabled to decode enum."
+                )
+            )
+        }
+        switch key {
+        case .input:
+            let value = try container.decode(
+                String.self,
+                forKey: .input
+            )
+            self = .input(value)
+        case .exchange_character:
+            self = .exchangeCharacter
+        case .delete:
+            let value = try container.decode(
+                Int.self,
+                forKey: .delete
+            )
+            self = .delete(value)
+        case .smooth_delete:
+            self = .smoothDelete
+        case .complete:
+            self = .complete
+        case .move_cursor:
+            let value = try container.decode(
+                Int.self,
+                forKey: .move_cursor
+            )
+            self = .moveCursor(value)
+        case .move_tab:
+            let destination = try container.decode(
+                CodableTabData.self,
+                forKey: .move_tab
+            )
+            self = .moveTab(destination)
+        case .toggle_cursor_moving_view:
+            self = .toggleCursorMovingView
+        case .toggle_caps_lock_state:
+            self = .toggleCapsLockState
+        case .toggle_tab_bar:
+            self = .toggleTabBar
+        case .dismiss_keyboard:
+            self = .dismissKeyboard
+        case .open_app:
+            let destination = try container.decode(
+                String.self,
+                forKey: .open_app
+            )
+            self = .openApp(destination)
         }
     }
 }
@@ -321,107 +432,9 @@ extension CodableActionData: Hashable {
         case let .openApp(value):
             hasher.combine(value)
             key = .open_app
+        case .dismissKeyboard:
+            key = .dismiss_keyboard
         }
         hasher.combine(key)
-    }
-}
-
-extension CodableActionData{
-    enum CodingKeys: CodingKey{
-        case input
-        case exchange_character
-        case delete
-        case smooth_delete
-        case complete
-        case move_cursor
-        case move_tab
-        case toggle_cursor_moving_view
-        case toggle_tab_bar
-        case toggle_caps_lock_state
-        case open_app
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case let .input(value):
-            try container.encode(value, forKey: .input)
-        case .exchangeCharacter:
-            try container.encode(true, forKey: .exchange_character)
-        case let .delete(value):
-            try container.encode(value, forKey: .delete)
-        case .smoothDelete:
-            try container.encode(true, forKey: .smooth_delete)
-        case .complete:
-            try container.encode(true, forKey: .complete)
-        case let .moveCursor(value):
-            try container.encode(value, forKey: .move_cursor)
-        case let .moveTab(destination):
-            try container.encode(destination, forKey: .move_tab)
-        case .toggleCursorMovingView:
-            try container.encode(true, forKey: .toggle_cursor_moving_view)
-        case .toggleTabBar:
-            try container.encode(true, forKey: .toggle_tab_bar)
-        case .toggleCapsLockState:
-            try container.encode(true, forKey: .toggle_caps_lock_state)
-        case let .openApp(value):
-            try container.encode(value, forKey: .open_app)
-        }
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
-                )
-            )
-        }
-        switch key {
-        case .input:
-            let value = try container.decode(
-                String.self,
-                forKey: .input
-            )
-            self = .input(value)
-        case .exchange_character:
-            self = .exchangeCharacter
-        case .delete:
-            let value = try container.decode(
-                Int.self,
-                forKey: .delete
-            )
-            self = .delete(value)
-        case .smooth_delete:
-            self = .smoothDelete
-        case .complete:
-            self = .complete
-        case .move_cursor:
-            let value = try container.decode(
-                Int.self,
-                forKey: .move_cursor
-            )
-            self = .moveCursor(value)
-        case .move_tab:
-            let destination = try container.decode(
-                CodableTabData.self,
-                forKey: .move_tab
-            )
-            self = .moveTab(destination)
-        case .toggle_cursor_moving_view:
-            self = .toggleCursorMovingView
-        case .toggle_caps_lock_state:
-            self = .toggleCapsLockState
-        case .toggle_tab_bar:
-            self = .toggleTabBar
-        case .open_app:
-            let destination = try container.decode(
-                String.self,
-                forKey: .open_app
-            )
-            self = .openApp(destination)
-        }
     }
 }

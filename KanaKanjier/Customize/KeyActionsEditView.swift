@@ -100,35 +100,42 @@ struct KeyActionsEditView: View {
                     bottomSheetShown = false
                 }
                 Form{
-                    Button("タブの移動"){
-                        press(.moveTab(.system(.user_japanese)))
+                    Section(header: Text("基本")){
+                        Button("タブの移動"){
+                            press(.moveTab(.system(.user_japanese)))
+                        }
+                        Button("タブバーの表示"){
+                            press(.toggleTabBar)
+                        }
+                        Button("文字の入力"){
+                            press(.input("😁"))
+                        }
+                        Button("文字の削除"){
+                            press(.delete(1))
+                        }
                     }
-                    Button("文字の入力"){
-                        press(.input("😁"))
-                    }
-                    Button("文字の削除"){
-                        press(.delete(1))
-                    }
-                    Button("文頭まで削除"){
-                        press(.smoothDelete)
-                    }
-                    Button("タブバーの表示"){
-                        press(.toggleTabBar)
-                    }
-                    Button("カーソル移動"){
-                        press(.moveCursor(-1))
-                    }
-                    Button("入力の確定"){
-                        press(.complete)
-                    }
-                    Button("Capslock"){
-                        press(.toggleCapsLockState)
-                    }
-                    Button("カーソル移動画面の表示"){
-                        press(.toggleCursorMovingView)
-                    }
-                    Button("アプリを開く"){
-                        press(.openApp("azooKey://"))
+                    Section(header: Text("高度")){
+                        Button("文頭まで削除"){
+                            press(.smoothDelete)
+                        }
+                        Button("カーソル移動"){
+                            press(.moveCursor(-1))
+                        }
+                        Button("入力の確定"){
+                            press(.complete)
+                        }
+                        Button("Capslock"){
+                            press(.toggleCapsLockState)
+                        }
+                        Button("カーソル移動バーの表示"){
+                            press(.toggleCursorMovingView)
+                        }
+                        Button("キーボードを閉じる"){
+                            press(.dismissKeyboard)
+                        }
+                        Button("アプリを開く"){
+                            press(.openApp("azooKey://"))
+                        }
                     }
                 }
                 .foregroundColor(.primary)

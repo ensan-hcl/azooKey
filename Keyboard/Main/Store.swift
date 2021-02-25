@@ -181,6 +181,9 @@ final class KeyboardActionDepartment: ActionDepartment{
         case .hideLearningMemory:
             self.hideLearningMemory()
 
+        case .dismissKeyboard:
+            self.delegate.dismissKeyboard()
+
         case let .openApp(scheme):
             delegate.openApp(scheme: scheme)
 

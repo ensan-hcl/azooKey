@@ -30,6 +30,8 @@ enum ActionType{
     case moveTab(Tab)
     case toggleTabBar
 
+    //キーボードを閉じる
+    case dismissKeyboard
     //アプリを開く
     case openApp(String)    //アプリを開く
     #if DEBUG
@@ -67,6 +69,8 @@ extension ActionType: Equatable{
         case let (.changeCapsLockState(l),.changeCapsLockState(r)):
             return l == r
         case (.hideLearningMemory, .hideLearningMemory):
+            return true
+        case (.dismissKeyboard, .dismissKeyboard):
             return true
         case let (.moveTab(l), .moveTab(r)):
             return l == r
