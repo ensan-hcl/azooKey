@@ -103,26 +103,14 @@ extension ActionType{
     }
 }
 
-enum MoveDirection{
-    case left
-    case right
-}
-
 //長押しor長フリックされた際の挙動のタイプ
 enum KeyLongPressActionType: Equatable{
-    //ここに値を追加するときは、必ずEquatableの実装も更新する必要がある。
-    case input(String)
-    case delete
-    case moveCursor(MoveDirection)
+    case `repeat`(ActionType)
     case doOnce(ActionType)
 
     static func == (lsb: KeyLongPressActionType, rsb: KeyLongPressActionType) -> Bool {
         switch (lsb, rsb){
-        case let (.input(l), .input(r)):
-            return l == r
-        case (.delete, .delete):
-            return true
-        case let (.moveCursor(l),.moveCursor(r)):
+        case let (.repeat(l),.repeat(r)):
             return l == r
         case let (.doOnce(l),.doOnce(r)):
             return l == r
@@ -137,15 +125,21 @@ extension CodableActionData{
         switch self{
         case let .input(value):
             return .input(value)
+        case let .longInput(value):
+            return .input(value)
         case .exchangeCharacter:
             return .changeCharacterType
         case let .delete(value):
+            return .delete(value)
+        case let .longDelete(value):
             return .delete(value)
         case .smoothDelete:
             return .smoothDelete
         case .complete:
             return .enter
         case let .moveCursor(value):
+            return .moveCursor(value)
+        case let .longMoveCursor(value):
             return .moveCursor(value)
         case let .moveTab(value):
             return .moveTab(value.tab)
@@ -169,12 +163,12 @@ extension CodableActionData{
 
     var longpressActionType: KeyLongPressActionType {
         switch self{
-        case let .input(value):
-            return .input(value)
-        case .delete:
-            return .delete
-        case let .moveCursor(value):
-            return .moveCursor(value < 0 ? .left : .right)
+        case let .longInput(value):
+            return .repeat(.input(value))
+        case let .longDelete(value):
+            return .repeat(.delete(value))
+        case let .longMoveCursor(value):
+            return .repeat(.moveCursor(value))
         default:
             return .doOnce(self.actionType)
         }

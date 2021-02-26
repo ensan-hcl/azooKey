@@ -27,7 +27,7 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol{
         .left: FlickedKeyModel(
             labelType: .text("←"),
             pressActions: [.moveCursor(-1)],
-            longPressActions: [.moveCursor(.left)]
+            longPressActions: [.repeat(.moveCursor(-1))]
         ),
         .top: FlickedKeyModel(
             labelType: .text("全角"),

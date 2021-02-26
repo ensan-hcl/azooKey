@@ -233,35 +233,13 @@ final class KeyboardActionDepartment: ActionDepartment{
             return
         }
         let startTime = Date()
-
         switch action{
-        case .delete:
+        case let .repeat(actionType):
             let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
                 let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
                 if span > 0.4 {
-                    Sound.delete()
-                    self?.inputManager.delete(count: 1)
-                }
-            })
-            let tuple = (type: action, timer: timer)
-            self.timers.append(tuple)
-        case let .input(text):
-            let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
-                let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
-                if span > 0.4 {
-                    Sound.click()
-                    self?.inputManager.input(text: text)
-                }
-            })
-            let tuple = (type: action, timer: timer)
-            self.timers.append(tuple)
-        case let .moveCursor(direction):
-            let count = (direction == .right ? 1:-1)
-            let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
-                let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
-                if span > 0.4 {
-                    Sound.tabOrOtherKey()
-                    self?.inputManager.moveCursor(count: count)
+                    actionType.sound()
+                    self?.doAction(actionType)
                 }
             })
             let tuple = (type: action, timer: timer)
@@ -273,7 +251,6 @@ final class KeyboardActionDepartment: ActionDepartment{
             let tuple = (type: action, timer: timer)
             self.timers.append(tuple)
         }
-
     }
     
     ///長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。

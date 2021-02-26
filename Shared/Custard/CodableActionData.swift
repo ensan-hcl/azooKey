@@ -156,15 +156,23 @@ extension CodableTabData: Hashable {
 /// - アクション
 /// - actions done in key pressing
 enum CodableActionData: Codable {
-    /// - input specified character
+    /// - input action specified character
     case input(String)
+
+    /// - input action used in longpress
+    /// - warning: when use this in not longpress, it works as one time action
+    case longInput(String)
 
     /// - exchange character "あ→ぁ", "は→ば", "a→A".
     /// - when longpress, delete sequencially.
     case exchangeCharacter
 
-    /// - delete specified count of characters
+    /// - delete action specified count of characters
     case delete(Int)
+
+    /// - delete action used in longpress
+    /// - warning: when use this in not longpress, it works as one time action
+    case longDelete(Int)
 
     /// - delete to beginning of the sentence
     case smoothDelete
@@ -175,6 +183,10 @@ enum CodableActionData: Codable {
     /// - move cursor  specified count forward. when you specify negative number, the cursor moves backword.
     /// - when longpress, the cursor moves sequencially.
     case moveCursor(Int)
+
+    /// - move cursor action used in longpress
+    /// - warning: when use this in not longpress, it works as one time action
+    case longMoveCursor(Int)
 
     /// - move to specified tab
     case moveTab(CodableTabData)
@@ -200,11 +212,14 @@ enum CodableActionData: Codable {
 extension CodableActionData{
     enum CodingKeys: CodingKey{
         case input
+        case long_input
         case exchange_character
         case delete
+        case long_delete
         case smooth_delete
         case complete
         case move_cursor
+        case long_move_cursor
         case move_tab
         case toggle_cursor_moving_view
         case toggle_tab_bar
@@ -218,16 +233,22 @@ extension CodableActionData{
         switch self {
         case let .input(value):
             try container.encode(value, forKey: .input)
+        case let .longInput(value):
+            try container.encode(value, forKey: .long_input)
         case .exchangeCharacter:
             try container.encode(true, forKey: .exchange_character)
         case let .delete(value):
             try container.encode(value, forKey: .delete)
+        case let .longDelete(value):
+            try container.encode(value, forKey: .long_delete)
         case .smoothDelete:
             try container.encode(true, forKey: .smooth_delete)
         case .complete:
             try container.encode(true, forKey: .complete)
         case let .moveCursor(value):
             try container.encode(value, forKey: .move_cursor)
+        case let .longMoveCursor(value):
+            try container.encode(value, forKey: .long_move_cursor)
         case let .moveTab(destination):
             try container.encode(destination, forKey: .move_tab)
         case .toggleCursorMovingView:
@@ -260,6 +281,12 @@ extension CodableActionData{
                 forKey: .input
             )
             self = .input(value)
+        case .long_input:
+            let value = try container.decode(
+                String.self,
+                forKey: .long_input
+            )
+            self = .longInput(value)
         case .exchange_character:
             self = .exchangeCharacter
         case .delete:
@@ -268,6 +295,12 @@ extension CodableActionData{
                 forKey: .delete
             )
             self = .delete(value)
+        case .long_delete:
+            let value = try container.decode(
+                Int.self,
+                forKey: .long_delete
+            )
+            self = .longDelete(value)
         case .smooth_delete:
             self = .smoothDelete
         case .complete:
@@ -278,6 +311,12 @@ extension CodableActionData{
                 forKey: .move_cursor
             )
             self = .moveCursor(value)
+        case .long_move_cursor:
+            let value = try container.decode(
+                Int.self,
+                forKey: .long_move_cursor
+            )
+            self = .longMoveCursor(value)
         case .move_tab:
             let destination = try container.decode(
                 CodableTabData.self,
@@ -338,11 +377,17 @@ extension CodableActionData: Hashable {
         case let .input(value):
             hasher.combine(value)
             key = .input
+        case let .longInput(value):
+            hasher.combine(value)
+            key = .long_input
         case .exchangeCharacter:
             key = .exchange_character
         case let .delete(value):
             hasher.combine(value)
             key = .delete
+        case let .longDelete(value):
+            hasher.combine(value)
+            key = .long_delete
         case .smoothDelete:
             key = .smooth_delete
         case .complete:
@@ -350,6 +395,9 @@ extension CodableActionData: Hashable {
         case let .moveCursor(value):
             hasher.combine(value)
             key = .move_cursor
+        case let .longMoveCursor(value):
+            hasher.combine(value)
+            key = .long_move_cursor
         case let .moveTab(destination):
             hasher.combine(destination)
             key = .move_tab

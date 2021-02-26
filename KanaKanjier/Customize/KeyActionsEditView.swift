@@ -13,19 +13,22 @@ import Combine
 extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
-        case .delete(_), .input(_), .moveCursor(_), .moveTab(_), .openApp(_): return true
+        case .delete, .longDelete, .input, .longInput, .moveCursor, .longMoveCursor, .moveTab, .openApp: return true
         case .complete, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar, .dismissKeyboard: return false
         }
     }
 
     var label: LocalizedStringKey {
         switch self{
+        case let .input(value): return "「\(value)」を入力"
+        case let .longInput(value): return "「\(value)」を繰り返し入力"
+        case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
+        case let .longMoveCursor(value): return "\(String(value))文字ずつカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
+        case let .longDelete(value): return "\(String(value))ずつ文字を削除"
+        case let .moveTab(tab): return "タブに移動"
         case .complete: return "確定"
         case .exchangeCharacter: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
-        case let .input(value): return "「\(value)」を入力"
-        case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
-        case .moveTab(_): return "タブの移動"
         case .smoothDelete: return "文頭まで削除"
         case .toggleCapsLockState: return "Capslockのモードの切り替え"
         case .toggleCursorMovingView: return "カーソルバーの切り替え"

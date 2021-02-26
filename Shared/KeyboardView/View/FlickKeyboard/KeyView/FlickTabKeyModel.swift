@@ -17,7 +17,7 @@ struct FlickTabKeyModel: FlickKeyModelProtocol{
         .right: FlickedKeyModel(
             labelType: .text("→"),
             pressActions: [.moveCursor(1)],
-            longPressActions: [.moveCursor(.right)]
+            longPressActions: [.repeat(.moveCursor(1))]
         )
     ])
     static let numberTabKeyModel = FlickTabKeyModel(labelType:.text("☆123"), tab: .existential(.flick_numbersymbols), longPressActions: [.doOnce(.toggleTabBar)], flickKeys: [:])
