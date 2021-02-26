@@ -8,6 +8,42 @@
 
 import SwiftUI
 
+private struct _QwertyVariationKey: Codable {
+    var name: String
+    var input: String
+}
+
+private struct _QwertyCustomKey: Codable {
+    var name: String
+    var longpress: [String]
+    var input: String
+    var longpresses: [QwertyVariationKey]
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case longpress
+        case input
+        case longpresses
+    }
+
+    init(name: String, input: String? = nil, longpresses: [QwertyVariationKey] = []){
+        self.name = name
+        self.longpress = []
+        self.input = input ?? name
+        self.longpresses = longpresses
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let name = try values.decode(String.self, forKey: .name)
+        let longpress = try values.decode([String].self, forKey: .longpress)
+        self.name = name
+        self.longpress = []
+        self.input = (try? values.decode(String.self, forKey: .input)) ?? name
+        self.longpresses =  (try? values.decode([QwertyVariationKey].self, forKey: .longpresses)) ?? longpress.map{QwertyVariationKey(name: $0, input: $0)}
+    }
+}
+
 struct QwertyVariationKey: Codable {
     var name: String
     var input: String
@@ -18,6 +54,7 @@ struct QwertyCustomKey: Codable {
     var longpress: [String]
     var input: String
     var longpresses: [QwertyVariationKey]
+
     enum CodingKeys: String, CodingKey {
         case name
         case longpress

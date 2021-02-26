@@ -34,8 +34,8 @@ struct SettingData{
         self.keyboardLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getKeyboardLayoutSetting(setting)
         }
-        self.kogakiFlickSetting = Self.getKogakiFlickSetting()
-        self.kanaSymbolsFlickSetting = Self.getKanaSymbolsFlickSetting()
+        self.kogakiFlickSetting = Self.flickCustomKeySetting(for: .koganaKeyFlick)
+        self.kanaSymbolsFlickSetting = Self.flickCustomKeySetting(for: .kanaSymbolsKeyFlick)
 
         self.learningType = Self.learningTypeSetting(.inputAndOutput)
 
@@ -54,35 +54,13 @@ struct SettingData{
         return self.keyboardLayoutSetting[key, default: .flick]
     }
 
-    private static func getKogakiFlickSetting() -> (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) {
-        let value = Self.userDefaults.value(forKey: Setting.koganaKeyFlick.key)
+    private static func flickCustomKeySetting(for key: Setting) -> (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) {
+        let value = Self.userDefaults.value(forKey: key.key)
         let setting: KeyFlickSetting
         if let value = value, let data = KeyFlickSetting.get(value){
             setting = data
         }else{
-            setting = CustomizableFlickKey.kogana.defaultSetting
-        }
-        var dict: [FlickDirection: FlickedKeyModel] = [:]
-        if let left = setting.left.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: setting.left.actions.map{$0.actionType}){
-            dict[.left] = left
-        }
-        if let top = setting.top.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: setting.top.actions.map{$0.actionType}){
-            dict[.top] = top
-        }
-        if let right = setting.right.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: setting.right.actions.map{$0.actionType}){
-            dict[.right] = right
-        }
-        return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, dict)
-
-    }
-
-    private static func getKanaSymbolsFlickSetting() -> (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) {
-        let value = Self.userDefaults.value(forKey: Setting.kanaSymbolsKeyFlick.key)
-        let setting: KeyFlickSetting
-        if let value = value, let data = KeyFlickSetting.get(value){
-            setting = data
-        }else{
-            setting = CustomizableFlickKey.kanaSymbols.defaultSetting
+            setting = DefaultSetting.flickCustomKey(key)!
         }
         var dict: [FlickDirection: FlickedKeyModel] = [:]
         if let left = setting.left.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: setting.left.actions.map{$0.actionType}){
@@ -97,8 +75,8 @@ struct SettingData{
         return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, dict)
     }
 
-    var kogakiFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) = Self.getKogakiFlickSetting()
-    var kanaSymbolsFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) = Self.getKanaSymbolsFlickSetting()
+    var kogakiFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) = Self.flickCustomKeySetting(for: .koganaKeyFlick)
+    var kanaSymbolsFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) = Self.flickCustomKeySetting(for: .kanaSymbolsKeyFlick)
 
     var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput)
 
@@ -121,7 +99,7 @@ struct SettingData{
     private static func getBoolSetting(_ setting: Setting) -> Bool {
         if let object = Self.userDefaults.object(forKey: setting.key), let bool = object as? Bool{
             return bool
-        }else if let bool = DefaultSetting.shared.getBoolDefaultSetting(setting){
+        }else if let bool = DefaultSetting.bool(setting){
             return bool
         }
         return false
@@ -130,7 +108,7 @@ struct SettingData{
     private static func getDoubleSetting(_ setting: Setting) -> Double? {
         if let object = Self.userDefaults.object(forKey: setting.key), let value = object as? Double{
             return value
-        }else if let value = DefaultSetting.shared.getDoubleSetting(setting){
+        }else if let value = DefaultSetting.double(setting){
             return value
         }
         return nil
@@ -142,7 +120,7 @@ struct SettingData{
            let value = LearningType.get(object){
             result = value
         }else{
-            result = DefaultSetting.shared.memorySettingDefault
+            result = DefaultSetting.memorySetting
         }
         return result
     }
@@ -168,7 +146,7 @@ struct SettingData{
         let customKeys: QwertyCustomKeysValue
         if let value = Self.userDefaults.value(forKey: Setting.numberTabCustomKeys.key), let keys = QwertyCustomKeysValue.get(value){
             customKeys = keys
-        }else if let defaultValue = DefaultSetting.shared.qwertyCustomKeyDefaultSetting(.numberTabCustomKeys){
+        }else if let defaultValue = DefaultSetting.qwertyCustomKeys(.numberTabCustomKeys){
             customKeys = defaultValue
         }else{
             return []

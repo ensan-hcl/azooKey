@@ -118,10 +118,9 @@ enum Setting: String {
 }
 
 struct DefaultSetting{
-    static let shared = DefaultSetting()
     private init(){}
 
-    func getBoolDefaultSetting(_ setting: Setting) -> Bool? {
+    static func bool(_ setting: Setting) -> Bool? {
         switch setting{
         case .wesJapCalender, .typographyLetter, .halfKana, .fullRoman, .unicodeCandidate, .englishCandidate:
             return true
@@ -132,7 +131,7 @@ struct DefaultSetting{
         }
     }
 
-    func getDoubleSetting(_ setting: Setting) -> Double? {
+    static func double(_ setting: Setting) -> Double? {
         switch setting{
         case .resultViewFontSize, .keyViewFontSize:
             return -1
@@ -140,7 +139,18 @@ struct DefaultSetting{
         }
     }
 
-    func qwertyCustomKeyDefaultSetting(_ setting: Setting) -> QwertyCustomKeysValue? {
+    static func flickCustomKey(_ setting: Setting) -> KeyFlickSetting? {
+        switch setting{
+        case .koganaKeyFlick:
+            return CustomizableFlickKey.kogana.defaultSetting
+        case .kanaSymbolsKeyFlick:
+            return CustomizableFlickKey.kanaSymbols.defaultSetting
+        default:
+            return nil
+        }
+    }
+
+    static func qwertyCustomKeys(_ setting: Setting) -> QwertyCustomKeysValue? {
         switch setting{
         case .numberTabCustomKeys:
             return QwertyCustomKeysValue.defaultValue
@@ -149,9 +159,8 @@ struct DefaultSetting{
         }
     }
 
-    let koganaKeyFlickSettingDefault = ("", "", "", "")
-    let keyboardTypeSettingDefault = KeyboardLayout.flick
-    let englishKeyboardTypeSettingDefault = KeyboardLayout.flick
+    static let japaneseKeyboardLayout = KeyboardLayout.flick
+    static let englishKeyboardLayout = KeyboardLayout.flick
 
-    let memorySettingDefault = LearningType.inputAndOutput
+    static let memorySetting = LearningType.inputAndOutput
 }

@@ -160,7 +160,6 @@ struct KeyFlickSetting: Savable, Codable {
         case identifier
     }
 
-
     let targetKeyIdentifier: String //レガシー
     var left: FlickCustomKey
     var top: FlickCustomKey
