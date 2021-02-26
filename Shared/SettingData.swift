@@ -157,10 +157,10 @@ struct SettingData{
         return keys.map{key in
             QwertyKeyModel(
                 labelType: .text(key.name),
-                pressActions: [.input(key.input)],
+                pressActions: key.actions.map{$0.actionType},
                 variationsModel: VariationsModel(
                     key.longpresses.map{item in
-                        (label: .text(item.name), actions: [.input(item.input)])
+                        (label: .text(item.name), actions: item.actions.map{$0.actionType})
                     }
                 ),
                 for: scale

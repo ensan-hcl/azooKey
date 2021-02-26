@@ -57,6 +57,8 @@ struct QwertyCustomKeysItemView: View {
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
 
+    @State private var inputValue = ""
+
     var padding: CGFloat {
         return spacing/2
     }
@@ -117,7 +119,7 @@ struct QwertyCustomKeysItemView: View {
             if viewModel.value.keys.isEmpty{
                 VStack{
                     Button{
-                        viewModel.value.keys.append(QwertyCustomKey(name: "", input: "", longpresses: []))
+                        viewModel.value.keys.append(QwertyCustomKey(name: "", actions: [.input("")], longpresses: []))
                         selectState.selectedIndex = 0
                         selectState.longpressSelectedIndex = -1
                         editState.state = .action
@@ -156,7 +158,7 @@ struct QwertyCustomKeysItemView: View {
                 }.scaledToFit()
                 if longpresses.isEmpty{
                     Button{
-                        viewModel.value.keys[selectState.selectedIndex].longpresses.append(QwertyVariationKey(name: "", input: ""))
+                        viewModel.value.keys[selectState.selectedIndex].longpresses.append(QwertyVariationKey(name: "", actions: [.input("")]))
                         selectState.longpressSelectedIndex = self.viewModel.value.keys[selectState.selectedIndex].longpresses.endIndex - 1
                         editState.state = .action
                     }label: {
@@ -217,11 +219,11 @@ struct QwertyCustomKeysItemView: View {
                             let sIndex = selectState.selectedIndex
                             let lpsIndex = selectState.longpressSelectedIndex
                             if lpsIndex == -1{
-                                self.viewModel.value.keys.append(QwertyCustomKey(name: "", longpresses: []))
+                                self.viewModel.value.keys.append(QwertyCustomKey(name: "", actions: [.input("")], longpresses: []))
                                 selectState.selectedIndex = self.viewModel.value.keys.endIndex - 1
                                 editState.state = .action
                             }else{
-                                self.viewModel.value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", input: ""))
+                                self.viewModel.value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", actions: [.input("")]))
                                 selectState.longpressSelectedIndex = self.viewModel.value.keys[sIndex].longpresses.endIndex - 1
                                 editState.state = .action
                             }
@@ -243,6 +245,57 @@ struct QwertyCustomKeysItemView: View {
         .frame(maxWidth: .infinity)
         .navigationBarTitle("カスタムキーの設定", displayMode: .inline)
         .background(Color(.secondarySystemBackground))
+        .onChange(of: inputValue){value in
+            let sIndex = selectState.selectedIndex
+            let lpsIndex = selectState.longpressSelectedIndex
+            if lpsIndex == -1 && sIndex != -1{
+                viewModel.value.keys[sIndex].actions = [.input(value)]
+            }else{
+                if sIndex == -1 || lpsIndex == -1{
+                    return
+                }
+                viewModel.value.keys[sIndex].longpresses[lpsIndex].actions = [.input(value)]
+            }
+        }
+        .onChange(of: selectState.selectedIndex){value in
+            let sIndex = value
+            let lpsIndex = selectState.longpressSelectedIndex
+            if lpsIndex == -1 && sIndex != -1{
+                if let string = getInputText(actions: viewModel.value.keys[sIndex].actions){
+                    inputValue = string
+                }
+            }else{
+                if sIndex == -1 || lpsIndex == -1{
+                    return
+                }
+                if let string = getInputText(actions: viewModel.value.keys[sIndex].longpresses[lpsIndex].actions){
+                    inputValue = string
+                }
+            }
+        }
+        .onChange(of: selectState.longpressSelectedIndex){value in
+            let sIndex = selectState.selectedIndex
+            let lpsIndex = value
+            if lpsIndex == -1 && sIndex != -1{
+                if let string = getInputText(actions: viewModel.value.keys[sIndex].actions){
+                    inputValue = string
+                }
+            }else{
+                if sIndex == -1 || lpsIndex == -1{
+                    return
+                }
+                if let string = getInputText(actions: viewModel.value.keys[sIndex].longpresses[lpsIndex].actions){
+                    inputValue = string
+                }
+            }
+        }
+    }
+
+    private func getInputText(actions: [CodableActionData]) -> String? {
+        if actions.count == 1, let action = actions.first, case let .input(value) = action{
+            return value
+        }
+        return nil
     }
 
     var labelEditor: some View {
@@ -282,18 +335,18 @@ struct QwertyCustomKeysItemView: View {
             let sIndex = selectState.selectedIndex
             let lpsIndex = selectState.longpressSelectedIndex
             if lpsIndex == -1 && sIndex != -1{
-                TextField("入力される文字", text: $viewModel.value.keys[sIndex].input, onCommit: {
-                    if viewModel.value.keys[sIndex].name.isEmpty{
-                        viewModel.value.keys[sIndex].name = viewModel.value.keys[sIndex].input
+                TextField("入力される文字", text: $inputValue, onCommit: {
+                    if viewModel.value.keys[sIndex].name.isEmpty, let string = getInputText(actions: viewModel.value.keys[sIndex].actions){
+                        viewModel.value.keys[sIndex].name = string
                     }
                 })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
             }else{
-                TextField("入力される文字", text: $viewModel.value.keys[sIndex].longpresses[lpsIndex].input, onCommit: {
-                    if viewModel.value.keys[sIndex].longpresses[lpsIndex].name.isEmpty{
-                        viewModel.value.keys[sIndex].longpresses[lpsIndex].name = viewModel.value.keys[sIndex].longpresses[lpsIndex].input
+                TextField("入力される文字", text: $inputValue, onCommit: {
+                    if viewModel.value.keys[sIndex].longpresses[lpsIndex].name.isEmpty, let string = getInputText(actions: viewModel.value.keys[sIndex].longpresses[lpsIndex].actions){
+                        viewModel.value.keys[sIndex].longpresses[lpsIndex].name = string
                     }
                 })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
