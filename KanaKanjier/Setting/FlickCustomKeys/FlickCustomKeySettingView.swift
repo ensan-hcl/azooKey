@@ -60,6 +60,11 @@ struct FlickCustomKeysSettingSelectView: View {
     }
 }
 
+struct EditingFlickCustomKey{
+    var label: String
+    var input: String
+}
+
 struct FlickCustomKeysSettingView: View {
     @ObservedObject private var selectState = SelectState()
     @ObservedObject private var editState = EditState()
@@ -69,6 +74,8 @@ struct FlickCustomKeysSettingView: View {
 
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
+
+    @State private var inputValue = ""
 
     var padding: CGFloat {
         spacing/2
@@ -88,28 +95,13 @@ struct FlickCustomKeysSettingView: View {
         self.viewModel = viewModel
     }
 
-    var separator: some View {
+    private var separator: some View {
         Rectangle()
             .frame(width: 2, height: keySize.height*0.9)
             .foregroundColor(.accentColor)
     }
 
-    func input(_ position: FlickKeyPosition) -> Binding<String> {
-        switch position{
-        case .left:
-            return self.$viewModel.value.left.input
-        case .top:
-            return self.$viewModel.value.top.input
-        case .right:
-            return self.$viewModel.value.right.input
-        case .bottom:
-            return self.$viewModel.value.bottom.input
-        case .center:
-            return self.$viewModel.value.center.input
-        }
-    }
-
-    func label(_ position: FlickKeyPosition) -> Binding<String> {
+    private func label(_ position: FlickKeyPosition) -> Binding<String> {
         switch position{
         case .left:
             return self.$viewModel.value.left.label
@@ -124,7 +116,7 @@ struct FlickCustomKeysSettingView: View {
         }
     }
 
-    func label(_ position: FlickKeyPosition) -> String {
+    private func label(_ position: FlickKeyPosition) -> String {
         if !self.isPossiblePosition(position){
             return viewModel.value.identifier.defaultLabel[position]!
         }
@@ -142,7 +134,7 @@ struct FlickCustomKeysSettingView: View {
         }
     }
 
-    func isPossiblePosition(_ position: FlickKeyPosition) -> Bool {
+    private func isPossiblePosition(_ position: FlickKeyPosition) -> Bool {
         return self.viewModel.value.identifier.ablePosition.contains(position)
     }
 
@@ -206,9 +198,48 @@ struct FlickCustomKeysSettingView: View {
                     .fixedSize()
             }
         }.navigationBarTitle("カスタムキーの設定", displayMode: .inline)
+        .onChange(of: inputValue){value in
+            switch selectState.selectedPosition{
+            case .none:
+                return
+            case .left:
+                self.viewModel.value.left.actions = [.input(value)]
+            case .top:
+                self.viewModel.value.top.actions = [.input(value)]
+            case .right:
+                self.viewModel.value.right.actions = [.input(value)]
+            case .bottom:
+                self.viewModel.value.bottom.actions = [.input(value)]
+            case .center:
+                self.viewModel.value.center.actions = [.input(value)]
+            }
+        }
+        .onChange(of: selectState.selectedPosition){value in
+            switch selectState.selectedPosition{
+            case .none:
+                return
+            case .left:
+                inputValue = getInputText(actions: self.viewModel.value.left.actions) ?? ""
+            case .top:
+                inputValue = getInputText(actions: self.viewModel.value.top.actions) ?? ""
+            case .right:
+                inputValue = getInputText(actions: self.viewModel.value.right.actions) ?? ""
+            case .bottom:
+                inputValue = getInputText(actions: self.viewModel.value.bottom.actions) ?? ""
+            case .center:
+                inputValue = getInputText(actions: self.viewModel.value.center.actions) ?? ""
+            }
+        }
     }
 
-    var labelEditor: some View {
+    private func getInputText(actions: [CodableActionData]) -> String? {
+        if actions.count == 1, let action = actions.first, case let .input(value) = action{
+            return value
+        }
+        return nil
+    }
+
+    private var labelEditor: some View {
         VStack{
             if let key = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(key){
                 Text("キーに表示される文字を設定します。")
@@ -230,14 +261,14 @@ struct FlickCustomKeysSettingView: View {
         .padding()
     }
 
-    var actionEditor: some View {
+    private var  actionEditor: some View {
         VStack{
             if let key = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(key){
                 Text("キーを押して入力される文字を設定します。")
                     .font(.caption)
                 Text("キーの見た目は「ラベル」で設定できます。")
                     .font(.caption)
-                TextField("ラベル", text: input(key))
+                TextField("ラベル", text: $inputValue)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
@@ -253,12 +284,11 @@ struct FlickCustomKeysSettingView: View {
         .padding()
     }
 
-    func reload(){
+    private func reload(){
         if let position = selectState.selectedPosition, self.isPossiblePosition(position){
             let bindedLabel: Binding<String> = label(position)
-            let bindedInput: Binding<String> = input(position)
             bindedLabel.wrappedValue = viewModel.value.identifier.defaultLabel[position, default: ""]
-            bindedInput.wrappedValue = viewModel.value.identifier.defaultInput[position, default: ""]
+            inputValue = viewModel.value.identifier.defaultInput[position, default: ""]
         }
     }
 }

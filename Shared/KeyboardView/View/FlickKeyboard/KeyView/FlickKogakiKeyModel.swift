@@ -11,23 +11,22 @@ import SwiftUI
 struct FlickKogakiKeyModel: FlickKeyModelProtocol{
     let needSuggestView: Bool = true
     
-    static let shared = FlickKogakiKeyModel(labelType:.text("小ﾞﾟ"))
+    static let shared = FlickKogakiKeyModel()
 
-    var pressActions: [ActionType]{ [.changeCharacterType] }
+    let pressActions: [ActionType] = [.changeCharacterType]
     var longPressActions: [KeyLongPressActionType] = []
     var variableSection: KeyModelVariableSection = KeyModelVariableSection()
 
-    var labelType: KeyLabelType
+    let labelType: KeyLabelType = .text("小ﾞﾟ")
+
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        SettingData.shared.kogakiFlickSetting
+        SettingData.shared.kogakiFlickSetting.flick
     }
     
     var suggestModel: SuggestModel = SuggestModel(keyType: .kogaki)
 
     
-    init(labelType: KeyLabelType){
-        self.labelType = labelType
-    }
+    private init(){}
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         KeyLabel(self.labelType, width: width)

@@ -21,20 +21,20 @@ enum CustomizableFlickKey: String, Codable{
         case .kogana:
             return KeyFlickSetting(
                 identifier: self,
-                center: FlickCustomKey(input: "", label: "小ﾞﾟ"),
-                left: FlickCustomKey(input: "", label: ""),
-                top: FlickCustomKey(input: "", label: ""),
-                right: FlickCustomKey(input: "", label: ""),
-                bottom: FlickCustomKey(input: "", label: "")
+                center: FlickCustomKey(label: "小ﾞﾟ", actions: [.exchangeCharacter]),
+                left: FlickCustomKey(label: "", actions: []),
+                top: FlickCustomKey(label: "", actions: []),
+                right: FlickCustomKey(label: "", actions: []),
+                bottom: FlickCustomKey(label: "", actions: [])
             )
         case .kanaSymbols:
             return KeyFlickSetting(
                 identifier: self,
-                center: FlickCustomKey(input: "、", label: "､｡?!"),
-                left: FlickCustomKey(input: "。", label: "。"),
-                top: FlickCustomKey(input: "？", label: "？"),
-                right: FlickCustomKey(input: "！", label: "！"),
-                bottom: FlickCustomKey(input: "", label: "")
+                center: FlickCustomKey(label: "､｡?!", actions: [.input("、")]),
+                left: FlickCustomKey(label: "。", actions: [.input("。")]),
+                top: FlickCustomKey(label: "？", actions: [.input("？")]),
+                right: FlickCustomKey(label: "！", actions: [.input("！")]),
+                bottom: FlickCustomKey(label: "", actions: [])
             )
         }
     }
@@ -101,8 +101,41 @@ enum FlickKeyPosition: String, Codable{
 }
 
 struct FlickCustomKey: Codable{
-    var input: String
     var label: String
+    var actions: [CodableActionData]
+
+    enum CodingKeys: CodingKey {
+        case input
+        case label
+        case actions
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(label, forKey: .label)
+        try container.encode(actions, forKey: .actions)
+    }
+
+    internal init(label: String, actions: [CodableActionData]) {
+        self.label = label
+        self.actions = actions
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let label = try container.decode(String.self, forKey: .label)
+        let actions = try? container.decode([CodableActionData].self, forKey: .actions)
+        let input = try? container.decode(String.self, forKey: .input)
+
+        self.label = label
+        if let actions = actions{
+            self.actions = actions
+        }else if let input = input{
+            self.actions = [.input(input)]
+        }else{
+            self.actions = [.input(label)]
+        }
+    }
 }
 
 struct KeyFlickSetting: Savable, Codable {
@@ -139,11 +172,11 @@ struct KeyFlickSetting: Savable, Codable {
     
     init(targetKeyIdentifier: String, left: String = "", top: String = "", right: String = "", bottom: String = "", center: String = "") {
         self.identifier = CustomizableFlickKey(rawValue: targetKeyIdentifier) ?? .kogana
-        self.left = FlickCustomKey(input: left, label: left)
-        self.top = FlickCustomKey(input: top, label: top)
-        self.right = FlickCustomKey(input: right, label: right)
-        self.bottom = FlickCustomKey(input: bottom, label: bottom)
-        self.center = FlickCustomKey(input: "", label: "")
+        self.left = FlickCustomKey(label: left, actions: [.input(left)])
+        self.top = FlickCustomKey(label: top, actions: [.input(top)])
+        self.right = FlickCustomKey(label: right, actions: [.input(right)])
+        self.bottom = FlickCustomKey(label: bottom, actions: [.input(bottom)])
+        self.center = FlickCustomKey(label: "", actions: [])
         //レガシー
         self.targetKeyIdentifier = self.identifier.identifier
     }
@@ -168,11 +201,11 @@ struct KeyFlickSetting: Savable, Codable {
            let bottom = try? values.decode(String.self, forKey: .bottom){
             self.targetKeyIdentifier = targetKeyIdentifier
             self.identifier = CustomizableFlickKey(rawValue: targetKeyIdentifier) ?? .kogana
-            self.left = FlickCustomKey(input: left, label: left)
-            self.top = FlickCustomKey(input: top, label: top)
-            self.right = FlickCustomKey(input: right, label: right)
-            self.bottom = FlickCustomKey(input: bottom, label: bottom)
-            self.center = FlickCustomKey(input: "", label: "")
+            self.left = FlickCustomKey(label: left, actions: [.input(left)])
+            self.top = FlickCustomKey(label: top, actions: [.input(top)])
+            self.right = FlickCustomKey(label: right, actions: [.input(right)])
+            self.bottom = FlickCustomKey(label: bottom, actions: [.input(bottom)])
+            self.center = FlickCustomKey(label: "", actions: [])
             return
         }
 

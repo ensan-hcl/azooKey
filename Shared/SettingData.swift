@@ -54,7 +54,7 @@ struct SettingData{
         return self.keyboardLayoutSetting[key, default: .flick]
     }
 
-    private static func getKogakiFlickSetting() -> [FlickDirection: FlickedKeyModel] {
+    private static func getKogakiFlickSetting() -> (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) {
         let value = Self.userDefaults.value(forKey: Setting.koganaKeyFlick.key)
         let setting: KeyFlickSetting
         if let value = value, let data = KeyFlickSetting.get(value){
@@ -62,22 +62,21 @@ struct SettingData{
         }else{
             setting = CustomizableFlickKey.kogana.defaultSetting
         }
-
         var dict: [FlickDirection: FlickedKeyModel] = [:]
-        if let left = setting.left.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: [.input(setting.left.input)]){
+        if let left = setting.left.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: setting.left.actions.map{$0.actionType}){
             dict[.left] = left
         }
-        if let top = setting.top.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: [.input(setting.top.input)]){
+        if let top = setting.top.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: setting.top.actions.map{$0.actionType}){
             dict[.top] = top
         }
-        if let right = setting.right.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: [.input(setting.right.input)]){
+        if let right = setting.right.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: setting.right.actions.map{$0.actionType}){
             dict[.right] = right
         }
-        return dict
+        return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, dict)
 
     }
 
-    private static func getKanaSymbolsFlickSetting() -> (labelType: KeyLabelType, actions: [ActionType], flick:  [FlickDirection: FlickedKeyModel]) {
+    private static func getKanaSymbolsFlickSetting() -> (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) {
         let value = Self.userDefaults.value(forKey: Setting.kanaSymbolsKeyFlick.key)
         let setting: KeyFlickSetting
         if let value = value, let data = KeyFlickSetting.get(value){
@@ -86,20 +85,20 @@ struct SettingData{
             setting = CustomizableFlickKey.kanaSymbols.defaultSetting
         }
         var dict: [FlickDirection: FlickedKeyModel] = [:]
-        if let left = setting.left.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: [.input(setting.left.input)]){
+        if let left = setting.left.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: setting.left.actions.map{$0.actionType}){
             dict[.left] = left
         }
-        if let top = setting.top.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: [.input(setting.top.input)]){
+        if let top = setting.top.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: setting.top.actions.map{$0.actionType}){
             dict[.top] = top
         }
-        if let right = setting.right.input == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: [.input(setting.right.input)]){
+        if let right = setting.right.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: setting.right.actions.map{$0.actionType}){
             dict[.right] = right
         }
-        return (.text(setting.center.label), [.input(setting.center.input)], dict)
+        return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, dict)
     }
 
-    var kogakiFlickSetting: [FlickDirection: FlickedKeyModel] = Self.getKogakiFlickSetting()
-    var kanaSymbolsFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick:  [FlickDirection: FlickedKeyModel]) = Self.getKanaSymbolsFlickSetting()
+    var kogakiFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) = Self.getKogakiFlickSetting()
+    var kanaSymbolsFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) = Self.getKanaSymbolsFlickSetting()
 
     var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput)
 
