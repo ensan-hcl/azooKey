@@ -53,26 +53,24 @@ struct SuggestView: View {
         return FlickedKeyModel.zero.getSuggestView(size: keySize, isHidden: true, theme: theme)
     }
 
-    private var centerFillColor: Color {
-        theme.specialKeyFillColor.color
-    }
-
     var body: some View {
         let keySize = CGSize(width: model.keySizeType.width(design: tabDesign), height:model.keySizeType.height(design: tabDesign))
         VStack(spacing: tabDesign.verticalSpacing){
             if self.modelVariableSection.suggestState.isActive{
                 self.neededApeearView(direction: .top)
-                
                 HStack(spacing: tabDesign.horizontalSpacing){
                     self.neededApeearView(direction: .left)
                     RoundedRectangle(cornerRadius: 5.0)
-                        .strokeAndFill(fillContent: centerFillColor, strokeContent: theme.borderColor.color, lineWidth: CGFloat(theme.borderWidth))
+                        .strokeAndFill(
+                            fillContent: theme.specialKeyFillColor.color,
+                            strokeContent: theme.borderColor.color,
+                            lineWidth: CGFloat(theme.borderWidth)
+                        )
                         .frame(width: keySize.width, height: keySize.height)
                     self.neededApeearView(direction: .right)
                 }
                 self.neededApeearView(direction: .bottom)
             }
- 
         }
         .frame(width: keySize.width, height: keySize.height)
         .allowsHitTesting(false)
