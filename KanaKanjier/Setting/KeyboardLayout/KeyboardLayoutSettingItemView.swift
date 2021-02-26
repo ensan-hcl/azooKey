@@ -47,16 +47,6 @@ struct KeyboardLayoutSettingItemView: View {
         self.id = id
     }
 
-    var imageName: String {
-        let type = selection
-        switch (type, language){
-        case (.flick, .japanese): return "KeyboardImage_flick_ja"
-        case (.flick, .english): return "KeyboardImage_flick_en"
-        case (.qwerty, .japanese): return "KeyboardImage_roman_ja"
-        case (.qwerty, .english): return "KeyboardImage_roman_en"
-        }
-    }
-
     var labelText: LocalizedStringKey {
         if setTogether{
             return "\(Text("キーボードの種類"))(\(Text("現在")): \(Text(viewModel.value.string)))"
@@ -65,14 +55,26 @@ struct KeyboardLayoutSettingItemView: View {
         }
     }
 
+    var tab: Tab.ExistentialTab {
+        switch (selection, language){
+        case (.flick, .japanese):
+            return .flick_hira
+        case (.flick, .english):
+            return .flick_abc
+        case (.qwerty, .japanese):
+            return .qwerty_hira
+        case (.qwerty, .english):
+            return .qwerty_abc
+        }
+    }
+
     var body: some View {
         VStack{
             Text(labelText)
             CenterAlignedView{
-                Image(imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: Store.shared.imageMaximumWidth)
+                KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                    .allowsHitTesting(false)
+                    .disabled(true)
             }
             Picker(selection: $selection, label: Text(labelText)) {
                 ForEach(0 ..< types.count) { i in
