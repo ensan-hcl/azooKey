@@ -66,8 +66,8 @@ struct SuggestView: View {
                 HStack(spacing: tabDesign.horizontalSpacing){
                     self.neededApeearView(direction: .left)
                     RoundedRectangle(cornerRadius: 5.0)
+                        .strokeAndFill(fillContent: centerFillColor, strokeContent: theme.borderColor.color, lineWidth: CGFloat(theme.borderWidth))
                         .frame(width: keySize.width, height: keySize.height)
-                        .foregroundColor(centerFillColor)
                     self.neededApeearView(direction: .right)
                 }
                 self.neededApeearView(direction: .bottom)

@@ -213,7 +213,8 @@ struct FlickKeyView: View {
 
     var body: some View {
         let keySize = (width: model.keySizeType.width(design: tabDesign), height: model.keySizeType.height(design: tabDesign))
-        return RoundedBorderedRectangle(cornerRadius: 5.0, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
+        RoundedRectangle(cornerRadius: 6)
+            .strokeAndFill(fillContent: keyFillColor, strokeContent: keyBorderColor, lineWidth: keyBorderWidth)
             .frame(width: keySize.width, height: keySize.height)
             .gesture(gesture)
             .overlay(model.label(width: keySize.width, states: variableStates))

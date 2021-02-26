@@ -101,7 +101,8 @@ struct QwertyKeyView: View{
         let keySize = CGSize(width: model.keySizeType.width(design: tabDesign), height: model.keySizeType.height(design: tabDesign))
         ZStack(alignment: .bottom){
             Group{
-                RoundedBorderedRectangle(cornerRadius: 6, fillColor: keyFillColor, borderColor: keyBorderColor, borderWidth: keyBorderWidth)
+                RoundedRectangle(cornerRadius: 6)
+                    .strokeAndFill(fillContent: keyFillColor, strokeContent: keyBorderColor, lineWidth: keyBorderWidth)
                     .frame(width: keySize.width, height: keySize.height)
                     .contentShape(
                         Rectangle()
@@ -119,6 +120,8 @@ struct QwertyKeyView: View{
                             scale_y: 1,
                             variationsCount: self.model.variationsModel.variations.count,
                             color: suggestColor,
+                            borderColor: keyBorderColor,
+                            borderWidth: keyBorderWidth,
                             direction: model.variationsModel.direction,
                             tabDesign: tabDesign
                         )
@@ -134,6 +137,8 @@ struct QwertyKeyView: View{
                             keyWidth: keySize.width,
                             scale_y: 1,
                             color: suggestColor,
+                            borderColor: keyBorderColor,
+                            borderWidth: keyBorderWidth,
                             tabDesign: tabDesign
                         )
                         .overlay(

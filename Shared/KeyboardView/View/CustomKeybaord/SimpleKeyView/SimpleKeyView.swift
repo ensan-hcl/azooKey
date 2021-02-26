@@ -36,7 +36,12 @@ struct SimpleKeyView: View {
     var body: some View {
         model.label(width: tabDesign.keyViewWidth, states: variableStates, theme: theme)
             .background(
-                RoundedBorderedRectangle(cornerRadius: 6, fillColor: isPressed ? model.backGroundColorWhenPressed(theme: theme) : model.unpressedKeyColorType.color(states: variableStates, theme: theme), borderColor: keyBorderColor, borderWidth: keyBorderWidth)
+                RoundedRectangle(cornerRadius: 6)
+                    .strokeAndFill(
+                        fillContent: isPressed ? model.backGroundColorWhenPressed(theme: theme) : model.unpressedKeyColorType.color(states: variableStates, theme: theme),
+                        strokeContent: keyBorderColor,
+                        lineWidth: keyBorderWidth
+                    )
                     .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
             )
             .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
