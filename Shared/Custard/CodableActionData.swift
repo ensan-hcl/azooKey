@@ -198,55 +198,6 @@ enum CodableActionData: Codable {
 }
 
 extension CodableActionData{
-    var actionType: ActionType {
-        switch self{
-        case let .input(value):
-            return .input(value)
-        case .exchangeCharacter:
-            return .changeCharacterType
-        case let .delete(value):
-            return .delete(value)
-        case .smoothDelete:
-            return .smoothDelete
-        case .complete:
-            return .enter
-        case let .moveCursor(value):
-            return .moveCursor(value)
-        case let .moveTab(value):
-            return .moveTab(value.tab)
-        case .toggleCursorMovingView:
-            return .toggleShowMoveCursorView
-        case .toggleCapsLockState:
-            switch VariableStates.shared.aAKeyState{
-            case .normal:
-                return .changeCapsLockState(state: .capslock)
-            case .capslock:
-                return .changeCapsLockState(state: .normal)
-            }
-        case .toggleTabBar:
-            return .toggleTabBar
-        case let .openApp(value):
-            return .openApp(value)
-        case .dismissKeyboard:
-            return .dismissKeyboard
-        }
-    }
-
-    var longpressActionType: KeyLongPressActionType {
-        switch self{
-        case let .input(value):
-            return .input(value)
-        case .delete:
-            return .delete
-        case let .moveCursor(value):
-            return .moveCursor(value < 0 ? .left : .right)
-        default:
-            return .doOnce(self.actionType)
-        }
-    }
-}
-
-extension CodableActionData{
     enum CodingKeys: CodingKey{
         case input
         case exchange_character
