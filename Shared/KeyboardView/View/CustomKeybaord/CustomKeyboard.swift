@@ -110,7 +110,7 @@ fileprivate extension CustardInterfaceKey {
             case .enter:
                 return FlickEnterKeyModel(keySizeType: .normal)
             case .kogaki:
-                return KogakiKeyModel.shared
+                return FlickKogakiKeyModel.shared
             }
         case let .custom(value):
             let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variation.reduce(into: [:]){dictionary, variation in
@@ -145,7 +145,7 @@ fileprivate extension CustardInterfaceKey {
             case .enter:
                 return QwertyEnterKeyModel(keySizeType: .normal(of: 1, for: 1))
             case .kogaki:
-                let flickKogakiKey = KogakiKeyModel.shared
+                let flickKogakiKey = FlickKogakiKeyModel.shared
                 let variations = VariationsModel([flickKogakiKey.flickKeys[.left], flickKogakiKey.flickKeys[.top], flickKogakiKey.flickKeys[.right], flickKogakiKey.flickKeys[.bottom]].compactMap{$0}.map{(label: $0.labelType, actions: $0.pressActions)})
                 return QwertyKeyModel(labelType: .text("小ﾞﾟ"), pressActions: [.changeCharacterType], longPressActions: [], variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
             }

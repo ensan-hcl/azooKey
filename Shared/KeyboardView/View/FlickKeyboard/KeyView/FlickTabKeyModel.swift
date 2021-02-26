@@ -9,18 +9,18 @@
 import Foundation
 import SwiftUI
 
-struct TabKeyModel: FlickKeyModelProtocol{
+struct FlickTabKeyModel: FlickKeyModelProtocol{
     let needSuggestView: Bool = true
     
-    static let hiraTabKeyModel = TabKeyModel(labelType:.text("あいう"), tab: .user_dependent(.japanese), flickKeys: [:])
-    static let abcTabKeyModel = TabKeyModel(labelType:.text("abc"), tab: .user_dependent(.english), flickKeys: [
+    static let hiraTabKeyModel = FlickTabKeyModel(labelType:.text("あいう"), tab: .user_dependent(.japanese), flickKeys: [:])
+    static let abcTabKeyModel = FlickTabKeyModel(labelType:.text("abc"), tab: .user_dependent(.english), flickKeys: [
         .right: FlickedKeyModel(
             labelType: .text("→"),
             pressActions: [.moveCursor(1)],
             longPressActions: [.moveCursor(.right)]
         )
     ])
-    static let numberTabKeyModel = TabKeyModel(labelType:.text("☆123"), tab: .existential(.flick_numbersymbols), longPressActions: [.doOnce(.toggleTabBar)], flickKeys: [:])
+    static let numberTabKeyModel = FlickTabKeyModel(labelType:.text("☆123"), tab: .existential(.flick_numbersymbols), longPressActions: [.doOnce(.toggleTabBar)], flickKeys: [:])
 
 
     var pressActions: [ActionType]{ [.moveTab(self.tab)] }

@@ -189,7 +189,7 @@ struct QwertyDataProvider {
             QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: [.doOnce(.toggleTabBar)]),
         ] + SettingData.shared.qwertyNumberTabKeySetting +
         [
-            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+            QwertyFunctionalKeyModel.delete,
         ],
 
         [
@@ -340,7 +340,7 @@ struct QwertyDataProvider {
                 ]),
                 for: (7, 5)),
             QwertyKeyModel(labelType: .text("・"), pressActions: [.input("…")], for: (7, 5)),
-            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+            QwertyFunctionalKeyModel.delete,
         ],
         [
             QwertyChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
@@ -385,7 +385,7 @@ struct QwertyDataProvider {
             QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
             QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
             QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
-            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+            QwertyFunctionalKeyModel.delete,
         ],
         [
             QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: [.doOnce(.toggleTabBar)]),
@@ -430,7 +430,7 @@ struct QwertyDataProvider {
             QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
             QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
             QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
-            QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.delete]),
+            QwertyFunctionalKeyModel.delete,
         ],
         [
             QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: [.doOnce(.toggleTabBar)]),

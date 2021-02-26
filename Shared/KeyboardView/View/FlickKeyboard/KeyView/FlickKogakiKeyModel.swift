@@ -8,10 +8,10 @@
 
 import Foundation
 import SwiftUI
-struct KogakiKeyModel: FlickKeyModelProtocol{
+struct FlickKogakiKeyModel: FlickKeyModelProtocol{
     let needSuggestView: Bool = true
     
-    static let shared = KogakiKeyModel(labelType:.text("小ﾞﾟ"))
+    static let shared = FlickKogakiKeyModel(labelType:.text("小ﾞﾟ"))
 
     var pressActions: [ActionType]{ [.changeCharacterType] }
     var longPressActions: [KeyLongPressActionType] = []

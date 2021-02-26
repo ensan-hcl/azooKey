@@ -43,7 +43,7 @@
 		1A3A16042528BFF900A5BA4F /* SelctInputStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */; };
 		1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */; };
 		1A3A162C2529671300A5BA4F /* KeyFlickSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */; };
-		1A3A16322529712300A5BA4F /* KogakiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16312529712300A5BA4F /* KogakiKeyModel.swift */; };
+		1A3A16322529712300A5BA4F /* FlickKogakiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */; };
 		1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */; };
 		1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */; };
 		1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C92500D44B002CAA93 /* ContentView.swift */; };
@@ -66,7 +66,7 @@
 		1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21A2500D5D1002CAA93 /* FlickKeyModelProtocol.swift */; };
 		1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21C2500D5E4002CAA93 /* FlickKeyModel.swift */; };
 		1A3DC21F2500D5F2002CAA93 /* FlickEnterKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */; };
-		1A3DC2212500D600002CAA93 /* TabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2202500D600002CAA93 /* TabKeyModel.swift */; };
+		1A3DC2212500D600002CAA93 /* FlickTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2202500D600002CAA93 /* FlickTabKeyModel.swift */; };
 		1A3DC2232500D60F002CAA93 /* FlickedKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2222500D60F002CAA93 /* FlickedKeyModel.swift */; };
 		1A3DC2262500D63F002CAA93 /* SuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2252500D63F002CAA93 /* SuggestView.swift */; };
 		1A3DC2282500D64D002CAA93 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2272500D64D002CAA93 /* ResultView.swift */; };
@@ -188,7 +188,7 @@
 		1AC8A5AB2595934C00B71E5A /* ArrayBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */; };
 		1AC8A5B92595C10A00B71E5A /* StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */; };
 		1AC8A5D3259815C300B71E5A /* FlickCustomKeySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */; };
-		1AC8A5DD25986CA500B71E5A /* KanaSymbolsKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */; };
+		1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5DC25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift */; };
 		1ACB07CA25E552940077DE04 /* EditingScrollCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */; };
 		1ACB07DC25E71ED70077DE04 /* BindingArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACB07DB25E71ED70077DE04 /* BindingArray.swift */; };
 		1ACB07DD25E71ED70077DE04 /* BindingArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACB07DB25E71ED70077DE04 /* BindingArray.swift */; };
@@ -2432,10 +2432,10 @@
 		1AF6798625CEDBAE00F3987B /* SuggestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB02250290D800EB1864 /* SuggestModel.swift */; };
 		1AF6798725CEDBAE00F3987B /* FlickedKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2222500D60F002CAA93 /* FlickedKeyModel.swift */; };
 		1AF6798825CEDBAE00F3987B /* SuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2252500D63F002CAA93 /* SuggestView.swift */; };
-		1AF6798D25CEDBB500F3987B /* TabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2202500D600002CAA93 /* TabKeyModel.swift */; };
-		1AF6798E25CEDBB500F3987B /* KanaSymbolsKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */; };
+		1AF6798D25CEDBB500F3987B /* FlickTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2202500D600002CAA93 /* FlickTabKeyModel.swift */; };
+		1AF6798E25CEDBB500F3987B /* FlickKanaSymbolsKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5DC25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift */; };
 		1AF6798F25CEDBB500F3987B /* FlickKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2142500D59F002CAA93 /* FlickKeyView.swift */; };
-		1AF6799025CEDBB500F3987B /* KogakiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16312529712300A5BA4F /* KogakiKeyModel.swift */; };
+		1AF6799025CEDBB500F3987B /* FlickKogakiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */; };
 		1AF6799125CEDBB500F3987B /* FlickKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21A2500D5D1002CAA93 /* FlickKeyModelProtocol.swift */; };
 		1AF6799225CEDBB500F3987B /* FlickChangeKeyboardKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CEB253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift */; };
 		1AF6799325CEDBB500F3987B /* FlickAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */; };
@@ -2540,7 +2540,7 @@
 		1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelctInputStyle.swift; sourceTree = "<group>"; };
 		1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderIconView.swift; sourceTree = "<group>"; };
 		1A3A162B2529671300A5BA4F /* KeyFlickSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyFlickSetting.swift; sourceTree = "<group>"; };
-		1A3A16312529712300A5BA4F /* KogakiKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KogakiKeyModel.swift; sourceTree = "<group>"; };
+		1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKogakiKeyModel.swift; sourceTree = "<group>"; };
 		1A3DC1C22500D44A002CAA93 /* azooKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = azooKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -2570,7 +2570,7 @@
 		1A3DC21A2500D5D1002CAA93 /* FlickKeyModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKeyModelProtocol.swift; sourceTree = "<group>"; };
 		1A3DC21C2500D5E4002CAA93 /* FlickKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKeyModel.swift; sourceTree = "<group>"; };
 		1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickEnterKeyModel.swift; sourceTree = "<group>"; };
-		1A3DC2202500D600002CAA93 /* TabKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabKeyModel.swift; sourceTree = "<group>"; };
+		1A3DC2202500D600002CAA93 /* FlickTabKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickTabKeyModel.swift; sourceTree = "<group>"; };
 		1A3DC2222500D60F002CAA93 /* FlickedKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickedKeyModel.swift; sourceTree = "<group>"; };
 		1A3DC2252500D63F002CAA93 /* SuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestView.swift; sourceTree = "<group>"; };
 		1A3DC2272500D64D002CAA93 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
@@ -2680,7 +2680,7 @@
 		1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayBuilder.swift; sourceTree = "<group>"; };
 		1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringInterpolation.swift; sourceTree = "<group>"; };
 		1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickCustomKeySettingView.swift; sourceTree = "<group>"; };
-		1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaSymbolsKeyModel.swift; sourceTree = "<group>"; };
+		1AC8A5DC25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKanaSymbolsKeyModel.swift; sourceTree = "<group>"; };
 		1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingScrollCustardView.swift; sourceTree = "<group>"; };
 		1ACB07DB25E71ED70077DE04 /* BindingArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingArray.swift; sourceTree = "<group>"; };
 		1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickSpaceKeyModel.swift; sourceTree = "<group>"; };
@@ -5148,11 +5148,11 @@
 				1A3DC2182500D5C1002CAA93 /* KeyModelVariableSection.swift */,
 				1A3DC21C2500D5E4002CAA93 /* FlickKeyModel.swift */,
 				1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */,
-				1A3DC2202500D600002CAA93 /* TabKeyModel.swift */,
+				1A3DC2202500D600002CAA93 /* FlickTabKeyModel.swift */,
 				1AF28CEB253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift */,
 				1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */,
-				1A3A16312529712300A5BA4F /* KogakiKeyModel.swift */,
-				1AC8A5DC25986CA500B71E5A /* KanaSymbolsKeyModel.swift */,
+				1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */,
+				1AC8A5DC25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift */,
 				1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */,
 			);
 			path = KeyView;
@@ -10168,7 +10168,7 @@
 				1AF6799225CEDBB500F3987B /* FlickChangeKeyboardKeyModel.swift in Sources */,
 				1AB8C3DE25E2854C00D39BC5 /* KeyActionsEditView.swift in Sources */,
 				1AB8C38225E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift in Sources */,
-				1AF6799025CEDBB500F3987B /* KogakiKeyModel.swift in Sources */,
+				1AF6799025CEDBB500F3987B /* FlickKogakiKeyModel.swift in Sources */,
 				1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */,
 				1A64A8E0257C925E0022C081 /* FontSizeSettingItemView.swift in Sources */,
 				1A4057D8255841C70073C6F7 /* LearningType.swift in Sources */,
@@ -10214,7 +10214,7 @@
 				1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
 				1ACB07CA25E552940077DE04 /* EditingScrollCustardView.swift in Sources */,
-				1AF6798E25CEDBB500F3987B /* KanaSymbolsKeyModel.swift in Sources */,
+				1AF6798E25CEDBB500F3987B /* FlickKanaSymbolsKeyModel.swift in Sources */,
 				1AF6797225CEDB9B00F3987B /* QwertySpaceKeyModel.swift in Sources */,
 				1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */,
 				1AF6797525CEDB9B00F3987B /* QwertySuggestView.swift in Sources */,
@@ -10261,7 +10261,7 @@
 				1AF6792325CEDB6800F3987B /* extension CGPoint.swift in Sources */,
 				1A4057FD2558472B0073C6F7 /* AboutFullAccessView.swift in Sources */,
 				1AC8A5D3259815C300B71E5A /* FlickCustomKeySettingView.swift in Sources */,
-				1AF6798D25CEDBB500F3987B /* TabKeyModel.swift in Sources */,
+				1AF6798D25CEDBB500F3987B /* FlickTabKeyModel.swift in Sources */,
 				1AF679A125CEDC3A00F3987B /* VerticalFlickDataProvider.swift in Sources */,
 				1ACEEFD025665E3600899DA2 /* FallbackLink.swift in Sources */,
 			);
@@ -10301,7 +10301,7 @@
 				1A86F4B82539356100B92B49 /* only_contains.swift in Sources */,
 				1A12E24825C41A7100316009 /* Message.swift in Sources */,
 				1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */,
-				1AC8A5DD25986CA500B71E5A /* KanaSymbolsKeyModel.swift in Sources */,
+				1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */,
 				1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */,
 				1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */,
 				1A3DC22D2500D6C6002CAA93 /* Converter.swift in Sources */,
@@ -10315,7 +10315,7 @@
 				1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */,
 				1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */,
 				1AE1023E25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
-				1A3DC2212500D600002CAA93 /* TabKeyModel.swift in Sources */,
+				1A3DC2212500D600002CAA93 /* FlickTabKeyModel.swift in Sources */,
 				1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */,
 				1AA346962567F04300B41A16 /* RomanCustomKeys.swift in Sources */,
 				1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */,
@@ -10409,7 +10409,7 @@
 				1AE3DF02258A20A2007C7C4A /* KeyFlickSetting.swift in Sources */,
 				1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */,
 				1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */,
-				1A3A16322529712300A5BA4F /* KogakiKeyModel.swift in Sources */,
+				1A3A16322529712300A5BA4F /* FlickKogakiKeyModel.swift in Sources */,
 				1AE1023025D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1AC8A594259587A200B71E5A /* Design.swift in Sources */,
 			);

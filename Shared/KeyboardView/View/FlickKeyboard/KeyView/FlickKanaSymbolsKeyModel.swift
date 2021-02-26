@@ -8,10 +8,10 @@
 
 import Foundation
 import SwiftUI
-struct KanaSymbolsKeyModel: FlickKeyModelProtocol{
+struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol{
     let needSuggestView: Bool = true
 
-    static let shared = KanaSymbolsKeyModel()
+    static let shared = FlickKanaSymbolsKeyModel()
 
     var pressActions: [ActionType] {
         SettingData.shared.kanaSymbolsFlickSetting.actions

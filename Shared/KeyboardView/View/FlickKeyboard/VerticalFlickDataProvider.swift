@@ -15,9 +15,9 @@ struct VerticalFlickDataProvider {
     var hiraKeyboard: [[FlickKeyModelProtocol]] = [
         //第1列
         [
-            TabKeyModel.numberTabKeyModel,
-            TabKeyModel.abcTabKeyModel,
-            TabKeyModel.hiraTabKeyModel,
+            FlickTabKeyModel.numberTabKeyModel,
+            FlickTabKeyModel.abcTabKeyModel,
+            FlickTabKeyModel.hiraTabKeyModel,
             FlickChangeKeyboardModel.shared
         ],
         //第2列
@@ -78,7 +78,7 @@ struct VerticalFlickDataProvider {
                 )
 
             ]),
-            KogakiKeyModel.shared
+            FlickKogakiKeyModel.shared
 
         ],
         //第3列
@@ -215,16 +215,11 @@ struct VerticalFlickDataProvider {
                 )
 
             ]),
-            KanaSymbolsKeyModel.shared
+            FlickKanaSymbolsKeyModel.shared
         ],
         //第5列
         [
-            FlickKeyModel(labelType: .image("delete.left"), pressActions: [.delete(1)], longPressActions: [.delete], flickKeys: [
-                .left: FlickedKeyModel(
-                    labelType: .image("xmark"),
-                    pressActions: [.smoothDelete]
-                )
-            ], needSuggestView: false, keycolorType: .tabkey),
+            FlickKeyModel.delete,
             FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
         ],
@@ -235,9 +230,9 @@ struct VerticalFlickDataProvider {
     var abcKeyboard:[[FlickKeyModelProtocol]] = [
         //第1列
         [
-            TabKeyModel.numberTabKeyModel,
-            TabKeyModel.abcTabKeyModel,
-            TabKeyModel.hiraTabKeyModel,
+            FlickTabKeyModel.numberTabKeyModel,
+            FlickTabKeyModel.abcTabKeyModel,
+            FlickTabKeyModel.hiraTabKeyModel,
             FlickChangeKeyboardModel.shared
 
         ],
@@ -391,12 +386,7 @@ struct VerticalFlickDataProvider {
         ],
         //第5列
         [
-            FlickKeyModel(labelType: .image("delete.left"), pressActions: [.delete(1)], longPressActions: [.delete], flickKeys: [
-                .left: FlickedKeyModel(
-                    labelType: .image("xmark"),
-                    pressActions: [.smoothDelete]
-                )
-            ], needSuggestView: false, keycolorType: .tabkey),
+            FlickKeyModel.delete,
             FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
         ],
@@ -406,9 +396,9 @@ struct VerticalFlickDataProvider {
     var numberKeyboard:[[FlickKeyModelProtocol]] = [
         //第1列
         [
-            TabKeyModel.numberTabKeyModel,
-            TabKeyModel.abcTabKeyModel,
-            TabKeyModel.hiraTabKeyModel,
+            FlickTabKeyModel.numberTabKeyModel,
+            FlickTabKeyModel.abcTabKeyModel,
+            FlickTabKeyModel.hiraTabKeyModel,
             FlickChangeKeyboardModel.shared
         ],
         //第2列
@@ -596,12 +586,7 @@ struct VerticalFlickDataProvider {
         ],
         //第5列
         [
-            FlickKeyModel(labelType: .image("delete.left"), pressActions: [.delete(1)], longPressActions: [.delete], flickKeys: [
-                .left: FlickedKeyModel(
-                    labelType: .image("xmark"),
-                    pressActions: [.smoothDelete]
-                )
-            ], needSuggestView: false, keycolorType: .tabkey),
+            FlickKeyModel.delete,
             FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
         ],
