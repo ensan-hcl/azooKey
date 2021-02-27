@@ -9,6 +9,34 @@
 import Foundation
 import SwiftUI
 
+enum KeyboardLayout: String, CaseIterable{
+    ///フリック入力式のレイアウトで表示するスタイル
+    case flick = "flick"
+    ///qwerty入力式のレイアウトで表示するスタイル
+    case qwerty = "roman"
+}
+
+extension KeyboardLayout: Savable {
+    typealias SaveValue = String
+    var saveValue: String {
+        return self.rawValue
+    }
+
+    static func get(_ value: Any) -> KeyboardLayout? {
+        if let string = value as? String{
+            return self.init(rawValue: string)
+        }
+        return nil
+    }
+}
+
+enum InputStyle: String{
+    ///入力された文字を直接入力するスタイル
+    case direct = "direct"
+    ///ローマ字日本語入力とするスタイル
+    case roman = "roman"
+}
+
 enum KeyboardLanguage {
     case english
     case japanese

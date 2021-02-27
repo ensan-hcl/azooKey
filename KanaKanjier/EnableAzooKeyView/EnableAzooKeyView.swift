@@ -73,7 +73,7 @@ struct EnableAzooKeyView: View {
                             EnableAzooKeyViewHeader("最初の設定")
                             Divider()
                             EnableAzooKeyViewText("キーボードの種類をお選びください", with: "keyboard")
-                            KeyboardLayoutSettingItemView(Store.shared.keyboardTypeSetting, setTogether: true)
+                            LanguageLayoutSettingItemView(Store.shared.japaneseLayoutSetting, setTogether: true)
                             Divider()
                             EnableAzooKeyViewText("絵文字と顔文字を設定しましょう", with: "face.smiling")
                             AdditionalDictManageViewMain(style: .simple)

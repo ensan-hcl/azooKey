@@ -25,6 +25,8 @@ struct ThemeEditView: View {
     @State private var isSheetPresented = false
     @State private var viewType = ViewType.editor
 
+    @ObservedObject private var storeVariableSection = Store.variableSection
+
     private enum ViewType{
         case editor
         case themeShareView
@@ -33,8 +35,18 @@ struct ThemeEditView: View {
     private let title: LocalizedStringKey
 
     init(index: Int?, manager: Binding<ThemeIndexManager>){
-        VariableStates.shared.keyboardLayout = SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout)
+        let tab: Tab.ExistentialTab = {
+            switch Store.variableSection.japaneseLayout{
+            case .flick:
+                return .flick_hira
+            case .qwerty:
+                return .qwerty_hira
+            case let .custard(identifier):
+                return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
+            }
+        }()
 
+        self._tab = State(initialValue: tab)
         self._manager = manager
         if let index = index{
             do{
@@ -66,7 +78,7 @@ struct ThemeEditView: View {
     @State private var borderColor = ThemeData.base.borderColor.color
     @State private var keyLabelColor = ThemeData.base.textColor.color
     @State private var resultTextColor = ThemeData.base.resultTextColor.color
-
+    @State private var tab: Tab.ExistentialTab
     private var shareImage = ShareImage()
 
     // PHPickerの設定
@@ -76,8 +88,6 @@ struct ThemeEditView: View {
         config.selectionLimit = 1
         return config
     }
-
-    @State private var refresh = false
 
     var body: some View {
         switch viewType{
@@ -158,7 +168,7 @@ struct ThemeEditView: View {
                     }
 
                 }
-                KeyboardPreview(theme: self.theme)
+                KeyboardPreview(theme: self.theme, defaultTab: tab)
                 NavigationLink(destination: Group{
                     if let image = pickedImage{
                         TrimmingView(
@@ -245,6 +255,19 @@ struct ThemeEditView: View {
                 }label: {
                     Text("完了")
                 })
+            .onChange(of: storeVariableSection.japaneseLayout){value in
+                SettingData.shared.reload() //設定をリロードする
+                self.tab = {
+                    switch value{
+                    case .flick:
+                        return .flick_hira
+                    case .qwerty:
+                        return .qwerty_hira
+                    case let .custard(identifier):
+                        return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
+                    }
+                }()
+            }
         case .themeShareView:
             ThemeShareView(theme: self.theme, shareImage: shareImage){
                 presentationMode.wrappedValue.dismiss()

@@ -86,11 +86,13 @@ struct KeyView: View {
 
     var size: CGSize {
         let screenWidth = UIScreen.main.bounds.width
-        switch storeVariableSection.japaneseKeyboardLayout{
+        switch storeVariableSection.japaneseLayout{
         case .flick:
             return CGSize(width: screenWidth/5.6, height: screenWidth/8)
         case .qwerty:
             return CGSize(width: screenWidth/12.2, height: screenWidth/9)
+        case .custard:
+            return CGSize(width: screenWidth/5.6, height: screenWidth/8)
         }
     }
 

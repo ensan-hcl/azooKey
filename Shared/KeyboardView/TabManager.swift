@@ -87,18 +87,22 @@ enum Tab{
             //ユーザの設定に合わせて遷移先のタブ(非user_dependent)を返す
             switch self{
             case .english:
-                switch SettingData.shared.keyboardLayout(for: .englishKeyboardLayout){
+                switch SettingData.shared.languageLayout(for: .englishKeyboardLayout){
                 case .flick:
                     return .flick_abc
                 case .qwerty:
                     return .qwerty_abc
+                case let .custard(identifier):
+                    return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
                 }
             case .japanese:
-                switch SettingData.shared.keyboardLayout(for: .japaneseKeyboardLayout){
+                switch SettingData.shared.languageLayout(for: .japaneseKeyboardLayout){
                 case .flick:
                     return .flick_hira
                 case .qwerty:
                     return .qwerty_hira
+                case let .custard(identifier):
+                    return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
                 }
             }
         }

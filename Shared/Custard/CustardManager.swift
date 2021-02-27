@@ -53,7 +53,11 @@ struct CustardManager {
     private static let directoryName = "custard/"
     private var index = CustardManagerIndex()
 
-    static func fileURL(name: String) -> URL {
+    private static func fileName(_ identifier: String) -> String {
+        return String.init(identifier.hash, radix: 16, uppercase: true)
+    }
+
+    private static func fileURL(name: String) -> URL {
         let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
         let url = directoryPath.appendingPathComponent(directoryName + name)
         return url
@@ -97,14 +101,16 @@ struct CustardManager {
     }
 
     func userMadeCustardData(identifier: String) throws -> UserMadeCustard {
-        let fileURL = Self.fileURL(name: "\(identifier)_edit.json")
+        let fileName = Self.fileName(identifier)
+        let fileURL = Self.fileURL(name: "\(fileName)_edit.json")
         let data = try Data(contentsOf: fileURL)
         let userMadeCustard = try JSONDecoder().decode(UserMadeCustard.self, from: data)
         return userMadeCustard
     }
 
     func custard(identifier: String) throws -> Custard {
-        let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
+        let fileName = Self.fileName(identifier)
+        let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
         let data = try Data(contentsOf: fileURL)
         let custard = try JSONDecoder().decode(Custard.self, from: data)
         return custard
@@ -136,11 +142,12 @@ struct CustardManager {
     mutating func saveCustard(custard: Custard, metadata: CustardMetaData, userData: UserMadeCustard? = nil, updateTabBar: Bool = false) throws {
         let encoder = JSONEncoder()
         let data = try encoder.encode(custard)
-        let fileURL = Self.fileURL(name: "\(custard.identifier)_main.custard")
+        let fileName = Self.fileName(custard.identifier)
+        let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
         try data.write(to: fileURL)
 
         if let userData = userData {
-            let fileURL = Self.fileURL(name: "\(custard.identifier)_edit.json")
+            let fileURL = Self.fileURL(name: "\(fileName)_edit.json")
             let data = try encoder.encode(userData)
             try data.write(to: fileURL)
         }
@@ -173,11 +180,12 @@ struct CustardManager {
 
     mutating func removeCustard(identifier: String){
         do{
+            let fileName = Self.fileName(identifier)
             self.index.availableCustards.removeAll{$0 == identifier}
             self.index.metadata.removeValue(forKey: identifier)
-            let fileURL = Self.fileURL(name: "\(identifier)_main.custard")
+            let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
             try FileManager.default.removeItem(atPath: fileURL.path)
-            let editFileURL = Self.fileURL(name: "\(identifier)_edit.json")
+            let editFileURL = Self.fileURL(name: "\(fileName)_edit.json")
             try? FileManager.default.removeItem(atPath: editFileURL.path)
             self.save()
         }catch{
@@ -196,6 +204,30 @@ struct CustardManager {
         }
     }
 
+    func availableCustard(for language: KeyboardLanguage) -> [String] {
+        switch language{
+        case .japanese:
+            return self.availableCustards.compactMap{
+                if let custard = try? self.custard(identifier: $0){
+                    if custard.language == .japanese{
+                        return custard.identifier
+                    }
+                }
+                return nil
+            }
+        case .english:
+            return self.availableCustards.compactMap{
+                if let custard = try? self.custard(identifier: $0){
+                    if custard.language == .english{
+                        return custard.identifier
+                    }
+                }
+                return nil
+            }
+        case .none:
+            return []
+        }
+    }
 
     var availableCustards: [String] {
         return index.availableCustards

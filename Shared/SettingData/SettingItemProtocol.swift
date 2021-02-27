@@ -44,6 +44,18 @@ struct SettingItem <Value: Savable> {
         }
     }
 
+    init(identifier: Setting, initializedBy process: () -> Value){
+        self.identifier = identifier
+        let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
+        if let __value = userDefaults.value(forKey: identifier.key), let _value = Value.get(__value){
+            self.value = _value
+        }else{
+            let defaultValue = process()
+            self.value = defaultValue
+            userDefaults.setValue(defaultValue.saveValue, forKey: identifier.key)
+        }
+    }
+
     var description: LocalizedStringKey {
         identifier.explanation
     }

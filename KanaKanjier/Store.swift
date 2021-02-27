@@ -99,8 +99,7 @@ final class Store{
         identifier: .numberTabCustomKeys,
         defaultValue: QwertyCustomKeysValue.defaultValue
     ))
-
-
+    /*
     var keyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayout>(
         identifier: .japaneseKeyboardLayout,
         defaultValue: .flick
@@ -109,6 +108,37 @@ final class Store{
     var englishKeyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayout>(
         identifier: .englishKeyboardLayout,
         defaultValue: .flick
+    ))
+ */
+
+    var japaneseLayoutSetting = SettingItemViewModel(SettingItem<LanguageLayout>(
+        identifier: .japaneseKeyboardLayout,
+        initializedBy: {
+            let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
+            if let data = userDefaults.string(forKey: Setting.japaneseKeyboardLayout.key), let value = KeyboardLayout.get(data){
+                switch value{
+                case .flick: return .flick
+                case  .qwerty: return .qwerty
+                }
+            }else{
+                return .flick
+            }
+        }
+    ))
+
+    var englishLayoutSetting = SettingItemViewModel(SettingItem<LanguageLayout>(
+        identifier: .englishKeyboardLayout,
+        initializedBy: {
+            let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
+            if let data = userDefaults.string(forKey: Setting.englishKeyboardLayout.key), let value = KeyboardLayout.get(data){
+                switch value{
+                case .flick: return .flick
+                case  .qwerty: return .qwerty
+                }
+            }else{
+                return .flick
+            }
+        }
     ))
 
     var resultViewFontSizeSetting = SettingItemViewModel(SettingItem<FontSizeSetting>(
@@ -179,6 +209,8 @@ final class Store{
 final class StoreVariableSection: ObservableObject{
     @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
-    @Published var japaneseKeyboardLayout: KeyboardLayout = .flick
-    @Published var englishKeyboardLayout: KeyboardLayout = .flick
+    //@Published var japaneseKeyboardLayout: KeyboardLayout = .flick
+    //@Published var englishKeyboardLayout: KeyboardLayout = .flick
+    @Published var japaneseLayout: LanguageLayout = .flick
+    @Published var englishLayout: LanguageLayout = .flick
 }

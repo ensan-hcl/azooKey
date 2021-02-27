@@ -24,55 +24,25 @@ struct SettingTabView: View {
                         }
                     }
                 }
-                switch (storeVariableSection.japaneseKeyboardLayout, storeVariableSection.englishKeyboardLayout){
-                case (.flick, .flick):
-                    Section(header: Text("カスタムキー")){
-                        VStack{
-                            Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
-                            ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
-                        }
-                        NavigationLink(destination: FlickCustomKeysSettingSelectView()){
-                            HStack{
-                                Text("設定する")
-                                Spacer()
-                            }
+                Section(header: Text("カスタムキー")){
+                    VStack{
+                        Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
+                        ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
+                    }
+                    NavigationLink(destination: FlickCustomKeysSettingSelectView()){
+                        HStack{
+                            Text("設定する")
+                            Spacer()
                         }
                     }
-                case (.flick, .qwerty), (.qwerty, .flick):
-                    Section(header: Text("カスタムキー")){
-                        VStack{
-                            Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
-                            ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
-                        }
-                        NavigationLink(destination: FlickCustomKeysSettingSelectView()){
-                            HStack{
-                                Text("設定する")
-                                Spacer()
-                            }
-                        }
-                        VStack{
-                            Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
-                            ImageSlideshowView(pictures: ["qwertyCustomKeySetting0","qwertyCustomKeySetting1","qwertyCustomKeySetting2"])
-                        }
-                        NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
-                            HStack{
-                                Text("設定する")
-                                Spacer()
-                            }
-                        }
+                    VStack{
+                        Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
+                        ImageSlideshowView(pictures: ["qwertyCustomKeySetting0","qwertyCustomKeySetting1","qwertyCustomKeySetting2"])
                     }
-
-                case (.qwerty, .qwerty):
-                    Section(header: Text("カスタムキー")){
-                        VStack{
-                            Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
-                            ImageSlideshowView(pictures: ["qwertyCustomKeySetting0","qwertyCustomKeySetting1","qwertyCustomKeySetting2"])
-                        }
-                        NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
-                            HStack{
-                                Text("設定する")
-                                Spacer()
-                            }
+                    NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
+                        HStack{
+                            Text("設定する")
+                            Spacer()
                         }
                     }
                 }
@@ -132,10 +102,10 @@ struct SettingTabView: View {
                     ])
                 }
                 Section(header: Text("変換")){
-                    switch storeVariableSection.japaneseKeyboardLayout{
+                    switch storeVariableSection.japaneseLayout{
                     case .flick:
                         EmptyView()
-                    case .qwerty:
+                    case .qwerty, .custard:
                         BooleanSettingItemView(Store.shared.englishCandidateSetting)
                     }
                     BooleanSettingItemView(Store.shared.halfKanaSetting)

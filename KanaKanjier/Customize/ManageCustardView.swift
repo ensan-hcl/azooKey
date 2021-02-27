@@ -240,7 +240,7 @@ struct ManageCustardView: View {
             urlString = ""
             selectedDocument = Data()
         } catch {
-            debug(error)
+            debug("saveCustard", error)
         }
     }
 

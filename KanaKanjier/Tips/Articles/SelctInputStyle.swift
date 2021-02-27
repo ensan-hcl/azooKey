@@ -15,8 +15,11 @@ struct SelctInputStyleTipsView:View {
             TipsContentParagraph{
                 Text("日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。")
             }
-            KeyboardLayoutSettingItemView(Store.shared.keyboardTypeSetting, language: .japanese).padding(.vertical)
-            KeyboardLayoutSettingItemView(Store.shared.englishKeyboardTypeSetting, language: .english).padding(.vertical)
+            LanguageLayoutSettingItemView(Store.shared.japaneseLayoutSetting, language: .japanese).padding(.vertical)
+            LanguageLayoutSettingItemView(Store.shared.englishLayoutSetting, language: .english).padding(.vertical)
+            TipsContentParagraph(style: .caption){
+                Text("日本語・英語に対応したカスタムタブを読み込んだ場合、これを選ぶことも可能です")
+            }
             TipsContentParagraph(style: .caption){
                 Text("現在は携帯電話式の入力については対応していません。")
             }
