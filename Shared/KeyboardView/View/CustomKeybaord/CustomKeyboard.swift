@@ -130,6 +130,7 @@ fileprivate extension CustardInterfaceKey {
                 pressActions: value.press_action.map{$0.actionType},
                 longPressActions: value.longpress_action.map{$0.longpressActionType},
                 flickKeys: flickKeyModels,
+                needSuggestView: value.longpress_action.isEmpty && !value.variation.isEmpty,
                 keycolorType: value.design.color.flickKeyColorType
             )
             return model
@@ -165,7 +166,7 @@ fileprivate extension CustardInterfaceKey {
                 longPressActions: value.longpress_action.map{$0.longpressActionType},
                 variationsModel: VariationsModel(variations),
                 keyColorType: value.design.color.qwertyKeyColorType,
-                needSuggestView: true,
+                needSuggestView: value.longpress_action.isEmpty,
                 for: (1,1)
             )
             return model
