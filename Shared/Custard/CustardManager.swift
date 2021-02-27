@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 struct CustardMetaData: Codable {
     var origin: Origin
@@ -54,7 +55,9 @@ struct CustardManager {
     private var index = CustardManagerIndex()
 
     private static func fileName(_ identifier: String) -> String {
-        return String.init(identifier.hash, radix: 16, uppercase: true)
+        let hash = SHA256.hash(data: identifier.data(using: .utf8) ?? Data())
+        let value16 = hash.map{String.init($0, radix: 16, uppercase: true)}.joined()
+        return value16
     }
 
     private static func fileURL(name: String) -> URL {
