@@ -182,9 +182,10 @@ struct FlickCustomKeysSettingView: View {
             if selectState.selectedPosition != nil{
                 HStack{
                     ForEach(specifiers){specifier in
+                        Spacer()
                         self.button(specifier: specifier)
                             .foregroundColor(self.buttonColor(specifier: specifier))
-                            .padding()
+                        Spacer()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: 50)
