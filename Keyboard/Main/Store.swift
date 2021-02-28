@@ -729,7 +729,7 @@ private final class InputManager{
         }
     }
 
-    fileprivate func smoothDelete(){
+    fileprivate func smoothDelete(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
         //選択状態ではオール削除になる
         if self.isSelected{
             self.proxy.deleteBackward()
@@ -743,37 +743,73 @@ private final class InputManager{
             self.cursorPosition = 0
             self.kanaRomanStateHolder.delete(kanaCount: leftSideText.count, leftSideText: leftSideText)
             //削除を実行する
-            self.deleteBackward(count: leftSideText.count)
+            self.proxy.deleteBackward(count: leftSideText.count)
+            self.moveCursor(count: self.cursorMaximumPosition)
             //文字がもうなかった場合
             if self.inputtedText.isEmpty{
                 self.clear()
                 return
             }
             setResult()
-
             return
         }
-        var leftSideText = self.proxy.documentContextBeforeInput ?? ""
-        var count = 0
-        while let last = leftSideText.last{
-            if ["、","。","！","？",".",",","．","，"].contains(last){
-                if count == 0{
-                    count = 1
+
+        var deletedCount = 0
+        while let last = self.proxy.documentContextBeforeInput?.last{
+            if nexts.contains(last){
+                if deletedCount == 0{
+                    self.proxy.deleteBackward()
                 }
                 break
+            }else{
+                self.proxy.deleteBackward()
+                deletedCount += 1
             }
-            leftSideText.removeLast()
-            count += 1
         }
-        //削除を実行する
-        self.deleteBackward(count: count)
     }
-    
+
+    fileprivate func smoothMoveCursor(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
+        //選択状態では最も左にカーソルを移動
+        if isSelected{
+            let count = cursorPosition
+            deselect()
+            moveCursor(count: -count)
+            setResult()
+            return
+        }
+        //入力中の場合
+        if !inputtedText.isEmpty{
+            moveCursor(count: -cursorPosition)
+            setResult()
+            return
+        }
+
+        var movedCount = 0
+        while let last = proxy.documentContextBeforeInput?.last{
+            if nexts.contains(last){
+                if movedCount == 0{
+                    proxy.moveCursor(count: -1)
+                }
+                break
+            }else{
+                proxy.moveCursor(count: -1)
+                movedCount += 1
+            }
+        }
+    }
+
+    fileprivate func deselect(){
+        if isSelected{
+            clear()
+            VariableStates.shared.setEnterKeyState(.return)
+        }
+    }
+
     fileprivate func edit(){
-        if self.isSelected{
-            let selectedText = self.inputtedText
-            self.deleteBackward(count: 1)
-            self.input(text: selectedText)
+        if isSelected{
+            let selectedText = inputtedText
+            deleteBackward(count: 1)
+            input(text: selectedText)
             VariableStates.shared.setEnterKeyState(.complete)
         }
     }
