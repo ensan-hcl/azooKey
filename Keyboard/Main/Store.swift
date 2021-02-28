@@ -138,7 +138,7 @@ final class KeyboardActionDepartment: ActionDepartment{
             }
         case let .delete(count):
             self.showResultView()
-            self.inputManager.delete(count: count)
+            self.inputManager.deleteBackward(count: count)
 
         case .smoothDelete:
             Sound.smoothDelete()
@@ -655,9 +655,41 @@ private final class InputManager{
         setResult()
     }
 
-    fileprivate func delete(count: Int, requireSetResult: Bool = true){
-        //条件
-        if count <= 0 {
+    fileprivate func deleteForward(count: Int, requireSetResult: Bool = true){
+        if count < 0{
+            return
+        }
+
+        if self.inputtedText.isEmpty{
+            self.proxy.deleteForward(count: count)
+            return
+        }
+
+        //一番右端にいるときは削除させない
+        if !self.inputtedText.isEmpty && self.cursorPosition == self.cursorMaximumPosition{
+            return
+        }
+        //削除を実行する
+        self.proxy.deleteForward(count: count)
+        if VariableStates.shared.inputStyle == .roman{
+            //ステートホルダーを調整する
+            self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition+count))
+        }
+        let leftSideText = self.inputtedText.prefix(max(0,self.cursorPosition))
+        let rightSideText = self.inputtedText.suffix(self.cursorMaximumPosition - self.cursorPosition - count)
+        self.inputtedText = String(leftSideText + rightSideText)
+
+        if requireSetResult{
+            setResult()
+        }
+
+        if self.inputtedText.isEmpty{
+            VariableStates.shared.setEnterKeyState(.return)
+        }
+    }
+
+    fileprivate func deleteBackward(count: Int, requireSetResult: Bool = true){
+        if count == 0{
             return
         }
         //選択状態ではオール削除になる
@@ -666,14 +698,17 @@ private final class InputManager{
             self.clear()
             return
         }
+        //条件
+        if count < 0 {
+            self.deleteForward(count: abs(count), requireSetResult: requireSetResult)
+            return
+        }
         //一番左端にいるときは削除させない
         if !self.inputtedText.isEmpty && self.cursorPosition == self.cursorMinimumPosition{
             return
         }
         //削除を実行する
-        (0..<count).forEach{_ in
-            self.proxy.deleteBackward()
-        }
+        self.proxy.deleteBackward(count: count)
         if VariableStates.shared.inputStyle == .roman{
             //ステートホルダーを調整する
             self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition))
@@ -706,10 +741,8 @@ private final class InputManager{
             self.cursorPosition = 0
             self.kanaRomanStateHolder.delete(kanaCount: leftSideText.count, leftSideText: leftSideText)
             //削除を実行する
-            (0..<leftSideText.count).forEach{_ in
-                self.proxy.deleteBackward()
-            }
-
+            self.deleteBackward(count: leftSideText.count)
+            //文字がもうなかった場合
             if self.inputtedText.isEmpty{
                 self.clear()
                 return
@@ -731,15 +764,13 @@ private final class InputManager{
             count += 1
         }
         //削除を実行する
-        (0..<count).forEach{_ in
-            self.proxy.deleteBackward()
-        }
+        self.deleteBackward(count: count)
     }
     
     fileprivate func edit(){
         if self.isSelected{
             let selectedText = self.inputtedText
-            self.delete(count: 1)
+            self.deleteBackward(count: 1)
             self.input(text: selectedText)
             VariableStates.shared.setEnterKeyState(.complete)
         }
@@ -754,39 +785,8 @@ private final class InputManager{
         if Character(changed) == char{
             return
         }
-        self.delete(count: 1, requireSetResult: false)
+        self.deleteBackward(count: 1, requireSetResult: false)
         self.input(text: changed)
-    }
-
-    ///self.cursorPositionが正確である必要あり。
-    fileprivate func getActualOffset(count: Int) -> Int {
-        if count == 0{
-            return 0
-        }
-        else if count>0{
-            if let after = self.proxy.documentContextAfterInput{
-                //改行があって右端の場合ここに来る。
-                if after.isEmpty{
-                    return 1
-                }
-                let suf = after.prefix(count)
-                debug("あとの文字は、",suf,-suf.utf16.count)
-                return suf.utf16.count
-            }else{
-                return 1
-            }
-        }
-        else {
-            if let before = self.proxy.documentContextBeforeInput{
-                let pre = before.suffix(-count)
-                debug("前の文字は、",pre,-pre.utf16.count)
-
-                return -pre.utf16.count
-
-            }else{
-                return -1
-            }
-        }
     }
 
     ///キーボード経由でのカーソル移動
@@ -794,62 +794,53 @@ private final class InputManager{
         if count == 0 {
             return
         }
-        self.afterAdjusted = true
+        afterAdjusted = true
         if inputtedText.isEmpty{
-            let offset = self.getActualOffset(count: count)
-            self.proxy.adjustTextPosition(byCharacterOffset: offset)
+            proxy.moveCursor(count: count)
             return
         }
         debug("moveCursor, cursorPosition:", cursorPosition, count)
         //カーソル位置の正規化
-        if cursorPosition + count > self.cursorMaximumPosition{
-            let offset = self.getActualOffset(count: self.cursorMaximumPosition - self.cursorPosition)
-            self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            self.cursorPosition = self.cursorMaximumPosition
+        if cursorPosition + count > cursorMaximumPosition{
+            proxy.moveCursor(count: cursorMaximumPosition - cursorPosition)
+            cursorPosition = cursorMaximumPosition
             setResult()
             return
         }
-        if  cursorPosition + count < self.cursorMinimumPosition{
-            let offset = self.getActualOffset(count: self.cursorMinimumPosition - self.cursorPosition)
-            self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            self.cursorPosition = self.cursorMinimumPosition
+        if  cursorPosition + count < cursorMinimumPosition{
+            proxy.moveCursor(count: cursorMinimumPosition - cursorPosition)
+            cursorPosition = cursorMinimumPosition
             setResult()
             return
         }
         
-        let offset = self.getActualOffset(count: count)
-        self.proxy.adjustTextPosition(byCharacterOffset: offset)
-        self.cursorPosition += count
+        proxy.moveCursor(count: count)
+        cursorPosition += count
         setResult()
     }
     
     //MARK: userが勝手にカーソルを何かした場合の後処理
     fileprivate func userMovedCursor(count: Int){
-        debug("userによるカーソル移動を検知、今の位置は\(self.cursorPosition)、動かしたオフセットは\(count)")
-        if self.inputtedText.isEmpty{
+        debug("userによるカーソル移動を検知、今の位置は\(cursorPosition)、動かしたオフセットは\(count)")
+        if inputtedText.isEmpty{
             //入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
         }
         
-        self.cursorPosition += count
+        cursorPosition += count
 
-        if self.cursorPosition > self.cursorMaximumPosition{
-            let offset = self.getActualOffset(count: self.cursorMaximumPosition - self.cursorPosition)
-            self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            debug("右にはみ出したので\(self.cursorMaximumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
-            self.cursorPosition = self.cursorMaximumPosition
+        if cursorPosition > cursorMaximumPosition{
+            proxy.moveCursor(count: cursorMaximumPosition - cursorPosition)
+            cursorPosition = cursorMaximumPosition
             setResult()
-            self.afterAdjusted = true
+            afterAdjusted = true
             return
         }
-        if self.cursorPosition < self.cursorMinimumPosition{
-            let offset = self.getActualOffset(count: self.cursorMinimumPosition - self.cursorPosition)
-            //let offset = self.cursorMinimumPosition - self.cursorPosition
-            self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            debug("左にはみ出したので\(self.cursorMinimumPosition - self.cursorPosition)(\(offset))分正規化しました。動いた位置は\(self.cursorPosition)")
-            self.cursorPosition = self.cursorMinimumPosition
+        if cursorPosition < cursorMinimumPosition{
+            proxy.moveCursor(count: cursorMinimumPosition - cursorPosition)
+            cursorPosition = cursorMinimumPosition
             setResult()
-            self.afterAdjusted = true
+            afterAdjusted = true
             return
         }
         setResult()
@@ -857,26 +848,26 @@ private final class InputManager{
 
     fileprivate func userPastedText(text: String){
         //入力された分を反映する
-        self.inputtedText = text
-        self.cursorPosition = self.cursorMaximumPosition
-        self.isSelected = false
+        inputtedText = text
+        cursorPosition = cursorMaximumPosition
+        isSelected = false
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
     }
     
     fileprivate func userCutText(text: String){
-        self.inputtedText = ""
-        self.cursorPosition = .zero
-        self.isSelected = false
-        self.setResult()
+        inputtedText = ""
+        cursorPosition = .zero
+        isSelected = false
+        setResult()
         VariableStates.shared.setEnterKeyState(.return)
     }
     
     fileprivate func userReplacedSelectedText(text: String){
         //新たな入力を反映
-        self.inputtedText = text
-        self.cursorPosition = self.cursorMaximumPosition
-        self.isSelected = false
+        inputtedText = text
+        cursorPosition = cursorMaximumPosition
+        isSelected = false
         
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
@@ -887,19 +878,19 @@ private final class InputManager{
         if text.isEmpty{
             return
         }
-        self.inputtedText = text
-        self.kanaRomanStateHolder.components = text.map{KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
-        self.cursorPosition = self.cursorMaximumPosition
-        self.isSelected = true
+        inputtedText = text
+        kanaRomanStateHolder.components = text.map{KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
+        cursorPosition = cursorMaximumPosition
+        isSelected = true
         if text.split(separator: " ", omittingEmptySubsequences: false).count > 1 || text.components(separatedBy: .newlines).count > 1{
             //FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
-            //参照: https://qiita.com/En3_HCl/items/476ffb665cd37cb312da
+            //参照: https://qiita.com/ensan_hcl/items/476ffb665cd37cb312da
             //self.setResult(options: [.mojiCount, .wordCount])
-            self.setResult(options: [])
+            setResult(options: [])
         }else{
             //FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
-            //参照: https://qiita.com/En3_HCl/items/476ffb665cd37cb312da
-            self.setResult(options: [.convertInput])
+            //参照: https://qiita.com/ensan_hcl/items/476ffb665cd37cb312da
+            setResult(options: [.convertInput])
         }
         VariableStates.shared.setEnterKeyState(.edit)
     }
@@ -982,4 +973,69 @@ private final class InputManager{
         isDebugMode = true
         #endif
     }
+}
+
+extension UITextDocumentProxy{
+    private func getActualOffset(count: Int) -> Int {
+        if count == 0{
+            return 0
+        }
+        else if count>0{
+            if let after = self.documentContextAfterInput{
+                //改行があって右端の場合ここに来る。
+                if after.isEmpty{
+                    return 1
+                }
+                let suf = after.prefix(count)
+                debug("あとの文字は、",suf,-suf.utf16.count)
+                return suf.utf16.count
+            }else{
+                return 1
+            }
+        }
+        else {
+            if let before = self.documentContextBeforeInput{
+                let pre = before.suffix(-count)
+                debug("前の文字は、",pre,-pre.utf16.count)
+
+                return -pre.utf16.count
+
+            }else{
+                return -1
+            }
+        }
+    }
+
+    func moveCursor(count: Int) {
+        let offset = self.getActualOffset(count: count)
+        self.adjustTextPosition(byCharacterOffset: offset)
+    }
+
+    func deleteBackward(count: Int) {
+        if count == 0{
+            return
+        }
+        if count < 0{
+            self.deleteForward(count: abs(count))
+            return
+        }
+        (0..<count).forEach{ _ in
+            self.deleteBackward()
+        }
+    }
+
+    func deleteForward(count: Int = 1) {
+        if count == 0{
+            return
+        }
+        if count < 0{
+            self.deleteBackward(count: abs(count))
+            return
+        }
+        (0..<count).forEach{ _ in
+            self.moveCursor(count: 1)
+            self.deleteBackward()
+        }
+    }
+
 }
