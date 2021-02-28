@@ -13,4 +13,6 @@ final class KeyModelVariableSection: ObservableObject{
     @Published var suggestState: SuggestState = .nothing
     @Published var pressState: KeyPressState = .inactive
     @Published var startLocation: CGPoint? = nil
+
+    init(){debug("init")}
 }

@@ -49,8 +49,6 @@ protocol FlickKeyModelProtocol {
     var keySizeType: FlickKeySizeType {get}
     var needSuggestView: Bool {get}
     
-    var variableSection: KeyModelVariableSection {get set}
-
     //描画に関わるものは変数としてVariableStatesを受け取る。こうすることでVariableStatesの更新に合わせて変更されるようになる。
     func label(width: CGFloat, states: VariableStates) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color

@@ -66,7 +66,6 @@
 		1A3DC2122500D586002CAA93 /* HorizontalFlickDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2112500D586002CAA93 /* HorizontalFlickDataProvider.swift */; };
 		1A3DC2152500D59F002CAA93 /* FlickKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2142500D59F002CAA93 /* FlickKeyView.swift */; };
 		1A3DC2172500D5AB002CAA93 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2162500D5AB002CAA93 /* Action.swift */; };
-		1A3DC2192500D5C1002CAA93 /* KeyModelVariableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2182500D5C1002CAA93 /* KeyModelVariableSection.swift */; };
 		1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21A2500D5D1002CAA93 /* FlickKeyModelProtocol.swift */; };
 		1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21C2500D5E4002CAA93 /* FlickKeyModel.swift */; };
 		1A3DC21F2500D5F2002CAA93 /* FlickEnterKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */; };
@@ -2443,7 +2442,6 @@
 		1AF6799125CEDBB500F3987B /* FlickKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21A2500D5D1002CAA93 /* FlickKeyModelProtocol.swift */; };
 		1AF6799225CEDBB500F3987B /* FlickChangeKeyboardKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CEB253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift */; };
 		1AF6799325CEDBB500F3987B /* FlickAaKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */; };
-		1AF6799425CEDBB500F3987B /* KeyModelVariableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2182500D5C1002CAA93 /* KeyModelVariableSection.swift */; };
 		1AF6799525CEDBB500F3987B /* FlickKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21C2500D5E4002CAA93 /* FlickKeyModel.swift */; };
 		1AF6799625CEDBB500F3987B /* FlickEnterKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */; };
 		1AF6799B25CEDBC000F3987B /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A593259587A200B71E5A /* Design.swift */; };
@@ -2571,7 +2569,6 @@
 		1A3DC2112500D586002CAA93 /* HorizontalFlickDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalFlickDataProvider.swift; sourceTree = "<group>"; };
 		1A3DC2142500D59F002CAA93 /* FlickKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKeyView.swift; sourceTree = "<group>"; };
 		1A3DC2162500D5AB002CAA93 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
-		1A3DC2182500D5C1002CAA93 /* KeyModelVariableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyModelVariableSection.swift; sourceTree = "<group>"; };
 		1A3DC21A2500D5D1002CAA93 /* FlickKeyModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKeyModelProtocol.swift; sourceTree = "<group>"; };
 		1A3DC21C2500D5E4002CAA93 /* FlickKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKeyModel.swift; sourceTree = "<group>"; };
 		1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickEnterKeyModel.swift; sourceTree = "<group>"; };
@@ -5161,7 +5158,6 @@
 			children = (
 				1A3DC2142500D59F002CAA93 /* FlickKeyView.swift */,
 				1A3DC21A2500D5D1002CAA93 /* FlickKeyModelProtocol.swift */,
-				1A3DC2182500D5C1002CAA93 /* KeyModelVariableSection.swift */,
 				1A3DC21C2500D5E4002CAA93 /* FlickKeyModel.swift */,
 				1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */,
 				1A3DC2202500D600002CAA93 /* FlickTabKeyModel.swift */,
@@ -10142,7 +10138,6 @@
 				1ACEEFDE25665F0100899DA2 /* CenterAlignedView.swift in Sources */,
 				1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */,
 				1A3A16042528BFF900A5BA4F /* SelctInputStyle.swift in Sources */,
-				1AF6799425CEDBB500F3987B /* KeyModelVariableSection.swift in Sources */,
 				1A10D80D25E501C80095CB67 /* UserMadeCustard.swift in Sources */,
 				1AF6790A25CED97500F3987B /* Action.swift in Sources */,
 				1AC031642512138F004CA505 /* SettingItemProtocol.swift in Sources */,
@@ -10410,7 +10405,6 @@
 				1A9218E4255238CE005F45C4 /* RomanTypographys.swift in Sources */,
 				1AF28CF6253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift in Sources */,
 				1A6736082509F39E003FC654 /* VerbConjugation.swift in Sources */,
-				1A3DC2192500D5C1002CAA93 /* KeyModelVariableSection.swift in Sources */,
 				1A26029D2514808D00EAD647 /* QwertyKeyModelVariableSection.swift in Sources */,
 				1AC8A5AB2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1AB8C37525E0067700D39BC5 /* SimpleKeyView.swift in Sources */,
