@@ -10,16 +10,20 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form{
-                Group{
-                    VersionView("1.6", releaseDate: "2021年??月??日"){
-                        ParagraphView("カスタムタブ機能を追加しました。"){
-                            "タブ全体をカスタマイズするカスタムタブ機能の追加"
-                            "カスタムタブへの移動を担う「タブバー」の導入"
-                            "外部で作成したカスタムタブを読み込む機能を追加"
-                        }
+            Group{
+                VersionView("1.6", releaseDate: "2021年??月??日"){
+                    ParagraphView("カスタムタブ機能を追加しました。"){
+                        "オリジナルのタブを作成できるカスタムタブ機能の追加"
+                        "カスタムタブへの移動を担う「タブバー」の導入"
+                        "外部で作成したカスタムタブを読み込む機能を追加"
+                    }
                     ParagraphView("機能を改善しました。"){
                         "iOS14.5以降で利用可能なUnicode13.1に対応した絵文字のデータを追加"
+                        "カスタムキーに入力以外の操作を割り当てる機能を追加"
                         "ほとんどの機能を英語対応"
+                    }
+                    ParagraphView("不具合を修正しました。"){
+                        "着せ替え機能で枠線を設定してもサジェストに反映されない問題を修正"
                     }
                 }
                 VersionView("1.5.1", releaseDate: "2021年02月15日"){
