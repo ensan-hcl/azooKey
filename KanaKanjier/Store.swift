@@ -99,17 +99,6 @@ final class Store{
         identifier: .numberTabCustomKeys,
         defaultValue: QwertyCustomKeysValue.defaultValue
     ))
-    /*
-    var keyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayout>(
-        identifier: .japaneseKeyboardLayout,
-        defaultValue: .flick
-    ))
-
-    var englishKeyboardTypeSetting = SettingItemViewModel(SettingItem<KeyboardLayout>(
-        identifier: .englishKeyboardLayout,
-        defaultValue: .flick
-    ))
- */
 
     var japaneseLayoutSetting = SettingItemViewModel(SettingItem<LanguageLayout>(
         identifier: .japaneseKeyboardLayout,
@@ -209,8 +198,6 @@ final class Store{
 final class StoreVariableSection: ObservableObject{
     @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
-    //@Published var japaneseKeyboardLayout: KeyboardLayout = .flick
-    //@Published var englishKeyboardLayout: KeyboardLayout = .flick
     @Published var japaneseLayout: LanguageLayout = .flick
     @Published var englishLayout: LanguageLayout = .flick
 }
