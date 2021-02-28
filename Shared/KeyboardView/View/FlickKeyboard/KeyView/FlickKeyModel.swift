@@ -18,8 +18,6 @@ struct FlickKeyModel: FlickKeyModelProtocol{
             pressActions: [.smoothDelete]
         )
     ], needSuggestView: false, keycolorType: .tabkey)
-
-    var variableSection = KeyModelVariableSection()
     
     let suggestModel: SuggestModel
     let needSuggestView: Bool

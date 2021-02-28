@@ -23,7 +23,6 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
         }
     }
     var longPressActions: [KeyLongPressActionType]{ [] }
-    var variableSection: KeyModelVariableSection = KeyModelVariableSection()
 
     let suggestModel: SuggestModel
     let flickKeys: [FlickDirection: FlickedKeyModel] = [:]

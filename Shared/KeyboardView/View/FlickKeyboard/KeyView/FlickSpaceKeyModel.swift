@@ -11,7 +11,6 @@ import SwiftUI
 
 struct FlickSpaceKeyModel: FlickKeyModelProtocol{
     static var shared = FlickSpaceKeyModel()
-    var variableSection: KeyModelVariableSection = KeyModelVariableSection()
     let suggestModel: SuggestModel
     let needSuggestView = true
 

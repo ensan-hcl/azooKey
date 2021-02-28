@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 struct QwertyKeyModel: QwertyKeyModelProtocol{
-    var variableSection = QwertyKeyModelVariableSection()
     
     let pressActions: [ActionType]
     var longPressActions: [KeyLongPressActionType]

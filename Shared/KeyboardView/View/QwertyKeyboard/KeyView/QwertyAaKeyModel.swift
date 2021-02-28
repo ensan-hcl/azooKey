@@ -11,7 +11,6 @@ import SwiftUI
 struct QwertyAaKeyModel: QwertyKeyModelProtocol{
     static var shared = QwertyAaKeyModel()
 
-    var variableSection = QwertyKeyModelVariableSection()
     let keySizeType: QwertyKeySizeType = .normal(of: 1, for: 1)
     var variationsModel = VariationsModel([])
 

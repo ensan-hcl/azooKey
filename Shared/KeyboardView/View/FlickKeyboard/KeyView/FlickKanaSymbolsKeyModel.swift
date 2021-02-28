@@ -17,7 +17,6 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol{
         SettingData.shared.kanaSymbolsFlickSetting.actions
     }
     var longPressActions: [KeyLongPressActionType] = []
-    var variableSection: KeyModelVariableSection = KeyModelVariableSection()
 
     var labelType: KeyLabelType {
         SettingData.shared.kanaSymbolsFlickSetting.labelType

@@ -9,11 +9,37 @@
 import Foundation
 import SwiftUI
 
+enum QwertyKeyPressState{
+    case unpressed
+    case started(Date)
+    case longPressed
+    case variations
+
+    var isActive: Bool {
+        switch self{
+        case .unpressed:
+            return false
+        default:
+            return true
+        }
+    }
+
+    var needVariationsView: Bool {
+        switch self{
+        case .variations:
+            return true
+        default:
+            return false
+        }
+    }
+
+}
+
 struct QwertyKeyView: View{
     private let model: QwertyKeyModelProtocol
-    @ObservedObject private var modelVariableSection: QwertyKeyModelVariableSection
     @ObservedObject private var variableStates = VariableStates.shared
 
+    @State private var pressState: QwertyKeyPressState = .unpressed
     @State private var suggest = false
 
     @Environment(\.themeEnvironment) private var theme
@@ -21,7 +47,6 @@ struct QwertyKeyView: View{
     
     init(model: QwertyKeyModelProtocol, tabDesign: TabDependentDesign){
         self.model = model
-        self.modelVariableSection = model.variableSection
         self.tabDesign = tabDesign
     }
     
@@ -29,19 +54,19 @@ struct QwertyKeyView: View{
         DragGesture(minimumDistance: .zero)
             .onChanged({(value: DragGesture.Value) in
                 self.suggest = true
-                switch self.modelVariableSection.pressState{
+                switch self.pressState{
                 case .unpressed:
                     self.model.sound()
-                    self.modelVariableSection.pressState = .started(Date())
+                    self.pressState = .started(Date())
                     self.model.longPressReserve()
                 case let .started(date):
                     //もし0.4秒以上押していたら
                     if Date().timeIntervalSince(date) >= 0.4{
                         //長押し状態に設定する。
                         if self.model.variationsModel.variations.isEmpty{
-                            self.modelVariableSection.pressState = .longPressed
+                            self.pressState = .longPressed
                         }else{
-                            self.modelVariableSection.pressState = .variations
+                            self.pressState = .variations
                         }
                     }
                 case .longPressed:
@@ -56,7 +81,7 @@ struct QwertyKeyView: View{
                 self.model.longPressEnd()   //何もなければ何も起こらない。
                 self.suggest = false
                 //状態に基づいて、必要な変更を加える
-                switch self.modelVariableSection.pressState{
+                switch self.pressState{
                 case .unpressed:
                     break
                 case let .started(date):
@@ -69,12 +94,12 @@ struct QwertyKeyView: View{
                 case .variations:
                     self.model.variationsModel.performSelected()
                 }
-                self.modelVariableSection.pressState = .unpressed
+                self.pressState = .unpressed
             })
     }
 
     var keyFillColor: Color {
-        if modelVariableSection.pressState.isActive{
+        if self.pressState.isActive{
             return self.model.backGroundColorWhenPressed(theme: theme)
         }else{
             return self.model.unpressedKeyColorType.color(states: variableStates, theme: theme)
@@ -114,7 +139,7 @@ struct QwertyKeyView: View{
             .overlay(Group{
                 if self.suggest && self.model.needSuggestView{
                     let height = tabDesign.verticalSpacing + keySize.height
-                    if self.modelVariableSection.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty{
+                    if self.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty{
                         QwertySuggestView.scaleToVariationsSize(
                             keyWidth: keySize.width,
                             scale_y: 1,

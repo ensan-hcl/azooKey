@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
-    var variableSection = QwertyKeyModelVariableSection()
 
     var pressActions: [ActionType]{
         switch SemiStaticStates.shared.needsInputModeSwitchKey{

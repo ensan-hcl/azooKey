@@ -12,7 +12,6 @@ import SwiftUI
 struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
     static var delete = QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.repeat(.delete(1))])
 
-    var variableSection = QwertyKeyModelVariableSection()
     
     let pressActions: [ActionType]
     var longPressActions: [KeyLongPressActionType]

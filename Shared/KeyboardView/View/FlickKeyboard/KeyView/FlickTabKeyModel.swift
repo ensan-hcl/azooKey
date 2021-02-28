@@ -25,7 +25,6 @@ struct FlickTabKeyModel: FlickKeyModelProtocol{
 
     var pressActions: [ActionType]{ [.moveTab(self.tab)] }
     let longPressActions: [KeyLongPressActionType]
-    var variableSection: KeyModelVariableSection = KeyModelVariableSection()
 
     let suggestModel: SuggestModel
     var labelType: KeyLabelType

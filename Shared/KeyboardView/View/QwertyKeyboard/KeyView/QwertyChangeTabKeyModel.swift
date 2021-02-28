@@ -11,7 +11,6 @@ import SwiftUI
 
 //symbolタブ、123タブで表示される切り替えボタン
 struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
-    var variableSection = QwertyKeyModelVariableSection()
 
     var pressActions: [ActionType]{
         switch SemiStaticStates.shared.needsInputModeSwitchKey{

@@ -70,9 +70,7 @@ protocol QwertyKeyModelProtocol{
     var longPressActions: [KeyLongPressActionType] {get}
     var keySizeType: QwertyKeySizeType {get}
     var needSuggestView: Bool {get}
-    
-    var variableSection: QwertyKeyModelVariableSection {get set}
-    
+        
     var variationsModel: VariationsModel {get}
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
