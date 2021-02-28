@@ -123,7 +123,7 @@ final class KeyboardActionDepartment: ActionDepartment{
 
     private func showResultView(){
         VariableStates.shared.showTabBar = false
-        VariableStates.shared.showMoveCursorView = false
+        VariableStates.shared.showMoveCursorBar = false
     }
 
     private func doAction(_ action: ActionType){
@@ -162,7 +162,8 @@ final class KeyboardActionDepartment: ActionDepartment{
         case let .changeCapsLockState(state):
             VariableStates.shared.aAKeyState = state
         case .toggleShowMoveCursorView:
-            VariableStates.shared.showMoveCursorView.toggle()
+            VariableStates.shared.showTabBar = false
+            VariableStates.shared.showMoveCursorBar.toggle()
         case .enter:
             self.showResultView()
             let actions = self.inputManager.enter()
@@ -176,6 +177,7 @@ final class KeyboardActionDepartment: ActionDepartment{
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
         case .toggleTabBar:
+            VariableStates.shared.showMoveCursorBar = false
             VariableStates.shared.showTabBar.toggle()
             
         case .hideLearningMemory:

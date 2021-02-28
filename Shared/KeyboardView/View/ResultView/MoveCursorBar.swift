@@ -9,41 +9,43 @@
 import Foundation
 import SwiftUI
 
-private enum CursorMoveViewGestureState{
+private enum MoveCursorBarGestureState{
     case unactive
     case moving(CGPoint, Int)   //右だったら+1、左だったら-1
 }
 
-struct CursorMoveView: View{
-    @State private var gestureState: CursorMoveViewGestureState = .unactive
+struct MoveCursorBar: View{
+    @State private var gestureState: MoveCursorBarGestureState = .unactive
     @Environment(\.themeEnvironment) private var theme
 
     private var gesture: some Gesture {
-        DragGesture(minimumDistance: 0).onChanged({value in
-            switch self.gestureState{
-            case .unactive:
-                self.gestureState = .moving(value.location, 0)
-            case let .moving(previous, count):
-                let dx = (value.location.x - previous.x)
-                if dx.isZero{
-                    break
-                }
-                let newCount = count + Int(dx/abs(dx))
-                if newCount > 1{
+        DragGesture(minimumDistance: 0)
+            .onChanged{value in
+                switch self.gestureState{
+                case .unactive:
                     self.gestureState = .moving(value.location, 0)
-                    VariableStates.shared.action.registerAction(.moveCursor(1))
-                }
-                else if newCount < -1{
-                    self.gestureState = .moving(value.location, 0)
-                    VariableStates.shared.action.registerAction(.moveCursor(-1))
-                }
-                else{
-                    self.gestureState = .moving(value.location, newCount)
+                case let .moving(previous, count):
+                    let dx = (value.location.x - previous.x)
+                    if dx.isZero{
+                        break
+                    }
+                    let newCount = count + Int(dx/abs(dx))
+                    if newCount > 1{
+                        self.gestureState = .moving(value.location, 0)
+                        VariableStates.shared.action.registerAction(.moveCursor(1))
+                    }
+                    else if newCount < -1{
+                        self.gestureState = .moving(value.location, 0)
+                        VariableStates.shared.action.registerAction(.moveCursor(-1))
+                    }
+                    else{
+                        self.gestureState = .moving(value.location, newCount)
+                    }
                 }
             }
-        }).onEnded{value in
-            self.gestureState = .unactive
-        }
+            .onEnded{value in
+                self.gestureState = .unactive
+            }
     }
 
     private var centerColor: Color {
@@ -65,14 +67,12 @@ struct CursorMoveView: View{
 
     var body: some View {
         Group{
-         //   Rectangle()
             RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: 200)
                 .frame(height: Design.shared.resultViewHeight)
                 .cornerRadius(20)
                 .gesture(gesture)
                 .overlay(HStack{
                     Spacer()
-
                     Button(action: {
                         VariableStates.shared.action.registerAction(.moveCursor(-1))
                     }, label: {
@@ -91,7 +91,6 @@ struct CursorMoveView: View{
                     Spacer()
                 }.foregroundColor(symbolsColor))
         }.frame(height: Design.shared.resultViewHeight)
-
     }
 }
 

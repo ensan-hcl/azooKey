@@ -42,8 +42,8 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     var body: some View {
         Group{[unowned modelVariableSection] in
-            if variableStates.showMoveCursorView{
-                CursorMoveView()
+            if variableStates.showMoveCursorBar{
+                MoveCursorBar()
             }else if variableStates.showTabBar, let tabBarData = try? CustardManager.load().tabbar(identifier: 0){
                 TabBarView(data: tabBarData)
             }else{
