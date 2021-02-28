@@ -55,11 +55,13 @@ struct EditingCodableActionData: Identifiable, Equatable {
 struct KeyActionsEditView: View {
     @State private var editMode = EditMode.inactive
     @State private var bottomSheetShown = false
-    @Binding private var actions: [EditingCodableActionData]
+    @State private var actions: [EditingCodableActionData]
+    @Binding private var data: [CodableActionData]
     private let availableCustards: [String]
 
-    init(_ actions: Binding<[EditingCodableActionData]>, availableCustards: [String]){
-        self._actions = actions
+    init(_ actions: Binding<[CodableActionData]>, availableCustards: [String]){
+        self._data = actions
+        self._actions = State(initialValue: actions.wrappedValue.map{EditingCodableActionData($0)})
         self.availableCustards = availableCustards
     }
 
@@ -169,6 +171,9 @@ struct KeyActionsEditView: View {
                 }
                 .foregroundColor(.primary)
             }
+        }
+        .onChange(of: actions){value in
+            self.data = actions.map{$0.data}
         }
         .navigationBarTitle(Text("動作の編集"), displayMode: .inline)
         .navigationBarItems(trailing: editButton)

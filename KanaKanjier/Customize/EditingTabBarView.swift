@@ -27,10 +27,10 @@ extension TabBarItemLabelType: Equatable {
 struct EditingTabBarItem: Identifiable, Equatable {
     let id = UUID()
     var label: TabBarItemLabelType
-    var actions: [EditingCodableActionData]
+    var actions: [CodableActionData]
     var disclosed: Bool
 
-    init(label: TabBarItemLabelType, actions: [EditingCodableActionData], disclosed: Bool = false){
+    init(label: TabBarItemLabelType, actions: [CodableActionData], disclosed: Bool = false){
         self.label = label
         self.actions = actions
         self.disclosed = disclosed
@@ -51,7 +51,7 @@ struct EditingTabBarView: View {
         self._items = State(initialValue: tabBarData.wrappedValue.items.indices.map{i in
             EditingTabBarItem(
                 label: tabBarData.wrappedValue.items[i].label,
-                actions: tabBarData.wrappedValue.items[i].actions.map{EditingCodableActionData($0)}
+                actions: tabBarData.wrappedValue.items[i].actions
             )
         })
         self._tabBarData = tabBarData
@@ -65,7 +65,7 @@ struct EditingTabBarView: View {
                     items.append(
                         EditingTabBarItem(
                             label: .text("アイテム"),
-                            actions: [EditingCodableActionData(.moveTab(.system(.user_japanese)))]
+                            actions: [.moveTab(.system(.user_japanese))]
                         )
                     )
                 } label: {
@@ -123,7 +123,7 @@ struct EditingTabBarView: View {
     }
 
     private func makeLabelText(item: EditingTabBarItem) -> LocalizedStringKey {
-        if let label = item.actions.first?.data.label{
+        if let label = item.actions.first?.label{
             if item.actions.count > 1{
                 return "\(label)など"
             }else{
@@ -137,7 +137,7 @@ struct EditingTabBarView: View {
         do{
             debug("セーブする！", self.items)
             self.tabBarData = TabBarData(identifier: tabBarData.identifier, items: self.items.map{
-                TabBarItem(label: $0.label, actions: $0.actions.map{$0.data})
+                TabBarItem(label: $0.label, actions: $0.actions)
             })
             try manager.saveTabBarData(tabBarData: self.tabBarData)
         } catch {

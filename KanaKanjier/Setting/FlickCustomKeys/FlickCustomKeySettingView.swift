@@ -8,6 +8,39 @@
 
 import SwiftUI
 
+fileprivate extension FlickKeyPosition{
+    var keyPath: WritableKeyPath<KeyFlickSetting, FlickCustomKey> {
+        switch self{
+        case .left:
+            return \.left
+        case .top:
+            return \.top
+        case .right:
+            return \.right
+        case .bottom:
+            return \.bottom
+        case .center:
+            return \.center
+        }
+    }
+
+    var bindedKeyPath: KeyPath<Binding<KeyFlickSetting>, Binding<FlickCustomKey>> {
+        switch self{
+        case .left:
+            return \.left
+        case .top:
+            return \.top
+        case .right:
+            return \.right
+        case .bottom:
+            return \.bottom
+        case .center:
+            return \.center
+        }
+    }
+
+}
+
 fileprivate final class SelectState: ObservableObject{
     @Published var selectedPosition: FlickKeyPosition? = nil
 
@@ -22,6 +55,8 @@ fileprivate final class EditState: ObservableObject{
         case action
     }
     @Published var state = State.none
+    @Published var details = false
+
     var editLabel: Bool {
         return state == .label
     }
@@ -102,36 +137,14 @@ struct FlickCustomKeysSettingView: View {
     }
 
     private func label(_ position: FlickKeyPosition) -> Binding<String> {
-        switch position{
-        case .left:
-            return self.$viewModel.value.left.label
-        case .top:
-            return self.$viewModel.value.top.label
-        case .right:
-            return self.$viewModel.value.right.label
-        case .bottom:
-            return self.$viewModel.value.bottom.label
-        case .center:
-            return self.$viewModel.value.center.label
-        }
+        return self.$viewModel.value[keyPath: position.bindedKeyPath].label
     }
 
     private func label(_ position: FlickKeyPosition) -> String {
         if !self.isPossiblePosition(position){
             return viewModel.value.identifier.defaultLabel[position]!
         }
-        switch position{
-        case .left:
-            return self.viewModel.value.left.label
-        case .top:
-            return self.viewModel.value.top.label
-        case .right:
-            return self.viewModel.value.right.label
-        case .bottom:
-            return self.viewModel.value.bottom.label
-        case .center:
-            return self.viewModel.value.center.label
-        }
+        return self.viewModel.value[keyPath: position.keyPath].label
     }
 
     private func isPossiblePosition(_ position: FlickKeyPosition) -> Bool {
@@ -166,31 +179,15 @@ struct FlickCustomKeysSettingView: View {
             if editState.editAction{
                 actionEditor
             }
-
             if selectState.selectedPosition != nil{
                 HStack{
-                    Group{
-                        ToolBarButton(systemImage: "arrow.triangle.2.circlepath", labelText: "リセット"){
-                            self.reload()
-                        }
-                        .foregroundColor(editState.state == .none ? .primary:.systemGray)
-                        Spacer()
-                    }
-                    Group{
-                        ToolBarButton(systemImage: "text.cursor", labelText: "入力"){
-                            editState.toggle(.action)
-                        }
-                        .foregroundColor(editState.editAction ? .accentColor:.primary)
-                        Spacer()
-                    }
-                    Group{
-                        ToolBarButton(systemImage: "questionmark.square", labelText: "ラベル"){
-                            editState.toggle(.label)
-                        }
-                        .foregroundColor(editState.editLabel ? .accentColor:.primary)
+                    ForEach(specifiers){specifier in
+                        self.button(specifier: specifier)
+                            .foregroundColor(self.buttonColor(specifier: specifier))
+                            .padding()
                     }
                 }
-                .frame(maxHeight: 50)
+                .frame(maxWidth: .infinity, maxHeight: 50)
                 .padding(.vertical, 3)
                 .background(RoundedRectangle(cornerRadius: 4).fill(Color.systemGray6).shadow(color: .primary, radius: 1, x: 0, y: 1))
                 .padding()
@@ -198,36 +195,17 @@ struct FlickCustomKeysSettingView: View {
                     .fixedSize()
             }
         }.navigationBarTitle("カスタムキーの設定", displayMode: .inline)
+        .navigationBarItems(trailing: Button(editState.details ? "完了" : "詳細設定"){
+            editState.details.toggle()
+        })
         .onChange(of: inputValue){value in
-            switch selectState.selectedPosition{
-            case .none:
-                return
-            case .left:
-                self.viewModel.value.left.actions = [.input(value)]
-            case .top:
-                self.viewModel.value.top.actions = [.input(value)]
-            case .right:
-                self.viewModel.value.right.actions = [.input(value)]
-            case .bottom:
-                self.viewModel.value.bottom.actions = [.input(value)]
-            case .center:
-                self.viewModel.value.center.actions = [.input(value)]
+            if let position = selectState.selectedPosition{
+                self.viewModel.value[keyPath: position.keyPath].actions = [.input(value)]
             }
         }
         .onChange(of: selectState.selectedPosition){value in
-            switch selectState.selectedPosition{
-            case .none:
-                return
-            case .left:
-                inputValue = getInputText(actions: self.viewModel.value.left.actions) ?? ""
-            case .top:
-                inputValue = getInputText(actions: self.viewModel.value.top.actions) ?? ""
-            case .right:
-                inputValue = getInputText(actions: self.viewModel.value.right.actions) ?? ""
-            case .bottom:
-                inputValue = getInputText(actions: self.viewModel.value.bottom.actions) ?? ""
-            case .center:
-                inputValue = getInputText(actions: self.viewModel.value.center.actions) ?? ""
+            if let position = selectState.selectedPosition{
+                inputValue = getInputText(actions: self.viewModel.value[keyPath: position.keyPath].actions) ?? ""
             }
         }
     }
@@ -261,14 +239,29 @@ struct FlickCustomKeysSettingView: View {
         .padding()
     }
 
-    private var  actionEditor: some View {
+
+    var actions: Binding<[CodableActionData]>? {
+        selectState.selectedPosition.flatMap{
+            self.$viewModel.value[keyPath: $0.bindedKeyPath].actions
+        }
+    }
+
+    private var actionEditor: some View {
         VStack{
-            if let key = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(key){
+            if let position = selectState.selectedPosition, self.getInputText(actions: viewModel.value[keyPath: position.keyPath].actions) == nil{
+                Text("このキーには入力以外の複数のアクションが設定されています。")
+                    .font(.caption)
+                Text("現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
+                    .font(.caption)
+                Button("入力を設定する"){
+                    viewModel.value[keyPath: position.keyPath].actions = [.input("")]
+                }
+            }else if let key = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(key){
                 Text("キーを押して入力される文字を設定します。")
                     .font(.caption)
                 Text("キーの見た目は「ラベル」で設定できます。")
                     .font(.caption)
-                TextField("ラベル", text: $inputValue)
+                TextField("入力", text: $inputValue)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
@@ -291,9 +284,88 @@ struct FlickCustomKeysSettingView: View {
             inputValue = viewModel.value.identifier.defaultInput[position, default: ""]
         }
     }
+
+    private enum ToolBarButtonSpecifier: Int, Identifiable {
+        case reload
+        case input
+        case label
+        case actions
+
+        var id: Int {
+            self.rawValue
+        }
+    }
+
+    private var specifiers: [ToolBarButtonSpecifier] {
+        if editState.details{
+            return [.reload, .actions, .label]
+        }else{
+            return [.reload, .input, .label]
+        }
+    }
+
+    @ViewBuilder
+    private func button(specifier: ToolBarButtonSpecifier) -> some View {
+        switch specifier{
+        case .reload:
+            ToolBarButton(systemImage: "arrow.triangle.2.circlepath", labelText: "リセット"){
+                if self.editState.state == .none{
+                    self.reload()
+                }
+            }
+        case .input:
+            ToolBarButton(systemImage: "text.cursor", labelText: "入力"){
+                editState.toggle(.action)
+            }
+        case .label:
+            ToolBarButton(systemImage: "questionmark.square", labelText: "ラベル"){
+                editState.toggle(.label)
+            }
+        case .actions:
+            if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position), let actions = actions{
+                NavigationLink(destination: KeyActionsEditView(actions, availableCustards: CustardManager.load().availableCustards)){
+                    ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
+                }
+            }else{
+                ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
+            }
+        }
+    }
+
+    private func buttonColor(specifier: ToolBarButtonSpecifier) -> Color {
+        switch specifier{
+        case .reload:
+            return editState.state == .none ? .primary : .systemGray
+        case .input:
+            return editState.editAction ? .accentColor : .primary
+        case .label:
+            return editState.editLabel ? .accentColor : .primary
+        case .actions:
+            if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position){
+                return .primary
+            }else{
+                return .systemGray
+            }
+        }
+    }
 }
 
-private struct ToolBarButton: View{
+private struct ToolBarButtonLabel: View {
+    let systemImage: String
+    let labelText: LocalizedStringKey
+
+    var body: some View {
+        VStack{
+            Image(systemName: systemImage)
+                .font(.system(size: 23))
+            Spacer()
+            Text(labelText)
+                .font(.system(size: 10))
+        }
+    }
+}
+
+private struct ToolBarButton: View {
     let systemImage: String
     let labelText: LocalizedStringKey
     let action: () -> ()
@@ -302,14 +374,7 @@ private struct ToolBarButton: View{
         Button{
             action()
         }label: {
-            VStack{
-                Image(systemName: systemImage)
-                    .font(.system(size: 23))
-                Spacer()
-                Text(labelText)
-                    .font(.system(size: 10))
-
-            }
+            ToolBarButtonLabel(systemImage: systemImage, labelText: labelText)
         }
         .padding(.horizontal, 10)
     }
