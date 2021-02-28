@@ -1033,6 +1033,9 @@ extension UITextDocumentProxy{
             return
         }
         (0..<count).forEach{ _ in
+            if self.documentContextAfterInput == nil {
+                return
+            }
             self.moveCursor(count: 1)
             self.deleteBackward()
         }
