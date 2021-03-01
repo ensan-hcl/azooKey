@@ -107,8 +107,8 @@ fileprivate extension CustardInterfaceKey {
             switch value {
             case .change_keyboard:
                 return FlickChangeKeyboardModel.shared
-            case .enter:
-                return FlickEnterKeyModel(keySizeType: .normal)
+            case let .enter(count):
+                return FlickEnterKeyModel(keySizeType: .enter(count))
             case .kogaki:
                 return FlickKogakiKeyModel.shared
             }
@@ -143,8 +143,8 @@ fileprivate extension CustardInterfaceKey {
             switch value {
             case .change_keyboard:
                 return QwertyChangeKeyboardKeyModel(keySizeType: .normal(of: 1, for: 1))
-            case .enter:
-                return QwertyEnterKeyModel(keySizeType: .normal(of: 1, for: 1))
+            case let .enter(count):
+                return QwertyEnterKeyModel(keySizeType: .enter(.count(count)))
             case .kogaki:
                 let flickKogakiKey = FlickKogakiKeyModel.shared
                 let variations = VariationsModel([flickKogakiKey.flickKeys[.left], flickKogakiKey.flickKeys[.top], flickKogakiKey.flickKeys[.right], flickKogakiKey.flickKeys[.bottom]].compactMap{$0}.map{(label: $0.labelType, actions: $0.pressActions)})

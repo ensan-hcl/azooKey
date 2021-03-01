@@ -49,6 +49,7 @@ final class TabDependentDesign{
         }
         return screenWidth / horizontalKeyCount * coefficient
     }
+    
     ///This property calculate suitable height for normal keyView.
     var keyViewHeight: CGFloat {
         let keysViewHeight = Design.shared.keyboardHeight - (Design.shared.resultViewHeight + 12)
@@ -89,8 +90,8 @@ final class TabDependentDesign{
         return (screenWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1) * coefficient
     }
 
-    var flickEnterKeySize: CGSize {
-        CGSize(width: keyViewWidth, height: keyViewHeight * 2 + verticalSpacing)
+    func flickEnterKeySize(_ count: Int) -> CGSize {
+        CGSize(width: keyViewWidth, height: keyViewHeight * CGFloat(count) + verticalSpacing * CGFloat(count-1))
     }
 
     var qwertySpaceKeyWidth: CGFloat {

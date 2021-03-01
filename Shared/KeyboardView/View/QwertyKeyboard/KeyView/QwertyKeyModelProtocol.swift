@@ -9,11 +9,21 @@
 import Foundation
 import SwiftUI
 
+enum QwertyEnterKeySize{
+    case `default`
+    case count(Int)
+}
+
+enum QwertySpaceKeySize{
+    case `default`
+    case count(Int)
+}
+
 enum QwertyKeySizeType{
     case normal(of: Int, for: Int)
     case functional(normal: Int, functional: Int, enter: Int, space: Int)
-    case enter
-    case space
+    case enter(QwertyEnterKeySize)
+    case space(QwertySpaceKeySize)
 
     func width(design: TabDependentDesign) -> CGFloat {
         switch self{
@@ -21,10 +31,20 @@ enum QwertyKeySizeType{
             return design.qwertyScaledKeyWidth(normal: normalCount, for: keyCount)
         case let .functional(normal: normal, functional: functional, enter: enter, space: space):
             return design.qwertyFunctionalKeyWidth(normal: normal, functional: functional, enter: enter, space: space)
-        case .enter:
-            return design.qwertyEnterKeyWidth
-        case .space:
-            return design.qwertySpaceKeyWidth
+        case let .enter(type):
+            switch type{
+            case .default:
+                return design.qwertyEnterKeyWidth
+            case let .count(count):
+                return design.keyViewWidth * CGFloat(count) + design.horizontalSpacing * CGFloat(count - 1)
+            }
+        case let .space(type):
+            switch type{
+            case .default:
+                return design.qwertySpaceKeyWidth
+            case let .count(count):
+                return design.keyViewWidth * CGFloat(count) + design.horizontalSpacing * CGFloat(count - 1)
+            }
         }
     }
 

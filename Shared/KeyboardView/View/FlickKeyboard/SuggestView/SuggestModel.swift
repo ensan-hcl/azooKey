@@ -11,7 +11,7 @@ import SwiftUI
 
 enum SuggestModelKeyType{
     case normal
-    case enter
+    case enter(Int)
     case kogaki
     case kanaSymbols
     case aA
@@ -48,8 +48,8 @@ struct SuggestModel{
         switch self.keyType{
         case .normal, .kogaki, .kanaSymbols, .aA:
             return .normal
-        case .enter:
-            return .enter
+        case let .enter(count):
+            return .enter(count)
         }
     }
 }

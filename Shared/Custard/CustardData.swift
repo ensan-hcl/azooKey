@@ -43,7 +43,7 @@ enum CustardInputStyle: String, Codable {
 /// - カスタードのバージョンを指定します。
 /// - specify custard version
 enum CustardVersion: String, Codable {
-    case v1_0
+    case v1_0 = "1.0"
 }
 
 struct Custard: Codable {
@@ -455,15 +455,59 @@ extension CustardInterfaceKey{
 }
 
 /// - keys prepared in default
-enum CustardInterfaceSystemKey: String, Codable {
+enum CustardInterfaceSystemKey: Codable {
     /// - the globe key
     case change_keyboard
 
     /// - the enter key that changes its label in condition
-    case enter
+    case enter(Int)
 
     /// - flick 小ﾞﾟkey
     case kogaki
+}
+
+extension CustardInterfaceSystemKey{
+    enum CodingKeys: CodingKey{
+        case change_keyboard
+        case enter
+        case kogaki
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .change_keyboard:
+            try container.encode(true, forKey: .change_keyboard)
+        case .kogaki:
+            try container.encode(true, forKey: .kogaki)
+        case let .enter(count):
+            try container.encode(count, forKey: .enter)
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard let key = container.allKeys.first else{
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(
+                    codingPath: container.codingPath,
+                    debugDescription: "Unabled to decode enum."
+                )
+            )
+        }
+        switch key {
+        case .enter:
+            let value = try container.decode(
+                Int.self,
+                forKey: .enter
+            )
+            self = .enter(value)
+        case .change_keyboard:
+            self = .change_keyboard
+        case .kogaki:
+            self = .kogaki
+        }
+    }
 }
 
 /// - keys you can defined
@@ -756,7 +800,7 @@ extension Custard{
                         variation: []
                     )
                 ),
-                .grid_fit(.init(x: 1, y: 4)): .system(.enter),
+                .grid_fit(.init(x: 1, y: 4)): .system(.enter(1)),
                 .grid_fit(.init(x: 2, y: 4)): .custom(
                     .init(
                         design: .init(label: .systemImage("delete.left"), color: .special),

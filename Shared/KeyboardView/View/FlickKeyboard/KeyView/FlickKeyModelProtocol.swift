@@ -25,7 +25,7 @@ enum FlickKeyColorType{
 
 enum FlickKeySizeType{
     case normal
-    case enter
+    case enter(Int)
 
     func width(design: TabDependentDesign) -> CGFloat {
         return design.keyViewWidth
@@ -35,8 +35,8 @@ enum FlickKeySizeType{
         switch self{
         case .normal:
             return design.keyViewHeight
-        case .enter:
-            return design.flickEnterKeySize.height
+        case let .enter(count):
+            return design.flickEnterKeySize(count).height
         }
     }
 }

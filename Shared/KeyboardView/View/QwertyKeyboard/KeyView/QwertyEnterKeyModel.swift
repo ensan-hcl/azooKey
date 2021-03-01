@@ -15,7 +15,7 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
         self.keySizeType = keySizeType
     }
 
-    static var shared = QwertyEnterKeyModel(keySizeType: .enter)
+    static var shared = QwertyEnterKeyModel(keySizeType: .enter(.default))
     
     var variationsModel = VariationsModel([])
 

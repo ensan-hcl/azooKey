@@ -9,15 +9,26 @@
 import Foundation
 import SwiftUI
 
+fileprivate extension FlickKeySizeType{
+    var suggestKeyType: SuggestModelKeyType {
+        switch self{
+        case .normal:
+            return .normal
+        case let .enter(count):
+            return .enter(count)
+        }
+    }
+}
+
 struct FlickEnterKeyModel: FlickKeyModelProtocol{
-    static var shared = FlickEnterKeyModel(keySizeType: .enter)
+    static var shared = FlickEnterKeyModel(keySizeType: .enter(2))
     let suggestModel: SuggestModel
     let keySizeType: FlickKeySizeType
     let needSuggestView = false
     
     init(keySizeType: FlickKeySizeType){
         self.keySizeType = keySizeType
-        self.suggestModel = SuggestModel([:], keyType: keySizeType == .enter ? .enter : .normal)
+        self.suggestModel = SuggestModel([:], keyType: keySizeType.suggestKeyType)
     }
     
     var pressActions: [ActionType] {
