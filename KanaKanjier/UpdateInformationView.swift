@@ -20,11 +20,13 @@ struct UpdateInfomationView: View {
                     ParagraphView("機能を改善しました。"){
                         "iOS14.5以降で利用可能なUnicode13.1に対応した絵文字のデータを追加"
                         "カスタムキーに入力以外の操作を割り当てる機能を追加"
+                        "着せ替え機能で変換候補の背景色を設定する機能を追加"
                         "ほとんどの機能を英語対応"
                     }
                     ParagraphView("不具合を修正しました。"){
                         "着せ替え機能で枠線を設定してもサジェストに反映されない問題を修正"
                     }
+                    ParagraphView("その他デザイン・変換機能・操作性の軽微な改善を行いました。")
                 }
                 VersionView("1.5.1", releaseDate: "2021年02月15日"){
                     ParagraphView("機能を改善しました。"){
