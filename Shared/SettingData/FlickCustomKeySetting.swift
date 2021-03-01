@@ -103,22 +103,26 @@ enum FlickKeyPosition: String, Codable{
 struct FlickCustomKey: Codable{
     var label: String
     var actions: [CodableActionData]
+    var longpressActions: [CodableActionData]
 
     enum CodingKeys: CodingKey {
         case input
         case label
         case actions
+        case longpressActions
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(label, forKey: .label)
         try container.encode(actions, forKey: .actions)
+        try container.encode(longpressActions, forKey: .longpressActions)
     }
 
-    internal init(label: String, actions: [CodableActionData]) {
+    internal init(label: String, actions: [CodableActionData], longpressActions: [CodableActionData] = []) {
         self.label = label
         self.actions = actions
+        self.longpressActions = longpressActions
     }
 
     init(from decoder: Decoder) throws {
@@ -135,6 +139,7 @@ struct FlickCustomKey: Codable{
         }else{
             self.actions = [.input(label)]
         }
+        self.longpressActions = (try? container.decode([CodableActionData].self, forKey: .longpressActions)) ?? []
     }
 }
 

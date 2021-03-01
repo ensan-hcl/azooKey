@@ -12,9 +12,9 @@ import SwiftUI
 fileprivate extension CustardLanguage {
     var label: LocalizedStringKey {
         switch self{
-        case .english:
+        case .en_US:
             return "英語"
-        case .japanese:
+        case .ja_JP:
             return "日本語"
         case .undefined:
             return "指定なし"

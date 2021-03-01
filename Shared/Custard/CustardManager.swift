@@ -212,7 +212,7 @@ struct CustardManager {
         case .japanese:
             return self.availableCustards.compactMap{
                 if let custard = try? self.custard(identifier: $0){
-                    if custard.language == .japanese{
+                    if custard.language == .ja_JP{
                         return custard.identifier
                     }
                 }
@@ -221,7 +221,7 @@ struct CustardManager {
         case .english:
             return self.availableCustards.compactMap{
                 if let custard = try? self.custard(identifier: $0){
-                    if custard.language == .english{
+                    if custard.language == .en_US{
                         return custard.identifier
                     }
                 }

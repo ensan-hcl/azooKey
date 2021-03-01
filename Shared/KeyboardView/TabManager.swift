@@ -64,9 +64,9 @@ enum Tab{
                 return .japanese
             case let .custard(custard):
                 switch custard.language{
-                case .japanese:
+                case .ja_JP:
                     return .japanese
-                case .english:
+                case .en_US:
                     return .english
                 case .undefined:
                     return nil

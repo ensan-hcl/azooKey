@@ -247,6 +247,12 @@ struct FlickCustomKeysSettingView: View {
         }
     }
 
+    var longpressActions: Binding<[CodableActionData]>? {
+        selectState.selectedPosition.flatMap{
+            self.$viewModel.value[keyPath: $0.bindedKeyPath].longpressActions
+        }
+    }
+
     private var actionEditor: some View {
         VStack{
             if let position = selectState.selectedPosition, self.getInputText(actions: viewModel.value[keyPath: position.keyPath].actions) == nil{
@@ -291,6 +297,7 @@ struct FlickCustomKeysSettingView: View {
         case input
         case label
         case actions
+        case longpressActions
 
         var id: Int {
             self.rawValue
@@ -299,7 +306,7 @@ struct FlickCustomKeysSettingView: View {
 
     private var specifiers: [ToolBarButtonSpecifier] {
         if editState.details{
-            return [.reload, .actions, .label]
+            return [.reload, .actions, .longpressActions, .label]
         }else{
             return [.reload, .input, .label]
         }
@@ -330,6 +337,14 @@ struct FlickCustomKeysSettingView: View {
             }else{
                 ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
             }
+        case .longpressActions:
+            if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position), let longpressActions = longpressActions{
+                NavigationLink(destination: KeyActionsEditView(longpressActions, availableCustards: CustardManager.load().availableCustards, allowLongpressActions: true)){
+                    ToolBarButtonLabel(systemImage: "terminal", labelText: "長押し")
+                }
+            }else{
+                ToolBarButtonLabel(systemImage: "terminal", labelText: "長押し")
+            }
         }
     }
 
@@ -341,7 +356,7 @@ struct FlickCustomKeysSettingView: View {
             return editState.editAction ? .accentColor : .primary
         case .label:
             return editState.editLabel ? .accentColor : .primary
-        case .actions:
+        case .actions, .longpressActions:
             if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position){
                 return .primary
             }else{

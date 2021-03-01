@@ -58,11 +58,13 @@ struct KeyActionsEditView: View {
     @State private var actions: [EditingCodableActionData]
     @Binding private var data: [CodableActionData]
     private let availableCustards: [String]
+    private let allowLongpressActions: Bool
 
-    init(_ actions: Binding<[CodableActionData]>, availableCustards: [String]){
+    init(_ actions: Binding<[CodableActionData]>, availableCustards: [String], allowLongpressActions: Bool = false){
         self._data = actions
         self._actions = State(initialValue: actions.wrappedValue.map{EditingCodableActionData($0)})
         self.availableCustards = availableCustards
+        self.allowLongpressActions = allowLongpressActions
     }
 
     func add(new action: CodableActionData){
@@ -93,18 +95,44 @@ struct KeyActionsEditView: View {
                                     if action.wrappedValue.data.hasAssociatedValue{
                                         DisclosureGroup{
                                             switch action.wrappedValue.data{
-                                            case .delete:
-                                                ActionDeleteEditView(action)
-                                            case .input:
-                                                ActionInputEditView(action)
-                                            case .moveCursor:
-                                                ActionMoveCursorEditView(action)
+                                            case let .input(value):
+                                                ActionEditTextField("入力する文字", action: action){value} convert: {.input($0)}
+                                            case let .longInput(value):
+                                                ActionEditTextField("入力する文字", action: action){value} convert: {.longInput($0)}
+                                            case let .delete(count):
+                                                ActionEditTextField("削除する文字数", action: action){"\(count)"} convert: {value in
+                                                    if let count = Int(value){
+                                                        return .delete(count)
+                                                    }
+                                                    return nil
+                                                }
+                                                Text("負の値を指定すると右側の文字を削除します")
+                                            case let .longDelete(count):
+                                                ActionEditTextField("削除する文字数", action: action){"\(count)"} convert: {value in
+                                                    if let count = Int(value){
+                                                        return .longDelete(count)
+                                                    }
+                                                    return nil
+                                                }
+                                                Text("負の値を指定すると右側の文字を削除します")
+                                            case let .moveCursor(count):
+                                                ActionEditTextField("移動する文字数", action: action){"\(count)"} convert: {value in
+                                                    if let count = Int(value){
+                                                        return .moveCursor(count)
+                                                    }
+                                                    return nil
+                                                }
+                                                Text("負の値を指定すると左にカーソルが動きます")
+                                            case let .longMoveCursor(count):
+                                                ActionEditTextField("移動する文字数", action: action){"\(count)"} convert: {value in
+                                                    if let count = Int(value){
+                                                        return .longMoveCursor(count)
+                                                    }
+                                                    return nil
+                                                }
                                                 Text("負の値を指定すると左にカーソルが動きます")
                                             case .moveTab:
                                                 ActionMoveTabEditView(action, availableCustards: availableCustards)
-                                            case .openApp:
-                                                ActionOpenAppEditView(action)
-                                                Text("このアクションはiOSのメジャーアップデートで利用できなくなる可能性があります")
                                             default:
                                                 EmptyView()
                                             }
@@ -145,6 +173,19 @@ struct KeyActionsEditView: View {
                             press(.delete(1))
                         }
                     }
+                    if allowLongpressActions{
+                        Section(header: Text("長押し")){
+                            Button("文字の入力"){
+                                press(.longInput("ごめん"))
+                            }
+                            Button("カーソルの移動"){
+                                press(.longMoveCursor(1))
+                            }
+                            Button("文字の削除"){
+                                press(.longDelete(1))
+                            }
+                        }
+                    }
                     Section(header: Text("高度")){
                         Button("文頭まで削除"){
                             press(.smoothDelete)
@@ -163,9 +204,6 @@ struct KeyActionsEditView: View {
                         }
                         Button("キーボードを閉じる"){
                             press(.dismissKeyboard)
-                        }
-                        Button("アプリを開く"){
-                            press(.openApp("azooKey://"))
                         }
                     }
                 }
@@ -211,6 +249,33 @@ struct KeyActionsEditView: View {
     }
 
 }
+
+struct ActionEditTextField: View {
+    private let title: LocalizedStringKey
+    @Binding private var action: EditingCodableActionData
+    private let convert: (String) -> CodableActionData?
+    internal init(_ title: LocalizedStringKey, action: Binding<EditingCodableActionData>, initialValue: () -> String?, convert: @escaping (String) -> CodableActionData?) {
+        self.title = title
+        self.convert = convert
+        self._action = action
+        if let initialValue = initialValue(){
+            self._value = State(initialValue: initialValue)
+        }
+    }
+
+    @State private var value = ""
+
+    var body: some View {
+        TextField(title, text: $value)
+            .onChange(of: value){value in
+                if let data = convert(value){
+                    action.data = data
+                }
+            }
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+    }
+}
+
 
 struct ActionDeleteEditView: View {
     @Binding private var action: EditingCodableActionData

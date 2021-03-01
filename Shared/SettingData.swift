@@ -9,6 +9,8 @@
 import Foundation
 import SwiftUI
 
+typealias FlickCustomKeySettingData = (labelType: KeyLabelType, actions: [ActionType], longpressActions: [KeyLongPressActionType], flick: [FlickDirection: FlickedKeyModel])
+
 struct SettingData{
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
     private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate, .useOSuserDict]
@@ -57,7 +59,7 @@ struct SettingData{
         return self.languageLayoutSetting[key, default: .flick]
     }
 
-    private static func flickCustomKeySetting(for key: Setting) -> (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) {
+    private static func flickCustomKeySetting(for key: Setting) -> FlickCustomKeySettingData {
         let value = Self.userDefaults.value(forKey: key.key)
         let setting: KeyFlickSetting
         if let value = value, let data = KeyFlickSetting.get(value){
@@ -66,20 +68,20 @@ struct SettingData{
             setting = DefaultSetting.flickCustomKey(key)!
         }
         var dict: [FlickDirection: FlickedKeyModel] = [:]
-        if let left = setting.left.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: setting.left.actions.map{$0.actionType}){
+        if let left = setting.left.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: setting.left.actions.map{$0.actionType}, longPressActions: setting.left.longpressActions.map{$0.longpressActionType}){
             dict[.left] = left
         }
-        if let top = setting.top.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: setting.top.actions.map{$0.actionType}){
+        if let top = setting.top.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: setting.top.actions.map{$0.actionType}, longPressActions: setting.top.longpressActions.map{$0.longpressActionType}){
             dict[.top] = top
         }
-        if let right = setting.right.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: setting.right.actions.map{$0.actionType}){
+        if let right = setting.right.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: setting.right.actions.map{$0.actionType}, longPressActions: setting.right.longpressActions.map{$0.longpressActionType}){
             dict[.right] = right
         }
-        return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, dict)
+        return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, setting.center.longpressActions.map{$0.longpressActionType}, dict)
     }
 
-    var kogakiFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) = Self.flickCustomKeySetting(for: .koganaKeyFlick)
-    var kanaSymbolsFlickSetting: (labelType: KeyLabelType, actions: [ActionType], flick: [FlickDirection: FlickedKeyModel]) = Self.flickCustomKeySetting(for: .kanaSymbolsKeyFlick)
+    var kogakiFlickSetting: FlickCustomKeySettingData = Self.flickCustomKeySetting(for: .koganaKeyFlick)
+    var kanaSymbolsFlickSetting: FlickCustomKeySettingData = Self.flickCustomKeySetting(for: .kanaSymbolsKeyFlick)
 
     var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput)
 
