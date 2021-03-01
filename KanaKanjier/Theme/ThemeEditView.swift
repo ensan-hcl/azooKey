@@ -34,6 +34,10 @@ struct ThemeEditView: View {
 
     private let title: LocalizedStringKey
 
+    @State private var normalKeyColor = ThemeData.base.normalKeyFillColor.color
+    @State private var tab: Tab.ExistentialTab
+    private var shareImage = ShareImage()
+
     init(index: Int?, manager: Binding<ThemeIndexManager>){
         let tab: Tab.ExistentialTab = {
             switch Store.variableSection.japaneseLayout{
@@ -55,11 +59,6 @@ struct ThemeEditView: View {
                 self._theme = State(initialValue: theme)
                 self.base = theme
                 self._normalKeyColor = State(initialValue: theme.normalKeyFillColor.color)
-                self._specialKeyColor = State(initialValue: theme.specialKeyFillColor.color)
-                self._backGroundColor = State(initialValue: theme.backgroundColor.color)
-                self._borderColor = State(initialValue: theme.borderColor.color)
-                self._keyLabelColor = State(initialValue: theme.textColor.color)
-                self._resultTextColor = State(initialValue: theme.resultTextColor.color)
             } catch {
                 debug(error)
                 self.base = .base
@@ -71,16 +70,6 @@ struct ThemeEditView: View {
         }
         self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
     }
-
-    @State private var normalKeyColor = ThemeData.base.normalKeyFillColor.color
-    @State private var specialKeyColor = ThemeData.base.specialKeyFillColor.color
-    @State private var backGroundColor = ThemeData.base.backgroundColor.color
-    @State private var borderColor = ThemeData.base.borderColor.color
-    @State private var keyLabelColor = ThemeData.base.textColor.color
-    @State private var resultTextColor = ThemeData.base.resultTextColor.color
-    @State private var tab: Tab.ExistentialTab
-    private var shareImage = ShareImage()
-
     // PHPickerの設定
     private var config: PHPickerConfiguration {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
@@ -120,7 +109,7 @@ struct ThemeEditView: View {
                                     Text("\(systemImage: "photo")画像を選ぶ")
                                 }
                             }
-                            ColorPicker("背景の色", selection: $backGroundColor)
+                            GenericColorPicker("背景の色", selection: $theme.backgroundColor, initialValue: base.backgroundColor.color){.color($0)}
                         }
                     }
                     Section(header: Text("文字")){
@@ -133,16 +122,24 @@ struct ThemeEditView: View {
                     }
 
                     Section(header: Text("変換候補")){
-                        ColorPicker("変換候補の文字の色", selection: $resultTextColor)
+                        GenericColorPicker("変換候補の文字の色", selection: $theme.resultTextColor, initialValue: base.resultTextColor.color){.color($0)}
+                        GenericColorPicker("変換候補の背景色", selection: $theme.resultBackgroundColor, initialValue: base.resultBackgroundColor.color){.color($0)}
                     }
 
                     Section(header: Text("キー")){
-                        ColorPicker("キーの文字の色", selection: $keyLabelColor)
+                        GenericColorPicker("キーの文字の色", selection: $theme.textColor, initialValue: base.textColor.color){.color($0)}
 
                         ColorPicker("通常キーの背景色", selection: $normalKeyColor)
-                        ColorPicker("特殊キーの背景色", selection: $specialKeyColor)
+                        GenericColorPicker("特殊キーの背景色", selection: $theme.specialKeyFillColor, initialValue: base.specialKeyFillColor.color){value in
+                            if let specialKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
+                                return Color(red: r, green: g, blue: b, opacity: max(0.005, opacity))
+                            }){
+                                return .color(specialKeyColor)
+                            }
+                            return .color(value)
+                        }
 
-                        ColorPicker("枠線の色", selection: $borderColor)
+                        GenericColorPicker("枠線の色", selection: $theme.borderColor, initialValue: base.borderColor.color){.color($0)}
                         HStack{
                             Text("枠線の太さ")
                             Slider(value: $theme.borderWidth, in: 0...10)
@@ -154,11 +151,6 @@ struct ThemeEditView: View {
                             self.pickedImage = nil
                             self.trimmedImage = nil
                             self.normalKeyColor = self.base.normalKeyFillColor.color
-                            self.specialKeyColor = self.base.specialKeyFillColor.color
-                            self.backGroundColor = self.base.backgroundColor.color
-                            self.borderColor = self.base.borderColor.color
-                            self.keyLabelColor = self.base.textColor.color
-                            self.resultTextColor = self.base.resultTextColor.color
                             self.selectFontRowValue = 4
                             self.theme = self.base
                         } label: {
@@ -193,8 +185,8 @@ struct ThemeEditView: View {
             .onChange(of: trimmedImage){value in
                 if let value = value{
                     self.theme.picture = .uiImage(value)
-                    backGroundColor = Color.white.opacity(0)
                     self.theme.backgroundColor = .color(Color.white.opacity(0))
+                    self.theme.resultBackgroundColor = .color(Color.white.opacity(0))
                 }else{
                     self.theme.picture = .none
                 }
@@ -211,25 +203,6 @@ struct ThemeEditView: View {
                 }){
                     self.theme.pushedKeyFillColor = .color(pushedKeyColor)
                 }
-            }
-            .onChange(of: specialKeyColor){value in
-                if let specialKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
-                    return Color(red: r, green: g, blue: b, opacity: max(0.005, opacity))
-                }){
-                    self.theme.specialKeyFillColor = .color(specialKeyColor)
-                }
-            }
-            .onChange(of: backGroundColor){value in
-                self.theme.backgroundColor = .color(value)
-            }
-            .onChange(of: borderColor){value in
-                self.theme.borderColor = .color(value)
-            }
-            .onChange(of: keyLabelColor){value in
-                self.theme.textColor = .color(value)
-            }
-            .onChange(of: resultTextColor){value in
-                self.theme.resultTextColor = .color(value)
             }
             .sheet(isPresented: $isSheetPresented){
                 PhotoPicker(configuration: self.config,

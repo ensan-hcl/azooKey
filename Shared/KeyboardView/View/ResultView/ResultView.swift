@@ -158,7 +158,7 @@ struct ResultButtonStyle: ButtonStyle {
             .background(
                 configuration.isPressed ?
                     theme.pushedKeyFillColor.color.opacity(0.5) :
-                    theme.backgroundColor.color
+                    theme.resultBackgroundColor.color
             )
             .cornerRadius(5.0)
     }
