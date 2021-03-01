@@ -11,13 +11,13 @@ import Foundation
 /// - 変換対象の言語を指定します。
 /// - specify language to convert
 enum CustardLanguage: String, Codable {
-    /// - 英語に変換します
-    /// - convert to English
-    case english
+    /// - 英語(アメリカ)に変換します
+    /// - convert to American English
+    case en_US
 
-    /// - 日本語に変換します
-    /// - convert to Japanese
-    case japanese
+    /// - 日本語(共通語)に変換します
+    /// - convert to common Japanese
+    case ja_JP
 
     /// - 変換を行いません
     /// - don't convert
@@ -616,7 +616,7 @@ extension Custard{
         custard_version: .v1_0,
         identifier: "my_custard",
         display_name: "マイカスタード",
-        language: .japanese,
+        language: .ja_JP,
         input_style: .direct,
         interface: .init(
             key_style: .flick,
