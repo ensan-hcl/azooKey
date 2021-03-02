@@ -53,10 +53,12 @@ struct SimpleKeyView: View {
                             pressStartDate = Date()
                             model.sound()
                             model.longPressReserve()
-                        } touchMovedCallBack: {
-                            isPressed = false
-                            pressStartDate = Date()
-                            model.longPressEnd()
+                        } touchMovedCallBack: {distance in
+                            if distance > 15{
+                                isPressed = false
+                                pressStartDate = Date()
+                                model.longPressEnd()
+                            }
                         } touchUpCallBack: {
                             isPressed = false
                             model.longPressEnd()

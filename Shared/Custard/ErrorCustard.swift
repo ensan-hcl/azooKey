@@ -18,7 +18,7 @@ extension Custard{
         input_style: .direct,
         interface: .init(
             key_style: .flick,
-            key_layout: .gridFit(.init(width: 1, height: 5)),
+            key_layout: .gridFit(.init(width: 1, height: 6)),
             keys: [
                 .grid_fit(.init(x: 0, y: 0)): .custom(
                     .init(
@@ -48,7 +48,14 @@ extension Custard{
                         longpress_action: [],
                         variation: [])
                 ),
-                .grid_fit(.init(x: 0, y: 4)): .system(.change_keyboard)
+                .grid_fit(.init(x: 0, y: 4)): .custom(
+                    .init(
+                        design: .init(label: .text("ひらがなタブに移動"), color: .special),
+                        press_action: [.moveTab(.system(.user_japanese))],
+                        longpress_action: [],
+                        variation: [])
+                ),
+                .grid_fit(.init(x: 0, y: 5)): .system(.change_keyboard)
             ]
         )
     )

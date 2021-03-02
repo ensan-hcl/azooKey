@@ -24,7 +24,7 @@ struct EditingScrollCustardView: View {
     private let base: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
         .grid_scroll(0): .system(.change_keyboard),
         .grid_scroll(1): .custom(.init(design: .init(label: .systemImage("list.dash"), color: .special), press_action: [.toggleTabBar], longpress_action: [], variation: [])),
-        .grid_scroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_action: [.delete(1)], longpress_action: [.delete(1)], variation: [])),
+        .grid_scroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_action: [.delete(1)], longpress_action: [.longDelete(1)], variation: [])),
         .grid_scroll(3): .system(.enter(1)),
     ]
 
