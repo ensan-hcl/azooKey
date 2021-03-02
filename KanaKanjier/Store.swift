@@ -16,6 +16,7 @@ final class Store{
     var messageManager = MessageManager()
 
     init(){
+        SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(DeviceName.shared.hasHomeButton())
         //ユーザ辞書に登録がない場合
         self.messageManager.getMessagesContainerAppShouldMakeWhichDone().forEach{
             messageManager.done($0.id)
