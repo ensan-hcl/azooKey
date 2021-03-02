@@ -10,33 +10,33 @@ import Foundation
 import SwiftUI
 
 struct FlickTabKeyModel: FlickKeyModelProtocol{
+    private let setting: Setting
     let needSuggestView: Bool = true
     
-    static let hiraTabKeyModel = FlickTabKeyModel(labelType:.text("あいう"), tab: .user_dependent(.japanese), flickKeys: [:])
-    static let abcTabKeyModel = FlickTabKeyModel(labelType:.text("abc"), tab: .user_dependent(.english), flickKeys: [
-        .right: FlickedKeyModel(
-            labelType: .text("→"),
-            pressActions: [.moveCursor(1)],
-            longPressActions: [.repeat(.moveCursor(1))]
-        )
-    ])
-    static let numberTabKeyModel = FlickTabKeyModel(labelType:.text("☆123"), tab: .existential(.flick_numbersymbols), longPressActions: [.doOnce(.toggleTabBar)], flickKeys: [:])
+    static let hiraTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.japanese), setting: .hiraTabKeyFlick)
+    static let abcTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.english), setting: .abcTabKeyFlick)
+    static let numberTabKeyModel = FlickTabKeyModel(tab: .existential(.flick_numbersymbols), setting: .symbolsTabKeyFlick)
 
-
-    var pressActions: [ActionType]{ [.moveTab(self.tab)] }
-    let longPressActions: [LongPressActionType]
+    var pressActions: [ActionType] {
+        SettingData.shared.flickCustomKeySetting(for: setting).actions
+    }
+    var longPressActions: [LongPressActionType] {
+        SettingData.shared.flickCustomKeySetting(for: setting).longpressActions
+    }
+    var labelType: KeyLabelType {
+        SettingData.shared.flickCustomKeySetting(for: setting).labelType
+    }
+    var flickKeys: [FlickDirection: FlickedKeyModel] {
+        SettingData.shared.flickCustomKeySetting(for: setting).flick
+    }
 
     let suggestModel: SuggestModel
-    var labelType: KeyLabelType
     var tab: Tab
-    let flickKeys: [FlickDirection: FlickedKeyModel]
 
-    private init(labelType: KeyLabelType, tab: Tab, longPressActions: [LongPressActionType] = [], flickKeys: [FlickDirection: FlickedKeyModel]){
-        self.labelType = labelType
+    private init(tab: Tab, setting: Setting){
+        self.setting = setting
         self.tab = tab
-        self.longPressActions = longPressActions
-        self.flickKeys = flickKeys
-        self.suggestModel = SuggestModel(flickKeys)
+        self.suggestModel = SuggestModel([:], keyType: .custom(setting))
     }
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {

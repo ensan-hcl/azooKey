@@ -52,7 +52,8 @@ fileprivate final class EditState: ObservableObject{
     enum State{
         case none
         case label
-        case action
+        case input
+        case tab
     }
     @Published var state = State.none
     @Published var details = false
@@ -60,8 +61,11 @@ fileprivate final class EditState: ObservableObject{
     var editLabel: Bool {
         return state == .label
     }
-    var editAction: Bool {
-        return state == .action
+    var editInput: Bool {
+        return state == .input
+    }
+    var editTab: Bool {
+        return state == .tab
     }
 
     func toggle(_ state: State){
@@ -80,6 +84,9 @@ struct FlickCustomKeysSettingSelectView: View {
             Picker(selection: $selection, label: Text("カスタムするキー")){
                 Text("小ﾞﾟ").tag(CustomizableFlickKey.kogana)
                 Text("､｡?!").tag(CustomizableFlickKey.kanaSymbols)
+                Text("あいう").tag(CustomizableFlickKey.hiraTab)
+                Text("abc").tag(CustomizableFlickKey.abcTab)
+                Text("☆123").tag(CustomizableFlickKey.symbolsTab)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
@@ -89,9 +96,15 @@ struct FlickCustomKeysSettingSelectView: View {
                 FlickCustomKeysSettingView(Store.shared.koganaKeyFlickSetting)
             case .kanaSymbols:
                 FlickCustomKeysSettingView(Store.shared.kanaSymbolsKeyFlickSetting)
+            case .hiraTab:
+                FlickCustomKeysSettingView(Store.shared.hiraTabKeyFlickSetting)
+            case .abcTab:
+                FlickCustomKeysSettingView(Store.shared.abcTabKeyFlickSetting)
+            case .symbolsTab:
+                FlickCustomKeysSettingView(Store.shared.symbolsTabKeyFlickSetting)
             }
         }
-        .background(Color(.secondarySystemBackground))
+        .background(Color.secondarySystemBackground)
     }
 }
 
@@ -176,15 +189,17 @@ struct FlickCustomKeysSettingView: View {
             if editState.editLabel{
                 labelEditor
             }
-            if editState.editAction{
-                actionEditor
+            if editState.editTab{
+                tabEditor
+            }
+            if editState.editInput{
+                inputEditor
             }
             if selectState.selectedPosition != nil{
                 HStack{
                     ForEach(specifiers){specifier in
                         Spacer()
                         self.button(specifier: specifier)
-                            .foregroundColor(self.buttonColor(specifier: specifier))
                         Spacer()
                     }
                 }
@@ -197,6 +212,7 @@ struct FlickCustomKeysSettingView: View {
             }
         }.navigationBarTitle("カスタムキーの設定", displayMode: .inline)
         .navigationBarItems(trailing: Button(editState.details ? "完了" : "詳細設定"){
+            editState.state = .none
             editState.details.toggle()
         })
         .onChange(of: inputValue){value in
@@ -213,6 +229,13 @@ struct FlickCustomKeysSettingView: View {
 
     private func getInputText(actions: [CodableActionData]) -> String? {
         if actions.count == 1, let action = actions.first, case let .input(value) = action{
+            return value
+        }
+        return nil
+    }
+
+    private func getTab(actions: [CodableActionData]) -> CodableTabData? {
+        if actions.count == 1, let action = actions.first, case let .moveTab(value) = action{
             return value
         }
         return nil
@@ -253,10 +276,10 @@ struct FlickCustomKeysSettingView: View {
         }
     }
 
-    private var actionEditor: some View {
+    private var inputEditor: some View {
         VStack{
             if let position = selectState.selectedPosition, self.getInputText(actions: viewModel.value[keyPath: position.keyPath].actions) == nil{
-                Text("このキーには入力以外の複数のアクションが設定されています。")
+                Text("このキーには入力以外のアクションが設定されています。")
                     .font(.caption)
                 Text("現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
                     .font(.caption)
@@ -284,6 +307,38 @@ struct FlickCustomKeysSettingView: View {
         .padding()
     }
 
+    private var tabEditor: some View {
+        VStack{
+            if let position = selectState.selectedPosition{
+                if !viewModel.value.identifier.ablePosition.contains(position){
+                    Text("このキーは編集できません。")
+                        .font(.caption)
+                }else if let tab = self.getTab(actions: viewModel.value[keyPath: position.keyPath].actions){
+                    Text("キーを押して移動するタブを設定します。")
+                        .font(.caption)
+                    AvailableTabPicker(tab){value in
+                        viewModel.value[keyPath: position.keyPath].actions = [.moveTab(value)]
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal)
+                }else{
+                    Text("このキーにはタブ移動以外のアクションが設定されています。")
+                        .font(.caption)
+                    Text("現在のアクションを消去して移動するタブを設定するには「タブを設定する」を押してください")
+                        .font(.caption)
+                    Button("タブを設定する"){
+                        viewModel.value[keyPath: position.keyPath].actions = [.moveTab(.system(.user_japanese))]
+                    }
+                }
+            }
+        }
+        .frame(maxHeight: 80)
+        .padding(.vertical, 3)
+        .background(RoundedRectangle(cornerRadius: 4).fill(Color.systemGray6).shadow(color: .primary, radius: 1, x: 0, y: 1))
+        .padding()
+    }
+
     private func reload(){
         if let position = selectState.selectedPosition, self.isPossiblePosition(position){
             let bindedLabel: Binding<String> = label(position)
@@ -295,6 +350,7 @@ struct FlickCustomKeysSettingView: View {
     private enum ToolBarButtonSpecifier: Int, Identifiable {
         case reload
         case input
+        case tab
         case label
         case actions
         case longpressActions
@@ -308,7 +364,12 @@ struct FlickCustomKeysSettingView: View {
         if editState.details{
             return [.reload, .actions, .longpressActions, .label]
         }else{
-            return [.reload, .input, .label]
+            switch self.viewModel.value.identifier{
+            case .kanaSymbols, .kogana:
+                return [.reload, .input, .label]
+            case .hiraTab, .abcTab, .symbolsTab:
+                return [.reload, .tab, .label]
+            }
         }
     }
 
@@ -321,46 +382,43 @@ struct FlickCustomKeysSettingView: View {
                     self.reload()
                 }
             }
+            .foregroundColor(editState.state == .none ? .primary : .systemGray)
         case .input:
             ToolBarButton(systemImage: "text.cursor", labelText: "入力"){
-                editState.toggle(.action)
+                editState.toggle(.input)
             }
+            .foregroundColor(editState.editInput ? .accentColor : .primary)
+        case .tab:
+            ToolBarButton(systemImage: "square.on.square", labelText: "タブ"){
+                editState.toggle(.tab)
+            }
+            .foregroundColor(editState.editTab ? .accentColor : .primary)
         case .label:
             ToolBarButton(systemImage: "questionmark.square", labelText: "ラベル"){
                 editState.toggle(.label)
             }
+            .foregroundColor(editState.editLabel ? .accentColor : .primary)
         case .actions:
+            let color: Color = (selectState.selectedPosition.flatMap{viewModel.value.identifier.ablePosition.contains($0)} ?? false) ? .primary : .systemGray
             if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position), let actions = actions{
                 NavigationLink(destination: KeyActionsEditView(actions, availableCustards: CustardManager.load().availableCustards)){
                     ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
                 }
+                .foregroundColor(color)
             }else{
                 ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
+                    .foregroundColor(color)
             }
         case .longpressActions:
+            let color: Color = (selectState.selectedPosition.flatMap{viewModel.value.identifier.ablePosition.contains($0)} ?? false) ? .primary : .systemGray
             if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position), let longpressActions = longpressActions{
                 NavigationLink(destination: KeyActionsEditView(longpressActions, availableCustards: CustardManager.load().availableCustards, allowLongpressActions: true)){
                     ToolBarButtonLabel(systemImage: "terminal", labelText: "長押し")
                 }
+                .foregroundColor(color)
             }else{
                 ToolBarButtonLabel(systemImage: "terminal", labelText: "長押し")
-            }
-        }
-    }
-
-    private func buttonColor(specifier: ToolBarButtonSpecifier) -> Color {
-        switch specifier{
-        case .reload:
-            return editState.state == .none ? .primary : .systemGray
-        case .input:
-            return editState.editAction ? .accentColor : .primary
-        case .label:
-            return editState.editLabel ? .accentColor : .primary
-        case .actions, .longpressActions:
-            if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position){
-                return .primary
-            }else{
-                return .systemGray
+                    .foregroundColor(color)
             }
         }
     }

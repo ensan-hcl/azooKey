@@ -14,18 +14,22 @@ typealias FlickCustomKeySettingData = (labelType: KeyLabelType, actions: [Action
 struct SettingData{
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
     private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate, .useOSuserDict]
+    private let flickCustomKeySettingItems: [Setting] = [.koganaKeyFlick, .kanaSymbolsKeyFlick, .hiraTabKeyFlick, .abcTabKeyFlick, .symbolsTabKeyFlick]
+
     private var boolSettings: [Setting: Bool]
     private var languageLayoutSetting: [Setting: LanguageLayout]
-
+    private var flickCustomKeySetting: [Setting: FlickCustomKeySettingData]
     static var shared = SettingData()
 
     private init(){
         self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getBoolSetting(setting)
         }
-
         self.languageLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getLanguageLayoutSetting(setting)
+        }
+        self.flickCustomKeySetting = flickCustomKeySettingItems.reduce(into: [:]){dictionary, setting in
+            dictionary[setting] = Self.getFlickCustomKeySetting(for: setting)
         }
     }
 
@@ -34,13 +38,14 @@ struct SettingData{
         self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getBoolSetting(setting)
         }
-
+        //レイアウトの設定を更新
         self.languageLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]){dictionary, setting in
             dictionary[setting] = Self.getLanguageLayoutSetting(setting)
         }
-
-        self.kogakiFlickSetting = Self.flickCustomKeySetting(for: .koganaKeyFlick)
-        self.kanaSymbolsFlickSetting = Self.flickCustomKeySetting(for: .kanaSymbolsKeyFlick)
+        //フリックカスタムキーの設定を更新
+        self.flickCustomKeySetting = flickCustomKeySettingItems.reduce(into: [:]){dictionary, setting in
+            dictionary[setting] = Self.getFlickCustomKeySetting(for: setting)
+        }
 
         self.learningType = Self.learningTypeSetting(.inputAndOutput)
 
@@ -59,7 +64,7 @@ struct SettingData{
         return self.languageLayoutSetting[key, default: .flick]
     }
 
-    private static func flickCustomKeySetting(for key: Setting) -> FlickCustomKeySettingData {
+    private static func getFlickCustomKeySetting(for key: Setting) -> FlickCustomKeySettingData {
         let value = Self.userDefaults.value(forKey: key.key)
         let setting: KeyFlickSetting
         if let value = value, let data = KeyFlickSetting.get(value){
@@ -80,8 +85,22 @@ struct SettingData{
         return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, setting.center.longpressActions.map{$0.longpressActionType}, dict)
     }
 
-    var kogakiFlickSetting: FlickCustomKeySettingData = Self.flickCustomKeySetting(for: .koganaKeyFlick)
-    var kanaSymbolsFlickSetting: FlickCustomKeySettingData = Self.flickCustomKeySetting(for: .kanaSymbolsKeyFlick)
+    internal func flickCustomKeySetting(for key: Setting) -> FlickCustomKeySettingData {
+        self.flickCustomKeySetting[key, default: (.text("エラー"), [], [], [:])]
+    }
+
+    private static func get(_ setting: Setting) -> KeyboardLayout {
+        switch setting{
+        case .japaneseKeyboardLayout, .englishKeyboardLayout:
+            if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayout.get(string){
+                return type
+            }else{
+                userDefaults.set(KeyboardLayout.flick.rawValue, forKey: setting.key)
+                return .flick
+            }
+        default: return .flick
+        }
+    }
 
     var learningType: LearningType = Self.learningTypeSetting(.inputAndOutput)
 

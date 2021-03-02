@@ -12,8 +12,7 @@ import SwiftUI
 enum SuggestModelKeyType{
     case normal
     case enter(Int)
-    case kogaki
-    case kanaSymbols
+    case custom(Setting)
     case aA
 }
 
@@ -24,10 +23,8 @@ struct SuggestModel{
         switch self.keyType{
         case .normal, .enter:
             return _flickModels
-        case .kogaki:
-            return SettingData.shared.kogakiFlickSetting.flick
-        case .kanaSymbols:
-            return SettingData.shared.kanaSymbolsFlickSetting.flick
+        case let .custom(setting):
+            return SettingData.shared.flickCustomKeySetting(for: setting).flick
         case .aA:
             return FlickAaKeyModel.shared.flickKeys
         }
@@ -46,7 +43,7 @@ struct SuggestModel{
     
     var keySizeType: FlickKeySizeType {
         switch self.keyType{
-        case .normal, .kogaki, .kanaSymbols, .aA:
+        case .normal, .custom, .aA:
             return .normal
         case let .enter(count):
             return .enter(count)

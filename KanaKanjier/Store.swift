@@ -96,6 +96,21 @@ final class Store{
         defaultValue: CustomizableFlickKey.kanaSymbols.defaultSetting
     ))
 
+    var hiraTabKeyFlickSetting = SettingItemViewModel(SettingItem<KeyFlickSetting>(
+        identifier: .hiraTabKeyFlick,
+        defaultValue: CustomizableFlickKey.hiraTab.defaultSetting
+    ))
+
+    var abcTabKeyFlickSetting = SettingItemViewModel(SettingItem<KeyFlickSetting>(
+        identifier: .abcTabKeyFlick,
+        defaultValue: CustomizableFlickKey.abcTab.defaultSetting
+    ))
+
+    var symbolsTabKeyFlickSetting = SettingItemViewModel(SettingItem<KeyFlickSetting>(
+        identifier: .symbolsTabKeyFlick,
+        defaultValue: CustomizableFlickKey.symbolsTab.defaultSetting
+    ))
+
     var numberTabCustomKeysSettingNew = SettingItemViewModel(SettingItem<QwertyCustomKeysValue>(
         identifier: .numberTabCustomKeys,
         defaultValue: QwertyCustomKeysValue.defaultValue

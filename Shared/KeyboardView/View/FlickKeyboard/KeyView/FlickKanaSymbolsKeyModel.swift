@@ -14,18 +14,19 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol{
     static let shared = FlickKanaSymbolsKeyModel()
 
     var pressActions: [ActionType] {
-        SettingData.shared.kanaSymbolsFlickSetting.actions
+        SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).actions
     }
-    var longPressActions: [LongPressActionType] = []
-
+    var longPressActions: [LongPressActionType] {
+        SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).longpressActions
+    }
     var labelType: KeyLabelType {
-        SettingData.shared.kanaSymbolsFlickSetting.labelType
+        SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).labelType
     }
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        SettingData.shared.kanaSymbolsFlickSetting.flick
+        SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).flick
     }
 
-    var suggestModel: SuggestModel = SuggestModel(keyType: .kanaSymbols)
+    var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.kanaSymbolsKeyFlick))
 
 
     private init(){}

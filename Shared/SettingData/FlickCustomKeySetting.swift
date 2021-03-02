@@ -11,6 +11,9 @@ import Foundation
 enum CustomizableFlickKey: String, Codable{
     case kogana = "kogana"
     case kanaSymbols = "kana_symbols"
+    case hiraTab = "hira_tab"
+    case abcTab = "abc_tab"
+    case symbolsTab = "symbols_tab"
 
     var identifier: String {
         return self.rawValue
@@ -36,6 +39,34 @@ enum CustomizableFlickKey: String, Codable{
                 right: FlickCustomKey(label: "！", actions: [.input("！")]),
                 bottom: FlickCustomKey(label: "", actions: [])
             )
+        case .hiraTab:
+            return KeyFlickSetting(
+                identifier: self,
+                center: FlickCustomKey(label: "あいう", actions: [.moveTab(.system(.user_japanese))]),
+                left: FlickCustomKey(label: "", actions: []),
+                top: FlickCustomKey(label: "", actions: []),
+                right: FlickCustomKey(label: "", actions: []),
+                bottom: FlickCustomKey(label: "", actions: [])
+            )
+        case .abcTab:
+            return KeyFlickSetting(
+                identifier: self,
+                center: FlickCustomKey(label: "abc", actions: [.moveTab(.system(.user_english))]),
+                left: FlickCustomKey(label: "", actions: []),
+                top: FlickCustomKey(label: "", actions: []),
+                right: FlickCustomKey(label: "→", actions: [.moveCursor(1)], longpressActions: [.longMoveCursor(1)]),
+                bottom: FlickCustomKey(label: "", actions: [])
+            )
+        case .symbolsTab:
+            return KeyFlickSetting(
+                identifier: self,
+                center: FlickCustomKey(label: "☆123", actions: [.moveTab(.system(.flick_numbersymbols))], longpressActions: [.toggleTabBar]),
+                left: FlickCustomKey(label: "", actions: []),
+                top: FlickCustomKey(label: "", actions: []),
+                right: FlickCustomKey(label: "", actions: []),
+                bottom: FlickCustomKey(label: "", actions: [])
+            )
+
         }
     }
 
@@ -45,6 +76,8 @@ enum CustomizableFlickKey: String, Codable{
             return [.left, .top, .right]
         case .kanaSymbols:
             return [.center, .left, .top, .right]
+        case .hiraTab, .abcTab, .symbolsTab:
+            return [.center, .top, .right, .bottom]
         }
     }
 
@@ -66,8 +99,15 @@ enum CustomizableFlickKey: String, Codable{
                 .bottom: "",
                 .center: "、",
             ]
+        case .hiraTab, .abcTab, .symbolsTab:
+            return [
+                .left: "",
+                .top: "",
+                .right: "",
+                .bottom: "",
+                .center: "",
+            ]
         }
-
     }
 
     var defaultLabel: [FlickKeyPosition: String] {
@@ -87,6 +127,30 @@ enum CustomizableFlickKey: String, Codable{
                 .right: "！",
                 .bottom: "",
                 .center: "､｡?!",
+            ]
+        case .hiraTab:
+            return [
+                .left: "",
+                .top: "",
+                .right: "",
+                .bottom: "",
+                .center: "あいう",
+            ]
+        case .abcTab:
+            return [
+                .left: "",
+                .top: "",
+                .right: "",
+                .bottom: "",
+                .center: "abc",
+            ]
+        case .symbolsTab:
+            return [
+                .left: "",
+                .top: "",
+                .right: "",
+                .bottom: "",
+                .center: "☆123",
             ]
         }
     }

@@ -277,50 +277,6 @@ struct ActionEditTextField: View {
 }
 
 
-struct ActionDeleteEditView: View {
-    @Binding private var action: EditingCodableActionData
-
-    internal init(_ action: Binding<EditingCodableActionData>) {
-        self._action = action
-        if case let .delete(count) = action.wrappedValue.data{
-            self._value = State(initialValue: "\(count)")
-        }
-    }
-
-    @State private var value = ""
-
-    var body: some View {
-        TextField("削除する文字数", text: $value)
-            .onChange(of: value){value in
-                if let count = Int(value){
-                    action.data = .delete(max(count, 0))
-                }
-            }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-    }
-}
-
-struct ActionInputEditView: View {
-    @Binding private var action: EditingCodableActionData
-
-    internal init(_ action: Binding<EditingCodableActionData>) {
-        self._action = action
-        if case let .input(value) = action.wrappedValue.data{
-            self._value = State(initialValue: "\(value)")
-        }
-    }
-
-    @State private var value = ""
-
-    var body: some View {
-        TextField("入力する文字", text: $value)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .onChange(of: value){value in
-                action.data = .input(value)
-            }
-    }
-}
-
 struct ActionOpenAppEditView: View {
     @Binding private var action: EditingCodableActionData
 
@@ -345,27 +301,45 @@ struct ActionOpenAppEditView: View {
 
 struct ActionMoveTabEditView: View {
     @Binding private var action: EditingCodableActionData
-    private let items: [(label: String, tab: CodableTabData)]
+    private let availableCustards: [String]
     @State private var selectedTab: CodableTabData = .system(.user_japanese)
 
     internal init(_ action: Binding<EditingCodableActionData>, availableCustards: [String]) {
+        self.availableCustards = availableCustards
         self._action = action
         if case let .moveTab(value) = action.wrappedValue.data{
             self._selectedTab = State(initialValue: value)
         }
+    }
+
+    var body: some View {
+        AvailableTabPicker(selectedTab, availableCustards: self.availableCustards){tab in
+            self.action.data = .moveTab(tab)
+        }
+    }
+}
+
+struct AvailableTabPicker: View {
+    @State private var selectedTab: CodableTabData = .system(.user_japanese)
+    private let items: [(label: String, tab: CodableTabData)]
+    private let process: (CodableTabData) -> ()
+
+    internal init(_ initialValue: CodableTabData, availableCustards: [String]? = nil, onChange process: @escaping (CodableTabData) -> () = {_ in}) {
+        self._selectedTab = State(initialValue: initialValue)
+        self.process = process
         var dict: [(label: String, tab: CodableTabData)] = [
             ("日本語(設定に合わせる)", .system(.user_japanese)),
             ("英語(設定に合わせる)", .system(.user_english)),
             ("記号と数字(フリック入力)", .system(.flick_numbersymbols)),
             ("数字(ローマ字入力)", .system(.qwerty_number)),
             ("記号(ローマ字入力)", .system(.qwerty_symbols)),
+            ("最後に表示していたタブ", .system(.last_tab)),
             ("日本語(フリック入力)", .system(.flick_japanese)),
             ("日本語(ローマ字入力)", .system(.qwerty_japanese)),
             ("英語(フリック入力)", .system(.flick_english)),
             ("英語(ローマ字入力)", .system(.qwerty_english)),
-            ("最後に表示していたタブ", .system(.last_tab)),
         ]
-        availableCustards.forEach{
+        (availableCustards ?? CustardManager.load().availableCustards) .forEach{
             dict.insert(($0, .custom($0)), at: 0)
         }
         self.items = dict
@@ -377,33 +351,6 @@ struct ActionMoveTabEditView: View {
                 Text(LocalizedStringKey(items[i].label)).tag(items[i].tab)
             }
         }
-        .onChange(of: selectedTab){value in
-            self.action.data = .moveTab(value)
-        }
+        .onChange(of: selectedTab, perform: process)
     }
 }
-
-
-struct ActionMoveCursorEditView: View {
-    @Binding private var action: EditingCodableActionData
-
-    internal init(_ action: Binding<EditingCodableActionData>) {
-        self._action = action
-        if case let .moveCursor(count) = action.wrappedValue.data{
-            self._value = State(initialValue: "\(count)")
-        }
-    }
-
-    @State private var value = ""
-
-    var body: some View {
-        TextField("移動する文字数", text: $value)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .onChange(of: value){ value in
-                if let count = Int(value){
-                    action.data = .moveCursor(count)
-                }
-            }
-    }
-}
-

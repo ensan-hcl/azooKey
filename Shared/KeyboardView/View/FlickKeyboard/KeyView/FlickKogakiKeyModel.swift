@@ -19,10 +19,10 @@ struct FlickKogakiKeyModel: FlickKeyModelProtocol{
     let labelType: KeyLabelType = .text("小ﾞﾟ")
 
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        SettingData.shared.kogakiFlickSetting.flick
+        SettingData.shared.flickCustomKeySetting(for: .koganaKeyFlick).flick
     }
     
-    var suggestModel: SuggestModel = SuggestModel(keyType: .kogaki)
+    var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.koganaKeyFlick))
 
     
     private init(){}

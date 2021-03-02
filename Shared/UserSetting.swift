@@ -12,8 +12,13 @@ enum Setting: String {
     case japaneseKeyboardLayout = "keyboard_type"
     case englishKeyboardLayout = "keyboard_type_en"
     case numberTabCustomKeys = "roman_number_custom_keys"
+
     case koganaKeyFlick = "kogana_flicks"
     case kanaSymbolsKeyFlick = "kana_symbols_flick"
+    case symbolsTabKeyFlick = "symbols_tab_flick"
+    case abcTabKeyFlick = "abc_tab_flick"
+    case hiraTabKeyFlick = "hira_tab_flick"
+
     case learningType = "memory_learining_styple_setting"
     case stopLearningWhenSearch = "stop_learning_when_search"
     case unicodeCandidate = "unicode_candidate"
@@ -46,6 +51,12 @@ enum Setting: String {
             return "「小ﾞﾟ」キーのフリック割り当て"
         case .kanaSymbolsKeyFlick:
             return "「､｡?!」キーのフリック割り当て"
+        case .symbolsTabKeyFlick:
+            return "「☆123」キーのフリック割り当て"
+        case .abcTabKeyFlick:
+            return "「abc」キーのフリック割り当て"
+        case .hiraTabKeyFlick:
+            return "「あいう」キーのフリック割り当て"
         case .learningType:
             return "学習の使用"
         case .stopLearningWhenSearch:
@@ -83,10 +94,19 @@ enum Setting: String {
             return "英語の入力方法をフリック入力とローマ字入力から選択できます。"
         case .numberTabCustomKeys:
             return "数字タブの「、。！？…」部分に好きな記号や文字を割り当てて利用することができます。"
+
+        //flick layoutのカスタムキー
         case .koganaKeyFlick:
             return "「小ﾞﾟ」キーの「左」「上」「右」フリックに、好きな文字列を割り当てて利用することができます。"
         case .kanaSymbolsKeyFlick:
             return "「､｡?!」キーの「左」「上」「右」フリックに割り当てられた文字を変更することができます。"
+        case .symbolsTabKeyFlick:
+            return "「☆123」キーの「上」「右」「下」フリックに、好きな操作を割り当てて利用することができます。"
+        case .abcTabKeyFlick:
+            return "「abc」キーの「上」「右」「下」フリックに、好きな操作を割り当てて利用することができます。"
+        case .hiraTabKeyFlick:
+            return "「あいう」キーの「上」「右」「下」フリックに、好きな操作を割り当てて利用することができます。"
+
         case .learningType:
             return "「新たに学習し、反映する(デフォルト)」「新たな学習を停止する」「新たに学習せず、これまでの学習も反映しない」選択できます。この設定の変更で学習結果が消えることはありません。"
         case .stopLearningWhenSearch:
@@ -145,6 +165,12 @@ struct DefaultSetting{
             return CustomizableFlickKey.kogana.defaultSetting
         case .kanaSymbolsKeyFlick:
             return CustomizableFlickKey.kanaSymbols.defaultSetting
+        case .hiraTabKeyFlick:
+            return CustomizableFlickKey.hiraTab.defaultSetting
+        case .abcTabKeyFlick:
+            return CustomizableFlickKey.abcTab.defaultSetting
+        case .symbolsTabKeyFlick:
+            return CustomizableFlickKey.symbolsTab.defaultSetting
         default:
             return nil
         }
