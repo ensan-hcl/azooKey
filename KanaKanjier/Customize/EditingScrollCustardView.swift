@@ -134,8 +134,20 @@ struct EditingScrollCustardView: View {
         var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = base
 
         for substring in data.words.split(separator: "\n"){
-            let string = String(substring)
-            keys[.grid_scroll(.init(keys.count))] = .custom(.init(design: .init(label: .text(string), color: .normal), press_action: [.input(string)], longpress_action: [], variation: []))
+            let target = substring.components(separatedBy: "\\|").map{$0.components(separatedBy: "|")}.reduce(into: [String]()){array, value in
+                if let last = array.last, let first = value.first{
+                    array.removeLast()
+                    array.append([last, first].joined(separator: "|"))
+                    array.append(contentsOf: value.dropFirst())
+                }else{
+                    array.append(contentsOf: value)
+                }
+            }
+            guard let input = target.first else {
+                continue
+            }
+            let label = target.count > 1 ? target[1] : input
+            keys[.grid_scroll(.init(keys.count))] = .custom(.init(design: .init(label: .text(label), color: .normal), press_action: [.input(input)], longpress_action: [], variation: []))
         }
 
         let columnKeyCount = max(Int(data.columnCount) ?? 8, 1)
