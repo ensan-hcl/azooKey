@@ -20,7 +20,7 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol{
 
     let pressActions: [ActionType] = [.input(" ")]
 
-    let longPressActions: [KeyLongPressActionType] = [.doOnce(.toggleShowMoveCursorView)]
+    let longPressActions: [LongPressActionType] = [.doOnce(.toggleShowMoveCursorView)]
 
     let flickKeys: [FlickDirection: FlickedKeyModel] = [
         .left: FlickedKeyModel(

@@ -24,14 +24,14 @@ struct FlickTabKeyModel: FlickKeyModelProtocol{
 
 
     var pressActions: [ActionType]{ [.moveTab(self.tab)] }
-    let longPressActions: [KeyLongPressActionType]
+    let longPressActions: [LongPressActionType]
 
     let suggestModel: SuggestModel
     var labelType: KeyLabelType
     var tab: Tab
     let flickKeys: [FlickDirection: FlickedKeyModel]
 
-    private init(labelType: KeyLabelType, tab: Tab, longPressActions: [KeyLongPressActionType] = [], flickKeys: [FlickDirection: FlickedKeyModel]){
+    private init(labelType: KeyLabelType, tab: Tab, longPressActions: [LongPressActionType] = [], flickKeys: [FlickDirection: FlickedKeyModel]){
         self.labelType = labelType
         self.tab = tab
         self.longPressActions = longPressActions

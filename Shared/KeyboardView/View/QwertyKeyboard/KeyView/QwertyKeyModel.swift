@@ -12,7 +12,7 @@ import SwiftUI
 struct QwertyKeyModel: QwertyKeyModelProtocol{
     
     let pressActions: [ActionType]
-    var longPressActions: [KeyLongPressActionType]
+    var longPressActions: [LongPressActionType]
 
     let labelType: KeyLabelType
     let needSuggestView: Bool
@@ -21,7 +21,7 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType
     let unpressedKeyColorType: QwertyUnpressedKeyColorType
 
-    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], variationsModel: VariationsModel = VariationsModel([]), keyColorType: QwertyUnpressedKeyColorType = .normal, needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){
+    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [LongPressActionType] = [], variationsModel: VariationsModel = VariationsModel([]), keyColorType: QwertyUnpressedKeyColorType = .normal, needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions

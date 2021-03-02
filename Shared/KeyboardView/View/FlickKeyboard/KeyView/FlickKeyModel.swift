@@ -25,10 +25,10 @@ struct FlickKeyModel: FlickKeyModelProtocol{
 
     let labelType: KeyLabelType
     let pressActions: [ActionType]
-    let longPressActions: [KeyLongPressActionType]
+    let longPressActions: [LongPressActionType]
     private let keycolorType: FlickKeyColorType
     
-    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], flickKeys: [FlickDirection: FlickedKeyModel], needSuggestView: Bool = true, keycolorType: FlickKeyColorType = .normal){
+    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [LongPressActionType] = [], flickKeys: [FlickDirection: FlickedKeyModel], needSuggestView: Bool = true, keycolorType: FlickKeyColorType = .normal){
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions

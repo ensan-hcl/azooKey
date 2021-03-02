@@ -14,8 +14,8 @@ import SwiftUI
 class ActionDepartment{
     init(){}
     func registerAction(_ action: ActionType){}
-    func reserveLongPressAction(_ action: KeyLongPressActionType){}
-    func registerLongPressActionEnd(_ action: KeyLongPressActionType){}
+    func reserveLongPressAction(_ action: LongPressActionType){}
+    func registerLongPressActionEnd(_ action: LongPressActionType){}
     func notifySomethingWillChange(left: String, center: String, right: String){}
     func notifySomethingDidChange(a_left: String, a_center: String, a_right: String){}
     func notifyComplete(_ candidate: ResultViewItemData){}

@@ -32,7 +32,7 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
         }
     }
     
-    var longPressActions: [KeyLongPressActionType] {
+    var longPressActions: [LongPressActionType] {
         return []
     }
     

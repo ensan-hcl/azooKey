@@ -33,9 +33,9 @@ struct FlickedKeyModel{
     static let zero: FlickedKeyModel = FlickedKeyModel(labelType: .text(""), pressActions: [])
     let labelType: KeyLabelType
     let pressActions: [ActionType]
-    let longPressActions: [KeyLongPressActionType]
+    let longPressActions: [LongPressActionType]
     
-    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = []) {
+    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [LongPressActionType] = []) {
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions

@@ -14,7 +14,7 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
 
     
     let pressActions: [ActionType]
-    var longPressActions: [KeyLongPressActionType]
+    var longPressActions: [LongPressActionType]
     ///暫定
     let variationsModel = VariationsModel([])
 
@@ -23,7 +23,7 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
-    init(labelType: KeyLabelType, rowInfo: (normal: Int, functional: Int, space: Int, enter: Int), pressActions: [ActionType], longPressActions: [KeyLongPressActionType] = [], needSuggestView: Bool = false){
+    init(labelType: KeyLabelType, rowInfo: (normal: Int, functional: Int, space: Int, enter: Int), pressActions: [ActionType], longPressActions: [LongPressActionType] = [], needSuggestView: Bool = false){
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions

@@ -42,7 +42,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
         }
     }
     
-    var longPressActions: [KeyLongPressActionType] {
+    var longPressActions: [LongPressActionType] {
         return []
     }
     

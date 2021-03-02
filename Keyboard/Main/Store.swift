@@ -58,7 +58,7 @@ final class KeyboardActionDepartment: ActionDepartment{
     private weak var delegate: KeyboardViewController!
     
     //即時変数
-    private var timers: [(type: KeyLongPressActionType, timer: Timer)] = []
+    private var timers: [(type: LongPressActionType, timer: Timer)] = []
     private var tempTextData: (left: String, center: String, right: String)!
     private var tempSavedSelectedText: String!
 
@@ -230,7 +230,7 @@ final class KeyboardActionDepartment: ActionDepartment{
     ///長押しを予約する関数。
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
-    override func reserveLongPressAction(_ action: KeyLongPressActionType){
+    override func reserveLongPressAction(_ action: LongPressActionType){
         if timers.contains{$0.type == action}{
             return
         }
@@ -258,7 +258,7 @@ final class KeyboardActionDepartment: ActionDepartment{
     ///長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。
     /// - Parameters:
     ///   - action: どの動作を終了するか判定するために用いる。
-    override func registerLongPressActionEnd(_ action: KeyLongPressActionType){
+    override func registerLongPressActionEnd(_ action: LongPressActionType){
         timers = timers.compactMap{timer in
             if timer.type == action {
                 timer.timer.invalidate()

@@ -26,7 +26,7 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         }
 
     }
-    let longPressActions: [KeyLongPressActionType] = []
+    let longPressActions: [LongPressActionType] = []
     ///暫定
     let variationsModel = VariationsModel([])
 

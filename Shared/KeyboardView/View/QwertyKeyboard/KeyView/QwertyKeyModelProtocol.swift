@@ -87,7 +87,7 @@ enum QwertyUnpressedKeyColorType{
 
 protocol QwertyKeyModelProtocol{
     var pressActions: [ActionType] {get}
-    var longPressActions: [KeyLongPressActionType] {get}
+    var longPressActions: [LongPressActionType] {get}
     var keySizeType: QwertyKeySizeType {get}
     var needSuggestView: Bool {get}
         

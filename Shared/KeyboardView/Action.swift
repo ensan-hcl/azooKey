@@ -104,11 +104,11 @@ extension ActionType{
 }
 
 //長押しor長フリックされた際の挙動のタイプ
-enum KeyLongPressActionType: Equatable{
+enum LongPressActionType: Equatable{
     case `repeat`(ActionType)
     case doOnce(ActionType)
 
-    static func == (lsb: KeyLongPressActionType, rsb: KeyLongPressActionType) -> Bool {
+    static func == (lsb: LongPressActionType, rsb: LongPressActionType) -> Bool {
         switch (lsb, rsb){
         case let (.repeat(l),.repeat(r)):
             return l == r
@@ -161,7 +161,7 @@ extension CodableActionData{
         }
     }
 
-    var longpressActionType: KeyLongPressActionType {
+    var longpressActionType: LongPressActionType {
         switch self{
         case let .longInput(value):
             return .repeat(.input(value))

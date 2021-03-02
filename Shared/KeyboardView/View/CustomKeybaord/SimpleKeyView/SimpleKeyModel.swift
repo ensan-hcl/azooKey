@@ -42,7 +42,7 @@ enum SimpleUnpressedKeyColorType{
 
 protocol SimpleKeyModelProtocol{
     var pressActions: [ActionType] {get}
-    var longPressActions: [KeyLongPressActionType] {get}
+    var longPressActions: [LongPressActionType] {get}
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
     func press()
     func longPressReserve()
@@ -76,7 +76,7 @@ extension SimpleKeyModelProtocol{
 }
 
 struct SimpleKeyModel: SimpleKeyModelProtocol{
-    init(keyType: SimpleKeyColorType, keyLabelType: KeyLabelType, unpressedKeyColorType: SimpleUnpressedKeyColorType, pressActions: [ActionType], longPressActions: [KeyLongPressActionType]) {
+    init(keyType: SimpleKeyColorType, keyLabelType: KeyLabelType, unpressedKeyColorType: SimpleUnpressedKeyColorType, pressActions: [ActionType], longPressActions: [LongPressActionType]) {
         self.keyType = keyType
         self.keyLabelType = keyLabelType
         self.unpressedKeyColorType = unpressedKeyColorType
@@ -93,7 +93,7 @@ struct SimpleKeyModel: SimpleKeyModelProtocol{
     let unpressedKeyColorType: SimpleUnpressedKeyColorType
     let keyLabelType: KeyLabelType
     let pressActions: [ActionType]
-    let longPressActions: [KeyLongPressActionType]
+    let longPressActions: [LongPressActionType]
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         KeyLabel(self.keyLabelType, width: width)
@@ -113,7 +113,7 @@ struct SimpleEnterKeyModel: SimpleKeyModelProtocol{
         }
     }
 
-    let longPressActions: [KeyLongPressActionType] = []
+    let longPressActions: [LongPressActionType] = []
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .enter
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
@@ -131,7 +131,7 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol{
         }
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
-    let longPressActions: [KeyLongPressActionType] = []
+    let longPressActions: [LongPressActionType] = []
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         switch SemiStaticStates.shared.needsInputModeSwitchKey{

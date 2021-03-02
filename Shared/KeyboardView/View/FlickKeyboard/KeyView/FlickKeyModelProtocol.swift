@@ -44,7 +44,7 @@ enum FlickKeySizeType{
 protocol FlickKeyModelProtocol {
     var suggestModel: SuggestModel {get}
     var pressActions: [ActionType] {get}
-    var longPressActions: [KeyLongPressActionType] {get}
+    var longPressActions: [LongPressActionType] {get}
     var flickKeys: [FlickDirection: FlickedKeyModel] {get}
     var keySizeType: FlickKeySizeType {get}
     var needSuggestView: Bool {get}

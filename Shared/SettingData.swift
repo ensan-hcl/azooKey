@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-typealias FlickCustomKeySettingData = (labelType: KeyLabelType, actions: [ActionType], longpressActions: [KeyLongPressActionType], flick: [FlickDirection: FlickedKeyModel])
+typealias FlickCustomKeySettingData = (labelType: KeyLabelType, actions: [ActionType], longpressActions: [LongPressActionType], flick: [FlickDirection: FlickedKeyModel])
 
 struct SettingData{
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
