@@ -12,7 +12,7 @@ import SwiftUI
 struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
     let touchDownCallBack: (() -> Void)
     let touchMovedCallBack: ((CGFloat) -> Void)
-    let touchUpCallBack: (() -> Void)
+    let touchUpCallBack: ((CGFloat) -> Void)
 
     func makeUIView(context: UIViewRepresentableContext<Self>) -> Self.UIViewType {
         let view = UIView(frame: .zero)
@@ -25,9 +25,9 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
     class Coordinator: NSObject, UIGestureRecognizerDelegate {
         var touchDownCallback: (() -> Void)
         var touchMovedCallBack: ((CGFloat) -> Void)
-        var touchUpCallback: (() -> Void)
+        var touchUpCallback: ((CGFloat) -> Void)
 
-        init(touchDownCallback: @escaping (() -> Void), touchMovedCallBack: @escaping ((CGFloat) -> Void), touchUpCallback: @escaping (() -> Void)) {
+        init(touchDownCallback: @escaping (() -> Void), touchMovedCallBack: @escaping ((CGFloat) -> Void), touchUpCallback: @escaping ((CGFloat) -> Void)) {
             self.touchDownCallback = touchDownCallback
             self.touchMovedCallBack = touchMovedCallBack
             self.touchUpCallback = touchUpCallback
@@ -40,7 +40,7 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
             case .changed:
                 self.touchMovedCallBack(gesture.distance)
             case .cancelled, .ended:
-                self.touchUpCallback()
+                self.touchUpCallback(gesture.distance)
             case .possible, .failed:
                 break
             @unknown default:
@@ -61,8 +61,19 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
 }
 
 final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
-    var startLocation: CGPoint = .zero
-    var distance: CGFloat = .zero
+    private var startLocation: CGPoint = .zero
+
+    private var _distance: CGFloat = .zero
+    var distance: CGFloat {
+        get{
+            let value = _distance
+            _distance = .zero
+            return value
+        }
+        set{
+            self._distance = newValue
+        }
+    }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         if self.state == .possible {
@@ -85,8 +96,11 @@ final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
         self.state = .ended
+        let location = touches.first?.location(in: nil) ?? .zero
+        let dx = startLocation.x - location.x
+        let dy = startLocation.y - location.y
+        self.distance = sqrt(dx*dx + dy*dy)
         self.startLocation = .zero
-        self.distance = .zero
     }
 }
 
