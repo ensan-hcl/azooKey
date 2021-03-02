@@ -218,6 +218,15 @@ struct CustardManager {
                 }
                 return nil
             }
+        case .greek:
+            return self.availableCustards.compactMap{
+                if let custard = try? self.custard(identifier: $0){
+                    if custard.language == .el_GR{
+                        return custard.identifier
+                    }
+                }
+                return nil
+            }
         case .english:
             return self.availableCustards.compactMap{
                 if let custard = try? self.custard(identifier: $0){

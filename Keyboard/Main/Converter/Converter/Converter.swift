@@ -125,7 +125,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///外国語への予測変換候補を生成する関数
     /// - Parameters:
     ///   - inputData: 変換対象のデータ。
-    ///   - language: 言語コード。現在は`en-US`のみ対応している。
+    ///   - language: 言語コード。現在は`en-US`と`el(ギリシャ語)`のみ対応している。
     /// - Returns:
     ///   予測変換候補
     private func getForeignPredictionCandidate(inputData: InputData, language: String, penalty: PValue = -5) -> [Candidate] {
@@ -137,6 +137,37 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             if !ruby.onlyRomanAlphabet{
                 return result
             }
+            if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language){
+                if !completions.isEmpty{
+                    let data = [LRE_SRE_DicDataElement(ruby: ruby, cid: 1288, mid: 501, value: penalty)]
+                    let candidate: Candidate = Candidate(
+                        text: ruby,
+                        value: penalty,
+                        correspondingCount: inputData.characters.count,
+                        lastMid: 501,
+                        data: data
+                    )
+                    result.append(candidate)
+                }
+                var value: PValue = -5 + penalty
+                let delta: PValue = -10/PValue(completions.count)
+                completions.forEach{word in
+                    let data = [LRE_SRE_DicDataElement(ruby: word, cid: 1288, mid: 501, value: value)]
+                    let candidate: Candidate = Candidate(
+                        text: word,
+                        value: value,
+                        correspondingCount: inputData.characters.count,
+                        lastMid: 501,
+                        data: data)
+                    result.append(candidate)
+                    value += delta
+                }
+            }
+            return result
+        case "el":
+            var result: [Candidate] = []
+            let ruby = String(inputData.characters)
+            let range = NSMakeRange(0, ruby.utf16.count)
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language){
                 if !completions.isEmpty{
                     let data = [LRE_SRE_DicDataElement(ruby: ruby, cid: 1288, mid: 501, value: penalty)]
@@ -358,7 +389,15 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let start3_2 = Date()
 
         //英単語の予測変換。appleのapiを使うため、処理が異なる。
-        let english_candidates: [Candidate] = requireEnglishPrediction ? self.getForeignPredictionCandidate(inputData: inputData, language: "en-US") : []
+        var foreign_candidates: [Candidate] = []
+
+        if requireEnglishPrediction{
+            foreign_candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US"))
+        }
+        if VariableStates.shared.keyboardLanguage == .greek{
+            foreign_candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "el"))
+        }
+        
         debug("処理3.2:", -start3_2.timeIntervalSinceNow)
         let start3_3 = Date()
 
@@ -373,7 +412,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         let toplevel_additional_candidate = self.getTopLevelAdditionalCandidate(inputData)
         //文全体を変換するパターン
-        let full_candidate = getUniqueCandidate(best10 + english_candidates + (zeroHintPrediction_candidates + toplevel_additional_candidate)).sorted{$0.value>$1.value}.prefix(5)
+        let full_candidate = getUniqueCandidate(best10 + foreign_candidates + (zeroHintPrediction_candidates + toplevel_additional_candidate)).sorted{$0.value>$1.value}.prefix(5)
         //重複のない変換候補を作成するための集合
         var seenCandidate: Set<String> = Set(full_candidate.map{$0.text})
         debug("処理4:", -start4.timeIntervalSinceNow)

@@ -16,6 +16,8 @@ fileprivate extension CustardLanguage {
             return "英語"
         case .ja_JP:
             return "日本語"
+        case .el_GR:
+            return "ギリシャ語"
         case .undefined:
             return "指定なし"
         case .none:

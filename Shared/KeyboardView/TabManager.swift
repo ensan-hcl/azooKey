@@ -68,6 +68,8 @@ enum Tab{
                     return .japanese
                 case .en_US:
                     return .english
+                case .el_GR:
+                    return .greek
                 case .undefined:
                     return nil
                 case .none:

@@ -19,6 +19,10 @@ enum CustardLanguage: String, Codable {
     /// - convert to common Japanese
     case ja_JP
 
+    /// - ギリシア語に変換します
+    /// - convert to Greek
+    case el_GR
+
     /// - 変換を行いません
     /// - don't convert
     case none

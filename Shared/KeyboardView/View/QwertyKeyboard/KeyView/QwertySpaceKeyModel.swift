@@ -23,6 +23,8 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         switch states.keyboardLanguage{
+        case .greek:
+            return KeyLabel(.text("διάστημα"), width: width, textSize: .small, textColor: color)
         case .english:
             return KeyLabel(.text("space"), width: width, textSize: .small, textColor: color)
         case .japanese, .none:

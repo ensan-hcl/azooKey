@@ -40,6 +40,7 @@ enum InputStyle: String{
 enum KeyboardLanguage {
     case english
     case japanese
+    case greek
     case none
 }
 
