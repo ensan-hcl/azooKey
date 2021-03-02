@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 struct VerticalFlickKeyboardView: View{
-    private let model = VerticalFlickDataProvider()
     @ObservedObject private var variableStates = VariableStates.shared
     @Environment(\.themeEnvironment) private var theme
 

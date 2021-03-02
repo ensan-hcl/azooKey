@@ -99,23 +99,23 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
             case .flick_hira:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
-                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().hiraKeyboard)
+                    VerticalFlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard)
                 case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().hiraKeyboard)
+                    HorizontalFlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard)
                 }
             case .flick_abc:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
-                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().abcKeyboard)
+                    VerticalFlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard)
                 case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().abcKeyboard)
+                    HorizontalFlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard)
                 }
             case .flick_numbersymbols:
                 switch variableStates.keyboardOrientation{
                 case .vertical:
-                    VerticalFlickKeyboardView(keyModels: VerticalFlickDataProvider().numberKeyboard)
+                    VerticalFlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard)
                 case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: HorizontalFlickDataProvider().numberKeyboard)
+                    HorizontalFlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard)
                 }
             case .qwerty_hira:
                 QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard)
