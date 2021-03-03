@@ -383,7 +383,7 @@ final class DicDataStore{
         }
     }
 
-    private func convertDicData(from dataString: [Substring]) -> DicDataElementProtocol {
+    private func convertDicData<S: StringProtocol>(from dataString: [S]) -> DicDataElementProtocol {
         let LRE = dataString[3].isEmpty
         let SRE = dataString[1].isEmpty
         let V3E = dataString[5].isEmpty

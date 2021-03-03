@@ -141,7 +141,6 @@ struct LOUDSBuilder{
 
         let (paths, blocks, useradds) = self.loadUserDictInfo()
 
-        let csvData: [[String]]
         var csvLines: [Substring] = []
         do{
             for path in paths{
@@ -149,7 +148,7 @@ struct LOUDSBuilder{
                 csvLines.append(contentsOf: string.split(separator: "\n"))
             }
             csvLines.append(contentsOf: useradds.flatMap{self.makeDictionaryForm($0)}.map{Substring($0)})
-            csvData = csvLines.map{$0.components(separatedBy: "\t")}
+            let csvData = csvLines.map{$0.components(separatedBy: "\t")}
             csvData.indices.forEach{index in
                 if !blocks.contains(csvData[index][1]){
                     trieroot.insertValue(for: csvData[index][0], value: index)
@@ -157,7 +156,6 @@ struct LOUDSBuilder{
             }
         } catch {
             debug("ファイルが存在しません: \(error)")
-            csvData = []
             csvLines = []
             return
         }
