@@ -488,15 +488,29 @@ enum CustardInterfaceSystemKey: Codable {
     /// - the enter key that changes its label in condition
     case enter(Int)
 
+    ///custom keys.
     /// - flick 小ﾞﾟkey
-    case kogaki
+    case flick_kogaki
+    /// - flick ､｡!? key
+    case flick_kutoten
+    /// - flick hiragana tab
+    case flick_hira_tab
+    /// - flick abc tab
+    case flick_abc_tab
+    /// - flick number and symbols tab
+    case flick_star123_tab
+
 }
 
 extension CustardInterfaceSystemKey{
     enum CodingKeys: CodingKey{
         case change_keyboard
         case enter
-        case kogaki
+        case flick_kogaki
+        case flick_kutoten
+        case flick_hira_tab
+        case flick_abc_tab
+        case flick_star123_tab
     }
 
     func encode(to encoder: Encoder) throws {
@@ -504,8 +518,16 @@ extension CustardInterfaceSystemKey{
         switch self {
         case .change_keyboard:
             try container.encode(true, forKey: .change_keyboard)
-        case .kogaki:
-            try container.encode(true, forKey: .kogaki)
+        case .flick_kogaki:
+            try container.encode(true, forKey: .flick_kogaki)
+        case .flick_kutoten:
+            try container.encode(true, forKey: .flick_kutoten)
+        case .flick_hira_tab:
+            try container.encode(true, forKey: .flick_hira_tab)
+        case .flick_abc_tab:
+            try container.encode(true, forKey: .flick_abc_tab)
+        case .flick_star123_tab:
+            try container.encode(true, forKey: .flick_star123_tab)
         case let .enter(count):
             try container.encode(count, forKey: .enter)
         }
@@ -530,8 +552,16 @@ extension CustardInterfaceSystemKey{
             self = .enter(value)
         case .change_keyboard:
             self = .change_keyboard
-        case .kogaki:
-            self = .kogaki
+        case .flick_kogaki:
+            self = .flick_kogaki
+        case .flick_kutoten:
+            self = .flick_kutoten
+        case .flick_hira_tab:
+            self = .flick_hira_tab
+        case .flick_abc_tab:
+            self = .flick_abc_tab
+        case .flick_star123_tab:
+            self = .flick_star123_tab
         }
     }
 }
