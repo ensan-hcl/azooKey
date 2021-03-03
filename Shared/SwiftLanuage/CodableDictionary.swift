@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct ColdableDictionary<Key: Hashable, Value>{
-    private var dictionary: [Key: Value]
+struct CodableDictionary<Key: Hashable, Value>{
+    var dictionary: [Key: Value]
     init(_ dictionary: [Key: Value]){
         self.dictionary = dictionary
     }
 }
 
-extension ColdableDictionary: ExpressibleByDictionaryLiteral {
+extension CodableDictionary: ExpressibleByDictionaryLiteral {
     init(dictionaryLiteral elements: (Key, Value)...) {
         self.dictionary = elements.reduce(into: [:]){dictionary, pair in
             dictionary[pair.0] = pair.1
@@ -23,7 +23,7 @@ extension ColdableDictionary: ExpressibleByDictionaryLiteral {
     }
 }
 
-extension ColdableDictionary: Codable where Key: Codable, Value: Codable{
+extension CodableDictionary: Codable where Key: Codable, Value: Codable{
     struct CodableDictionaryPair: Codable {
         internal init(key: Key, value: Value) {
             self.key = key

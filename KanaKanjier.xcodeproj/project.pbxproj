@@ -10,6 +10,7 @@
 		1A0E8D5B25EC940C00A9BAE5 /* GenericColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D5A25EC940C00A9BAE5 /* GenericColorPicker.swift */; };
 		1A0E8D6825EDD74000A9BAE5 /* DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */; };
 		1A0E8D7F25EF273600A9BAE5 /* CodableDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D7E25EF273600A9BAE5 /* CodableDictionary.swift */; };
+		1A0E8D8825EFC04D00A9BAE5 /* CodableDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D7E25EF273600A9BAE5 /* CodableDictionary.swift */; };
 		1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */; };
 		1A10D80225E4F56D0095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
 		1A10D80725E4F5710095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
@@ -10310,6 +10311,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A0E8D8825EFC04D00A9BAE5 /* CodableDictionary.swift in Sources */,
 				1A86F4B82539356100B92B49 /* only_contains.swift in Sources */,
 				1A12E24825C41A7100316009 /* Message.swift in Sources */,
 				1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */,

@@ -296,6 +296,28 @@ struct CustardInterface: Codable {
     let keys: [CustardKeyPositionSpecifier: CustardInterfaceKey]
 }
 
+extension CustardInterface {
+    enum CodingKeys: CodingKey{
+        case key_style
+        case key_layout
+        case keys
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(key_style, forKey: .key_style)
+        try container.encode(key_layout, forKey: .key_layout)
+        try container.encode(CodableDictionary(keys), forKey: .keys)
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.key_style = try container.decode(CustardInterfaceStyle.self, forKey: .key_style)
+        self.key_layout = try container.decode(CustardInterfaceLayout.self, forKey: .key_layout)
+        self.keys = try container.decode(CodableDictionary<CustardKeyPositionSpecifier, CustardInterfaceKey>.self, forKey: .keys).dictionary
+    }
+}
+
 /// - キーのデザイン
 /// - design information of key
 struct CustardKeyDesign: Codable {
