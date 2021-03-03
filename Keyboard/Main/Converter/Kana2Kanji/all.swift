@@ -29,13 +29,13 @@ extension Kana2Kanji{
     ///(4)ノードをアップデートした上で返却する。
     func kana2lattice_all(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: Nodes){
         debug("新規に計算を行います。inputされた文字列は\(inputData.count)文字分の\(inputData.characters)")
-        let START = Date()
+        conversionTool.start(process: .変換全体)
         let count: Int = inputData.count
         let result: LatticeNode = LatticeNode.EOSNode
-
+        conversionTool.start(process: .辞書読み込み)
         let nodes: [[LatticeNode]] = (.zero ..< count).map{dicdataStore.getLOUDSData(inputData: inputData, from: $0)}
-        debug(nodes.map{$0.map{$0.data}})
-        TimeMesureTools.startTimeMesure()
+        conversionTool.end(process: .辞書読み込み)
+        conversionTool.start(process: .変換処理)
         //「i文字目から始まるnodes」に対して
         nodes.indices.forEach{(i: Int) in
             //それぞれのnodeに対して
@@ -66,10 +66,17 @@ extension Kana2Kanji{
                             return
                         }
                         //クラスの連続確率を計算する。
+                        conversionTool.start(process: .変換処理_連接コスト計算_全体)
+                        conversionTool.start(process: .変換処理_連接コスト計算_CCValue)
                         let ccValue: PValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
+                        conversionTool.end(process: .変換処理_連接コスト計算_CCValue)
+                        conversionTool.start(process: .変換処理_連接コスト計算_Memory)
                         let ccBonus: PValue = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
+                        conversionTool.end(process: .変換処理_連接コスト計算_Memory)
                         let ccSum: PValue = ccValue + ccBonus
+                        conversionTool.end(process: .変換処理_連接コスト計算_全体)
                         //nodeの持っている全てのprevnodeに対して
+                        conversionTool.start(process: .変換処理_N_Best計算)
                         node.values.indices.forEach{(index: Int) in
                             let newValue: PValue = ccSum + node.values[index]
                             //追加すべきindexを取得する
@@ -83,14 +90,14 @@ extension Kana2Kanji{
                             if nextnode.prevs.count > N_best{
                                 nextnode.prevs.removeLast()
                             }
-
                         }
+                        conversionTool.end(process: .変換処理_N_Best計算)
                     }
                 }
             }
         }
-        TimeMesureTools.endTimeMesure("計算所要時間：")
-        debug("計算所要時間：全体",-START.timeIntervalSinceNow)
+        conversionTool.end(process: .変換処理)
+        conversionTool.end(process: .変換全体)
         return (result: result, nodes: nodes)
     }
 

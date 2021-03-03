@@ -8,6 +8,20 @@
 
 import Foundation
 
+private struct DicDataElementCore: Hashable{
+    internal init(data: DicDataElementProtocol){
+        self.word = data.word
+        self.ruby = data.ruby
+        self.lcid = data.lcid
+        self.rcid = data.rcid
+    }
+
+    let word: String
+    let ruby: String
+    let lcid: Int
+    let rcid: Int
+}
+
 private final class LearningMemoryElement{
     var data: DicDataElementProtocol
     var count: Int
@@ -23,13 +37,13 @@ struct LearningMemorys{
     static let memoryCount = 100
     static let memoryFileName = "learningMemory"
     private var values: [LearningMemoryElement]
-    private var index2order: [Int]
+    private var index2order: [Int]  //index→values内の位置
+    private var core2Index: [DicDataElementCore: Int]
 
     private func getMinOrderIndex() -> Int? {
         let pair = self.index2order.enumerated().min(by: {$0.element < $1.element})
         return pair?.offset
     }
-
 
     private mutating func updateOrder(at index: Int){
         let order = self.index2order[index]
@@ -56,8 +70,8 @@ struct LearningMemorys{
 
 
     func getSingle(_ data: DicDataElementProtocol) -> Int {
-        if let element = self.values.last(where: {$0.data == data}){
-            return element.count
+        if let index = self.core2Index[.init(data: data)]{
+            return values[index].count
         }
         return .zero
     }
@@ -68,16 +82,16 @@ struct LearningMemorys{
     }
 
     func getNextData(_ data: DicDataElementProtocol) -> [(next: DicDataElementProtocol, count: Int)] {
-        if let element = self.values.last(where: {$0.data == data}){
-            return element.next.map{(next: self.values[$0.index].data, count: $0.count)}
+        if let index = self.core2Index[.init(data: data)]{
+            return values[index].next.map{(next: self.values[$0.index].data, count: $0.count)}
         }
         return []
     }
 
     func matchNext(_ previous: DicDataElementProtocol, next: DicDataElementProtocol) -> Int {
-        if let element = self.values.last(where: {$0.data == previous}),
-           let index = self.values.lastIndex(where: {$0.data == next}),
-           let next = element.next.filter({$0.index == index}).last{
+        if let nextIndex = self.core2Index[.init(data: next)],
+           let previousIndex = self.core2Index[.init(data: previous)],
+           let next = values[previousIndex].next.last(where: {$0.index == nextIndex}){
             return next.count
         }
         return .zero
@@ -97,20 +111,29 @@ struct LearningMemorys{
             if i != .zero || lastData == nil{
                 let needMemoryCount = DicDataStore.needWValueMemory(datalist[i])
                 let countDelta = needMemoryCount ? 1:0
-                if let index = self.values.lastIndex(where: {$0.data == datalist[i]}){
+                //すでにデータが存在している場合
+                if let index = core2Index[.init(data: datalist[i])]{
                     self.updateOrder(at: index)
                     lastIndex = index
                     self.values[index].count += countDelta
                 }else{
+                    //最大数に満たない場合
                     if self.values.count < Self.memoryCount{
                         lastIndex = self.values.endIndex
-                        self.values.append(LearningMemoryElement(data: datalist[i], count: countDelta))
+                        let data = datalist[i]
+                        self.values.append(LearningMemoryElement(data: data, count: countDelta))
                         self.index2order.append(self.index2order.count)
+                        self.core2Index[.init(data: data)] = self.index2order.count - 1
+                    //最大数になっている場合、最も古いデータを更新する
                     }else if let minIndex = self.getMinOrderIndex(){
                         self.values.forEach{
                             $0.next = $0.next.lazy.filter{$0.index != minIndex}
                         }
-                        self.values[minIndex] = LearningMemoryElement(data: datalist[i], count: countDelta)
+                        let data = datalist[i]
+                        let oldData = values[minIndex].data
+                        self.core2Index.removeValue(forKey: .init(data: oldData))
+                        self.values[minIndex] = LearningMemoryElement(data: data, count: countDelta)
+                        self.core2Index[.init(data: data)] = minIndex
                         self.updateOrder(at: minIndex)
                         lastIndex = minIndex
                     }
@@ -161,6 +184,7 @@ struct LearningMemorys{
     mutating func reset(){
         self.values = []
         self.index2order = []
+        self.core2Index = [:]
         self.save(force: true)
     }
 
@@ -169,18 +193,23 @@ struct LearningMemorys{
             //リセットする。
             self.values = []
             self.index2order = []
+            self.core2Index = [:]
             self.save(force: true)
         }
 
         if !SettingData.shared.learningType.needUsingMemory{
             self.values = []
             self.index2order = []
+            self.core2Index = [:]
             return
         }
-
-        self.values = Self.load()
+        let values = Self.load()
+        self.values = values
         self.values.reserveCapacity(Self.memoryCount + 1)
         self.index2order = Array(values.indices)
+        self.core2Index = values.indices.reduce(into: [:]){dictionary, i in
+            dictionary[.init(data: values[i].data)] = i
+        }
     }
 
     private static func load() -> [LearningMemoryElement]{

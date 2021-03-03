@@ -25,6 +25,7 @@ final class DicDataStore{
     private let treshold: PValue = -17
 
     private var loudses: [String: LOUDS] = [:]
+    private var importedLoudses: Set<String> = []
     private var charsID: [Character: UInt8] = [:]
     private var memory: LearningMemorys = LearningMemorys()
     private var zeroHintPredictionDicData: DicData? = nil
@@ -125,6 +126,7 @@ final class DicDataStore{
     }
 
     private func loadLOUDS(identifier: String){
+        importedLoudses.update(with: identifier)
         if let louds = LOUDS.build(identifier){
             self.loudses[identifier] = louds
         }else{
@@ -133,7 +135,7 @@ final class DicDataStore{
     }
 
     private func perfectMatchLOUDS(identifier: String, key: String) -> [Int] {
-        if !self.loudses.keys.contains(identifier){
+        if !importedLoudses.contains(identifier){
             self.loadLOUDS(identifier: identifier)
         }
         guard let louds = self.loudses[identifier] else {
@@ -143,7 +145,7 @@ final class DicDataStore{
     }
 
     private func throughMatchLOUDS(identifier: String, key: String) -> [Int] {
-        if !self.loudses.keys.contains(identifier){
+        if !importedLoudses.contains(identifier){
             self.loadLOUDS(identifier: identifier)
         }
         guard let louds = self.loudses[identifier] else {
@@ -153,7 +155,7 @@ final class DicDataStore{
     }
 
     private func prefixMatchLOUDS(identifier: String, key: String, depth: Int = .max) -> [Int] {
-        if !self.loudses.keys.contains(identifier){
+        if !importedLoudses.contains(identifier){
             self.loadLOUDS(identifier: identifier)
         }
         guard let louds = self.loudses[identifier] else {
@@ -285,7 +287,6 @@ final class DicDataStore{
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
         let group = [Character: [String]].init(grouping: stringWithTypoData.map{$0.string}, by: {$0.first!})
-        debug(group)
         //先頭の文字: そこで検索したい文字列の集合
         let indices: [(String, Set<Int>)] = group.map{dic in
             let key = String(dic.key)
