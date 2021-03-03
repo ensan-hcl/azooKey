@@ -49,7 +49,7 @@ extension InputDataProtocol{
 
 extension InputDataProtocol{    
     internal func isAfterAddedCharacter(previous: Self) -> Int? {
-        if self.characters.count == previous.count{
+        if self.characters.count <= previous.count{
             return nil
         }
         let prefix: [Character] = Array(self.characters.prefix(previous.characters.count))
