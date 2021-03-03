@@ -22,7 +22,7 @@ extension Kana2Kanji{
     func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, lastRubyCount: Int, N_best: Int) -> [Candidate] {
         let datas: [DicDataElementProtocol]
         let lastData: DicDataElementProtocol?
-        TimeMesureTools.startTimeMesure()
+        conversionBenchmark.start(process: .結果の処理_予測変換_日本語_雑多なデータ取得)
         do{
             var _str = ""
             let prestring: String = prepart.clauses.map{$0.clause.text}.joined()
@@ -37,12 +37,24 @@ extension Kana2Kanji{
             lastData = prepart.data.count > count ? prepart.data[count] : nil
             datas = Array(prepart.data.prefix(count))
         }
-        TimeMesureTools.endAndStart("処理3.1.1")
 
         let memory: [DicDataElementProtocol] = dicdataStore.getPrefixMemory(lastRuby)
         let osuserdict: [DicDataElementProtocol] = dicdataStore.getPrefixMatchOSUserDict(lastRuby)
-        TimeMesureTools.endAndStart("処理3.1.2")
 
+        let lastCandidate: Candidate = prepart.isEmpty ? Candidate(text: "", value: .zero, correspondingCount: 0, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
+        let lastRcid: Int = lastCandidate.data.last?.rcid ?? 1316
+        let nextLcid: Int = prepart.lastClause?.nextLcid ?? 1316
+        let lastMid: Int = lastCandidate.lastMid
+        let correspoindingCount: Int = lastCandidate.correspondingCount + lastRubyCount
+        var ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
+
+        if lastCandidate.data.count > 1, let lastNext = lastData{
+            let lastPrev: DicDataElementProtocol = lastCandidate.data[lastCandidate.data.endIndex - 2]
+            ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
+        }
+        conversionBenchmark.end(process: .結果の処理_予測変換_日本語_雑多なデータ取得)
+
+        conversionBenchmark.start(process: .結果の処理_予測変換_日本語_Dicdataの読み込み)
         let dicdata: DicDataStore.DicData
         switch VariableStates.shared.inputStyle{
         case .direct:
@@ -59,23 +71,8 @@ extension Kana2Kanji{
                 dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
             }
         }
-
-        TimeMesureTools.endAndStart("処理3.1.3") //ここが激遅い
-
-        let lastCandidate: Candidate = prepart.isEmpty ? Candidate(text: "", value: .zero, correspondingCount: 0, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
-        let lastRcid: Int = lastCandidate.data.last?.rcid ?? 1316
-        let nextLcid: Int = prepart.lastClause?.nextLcid ?? 1316
-        let lastMid: Int = lastCandidate.lastMid
-        let correspoindingCount: Int = lastCandidate.correspondingCount + lastRubyCount
-        var ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
-
-        if lastCandidate.data.count > 1, let lastNext = lastData{
-            let lastPrev: DicDataElementProtocol = lastCandidate.data[lastCandidate.data.endIndex - 2]
-            ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
-        }
-
-        TimeMesureTools.endAndStart("処理3.1.4")
-
+        conversionBenchmark.end(process: .結果の処理_予測変換_日本語_Dicdataの読み込み)
+        conversionBenchmark.start(process: .結果の処理_予測変換_日本語_連接計算)
         var result: [Candidate] = []
 
         result.reserveCapacity(N_best &+ 1)
@@ -106,7 +103,7 @@ extension Kana2Kanji{
                 result.removeLast()
             }
         }
-        TimeMesureTools.endAndStart("処理3.1.5")
+        conversionBenchmark.end(process: .結果の処理_予測変換_日本語_連接計算)
         return result
     }
 }

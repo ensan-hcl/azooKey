@@ -38,22 +38,26 @@ protocol BenchmarkTarget{
 
 struct Kana2KanjiTarget: BenchmarkTarget{
     enum ProcessType: String, CustomDebugStringConvertible{
-        case 変換全体
-        case 結果の処理全体
+        case 変換_全体
+        case 変換_辞書読み込み
+        case 変換_処理
+        case 変換_処理_N_Best計算
+        case 変換_処理_連接コスト計算_全体
+        case 変換_処理_連接コスト計算_CCValue
+        case 変換_処理_連接コスト計算_Memory
+        case 変換_結果処理
+        case 結果の処理_全体
         case 結果の処理_文節化
         case 結果の処理_文全体変換
         case 結果の処理_予測変換_全体
-        case 結果の処理_予測変換_日本語
+        case 結果の処理_予測変換_日本語_全体
+        case 結果の処理_予測変換_日本語_雑多なデータ取得
+        case 結果の処理_予測変換_日本語_Dicdataの読み込み
+        case 結果の処理_予測変換_日本語_連接計算
         case 結果の処理_予測変換_外国語
         case 結果の処理_予測変換_ゼロヒント
         case 結果の処理_付加候補
         case 結果の処理_並び替え
-        case 辞書読み込み
-        case 変換処理
-        case 変換処理_N_Best計算
-        case 変換処理_連接コスト計算_全体
-        case 変換処理_連接コスト計算_CCValue
-        case 変換処理_連接コスト計算_Memory
 
 
         var debugDescription: String {
@@ -97,4 +101,4 @@ final class BenchmarkTool<Target: BenchmarkTarget>{
     }
 }
 
-var conversionTool = BenchmarkTool<Kana2KanjiTarget>()
+var conversionBenchmark = BenchmarkTool<Kana2KanjiTarget>()

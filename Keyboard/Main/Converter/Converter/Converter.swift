@@ -349,8 +349,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     private func processResult(inputData: InputData, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> [Candidate] {
         self.previousInputData = inputData
         self.nodes = result.nodes
-        conversionTool.start(process: .結果の処理全体)
-        conversionTool.start(process: .結果の処理_文節化)
+        conversionBenchmark.start(process: .結果の処理_全体)
+        conversionBenchmark.start(process: .結果の処理_文節化)
         let clauseResult = result.result.getCandidateData()
         if clauseResult.isEmpty{
             return self.getUniqueCandidate(self.getAdditionalCandidate(inputData))   //アーリーリターン
@@ -376,21 +376,21 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 data: Array(candidateData.data[0...count])
             )
         }
-        conversionTool.end(process: .結果の処理_文節化)
-        conversionTool.start(process: .結果の処理_文全体変換)
+        conversionBenchmark.end(process: .結果の処理_文節化)
+        conversionBenchmark.start(process: .結果の処理_文全体変換)
         let sums: [(CandidateData, Candidate)] = clauseResult.map{($0, converter.processClauseCandidate($0))}
         //文章全体を変換した場合の候補上位五件
         let sentence_candidates = self.getUniqueCandidate(sums.map{$0.1}).sorted{$0.value>$1.value}.prefix(5)
-        conversionTool.end(process: .結果の処理_文全体変換)
+        conversionBenchmark.end(process: .結果の処理_文全体変換)
 
         //予測変換
-        conversionTool.start(process: .結果の処理_予測変換_全体)
-        conversionTool.start(process: .結果の処理_予測変換_日本語)
+        conversionBenchmark.start(process: .結果の処理_予測変換_全体)
+        conversionBenchmark.start(process: .結果の処理_予測変換_日本語_全体)
         let prediction_candidates: [Candidate] = requirePrediction ? self.getUniqueCandidate(self.getPredictionCandidate(sums)) : []
-        conversionTool.end(process: .結果の処理_予測変換_日本語)
+        conversionBenchmark.end(process: .結果の処理_予測変換_日本語_全体)
 
         //英単語の予測変換。appleのapiを使うため、処理が異なる。
-        conversionTool.start(process: .結果の処理_予測変換_外国語)
+        conversionBenchmark.start(process: .結果の処理_予測変換_外国語)
         var foreign_candidates: [Candidate] = []
 
         if requireEnglishPrediction{
@@ -399,16 +399,16 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         if VariableStates.shared.keyboardLanguage == .greek{
             foreign_candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "el"))
         }
-        conversionTool.end(process: .結果の処理_予測変換_外国語)
+        conversionBenchmark.end(process: .結果の処理_予測変換_外国語)
 
         //ゼロヒント予測変換
-        conversionTool.start(process: .結果の処理_予測変換_ゼロヒント)
+        conversionBenchmark.start(process: .結果の処理_予測変換_ゼロヒント)
         let best10 = getUniqueCandidate(sentence_candidates + prediction_candidates).sorted{$0.value > $1.value}.prefix(10)
         let zeroHintPrediction_candidates = converter.getZeroHintPredictionCandidates(preparts: best10, N_best: 3)
-        conversionTool.end(process: .結果の処理_予測変換_ゼロヒント)
-        conversionTool.end(process: .結果の処理_予測変換_全体)
+        conversionBenchmark.end(process: .結果の処理_予測変換_ゼロヒント)
+        conversionBenchmark.end(process: .結果の処理_予測変換_全体)
 
-        conversionTool.start(process: .結果の処理_付加候補)
+        conversionBenchmark.start(process: .結果の処理_付加候補)
         let toplevel_additional_candidate = self.getTopLevelAdditionalCandidate(inputData)
         //文全体を変換するパターン
         let full_candidate = getUniqueCandidate(best10 + foreign_candidates + (zeroHintPrediction_candidates + toplevel_additional_candidate)).sorted{$0.value>$1.value}.prefix(5)
@@ -435,13 +435,13 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         }
         //追加する部分
         let additionalCandidates: [Candidate] = self.getAdditionalCandidate(inputData)
-        conversionTool.end(process: .結果の処理_付加候補)
+        conversionBenchmark.end(process: .結果の処理_付加候補)
 
 
         /*
          文字列の長さごとに並べ、かつその中で評価の高いものから順に並べる。
          */
-        conversionTool.start(process: .結果の処理_並び替え)
+        conversionBenchmark.start(process: .結果の処理_並び替え)
 
         let word_candidates: [Candidate] = self.getUniqueCandidate((dicCandidates+additionalCandidates).filter{!seenCandidate.contains($0.text)}).sorted{
             let count0 = $0.correspondingCount
@@ -453,10 +453,10 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         result.append(contentsOf: clause_candidates)
         result.append(contentsOf: wise_candidates)
         result.append(contentsOf: word_candidates)
-        conversionTool.end(process: .結果の処理_並び替え)
-        conversionTool.end(process: .結果の処理全体)
-        conversionTool.result()
-        conversionTool.reset()
+        conversionBenchmark.end(process: .結果の処理_並び替え)
+        conversionBenchmark.end(process: .結果の処理_全体)
+        conversionBenchmark.result()
+        conversionBenchmark.reset()
         return result
     }
 
