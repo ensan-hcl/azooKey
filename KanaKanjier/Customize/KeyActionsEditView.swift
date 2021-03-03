@@ -25,7 +25,7 @@ extension CodableActionData{
         case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
         case let .longMoveCursor(value): return "\(String(value))文字ずつカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
-        case let .longDelete(value): return "\(String(value))ずつ文字を削除"
+        case let .longDelete(value): return "\(String(value))文字ずつ削除"
         case let .moveTab(tab): return "タブに移動"
         case .complete: return "確定"
         case .exchangeCharacter: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
@@ -178,7 +178,7 @@ struct KeyActionsEditView: View {
                             Button("文字の入力"){
                                 press(.longInput("ごめん"))
                             }
-                            Button("カーソルの移動"){
+                            Button("カーソル移動"){
                                 press(.longMoveCursor(1))
                             }
                             Button("文字の削除"){

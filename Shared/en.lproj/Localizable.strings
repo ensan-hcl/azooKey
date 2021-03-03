@@ -54,6 +54,7 @@
 "文字の太さ" = "Font weight";
 
 "変換候補の文字の色" = "Color of candidates";
+"変換候補の背景色" = "Background color of candidates";
 
 "キーの文字の色" = "Color of key labels";
 "通常キーの背景色" = "Background color of normal keys";
@@ -78,6 +79,10 @@
 "入力方法を選ぶ" = "Select input style";
 "キーボードの入力方式" = "Select input style";
 "キーボードの種類を設定する" = "Select input style";
+"キーボードの種類(現在: %@)" = "Keyboard layout (current: %@)";
+"%@キーボードの種類(現在: %@)" = "%1$@ keyboard layout (current: %2$@)";
+"日本語・英語に対応したカスタムタブを読み込んだ場合、これを選ぶことも可能です" = "If you have imported custom tabs that support Japanese or English, you can choice them as a default keyboard.";
+
 "カーソルを自由に移動する" = "Move cursor easily";
 "カーソルを移動する" = "Move cursor easily";
 "「空白」を長押しすると、カーソル移動ボタンが現れます。ホームボタンのない端末のフリック入力では左下の%@を押して表示することも可能です。" = "Tap and hold \"空白\" key, moving cursor button appears. If you are using device without home button, you can push %@ and then the button appears.";
@@ -175,10 +180,18 @@
 "キーに表示される文字を設定します。" = "Set the label.";
 "入力される文字とは異なっていても構いません。" = "Not necessarily equal to input letter.";
 "キーを押して入力される文字を設定します。" = "Set letters inputted when you press this key.";
+"キーを押して移動するタブを設定します。" = "Set destination tab when you press this key.";
 "入力される文字" = "Inputted letters";
 "キーの見た目は「ラベル」で設定できます。" = "You can set labels for the appearance.";
 "キーを追加する" = "Add a new key";
 "デフォルトに戻す" = "Reset";
+"このキーには入力以外のアクションが設定されています。" = "This key doesn't have input action.";
+"現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください" = "To delete current set action and set inputted letters, please push 'set destination tab.'";
+"このキーにはタブ移動以外のアクションが設定されています。" = "This key doesn't have moving tab action.";
+"現在のアクションを消去して移動するタブを設定するには「タブを設定する」を押してください" = "To delete current set action and set destination tab, please push 'set destination tab.'";
+"タブを設定する" = "Set destination tab";
+"入力を設定する" = "Set inputted letters";
+"長押し" = "Longpress";
 
 "長押しした時の候補" = "Selectable variations when you longpress this key";
 "削除" = "Remove";
@@ -355,13 +368,17 @@
 "カーソル移動" = "Moving cursor";
 "カーソルバーの表示" = "Show cursor bar";
 
-"%@文字削除" = "Delete %@ character";
 "確定" = "Complete";
 "大文字/小文字、拗音/濁音/半濁音の切り替え" = "Change uppercase ⇆ lowercase.";
 "「%@」を入力" = "Input '%@'";
+"「%@」を繰り返し入力" = "Input '%@' repeatedly";
 "入力する文字" = "Letters to input";
 "削除する文字数" = "Count to delete";
+"%@文字削除" = "Delete %@ character";
+"%@文字ずつ削除" = "Delete %@ character repeatedly";
+"負の値を指定すると右側の文字を削除します" = "Negative number means delete forward";
 "%@文字分カーソルを移動" = "Move cursor for %@ characters";
+"%@文字ずつカーソルを移動" = "Move cursor for %@ characters repeatedly";
 "負の値を指定すると左にカーソルが動きます" = "Negative number means moving backwords";
 "移動する文字数" = "Count of movement";
 "タブの移動" = "Move to tab";
@@ -383,7 +400,7 @@
 "日本語(ローマ字入力)" = "Japanese (qwerty style)";
 "英語(フリック入力)" = "English (flick style)";
 "英語(ローマ字入力)" = "English (qwerty style)";
-
+"最後に表示していたタブ" = "Last used tab";
 
 
 
