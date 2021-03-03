@@ -78,7 +78,7 @@ final class KeyboardViewController: UIInputViewController {
             Store.shared.action.sendToDicDataStore(.importOSUserDict(osuserdict))
         }
 
-        Store.shared.action.appearedAgain()
+        Store.shared.appearedAgain()
     }
 
     func registerScreenActualSize(){

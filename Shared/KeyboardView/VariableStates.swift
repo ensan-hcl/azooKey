@@ -40,7 +40,7 @@ final class VariableStates: ObservableObject{
     }
 
     func closeKeybaord(){
-        self.tabManager.lastTab = self.tabManager.currentTab
+        self.tabManager.closeKeyboard()
     }
 
     func refreshView(){

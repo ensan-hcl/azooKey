@@ -180,8 +180,8 @@ extension Tab: Equatable {
 }
 
 struct TabManager{
-    var currentTab: ManagerTab = .user_dependent(.japanese)
-    var lastTab: ManagerTab? = nil
+    private(set) var currentTab: ManagerTab = .user_dependent(.japanese)
+    private(set) var lastTab: ManagerTab? = nil
 
     enum ManagerTab{
         case existential(Tab.ExistentialTab)
@@ -211,12 +211,16 @@ struct TabManager{
     mutating func initialize(){
         switch lastTab{
         case .none:
-            return
+            self.moveTab(to: .user_dependent(.japanese))
         case let .existential(tab):
             self.moveTab(to: tab)
         case let .user_dependent(tab):
-            self.moveTab(to: tab.actualTab)
+            self.moveTab(to: .user_dependent(tab))
         }
+    }
+
+    mutating func closeKeyboard(){
+        self.lastTab = self.currentTab
     }
 
     mutating private func moveTab(to destination: Tab.ExistentialTab){

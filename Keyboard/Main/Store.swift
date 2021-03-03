@@ -17,26 +17,28 @@ final class Store{
 
     private init(){
         VariableStates.shared.action = action
-        self.settingCheck()
     }
 
     func settingCheck(){
+        SettingData.shared.reload()
         if SettingData.checkResetSetting(){
             self.action.sendToDicDataStore(.resetMemory)
         }
-        action.sendToDicDataStore(.notifyLearningType(SettingData.shared.learningType))
+        self.action.sendToDicDataStore(.notifyLearningType(SettingData.shared.learningType))
     }
-    
+
+    ///Call this method after initialize
     func initialize(){
-        SettingData.shared.reload()
+        debug("Storeを初期化します")
         self.settingCheck()
         VariableStates.shared.initialize()
         self.action.initialize()
     }
 
     func appearedAgain(){
-        SettingData.shared.reload()
+        debug("再び表示されました")
         self.settingCheck()
+        VariableStates.shared.initialize()
         self.action.appearedAgain()
     }
 
@@ -62,23 +64,18 @@ final class KeyboardActionDepartment: ActionDepartment{
     private var tempTextData: (left: String, center: String, right: String)!
     private var tempSavedSelectedText: String!
 
-    func initialize(){
+    fileprivate func initialize(){
         self.inputManager.closeKeyboard()
         self.timers.forEach{$0.timer.invalidate()}
         self.timers = []
     }
 
-    func closeKeyboard(){
+    fileprivate func closeKeyboard(){
         self.initialize()
     }
 
-    func appearedAgain(){
-        debug("再び表示されました")
+    fileprivate func appearedAgain(){
         self.sendToDicDataStore(.reloadUserDict)
-    }
-
-    func setResult(){
-        self.inputManager.setResult()
     }
 
     func setTextDocumentProxy(_ proxy: UITextDocumentProxy){
