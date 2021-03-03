@@ -115,6 +115,7 @@ struct CustardInformationView: View {
                     NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: value)){
                         Text("編集する")
                     }
+                    .foregroundColor(.accentColor)
                 }
             }
 
