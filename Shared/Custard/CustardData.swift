@@ -389,13 +389,13 @@ enum CustardKeyVariationType: Codable {
 
     /// - variation of qwerty selectable when keys were longoressed
     /// - warning: when you use flick key style, this type of variation would be ignored.
-    case variations
+    case qwerty_variation
 }
 
 extension CustardKeyVariationType{
     enum CodingKeys: CodingKey{
         case flick
-        case variations
+        case qwerty_variation
     }
 
     func encode(to encoder: Encoder) throws {
@@ -403,8 +403,8 @@ extension CustardKeyVariationType{
         switch self {
         case let .flick(flickDirection):
             try container.encode(flickDirection, forKey: .flick)
-        case .variations:
-            try container.encode(true, forKey: .variations)
+        case .qwerty_variation:
+            try container.encode(true, forKey: .qwerty_variation)
         }
     }
 
@@ -425,8 +425,8 @@ extension CustardKeyVariationType{
                 forKey: .flick
             )
             self = .flick(direction)
-        case .variations:
-            self = .variations
+        case .qwerty_variation:
+            self = .qwerty_variation
         }
     }
 }
@@ -578,7 +578,7 @@ struct CustardInterfaceCustomKey: Codable {
     let longpress_actions: [CodableActionData]
 
     /// - variations available when user flick or longpress this key
-    let variation: [CustardInterfaceVariation]
+    let variations: [CustardInterfaceVariation]
 }
 
 /// - variation of key, includes flick keys and selectable variations in qwerty keyboard.
@@ -613,7 +613,7 @@ extension Custard{
                     design: .init(label: .text("←"), color: .special),
                     press_actions: [.moveCursor(-1)],
                     longpress_actions: [.moveCursor(-1)],
-                    variation: []
+                    variations: []
                 )
             ),
             .grid_scroll(2): .custom(
@@ -621,7 +621,7 @@ extension Custard{
                     design: .init(label: .systemImage("list.dash"), color: .special),
                     press_actions: [.toggleTabBar],
                     longpress_actions: [],
-                    variation: []
+                    variations: []
                 )
             ),
             .grid_scroll(3): .custom(
@@ -629,7 +629,7 @@ extension Custard{
                     design: .init(label: .text("→"), color: .special),
                     press_actions: [.moveCursor(1)],
                     longpress_actions: [.moveCursor(1)],
-                    variation: []
+                    variations: []
                 )
             ),
             .grid_scroll(4): .custom(
@@ -637,7 +637,7 @@ extension Custard{
                     design: .init(label: .systemImage("delete.left"), color: .special),
                     press_actions: [.delete(1)],
                     longpress_actions: [.delete(1)],
-                    variation: []
+                    variations: []
                 )
             ),
         ]
@@ -648,7 +648,7 @@ extension Custard{
                     design: .init(label: .text(hieroglyphs[$0]), color: .normal),
                     press_actions: [.input(hieroglyphs[$0])],
                     longpress_actions: [],
-                    variation: []
+                    variations: []
                 )
             )
         }

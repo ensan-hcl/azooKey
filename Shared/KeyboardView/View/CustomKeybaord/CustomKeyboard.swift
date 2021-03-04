@@ -121,7 +121,7 @@ fileprivate extension CustardInterfaceKey {
                 return FlickTabKeyModel.numberTabKeyModel
             }
         case let .custom(value):
-            let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variation.reduce(into: [:]){dictionary, variation in
+            let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variations.reduce(into: [:]){dictionary, variation in
                 switch variation.type{
                 case let .flick(direction):
                     dictionary[direction] = FlickedKeyModel(
@@ -129,7 +129,7 @@ fileprivate extension CustardInterfaceKey {
                         pressActions: variation.key.press_actions.map{$0.actionType},
                         longPressActions: variation.key.longpress_actions.map{$0.longpressActionType}
                     )
-                case .variations:
+                case .qwerty_variation:
                     break
                 }
             }
@@ -138,7 +138,7 @@ fileprivate extension CustardInterfaceKey {
                 pressActions: value.press_actions.map{$0.actionType},
                 longPressActions: value.longpress_actions.map{$0.longpressActionType},
                 flickKeys: flickKeyModels,
-                needSuggestView: value.longpress_actions.isEmpty && !value.variation.isEmpty,
+                needSuggestView: value.longpress_actions.isEmpty && !value.variations.isEmpty,
                 keycolorType: value.design.color.flickKeyColorType
             )
             return model
@@ -170,11 +170,11 @@ fileprivate extension CustardInterfaceKey {
                 return convertToQwertyKeyModel(model: FlickTabKeyModel.numberTabKeyModel)
             }
         case let .custom(value):
-            let variations: [(label: KeyLabelType, actions: [ActionType])] = value.variation.reduce(into: []){array, variation in
+            let variations: [(label: KeyLabelType, actions: [ActionType])] = value.variations.reduce(into: []){array, variation in
                 switch variation.type{
                 case .flick:
                     break
-                case .variations:
+                case .qwerty_variation:
                     array.append((variation.key.label.keyLabelType, variation.key.press_actions.map{$0.actionType}))
                 }
             }
