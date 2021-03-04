@@ -69,7 +69,9 @@ struct KeyActionsEditView: View {
     }
 
     func add(new action: CodableActionData){
-        actions.append(EditingCodableActionData(action))
+        withAnimation(Animation.interactiveSpring()){
+            actions.append(EditingCodableActionData(action))
+        }
     }
 
     var body: some View {

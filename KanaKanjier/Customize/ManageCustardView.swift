@@ -239,6 +239,7 @@ struct ManageCustardView: View {
             data.reset()
             urlString = ""
             selectedDocument = Data()
+            Store.shared.feedbackGenerator.notificationOccurred(.success)
         } catch {
             debug("saveCustard", error)
         }

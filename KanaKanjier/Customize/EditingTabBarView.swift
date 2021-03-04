@@ -62,12 +62,14 @@ struct EditingTabBarView: View {
         Form {
             Section{
                 Button{
-                    items.append(
-                        EditingTabBarItem(
-                            label: .text("アイテム"),
-                            actions: [.moveTab(.system(.user_japanese))]
+                    withAnimation(Animation.interactiveSpring()){
+                        items.append(
+                            EditingTabBarItem(
+                                label: .text("アイテム"),
+                                actions: [.moveTab(.system(.user_japanese))]
+                            )
                         )
-                    )
+                    }
                 } label: {
                     HStack{
                         Image(systemName: "plus")
