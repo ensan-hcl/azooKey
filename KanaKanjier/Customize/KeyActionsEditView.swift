@@ -13,8 +13,8 @@ import Combine
 extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
-        case .delete, .longDelete, .input, .longInput, .replaceLastCharacters, .moveCursor, .longMoveCursor, .moveTab, .openApp: return true
-        case .complete, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar, .dismissKeyboard: return false
+        case .delete, .longDelete, .input, .longInput, .replaceLastCharacters, .moveCursor, .longMoveCursor, .moveTab, .openURL: return true
+        case .complete, .replaceDefault, .smoothDelete,.toggleCapslockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
 
@@ -29,13 +29,13 @@ extension CodableActionData{
         case let .moveTab(tab): return "タブに移動"
         case let .replaceLastCharacters(tab): return "文字を置換"
         case .complete: return "確定"
-        case .exchangeCharacter: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
+        case .replaceDefault: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
         case .smoothDelete: return "文頭まで削除"
-        case .toggleCapsLockState: return "Capslockのモードの切り替え"
-        case .toggleCursorMovingView: return "カーソルバーの切り替え"
+        case .toggleCapslockState: return "Capslockのモードの切り替え"
+        case .toggleCursorBar: return "カーソルバーの切り替え"
         case .toggleTabBar: return "タブバーの切り替え"
         case .dismissKeyboard: return "キーボードを閉じる"
-        case .openApp(_): return "アプリを開く"
+        case .openURL(_): return "アプリを開く"
         }
     }
 }
@@ -198,10 +198,10 @@ struct KeyActionsEditView: View {
                             press(.complete)
                         }
                         Button("Capslock"){
-                            press(.toggleCapsLockState)
+                            press(.toggleCapslockState)
                         }
                         Button("カーソルバーの表示"){
-                            press(.toggleCursorMovingView)
+                            press(.toggleCursorBar)
                         }
                         Button("キーボードを閉じる"){
                             press(.dismissKeyboard)
@@ -283,7 +283,7 @@ struct ActionOpenAppEditView: View {
 
     internal init(_ action: Binding<EditingCodableActionData>) {
         self._action = action
-        if case let .openApp(value) = action.wrappedValue.data{
+        if case let .openURL(value) = action.wrappedValue.data{
             self._value = State(initialValue: "\(value)")
         }
     }
@@ -294,7 +294,7 @@ struct ActionOpenAppEditView: View {
         TextField("URL Scheme", text: $value)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .onChange(of: value){value in
-                action.data = .openApp(value)
+                action.data = .openURL(value)
             }
     }
 }

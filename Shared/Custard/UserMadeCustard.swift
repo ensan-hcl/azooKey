@@ -49,7 +49,7 @@ extension UserMadeCustard{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode UserMadeCustard."
                 )
             )
         }

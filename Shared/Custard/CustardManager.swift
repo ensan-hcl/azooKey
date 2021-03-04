@@ -148,7 +148,6 @@ struct CustardManager {
         let fileName = Self.fileName(custard.identifier)
         let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
         try data.write(to: fileURL)
-
         if let userData = userData {
             let fileURL = Self.fileURL(name: "\(fileName)_edit.json")
             let data = try encoder.encode(userData)
@@ -168,13 +167,10 @@ struct CustardManager {
     }
 
     mutating func saveTabBarData(tabBarData: TabBarData) throws {
-        do{
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(tabBarData)
-            let fileURL = Self.fileURL(name: "tabbar_\(tabBarData.identifier).tabbar")
-            try data.write(to: fileURL)
-        }
-
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(tabBarData)
+        let fileURL = Self.fileURL(name: "tabbar_\(tabBarData.identifier).tabbar")
+        try data.write(to: fileURL)
         if !self.index.availableTabBars.contains(tabBarData.identifier){
             self.index.availableTabBars.append(tabBarData.identifier)
         }

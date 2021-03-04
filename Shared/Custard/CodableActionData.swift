@@ -72,7 +72,7 @@ extension CodableTabData{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode CodableTabData."
                 )
             )
         }
@@ -157,6 +157,7 @@ extension CodableTabData: Hashable {
 /// - actions done in key pressing
 enum CodableActionData: Codable {
     /// - input action specified character
+    /// - warning: when use this in longpress, it works as one time action
     case input(String)
 
     /// - input action used in longpress
@@ -164,12 +165,13 @@ enum CodableActionData: Codable {
     case longInput(String)
 
     /// - exchange character "あ→ぁ", "は→ば", "a→A"
-    case exchangeCharacter
+    case replaceDefault
 
     /// - replace string at the trailing of cursor following to specified table
     case replaceLastCharacters([String: String])
 
     /// - delete action specified count of characters
+    /// - warning: when use this in longpress, it works as one time action
     case delete(Int)
 
     /// - delete action used in longpress
@@ -182,8 +184,8 @@ enum CodableActionData: Codable {
     /// - complete current inputting words
     case complete
 
-    /// - move cursor  specified count forward. when you specify negative number, the cursor moves backword.
-    /// - when longpress, the cursor moves sequencially.
+    /// - move cursor  specified count forward. when you specify negative number, the cursor moves backword
+    /// - warning: when use this in longpress, it works as one time action
     case moveCursor(Int)
 
     /// - move cursor action used in longpress
@@ -194,10 +196,10 @@ enum CodableActionData: Codable {
     case moveTab(CodableTabData)
 
     /// - toggle show or not show the cursor move bar
-    case toggleCursorMovingView
+    case toggleCursorBar
 
     /// - toggle capslock or not
-    case toggleCapsLockState
+    case toggleCapslockState
 
     /// - toggle show or not show the tab bar
     case toggleTabBar
@@ -208,14 +210,14 @@ enum CodableActionData: Codable {
     /// - open specified url scheme.
     /// - warning: this action could be deleted in future iOS.
     /// - warning: some of url schemes doesn't work.
-    case openApp(String)    //iOSのバージョンによって消える可能性がある
+    case openURL(String)    //iOSのバージョンによって消える可能性がある
 }
 
 extension CodableActionData{
     enum CodingKeys: CodingKey{
         case input
         case long_input
-        case exchange_character
+        case replace_default
         case replace_last_characters
         case delete
         case long_delete
@@ -224,10 +226,10 @@ extension CodableActionData{
         case move_cursor
         case long_move_cursor
         case move_tab
-        case toggle_cursor_moving_view
+        case toggle_cursor_bar
         case toggle_tab_bar
-        case toggle_caps_lock_state
-        case open_app
+        case toggle_capslock_state
+        case open_url
         case dismiss_keyboard
     }
 
@@ -239,8 +241,8 @@ extension CodableActionData{
         case let .longInput(value):
             try container.encode(value, forKey: .long_input)
 
-        case .exchangeCharacter:
-            try container.encode(true, forKey: .exchange_character)
+        case .replaceDefault:
+            try container.encode(true, forKey: .replace_default)
         case let .replaceLastCharacters(value):
             try container.encode(value, forKey: .replace_last_characters)
 
@@ -262,17 +264,17 @@ extension CodableActionData{
         case let .moveTab(destination):
             try container.encode(destination, forKey: .move_tab)
 
-        case .toggleCursorMovingView:
-            try container.encode(true, forKey: .toggle_cursor_moving_view)
+        case .toggleCursorBar:
+            try container.encode(true, forKey: .toggle_cursor_bar)
         case .toggleTabBar:
             try container.encode(true, forKey: .toggle_tab_bar)
-        case .toggleCapsLockState:
-            try container.encode(true, forKey: .toggle_caps_lock_state)
+        case .toggleCapslockState:
+            try container.encode(true, forKey: .toggle_capslock_state)
 
         case .dismissKeyboard:
             try container.encode(true, forKey: .dismiss_keyboard)
-        case let .openApp(value):
-            try container.encode(value, forKey: .open_app)
+        case let .openURL(value):
+            try container.encode(value, forKey: .open_url)
         }
     }
 
@@ -282,7 +284,7 @@ extension CodableActionData{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode CodableActionData: keys are \(container.allKeys)."
                 )
             )
         }
@@ -299,8 +301,8 @@ extension CodableActionData{
                 forKey: .long_input
             )
             self = .longInput(value)
-        case .exchange_character:
-            self = .exchangeCharacter
+        case .replace_default:
+            self = .replaceDefault
         case .replace_last_characters:
             let value = try container.decode(
                 [String: String].self,
@@ -341,20 +343,20 @@ extension CodableActionData{
                 forKey: .move_tab
             )
             self = .moveTab(destination)
-        case .toggle_cursor_moving_view:
-            self = .toggleCursorMovingView
-        case .toggle_caps_lock_state:
-            self = .toggleCapsLockState
+        case .toggle_cursor_bar:
+            self = .toggleCursorBar
+        case .toggle_capslock_state:
+            self = .toggleCapslockState
         case .toggle_tab_bar:
             self = .toggleTabBar
         case .dismiss_keyboard:
             self = .dismissKeyboard
-        case .open_app:
+        case .open_url:
             let destination = try container.decode(
                 String.self,
-                forKey: .open_app
+                forKey: .open_url
             )
-            self = .openApp(destination)
+            self = .openURL(destination)
         }
     }
 }
@@ -367,7 +369,7 @@ extension CodableActionData: Hashable {
         case let (.longInput(l), .longInput(r)):
             return l == r
 
-        case (.exchangeCharacter, .exchangeCharacter):
+        case (.replaceDefault, .replaceDefault):
             return true
         case let (.replaceLastCharacters(l), .replaceLastCharacters(r)):
             return l == r
@@ -392,11 +394,11 @@ extension CodableActionData: Hashable {
 
         case (.toggleTabBar, .toggleTabBar):
             return true
-        case (.toggleCursorMovingView,.toggleCursorMovingView):
+        case (.toggleCursorBar,.toggleCursorBar):
             return true
-        case (.toggleCapsLockState,.toggleCapsLockState):
+        case (.toggleCapslockState,.toggleCapslockState):
             return true
-        case let (.openApp(l), .openApp(r)):
+        case let (.openURL(l), .openURL(r)):
             return l == r
 
         case (.dismissKeyboard, .dismissKeyboard):
@@ -416,9 +418,10 @@ extension CodableActionData: Hashable {
         case let .longInput(value):
             hasher.combine(value)
             key = .long_input
-        case .exchangeCharacter:
-            key = .exchange_character
-        case .replaceLastCharacters:
+        case .replaceDefault:
+            key = .replace_default
+        case let .replaceLastCharacters(value):
+            hasher.combine(value)
             key = .replace_last_characters
         case let .delete(value):
             hasher.combine(value)
@@ -439,15 +442,15 @@ extension CodableActionData: Hashable {
         case let .moveTab(destination):
             hasher.combine(destination)
             key = .move_tab
-        case .toggleCursorMovingView:
-            key = .toggle_cursor_moving_view
+        case .toggleCursorBar:
+            key = .toggle_cursor_bar
         case .toggleTabBar:
             key = .toggle_tab_bar
-        case .toggleCapsLockState:
-            key = .toggle_caps_lock_state
-        case let .openApp(value):
+        case .toggleCapslockState:
+            key = .toggle_capslock_state
+        case let .openURL(value):
             hasher.combine(value)
-            key = .open_app
+            key = .open_url
         case .dismissKeyboard:
             key = .dismiss_keyboard
         }

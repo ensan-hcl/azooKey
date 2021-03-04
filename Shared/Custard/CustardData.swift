@@ -147,7 +147,7 @@ extension CustardInterfaceLayout{
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard let key = container.allKeys.first else{
             throw DecodingError.dataCorrupted(
-                DecodingError.Context(codingPath: container.codingPath, debugDescription: "Unabled to decode enum.")
+                DecodingError.Context(codingPath: container.codingPath, debugDescription: "Unabled to decode CustardInterfaceLayout.")
             )
         }
         switch key {
@@ -214,7 +214,7 @@ extension CustardKeyPositionSpecifier{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode CustardKeyPositionSpecifier."
                 )
             )
         }
@@ -359,7 +359,7 @@ extension CustardKeyLabelStyle{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode CustardKeyLabelStyle."
                 )
             )
         }
@@ -414,7 +414,7 @@ extension CustardKeyVariationType{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode CustardKeyVariationType."
                 )
             )
         }
@@ -459,7 +459,7 @@ extension CustardInterfaceKey{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode CustardInterfaceKey."
                 )
             )
         }
@@ -539,7 +539,7 @@ extension CustardInterfaceSystemKey{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode CustardInterfaceSystemKey."
                 )
             )
         }
@@ -852,7 +852,7 @@ extension Custard{
                     .init(
                         design: .init(label: .text("空白"), color: .special),
                         press_action: [.input(" ")],
-                        longpress_action: [.toggleCursorMovingView],
+                        longpress_action: [.toggleCursorBar],
                         variation: []
                     )
                 ),

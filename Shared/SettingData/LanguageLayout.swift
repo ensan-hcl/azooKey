@@ -40,11 +40,10 @@ extension LanguageLayout: Codable {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode LanguageLayout."
                 )
             )
         }
-        print("decoder", key)
         switch key {
         case .flick:
             self = .flick

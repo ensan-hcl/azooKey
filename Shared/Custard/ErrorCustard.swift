@@ -37,7 +37,7 @@ extension Custard{
                 .grid_fit(.init(x: 0, y: 2)): .custom(
                     .init(
                         design: .init(label: .text("アプリで確認する"), color: .special),
-                        press_action: [.openApp("azooKey://")],
+                        press_action: [.openURL("azooKey://")],
                         longpress_action: [],
                         variation: [])
                 ),

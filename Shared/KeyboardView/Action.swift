@@ -130,7 +130,7 @@ extension CodableActionData{
             return .input(value)
         case let .longInput(value):
             return .input(value)
-        case .exchangeCharacter:
+        case .replaceDefault:
             return .changeCharacterType
         case let .replaceLastCharacters(value):
             return .replaceLastCharacters(value)
@@ -148,9 +148,9 @@ extension CodableActionData{
             return .moveCursor(value)
         case let .moveTab(value):
             return .moveTab(value.tab)
-        case .toggleCursorMovingView:
+        case .toggleCursorBar:
             return .toggleShowMoveCursorView
-        case .toggleCapsLockState:
+        case .toggleCapslockState:
             switch VariableStates.shared.aAKeyState{
             case .normal:
                 return .changeCapsLockState(state: .capslock)
@@ -159,7 +159,7 @@ extension CodableActionData{
             }
         case .toggleTabBar:
             return .toggleTabBar
-        case let .openApp(value):
+        case let .openURL(value):
             return .openApp(value)
         case .dismissKeyboard:
             return .dismissKeyboard

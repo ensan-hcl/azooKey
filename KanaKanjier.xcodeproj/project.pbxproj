@@ -7754,8 +7754,8 @@
 		1AF678DD25CED84F00F3987B /* KeyboardView */ = {
 			isa = PBXGroup;
 			children = (
-				1AF678AE25CE3B4A00F3987B /* States.swift */,
 				1A3DC2162500D5AB002CAA93 /* Action.swift */,
+				1AF678AE25CE3B4A00F3987B /* States.swift */,
 				1AF678DE25CED86500F3987B /* VariableStates.swift */,
 				1AB8C38C25E1190900D39BC5 /* TabManager.swift */,
 				1AF678F525CED91900F3987B /* ActionDepartment.swift */,

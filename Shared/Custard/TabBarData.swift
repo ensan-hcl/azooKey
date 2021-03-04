@@ -48,7 +48,7 @@ extension TabBarItemLabelType{
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode enum."
+                    debugDescription: "Unabled to decode TabBarItemLabelType."
                 )
             )
         }
@@ -80,7 +80,6 @@ struct TabBarItem: Codable {
     let label: TabBarItemLabelType
     let actions: [CodableActionData]
 }
-
 
 struct TabBarData: Codable {
     let identifier: Int
