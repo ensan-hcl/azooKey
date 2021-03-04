@@ -127,7 +127,7 @@ final class KeyboardActionDepartment: ActionDepartment{
         switch action{
         case let .input(text):
             self.showResultView()
-            if VariableStates.shared.keyboardLanguage == .english && VariableStates.shared.aAKeyState == .capslock{
+            if VariableStates.shared.aAKeyState == .capslock && [.english, .greek].contains(VariableStates.shared.keyboardLanguage){
                 let input = text.uppercased()
                 self.inputManager.input(text: input)
             }else{
