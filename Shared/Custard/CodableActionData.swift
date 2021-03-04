@@ -163,9 +163,11 @@ enum CodableActionData: Codable {
     /// - warning: when use this in not longpress, it works as one time action
     case longInput(String)
 
-    /// - exchange character "あ→ぁ", "は→ば", "a→A".
-    /// - when longpress, delete sequencially.
+    /// - exchange character "あ→ぁ", "は→ば", "a→A"
     case exchangeCharacter
+
+    /// - replace string at the trailing of cursor following to specified table
+    case replaceLastCharacters([String: String])
 
     /// - delete action specified count of characters
     case delete(Int)
@@ -214,6 +216,7 @@ extension CodableActionData{
         case input
         case long_input
         case exchange_character
+        case replace_last_characters
         case delete
         case long_delete
         case smooth_delete
@@ -235,28 +238,37 @@ extension CodableActionData{
             try container.encode(value, forKey: .input)
         case let .longInput(value):
             try container.encode(value, forKey: .long_input)
+
         case .exchangeCharacter:
             try container.encode(true, forKey: .exchange_character)
+        case let .replaceLastCharacters(value):
+            try container.encode(value, forKey: .replace_last_characters)
+
         case let .delete(value):
             try container.encode(value, forKey: .delete)
         case let .longDelete(value):
             try container.encode(value, forKey: .long_delete)
         case .smoothDelete:
             try container.encode(true, forKey: .smooth_delete)
+
         case .complete:
             try container.encode(true, forKey: .complete)
+
         case let .moveCursor(value):
             try container.encode(value, forKey: .move_cursor)
         case let .longMoveCursor(value):
             try container.encode(value, forKey: .long_move_cursor)
+
         case let .moveTab(destination):
             try container.encode(destination, forKey: .move_tab)
+
         case .toggleCursorMovingView:
             try container.encode(true, forKey: .toggle_cursor_moving_view)
         case .toggleTabBar:
             try container.encode(true, forKey: .toggle_tab_bar)
         case .toggleCapsLockState:
             try container.encode(true, forKey: .toggle_caps_lock_state)
+
         case .dismissKeyboard:
             try container.encode(true, forKey: .dismiss_keyboard)
         case let .openApp(value):
@@ -289,6 +301,12 @@ extension CodableActionData{
             self = .longInput(value)
         case .exchange_character:
             self = .exchangeCharacter
+        case .replace_last_characters:
+            let value = try container.decode(
+                [String: String].self,
+                forKey: .replace_last_characters
+            )
+            self = .replaceLastCharacters(value)
         case .delete:
             let value = try container.decode(
                 Int.self,
@@ -346,26 +364,44 @@ extension CodableActionData: Hashable {
         switch (lhs, rhs){
         case let (.input(l), .input(r)):
             return l == r
+        case let (.longInput(l), .longInput(r)):
+            return l == r
+
+        case (.exchangeCharacter, .exchangeCharacter):
+            return true
+        case let (.replaceLastCharacters(l), .replaceLastCharacters(r)):
+            return l == r
+
         case let (.delete(l), .delete(r)):
+            return l == r
+        case let (.longDelete(l), .longDelete(r)):
             return l == r
         case (.smoothDelete, .smoothDelete):
             return true
+
+        case (.complete, .complete):
+            return true
+
         case let (.moveCursor(l),.moveCursor(r)):
             return l == r
+        case let (.longMoveCursor(l), .longMoveCursor(r)):
+            return l == r
+
+        case let (.moveTab(l), .moveTab(r)):
+            return l == r
+
         case (.toggleTabBar, .toggleTabBar):
             return true
         case (.toggleCursorMovingView,.toggleCursorMovingView):
             return true
-        case (.complete, .complete):
-            return true
-        case (.exchangeCharacter, .exchangeCharacter):
-            return true
         case (.toggleCapsLockState,.toggleCapsLockState):
             return true
-        case let (.moveTab(l), .moveTab(r)):
-            return l == r
         case let (.openApp(l), .openApp(r)):
             return l == r
+
+        case (.dismissKeyboard, .dismissKeyboard):
+            return true
+
         default:
             return false
         }
@@ -382,6 +418,8 @@ extension CodableActionData: Hashable {
             key = .long_input
         case .exchangeCharacter:
             key = .exchange_character
+        case .replaceLastCharacters:
+            key = .replace_last_characters
         case let .delete(value):
             hasher.combine(value)
             key = .delete

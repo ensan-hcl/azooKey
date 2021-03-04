@@ -13,7 +13,7 @@ import Combine
 extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
-        case .delete, .longDelete, .input, .longInput, .moveCursor, .longMoveCursor, .moveTab, .openApp: return true
+        case .delete, .longDelete, .input, .longInput, .replaceLastCharacters, .moveCursor, .longMoveCursor, .moveTab, .openApp: return true
         case .complete, .exchangeCharacter, .smoothDelete,.toggleCapsLockState, .toggleCursorMovingView, .toggleTabBar, .dismissKeyboard: return false
         }
     }
@@ -27,6 +27,7 @@ extension CodableActionData{
         case let .delete(value): return "\(String(value))文字削除"
         case let .longDelete(value): return "\(String(value))文字ずつ削除"
         case let .moveTab(tab): return "タブに移動"
+        case let .replaceLastCharacters(tab): return "文字を置換"
         case .complete: return "確定"
         case .exchangeCharacter: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
         case .smoothDelete: return "文頭まで削除"

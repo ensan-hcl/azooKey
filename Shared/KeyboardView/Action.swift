@@ -24,6 +24,7 @@ enum ActionType{
     //変換関連
     case enter
     case changeCharacterType    //濁点、半濁点、小さい文字
+    case replaceLastCharacters([String: String])
     case changeCapsLockState(state: AaKeyState)
     case hideLearningMemory
     //タブの変更
@@ -66,6 +67,8 @@ extension ActionType: Equatable{
             return true
         case (.changeCharacterType, .changeCharacterType):
             return true
+        case let (.replaceLastCharacters(l), .replaceLastCharacters(r)):
+            return l == r
         case let (.changeCapsLockState(l),.changeCapsLockState(r)):
             return l == r
         case (.hideLearningMemory, .hideLearningMemory):
@@ -129,6 +132,8 @@ extension CodableActionData{
             return .input(value)
         case .exchangeCharacter:
             return .changeCharacterType
+        case let .replaceLastCharacters(value):
+            return .replaceLastCharacters(value)
         case let .delete(value):
             return .delete(value)
         case let .longDelete(value):

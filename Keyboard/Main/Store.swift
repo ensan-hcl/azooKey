@@ -170,7 +170,9 @@ final class KeyboardActionDepartment: ActionDepartment{
         case .changeCharacterType:
             self.showResultView()
             self.inputManager.changeCharacter()
-
+        case let .replaceLastCharacters(table):
+            self.showResultView()
+            self.inputManager.replaceLastCharacters(table: table)
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
         case .toggleTabBar:
@@ -808,6 +810,24 @@ private final class InputManager{
             deleteBackward(count: 1)
             input(text: selectedText)
             VariableStates.shared.setEnterKeyState(.complete)
+        }
+    }
+
+    fileprivate func replaceLastCharacters(table: [String: String]){
+        if isSelected{
+            return
+        }
+        let counts: (max: Int, min: Int) = table.keys.reduce(into: (max: 0, min: .max)){
+            $0.max = max($0.max, $1.count)
+            $0.min = min($0.min, $1.count)
+        }
+        let leftside = inputtedText.prefix(cursorPosition)
+        for count in (counts.min...counts.max).reversed() where count <= cursorPosition {
+            if let replace = table[String(leftside.suffix(count))]{
+                self.deleteBackward(count: count, requireSetResult: false)
+                self.input(text: replace)
+                break
+            }
         }
     }
     
