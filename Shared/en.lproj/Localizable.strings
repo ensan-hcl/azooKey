@@ -85,12 +85,12 @@
 
 "カーソルを自由に移動する" = "Move cursor easily";
 "カーソルを移動する" = "Move cursor easily";
-"「空白」を長押しすると、カーソル移動ボタンが現れます。ホームボタンのない端末のフリック入力では左下の%@を押して表示することも可能です。" = "Tap and hold \"空白\" key, moving cursor button appears. If you are using device without home button, you can push %@ and then the button appears.";
+"「空白」を長押しすると、カーソルバーが現れます。ホームボタンのない端末のフリック入力では左下の%@を押して表示することも可能です。" = "Tap and hold \"空白\" key, the cursor bar appears. If you are using device without home button, you can push %@ and then the button appears.";
 "黄色枠部分" = "Yellow framed part";
 "青枠部分" = "Blue framed part";
 "%@ %@に指を置いて左右になぞることでカーソルが滑らかに移動します。" = "By putting your finger on the %1$@ %2$@ and tracing it, the cursor moves smoothly as you move your finger.";
 "1文字ずつ移動したい場合は%@の%@部分または%@部分をタップすることでそれぞれの方向に1文字ずつ移動します。" = "When you'd like to move by one character, tap the %1$@ %2$@ or %3$@ and the cursor moves each direction for one character.";
-"カーソル移動ボタンを消すには、入力/削除を行うか、再び空白を長押ししてください。" = "To hide the button, you can simply input or delete letters, or tap and hold \"空白\" key again.";
+"カーソルバーを消すには、入力/削除を行うか、再び空白を長押ししてください。" = "To hide the bar, you can simply input or delete letters, or tap and hold \"空白\" key again.";
 
 "文頭まで一気に消す" = "Delete to beginning of the sentence";
 "文頭まで削除する" = "Delete to beginning of the sentence";
