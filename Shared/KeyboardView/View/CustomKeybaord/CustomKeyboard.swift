@@ -126,8 +126,8 @@ fileprivate extension CustardInterfaceKey {
                 case let .flick(direction):
                     dictionary[direction] = FlickedKeyModel(
                         labelType: variation.key.label.keyLabelType,
-                        pressActions: variation.key.press_action.map{$0.actionType},
-                        longPressActions: variation.key.longpress_action.map{$0.longpressActionType}
+                        pressActions: variation.key.press_actions.map{$0.actionType},
+                        longPressActions: variation.key.longpress_actions.map{$0.longpressActionType}
                     )
                 case .variations:
                     break
@@ -135,10 +135,10 @@ fileprivate extension CustardInterfaceKey {
             }
             let model = FlickKeyModel(
                 labelType: value.design.label.keyLabelType,
-                pressActions: value.press_action.map{$0.actionType},
-                longPressActions: value.longpress_action.map{$0.longpressActionType},
+                pressActions: value.press_actions.map{$0.actionType},
+                longPressActions: value.longpress_actions.map{$0.longpressActionType},
                 flickKeys: flickKeyModels,
-                needSuggestView: value.longpress_action.isEmpty && !value.variation.isEmpty,
+                needSuggestView: value.longpress_actions.isEmpty && !value.variation.isEmpty,
                 keycolorType: value.design.color.flickKeyColorType
             )
             return model
@@ -175,17 +175,17 @@ fileprivate extension CustardInterfaceKey {
                 case .flick:
                     break
                 case .variations:
-                    array.append((variation.key.label.keyLabelType, variation.key.press_action.map{$0.actionType}))
+                    array.append((variation.key.label.keyLabelType, variation.key.press_actions.map{$0.actionType}))
                 }
             }
 
             let model = QwertyKeyModel(
                 labelType: value.design.label.keyLabelType,
-                pressActions: value.press_action.map{$0.actionType},
-                longPressActions: value.longpress_action.map{$0.longpressActionType},
+                pressActions: value.press_actions.map{$0.actionType},
+                longPressActions: value.longpress_actions.map{$0.longpressActionType},
                 variationsModel: VariationsModel(variations),
                 keyColorType: value.design.color.qwertyKeyColorType,
-                needSuggestView: value.longpress_action.isEmpty,
+                needSuggestView: value.longpress_actions.isEmpty,
                 for: (1,1)
             )
             return model
@@ -216,8 +216,8 @@ fileprivate extension CustardInterfaceKey {
                 keyType: .normal,
                 keyLabelType: value.design.label.keyLabelType,
                 unpressedKeyColorType: value.design.color.simpleKeyColorType,
-                pressActions: value.press_action.map{$0.actionType},
-                longPressActions: value.longpress_action.map{$0.longpressActionType}
+                pressActions: value.press_actions.map{$0.actionType},
+                longPressActions: value.longpress_actions.map{$0.longpressActionType}
             )
         }
     }

@@ -23,36 +23,36 @@ extension Custard{
                 .grid_fit(.init(x: 0, y: 0)): .custom(
                     .init(
                         design: .init(label: .text("カスタードファイルが見つかりません"), color: .normal),
-                        press_action: [],
-                        longpress_action: [],
+                        press_actions: [],
+                        longpress_actions: [],
                         variation: [])
                 ),
                 .grid_fit(.init(x: 0, y: 1)): .custom(
                     .init(
                         design: .init(label: .text("正しく読み込めているか確認してください"), color: .normal),
-                        press_action: [],
-                        longpress_action: [],
+                        press_actions: [],
+                        longpress_actions: [],
                         variation: [])
                 ),
                 .grid_fit(.init(x: 0, y: 2)): .custom(
                     .init(
                         design: .init(label: .text("アプリで確認する"), color: .special),
-                        press_action: [.openURL("azooKey://")],
-                        longpress_action: [],
+                        press_actions: [.openURL("azooKey://")],
+                        longpress_actions: [],
                         variation: [])
                 ),
                 .grid_fit(.init(x: 0, y: 3)): .custom(
                     .init(
                         design: .init(label: .text("前のタブに戻る"), color: .special),
-                        press_action: [.moveTab(.system(.last_tab))],
-                        longpress_action: [],
+                        press_actions: [.moveTab(.system(.last_tab))],
+                        longpress_actions: [],
                         variation: [])
                 ),
                 .grid_fit(.init(x: 0, y: 4)): .custom(
                     .init(
                         design: .init(label: .text("ひらがなタブに移動"), color: .special),
-                        press_action: [.moveTab(.system(.user_japanese))],
-                        longpress_action: [],
+                        press_actions: [.moveTab(.system(.user_japanese))],
+                        longpress_actions: [],
                         variation: [])
                 ),
                 .grid_fit(.init(x: 0, y: 5)): .system(.change_keyboard)

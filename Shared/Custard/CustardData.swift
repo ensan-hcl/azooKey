@@ -571,11 +571,11 @@ struct CustardInterfaceCustomKey: Codable {
     /// - design of this key
     let design: CustardKeyDesign
 
-    /// - action done when this key is pressed. actions are done in order.
-    let press_action: [CodableActionData]
+    /// - actions done when this key is pressed. actions are done in order.
+    let press_actions: [CodableActionData]
 
-    /// - action done when this key is longpressed. actions are done in order.
-    let longpress_action: [CodableActionData]
+    /// - actions done when this key is longpressed. actions are done in order.
+    let longpress_actions: [CodableActionData]
 
     /// - variations available when user flick or longpress this key
     let variation: [CustardInterfaceVariation]
@@ -595,11 +595,11 @@ struct CustardInterfaceVariationKey: Codable {
     /// - label on this variation
     let label: CustardKeyLabelStyle
 
-    /// - action done when you select this variation. actions are done in order..
-    let press_action: [CodableActionData]
+    /// - actions done when you select this variation. actions are done in order..
+    let press_actions: [CodableActionData]
 
-    /// - action done when you 'long select' this variation, like long-flick. actions are done in order.
-    let longpress_action: [CodableActionData]
+    /// - actions done when you 'long select' this variation, like long-flick. actions are done in order.
+    let longpress_actions: [CodableActionData]
 }
 
 extension Custard{
@@ -611,32 +611,32 @@ extension Custard{
             .grid_scroll(1): .custom(
                 .init(
                     design: .init(label: .text("←"), color: .special),
-                    press_action: [.moveCursor(-1)],
-                    longpress_action: [.moveCursor(-1)],
+                    press_actions: [.moveCursor(-1)],
+                    longpress_actions: [.moveCursor(-1)],
                     variation: []
                 )
             ),
             .grid_scroll(2): .custom(
                 .init(
                     design: .init(label: .systemImage("list.dash"), color: .special),
-                    press_action: [.toggleTabBar],
-                    longpress_action: [],
+                    press_actions: [.toggleTabBar],
+                    longpress_actions: [],
                     variation: []
                 )
             ),
             .grid_scroll(3): .custom(
                 .init(
                     design: .init(label: .text("→"), color: .special),
-                    press_action: [.moveCursor(1)],
-                    longpress_action: [.moveCursor(1)],
+                    press_actions: [.moveCursor(1)],
+                    longpress_actions: [.moveCursor(1)],
                     variation: []
                 )
             ),
             .grid_scroll(4): .custom(
                 .init(
                     design: .init(label: .systemImage("delete.left"), color: .special),
-                    press_action: [.delete(1)],
-                    longpress_action: [.delete(1)],
+                    press_actions: [.delete(1)],
+                    longpress_actions: [.delete(1)],
                     variation: []
                 )
             ),
@@ -646,8 +646,8 @@ extension Custard{
             keys[.grid_scroll(GridScrollPositionSpecifier(5+$0))] = .custom(
                 .init(
                     design: .init(label: .text(hieroglyphs[$0]), color: .normal),
-                    press_action: [.input(hieroglyphs[$0])],
-                    longpress_action: [],
+                    press_actions: [.input(hieroglyphs[$0])],
+                    longpress_actions: [],
                     variation: []
                 )
             )
@@ -667,214 +667,4 @@ extension Custard{
         )
         return custard
     }()
-
-    static let mock_flick_grid = Custard(
-        custard_version: .v1_0,
-        identifier: "my_custard",
-        display_name: "マイカスタード",
-        language: .ja_JP,
-        input_style: .direct,
-        interface: .init(
-            key_style: .flick,
-            key_layout: .gridFit(.init(width: 3, height: 5)),
-            keys: [
-                .grid_fit(.init(x: 0, y: 0)): .system(.change_keyboard),
-                .grid_fit(.init(x: 1, y: 0)): .custom(
-                    .init(
-                        design: .init(label: .text("←"), color: .special),
-                        press_action: [.moveCursor(-1)],
-                        longpress_action: [.moveCursor(-1)],
-                        variation: []
-                    )
-                ),
-                .grid_fit(.init(x: 2, y: 0)): .custom(
-                    .init(
-                        design: .init(label: .text("→"), color: .special),
-                        press_action: [.moveCursor(1)],
-                        longpress_action: [.moveCursor(1)],
-                        variation: []
-                    )
-                ),
-                .grid_fit(.init(x: 0, y: 1)): .custom(
-                    .init(
-                        design: .init(label: .text("①"), color: .normal),
-                        press_action: [.input("①")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 1, y: 1)): .custom(
-                    .init(
-                        design: .init(label: .text("②"), color: .normal),
-                        press_action: [.input("②")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 2, y: 1)): .custom(
-                    .init(
-                        design: .init(label: .text("③"), color: .normal),
-                        press_action: [.input("③")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 0, y: 2)): .custom(
-                    .init(
-                        design: .init(label: .text("④"), color: .normal),
-                        press_action: [.input("④")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 1, y: 2)): .custom(
-                    .init(
-                        design: .init(label: .text("⑤"), color: .normal),
-                        press_action: [.input("⑤")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 2, y: 2)): .custom(
-                    .init(
-                        design: .init(label: .text("⑥"), color: .normal),
-                        press_action: [.input("⑥")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 0, y: 3)): .custom(
-                    .init(
-                        design: .init(label: .text("⑦"), color: .normal),
-                        press_action: [.input("⑦")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 1, y: 3)): .custom(
-                    .init(
-                        design: .init(label: .text("⑧"), color: .normal),
-                        press_action: [.input("⑧")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 2, y: 3)): .custom(
-                    .init(
-                        design: .init(label: .text("⑨"), color: .normal),
-                        press_action: [.input("⑨")],
-                        longpress_action: [],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                ),
-                .grid_fit(.init(x: 0, y: 4)): .custom(
-                    .init(
-                        design: .init(label: .text("空白"), color: .special),
-                        press_action: [.input(" ")],
-                        longpress_action: [.toggleCursorBar],
-                        variation: []
-                    )
-                ),
-                .grid_fit(.init(x: 1, y: 4)): .system(.enter(1)),
-                .grid_fit(.init(x: 2, y: 4)): .custom(
-                    .init(
-                        design: .init(label: .systemImage("delete.left"), color: .special),
-                        press_action: [.delete(1)],
-                        longpress_action: [.delete(1)],
-                        variation: [
-                            .init(
-                                type: .flick(.left),
-                                key: .init(
-                                    label: .text("❌"),
-                                    press_action: [.smoothDelete],
-                                    longpress_action: []
-                                )
-                            )
-                        ]
-                    )
-                )
-            ]
-        )
-    )
 }
