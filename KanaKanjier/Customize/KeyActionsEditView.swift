@@ -13,8 +13,8 @@ import Combine
 extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
-        case .delete, .longDelete, .input, .longInput, .replaceLastCharacters, .moveCursor, .longMoveCursor, .moveTab, .openURL: return true
-        case .complete, .replaceDefault, .smoothDelete,.toggleCapslockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
+        case .delete, .longDelete, .smartDelete, .input, .longInput, .replaceLastCharacters, .moveCursor, .longMoveCursor, .smartMoveCursor, .moveTab, .openURL: return true
+        case .complete, .replaceDefault, .smartDeleteDefault,.toggleCapslockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
 
@@ -24,13 +24,15 @@ extension CodableActionData{
         case let .longInput(value): return "「\(value)」を繰り返し入力"
         case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
         case let .longMoveCursor(value): return "\(String(value))文字ずつカーソルを移動"
+        case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
         case let .longDelete(value): return "\(String(value))文字ずつ削除"
+        case let .smartDelete(value): return "\(value.targets.joined(separator: ","))の隣まで削除"
         case let .moveTab(tab): return "タブに移動"
         case let .replaceLastCharacters(tab): return "文字を置換"
         case .complete: return "確定"
         case .replaceDefault: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
-        case .smoothDelete: return "文頭まで削除"
+        case .smartDeleteDefault: return "文頭まで削除"
         case .toggleCapslockState: return "Capslockのモードの切り替え"
         case .toggleCursorBar: return "カーソルバーの切り替え"
         case .toggleTabBar: return "タブバーの切り替え"
@@ -191,7 +193,7 @@ struct KeyActionsEditView: View {
                     }
                     Section(header: Text("高度")){
                         Button("文頭まで削除"){
-                            press(.smoothDelete)
+                            press(.smartDeleteDefault)
                         }
                         Button("カーソル移動"){
                             press(.moveCursor(-1))

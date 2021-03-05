@@ -153,6 +153,26 @@ extension CodableTabData: Hashable {
     }
 }
 
+struct SmartDeleteItem: Codable, Hashable {
+    let targets: [String]
+    let direction: Direction
+
+    enum Direction: String, Codable {
+        case forward
+        case backward
+    }
+}
+
+struct SmartMoveCursorItem: Codable, Hashable {
+    let targets: [String]
+    let direction: Direction
+
+    enum Direction: String, Codable {
+        case forward
+        case backward
+    }
+}
+
 /// - アクション
 /// - actions done in key pressing
 enum CodableActionData: Codable {
@@ -179,7 +199,11 @@ enum CodableActionData: Codable {
     case longDelete(Int)
 
     /// - delete to beginning of the sentence
-    case smoothDelete
+    case smartDeleteDefault
+
+    /// - delete to the ` direction` until `target` appears in the direction of travel..
+    /// - if `target` is `[".", ","]`, `direction` is `.backward`, and current text is `I love this. But |she likes`, after the action, the text become `I love this.|she likes`.
+    case smartDelete(SmartDeleteItem)
 
     /// - complete current inputting words
     case complete
@@ -191,6 +215,10 @@ enum CodableActionData: Codable {
     /// - move cursor action used in longpress
     /// - warning: when use this in not longpress, it works as one time action
     case longMoveCursor(Int)
+
+    /// - move cursor to the ` direction` until `target` appears in the direction of travel..
+    /// - if `target` is `[".", ","]`, `direction` is `.backward`, and current text is `I love this. But |she likes`, after the action, the text become `I love this.| But she likes`.
+    case smartMoveCursor(SmartMoveCursorItem)
 
     /// - move to specified tab
     case moveTab(CodableTabData)
@@ -221,10 +249,12 @@ extension CodableActionData{
         case replace_last_characters
         case delete
         case long_delete
-        case smooth_delete
+        case smart_delete
+        case smart_delete_default
         case complete
         case move_cursor
         case long_move_cursor
+        case smart_move_cursor
         case move_tab
         case toggle_cursor_bar
         case toggle_tab_bar
@@ -250,8 +280,10 @@ extension CodableActionData{
             try container.encode(value, forKey: .delete)
         case let .longDelete(value):
             try container.encode(value, forKey: .long_delete)
-        case .smoothDelete:
-            try container.encode(true, forKey: .smooth_delete)
+        case .smartDeleteDefault:
+            try container.encode(true, forKey: .smart_delete_default)
+        case let .smartDelete(value):
+            try container.encode(value, forKey: .smart_delete)
 
         case .complete:
             try container.encode(true, forKey: .complete)
@@ -260,6 +292,8 @@ extension CodableActionData{
             try container.encode(value, forKey: .move_cursor)
         case let .longMoveCursor(value):
             try container.encode(value, forKey: .long_move_cursor)
+        case let .smartMoveCursor(value):
+            try container.encode(value, forKey: .smart_move_cursor)
 
         case let .moveTab(destination):
             try container.encode(destination, forKey: .move_tab)
@@ -321,8 +355,14 @@ extension CodableActionData{
                 forKey: .long_delete
             )
             self = .longDelete(value)
-        case .smooth_delete:
-            self = .smoothDelete
+        case .smart_delete_default:
+            self = .smartDeleteDefault
+        case .smart_delete:
+            let value = try container.decode(
+                SmartDeleteItem.self,
+                forKey: .smart_delete
+            )
+            self = .smartDelete(value)
         case .complete:
             self = .complete
         case .move_cursor:
@@ -337,6 +377,12 @@ extension CodableActionData{
                 forKey: .long_move_cursor
             )
             self = .longMoveCursor(value)
+        case .smart_move_cursor:
+            let value = try container.decode(
+                SmartMoveCursorItem.self,
+                forKey: .smart_move_cursor
+            )
+            self = .smartMoveCursor(value)
         case .move_tab:
             let destination = try container.decode(
                 CodableTabData.self,
@@ -378,8 +424,10 @@ extension CodableActionData: Hashable {
             return l == r
         case let (.longDelete(l), .longDelete(r)):
             return l == r
-        case (.smoothDelete, .smoothDelete):
+        case (.smartDeleteDefault, .smartDeleteDefault):
             return true
+        case let (.smartDelete(l), .smartDelete(r)):
+            return l == r
 
         case (.complete, .complete):
             return true
@@ -387,6 +435,8 @@ extension CodableActionData: Hashable {
         case let (.moveCursor(l),.moveCursor(r)):
             return l == r
         case let (.longMoveCursor(l), .longMoveCursor(r)):
+            return l == r
+        case let (.smartMoveCursor(l), .smartMoveCursor(r)):
             return l == r
 
         case let (.moveTab(l), .moveTab(r)):
@@ -429,8 +479,11 @@ extension CodableActionData: Hashable {
         case let .longDelete(value):
             hasher.combine(value)
             key = .long_delete
-        case .smoothDelete:
-            key = .smooth_delete
+        case let .smartDelete(value):
+            hasher.combine(value)
+            key = .smart_delete
+        case .smartDeleteDefault:
+            key = .smart_delete_default
         case .complete:
             key = .complete
         case let .moveCursor(value):
@@ -439,6 +492,9 @@ extension CodableActionData: Hashable {
         case let .longMoveCursor(value):
             hasher.combine(value)
             key = .long_move_cursor
+        case let .smartMoveCursor(value):
+            hasher.combine(value)
+            key = .smart_move_cursor
         case let .moveTab(destination):
             hasher.combine(destination)
             key = .move_tab

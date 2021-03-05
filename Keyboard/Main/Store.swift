@@ -141,7 +141,13 @@ final class KeyboardActionDepartment: ActionDepartment{
             Sound.smoothDelete()
             self.showResultView()
             self.inputManager.smoothDelete()
-
+        case let .smartDelete(item):
+            switch item.direction{
+            case .forward:
+                self.inputManager.smoothDelete(to: item.targets.map{Character($0)})
+            case .backward:
+                self.inputManager.smoothDelete(to: item.targets.map{Character($0)})
+            }
         case .deselectAndUseAsInputting:
             self.inputManager.edit()
 
@@ -156,6 +162,13 @@ final class KeyboardActionDepartment: ActionDepartment{
             }
         case let .moveCursor(count):
             self.inputManager.moveCursor(count: count)
+        case let .smartMoveCursor(item):
+            switch item.direction {
+            case .forward:
+                self.inputManager.smartMoveCursorForward(to: item.targets.map{Character($0)})
+            case .backward:
+                self.inputManager.smartMoveCursorBackward(to: item.targets.map{Character($0)})
+            }
         case let .changeCapsLockState(state):
             VariableStates.shared.aAKeyState = state
         case .toggleShowMoveCursorView:
@@ -756,18 +769,53 @@ private final class InputManager{
         var deletedCount = 0
         while let last = self.proxy.documentContextBeforeInput?.last{
             if nexts.contains(last){
-                if deletedCount == 0{
-                    self.proxy.deleteBackward()
-                }
                 break
             }else{
                 self.proxy.deleteBackward()
                 deletedCount += 1
             }
         }
+        if deletedCount == 0{
+            self.proxy.deleteBackward()
+        }
     }
 
-    fileprivate func smoothMoveCursor(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
+    fileprivate func smoothDeleteForward(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
+        //選択状態ではオール削除になる
+        if self.isSelected{
+            self.proxy.deleteBackward()
+            self.clear()
+            return
+        }
+        //入力中の場合
+        if !self.inputtedText.isEmpty{
+            let count = cursorMaximumPosition - cursorPosition
+            self.inputtedText.removeLast(count)
+            self.proxy.moveCursor(count: count)
+            self.proxy.deleteBackward(count: count)
+            //文字がもうなかった場合
+            if inputtedText.isEmpty{
+                clear()
+                setResult()
+            }
+            return
+        }
+
+        var deletedCount = 0
+        while let first = self.proxy.documentContextAfterInput?.first{
+            if nexts.contains(first){
+                break
+            }else{
+                self.proxy.deleteForward()
+                deletedCount += 1
+            }
+        }
+        if deletedCount == 0{
+            self.proxy.deleteForward()
+        }
+    }
+
+    fileprivate func smartMoveCursorBackward(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
         //選択状態では最も左にカーソルを移動
         if isSelected{
             let count = cursorPosition
@@ -786,14 +834,43 @@ private final class InputManager{
         var movedCount = 0
         while let last = proxy.documentContextBeforeInput?.last{
             if nexts.contains(last){
-                if movedCount == 0{
-                    proxy.moveCursor(count: -1)
-                }
                 break
             }else{
                 proxy.moveCursor(count: -1)
                 movedCount += 1
             }
+        }
+        if movedCount == 0{
+            proxy.moveCursor(count: -1)
+        }
+    }
+
+    fileprivate func smartMoveCursorForward(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
+        //選択状態では最も左にカーソルを移動
+        if isSelected{
+            deselect()
+            moveCursor(count: cursorMaximumPosition - cursorPosition)
+            setResult()
+            return
+        }
+        //入力中の場合
+        if !inputtedText.isEmpty{
+            moveCursor(count: cursorMaximumPosition - cursorPosition)
+            setResult()
+            return
+        }
+
+        var movedCount = 0
+        while let first = proxy.documentContextAfterInput?.first{
+            if nexts.contains(first){
+                break
+            }else{
+                proxy.moveCursor(count: 1)
+                movedCount += 1
+            }
+        }
+        if movedCount == 0{
+            proxy.moveCursor(count: 1)
         }
     }
 

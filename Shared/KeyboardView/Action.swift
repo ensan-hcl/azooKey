@@ -13,12 +13,16 @@ enum ActionType{
     case input(String)          //テキストの入力
     case delete(Int)            //テキストの削除
     case smoothDelete           //テキストの一括削除
+    case smartDelete(SmartDeleteItem)
+
     case deselectAndUseAsInputting   //選択を解除して編集中とみなす
     //取り込み関係
     case saveSelectedTextIfNeeded           //選択部分が存在していたら一時保存する。
     case restoreSelectedTextIfNeeded        //選択部分の一時保存したデータを取り出して代入する
     //カーソル関係
     case moveCursor(Int)
+    case smartMoveCursor(SmartMoveCursorItem)
+
     case toggleShowMoveCursorView
 
     //変換関連
@@ -138,14 +142,18 @@ extension CodableActionData{
             return .delete(value)
         case let .longDelete(value):
             return .delete(value)
-        case .smoothDelete:
+        case .smartDeleteDefault:
             return .smoothDelete
+        case let .smartDelete(value):
+            return .smartDelete(value)
         case .complete:
             return .enter
         case let .moveCursor(value):
             return .moveCursor(value)
         case let .longMoveCursor(value):
             return .moveCursor(value)
+        case let .smartMoveCursor(value):
+            return .smartMoveCursor(value)
         case let .moveTab(value):
             return .moveTab(value.tab)
         case .toggleCursorBar:
