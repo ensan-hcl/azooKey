@@ -18,7 +18,7 @@ final class VariableStates: ObservableObject{
 
     private init(){}
 
-    @Published var keyboardLanguage: KeyboardLanguage = .japanese
+    @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published var keyboardLayout: KeyboardLayout = .flick
 

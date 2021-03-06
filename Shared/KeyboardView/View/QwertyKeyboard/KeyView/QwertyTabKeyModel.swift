@@ -10,15 +10,15 @@ import Foundation
 import SwiftUI
 
 //symbolタブ、123タブで表示される切り替えボタン
-struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
+struct QwertyTabKeyModel: QwertyKeyModelProtocol{
 
     var pressActions: [ActionType]{
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch VariableStates.shared.keyboardLanguage{
-            case .japanese, .none, .greek:
+            case .ja_JP, .none, .el_GR:
                 return [.moveTab(.user_dependent(.japanese))]
-            case .english:
+            case .en_US:
                 return [.moveTab(.user_dependent(.english))]
             }
         case false:
@@ -43,9 +43,9 @@ struct QwertyChangeTabKeyModel: QwertyKeyModelProtocol{
         switch SemiStaticStates.shared.needsInputModeSwitchKey{
         case true:
             switch states.keyboardLanguage{
-            case .japanese, .none, .greek:
+            case .ja_JP, .none, .el_GR:
                 return KeyLabel(.text("あ"), width: width, textColor: color)
-            case .english:
+            case .en_US:
                 return KeyLabel(.text("A"), width: width, textColor: color)
             }
         case false:

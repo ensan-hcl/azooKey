@@ -205,7 +205,7 @@ struct CustardManager {
 
     func availableCustard(for language: KeyboardLanguage) -> [String] {
         switch language{
-        case .japanese:
+        case .ja_JP:
             return self.availableCustards.compactMap{
                 if let custard = try? self.custard(identifier: $0){
                     if custard.language == .ja_JP{
@@ -214,7 +214,7 @@ struct CustardManager {
                 }
                 return nil
             }
-        case .greek:
+        case .el_GR:
             return self.availableCustards.compactMap{
                 if let custard = try? self.custard(identifier: $0){
                     if custard.language == .el_GR{
@@ -223,7 +223,7 @@ struct CustardManager {
                 }
                 return nil
             }
-        case .english:
+        case .en_US:
             return self.availableCustards.compactMap{
                 if let custard = try? self.custard(identifier: $0){
                     if custard.language == .en_US{

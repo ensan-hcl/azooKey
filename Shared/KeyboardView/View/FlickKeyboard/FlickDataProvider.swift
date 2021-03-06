@@ -11,15 +11,54 @@ import SwiftUI
 
 //M：基本は変わらない
 struct FlickDataProvider {
+    static func TabKeys() -> [FlickKeyModelProtocol] {
+        let first: FlickKeyModelProtocol = {
+            switch SettingData.shared.preferredLanguageSetting.first{
+            case .el_GR: return FlickChangeKeyboardModel.shared
+            case .en_US: return FlickTabKeyModel.abcTabKeyModel
+            case .ja_JP: return FlickTabKeyModel.hiraTabKeyModel
+            case .none: return FlickChangeKeyboardModel.shared
+            }
+        }()
+
+        let second: FlickKeyModelProtocol? = {
+            guard let second = SettingData.shared.preferredLanguageSetting.second else{
+                return nil
+            }
+            switch second{
+            case .none: return nil
+            case .el_GR: return FlickChangeKeyboardModel.shared
+            case .en_US: return FlickTabKeyModel.abcTabKeyModel
+            case .ja_JP: return FlickTabKeyModel.hiraTabKeyModel
+            }
+        }()
+
+        if let second = second{
+            return [
+                FlickTabKeyModel.numberTabKeyModel,
+                second,
+                first,
+                FlickChangeKeyboardModel.shared
+            ]
+        }else{
+            return [
+                FlickKeyModel(
+                    labelType: .image("list.bullet"),
+                    pressActions: [.toggleTabBar], longPressActions: .init(start: [.toggleTabBar]),
+                    flickKeys: [:],
+                    needSuggestView: false,
+                    keycolorType: .tabkey
+                ),
+                FlickTabKeyModel.numberTabKeyModel,
+                first,
+                FlickChangeKeyboardModel.shared
+            ]
+        }
+    }
     //縦に並べる
     var hiraKeyboard: [[FlickKeyModelProtocol]] = [
         //第1列
-        [
-            FlickTabKeyModel.numberTabKeyModel,
-            FlickTabKeyModel.abcTabKeyModel,
-            FlickTabKeyModel.hiraTabKeyModel,
-            FlickChangeKeyboardModel.shared
-        ],
+        Self.TabKeys(),
         //第2列
         [
             FlickKeyModel(labelType: .text("あ"), pressActions: [.input("あ")], flickKeys: [
@@ -229,13 +268,7 @@ struct FlickDataProvider {
     //縦に並べる
     var abcKeyboard:[[FlickKeyModelProtocol]] = [
         //第1列
-        [
-            FlickTabKeyModel.numberTabKeyModel,
-            FlickTabKeyModel.abcTabKeyModel,
-            FlickTabKeyModel.hiraTabKeyModel,
-            FlickChangeKeyboardModel.shared
-
-        ],
+        Self.TabKeys(),
         //第2列
         [
             FlickKeyModel(labelType: .text("@#/&_"), pressActions: [.input("@")], flickKeys: [
@@ -395,12 +428,7 @@ struct FlickDataProvider {
     //縦に並べる
     var numberKeyboard:[[FlickKeyModelProtocol]] = [
         //第1列
-        [
-            FlickTabKeyModel.numberTabKeyModel,
-            FlickTabKeyModel.abcTabKeyModel,
-            FlickTabKeyModel.hiraTabKeyModel,
-            FlickChangeKeyboardModel.shared
-        ],
+        Self.TabKeys(),
         //第2列
         [
             FlickKeyModel(labelType: .symbols(["1","☆","♪","→"]), pressActions: [.input("1")], flickKeys: [

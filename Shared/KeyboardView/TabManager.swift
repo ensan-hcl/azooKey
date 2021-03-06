@@ -59,17 +59,17 @@ enum Tab{
         var language: KeyboardLanguage? {
             switch self{
             case .flick_abc, .qwerty_abc:
-                return .english
+                return .en_US
             case .flick_hira, .qwerty_hira:
-                return .japanese
+                return .ja_JP
             case let .custard(custard):
                 switch custard.language{
                 case .ja_JP:
-                    return .japanese
+                    return .ja_JP
                 case .en_US:
-                    return .english
+                    return .en_US
                 case .el_GR:
-                    return .greek
+                    return .el_GR
                 case .undefined:
                     return nil
                 case .none:
@@ -211,7 +211,17 @@ struct TabManager{
     mutating func initialize(){
         switch lastTab{
         case .none:
-            self.moveTab(to: .user_dependent(.japanese))
+            let targetTab: Tab = {
+                switch SettingData.shared.preferredLanguageSetting.first{
+                case .en_US:
+                    return .user_dependent(.english)
+                case .ja_JP:
+                    return .user_dependent(.japanese)
+                case .none, .el_GR:
+                    return .user_dependent(.japanese)
+                }
+            }()
+            self.moveTab(to: targetTab)
         case let .existential(tab):
             self.moveTab(to: tab)
         case let .user_dependent(tab):

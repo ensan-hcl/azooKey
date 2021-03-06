@@ -9,6 +9,42 @@
 import Foundation
 
 struct QwertyDataProvider {
+    static func tabKeys(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)) -> (languageKey: QwertyKeyModelProtocol, numbersKey: QwertyKeyModelProtocol, symbolsKey: QwertyKeyModelProtocol, changeKeyboardKey: QwertyKeyModelProtocol) {
+        let languageKey: QwertyKeyModelProtocol
+        let first = SettingData.shared.preferredLanguageSetting.first
+        if let second = SettingData.shared.preferredLanguageSetting.second{
+            languageKey = QwertySwitchLanguageKeyModel(rowInfo: rowInfo, languages: (first, second))
+        }else{
+            let targetTab: Tab = {
+                switch first{
+                case .en_US:
+                    return .user_dependent(.english)
+                case .ja_JP:
+                    return .user_dependent(.japanese)
+                case .none, .el_GR:
+                    return .user_dependent(.japanese)
+                }
+            }()
+            languageKey = QwertyFunctionalKeyModel(labelType: .text(first.symbol), rowInfo: rowInfo, pressActions: [.moveTab(targetTab)], longPressActions: .none, needSuggestView: false)
+        }
+
+        let numbersKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.toggleTabBar]))
+        let symbolsKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.toggleTabBar]))
+
+        let changeKeyboardKey: QwertyKeyModelProtocol
+        if let second = SettingData.shared.preferredLanguageSetting.second{
+            changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .secondTab(secondLanguage: second))
+        }else{
+            changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .tabBar)
+        }
+        return (
+            languageKey: languageKey,
+            numbersKey: numbersKey,
+            symbolsKey: symbolsKey,
+            changeKeyboardKey: changeKeyboardKey
+        )
+    }
+
         //横に並べる
     var numberKeyboard: [[QwertyKeyModelProtocol]] {[
         [
@@ -186,15 +222,15 @@ struct QwertyDataProvider {
         ],
 
         [
-            QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.toggleTabBar])),
+            Self.tabKeys(rowInfo: (7, 2, 0, 0)).symbolsKey
         ] + SettingData.shared.qwertyNumberTabKeySetting +
         [
             QwertyFunctionalKeyModel.delete,
         ],
 
         [
-            QwertyChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
-            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
+            Self.tabKeys(rowInfo: (0, 2, 1, 1)).languageKey,
+            Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],
@@ -304,7 +340,7 @@ struct QwertyDataProvider {
         ],
 
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.toggleTabBar])),
+            Self.tabKeys(rowInfo: (7, 2, 0, 0)).numbersKey,
             QwertyKeyModel(
                 labelType: .text("."),
                 pressActions: [.input(".")],
@@ -343,8 +379,8 @@ struct QwertyDataProvider {
             QwertyFunctionalKeyModel.delete,
         ],
         [
-            QwertyChangeTabKeyModel(rowInfo: (normal: 0, functional: 2, space: 1, enter: 1)),
-            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
+            Self.tabKeys(rowInfo: (0, 2, 1, 1)).languageKey,
+            Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],
@@ -377,7 +413,7 @@ struct QwertyDataProvider {
             QwertyKeyModel(labelType: .text("ー"), pressActions: [.input("ー")]),
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .selectable("あ", "Ａ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.user_dependent(.english))]),
+            Self.tabKeys(rowInfo: (7, 2, 0, 0)).languageKey,
             QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
             QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
             QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
@@ -388,8 +424,8 @@ struct QwertyDataProvider {
             QwertyFunctionalKeyModel.delete,
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.toggleTabBar])),
-            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
+            Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
+            Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],
@@ -422,7 +458,7 @@ struct QwertyDataProvider {
             QwertyAaKeyModel.shared
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .selectable("Ａ", "あ"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.user_dependent(.japanese))]),
+            Self.tabKeys(rowInfo: (7, 2, 0, 0)).languageKey,
             QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
             QwertyKeyModel(labelType: .text("x"), pressActions: [.input("x")]),
             QwertyKeyModel(labelType: .text("c"), pressActions: [.input("c")]),
@@ -433,8 +469,8 @@ struct QwertyDataProvider {
             QwertyFunctionalKeyModel.delete,
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.toggleTabBar])),
-            QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
+            Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
+            Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
         ],

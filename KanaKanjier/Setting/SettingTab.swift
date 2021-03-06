@@ -23,6 +23,7 @@ struct SettingTabView: View {
                             Spacer()
                         }
                     }
+                    PreferredLanguageSettingView(Store.shared.preferredLanguage).padding(.vertical)
                 }
                 Section(header: Text("カスタムキー")){
                     VStack{

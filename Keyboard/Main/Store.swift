@@ -127,7 +127,7 @@ final class KeyboardActionDepartment: ActionDepartment{
         switch action{
         case let .input(text):
             self.showResultView()
-            if VariableStates.shared.aAKeyState == .capslock && [.english, .greek].contains(VariableStates.shared.keyboardLanguage){
+            if VariableStates.shared.aAKeyState == .capslock && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage){
                 let input = text.uppercased()
                 self.inputManager.input(text: input)
             }else{
@@ -1053,8 +1053,8 @@ private final class InputManager{
                     result = self.directConverter.requestCandidates(inputData, N_best: 10)
                 case .roman:
                     let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
-                    let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .japanese
-                    let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .english
+                    let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
+                    let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
 
                     result = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
                 }

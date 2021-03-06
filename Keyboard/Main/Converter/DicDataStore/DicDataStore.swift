@@ -444,11 +444,11 @@ final class DicDataStore{
         }
 
         //headを英単語として候補に追加する
-        if VariableStates.shared.keyboardLanguage == .english && head.onlyRomanAlphabet{
+        if VariableStates.shared.keyboardLanguage == .en_US && head.onlyRomanAlphabet{
             result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 40, value: -14))
         }
         //入力を全てひらがな、カタカナに変換したものを候補に追加する
-        if VariableStates.shared.keyboardLanguage != .english && VariableStates.shared.inputStyle == .roman{
+        if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman{
             if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head]{
                 result.append(LRE_DicDataElement(word: hiragana, ruby: katakana, cid: 1288, mid: 501, value: -13))
                 result.append(LRE_SRE_DicDataElement(ruby: katakana, cid: 1288, mid: 501, value: -14))

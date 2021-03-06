@@ -396,7 +396,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         if requireEnglishPrediction{
             foreign_candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US"))
         }
-        if VariableStates.shared.keyboardLanguage == .greek{
+        if VariableStates.shared.keyboardLanguage == .el_GR{
             foreign_candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "el"))
         }
         conversionBenchmark.end(process: .結果の処理_予測変換_外国語)

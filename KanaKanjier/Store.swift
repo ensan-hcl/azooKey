@@ -146,6 +146,12 @@ final class Store{
         }
     ))
 
+    var preferredLanguage = SettingItemViewModel(SettingItem<PreferredLanguage>(
+        identifier: .preferredLanguage,
+        defaultValue: DefaultSetting.preferredLanguage
+    ))
+
+
     var resultViewFontSizeSetting = SettingItemViewModel(SettingItem<FontSizeSetting>(
         identifier: .resultViewFontSize,
         defaultValue: -1

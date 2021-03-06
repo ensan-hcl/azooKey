@@ -37,11 +37,24 @@ enum InputStyle: String{
     case roman = "roman"
 }
 
-enum KeyboardLanguage {
-    case english
-    case japanese
-    case greek
+enum KeyboardLanguage: String, Codable {
+    case en_US
+    case ja_JP
+    case el_GR
     case none
+
+    var symbol: String{
+        switch self{
+        case .en_US:
+            return "A"
+        case .el_GR:
+            return "Ω"
+        case .ja_JP:
+            return "あ"
+        case .none:
+            return ""
+        }
+    }
 }
 
 enum KeyboardOrientation{

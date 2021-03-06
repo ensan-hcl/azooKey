@@ -11,6 +11,7 @@ import SwiftUI
 enum Setting: String {
     case japaneseKeyboardLayout = "keyboard_type"
     case englishKeyboardLayout = "keyboard_type_en"
+    case preferredLanguage = "preferred_language_order"
     case numberTabCustomKeys = "roman_number_custom_keys"
 
     case koganaKeyFlick = "kogana_flicks"
@@ -45,6 +46,8 @@ enum Setting: String {
             return "日本語キーボードの種類"
         case .englishKeyboardLayout:
             return "日本語キーボードの種類"
+        case .preferredLanguage:
+            return "入力する言語"
         case .numberTabCustomKeys:
             return "数字タブのカスタムキー機能"
         case .koganaKeyFlick:
@@ -92,6 +95,9 @@ enum Setting: String {
             return "日本語の入力方法をフリック入力とローマ字入力から選択できます。"
         case .englishKeyboardLayout:
             return "英語の入力方法をフリック入力とローマ字入力から選択できます。"
+        case .preferredLanguage:
+            return "キーボード上で入力する言語を選択できます。"
+
         case .numberTabCustomKeys:
             return "数字タブの「、。！？…」部分に好きな記号や文字を割り当てて利用することができます。"
 
@@ -187,6 +193,8 @@ struct DefaultSetting{
 
     static let japaneseKeyboardLayout = KeyboardLayout.flick
     static let englishKeyboardLayout = KeyboardLayout.flick
+
+    static let preferredLanguage = PreferredLanguage(first: .ja_JP, second: .en_US)
 
     static let memorySetting = LearningType.inputAndOutput
 }

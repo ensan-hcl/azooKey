@@ -155,7 +155,13 @@ fileprivate extension CustardInterfaceKey {
         case let .system(value):
             switch value {
             case .change_keyboard:
-                return QwertyChangeKeyboardKeyModel(keySizeType: .normal(of: 1, for: 1))
+                let changeKeyboardKey: QwertyChangeKeyboardKeyModel
+                if let second = SettingData.shared.preferredLanguageSetting.second{
+                    changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .secondTab(secondLanguage: second))
+                }else{
+                    changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .tabBar)
+                }
+                return changeKeyboardKey
             case let .enter(count):
                 return QwertyEnterKeyModel(keySizeType: .enter(.count(count)))
             case .flick_kogaki:

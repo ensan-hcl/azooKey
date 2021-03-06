@@ -51,6 +51,7 @@ struct SettingData{
 
         self.resultViewFontSize = Self.getDoubleSetting(.resultViewFontSize) ?? -1
         self.keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
+        self.preferredLanguageSetting = Self.preferredLanguageSetting()
     }
 
     internal func bool(for key: Setting) -> Bool {
@@ -186,6 +187,15 @@ struct SettingData{
         Self.userDefaults.set(type.saveValue, forKey: Setting.learningType.key)
         self.learningType = type
     }
+
+    private static func preferredLanguageSetting() -> PreferredLanguage {
+        if let value = Self.userDefaults.value(forKey: Setting.preferredLanguage.key), let data = PreferredLanguage.get(value){
+            return data
+        }
+        return DefaultSetting.preferredLanguage
+    }
+
+    var preferredLanguageSetting: PreferredLanguage = Self.preferredLanguageSetting()
 
     var qwertyNumberTabKeySetting: [QwertyKeyModel] {
         let customKeys: QwertyCustomKeysValue
