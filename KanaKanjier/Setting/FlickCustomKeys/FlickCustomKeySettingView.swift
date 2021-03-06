@@ -322,6 +322,8 @@ struct FlickCustomKeysSettingView: View {
                     .pickerStyle(MenuPickerStyle())
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
+                    Text("移動先：\(tab.label)")
+                        .font(.caption)
                 }else{
                     Text("このキーにはタブ移動以外のアクションが設定されています。")
                         .font(.caption)
@@ -341,8 +343,7 @@ struct FlickCustomKeysSettingView: View {
 
     private func reload(){
         if let position = selectState.selectedPosition, self.isPossiblePosition(position){
-            let bindedLabel: Binding<String> = label(position)
-            bindedLabel.wrappedValue = viewModel.value.identifier.defaultLabel[position, default: ""]
+            viewModel.value[keyPath: position.keyPath] = viewModel.value.identifier.defaultSetting[keyPath: position.keyPath]
             inputValue = viewModel.value.identifier.defaultInput[position, default: ""]
         }
     }

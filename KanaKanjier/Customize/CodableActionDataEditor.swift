@@ -301,6 +301,38 @@ struct ActionMoveTabEditView: View {
     }
 }
 
+extension CodableTabData{
+    var label: LocalizedStringKey {
+        switch self{
+        case let .system(tab):
+            switch tab{
+            case .user_japanese:
+                return "日本語(設定に合わせる)"
+            case .user_english:
+                return "英語(設定に合わせる)"
+            case .flick_japanese:
+                return "日本語(フリック入力)"
+            case .flick_english:
+                return "英語(フリック入力)"
+            case .flick_numbersymbols:
+                return "記号と数字(フリック入力)"
+            case .qwerty_japanese:
+                return "日本語(ローマ字入力)"
+            case .qwerty_english:
+                return "英語(ローマ字入力)"
+            case .qwerty_number:
+                return "数字(ローマ字入力)"
+            case .qwerty_symbols:
+                return "記号(ローマ字入力)"
+            case .last_tab:
+                return "最後に表示していたタブ"
+            }
+        case let .custom(identifier):
+            return LocalizedStringKey(identifier)
+        }
+    }
+}
+
 struct AvailableTabPicker: View {
     @State private var selectedTab: CodableTabData = .system(.user_japanese)
     private let items: [(label: String, tab: CodableTabData)]
