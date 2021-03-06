@@ -198,6 +198,10 @@
 "移動" = "Move";
 "追加" = "Add";
 
+"第1言語" = "First language";
+"第2言語" = "Second language";
+"指定しない" = "Don't use";
+
 "サウンド" = "Sounds";
 "キー音のON/OFF" = "Enable keyboard sounds";
 "キーを押した際に音を鳴らします。" = "Make sounds when you press keys.";
@@ -361,6 +365,9 @@
 
 "基本" = "Basic";
 "高度" = "Advanced";
+"押し始めのアクション" = "Actions done when longpress starts";
+"押している間のアクション" = "Actions repeated during longpress";
+
 "タブバーの表示" = "Show tab bar";
 "文字の入力" = "Input letters";
 "文字の削除" = "Delete letters";
@@ -402,6 +409,7 @@
 "英語(ローマ字入力)" = "English (qwerty style)";
 "最後に表示していたタブ" = "Last used tab";
 
+"移動先：%@" = "Destination: %@";
 
 
 
