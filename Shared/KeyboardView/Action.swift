@@ -110,21 +110,15 @@ extension ActionType{
     }
 }
 
-//長押しor長フリックされた際の挙動のタイプ
-enum LongPressActionType: Equatable{
-    case `repeat`(ActionType)
-    case doOnce(ActionType)
-
-    static func == (lsb: LongPressActionType, rsb: LongPressActionType) -> Bool {
-        switch (lsb, rsb){
-        case let (.repeat(l),.repeat(r)):
-            return l == r
-        case let (.doOnce(l),.doOnce(r)):
-            return l == r
-        default:
-            return false
-        }
+struct LongpressActionType: Equatable {
+    static let none = LongpressActionType()
+    internal init(start: [ActionType] = [], repeat: [ActionType] = []) {
+        self.start = start
+        self.repeat = `repeat`
     }
+
+    let start: [ActionType]
+    let `repeat`: [ActionType]
 }
 
 extension CodableActionData{
@@ -132,15 +126,11 @@ extension CodableActionData{
         switch self{
         case let .input(value):
             return .input(value)
-        case let .longInput(value):
-            return .input(value)
         case .replaceDefault:
             return .changeCharacterType
         case let .replaceLastCharacters(value):
             return .replaceLastCharacters(value)
         case let .delete(value):
-            return .delete(value)
-        case let .longDelete(value):
             return .delete(value)
         case .smartDeleteDefault:
             return .smoothDelete
@@ -149,8 +139,6 @@ extension CodableActionData{
         case .complete:
             return .enter
         case let .moveCursor(value):
-            return .moveCursor(value)
-        case let .longMoveCursor(value):
             return .moveCursor(value)
         case let .smartMoveCursor(value):
             return .smartMoveCursor(value)
@@ -173,17 +161,10 @@ extension CodableActionData{
             return .dismissKeyboard
         }
     }
+}
 
-    var longpressActionType: LongPressActionType {
-        switch self{
-        case let .longInput(value):
-            return .repeat(.input(value))
-        case let .longDelete(value):
-            return .repeat(.delete(value))
-        case let .longMoveCursor(value):
-            return .repeat(.moveCursor(value))
-        default:
-            return .doOnce(self.actionType)
-        }
+extension CodableLongpressActionData{
+    var longpressActionType: LongpressActionType {
+        .init(start: self.start.map{$0.actionType}, repeat: self.repeat.map{$0.actionType})
     }
 }

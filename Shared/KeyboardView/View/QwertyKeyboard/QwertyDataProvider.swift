@@ -186,7 +186,7 @@ struct QwertyDataProvider {
         ],
 
         [
-            QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: [.doOnce(.toggleTabBar)]),
+            QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.toggleTabBar])),
         ] + SettingData.shared.qwertyNumberTabKeySetting +
         [
             QwertyFunctionalKeyModel.delete,
@@ -304,7 +304,7 @@ struct QwertyDataProvider {
         ],
 
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: [.doOnce(.toggleTabBar)]),
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.toggleTabBar])),
             QwertyKeyModel(
                 labelType: .text("."),
                 pressActions: [.input(".")],
@@ -388,7 +388,7 @@ struct QwertyDataProvider {
             QwertyFunctionalKeyModel.delete,
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: [.doOnce(.toggleTabBar)]),
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.toggleTabBar])),
             QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,
@@ -433,7 +433,7 @@ struct QwertyDataProvider {
             QwertyFunctionalKeyModel.delete,
         ],
         [
-            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: [.doOnce(.toggleTabBar)]),
+            QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: (normal: 0, functional: 2, space: 1, enter: 1), pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.toggleTabBar])),
             QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1)),
             QwertySpaceKeyModel(),
             QwertyEnterKeyModel.shared,

@@ -16,7 +16,7 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol{
     var pressActions: [ActionType] {
         SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).actions
     }
-    var longPressActions: [LongPressActionType] {
+    var longPressActions: LongpressActionType {
         SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).longpressActions
     }
     var labelType: KeyLabelType {

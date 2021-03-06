@@ -122,7 +122,7 @@ extension ThemeColor: Codable, Equatable {
         let dynamicColor: DynamicColor?
         switch self{
         case let .color(_color):
-            if let matchedDynamicColor = DynamicColor.allCases.filter{$0.color == _color}.first{
+            if let matchedDynamicColor = DynamicColor.allCases.filter({$0.color == _color}).first{
                 color = nil
                 systemColor = nil
                 dynamicColor = matchedDynamicColor

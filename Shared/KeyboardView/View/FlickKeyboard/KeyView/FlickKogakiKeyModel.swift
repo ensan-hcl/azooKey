@@ -14,7 +14,7 @@ struct FlickKogakiKeyModel: FlickKeyModelProtocol{
     static let shared = FlickKogakiKeyModel()
 
     let pressActions: [ActionType] = [.changeCharacterType]
-    var longPressActions: [LongPressActionType] = []
+    var longPressActions: LongpressActionType = .none
 
     let labelType: KeyLabelType = .text("小ﾞﾟ")
 
@@ -23,7 +23,6 @@ struct FlickKogakiKeyModel: FlickKeyModelProtocol{
     }
     
     var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.koganaKeyFlick))
-
     
     private init(){}
 

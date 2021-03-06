@@ -171,7 +171,7 @@
 		1AB8C3C725E24D0B00D39BC5 /* CustardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */; };
 		1AB8C3CE25E2509300D39BC5 /* CustomizeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */; };
 		1AB8C3D825E256EE00D39BC5 /* EditingTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */; };
-		1AB8C3DE25E2854C00D39BC5 /* KeyActionsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */; };
+		1AB8C3DE25E2854C00D39BC5 /* CodableActionDataEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3DD25E2854C00D39BC5 /* CodableActionDataEditor.swift */; };
 		1AB8C3E825E2A1F000D39BC5 /* CodableActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */; };
 		1AB8C3E925E2A1F000D39BC5 /* CodableActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */; };
 		1AB8C3EF25E2A27C00D39BC5 /* TabBarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */; };
@@ -2661,7 +2661,7 @@
 		1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardManager.swift; sourceTree = "<group>"; };
 		1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabView.swift; sourceTree = "<group>"; };
 		1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTabBarView.swift; sourceTree = "<group>"; };
-		1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyActionsEditView.swift; sourceTree = "<group>"; };
+		1AB8C3DD25E2854C00D39BC5 /* CodableActionDataEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableActionDataEditor.swift; sourceTree = "<group>"; };
 		1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableActionData.swift; sourceTree = "<group>"; };
 		1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarData.swift; sourceTree = "<group>"; };
 		1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCustardView.swift; sourceTree = "<group>"; };
@@ -5366,12 +5366,12 @@
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1A12E24725C41A7100316009 /* Message.swift */,
 				1AF678A025CDA07A00F3987B /* SettingData.swift */,
+				1A36B146258D0BA90084DFE0 /* SettingData */,
 				1A26F34025E8AAAC003CDA0D /* SwiftUI */,
 				1ACB07DA25E71EC00077DE04 /* SwiftLanuage */,
 				1AF678DD25CED84F00F3987B /* KeyboardView */,
 				1AF6785B25CC4FF800F3987B /* ThemeData */,
 				1A18425325DE614D003985AB /* Custard */,
-				1A36B146258D0BA90084DFE0 /* SettingData */,
 				1AC5876825D930D000BB060E /* Localizable.strings */,
 			);
 			path = Shared;
@@ -5415,7 +5415,7 @@
 				1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */,
 				1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */,
 				1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */,
-				1AB8C3DD25E2854C00D39BC5 /* KeyActionsEditView.swift */,
+				1AB8C3DD25E2854C00D39BC5 /* CodableActionDataEditor.swift */,
 				1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */,
 			);
 			path = Customize;
@@ -10178,7 +10178,7 @@
 				1AB8C3C625E24D0B00D39BC5 /* CustardManager.swift in Sources */,
 				1AA346822567D8B100B41A16 /* UserSetting.swift in Sources */,
 				1AF6799225CEDBB500F3987B /* FlickChangeKeyboardKeyModel.swift in Sources */,
-				1AB8C3DE25E2854C00D39BC5 /* KeyActionsEditView.swift in Sources */,
+				1AB8C3DE25E2854C00D39BC5 /* CodableActionDataEditor.swift in Sources */,
 				1AB8C38225E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift in Sources */,
 				1AF6799025CEDBB500F3987B /* FlickKogakiKeyModel.swift in Sources */,
 				1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */,

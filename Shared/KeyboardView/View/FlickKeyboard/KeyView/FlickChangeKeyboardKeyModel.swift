@@ -22,7 +22,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
             return [.toggleShowMoveCursorView]
         }
     }
-    var longPressActions: [LongPressActionType]{ [] }
+    var longPressActions: LongpressActionType = .none
 
     let suggestModel: SuggestModel
     let flickKeys: [FlickDirection: FlickedKeyModel] = [:]

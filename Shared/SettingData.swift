@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-typealias FlickCustomKeySettingData = (labelType: KeyLabelType, actions: [ActionType], longpressActions: [LongPressActionType], flick: [FlickDirection: FlickedKeyModel])
+typealias FlickCustomKeySettingData = (labelType: KeyLabelType, actions: [ActionType], longpressActions: LongpressActionType, flick: [FlickDirection: FlickedKeyModel])
 
 struct SettingData{
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
@@ -72,21 +72,24 @@ struct SettingData{
         }else{
             setting = DefaultSetting.flickCustomKey(key)!
         }
-        var dict: [FlickDirection: FlickedKeyModel] = [:]
-        if let left = setting.left.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.left.label), pressActions: setting.left.actions.map{$0.actionType}, longPressActions: setting.left.longpressActions.map{$0.longpressActionType}){
-            dict[.left] = left
+        let targets: [(path: KeyPath<KeyFlickSetting,FlickCustomKey>, direction: FlickDirection)] = [(\.left, .left), (\.top, .top), (\.right, .right), (\.bottom, .bottom)]
+        let dict: [FlickDirection: FlickedKeyModel] = targets.reduce(into: [:]){dict, target in
+            let item = setting[keyPath: target.path]
+            if item.label == ""{
+                return
+            }
+            let model = FlickedKeyModel(
+                labelType: .text(item.label),
+                pressActions: item.actions.map{$0.actionType},
+                longPressActions: item.longpressActions.longpressActionType
+            )
+            dict[target.direction] = model
         }
-        if let top = setting.top.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.top.label), pressActions: setting.top.actions.map{$0.actionType}, longPressActions: setting.top.longpressActions.map{$0.longpressActionType}){
-            dict[.top] = top
-        }
-        if let right = setting.right.label == "" ? nil:FlickedKeyModel(labelType: .text(setting.right.label), pressActions: setting.right.actions.map{$0.actionType}, longPressActions: setting.right.longpressActions.map{$0.longpressActionType}){
-            dict[.right] = right
-        }
-        return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, setting.center.longpressActions.map{$0.longpressActionType}, dict)
+        return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, setting.center.longpressActions.longpressActionType, dict)
     }
 
     internal func flickCustomKeySetting(for key: Setting) -> FlickCustomKeySettingData {
-        self.flickCustomKeySetting[key, default: (.text("エラー"), [], [], [:])]
+        self.flickCustomKeySetting[key, default: (.text("エラー"), [], .none, [:])]
     }
 
     private static func get(_ setting: Setting) -> KeyboardLayout {

@@ -12,7 +12,7 @@ import SwiftUI
 
 //M：基本は変わらない
 struct FlickKeyModel: FlickKeyModelProtocol{
-    static var delete = FlickKeyModel(labelType: .image("delete.left"), pressActions: [.delete(1)], longPressActions: [.repeat(.delete(1))], flickKeys: [
+    static var delete = FlickKeyModel(labelType: .image("delete.left"), pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)]), flickKeys: [
         .left: FlickedKeyModel(
             labelType: .image("xmark"),
             pressActions: [.smoothDelete]
@@ -25,10 +25,10 @@ struct FlickKeyModel: FlickKeyModelProtocol{
 
     let labelType: KeyLabelType
     let pressActions: [ActionType]
-    let longPressActions: [LongPressActionType]
+    let longPressActions: LongpressActionType
     private let keycolorType: FlickKeyColorType
     
-    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [LongPressActionType] = [], flickKeys: [FlickDirection: FlickedKeyModel], needSuggestView: Bool = true, keycolorType: FlickKeyColorType = .normal){
+    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: LongpressActionType = .none, flickKeys: [FlickDirection: FlickedKeyModel], needSuggestView: Bool = true, keycolorType: FlickKeyColorType = .normal){
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions

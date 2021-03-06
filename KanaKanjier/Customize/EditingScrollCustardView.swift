@@ -23,8 +23,8 @@ fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection{
 struct EditingScrollCustardView: View {
     private let base: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
         .grid_scroll(0): .system(.change_keyboard),
-        .grid_scroll(1): .custom(.init(design: .init(label: .systemImage("list.dash"), color: .special), press_actions: [.toggleTabBar], longpress_actions: [], variations: [])),
-        .grid_scroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: [.longDelete(1)], variations: [])),
+        .grid_scroll(1): .custom(.init(design: .init(label: .systemImage("list.dash"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
+        .grid_scroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
         .grid_scroll(3): .system(.enter(1)),
     ]
 
@@ -147,7 +147,7 @@ struct EditingScrollCustardView: View {
                 continue
             }
             let label = target.count > 1 ? target[1] : input
-            keys[.grid_scroll(.init(keys.count))] = .custom(.init(design: .init(label: .text(label), color: .normal), press_actions: [.input(input)], longpress_actions: [], variations: []))
+            keys[.grid_scroll(.init(keys.count))] = .custom(.init(design: .init(label: .text(label), color: .normal), press_actions: [.input(input)], longpress_actions: .none, variations: []))
         }
 
         let columnKeyCount = max(Int(data.columnCount) ?? 8, 1)

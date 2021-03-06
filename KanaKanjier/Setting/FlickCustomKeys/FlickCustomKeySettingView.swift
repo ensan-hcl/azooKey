@@ -270,7 +270,7 @@ struct FlickCustomKeysSettingView: View {
         }
     }
 
-    var longpressActions: Binding<[CodableActionData]>? {
+    var longpressActions: Binding<CodableLongpressActionData>?{
         selectState.selectedPosition.flatMap{
             self.$viewModel.value[keyPath: $0.bindedKeyPath].longpressActions
         }
@@ -401,7 +401,7 @@ struct FlickCustomKeysSettingView: View {
         case .actions:
             let color: Color = (selectState.selectedPosition.flatMap{viewModel.value.identifier.ablePosition.contains($0)} ?? false) ? .primary : .systemGray
             if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position), let actions = actions{
-                NavigationLink(destination: KeyActionsEditView(actions, availableCustards: CustardManager.load().availableCustards)){
+                NavigationLink(destination: CodableActionDataEditor(actions, availableCustards: CustardManager.load().availableCustards)){
                     ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
                 }
                 .foregroundColor(color)
@@ -412,7 +412,7 @@ struct FlickCustomKeysSettingView: View {
         case .longpressActions:
             let color: Color = (selectState.selectedPosition.flatMap{viewModel.value.identifier.ablePosition.contains($0)} ?? false) ? .primary : .systemGray
             if let position = selectState.selectedPosition, viewModel.value.identifier.ablePosition.contains(position), let longpressActions = longpressActions{
-                NavigationLink(destination: KeyActionsEditView(longpressActions, availableCustards: CustardManager.load().availableCustards, allowLongpressActions: true)){
+                NavigationLink(destination: CodableLongpressActionDataEditor(longpressActions, availableCustards: CustardManager.load().availableCustards)){
                     ToolBarButtonLabel(systemImage: "terminal", labelText: "長押し")
                 }
                 .foregroundColor(color)

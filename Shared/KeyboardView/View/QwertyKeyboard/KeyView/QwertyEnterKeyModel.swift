@@ -32,9 +32,7 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
         }
     }
     
-    var longPressActions: [LongPressActionType] {
-        return []
-    }
+    let longPressActions: LongpressActionType = .none
     
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)

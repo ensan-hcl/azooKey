@@ -22,7 +22,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
         }
     }
 
-    var longPressActions: [LongPressActionType] = []
+    let longPressActions: LongpressActionType = .none
     var flickKeys: [FlickDirection: FlickedKeyModel] {
         switch VariableStates.shared.aAKeyState{
         case .normal:

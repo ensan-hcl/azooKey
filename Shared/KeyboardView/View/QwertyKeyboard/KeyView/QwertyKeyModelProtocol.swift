@@ -87,7 +87,7 @@ enum QwertyUnpressedKeyColorType{
 
 protocol QwertyKeyModelProtocol{
     var pressActions: [ActionType] {get}
-    var longPressActions: [LongPressActionType] {get}
+    var longPressActions: LongpressActionType {get}
     var keySizeType: QwertyKeySizeType {get}
     var needSuggestView: Bool {get}
         
@@ -109,15 +109,15 @@ extension QwertyKeyModelProtocol{
     func press(){
         self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
     }
-    
+
     func longPressReserve(){
-        self.longPressActions.forEach{VariableStates.shared.action.reserveLongPressAction($0)}
+        VariableStates.shared.action.reserveLongPressAction(longPressActions)
     }
-    
+
     func longPressEnd(){
-        self.longPressActions.forEach{VariableStates.shared.action.registerLongPressActionEnd($0)}
+        VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
     }
-        
+
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
         theme.pushedKeyFillColor.color
     }

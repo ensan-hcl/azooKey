@@ -492,12 +492,12 @@ struct QwertyCustomKeysItemView: View {
             let sIndex = selectState.selectedIndex
             let lpsIndex = selectState.longpressSelectedIndex
             if lpsIndex == -1 && sIndex != -1{
-                NavigationLink(destination: KeyActionsEditView($viewModel.value.keys[sIndex].actions, availableCustards: CustardManager.load().availableCustards)){
+                NavigationLink(destination: CodableActionDataEditor($viewModel.value.keys[sIndex].actions, availableCustards: CustardManager.load().availableCustards)){
                     ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
                 }
                 .foregroundColor(.primary)
             }else{
-                NavigationLink(destination: KeyActionsEditView($viewModel.value.keys[sIndex].longpresses[lpsIndex].actions, availableCustards: CustardManager.load().availableCustards)){
+                NavigationLink(destination: CodableActionDataEditor($viewModel.value.keys[sIndex].longpresses[lpsIndex].actions, availableCustards: CustardManager.load().availableCustards)){
                     ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
                 }
                 .foregroundColor(.primary)

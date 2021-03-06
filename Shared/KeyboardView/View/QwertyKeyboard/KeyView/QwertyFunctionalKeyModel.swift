@@ -10,11 +10,11 @@ import Foundation
 import SwiftUI
 
 struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
-    static var delete = QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: [.repeat(.delete(1))])
+    static var delete = QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions:.init(repeat: [.delete(1)]))
 
     
     let pressActions: [ActionType]
-    var longPressActions: [LongPressActionType]
+    var longPressActions: LongpressActionType
     ///暫定
     let variationsModel = VariationsModel([])
 
@@ -23,7 +23,7 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
-    init(labelType: KeyLabelType, rowInfo: (normal: Int, functional: Int, space: Int, enter: Int), pressActions: [ActionType], longPressActions: [LongPressActionType] = [], needSuggestView: Bool = false){
+    init(labelType: KeyLabelType, rowInfo: (normal: Int, functional: Int, space: Int, enter: Int), pressActions: [ActionType], longPressActions: LongpressActionType = .none, needSuggestView: Bool = false){
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions

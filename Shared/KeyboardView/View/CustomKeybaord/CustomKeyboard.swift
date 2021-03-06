@@ -127,7 +127,7 @@ fileprivate extension CustardInterfaceKey {
                     dictionary[direction] = FlickedKeyModel(
                         labelType: variation.key.label.keyLabelType,
                         pressActions: variation.key.press_actions.map{$0.actionType},
-                        longPressActions: variation.key.longpress_actions.map{$0.longpressActionType}
+                        longPressActions: variation.key.longpress_actions.longpressActionType
                     )
                 case .qwerty_variation:
                     break
@@ -136,9 +136,9 @@ fileprivate extension CustardInterfaceKey {
             let model = FlickKeyModel(
                 labelType: value.design.label.keyLabelType,
                 pressActions: value.press_actions.map{$0.actionType},
-                longPressActions: value.longpress_actions.map{$0.longpressActionType},
+                longPressActions: value.longpress_actions.longpressActionType,
                 flickKeys: flickKeyModels,
-                needSuggestView: value.longpress_actions.isEmpty && !value.variations.isEmpty,
+                needSuggestView: value.longpress_actions == .none && !value.variations.isEmpty,
                 keycolorType: value.design.color.flickKeyColorType
             )
             return model
@@ -147,7 +147,7 @@ fileprivate extension CustardInterfaceKey {
 
     private func convertToQwertyKeyModel(model: FlickKeyModelProtocol) -> QwertyKeyModelProtocol {
         let variations = VariationsModel([model.flickKeys[.left], model.flickKeys[.top], model.flickKeys[.right], model.flickKeys[.bottom]].compactMap{$0}.map{(label: $0.labelType, actions: $0.pressActions)})
-        return QwertyKeyModel(labelType: .text("小ﾞﾟ"), pressActions: [.changeCharacterType], longPressActions: [], variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
+        return QwertyKeyModel(labelType: .text("小ﾞﾟ"), pressActions: [.changeCharacterType], longPressActions: .none, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
     }
 
     func qwertyKeyModel(layout: CustardInterfaceLayout) -> QwertyKeyModelProtocol {
@@ -182,10 +182,10 @@ fileprivate extension CustardInterfaceKey {
             let model = QwertyKeyModel(
                 labelType: value.design.label.keyLabelType,
                 pressActions: value.press_actions.map{$0.actionType},
-                longPressActions: value.longpress_actions.map{$0.longpressActionType},
+                longPressActions: value.longpress_actions.longpressActionType,
                 variationsModel: VariationsModel(variations),
                 keyColorType: value.design.color.qwertyKeyColorType,
-                needSuggestView: value.longpress_actions.isEmpty,
+                needSuggestView: value.longpress_actions == .none,
                 for: (1,1)
             )
             return model
@@ -201,15 +201,15 @@ fileprivate extension CustardInterfaceKey {
             case .enter:
                 return SimpleEnterKeyModel()
             case .flick_kogaki:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType], longPressActions: [])
+                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .flick_kutoten:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")], longPressActions: [])
+                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
             case .flick_hira_tab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))], longPressActions: [])
+                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
             case .flick_abc_tab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))], longPressActions: [])
+                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
             case .flick_star123_tab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))], longPressActions: [])
+                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))])
             }
         case let .custom(value):
             return SimpleKeyModel(
@@ -217,7 +217,7 @@ fileprivate extension CustardInterfaceKey {
                 keyLabelType: value.design.label.keyLabelType,
                 unpressedKeyColorType: value.design.color.simpleKeyColorType,
                 pressActions: value.press_actions.map{$0.actionType},
-                longPressActions: value.longpress_actions.map{$0.longpressActionType}
+                longPressActions: value.longpress_actions.longpressActionType
             )
         }
     }

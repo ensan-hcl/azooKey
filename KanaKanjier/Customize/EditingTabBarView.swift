@@ -89,7 +89,7 @@ struct EditingTabBarView: View {
                                         Spacer()
                                         TabNavigationViewItemLabelEditView("ラベルを設定", label: item.label)
                                     }
-                                    NavigationLink(destination: KeyActionsEditView(item.actions, availableCustards: manager.availableCustards)){
+                                    NavigationLink(destination: CodableActionDataEditor(item.actions, availableCustards: manager.availableCustards)){
                                         Text("押した時の動作")
                                         Spacer()
                                         Text(makeLabelText(item: item.wrappedValue))

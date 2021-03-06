@@ -54,13 +54,13 @@ enum CustomizableFlickKey: String, Codable{
                 center: FlickCustomKey(label: "abc", actions: [.moveTab(.system(.user_english))]),
                 left: FlickCustomKey(label: "", actions: []),
                 top: FlickCustomKey(label: "", actions: []),
-                right: FlickCustomKey(label: "→", actions: [.moveCursor(1)], longpressActions: [.longMoveCursor(1)]),
+                right: FlickCustomKey(label: "→", actions: [.moveCursor(1)], longpressActions: .init(repeat: [.moveCursor(1)])),
                 bottom: FlickCustomKey(label: "", actions: [])
             )
         case .symbolsTab:
             return KeyFlickSetting(
                 identifier: self,
-                center: FlickCustomKey(label: "☆123", actions: [.moveTab(.system(.flick_numbersymbols))], longpressActions: [.toggleTabBar]),
+                center: FlickCustomKey(label: "☆123", actions: [.moveTab(.system(.flick_numbersymbols))], longpressActions: .init(start: [.toggleTabBar])),
                 left: FlickCustomKey(label: "", actions: []),
                 top: FlickCustomKey(label: "", actions: []),
                 right: FlickCustomKey(label: "", actions: []),
@@ -167,7 +167,7 @@ enum FlickKeyPosition: String, Codable{
 struct FlickCustomKey: Codable{
     var label: String
     var actions: [CodableActionData]
-    var longpressActions: [CodableActionData]
+    var longpressActions: CodableLongpressActionData
 
     enum CodingKeys: CodingKey {
         case input
@@ -183,7 +183,7 @@ struct FlickCustomKey: Codable{
         try container.encode(longpressActions, forKey: .longpressActions)
     }
 
-    internal init(label: String, actions: [CodableActionData], longpressActions: [CodableActionData] = []) {
+    internal init(label: String, actions: [CodableActionData], longpressActions: CodableLongpressActionData = .none) {
         self.label = label
         self.actions = actions
         self.longpressActions = longpressActions
@@ -203,7 +203,7 @@ struct FlickCustomKey: Codable{
         }else{
             self.actions = [.input(label)]
         }
-        self.longpressActions = (try? container.decode([CodableActionData].self, forKey: .longpressActions)) ?? []
+        self.longpressActions = (try? container.decode(CodableLongpressActionData.self, forKey: .longpressActions)) ?? .none
     }
 }
 

@@ -20,13 +20,13 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol{
 
     let pressActions: [ActionType] = [.input(" ")]
 
-    let longPressActions: [LongPressActionType] = [.doOnce(.toggleShowMoveCursorView)]
+    let longPressActions: LongpressActionType = .init(start: [.toggleShowMoveCursorView])
 
     let flickKeys: [FlickDirection: FlickedKeyModel] = [
         .left: FlickedKeyModel(
             labelType: .text("←"),
             pressActions: [.moveCursor(-1)],
-            longPressActions: [.repeat(.moveCursor(-1))]
+            longPressActions: .init(repeat: [.moveCursor(-1)])
         ),
         .top: FlickedKeyModel(
             labelType: .text("全角"),

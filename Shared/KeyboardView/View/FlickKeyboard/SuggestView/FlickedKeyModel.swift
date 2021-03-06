@@ -33,9 +33,9 @@ struct FlickedKeyModel{
     static let zero: FlickedKeyModel = FlickedKeyModel(labelType: .text(""), pressActions: [])
     let labelType: KeyLabelType
     let pressActions: [ActionType]
-    let longPressActions: [LongPressActionType]
+    let longPressActions: LongpressActionType
     
-    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: [LongPressActionType] = []) {
+    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: LongpressActionType = .none) {
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions
@@ -68,13 +68,13 @@ struct FlickedKeyModel{
     func flick(){
         self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
     }
-    
+
     func longFlickReserve(){
-        self.longPressActions.forEach{VariableStates.shared.action.reserveLongPressAction($0)}
+        VariableStates.shared.action.reserveLongPressAction(longPressActions)
     }
-    
+
     func longFlickEnd(){
-        self.longPressActions.forEach{VariableStates.shared.action.registerLongPressActionEnd($0)}
+        VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
     }
-    
+
 }

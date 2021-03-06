@@ -25,12 +25,12 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
         }
     }
 
-    var longPressActions: [LongPressActionType] {
+    var longPressActions: LongpressActionType {
         switch VariableStates.shared.aAKeyState{
         case .normal:
-            return [.doOnce(.changeCapsLockState(state: .capslock))]
+            return .init(start: [.changeCapsLockState(state: .capslock)])
         case .capslock:
-            return [.doOnce(.changeCapsLockState(state: .normal))]
+            return .init(start: [.changeCapsLockState(state: .normal)])
         }
     }
 

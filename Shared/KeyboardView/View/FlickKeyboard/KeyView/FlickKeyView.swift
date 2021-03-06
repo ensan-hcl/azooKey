@@ -60,7 +60,7 @@ struct FlickKeyView: View {
                     self.model.sound()
                     withAnimation(suggestAnimation) {
                         //サジェストが必要な設定なら
-                        if self.model.needSuggestView && self.model.longPressActions.isEmpty{
+                        if self.model.needSuggestView && self.model.longPressActions == .none{
                             //全てのサジェストを表示する
                             suggestState = .all
                             //変化を通告する。
@@ -190,7 +190,7 @@ struct FlickKeyView: View {
                 case .longPressed:
                     break
                 case let .longFlicked(direction):
-                    if let flickKey = self.model.flickKeys[direction], flickKey.longPressActions.isEmpty{
+                    if let flickKey = self.model.flickKeys[direction], flickKey.longPressActions == .none{
                         self.model.flick(to: direction)
                     }
                 }

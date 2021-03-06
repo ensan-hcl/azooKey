@@ -575,7 +575,7 @@ struct CustardInterfaceCustomKey: Codable {
     let press_actions: [CodableActionData]
 
     /// - actions done when this key is longpressed. actions are done in order.
-    let longpress_actions: [CodableActionData]
+    let longpress_actions: CodableLongpressActionData
 
     /// - variations available when user flick or longpress this key
     let variations: [CustardInterfaceVariation]
@@ -599,7 +599,7 @@ struct CustardInterfaceVariationKey: Codable {
     let press_actions: [CodableActionData]
 
     /// - actions done when you 'long select' this variation, like long-flick. actions are done in order.
-    let longpress_actions: [CodableActionData]
+    let longpress_actions: CodableLongpressActionData
 }
 
 extension Custard{
@@ -612,7 +612,7 @@ extension Custard{
                 .init(
                     design: .init(label: .text("←"), color: .special),
                     press_actions: [.moveCursor(-1)],
-                    longpress_actions: [.moveCursor(-1)],
+                    longpress_actions: .init(repeat: [.moveCursor(-1)]),
                     variations: []
                 )
             ),
@@ -620,7 +620,7 @@ extension Custard{
                 .init(
                     design: .init(label: .systemImage("list.dash"), color: .special),
                     press_actions: [.toggleTabBar],
-                    longpress_actions: [],
+                    longpress_actions: .none,
                     variations: []
                 )
             ),
@@ -628,7 +628,7 @@ extension Custard{
                 .init(
                     design: .init(label: .text("→"), color: .special),
                     press_actions: [.moveCursor(1)],
-                    longpress_actions: [.moveCursor(1)],
+                    longpress_actions: .init(repeat: [.moveCursor(1)]),
                     variations: []
                 )
             ),
@@ -636,7 +636,7 @@ extension Custard{
                 .init(
                     design: .init(label: .systemImage("delete.left"), color: .special),
                     press_actions: [.delete(1)],
-                    longpress_actions: [.delete(1)],
+                    longpress_actions: .init(repeat: [.delete(1)]),
                     variations: []
                 )
             ),
@@ -647,7 +647,7 @@ extension Custard{
                 .init(
                     design: .init(label: .text(hieroglyphs[$0]), color: .normal),
                     press_actions: [.input(hieroglyphs[$0])],
-                    longpress_actions: [],
+                    longpress_actions: .none,
                     variations: []
                 )
             )

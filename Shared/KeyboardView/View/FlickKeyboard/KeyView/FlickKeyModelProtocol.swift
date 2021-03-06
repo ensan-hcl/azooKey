@@ -44,7 +44,7 @@ enum FlickKeySizeType{
 protocol FlickKeyModelProtocol {
     var suggestModel: SuggestModel {get}
     var pressActions: [ActionType] {get}
-    var longPressActions: [LongPressActionType] {get}
+    var longPressActions: LongpressActionType {get}
     var flickKeys: [FlickDirection: FlickedKeyModel] {get}
     var keySizeType: FlickKeySizeType {get}
     var needSuggestView: Bool {get}
@@ -93,11 +93,11 @@ extension FlickKeyModelProtocol{
     }
     
     func longPressReserve(){
-        self.longPressActions.forEach{VariableStates.shared.action.reserveLongPressAction($0)}
+        VariableStates.shared.action.reserveLongPressAction(longPressActions)
     }
     
     func longPressEnd(){
-        self.longPressActions.forEach{VariableStates.shared.action.registerLongPressActionEnd($0)}
+        VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
     }
     
     func flick(to direction: FlickDirection){

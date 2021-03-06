@@ -60,7 +60,7 @@ final class KeyboardActionDepartment: ActionDepartment{
     private weak var delegate: KeyboardViewController!
     
     //即時変数
-    private var timers: [(type: LongPressActionType, timer: Timer)] = []
+    private var timers: [(type: LongpressActionType, timer: Timer)] = []
     private var tempTextData: (left: String, center: String, right: String)!
     private var tempSavedSelectedText: String!
 
@@ -242,35 +242,36 @@ final class KeyboardActionDepartment: ActionDepartment{
     ///長押しを予約する関数。
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
-    override func reserveLongPressAction(_ action: LongPressActionType){
-        if timers.contains{$0.type == action}{
+    override func reserveLongPressAction(_ action: LongpressActionType){
+        if timers.contains(where: {$0.type == action}){
             return
         }
         let startTime = Date()
-        switch action{
-        case let .repeat(actionType):
-            let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
-                let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
-                if span > 0.4 {
-                    actionType.sound()
-                    self?.doAction(actionType)
+
+        let startTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
+            let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
+            if span > 0.4 {
+                action.repeat.first?.sound()
+                action.repeat.forEach{
+                    self?.doAction($0)
                 }
-            })
-            let tuple = (type: action, timer: timer)
-            self.timers.append(tuple)
-        case let .doOnce(actionType):
-            let timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {_ in
-                self.registerAction(actionType)
-            })
-            let tuple = (type: action, timer: timer)
-            self.timers.append(tuple)
-        }
+            }
+        })
+        self.timers.append((type: action, timer: startTimer))
+
+        let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
+            action.start.first?.sound()
+            action.start.forEach{
+                self?.doAction($0)
+            }
+        })
+        self.timers.append((type: action, timer: repeatTimer))
     }
     
     ///長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。
     /// - Parameters:
     ///   - action: どの動作を終了するか判定するために用いる。
-    override func registerLongPressActionEnd(_ action: LongPressActionType){
+    override func registerLongPressActionEnd(_ action: LongpressActionType){
         timers = timers.compactMap{timer in
             if timer.type == action {
                 timer.timer.invalidate()

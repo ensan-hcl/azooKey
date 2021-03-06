@@ -42,13 +42,9 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
         }
     }
     
-    var longPressActions: [LongPressActionType] {
-        return []
-    }
+    var longPressActions: LongpressActionType = .none
     
-    var flickKeys: [FlickDirection: FlickedKeyModel] {
-        return [:]
-    }
+    var flickKeys: [FlickDirection: FlickedKeyModel] = [:]
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)

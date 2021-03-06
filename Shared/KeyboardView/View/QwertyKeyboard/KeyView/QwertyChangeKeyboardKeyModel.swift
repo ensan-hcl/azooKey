@@ -31,7 +31,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
         }
 
     }
-    let longPressActions: [LongPressActionType] = []
+    let longPressActions: LongpressActionType = .none
     ///暫定
     let variationsModel = VariationsModel([])
 

@@ -13,7 +13,7 @@ import Combine
 extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
-        case .delete, .longDelete, .smartDelete, .input, .longInput, .replaceLastCharacters, .moveCursor, .longMoveCursor, .smartMoveCursor, .moveTab, .openURL: return true
+        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .openURL: return true
         case .complete, .replaceDefault, .smartDeleteDefault,.toggleCapslockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
@@ -21,12 +21,9 @@ extension CodableActionData{
     var label: LocalizedStringKey {
         switch self{
         case let .input(value): return "「\(value)」を入力"
-        case let .longInput(value): return "「\(value)」を繰り返し入力"
         case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
-        case let .longMoveCursor(value): return "\(String(value))文字ずつカーソルを移動"
         case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
-        case let .longDelete(value): return "\(String(value))文字ずつ削除"
         case let .smartDelete(value): return "\(value.targets.joined(separator: ","))の隣まで削除"
         case let .moveTab(tab): return "タブに移動"
         case let .replaceLastCharacters(tab): return "文字を置換"
@@ -55,19 +52,17 @@ struct EditingCodableActionData: Identifiable, Equatable {
     }
 }
 
-struct KeyActionsEditView: View {
+struct CodableActionDataEditor: View {
     @State private var editMode = EditMode.inactive
     @State private var bottomSheetShown = false
     @State private var actions: [EditingCodableActionData]
     @Binding private var data: [CodableActionData]
     private let availableCustards: [String]
-    private let allowLongpressActions: Bool
 
-    init(_ actions: Binding<[CodableActionData]>, availableCustards: [String], allowLongpressActions: Bool = false){
+    init(_ actions: Binding<[CodableActionData]>, availableCustards: [String]){
         self._data = actions
         self._actions = State(initialValue: actions.wrappedValue.map{EditingCodableActionData($0)})
         self.availableCustards = availableCustards
-        self.allowLongpressActions = allowLongpressActions
     }
 
     func add(new action: CodableActionData){
@@ -95,60 +90,7 @@ struct KeyActionsEditView: View {
                 Section(header: Text("アクション")){
                     List{
                         ForEach($actions){(action: Binding<EditingCodableActionData>) in
-                            HStack{
-                                VStack(spacing: 20){
-                                    if action.wrappedValue.data.hasAssociatedValue{
-                                        DisclosureGroup{
-                                            switch action.wrappedValue.data{
-                                            case let .input(value):
-                                                ActionEditTextField("入力する文字", action: action){value} convert: {.input($0)}
-                                            case let .longInput(value):
-                                                ActionEditTextField("入力する文字", action: action){value} convert: {.longInput($0)}
-                                            case let .delete(count):
-                                                ActionEditTextField("削除する文字数", action: action){"\(count)"} convert: {value in
-                                                    if let count = Int(value){
-                                                        return .delete(count)
-                                                    }
-                                                    return nil
-                                                }
-                                                Text("負の値を指定すると右側の文字を削除します")
-                                            case let .longDelete(count):
-                                                ActionEditTextField("削除する文字数", action: action){"\(count)"} convert: {value in
-                                                    if let count = Int(value){
-                                                        return .longDelete(count)
-                                                    }
-                                                    return nil
-                                                }
-                                                Text("負の値を指定すると右側の文字を削除します")
-                                            case let .moveCursor(count):
-                                                ActionEditTextField("移動する文字数", action: action){"\(count)"} convert: {value in
-                                                    if let count = Int(value){
-                                                        return .moveCursor(count)
-                                                    }
-                                                    return nil
-                                                }
-                                                Text("負の値を指定すると左にカーソルが動きます")
-                                            case let .longMoveCursor(count):
-                                                ActionEditTextField("移動する文字数", action: action){"\(count)"} convert: {value in
-                                                    if let count = Int(value){
-                                                        return .longMoveCursor(count)
-                                                    }
-                                                    return nil
-                                                }
-                                                Text("負の値を指定すると左にカーソルが動きます")
-                                            case .moveTab:
-                                                ActionMoveTabEditView(action, availableCustards: availableCustards)
-                                            default:
-                                                EmptyView()
-                                            }
-                                        } label :{
-                                            Text(action.wrappedValue.data.label)
-                                        }
-                                    }else{
-                                        Text(action.wrappedValue.data.label)
-                                    }
-                                }
-                            }
+                            CodableActionEditor(action: action, availableCustards: availableCustards)
                         }
                         .onDelete(perform: delete)
                         .onMove(perform: onMove)
@@ -176,19 +118,6 @@ struct KeyActionsEditView: View {
                         }
                         Button("文字の削除"){
                             press(.delete(1))
-                        }
-                    }
-                    if allowLongpressActions{
-                        Section(header: Text("長押し")){
-                            Button("文字の入力"){
-                                press(.longInput("ごめん"))
-                            }
-                            Button("カーソル移動"){
-                                press(.longMoveCursor(1))
-                            }
-                            Button("文字の削除"){
-                                press(.longDelete(1))
-                            }
                         }
                     }
                     Section(header: Text("高度")){
@@ -252,6 +181,55 @@ struct KeyActionsEditView: View {
     private func onMove(source: IndexSet, destination: Int) {
         actions.move(fromOffsets: source, toOffset: destination)
     }
+}
+
+struct CodableActionEditor: View {
+    internal init(action: Binding<EditingCodableActionData>, availableCustards: [String]) {
+        self.availableCustards = availableCustards
+        self._action = action
+    }
+
+    @Binding private var action: EditingCodableActionData
+    private let availableCustards: [String]
+
+    var body: some View {
+        HStack{
+            VStack(spacing: 20){
+                if action.data.hasAssociatedValue{
+                    DisclosureGroup{
+                        switch action.data{
+                        case let .input(value):
+                            ActionEditTextField("入力する文字", action: $action){value} convert: {.input($0)}
+                        case let .delete(count):
+                            ActionEditTextField("削除する文字数", action: $action){"\(count)"} convert: {value in
+                                if let count = Int(value){
+                                    return .delete(count)
+                                }
+                                return nil
+                            }
+                            Text("負の値を指定すると右側の文字を削除します")
+                        case let .moveCursor(count):
+                            ActionEditTextField("移動する文字数", action: $action){"\(count)"} convert: {value in
+                                if let count = Int(value){
+                                    return .moveCursor(count)
+                                }
+                                return nil
+                            }
+                            Text("負の値を指定すると左にカーソルが動きます")
+                        case .moveTab:
+                            ActionMoveTabEditView($action, availableCustards: availableCustards)
+                        default:
+                            EmptyView()
+                        }
+                    } label :{
+                        Text(action.data.label)
+                    }
+                }else{
+                    Text(action.data.label)
+                }
+            }
+        }
+    }
 
 }
 
@@ -302,7 +280,6 @@ struct ActionOpenAppEditView: View {
             }
     }
 }
-
 
 struct ActionMoveTabEditView: View {
     @Binding private var action: EditingCodableActionData
@@ -357,5 +334,165 @@ struct AvailableTabPicker: View {
             }
         }
         .onChange(of: selectedTab, perform: process)
+    }
+}
+
+struct CodableLongpressActionDataEditor: View {
+    @State private var editMode = EditMode.inactive
+    @State private var bottomSheetShown = false
+    @State private var addTarget: AddTarget = .start
+
+    enum AddTarget{
+        case `repeat`
+        case start
+    }
+
+    @State private var startActions: [EditingCodableActionData]
+    @State private var repeatActions: [EditingCodableActionData]
+    @Binding private var data: CodableLongpressActionData
+    private let availableCustards: [String]
+
+    init(_ actions: Binding<CodableLongpressActionData>, availableCustards: [String]){
+        self._data = actions
+        self._startActions = State(initialValue: actions.wrappedValue.start.map{EditingCodableActionData($0)})
+        self._repeatActions = State(initialValue: actions.wrappedValue.repeat.map{EditingCodableActionData($0)})
+        self.availableCustards = availableCustards
+    }
+
+    func add(new action: CodableActionData){
+        withAnimation(Animation.interactiveSpring()){
+            switch self.addTarget{
+            case .start:
+                startActions.append(EditingCodableActionData(action))
+            case .repeat:
+                repeatActions.append(EditingCodableActionData(action))
+            }
+        }
+    }
+
+    var body: some View {
+        GeometryReader{geometry in
+            Form {
+                Section{
+                    Text("上から順に実行されます")
+                }
+                Section(header: Text("押し始めのアクション")){
+                    Button{
+                        self.addTarget = .start
+                        self.bottomSheetShown = true
+                    } label: {
+                        HStack{
+                            Image(systemName: "plus")
+                            Text("アクションを追加")
+                        }
+                    }
+
+                    List{
+                        ForEach($startActions){(action: Binding<EditingCodableActionData>) in
+                            CodableActionEditor(action: action, availableCustards: availableCustards)
+                        }
+                        .onDelete(perform: {startActions.remove(atOffsets: $0)})
+                        .onMove(perform: {startActions.move(fromOffsets: $0, toOffset: $1)})
+                    }
+                }
+                Section(header: Text("押している間のアクション")){
+                    Button{
+                        self.addTarget = .repeat
+                        self.bottomSheetShown = true
+                    } label: {
+                        HStack{
+                            Image(systemName: "plus")
+                            Text("アクションを追加")
+                        }
+                    }
+
+                    List{
+                        ForEach($repeatActions){(action: Binding<EditingCodableActionData>) in
+                            CodableActionEditor(action: action, availableCustards: availableCustards)
+                        }
+                        .onDelete(perform: {repeatActions.remove(atOffsets: $0)})
+                        .onMove(perform: {repeatActions.move(fromOffsets: $0, toOffset: $1)})
+                    }
+                }
+
+            }
+            BottomSheetView(
+                isOpen: self.$bottomSheetShown,
+                maxHeight: geometry.size.height * 0.7
+            ) {
+                let press: (CodableActionData) -> () = { action in
+                    add(new: action)
+                    bottomSheetShown = false
+                }
+                Form{
+                    Section(header: Text("基本")){
+                        Button("タブの移動"){
+                            press(.moveTab(.system(.user_japanese)))
+                        }
+                        Button("タブバーの表示"){
+                            press(.toggleTabBar)
+                        }
+                        Button("カーソル移動"){
+                            press(.moveCursor(-1))
+                        }
+                        Button("文字の入力"){
+                            press(.input("😁"))
+                        }
+                        Button("文字の削除"){
+                            press(.delete(1))
+                        }
+                    }
+                    Section(header: Text("高度")){
+                        Button("文頭まで削除"){
+                            press(.smartDeleteDefault)
+                        }
+                        Button("入力の確定"){
+                            press(.complete)
+                        }
+                        Button("Capslock"){
+                            press(.toggleCapslockState)
+                        }
+                        Button("カーソルバーの表示"){
+                            press(.toggleCursorBar)
+                        }
+                        Button("キーボードを閉じる"){
+                            press(.dismissKeyboard)
+                        }
+                    }
+                }
+                .foregroundColor(.primary)
+            }
+        }
+        .onChange(of: startActions){value in
+            self.data.start = value.map{$0.data}
+        }
+        .onChange(of: repeatActions){value in
+            self.data.repeat = value.map{$0.data}
+        }
+        .navigationBarTitle(Text("動作の編集"), displayMode: .inline)
+        .navigationBarItems(trailing: editButton)
+        .environment(\.editMode, $editMode)
+    }
+
+    private var editButton: some View {
+        Button{
+            switch editMode{
+            case .inactive:
+                editMode = .active
+            case .active, .transient:
+                editMode = .inactive
+            @unknown default:
+                editMode = .inactive
+            }
+        } label: {
+            switch editMode{
+            case .inactive:
+                Text("削除と順番")
+            case .active, .transient:
+                Text("完了")
+            @unknown default:
+                Text("完了")
+            }
+        }
     }
 }

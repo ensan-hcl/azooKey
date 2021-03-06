@@ -20,7 +20,7 @@ struct FlickTabKeyModel: FlickKeyModelProtocol{
     var pressActions: [ActionType] {
         SettingData.shared.flickCustomKeySetting(for: setting).actions
     }
-    var longPressActions: [LongPressActionType] {
+    var longPressActions: LongpressActionType {
         SettingData.shared.flickCustomKeySetting(for: setting).longpressActions
     }
     var labelType: KeyLabelType {
