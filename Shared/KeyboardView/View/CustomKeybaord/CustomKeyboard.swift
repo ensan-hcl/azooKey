@@ -125,7 +125,7 @@ fileprivate extension CustardInterfaceKey {
                 switch variation.type{
                 case let .flick(direction):
                     dictionary[direction] = FlickedKeyModel(
-                        labelType: variation.key.label.keyLabelType,
+                        labelType: variation.key.design.label.keyLabelType,
                         pressActions: variation.key.press_actions.map{$0.actionType},
                         longPressActions: variation.key.longpress_actions.longpressActionType
                     )
@@ -181,7 +181,7 @@ fileprivate extension CustardInterfaceKey {
                 case .flick:
                     break
                 case .qwerty_variation:
-                    array.append((variation.key.label.keyLabelType, variation.key.press_actions.map{$0.actionType}))
+                    array.append((variation.key.design.label.keyLabelType, variation.key.press_actions.map{$0.actionType}))
                 }
             }
 

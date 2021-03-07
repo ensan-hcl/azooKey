@@ -330,6 +330,12 @@ struct CustardKeyDesign: Codable {
     }
 }
 
+/// - バリエーションのキーのデザイン
+/// - design information of key
+struct CustardVariationKeyDesign: Codable {
+    let label: CustardKeyLabelStyle
+}
+
 /// - キーに指定するラベル
 /// - labels on the key
 enum CustardKeyLabelStyle: Codable {
@@ -595,7 +601,7 @@ struct CustardInterfaceVariation: Codable {
 /// - data of variation key
 struct CustardInterfaceVariationKey: Codable {
     /// - label on this variation
-    let label: CustardKeyLabelStyle
+    let design: CustardVariationKeyDesign
 
     /// - actions done when you select this variation. actions are done in order..
     let press_actions: [CodableActionData]
