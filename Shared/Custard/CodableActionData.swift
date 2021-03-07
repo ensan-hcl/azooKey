@@ -227,7 +227,8 @@ enum CodableActionData: Codable {
 }
 
 extension CodableActionData{
-    enum CodingKeys: CodingKey{
+    enum CodingKeys: String, Codable, CodingKey{
+        case action
         case input
         case replace_default
         case replace_last_characters
@@ -245,64 +246,67 @@ extension CodableActionData{
         case dismiss_keyboard
     }
 
+    private var key: CodingKeys {
+        switch self {
+        case .complete: return .complete
+        case .delete: return .delete
+        case .dismissKeyboard: return .dismiss_keyboard
+        case .input: return .input
+        case .moveCursor: return .move_cursor
+        case .moveTab: return .move_tab
+        case .openURL: return .open_url
+        case .replaceDefault: return .replace_default
+        case .replaceLastCharacters: return .replace_last_characters
+        case .smartDelete: return .smart_delete
+        case .smartDeleteDefault: return .smart_delete_default
+        case .smartMoveCursor: return .smart_move_cursor
+        case .toggleCapslockState: return .toggle_capslock_state
+        case .toggleCursorBar: return .toggle_cursor_bar
+        case .toggleTabBar: return .toggle_tab_bar
+        }
+    }
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        //{"action": "action_identifier"}
+        try container.encode(self.key, forKey: .action)
         switch self {
         case let .input(value):
-            try container.encode(value, forKey: .input)
-
-        case .replaceDefault:
-            try container.encode(true, forKey: .replace_default)
+            try container.encode(value, forKey: self.key)
         case let .replaceLastCharacters(value):
-            try container.encode(value, forKey: .replace_last_characters)
-
+            try container.encode(value, forKey: self.key)
         case let .delete(value):
-            try container.encode(value, forKey: .delete)
-        case .smartDeleteDefault:
-            try container.encode(true, forKey: .smart_delete_default)
+            try container.encode(value, forKey: self.key)
         case let .smartDelete(value):
-            try container.encode(value, forKey: .smart_delete)
-
-        case .complete:
-            try container.encode(true, forKey: .complete)
-
+            try container.encode(value, forKey: self.key)
         case let .moveCursor(value):
-            try container.encode(value, forKey: .move_cursor)
+            try container.encode(value, forKey: self.key)
         case let .smartMoveCursor(value):
-            try container.encode(value, forKey: .smart_move_cursor)
-
-        case let .moveTab(destination):
-            try container.encode(destination, forKey: .move_tab)
-
-        case .toggleCursorBar:
-            try container.encode(true, forKey: .toggle_cursor_bar)
-        case .toggleTabBar:
-            try container.encode(true, forKey: .toggle_tab_bar)
-        case .toggleCapslockState:
-            try container.encode(true, forKey: .toggle_capslock_state)
-
-        case .dismissKeyboard:
-            try container.encode(true, forKey: .dismiss_keyboard)
+            try container.encode(value, forKey: self.key)
+        case let .moveTab(value):
+            try container.encode(value, forKey: self.key)
         case let .openURL(value):
-            try container.encode(value, forKey: .open_url)
+            try container.encode(value, forKey: self.key)
+        case .dismissKeyboard, .toggleTabBar, .toggleCursorBar, .toggleCapslockState, .complete, .smartDeleteDefault, .replaceDefault:
+            break
         }
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
+        let actionType = try container.decode(CodingKeys.self, forKey: .action)
+        switch actionType {
+        case .action:
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode CodableActionData: keys are \(container.allKeys)."
+                    debugDescription: "Failed to decode CodableActionData: keys are \(container.allKeys)."
                 )
             )
-        }
-        switch key {
         case .input:
             let value = try container.decode(
                 String.self,
-                forKey: .input
+                forKey: actionType
             )
             self = .input(value)
         case .replace_default:
@@ -310,13 +314,13 @@ extension CodableActionData{
         case .replace_last_characters:
             let value = try container.decode(
                 [String: String].self,
-                forKey: .replace_last_characters
+                forKey: actionType
             )
             self = .replaceLastCharacters(value)
         case .delete:
             let value = try container.decode(
                 Int.self,
-                forKey: .delete
+                forKey: actionType
             )
             self = .delete(value)
         case .smart_delete_default:
@@ -324,7 +328,7 @@ extension CodableActionData{
         case .smart_delete:
             let value = try container.decode(
                 SmartDeleteItem.self,
-                forKey: .smart_delete
+                forKey: actionType
             )
             self = .smartDelete(value)
         case .complete:
@@ -332,19 +336,19 @@ extension CodableActionData{
         case .move_cursor:
             let value = try container.decode(
                 Int.self,
-                forKey: .move_cursor
+                forKey: actionType
             )
             self = .moveCursor(value)
         case .smart_move_cursor:
             let value = try container.decode(
                 SmartMoveCursorItem.self,
-                forKey: .smart_move_cursor
+                forKey: actionType
             )
             self = .smartMoveCursor(value)
         case .move_tab:
             let destination = try container.decode(
                 CodableTabData.self,
-                forKey: .move_tab
+                forKey: actionType
             )
             self = .moveTab(destination)
         case .toggle_cursor_bar:
@@ -358,7 +362,7 @@ extension CodableActionData{
         case .open_url:
             let destination = try container.decode(
                 String.self,
-                forKey: .open_url
+                forKey: actionType
             )
             self = .openURL(destination)
         }

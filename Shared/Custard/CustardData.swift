@@ -399,12 +399,13 @@ extension CustardKeyVariationType{
     }
 
     func encode(to encoder: Encoder) throws {
+        let emptyData = [String: String]()
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case let .flick(flickDirection):
             try container.encode(flickDirection, forKey: .flick)
         case .qwerty_variation:
-            try container.encode(true, forKey: .qwerty_variation)
+            try container.encode(emptyData, forKey: .qwerty_variation)
         }
     }
 
@@ -515,19 +516,20 @@ extension CustardInterfaceSystemKey{
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        let emptyData = [String: String]()
         switch self {
         case .change_keyboard:
-            try container.encode(true, forKey: .change_keyboard)
+            try container.encode(emptyData, forKey: .change_keyboard)
         case .flick_kogaki:
-            try container.encode(true, forKey: .flick_kogaki)
+            try container.encode(emptyData, forKey: .flick_kogaki)
         case .flick_kutoten:
-            try container.encode(true, forKey: .flick_kutoten)
+            try container.encode(emptyData, forKey: .flick_kutoten)
         case .flick_hira_tab:
-            try container.encode(true, forKey: .flick_hira_tab)
+            try container.encode(emptyData, forKey: .flick_hira_tab)
         case .flick_abc_tab:
-            try container.encode(true, forKey: .flick_abc_tab)
+            try container.encode(emptyData, forKey: .flick_abc_tab)
         case .flick_star123_tab:
-            try container.encode(true, forKey: .flick_star123_tab)
+            try container.encode(emptyData, forKey: .flick_star123_tab)
         case let .enter(count):
             try container.encode(count, forKey: .enter)
         }
