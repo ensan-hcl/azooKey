@@ -40,7 +40,7 @@ enum CodableTabData: Codable {
         case qwerty_english
 
         ///qwerty number input tab
-        case qwerty_number
+        case qwerty_numbers
 
         ///qwerty symbols input tab
         case qwerty_symbols
@@ -108,7 +108,7 @@ extension CodableTabData{
                 return .existential(.qwerty_hira)
             case .qwerty_english:
                 return .existential(.qwerty_abc)
-            case .qwerty_number:
+            case .qwerty_numbers:
                 return .existential(.qwerty_number)
             case .qwerty_symbols:
                 return .existential(.qwerty_symbols)

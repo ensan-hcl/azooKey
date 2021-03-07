@@ -320,7 +320,7 @@ extension CodableTabData{
                 return "日本語(ローマ字入力)"
             case .qwerty_english:
                 return "英語(ローマ字入力)"
-            case .qwerty_number:
+            case .qwerty_numbers:
                 return "数字(ローマ字入力)"
             case .qwerty_symbols:
                 return "記号(ローマ字入力)"
@@ -345,7 +345,7 @@ struct AvailableTabPicker: View {
             ("日本語(設定に合わせる)", .system(.user_japanese)),
             ("英語(設定に合わせる)", .system(.user_english)),
             ("記号と数字(フリック入力)", .system(.flick_numbersymbols)),
-            ("数字(ローマ字入力)", .system(.qwerty_number)),
+            ("数字(ローマ字入力)", .system(.qwerty_numbers)),
             ("記号(ローマ字入力)", .system(.qwerty_symbols)),
             ("最後に表示していたタブ", .system(.last_tab)),
             ("日本語(フリック入力)", .system(.flick_japanese)),

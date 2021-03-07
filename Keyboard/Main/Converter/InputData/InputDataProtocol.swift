@@ -33,12 +33,12 @@ extension InputDataProtocol{
         if let data = self as? InputData{
             return data
         }
-        if self is DirectInputData{
+        if let self = self as? DirectInputData{
             if InputData.self == RomanInputData.self{
                 return RomanInputData(self.katakanaString, history: KanaRomanStateHolder(components: [KanaComponent(internalText: self.katakanaString, kana: self.katakanaString, isFreezed: true, escapeRomanKanaConverting: true)]), count: self.count) as! InputData
             }
         }
-        if self is RomanInputData{
+        if let self = self as? RomanInputData{
             if InputData.self == DirectInputData.self{
                 return DirectInputData(self.katakanaString, count: self.count) as! InputData
             }
