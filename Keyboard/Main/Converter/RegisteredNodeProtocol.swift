@@ -105,7 +105,7 @@ extension RegisteredNodeProtocol{
             switch VariableStates.shared.inputStyle{
             case .direct:
                 break
-            case .roman:
+            case .roman2kana:
                 lastClause.ruby = lastClause.ruby.roman2katakana
             }
             lastcandidate.clauses.append((clause: unit, value: self.totalValue))

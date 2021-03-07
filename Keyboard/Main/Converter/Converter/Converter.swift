@@ -255,7 +255,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         if SettingData.shared.bool(for: .englishCandidate){
             switch VariableStates.shared.inputStyle{
             case .direct: break
-            case .roman:
+            case .roman2kana:
                 candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US", penalty: -10))
             }
         }

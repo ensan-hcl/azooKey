@@ -34,7 +34,7 @@ enum InputStyle: String{
     ///入力された文字を直接入力するスタイル
     case direct = "direct"
     ///ローマ字日本語入力とするスタイル
-    case roman = "roman"
+    case roman2kana = "roman"
 }
 
 enum KeyboardLanguage: String, Codable {

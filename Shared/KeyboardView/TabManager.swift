@@ -27,13 +27,13 @@ enum Tab{
         var inputStyle: InputStyle {
             switch self{
             case .qwerty_hira:
-                return .roman
+                return .roman2kana
             case let .custard(custard):
                 switch custard.input_style{
                 case .direct:
                     return .direct
                 case .roman2kana:
-                    return .roman
+                    return .roman2kana
                 }
             default:
                 return .direct

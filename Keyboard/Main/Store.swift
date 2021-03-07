@@ -453,14 +453,14 @@ private final class InputManager{
 
     func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
         switch (beforeStyle, afterStyle){
-        case (.direct, .roman):
+        case (.direct, .roman2kana):
             let stateHolder = KanaRomanStateHolder(components: [KanaComponent(internalText: self.inputtedText, kana: self.inputtedText, isFreezed: true, escapeRomanKanaConverting: true)])
             self.kanaRomanStateHolder = stateHolder
             let converter = RomanConverter()
             converter.translated(from: self.directConverter)
             self._romanConverter = converter
             self._directConverter = nil
-        case (.roman, .direct):
+        case (.roman2kana, .direct):
             let converter = DirectConverter()
             converter.translated(from: self.romanConverter)
             self._directConverter = converter
@@ -483,7 +483,7 @@ private final class InputManager{
         switch VariableStates.shared.inputStyle{
         case .direct:
             return false
-        case .roman:
+        case .roman2kana:
             return true
         }
     }
@@ -520,7 +520,7 @@ private final class InputManager{
             self.inputtedText = String(self.inputtedText.dropFirst(candidate.correspondingCount))
             self.directConverter.setCompletedData(candidate)
 
-        case .roman:
+        case .roman2kana:
             self.romanConverter.updateLearningData(candidate)
             let displayedTextCount = self.kanaRomanStateHolder.complete(candidate.correspondingCount)
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(displayedTextCount))
@@ -581,7 +581,7 @@ private final class InputManager{
             actions = self.directConverter.getApporopriateActions(_candidate)
             let candidate = _candidate.withActions(actions)
             self.directConverter.updateLearningData(candidate)
-        case .roman:
+        case .roman2kana:
             actions = self.romanConverter.getApporopriateActions(_candidate)
 
             let candidate = _candidate.withActions(actions)
@@ -602,7 +602,7 @@ private final class InputManager{
             switch VariableStates.shared.inputStyle{
             case .direct:
                 break
-            case .roman:
+            case .roman2kana:
                 if isRomanKanaInputMode{
                     kanaRomanStateHolder.insert(text, leftSideText: "")
                 }else{
@@ -648,7 +648,7 @@ private final class InputManager{
             self.proxy.insertText(text)
             self.cursorPosition += text.count
 
-        case .roman:
+        case .roman2kana:
             if isRomanKanaInputMode{
                 let roman2hiragana = kanaRomanStateHolder.insert(text, leftSideText: leftSideText)
                 self.inputtedText = roman2hiragana.result + rightSideText
@@ -686,7 +686,7 @@ private final class InputManager{
         }
         //削除を実行する
         self.proxy.deleteForward(count: count)
-        if VariableStates.shared.inputStyle == .roman{
+        if VariableStates.shared.inputStyle == .roman2kana{
             //ステートホルダーを調整する
             self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition+count))
         }
@@ -724,7 +724,7 @@ private final class InputManager{
         }
         //削除を実行する
         self.proxy.deleteBackward(count: count)
-        if VariableStates.shared.inputStyle == .roman{
+        if VariableStates.shared.inputStyle == .roman2kana{
             //ステートホルダーを調整する
             self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition))
         }
@@ -1051,7 +1051,7 @@ private final class InputManager{
                 case .direct:
                     let inputData = DirectInputData(String(input_hira))
                     result = self.directConverter.requestCandidates(inputData, N_best: 10)
-                case .roman:
+                case .roman2kana:
                     let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
                     let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
                     let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US

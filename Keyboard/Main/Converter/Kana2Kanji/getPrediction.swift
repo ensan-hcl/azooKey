@@ -59,7 +59,7 @@ extension Kana2Kanji{
         switch VariableStates.shared.inputStyle{
         case .direct:
             dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: lastRuby)
-        case .roman:
+        case .roman2kana:
             let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
             let roman: Substring = lastRuby.suffix(lastRuby.count - ruby.count)
             if !roman.isEmpty{

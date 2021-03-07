@@ -30,7 +30,7 @@ extension LatticeNodeProtocol{
         switch VariableStates.shared.inputStyle{
         case .direct:
             break
-        case .roman:
+        case .roman2kana:
             result.forEach{
                 $0.lastClause?.ruby = $0.lastClause?.ruby.roman2katakana ?? ""
             }
