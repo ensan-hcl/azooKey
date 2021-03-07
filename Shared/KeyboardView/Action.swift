@@ -13,7 +13,7 @@ enum ActionType{
     case input(String)          //テキストの入力
     case delete(Int)            //テキストの削除
     case smoothDelete           //テキストの一括削除
-    case smartDelete(SmartDeleteItem)
+    case smartDelete(ScanItem)
 
     case deselectAndUseAsInputting   //選択を解除して編集中とみなす
     //取り込み関係
@@ -21,7 +21,7 @@ enum ActionType{
     case restoreSelectedTextIfNeeded        //選択部分の一時保存したデータを取り出して代入する
     //カーソル関係
     case moveCursor(Int)
-    case smartMoveCursor(SmartMoveCursorItem)
+    case smartMoveCursor(ScanItem)
 
     case toggleShowMoveCursorView
 
