@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var isPresented = true
 
     @State private var messageManager = MessageManager()
+    @State private var showWalkthrough = false
 
     var body: some View {
         ZStack{
@@ -55,8 +56,18 @@ struct ContentView: View {
                     }
                     .tag(3)
             }
+            /*
+            .sheet(isPresented: $showWalkthrough){
+                CustomizeTabWalkthroughView(isShowing: $showWalkthrough)
+            }
+             */
             .fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()
+            }
+            .onChange(of: selection){value in
+                if value == 2{
+                    self.showWalkthrough = true
+                }
             }
             ForEach(messageManager.necessaryMessages, id: \.id){data in
                 if messageManager.requireShow(data.id){

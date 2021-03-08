@@ -22,7 +22,7 @@ struct EnableAzooKeyViewHeader: View {
                         .font(font)
                 }
                 Text(text)
-                    .font(Font.system(.title))
+                    .font(Font.system(.title).bold())
             }
             .multilineTextAlignment(.leading)
             .padding(.vertical)
@@ -45,20 +45,22 @@ struct EnableAzooKeyViewText: View {
             }
             Text(text)
         }
+        .lineLimit(nil)
+        .fixedSize(horizontal: false, vertical: true)
         .multilineTextAlignment(.leading)
     }
 }
 
 struct EnableAzooKeyViewButton: View {
     enum Style{
-        case emphisized, normal
+        case emphasized, destructive
     }
     private let text: LocalizedStringKey
     private let systemName: String?
     private let style: Style
     private let action: () -> Void
     
-    init(_ text: LocalizedStringKey, systemName: String? = nil, style: Style = .normal, action: @escaping () -> Void){
+    init(_ text: LocalizedStringKey, systemName: String? = nil, style: Style = .emphasized, action: @escaping () -> Void){
         self.text = text
         self.systemName = systemName
         self.style = style
@@ -66,25 +68,26 @@ struct EnableAzooKeyViewButton: View {
     }
 
     var body: some View {
-        let button = Button(action: {
-            self.action()
-        }, label: {
-            if let systemName = systemName{
-                Image(systemName: systemName)
+        let width = UIScreen.main.bounds.width
+            Button{
+                action()
+            }label: {
+                HStack{
+                    if let systemName = systemName{
+                        Image(systemName: systemName)
+                            .font(Font.body.bold())
+                    }
+                    Text(text)
+                        .bold()
+                }
+                .padding()
+                .frame(width: width*0.9)
+                .foregroundColor(.background)
+                .background(
+                    RoundedRectangle(cornerRadius: width / 4.8 * 0.17)
+                        .fill(self.style == .emphasized ? Color.blue : Color.red)
+                )
             }
-            Text(text)
-        })
-        .padding()
-        .cornerRadius(5)
-
-        Group{
-            switch self.style{
-            case .normal:
-                button
-            case .emphisized:
-                button.border(Color(.blue), width: 2)
-            }
-        }
     }
 }
 

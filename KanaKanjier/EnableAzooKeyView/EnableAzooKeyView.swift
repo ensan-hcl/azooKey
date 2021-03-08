@@ -33,7 +33,7 @@ struct EnableAzooKeyView: View {
                             }
                             EnableAzooKeyViewText("azooKeyを使う前に、iPhoneのキーボードのリストにazooKeyを追加する必要があります", with: "exclamationmark.triangle.fill")
                             CenterAlignedView{
-                                EnableAzooKeyViewButton("手順を見る", systemName: "arrowtriangle.right.fill", style: .emphisized){
+                                EnableAzooKeyViewButton("手順を見る", systemName: "arrowtriangle.right.fill"){
                                     self.step = .append
                                 }
                             }
@@ -52,7 +52,7 @@ struct EnableAzooKeyView: View {
                             EnableAzooKeyViewImage("initSettingAzooKeySwitchImage-hand")
                             EnableAzooKeyViewText("このアプリを再び開いてください", with: "arrow.turn.down.left")
                             CenterAlignedView{
-                                EnableAzooKeyViewButton("追加する", systemName: "plus.circle", style: .emphisized){
+                                EnableAzooKeyViewButton("追加する", systemName: "plus.circle"){
                                     if let url = URL(string: UIApplication.openSettingsURLString) {
                                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                                     }
@@ -60,7 +60,7 @@ struct EnableAzooKeyView: View {
                             }
                             EnableAzooKeyViewText("この設定をしないとキーボードが使えません", with: "exclamationmark.triangle.fill")
                             CenterAlignedView{
-                                EnableAzooKeyViewButton("閉じる", systemName: "xmark"){
+                                EnableAzooKeyViewButton("閉じる", systemName: "xmark", style: .destructive){
                                     Store.variableSection.requireFirstOpenView = false
                                 }
                             }
@@ -80,7 +80,7 @@ struct EnableAzooKeyView: View {
                             Divider()
                             EnableAzooKeyViewText("設定は「設定タブ」でいつでも変えられます", with: "gearshape")
                             CenterAlignedView{
-                                EnableAzooKeyViewButton("完了", systemName: "checkmark", style: .emphisized){
+                                EnableAzooKeyViewButton("完了", systemName: "checkmark"){
                                     self.step = .finish
                                 }
                             }
@@ -96,7 +96,7 @@ struct EnableAzooKeyView: View {
                             if showDoneMessage{
                                 EnableAzooKeyViewText("azooKeyが開かれました！", with: "checkmark")
                                 CenterAlignedView{
-                                    EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill", style: .emphisized){
+                                    EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill"){
                                         Store.variableSection.requireFirstOpenView = false
                                     }
                                 }
@@ -106,9 +106,11 @@ struct EnableAzooKeyView: View {
                             TextField("キーボードを開く", text: $text).textFieldStyle(RoundedBorderTextFieldStyle())
                             EnableAzooKeyViewImage("initSettingGlobeTapImage")
                             EnableAzooKeyViewText("azooKeyをお楽しみください！", with: "star.fill")
-                            CenterAlignedView{
-                                EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill", style: .emphisized){
-                                    Store.variableSection.requireFirstOpenView = false
+                            if !showDoneMessage{
+                                CenterAlignedView{
+                                    EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill"){
+                                        Store.variableSection.requireFirstOpenView = false
+                                    }
                                 }
                             }
                         }
@@ -132,8 +134,9 @@ struct EnableAzooKeyView: View {
                 }
                 .id(0)
             }
-
         }
+        .animation(.interactiveSpring(), value: step)
+        .animation(.spring(), value: showDoneMessage)
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             if Store.shared.isKeyboardActivated{
                 self.step = .setting
