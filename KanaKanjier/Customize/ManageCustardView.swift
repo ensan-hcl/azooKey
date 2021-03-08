@@ -63,15 +63,21 @@ final class ImportedCustardData: ObservableObject {
 
     func process(data: Data) -> [Custard]? {
         self.processState = .processFile
-        if let custard = try? JSONDecoder().decode(Custard.self, from: data) {
+        do{
+            let custard = try JSONDecoder().decode(Custard.self, from: data)
             self.processState = .none
             self.custards = [custard]
             return [custard]
+        }catch{
+            debug(error)
         }
-        if let custards = try? JSONDecoder().decode([Custard].self, from: data) {
+        do{
+            let custards = try JSONDecoder().decode([Custard].self, from: data)
             self.processState = .none
             self.custards = custards
             return custards
+        }catch{
+            debug(error)
         }
         self.failureData = .invalidFile
         self.downloadedData = nil

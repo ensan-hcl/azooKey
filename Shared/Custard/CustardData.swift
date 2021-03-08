@@ -418,7 +418,7 @@ public enum CustardKeyLabelStyle: Codable {
 public extension CustardKeyLabelStyle{
     enum CodingKeys: CodingKey{
         case text
-        case systemImage
+        case system_image
     }
 
     func encode(to encoder: Encoder) throws {
@@ -427,7 +427,7 @@ public extension CustardKeyLabelStyle{
         case let .text(value):
             try container.encode(value, forKey: .text)
         case let .systemImage(value):
-            try container.encode(value, forKey: .systemImage)
+            try container.encode(value, forKey: .system_image)
         }
     }
 
@@ -448,10 +448,10 @@ public extension CustardKeyLabelStyle{
                 forKey: .text
             )
             self = .text(value)
-        case .systemImage:
+        case .system_image:
             let value = try container.decode(
                 String.self,
-                forKey: .systemImage
+                forKey: .system_image
             )
             self = .systemImage(value)
         }
