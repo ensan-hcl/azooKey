@@ -169,7 +169,7 @@ extension CustardInterfaceLayout{
 
 /// - 画面内でのキーの位置を決める指定子
 /// - the specifier of key's position in screen
-enum CustardKeyPositionSpecifier: Codable, Hashable {
+enum CustardKeyPositionSpecifier: Hashable {
     /// - gridFitのレイアウトを利用した際のキーの位置指定子
     /// - position specifier when you use grid fit layout
     case grid_fit(GridFitPositionSpecifier)
@@ -180,57 +180,18 @@ enum CustardKeyPositionSpecifier: Codable, Hashable {
 }
 
 extension CustardKeyPositionSpecifier {
+    private enum ValueType{
+        case grid_fit, grid_scroll
+    }
+
     func hash(into hasher: inout Hasher) {
         switch self {
         case let .grid_fit(value):
-            hasher.combine(CodingKeys.grid_fit)
+            hasher.combine(ValueType.grid_fit)
             hasher.combine(value)
         case let .grid_scroll(value):
-            hasher.combine(CodingKeys.grid_scroll)
+            hasher.combine(ValueType.grid_scroll)
             hasher.combine(value)
-        }
-    }
-}
-
-extension CustardKeyPositionSpecifier{
-    enum CodingKeys: CodingKey{
-        case grid_fit
-        case grid_scroll
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case let .grid_fit(value):
-            try container.encode(value, forKey: .grid_fit)
-        case let .grid_scroll(value):
-            try container.encode(value, forKey: .grid_scroll)
-        }
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode CustardKeyPositionSpecifier."
-                )
-            )
-        }
-        switch key {
-        case .grid_fit:
-            let value = try container.decode(
-                GridFitPositionSpecifier.self,
-                forKey: .grid_fit
-            )
-            self = .grid_fit(value)
-        case .grid_scroll:
-            let value = try container.decode(
-                GridScrollPositionSpecifier.self,
-                forKey: .grid_scroll
-            )
-            self = .grid_scroll(value)
         }
     }
 }
@@ -303,18 +264,91 @@ extension CustardInterface {
         case keys
     }
 
+    private struct Element: Codable{
+        internal init(specifier: CustardKeyPositionSpecifier, key: CustardInterfaceKey) {
+            self.specifier = specifier
+            self.key = key
+        }
+
+        let specifier: CustardKeyPositionSpecifier
+        let key: CustardInterfaceKey
+
+        enum KeyType: String, Codable {
+            case custom, system
+        }
+
+        enum SpecifierType: String, Codable {
+            case grid_fit, grid_scroll
+        }
+
+        enum CodingKeys: CodingKey {
+            case specifier_type
+            case specifier
+            case key_type
+            case key
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            switch self.specifier{
+            case let .grid_fit(value):
+                try container.encode(SpecifierType.grid_fit, forKey: .specifier_type)
+                try container.encode(value, forKey: .specifier)
+            case let .grid_scroll(value):
+                try container.encode(SpecifierType.grid_scroll, forKey: .specifier_type)
+                try container.encode(value, forKey: .specifier)
+            }
+            switch self.key{
+            case let .system(value):
+                try container.encode(KeyType.system, forKey: .key_type)
+                try container.encode(value, forKey: .key)
+            case let .custom(value):
+                try container.encode(KeyType.custom, forKey: .key_type)
+                try container.encode(value, forKey: .key)
+            }
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+
+            let specifierType = try container.decode(SpecifierType.self, forKey: .specifier_type)
+            switch specifierType{
+            case .grid_fit:
+                let specifier = try container.decode(GridFitPositionSpecifier.self, forKey: .specifier)
+                self.specifier = .grid_fit(specifier)
+            case .grid_scroll:
+                let specifier = try container.decode(GridScrollPositionSpecifier.self, forKey: .specifier)
+                self.specifier = .grid_scroll(specifier)
+            }
+
+            let keyType = try container.decode(KeyType.self, forKey: .key_type)
+            switch keyType{
+            case .system:
+                let key = try container.decode(CustardInterfaceSystemKey.self, forKey: .key)
+                self.key = .system(key)
+            case .custom:
+                let key = try container.decode(CustardInterfaceCustomKey.self, forKey: .key)
+                self.key = .custom(key)
+            }
+        }
+    }
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(key_style, forKey: .key_style)
         try container.encode(key_layout, forKey: .key_layout)
-        try container.encode(CodableDictionary(keys), forKey: .keys)
+        let elements = self.keys.map{Element(specifier: $0.key, key: $0.value)}
+        try container.encode(elements, forKey: .keys)
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.key_style = try container.decode(CustardInterfaceStyle.self, forKey: .key_style)
         self.key_layout = try container.decode(CustardInterfaceLayout.self, forKey: .key_layout)
-        self.keys = try container.decode(CodableDictionary<CustardKeyPositionSpecifier, CustardInterfaceKey>.self, forKey: .keys).dictionary
+        let elements = try container.decode([Element].self, forKey: .keys)
+        self.keys = elements.reduce(into: [:]){dictionary, element in
+            dictionary[element.specifier] = element.key
+        }
     }
 }
 
@@ -399,52 +433,9 @@ enum CustardKeyVariationType {
 }
 
 /// - key's data in interface
-enum CustardInterfaceKey: Codable {
+enum CustardInterfaceKey {
     case system(CustardInterfaceSystemKey)
     case custom(CustardInterfaceCustomKey)
-}
-
-extension CustardInterfaceKey{
-    enum CodingKeys: CodingKey{
-        case system
-        case custom
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case let .system(value):
-            try container.encode(value, forKey: .system)
-        case let .custom(value):
-            try container.encode(value, forKey: .custom)
-        }
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode CustardInterfaceKey."
-                )
-            )
-        }
-        switch key {
-        case .system:
-            let value = try container.decode(
-                CustardInterfaceSystemKey.self,
-                forKey: .system
-            )
-            self = .system(value)
-        case .custom:
-            let value = try container.decode(
-                CustardInterfaceCustomKey.self,
-                forKey: .custom
-            )
-            self = .custom(value)
-        }
-    }
 }
 
 /// - keys prepared in default
