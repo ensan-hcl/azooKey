@@ -129,7 +129,7 @@ fileprivate extension CustardInterfaceKey {
                         pressActions: variation.key.press_actions.map{$0.actionType},
                         longPressActions: variation.key.longpress_actions.longpressActionType
                     )
-                case .qwerty_variation:
+                case .longpress_variation:
                     break
                 }
             }
@@ -180,7 +180,7 @@ fileprivate extension CustardInterfaceKey {
                 switch variation.type{
                 case .flick:
                     break
-                case .qwerty_variation:
+                case .longpress_variation:
                     array.append((variation.key.design.label.keyLabelType, variation.key.press_actions.map{$0.actionType}))
                 }
             }

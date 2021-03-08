@@ -388,54 +388,14 @@ extension CustardKeyLabelStyle{
 
 /// - キーの変種の種類
 /// - type of key variation
-enum CustardKeyVariationType: Codable {
+enum CustardKeyVariationType {
     /// - variation of flick
     /// - warning: when you use qwerty key style, this type of variation would be ignored.
     case flick(FlickDirection)
 
-    /// - variation of qwerty selectable when keys were longoressed
+    /// - variation selectable when keys were longoressed, especially used in qwerty-like style keyboard.
     /// - warning: when you use flick key style, this type of variation would be ignored.
-    case qwerty_variation
-}
-
-extension CustardKeyVariationType{
-    enum CodingKeys: CodingKey{
-        case flick
-        case qwerty_variation
-    }
-
-    func encode(to encoder: Encoder) throws {
-        let emptyData = [String: String]()
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case let .flick(flickDirection):
-            try container.encode(flickDirection, forKey: .flick)
-        case .qwerty_variation:
-            try container.encode(emptyData, forKey: .qwerty_variation)
-        }
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode CustardKeyVariationType."
-                )
-            )
-        }
-        switch key {
-        case .flick:
-            let direction = try container.decode(
-                FlickDirection.self,
-                forKey: .flick
-            )
-            self = .flick(direction)
-        case .qwerty_variation:
-            self = .qwerty_variation
-        }
-    }
+    case longpress_variation
 }
 
 /// - key's data in interface
@@ -590,12 +550,50 @@ struct CustardInterfaceCustomKey: Codable {
 }
 
 /// - variation of key, includes flick keys and selectable variations in qwerty keyboard.
-struct CustardInterfaceVariation: Codable {
+struct CustardInterfaceVariation {
     /// - type of the variation
     let type: CustardKeyVariationType
 
     /// - data of variation
     let key: CustardInterfaceVariationKey
+}
+
+extension CustardInterfaceVariation: Codable {
+    enum CodingKeys: CodingKey{
+        case type
+        case direction
+        case key
+    }
+
+    enum ValueType: String, Codable {
+        case flick
+        case longpress_variation
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.key, forKey: .key)
+        switch self.type{
+        case let .flick(value):
+            try container.encode(ValueType.flick, forKey: .type)
+            try container.encode(value, forKey: .direction)
+        case .longpress_variation:
+            try container.encode(ValueType.longpress_variation, forKey: .type)
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.key = try container.decode(CustardInterfaceVariationKey.self, forKey: .key)
+        let valueType = try container.decode(ValueType.self, forKey: .type)
+        switch valueType{
+        case .flick:
+            let direction = try container.decode(FlickDirection.self, forKey: .direction)
+            self.type = .flick(direction)
+        case .longpress_variation:
+            self.type = .longpress_variation
+        }
+    }
 }
 
 /// - data of variation key
