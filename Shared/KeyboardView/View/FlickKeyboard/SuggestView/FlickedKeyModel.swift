@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-enum FlickDirection: String, CustomStringConvertible, Codable {
+public enum FlickDirection: String, CustomStringConvertible, Codable {
     case left
     case top
     case right
     case bottom
     
-    var description: String {
+    public var description: String {
         switch self{
         case .left:
             return "左"

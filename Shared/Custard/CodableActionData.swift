@@ -10,14 +10,14 @@ import Foundation
 import SwiftUI
 
 /// - Tab specifier
-enum CodableTabData: Codable {
+public enum CodableTabData: Codable, Hashable {
     /// - tabs prepared by default
     case system(SystemTab)
     /// - tabs made as custom tabs.
     case custom(String)
 
     /// - system tabs
-    enum SystemTab: String, Codable {
+    public enum SystemTab: String, Codable {
         ///japanese input tab. the layout and input style depends on user's setting
         case user_japanese
 
@@ -50,7 +50,7 @@ enum CodableTabData: Codable {
     }
 }
 
-extension CodableTabData{
+public extension CodableTabData{
     enum CodingKeys: CodingKey{
         case type
         case destination
@@ -122,7 +122,7 @@ extension CodableTabData{
     }
 }
 
-extension CodableTabData: Hashable {
+public extension CodableTabData {
     static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs){
         case let(.system(ltab), .system(rtab)):
@@ -146,18 +146,23 @@ extension CodableTabData: Hashable {
     }
 }
 
-struct ScanItem: Codable, Hashable {
+public struct ScanItem: Codable, Hashable {
+    public init(targets: [String], direction: ScanItem.Direction) {
+        self.targets = targets
+        self.direction = direction
+    }
+
     let targets: [String]
     let direction: Direction
 
-    enum Direction: String, Codable {
+    public enum Direction: String, Codable {
         case forward
         case backward
     }
 }
 /// - アクション
 /// - actions done in key pressing
-enum CodableActionData: Codable {
+public enum CodableActionData: Codable, Hashable {
     /// - input action specified character
     case input(String)
 
@@ -208,7 +213,7 @@ enum CodableActionData: Codable {
     case openURL(String)    //iOSのバージョンによって消える可能性がある
 }
 
-extension CodableActionData{
+public extension CodableActionData{
     enum CodingKeys: CodingKey {
         case type
     }
@@ -387,7 +392,7 @@ extension CodableActionData{
     }
 }
 
-extension CodableActionData: Hashable {
+public extension CodableActionData {
     static func == (lhs: CodableActionData, rhs: CodableActionData) -> Bool {
         switch (lhs, rhs){
         case let (.input(l), .input(r)):
@@ -479,9 +484,9 @@ extension CodableActionData: Hashable {
     }
 }
 
-struct CodableLongpressActionData: Codable, Equatable {
-    static let none = CodableLongpressActionData()
-    internal init(start: [CodableActionData] = [], repeat: [CodableActionData] = []) {
+public struct CodableLongpressActionData: Codable, Equatable {
+    public static let none = CodableLongpressActionData()
+    public init(start: [CodableActionData] = [], repeat: [CodableActionData] = []) {
         self.start = start
         self.repeat = `repeat`
     }
