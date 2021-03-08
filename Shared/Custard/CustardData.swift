@@ -461,7 +461,10 @@ enum CustardInterfaceSystemKey: Codable {
 }
 
 extension CustardInterfaceSystemKey{
-    enum CodingKeys: CodingKey{
+    enum CodingKeys: CodingKey {
+        case type, size
+    }
+    private enum ValueType: String, Codable {
         case change_keyboard
         case enter
         case flick_kogaki
@@ -471,43 +474,34 @@ extension CustardInterfaceSystemKey{
         case flick_star123_tab
     }
 
+    private var valueType: ValueType {
+        switch self{
+        case .change_keyboard: return .change_keyboard
+        case .enter(_): return .enter
+        case .flick_kogaki: return .flick_kogaki
+        case .flick_kutoten: return .flick_kutoten
+        case .flick_hira_tab: return .flick_hira_tab
+        case .flick_abc_tab: return .flick_abc_tab
+        case .flick_star123_tab: return .flick_star123_tab
+        }
+    }
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        let emptyData = [String: String]()
+        try container.encode(self.valueType, forKey: .type)
         switch self {
-        case .change_keyboard:
-            try container.encode(emptyData, forKey: .change_keyboard)
-        case .flick_kogaki:
-            try container.encode(emptyData, forKey: .flick_kogaki)
-        case .flick_kutoten:
-            try container.encode(emptyData, forKey: .flick_kutoten)
-        case .flick_hira_tab:
-            try container.encode(emptyData, forKey: .flick_hira_tab)
-        case .flick_abc_tab:
-            try container.encode(emptyData, forKey: .flick_abc_tab)
-        case .flick_star123_tab:
-            try container.encode(emptyData, forKey: .flick_star123_tab)
         case let .enter(count):
-            try container.encode(count, forKey: .enter)
+            try container.encode(count, forKey: .size)
+        default: break
         }
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode CustardInterfaceSystemKey."
-                )
-            )
-        }
-        switch key {
+        let type = try container.decode(ValueType.self, forKey: .type)
+        switch type {
         case .enter:
-            let value = try container.decode(
-                Int.self,
-                forKey: .enter
-            )
+            let value = try container.decode(Int.self, forKey: .size)
             self = .enter(value)
         case .change_keyboard:
             self = .change_keyboard
