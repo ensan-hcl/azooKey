@@ -81,7 +81,7 @@ enum CustardInterfaceStyle: String, Codable {
 
     /// - 長押しで他の文字を選べるキー
     /// - keys with variations
-    case qwerty
+    case pc_style
 }
 
 
@@ -424,10 +424,10 @@ extension CustardKeyLabelStyle{
 /// - type of key variation
 enum CustardKeyVariationType {
     /// - variation of flick
-    /// - warning: when you use qwerty key style, this type of variation would be ignored.
+    /// - warning: when you use pc style, this type of variation would be ignored.
     case flick(FlickDirection)
 
-    /// - variation selectable when keys were longoressed, especially used in qwerty-like style keyboard.
+    /// - variation selectable when keys were longoressed, especially used in pc style keyboard.
     /// - warning: when you use flick key style, this type of variation would be ignored.
     case longpress_variation
 }
@@ -534,7 +534,7 @@ struct CustardInterfaceCustomKey: Codable {
     let variations: [CustardInterfaceVariation]
 }
 
-/// - variation of key, includes flick keys and selectable variations in qwerty keyboard.
+/// - variation of key, includes flick keys and selectable variations in pc style keyboard.
 struct CustardInterfaceVariation {
     /// - type of the variation
     let type: CustardKeyVariationType

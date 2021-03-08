@@ -36,7 +36,7 @@ fileprivate extension CustardInterfaceStyle{
         switch self{
         case .flick:
             return .flick
-        case .qwerty:
+        case .pc_style:
             return .qwerty
         }
     }
@@ -271,7 +271,7 @@ struct CustomKeyboardView: View {
                         }
                     }
                 }
-            case .qwerty:
+            case .pc_style:
                 let models = custard.interface.qwertyKeyModels
                 VStack(spacing: tabDesign.verticalSpacing){
                     ForEach(0..<value.height, id: \.self){y in

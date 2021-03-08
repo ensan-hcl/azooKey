@@ -50,7 +50,7 @@ enum Tab{
                 switch custard.interface.key_style{
                 case .flick:
                     return .flick
-                case .qwerty:
+                case .pc_style:
                     return .qwerty
                 }
             }
