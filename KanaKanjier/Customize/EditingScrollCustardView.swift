@@ -23,8 +23,8 @@ fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection{
 struct EditingScrollCustardView: View {
     private let base: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
         .grid_scroll(0): .system(.change_keyboard),
-        .grid_scroll(1): .custom(.init(design: .init(label: .systemImage("list.dash"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
-        .grid_scroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
+        .grid_scroll(1): .custom(.init(design: .init(label: .system_image("list.dash"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
+        .grid_scroll(2): .custom(.init(design: .init(label: .system_image("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
         .grid_scroll(3): .system(.enter(1)),
     ]
 
@@ -159,7 +159,7 @@ struct EditingScrollCustardView: View {
             language: .none,
             input_style: .direct,
             interface: .init(
-                key_style: .flick,
+                key_style: .tenkey_style,
                 key_layout: .gridScroll(.init(direction: data.direction, columnKeyCount: columnKeyCount, screenRowKeyCount: rowKeyCount)),
                 keys: keys
             )

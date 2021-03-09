@@ -86,7 +86,7 @@ public struct Custard: Codable {
 public enum CustardInterfaceStyle: String, Codable {
     /// - フリック可能なキー
     /// - flickable keys
-    case flick
+    case tenkey_style
 
     /// - 長押しで他の文字を選べるキー
     /// - keys with variations
@@ -463,7 +463,7 @@ public extension CustardKeyLabelStyle{
 public enum CustardKeyVariationType {
     /// - variation of flick
     /// - warning: when you use pc style, this type of variation would be ignored.
-    case flick(FlickDirection)
+    case flick_variation(FlickDirection)
 
     /// - variation selectable when keys were longoressed, especially used in pc style keyboard.
     /// - warning: when you use flick key style, this type of variation would be ignored.
@@ -601,7 +601,7 @@ public extension CustardInterfaceVariation {
     }
 
     enum ValueType: String, Codable {
-        case flick
+        case flick_variation
         case longpress_variation
     }
 
@@ -609,8 +609,8 @@ public extension CustardInterfaceVariation {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.key, forKey: .key)
         switch self.type{
-        case let .flick(value):
-            try container.encode(ValueType.flick, forKey: .type)
+        case let .flick_variation(value):
+            try container.encode(ValueType.flick_variation, forKey: .type)
             try container.encode(value, forKey: .direction)
         case .longpress_variation:
             try container.encode(ValueType.longpress_variation, forKey: .type)
@@ -622,9 +622,9 @@ public extension CustardInterfaceVariation {
         self.key = try container.decode(CustardInterfaceVariationKey.self, forKey: .key)
         let valueType = try container.decode(ValueType.self, forKey: .type)
         switch valueType{
-        case .flick:
+        case .flick_variation:
             let direction = try container.decode(FlickDirection.self, forKey: .direction)
-            self.type = .flick(direction)
+            self.type = .flick_variation(direction)
         case .longpress_variation:
             self.type = .longpress_variation
         }
@@ -707,7 +707,7 @@ public extension Custard{
             language: .undefined,
             input_style: .direct,
             interface: .init(
-                key_style: .flick,
+                key_style: .tenkey_style,
                 key_layout: .gridScroll(.init(direction: .vertical, columnKeyCount: 8, screenRowKeyCount: 4.2)),
                 keys: keys
             )

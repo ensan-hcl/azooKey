@@ -14,7 +14,7 @@ fileprivate extension CustardKeyLabelStyle{
         switch self{
         case let .text(value):
             return .text(value)
-        case let .systemImage(value):
+        case let .system_image(value):
             return .image(value)
         }
     }
@@ -34,7 +34,7 @@ fileprivate extension CustardInterfaceLayoutScrollValue{
 fileprivate extension CustardInterfaceStyle{
     var keyboardLayout: KeyboardLayout {
         switch self{
-        case .flick:
+        case .tenkey_style:
             return .flick
         case .pc_style:
             return .qwerty
@@ -123,7 +123,7 @@ fileprivate extension CustardInterfaceKey {
         case let .custom(value):
             let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variations.reduce(into: [:]){dictionary, variation in
                 switch variation.type{
-                case let .flick(direction):
+                case let .flick_variation(direction):
                     dictionary[direction] = FlickedKeyModel(
                         labelType: variation.key.design.label.keyLabelType,
                         pressActions: variation.key.press_actions.map{$0.actionType},
@@ -178,7 +178,7 @@ fileprivate extension CustardInterfaceKey {
         case let .custom(value):
             let variations: [(label: KeyLabelType, actions: [ActionType])] = value.variations.reduce(into: []){array, variation in
                 switch variation.type{
-                case .flick:
+                case .flick_variation:
                     break
                 case .longpress_variation:
                     array.append((variation.key.design.label.keyLabelType, variation.key.press_actions.map{$0.actionType}))
@@ -245,7 +245,7 @@ struct CustomKeyboardView: View {
         switch custard.interface.key_layout{
         case let .gridFit(value):
             switch custard.interface.key_style{
-            case .flick:
+            case .tenkey_style:
                 let models = custard.interface.flickKeyModels
                 ZStack{
                     HStack(spacing: tabDesign.horizontalSpacing){

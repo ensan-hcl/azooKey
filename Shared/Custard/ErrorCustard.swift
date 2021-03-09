@@ -17,7 +17,7 @@ extension Custard{
         language: .undefined,
         input_style: .direct,
         interface: .init(
-            key_style: .flick,
+            key_style: .tenkey_style,
             key_layout: .gridFit(.init(width: 1, height: 6)),
             keys: [
                 .grid_fit(.init(x: 0, y: 0)): .custom(

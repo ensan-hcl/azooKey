@@ -48,7 +48,7 @@ enum Tab{
                 return .qwerty
             case let .custard(custard):
                 switch custard.interface.key_style{
-                case .flick:
+                case .tenkey_style:
                     return .flick
                 case .pc_style:
                     return .qwerty
