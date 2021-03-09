@@ -412,7 +412,7 @@ public struct CustardVariationKeyDesign: Codable {
 /// - labels on the key
 public enum CustardKeyLabelStyle: Codable {
     case text(String)
-    case systemImage(String)
+    case system_image(String)
 }
 
 public extension CustardKeyLabelStyle{
@@ -426,7 +426,7 @@ public extension CustardKeyLabelStyle{
         switch self {
         case let .text(value):
             try container.encode(value, forKey: .text)
-        case let .systemImage(value):
+        case let .system_image(value):
             try container.encode(value, forKey: .system_image)
         }
     }
@@ -453,7 +453,7 @@ public extension CustardKeyLabelStyle{
                 String.self,
                 forKey: .system_image
             )
-            self = .systemImage(value)
+            self = .system_image(value)
         }
     }
 }
@@ -665,7 +665,7 @@ public extension Custard{
             ),
             .grid_scroll(2): .custom(
                 .init(
-                    design: .init(label: .systemImage("list.dash"), color: .special),
+                    design: .init(label: .system_image("list.dash"), color: .special),
                     press_actions: [.toggleTabBar],
                     longpress_actions: .none,
                     variations: []
@@ -681,7 +681,7 @@ public extension Custard{
             ),
             .grid_scroll(4): .custom(
                 .init(
-                    design: .init(label: .systemImage("delete.left"), color: .special),
+                    design: .init(label: .system_image("delete.left"), color: .special),
                     press_actions: [.delete(1)],
                     longpress_actions: .init(repeat: [.delete(1)]),
                     variations: []
