@@ -86,11 +86,11 @@ public struct Custard: Codable {
 public enum CustardInterfaceStyle: String, Codable {
     /// - フリック可能なキー
     /// - flickable keys
-    case tenkey_style
+    case tenkeyStyle = "tenkey_style"
 
     /// - 長押しで他の文字を選べるキー
     /// - keys with variations
-    case pc_style
+    case pcStyle = "pc_style"
 }
 
 /// - インターフェースのレイアウトのスタイルです
@@ -106,7 +106,12 @@ public enum CustardInterfaceLayout: Codable {
 }
 
 public extension CustardInterfaceLayout{
-    enum CodingKeys: CodingKey{
+    enum CodingKeys: CodingKey {
+        case type
+        case row_count, column_count
+        case direction
+    }
+    enum ValueType: String, Codable{
         case grid_fit
         case grid_scroll
     }
@@ -115,55 +120,51 @@ public extension CustardInterfaceLayout{
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case let .gridFit(value):
-            try container.encode(value, forKey: .grid_fit)
+            try container.encode(ValueType.grid_fit, forKey: .type)
+            try container.encode(value.rowCount, forKey: .row_count)
+            try container.encode(value.columnCount, forKey: .column_count)
         case let .gridScroll(value):
-            try container.encode(value, forKey: .grid_scroll)
+            try container.encode(ValueType.grid_scroll, forKey: .type)
+            try container.encode(value.direction, forKey: .direction)
+            try container.encode(value.rowCount, forKey: .row_count)
+            try container.encode(value.columnCount, forKey: .column_count)
         }
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(codingPath: container.codingPath, debugDescription: "Unabled to decode CustardInterfaceLayout.")
-            )
-        }
-        switch key {
+        let type = try container.decode(ValueType.self, forKey: .type)
+        let rowCount = try container.decode(Double.self, forKey: .row_count)
+        let columnCount = try container.decode(Double.self, forKey: .column_count)
+        switch type {
         case .grid_fit:
-            let value = try container.decode(
-                CustardInterfaceLayoutGridValue.self,
-                forKey: .grid_fit
-            )
-            self = .gridFit(value)
+            self = .gridFit(.init(width: Int(rowCount), height: Int(columnCount)))
         case .grid_scroll:
-            let value = try container.decode(
-                CustardInterfaceLayoutScrollValue.self,
-                forKey: .grid_scroll
-            )
-            self = .gridScroll(value)
+            let direction = try container.decode(CustardInterfaceLayoutScrollValue.ScrollDirection.self, forKey: .direction)
+            self = .gridScroll(.init(direction: direction, rowCount: rowCount, columnCount: columnCount))
         }
     }
 }
 
 public struct CustardInterfaceLayoutGridValue: Codable {
     public init(width: Int, height: Int) {
-        self.width = width
-        self.height = height
+        self.rowCount = width
+        self.columnCount = height
     }
 
     /// - 横方向に配置するキーの数
     /// - number of keys placed horizontally
-    let width: Int
+    let rowCount: Int
     /// - 縦方向に配置するキーの数
     /// - number of keys placed vertically
-    let height: Int
+    let columnCount: Int
 }
 
 public struct CustardInterfaceLayoutScrollValue: Codable {
-    public init(direction: CustardInterfaceLayoutScrollValue.ScrollDirection, columnKeyCount: Int, screenRowKeyCount: Double) {
+    public init(direction: ScrollDirection, rowCount: Double, columnCount: Double) {
         self.direction = direction
-        self.columnKeyCount = columnKeyCount
-        self.screenRowKeyCount = screenRowKeyCount
+        self.rowCount = rowCount
+        self.columnCount = columnCount
     }
 
     /// - スクロールの方向
@@ -172,11 +173,11 @@ public struct CustardInterfaceLayoutScrollValue: Codable {
 
     /// - 一列に配置するキーの数
     /// - number of keys in scroll normal direction
-    let columnKeyCount: Int
+    let rowCount: Double
 
     /// - 画面内に収まるスクロール方向のキーの数
     /// - number of keys in screen in scroll direction
-    let screenRowKeyCount: Double
+    let columnCount: Double
 
     /// - direction of scroll
     public enum ScrollDirection: String, Codable{
@@ -190,11 +191,11 @@ public struct CustardInterfaceLayoutScrollValue: Codable {
 public enum CustardKeyPositionSpecifier: Hashable {
     /// - gridFitのレイアウトを利用した際のキーの位置指定子
     /// - position specifier when you use grid fit layout
-    case grid_fit(GridFitPositionSpecifier)
+    case gridFit(GridFitPositionSpecifier)
 
     /// - gridScrollのレイアウトを利用した際のキーの位置指定子
     /// - position specifier when you use grid scroll layout
-    case grid_scroll(GridScrollPositionSpecifier)
+    case gridScroll(GridScrollPositionSpecifier)
 }
 
 public extension CustardKeyPositionSpecifier {
@@ -204,10 +205,10 @@ public extension CustardKeyPositionSpecifier {
 
     func hash(into hasher: inout Hasher) {
         switch self {
-        case let .grid_fit(value):
+        case let .gridFit(value):
             hasher.combine(ValueType.grid_fit)
             hasher.combine(value)
-        case let .grid_scroll(value):
+        case let .gridScroll(value):
             hasher.combine(ValueType.grid_scroll)
             hasher.combine(value)
         }
@@ -266,19 +267,19 @@ public extension GridScrollPositionSpecifier {
 /// - interface
 public struct CustardInterface: Codable {
     public init(key_style: CustardInterfaceStyle, key_layout: CustardInterfaceLayout, keys: [CustardKeyPositionSpecifier : CustardInterfaceKey]) {
-        self.key_style = key_style
-        self.key_layout = key_layout
+        self.keyStyle = key_style
+        self.keyLayout = key_layout
         self.keys = keys
     }
 
     /// - キーのスタイル
     /// - style of keys
     /// - warning: Currently when you use gird scroll. layout, key style would be ignored.
-    let key_style: CustardInterfaceStyle
+    let keyStyle: CustardInterfaceStyle
 
     /// - キーのレイアウト
     /// - layout of keys
-    let key_layout: CustardInterfaceLayout
+    let keyLayout: CustardInterfaceLayout
 
     /// - キーの辞書
     /// - dictionary of keys
@@ -320,10 +321,10 @@ public extension CustardInterface {
         func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             switch self.specifier{
-            case let .grid_fit(value):
+            case let .gridFit(value):
                 try container.encode(SpecifierType.grid_fit, forKey: .specifier_type)
                 try container.encode(value, forKey: .specifier)
-            case let .grid_scroll(value):
+            case let .gridScroll(value):
                 try container.encode(SpecifierType.grid_scroll, forKey: .specifier_type)
                 try container.encode(value, forKey: .specifier)
             }
@@ -344,10 +345,10 @@ public extension CustardInterface {
             switch specifierType{
             case .grid_fit:
                 let specifier = try container.decode(GridFitPositionSpecifier.self, forKey: .specifier)
-                self.specifier = .grid_fit(specifier)
+                self.specifier = .gridFit(specifier)
             case .grid_scroll:
                 let specifier = try container.decode(GridScrollPositionSpecifier.self, forKey: .specifier)
-                self.specifier = .grid_scroll(specifier)
+                self.specifier = .gridScroll(specifier)
             }
 
             let keyType = try container.decode(KeyType.self, forKey: .key_type)
@@ -364,16 +365,16 @@ public extension CustardInterface {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(key_style, forKey: .key_style)
-        try container.encode(key_layout, forKey: .key_layout)
+        try container.encode(keyStyle, forKey: .key_style)
+        try container.encode(keyLayout, forKey: .key_layout)
         let elements = self.keys.map{Element(specifier: $0.key, key: $0.value)}
         try container.encode(elements, forKey: .keys)
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.key_style = try container.decode(CustardInterfaceStyle.self, forKey: .key_style)
-        self.key_layout = try container.decode(CustardInterfaceLayout.self, forKey: .key_layout)
+        self.keyStyle = try container.decode(CustardInterfaceStyle.self, forKey: .key_style)
+        self.keyLayout = try container.decode(CustardInterfaceLayout.self, forKey: .key_layout)
         let elements = try container.decode([Element].self, forKey: .keys)
         self.keys = elements.reduce(into: [:]){dictionary, element in
             dictionary[element.specifier] = element.key
@@ -412,7 +413,7 @@ public struct CustardVariationKeyDesign: Codable {
 /// - labels on the key
 public enum CustardKeyLabelStyle: Codable {
     case text(String)
-    case system_image(String)
+    case systemImage(String)
 }
 
 public extension CustardKeyLabelStyle{
@@ -426,7 +427,7 @@ public extension CustardKeyLabelStyle{
         switch self {
         case let .text(value):
             try container.encode(value, forKey: .text)
-        case let .system_image(value):
+        case let .systemImage(value):
             try container.encode(value, forKey: .system_image)
         }
     }
@@ -453,7 +454,7 @@ public extension CustardKeyLabelStyle{
                 String.self,
                 forKey: .system_image
             )
-            self = .system_image(value)
+            self = .systemImage(value)
         }
     }
 }
@@ -463,11 +464,11 @@ public extension CustardKeyLabelStyle{
 public enum CustardKeyVariationType {
     /// - variation of flick
     /// - warning: when you use pc style, this type of variation would be ignored.
-    case flick_variation(FlickDirection)
+    case flickVariation(FlickDirection)
 
     /// - variation selectable when keys were longoressed, especially used in pc style keyboard.
     /// - warning: when you use flick key style, this type of variation would be ignored.
-    case longpress_variation
+    case longpressVariation
 }
 
 /// - key's data in interface
@@ -495,7 +496,6 @@ public enum CustardInterfaceSystemKey: Codable {
     case flick_abc_tab
     /// - flick number and symbols tab
     case flick_star123_tab
-
 }
 
 public extension CustardInterfaceSystemKey{
@@ -609,10 +609,10 @@ public extension CustardInterfaceVariation {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.key, forKey: .key)
         switch self.type{
-        case let .flick_variation(value):
+        case let .flickVariation(value):
             try container.encode(ValueType.flick_variation, forKey: .type)
             try container.encode(value, forKey: .direction)
-        case .longpress_variation:
+        case .longpressVariation:
             try container.encode(ValueType.longpress_variation, forKey: .type)
         }
     }
@@ -624,9 +624,9 @@ public extension CustardInterfaceVariation {
         switch valueType{
         case .flick_variation:
             let direction = try container.decode(FlickDirection.self, forKey: .direction)
-            self.type = .flick_variation(direction)
+            self.type = .flickVariation(direction)
         case .longpress_variation:
-            self.type = .longpress_variation
+            self.type = .longpressVariation
         }
     }
 }
@@ -654,8 +654,8 @@ public extension Custard{
         let hieroglyphs = Array(String.UnicodeScalarView((UInt32(0x13000)...UInt32(0x133FF)).compactMap(UnicodeScalar.init))).map(String.init)
 
         var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
-            .grid_scroll(0): .system(.change_keyboard),
-            .grid_scroll(1): .custom(
+            .gridScroll(0): .system(.change_keyboard),
+            .gridScroll(1): .custom(
                 .init(
                     design: .init(label: .text("←"), color: .special),
                     press_actions: [.moveCursor(-1)],
@@ -663,15 +663,15 @@ public extension Custard{
                     variations: []
                 )
             ),
-            .grid_scroll(2): .custom(
+            .gridScroll(2): .custom(
                 .init(
-                    design: .init(label: .system_image("list.dash"), color: .special),
+                    design: .init(label: .systemImage("list.dash"), color: .special),
                     press_actions: [.toggleTabBar],
                     longpress_actions: .none,
                     variations: []
                 )
             ),
-            .grid_scroll(3): .custom(
+            .gridScroll(3): .custom(
                 .init(
                     design: .init(label: .text("→"), color: .special),
                     press_actions: [.moveCursor(1)],
@@ -679,9 +679,9 @@ public extension Custard{
                     variations: []
                 )
             ),
-            .grid_scroll(4): .custom(
+            .gridScroll(4): .custom(
                 .init(
-                    design: .init(label: .system_image("delete.left"), color: .special),
+                    design: .init(label: .systemImage("delete.left"), color: .special),
                     press_actions: [.delete(1)],
                     longpress_actions: .init(repeat: [.delete(1)]),
                     variations: []
@@ -690,7 +690,7 @@ public extension Custard{
         ]
 
         hieroglyphs.indices.forEach{
-            keys[.grid_scroll(GridScrollPositionSpecifier(5+$0))] = .custom(
+            keys[.gridScroll(GridScrollPositionSpecifier(5+$0))] = .custom(
                 .init(
                     design: .init(label: .text(hieroglyphs[$0]), color: .normal),
                     press_actions: [.input(hieroglyphs[$0])],
@@ -707,8 +707,8 @@ public extension Custard{
             language: .undefined,
             input_style: .direct,
             interface: .init(
-                key_style: .tenkey_style,
-                key_layout: .gridScroll(.init(direction: .vertical, columnKeyCount: 8, screenRowKeyCount: 4.2)),
+                key_style: .tenkeyStyle,
+                key_layout: .gridScroll(.init(direction: .vertical, rowCount: 8, columnCount: 4.2)),
                 keys: keys
             )
         )

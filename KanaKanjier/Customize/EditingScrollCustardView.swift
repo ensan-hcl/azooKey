@@ -22,16 +22,16 @@ fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection{
 }
 struct EditingScrollCustardView: View {
     private let base: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
-        .grid_scroll(0): .system(.change_keyboard),
-        .grid_scroll(1): .custom(.init(design: .init(label: .system_image("list.dash"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
-        .grid_scroll(2): .custom(.init(design: .init(label: .system_image("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
-        .grid_scroll(3): .system(.enter(1)),
+        .gridScroll(0): .system(.change_keyboard),
+        .gridScroll(1): .custom(.init(design: .init(label: .systemImage("list.dash"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
+        .gridScroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
+        .gridScroll(3): .system(.enter(1)),
     ]
 
     @Environment(\.presentationMode) private var presentationMode
 
     @State private var showPreview = false
-    @State private var editingItem = UserMadeGridScrollCustard(tabName: "", direction: .vertical, columnCount: "", screenRowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
+    @State private var editingItem = UserMadeGridScrollCustard(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
     @Binding private var manager: CustardManager
 
     init(manager: Binding<CustardManager>, editingItem: UserMadeGridScrollCustard? = nil){
@@ -62,35 +62,18 @@ struct EditingScrollCustardView: View {
                                 }
                                 .pickerStyle(SegmentedPickerStyle())
                             }
-                            switch editingItem.direction{
-                            case .horizontal:
-                                HStack{
-                                    Text("縦方向キー数")
-                                    Spacer()
-                                    TextField("縦方向キー数", text: $editingItem.columnCount)
-                                        .keyboardType(.numberPad)
-                                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                                }
-                                HStack{
-                                    Text("横方向キー数")
-                                    Spacer()
-                                    TextField("横方向キー数", text: $editingItem.screenRowCount).keyboardType(.numberPad)
-                                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                                }
-                            case .vertical:
-                                HStack{
-                                    Text("横方向キー数")
-                                    Spacer()
-                                    TextField("横方向キー数", text: $editingItem.columnCount)
-                                        .keyboardType(.numberPad)
-                                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                                }
-                                HStack{
-                                    Text("縦方向キー数")
-                                    Spacer()
-                                    TextField("縦方向キー数", text: $editingItem.screenRowCount).keyboardType(.numberPad)
-                                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                                }
+                            HStack{
+                                Text("縦方向キー数")
+                                Spacer()
+                                TextField("縦方向キー数", text: $editingItem.rowCount)
+                                    .keyboardType(.numberPad)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                            }
+                            HStack{
+                                Text("横方向キー数")
+                                Spacer()
+                                TextField("横方向キー数", text: $editingItem.columnCount).keyboardType(.numberPad)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
                             }
                             Toggle(isOn: $editingItem.addTabBarAutomatically){
                                 Text("自動的にタブバーに追加")
@@ -147,11 +130,11 @@ struct EditingScrollCustardView: View {
                 continue
             }
             let label = target.count > 1 ? target[1] : input
-            keys[.grid_scroll(.init(keys.count))] = .custom(.init(design: .init(label: .text(label), color: .normal), press_actions: [.input(input)], longpress_actions: .none, variations: []))
+            keys[.gridScroll(.init(keys.count))] = .custom(.init(design: .init(label: .text(label), color: .normal), press_actions: [.input(input)], longpress_actions: .none, variations: []))
         }
 
-        let columnKeyCount = max(Int(data.columnCount) ?? 8, 1)
-        let rowKeyCount = max(Double(data.screenRowCount) ?? 4, 1)
+        let rowCount = max(Double(data.rowCount) ?? 8, 1)
+        let columnCount = max(Double(data.columnCount) ?? 4, 1)
         return Custard(
             custard_version: .v1_0,
             identifier: data.tabName.isEmpty ? "new_tab" : data.tabName,
@@ -159,8 +142,8 @@ struct EditingScrollCustardView: View {
             language: .none,
             input_style: .direct,
             interface: .init(
-                key_style: .tenkey_style,
-                key_layout: .gridScroll(.init(direction: data.direction, columnKeyCount: columnKeyCount, screenRowKeyCount: rowKeyCount)),
+                key_style: .tenkeyStyle,
+                key_layout: .gridScroll(.init(direction: data.direction, rowCount: rowCount, columnCount: columnCount)),
                 keys: keys
             )
         )

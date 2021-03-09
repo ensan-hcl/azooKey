@@ -47,10 +47,10 @@ enum Tab{
             case .qwerty_hira, .qwerty_abc, .qwerty_number, .qwerty_symbols:
                 return .qwerty
             case let .custard(custard):
-                switch custard.interface.key_style{
-                case .tenkey_style:
+                switch custard.interface.keyStyle{
+                case .tenkeyStyle:
                     return .flick
-                case .pc_style:
+                case .pcStyle:
                     return .qwerty
                 }
             }
