@@ -57,6 +57,14 @@ final class TabDependentDesign{
         return keyHeight
     }
 
+    var keysWidth: CGFloat {
+        keyViewWidth * horizontalKeyCount + horizontalSpacing * (horizontalKeyCount-1)
+    }
+
+    var keysHeight: CGFloat {
+        keyViewHeight * verticalKeyCount + verticalSpacing * (verticalKeyCount-1)
+    }
+
     ///This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
     var keyViewSize: CGSize {
         CGSize(width: keyViewWidth, height: keyViewHeight)
@@ -88,6 +96,14 @@ final class TabDependentDesign{
             coefficient = 9/10
         }
         return (screenWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1) * coefficient
+    }
+
+    func keyViewWidth(widthCount: Int) -> CGFloat {
+        keyViewWidth * CGFloat(widthCount) + horizontalSpacing * CGFloat(widthCount - 1)
+    }
+
+    func keyViewHeight(heightCount: Int) -> CGFloat {
+        keyViewHeight * CGFloat(heightCount) + verticalSpacing * CGFloat(heightCount - 1)
     }
 
     func flickEnterKeySize(_ count: Int) -> CGSize {

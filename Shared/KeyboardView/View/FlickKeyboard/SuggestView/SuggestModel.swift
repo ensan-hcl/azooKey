@@ -40,15 +40,6 @@ struct SuggestModel{
     func setSuggestState(_ state: SuggestState){
         self.variableSection.suggestState = state
     }
-    
-    var keySizeType: FlickKeySizeType {
-        switch self.keyType{
-        case .normal, .custom, .aA:
-            return .normal
-        case let .enter(count):
-            return .enter(count)
-        }
-    }
 }
 
 final class SuggestModelVariableSection: ObservableObject{

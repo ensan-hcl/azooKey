@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+
 enum SuggestState{
     case oneDirection(FlickDirection)
     case all
@@ -27,34 +28,34 @@ struct SuggestView: View {
     @ObservedObject private var modelVariableSection: SuggestModelVariableSection
     @Environment(\.themeEnvironment) private var theme
     private let tabDesign: TabDependentDesign
+    private let size: CGSize
 
-    init(model: SuggestModel, tabDesign: TabDependentDesign){
+    init(model: SuggestModel, tabDesign: TabDependentDesign, size: CGSize){
         self.model = model
         self.modelVariableSection = model.variableSection
         self.tabDesign = tabDesign
+        self.size = size
     }
      
     private func neededApeearView(direction: FlickDirection) -> some View {
-        let keySize = CGSize(width: model.keySizeType.width(design: tabDesign), height:model.keySizeType.height(design: tabDesign))
         if case .oneDirection(direction) = self.modelVariableSection.suggestState{
             if let model = self.model.flickModels[direction]{
-                return model.getSuggestView(size: keySize, isPointed: true, theme: theme)
+                return model.getSuggestView(size: size, isPointed: true, theme: theme)
             }else{
-                return FlickedKeyModel.zero.getSuggestView(size: keySize, isHidden: true, theme: theme)
+                return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
             }
         }
         if case .all = self.modelVariableSection.suggestState{
             if let model = self.model.flickModels[direction]{
-                return model.getSuggestView(size: keySize, theme: theme)
+                return model.getSuggestView(size: size, theme: theme)
             }else{
-                return FlickedKeyModel.zero.getSuggestView(size: keySize, isHidden: true, theme: theme)
+                return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
             }
         }
-        return FlickedKeyModel.zero.getSuggestView(size: keySize, isHidden: true, theme: theme)
+        return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
     }
 
     var body: some View {
-        let keySize = CGSize(width: model.keySizeType.width(design: tabDesign), height:model.keySizeType.height(design: tabDesign))
         VStack(spacing: tabDesign.verticalSpacing){
             if self.modelVariableSection.suggestState.isActive{
                 self.neededApeearView(direction: .top)
@@ -66,13 +67,13 @@ struct SuggestView: View {
                             strokeContent: theme.borderColor.color,
                             lineWidth: CGFloat(theme.borderWidth)
                         )
-                        .frame(width: keySize.width, height: keySize.height)
+                        .frame(width: size.width, height: size.height)
                     self.neededApeearView(direction: .right)
                 }
                 self.neededApeearView(direction: .bottom)
             }
         }
-        .frame(width: keySize.width, height: keySize.height)
+        .frame(width: size.width, height: size.height)
         .allowsHitTesting(false)
     }
 }

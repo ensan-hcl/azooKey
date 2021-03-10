@@ -33,7 +33,15 @@ struct QwertyKeyboardView: View{
             ForEach(self.verticalIndices, id: \.self){(v: Int) in
                 HStack(spacing: tabDesign.horizontalSpacing){
                     ForEach(self.horizontalIndices(v: v), id: \.self){(h: Int) in
-                        QwertyKeyView(model: self.keyModels[v][h], tabDesign: tabDesign)
+                        let model = self.keyModels[v][h]
+                        QwertyKeyView(
+                            model: model,
+                            tabDesign: tabDesign,
+                            size: CGSize(
+                                width: model.keySizeType.width(design: tabDesign),
+                                height: model.keySizeType.height(design: tabDesign)
+                            )
+                        )
                     }
                 }
             }

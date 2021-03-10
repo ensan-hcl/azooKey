@@ -16,7 +16,7 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
 
     let needSuggestView: Bool = false
     let variationsModel = VariationsModel([])
-    let keySizeType: QwertyKeySizeType = .space(.default)
+    let keySizeType: QwertyKeySizeType = .space
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .normal
 
     init(){}

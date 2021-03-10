@@ -57,15 +57,46 @@ fileprivate extension CustardInterface{
         }
     }
 
-    var flickKeyModels: [CustardKeyPositionSpecifier: FlickKeyModelProtocol] {
-        self.keys.mapValues{
-            $0.flickKeyModel
+    enum KeyPosition: Hashable {
+        case gridFit(x: Int, y: Int)
+        case gridScroll(index: Int)
+
+        enum ValueType: Hashable {
+            case gridFit, gridScroll
+        }
+
+        func hash(into hasher: inout Hasher) {
+            switch self{
+            case let .gridFit(x: x, y: y):
+                hasher.combine(ValueType.gridFit)
+                hasher.combine(x)
+                hasher.combine(y)
+            case let .gridScroll(index: index):
+                hasher.combine(ValueType.gridScroll)
+                hasher.combine(index)
+            }
         }
     }
 
-    var qwertyKeyModels: [CustardKeyPositionSpecifier: QwertyKeyModelProtocol] {
-        self.keys.mapValues{
-            $0.qwertyKeyModel(layout: self.keyLayout)
+    var flickKeyModels: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
+        return self.keys.reduce(into: [:]){dictionary, value in
+            switch value.key{
+            case let .gridFit(data):
+                dictionary[.gridFit(x: data.x, y: data.y)] = (value.value.flickKeyModel, data.width, data.height)
+            case let .gridScroll(data):
+                dictionary[.gridScroll(index: data.index)] = (value.value.flickKeyModel, 1, 1)
+            }
+        }
+    }
+
+    var qwertyKeyModels: [KeyPosition: (model: QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
+        return self.keys.reduce(into: [:]){dictionary, value in
+            switch value.key{
+            case let .gridFit(data):
+                dictionary[.gridFit(x: data.x, y: data.y)] = (value.value.qwertyKeyModel(layout: self.keyLayout), .unit(width: data.width, height: data.height))
+            case let .gridScroll(data):
+                dictionary[.gridScroll(index: data.index)] = (value.value.qwertyKeyModel(layout: self.keyLayout), .unit(width: 1, height: 1))
+            }
         }
     }
 }
@@ -107,8 +138,8 @@ fileprivate extension CustardInterfaceKey {
             switch value {
             case .change_keyboard:
                 return FlickChangeKeyboardModel.shared
-            case let .enter(count):
-                return FlickEnterKeyModel(keySizeType: .enter(count))
+            case .enter:
+                return FlickEnterKeyModel()
             case .flick_kogaki:
                 return FlickKogakiKeyModel.shared
             case .flick_kutoten:
@@ -162,8 +193,8 @@ fileprivate extension CustardInterfaceKey {
                     changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .tabBar)
                 }
                 return changeKeyboardKey
-            case let .enter(count):
-                return QwertyEnterKeyModel(keySizeType: .enter(.count(count)))
+            case .enter:
+                return QwertyEnterKeyModel(keySizeType: .enter)
             case .flick_kogaki:
                 return  convertToQwertyKeyModel(model: FlickKogakiKeyModel.shared)
             case .flick_kutoten:
@@ -211,7 +242,7 @@ fileprivate extension CustardInterfaceKey {
             case .flick_kutoten:
                 return SimpleKeyModel(keyType: .functional, keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
             case .flick_hira_tab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
+                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
             case .flick_abc_tab:
                 return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
             case .flick_star123_tab:
@@ -241,6 +272,22 @@ struct CustomKeyboardView: View {
         self.tabDesign = custard.interface.tabDesign
     }
 
+    private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
+        let width = tabDesign.keyViewWidth(widthCount: width)
+        let height = tabDesign.keyViewHeight(heightCount: height)
+        let dx = width * 0.5 + tabDesign.keyViewWidth * CGFloat(x) + tabDesign.horizontalSpacing * CGFloat(x)
+        let dy = height * 0.5 + tabDesign.keyViewHeight * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
+        return (CGPoint(x: dx, y: dy), CGSize(width: width, height: height))
+    }
+
+    private func qwertyKeyData(x: Int, y: Int, size: QwertyKeySizeType) -> (position: CGPoint, size: CGSize) {
+        let width = size.width(design: tabDesign)
+        let height = size.height(design: tabDesign)
+        let dx = width * 0.5 + tabDesign.keyViewWidth * CGFloat(x) + tabDesign.horizontalSpacing * CGFloat(x)
+        let dy = height * 0.5 + tabDesign.keyViewHeight * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
+        return (CGPoint(x: dx, y: dy), CGSize(width: width, height: height))
+    }
+
     var body: some View {
         switch custard.interface.keyLayout{
         case let .gridFit(value):
@@ -248,42 +295,49 @@ struct CustomKeyboardView: View {
             case .tenkeyStyle:
                 let models = custard.interface.flickKeyModels
                 ZStack{
-                    HStack(spacing: tabDesign.horizontalSpacing){
-                        ForEach(0..<value.rowCount, id: \.self){x in
-                            VStack(spacing: tabDesign.verticalSpacing){
-                                ForEach(0..<value.columnCount, id: \.self){y in
-                                    if let model = models[.gridFit(GridFitPositionSpecifier(x: x, y: y))]{
-                                        FlickKeyView(model: model, tabDesign: tabDesign)
-                                    }
-                                }
+                    ForEach(0..<value.rowCount, id: \.self){x in
+                        ForEach(0..<value.columnCount, id: \.self){y in
+                            if let data = models[.gridFit(x: x, y: y)]{
+                                let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
+                                FlickKeyView(model: data.model, size: info.size)
+                                    .position(x: info.position.x, y: info.position.y)
                             }
                         }
-                    }
-                    HStack(spacing: tabDesign.horizontalSpacing){
-                        ForEach(0..<value.rowCount, id: \.self){x in
-                            VStack(spacing: tabDesign.verticalSpacing){
-                                ForEach(0..<value.columnCount, id: \.self){y in
-                                    if let model = models[.gridFit(GridFitPositionSpecifier(x: x, y: y))]{
-                                        SuggestView(model: model.suggestModel, tabDesign: tabDesign)
-                                    }
-                                }
+                    }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+                    ForEach(0..<value.rowCount, id: \.self){x in
+                        ForEach(0..<value.columnCount, id: \.self){y in
+                            if let data = models[.gridFit(x: x, y: y)]{
+                                let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
+                                SuggestView(model: data.model.suggestModel, tabDesign: tabDesign, size: info.size)
+                                    .position(x: info.position.x, y: info.position.y)
                             }
                         }
-                    }
+                    }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
                 }
             case .pcStyle:
                 let models = custard.interface.qwertyKeyModels
-                VStack(spacing: tabDesign.verticalSpacing){
-                    ForEach(0..<value.columnCount, id: \.self){y in
-                        HStack(spacing: tabDesign.horizontalSpacing){
-                            ForEach(0..<value.rowCount, id: \.self){x in
-                                if let model = models[.gridFit(GridFitPositionSpecifier(x: x, y: y))]{
-                                    QwertyKeyView(model: model, tabDesign: tabDesign)
-                                }
-                            }
+                ForEach(0..<value.columnCount, id: \.self){y in
+                    ForEach(0..<value.rowCount, id: \.self){x in
+                        if let data = models[.gridFit(x: x, y: y)]{
+                            let info = qwertyKeyData(x: x, y: y, size: data.sizeType)
+                            QwertyKeyView(model: data.model, tabDesign: tabDesign, size: info.size)
+                                .position(x: info.position.x, y: info.position.y)
                         }
                     }
-                }
+                }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+            /*
+             VStack(spacing: tabDesign.verticalSpacing){
+             ForEach(0..<value.columnCount, id: \.self){y in
+             HStack(spacing: tabDesign.horizontalSpacing){
+             ForEach(0..<value.rowCount, id: \.self){x in
+             if let model = models[.gridFit(GridFitPositionSpecifier(x: x, y: y))]{
+             QwertyKeyView(model: model, tabDesign: tabDesign)
+             }
+             }
+             }
+             }
+             }
+             */
             }
         case let .gridScroll(value):
             let height = Design.shared.keyboardHeight - (Design.shared.resultViewHeight + 12)

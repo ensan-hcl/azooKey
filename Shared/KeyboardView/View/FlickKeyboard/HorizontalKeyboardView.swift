@@ -64,7 +64,15 @@ struct HorizontalFlickKeyboardView: View {
                         VStack(spacing: tabDesign.verticalSpacing){
                             //IDを明示する必要がある。
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> FlickKeyView in
-                                return FlickKeyView(model: self.keyModels[h][v], tabDesign: tabDesign)
+                                let model = self.keyModels[h][v]
+                                let size: CGSize = {
+                                    if model is FlickEnterKeyModel{
+                                        return CGSize(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight(heightCount: 2))
+                                    }else{
+                                        return tabDesign.keyViewSize
+                                    }
+                                }()
+                                FlickKeyView(model: model, size: size)
                             }
                         }
                     }
@@ -73,7 +81,15 @@ struct HorizontalFlickKeyboardView: View {
                     ForEach(self.horizontalIndices, id: \.self){h in
                         VStack(spacing: tabDesign.verticalSpacing){
                             ForEach(self.verticalIndices(h: h), id: \.self){(v: Int) -> SuggestView in
-                                return SuggestView(model: self.keyModels[h][v].suggestModel, tabDesign: tabDesign)
+                                let model = self.keyModels[h][v]
+                                let size: CGSize = {
+                                    if model is FlickEnterKeyModel{
+                                        return CGSize(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight(heightCount: 2))
+                                    }else{
+                                        return tabDesign.keyViewSize
+                                    }
+                                }()
+                                SuggestView(model: model.suggestModel, tabDesign: tabDesign, size: size)
                             }
                         }
                     }
