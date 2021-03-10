@@ -138,15 +138,15 @@ public extension CustardInterfaceLayout{
         let columnCount = try container.decode(Double.self, forKey: .column_count)
         switch type {
         case .grid_fit:
-            self = .gridFit(.init(width: Int(rowCount), height: Int(columnCount)))
+            self = .gridFit(.init(width: abs(Int(rowCount)), height: abs(Int(columnCount))))
         case .grid_scroll:
             let direction = try container.decode(CustardInterfaceLayoutScrollValue.ScrollDirection.self, forKey: .direction)
-            self = .gridScroll(.init(direction: direction, rowCount: rowCount, columnCount: columnCount))
+            self = .gridScroll(.init(direction: direction, rowCount: abs(rowCount), columnCount: abs(columnCount)))
         }
     }
 }
 
-public struct CustardInterfaceLayoutGridValue: Codable {
+public struct CustardInterfaceLayoutGridValue {
     public init(width: Int, height: Int) {
         self.rowCount = width
         self.columnCount = height
@@ -160,7 +160,7 @@ public struct CustardInterfaceLayoutGridValue: Codable {
     let columnCount: Int
 }
 
-public struct CustardInterfaceLayoutScrollValue: Codable {
+public struct CustardInterfaceLayoutScrollValue {
     public init(direction: ScrollDirection, rowCount: Double, columnCount: Double) {
         self.direction = direction
         self.rowCount = rowCount
@@ -252,8 +252,8 @@ public struct GridFitPositionSpecifier: Codable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.x = try container.decode(Int.self, forKey: .x)
         self.y = try container.decode(Int.self, forKey: .y)
-        self.width = (try? container.decode(Int.self, forKey: .width)) ?? 1
-        self.height = (try? container.decode(Int.self, forKey: .height)) ?? 1
+        self.width = abs((try? container.decode(Int.self, forKey: .width)) ?? 1)
+        self.height = abs((try? container.decode(Int.self, forKey: .height)) ?? 1)
     }
 }
 
