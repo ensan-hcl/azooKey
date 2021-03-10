@@ -34,16 +34,14 @@ final class TabDependentDesign{
         self.orientation = orientation
     }
 
-    ///This property calculate suitable width for normal keyView.
+    ///screenWidthとhorizontalKeyCountに依存
     var keyViewWidth: CGFloat {
         let coefficient: CGFloat
         switch (layout, orientation){
-        case (.flick, .vertical):
-            coefficient = 5/5.6
+        case (_, .vertical):
+            coefficient = 5/(5.1 + horizontalKeyCount/10)
         case (.flick, .horizontal):
             coefficient = 5/9
-        case (.qwerty, .vertical):
-            coefficient = 10/12.2
         case (.qwerty, .horizontal):
             coefficient = 10/13
         }
@@ -83,15 +81,14 @@ final class TabDependentDesign{
         }
     }
 
+    ///screenWidthとhorizontalKeyCountとkeyViewWidthに依存
     var horizontalSpacing: CGFloat {
         let coefficient: CGFloat
         switch (layout, orientation){
-        case (.flick, .vertical):
-            coefficient = 4/5
+        case (_, .vertical):
+            coefficient = (5+horizontalKeyCount)/(7.5+horizontalKeyCount)
         case (.flick, .horizontal):
             coefficient = 1/6
-        case (.qwerty, .vertical):
-            coefficient = 366/427
         case (.qwerty, .horizontal):
             coefficient = 9/10
         }
