@@ -103,10 +103,6 @@ final class TabDependentDesign{
         keyViewHeight * CGFloat(heightCount) + verticalSpacing * CGFloat(heightCount - 1)
     }
 
-    func flickEnterKeySize(_ count: Int) -> CGSize {
-        CGSize(width: keyViewWidth, height: keyViewHeight * CGFloat(count) + verticalSpacing * CGFloat(count-1))
-    }
-
     var qwertySpaceKeyWidth: CGFloat {
         keyViewWidth * 5
     }
