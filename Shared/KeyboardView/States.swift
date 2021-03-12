@@ -85,11 +85,17 @@ final class SemiStaticStates{
 
     /// - do not  consider using screenHeight
     private(set) var screenWidth: CGFloat = .zero
+    private(set) var screenHeight: CGFloat = .zero
     func setScreenSize(size: CGSize){
         if self.screenWidth == size.width{
             return
         }
-        self.screenWidth = size.width
+        let width = size.width
+        self.screenWidth = width
         VariableStates.shared.setOrientation(size.width<size.height ? .vertical : .horizontal)
+        VariableStates.shared.interfaceSize.width = width
+        let height = Design.shared.keyboardHeight()
+        self.screenHeight = height
+        VariableStates.shared.interfaceSize.height = height
     }
 }

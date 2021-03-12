@@ -24,7 +24,7 @@ enum ActionType{
     case smartMoveCursor(ScanItem)
 
     case toggleShowMoveCursorView
-
+    case toggleResizingMode
     //変換関連
     case enter
     case changeCharacterType    //濁点、半濁点、小さい文字
@@ -66,6 +66,8 @@ extension ActionType: Equatable{
         case (.toggleTabBar, .toggleTabBar):
             return true
         case (.toggleShowMoveCursorView,.toggleShowMoveCursorView):
+            return true
+        case (.toggleResizingMode, .toggleResizingMode):
             return true
         case (.enter, .enter):
             return true

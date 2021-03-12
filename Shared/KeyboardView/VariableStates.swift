@@ -22,6 +22,7 @@ final class VariableStates: ObservableObject{
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published var keyboardLayout: KeyboardLayout = .flick
 
+    @Published var interfaceSize: CGSize = .zero
     @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
@@ -33,6 +34,8 @@ final class VariableStates: ObservableObject{
     @Published var showTabBar = false
 
     @Published var refreshing = true
+
+    @Published var enableResizing = false
 
     func initialize(){
         self.tabManager.initialize()

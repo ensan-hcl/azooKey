@@ -66,10 +66,9 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                 }
                 .padding(.vertical, 3)
                 .padding(.leading, 15)
-
             }
         }
-        .frame(height: Design.shared.keyboardHeight, alignment: .bottom)
+        .frame(height: VariableStates.shared.interfaceSize.height, alignment: .bottom)
     }
 
     private func pressed(data: ResultData<Candidate>){
@@ -88,7 +87,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         let font = UIFont.systemFont(ofSize: Design.fonts.resultViewFontSize+1)
         results.forEach{[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
-            if (curSum + width) < Design.shared.screenWidth{
+            if (curSum + width) < VariableStates.shared.interfaceSize.width{
                 curResult.append(datum)
                 curSum += width
             }else{

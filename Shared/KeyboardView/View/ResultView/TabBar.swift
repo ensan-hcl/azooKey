@@ -42,11 +42,11 @@ struct TabBarView: View{
                                 Image(systemName: image)
                             }
                         }
-                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6, theme: theme))
+                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
                     }
                 }
             }
-        }.frame(height: Design.shared.resultViewHeight)
+        }.frame(height: Design.shared.resultViewHeight())
     }
 }
 

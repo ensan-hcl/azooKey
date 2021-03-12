@@ -51,6 +51,8 @@
 		1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */; };
 		1A3A162C2529671300A5BA4F /* FlickCustomKeySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */; };
 		1A3A16322529712300A5BA4F /* FlickKogakiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */; };
+		1A3ACEF925F9F9AA007E9938 /* ResizingRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */; };
+		1A3ACEFA25F9F9AA007E9938 /* ResizingRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */; };
 		1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */; };
 		1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */; };
 		1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C92500D44B002CAA93 /* ContentView.swift */; };
@@ -2552,6 +2554,7 @@
 		1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderIconView.swift; sourceTree = "<group>"; };
 		1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickCustomKeySetting.swift; sourceTree = "<group>"; };
 		1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKogakiKeyModel.swift; sourceTree = "<group>"; };
+		1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizingRect.swift; sourceTree = "<group>"; };
 		1A3DC1C22500D44A002CAA93 /* azooKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = azooKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -5011,6 +5014,7 @@
 				1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */,
 				1ACE61C2257286E5008078D3 /* Color.swift */,
 				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
+				1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -10158,6 +10162,7 @@
 				1AC031612512129A004CA505 /* Store.swift in Sources */,
 				1AF6798825CEDBAE00F3987B /* SuggestView.swift in Sources */,
 				1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */,
+				1A3ACEF925F9F9AA007E9938 /* ResizingRect.swift in Sources */,
 				1A12E25125C4428D00316009 /* Message.swift in Sources */,
 				1A0E8D7F25EF273600A9BAE5 /* CodableDictionary.swift in Sources */,
 				1ACEEFDE25665F0100899DA2 /* CenterAlignedView.swift in Sources */,
@@ -10393,6 +10398,7 @@
 				1A4623E52524617B00EF5B02 /* LOUDS.swift in Sources */,
 				1AA346872567D8CA00B41A16 /* UserSetting.swift in Sources */,
 				1A3DC21F2500D5F2002CAA93 /* FlickEnterKeyModel.swift in Sources */,
+				1A3ACEFA25F9F9AA007E9938 /* ResizingRect.swift in Sources */,
 				1A64C8BE251315AD00ACD537 /* DicDataStore.swift in Sources */,
 				1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,

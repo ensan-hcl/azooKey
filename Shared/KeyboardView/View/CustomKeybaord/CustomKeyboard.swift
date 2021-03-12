@@ -340,7 +340,7 @@ struct CustomKeyboardView: View {
              */
             }
         case let .gridScroll(value):
-            let height = Design.shared.keyboardHeight - (Design.shared.resultViewHeight + 12)
+            let height = Design.shared.keyboardHeight() - (Design.shared.resultViewHeight() + 12)
             let models = (0..<custard.interface.keys.count).compactMap{custard.interface.keys[.gridScroll(GridScrollPositionSpecifier($0))]}
             switch value.direction{
             case .vertical:

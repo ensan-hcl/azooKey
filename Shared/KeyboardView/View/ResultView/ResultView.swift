@@ -59,7 +59,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                         } label: {
                                             Text(data.candidate.text)
                                         }
-                                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6, theme: theme))
+                                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
                                         .contextMenu{
                                             ResultContextMenuView(text: data.candidate.text)
                                         }
@@ -86,10 +86,10 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                 .font(Design.fonts.iconImageFont(theme: theme))
                                 .frame(height: 18)
                         }
-                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight*0.6, theme: theme))
+                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
                         .padding(.trailing, 10)
                     }
-                }.frame(height: Design.shared.resultViewHeight)
+                }.frame(height: Design.shared.resultViewHeight())
             }
         }
     }

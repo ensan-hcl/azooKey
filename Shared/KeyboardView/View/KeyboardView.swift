@@ -44,7 +44,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
         self.resultModel = resultModel
         self.defaultTab = defaultTab
     }
-
+    @State private var position: CGPoint = .zero
     var body: some View {
         ZStack{
             theme.backgroundColor.color
@@ -55,35 +55,44 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: Design.shared.screenWidth, height: Design.shared.keyboardScreenHeight)
+                                .frame(width: SemiStaticStates.shared.screenWidth, height: Design.shared.keyboardScreenHeight)
                                 .clipped()
                         }
                     }
                 )
-            if isResultViewExpanded{
-                ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
-                    .padding(.bottom, 2)
-            }else{
-                VStack(spacing: 0){
-                    ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
-                        .padding(.vertical, 6)
-                    if variableStates.refreshing{
-                        keyboardView(tab: variableStates.tabManager.currentTab.existential)
-                    }else{
-                        keyboardView(tab: variableStates.tabManager.currentTab.existential)
+            Group{
+                if isResultViewExpanded{
+                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                }else{
+                    VStack(spacing: 0){
+                        ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                            .padding(.vertical, 6)
+                        if variableStates.refreshing{
+                            keyboardView(tab: variableStates.tabManager.currentTab.existential)
+                        }else{
+                            keyboardView(tab: variableStates.tabManager.currentTab.existential)
+                        }
                     }
-                }.padding(.bottom, 2)
+                }
             }
+            .resizingFrame(
+                width: $variableStates.interfaceSize.width,
+                height: $variableStates.interfaceSize.height,
+                position: $position,
+                initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight),
+                enabled: $variableStates.enableResizing
+            )
+            .padding(.bottom, 2)
             if variableStates.isTextMagnifying{
                 LargeTextView()
             }
-            
             ForEach(messageManager.necessaryMessages, id: \.id){data in
                 if messageManager.requireShow(data.id){
                     MessageView(data: data, manager: $messageManager)
                 }
             }
         }
+        .frame(height: Design.shared.keyboardScreenHeight)
     }
 
     func keyboardView(tab: Tab.ExistentialTab) -> some View {

@@ -13,7 +13,7 @@ struct LargeTextView: View {
     @ObservedObject private var variableStates = VariableStates.shared
 
     private var font: Font {
-        Font.system(size: Design.shared.getMaximumTextSize(variableStates.magnifyingText), weight: .regular, design: .serif)
+        Font.system(size: Design.shared.largeTextViewFontSize(variableStates.magnifyingText), weight: .regular, design: .serif)
     }
     var body: some View {
         VStack{
@@ -27,7 +27,7 @@ struct LargeTextView: View {
                 Image(systemName: "xmark")
                 Text("閉じる")
                     .font(.body)
-            }.frame(width: nil, height: Design.shared.keyboardHeight*0.15)
+            }.frame(width: nil, height: Design.shared.keyboardScreenHeight*0.15)
         }
         .background(Color(UIColor.systemBackground))
         .frame(height: Design.shared.keyboardScreenHeight, alignment: .bottom)
