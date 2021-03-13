@@ -83,8 +83,8 @@
 "%@キーボードの種類(現在: %@)" = "%1$@ keyboard layout (current: %2$@)";
 "日本語・英語に対応したカスタムタブを読み込んだ場合、これを選ぶことも可能です" = "If you have imported custom tabs that support Japanese or English, you can choice them as a default keyboard.";
 
-"片手モードを使う" = "Use One-handed mode";
-"片手モードを利用する" = "Use One-handed mode";
+"片手モードを使う" = "Use one-handed mode";
+"片手モードを利用する" = "Use one-handed mode";
 "azooKeyでは片手モードを利用可能です。" = "In azooKey, you can use one-handed mode.";
 "まずタブバーを表示します。変換候補欄を長押しするか記号タブキーを長押しすると表示されます。" = "First, display tab bar. You can display tab bar by longpressing empty candidates space or longpressing symbols tab key.";
 "「片手」をタップします。" = "Tap '片手'.";
