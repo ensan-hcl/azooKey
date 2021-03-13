@@ -19,7 +19,7 @@
 "設定は「設定タブ」でいつでも変えられます" = "You can change settings on Settings tab anytime";
 "azooKeyが使えます！" = "You can use azooKey now!";
 "準備は完了です！" = "Preparation completed!";
-"キーボードの地球儀ボタンを長押しし、azooKeyを選択してください" = "Tap and hold the globe button on keyboard, and select azooKey";
+"キーボードの地球儀ボタンを長押しし、azooKeyを選択してください" = "Tap and hold the globe button on the keyboard, and select azooKey";
 "キーボードを開く" = "Open keyboard";
 "azooKeyが開かれました！" = "You enabled azooKey!";
 "azooKeyをお楽しみください！" = "Enjoy azooKey!";
@@ -60,7 +60,7 @@
 "通常キーの背景色" = "Background color of normal keys";
 "特殊キーの背景色" = "Background color of special keys";
 "枠線の色" = "Border color";
-"枠線の太さ" = "Border line width";
+"枠線の太さ" = "Border width";
 
 "リセットする" = "Reset";
 
@@ -81,23 +81,23 @@
 "キーボードの種類を設定する" = "Select input style";
 "キーボードの種類(現在: %@)" = "Keyboard layout (current: %@)";
 "%@キーボードの種類(現在: %@)" = "%1$@ keyboard layout (current: %2$@)";
-"日本語・英語に対応したカスタムタブを読み込んだ場合、これを選ぶことも可能です" = "If you have imported custom tabs that support Japanese or English, you can choice them as a default keyboard.";
+"日本語・英語に対応したカスタムタブを読み込んだ場合、これを選ぶことも可能です" = "If you have imported custom tabs that support Japanese or English, you can choose them as a default keyboard.";
 
 "片手モードを使う" = "Use one-handed mode";
 "片手モードを利用する" = "Use one-handed mode";
 "azooKeyでは片手モードを利用可能です。" = "In azooKey, you can use one-handed mode.";
-"まずタブバーを表示します。変換候補欄を長押しするか記号タブキーを長押しすると表示されます。" = "First, display tab bar. You can display tab bar by longpressing empty candidates space or longpressing symbols tab key.";
+"まずタブバーを表示します。変換候補欄を長押しするか記号タブキーを長押しすると表示されます。" = "First, display the tab bar. You can display the tab bar by longpressing empty candidates space or longpressing symbols tab key.";
 "「片手」をタップします。" = "Tap '片手'.";
-"サイズの調整モードがオンになります。左右の白い部分をドラッグし、好みのサイズに調整してください。" = "Resizing mode becomes enabled. Drag white part at the sides and adjust keyboard to your suitable size.";
+"サイズの調整モードがオンになります。左右の白い部分をドラッグし、好みのサイズに調整してください。" = "Resizing mode becomes enabled. Drag the white part at the sides and adjust the keyboard to your suitable size.";
 "%@をタップすると完了します。" = "To finish resizing, tap %@.";
 "%@をタップするとリセットされます。" = "To reset, tap %@.";
 "%@を押して完了したあとは通常のキーボードと同様に使えます。" = "After tap %@ and resizing has finished, you can use the keyboard in the same way as the normal mode.";
-"%@を押すと再度編集できます。" = "To resize keyboard, tap %@.";
+"%@を押すと再度編集できます。" = "To resize the keyboard, tap %@.";
 "%@を押すと通常の両手モードに戻ります。" = "To escape one-handed mode, tap %@.";
 
 "カーソルを自由に移動する" = "Move cursor easily";
 "カーソルを移動する" = "Move cursor easily";
-"「空白」を長押しすると、カーソルバーが現れます。ホームボタンのない端末のフリック入力では左下の%@を押して表示することも可能です。" = "Tap and hold \"空白\" key, the cursor bar appears. If you are using device without home button, you can push %@ and then the button appears.";
+"「空白」を長押しすると、カーソルバーが現れます。ホームボタンのない端末のフリック入力では左下の%@を押して表示することも可能です。" = "Tap and hold \"空白\" key, the cursor bar appears. If your device doesn't have the home button, you can push %@ and then the button appears.";
 "黄色枠部分" = "Yellow framed part";
 "青枠部分" = "Blue framed part";
 "%@ %@に指を置いて左右になぞることでカーソルが滑らかに移動します。" = "By putting your finger on the %1$@ %2$@ and tracing it, the cursor moves smoothly as you move your finger.";
@@ -107,7 +107,7 @@
 "文頭まで一気に消す" = "Delete to beginning of the sentence";
 "文頭まで削除する" = "Delete to beginning of the sentence";
 "フリックのキーボードでは削除%@キーを左にフリックすると、文頭まで削除することができます。" = "If you are using flick input style, by flicking delete key %@ left, you can delete to the beginning of the sentence.";
-"誤って削除してしまった場合は端末を振るか、入力欄を三本指でスワイプすることで取り消し操作を行うことが可能です。" = "If you mistakenly deleted, you could shake your device or swipe input field by three fingers, and you can undo it.";
+"誤って削除してしまった場合は端末を振るか、入力欄を三本指でスワイプすることで取り消し操作を行うことが可能です。" = "If you mistakenly deleted letters, you could shake your device or swipe the input field with three fingers, and you can undo it.";
 
 "漢字を拡大表示する" = "Zooming difficult letters";
 "文字を拡大表示する" = "Zooming difficult letters";
@@ -115,7 +115,7 @@
 "文字を拡大するには、まず拡大したい文字を入力した上で変換候補を長押しします。" = "To zoom letters, you need to input the letters you want to zoom, and tap candidate and hold.";
 "大きな文字で表示する" = "Zoom in";
 "長押し後表示される画面で「大きな文字で表示する」をタップします。" = "Tap the button 'Zoom in'.";
-"最大限大きなサイズで文字が表示されます。右にスクロールすると途切れている文字を確認することができます。" = "The letter is zoomed as large as possible. Scroll right to check cut off letters.";
+"最大限大きなサイズで文字が表示されます。右にスクロールすると途切れている文字を確認することができます。" = "The letter is zoomed as large as possible. Scroll right to check cut-off letters.";
 "フォントはiOSで標準的に利用される「ヒラギノ明朝」を用いています。明朝体の字形は手書きする際の規範的な字形と必ずしも一致しません。ご了承ください。" = "The font is 'Hiragino Mincho' which is commonly used in iOS. Please note that the glyphs of Mincho style are not always consistent with normative glyphs in handwriting.";
 
 "大文字に固定する" = "Caps Lock";
@@ -123,43 +123,43 @@
 "大文字のみ入力するモード(Caps Lock)を利用できます。" = "You can use caps lock in azooKey.";
 "フリック入力では「a/A」キーを上にフリックします。" = "Using flick style, to flick \"a/A\" key, you can turn on caps lock.";
 "ローマ字入力では「Aa」キーを長押しします。" = "Using roman style, tap and hold \"Aa\" key, you can turn on caps lock.";
-"どちらの入力方式でも%@は大文字固定になっていることを意味します。" = "In both input style, the mark %@ means that currently the keyboard is caps locked.";
+"どちらの入力方式でも%@は大文字固定になっていることを意味します。" = "In both input styles, the mark %@ means that currently the keyboard is caps locked.";
 "解除するにはもう一度キーを押してください。" = "To unlock, push the key again.";
 
 "タイムスタンプを使う" = "Use timestamp";
 "タイムスタンプを設定する" = "Use timestamp";
-"azooKeyでは「テンプレート」という機能を使うことで、時刻や乱数などを用いた高度な変換を定義することが可能です。" = "Using 'Template' feature, you can define special conversion relating to dates and random values.";
+"azooKeyでは「テンプレート」という機能を使うことで、時刻や乱数などを用いた高度な変換を定義することが可能です。" = "Using the 'Template' feature, you can define special conversions relating to dates and random values.";
 "ここでは「2020/01/23 01:23」という形式のタイムスタンプを作ってみます。" = "Here we make '2020/01/23 01:23' style time stamp.";
 "まず「テンプレートの管理」から新しいテンプレートを作成します。画面右上の%@を押して、テンプレートを追加しましょう。" = "To begin with, let's make a new template on 'Manage templates'. Push the button %@ and add a new template.";
-"追加したテンプレートを選ぶと編集画面が開きます。" = "Select the template you added, and editing view opens.";
-"編集画面で次のように設定します。" = "On editing view, set as following:";
+"追加したテンプレートを選ぶと編集画面が開きます。" = "Select the template you added, and the editing view opens.";
+"編集画面で次のように設定します。" = "On the editing view, set as follows:";
 "・名前を「タイムスタンプ」に設定" = "Set 'Name' as 'TimeStamp'.";
 "・書式で「カスタム」を選択" = "Select 'カスタム' for 'Format'.";
 "・カスタム書式に「yyyy/MM/dd hh:mm」と入力" = "Input custom format as 'yyyy/MM/dd hh:mm'.";
-"編集が終わったら完了ボタンを押してください。" = "When you finish editing, push 'Done' button.";
-"次にユーザ辞書でテンプレートを使います。「追加する」から新規に単語を登録し、編集画面が開きます。" = "Next, let's use template in the text replacement. Tap 'Add' and new text replacement editing view opens.";
+"編集が終わったら完了ボタンを押してください。" = "When you finish editing, push the 'Done' button.";
+"次にユーザ辞書でテンプレートを使います。「追加する」から新規に単語を登録し、編集画面が開きます。" = "Next, let's use this template in the text replacement. Tap 'Add' and new text replacement editing view opens.";
 "ユーザ辞書で作成したテンプレートを使う際は、%@という形式で記述します。" = "When you use the template in the text replacement, input as '%@'.";
 "今回は「タイムスタンプ」というテンプレートなので、%@と入力します。" = "We created 'Timestamp' template, so input %@.";
-"以上で設定が完了です。あとは実際に使ってみましょう。" = "Setting is all done. Let's use it.";
-"「yyyy/MM/dd hh:mm」というのは日付の書式の書き方で、「yyyy」が4桁の年、「MM」が2桁の月、「dd」は2桁の日付を指しています。「hh」と「mm」も同様に時間と分です。" = "'yyyy/MM/dd hh:mm' is the format of dates. 'yyyy' represents current year in 4 digits, 'MM' represents current month in 2 digits, 'dd' represents current date in 2 digits. 'hh' and 'mm' represent current hour and minute.";
-"この書式を使って他にもカスタマイズが可能です。「hh」ではなく「HH」を使うことで24時間表記にすることができます。また「M」一文字を使った場合は「01」月ではなく「1」月と表示されます。「ss」で秒を、「EEE」で曜日を、「a」で午前/午後を表示することもできます。" = "Using this format, you can define other styles. Using 'HH' instead of 'hh', you can get 24-hour notation. Using only 'M', it displays '1月', not '01月'. 'ss' represents current second, 'EEE' represents current day, 'a' represents AM or PM.";
+"以上で設定が完了です。あとは実際に使ってみましょう。" = "All the settings are now done. Let's use it.";
+"「yyyy/MM/dd hh:mm」というのは日付の書式の書き方で、「yyyy」が4桁の年、「MM」が2桁の月、「dd」は2桁の日付を指しています。「hh」と「mm」も同様に時間と分です。" = "'yyyy/MM/dd hh:mm' is the format of dates. 'yyyy' represents the current year in 4 digits, 'MM' represents the current month in 2 digits, 'dd' represents the current date in 2 digits. 'hh' and 'mm' represent the current hour and minute.";
+"この書式を使って他にもカスタマイズが可能です。「hh」ではなく「HH」を使うことで24時間表記にすることができます。また「M」一文字を使った場合は「01」月ではなく「1」月と表示されます。「ss」で秒を、「EEE」で曜日を、「a」で午前/午後を表示することもできます。" = "Using this format, you can define other styles. Using 'HH' instead of 'hh', you can get 24-hour notation. Using only 'M', it displays '1月', not '01月'. 'ss' represents the current second, 'EEE' represents the current day, 'a' represents AM or PM.";
 "azooKeyではこの他にも、「ズレ」を設定することで昨日や明日の日付を表示したり、乱数を用いるテンプレートを設定したりすることができます。お試しください。" = "In azooKey, you can also set yesterday or tomorrow's date using 'delta' and templates that use random values. Let's try!";
 "{{テンプレート名}}" = "{{TemplateName}}";
 "{{タイムスタンプ}}" = "{{TimeStamp}}";
 "キーをカスタマイズする" = "Customize keys";
 
 
-"端末の文字サイズ設定が反映されない" = "Setting of device's font size doesn't effect";
-"端末の文字サイズの設定を変更しても、キーボードに表示される文字の大きさが変わらないことがあります。" = "Sometimes the setting of device's font size doesn't effect to the keyboard.";
+"端末の文字サイズ設定が反映されない" = "Setting of device's font size doesn't affect";
+"端末の文字サイズの設定を変更しても、キーボードに表示される文字の大きさが変わらないことがあります。" = "Sometimes the setting of your device's font size doesn't affect the keyboard.";
 "一度端末を再起動していただくと設定が反映されます。" = "Please reboot your device, and the setting can work.";
-"azooKeyの設定タブよりキーの文字サイズを設定することが可能です。そちらもお試しください。" = "On Settings tab in azooKey, you can set key font size. Please try it.";
+"azooKeyの設定タブよりキーの文字サイズを設定することが可能です。そちらもお試しください。" = "On the Settings tab in azooKey, you can set key font size. Please try it.";
 
 "絵文字や顔文字の変換候補を表示したい" = "Show Emoji and Kaomoji candidates";
 "バグの報告や機能のリクエストをしたい" = "Report bugs or request new features";
 "お問い合わせ" = "Contact";
 
-"日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。" = "You can select Qwerty and Flick input style for each of Japanese and English.";
-"現在は携帯電話式の入力については対応していません。" = "Currently azooKey doesn't support Japanese flip phone input style.";
+"日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。" = "You can select Qwerty and Flick input styles for each of Japanese and English.";
+"現在は携帯電話式の入力については対応していません。" = "Currently, azooKey doesn't support the Japanese flip phone input style.";
 
 "日本語" = "Japanese";
 "英語" = "English";
@@ -169,9 +169,9 @@
 "フリック入力" = "Flick";
 "ローマ字入力" = "Qwerty";
 
-"azooKeyでは一部キーのカスタマイズが可能です。「設定」タブから変更できます。" = "With azooKey, you can customize some of keys. You can change keys on the Settings tab.";
+"azooKeyでは一部キーのカスタマイズが可能です。「設定」タブから変更できます。" = "With azooKey, you can customize some of the keys. You can change keys on the Settings tab.";
 "フリック入力では、ひらがなタブの「小ﾞﾟ」キーと「､｡?!」キーのフリックに最大3方向まで好きな文字を登録することができます。" = "Using flick input style, you can register at most three letters on the key 「小ﾞﾟ」 and 「､｡?!」.";
-"ローマ字入力では、数字タブの一部キーに好きな文字と長押ししたときの候補を登録することができます。" = "Using qwerty input style, you can register favorite letter on some of keys in number tab and on some of variations which you can select by longpressing.";
+"ローマ字入力では、数字タブの一部キーに好きな文字と長押ししたときの候補を登録することができます。" = "Using qwerty input style, you can register favorite letter on some of the keys in the number tab and on some of the variations which you can select by longpressing.";
 
 "お問い合わせ内容を選んでください。ブラウザでGoogle Formが開きます。「質問・連絡・その他」では返信のためメールアドレスが必要となります。" = "Please select your contents of contact. Google form opens on your browser. If you select 'Question, contacts, and others', you have to prepare your email address for the sake of our reply.";
 "不具合報告" = "Report bugs";
@@ -185,23 +185,23 @@
 "「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。" = "You can register at most three letters on both keys 「小ﾞﾟ」 and 「､｡?!」.";
 "数字タブの青枠部分に好きな記号や文字を割り当てられます。" = "You can register your favorite letters on blue framed keys.";
 
-"編集したい方向を選択してください。" = "Select key to which you want to register.";
-"編集したいキーを選択してください。" = "Select key to which you want to register.";
+"編集したい方向を選択してください。" = "Select the key to which you want to register.";
+"編集したいキーを選択してください。" = "Select the key to which you want to register.";
 "リセット" = "Reset";
 "入力" = "Input";
 "ラベル" = "Labels";
 "キーに表示される文字を設定します。" = "Set the label.";
 "入力される文字とは異なっていても構いません。" = "Not necessarily equal to input letter.";
 "キーを押して入力される文字を設定します。" = "Set letters inputted when you press this key.";
-"キーを押して移動するタブを設定します。" = "Set destination tab when you press this key.";
+"キーを押して移動するタブを設定します。" = "Set the destination tab when you press this key.";
 "入力される文字" = "Inputted letters";
 "キーの見た目は「ラベル」で設定できます。" = "You can set labels for the appearance.";
 "キーを追加する" = "Add a new key";
 "デフォルトに戻す" = "Reset";
 "このキーには入力以外のアクションが設定されています。" = "This key doesn't have input action.";
-"現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください" = "To delete current set action and set inputted letters, please push 'set destination tab.'";
-"このキーにはタブ移動以外のアクションが設定されています。" = "This key doesn't have moving tab action.";
-"現在のアクションを消去して移動するタブを設定するには「タブを設定する」を押してください" = "To delete current set action and set destination tab, please push 'set destination tab.'";
+"現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください" = "To delete current actions and set inputted letters, please push 'set destination tab.'";
+"このキーにはタブ移動以外のアクションが設定されています。" = "This key doesn't have a moving tab action.";
+"現在のアクションを消去して移動するタブを設定するには「タブを設定する」を押してください" = "To delete current actions and set destination tab, please push 'set destination tab.'";
 "タブを設定する" = "Set destination tab";
 "入力を設定する" = "Set inputted letters";
 "長押し" = "Longpress";
@@ -233,19 +233,19 @@
 "「いんてれsちんg」→「interesting」のように、ローマ字日本語入力中も英語への変換候補を表示します。" = "Display English word candidates during qwerty Japanese inputting like 「いんてれsちんg」→「interesting」.";
 "半角カナ変換" = "Half-width kana candidates";
 "半角ｶﾀｶﾅへの変換を候補に表示します。" = "Display half-width ｶﾀｶﾅ(katakana) candidates.";
-"全角英数字変換" = "Full width numbers and roman letters candidates";
+"全角英数字変換" = "Full-width numbers and roman letters candidates";
 "全角英数字(ａｂｃ１２３)への変換候補を表示します。" = "Display full-width numbers and roman letters candidates like 'ａｂｃ１２３'";
 "装飾英字変換" = "Decorated letters candidates";
 "英字入力をした際、「𝕥𝕪𝕡𝕠𝕘𝕣𝕒𝕡𝕙𝕪」のような装飾字体を候補に表示します。" = "Display decorated font candidates like '𝕥𝕪𝕡𝕠𝕘𝕣𝕒𝕡𝕙𝕪' during English inputting.";
 "西暦⇄和暦変換" = "Gregorian - Japanese calendar conversion";
 "「2020ねん→令和2年」「れいわ2ねん→2020年」のように西暦と和暦を相互に変換して候補に表示します。" = "Convert Gregorian year and Japanese year mutually and display candidates like 「2020ねん→令和2年」「れいわ2ねん→2020年」.";
 "unicode変換" = "Unicode letters conversion";
-"「u3042→あ」のように、入力されたunicode番号に対応する文字に変換します。接頭辞にはu, u+, U, U+が使えます。" = "Convert unicode order to letter and display candidates like 「u3042→あ」";
-"絵文字と顔文字" = "Emoji and Kaomoji";
+"「u3042→あ」のように、入力されたunicode番号に対応する文字に変換します。接頭辞にはu, u+, U, U+が使えます。" = "Convert Unicode order to letter and display candidates like 「u3042→あ」";
+"絵文字と顔文字" = "Emojis and Kaomojis";
 "絵文字" = "Emoji";
 "顔文字" = "Kaomoji";
 "絵文字と顔文字は別々にオン・オフを選択可能です。" = "You can decide whether you use emoji and whether you use kaomoji.";
-"絵文字の一覧を表示したい場合、標準の絵文字キーボードをご利用ください。" = "If you want to get the list of emoji, please use the device's emoji keyboard.";
+"絵文字の一覧を表示したい場合、標準の絵文字キーボードをご利用ください。" = "If you want to get the list of emoji, please use the device's emojis keyboard.";
 "利用するもの" = "You use";
 "不快な絵文字を表示しない" = "Block unpleasant Emojis";
 "ゴキブリの絵文字を非表示" = "Forbid cockroach emojis";
@@ -255,7 +255,7 @@
 "OSのユーザ辞書の利用" = "Use device text replacement";
 "iOS標準のユーザ辞書を利用します。" = "Use device text replacement and display the candidates.";
 "azooKeyユーザ辞書" = "azooKey's Text replacement";
-"変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。" = "You can add text replacements. It is different from device's text replacements.";
+"変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。" = "You can add text replacements. It is different from thee device's text replacements.";
 
 "追加する" = "Add";
 "詳細設定" = "Details";
@@ -263,11 +263,11 @@
 "読み" = "Ruby";
 "読みと単語" = "Ruby and word";
 "詳細な設定" = "High-level settings";
-"人・動物・会社などの名前である" = "It is the name of persons, pets and groups.";
+"人・動物・会社などの名前である" = "It is the name of persons, pets, and groups.";
 "場所・建物などの名前である" = "It is the name of places and buildings";
 "読みが空です" = "Ruby is empty";
 "単語が空です" = "Word is empty";
-"読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください" = "Contains unusable character. Please use hiragana, roman letters, and numbers.";
+"読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください" = "Contains unusable characters. Please use hiragana, roman letters, and numbers.";
 
 "テンプレート" = "Templates";
 "テンプレートの管理" = "Manage templates";
@@ -288,7 +288,7 @@
 "時間" = "Hours";
 "日" = "Days";
 "カスタム書式" = "Custom format";
-"書式はyyyyMMddhhmmssフォーマットで記述します。詳しい記法はインターネット等で確認できます。" = "Formats can be specified by yyyyMMddhhmmss style. You can check details in the Internet.";
+"書式はyyyyMMddhhmmssフォーマットで記述します。詳しい記法はインターネット等で確認できます。" = "Formats can be specified by yyyyMMddhhmmss style. You can check details on the Internet.";
 "Web検索" = "Google search";
 "値の種類" = "Type of value";
 "整数" = "Integers";
@@ -304,29 +304,29 @@
 "学習する(デフォルト)" = "Use memorizing (default)";
 "新たな学習を停止" = "Stop memorizing";
 "これまでの学習を反映しない" = "Ignore memories";
-"学習履歴をリセットします。よろしいですか？" = "Reset memories. Is it OK?";
+"学習履歴をリセットします。よろしいですか？" = "Reset memories. Is this alright?";
 "この操作は取り消せません。" = "This operation cannot be canceled.";
 
 "このアプリについて" = "About azooKey";
 "プライバシーポリシー" = "Privacy Policy (Japanese)";
 "利用規約" = "Terms of use (Japanese)";
 "更新履歴" = "Update histories (Japanese)";
-"オープンソースソフトウェア" = "Open source softwares (Japanese)";
+"オープンソースソフトウェア" = "Open-source software (Japanese)";
 "バージョン" = "Version";
 
 "カスタムタブ" = "Custom tabs";
-"好きな文字や文章を並べたオリジナルのタブを作成することができます。" = "You can make your original tab includs letters and sentences you need to input daily.";
+"好きな文字や文章を並べたオリジナルのタブを作成することができます。" = "You can make your original tab includes letters and sentences you need to input daily.";
 "カスタムタブの管理" = "Manage custom tabs";
 "タブバー" = "Tab bar";
-"タブバーはカスタムタブへの移動をサポートします。フリック入力では左上の「記号タブ」キー、ローマ字入力では左下の「数字/記号」キーを長押しすることで表示されます。" = "Tab bar supports moving to custom tabs. Using flick input style, you can show it by longpressing ☆123 key at the left top edge in the keyboard.. Using qwerty input style, you can show it by longpressing #+= key or 123 key at the left bottom edge in the keyboard.";
-"タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。" = "You can edit tab bar. You can rearange, delete, append tabs and also add features like inputting, moving cursor and so on.";
+"タブバーはカスタムタブへの移動をサポートします。フリック入力では左上の「記号タブ」キー、ローマ字入力では左下の「数字/記号」キーを長押しすることで表示されます。" = "Tab bar supports moving to custom tabs. Using flick input style, you can show it by longpressing ☆123 key at the left top edge of the keyboard. Using qwerty input style, you can show it by longpressing #+= key or 123 key at the left bottom edge of the keyboard.";
+"タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。" = "You can edit the tab bar. You can rearrange, delete, append tabs and also add features like inputting, moving the cursor, and so on.";
 "タブバーを編集" = "Edit tab bar";
 "一覧" = "List";
 "URLが間違っている可能性があります" = "Wrong URL";
 "データが取得できませんでした" = "Failed to get data from URL";
 "正しくない形式のファイルです" = "Incorrectly formatted file";
 "ファイルを取得中" = "Getting file";
-"URLを取得中" = "Geting URL";
+"URLを取得中" = "Getting URL";
 "ファイルを処理中" = "Processing file";
 "カスタムタブがまだありません" = "Custom tabs have yet created";
 "登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。" = "You can make custom tabs only by list up the words and sentences.";
@@ -337,10 +337,10 @@
 "iCloudから読み込む" = "Import from iCloud";
 "URLから読み込む" = "Import from URL";
 "URLを入力" = "URL";
-"カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。" = "You can create custom tabs as a files outside of this app and import them. You can create more high-functional tabs. For detail please check below.";
+"カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。" = "You can create custom tabs as files outside of this app and import them. You can create more high-functional tabs. For detail please check below.";
 "カスタムタブファイルの作り方" = "How to make custom tab files.";
 "注意" = "Warning";
-"識別子%@を持つカスタムタブが既に登録されています。上書きしますか？" = "You have already using a custom tab which has identifier %@. Do you overwrap it?";
+"識別子%@を持つカスタムタブが既に登録されています。上書きしますか？" = "You have been already using a custom tab that has identifier %@. Do you overwrap it?";
 "上書き" = "Overwrap";
 "タブ名" = "Tab Name";
 "タブの名前" = "Tab Name";
@@ -402,11 +402,11 @@
 "負の値を指定すると右側の文字を削除します" = "Negative number means delete forward";
 "%@文字分カーソルを移動" = "Move cursor for %@ characters";
 "%@文字ずつカーソルを移動" = "Move cursor for %@ characters repeatedly";
-"負の値を指定すると左にカーソルが動きます" = "Negative number means moving backwords";
+"負の値を指定すると左にカーソルが動きます" = "Negative number means moving backward";
 "移動する文字数" = "Count of movement";
 "タブの移動" = "Move to tab";
 "タブを選択" = "Select destination tab";
-"文頭まで削除" = "Delete to beginning of the senetence";
+"文頭まで削除" = "Delete to beginning of the sentence";
 "Caps lockのモードの切り替え" = "Toggle caps lock";
 "カーソルバーの切り替え" = "Toggle show or not show cursor bar";
 "タブバーの切り替え" = "Toggle show or not show tab bar";
@@ -414,7 +414,7 @@
 "アプリを開く" = "Open app";
 "このアクションはiOSのメジャーアップデートで利用できなくなる可能性があります" = "This action could be invalid in future iOS versions";
 
-"日本語(設定に合わせる)" = "Japnaese (follow your setting)";
+"日本語(設定に合わせる)" = "Japanese (follow your setting)";
 "英語(設定に合わせる)" = "English (follow your setting)";
 "記号と数字(フリック入力)" = "Symbols and numbers (flick style)";
 "数字(ローマ字入力)" = "Numbers (qwerty style)";
