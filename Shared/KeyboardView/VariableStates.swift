@@ -37,7 +37,7 @@ final class VariableStates: ObservableObject{
 
     @Published var refreshing = true
 
-    @Published var resizingState: ResizingState = .fullwidth
+    @Published private(set) var resizingState: ResizingState = .fullwidth
 
     func setResizingMode(_ state: ResizingState){
         switch state{
@@ -49,8 +49,10 @@ final class VariableStates: ObservableObject{
             interfacePosition = item.position
         }
         self.resizingState = state
-        KeyboardInternalSetting.shared.oneHandedModeSetting.update(layout: keyboardLayout, orientation: keyboardOrientation){value in
-            value.isLastOnehandedMode = state != .fullwidth
+        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting){value in
+            value.update(layout: keyboardLayout, orientation: keyboardOrientation){value in
+                value.isLastOnehandedMode = state != .fullwidth
+            }
         }
     }
 
@@ -97,8 +99,8 @@ final class VariableStates: ObservableObject{
     }
 
     func updateResizingState(){
-        let lastState = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation).isLastOnehandedMode
-        if lastState{
+        let isLastOnehandedMode = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation).isLastOnehandedMode
+        if isLastOnehandedMode{
             self.setResizingMode(.onehanded)
         }else{
             self.setResizingMode(.fullwidth)

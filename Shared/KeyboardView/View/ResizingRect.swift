@@ -271,13 +271,11 @@ struct ResizingBindingFrame: ViewModifier {
     private let initialSize: CGSize
     @Binding private var position: CGPoint
     @Binding private var size: CGSize
-    private let state: ResizingState
 
-    init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize, state: ResizingState){
+    init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize){
         self.initialSize = initialSize
         self._size = size
         self._position = position
-        self.state = state
     }
 
     private enum HV{
@@ -359,7 +357,7 @@ struct ResizingBindingFrame: ViewModifier {
     }
 
     @ViewBuilder func body(content: Content) -> some View {
-        switch state {
+        switch VariableStates.shared.resizingState {
         case .onehanded:
             editButton()
             content
@@ -383,7 +381,7 @@ struct ResizingBindingFrame: ViewModifier {
 }
 
 extension View {
-    func resizingFrame(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize, state: ResizingState) -> some View {
-        self.modifier(ResizingBindingFrame(size: size, position: position, initialSize: initialSize, state: state))
+    func resizingFrame(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize) -> some View {
+        self.modifier(ResizingBindingFrame(size: size, position: position, initialSize: initialSize))
     }
 }
