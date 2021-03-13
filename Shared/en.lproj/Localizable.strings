@@ -83,6 +83,18 @@
 "%@キーボードの種類(現在: %@)" = "%1$@ keyboard layout (current: %2$@)";
 "日本語・英語に対応したカスタムタブを読み込んだ場合、これを選ぶことも可能です" = "If you have imported custom tabs that support Japanese or English, you can choice them as a default keyboard.";
 
+"片手モードを使う" = "Use One-handed mode";
+"片手モードを利用する" = "Use One-handed mode";
+"azooKeyでは片手モードを利用可能です。" = "In azooKey, you can use one-handed mode.";
+"まずタブバーを表示します。変換候補欄を長押しするか記号タブキーを長押しすると表示されます。" = "First, display tab bar. You can display tab bar by longpressing empty candidates space or longpressing symbols tab key.";
+"「片手」をタップします。" = "Tap '片手'.";
+"サイズの調整モードがオンになります。左右の白い部分をドラッグし、好みのサイズに調整してください。" = "Resizing mode becomes enabled. Drag white part at the sides and adjust keyboard to your suitable size.";
+"%@をタップすると完了します。" = "To finish resizing, tap %@.";
+"%@をタップするとリセットされます。" = "To reset, tap %@.";
+"%@を押して完了したあとは通常のキーボードと同様に使えます。" = "After tap %@ and resizing has finished, you can use the keyboard in the same way as the normal mode.";
+"%@を押すと再度編集できます。" = "To resize keyboard, tap %@.";
+"%@を押すと通常の両手モードに戻ります。" = "To escape one-handed mode, tap %@.";
+
 "カーソルを自由に移動する" = "Move cursor easily";
 "カーソルを移動する" = "Move cursor easily";
 "「空白」を長押しすると、カーソルバーが現れます。ホームボタンのない端末のフリック入力では左下の%@を押して表示することも可能です。" = "Tap and hold \"空白\" key, the cursor bar appears. If you are using device without home button, you can push %@ and then the button appears.";

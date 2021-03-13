@@ -2463,6 +2463,7 @@
 		1AF679A325CEDC3A00F3987B /* HorizontalKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */; };
 		1AF679AD25CEE66F00F3987B /* KeyboardPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */; };
 		1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC03158251103EF004CA505 /* Designs.xcassets */; };
+		1AF6A54725FCF1240037D5ED /* OneHandedModeTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6A54625FCF1240037D5ED /* OneHandedModeTips.swift */; };
 		1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA4BB2257E169100477DC2 /* PasteButton.swift */; };
 		1AFA4BD3257E84C400477DC2 /* シ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */; };
 		1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
@@ -4900,6 +4901,7 @@
 		1AF678F525CED91900F3987B /* ActionDepartment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionDepartment.swift; sourceTree = "<group>"; };
 		1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeKeyboardButtonView.swift; sourceTree = "<group>"; };
 		1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPreview.swift; sourceTree = "<group>"; };
+		1AF6A54625FCF1240037D5ED /* OneHandedModeTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedModeTips.swift; sourceTree = "<group>"; };
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA4BD2257E84C400477DC2 /* シ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "シ0.loudstxt"; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
@@ -5555,6 +5557,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */,
+				1AF6A54625FCF1240037D5ED /* OneHandedModeTips.swift */,
 				1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */,
 				1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */,
 				1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */,
@@ -10253,6 +10256,7 @@
 				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
 				1AF678FB25CED91C00F3987B /* ActionDepartment.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
+				1AF6A54725FCF1240037D5ED /* OneHandedModeTips.swift in Sources */,
 				1A10D81525E506710095CB67 /* DocumentPicker.swift in Sources */,
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
 				1AB8C40425E3884200D39BC5 /* BottomSheetView.swift in Sources */,
