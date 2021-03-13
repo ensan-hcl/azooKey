@@ -13,13 +13,15 @@ enum SimpleUnpressedKeyColorType{
     case normal
     case special
     case enter
-
+    case selected
     func color(states: VariableStates, theme: ThemeData) -> Color {
         switch self{
         case .normal:
             return theme.normalKeyFillColor.color
         case .special:
             return theme.specialKeyFillColor.color
+        case .selected:
+            return theme.pushedKeyFillColor.color
         case .enter:
             switch states.enterKeyState{
             case .complete, .edit:

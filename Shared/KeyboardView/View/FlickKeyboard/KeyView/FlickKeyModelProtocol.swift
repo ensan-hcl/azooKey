@@ -12,6 +12,7 @@ import SwiftUI
 enum FlickKeyColorType{
     case normal
     case tabkey
+    case selected
 
     func color(theme: ThemeData) -> Color {
         switch self {
@@ -19,6 +20,8 @@ enum FlickKeyColorType{
             return theme.normalKeyFillColor.color
         case .tabkey:
             return theme.specialKeyFillColor.color
+        case .selected:
+            return theme.pushedKeyFillColor.color
         }
     }
 }

@@ -5020,7 +5020,6 @@
 				1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */,
 				1ACE61C2257286E5008078D3 /* Color.swift */,
 				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
-				1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -5329,6 +5328,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC2092500D51F002CAA93 /* KeyboardView.swift */,
+				1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */,
 				1AF28D05253DE4B60012CF94 /* KeyLabel.swift */,
 				1A12E24125C3E1CA00316009 /* MessageView.swift */,
 				1A58AB0B25037E8800EB1864 /* ResultView */,

@@ -108,6 +108,8 @@ fileprivate extension CustardKeyDesign.ColorType{
             return .normal
         case .special:
             return .tabkey
+        case .selected:
+            return .selected
         }
     }
 
@@ -117,6 +119,8 @@ fileprivate extension CustardKeyDesign.ColorType{
             return .normal
         case .special:
             return .special
+        case .selected:
+            return .selected
         }
     }
 
@@ -126,6 +130,8 @@ fileprivate extension CustardKeyDesign.ColorType{
             return .normal
         case .special:
             return .special
+        case .selected:
+            return .selected
         }
     }
 

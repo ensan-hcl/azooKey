@@ -416,6 +416,7 @@ public struct CustardKeyDesign: Codable {
     public enum ColorType: String, Codable{
         case normal
         case special
+        case selected
     }
 }
 

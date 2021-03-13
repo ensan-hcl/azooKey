@@ -309,7 +309,7 @@ struct ResizingBindingFrame: ViewModifier {
 
     @ViewBuilder func editButton() -> some View {
         let data = self.editButtonData
-        if data.max >= 50{
+        if data.max >= 30{
             let max = min(initialSize.width, initialSize.height) * 0.15
             let r = min(data.max * 0.7, max)
             let button1 = Button{
