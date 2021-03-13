@@ -9,14 +9,15 @@
 import Foundation
 import SwiftUI
 
-struct VerticalFlickKeyboardView: View{
+struct FlickKeyboardView: View{
     @ObservedObject private var variableStates = VariableStates.shared
     @Environment(\.themeEnvironment) private var theme
 
-    private let tabDesign = TabDependentDesign(width: 5, height: 4, layout: .flick, orientation: .vertical)
+    private let tabDesign: TabDependentDesign
     private let keyModels: [[FlickKeyModelProtocol]]
     init(keyModels: [[FlickKeyModelProtocol]]){
         self.keyModels = keyModels
+        self.tabDesign = TabDependentDesign(width: 5, height: 4, layout: .flick, orientation: VariableStates.shared.keyboardOrientation)
     }
 
     private var horizontalIndices: Range<Int> {

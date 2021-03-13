@@ -192,8 +192,8 @@ final class KeyboardActionDepartment: ActionDepartment{
             VariableStates.shared.showMoveCursorBar = false
             VariableStates.shared.showTabBar.toggle()
 
-        case .toggleResizingMode:
-            VariableStates.shared.enableResizing.toggle()
+        case .enableResizingMode:
+            VariableStates.shared.setResizingMode(.resizing)
 
         case .hideLearningMemory:
             self.hideLearningMemory()

@@ -14,7 +14,7 @@ extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
         case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .openURL: return true
-        case .complete, .replaceDefault, .smartDeleteDefault,.toggleCapslockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
+        case  .enableResizingMode,.complete, .replaceDefault, .smartDeleteDefault,.toggleCapslockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
 
@@ -34,6 +34,7 @@ extension CodableActionData{
         case .toggleCursorBar: return "カーソルバーの切り替え"
         case .toggleTabBar: return "タブバーの切り替え"
         case .dismissKeyboard: return "キーボードを閉じる"
+        case .enableResizingMode: return "片手モードをオンにする"
         case .openURL(_): return "アプリを開く"
         }
     }
@@ -126,6 +127,9 @@ struct CodableActionDataEditor: View {
                         }
                         Button("カーソル移動"){
                             press(.moveCursor(-1))
+                        }
+                        Button("片手モードをオン"){
+                            press(.enableResizingMode)
                         }
                         Button("入力の確定"){
                             press(.complete)
@@ -477,6 +481,9 @@ struct CodableLongpressActionDataEditor: View {
                     Section(header: Text("高度")){
                         Button("文頭まで削除"){
                             press(.smartDeleteDefault)
+                        }
+                        Button("片手モードをオン"){
+                            press(.enableResizingMode)
                         }
                         Button("入力の確定"){
                             press(.complete)

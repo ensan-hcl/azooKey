@@ -21,6 +21,7 @@ struct CustomizeTabView: View {
             self._tabBarData = State(initialValue: tabBarData)
         }else{
             self._tabBarData = State(initialValue: TabBarData(identifier: 0, items: [
+                TabBarItem(label: .text("片手"), actions: [.enableResizingMode, .toggleTabBar]),
                 TabBarItem(label: .text("あいう"), actions: [.moveTab(.system(.user_japanese))]),
                 TabBarItem(label: .text("ABC"), actions: [.moveTab(.system(.user_english))]),
             ]))

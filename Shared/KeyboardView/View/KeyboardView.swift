@@ -44,7 +44,6 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
         self.resultModel = resultModel
         self.defaultTab = defaultTab
     }
-    @State private var position: CGPoint = .zero
     var body: some View {
         ZStack{
             theme.backgroundColor.color
@@ -76,11 +75,10 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 }
             }
             .resizingFrame(
-                width: $variableStates.interfaceSize.width,
-                height: $variableStates.interfaceSize.height,
-                position: $position,
+                size: $variableStates.interfaceSize,
+                position: $variableStates.interfacePosition,
                 initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight),
-                enabled: $variableStates.enableResizing
+                state: variableStates.resizingState
             )
             .padding(.bottom, 2)
             if variableStates.isTextMagnifying{
@@ -106,26 +104,11 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
         return Group{
             switch target{
             case .flick_hira:
-                switch variableStates.keyboardOrientation{
-                case .vertical:
-                    VerticalFlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard)
-                case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard)
-                }
+                FlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard)
             case .flick_abc:
-                switch variableStates.keyboardOrientation{
-                case .vertical:
-                    VerticalFlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard)
-                case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard)
-                }
+                FlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard)
             case .flick_numbersymbols:
-                switch variableStates.keyboardOrientation{
-                case .vertical:
-                    VerticalFlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard)
-                case .horizontal:
-                    HorizontalFlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard)
-                }
+                FlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard)
             case .qwerty_hira:
                 QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard)
             case .qwerty_abc:

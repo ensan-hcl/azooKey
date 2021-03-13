@@ -25,7 +25,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
         }
     }
     
-    var longPressActions: LongpressActionType = .init(start: [.toggleResizingMode])
+    var longPressActions: LongpressActionType = .init(start: [.enableResizingMode])
     
     var flickKeys: [FlickDirection: FlickedKeyModel] = [:]
 

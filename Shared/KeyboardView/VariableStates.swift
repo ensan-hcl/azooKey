@@ -20,9 +20,11 @@ final class VariableStates: ObservableObject{
 
     @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
-    @Published var keyboardLayout: KeyboardLayout = .flick
+    @Published private(set) var keyboardLayout: KeyboardLayout = .flick
 
     @Published var interfaceSize: CGSize = .zero
+    @Published var interfacePosition: CGPoint = .zero
+
     @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
@@ -35,7 +37,22 @@ final class VariableStates: ObservableObject{
 
     @Published var refreshing = true
 
-    @Published var enableResizing = false
+    @Published var resizingState: ResizingState = .fullwidth
+
+    func setResizingMode(_ state: ResizingState){
+        switch state{
+        case .fullwidth:
+            interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight)
+        case .onehanded, .resizing:
+            let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation)
+            interfaceSize = item.size
+            interfacePosition = item.position
+        }
+        self.resizingState = state
+        KeyboardInternalSetting.shared.oneHandedModeSetting.update(layout: keyboardLayout, orientation: keyboardOrientation){value in
+            value.isLastOnehandedMode = state != .fullwidth
+        }
+    }
 
     func initialize(){
         self.tabManager.initialize()
@@ -79,6 +96,20 @@ final class VariableStates: ObservableObject{
         }
     }
 
+    func updateResizingState(){
+        let lastState = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation).isLastOnehandedMode
+        if lastState{
+            self.setResizingMode(.onehanded)
+        }else{
+            self.setResizingMode(.fullwidth)
+        }
+    }
+
+    func setKeyboardLayout(_ layout: KeyboardLayout){
+        self.keyboardLayout = layout
+        self.updateResizingState()
+    }
+
     func setInputStyle(_ style: InputStyle){
         self.action.changeInputStyle(from: self.inputStyle, to: style)
         self.inputStyle = style
@@ -93,6 +124,7 @@ final class VariableStates: ObservableObject{
             return
         }
         self.keyboardOrientation = orientation
+        self.updateResizingState()
     }
 
 }

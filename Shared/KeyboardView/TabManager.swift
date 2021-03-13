@@ -235,7 +235,7 @@ struct TabManager{
 
     mutating private func moveTab(to destination: Tab.ExistentialTab){
         //VariableStateの状態を遷移先のタブに合わせて適切に変更する
-        VariableStates.shared.keyboardLayout = destination.layout
+        VariableStates.shared.setKeyboardLayout(destination.layout)
         VariableStates.shared.setInputStyle(destination.inputStyle)
         if let language = destination.language{
             VariableStates.shared.keyboardLanguage = language
@@ -262,7 +262,7 @@ struct TabManager{
         }
 
         //VariableStateの状態を遷移先のタブに合わせて適切に変更する
-        VariableStates.shared.keyboardLayout = actualTab.layout
+        VariableStates.shared.setKeyboardLayout(destination.layout)
         VariableStates.shared.setInputStyle(actualTab.inputStyle)
         if let language = actualTab.language{
             VariableStates.shared.keyboardLanguage = language

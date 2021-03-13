@@ -195,6 +195,9 @@ public enum CodableActionData: Codable, Hashable {
     /// - move to specified tab
     case moveTab(CodableTabData)
 
+    /// - enable keyboard resizing mode
+    case enableResizingMode
+
     /// - toggle show or not show the cursor move bar
     case toggleCursorBar
 
@@ -229,6 +232,7 @@ public extension CodableActionData{
         case move_cursor
         case smart_move_cursor
         case move_tab
+        case enable_resizing_mode
         case toggle_cursor_bar
         case toggle_tab_bar
         case toggle_capslock_state
@@ -250,6 +254,7 @@ public extension CodableActionData{
         case .smartDelete: return .smart_delete
         case .smartDeleteDefault: return .smart_delete_default
         case .smartMoveCursor: return .smart_move_cursor
+        case .enableResizingMode: return .enable_resizing_mode
         case .toggleCapslockState: return .toggle_capslock_state
         case .toggleCursorBar: return .toggle_cursor_bar
         case .toggleTabBar: return .toggle_tab_bar
@@ -340,7 +345,7 @@ public extension CodableActionData{
             try CodableTabArgument(type: .move_tab, tab: value).encode(to: encoder)
         case let .openURL(value):
             try DestinationArgument(type: .open_url, destination: value).encode(to: encoder)
-        case .dismissKeyboard, .toggleTabBar, .toggleCursorBar, .toggleCapslockState, .complete, .smartDeleteDefault, .replaceDefault:
+        case .dismissKeyboard, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapslockState, .complete, .smartDeleteDefault, .replaceDefault:
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(self.key, forKey: .type)
         }
@@ -377,6 +382,8 @@ public extension CodableActionData{
         case .move_tab:
             let value = try CodableTabArgument.init(from: decoder)
             self = .moveTab(value.tab)
+        case .enable_resizing_mode:
+            self = .enableResizingMode
         case .toggle_cursor_bar:
             self = .toggleCursorBar
         case .toggle_capslock_state:
@@ -468,6 +475,8 @@ public extension CodableActionData {
         case let .moveTab(destination):
             hasher.combine(destination)
             key = .move_tab
+        case .enableResizingMode:
+            key = .enable_resizing_mode
         case .toggleCursorBar:
             key = .toggle_cursor_bar
         case .toggleTabBar:

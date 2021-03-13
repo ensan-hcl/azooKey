@@ -43,18 +43,15 @@ final class TabDependentDesign{
         switch (layout, orientation){
         case (_, .vertical):
             coefficient = 5/(5.1 + horizontalKeyCount/10)
-        case (.flick, .horizontal):
-            coefficient = 5/9
-        case (.qwerty, .horizontal):
-            coefficient = 10/13
+        case (_, .horizontal):
+            coefficient = 10/(10.2 + horizontalKeyCount * 0.28)
         }
         return interfaceWidth / horizontalKeyCount * coefficient
     }
     
     ///This property calculate suitable height for normal keyView.
     var keyViewHeight: CGFloat {
-        let keysViewHeight = interfaceHeight - (Design.shared.resultViewHeight() + 12)
-        let keyHeight = (keysViewHeight - (verticalKeyCount-1) * verticalSpacing)/verticalKeyCount
+        let keyHeight = (keysHeight - (verticalKeyCount-1) * verticalSpacing)/verticalKeyCount
         return keyHeight
     }
 
@@ -62,8 +59,9 @@ final class TabDependentDesign{
         keyViewWidth * horizontalKeyCount + horizontalSpacing * (horizontalKeyCount-1)
     }
 
+    //resultViewの幅を全体から引いたもの。キーを配置して良い部分の高さ。
     var keysHeight: CGFloat {
-        keyViewHeight * verticalKeyCount + verticalSpacing * (verticalKeyCount-1)
+        interfaceHeight - (Design.shared.resultViewHeight() + 12)
     }
 
     ///This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
@@ -87,13 +85,11 @@ final class TabDependentDesign{
     ///screenWidthとhorizontalKeyCountとkeyViewWidthに依存
     var horizontalSpacing: CGFloat {
         let coefficient: CGFloat
-        switch (layout, orientation){
-        case (_, .vertical):
+        switch orientation{
+        case .vertical:
             coefficient = (5+horizontalKeyCount)/(7.5+horizontalKeyCount)
-        case (.flick, .horizontal):
-            coefficient = 1/6
-        case (.qwerty, .horizontal):
-            coefficient = 9/10
+        case .horizontal:
+            coefficient = (8+horizontalKeyCount)/(10+horizontalKeyCount)
         }
         return (interfaceWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1) * coefficient
     }

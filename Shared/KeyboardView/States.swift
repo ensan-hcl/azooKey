@@ -57,6 +57,12 @@ enum KeyboardLanguage: String, Codable {
     }
 }
 
+enum ResizingState{
+    case fullwidth //両手モードの利用
+    case onehanded //片手モードの利用
+    case resizing  //編集モード
+}
+
 enum KeyboardOrientation{
     case vertical       //width<height
     case horizontal     //height<width
@@ -73,7 +79,7 @@ enum AaKeyState{
     case capslock
 }
 
-///実行中変更されない値。収容アプリでも共有できる形にすること。
+///実行しないと値が確定しないが、実行されれば全く変更されない値。収容アプリでも共有できる形にすること。
 final class SemiStaticStates{
     static let shared = SemiStaticStates()
     private init(){}
@@ -90,12 +96,22 @@ final class SemiStaticStates{
         if self.screenWidth == size.width{
             return
         }
-        let width = size.width
-        self.screenWidth = width
         VariableStates.shared.setOrientation(size.width<size.height ? .vertical : .horizontal)
-        VariableStates.shared.interfaceSize.width = width
-        let height = Design.shared.keyboardHeight()
+        let width = size.width
+        let height = Design.shared.keyboardHeight(screenWidth: width)
+        self.screenWidth = width
         self.screenHeight = height
-        VariableStates.shared.interfaceSize.height = height
+        let (layout, orientation) = (layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
+        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting){value in
+            value.setIfFirst(layout: layout, orientation: orientation, size: .init(width: width, height: height), position: .zero)
+        }
+        switch VariableStates.shared.resizingState{
+        case .fullwidth:
+            VariableStates.shared.interfaceSize = CGSize(width: width, height: height)
+        case .onehanded, .resizing:
+            let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: layout, orientation: orientation)
+            VariableStates.shared.interfaceSize = item.size
+            VariableStates.shared.interfacePosition = item.position
+        }
     }
 }

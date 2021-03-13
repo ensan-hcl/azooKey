@@ -24,7 +24,7 @@ enum ActionType{
     case smartMoveCursor(ScanItem)
 
     case toggleShowMoveCursorView
-    case toggleResizingMode
+    case enableResizingMode
     //変換関連
     case enter
     case changeCharacterType    //濁点、半濁点、小さい文字
@@ -67,7 +67,7 @@ extension ActionType: Equatable{
             return true
         case (.toggleShowMoveCursorView,.toggleShowMoveCursorView):
             return true
-        case (.toggleResizingMode, .toggleResizingMode):
+        case (.enableResizingMode, .enableResizingMode):
             return true
         case (.enter, .enter):
             return true
@@ -146,6 +146,8 @@ extension CodableActionData{
             return .smartMoveCursor(value)
         case let .moveTab(value):
             return .moveTab(value.tab)
+        case .enableResizingMode:
+            return .enableResizingMode
         case .toggleCursorBar:
             return .toggleShowMoveCursorView
         case .toggleCapslockState:
