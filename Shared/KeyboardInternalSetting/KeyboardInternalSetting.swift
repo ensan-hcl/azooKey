@@ -33,16 +33,20 @@ protocol KeyboardInternalSettingProtocol {
 struct KeyboardInternalSetting{
     static var shared = Self()
 
-    var oneHandedModeSetting: OneHandedModeSetting = Self.load(key: .one_handed_mode_setting)
+    private(set) var oneHandedModeSetting: OneHandedModeSetting = Self.load(key: .one_handed_mode_setting)
 
-    mutating func update<T: Codable>(value: WritableKeyPath<Self, T>, newValue: T){
-        self[keyPath: value] = newValue
-        update(value: value)
+    mutating func update<T: Codable>(_ value: KeyPath<Self, T>, newValue: T){
+        if let value = value as? WritableKeyPath{
+            self[keyPath: value] = newValue
+            update(value: value)
+        }
     }
 
-    mutating func update<T: Codable>(_ value: WritableKeyPath<Self, T>, process: (inout T) -> ()){
-        process(&self[keyPath: value])
-        update(value: value)
+    mutating func update<T: Codable>(_ value: KeyPath<Self, T>, process: (inout T) -> ()){
+        if let value = value as? WritableKeyPath{
+            process(&self[keyPath: value])
+            update(value: value)
+        }
     }
 
     private mutating func update<T: Codable>(value: WritableKeyPath<Self, T>){
