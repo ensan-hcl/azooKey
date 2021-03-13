@@ -20,16 +20,9 @@ extension Custard{
             key_style: .tenkeyStyle,
             key_layout: .gridFit(.init(width: 1, height: 6)),
             keys: [
-                .gridFit(.init(x: 0, y: 0)): .custom(
+                .gridFit(.init(x: 0, y: 0, width: 1, height: 2)): .custom(
                     .init(
-                        design: .init(label: .text("カスタードファイルが見つかりません"), color: .normal),
-                        press_actions: [],
-                        longpress_actions: .none,
-                        variations: [])
-                ),
-                .gridFit(.init(x: 0, y: 1)): .custom(
-                    .init(
-                        design: .init(label: .text("正しく読み込めているか確認してください"), color: .normal),
+                        design: .init(label: .text("カスタードファイルが見つかりません\n正しく読み込めているか確認してください"), color: .normal),
                         press_actions: [],
                         longpress_actions: .none,
                         variations: [])

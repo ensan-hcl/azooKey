@@ -127,9 +127,9 @@ struct EditingTabBarView: View {
     private func makeLabelText(item: EditingTabBarItem) -> LocalizedStringKey {
         if let label = item.actions.first?.label{
             if item.actions.count > 1{
-                return "\(label)など"
+                return "\(label, color: .gray)など"
             }else{
-                return label
+                return "\(label, color: .gray)"
             }
         }
         return "動作なし"

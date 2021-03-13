@@ -17,7 +17,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
         switch VariableStates.shared.aAKeyState{
         case .normal:
             return [.changeCharacterType]
-        case .capslock:
+        case .capsLock:
             return [.changeCapsLockState(state: .normal)]
         }
     }
@@ -27,9 +27,9 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
         switch VariableStates.shared.aAKeyState{
         case .normal:
             return [
-                .top: FlickedKeyModel(labelType: .image("capslock"), pressActions: [.changeCapsLockState(state: .capslock)])
+                .top: FlickedKeyModel(labelType: .image("capslock"), pressActions: [.changeCapsLockState(state: .capsLock)])
             ]
-        case .capslock:
+        case .capsLock:
             return [
                 :
             ]
@@ -42,7 +42,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
         switch states.aAKeyState{
         case .normal:
             return KeyLabel(.text("a/A"), width: width)
-        case .capslock:
+        case .capsLock:
             return KeyLabel(.image("capslock.fill"), width: width)
         }
     }
@@ -55,7 +55,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
         switch states.aAKeyState{
         case .normal:
             return theme.normalKeyFillColor.color
-        case .capslock:
+        case .capsLock:
             return theme.specialKeyFillColor.color
         }
     }

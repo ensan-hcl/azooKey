@@ -150,11 +150,11 @@ extension CodableActionData{
             return .enableResizingMode
         case .toggleCursorBar:
             return .toggleShowMoveCursorView
-        case .toggleCapslockState:
+        case .toggleCapsLockState:
             switch VariableStates.shared.aAKeyState{
             case .normal:
-                return .changeCapsLockState(state: .capslock)
-            case .capslock:
+                return .changeCapsLockState(state: .capsLock)
+            case .capsLock:
                 return .changeCapsLockState(state: .normal)
             }
         case .toggleTabBar:

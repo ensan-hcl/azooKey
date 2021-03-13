@@ -86,42 +86,6 @@ public extension CodableTabData{
     }
 }
 
-extension CodableTabData{
-    var tab: Tab {
-        switch self{
-        case let .system(tab):
-            switch tab{
-            case .flick_japanese:
-                return .existential(.flick_hira)
-            case .flick_english:
-                return .existential(.flick_abc)
-            case .flick_numbersymbols:
-                return .existential(.flick_numbersymbols)
-            case .qwerty_japanese:
-                return .existential(.qwerty_hira)
-            case .qwerty_english:
-                return .existential(.qwerty_abc)
-            case .qwerty_numbers:
-                return .existential(.qwerty_number)
-            case .qwerty_symbols:
-                return .existential(.qwerty_symbols)
-            case .user_japanese:
-                return .user_dependent(.japanese)
-            case .user_english:
-                return .user_dependent(.english)
-            case .last_tab:
-                return .last_tab
-            }
-        case let .custom(identifier):
-            if let custard = try? CustardManager.load().custard(identifier: identifier){
-                return .existential(.custard(custard))
-            }else{
-                return .existential(.custard(.errorMessage))
-            }
-        }
-    }
-}
-
 public extension CodableTabData {
     static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs){
@@ -201,8 +165,8 @@ public enum CodableActionData: Codable, Hashable {
     /// - toggle show or not show the cursor move bar
     case toggleCursorBar
 
-    /// - toggle capslock or not
-    case toggleCapslockState
+    /// - toggle caps lock or not
+    case toggleCapsLockState
 
     /// - toggle show or not show the tab bar
     case toggleTabBar
@@ -235,7 +199,7 @@ public extension CodableActionData{
         case enable_resizing_mode
         case toggle_cursor_bar
         case toggle_tab_bar
-        case toggle_capslock_state
+        case toggle_caps_lock_state
         case open_url
         case dismiss_keyboard
     }
@@ -255,7 +219,7 @@ public extension CodableActionData{
         case .smartDeleteDefault: return .smart_delete_default
         case .smartMoveCursor: return .smart_move_cursor
         case .enableResizingMode: return .enable_resizing_mode
-        case .toggleCapslockState: return .toggle_capslock_state
+        case .toggleCapsLockState: return .toggle_caps_lock_state
         case .toggleCursorBar: return .toggle_cursor_bar
         case .toggleTabBar: return .toggle_tab_bar
         }
@@ -345,7 +309,7 @@ public extension CodableActionData{
             try CodableTabArgument(type: .move_tab, tab: value).encode(to: encoder)
         case let .openURL(value):
             try DestinationArgument(type: .open_url, destination: value).encode(to: encoder)
-        case .dismissKeyboard, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapslockState, .complete, .smartDeleteDefault, .replaceDefault:
+        case .dismissKeyboard, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapsLockState, .complete, .smartDeleteDefault, .replaceDefault:
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(self.key, forKey: .type)
         }
@@ -386,8 +350,8 @@ public extension CodableActionData{
             self = .enableResizingMode
         case .toggle_cursor_bar:
             self = .toggleCursorBar
-        case .toggle_capslock_state:
-            self = .toggleCapslockState
+        case .toggle_caps_lock_state:
+            self = .toggleCapsLockState
         case .toggle_tab_bar:
             self = .toggleTabBar
         case .dismiss_keyboard:
@@ -432,7 +396,7 @@ public extension CodableActionData {
             return true
         case (.toggleCursorBar,.toggleCursorBar):
             return true
-        case (.toggleCapslockState,.toggleCapslockState):
+        case (.toggleCapsLockState,.toggleCapsLockState):
             return true
         case let (.openURL(l), .openURL(r)):
             return l == r
@@ -481,8 +445,8 @@ public extension CodableActionData {
             key = .toggle_cursor_bar
         case .toggleTabBar:
             key = .toggle_tab_bar
-        case .toggleCapslockState:
-            key = .toggle_capslock_state
+        case .toggleCapsLockState:
+            key = .toggle_caps_lock_state
         case let .openURL(value):
             hasher.combine(value)
             key = .open_url

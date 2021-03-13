@@ -179,6 +179,42 @@ extension Tab: Equatable {
     }
 }
 
+extension CodableTabData{
+    var tab: Tab {
+        switch self{
+        case let .system(tab):
+            switch tab{
+            case .flick_japanese:
+                return .existential(.flick_hira)
+            case .flick_english:
+                return .existential(.flick_abc)
+            case .flick_numbersymbols:
+                return .existential(.flick_numbersymbols)
+            case .qwerty_japanese:
+                return .existential(.qwerty_hira)
+            case .qwerty_english:
+                return .existential(.qwerty_abc)
+            case .qwerty_numbers:
+                return .existential(.qwerty_number)
+            case .qwerty_symbols:
+                return .existential(.qwerty_symbols)
+            case .user_japanese:
+                return .user_dependent(.japanese)
+            case .user_english:
+                return .user_dependent(.english)
+            case .last_tab:
+                return .last_tab
+            }
+        case let .custom(identifier):
+            if let custard = try? CustardManager.load().custard(identifier: identifier){
+                return .existential(.custard(custard))
+            }else{
+                return .existential(.custard(.errorMessage))
+            }
+        }
+    }
+}
+
 struct TabManager{
     private(set) var currentTab: ManagerTab = .user_dependent(.japanese)
     private(set) var lastTab: ManagerTab? = nil
@@ -262,7 +298,7 @@ struct TabManager{
         }
 
         //VariableStateの状態を遷移先のタブに合わせて適切に変更する
-        VariableStates.shared.setKeyboardLayout(destination.layout)
+        VariableStates.shared.setKeyboardLayout(actualTab.layout)
         VariableStates.shared.setInputStyle(actualTab.inputStyle)
         if let language = actualTab.language{
             VariableStates.shared.keyboardLanguage = language

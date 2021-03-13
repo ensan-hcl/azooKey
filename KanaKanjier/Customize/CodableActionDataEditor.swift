@@ -14,7 +14,7 @@ extension CodableActionData{
     var hasAssociatedValue: Bool {
         switch self{
         case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .openURL: return true
-        case  .enableResizingMode,.complete, .replaceDefault, .smartDeleteDefault,.toggleCapslockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
+        case  .enableResizingMode,.complete, .replaceDefault, .smartDeleteDefault,.toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
 
@@ -30,7 +30,7 @@ extension CodableActionData{
         case .complete: return "確定"
         case .replaceDefault: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
         case .smartDeleteDefault: return "文頭まで削除"
-        case .toggleCapslockState: return "Capslockのモードの切り替え"
+        case .toggleCapsLockState: return "Caps lockのモードの切り替え"
         case .toggleCursorBar: return "カーソルバーの切り替え"
         case .toggleTabBar: return "タブバーの切り替え"
         case .dismissKeyboard: return "キーボードを閉じる"
@@ -134,8 +134,8 @@ struct CodableActionDataEditor: View {
                         Button("入力の確定"){
                             press(.complete)
                         }
-                        Button("Capslock"){
-                            press(.toggleCapslockState)
+                        Button("Caps lock"){
+                            press(.toggleCapsLockState)
                         }
                         Button("カーソルバーの表示"){
                             press(.toggleCursorBar)
@@ -488,8 +488,8 @@ struct CodableLongpressActionDataEditor: View {
                         Button("入力の確定"){
                             press(.complete)
                         }
-                        Button("Capslock"){
-                            press(.toggleCapslockState)
+                        Button("Caps lock"){
+                            press(.toggleCapsLockState)
                         }
                         Button("カーソルバーの表示"){
                             press(.toggleCursorBar)

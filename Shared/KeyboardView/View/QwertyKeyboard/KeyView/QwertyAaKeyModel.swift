@@ -20,7 +20,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
         switch VariableStates.shared.aAKeyState{
         case .normal:
             return [.changeCharacterType]
-        case .capslock:
+        case .capsLock:
             return [.changeCapsLockState(state: .normal)]
         }
     }
@@ -28,8 +28,8 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
     var longPressActions: LongpressActionType {
         switch VariableStates.shared.aAKeyState{
         case .normal:
-            return .init(start: [.changeCapsLockState(state: .capslock)])
-        case .capslock:
+            return .init(start: [.changeCapsLockState(state: .capsLock)])
+        case .capsLock:
             return .init(start: [.changeCapsLockState(state: .normal)])
         }
     }
@@ -38,7 +38,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
         switch states.aAKeyState{
         case .normal:
             return KeyLabel(.image("textformat.alt"), width: width, textColor: color)
-        case .capslock:
+        case .capsLock:
             return KeyLabel(.image("capslock.fill"), width: width, textColor: color)
         }
     }

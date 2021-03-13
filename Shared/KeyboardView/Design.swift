@@ -84,6 +84,9 @@ final class TabDependentDesign{
 
     ///screenWidthとhorizontalKeyCountとkeyViewWidthに依存
     var horizontalSpacing: CGFloat {
+        if horizontalKeyCount <= 1{
+            return 0
+        }
         let coefficient: CGFloat
         switch orientation{
         case .vertical:

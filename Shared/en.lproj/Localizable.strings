@@ -375,9 +375,12 @@
 "入力の確定" = "Complete";
 "カーソル移動" = "Moving cursor";
 "カーソルバーの表示" = "Show cursor bar";
+"片手モードをオン" = "Enable one-handed mode";
+"片手モードをオンにする" = "Enable one-handed mode";
+"%@など" = "%@, etc";
 
 "確定" = "Complete";
-"大文字/小文字、拗音/濁音/半濁音の切り替え" = "Change uppercase ⇆ lowercase.";
+"大文字/小文字、拗音/濁音/半濁音の切り替え" = "Change uppercase ⇆ lowercase";
 "「%@」を入力" = "Input '%@'";
 "「%@」を繰り返し入力" = "Input '%@' repeatedly";
 "入力する文字" = "Letters to input";
@@ -392,7 +395,7 @@
 "タブの移動" = "Move to tab";
 "タブを選択" = "Select destination tab";
 "文頭まで削除" = "Delete to beginning of the senetence";
-"Capslockのモードの切り替え" = "Toggle capslock";
+"Caps lockのモードの切り替え" = "Toggle caps lock";
 "カーソルバーの切り替え" = "Toggle show or not show cursor bar";
 "タブバーの切り替え" = "Toggle show or not show tab bar";
 "キーボードを閉じる" = "Dismiss keyboard";
