@@ -92,6 +92,9 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                 }.frame(height: Design.shared.resultViewHeight())
             }
         }
+        .onLongPressGesture {
+            variableStates.action.registerAction(.toggleTabBar)
+        }
     }
 
     private func pressed(candidate: Candidate){
