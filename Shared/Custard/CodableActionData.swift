@@ -200,7 +200,7 @@ public extension CodableActionData{
         case toggle_cursor_bar
         case toggle_tab_bar
         case toggle_caps_lock_state
-        case open_url
+        case warning_private_forbidden_should_not_use_open_url
         case dismiss_keyboard
     }
 
@@ -212,7 +212,7 @@ public extension CodableActionData{
         case .input: return .input
         case .moveCursor: return .move_cursor
         case .moveTab: return .move_tab
-        case .openURL: return .open_url
+        case .openURL: return .warning_private_forbidden_should_not_use_open_url
         case .replaceDefault: return .replace_default
         case .replaceLastCharacters: return .replace_last_characters
         case .smartDelete: return .smart_delete
@@ -308,7 +308,7 @@ public extension CodableActionData{
         case let .moveTab(value):
             try CodableTabArgument(type: .move_tab, tab: value).encode(to: encoder)
         case let .openURL(value):
-            try DestinationArgument(type: .open_url, destination: value).encode(to: encoder)
+            try DestinationArgument(type: .warning_private_forbidden_should_not_use_open_url, destination: value).encode(to: encoder)
         case .dismissKeyboard, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapsLockState, .complete, .smartDeleteDefault, .replaceDefault:
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(self.key, forKey: .type)
@@ -356,7 +356,7 @@ public extension CodableActionData{
             self = .toggleTabBar
         case .dismiss_keyboard:
             self = .dismissKeyboard
-        case .open_url:
+        case .warning_private_forbidden_should_not_use_open_url:
             let value = try DestinationArgument<String>.init(from: decoder)
             self = .openURL(value.destination)
         }
@@ -449,7 +449,7 @@ public extension CodableActionData {
             key = .toggle_caps_lock_state
         case let .openURL(value):
             hasher.combine(value)
-            key = .open_url
+            key = .warning_private_forbidden_should_not_use_open_url
         case .dismissKeyboard:
             key = .dismiss_keyboard
         }
