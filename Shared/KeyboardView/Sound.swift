@@ -23,8 +23,9 @@ struct Sound{
      1131: 電話のキーのような音
      1261: なんかいい感じ
      1306: 純正クリック音
+     1396,7: 軽め
      1522: なんかいい感じ。
-     1420: なんかいい感じ。
+     1420,1429: なんかいい感じ。
      1318まで試した
      */
 
@@ -58,4 +59,12 @@ struct Sound{
             AudioServicesPlaySystemSound(1105)
         }
     }
+
+    /// 操作のリセットを行うときに音を鳴らします。
+    static func reset(){
+        if SettingData.shared.bool(for: .enableSound){
+            AudioServicesPlaySystemSound(1533)
+        }
+    }
+
 }

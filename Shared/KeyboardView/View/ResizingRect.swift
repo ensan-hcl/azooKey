@@ -231,6 +231,7 @@ struct ResizingRect: View {
                     )
                     .gesture(moveGesture)
                 Button{
+                    Sound.reset()
                     withAnimation(.interactiveSpring()){
                         self.position = .zero
                         self.size.width = initialSize.width

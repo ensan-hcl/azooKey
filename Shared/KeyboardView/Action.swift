@@ -172,3 +172,20 @@ extension CodableLongpressActionData{
         .init(start: self.start.map{$0.actionType}, repeat: self.repeat.map{$0.actionType})
     }
 }
+
+extension ActionType{
+    func sound(){
+        switch self{
+        case .input:
+            Sound.click()
+        case .delete:
+            Sound.delete()
+        case .smoothDelete, .smartDelete, .smartMoveCursor:
+            Sound.smoothDelete()
+        case .moveTab, .enter, .changeCharacterType, .toggleShowMoveCursorView, .moveCursor, .enableResizingMode, .replaceLastCharacters, .changeCapsLockState, .toggleTabBar:
+            Sound.tabOrOtherKey()
+        case .DEBUG_DATA_INPUT, .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
+            return
+        }
+    }
+}

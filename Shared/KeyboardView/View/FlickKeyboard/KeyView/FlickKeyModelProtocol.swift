@@ -50,23 +50,6 @@ protocol FlickKeyModelProtocol {
 
 }
 
-extension ActionType{
-    func sound(){
-        switch self{
-        case .input(_):
-            Sound.click()
-        case .delete(_):
-            Sound.delete()
-        case .smoothDelete:
-            Sound.smoothDelete()
-        case .moveTab(_), .enter, .changeCharacterType, .toggleShowMoveCursorView, .moveCursor(_):
-            Sound.tabOrOtherKey()
-        default:
-            return
-        }
-    }
-}
-
 extension FlickKeyModelProtocol{
     func isFlickAble(to direction: FlickDirection) -> Bool {
         return flickKeys.keys.contains(direction)
