@@ -80,7 +80,7 @@ extension Kana2Kanji{
             let includeMMValueCalculation = DicDataStore.includeMMValueCalculation(data)
             let mmValue: PValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
             let ccValue: PValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)
-            let penalty: PValue = -PValue(data.ruby.count &- lastRuby.count)    //文字数差をペナルティとする
+            let penalty: PValue = -PValue(data.ruby.count &- lastRuby.count) * 3.0   //文字数差をペナルティとする
             let wValue: PValue = data.value()
             let newValue: PValue = lastCandidate.value + mmValue + ccValue + wValue + penalty - ignoreCCValue
             //追加すべきindexを取得する
