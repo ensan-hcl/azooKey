@@ -71,7 +71,6 @@
 		1A3DC20A2500D51F002CAA93 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1A3DC20C2500D53B002CAA93 /* FlickKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20B2500D53B002CAA93 /* FlickKeyboardView.swift */; };
 		1A3DC20E2500D55F002CAA93 /* FlickDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20D2500D55F002CAA93 /* FlickDataProvider.swift */; };
-		1A3DC2102500D571002CAA93 /* HorizontalKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */; };
 		1A3DC2152500D59F002CAA93 /* FlickKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2142500D59F002CAA93 /* FlickKeyView.swift */; };
 		1A3DC2172500D5AB002CAA93 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2162500D5AB002CAA93 /* Action.swift */; };
 		1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21A2500D5D1002CAA93 /* FlickKeyModelProtocol.swift */; };
@@ -129,7 +128,6 @@
 		1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */; };
 		1A65C00B250B800E00F297BF /* LatticeNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */; };
 		1A67360625092C1E003FC654 /* DicDataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67360525092C1E003FC654 /* DicDataElement.swift */; };
-		1A6736082509F39E003FC654 /* VerbConjugation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6736072509F39E003FC654 /* VerbConjugation.swift */; };
 		1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A673609250AFBCB003FC654 /* Wareki.swift */; };
 		1A677370256F7AC30037AF22 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* Sound.swift */; };
 		1A6F959725144481007399AC /* QwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* QwertyKeyboardView.swift */; };
@@ -318,7 +316,6 @@
 		1AF6799B25CEDBC000F3987B /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A593259587A200B71E5A /* Design.swift */; };
 		1AF6799C25CEDBC000F3987B /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* Sound.swift */; };
 		1AF679A125CEDC3A00F3987B /* FlickDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20D2500D55F002CAA93 /* FlickDataProvider.swift */; };
-		1AF679A325CEDC3A00F3987B /* HorizontalKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */; };
 		1AF679AD25CEE66F00F3987B /* KeyboardPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */; };
 		1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC03158251103EF004CA505 /* Designs.xcassets */; };
 		1AF6A54725FCF1240037D5ED /* OneHandedModeTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6A54625FCF1240037D5ED /* OneHandedModeTips.swift */; };
@@ -5067,6 +5064,7 @@
 				1A3DC1DB2500D44E002CAA93 /* KanaKanjierTests */,
 				1A3DC1E62500D44E002CAA93 /* KanaKanjierUITests */,
 				1A3DC1FA2500D488002CAA93 /* Keyboard */,
+				1AF6B69225FFAD6C0037D5ED /* deprecated */,
 				1AF1CAF2252F2228002FCC66 /* azooKeyKeyboardTests */,
 				1A3DC1C32500D44A002CAA93 /* Products */,
 			);
@@ -5177,7 +5175,6 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC20B2500D53B002CAA93 /* FlickKeyboardView.swift */,
-				1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */,
 				1A3DC20D2500D55F002CAA93 /* FlickDataProvider.swift */,
 				1A58AAFF2502905F00EB1864 /* SuggestView */,
 				1A3DC2132500D595002CAA93 /* KeyView */,
@@ -5311,7 +5308,6 @@
 				1A64C8BD251315AD00ACD537 /* DicDataStore.swift */,
 				1A67360525092C1E003FC654 /* DicDataElement.swift */,
 				1A364E3125C8361A00A56583 /* LearningMemory.swift */,
-				1A6736072509F39E003FC654 /* VerbConjugation.swift */,
 				1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */,
 			);
 			path = DicDataStore;
@@ -7812,6 +7808,15 @@
 			path = "../../../../../AzooKey-dict/workspaces/2021:01:30/_results/louds";
 			sourceTree = "<group>";
 		};
+		1AF6B69225FFAD6C0037D5ED /* deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */,
+				1A6736072509F39E003FC654 /* VerbConjugation.swift */,
+			);
+			path = deprecated;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -10218,7 +10223,6 @@
 				1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */,
 				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
 				1AB8C37025E0067600D39BC5 /* SimpleKeyView.swift in Sources */,
-				1AF679A325CEDC3A00F3987B /* HorizontalKeyboardView.swift in Sources */,
 				1AF6794C25CEDB8400F3987B /* ExpandedResultView.swift in Sources */,
 				1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */,
 				1AB8C3C625E24D0B00D39BC5 /* CustardManager.swift in Sources */,
@@ -10446,7 +10450,6 @@
 				1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */,
 				1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */,
 				1A4623EF252461A800EF5B02 /* extension UInt.swift in Sources */,
-				1A3DC2102500D571002CAA93 /* HorizontalKeyboardView.swift in Sources */,
 				1AD4DDD1258718F600A6FA18 /* QwertyTabKeyModel.swift in Sources */,
 				1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */,
 				1A2602EA2514F7D100EAD647 /* QwertyVariationsView.swift in Sources */,
@@ -10465,7 +10468,6 @@
 				1A3DC2282500D64D002CAA93 /* ResultView.swift in Sources */,
 				1A9218E4255238CE005F45C4 /* RomanTypographys.swift in Sources */,
 				1AF28CF6253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift in Sources */,
-				1A6736082509F39E003FC654 /* VerbConjugation.swift in Sources */,
 				1AC8A5AB2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1AB8C37525E0067700D39BC5 /* SimpleKeyView.swift in Sources */,
 				1A8A8402250F65110093A701 /* all.swift in Sources */,

@@ -6,9 +6,9 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
+/*
 import Foundation
 import SwiftUI
-
 fileprivate enum KeyboardAlignment{
     case right, left, center
 }
@@ -114,3 +114,4 @@ struct HorizontalFlickKeyboardView: View {
         }
     }
 }
+*/
