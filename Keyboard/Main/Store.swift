@@ -902,12 +902,23 @@ private final class InputManager{
             $0.max = max($0.max, $1.count)
             $0.min = min($0.min, $1.count)
         }
-        let leftside = inputtedText.prefix(cursorPosition)
-        for count in (counts.min...counts.max).reversed() where count <= cursorPosition {
-            if let replace = table[String(leftside.suffix(count))]{
-                self.deleteBackward(count: count, requireSetResult: false)
-                self.input(text: replace)
-                break
+        if !inputtedText.isEmpty{
+            let leftside = inputtedText.prefix(cursorPosition)
+            for count in (counts.min...counts.max).reversed() where count <= cursorPosition {
+                if let replace = table[String(leftside.suffix(count))]{
+                    self.deleteBackward(count: count, requireSetResult: false)
+                    self.input(text: replace)
+                    break
+                }
+            }
+        }else{
+            let leftside = proxy.documentContextBeforeInput ?? ""
+            for count in (counts.min...counts.max).reversed() where count <= cursorPosition {
+                if let replace = table[String(leftside.suffix(count))]{
+                    self.proxy.deleteBackward(count: count)
+                    self.input(text: replace)
+                    break
+                }
             }
         }
     }
