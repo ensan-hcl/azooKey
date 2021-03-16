@@ -323,15 +323,17 @@ struct CustomKeyboardView: View {
                 }
             case .pcStyle:
                 let models = custard.interface.qwertyKeyModels
-                ForEach(0..<value.columnCount, id: \.self){y in
-                    ForEach(0..<value.rowCount, id: \.self){x in
-                        if let data = models[.gridFit(x: x, y: y)]{
-                            let info = qwertyKeyData(x: x, y: y, size: data.sizeType)
-                            QwertyKeyView(model: data.model, tabDesign: tabDesign, size: info.size)
-                                .position(x: info.position.x, y: info.position.y)
+                ZStack{
+                    ForEach(0..<value.columnCount, id: \.self){y in
+                        ForEach(0..<value.rowCount, id: \.self){x in
+                            if let data = models[.gridFit(x: x, y: y)]{
+                                let info = qwertyKeyData(x: x, y: y, size: data.sizeType)
+                                QwertyKeyView(model: data.model, tabDesign: tabDesign, size: info.size)
+                                    .position(x: info.position.x, y: info.position.y)
+                            }
                         }
-                    }
-                }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+                    }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+                }
             /*
              VStack(spacing: tabDesign.verticalSpacing){
              ForEach(0..<value.columnCount, id: \.self){y in
