@@ -331,6 +331,13 @@ public extension CustardInterface {
         let specifier: CustardKeyPositionSpecifier
         let key: CustardInterfaceKey
 
+        private var specifierType: SpecifierType {
+            switch self.specifier{
+            case .gridFit: return .grid_fit
+            case .gridScroll: return .grid_scroll
+            }
+        }
+
         private enum CodingKeys: CodingKey {
             case specifier_type
             case specifier
@@ -340,14 +347,14 @@ public extension CustardInterface {
 
         func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(specifierType, forKey: .specifier_type)
             switch self.specifier{
             case let .gridFit(value):
-                try container.encode(SpecifierType.grid_fit, forKey: .specifier_type)
                 try container.encode(value, forKey: .specifier)
             case let .gridScroll(value):
-                try container.encode(SpecifierType.grid_scroll, forKey: .specifier_type)
                 try container.encode(value, forKey: .specifier)
             }
+
             switch self.key{
             case let .system(value):
                 try container.encode(KeyType.system, forKey: .key_type)
