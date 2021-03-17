@@ -126,7 +126,7 @@ public struct ScanItem: Codable, Hashable {
 }
 /// - アクション
 /// - actions done in key pressing
-public enum CodableActionData: Codable, Hashable {
+public enum CodableActionData: Codable, Equatable {
     /// - input action specified character
     case input(String)
 
@@ -408,7 +408,7 @@ public extension CodableActionData {
             return false
         }
     }
-
+    /*
     func hash(into hasher: inout Hasher) {
         let key: ValueType
         switch self {
@@ -455,6 +455,8 @@ public extension CodableActionData {
         }
         hasher.combine(key)
     }
+     */
+
 }
 
 public struct CodableLongpressActionData: Codable, Equatable {
