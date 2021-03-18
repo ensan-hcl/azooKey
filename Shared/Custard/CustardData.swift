@@ -338,6 +338,13 @@ public extension CustardInterface {
             }
         }
 
+        private var keyType: KeyType {
+            switch self.key{
+            case .system: return .system
+            case .custom: return .custom
+            }
+        }
+
         private enum CodingKeys: CodingKey {
             case specifier_type
             case specifier
@@ -349,25 +356,20 @@ public extension CustardInterface {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(specifierType, forKey: .specifier_type)
             switch self.specifier{
-            case let .gridFit(value):
-                try container.encode(value, forKey: .specifier)
-            case let .gridScroll(value):
-                try container.encode(value, forKey: .specifier)
+            case let .gridFit(value as Encodable),
+                 let .gridScroll(value as Encodable):
+                try value.containerEncode(container: &container, key: CodingKeys.specifier)
             }
-
+            try container.encode(keyType, forKey: .key_type)
             switch self.key{
-            case let .system(value):
-                try container.encode(KeyType.system, forKey: .key_type)
-                try container.encode(value, forKey: .key)
-            case let .custom(value):
-                try container.encode(KeyType.custom, forKey: .key_type)
-                try container.encode(value, forKey: .key)
+            case let .system(value as Encodable),
+                 let .custom(value as Encodable):
+                try value.containerEncode(container: &container, key: CodingKeys.key)
             }
         }
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-
             let specifierType = try container.decode(SpecifierType.self, forKey: .specifier_type)
             switch specifierType{
             case .grid_fit:
@@ -450,13 +452,19 @@ public extension CustardKeyLabelStyle{
         case system_image
     }
 
+    private var key: CodingKeys {
+        switch self{
+        case .text: return .text
+        case .systemImage: return .system_image
+        }
+    }
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case let .text(value):
-            try container.encode(value, forKey: .text)
-        case let .systemImage(value):
-            try container.encode(value, forKey: .system_image)
+        case let .text(value),
+             let .systemImage(value):
+            try container.encode(value, forKey: key)
         }
     }
 
@@ -527,9 +535,10 @@ public enum CustardInterfaceSystemKey: Codable {
 }
 
 public extension CustardInterfaceSystemKey{
-    enum CodingKeys: CodingKey {
-        case type, size
+    private enum CodingKeys: CodingKey {
+        case type
     }
+
     private enum ValueType: String, Codable {
         case change_keyboard
         case enter
@@ -622,20 +631,27 @@ public extension CustardInterfaceVariation {
         case key
     }
 
-    enum ValueType: String, Codable {
+    private enum ValueType: String, Codable {
         case flick_variation
         case longpress_variation
+    }
+
+    private var valueType: ValueType {
+        switch self.type{
+        case .flickVariation: return .flick_variation
+        case .longpressVariation: return .longpress_variation
+        }
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.key, forKey: .key)
+        try container.encode(self.valueType, forKey: .type)
         switch self.type{
         case let .flickVariation(value):
-            try container.encode(ValueType.flick_variation, forKey: .type)
             try container.encode(value, forKey: .direction)
         case .longpressVariation:
-            try container.encode(ValueType.longpress_variation, forKey: .type)
+            break
         }
     }
 

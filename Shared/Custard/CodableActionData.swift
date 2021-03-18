@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 /// - Tab specifier
-public enum CodableTabData: Codable, Hashable {
+public enum CodableTabData: Hashable {
     /// - tabs prepared by default
     case system(SystemTab)
     /// - tabs made as custom tabs.
@@ -50,43 +50,18 @@ public enum CodableTabData: Codable, Hashable {
     }
 }
 
-public extension CodableTabData{
-    enum CodingKeys: CodingKey{
-        case type
-        case destination
-    }
-
+public extension CodableTabData {
     private enum ValueType: String, Codable{
         case custom, system
     }
 
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case let .system(value):
-            try container.encode(ValueType.system, forKey: .type)
-            try container.encode(value, forKey: .destination)
-        case let .custom(value):
-            try container.encode(ValueType.custom, forKey: .type)
-            try container.encode(value, forKey: .destination)
+    private var valueType: ValueType {
+        switch self{
+        case .system: return .system
+        case .custom: return .custom
         }
     }
 
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let valueType = try container.decode(ValueType.self, forKey: .type)
-        switch valueType {
-        case .system:
-            let value = try container.decode(SystemTab.self,forKey: .destination)
-            self = .system(value)
-        case .custom:
-            let value = try container.decode(String.self,forKey: .destination)
-            self = .custom(value)
-        }
-    }
-}
-
-public extension CodableTabData {
     static func == (lhs: Self, rhs: Self) -> Bool {
         switch (lhs, rhs){
         case let(.system(ltab), .system(rtab)):
@@ -99,13 +74,12 @@ public extension CodableTabData {
     }
 
     func hash(into hasher: inout Hasher) {
+        hasher.combine(valueType)
         switch self{
         case let .system(tab):
             hasher.combine(tab)
-            hasher.combine(ValueType.system)
         case let .custom(tab):
             hasher.combine(tab)
-            hasher.combine(ValueType.custom)
         }
     }
 }
@@ -183,6 +157,12 @@ public enum CodableActionData: Codable, Equatable {
 public extension CodableActionData{
     enum CodingKeys: CodingKey {
         case type
+        case text
+        case count
+        case table
+        case destination
+        case tab_type, identifier
+        case direction, targets
     }
 
     private enum ValueType: String, Codable{
@@ -224,94 +204,61 @@ public extension CodableActionData{
         case .toggleTabBar: return .toggle_tab_bar
         }
     }
-
-    private struct InputArgument: Codable {
-        var type: ValueType = .input
-        var text: String
-    }
-    private struct CountArgument: Codable {
-        var type: ValueType
-        var count: Int
-    }
-    private struct TableArgument<Key: Codable&Hashable, Value: Codable>: Codable {
-        var type: ValueType
-        var table: [Key: Value]
-    }
-    private struct DestinationArgument<Destination: Codable>: Codable {
-        var type: ValueType
-        var destination: Destination
-    }
-    private struct CodableTabArgument: Codable {
-        internal init(type: CodableActionData.ValueType, tab: CodableTabData) {
-            self.type = type
+    private struct CodableTabArgument{
+        internal init(tab: CodableTabData) {
             self.tab = tab
         }
-        
-        var type: ValueType
-        var tab: CodableTabData
-
-        enum CodingKeys: CodingKey{
-            case type, tab_type, identifier
-        }
+        private var tab: CodableTabData
 
         private enum TabType: String, Codable{
             case custom, system
         }
 
-        func encode(to encoder: Encoder) throws {
-            var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(type, forKey: .type)
-            switch tab {
-            case let .system(value):
+        func containerEncode(container: inout KeyedEncodingContainer<CodingKeys>) throws {
+            switch tab{
+            case .system:
                 try container.encode(TabType.system, forKey: .tab_type)
-                try container.encode(value, forKey: .identifier)
-            case let .custom(value):
+            case .custom:
                 try container.encode(TabType.custom, forKey: .tab_type)
-                try container.encode(value, forKey: .identifier)
+            }
+            switch tab {
+            case let .system(value as Encodable),
+                 let .custom(value as Encodable):
+                try value.containerEncode(container: &container, key: .identifier)
             }
         }
 
-        init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            self.type = try container.decode(ValueType.self, forKey: .type)
-            let tabType = try container.decode(TabType.self, forKey: .tab_type)
-            switch tabType {
+        static func containerDecode(container: KeyedDecodingContainer<CodingKeys>) throws -> CodableTabData {
+            let type = try container.decode(TabType.self, forKey: .tab_type)
+            switch type {
             case .system:
-                let value = try container.decode(CodableTabData.SystemTab.self, forKey: .identifier)
-                self.tab = .system(value)
+                let tab = try container.decode(CodableTabData.SystemTab.self, forKey: .identifier)
+                return .system(tab)
             case .custom:
-                let value = try container.decode(String.self, forKey: .identifier)
-                self.tab = .custom(value)
+                let tab = try container.decode(String.self, forKey: .identifier)
+                return .custom(tab)
             }
         }
-    }
-    private struct ScanArgument: Codable {
-        var type: ValueType
-        var direction: ScanItem.Direction
-        var targets: [String]
     }
 
     func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.key, forKey: .type)
         switch self {
         case let .input(value):
-            try InputArgument(text: value).encode(to: encoder)
+            try container.encode(value, forKey: .text)
         case let .replaceLastCharacters(value):
-            try TableArgument(type: .replace_last_characters, table: value).encode(to: encoder)
-        case let .delete(value):
-            try CountArgument(type: .delete, count: value).encode(to: encoder)
-        case let .smartDelete(value):
-            try ScanArgument(type: .smart_delete, direction: value.direction, targets: value.targets).encode(to: encoder)
-        case let .moveCursor(value):
-            try CountArgument(type: .move_cursor, count: value).encode(to: encoder)
-        case let .smartMoveCursor(value):
-            try ScanArgument(type: .smart_move_cursor, direction: value.direction, targets: value.targets).encode(to: encoder)
+            try container.encode(value, forKey: .table)
+        case let .delete(value), let .moveCursor(value):
+            try container.encode(value, forKey: .count)
+        case let .smartDelete(value), let .smartMoveCursor(value):
+            try container.encode(value.direction, forKey: .direction)
+            try container.encode(value.targets, forKey: .targets)
         case let .moveTab(value):
-            try CodableTabArgument(type: .move_tab, tab: value).encode(to: encoder)
+            try CodableTabArgument(tab: value).containerEncode(container: &container)
         case let .openURL(value):
-            try DestinationArgument(type: .warning_private_forbidden_should_not_use_open_url, destination: value).encode(to: encoder)
-        case .dismissKeyboard, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapsLockState, .complete, .smartDeleteDefault, .replaceDefault:
-            var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(self.key, forKey: .type)
+            try container.encode(value, forKey: .destination)
+        case .dismissKeyboard, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapsLockState, .complete, .smartDeleteDefault, .replaceDefault: break
         }
     }
 
@@ -320,32 +267,34 @@ public extension CodableActionData{
         let valueType = try container.decode(ValueType.self, forKey: .type)
         switch valueType {
         case .input:
-            let value = try InputArgument.init(from: decoder)
-            self = .input(value.text)
+            let value = try container.decode(String.self, forKey: .text)
+            self = .input(value)
         case .replace_default:
             self = .replaceDefault
         case .replace_last_characters:
-            let value = try TableArgument<String,String>.init(from: decoder)
-            self = .replaceLastCharacters(value.table)
+            let value = try container.decode([String: String].self, forKey: .table)
+            self = .replaceLastCharacters(value)
         case .delete:
-            let value = try CountArgument.init(from: decoder)
-            self = .delete(value.count)
+            let value = try container.decode(Int.self, forKey: .count)
+            self = .delete(value)
         case .smart_delete_default:
             self = .smartDeleteDefault
         case .smart_delete:
-            let value = try ScanArgument.init(from: decoder)
-            self = .smartDelete(.init(targets: value.targets, direction: value.direction))
+            let direction = try container.decode(ScanItem.Direction.self, forKey: .direction)
+            let targets = try container.decode([String].self, forKey: .targets)
+            self = .smartDelete(.init(targets: targets, direction: direction))
         case .complete:
             self = .complete
         case .move_cursor:
-            let value = try CountArgument.init(from: decoder)
-            self = .moveCursor(value.count)
+            let value = try container.decode(Int.self, forKey: .count)
+            self = .moveCursor(value)
         case .smart_move_cursor:
-            let value = try ScanArgument.init(from: decoder)
-            self = .smartMoveCursor(.init(targets: value.targets, direction: value.direction))
+            let direction = try container.decode(ScanItem.Direction.self, forKey: .direction)
+            let targets = try container.decode([String].self, forKey: .targets)
+            self = .smartMoveCursor(.init(targets: targets, direction: direction))
         case .move_tab:
-            let value = try CodableTabArgument.init(from: decoder)
-            self = .moveTab(value.tab)
+            let value = try CodableTabArgument.containerDecode(container: container)
+            self = .moveTab(value)
         case .enable_resizing_mode:
             self = .enableResizingMode
         case .toggle_cursor_bar:
@@ -357,8 +306,8 @@ public extension CodableActionData{
         case .dismiss_keyboard:
             self = .dismissKeyboard
         case .warning_private_forbidden_should_not_use_open_url:
-            let value = try DestinationArgument<String>.init(from: decoder)
-            self = .openURL(value.destination)
+            let value = try container.decode(String.self, forKey: .destination)
+            self = .openURL(value)
         }
     }
 }
@@ -392,6 +341,8 @@ public extension CodableActionData {
         case let (.moveTab(l), .moveTab(r)):
             return l == r
 
+        case (.enableResizingMode, .enableResizingMode):
+            return true
         case (.toggleTabBar, .toggleTabBar):
             return true
         case (.toggleCursorBar,.toggleCursorBar):
