@@ -121,7 +121,7 @@ public enum CodableActionData: Codable, Hashable {
 }
 
 public extension CodableActionData{
-    enum CodingKeys: CodingKey {
+    private enum CodingKeys: CodingKey {
         case type
         case text
         case count
