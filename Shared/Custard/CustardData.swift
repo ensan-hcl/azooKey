@@ -358,13 +358,13 @@ public extension CustardInterface {
             switch self.specifier{
             case let .gridFit(value as Encodable),
                  let .gridScroll(value as Encodable):
-                try value.containerEncode(container: &container, key: CodingKeys.specifier)
+                try value.containerEncode(container: &container, key: .specifier)
             }
             try container.encode(keyType, forKey: .key_type)
             switch self.key{
             case let .system(value as Encodable),
                  let .custom(value as Encodable):
-                try value.containerEncode(container: &container, key: CodingKeys.key)
+                try value.containerEncode(container: &container, key: .key)
             }
         }
 
