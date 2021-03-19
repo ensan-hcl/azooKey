@@ -136,11 +136,10 @@ struct EditingScrollCustardView: View {
         let rowCount = max(Double(data.rowCount) ?? 8, 1)
         let columnCount = max(Double(data.columnCount) ?? 4, 1)
         return Custard(
-            custard_version: .v1_0,
             identifier: data.tabName.isEmpty ? "new_tab" : data.tabName,
-            display_name: data.tabName.isEmpty ? "New tab" : data.tabName,
             language: .none,
             input_style: .direct,
+            metadata: .init(custard_version: .v1_0, display_name: data.tabName.isEmpty ? "New tab" : data.tabName),
             interface: .init(
                 key_style: .tenkeyStyle,
                 key_layout: .gridScroll(.init(direction: data.direction, rowCount: rowCount, columnCount: columnCount)),

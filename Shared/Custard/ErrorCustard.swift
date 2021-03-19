@@ -11,11 +11,10 @@ import SwiftUI
 
 extension Custard{
     static let errorMessage = Custard(
-        custard_version: .v1_0,
         identifier: "error_message",
-        display_name: "エラーメッセージ",
         language: .undefined,
         input_style: .direct,
+        metadata: .init(custard_version: .v1_0, display_name: "エラーメッセージ"),
         interface: .init(
             key_style: .tenkeyStyle,
             key_layout: .gridFit(.init(width: 1, height: 6)),

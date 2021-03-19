@@ -37,7 +37,7 @@ fileprivate extension CustardInputStyle {
     }
 }
 
-fileprivate extension CustardMetaData.Origin {
+fileprivate extension CustardInternalMetaData.Origin {
     var description: LocalizedStringKey {
         switch self{
         case .userMade:
@@ -86,7 +86,7 @@ struct CustardInformationView: View {
             HStack{
                 Text("タブ名")
                 Spacer()
-                Text(custard.display_name)
+                Text(custard.metadata.display_name)
             }
             HStack{
                 Text("識別子")
@@ -124,7 +124,7 @@ struct CustardInformationView: View {
             }else{
                 Button("タブバーに追加"){
                     do{
-                        try manager.addTabBar(item: TabBarItem(label: .text(custard.display_name), actions: [.moveTab(.custom(custard.identifier))]))
+                        try manager.addTabBar(item: TabBarItem(label: .text(custard.metadata.display_name), actions: [.moveTab(.custom(custard.identifier))]))
                         added = true
                     }catch{
                         debug(error)

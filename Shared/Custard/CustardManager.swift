@@ -9,7 +9,7 @@
 import Foundation
 import CryptoKit
 
-struct CustardMetaData: Codable {
+struct CustardInternalMetaData: Codable {
     var origin: Origin
 
     enum Origin: String, Codable {
@@ -21,7 +21,7 @@ struct CustardMetaData: Codable {
 struct CustardManagerIndex: Codable {
     var availableCustards: [String] = []
     var availableTabBars: [Int] = []
-    var metadata: [String: CustardMetaData] = [:]
+    var metadata: [String: CustardInternalMetaData] = [:]
 
     enum CodingKeys: CodingKey{
         case availableCustards
@@ -29,7 +29,7 @@ struct CustardManagerIndex: Codable {
         case metadata
     }
 
-    internal init(availableCustards: [String] = [], availableTabBars: [Int] = [], metadata: [String : CustardMetaData] = [:]) {
+    internal init(availableCustards: [String] = [], availableTabBars: [Int] = [], metadata: [String : CustardInternalMetaData] = [:]) {
         self.availableCustards = availableCustards
         self.availableTabBars = availableTabBars
         self.metadata = metadata
@@ -46,7 +46,7 @@ struct CustardManagerIndex: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.availableCustards = try container.decode([String].self, forKey: .availableCustards)
         self.availableTabBars = try container.decode([Int].self, forKey: .availableTabBars)
-        self.metadata = try container.decode([String: CustardMetaData].self, forKey: .metadata)
+        self.metadata = try container.decode([String: CustardInternalMetaData].self, forKey: .metadata)
     }
 }
 
@@ -142,7 +142,7 @@ struct CustardManager {
         try self.saveTabBarData(tabBarData: newTabBar)
     }
 
-    mutating func saveCustard(custard: Custard, metadata: CustardMetaData, userData: UserMadeCustard? = nil, updateTabBar: Bool = false) throws {
+    mutating func saveCustard(custard: Custard, metadata: CustardInternalMetaData, userData: UserMadeCustard? = nil, updateTabBar: Bool = false) throws {
         let encoder = JSONEncoder()
         let data = try encoder.encode(custard)
         let fileName = Self.fileName(custard.identifier)
@@ -159,7 +159,7 @@ struct CustardManager {
         }
 
         if updateTabBar && !self.checkTabExistInTabBar(tab: .custom(custard.identifier)){
-            try self.addTabBar(item: .init(label: .text(custard.display_name), actions: [.moveTab(.custom(custard.identifier))]))
+            try self.addTabBar(item: .init(label: .text(custard.metadata.display_name), actions: [.moveTab(.custom(custard.identifier))]))
         }
 
         self.index.metadata[custard.identifier] = metadata
@@ -245,7 +245,7 @@ struct CustardManager {
         return index.availableTabBars
     }
 
-    var metadata: [String: CustardMetaData] {
+    var metadata: [String: CustardInternalMetaData] {
         return index.metadata
     }
 

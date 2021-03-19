@@ -163,7 +163,7 @@ struct ManageCustardView: View {
                let custards = (data.custards ?? data.process(data: value)){
                 ForEach(custards, id: \.identifier){custard in
                     Section(header: Text("読み込んだタブ")){
-                        Text("「\(custard.display_name)(\(custard.identifier))」の読み込みに成功しました")
+                        Text("「\(custard.metadata.display_name)(\(custard.identifier))」の読み込みに成功しました")
                         CenterAlignedView{
                             KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
                         }
