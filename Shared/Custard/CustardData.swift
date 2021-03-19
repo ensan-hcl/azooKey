@@ -198,23 +198,6 @@ public enum CustardKeyPositionSpecifier: Hashable {
     case gridScroll(GridScrollPositionSpecifier)
 }
 
-public extension CustardKeyPositionSpecifier {
-    private enum ValueType{
-        case grid_fit, grid_scroll
-    }
-
-    func hash(into hasher: inout Hasher) {
-        switch self {
-        case let .gridFit(value):
-            hasher.combine(ValueType.grid_fit)
-            hasher.combine(value)
-        case let .gridScroll(value):
-            hasher.combine(ValueType.grid_scroll)
-            hasher.combine(value)
-        }
-    }
-}
-
 /// - gridFitのレイアウトを利用した際のキーの位置指定子に与える値
 /// - values in position specifier when you use grid fit layout
 public struct GridFitPositionSpecifier: Codable, Hashable {
@@ -237,13 +220,6 @@ public struct GridFitPositionSpecifier: Codable, Hashable {
     let width: Int
     let height: Int
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(x)
-        hasher.combine(y)
-        hasher.combine(width)
-        hasher.combine(height)
-    }
-
     private enum CodingKeys: CodingKey{
         case x, y, width, height
     }
@@ -252,8 +228,8 @@ public struct GridFitPositionSpecifier: Codable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.x = try container.decode(Int.self, forKey: .x)
         self.y = try container.decode(Int.self, forKey: .y)
-        self.width = abs((try? container.decode(Int.self, forKey: .width)) ?? 1)
-        self.height = abs((try? container.decode(Int.self, forKey: .height)) ?? 1)
+        self.width = try container.decode(Int.self, forKey: .width)
+        self.height = try container.decode(Int.self, forKey: .height)
     }
 }
 
@@ -266,10 +242,6 @@ public struct GridScrollPositionSpecifier: Codable, Hashable, ExpressibleByInteg
 
     public init(_ index: Int){
         self.index = index
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(index)
     }
 }
 
