@@ -146,7 +146,8 @@ struct ResizingRect: View {
             }
             .onEnded{value in
                 self.setInitial()
-                self.updateUserDefaults()            }
+                self.updateUserDefaults()
+            }
     }
 
     var body: some View {
@@ -339,17 +340,40 @@ struct ResizingBindingFrame: ViewModifier {
             }
             .frame(width: r, height: r)
 
+            let button3 = Button{
+                Sound.reset()
+                withAnimation(.interactiveSpring()){
+                    self.position = .zero
+                    self.size.width = initialSize.width
+                    self.size.height = initialSize.height
+                }
+                KeyboardInternalSetting.shared.update(\.oneHandedModeSetting){value in
+                    value.set(layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation, size: initialSize, position: .zero)
+                }
+            }label: {
+                Circle()
+                    .fill(Color.red)
+                    .frame(width: r, height: r)
+                    .overlay(
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .foregroundColor(.white)
+                            .font(Font.system(size: r*0.5))
+                    )
+            }
+
             switch data.stack{
             case .H:
                 HStack{
                     button1
                     button2
+                    button3
                 }
                 .position(x: data.position.x, y: data.position.y)
             case .V:
                 VStack{
                     button1
                     button2
+                    button3
                 }
                 .position(x: data.position.x, y: data.position.y)
             }
