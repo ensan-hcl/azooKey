@@ -47,7 +47,7 @@ struct SimpleKeyView: View {
             .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
             .overlay(
                 Group{
-                    if !(model is SimpleChangeKeyboardKeyModel){
+                    if !(model is SimpleChangeKeyboardKeyModel && SemiStaticStates.shared.needsInputModeSwitchKey){
                         TouchDownAndTouchUpGestureView{
                             isPressed = true
                             pressStartDate = Date()

@@ -54,8 +54,10 @@ struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol{
             return KeyLabel(.selectable(languages.0.symbol, languages.1.symbol), width: width, textColor: color)
         }else if languages.1 == currentTabLanguage{
             return KeyLabel(.selectable(languages.1.symbol, languages.0.symbol), width: width, textColor: color)
-        }else{
+        }else if SemiStaticStates.shared.needsInputModeSwitchKey{
             return KeyLabel(.text(VariableStates.shared.keyboardLanguage.symbol), width: width, textColor: color)
+        }else{
+            return KeyLabel(.text(SettingData.shared.preferredLanguageSetting.first.symbol), width: width, textColor: color)
         }
     }
 

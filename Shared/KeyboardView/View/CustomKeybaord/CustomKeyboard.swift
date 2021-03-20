@@ -60,22 +60,6 @@ fileprivate extension CustardInterface{
     enum KeyPosition: Hashable {
         case gridFit(x: Int, y: Int)
         case gridScroll(index: Int)
-
-        enum ValueType: Hashable {
-            case gridFit, gridScroll
-        }
-
-        func hash(into hasher: inout Hasher) {
-            switch self{
-            case let .gridFit(x: x, y: y):
-                hasher.combine(ValueType.gridFit)
-                hasher.combine(x)
-                hasher.combine(y)
-            case let .gridScroll(index: index):
-                hasher.combine(ValueType.gridScroll)
-                hasher.combine(index)
-            }
-        }
     }
 
     var flickKeyModels: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {

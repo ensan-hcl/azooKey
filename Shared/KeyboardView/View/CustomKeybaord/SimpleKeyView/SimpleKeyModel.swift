@@ -55,7 +55,6 @@ protocol SimpleKeyModelProtocol{
 }
 
 extension SimpleKeyModelProtocol{
-
     func press(){
         self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
     }
@@ -124,11 +123,10 @@ struct SimpleEnterKeyModel: SimpleKeyModelProtocol{
 }
 
 struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol{
-    var pressActions: [ActionType]{
-        switch SemiStaticStates.shared.needsInputModeSwitchKey{
-        case true:
+    var pressActions: [ActionType] {
+        if SemiStaticStates.shared.needsInputModeSwitchKey{
             return []
-        case false:
+        }else{
             return [.toggleShowMoveCursorView]
         }
     }
@@ -136,10 +134,9 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol{
     let longPressActions: LongpressActionType = .none
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
-        switch SemiStaticStates.shared.needsInputModeSwitchKey{
-        case true:
+        if SemiStaticStates.shared.needsInputModeSwitchKey{
             return KeyLabel(.changeKeyboard, width: width)
-        case false:
+        }else{
             return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: width)
         }
     }
