@@ -15,16 +15,17 @@ struct CustomizeTabView: View {
     @State private var manager: CustardManager
 
     init(){
-        let manager = CustardManager.load()
+        var manager = CustardManager.load()
         self._manager = State(initialValue: manager)
         if let tabBarData = try? manager.tabbar(identifier: 0){
             self._tabBarData = State(initialValue: tabBarData)
         }else{
-            self._tabBarData = State(initialValue: TabBarData(identifier: 0, items: [
-                TabBarItem(label: .text("片手"), actions: [.enableResizingMode, .toggleTabBar]),
-                TabBarItem(label: .text("あいう"), actions: [.moveTab(.system(.user_japanese))]),
-                TabBarItem(label: .text("ABC"), actions: [.moveTab(.system(.user_english))]),
-            ]))
+            self._tabBarData = State(initialValue: TabBarData.default)
+            do{
+                try manager.saveTabBarData(tabBarData: self.tabBarData)
+            }catch{
+                debug(error)
+            }
         }
     }
 
