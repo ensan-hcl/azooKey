@@ -80,80 +80,6 @@ enum CustomizableFlickKey: String, Codable{
             return [.center, .top, .right, .bottom]
         }
     }
-
-    var defaultInput: [FlickKeyPosition: String] {
-        switch self {
-        case .kogana:
-            return [
-                .left: "",
-                .top: "",
-                .right: "",
-                .bottom: "",
-                .center: "",
-            ]
-        case .kanaSymbols:
-            return [
-                .left: "。",
-                .top: "？",
-                .right: "！",
-                .bottom: "",
-                .center: "、",
-            ]
-        case .hiraTab, .abcTab, .symbolsTab:
-            return [
-                .left: "",
-                .top: "",
-                .right: "",
-                .bottom: "",
-                .center: "",
-            ]
-        }
-    }
-
-    var defaultLabel: [FlickKeyPosition: String] {
-        switch self {
-        case .kogana:
-            return [
-                .left: "",
-                .top: "",
-                .right: "",
-                .bottom: "",
-                .center: "小ﾞﾟ",
-            ]
-        case .kanaSymbols:
-            return [
-                .left: "。",
-                .top: "？",
-                .right: "！",
-                .bottom: "",
-                .center: "､｡?!",
-            ]
-        case .hiraTab:
-            return [
-                .left: "",
-                .top: "",
-                .right: "",
-                .bottom: "",
-                .center: "あいう",
-            ]
-        case .abcTab:
-            return [
-                .left: "",
-                .top: "",
-                .right: "",
-                .bottom: "",
-                .center: "abc",
-            ]
-        case .symbolsTab:
-            return [
-                .left: "",
-                .top: "",
-                .right: "",
-                .bottom: "",
-                .center: "☆123",
-            ]
-        }
-    }
 }
 
 enum FlickKeyPosition: String, Codable{
@@ -201,7 +127,7 @@ struct FlickCustomKey: Codable{
         }else if let input = input{
             self.actions = [.input(input)]
         }else{
-            self.actions = [.input(label)]
+            self.actions = []
         }
         self.longpressActions = (try? container.decode(CodableLongpressActionData.self, forKey: .longpressActions)) ?? .none
     }

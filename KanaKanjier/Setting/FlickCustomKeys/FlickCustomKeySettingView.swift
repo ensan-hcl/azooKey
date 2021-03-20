@@ -155,7 +155,7 @@ struct FlickCustomKeysSettingView: View {
 
     private func label(_ position: FlickKeyPosition) -> String {
         if !self.isPossiblePosition(position){
-            return viewModel.value.identifier.defaultLabel[position]!
+            return viewModel.value.identifier.defaultSetting[keyPath: position.keyPath].label
         }
         return self.viewModel.value[keyPath: position.keyPath].label
     }
@@ -215,11 +215,6 @@ struct FlickCustomKeysSettingView: View {
             editState.state = .none
             editState.details.toggle()
         })
-        .onChange(of: inputValue){value in
-            if let position = selectState.selectedPosition{
-                self.viewModel.value[keyPath: position.keyPath].actions = [.input(value)]
-            }
-        }
         .onChange(of: selectState.selectedPosition){value in
             if let position = selectState.selectedPosition{
                 inputValue = getInputText(actions: self.viewModel.value[keyPath: position.keyPath].actions) ?? ""
@@ -295,6 +290,11 @@ struct FlickCustomKeysSettingView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
+                    .onChange(of: inputValue){value in
+                        if let position = selectState.selectedPosition{
+                            self.viewModel.value[keyPath: position.keyPath].actions = [.input(value)]
+                        }
+                    }
             }else{
                 Text("このキーは編集できません。")
                     .font(.caption)
@@ -344,7 +344,7 @@ struct FlickCustomKeysSettingView: View {
     private func reload(){
         if let position = selectState.selectedPosition, self.isPossiblePosition(position){
             viewModel.value[keyPath: position.keyPath] = viewModel.value.identifier.defaultSetting[keyPath: position.keyPath]
-            inputValue = viewModel.value.identifier.defaultInput[position, default: ""]
+            inputValue = self.getInputText(actions: viewModel.value.identifier.defaultSetting[keyPath: position.keyPath].actions) ?? ""
         }
     }
 
