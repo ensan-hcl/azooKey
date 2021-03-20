@@ -42,7 +42,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
             case .qwerty_symbols:
                 return [.moveTab(targetTab)]
             default:
-                return [.moveTab(.existential(.qwerty_symbols))]
+                return [.toggleShowMoveCursorView]
             }
         case .tabBar:
             return [.toggleTabBar]
@@ -80,7 +80,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
             case .qwerty_symbols:
                 return KeyLabel(.text(language.symbol), width: width, textColor: color)
             default:
-                return KeyLabel(.text("#+="), width: width, textColor: color)
+                return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: width)
             }
         case .tabBar:
             return KeyLabel(.image("list.bullet"), width: width, textColor: color)
