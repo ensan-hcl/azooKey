@@ -225,7 +225,7 @@ struct ManageCustardView: View {
                     }
 
                     Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
-                    FallbackLink("カスタムタブファイルの作り方", destination: "https://google.com")
+                    FallbackLink("カスタムタブファイルの作り方", destination: "https://github.com/ensan-hcl/CustardKit")
                 }
             }
         }

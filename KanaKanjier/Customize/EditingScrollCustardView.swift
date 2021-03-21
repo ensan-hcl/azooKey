@@ -65,14 +65,15 @@ struct EditingScrollCustardView: View {
                             HStack{
                                 Text("縦方向キー数")
                                 Spacer()
-                                TextField("縦方向キー数", text: $editingItem.rowCount)
+                                TextField("縦方向キー数", text: $editingItem.columnCount)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                             }
                             HStack{
                                 Text("横方向キー数")
                                 Spacer()
-                                TextField("横方向キー数", text: $editingItem.columnCount).keyboardType(.numberPad)
+                                TextField("横方向キー数", text: $editingItem.rowCount)
+                                    .keyboardType(.numberPad)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                             }
                             Toggle(isOn: $editingItem.addTabBarAutomatically){
