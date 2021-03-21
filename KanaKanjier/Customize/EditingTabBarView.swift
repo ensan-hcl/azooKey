@@ -42,16 +42,7 @@ struct EditingTabBarView: View {
     var body: some View {
         Form {
             Section{
-                Button{
-                    withAnimation(Animation.interactiveSpring()){
-                        items.append(
-                            EditingTabBarItem(
-                                label: .text("アイテム"),
-                                actions: [.moveTab(.system(.user_japanese))]
-                            )
-                        )
-                    }
-                } label: {
+                Button(action: add){
                     HStack{
                         Image(systemName: "plus")
                         Text("アイテムを追加")
@@ -97,7 +88,7 @@ struct EditingTabBarView: View {
                 }
             }
         }
-        .onDisappear{
+        .onChange(of: items){_ in
             self.save()
         }
         .navigationBarTitle(Text("タブバーの編集"), displayMode: .inline)
@@ -147,6 +138,17 @@ struct EditingTabBarView: View {
             @unknown default:
                 Text("完了")
             }
+        }
+    }
+
+    private func add() {
+        withAnimation(Animation.interactiveSpring()){
+            items.append(
+                EditingTabBarItem(
+                    label: .text("アイテム"),
+                    actions: [.moveTab(.system(.user_japanese))]
+                )
+            )
         }
     }
 
