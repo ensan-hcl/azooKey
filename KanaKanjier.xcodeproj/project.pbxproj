@@ -55,8 +55,8 @@
 		1A3A16322529712300A5BA4F /* FlickKogakiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */; };
 		1A3ACEF925F9F9AA007E9938 /* ResizingRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */; };
 		1A3ACEFA25F9F9AA007E9938 /* ResizingRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */; };
-		1A3ACF1725FB78BF007E9938 /* KeyboardInternalSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF1625FB78BF007E9938 /* KeyboardInternalSetting.swift */; };
-		1A3ACF1825FB78BF007E9938 /* KeyboardInternalSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF1625FB78BF007E9938 /* KeyboardInternalSetting.swift */; };
+		1A3ACF1725FB78BF007E9938 /* InternalSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */; };
+		1A3ACF1825FB78BF007E9938 /* InternalSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */; };
 		1A3ACF2225FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */; };
 		1A3ACF2325FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */; };
 		1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */; };
@@ -2562,7 +2562,7 @@
 		1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickCustomKeySetting.swift; sourceTree = "<group>"; };
 		1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKogakiKeyModel.swift; sourceTree = "<group>"; };
 		1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizingRect.swift; sourceTree = "<group>"; };
-		1A3ACF1625FB78BF007E9938 /* KeyboardInternalSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardInternalSetting.swift; sourceTree = "<group>"; };
+		1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSetting.swift; sourceTree = "<group>"; };
 		1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedModeSetting.swift; sourceTree = "<group>"; };
 		1A3DC1C22500D44A002CAA93 /* azooKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = azooKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -5056,7 +5056,7 @@
 		1A3ACF1525FB78B1007E9938 /* UserDefaultsManager */ = {
 			isa = PBXGroup;
 			children = (
-				1A3ACF1625FB78BF007E9938 /* KeyboardInternalSetting.swift */,
+				1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */,
 				1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */,
 				1AFE772F26077E0E0041D74D /* WalkthroughState.swift */,
 			);
@@ -10281,7 +10281,7 @@
 				1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */,
 				1AF6791A25CEDAF300F3987B /* SettingData.swift in Sources */,
 				1ACE61C3257286E5008078D3 /* Color.swift in Sources */,
-				1A3ACF1725FB78BF007E9938 /* KeyboardInternalSetting.swift in Sources */,
+				1A3ACF1725FB78BF007E9938 /* InternalSetting.swift in Sources */,
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */,
 				1ACB07DC25E71ED70077DE04 /* BindingArray.swift in Sources */,
@@ -10423,7 +10423,7 @@
 				1A8A8404250F65410093A701 /* added_last_1_character.swift in Sources */,
 				1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */,
 				1A3DC2232500D60F002CAA93 /* FlickedKeyModel.swift in Sources */,
-				1A3ACF1825FB78BF007E9938 /* KeyboardInternalSetting.swift in Sources */,
+				1A3ACF1825FB78BF007E9938 /* InternalSetting.swift in Sources */,
 				1AFB68502518F18A00C649C4 /* MoveCursorBar.swift in Sources */,
 				1AB8C3E925E2A1F000D39BC5 /* CodableActionData.swift in Sources */,
 				1A9218F7255238E9005F45C4 /* Unicode.swift in Sources */,
