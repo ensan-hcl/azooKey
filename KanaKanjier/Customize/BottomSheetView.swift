@@ -15,15 +15,17 @@ struct BottomSheetView<Content: View>: View {
 
     let maxHeight: CGFloat
     let minHeight: CGFloat
+    let headerColor: Color
     let content: Content
 
-    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, @ViewBuilder content: () -> Content) {
+    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: () -> Content) {
         if let minHeight = minHeight{
             self.minHeight = minHeight
         }else{
             self.minHeight = maxHeight * 0.2
         }
         self.maxHeight = maxHeight
+        self.headerColor = headerColor
         self.content = content()
         self._isOpen = isOpen
     }
@@ -49,7 +51,7 @@ struct BottomSheetView<Content: View>: View {
                 self.content
             }
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
-            .background(Color(.systemGray4))
+            .background(headerColor)
             .cornerRadius(10)
             .frame(height: geometry.size.height, alignment: .bottom)
             .offset(y: max(self.offset + self.translation, 0))

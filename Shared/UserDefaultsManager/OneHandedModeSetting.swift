@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct OneHandedModeSetting: Codable, KeyboardInternalSettingProtocol {
+struct OneHandedModeSetting: Codable, KeyboardInternalSettingValue {
     static let initialValue = Self()
 
     private(set) var flick_vertical = OneHandedModeSettingItem()

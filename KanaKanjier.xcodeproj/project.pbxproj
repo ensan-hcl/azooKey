@@ -2474,6 +2474,8 @@
 		1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68372518A40D00C649C4 /* LargeTextView.swift */; };
 		1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */; };
 		1AFB68502518F18A00C649C4 /* MoveCursorBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB684F2518F18A00C649C4 /* MoveCursorBar.swift */; };
+		1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
+		1AFE773126077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -4913,6 +4915,7 @@
 		1AFB68372518A40D00C649C4 /* LargeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeTextView.swift; sourceTree = "<group>"; };
 		1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceSoftWaresLicenceView.swift; sourceTree = "<group>"; };
 		1AFB684F2518F18A00C649C4 /* MoveCursorBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveCursorBar.swift; sourceTree = "<group>"; };
+		1AFE772F26077E0E0041D74D /* WalkthroughState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5050,13 +5053,14 @@
 			path = Tips;
 			sourceTree = "<group>";
 		};
-		1A3ACF1525FB78B1007E9938 /* KeyboardInternalSetting */ = {
+		1A3ACF1525FB78B1007E9938 /* UserDefaultsManager */ = {
 			isa = PBXGroup;
 			children = (
 				1A3ACF1625FB78BF007E9938 /* KeyboardInternalSetting.swift */,
 				1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */,
+				1AFE772F26077E0E0041D74D /* WalkthroughState.swift */,
 			);
-			path = KeyboardInternalSetting;
+			path = UserDefaultsManager;
 			sourceTree = "<group>";
 		};
 		1A3DC1B92500D44A002CAA93 = {
@@ -5406,7 +5410,7 @@
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1A12E24725C41A7100316009 /* Message.swift */,
 				1AF678A025CDA07A00F3987B /* SettingData.swift */,
-				1A3ACF1525FB78B1007E9938 /* KeyboardInternalSetting */,
+				1A3ACF1525FB78B1007E9938 /* UserDefaultsManager */,
 				1A36B146258D0BA90084DFE0 /* SettingData */,
 				1A26F34025E8AAAC003CDA0D /* SwiftUI */,
 				1ACB07DA25E71EC00077DE04 /* SwiftLanuage */,
@@ -10226,6 +10230,7 @@
 				1AF678B425CE3B7000F3987B /* States.swift in Sources */,
 				1AB8C3BF25E2303200D39BC5 /* TabBar.swift in Sources */,
 				1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */,
+				1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */,
 				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
 				1AB8C37025E0067600D39BC5 /* SimpleKeyView.swift in Sources */,
 				1AF6794C25CEDB8400F3987B /* ExpandedResultView.swift in Sources */,
@@ -10471,6 +10476,7 @@
 				1A3DC22A2500D65C002CAA93 /* extension CGPoint.swift in Sources */,
 				1AA346AF2567F15C00B41A16 /* SharedStore.swift in Sources */,
 				1A8A840A250F65DA0093A701 /* completed_first.swift in Sources */,
+				1AFE773126077E0E0041D74D /* WalkthroughState.swift in Sources */,
 				1A3DC2282500D64D002CAA93 /* ResultView.swift in Sources */,
 				1A9218E4255238CE005F45C4 /* RomanTypographys.swift in Sources */,
 				1AF28CF6253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift in Sources */,

@@ -56,18 +56,19 @@ struct ContentView: View {
                     }
                     .tag(3)
             }
-            /*
-            .sheet(isPresented: $showWalkthrough){
-                CustomizeTabWalkthroughView(isShowing: $showWalkthrough)
-            }
-             */
             .fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView){
                 EnableAzooKeyView()
             }
             .onChange(of: selection){value in
                 if value == 2{
-                    self.showWalkthrough = true
+                    if ContainerInternalSetting.shared.walkthroughState.shouldDisplay(identifier: .extensions){
+                        self.showWalkthrough = true
+                    }
                 }
+            }
+            BottomSheetView(isOpen: $showWalkthrough, maxHeight: UIScreen.main.bounds.height * 0.9, minHeight: 0, headerColor: .background){
+                CustomizeTabWalkthroughView(isShowing: $showWalkthrough)
+                    .background(Color.background)
             }
             ForEach(messageManager.necessaryMessages, id: \.id){data in
                 if messageManager.requireShow(data.id){
