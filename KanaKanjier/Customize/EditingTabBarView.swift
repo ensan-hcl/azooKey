@@ -9,21 +9,6 @@
 import Foundation
 import SwiftUI
 
-extension TabBarItemLabelType: Equatable {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case let (.text(l), .text(r)):
-            return l == r
-        case let (.image(l), .image(r)):
-            return l == r
-        case let (.imageAndText(l), .imageAndText(r)):
-            return l == r
-        default:
-            return false
-        }
-    }
-}
-
 struct EditingTabBarItem: Identifiable, Equatable {
     let id = UUID()
     var label: TabBarItemLabelType
@@ -34,10 +19,6 @@ struct EditingTabBarItem: Identifiable, Equatable {
         self.label = label
         self.actions = actions
         self.disclosed = disclosed
-    }
-
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.id == rhs.id && lhs.label == rhs.label && lhs.actions == rhs.actions
     }
 }
 

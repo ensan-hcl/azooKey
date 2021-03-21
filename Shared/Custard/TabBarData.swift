@@ -7,7 +7,7 @@
 //
 
 import Foundation
-enum TabBarItemLabelType: Codable {
+enum TabBarItemLabelType: Codable, Equatable {
     case text(String)
     case imageAndText(ImageAndText)
     case image(String)
@@ -15,11 +15,6 @@ enum TabBarItemLabelType: Codable {
     struct ImageAndText: Codable, Equatable {
         let systemName: String
         let text: String
-
-        static func == (lhs: ImageAndText, rhs: ImageAndText) -> Bool {
-            return lhs.systemName == rhs.systemName && lhs.text == rhs.text
-        }
-
     }
 }
 

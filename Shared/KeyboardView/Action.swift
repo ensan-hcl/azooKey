@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ActionType{
+enum ActionType: Equatable {
     //テキスト関係
     case input(String)          //テキストの入力
     case delete(Int)            //テキストの削除
@@ -43,57 +43,6 @@ enum ActionType{
     //デバッグ用
     case DEBUG_DATA_INPUT
     #endif
-}
-
-extension ActionType: Equatable{
-
-    static func == (lsb: ActionType, rsb: ActionType) -> Bool {
-        switch (lsb, rsb){
-        case let (.input(l), .input(r)):
-            return l == r
-        case let (.delete(l), .delete(r)):
-            return l == r
-        case (.smoothDelete, .smoothDelete):
-            return true
-        case (.deselectAndUseAsInputting, .deselectAndUseAsInputting):
-            return true
-        case (.saveSelectedTextIfNeeded, .saveSelectedTextIfNeeded):
-            return true
-        case (.restoreSelectedTextIfNeeded, .restoreSelectedTextIfNeeded):
-            return true
-        case let (.moveCursor(l),.moveCursor(r)):
-            return l == r
-        case (.toggleTabBar, .toggleTabBar):
-            return true
-        case (.toggleShowMoveCursorView,.toggleShowMoveCursorView):
-            return true
-        case (.enableResizingMode, .enableResizingMode):
-            return true
-        case (.enter, .enter):
-            return true
-        case (.changeCharacterType, .changeCharacterType):
-            return true
-        case let (.replaceLastCharacters(l), .replaceLastCharacters(r)):
-            return l == r
-        case let (.changeCapsLockState(l),.changeCapsLockState(r)):
-            return l == r
-        case (.hideLearningMemory, .hideLearningMemory):
-            return true
-        case (.dismissKeyboard, .dismissKeyboard):
-            return true
-        case let (.moveTab(l), .moveTab(r)):
-            return l == r
-        case let (.openApp(l), .openApp(r)):
-            return l == r
-        #if DEBUG
-        case (.DEBUG_DATA_INPUT, .DEBUG_DATA_INPUT):
-            return true
-        #endif
-        default:
-            return false
-        }
-    }
-
 }
 
 extension ActionType{

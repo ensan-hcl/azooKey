@@ -8,16 +8,9 @@
 
 import Foundation
 
-struct PreferredLanguage: Codable {
+struct PreferredLanguage: Codable, Hashable {
     var first: KeyboardLanguage
     var second: KeyboardLanguage?
-}
-
-extension PreferredLanguage: Hashable{
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(first)
-        hasher.combine(second)
-    }
 }
 
 extension PreferredLanguage: Savable {

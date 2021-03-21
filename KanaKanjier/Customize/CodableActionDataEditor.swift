@@ -47,10 +47,6 @@ struct EditingCodableActionData: Identifiable, Equatable {
     init(_ data: CodableActionData){
         self.data = data
     }
-
-    static func == (lhs: EditingCodableActionData, rhs: EditingCodableActionData) -> Bool {
-        return lhs.id == rhs.id && lhs.data == rhs.data
-    }
 }
 
 struct CodableActionDataEditor: View {

@@ -9,12 +9,18 @@
 import Foundation
 import SwiftUI
 
-enum Tab{
+extension Custard: Equatable {
+    public static func == (lhs: Custard, rhs: Custard) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
+}
+
+enum Tab: Equatable {
     case existential(ExistentialTab)
     case user_dependent(UserDependentTab)
     case last_tab
 
-    enum ExistentialTab{
+    enum ExistentialTab: Equatable {
         case flick_hira
         case flick_abc
         case flick_numbersymbols
@@ -81,7 +87,7 @@ enum Tab{
         }
     }
 
-    enum UserDependentTab{
+    enum UserDependentTab: Equatable {
         case japanese
         case english
 
@@ -143,38 +149,6 @@ enum Tab{
             return actualTab.language
         case .last_tab:
             fatalError()
-        }
-    }
-}
-
-extension Tab.ExistentialTab: Equatable{
-    static func == (lhs: Tab.ExistentialTab, rhs: Tab.ExistentialTab) -> Bool {
-        switch (lhs, rhs){
-        case (.flick_abc, .flick_abc), (.flick_hira, .flick_hira), (.flick_numbersymbols, .flick_numbersymbols), (.qwerty_abc, .qwerty_abc), (.qwerty_hira, .qwerty_hira), (.qwerty_number, .qwerty_number), (.qwerty_symbols, .qwerty_symbols):
-            return true
-        case let (.custard(lcustard), .custard(rcustard)):
-            return lcustard.identifier == rcustard.identifier
-        default:
-            return false
-        }
-    }
-}
-
-extension Tab: Equatable {
-    static func == (lhs: Tab, rhs: Tab) -> Bool {
-        switch (lhs, rhs){
-        case let (.existential(ltab), .existential(rtab)):
-            return ltab == rtab
-        case let (.user_dependent(ltab), .user_dependent(rtab)):
-            return ltab == rtab
-        case let (.user_dependent(ltab), .existential(rtab)):
-            return ltab.actualTab == rtab
-        case let (.existential(ltab), .user_dependent(rtab)):
-            return ltab == rtab.actualTab
-        case (.last_tab, .last_tab):
-            return true
-        default:
-            return false
         }
     }
 }

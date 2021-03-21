@@ -15,8 +15,8 @@ enum LanguageLayout {
     case custard(String)
 }
 
-extension LanguageLayout: Codable {
-    enum CodingKeys: CodingKey{
+extension LanguageLayout: Codable, Hashable {
+    private enum CodingKeys: CodingKey{
         case flick
         case qwerty
         case custard
@@ -56,29 +56,6 @@ extension LanguageLayout: Codable {
             )
             self = .custard(value)
         }
-    }
-}
-
-extension LanguageLayout: Hashable {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs){
-        case (.flick, .flick), (.qwerty, .qwerty): return true
-        case let (.custard(l), .custard(r)): return l == r
-        default: return false
-        }
-    }
-
-    func hash(into hasher: inout Hasher) {
-        switch self {
-        case .flick:
-            hasher.combine(CodingKeys.flick)
-        case .qwerty:
-            hasher.combine(CodingKeys.qwerty)
-        case let .custard(value):
-            hasher.combine(CodingKeys.custard)
-            hasher.combine(value)
-        }
-
     }
 }
 

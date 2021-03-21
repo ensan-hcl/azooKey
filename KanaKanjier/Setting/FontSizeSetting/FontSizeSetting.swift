@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-enum FontSizeSetting: Savable{
+enum FontSizeSetting: Savable, Hashable {
     typealias SaveValue = Double
     case value(Double)
 
@@ -55,12 +55,6 @@ extension FontSizeSetting: CustomStringConvertible{
             }
             return "\(value)"
         }
-    }
-}
-
-extension FontSizeSetting: Hashable{
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.saveValue)
     }
 }
 
