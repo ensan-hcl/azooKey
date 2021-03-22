@@ -72,6 +72,7 @@ struct MessageManager{
     func getMessagesContainerAppShouldMakeWhichDone() -> [MessageData] {
         necessaryMessages.filter{$0.containerAppShouldMakeItDone()}
     }
+    static let doneFlag = "done"
 
     let necessaryMessages: [MessageData] = [
         MessageData(
@@ -95,7 +96,7 @@ struct MessageManager{
         ),
 
         MessageData(
-            id: .ver1_5_update_loudstxt,
+            id: .iOS14_5_new_emoji,
             title: "お知らせ",
             description: "iOS14.5で新しい絵文字が追加されました。本体アプリを開き、データを更新しますか？",
             leftsideButton: .later,
@@ -117,10 +118,10 @@ struct MessageManager{
         self.needShow = necessaryMessages.reduce(into: [:]){dict, value in
             if value.id.needUsingContainerApp{
                 //収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
-                dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != "done"
+                dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != Self.doneFlag
             }else{
                 //本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
-                dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != "done" && UserDefaults.standard.string(forKey: value.id.key) != "done"
+                dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: value.id.key) != Self.doneFlag
             }
         }
     }
@@ -133,11 +134,11 @@ struct MessageManager{
         self.needShow[id] = false
         if id.needUsingContainerApp{
             //収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
-            Self.userDefaults.setValue("done", forKey: id.key)
+            Self.userDefaults.setValue(Self.doneFlag, forKey: id.key)
         }else{
             //本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
-            Self.userDefaults.setValue("done", forKey: id.key)
-            UserDefaults.standard.setValue("done", forKey: id.key)
+            Self.userDefaults.setValue(Self.doneFlag, forKey: id.key)
+            UserDefaults.standard.setValue(Self.doneFlag, forKey: id.key)
         }
     }
 }
