@@ -161,9 +161,9 @@ public extension CustardInterfaceLayout{
 }
 
 public struct CustardInterfaceLayoutGridValue {
-    public init(width: Int, height: Int) {
-        self.rowCount = width
-        self.columnCount = height
+    public init(rowCount: Int, columnCount: Int) {
+        self.rowCount = rowCount
+        self.columnCount = columnCount
     }
 
     /// - 横方向に配置するキーの数
@@ -272,9 +272,9 @@ public extension GridScrollPositionSpecifier {
 /// - インターフェース
 /// - interface
 public struct CustardInterface: Codable {
-    public init(key_style: CustardInterfaceStyle, key_layout: CustardInterfaceLayout, keys: [CustardKeyPositionSpecifier : CustardInterfaceKey]) {
-        self.keyStyle = key_style
-        self.keyLayout = key_layout
+    public init(keyStyle: CustardInterfaceStyle, keyLayout: CustardInterfaceLayout, keys: [CustardKeyPositionSpecifier : CustardInterfaceKey]) {
+        self.keyStyle = keyStyle
+        self.keyLayout = keyLayout
         self.keys = keys
     }
 
@@ -730,8 +730,8 @@ public extension Custard{
             input_style: .direct,
             metadata: .init(custard_version: .v1_0, display_name: "ヒエログリフ"),
             interface: .init(
-                key_style: .tenkeyStyle,
-                key_layout: .gridScroll(.init(direction: .vertical, rowCount: 8, columnCount: 4.2)),
+                keyStyle: .tenkeyStyle,
+                keyLayout: .gridScroll(.init(direction: .vertical, rowCount: 8, columnCount: 4.2)),
                 keys: keys
             )
         )

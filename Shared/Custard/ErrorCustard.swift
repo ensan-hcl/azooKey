@@ -16,8 +16,8 @@ extension Custard{
         input_style: .direct,
         metadata: .init(custard_version: .v1_0, display_name: "エラーメッセージ"),
         interface: .init(
-            key_style: .tenkeyStyle,
-            key_layout: .gridFit(.init(width: 1, height: 6)),
+            keyStyle: .tenkeyStyle,
+            keyLayout: .gridFit(.init(rowCount: 1, columnCount: 6)),
             keys: [
                 .gridFit(.init(x: 0, y: 0, width: 1, height: 2)): .custom(
                     .init(
