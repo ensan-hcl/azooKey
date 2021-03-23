@@ -84,7 +84,7 @@ public enum CodableActionData: Codable, Hashable {
 
     /// - delete to the ` direction` until `target` appears in the direction of travel..
     /// - if `target` is `[".", ","]`, `direction` is `.backward`, and current text is `I love this. But |she likes`, after the action, the text become `I love this.|she likes`.
-    case smartDelete(ScanItem)
+    case smartDelete(ScanItem = .init(targets: ["、","。","！","？",".",",","．","，", "\n"], direction: .backward))
 
     /// - complete current inputting words
     case complete
@@ -94,7 +94,7 @@ public enum CodableActionData: Codable, Hashable {
 
     /// - move cursor to the ` direction` until `target` appears in the direction of travel..
     /// - if `target` is `[".", ","]`, `direction` is `.backward`, and current text is `I love this. But |she likes`, after the action, the text become `I love this.| But she likes`.
-    case smartMoveCursor(ScanItem)
+    case smartMoveCursor(ScanItem = .init(targets: ["、","。","！","？",".",",","．","，", "\n"], direction: .forward))
 
     /// - move to specified tab
     case moveTab(CodableTabData)
