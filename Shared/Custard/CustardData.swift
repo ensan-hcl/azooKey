@@ -596,6 +596,81 @@ public struct CustardInterfaceCustomKey: Codable {
     let variations: [CustardInterfaceVariation]
 }
 
+public extension CustardInterfaceCustomKey {
+    /// Create simple input key using flick
+    /// - parameters:
+    ///  - center: string inputed when tap the key
+    ///  - subs: set string inputed when flick the key up to four letters. letters are stucked in order left -> top -> right -> bottom
+    ///  - centerLabel: (optional) if needed, set label of center. without specification `center` is set as label
+    static func flick_simple_inputs(center: String, subs: [String], centerLabel: String? = nil) -> Self {
+        let variations: [CustardInterfaceVariation] = zip(subs, [FlickDirection.left, .top, .right, .bottom]).map{letter, direction in
+            .init(
+                type: .flickVariation(direction),
+                key: .init(
+                    design: .init(label: .text(letter)),
+                    press_actions: [.input(letter)],
+                    longpress_actions: .none
+                )
+            )
+        }
+
+        return .init(
+            design: .init(label: .text(centerLabel ?? center), color: .normal),
+            press_actions: [.input(center)],
+            longpress_actions: .none,
+            variations: variations
+        )
+    }
+
+    static let flick_delete: Self = .init(
+        design: .init(label: .systemImage("delete.left"), color: .special),
+        press_actions: [.delete(1)],
+        longpress_actions: .init(repeat: [.delete(1)]),
+        variations: [
+            .init(
+                type: .flickVariation(.left),
+                key: .init(
+                    design: .init(label: .systemImage("xmark")),
+                    press_actions: [.smartDeleteDefault],
+                    longpress_actions: .none
+                )
+            ),
+        ]
+    )
+
+    static let flick_space: Self = .init(
+        design: .init(label: .text("空白"), color: .special),
+        press_actions: [.input(" ")],
+        longpress_actions: .init(start: [.toggleCursorBar]),
+        variations: [
+            .init(
+                type: .flickVariation(.left),
+                key: .init(
+                    design: .init(label: .text("←")),
+                    press_actions: [.moveCursor(-1)],
+                    longpress_actions: .init(repeat: [.moveCursor(-1)])
+                )
+            ),
+            .init(
+                type: .flickVariation(.top),
+                key: .init(
+                    design: .init(label: .text("全角")),
+                    press_actions: [.input("　")],
+                    longpress_actions: .none
+                )
+            ),
+            .init(
+                type: .flickVariation(.bottom),
+                key: .init(
+                    design: .init(label: .text("tab")),
+                    press_actions: [.input("\t")],
+                    longpress_actions: .none
+                )
+            )
+        ]
+    )
+}
+
 /// - variation of key, includes flick keys and selectable variations in pc style keyboard.
 public struct CustardInterfaceVariation: Codable {
     public init(type: CustardKeyVariationType, key: CustardInterfaceVariationKey) {
