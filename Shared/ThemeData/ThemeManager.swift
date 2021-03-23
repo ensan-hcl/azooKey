@@ -43,7 +43,6 @@ struct ThemeIndexManager: Equatable {
         do{
             let data = try Data(contentsOf: themeIndexURL)
             let themeIndex = try JSONDecoder().decode(ThemeIndices.self, from: data)
-            debug(themeIndex)
             return self.init(index: themeIndex)
         } catch {
             debug(error)

@@ -895,6 +895,7 @@ private final class InputManager{
     }
 
     fileprivate func replaceLastCharacters(table: [String: String]){
+        debug(table, inputtedText, isSelected)
         if isSelected{
             return
         }
@@ -911,9 +912,11 @@ private final class InputManager{
                     break
                 }
             }
-        }else{
+            return
+        }
+        if VariableStates.shared.keyboardLanguage == .none{
             let leftside = proxy.documentContextBeforeInput ?? ""
-            for count in (counts.min...counts.max).reversed() where count <= cursorPosition {
+            for count in (counts.min...counts.max).reversed() where count <= leftside.count {
                 if let replace = table[String(leftside.suffix(count))]{
                     self.proxy.deleteBackward(count: count)
                     self.input(text: replace)
@@ -921,6 +924,7 @@ private final class InputManager{
                 }
             }
         }
+        return
     }
     
     fileprivate func changeCharacter(){

@@ -265,7 +265,6 @@ struct UserDictionaryDataSettingView: View {
     }
 
     func highlight<S: StringProtocol>(_ text: S) -> [(text: String, type: HighlightType)] {
-        debug(text)
         if let range = text.range(of: "\\{\\{.*?\\}\\}", options: .regularExpression){
             let lowerSide = text[text.startIndex ..< range.lowerBound]
             let internalSide = text[range]

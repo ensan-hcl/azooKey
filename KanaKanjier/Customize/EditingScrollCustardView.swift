@@ -142,8 +142,8 @@ struct EditingScrollCustardView: View {
             input_style: .direct,
             metadata: .init(custard_version: .v1_0, display_name: data.tabName.isEmpty ? "New tab" : data.tabName),
             interface: .init(
-                key_style: .tenkeyStyle,
-                key_layout: .gridScroll(.init(direction: data.direction, rowCount: rowCount, columnCount: columnCount)),
+                keyStyle: .tenkeyStyle,
+                keyLayout: .gridScroll(.init(direction: data.direction, rowCount: rowCount, columnCount: columnCount)),
                 keys: keys
             )
         )

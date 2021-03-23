@@ -109,7 +109,6 @@ struct EditingTabBarView: View {
 
     private func save(){
         do{
-            debug("セーブする！", self.items)
             self.tabBarData = TabBarData(identifier: tabBarData.identifier, items: self.items.map{
                 TabBarItem(label: $0.label, actions: $0.actions)
             })

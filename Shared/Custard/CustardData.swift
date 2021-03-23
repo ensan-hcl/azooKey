@@ -152,7 +152,7 @@ public extension CustardInterfaceLayout{
         let columnCount = try container.decode(Double.self, forKey: .column_count)
         switch type {
         case .grid_fit:
-            self = .gridFit(.init(width: abs(Int(rowCount)), height: abs(Int(columnCount))))
+            self = .gridFit(.init(rowCount: abs(Int(rowCount)), columnCount: abs(Int(columnCount))))
         case .grid_scroll:
             let direction = try container.decode(CustardInterfaceLayoutScrollValue.ScrollDirection.self, forKey: .direction)
             self = .gridScroll(.init(direction: direction, rowCount: abs(rowCount), columnCount: abs(columnCount)))

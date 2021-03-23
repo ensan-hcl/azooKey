@@ -85,7 +85,6 @@ struct CustardManager {
         do{
             let data = try Data(contentsOf: themeIndexURL)
             let index = try JSONDecoder().decode(CustardManagerIndex.self, from: data)
-            debug(index)
             return self.init(index: index)
         } catch {
             debug(error)
