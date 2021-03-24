@@ -126,19 +126,19 @@ fileprivate extension CustardInterfaceKey {
         switch self {
         case let .system(value):
             switch value {
-            case .change_keyboard:
+            case .changeKeyboard:
                 return FlickChangeKeyboardModel.shared
             case .enter:
                 return FlickEnterKeyModel()
-            case .flick_kogaki:
+            case .flickKogaki:
                 return FlickKogakiKeyModel.shared
-            case .flick_kutoten:
+            case .flickKutoten:
                 return FlickKanaSymbolsKeyModel.shared
-            case .flick_hira_tab:
+            case .flickHiraTab:
                 return FlickTabKeyModel.hiraTabKeyModel
-            case .flick_abc_tab:
+            case .flickAbcTab:
                 return FlickTabKeyModel.abcTabKeyModel
-            case .flick_star123_tab:
+            case .flickStar123Tab:
                 return FlickTabKeyModel.numberTabKeyModel
             }
         case let .custom(value):
@@ -175,7 +175,7 @@ fileprivate extension CustardInterfaceKey {
         switch self {
         case let .system(value):
             switch value {
-            case .change_keyboard:
+            case .changeKeyboard:
                 let changeKeyboardKey: QwertyChangeKeyboardKeyModel
                 if let second = SettingData.shared.preferredLanguageSetting.second{
                     changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .secondTab(secondLanguage: second))
@@ -185,15 +185,15 @@ fileprivate extension CustardInterfaceKey {
                 return changeKeyboardKey
             case .enter:
                 return QwertyEnterKeyModel(keySizeType: .enter)
-            case .flick_kogaki:
+            case .flickKogaki:
                 return  convertToQwertyKeyModel(model: FlickKogakiKeyModel.shared)
-            case .flick_kutoten:
+            case .flickKutoten:
                 return convertToQwertyKeyModel(model: FlickKanaSymbolsKeyModel.shared)
-            case .flick_hira_tab:
+            case .flickHiraTab:
                 return convertToQwertyKeyModel(model: FlickTabKeyModel.hiraTabKeyModel)
-            case .flick_abc_tab:
+            case .flickAbcTab:
                 return convertToQwertyKeyModel(model: FlickTabKeyModel.abcTabKeyModel)
-            case .flick_star123_tab:
+            case .flickStar123Tab:
                 return convertToQwertyKeyModel(model: FlickTabKeyModel.numberTabKeyModel)
             }
         case let .custom(value):
@@ -223,19 +223,19 @@ fileprivate extension CustardInterfaceKey {
         switch self {
         case let .system(value):
             switch value{
-            case .change_keyboard:
+            case .changeKeyboard:
                 return SimpleChangeKeyboardKeyModel()
             case .enter:
                 return SimpleEnterKeyModel()
-            case .flick_kogaki:
+            case .flickKogaki:
                 return SimpleKeyModel(keyType: .functional, keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
-            case .flick_kutoten:
+            case .flickKutoten:
                 return SimpleKeyModel(keyType: .functional, keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
-            case .flick_hira_tab:
+            case .flickHiraTab:
                 return SimpleKeyModel(keyType: .functional, keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
-            case .flick_abc_tab:
+            case .flickAbcTab:
                 return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
-            case .flick_star123_tab:
+            case .flickStar123Tab:
                 return SimpleKeyModel(keyType: .functional, keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))])
             }
         case let .custom(value):
