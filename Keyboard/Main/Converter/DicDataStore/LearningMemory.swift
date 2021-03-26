@@ -45,6 +45,12 @@ struct LearningMemorys{
         return pair?.offset
     }
 
+    private static func matchAdjust(memory: LearningMemoryElement) -> PValue {
+        let matchCount = PValue(memory.count)
+        let rubyCount = PValue(memory.data.ruby.count)
+        return matchCount * (4 - 3.5 / rubyCount)
+    }
+
     private mutating func updateOrder(at index: Int){
         let order = self.index2order[index]
         if order == self.index2order.endIndex - 1{
@@ -64,7 +70,7 @@ struct LearningMemorys{
     }
 
     func match<S: StringProtocol>(_ ruby: S) -> DicDataStore.DicData {
-        let dicdata = self.values.lazy.filter{$0.data.ruby == ruby}.map{$0.data.adjustedData(PValue($0.count * 3))}
+        let dicdata = self.values.lazy.filter{$0.data.ruby == ruby}.map{$0.data.adjustedData(Self.matchAdjust(memory: $0))}
         return Array(dicdata)
     }
 
@@ -77,7 +83,7 @@ struct LearningMemorys{
     }
 
     func getPrefixDicData<S: StringProtocol>(_ prefix: S) -> DicDataStore.DicData {
-        let dicdata = self.values.lazy.filter{$0.data.ruby != prefix && $0.data.ruby.hasPrefix(prefix)}.map{$0.data.adjustedData(PValue($0.count * 3))}
+        let dicdata = self.values.lazy.filter{$0.data.ruby != prefix && $0.data.ruby.hasPrefix(prefix)}.map{$0.data.adjustedData(Self.matchAdjust(memory: $0))}
         return Array(dicdata)
     }
 
