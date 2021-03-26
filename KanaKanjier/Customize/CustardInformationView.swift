@@ -138,7 +138,7 @@ struct CustardInformationView: View {
                 }
                 //tmpディレクトリを取得
                 let directory = FileManager.default.temporaryDirectory
-                let path = directory.appendingPathComponent("\(custard.identifier).custard")
+                let path = directory.appendingPathComponent("\(custard.identifier).json")
                 do {
                     //書き出してpathをセット
                     try encoded.write(to: path, options: .atomicWrite)
