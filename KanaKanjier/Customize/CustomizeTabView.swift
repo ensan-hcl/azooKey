@@ -13,6 +13,8 @@ import StoreKit
 struct CustomizeTabView: View {
     @State private var tabBarData: TabBarData
     @State private var manager: CustardManager
+    @State private var showImportView = false
+    @ObservedObject private var storeVariableSection = Store.variableSection
 
     init(){
         var manager = CustardManager.load()
@@ -30,76 +32,84 @@ struct CustomizeTabView: View {
     }
 
     var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("カスタムタブ")){
-                    VStack{
-                        Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
-                    }
-                    Image("custard_1")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: Store.shared.imageMaximumWidth)
+        ZStack{
+            NavigationView {
+                Form {
+                    Section(header: Text("カスタムタブ")){
+                        VStack{
+                            Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
+                        }
+                        Image("custard_1")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: Store.shared.imageMaximumWidth)
 
-                    NavigationLink(destination: ManageCustardView(manager: $manager)){
-                        HStack{
-                            Text("カスタムタブの管理")
-                            Spacer()
+                        NavigationLink(destination: ManageCustardView(manager: $manager)){
+                            HStack{
+                                Text("カスタムタブの管理")
+                                Spacer()
+                            }
+                        }
+                    }
+                    Section(header: Text("タブバー")){
+                        Text("タブバーはカスタムタブへの移動をサポートします。フリック入力では左上の「記号タブ」キー、ローマ字入力では左下の「数字/記号」キーを長押しすることで表示されます。")
+                        Image("tabBar_1")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: Store.shared.imageMaximumWidth)
+
+                        Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
+                        NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager)){
+                            HStack{
+                                Text("タブバーを編集")
+                                Spacer()
+                            }
+                        }
+                    }
+
+                    Section(header: Text("カスタムキー")){
+                        VStack{
+                            Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
+                            ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
+                        }
+                        NavigationLink(destination: FlickCustomKeysSettingSelectView()){
+                            HStack{
+                                Text("設定する")
+                                Spacer()
+                            }
+                        }
+                        VStack{
+                            Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
+                            ImageSlideshowView(pictures: ["qwertyCustomKeySetting0","qwertyCustomKeySetting1","qwertyCustomKeySetting2"])
+                        }
+                        NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
+                            HStack{
+                                Text("設定する")
+                                Spacer()
+                            }
                         }
                     }
                 }
-                Section(header: Text("タブバー")){
-                    Text("タブバーはカスタムタブへの移動をサポートします。フリック入力では左上の「記号タブ」キー、ローマ字入力では左下の「数字/記号」キーを長押しすることで表示されます。")
-                    Image("tabBar_1")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: Store.shared.imageMaximumWidth)
-
-                    Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
-                    NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager)){
-                        HStack{
-                            Text("タブバーを編集")
-                            Spacer()
-                        }
+                .navigationBarTitle(Text("拡張"), displayMode: .large)
+                .onAppear(){
+                    if let tabBarData = try? manager.tabbar(identifier: 0){
+                        self.tabBarData = tabBarData
                     }
-                }
-
-                Section(header: Text("カスタムキー")){
-                    VStack{
-                        Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
-                        ImageSlideshowView(pictures: ["flickCustomKeySetting0","flickCustomKeySetting1","flickCustomKeySetting2"])
-                    }
-                    NavigationLink(destination: FlickCustomKeysSettingSelectView()){
-                        HStack{
-                            Text("設定する")
-                            Spacer()
-                        }
-                    }
-                    VStack{
-                        Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
-                        ImageSlideshowView(pictures: ["qwertyCustomKeySetting0","qwertyCustomKeySetting1","qwertyCustomKeySetting2"])
-                    }
-                    NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
-                        HStack{
-                            Text("設定する")
-                            Spacer()
+                    if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview(){
+                        if let windowScene = UIApplication.shared.windows.first?.windowScene {
+                            SKStoreReviewController.requestReview(in: windowScene)
                         }
                     }
                 }
             }
-            .navigationBarTitle(Text("拡張"), displayMode: .large)
-            .onAppear(){
-                if let tabBarData = try? manager.tabbar(identifier: 0){
-                    self.tabBarData = tabBarData
-                }
-                if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview(){
-                    if let windowScene = UIApplication.shared.windows.first?.windowScene {
-                        SKStoreReviewController.requestReview(in: windowScene)
-                    }
-                }
+            .navigationViewStyle(StackNavigationViewStyle())
+            .onChange(of: storeVariableSection.importFile){ value in
+                showImportView = value != nil
+            }
+            if showImportView{
+                URLImportCustardView(manager: $manager)
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

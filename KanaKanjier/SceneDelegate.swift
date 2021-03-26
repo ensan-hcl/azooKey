@@ -59,6 +59,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>)
+    {
+        // リクエストURLの取得
+        guard let url = URLContexts.first?.url else {
+            return
+        }
 
+        debug(url)
+        Store.shared.showCustardImportView(url: url)
+    }
 }
 

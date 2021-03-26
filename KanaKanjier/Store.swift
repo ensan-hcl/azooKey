@@ -215,6 +215,10 @@ final class Store{
         return false
     }
 
+    func showCustardImportView(url: URL){
+        Self.variableSection.importFile = url
+    }
+
 }
 
 final class StoreVariableSection: ObservableObject{
@@ -222,4 +226,5 @@ final class StoreVariableSection: ObservableObject{
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
     @Published var japaneseLayout: LanguageLayout = .flick
     @Published var englishLayout: LanguageLayout = .flick
+    @Published var importFile: URL? = nil
 }
