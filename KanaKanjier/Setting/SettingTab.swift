@@ -35,6 +35,7 @@ struct SettingTabView: View {
                     NavigationLink(destination: FlickCustomKeysSettingSelectView()){
                         HStack{
                             Text("設定する")
+                                .foregroundColor(.accentColor)
                             Spacer()
                         }
                     }
@@ -45,6 +46,7 @@ struct SettingTabView: View {
                     NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
                         HStack{
                             Text("設定する")
+                                .foregroundColor(.accentColor)
                             Spacer()
                         }
                     }

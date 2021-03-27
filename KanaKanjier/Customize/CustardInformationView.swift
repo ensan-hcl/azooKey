@@ -131,7 +131,7 @@ struct CustardInformationView: View {
                     }
                 }
             }
-            Button("書き出す"){
+            Button("共有する"){
                 guard let encoded = try? JSONEncoder().encode(custard) else {
                     debug("書き出しに失敗")
                     return

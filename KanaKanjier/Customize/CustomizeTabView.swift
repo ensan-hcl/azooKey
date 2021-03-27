@@ -43,22 +43,29 @@ struct CustomizeTabView: View {
                         NavigationLink(destination: ManageCustardView(manager: $manager)){
                             HStack{
                                 Text("カスタムタブの管理")
+                                    .foregroundColor(.accentColor)
                                 Spacer()
                             }
                         }
                     }
                     Section(header: Text("タブバー")){
-                        Text("タブバーはカスタムタブへの移動をサポートします。フリック入力では左上の「記号タブ」キー、ローマ字入力では左下の「数字/記号」キーを長押しすることで表示されます。")
+                        Text("カスタムタブを使うにはタブバーを利用します。")
                         Image("tabBar_1")
                             .resizable()
                             .scaledToFit()
                             .frame(maxWidth: Store.shared.imageMaximumWidth)
-
-                        Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
-                        NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager)){
-                            HStack{
-                                Text("タブバーを編集")
-                                Spacer()
+                        DisclosureGroup("使い方"){
+                            Text("変換候補欄に何も表示されていない状態で、変換候補欄を長押しすると表示されます。")
+                            Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
+                        }
+                        DisclosureGroup("もっと便利にする"){
+                            Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
+                            NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager)){
+                                HStack{
+                                    Text("タブバーを編集")
+                                        .foregroundColor(.accentColor)
+                                    Spacer()
+                                }
                             }
                         }
                     }
@@ -71,6 +78,7 @@ struct CustomizeTabView: View {
                         NavigationLink(destination: FlickCustomKeysSettingSelectView()){
                             HStack{
                                 Text("設定する")
+                                    .foregroundColor(.accentColor)
                                 Spacer()
                             }
                         }
@@ -81,6 +89,7 @@ struct CustomizeTabView: View {
                         NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)){
                             HStack{
                                 Text("設定する")
+                                    .foregroundColor(.accentColor)
                                 Spacer()
                             }
                         }

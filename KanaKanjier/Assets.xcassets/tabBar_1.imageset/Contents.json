@@ -1,17 +1,18 @@
 {
   "images" : [
     {
-      "filename" : "IMG_4404.jpg",
-      "idiom" : "universal",
-      "scale" : "1x"
+      "filename" : "IMG_4631.jpg",
+      "idiom" : "universal"
     },
     {
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x"
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "IMG_4632.jpg",
+      "idiom" : "universal"
     }
   ],
   "info" : {
