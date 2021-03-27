@@ -39,11 +39,7 @@ struct CustomizeTabView: View {
                         VStack{
                             Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
                         }
-                        Image("custard_1")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: Store.shared.imageMaximumWidth)
-
+                        ImageSlideshowView(pictures: ["custard_1", "custard_2", "custard_3",])
                         NavigationLink(destination: ManageCustardView(manager: $manager)){
                             HStack{
                                 Text("カスタムタブの管理")
