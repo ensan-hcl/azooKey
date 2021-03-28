@@ -37,7 +37,14 @@ protocol BenchmarkTarget{
 }
 
 struct Kana2KanjiTarget: BenchmarkTarget{
-    enum ProcessType: String, CustomDebugStringConvertible{
+    enum ProcessType: String, CustomDebugStringConvertible {
+        case 辞書読み込み_全体
+        case 辞書読み込み_軽量データ読み込み
+        case 辞書読み込み_誤り訂正候補列挙
+        case 辞書読み込み_検索対象列挙
+        case 辞書読み込み_検索
+        case 辞書読み込み_辞書データ生成
+        case 辞書読み込み_ノード生成
         case 変換_全体
         case 変換_辞書読み込み
         case 変換_処理

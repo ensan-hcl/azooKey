@@ -115,7 +115,7 @@ private final class ImportedCustardData: ObservableObject {
                 return
             }
             DispatchQueue.main.async{
-                print("ダウンロード終了")
+                debug("ダウンロード終了")
                 self.downloadedData = data
             }
         })

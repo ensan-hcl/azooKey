@@ -70,8 +70,8 @@ extension Kana2Kanji{
                     conversionBenchmark.end(process: .変換_処理_連接コスト計算_Memory)
                     let ccSum: PValue = ccValue + ccBonus
                     conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
-                    //nodeの持っている全てのprevnodeに対して
                     conversionBenchmark.start(process: .変換_処理_N_Best計算)
+                    //nodeの持っている全てのprevnodeに対して
                     node.values.indices.forEach{(index: Int) in
                         let newValue: PValue = ccSum + node.values[index]
                         //追加すべきindexを取得する
