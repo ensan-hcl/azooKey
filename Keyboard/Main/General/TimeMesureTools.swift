@@ -77,7 +77,7 @@ final class BenchmarkTool<Target: BenchmarkTarget>{
         #if DEBUG
         let pairs = self.benchmarks.map{(key: $0.key, value: $0.value)}
         debug("=== Benchmark Result ===")
-        debug(pairs.sorted{$0.value > $1.value}.map{"\($0.key.debugDescription): \($0.value)"}.joined(separator: "\n"))
+        debug(pairs.sorted{$0.value > $1.value}.map{"⏱\($0.key.debugDescription): \($0.value)"}.joined(separator: "\n"))
         debug("=== === ===  === === ===")
         #endif
     }
