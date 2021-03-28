@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 /// - Tab specifier
-public enum CodableTabData: Hashable{
+public enum TabData: Hashable{
     /// - tabs prepared by default
     case system(SystemTab)
     /// - tabs made as custom tabs.
@@ -97,7 +97,7 @@ public enum CodableActionData: Codable, Hashable {
     case smartMoveCursor(ScanItem = .init(targets: ["、","。","！","？",".",",","．","，", "\n"], direction: .forward))
 
     /// - move to specified tab
-    case moveTab(CodableTabData)
+    case moveTab(TabData)
 
     /// - enable keyboard resizing mode
     case enableResizingMode
@@ -171,10 +171,10 @@ public extension CodableActionData{
         }
     }
     private struct CodableTabArgument{
-        internal init(tab: CodableTabData) {
+        internal init(tab: TabData) {
             self.tab = tab
         }
-        private var tab: CodableTabData
+        private var tab: TabData
 
         private enum TabType: String, Codable{
             case custom, system
@@ -194,11 +194,11 @@ public extension CodableActionData{
             }
         }
 
-        static func containerDecode(container: KeyedDecodingContainer<CodingKeys>) throws -> CodableTabData {
+        static func containerDecode(container: KeyedDecodingContainer<CodingKeys>) throws -> TabData {
             let type = try container.decode(TabType.self, forKey: .tab_type)
             switch type {
             case .system:
-                let tab = try container.decode(CodableTabData.SystemTab.self, forKey: .identifier)
+                let tab = try container.decode(TabData.SystemTab.self, forKey: .identifier)
                 return .system(tab)
             case .custom:
                 let tab = try container.decode(String.self, forKey: .identifier)

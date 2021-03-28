@@ -229,7 +229,7 @@ struct FlickCustomKeysSettingView: View {
         return nil
     }
 
-    private func getTab(actions: [CodableActionData]) -> CodableTabData? {
+    private func getTab(actions: [CodableActionData]) -> TabData? {
         if actions.count == 1, let action = actions.first, case let .moveTab(value) = action{
             return value
         }

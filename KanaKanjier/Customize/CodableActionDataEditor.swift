@@ -284,7 +284,7 @@ struct ActionOpenAppEditView: View {
 struct ActionMoveTabEditView: View {
     @Binding private var action: EditingCodableActionData
     private let availableCustards: [String]
-    @State private var selectedTab: CodableTabData = .system(.user_japanese)
+    @State private var selectedTab: TabData = .system(.user_japanese)
 
     internal init(_ action: Binding<EditingCodableActionData>, availableCustards: [String]) {
         self.availableCustards = availableCustards
@@ -301,7 +301,7 @@ struct ActionMoveTabEditView: View {
     }
 }
 
-extension CodableTabData{
+extension TabData{
     var label: LocalizedStringKey {
         switch self{
         case let .system(tab):
@@ -334,14 +334,14 @@ extension CodableTabData{
 }
 
 struct AvailableTabPicker: View {
-    @State private var selectedTab: CodableTabData = .system(.user_japanese)
-    private let items: [(label: String, tab: CodableTabData)]
-    private let process: (CodableTabData) -> ()
+    @State private var selectedTab: TabData = .system(.user_japanese)
+    private let items: [(label: String, tab: TabData)]
+    private let process: (TabData) -> ()
 
-    internal init(_ initialValue: CodableTabData, availableCustards: [String]? = nil, onChange process: @escaping (CodableTabData) -> () = {_ in}) {
+    internal init(_ initialValue: TabData, availableCustards: [String]? = nil, onChange process: @escaping (TabData) -> () = {_ in}) {
         self._selectedTab = State(initialValue: initialValue)
         self.process = process
-        var dict: [(label: String, tab: CodableTabData)] = [
+        var dict: [(label: String, tab: TabData)] = [
             ("日本語(設定に合わせる)", .system(.user_japanese)),
             ("英語(設定に合わせる)", .system(.user_english)),
             ("記号と数字(フリック入力)", .system(.flick_numbersymbols)),

@@ -153,7 +153,7 @@ enum Tab: Equatable {
     }
 }
 
-extension CodableTabData{
+extension TabData{
     var tab: Tab {
         switch self{
         case let .system(tab):

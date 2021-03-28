@@ -125,7 +125,7 @@ struct CustardManager {
         return custard
     }
 
-    func checkTabExistInTabBar(identifier: Int = 0, tab: CodableTabData) -> Bool {
+    func checkTabExistInTabBar(identifier: Int = 0, tab: TabData) -> Bool {
         guard let tabbar = try? self.tabbar(identifier: identifier) else {
             return false
         }
