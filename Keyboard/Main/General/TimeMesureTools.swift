@@ -8,30 +8,6 @@
 
 import Foundation
 
-final class TimeMesureTools{
-    private static var start: Date?
-
-    static func startTimeMesure(){
-        #if DEBUG
-        Self.start = Date()
-        #endif
-    }
-
-    static func endTimeMesure(_ message: String = ""){
-        #if DEBUG
-        debug(message, -(Self.start?.timeIntervalSinceNow ?? .nan))
-        Self.start = nil
-        #endif
-    }
-
-    static func endAndStart(_ message: String = ""){
-        #if DEBUG
-        Self.endTimeMesure(message)
-        Self.startTimeMesure()
-        #endif
-    }
-}
-
 protocol BenchmarkTarget{
     associatedtype ProcessType: Hashable, CustomDebugStringConvertible
 }
@@ -65,7 +41,6 @@ struct Kana2KanjiTarget: BenchmarkTarget{
         case 結果の処理_予測変換_ゼロヒント
         case 結果の処理_付加候補
         case 結果の処理_並び替え
-
 
         var debugDescription: String {
             return self.rawValue
