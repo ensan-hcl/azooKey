@@ -11,7 +11,7 @@ struct UpdateInfomationView: View {
     var body: some View {
         Form{
             Group{
-                VersionView("1.6", releaseDate: "2021年??月??日"){
+                VersionView("1.6", releaseDate: "2021年03月29日"){
                     ParagraphView("カスタムタブ機能を追加しました。"){
                         "オリジナルのタブを作成できるカスタムタブ機能の導入"
                         "カスタムタブへの移動を担う「タブバー」の導入"
