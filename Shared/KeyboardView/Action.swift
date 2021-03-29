@@ -133,8 +133,12 @@ extension ActionType{
             Sound.smoothDelete()
         case .moveTab, .enter, .changeCharacterType, .toggleShowMoveCursorView, .moveCursor, .enableResizingMode, .replaceLastCharacters, .changeCapsLockState, .toggleTabBar:
             Sound.tabOrOtherKey()
-        case .DEBUG_DATA_INPUT, .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
+        case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
+        #if DEBUG
+        case .DEBUG_DATA_INPUT:
+            return
+        #endif
         }
     }
 }
