@@ -50,10 +50,12 @@ struct CustomizeTabView: View {
                     }
                     Section(header: Text("タブバー")){
                         Text("カスタムタブを使うにはタブバーを利用します。")
-                        Image("tabBar_1")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: Store.shared.imageMaximumWidth)
+                        CenterAlignedView{
+                            Image("tabBar_1")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: Store.shared.imageMaximumWidth)
+                        }
                         DisclosureGroup("使い方"){
                             Text("変換候補欄に何も表示されていない状態で、変換候補欄を長押しすると表示されます。")
                             Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
