@@ -4767,6 +4767,7 @@
 		1A4E1C3E26103068009B6EB7 /* ↑.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "↑.louds"; sourceTree = "<group>"; };
 		1A4E1C3F26103068009B6EB7 /* ト6.loudstxt2 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ト6.loudstxt2"; sourceTree = "<group>"; };
 		1A4E1C4026103068009B6EB7 /* 》.louds */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "》.louds"; sourceTree = "<group>"; };
+		1A4E1F5B2615CADA009B6EB7 /* KeyFlickSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KeyFlickSettingItemView.swift; path = deprecated/KeyFlickSettingItemView.swift; sourceTree = SOURCE_ROOT; };
 		1A4EFE2A260E2636009B6EB7 /* mm.binary */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mm.binary; path = "../../../../../AzooKey-dict/workspaces/2021:01:30/_results/mm.binary"; sourceTree = "<group>"; };
 		1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestView.swift; sourceTree = "<group>"; };
 		1A58AB02250290D800EB1864 /* SuggestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestModel.swift; sourceTree = "<group>"; };
@@ -7820,6 +7821,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */,
+				1A4E1F5B2615CADA009B6EB7 /* KeyFlickSettingItemView.swift */,
 				1A6736072509F39E003FC654 /* VerbConjugation.swift */,
 			);
 			path = deprecated;
