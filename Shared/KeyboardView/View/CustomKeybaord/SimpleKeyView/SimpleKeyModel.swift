@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-enum SimpleUnpressedKeyColorType{
+enum SimpleUnpressedKeyColorType {
     case normal
     case special
     case enter
     case selected
     func color(states: VariableStates, theme: ThemeData) -> Color {
-        switch self{
+        switch self {
         case .normal:
             return theme.normalKeyFillColor.color
         case .special:
@@ -23,17 +23,17 @@ enum SimpleUnpressedKeyColorType{
         case .selected:
             return theme.pushedKeyFillColor.color
         case .enter:
-            switch states.enterKeyState{
+            switch states.enterKeyState {
             case .complete, .edit:
                 return theme.specialKeyFillColor.color
             case let .return(type):
-                switch type{
+                switch type {
                 case .default:
                     return theme.specialKeyFillColor.color
                 default:
-                    if theme == .default{
+                    if theme == .default {
                         return Design.colors.specialEnterKeyColor
-                    }else{
+                    } else {
                         return theme.specialKeyFillColor.color
                     }
                 }
@@ -42,7 +42,7 @@ enum SimpleUnpressedKeyColorType{
     }
 }
 
-protocol SimpleKeyModelProtocol{
+protocol SimpleKeyModelProtocol {
     var pressActions: [ActionType] {get}
     var longPressActions: LongpressActionType {get}
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
@@ -54,16 +54,16 @@ protocol SimpleKeyModelProtocol{
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
 }
 
-extension SimpleKeyModelProtocol{
-    func press(){
-        self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
+extension SimpleKeyModelProtocol {
+    func press() {
+        self.pressActions.forEach {VariableStates.shared.action.registerAction($0)}
     }
 
-    func longPressReserve(){
+    func longPressReserve() {
         VariableStates.shared.action.reserveLongPressAction(longPressActions)
     }
 
-    func longPressEnd(){
+    func longPressEnd() {
         VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
     }
 
@@ -76,7 +76,7 @@ extension SimpleKeyModelProtocol{
     }
 }
 
-struct SimpleKeyModel: SimpleKeyModelProtocol{
+struct SimpleKeyModel: SimpleKeyModelProtocol {
     init(keyType: SimpleKeyColorType, keyLabelType: KeyLabelType, unpressedKeyColorType: SimpleUnpressedKeyColorType, pressActions: [ActionType], longPressActions: LongpressActionType = .none) {
         self.keyType = keyType
         self.keyLabelType = keyLabelType
@@ -85,7 +85,7 @@ struct SimpleKeyModel: SimpleKeyModelProtocol{
         self.longPressActions = longPressActions
     }
 
-    enum SimpleKeyColorType{
+    enum SimpleKeyColorType {
         case normal
         case functional
     }
@@ -101,10 +101,10 @@ struct SimpleKeyModel: SimpleKeyModelProtocol{
     }
 }
 
-struct SimpleEnterKeyModel: SimpleKeyModelProtocol{
+struct SimpleEnterKeyModel: SimpleKeyModelProtocol {
 
     var pressActions: [ActionType] {
-        switch VariableStates.shared.enterKeyState{
+        switch VariableStates.shared.enterKeyState {
         case .complete:
             return [.enter]
         case .return:
@@ -122,11 +122,11 @@ struct SimpleEnterKeyModel: SimpleKeyModelProtocol{
     }
 }
 
-struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol{
+struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol {
     var pressActions: [ActionType] {
-        if SemiStaticStates.shared.needsInputModeSwitchKey{
+        if SemiStaticStates.shared.needsInputModeSwitchKey {
             return []
-        }else{
+        } else {
             return [.toggleShowMoveCursorView]
         }
     }
@@ -134,9 +134,9 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol{
     let longPressActions: LongpressActionType = .none
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
-        if SemiStaticStates.shared.needsInputModeSwitchKey{
+        if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.changeKeyboard, width: width)
-        }else{
+        } else {
             return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: width)
         }
     }

@@ -19,15 +19,15 @@ struct ThemeEditView: View {
     @State private var selectFontRowValue: Double = 4
     @Binding private var manager: ThemeIndexManager
 
-    @State private var trimmedImage: UIImage? = nil
+    @State private var trimmedImage: UIImage?
     @State private var isTrimmingViewPresented = false
-    @State private var pickedImage: UIImage? = nil
+    @State private var pickedImage: UIImage?
     @State private var isSheetPresented = false
     @State private var viewType = ViewType.editor
 
     @ObservedObject private var storeVariableSection = Store.variableSection
 
-    private enum ViewType{
+    private enum ViewType {
         case editor
         case themeShareView
     }
@@ -38,9 +38,9 @@ struct ThemeEditView: View {
     @State private var tab: Tab.ExistentialTab
     private var shareImage = ShareImage()
 
-    init(index: Int?, manager: Binding<ThemeIndexManager>){
+    init(index: Int?, manager: Binding<ThemeIndexManager>) {
         let tab: Tab.ExistentialTab = {
-            switch Store.variableSection.japaneseLayout{
+            switch Store.variableSection.japaneseLayout {
             case .flick:
                 return .flick_hira
             case .qwerty:
@@ -52,8 +52,8 @@ struct ThemeEditView: View {
 
         self._tab = State(initialValue: tab)
         self._manager = manager
-        if let index = index{
-            do{
+        if let index = index {
+            do {
                 var theme = try manager.wrappedValue.theme(at: index)
                 theme.id = index
                 self._theme = State(initialValue: theme)
@@ -64,7 +64,7 @@ struct ThemeEditView: View {
                 self.base = .base
             }
             self.title = "着せ替えを編集"
-        }else{
+        } else {
             self.base = .base
             self.title = "着せ替えを作成"
         }
@@ -79,75 +79,75 @@ struct ThemeEditView: View {
     }
 
     var body: some View {
-        switch viewType{
+        switch viewType {
         case .editor:
-            VStack{
-                Form{
-                    Section(header: Text("背景")){
-                        if let _ = trimmedImage{
-                            Button{
+            VStack {
+                Form {
+                    Section(header: Text("背景")) {
+                        if trimmedImage != nil {
+                            Button {
                                 self.isSheetPresented = true
                             } label: {
-                                HStack{
+                                HStack {
                                     Text("\(systemImage: "photo")画像を選び直す")
                                 }
                             }
-                            Button{
+                            Button {
                                 pickedImage = nil
                                 trimmedImage = nil
                             } label: {
-                                HStack{
+                                HStack {
                                     Text("画像を削除")
                                         .foregroundColor(.red)
                                 }
                             }
                         } else {
-                            Button{
+                            Button {
                                 self.isSheetPresented = true
                             } label: {
-                                HStack{
+                                HStack {
                                     Text("\(systemImage: "photo")画像を選ぶ")
                                 }
                             }
-                            GenericColorPicker("背景の色", selection: $theme.backgroundColor, initialValue: base.backgroundColor.color){.color($0)}
+                            GenericColorPicker("背景の色", selection: $theme.backgroundColor, initialValue: base.backgroundColor.color) {.color($0)}
                         }
                     }
-                    Section(header: Text("文字")){
-                        HStack{
+                    Section(header: Text("文字")) {
+                        HStack {
                             Text("文字の太さ")
-                            Slider(value: $selectFontRowValue, in: 1...9.9){editing in
+                            Slider(value: $selectFontRowValue, in: 1...9.9) {_ in
                                 theme.textFont = ThemeFontWeight.init(rawValue: Int(selectFontRowValue)) ?? .regular
                             }
                         }
                     }
 
-                    Section(header: Text("変換候補")){
-                        GenericColorPicker("変換候補の文字の色", selection: $theme.resultTextColor, initialValue: base.resultTextColor.color){.color($0)}
-                        GenericColorPicker("変換候補の背景色", selection: $theme.resultBackgroundColor, initialValue: base.resultBackgroundColor.color){.color($0)}
+                    Section(header: Text("変換候補")) {
+                        GenericColorPicker("変換候補の文字の色", selection: $theme.resultTextColor, initialValue: base.resultTextColor.color) {.color($0)}
+                        GenericColorPicker("変換候補の背景色", selection: $theme.resultBackgroundColor, initialValue: base.resultBackgroundColor.color) {.color($0)}
                     }
 
-                    Section(header: Text("キー")){
-                        GenericColorPicker("キーの文字の色", selection: $theme.textColor, initialValue: base.textColor.color){.color($0)}
+                    Section(header: Text("キー")) {
+                        GenericColorPicker("キーの文字の色", selection: $theme.textColor, initialValue: base.textColor.color) {.color($0)}
 
                         ColorPicker("通常キーの背景色", selection: $normalKeyColor)
-                        GenericColorPicker("特殊キーの背景色", selection: $theme.specialKeyFillColor, initialValue: base.specialKeyFillColor.color){value in
+                        GenericColorPicker("特殊キーの背景色", selection: $theme.specialKeyFillColor, initialValue: base.specialKeyFillColor.color) {value in
                             if let specialKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
                                 return Color(red: r, green: g, blue: b, opacity: max(0.005, opacity))
-                            }){
+                            }) {
                                 return .color(specialKeyColor)
                             }
                             return .color(value)
                         }
 
-                        GenericColorPicker("枠線の色", selection: $theme.borderColor, initialValue: base.borderColor.color){.color($0)}
-                        HStack{
+                        GenericColorPicker("枠線の色", selection: $theme.borderColor, initialValue: base.borderColor.color) {.color($0)}
+                        HStack {
                             Text("枠線の太さ")
                             Slider(value: $theme.borderWidth, in: 0...10)
                         }
                     }
 
-                    Section{
-                        Button{
+                    Section {
+                        Button {
                             self.pickedImage = nil
                             self.trimmedImage = nil
                             self.normalKeyColor = self.base.normalKeyFillColor.color
@@ -161,50 +161,50 @@ struct ThemeEditView: View {
 
                 }
                 KeyboardPreview(theme: self.theme, defaultTab: tab)
-                NavigationLink(destination: Group{
-                    if let image = pickedImage{
+                NavigationLink(destination: Group {
+                    if let image = pickedImage {
                         TrimmingView(
                             uiImage: image,
                             resultImage: $trimmedImage,
                             maxSize: CGSize(width: 1280, height: 720),
                             aspectRatio: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.shared.keyboardScreenHeight)
                         )}
-                }, isActive: $isTrimmingViewPresented){
+                }, isActive: $isTrimmingViewPresented) {
                     EmptyView()
                 }
 
             }
             .background(Color(.secondarySystemBackground))
-            .onChange(of: pickedImage){value in
-                if let _ = value{
+            .onChange(of: pickedImage) {value in
+                if value != nil {
                     self.isTrimmingViewPresented = true
-                }else{
+                } else {
                     self.theme.picture = .none
                 }
             }
-            .onChange(of: trimmedImage){value in
-                if let value = value{
+            .onChange(of: trimmedImage) {value in
+                if let value = value {
                     self.theme.picture = .uiImage(value)
                     self.theme.backgroundColor = .color(Color.white.opacity(0))
                     self.theme.resultBackgroundColor = .color(Color.white.opacity(0))
-                }else{
+                } else {
                     self.theme.picture = .none
                 }
             }
-            .onChange(of: normalKeyColor){value in
+            .onChange(of: normalKeyColor) {value in
                 if let normalKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
                     return Color(red: r, green: g, blue: b, opacity: max(0.001, opacity))
-                }){
+                }) {
                     self.theme.normalKeyFillColor = .color(normalKeyColor)
                 }
                 if let pushedKeyColor = ColorTools.hsv(value, process: {h, s, v, opacity in
                     let base = (floor(v-0.5) + 0.5)*2
                     return Color(hue: h, saturation: s, brightness: v - base * 0.1, opacity: max(0.05, sqrt(opacity)))
-                }){
+                }) {
                     self.theme.pushedKeyFillColor = .color(pushedKeyColor)
                 }
             }
-            .sheet(isPresented: $isSheetPresented){
+            .sheet(isPresented: $isSheetPresented) {
                 PhotoPicker(configuration: self.config,
                             pickerResult: $pickedImage,
                             isPresented: $isSheetPresented)
@@ -212,26 +212,26 @@ struct ThemeEditView: View {
             .navigationBarTitle(Text(self.title), displayMode: .inline)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(
-                leading: Button{
+                leading: Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
                     Text("キャンセル")
                 },
-                trailing: Button{
-                    do{
+                trailing: Button {
+                    do {
                         try self.save()
-                    }catch{
+                    } catch {
                         debug(error)
                     }
-                    //presentationMode.wrappedValue.dismiss()
+                    // presentationMode.wrappedValue.dismiss()
                     self.viewType = .themeShareView
                 }label: {
                     Text("完了")
                 })
-            .onChange(of: storeVariableSection.japaneseLayout){value in
-                SettingData.shared.reload() //設定をリロードする
+            .onChange(of: storeVariableSection.japaneseLayout) {value in
+                SettingData.shared.reload() // 設定をリロードする
                 self.tab = {
-                    switch value{
+                    switch value {
                     case .flick:
                         return .flick_hira
                     case .qwerty:
@@ -242,7 +242,7 @@ struct ThemeEditView: View {
                 }()
             }
         case .themeShareView:
-            ThemeShareView(theme: self.theme, shareImage: shareImage){
+            ThemeShareView(theme: self.theme, shareImage: shareImage) {
                 presentationMode.wrappedValue.dismiss()
             }
             .navigationBarTitle(Text("完了"), displayMode: .inline)
@@ -251,7 +251,7 @@ struct ThemeEditView: View {
     }
 
     private func save() throws {
-        //テーマを保存する
+        // テーマを保存する
         let id = try manager.saveTheme(theme: self.theme)
         self.theme.id = id
         manager.select(at: id)

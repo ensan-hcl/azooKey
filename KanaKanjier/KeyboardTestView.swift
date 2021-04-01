@@ -34,15 +34,13 @@ import AudioToolbox
  */
 
 struct TestView: View {
-    @State private var proxy: ScrollViewProxy? = nil
+    @State private var proxy: ScrollViewProxy?
 
     var body: some View {
-        VStack{
+        VStack {
         }
     }
 }
-
-
 
 /*
 

@@ -12,26 +12,26 @@ final class VariationsModelVariableSection: ObservableObject {
     @Published var selection: Int = 0
 }
 
-struct VariationsModel{
+struct VariationsModel {
     let variations: [(label: KeyLabelType, actions: [ActionType])]
     var direction: VariationsViewDirection
 
     var variableSection = VariationsModelVariableSection()
-    init(_ variations: [(label: KeyLabelType, actions: [ActionType])], direction: VariationsViewDirection = .center){
+    init(_ variations: [(label: KeyLabelType, actions: [ActionType])], direction: VariationsViewDirection = .center) {
         self.variations = variations
         self.direction = direction
     }
-    
-    func performSelected(){
-        if self.variations.isEmpty{
+
+    func performSelected() {
+        if self.variations.isEmpty {
             return
         }
-        
+
         let selected = self.variableSection.selection
-        self.variations[selected].actions.forEach{VariableStates.shared.action.registerAction($0)}
+        self.variations[selected].actions.forEach {VariableStates.shared.action.registerAction($0)}
     }
-    
-    func registerLocation(dx: CGFloat, tabDesign: TabDependentDesign){
+
+    func registerLocation(dx: CGFloat, tabDesign: TabDependentDesign) {
         let count = CGFloat(self.variations.count)
         let width = tabDesign.keyViewWidth
         let spacing = tabDesign.horizontalSpacing

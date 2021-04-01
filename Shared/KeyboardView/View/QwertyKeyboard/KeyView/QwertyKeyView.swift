@@ -9,14 +9,14 @@
 import Foundation
 import SwiftUI
 
-enum QwertyKeyPressState{
+enum QwertyKeyPressState {
     case unpressed
     case started(Date)
     case longPressed
     case variations
 
     var isActive: Bool {
-        switch self{
+        switch self {
         case .unpressed:
             return false
         default:
@@ -25,7 +25,7 @@ enum QwertyKeyPressState{
     }
 
     var needVariationsView: Bool {
-        switch self{
+        switch self {
         case .variations:
             return true
         default:
@@ -35,7 +35,7 @@ enum QwertyKeyPressState{
 
 }
 
-struct QwertyKeyView: View{
+struct QwertyKeyView: View {
     private let model: QwertyKeyModelProtocol
     @ObservedObject private var variableStates = VariableStates.shared
 
@@ -45,29 +45,29 @@ struct QwertyKeyView: View{
     @Environment(\.themeEnvironment) private var theme
     private let tabDesign: TabDependentDesign
     private let size: CGSize
-    
-    init(model: QwertyKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize){
+
+    init(model: QwertyKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize) {
         self.model = model
         self.tabDesign = tabDesign
         self.size = size
     }
-    
+
     private var gesture: some Gesture {
         DragGesture(minimumDistance: .zero)
             .onChanged({(value: DragGesture.Value) in
                 self.suggest = true
-                switch self.pressState{
+                switch self.pressState {
                 case .unpressed:
                     self.model.sound()
                     self.pressState = .started(Date())
                     self.model.longPressReserve()
                 case let .started(date):
-                    //もし0.4秒以上押していたら
-                    if Date().timeIntervalSince(date) >= 0.4{
-                        //長押し状態に設定する。
-                        if self.model.variationsModel.variations.isEmpty{
+                    // もし0.4秒以上押していたら
+                    if Date().timeIntervalSince(date) >= 0.4 {
+                        // 長押し状態に設定する。
+                        if self.model.variationsModel.variations.isEmpty {
                             self.pressState = .longPressed
-                        }else{
+                        } else {
                             self.pressState = .variations
                         }
                     }
@@ -78,17 +78,17 @@ struct QwertyKeyView: View{
                     self.model.variationsModel.registerLocation(dx: dx, tabDesign: tabDesign)
                 }
             })
-            //タップの終了時
-            .onEnded({value in
-                self.model.longPressEnd()   //何もなければ何も起こらない。
+            // タップの終了時
+            .onEnded({_ in
+                self.model.longPressEnd()   // 何もなければ何も起こらない。
                 self.suggest = false
-                //状態に基づいて、必要な変更を加える
-                switch self.pressState{
+                // 状態に基づいて、必要な変更を加える
+                switch self.pressState {
                 case .unpressed:
                     break
                 case let .started(date):
-                    //もし0.4秒以上押していたら
-                    if Date().timeIntervalSince(date) < 0.4{
+                    // もし0.4秒以上押していたら
+                    if Date().timeIntervalSince(date) < 0.4 {
                         self.model.press()
                     }
                 case .longPressed:
@@ -101,9 +101,9 @@ struct QwertyKeyView: View{
     }
 
     var keyFillColor: Color {
-        if self.pressState.isActive{
+        if self.pressState.isActive {
             return self.model.backGroundColorWhenPressed(theme: theme)
-        }else{
+        } else {
             return self.model.unpressedKeyColorType.color(states: variableStates, theme: theme)
         }
     }
@@ -125,8 +125,8 @@ struct QwertyKeyView: View{
     }
 
     var body: some View {
-        ZStack(alignment: .bottom){
-            Group{
+        ZStack(alignment: .bottom) {
+            Group {
                 RoundedRectangle(cornerRadius: 6)
                     .strokeAndFill(fillContent: keyFillColor, strokeContent: keyBorderColor, lineWidth: keyBorderWidth)
                     .frame(width: size.width, height: size.height)
@@ -137,10 +137,10 @@ struct QwertyKeyView: View{
                     .gesture(gesture)
                     .overlay(self.model.label(width: size.width, states: variableStates, color: nil))
             }
-            .overlay(Group{
-                if self.suggest && self.model.needSuggestView{
+            .overlay(Group {
+                if self.suggest && self.model.needSuggestView {
                     let height = tabDesign.verticalSpacing + size.height
-                    if self.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty{
+                    if self.pressState.needVariationsView && !self.model.variationsModel.variations.isEmpty {
                         QwertySuggestView.scaleToVariationsSize(
                             keyWidth: size.width,
                             scale_y: 1,
@@ -158,7 +158,7 @@ struct QwertyKeyView: View{
                             alignment: self.model.variationsModel.direction.alignment
                         )
                         .allowsHitTesting(false)
-                    }else{
+                    } else {
                         QwertySuggestView.scaleToFrameSize(
                             keyWidth: size.width,
                             scale_y: 1,

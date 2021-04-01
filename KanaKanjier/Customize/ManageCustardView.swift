@@ -9,8 +9,7 @@
 import Foundation
 import SwiftUI
 
-
-private enum AlertType{
+private enum AlertType {
     case none
     case overlapCustard(custard: Custard)
 }
@@ -22,7 +21,7 @@ private final class ImportedCustardData: ObservableObject {
         case invalidFile
 
         var description: LocalizedStringKey {
-            switch self{
+            switch self {
             case .invalidURL:
                 return "URLが間違っている可能性があります"
             case .invalidData:
@@ -40,7 +39,7 @@ private final class ImportedCustardData: ObservableObject {
         case processFile
 
         var description: LocalizedStringKey? {
-            switch self{
+            switch self {
             case .none: return nil
             case .getFile: return "ファイルを取得中"
             case .getURL: return "URLを取得中"
@@ -51,38 +50,38 @@ private final class ImportedCustardData: ObservableObject {
 
     @Published var processState: ProcessState = .none
 
-    @Published var downloadedData: Data? = nil
-    @Published var failureData: ImportError? = nil
+    @Published var downloadedData: Data?
+    @Published var failureData: ImportError?
 
-    private(set) var custards: [Custard]? = nil
+    private(set) var custards: [Custard]?
 
-    func reset(){
+    func reset() {
         self.processState = .none
         self.downloadedData = nil
         self.failureData = nil
         self.custards = nil
     }
 
-    func finish(custard: Custard){
+    func finish(custard: Custard) {
         self.custards?.removeAll(where: {$0.identifier == custard.identifier})
     }
 
     func process(data: Data) -> [Custard]? {
         self.processState = .processFile
-        do{
+        do {
             let custard = try JSONDecoder().decode(Custard.self, from: data)
             self.processState = .none
             self.custards = [custard]
             return [custard]
-        }catch{
+        } catch {
             debug(error)
         }
-        do{
+        do {
             let custards = try JSONDecoder().decode([Custard].self, from: data)
             self.processState = .none
             self.custards = custards
             return custards
-        }catch{
+        } catch {
             debug(error)
         }
         self.failureData = .invalidFile
@@ -99,22 +98,22 @@ private final class ImportedCustardData: ObservableObject {
         self.processState = .getURL
         debug("ダウンロード開始")
         guard let url = url else {
-            DispatchQueue.main.async{
+            DispatchQueue.main.async {
                 self.failureData = .invalidURL
                 self.processState = .none
             }
             return
         }
         self.processState = .getFile
-        let task: URLSessionTask = URLSession.shared.dataTask(with: url, completionHandler: {(data, response, error) in
+        let task: URLSessionTask = URLSession.shared.dataTask(with: url, completionHandler: {(data, _, _) in
             guard let data = data else {
-                DispatchQueue.main.async{
+                DispatchQueue.main.async {
                     self.failureData = .invalidData
                     self.processState = .none
                 }
                 return
             }
-            DispatchQueue.main.async{
+            DispatchQueue.main.async {
                 debug("ダウンロード終了")
                 self.downloadedData = data
             }
@@ -134,20 +133,20 @@ struct ManageCustardView: View {
     @State private var showDocumentPicker = false
     @State var selectedDocument: Data = Data()
     @State var addTabBar = true
-    init(manager: Binding<CustardManager>){
+    init(manager: Binding<CustardManager>) {
         self._manager = manager
     }
 
     var body: some View {
-        Form{
-            Section(header: Text("一覧")){
-                if manager.availableCustards.isEmpty{
+        Form {
+            Section(header: Text("一覧")) {
+                if manager.availableCustards.isEmpty {
                     Text("カスタムタブがまだありません")
-                }else{
-                    List{
-                        ForEach(manager.availableCustards, id: \.self){identifier in
-                            if let custard = try? manager.custard(identifier: identifier){
-                                NavigationLink(destination: CustardInformationView(custard: custard, manager: $manager)){
+                } else {
+                    List {
+                        ForEach(manager.availableCustards, id: \.self) {identifier in
+                            if let custard = try? manager.custard(identifier: identifier) {
+                                NavigationLink(destination: CustardInformationView(custard: custard, manager: $manager)) {
                                     Text(identifier)
                                 }
                             }
@@ -157,57 +156,57 @@ struct ManageCustardView: View {
                 }
             }
 
-            Section(header: Text("作る")){
+            Section(header: Text("作る")) {
                 Text("登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
-                NavigationLink(destination: EditingScrollCustardView(manager: $manager)){
+                NavigationLink(destination: EditingScrollCustardView(manager: $manager)) {
                     Text("作る")
                 }
 
             }
 
             if let value = data.downloadedData,
-               let custards = (data.custards ?? data.process(data: value)){
-                ForEach(custards, id: \.identifier){custard in
-                    Section(header: Text("読み込んだタブ")){
+               let custards = (data.custards ?? data.process(data: value)) {
+                ForEach(custards, id: \.identifier) {custard in
+                    Section(header: Text("読み込んだタブ")) {
                         Text("「\(custard.metadata.display_name)(\(custard.identifier))」の読み込みに成功しました")
-                        CenterAlignedView{
+                        CenterAlignedView {
                             KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
                         }
-                        Toggle(isOn: $addTabBar){
+                        Toggle(isOn: $addTabBar) {
                             Text("タブバーに追加")
                         }
-                        Button("保存"){
-                            if manager.availableCustards.contains(custard.identifier){
+                        Button("保存") {
+                            if manager.availableCustards.contains(custard.identifier) {
                                 self.showAlert = true
                                 self.alertType = .overlapCustard(custard: custard)
-                            }else{
+                            } else {
                                 self.saveCustard(custard: custard)
                             }
                         }
                     }
                 }
-                Button("キャンセル"){
+                Button("キャンセル") {
                     urlString = ""
                     selectedDocument = Data()
                     data.reset()
                 }
                 .foregroundColor(.red)
 
-            }else{
-                Section(header: Text("読み込む")){
+            } else {
+                Section(header: Text("読み込む")) {
 
-                    if let text = data.processState.description{
+                    if let text = data.processState.description {
                         ProgressView(text)
                     }
-                    if let failure = data.failureData{
-                        HStack{
+                    if let failure = data.failureData {
+                        HStack {
                             Image(systemName: "exclamationmark.triangle")
                             Text(failure.description).foregroundColor(.red)
                         }
                     }
-                    DisclosureGroup{
+                    DisclosureGroup {
 
-                        Button{
+                        Button {
                             showDocumentPicker = true
                         } label: {
                             Text("読み込む")
@@ -217,11 +216,11 @@ struct ManageCustardView: View {
                         Text("iCloudから読み込む")
                     }
 
-                    DisclosureGroup{
-                        HStack{
+                    DisclosureGroup {
+                        HStack {
                             TextField("URLを入力", text: $urlString)
                         }
-                        Button{
+                        Button {
                             data.download(from: urlString)
                         } label: {
                             Text("読み込む")
@@ -236,36 +235,36 @@ struct ManageCustardView: View {
             }
         }
         .navigationBarTitle(Text("カスタムタブの管理"), displayMode: .inline)
-        .alert(isPresented: $showAlert){
-            switch alertType{
+        .alert(isPresented: $showAlert) {
+            switch alertType {
             case .none:
                 return Alert(title: Text("アラート"))
             case let .overlapCustard(custard):
                 return Alert(
                     title: Text("注意"),
                     message: Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？"),
-                    primaryButton: .default(Text("上書き")){
+                    primaryButton: .default(Text("上書き")) {
                         self.saveCustard(custard: custard)
                     },
                     secondaryButton: .cancel()
                 )
             }
         }
-        .sheet(isPresented: $showDocumentPicker){
+        .sheet(isPresented: $showDocumentPicker) {
             DocumentPicker(
                 pickerResult: $data.downloadedData,
                 isPresented: $showDocumentPicker,
-                extensions: ["txt","custard","json"]
+                extensions: ["txt", "custard", "json"]
             )
         }
     }
 
-    private func saveCustard(custard: Custard){
-        do{
+    private func saveCustard(custard: Custard) {
+        do {
             try manager.saveCustard(custard: custard, metadata: .init(origin: .imported), updateTabBar: addTabBar)
             data.finish(custard: custard)
             Store.shared.feedbackGenerator.notificationOccurred(.success)
-            if self.isFinished{
+            if self.isFinished {
                 data.reset()
                 urlString = ""
                 selectedDocument = Data()
@@ -276,14 +275,14 @@ struct ManageCustardView: View {
     }
 
     private func delete(at offsets: IndexSet) {
-        let identifiers = offsets.map{manager.availableCustards[$0]}
-        identifiers.forEach{
+        let identifiers = offsets.map {manager.availableCustards[$0]}
+        identifiers.forEach {
             manager.removeCustard(identifier: $0)
         }
     }
 
     private var isFinished: Bool {
-        if let custards = data.custards{
+        if let custards = data.custards {
             return custards.isEmpty
         }
         return true
@@ -291,7 +290,7 @@ struct ManageCustardView: View {
 
 }
 
-//FIXME: ファイルを保存もキャンセルもしない状態で2つ目のファイルを読み込むとエラーになる
+// FIXME: ファイルを保存もキャンセルもしない状態で2つ目のファイルを読み込むとエラーになる
 struct URLImportCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var showAlert = false
@@ -300,56 +299,56 @@ struct URLImportCustardView: View {
     @State private var addTabBar = true
     @ObservedObject private var storeVariableSection = Store.variableSection
 
-    init(manager: Binding<CustardManager>){
+    init(manager: Binding<CustardManager>) {
         self._manager = manager
     }
 
     var body: some View {
-        Form{
+        Form {
             if let value = data.downloadedData,
-               let custards = (data.custards ?? data.process(data: value)){
-                ForEach(custards, id: \.identifier){custard in
-                    Section(header: Text("読み込んだタブ")){
+               let custards = (data.custards ?? data.process(data: value)) {
+                ForEach(custards, id: \.identifier) {custard in
+                    Section(header: Text("読み込んだタブ")) {
                         Text("「\(custard.metadata.display_name)(\(custard.identifier))」の読み込みに成功しました")
-                        CenterAlignedView{
+                        CenterAlignedView {
                             KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
                         }
-                        Toggle(isOn: $addTabBar){
+                        Toggle(isOn: $addTabBar) {
                             Text("タブバーに追加")
                         }
-                        Button("保存"){
-                            if manager.availableCustards.contains(custard.identifier){
+                        Button("保存") {
+                            if manager.availableCustards.contains(custard.identifier) {
                                 self.showAlert = true
                                 self.alertType = .overlapCustard(custard: custard)
-                            }else{
+                            } else {
                                 self.saveCustard(custard: custard)
                             }
                         }
                     }
                 }
-                Button("キャンセル"){
+                Button("キャンセル") {
                     data.reset()
                     Store.variableSection.importFile = nil
                 }
                 .foregroundColor(.red)
-            }else if let text = data.processState.description{
-                Section(header: Text("読み込み中")){
+            } else if let text = data.processState.description {
+                Section(header: Text("読み込み中")) {
                     ProgressView(text)
-                    Button("閉じる"){
+                    Button("閉じる") {
                         data.reset()
                         Store.variableSection.importFile = nil
                     }
                     .foregroundColor(.accentColor)
                 }
-            }else{
-                Section(header: Text("読み込み失敗")){
-                    if let failure = data.failureData{
-                        HStack{
+            } else {
+                Section(header: Text("読み込み失敗")) {
+                    if let failure = data.failureData {
+                        HStack {
                             Image(systemName: "exclamationmark.triangle")
                             Text(failure.description).foregroundColor(.red)
                         }
                     }
-                    Button("閉じる"){
+                    Button("閉じる") {
                         data.reset()
                         Store.variableSection.importFile = nil
                     }
@@ -357,27 +356,27 @@ struct URLImportCustardView: View {
                 }
             }
         }
-        .onAppear{
-            if let url = storeVariableSection.importFile{
+        .onAppear {
+            if let url = storeVariableSection.importFile {
                 data.reset()
                 data.download(from: url)
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            if let url = storeVariableSection.importFile{
+            if let url = storeVariableSection.importFile {
                 data.reset()
                 data.download(from: url)
             }
         }
-        .alert(isPresented: $showAlert){
-            switch alertType{
+        .alert(isPresented: $showAlert) {
+            switch alertType {
             case .none:
                 return Alert(title: Text("アラート"))
             case let .overlapCustard(custard):
                 return Alert(
                     title: Text("注意"),
                     message: Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？"),
-                    primaryButton: .default(Text("上書き")){
+                    primaryButton: .default(Text("上書き")) {
                         self.saveCustard(custard: custard)
                     },
                     secondaryButton: .cancel()
@@ -386,12 +385,12 @@ struct URLImportCustardView: View {
         }
     }
 
-    private func saveCustard(custard: Custard){
-        do{
+    private func saveCustard(custard: Custard) {
+        do {
             try manager.saveCustard(custard: custard, metadata: .init(origin: .imported), updateTabBar: addTabBar)
             data.finish(custard: custard)
             Store.shared.feedbackGenerator.notificationOccurred(.success)
-            if self.isFinished{
+            if self.isFinished {
                 data.reset()
                 Store.variableSection.importFile = nil
             }
@@ -401,7 +400,7 @@ struct URLImportCustardView: View {
     }
 
     private var isFinished: Bool {
-        if let custards = data.custards{
+        if let custards = data.custards {
             return custards.isEmpty
         }
         return true

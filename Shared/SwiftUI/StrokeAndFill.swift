@@ -11,7 +11,7 @@ import SwiftUI
 
 extension Shape {
     func strokeAndFill<FillContent: ShapeStyle, StrokeContent: ShapeStyle>(fillContent: FillContent, strokeContent: StrokeContent, lineWidth: CGFloat) -> some View {
-        ZStack{
+        ZStack {
             self.fill(fillContent)
             self.stroke(strokeContent, lineWidth: lineWidth)
         }

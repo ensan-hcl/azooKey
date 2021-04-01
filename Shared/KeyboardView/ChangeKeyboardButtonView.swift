@@ -14,14 +14,14 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
     private let size: CGFloat
     private let theme: ThemeData
 
-    init(selector: Selector? = nil, size: CGFloat, theme: ThemeData){
+    init(selector: Selector? = nil, size: CGFloat, theme: ThemeData) {
         self.selector = selector
         self.size = size
         self.theme = theme
     }
 
     private var weight: UIImage.SymbolWeight {
-        switch theme.textFont{
+        switch theme.textFont {
         case .ultraLight:
             return .ultraLight
         case .thin:
@@ -41,7 +41,7 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UIButton {
         let button = UIButton(type: .custom)
-        if let selector = selector{
+        if let selector = selector {
             button.addTarget(nil, action: selector, for: .allTouchEvents)
         }
         let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)

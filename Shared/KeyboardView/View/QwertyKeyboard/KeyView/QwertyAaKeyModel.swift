@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct QwertyAaKeyModel: QwertyKeyModelProtocol{
+struct QwertyAaKeyModel: QwertyKeyModelProtocol {
     static var shared = QwertyAaKeyModel()
 
     let keySizeType: QwertyKeySizeType = .normal(of: 1, for: 1)
@@ -17,7 +17,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
     let needSuggestView: Bool = false
 
     var pressActions: [ActionType] {
-        switch VariableStates.shared.aAKeyState{
+        switch VariableStates.shared.aAKeyState {
         case .normal:
             return [.changeCharacterType]
         case .capsLock:
@@ -26,7 +26,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
     }
 
     var longPressActions: LongpressActionType {
-        switch VariableStates.shared.aAKeyState{
+        switch VariableStates.shared.aAKeyState {
         case .normal:
             return .init(start: [.changeCapsLockState(state: .capsLock)])
         case .capsLock:
@@ -35,7 +35,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol{
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        switch states.aAKeyState{
+        switch states.aAKeyState {
         case .normal:
             return KeyLabel(.image("textformat.alt"), width: width, textColor: color)
         case .capsLock:

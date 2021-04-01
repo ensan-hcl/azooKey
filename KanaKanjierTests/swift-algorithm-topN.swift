@@ -1,4 +1,4 @@
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift Algorithms open source project
 //
@@ -7,7 +7,7 @@
 //
 // See https://swift.org/LICENSE.txt for license information
 //
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 extension Collection {
     /// Returns the first k elements of this collection when it's sorted using
     /// the given predicate as the comparison between elements.
@@ -96,7 +96,7 @@ extension Collection where Element: Comparable {
         return sortedPrefix(count, by: <)
     }
 }
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift Algorithms open source project
 //
@@ -105,10 +105,10 @@ extension Collection where Element: Comparable {
 //
 // See https://swift.org/LICENSE.txt for license information
 //
-//===----------------------------------------------------------------------===//
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 // stablePartition(by:)
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 extension MutableCollection {
     /// Moves all elements satisfying `belongsInSecondPartition` into a suffix
     /// of the collection, preserving their relative order, and returns the
@@ -183,9 +183,9 @@ extension MutableCollection {
     }
 }
 
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 // partition(by:)
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 extension MutableCollection {
     /// Moves all elements satisfying `isSuffixElement` into a suffix of the
     /// collection, returning the start position of the resulting suffix.
@@ -257,9 +257,9 @@ extension MutableCollection where Self: BidirectionalCollection {
     }
 }
 
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 // partitioningIndex(where:)
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 extension Collection {
     /// Returns the index of the first element in the collection that matches
     /// the predicate.
@@ -296,7 +296,7 @@ extension Collection {
         return l
     }
 }
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift Algorithms open source project
 //
@@ -305,10 +305,10 @@ extension Collection {
 //
 // See https://swift.org/LICENSE.txt for license information
 //
-//===----------------------------------------------------------------------===//
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 // reverse(subrange:)
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 extension MutableCollection where Self: BidirectionalCollection {
     /// Reverses the elements of the collection, moving from each end until
     /// `limit` is reached from either direction. The returned indices are the
@@ -366,9 +366,9 @@ extension MutableCollection where Self: BidirectionalCollection {
     }
 }
 
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 // rotate(toStartAt:) / rotate(subrange:toStartAt:)
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 extension MutableCollection {
     /// Swaps the elements of the two given subranges, up to the upper bound of
     /// the smaller subrange. The returned indices are the ends of the two
@@ -582,8 +582,7 @@ extension MutableCollection {
     @discardableResult
     public mutating func rotate(
         subrange: Range<Index>,
-        at newStart: Index) -> Index
-    {
+        at newStart: Index) -> Index {
         rotate(subrange: subrange, toStartAt: newStart)
     }
 

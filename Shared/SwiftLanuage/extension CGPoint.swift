@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-extension CGPoint{
+extension CGPoint {
     @inlinable
     func distance(to point: CGPoint) -> CGFloat {
         let dx: CGFloat = x-point.x
@@ -20,18 +20,18 @@ extension CGPoint{
     func direction(to point: CGPoint) -> FlickDirection {
         let x: CGFloat = point.x - self.x
         let y: CGFloat = point.y - self.y
-        
-        if x>0 && abs(y) < x{
+
+        if x>0 && abs(y) < x {
             return FlickDirection.right
         }
-        if x<0 && abs(y) < -x{
+        if x<0 && abs(y) < -x {
             return FlickDirection.left
         }
-        //CGは座標が下の方が大きい
-        if y>0 && abs(x) < y{
+        // CGは座標が下の方が大きい
+        if y>0 && abs(x) < y {
             return FlickDirection.bottom
         }
-        if y<0 && abs(x) < -y{
+        if y<0 && abs(x) < -y {
             return FlickDirection.top
         }
         return FlickDirection.top

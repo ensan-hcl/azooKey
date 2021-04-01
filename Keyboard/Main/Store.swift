@@ -9,80 +9,80 @@
 import Foundation
 import SwiftUI
 
-final class Store{
+final class Store {
     static let shared = Store()
     private(set) var resultModel = ResultModel<Candidate>()
-    ///Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
+    /// Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     private(set) var action = KeyboardActionDepartment()
 
-    private init(){
+    private init() {
         VariableStates.shared.action = action
     }
 
-    func settingCheck(){
+    func settingCheck() {
         SettingData.shared.reload()
-        if SettingData.checkResetSetting(){
+        if SettingData.checkResetSetting() {
             self.action.sendToDicDataStore(.resetMemory)
         }
         self.action.sendToDicDataStore(.notifyLearningType(SettingData.shared.learningType))
     }
 
-    ///Call this method after initialize
-    func initialize(){
+    /// Call this method after initialize
+    func initialize() {
         debug("Storeを初期化します")
         self.settingCheck()
         VariableStates.shared.initialize()
         self.action.initialize()
     }
 
-    func appearedAgain(){
+    func appearedAgain() {
         debug("再び表示されました")
         self.settingCheck()
         VariableStates.shared.initialize()
         self.action.appearedAgain()
     }
 
-    fileprivate func registerResult(_ result: [Candidate]){
+    fileprivate func registerResult(_ result: [Candidate]) {
         self.resultModel.setResults(result)
     }
 
-    func closeKeyboard(){
+    func closeKeyboard() {
         VariableStates.shared.closeKeybaord()
         self.action.closeKeyboard()
     }
 }
 
-//MARK:Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
-final class KeyboardActionDepartment: ActionDepartment{
-    fileprivate override init(){}
-    
+// MARK: Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
+final class KeyboardActionDepartment: ActionDepartment {
+    fileprivate override init() {}
+
     private var inputManager = InputManager()
     private weak var delegate: KeyboardViewController!
-    
-    //即時変数
+
+    // 即時変数
     private var timers: [(type: LongpressActionType, timer: Timer)] = []
     private var tempTextData: (left: String, center: String, right: String)!
     private var tempSavedSelectedText: String!
 
-    fileprivate func initialize(){
+    fileprivate func initialize() {
         self.inputManager.closeKeyboard()
-        self.timers.forEach{$0.timer.invalidate()}
+        self.timers.forEach {$0.timer.invalidate()}
         self.timers = []
     }
 
-    fileprivate func closeKeyboard(){
+    fileprivate func closeKeyboard() {
         self.initialize()
     }
 
-    fileprivate func appearedAgain(){
+    fileprivate func appearedAgain() {
         self.sendToDicDataStore(.reloadUserDict)
     }
 
-    func setTextDocumentProxy(_ proxy: UITextDocumentProxy){
+    func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
         self.inputManager.setTextDocumentProxy(proxy)
     }
 
-    enum DicDataStoreNotification{
+    enum DicDataStoreNotification {
         case notifyLearningType(LearningType)
         case importOSUserDict(OSUserDict)
         case notifyAppearAgain
@@ -91,46 +91,46 @@ final class KeyboardActionDepartment: ActionDepartment{
         case resetMemory
     }
 
-    func sendToDicDataStore(_ data: DicDataStoreNotification){
+    func sendToDicDataStore(_ data: DicDataStoreNotification) {
         self.inputManager.sendToDicDataStore(data)
     }
 
-    func setDelegateViewController(_ controller: KeyboardViewController){
+    func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
     }
 
     override func makeChangeKeyboardButtonView(theme: ThemeData) -> ChangeKeyboardButtonView {
         delegate.makeChangeKeyboardButtonView(size: Design.fonts.iconFontSize, theme: theme)
     }
-    
-    ///変換を確定した場合に呼ばれる。
+
+    /// 変換を確定した場合に呼ばれる。
     /// - Parameters:
     ///   - text: String。確定された文字列。
     ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
-    override func notifyComplete(_ candidate: ResultViewItemData){
+    override func notifyComplete(_ candidate: ResultViewItemData) {
         guard let candidate = candidate as? Candidate else {
             debug("確定できません")
             return
         }
         self.inputManager.complete(candidate: candidate)
-        candidate.actions.forEach{
+        candidate.actions.forEach {
             self.doAction($0)
         }
     }
 
-    private func showResultView(){
+    private func showResultView() {
         VariableStates.shared.showTabBar = false
         VariableStates.shared.showMoveCursorBar = false
     }
 
-    private func doAction(_ action: ActionType){
-        switch action{
+    private func doAction(_ action: ActionType) {
+        switch action {
         case let .input(text):
             self.showResultView()
-            if VariableStates.shared.aAKeyState == .capsLock && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage){
+            if VariableStates.shared.aAKeyState == .capsLock && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage) {
                 let input = text.uppercased()
                 self.inputManager.input(text: input)
-            }else{
+            } else {
                 self.inputManager.input(text: text)
             }
         case let .delete(count):
@@ -142,21 +142,21 @@ final class KeyboardActionDepartment: ActionDepartment{
             self.showResultView()
             self.inputManager.smoothDelete()
         case let .smartDelete(item):
-            switch item.direction{
+            switch item.direction {
             case .forward:
-                self.inputManager.smoothDelete(to: item.targets.map{Character($0)})
+                self.inputManager.smoothDelete(to: item.targets.map {Character($0)})
             case .backward:
-                self.inputManager.smoothDelete(to: item.targets.map{Character($0)})
+                self.inputManager.smoothDelete(to: item.targets.map {Character($0)})
             }
         case .deselectAndUseAsInputting:
             self.inputManager.edit()
 
         case .saveSelectedTextIfNeeded:
-            if self.inputManager.isSelected{
+            if self.inputManager.isSelected {
                 self.tempSavedSelectedText = self.inputManager.inputtedText
             }
         case .restoreSelectedTextIfNeeded:
-            if let tmp = self.tempSavedSelectedText{
+            if let tmp = self.tempSavedSelectedText {
                 self.inputManager.input(text: tmp)
                 self.tempSavedSelectedText = nil
             }
@@ -165,9 +165,9 @@ final class KeyboardActionDepartment: ActionDepartment{
         case let .smartMoveCursor(item):
             switch item.direction {
             case .forward:
-                self.inputManager.smartMoveCursorForward(to: item.targets.map{Character($0)})
+                self.inputManager.smartMoveCursorForward(to: item.targets.map {Character($0)})
             case .backward:
-                self.inputManager.smartMoveCursorBackward(to: item.targets.map{Character($0)})
+                self.inputManager.smartMoveCursorBackward(to: item.targets.map {Character($0)})
             }
         case let .changeCapsLockState(state):
             VariableStates.shared.aAKeyState = state
@@ -177,7 +177,7 @@ final class KeyboardActionDepartment: ActionDepartment{
         case .enter:
             self.showResultView()
             let actions = self.inputManager.enter()
-            actions.forEach{
+            actions.forEach {
                 self.doAction($0)
             }
         case .changeCharacterType:
@@ -205,10 +205,10 @@ final class KeyboardActionDepartment: ActionDepartment{
             delegate.openApp(scheme: scheme)
 
         #if DEBUG
-        //MARK: デバッグ用
+        // MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
             self.inputManager.isDebugMode.toggle()
-            if self.inputManager.isDebugMode{
+            if self.inputManager.isDebugMode {
                 var left = self.inputManager.proxy.documentContextBeforeInput ?? "nil"
                 if left == "\n"{
                     left = "↩︎"
@@ -221,7 +221,7 @@ final class KeyboardActionDepartment: ActionDepartment{
                 if right == "\n"{
                     right = "↩︎"
                 }
-                if right.isEmpty{
+                if right.isEmpty {
                     right = "empty"
                 }
 
@@ -234,19 +234,19 @@ final class KeyboardActionDepartment: ActionDepartment{
     override func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
         self.inputManager.changeInputStyle(from: beforeStyle, to: afterStyle)
     }
-    
-    ///押した場合に行われる。
+
+    /// 押した場合に行われる。
     /// - Parameters:
     ///   - action: 行われた動作。
-    override func registerAction(_ action: ActionType){
+    override func registerAction(_ action: ActionType) {
         self.doAction(action)
     }
-    
-    ///長押しを予約する関数。
+
+    /// 長押しを予約する関数。
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
-    override func reserveLongPressAction(_ action: LongpressActionType){
-        if timers.contains(where: {$0.type == action}){
+    override func reserveLongPressAction(_ action: LongpressActionType) {
+        if timers.contains(where: {$0.type == action}) {
             return
         }
         let startTime = Date()
@@ -255,7 +255,7 @@ final class KeyboardActionDepartment: ActionDepartment{
             let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
             if span > 0.4 {
                 action.repeat.first?.sound()
-                action.repeat.forEach{
+                action.repeat.forEach {
                     self?.doAction($0)
                 }
             }
@@ -264,18 +264,18 @@ final class KeyboardActionDepartment: ActionDepartment{
 
         let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
             action.start.first?.sound()
-            action.start.forEach{
+            action.start.forEach {
                 self?.doAction($0)
             }
         })
         self.timers.append((type: action, timer: repeatTimer))
     }
-    
-    ///長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。
+
+    /// 長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。
     /// - Parameters:
     ///   - action: どの動作を終了するか判定するために用いる。
-    override func registerLongPressActionEnd(_ action: LongpressActionType){
-        timers = timers.compactMap{timer in
+    override func registerLongPressActionEnd(_ action: LongpressActionType) {
+        timers = timers.compactMap {timer in
             if timer.type == action {
                 timer.timer.invalidate()
                 return nil
@@ -283,12 +283,12 @@ final class KeyboardActionDepartment: ActionDepartment{
             return timer
         }
     }
-    
-    ///何かが変化する前に状態の保存を行う関数。
-    override func notifySomethingWillChange(left: String, center: String, right: String){
+
+    /// 何かが変化する前に状態の保存を行う関数。
+    override func notifySomethingWillChange(left: String, center: String, right: String) {
         self.tempTextData = (left: left, center: center, right: right)
     }
-    //MARK: left/center/rightとして得られる情報は以下の通り
+    // MARK: left/center/rightとして得られる情報は以下の通り
     /*
      |はカーソル位置。二つある場合は選択範囲
      ---------------------
@@ -316,10 +316,10 @@ final class KeyboardActionDepartment: ActionDepartment{
      d|ef              :a/bc \n d/ef
      ---------------------
      */
-    
-    ///何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String){
-        if self.inputManager.isAfterAdjusted(){
+
+    /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
+    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
+        if self.inputManager.isAfterAdjusted() {
             return
         }
         debug("something did happen by user!")
@@ -333,98 +333,98 @@ final class KeyboardActionDepartment: ActionDepartment{
         let wasSelected = !b_center.isEmpty
         let isSelected = !a_center.isEmpty
 
-        if isSelected{
+        if isSelected {
             self.inputManager.userSelectedText(text: a_center)
             return
         }
-        
-        //全体としてテキストが変化せず、選択範囲が存在している場合→新たに選択した、または選択範囲を変更した
-        if !isWholeTextChanged{
-            //全体としてテキストが変化せず、選択範囲が無くなっている場合→選択を解除した
-            if wasSelected && !isSelected{
+
+        // 全体としてテキストが変化せず、選択範囲が存在している場合→新たに選択した、または選択範囲を変更した
+        if !isWholeTextChanged {
+            // 全体としてテキストが変化せず、選択範囲が無くなっている場合→選択を解除した
+            if wasSelected && !isSelected {
                 self.inputManager.userDeselectedText()
                 debug("user operation id: 1")
                 return
             }
 
-            //全体としてテキストが変化せず、選択範囲は前後ともになく、左側(右側)の文字列だけが変わっていた場合→カーソルを移動した
-            if !wasSelected && !isSelected && b_left != a_left{
+            // 全体としてテキストが変化せず、選択範囲は前後ともになく、左側(右側)の文字列だけが変わっていた場合→カーソルを移動した
+            if !wasSelected && !isSelected && b_left != a_left {
                 debug("user operation id: 2", b_left, a_left)
                 let offset = a_left.count - b_left.count
                 self.inputManager.userMovedCursor(count: offset)
                 return
             }
-            //ただタップしただけ、などの場合ここにくる事がある。
+            // ただタップしただけ、などの場合ここにくる事がある。
             debug("user operation id: 3")
             return
         }
-        //以降isWholeTextChangedは常にtrue
-        //全体としてテキストが変化しており、前は左は改行コードになっていて選択範囲が存在し、かつ前の選択範囲と後の全体が一致する場合→行全体の選択が解除された
-        //行全体を選択している場合は改行コードが含まれる。
-        if b_left == "\n" && b_center == a_wholeText{
+        // 以降isWholeTextChangedは常にtrue
+        // 全体としてテキストが変化しており、前は左は改行コードになっていて選択範囲が存在し、かつ前の選択範囲と後の全体が一致する場合→行全体の選択が解除された
+        // 行全体を選択している場合は改行コードが含まれる。
+        if b_left == "\n" && b_center == a_wholeText {
             debug("user operation id: 5")
             self.inputManager.userDeselectedText()
             return
         }
 
-        //全体としてテキストが変化しており、左右の文字列を合わせたものが不変である場合→カットしたのではないか？
-        if b_left + b_right == a_left + a_right{
+        // 全体としてテキストが変化しており、左右の文字列を合わせたものが不変である場合→カットしたのではないか？
+        if b_left + b_right == a_left + a_right {
             debug("user operation id: 6")
             self.inputManager.userCutText(text: b_center)
             return
         }
-        
-        //全体としてテキストが変化しており、右側の文字列が不変であった場合→ペーストしたのではないか？
-        if b_right == a_right{
-            //もしクリップボードに文字列がコピーされており、かつ、前の左側文字列にその文字列を加えた文字列が後の左側の文字列に一致した場合→確実にペースト
-            if let pastedText = UIPasteboard.general.string, a_left.hasSuffix(pastedText){
-                if wasSelected{
+
+        // 全体としてテキストが変化しており、右側の文字列が不変であった場合→ペーストしたのではないか？
+        if b_right == a_right {
+            // もしクリップボードに文字列がコピーされており、かつ、前の左側文字列にその文字列を加えた文字列が後の左側の文字列に一致した場合→確実にペースト
+            if let pastedText = UIPasteboard.general.string, a_left.hasSuffix(pastedText) {
+                if wasSelected {
                     debug("user operation id: 7")
                     self.inputManager.userReplacedSelectedText(text: pastedText)
-                }else{
+                } else {
                     debug("user operation id: 8")
                     self.inputManager.userPastedText(text: pastedText)
                 }
                 return
             }
         }
-        
-        if a_left == "\n" && b_left.isEmpty && a_right == b_right{
+
+        if a_left == "\n" && b_left.isEmpty && a_right == b_right {
             debug("user operation id: 9")
             return
         }
-        
-        //上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
-        debug("user operation id: 10, \((a_left,a_center,a_right)), \((b_left, b_center, b_right))")
+
+        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
+        debug("user operation id: 10, \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
         self.inputManager.clear()
     }
 
-    private func hideLearningMemory(){
+    private func hideLearningMemory() {
         SettingData.shared.writeLearningTypeSetting(to: .nothing)
         self.sendToDicDataStore(.notifyLearningType(.nothing))
     }
 
     #if DEBUG
-    func setDebugPrint(_ text: String){
+    func setDebugPrint(_ text: String) {
         self.inputManager.setDebugResult(text: text)
     }
     #endif
 }
 
-//ActionDepartmentの状態を保存する部分
-private final class InputManager{
+// ActionDepartmentの状態を保存する部分
+private final class InputManager {
     fileprivate var proxy: UITextDocumentProxy!
-    
-    //現在入力中の文字
+
+    // 現在入力中の文字
     fileprivate var inputtedText: String = ""
     private var kanaRomanStateHolder = KanaRomanStateHolder()
-    //セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
+    // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
     fileprivate var isSelected = false
-    //現在のカーソル位置。カーソル左側の文字数に等しい
+    // 現在のカーソル位置。カーソル左側の文字数に等しい
     private var cursorPosition = 0
-    //カーソルの取りうる最小位置。
+    // カーソルの取りうる最小位置。
     private let cursorMinimumPosition: Int = 0
-    ///カーソルの動ける最大範囲。`inputtedText`の文字数に等しい。
+    /// カーソルの動ける最大範囲。`inputtedText`の文字数に等しい。
     private var cursorMaximumPosition: Int {
         return inputtedText.count
     }
@@ -432,13 +432,13 @@ private final class InputManager{
 
     private typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
     private typealias DirectConverter = KanaKanjiConverter<DirectInputData, DirectLatticeNode>
-    ///かな漢字変換を受け持つ変換器。
+    /// かな漢字変換を受け持つ変換器。
     private var _romanConverter: RomanConverter?
     private var _directConverter: DirectConverter?
 
     private var romanConverter: RomanConverter {
         self._directConverter = nil
-        if let romanConverter = self._romanConverter{
+        if let romanConverter = self._romanConverter {
             return romanConverter
         }
         self._romanConverter = RomanConverter()
@@ -447,7 +447,7 @@ private final class InputManager{
 
     private var directConverter: DirectConverter {
         self._romanConverter = nil
-        if let flickConverter = self._directConverter{
+        if let flickConverter = self._directConverter {
             return flickConverter
         }
         self._directConverter = DirectConverter()
@@ -455,7 +455,7 @@ private final class InputManager{
     }
 
     func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
-        switch (beforeStyle, afterStyle){
+        switch (beforeStyle, afterStyle) {
         case (.direct, .roman2kana):
             let stateHolder = KanaRomanStateHolder(components: [KanaComponent(internalText: self.inputtedText, kana: self.inputtedText, isFreezed: true, escapeRomanKanaConverting: true)])
             self.kanaRomanStateHolder = stateHolder
@@ -473,17 +473,17 @@ private final class InputManager{
         }
     }
 
-    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification){
+    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification) {
         self._romanConverter?.sendToDicDataStore(data)
         self._directConverter?.sendToDicDataStore(data)
     }
 
-    fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy){
+    fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
         self.proxy = proxy
     }
 
     private var isRomanKanaInputMode: Bool {
-        switch VariableStates.shared.inputStyle{
+        switch VariableStates.shared.inputStyle {
         case .direct:
             return false
         case .roman2kana:
@@ -492,29 +492,29 @@ private final class InputManager{
     }
 
     func isAfterAdjusted() -> Bool {
-        if self.afterAdjusted{
+        if self.afterAdjusted {
             self.afterAdjusted = false
             return true
         }
         return false
     }
 
-    ///変換を選択した場合に呼ばれる
-    fileprivate func complete(candidate: Candidate){
-        //入力部分を削除する
+    /// 変換を選択した場合に呼ばれる
+    fileprivate func complete(candidate: Candidate) {
+        // 入力部分を削除する
         let leftsideInputedText = self.inputtedText.prefix(self.cursorPosition)
-        if !self.isSelected{
-            (0..<self.cursorPosition).forEach{_ in
+        if !self.isSelected {
+            (0..<self.cursorPosition).forEach {_ in
                 self.proxy.deleteBackward()
             }
         }
         self.isSelected = false
 
-        switch VariableStates.shared.inputStyle{
+        switch VariableStates.shared.inputStyle {
         case .direct:
             self.directConverter.updateLearningData(candidate)
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.correspondingCount))
-            if candidate.correspondingCount == inputtedText.count{
+            if candidate.correspondingCount == inputtedText.count {
                 self.clear()
                 VariableStates.shared.setEnterKeyState(.return)
                 return
@@ -527,7 +527,7 @@ private final class InputManager{
             self.romanConverter.updateLearningData(candidate)
             let displayedTextCount = self.kanaRomanStateHolder.complete(candidate.correspondingCount)
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(displayedTextCount))
-            if self.kanaRomanStateHolder.components.isEmpty{
+            if self.kanaRomanStateHolder.components.isEmpty {
                 self.clear()
                 VariableStates.shared.setEnterKeyState(.return)
                 return
@@ -536,17 +536,17 @@ private final class InputManager{
             self.inputtedText = String(self.inputtedText.dropFirst(displayedTextCount))
             self.romanConverter.setCompletedData(candidate)
         }
-        if self.cursorPosition == 0{
+        if self.cursorPosition == 0 {
             self.cursorPosition = self.cursorMaximumPosition
-            //入力の直後、documentContextAfterInputは間違っていることがあるため、ここではoffsetをinputtedTextから直接計算する。
+            // 入力の直後、documentContextAfterInputは間違っていることがあるため、ここではoffsetをinputtedTextから直接計算する。
             let offset = inputtedText.utf16.count
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
             self.afterAdjusted = true
         }
         self.setResult()
     }
-    
-    fileprivate func clear(){
+
+    fileprivate func clear() {
         debug("クリアしました")
         self.inputtedText = ""
         self.cursorPosition = self.cursorMinimumPosition
@@ -559,7 +559,7 @@ private final class InputManager{
         VariableStates.shared.setEnterKeyState(.return)
     }
 
-    fileprivate func closeKeyboard(){
+    fileprivate func closeKeyboard() {
         debug("キーボードを閉じます")
         self.sendToDicDataStore(.closeKeyboard)
         self._romanConverter = nil
@@ -567,7 +567,7 @@ private final class InputManager{
         self.clear()
     }
 
-    //単純に確定した場合のデータ
+    // 単純に確定した場合のデータ
     fileprivate func enter() -> [ActionType] {
         let _candidate = Candidate(
             text: self.inputtedText,
@@ -579,7 +579,7 @@ private final class InputManager{
             ]
         )
         let actions: [ActionType]
-        switch VariableStates.shared.inputStyle{
+        switch VariableStates.shared.inputStyle {
         case .direct:
             actions = self.directConverter.getApporopriateActions(_candidate)
             let candidate = _candidate.withActions(actions)
@@ -593,176 +593,176 @@ private final class InputManager{
         self.clear()
         return actions
     }
-    
-    //MARK: キーボード経由での操作。
-    fileprivate func input(text: String){
-        if self.isSelected{
-            //選択は解除される
+
+    // MARK: キーボード経由での操作。
+    fileprivate func input(text: String) {
+        if self.isSelected {
+            // 選択は解除される
             self.isSelected = false
 
             self.inputtedText = text
             self.kanaRomanStateHolder = KanaRomanStateHolder()
-            switch VariableStates.shared.inputStyle{
+            switch VariableStates.shared.inputStyle {
             case .direct:
                 break
             case .roman2kana:
-                if isRomanKanaInputMode{
+                if isRomanKanaInputMode {
                     kanaRomanStateHolder.insert(text, leftSideText: "")
-                }else{
+                } else {
                     kanaRomanStateHolder.insert(text, leftSideText: "", isFreezed: true)
                 }
             }
 
             self.cursorPosition = self.cursorMaximumPosition
-            //実際に入力する
+            // 実際に入力する
             self.proxy.insertText(text)
             setResult()
-            
+
             VariableStates.shared.setEnterKeyState(.complete)
             return
         }
-        
+
         if text == "\n"{
             self.proxy.insertText(text)
             self.clear()
             return
         }
-        //スペースだった場合
+        // スペースだった場合
         if text == " " || text == "　" || text == "\t" || text == "\0"{
             self.proxy.insertText(text)
             self.clear()
             return
         }
 
-        if VariableStates.shared.keyboardLanguage == .none{
+        if VariableStates.shared.keyboardLanguage == .none {
             self.proxy.insertText(text)
             self.clear()
             return
         }
 
-        //選択されていない場合
-        
+        // 選択されていない場合
+
         let leftSideText = inputtedText.prefix(cursorPosition)
         let rightSideText = inputtedText.dropFirst(cursorPosition)
-        
-        switch VariableStates.shared.inputStyle{
+
+        switch VariableStates.shared.inputStyle {
         case .direct:
             self.inputtedText = leftSideText + text + rightSideText
             self.proxy.insertText(text)
             self.cursorPosition += text.count
 
         case .roman2kana:
-            if isRomanKanaInputMode{
+            if isRomanKanaInputMode {
                 let roman2hiragana = kanaRomanStateHolder.insert(text, leftSideText: leftSideText)
                 self.inputtedText = roman2hiragana.result + rightSideText
-                (0..<max(0, roman2hiragana.delete)).forEach{_ in
+                (0..<max(0, roman2hiragana.delete)).forEach {_ in
                     self.proxy.deleteBackward()
                 }
                 self.proxy.insertText(roman2hiragana.input)
                 self.cursorPosition += roman2hiragana.input.count - roman2hiragana.delete
-            }else{
+            } else {
                 kanaRomanStateHolder.insert(text, leftSideText: leftSideText, isFreezed: true)
                 self.inputtedText = leftSideText + text + rightSideText
                 self.proxy.insertText(text)
                 self.cursorPosition += text.count
             }
         }
-        
+
         VariableStates.shared.setEnterKeyState(.complete)
 
         setResult()
     }
 
-    fileprivate func deleteForward(count: Int, requireSetResult: Bool = true){
-        if count < 0{
+    fileprivate func deleteForward(count: Int, requireSetResult: Bool = true) {
+        if count < 0 {
             return
         }
 
-        if self.inputtedText.isEmpty{
+        if self.inputtedText.isEmpty {
             self.proxy.deleteForward(count: count)
             return
         }
 
-        //一番右端にいるときは削除させない
-        if !self.inputtedText.isEmpty && self.cursorPosition == self.cursorMaximumPosition{
+        // 一番右端にいるときは削除させない
+        if !self.inputtedText.isEmpty && self.cursorPosition == self.cursorMaximumPosition {
             return
         }
-        //削除を実行する
+        // 削除を実行する
         self.proxy.deleteForward(count: count)
-        if VariableStates.shared.inputStyle == .roman2kana{
-            //ステートホルダーを調整する
+        if VariableStates.shared.inputStyle == .roman2kana {
+            // ステートホルダーを調整する
             self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition+count))
         }
-        let leftSideText = self.inputtedText.prefix(max(0,self.cursorPosition))
+        let leftSideText = self.inputtedText.prefix(max(0, self.cursorPosition))
         let rightSideText = self.inputtedText.suffix(self.cursorMaximumPosition - self.cursorPosition - count)
         self.inputtedText = String(leftSideText + rightSideText)
 
-        if requireSetResult{
+        if requireSetResult {
             setResult()
         }
 
-        if self.inputtedText.isEmpty{
+        if self.inputtedText.isEmpty {
             VariableStates.shared.setEnterKeyState(.return)
         }
     }
 
-    fileprivate func deleteBackward(count: Int, requireSetResult: Bool = true){
-        if count == 0{
+    fileprivate func deleteBackward(count: Int, requireSetResult: Bool = true) {
+        if count == 0 {
             return
         }
-        //選択状態ではオール削除になる
-        if self.isSelected{
+        // 選択状態ではオール削除になる
+        if self.isSelected {
             self.proxy.deleteBackward()
             self.clear()
             return
         }
-        //条件
+        // 条件
         if count < 0 {
             self.deleteForward(count: abs(count), requireSetResult: requireSetResult)
             return
         }
-        //一番左端にいるときは削除させない
-        if !self.inputtedText.isEmpty && self.cursorPosition == self.cursorMinimumPosition{
+        // 一番左端にいるときは削除させない
+        if !self.inputtedText.isEmpty && self.cursorPosition == self.cursorMinimumPosition {
             return
         }
-        //削除を実行する
+        // 削除を実行する
         self.proxy.deleteBackward(count: count)
-        if VariableStates.shared.inputStyle == .roman2kana{
-            //ステートホルダーを調整する
+        if VariableStates.shared.inputStyle == .roman2kana {
+            // ステートホルダーを調整する
             self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition))
         }
-        let leftSideText = self.inputtedText.prefix(max(0,self.cursorPosition-count))
+        let leftSideText = self.inputtedText.prefix(max(0, self.cursorPosition-count))
         let rightSideText = self.inputtedText.suffix(self.cursorMaximumPosition - self.cursorPosition)
         self.inputtedText = String(leftSideText + rightSideText)
-        //消せる文字がなかった場合、0未満になってしまうので
+        // 消せる文字がなかった場合、0未満になってしまうので
         self.cursorPosition = max(self.cursorMinimumPosition, self.cursorPosition - count)
-        if requireSetResult{
+        if requireSetResult {
             setResult()
         }
 
-        if self.inputtedText.isEmpty{
+        if self.inputtedText.isEmpty {
             VariableStates.shared.setEnterKeyState(.return)
         }
     }
 
-    fileprivate func smoothDelete(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
-        //選択状態ではオール削除になる
-        if self.isSelected{
+    fileprivate func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
+        // 選択状態ではオール削除になる
+        if self.isSelected {
             self.proxy.deleteBackward()
             self.clear()
             return
         }
-        //入力中の場合
-        if !self.inputtedText.isEmpty{
+        // 入力中の場合
+        if !self.inputtedText.isEmpty {
             let leftSideText = self.inputtedText.prefix(self.cursorPosition)
             self.inputtedText.removeFirst(self.cursorPosition)
             self.cursorPosition = 0
             self.kanaRomanStateHolder.delete(kanaCount: leftSideText.count, leftSideText: leftSideText)
-            //削除を実行する
+            // 削除を実行する
             self.proxy.deleteBackward(count: leftSideText.count)
             self.moveCursor(count: self.cursorMaximumPosition)
-            //文字がもうなかった場合
-            if self.inputtedText.isEmpty{
+            // 文字がもうなかった場合
+            if self.inputtedText.isEmpty {
                 self.clear()
                 return
             }
@@ -771,34 +771,34 @@ private final class InputManager{
         }
 
         var deletedCount = 0
-        while let last = self.proxy.documentContextBeforeInput?.last{
-            if nexts.contains(last){
+        while let last = self.proxy.documentContextBeforeInput?.last {
+            if nexts.contains(last) {
                 break
-            }else{
+            } else {
                 self.proxy.deleteBackward()
                 deletedCount += 1
             }
         }
-        if deletedCount == 0{
+        if deletedCount == 0 {
             self.proxy.deleteBackward()
         }
     }
 
-    fileprivate func smoothDeleteForward(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
-        //選択状態ではオール削除になる
-        if self.isSelected{
+    fileprivate func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
+        // 選択状態ではオール削除になる
+        if self.isSelected {
             self.proxy.deleteBackward()
             self.clear()
             return
         }
-        //入力中の場合
-        if !self.inputtedText.isEmpty{
+        // 入力中の場合
+        if !self.inputtedText.isEmpty {
             let count = cursorMaximumPosition - cursorPosition
             self.inputtedText.removeLast(count)
             self.proxy.moveCursor(count: count)
             self.proxy.deleteBackward(count: count)
-            //文字がもうなかった場合
-            if inputtedText.isEmpty{
+            // 文字がもうなかった場合
+            if inputtedText.isEmpty {
                 clear()
                 setResult()
             }
@@ -806,87 +806,87 @@ private final class InputManager{
         }
 
         var deletedCount = 0
-        while let first = self.proxy.documentContextAfterInput?.first{
-            if nexts.contains(first){
+        while let first = self.proxy.documentContextAfterInput?.first {
+            if nexts.contains(first) {
                 break
-            }else{
+            } else {
                 self.proxy.deleteForward()
                 deletedCount += 1
             }
         }
-        if deletedCount == 0{
+        if deletedCount == 0 {
             self.proxy.deleteForward()
         }
     }
 
-    fileprivate func smartMoveCursorBackward(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
-        //選択状態では最も左にカーソルを移動
-        if isSelected{
+    fileprivate func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
+        // 選択状態では最も左にカーソルを移動
+        if isSelected {
             let count = cursorPosition
             deselect()
             moveCursor(count: -count)
             setResult()
             return
         }
-        //入力中の場合
-        if !inputtedText.isEmpty{
+        // 入力中の場合
+        if !inputtedText.isEmpty {
             moveCursor(count: -cursorPosition)
             setResult()
             return
         }
 
         var movedCount = 0
-        while let last = proxy.documentContextBeforeInput?.last{
-            if nexts.contains(last){
+        while let last = proxy.documentContextBeforeInput?.last {
+            if nexts.contains(last) {
                 break
-            }else{
+            } else {
                 proxy.moveCursor(count: -1)
                 movedCount += 1
             }
         }
-        if movedCount == 0{
+        if movedCount == 0 {
             proxy.moveCursor(count: -1)
         }
     }
 
-    fileprivate func smartMoveCursorForward(to nexts: [Character] = ["、","。","！","？",".",",","．","，", "\n"]){
-        //選択状態では最も左にカーソルを移動
-        if isSelected{
+    fileprivate func smartMoveCursorForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
+        // 選択状態では最も左にカーソルを移動
+        if isSelected {
             deselect()
             moveCursor(count: cursorMaximumPosition - cursorPosition)
             setResult()
             return
         }
-        //入力中の場合
-        if !inputtedText.isEmpty{
+        // 入力中の場合
+        if !inputtedText.isEmpty {
             moveCursor(count: cursorMaximumPosition - cursorPosition)
             setResult()
             return
         }
 
         var movedCount = 0
-        while let first = proxy.documentContextAfterInput?.first{
-            if nexts.contains(first){
+        while let first = proxy.documentContextAfterInput?.first {
+            if nexts.contains(first) {
                 break
-            }else{
+            } else {
                 proxy.moveCursor(count: 1)
                 movedCount += 1
             }
         }
-        if movedCount == 0{
+        if movedCount == 0 {
             proxy.moveCursor(count: 1)
         }
     }
 
-    fileprivate func deselect(){
-        if isSelected{
+    fileprivate func deselect() {
+        if isSelected {
             clear()
             VariableStates.shared.setEnterKeyState(.return)
         }
     }
 
-    fileprivate func edit(){
-        if isSelected{
+    fileprivate func edit() {
+        if isSelected {
             let selectedText = inputtedText
             deleteBackward(count: 1)
             input(text: selectedText)
@@ -894,19 +894,19 @@ private final class InputManager{
         }
     }
 
-    fileprivate func replaceLastCharacters(table: [String: String]){
+    fileprivate func replaceLastCharacters(table: [String: String]) {
         debug(table, inputtedText, isSelected)
-        if isSelected{
+        if isSelected {
             return
         }
-        let counts: (max: Int, min: Int) = table.keys.reduce(into: (max: 0, min: .max)){
+        let counts: (max: Int, min: Int) = table.keys.reduce(into: (max: 0, min: .max)) {
             $0.max = max($0.max, $1.count)
             $0.min = min($0.min, $1.count)
         }
-        if !inputtedText.isEmpty{
+        if !inputtedText.isEmpty {
             let leftside = inputtedText.prefix(cursorPosition)
             for count in (counts.min...counts.max).reversed() where count <= cursorPosition {
-                if let replace = table[String(leftside.suffix(count))]{
+                if let replace = table[String(leftside.suffix(count))] {
                     self.deleteBackward(count: count, requireSetResult: false)
                     self.input(text: replace)
                     break
@@ -914,10 +914,10 @@ private final class InputManager{
             }
             return
         }
-        if VariableStates.shared.keyboardLanguage == .none{
+        if VariableStates.shared.keyboardLanguage == .none {
             let leftside = proxy.documentContextBeforeInput ?? ""
             for count in (counts.min...counts.max).reversed() where count <= leftside.count {
-                if let replace = table[String(leftside.suffix(count))]{
+                if let replace = table[String(leftside.suffix(count))] {
                     self.proxy.deleteBackward(count: count)
                     self.input(text: replace)
                     break
@@ -926,68 +926,68 @@ private final class InputManager{
         }
         return
     }
-    
-    fileprivate func changeCharacter(){
-        if self.isSelected{
+
+    fileprivate func changeCharacter() {
+        if self.isSelected {
             return
         }
         let char = self.inputtedText.prefix(self.cursorPosition).last ?? "\0"
         let changed = char.requestChange()
-        if Character(changed) == char{
+        if Character(changed) == char {
             return
         }
         self.deleteBackward(count: 1, requireSetResult: false)
         self.input(text: changed)
     }
 
-    ///キーボード経由でのカーソル移動
-    fileprivate func moveCursor(count: Int){
+    /// キーボード経由でのカーソル移動
+    fileprivate func moveCursor(count: Int) {
         if count == 0 {
             return
         }
         afterAdjusted = true
-        if inputtedText.isEmpty{
+        if inputtedText.isEmpty {
             proxy.moveCursor(count: count)
             return
         }
         debug("moveCursor, cursorPosition:", cursorPosition, count)
-        //カーソル位置の正規化
-        if cursorPosition + count > cursorMaximumPosition{
+        // カーソル位置の正規化
+        if cursorPosition + count > cursorMaximumPosition {
             proxy.moveCursor(count: cursorMaximumPosition - cursorPosition)
             cursorPosition = cursorMaximumPosition
             setResult()
             return
         }
-        if  cursorPosition + count < cursorMinimumPosition{
+        if  cursorPosition + count < cursorMinimumPosition {
             proxy.moveCursor(count: cursorMinimumPosition - cursorPosition)
             cursorPosition = cursorMinimumPosition
             setResult()
             return
         }
-        
+
         proxy.moveCursor(count: count)
         cursorPosition += count
         setResult()
     }
-    
-    //MARK: userが勝手にカーソルを何かした場合の後処理
-    fileprivate func userMovedCursor(count: Int){
+
+    // MARK: userが勝手にカーソルを何かした場合の後処理
+    fileprivate func userMovedCursor(count: Int) {
         debug("userによるカーソル移動を検知、今の位置は\(cursorPosition)、動かしたオフセットは\(count)")
-        if inputtedText.isEmpty{
-            //入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
+        if inputtedText.isEmpty {
+            // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
         }
-        
+
         cursorPosition += count
 
-        if cursorPosition > cursorMaximumPosition{
+        if cursorPosition > cursorMaximumPosition {
             proxy.moveCursor(count: cursorMaximumPosition - cursorPosition)
             cursorPosition = cursorMaximumPosition
             setResult()
             afterAdjusted = true
             return
         }
-        if cursorPosition < cursorMinimumPosition{
+        if cursorPosition < cursorMinimumPosition {
             proxy.moveCursor(count: cursorMinimumPosition - cursorPosition)
             cursorPosition = cursorMinimumPosition
             setResult()
@@ -997,75 +997,75 @@ private final class InputManager{
         setResult()
     }
 
-    fileprivate func userPastedText(text: String){
-        //入力された分を反映する
+    fileprivate func userPastedText(text: String) {
+        // 入力された分を反映する
         inputtedText = text
         cursorPosition = cursorMaximumPosition
         isSelected = false
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
     }
-    
-    fileprivate func userCutText(text: String){
+
+    fileprivate func userCutText(text: String) {
         inputtedText = ""
         cursorPosition = .zero
         isSelected = false
         setResult()
         VariableStates.shared.setEnterKeyState(.return)
     }
-    
-    fileprivate func userReplacedSelectedText(text: String){
-        //新たな入力を反映
+
+    fileprivate func userReplacedSelectedText(text: String) {
+        // 新たな入力を反映
         inputtedText = text
         cursorPosition = cursorMaximumPosition
         isSelected = false
-        
+
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
     }
-    
-    //ユーザが文章を選択した場合、その部分を入力中であるとみなす
-    fileprivate func userSelectedText(text: String){
-        if text.isEmpty{
+
+    // ユーザが文章を選択した場合、その部分を入力中であるとみなす
+    fileprivate func userSelectedText(text: String) {
+        if text.isEmpty {
             return
         }
         inputtedText = text
-        kanaRomanStateHolder.components = text.map{KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
+        kanaRomanStateHolder.components = text.map {KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
         cursorPosition = cursorMaximumPosition
         isSelected = true
-        if text.split(separator: " ", omittingEmptySubsequences: false).count > 1 || text.components(separatedBy: .newlines).count > 1{
-            //FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
-            //参照: https://qiita.com/ensan_hcl/items/476ffb665cd37cb312da
-            //self.setResult(options: [.mojiCount, .wordCount])
+        if text.split(separator: " ", omittingEmptySubsequences: false).count > 1 || text.components(separatedBy: .newlines).count > 1 {
+            // FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
+            // 参照: https://qiita.com/ensan_hcl/items/476ffb665cd37cb312da
+            // self.setResult(options: [.mojiCount, .wordCount])
             setResult(options: [])
-        }else{
-            //FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
-            //参照: https://qiita.com/ensan_hcl/items/476ffb665cd37cb312da
+        } else {
+            // FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
+            // 参照: https://qiita.com/ensan_hcl/items/476ffb665cd37cb312da
             setResult(options: [.convertInput])
         }
         VariableStates.shared.setEnterKeyState(.edit)
     }
-    
-    //選択を解除した場合、clearとみなす
-    fileprivate func userDeselectedText(){
+
+    // 選択を解除した場合、clearとみなす
+    fileprivate func userDeselectedText() {
         self.clear()
         VariableStates.shared.setEnterKeyState(.return)
     }
 
-    fileprivate enum ResultOptions{
+    fileprivate enum ResultOptions {
         case convertInput
         case mojiCount
         case wordCount
     }
 
-    fileprivate func setResult(options: [ResultOptions] = [.convertInput]){
+    fileprivate func setResult(options: [ResultOptions] = [.convertInput]) {
         var results = [Candidate]()
-        options.forEach{option in
-            switch option{
+        options.forEach {option in
+            switch option {
             case .convertInput:
                 let input_hira = self.inputtedText.prefix(self.cursorPosition)
                 let result: [Candidate]
-                switch VariableStates.shared.inputStyle{
+                switch VariableStates.shared.inputStyle {
                 case .direct:
                     let inputData = DirectInputData(String(input_hira))
                     result = self.directConverter.requestCandidates(inputData, N_best: 10)
@@ -1077,10 +1077,10 @@ private final class InputManager{
                     result = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
                 }
                 results.append(contentsOf: result)
-                //Storeに通知し、ResultViewに表示する。
+            // Storeに通知し、ResultViewに表示する。
             case .mojiCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)
-                let count = input.filter{!$0.isNewline}.count
+                let count = input.filter {!$0.isNewline}.count
                 let mojisu = Candidate(
                     text: "文字数:\(count)",
                     value: 0,
@@ -1092,8 +1092,8 @@ private final class InputManager{
                 results.append(mojisu)
             case .wordCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)
-                if input.isEnglishSentence{
-                    let count = input.components(separatedBy: .newlines).map{$0.split(separator: " ").count}.reduce(0, +)
+                if input.isEnglishSentence {
+                    let count = input.components(separatedBy: .newlines).map {$0.split(separator: " ").count}.reduce(0, +)
                     results.append(
                         Candidate(
                             text: "単語数:\(count)",
@@ -1110,13 +1110,13 @@ private final class InputManager{
         Store.shared.registerResult(results)
     }
     #if DEBUG
-    //debug中であることを示す。
+    // debug中であることを示す。
     fileprivate var isDebugMode: Bool = false
     #endif
-    
-    fileprivate func setDebugResult(text: String){
+
+    fileprivate func setDebugResult(text: String) {
         #if DEBUG
-        if !isDebugMode{
+        if !isDebugMode {
             return
         }
 
@@ -1126,32 +1126,30 @@ private final class InputManager{
     }
 }
 
-extension UITextDocumentProxy{
+extension UITextDocumentProxy {
     private func getActualOffset(count: Int) -> Int {
-        if count == 0{
+        if count == 0 {
             return 0
-        }
-        else if count>0{
-            if let after = self.documentContextAfterInput{
-                //改行があって右端の場合ここに来る。
-                if after.isEmpty{
+        } else if count>0 {
+            if let after = self.documentContextAfterInput {
+                // 改行があって右端の場合ここに来る。
+                if after.isEmpty {
                     return 1
                 }
                 let suf = after.prefix(count)
-                debug("あとの文字は、",suf,-suf.utf16.count)
+                debug("あとの文字は、", suf, -suf.utf16.count)
                 return suf.utf16.count
-            }else{
+            } else {
                 return 1
             }
-        }
-        else {
-            if let before = self.documentContextBeforeInput{
+        } else {
+            if let before = self.documentContextBeforeInput {
                 let pre = before.suffix(-count)
-                debug("前の文字は、",pre,-pre.utf16.count)
+                debug("前の文字は、", pre, -pre.utf16.count)
 
                 return -pre.utf16.count
 
-            }else{
+            } else {
                 return -1
             }
         }
@@ -1163,27 +1161,27 @@ extension UITextDocumentProxy{
     }
 
     func deleteBackward(count: Int) {
-        if count == 0{
+        if count == 0 {
             return
         }
-        if count < 0{
+        if count < 0 {
             self.deleteForward(count: abs(count))
             return
         }
-        (0..<count).forEach{ _ in
+        (0..<count).forEach { _ in
             self.deleteBackward()
         }
     }
 
     func deleteForward(count: Int = 1) {
-        if count == 0{
+        if count == 0 {
             return
         }
-        if count < 0{
+        if count < 0 {
             self.deleteBackward(count: abs(count))
             return
         }
-        (0..<count).forEach{ _ in
+        (0..<count).forEach { _ in
             if self.documentContextAfterInput == nil {
                 return
             }

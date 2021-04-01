@@ -34,7 +34,7 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
         }
 
         @objc func tap(gesture: SingleScrollAndLongpressGestureRecognizer) {
-            switch gesture.state{
+            switch gesture.state {
             case .began:
                 self.touchDownCallback()
             case .changed:
@@ -65,12 +65,12 @@ final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
 
     private var _distance: CGFloat = .zero
     var distance: CGFloat {
-        get{
+        get {
             let value = _distance
             _distance = .zero
             return value
         }
-        set{
+        set {
             self._distance = newValue
         }
     }
@@ -103,4 +103,3 @@ final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
         self.startLocation = .zero
     }
 }
-

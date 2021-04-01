@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-enum LearningType: Int, CaseIterable{
+enum LearningType: Int, CaseIterable {
     case inputAndOutput = 0
     case onlyOutput = 1
     case nothing = 2
 
     var string: LocalizedStringKey {
-        switch self{
+        switch self {
         case .inputAndOutput: return "学習する(デフォルト)"
         case .onlyOutput: return "新たな学習を停止"
         case .nothing: return "これまでの学習を反映しない"
@@ -34,14 +34,14 @@ enum LearningType: Int, CaseIterable{
     }
 }
 
-extension LearningType: Savable{
+extension LearningType: Savable {
     typealias SaveValue = Int
     var saveValue: Int {
         return self.id
     }
 
     static func get(_ value: Any) -> LearningType? {
-        if let id = value as? Int{
+        if let id = value as? Int {
             return Self(rawValue: id)
         }
         return nil

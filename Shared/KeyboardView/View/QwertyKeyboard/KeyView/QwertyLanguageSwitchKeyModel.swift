@@ -9,23 +9,23 @@
 import Foundation
 import SwiftUI
 
-//symbolタブ、123タブで表示される切り替えボタン
-struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol{
+// symbolタブ、123タブで表示される切り替えボタン
+struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
     let languages: (KeyboardLanguage, KeyboardLanguage)
     var currentTabLanguage: KeyboardLanguage? {
         VariableStates.shared.tabManager.currentTab.existential.language
     }
 
-    var pressActions: [ActionType]{
+    var pressActions: [ActionType] {
         let target: KeyboardLanguage
-        if languages.0 == currentTabLanguage{
+        if languages.0 == currentTabLanguage {
             target = languages.1
-        }else if languages.1 == currentTabLanguage{
+        } else if languages.1 == currentTabLanguage {
             target = languages.0
-        }else{
+        } else {
             target = VariableStates.shared.keyboardLanguage
         }
-        switch target{
+        switch target {
         case .ja_JP:
             return [.moveTab(.user_dependent(.japanese))]
         case .en_US:
@@ -36,7 +36,7 @@ struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol{
         }
     }
     let longPressActions: LongpressActionType = .none
-    ///暫定
+    /// 暫定
     let variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
@@ -44,19 +44,19 @@ struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
-    init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int), languages: (KeyboardLanguage, KeyboardLanguage)){
+    init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int), languages: (KeyboardLanguage, KeyboardLanguage)) {
         self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
         self.languages = languages
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        if languages.0 == currentTabLanguage{
+        if languages.0 == currentTabLanguage {
             return KeyLabel(.selectable(languages.0.symbol, languages.1.symbol), width: width, textColor: color)
-        }else if languages.1 == currentTabLanguage{
+        } else if languages.1 == currentTabLanguage {
             return KeyLabel(.selectable(languages.1.symbol, languages.0.symbol), width: width, textColor: color)
-        }else if SemiStaticStates.shared.needsInputModeSwitchKey{
+        } else if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.text(VariableStates.shared.keyboardLanguage.symbol), width: width, textColor: color)
-        }else{
+        } else {
             return KeyLabel(.text(SettingData.shared.preferredLanguageSetting.first.symbol), width: width, textColor: color)
         }
     }

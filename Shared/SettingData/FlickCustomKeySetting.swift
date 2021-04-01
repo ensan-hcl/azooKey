@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CustomizableFlickKey: String, Codable{
+enum CustomizableFlickKey: String, Codable {
     case kogana = "kogana"
     case kanaSymbols = "kana_symbols"
     case hiraTab = "hira_tab"
@@ -20,7 +20,7 @@ enum CustomizableFlickKey: String, Codable{
     }
 
     var defaultSetting: KeyFlickSetting {
-        switch self{
+        switch self {
         case .kogana:
             return KeyFlickSetting(
                 identifier: self,
@@ -82,7 +82,7 @@ enum CustomizableFlickKey: String, Codable{
     }
 }
 
-enum FlickKeyPosition: String, Codable{
+enum FlickKeyPosition: String, Codable {
     case left = "left"
     case top = "top"
     case right = "right"
@@ -90,7 +90,7 @@ enum FlickKeyPosition: String, Codable{
     case center = "center"
 }
 
-struct FlickCustomKey: Codable{
+struct FlickCustomKey: Codable {
     var label: String
     var actions: [CodableActionData]
     var longpressActions: CodableLongpressActionData
@@ -122,11 +122,11 @@ struct FlickCustomKey: Codable{
         let input = try? container.decode(String.self, forKey: .input)
 
         self.label = label
-        if let actions = actions{
+        if let actions = actions {
             self.actions = actions
-        }else if let input = input{
+        } else if let input = input {
             self.actions = [.input(input)]
-        }else{
+        } else {
             self.actions = []
         }
         self.longpressActions = (try? container.decode(CodableLongpressActionData.self, forKey: .longpressActions)) ?? .none
@@ -139,7 +139,7 @@ struct KeyFlickSetting: Savable, Codable {
         let encoder = JSONEncoder()
         if let encodedValue = try? encoder.encode(self) {
             return encodedValue
-        }else{
+        } else {
             return Data()
         }
     }
@@ -155,7 +155,7 @@ struct KeyFlickSetting: Savable, Codable {
         case identifier
     }
 
-    let targetKeyIdentifier: String //レガシー
+    let targetKeyIdentifier: String // レガシー
     var left: FlickCustomKey
     var top: FlickCustomKey
     var right: FlickCustomKey
@@ -163,7 +163,7 @@ struct KeyFlickSetting: Savable, Codable {
     var center: FlickCustomKey
 
     let identifier: CustomizableFlickKey
-    
+
     init(targetKeyIdentifier: String, left: String = "", top: String = "", right: String = "", bottom: String = "", center: String = "") {
         self.identifier = CustomizableFlickKey(rawValue: targetKeyIdentifier) ?? .kogana
         self.left = FlickCustomKey(label: left, actions: [.input(left)])
@@ -171,11 +171,11 @@ struct KeyFlickSetting: Savable, Codable {
         self.right = FlickCustomKey(label: right, actions: [.input(right)])
         self.bottom = FlickCustomKey(label: bottom, actions: [.input(bottom)])
         self.center = FlickCustomKey(label: "", actions: [])
-        //レガシー
+        // レガシー
         self.targetKeyIdentifier = self.identifier.identifier
     }
 
-    init(identifier: CustomizableFlickKey, center: FlickCustomKey, left: FlickCustomKey, top: FlickCustomKey, right: FlickCustomKey, bottom: FlickCustomKey){
+    init(identifier: CustomizableFlickKey, center: FlickCustomKey, left: FlickCustomKey, top: FlickCustomKey, right: FlickCustomKey, bottom: FlickCustomKey) {
         self.identifier = identifier
         self.center = center
         self.left = left
@@ -192,7 +192,7 @@ struct KeyFlickSetting: Savable, Codable {
            let left = try? values.decode(String.self, forKey: .left),
            let top = try? values.decode(String.self, forKey: .top),
            let right = try? values.decode(String.self, forKey: .right),
-           let bottom = try? values.decode(String.self, forKey: .bottom){
+           let bottom = try? values.decode(String.self, forKey: .bottom) {
             self.targetKeyIdentifier = targetKeyIdentifier
             self.identifier = CustomizableFlickKey(rawValue: targetKeyIdentifier) ?? .kogana
             self.left = FlickCustomKey(label: left, actions: [.input(left)])
@@ -226,16 +226,16 @@ struct KeyFlickSetting: Savable, Codable {
      }*/
 
     static func get(_ value: Any) -> KeyFlickSetting? {
-        if let dict = value as? [String: String]{
+        if let dict = value as? [String: String] {
             if let identifier = dict["identifier"],
                let left = dict["left"],
                let top = dict["top"],
                let right = dict["right"],
-               let bottom = dict["bottom"]{
+               let bottom = dict["bottom"] {
                 return KeyFlickSetting(targetKeyIdentifier: identifier, left: left, top: top, right: right, bottom: bottom)
             }
         }
-        if let value = value as? Data{
+        if let value = value as? Data {
             let decoder = JSONDecoder()
             if let data = try? decoder.decode(KeyFlickSetting.self, from: value) {
                 return data
@@ -245,4 +245,3 @@ struct KeyFlickSetting: Savable, Codable {
         return nil
     }
 }
-

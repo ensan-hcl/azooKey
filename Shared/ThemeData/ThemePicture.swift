@@ -16,12 +16,12 @@ enum ThemePicture: Equatable {
     case uiImage(UIImage)
 
     var image: Image? {
-        switch self{
+        switch self {
         case .none:
             return nil
         case let .path(path):
-            let data = Data()   //この部分でpathから画像を読み込む
-            return UIImage(data: data).flatMap{Image(uiImage: $0)}
+            let data = Data()   // この部分でpathから画像を読み込む
+            return UIImage(data: data).flatMap {Image(uiImage: $0)}
         case let .asset(name):
             return Image(name)
         case let .uiImage(uiImage):
@@ -30,7 +30,7 @@ enum ThemePicture: Equatable {
     }
 }
 
-extension ThemePicture: Codable{
+extension ThemePicture: Codable {
     enum EncodeError: Error {
         case uiImageCannotEncode
     }
@@ -43,14 +43,14 @@ extension ThemePicture: Codable{
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let valueType = try values.decode(ValueType.self, forKey: .valueType)
         let value = try values.decodeIfPresent(String.self, forKey: .value)
-        switch valueType{
+        switch valueType {
         case .none:
             self = .none
         case .path:
-            guard let path = value else{ throw DecodeError.emptyPath }
+            guard let path = value else { throw DecodeError.emptyPath }
             self = .path(path)
         case .asset:
-            guard let name = value else{ throw DecodeError.emptyPath }
+            guard let name = value else { throw DecodeError.emptyPath }
             self = .asset(name)
         }
     }
@@ -71,7 +71,7 @@ extension ThemePicture: Codable{
 
         let valueType: ValueType
         let value: String?
-        switch self{
+        switch self {
         case .none:
             valueType = .none
             value = nil
@@ -81,7 +81,7 @@ extension ThemePicture: Codable{
         case let .asset(name):
             valueType = .asset
             value = name
-        case .uiImage(_):
+        case .uiImage:
             throw EncodeError.uiImageCannotEncode
         }
 

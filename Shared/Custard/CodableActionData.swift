@@ -10,42 +10,42 @@ import Foundation
 import SwiftUI
 
 /// - Tab specifier
-public enum TabData: Hashable{
+public enum TabData: Hashable {
     /// - tabs prepared by default
     case system(SystemTab)
     /// - tabs made as custom tabs.
     case custom(String)
 
     /// - system tabs
-    public enum SystemTab: String, Codable, Hashable{
-        ///japanese input tab. the layout and input style depends on user's setting
+    public enum SystemTab: String, Codable, Hashable {
+        /// japanese input tab. the layout and input style depends on user's setting
         case user_japanese
 
-        ///english input tab. the layout and input style depends on user's setting
+        /// english input tab. the layout and input style depends on user's setting
         case user_english
 
-        ///flick japanese input tab
+        /// flick japanese input tab
         case flick_japanese
 
-        ///flick enlgish input tab
+        /// flick enlgish input tab
         case flick_english
 
-        ///flick number and symbols input tab
+        /// flick number and symbols input tab
         case flick_numbersymbols
 
-        ///qwerty japanese input tab
+        /// qwerty japanese input tab
         case qwerty_japanese
 
-        ///qwerty english input tab
+        /// qwerty english input tab
         case qwerty_english
 
-        ///qwerty number input tab
+        /// qwerty number input tab
         case qwerty_numbers
 
-        ///qwerty symbols input tab
+        /// qwerty symbols input tab
         case qwerty_symbols
 
-        ///the last tab
+        /// the last tab
         case last_tab
     }
 }
@@ -84,7 +84,7 @@ public enum CodableActionData: Codable, Hashable {
 
     /// - delete to the ` direction` until `target` appears in the direction of travel..
     /// - if `target` is `[".", ","]`, `direction` is `.backward`, and current text is `I love this. But |she likes`, after the action, the text become `I love this.|she likes`.
-    case smartDelete(ScanItem = .init(targets: ["、","。","！","？",".",",","．","，", "\n"], direction: .backward))
+    case smartDelete(ScanItem = .init(targets: ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], direction: .backward))
 
     /// - complete current inputting words
     case complete
@@ -94,7 +94,7 @@ public enum CodableActionData: Codable, Hashable {
 
     /// - move cursor to the ` direction` until `target` appears in the direction of travel..
     /// - if `target` is `[".", ","]`, `direction` is `.backward`, and current text is `I love this. But |she likes`, after the action, the text become `I love this.| But she likes`.
-    case smartMoveCursor(ScanItem = .init(targets: ["、","。","！","？",".",",","．","，", "\n"], direction: .forward))
+    case smartMoveCursor(ScanItem = .init(targets: ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], direction: .forward))
 
     /// - move to specified tab
     case moveTab(TabData)
@@ -117,10 +117,10 @@ public enum CodableActionData: Codable, Hashable {
     /// - open specified url scheme.
     /// - warning: this action could be deleted in future iOS.
     /// - warning: some of url schemes doesn't work.
-    case openURL(String)    //iOSのバージョンによって消える可能性がある
+    case openURL(String)    // iOSのバージョンによって消える可能性がある
 }
 
-public extension CodableActionData{
+public extension CodableActionData {
     private enum CodingKeys: CodingKey {
         case type
         case text
@@ -131,7 +131,7 @@ public extension CodableActionData{
         case direction, targets
     }
 
-    private enum ValueType: String, Codable{
+    private enum ValueType: String, Codable {
         case input
         case replace_default
         case replace_last_characters
@@ -170,18 +170,18 @@ public extension CodableActionData{
         case .toggleTabBar: return .toggle_tab_bar
         }
     }
-    private struct CodableTabArgument{
+    private struct CodableTabArgument {
         internal init(tab: TabData) {
             self.tab = tab
         }
         private var tab: TabData
 
-        private enum TabType: String, Codable{
+        private enum TabType: String, Codable {
             case custom, system
         }
 
         func containerEncode(container: inout KeyedEncodingContainer<CodingKeys>) throws {
-            switch tab{
+            switch tab {
             case .system:
                 try container.encode(TabType.system, forKey: .tab_type)
             case .custom:

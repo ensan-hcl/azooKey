@@ -10,16 +10,16 @@ import Foundation
 import SwiftUI
 import Combine
 
-extension CodableActionData{
+extension CodableActionData {
     var hasAssociatedValue: Bool {
-        switch self{
+        switch self {
         case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .openURL: return true
-        case  .enableResizingMode,.complete, .replaceDefault, .smartDeleteDefault,.toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
+        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
 
     var label: LocalizedStringKey {
-        switch self{
+        switch self {
         case let .input(value): return "「\(value)」を入力"
         case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
         case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
@@ -35,7 +35,7 @@ extension CodableActionData{
         case .toggleTabBar: return "タブバーの切り替え"
         case .dismissKeyboard: return "キーボードを閉じる"
         case .enableResizingMode: return "片手モードをオンにする"
-        case .openURL(_): return "アプリを開く"
+        case .openURL: return "アプリを開く"
         }
     }
 }
@@ -44,7 +44,7 @@ struct EditingCodableActionData: Identifiable, Equatable {
     typealias ID = UUID
     let id = UUID()
     var data: CodableActionData
-    init(_ data: CodableActionData){
+    init(_ data: CodableActionData) {
         self.data = data
     }
 }
@@ -56,37 +56,37 @@ struct CodableActionDataEditor: View {
     @Binding private var data: [CodableActionData]
     private let availableCustards: [String]
 
-    init(_ actions: Binding<[CodableActionData]>, availableCustards: [String]){
+    init(_ actions: Binding<[CodableActionData]>, availableCustards: [String]) {
         self._data = actions
-        self._actions = State(initialValue: actions.wrappedValue.map{EditingCodableActionData($0)})
+        self._actions = State(initialValue: actions.wrappedValue.map {EditingCodableActionData($0)})
         self.availableCustards = availableCustards
     }
 
-    func add(new action: CodableActionData){
-        withAnimation(Animation.interactiveSpring()){
+    private func add(new action: CodableActionData) {
+        withAnimation(Animation.interactiveSpring()) {
             actions.append(EditingCodableActionData(action))
         }
     }
 
     var body: some View {
-        GeometryReader{geometry in
+        GeometryReader {geometry in
             Form {
-                Section{
+                Section {
                     Text("上から順に実行されます")
                 }
-                Section{
-                    Button{
+                Section {
+                    Button {
                         self.bottomSheetShown = true
                     } label: {
-                        HStack{
+                        HStack {
                             Image(systemName: "plus")
                             Text("アクションを追加")
                         }
                     }
                 }
-                Section(header: Text("アクション")){
-                    List{
-                        ForEach($actions){(action: Binding<EditingCodableActionData>) in
+                Section(header: Text("アクション")) {
+                    List {
+                        ForEach($actions) {(action: Binding<EditingCodableActionData>) in
                             CodableActionEditor(action: action, availableCustards: availableCustards)
                         }
                         .onDelete(perform: delete)
@@ -98,45 +98,45 @@ struct CodableActionDataEditor: View {
                 isOpen: self.$bottomSheetShown,
                 maxHeight: geometry.size.height * 0.7
             ) {
-                let press: (CodableActionData) -> () = { action in
+                let press: (CodableActionData) -> Void = { action in
                     add(new: action)
                     bottomSheetShown = false
                 }
-                Form{
-                    Section(header: Text("基本")){
-                        Button("タブの移動"){
+                Form {
+                    Section(header: Text("基本")) {
+                        Button("タブの移動") {
                             press(.moveTab(.system(.user_japanese)))
                         }
-                        Button("タブバーの表示"){
+                        Button("タブバーの表示") {
                             press(.toggleTabBar)
                         }
-                        Button("文字の入力"){
+                        Button("文字の入力") {
                             press(.input("😁"))
                         }
-                        Button("文字の削除"){
+                        Button("文字の削除") {
                             press(.delete(1))
                         }
                     }
-                    Section(header: Text("高度")){
-                        Button("文頭まで削除"){
+                    Section(header: Text("高度")) {
+                        Button("文頭まで削除") {
                             press(.smartDeleteDefault)
                         }
-                        Button("カーソル移動"){
+                        Button("カーソル移動") {
                             press(.moveCursor(-1))
                         }
-                        Button("片手モードをオン"){
+                        Button("片手モードをオン") {
                             press(.enableResizingMode)
                         }
-                        Button("入力の確定"){
+                        Button("入力の確定") {
                             press(.complete)
                         }
-                        Button("Caps lock"){
+                        Button("Caps lock") {
                             press(.toggleCapsLockState)
                         }
-                        Button("カーソルバーの表示"){
+                        Button("カーソルバーの表示") {
                             press(.toggleCursorBar)
                         }
-                        Button("キーボードを閉じる"){
+                        Button("キーボードを閉じる") {
                             press(.dismissKeyboard)
                         }
                     }
@@ -144,8 +144,8 @@ struct CodableActionDataEditor: View {
                 .foregroundColor(.primary)
             }
         }
-        .onChange(of: actions){value in
-            self.data = actions.map{$0.data}
+        .onChange(of: actions) {_ in
+            self.data = actions.map {$0.data}
         }
         .navigationBarTitle(Text("動作の編集"), displayMode: .inline)
         .navigationBarItems(trailing: editButton)
@@ -153,8 +153,8 @@ struct CodableActionDataEditor: View {
     }
 
     private var editButton: some View {
-        Button{
-            switch editMode{
+        Button {
+            switch editMode {
             case .inactive:
                 editMode = .active
             case .active, .transient:
@@ -163,7 +163,7 @@ struct CodableActionDataEditor: View {
                 editMode = .inactive
             }
         } label: {
-            switch editMode{
+            switch editMode {
             case .inactive:
                 Text("削除と順番")
             case .active, .transient:
@@ -184,7 +184,7 @@ struct CodableActionDataEditor: View {
 }
 
 struct CodableActionEditor: View {
-    internal init(action: Binding<EditingCodableActionData>, availableCustards: [String]) {
+    init(action: Binding<EditingCodableActionData>, availableCustards: [String]) {
         self.availableCustards = availableCustards
         self._action = action
     }
@@ -193,24 +193,24 @@ struct CodableActionEditor: View {
     private let availableCustards: [String]
 
     var body: some View {
-        HStack{
-            VStack(spacing: 20){
-                if action.data.hasAssociatedValue{
-                    DisclosureGroup{
-                        switch action.data{
+        HStack {
+            VStack(spacing: 20) {
+                if action.data.hasAssociatedValue {
+                    DisclosureGroup {
+                        switch action.data {
                         case let .input(value):
-                            ActionEditTextField("入力する文字", action: $action){value} convert: {.input($0)}
+                            ActionEditTextField("入力する文字", action: $action) {value} convert: {.input($0)}
                         case let .delete(count):
-                            ActionEditTextField("削除する文字数", action: $action){"\(count)"} convert: {value in
-                                if let count = Int(value){
+                            ActionEditTextField("削除する文字数", action: $action) {"\(count)"} convert: {value in
+                                if let count = Int(value) {
                                     return .delete(count)
                                 }
                                 return nil
                             }
                             Text("負の値を指定すると右側の文字を削除します")
                         case let .moveCursor(count):
-                            ActionEditTextField("移動する文字数", action: $action){"\(count)"} convert: {value in
-                                if let count = Int(value){
+                            ActionEditTextField("移動する文字数", action: $action) {"\(count)"} convert: {value in
+                                if let count = Int(value) {
                                     return .moveCursor(count)
                                 }
                                 return nil
@@ -221,27 +221,26 @@ struct CodableActionEditor: View {
                         default:
                             EmptyView()
                         }
-                    } label :{
+                    } label: {
                         Text(action.data.label)
                     }
-                }else{
+                } else {
                     Text(action.data.label)
                 }
             }
         }
     }
-
 }
 
 struct ActionEditTextField: View {
     private let title: LocalizedStringKey
     @Binding private var action: EditingCodableActionData
     private let convert: (String) -> CodableActionData?
-    internal init(_ title: LocalizedStringKey, action: Binding<EditingCodableActionData>, initialValue: () -> String?, convert: @escaping (String) -> CodableActionData?) {
+    init(_ title: LocalizedStringKey, action: Binding<EditingCodableActionData>, initialValue: () -> String?, convert: @escaping (String) -> CodableActionData?) {
         self.title = title
         self.convert = convert
         self._action = action
-        if let initialValue = initialValue(){
+        if let initialValue = initialValue() {
             self._value = State(initialValue: initialValue)
         }
     }
@@ -250,8 +249,8 @@ struct ActionEditTextField: View {
 
     var body: some View {
         TextField(title, text: $value)
-            .onChange(of: value){value in
-                if let data = convert(value){
+            .onChange(of: value) {value in
+                if let data = convert(value) {
                     action.data = data
                 }
             }
@@ -259,13 +258,12 @@ struct ActionEditTextField: View {
     }
 }
 
-
 struct ActionOpenAppEditView: View {
     @Binding private var action: EditingCodableActionData
 
-    internal init(_ action: Binding<EditingCodableActionData>) {
+    init(_ action: Binding<EditingCodableActionData>) {
         self._action = action
-        if case let .openURL(value) = action.wrappedValue.data{
+        if case let .openURL(value) = action.wrappedValue.data {
             self._value = State(initialValue: "\(value)")
         }
     }
@@ -275,7 +273,7 @@ struct ActionOpenAppEditView: View {
     var body: some View {
         TextField("URL Scheme", text: $value)
             .textFieldStyle(RoundedBorderTextFieldStyle())
-            .onChange(of: value){value in
+            .onChange(of: value) {value in
                 action.data = .openURL(value)
             }
     }
@@ -286,26 +284,26 @@ struct ActionMoveTabEditView: View {
     private let availableCustards: [String]
     @State private var selectedTab: TabData = .system(.user_japanese)
 
-    internal init(_ action: Binding<EditingCodableActionData>, availableCustards: [String]) {
+    init(_ action: Binding<EditingCodableActionData>, availableCustards: [String]) {
         self.availableCustards = availableCustards
         self._action = action
-        if case let .moveTab(value) = action.wrappedValue.data{
+        if case let .moveTab(value) = action.wrappedValue.data {
             self._selectedTab = State(initialValue: value)
         }
     }
 
     var body: some View {
-        AvailableTabPicker(selectedTab, availableCustards: self.availableCustards){tab in
+        AvailableTabPicker(selectedTab, availableCustards: self.availableCustards) {tab in
             self.action.data = .moveTab(tab)
         }
     }
 }
 
-extension TabData{
+extension TabData {
     var label: LocalizedStringKey {
-        switch self{
+        switch self {
         case let .system(tab):
-            switch tab{
+            switch tab {
             case .user_japanese:
                 return "日本語(設定に合わせる)"
             case .user_english:
@@ -336,9 +334,9 @@ extension TabData{
 struct AvailableTabPicker: View {
     @State private var selectedTab: TabData = .system(.user_japanese)
     private let items: [(label: String, tab: TabData)]
-    private let process: (TabData) -> ()
+    private let process: (TabData) -> Void
 
-    internal init(_ initialValue: TabData, availableCustards: [String]? = nil, onChange process: @escaping (TabData) -> () = {_ in}) {
+    init(_ initialValue: TabData, availableCustards: [String]? = nil, onChange process: @escaping (TabData) -> Void = {_ in}) {
         self._selectedTab = State(initialValue: initialValue)
         self.process = process
         var dict: [(label: String, tab: TabData)] = [
@@ -351,17 +349,17 @@ struct AvailableTabPicker: View {
             ("日本語(フリック入力)", .system(.flick_japanese)),
             ("日本語(ローマ字入力)", .system(.qwerty_japanese)),
             ("英語(フリック入力)", .system(.flick_english)),
-            ("英語(ローマ字入力)", .system(.qwerty_english)),
+            ("英語(ローマ字入力)", .system(.qwerty_english))
         ]
-        (availableCustards ?? CustardManager.load().availableCustards) .forEach{
+        (availableCustards ?? CustardManager.load().availableCustards) .forEach {
             dict.insert(($0, .custom($0)), at: 0)
         }
         self.items = dict
     }
 
     var body: some View {
-        Picker(selection: $selectedTab, label: Text("タブを選択")){
-            ForEach(items.indices, id: \.self){i in
+        Picker(selection: $selectedTab, label: Text("タブを選択")) {
+            ForEach(items.indices, id: \.self) {i in
                 Text(LocalizedStringKey(items[i].label)).tag(items[i].tab)
             }
         }
@@ -374,7 +372,7 @@ struct CodableLongpressActionDataEditor: View {
     @State private var bottomSheetShown = false
     @State private var addTarget: AddTarget = .start
 
-    enum AddTarget{
+    private enum AddTarget {
         case `repeat`
         case start
     }
@@ -384,16 +382,16 @@ struct CodableLongpressActionDataEditor: View {
     @Binding private var data: CodableLongpressActionData
     private let availableCustards: [String]
 
-    init(_ actions: Binding<CodableLongpressActionData>, availableCustards: [String]){
+    init(_ actions: Binding<CodableLongpressActionData>, availableCustards: [String]) {
         self._data = actions
-        self._startActions = State(initialValue: actions.wrappedValue.start.map{EditingCodableActionData($0)})
-        self._repeatActions = State(initialValue: actions.wrappedValue.repeat.map{EditingCodableActionData($0)})
+        self._startActions = State(initialValue: actions.wrappedValue.start.map {EditingCodableActionData($0)})
+        self._repeatActions = State(initialValue: actions.wrappedValue.repeat.map {EditingCodableActionData($0)})
         self.availableCustards = availableCustards
     }
 
-    func add(new action: CodableActionData){
-        withAnimation(Animation.interactiveSpring()){
-            switch self.addTarget{
+    private func add(new action: CodableActionData) {
+        withAnimation(Animation.interactiveSpring()) {
+            switch self.addTarget {
             case .start:
                 startActions.append(EditingCodableActionData(action))
             case .repeat:
@@ -403,43 +401,43 @@ struct CodableLongpressActionDataEditor: View {
     }
 
     var body: some View {
-        GeometryReader{geometry in
+        GeometryReader {geometry in
             Form {
-                Section{
+                Section {
                     Text("上から順に実行されます")
                 }
-                Section(header: Text("押し始めのアクション")){
-                    Button{
+                Section(header: Text("押し始めのアクション")) {
+                    Button {
                         self.addTarget = .start
                         self.bottomSheetShown = true
                     } label: {
-                        HStack{
+                        HStack {
                             Image(systemName: "plus")
                             Text("アクションを追加")
                         }
                     }
 
-                    List{
-                        ForEach($startActions){(action: Binding<EditingCodableActionData>) in
+                    List {
+                        ForEach($startActions) {(action: Binding<EditingCodableActionData>) in
                             CodableActionEditor(action: action, availableCustards: availableCustards)
                         }
                         .onDelete(perform: {startActions.remove(atOffsets: $0)})
                         .onMove(perform: {startActions.move(fromOffsets: $0, toOffset: $1)})
                     }
                 }
-                Section(header: Text("押している間のアクション")){
-                    Button{
+                Section(header: Text("押している間のアクション")) {
+                    Button {
                         self.addTarget = .repeat
                         self.bottomSheetShown = true
                     } label: {
-                        HStack{
+                        HStack {
                             Image(systemName: "plus")
                             Text("アクションを追加")
                         }
                     }
 
-                    List{
-                        ForEach($repeatActions){(action: Binding<EditingCodableActionData>) in
+                    List {
+                        ForEach($repeatActions) {(action: Binding<EditingCodableActionData>) in
                             CodableActionEditor(action: action, availableCustards: availableCustards)
                         }
                         .onDelete(perform: {repeatActions.remove(atOffsets: $0)})
@@ -452,45 +450,45 @@ struct CodableLongpressActionDataEditor: View {
                 isOpen: self.$bottomSheetShown,
                 maxHeight: geometry.size.height * 0.7
             ) {
-                let press: (CodableActionData) -> () = { action in
+                let press: (CodableActionData) -> Void = { action in
                     add(new: action)
                     bottomSheetShown = false
                 }
-                Form{
-                    Section(header: Text("基本")){
-                        Button("タブの移動"){
+                Form {
+                    Section(header: Text("基本")) {
+                        Button("タブの移動") {
                             press(.moveTab(.system(.user_japanese)))
                         }
-                        Button("タブバーの表示"){
+                        Button("タブバーの表示") {
                             press(.toggleTabBar)
                         }
-                        Button("カーソル移動"){
+                        Button("カーソル移動") {
                             press(.moveCursor(-1))
                         }
-                        Button("文字の入力"){
+                        Button("文字の入力") {
                             press(.input("😁"))
                         }
-                        Button("文字の削除"){
+                        Button("文字の削除") {
                             press(.delete(1))
                         }
                     }
-                    Section(header: Text("高度")){
-                        Button("文頭まで削除"){
+                    Section(header: Text("高度")) {
+                        Button("文頭まで削除") {
                             press(.smartDeleteDefault)
                         }
-                        Button("片手モードをオン"){
+                        Button("片手モードをオン") {
                             press(.enableResizingMode)
                         }
-                        Button("入力の確定"){
+                        Button("入力の確定") {
                             press(.complete)
                         }
-                        Button("Caps lock"){
+                        Button("Caps lock") {
                             press(.toggleCapsLockState)
                         }
-                        Button("カーソルバーの表示"){
+                        Button("カーソルバーの表示") {
                             press(.toggleCursorBar)
                         }
-                        Button("キーボードを閉じる"){
+                        Button("キーボードを閉じる") {
                             press(.dismissKeyboard)
                         }
                     }
@@ -498,11 +496,11 @@ struct CodableLongpressActionDataEditor: View {
                 .foregroundColor(.primary)
             }
         }
-        .onChange(of: startActions){value in
-            self.data.start = value.map{$0.data}
+        .onChange(of: startActions) {value in
+            self.data.start = value.map {$0.data}
         }
-        .onChange(of: repeatActions){value in
-            self.data.repeat = value.map{$0.data}
+        .onChange(of: repeatActions) {value in
+            self.data.repeat = value.map {$0.data}
         }
         .navigationBarTitle(Text("動作の編集"), displayMode: .inline)
         .navigationBarItems(trailing: editButton)
@@ -510,8 +508,8 @@ struct CodableLongpressActionDataEditor: View {
     }
 
     private var editButton: some View {
-        Button{
-            switch editMode{
+        Button {
+            switch editMode {
             case .inactive:
                 editMode = .active
             case .active, .transient:
@@ -520,7 +518,7 @@ struct CodableLongpressActionDataEditor: View {
                 editMode = .inactive
             }
         } label: {
-            switch editMode{
+            switch editMode {
             case .inactive:
                 Text("削除と順番")
             case .active, .transient:

@@ -14,7 +14,7 @@ struct RoundedBorderedRectangle: View {
     private let borderColor: Color
     private let borderWidth: CGFloat
 
-    init(cornerRadius: CGFloat, fillColor: Color = .clear, borderColor: Color = .clear, borderWidth: CGFloat = 1){
+    init(cornerRadius: CGFloat, fillColor: Color = .clear, borderColor: Color = .clear, borderWidth: CGFloat = 1) {
         self.cornerRadius = cornerRadius
         self.fillColor = fillColor
         self.borderColor = borderColor
@@ -26,7 +26,7 @@ struct RoundedBorderedRectangle: View {
     }
 
     var body: some View {
-        ZStack{
+        ZStack {
             base.fill(fillColor)
             base.stroke(borderColor, lineWidth: borderWidth)
         }

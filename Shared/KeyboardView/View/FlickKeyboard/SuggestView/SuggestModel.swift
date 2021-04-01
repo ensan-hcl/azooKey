@@ -9,18 +9,18 @@
 import Foundation
 import SwiftUI
 
-enum SuggestModelKeyType{
+enum SuggestModelKeyType {
     case normal
     case enter(Int)
     case custom(Setting)
     case aA
 }
 
-struct SuggestModel{
+struct SuggestModel {
     var variableSection = SuggestModelVariableSection()
     let _flickModels: [FlickDirection: FlickedKeyModel]
     var flickModels: [FlickDirection: FlickedKeyModel] {
-        switch self.keyType{
+        switch self.keyType {
         case .normal, .enter:
             return _flickModels
         case let .custom(setting):
@@ -29,20 +29,19 @@ struct SuggestModel{
             return FlickAaKeyModel.shared.flickKeys
         }
     }
-    
+
     let keyType: SuggestModelKeyType
-    
-    init(_ flickModels: [FlickDirection: FlickedKeyModel] = [:], keyType: SuggestModelKeyType = .normal){
+
+    init(_ flickModels: [FlickDirection: FlickedKeyModel] = [:], keyType: SuggestModelKeyType = .normal) {
         self._flickModels = flickModels
         self.keyType = keyType
     }
-    
-    func setSuggestState(_ state: SuggestState){
+
+    func setSuggestState(_ state: SuggestState) {
         self.variableSection.suggestState = state
     }
 }
 
-final class SuggestModelVariableSection: ObservableObject{
+final class SuggestModelVariableSection: ObservableObject {
     @Published var suggestState: SuggestState = .nothing
 }
-

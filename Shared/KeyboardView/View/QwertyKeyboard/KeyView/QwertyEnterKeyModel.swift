@@ -9,20 +9,20 @@
 import Foundation
 import SwiftUI
 
-struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
+struct QwertyEnterKeyModel: QwertyKeyModelProtocol {
     let keySizeType: QwertyKeySizeType
-    init(keySizeType: QwertyKeySizeType){
+    init(keySizeType: QwertyKeySizeType) {
         self.keySizeType = keySizeType
     }
 
     static var shared = QwertyEnterKeyModel(keySizeType: .enter)
-    
+
     var variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
 
     var pressActions: [ActionType] {
-        switch VariableStates.shared.enterKeyState{
+        switch VariableStates.shared.enterKeyState {
         case .complete:
             return [.enter]
         case .return:
@@ -31,22 +31,22 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol{
             return [.deselectAndUseAsInputting]
         }
     }
-    
+
     let longPressActions: LongpressActionType = .none
-    
+
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width, textSize: .small, textColor: color)
     }
-    
+
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .enter
 
     func sound() {
-        switch VariableStates.shared.enterKeyState{
+        switch VariableStates.shared.enterKeyState {
         case .complete, .edit:
             Sound.tabOrOtherKey()
         case let .return(type):
-            switch type{
+            switch type {
             case .default:
                 Sound.click()
             default:

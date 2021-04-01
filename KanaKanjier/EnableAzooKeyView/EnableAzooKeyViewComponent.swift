@@ -10,14 +10,14 @@ import SwiftUI
 
 struct EnableAzooKeyViewHeader: View {
     private let text: LocalizedStringKey
-    init(_ text: LocalizedStringKey){
+    init(_ text: LocalizedStringKey) {
         self.text = text
     }
 
     var body: some View {
-        CenterAlignedView{
-            HStack{
-                if let font = Store.shared.iconFont(30, relativeTo: .title){
+        CenterAlignedView {
+            HStack {
+                if let font = Store.shared.iconFont(30, relativeTo: .title) {
                     Text("1")
                         .font(font)
                 }
@@ -33,14 +33,14 @@ struct EnableAzooKeyViewHeader: View {
 struct EnableAzooKeyViewText: View {
     private let text: LocalizedStringKey
     private let systemName: String
-    init(_ text: LocalizedStringKey, with systemName: String){
+    init(_ text: LocalizedStringKey, with systemName: String) {
         self.text = text
         self.systemName = systemName
     }
 
     var body: some View {
-        HStack{
-            if let systemName = systemName{
+        HStack {
+            if let systemName = systemName {
                 Image(systemName: systemName)
             }
             Text(text)
@@ -52,15 +52,15 @@ struct EnableAzooKeyViewText: View {
 }
 
 struct EnableAzooKeyViewButton: View {
-    enum Style{
+    enum Style {
         case emphasized, destructive
     }
     private let text: LocalizedStringKey
     private let systemName: String?
     private let style: Style
     private let action: () -> Void
-    
-    init(_ text: LocalizedStringKey, systemName: String? = nil, style: Style = .emphasized, action: @escaping () -> Void){
+
+    init(_ text: LocalizedStringKey, systemName: String? = nil, style: Style = .emphasized, action: @escaping () -> Void) {
         self.text = text
         self.systemName = systemName
         self.style = style
@@ -69,31 +69,31 @@ struct EnableAzooKeyViewButton: View {
 
     var body: some View {
         let width = UIScreen.main.bounds.width
-            Button{
-                action()
-            }label: {
-                HStack{
-                    if let systemName = systemName{
-                        Image(systemName: systemName)
-                            .font(Font.body.bold())
-                    }
-                    Text(text)
-                        .bold()
+        Button {
+            action()
+        }label: {
+            HStack {
+                if let systemName = systemName {
+                    Image(systemName: systemName)
+                        .font(Font.body.bold())
                 }
-                .padding()
-                .frame(width: width*0.9)
-                .foregroundColor(.background)
-                .background(
-                    RoundedRectangle(cornerRadius: width / 4.8 * 0.17)
-                        .fill(self.style == .emphasized ? Color.blue : Color.red)
-                )
+                Text(text)
+                    .bold()
             }
+            .padding()
+            .frame(width: width*0.9)
+            .foregroundColor(.background)
+            .background(
+                RoundedRectangle(cornerRadius: width / 4.8 * 0.17)
+                    .fill(self.style == .emphasized ? Color.blue : Color.red)
+            )
+        }
     }
 }
 
 struct EnableAzooKeyViewImage: View {
     private let identifier: String
-    init(_ identifier: String){
+    init(_ identifier: String) {
         self.identifier = identifier
     }
 

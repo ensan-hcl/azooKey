@@ -9,17 +9,17 @@
 import Foundation
 import SwiftUI
 
-protocol ResultViewItemData{
+protocol ResultViewItemData {
     var text: String {get}
     var inputable: Bool {get}
 }
 
-private final class ResultModelVariableSection<Candidate: ResultViewItemData>: ObservableObject{
+private final class ResultModelVariableSection<Candidate: ResultViewItemData>: ObservableObject {
     @Published fileprivate var results: [ResultData<Candidate>] = []
-    @Published fileprivate var scrollViewProxy: ScrollViewProxy? = nil
+    @Published fileprivate var scrollViewProxy: ScrollViewProxy?
 }
 
-struct ResultData<Candidate: ResultViewItemData>: Identifiable{
+struct ResultData<Candidate: ResultViewItemData>: Identifiable {
     var id: Int
     var candidate: Candidate
 }
@@ -33,7 +33,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     @Binding private var isResultViewExpanded: Bool
     @Environment(\.themeEnvironment) private var theme
 
-    init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
+    init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>) {
         self.model = model
         self.modelVariableSection = model.variableSection
         self.sharedResultData = sharedResultData
@@ -41,48 +41,48 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 
     var body: some View {
-        Group{[unowned modelVariableSection] in
-            if variableStates.showMoveCursorBar{
+        Group {[unowned modelVariableSection] in
+            if variableStates.showMoveCursorBar {
                 MoveCursorBar()
-            }else if variableStates.showTabBar{
+            } else if variableStates.showTabBar {
                 let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
                 TabBarView(data: tabBarData)
-            }else{
-                HStack{
-                    ScrollView(.horizontal, showsIndicators: false){
-                        ScrollViewReader{scrollViewProxy in
+            } else {
+                HStack {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        ScrollViewReader {scrollViewProxy in
                             LazyHStack(spacing: 10) {
-                                ForEach(modelVariableSection.results, id: \.id){(data: ResultData<Candidate>) in
-                                    if data.candidate.inputable{
-                                        Button{
+                                ForEach(modelVariableSection.results, id: \.id) {(data: ResultData<Candidate>) in
+                                    if data.candidate.inputable {
+                                        Button {
                                             Sound.click()
                                             self.pressed(candidate: data.candidate)
                                         } label: {
                                             Text(data.candidate.text)
                                         }
                                         .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
-                                        .contextMenu{
+                                        .contextMenu {
                                             ResultContextMenuView(text: data.candidate.text)
                                         }
                                         .id(data.id)
-                                    }else{
+                                    } else {
                                         Text(data.candidate.text)
                                             .font(Design.fonts.resultViewFont(theme: theme))
                                             .underline(true, color: .accentColor)
                                     }
                                 }
-                            }.onAppear{
+                            }.onAppear {
                                 modelVariableSection.scrollViewProxy = scrollViewProxy
                             }
                         }
                         .padding(.horizontal, 5)
                     }
 
-                    if modelVariableSection.results.count > 1{
-                        //候補を展開するボタン
+                    if modelVariableSection.results.count > 1 {
+                        // 候補を展開するボタン
                         Button(action: {
                             self.expand()
-                        }){
+                        }) {
                             Image(systemName: "chevron.down")
                                 .font(Design.fonts.iconImageFont(theme: theme))
                                 .frame(height: 18)
@@ -98,26 +98,25 @@ struct ResultView<Candidate: ResultViewItemData>: View {
         }
     }
 
-    private func pressed(candidate: Candidate){
+    private func pressed(candidate: Candidate) {
         variableStates.action.notifyComplete(candidate)
     }
 
-    private func expand(){
+    private func expand() {
         self.isResultViewExpanded = true
         self.sharedResultData.results = self.modelVariableSection.results
     }
 }
 
-
 struct ResultContextMenuView: View {
     private let text: String
 
-    init(text: String){
+    init(text: String) {
         self.text = text
     }
-    
+
     var body: some View {
-        Group{
+        Group {
             Button(action: {
                 VariableStates.shared.magnifyingText = text
                 VariableStates.shared.isTextMagnifying = true
@@ -129,16 +128,16 @@ struct ResultContextMenuView: View {
     }
 }
 
-struct ResultModel<Candidate: ResultViewItemData>{
+struct ResultModel<Candidate: ResultViewItemData> {
     fileprivate var variableSection = ResultModelVariableSection<Candidate>()
 
-    func setResults(_ results: [Candidate]){
-        self.variableSection.results = results.indices.map{ResultData(id: $0, candidate: results[$0])}
+    func setResults(_ results: [Candidate]) {
+        self.variableSection.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
         self.scrollTop()
     }
 
-    func scrollTop(){
-        if let proxy = self.variableSection.scrollViewProxy{
+    func scrollTop() {
+        if let proxy = self.variableSection.scrollViewProxy {
             proxy.scrollTo(0, anchor: .trailing)
         }
     }
@@ -148,7 +147,7 @@ struct ResultButtonStyle: ButtonStyle {
     private let height: CGFloat
     private let theme: ThemeData
 
-    init(height: CGFloat, theme: ThemeData){
+    init(height: CGFloat, theme: ThemeData) {
         self.theme = theme
         self.height = height
     }
@@ -158,7 +157,7 @@ struct ResultButtonStyle: ButtonStyle {
             .font(Design.fonts.resultViewFont(theme: theme))
             .frame(height: height)
             .padding(.all, 5)
-            .foregroundColor(theme.resultTextColor.color) //文字色は常に不透明度1で描画する
+            .foregroundColor(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
                     theme.pushedKeyFillColor.color.opacity(0.5) :
@@ -167,4 +166,3 @@ struct ResultButtonStyle: ButtonStyle {
             .cornerRadius(5.0)
     }
 }
-

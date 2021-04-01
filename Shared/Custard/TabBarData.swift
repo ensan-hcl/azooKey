@@ -18,15 +18,15 @@ enum TabBarItemLabelType: Codable, Equatable {
     }
 }
 
-extension TabBarItemLabelType{
-    private enum CodingKeys: CodingKey{
+extension TabBarItemLabelType {
+    private enum CodingKeys: CodingKey {
         case text
         case imageAndText
         case image
     }
 
     private var key: CodingKeys {
-        switch self{
+        switch self {
         case .image: return .image
         case .text: return .text
         case .imageAndText: return .imageAndText
@@ -50,18 +50,17 @@ extension TabBarItemLabelType{
         }
         switch key {
         case .text:
-            let value = try container.decode(String.self,forKey: .text)
+            let value = try container.decode(String.self, forKey: .text)
             self = .text(value)
         case .imageAndText:
-            let value = try container.decode(ImageAndText.self,forKey: .imageAndText)
+            let value = try container.decode(ImageAndText.self, forKey: .imageAndText)
             self = .imageAndText(value)
         case .image:
-            let value = try container.decode(String.self,forKey: .image)
+            let value = try container.decode(String.self, forKey: .image)
             self = .image(value)
         }
     }
 }
-
 
 struct TabBarItem: Codable {
     let label: TabBarItemLabelType
@@ -75,6 +74,6 @@ struct TabBarData: Codable {
     static let `default` = TabBarData(identifier: 0, items: [
         TabBarItem(label: .text("片手"), actions: [.enableResizingMode, .toggleTabBar]),
         TabBarItem(label: .text("あいう"), actions: [.moveTab(.system(.user_japanese))]),
-        TabBarItem(label: .text("ABC"), actions: [.moveTab(.system(.user_english))]),
+        TabBarItem(label: .text("ABC"), actions: [.moveTab(.system(.user_english))])
     ])
 }

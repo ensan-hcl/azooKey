@@ -12,9 +12,9 @@ struct DataUpdateView: View {
 
     private let id: MessageIdentifier
     @Binding private var manager: MessageManager
-    private let process: () -> ()
+    private let process: () -> Void
 
-    init(id: MessageIdentifier, manager: Binding<MessageManager>, process: @escaping () -> ()){
+    init(id: MessageIdentifier, manager: Binding<MessageManager>, process: @escaping () -> Void) {
         self.id = id
         self._manager = manager
         self.process = process
@@ -23,28 +23,28 @@ struct DataUpdateView: View {
     @State private var done = false
 
     var body: some View {
-        ZStack{
+        ZStack {
             Color.white
-            if done{
-                VStack{
+            if done {
+                VStack {
                     Text("\(systemImage: "checkmark.seal")完了しました")
                         .font(.title)
-                        .onAppear{
+                        .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                 manager.done(id)
                             }
                         }
                         .padding()
-                    Button{
+                    Button {
                         manager.done(id)
                     } label: {
                         Text("閉じる")
                             .padding()
                     }
                 }
-            }else{
+            } else {
                 ProgressView("データの更新処理中です")
-                    .onAppear{
+                    .onAppear {
                         let dispatchGroup = DispatchGroup()
                         let dispatchQueue = DispatchQueue(label: "queue", attributes: .concurrent)
 

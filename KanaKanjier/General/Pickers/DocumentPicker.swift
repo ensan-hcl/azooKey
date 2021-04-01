@@ -16,7 +16,7 @@ struct DocumentPicker: UIViewControllerRepresentable {
     let extensions: [String]
 
     func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let controller = UIDocumentPickerViewController(forOpeningContentTypes: extensions.compactMap{UTType(filenameExtension: $0, conformingTo: .text)}, asCopy: true)
+        let controller = UIDocumentPickerViewController(forOpeningContentTypes: extensions.compactMap {UTType(filenameExtension: $0, conformingTo: .text)}, asCopy: true)
         controller.delegate = context.coordinator
         return controller
     }
@@ -34,12 +34,11 @@ struct DocumentPicker: UIViewControllerRepresentable {
             self.parent = parent
         }
 
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]){
-            if let url = urls.first, let data = try? Data.init(contentsOf: url){
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            if let url = urls.first, let data = try? Data.init(contentsOf: url) {
                 parent.pickerResult = data
                 parent.isPresented = false
             }
         }
     }
 }
-

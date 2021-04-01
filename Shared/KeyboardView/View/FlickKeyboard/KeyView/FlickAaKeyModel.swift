@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct FlickAaKeyModel: FlickKeyModelProtocol{
+struct FlickAaKeyModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = true
 
     static let shared = FlickAaKeyModel()
 
     var pressActions: [ActionType] {
-        switch VariableStates.shared.aAKeyState{
+        switch VariableStates.shared.aAKeyState {
         case .normal:
             return [.changeCharacterType]
         case .capsLock:
@@ -24,7 +24,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
 
     let longPressActions: LongpressActionType = .none
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        switch VariableStates.shared.aAKeyState{
+        switch VariableStates.shared.aAKeyState {
         case .normal:
             return [
                 .top: FlickedKeyModel(labelType: .image("capslock"), pressActions: [.changeCapsLockState(state: .capsLock)])
@@ -39,7 +39,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
     var suggestModel: SuggestModel = SuggestModel([:], keyType: .aA)
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
-        switch states.aAKeyState{
+        switch states.aAKeyState {
         case .normal:
             return KeyLabel(.text("a/A"), width: width)
         case .capsLock:
@@ -52,7 +52,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol{
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        switch states.aAKeyState{
+        switch states.aAKeyState {
         case .normal:
             return theme.normalKeyFillColor.color
         case .capsLock:

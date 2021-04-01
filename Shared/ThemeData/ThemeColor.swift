@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-enum ThemeColor{
+enum ThemeColor {
     case color(Color)
     case system(SystemColor)
     case dynamic(DynamicColor)
 
     var color: Color {
-        switch self{
+        switch self {
         case let .color(color):
             return color
         case let .system(systemColor):
@@ -25,7 +25,7 @@ enum ThemeColor{
         }
     }
 
-    enum DynamicColor: String, Codable, CaseIterable{
+    enum DynamicColor: String, Codable, CaseIterable {
         case accentColor
         case black
         case blue
@@ -42,7 +42,7 @@ enum ThemeColor{
         case white
 
         var color: Color {
-            switch self{
+            switch self {
             case .accentColor: return .accentColor
             case .black: return .black
             case .blue: return .blue
@@ -61,7 +61,7 @@ enum ThemeColor{
         }
     }
 
-    enum SystemColor: String, Codable{
+    enum SystemColor: String, Codable {
         case normalKeyColor
         case specialKeyColor
         case highlightedKeyColor
@@ -69,7 +69,7 @@ enum ThemeColor{
         case backgroundColor
 
         var color: Color {
-            switch self{
+            switch self {
             case .backgroundColor:
                 return Design.colors.backGroundColor
             case .normalKeyColor:
@@ -97,13 +97,13 @@ extension ThemeColor: Codable, Equatable {
         let systemColor = try values.decode(SystemColor?.self, forKey: .systemColor)
         let dynamicColor = try values.decode(DynamicColor?.self, forKey: .dynamicColor)
 
-        if let color = color{
+        if let color = color {
             self = .color(color)
-        }else if let systemColor = systemColor{
+        } else if let systemColor = systemColor {
             self = .system(systemColor)
-        }else if let dynamicColor = dynamicColor{
+        } else if let dynamicColor = dynamicColor {
             self = .dynamic(dynamicColor)
-        }else{
+        } else {
             throw DecodeError.emptyData
         }
     }
@@ -120,13 +120,13 @@ extension ThemeColor: Codable, Equatable {
         let color: Color?
         let systemColor: SystemColor?
         let dynamicColor: DynamicColor?
-        switch self{
+        switch self {
         case let .color(_color):
-            if let matchedDynamicColor = DynamicColor.allCases.filter({$0.color == _color}).first{
+            if let matchedDynamicColor = DynamicColor.allCases.filter({$0.color == _color}).first {
                 color = nil
                 systemColor = nil
                 dynamicColor = matchedDynamicColor
-            }else{
+            } else {
                 color = _color
                 systemColor = nil
                 dynamicColor = nil
@@ -171,7 +171,7 @@ extension Color: Codable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        guard let rgba = self.cgColor?.components else{
+        guard let rgba = self.cgColor?.components else {
             throw EncodeError.dynamicColor(self)
         }
         try container.encode(rgba[0], forKey: .red)
@@ -180,4 +180,3 @@ extension Color: Codable {
         try container.encode(rgba[3], forKey: .opacity)
     }
 }
-

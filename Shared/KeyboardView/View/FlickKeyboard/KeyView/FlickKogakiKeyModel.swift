@@ -8,9 +8,9 @@
 
 import Foundation
 import SwiftUI
-struct FlickKogakiKeyModel: FlickKeyModelProtocol{
+struct FlickKogakiKeyModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = true
-    
+
     static let shared = FlickKogakiKeyModel()
 
     let pressActions: [ActionType] = [.changeCharacterType]
@@ -21,17 +21,17 @@ struct FlickKogakiKeyModel: FlickKeyModelProtocol{
     var flickKeys: [FlickDirection: FlickedKeyModel] {
         SettingData.shared.flickCustomKeySetting(for: .koganaKeyFlick).flick
     }
-    
+
     var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.koganaKeyFlick))
-    
-    private init(){}
+
+    private init() {}
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         KeyLabel(self.labelType, width: width)
     }
 
     func flickSensitivity(to direction: FlickDirection) -> CGFloat {
-        switch direction{
+        switch direction {
         case .left, .bottom:
             return 25
         case .top:

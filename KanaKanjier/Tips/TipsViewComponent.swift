@@ -12,14 +12,14 @@ struct TipsContentView<Content: View>: View {
     private let content: () -> Content
     private let title: LocalizedStringKey
 
-    init(_ title: LocalizedStringKey, @ViewBuilder _ content: @escaping () -> Content){
+    init(_ title: LocalizedStringKey, @ViewBuilder _ content: @escaping () -> Content) {
         self.content = content
         self.title = title
     }
 
     var body: some View {
-        VStack{
-            Form{
+        VStack {
+            Form {
                 self.content()
             }.navigationBarTitle(Text(self.title), displayMode: .inline)
         }
@@ -30,14 +30,14 @@ struct TipsContentParagraph<Content: View>: View {
     private let content: () -> Content
     private let style: Font.TextStyle
 
-    init(style: Font.TextStyle = .body, @ViewBuilder _ content: @escaping () -> Content){
+    init(style: Font.TextStyle = .body, @ViewBuilder _ content: @escaping () -> Content) {
         self.style = style
         self.content = content
     }
 
     var body: some View {
-        Section{
-            VStack(alignment: .leading, spacing: 10){
+        Section {
+            VStack(alignment: .leading, spacing: 10) {
                 self.content()
             }
             .font(.system(style))
@@ -46,16 +46,15 @@ struct TipsContentParagraph<Content: View>: View {
     }
 }
 
-
 struct TipsImage: View {
     private let name: String
 
-    init(_ name: String){
+    init(_ name: String) {
         self.name = name
     }
-    
+
     var body: some View {
-        CenterAlignedView{
+        CenterAlignedView {
             Image(self.name)
                 .resizable()
                 .scaledToFit()
@@ -65,4 +64,3 @@ struct TipsImage: View {
     }
 
 }
-

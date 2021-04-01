@@ -9,10 +9,10 @@
 import Foundation
 import SwiftUI
 
-struct FlickTabKeyModel: FlickKeyModelProtocol{
+struct FlickTabKeyModel: FlickKeyModelProtocol {
     private let setting: Setting
     let needSuggestView: Bool = true
-    
+
     static let hiraTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.japanese), setting: .hiraTabKeyFlick)
     static let abcTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.english), setting: .abcTabKeyFlick)
     static let numberTabKeyModel = FlickTabKeyModel(tab: .existential(.flick_numbersymbols), setting: .symbolsTabKeyFlick)
@@ -33,7 +33,7 @@ struct FlickTabKeyModel: FlickKeyModelProtocol{
     let suggestModel: SuggestModel
     var tab: Tab
 
-    private init(tab: Tab, setting: Setting){
+    private init(tab: Tab, setting: Setting) {
         self.setting = setting
         self.tab = tab
         self.suggestModel = SuggestModel([:], keyType: .custom(setting))
@@ -44,12 +44,12 @@ struct FlickTabKeyModel: FlickKeyModelProtocol{
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        if states.tabManager.isCurrentTab(tab: tab){
+        if states.tabManager.isCurrentTab(tab: tab) {
             return theme.pushedKeyFillColor.color
         }
         return theme.specialKeyFillColor.color
     }
-    
+
     func sound() {
         Sound.tabOrOtherKey()
     }

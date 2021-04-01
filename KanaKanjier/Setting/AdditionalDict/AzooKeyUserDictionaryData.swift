@@ -11,11 +11,11 @@ import SwiftUI
 
 final class EditableUserDictionaryData: ObservableObject {
     lazy var availableChars: [Character] = {
-        do{
+        do {
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
 
-            return Array(string).filter{!["\t",","," ","\0"].contains($0)}
-        }catch{
+            return Array(string).filter {!["\t", ",", " ", "\0"].contains($0)}
+        } catch {
             return []
         }
     }()
@@ -28,7 +28,7 @@ final class EditableUserDictionaryData: ObservableObject {
 
     let id: Int
 
-    init(ruby: String, word: String, isVerb: Bool, isPersonName: Bool, isPlaceName: Bool, id: Int){
+    init(ruby: String, word: String, isVerb: Bool, isPersonName: Bool, isPlaceName: Bool, id: Int) {
         self.ruby = ruby
         self.word = word
         self.id = id
@@ -50,13 +50,13 @@ final class EditableUserDictionaryData: ObservableObject {
         self.word.dropLast() + "らない"
     }
 
-    enum AppendError{
+    enum AppendError {
         case rubyEmpty
         case wordEmpty
         case unavailableCharacter
 
         var message: LocalizedStringKey {
-            switch self{
+            switch self {
             case .rubyEmpty:
                 return "読みが空です"
             case .wordEmpty:
@@ -69,20 +69,20 @@ final class EditableUserDictionaryData: ObservableObject {
     }
 
     var error: AppendError? {
-        if ruby.isEmpty{
+        if ruby.isEmpty {
             return .rubyEmpty
         }
-        if word.isEmpty{
+        if word.isEmpty {
             return .wordEmpty
         }
-        if !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy({self.availableChars.contains($0)}){
+        if !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy({self.availableChars.contains($0)}) {
             return .unavailableCharacter
         }
         return nil
     }
 
     func makeStableData() -> UserDictionaryData {
-        if !self.neadVerbCheck() && isVerb{
+        if !self.neadVerbCheck() && isVerb {
             isVerb = false
         }
         return UserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
@@ -93,25 +93,25 @@ final class EditableUserDictionaryData: ObservableObject {
 struct UserDictionary: Codable {
     let items: [UserDictionaryData]
 
-    init(items: [UserDictionaryData]){
-        self.items = items.indices.map{i in
+    init(items: [UserDictionaryData]) {
+        self.items = items.indices.map {i in
             let item = items[i]
             return UserDictionaryData(ruby: item.ruby, word: item.word, isVerb: item.isVerb, isPersonName: item.isPersonName, isPlaceName: item.isPlaceName, id: i)
         }
     }
 
-    func save(){
+    func save() {
         let encoder = JSONEncoder()
         let saveData: Data
         if let encodedValue = try? encoder.encode(self) {
             saveData = encodedValue
-        }else{
+        } else {
             saveData = Data()
         }
         UserDefaults.standard.set(saveData, forKey: "user_dict")
     }
     static func get() -> Self? {
-        if let value = UserDefaults.standard.value(forKey: "user_dict") as? Data{
+        if let value = UserDefaults.standard.value(forKey: "user_dict") as? Data {
             let decoder = JSONDecoder()
             if let userDictionary = try? decoder.decode(UserDictionary.self, from: value) {
                 return userDictionary
@@ -121,7 +121,7 @@ struct UserDictionary: Codable {
     }
 }
 
-struct UserDictionaryData: Identifiable, Codable{
+struct UserDictionaryData: Identifiable, Codable {
     let ruby: String
     let word: String
     let isVerb: Bool
@@ -137,6 +137,3 @@ struct UserDictionaryData: Identifiable, Codable{
         return UserDictionaryData(ruby: "", word: "", isVerb: false, isPersonName: false, isPlaceName: false, id: id)
     }
 }
-
-
-

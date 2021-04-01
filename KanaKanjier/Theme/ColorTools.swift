@@ -9,11 +9,11 @@
 import Foundation
 import SwiftUI
 
-struct ColorTools{
-    private init(){}
+struct ColorTools {
+    private init() {}
 
     static func rgba(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
-        guard let rgba = color.cgColor?.components else{
+        guard let rgba = color.cgColor?.components else {
             return nil
         }
         // R、GおよびBが0.0を最小量、1.0を最大値とする0.0から1.0の範囲にある
@@ -25,7 +25,7 @@ struct ColorTools{
     }
 
     static func hsv(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
-        guard let rgba = color.cgColor?.components else{
+        guard let rgba = color.cgColor?.components else {
             return nil
         }
         // R、GおよびBが0.0を最小量、1.0を最大値とする0.0から1.0の範囲にある
@@ -47,21 +47,21 @@ struct ColorTools{
             // MAX = MIN(例・S = 0)のとき、 Hは定義されない。
             h = 0
         } else {
-            if (maxValue == r) {
+            if maxValue == r {
                 h = (60 * (g - b) / sub) + 0
-            } else if (maxValue == g) {
+            } else if maxValue == g {
                 h = (60 * (b - r) / sub) + 120
-            } else if (maxValue == b) {
+            } else if maxValue == b {
                 h = (60 * (r - g) / sub) + 240
             }
             // さらに H += 360 if H < 0
-            if (h < 0) {
-                h += 360;
+            if h < 0 {
+                h += 360
             }
         }
 
         // Calculate Saturation
-        if (maxValue > 0) {
+        if maxValue > 0 {
             s = sub / maxValue
         }
 
@@ -72,4 +72,3 @@ struct ColorTools{
     }
 
 }
-

@@ -9,15 +9,15 @@
 import Foundation
 import SwiftUI
 
-enum QwertyKeySizeType{
+enum QwertyKeySizeType {
     case unit(width: Int, height: Int)
     case normal(of: Int, for: Int)
     case functional(normal: Int, functional: Int, enter: Int, space: Int)
     case enter
     case space
-    
+
     func width(design: TabDependentDesign) -> CGFloat {
-        switch self{
+        switch self {
         case let .unit(width: width, _):
             return design.keyViewWidth(widthCount: width)
         case let .normal(of: normalCount, for: keyCount):
@@ -30,26 +30,26 @@ enum QwertyKeySizeType{
             return design.qwertySpaceKeyWidth
         }
     }
-    
+
     func height(design: TabDependentDesign) -> CGFloat {
-        switch self{
+        switch self {
         case let .unit(_, height: height):
             return design.keyViewHeight(heightCount: height)
         default:
             return design.keyViewHeight
         }
     }
-    
+
 }
 
-enum QwertyUnpressedKeyColorType{
+enum QwertyUnpressedKeyColorType {
     case normal
     case special
     case enter
     case selected
 
     func color(states: VariableStates, theme: ThemeData) -> Color {
-        switch self{
+        switch self {
         case .normal:
             return theme.normalKeyFillColor.color
         case .special:
@@ -57,17 +57,17 @@ enum QwertyUnpressedKeyColorType{
         case .selected:
             return theme.pushedKeyFillColor.color
         case .enter:
-            switch states.enterKeyState{
+            switch states.enterKeyState {
             case .complete, .edit:
                 return theme.specialKeyFillColor.color
             case let .return(type):
-                switch type{
+                switch type {
                 case .default:
                     return theme.specialKeyFillColor.color
                 default:
-                    if theme == .default{
+                    if theme == .default {
                         return Design.colors.specialEnterKeyColor
-                    }else{
+                    } else {
                         return theme.specialKeyFillColor.color
                     }
                 }
@@ -76,39 +76,38 @@ enum QwertyUnpressedKeyColorType{
     }
 }
 
-protocol QwertyKeyModelProtocol{
+protocol QwertyKeyModelProtocol {
     var pressActions: [ActionType] {get}
     var longPressActions: LongpressActionType {get}
     var keySizeType: QwertyKeySizeType {get}
     var needSuggestView: Bool {get}
-    
+
     var variationsModel: VariationsModel {get}
-    
+
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
-    
+
     func press()
     func longPressReserve()
     func longPressEnd()
-    
+
     func sound()
 }
 
-
-extension QwertyKeyModelProtocol{
-    func press(){
-        self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
+extension QwertyKeyModelProtocol {
+    func press() {
+        self.pressActions.forEach {VariableStates.shared.action.registerAction($0)}
     }
-    
-    func longPressReserve(){
+
+    func longPressReserve() {
         VariableStates.shared.action.reserveLongPressAction(longPressActions)
     }
-    
-    func longPressEnd(){
+
+    func longPressEnd() {
         VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
     }
-    
+
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
         theme.pushedKeyFillColor.color
     }

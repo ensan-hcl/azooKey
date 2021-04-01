@@ -9,17 +9,17 @@
 import Foundation
 import SwiftUI
 
-///キーボードの操作を管理するためのクラス
+/// キーボードの操作を管理するためのクラス
 /// - finalにはできない
-class ActionDepartment{
-    init(){}
-    func registerAction(_ action: ActionType){}
-    func reserveLongPressAction(_ action: LongpressActionType){}
-    func registerLongPressActionEnd(_ action: LongpressActionType){}
-    func notifySomethingWillChange(left: String, center: String, right: String){}
-    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String){}
-    func notifyComplete(_ candidate: ResultViewItemData){}
-    func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle){}
+class ActionDepartment {
+    init() {}
+    func registerAction(_ action: ActionType) {}
+    func reserveLongPressAction(_ action: LongpressActionType) {}
+    func registerLongPressActionEnd(_ action: LongpressActionType) {}
+    func notifySomethingWillChange(left: String, center: String, right: String) {}
+    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {}
+    func notifyComplete(_ candidate: ResultViewItemData) {}
+    func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {}
 
     func makeChangeKeyboardButtonView(theme: ThemeData) -> ChangeKeyboardButtonView {
         ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize, theme: theme)

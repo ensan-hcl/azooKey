@@ -13,27 +13,27 @@ struct FallbackLink: View {
     private let title: LocalizedStringKey
     private let url: URL
 
-    init(_ title: LocalizedStringKey, destination: String){
+    init(_ title: LocalizedStringKey, destination: String) {
         self.title = title
         self.url = URL(string: destination)!
     }
 
-    init(_ title: LocalizedStringKey, destination: URL){
+    init(_ title: LocalizedStringKey, destination: URL) {
         self.title = title
         self.url = destination
     }
 
     var body: some View {
-        Button(action: {
-            //外部ブラウザでURLを開く
-            if UIApplication.shared.canOpenURL(url){
+        Button {
+            // 外部ブラウザでURLを開く
+            if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }else{
+            } else {
                 self.showAlert = true
             }
-        }){
+        } label: {
             Text("\(systemImage: "arrow.up.forward.square") \(title)")
-        }.alert(isPresented: $showAlert){
+        }.alert(isPresented: $showAlert) {
             Alert(title: Text("ブラウザを開けませんでした"), message: Text("URLをコピーします。"), dismissButton: .default(Text("OK"), action: {
                 UIPasteboard.general.string = url.absoluteString
                 self.showAlert = false

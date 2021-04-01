@@ -14,7 +14,7 @@ struct WalkthroughInformation: Codable, KeyboardInternalSettingValue {
 
     var walkthroughs: [Walkthrough: WalkthroughState] = [:]
 
-    enum Walkthrough: String, Codable{
+    enum Walkthrough: String, Codable {
         case extensions
     }
 
@@ -23,21 +23,21 @@ struct WalkthroughInformation: Codable, KeyboardInternalSettingValue {
         return !upToDate
     }
 
-    mutating func done(identifier: Walkthrough){
+    mutating func done(identifier: Walkthrough) {
         walkthroughs[identifier, default: .init()].lastDisplayedVersion = .upToDate
     }
 }
 
 struct WalkthroughState: Codable {
-    //最後の状態がOneHandedModeだったかどうか
-    fileprivate var lastDisplayedVersion: VersionIdentifier? = nil
+    // 最後の状態がOneHandedModeだったかどうか
+    fileprivate var lastDisplayedVersion: VersionIdentifier?
 }
 
 private enum VersionIdentifier: String, Codable {
     case v1_6
 
     static let upToDate: Self = .v1_6
-    //もっとも新しいバージョンか否か
+    // もっとも新しいバージョンか否か
     var isUpToDate: Bool {
         return self == Self.upToDate
     }

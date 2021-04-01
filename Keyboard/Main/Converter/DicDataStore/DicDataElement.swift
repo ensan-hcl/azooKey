@@ -17,25 +17,25 @@ import Foundation
 
 protocol DicDataElementProtocol: CustomDebugStringConvertible {
     var word: String {get}
-    var ruby: String{get}
-    var lcid: Int{get}
-    var rcid: Int{get}
-    var mid: Int{get}
+    var ruby: String {get}
+    var lcid: Int {get}
+    var rcid: Int {get}
+    var mid: Int {get}
     var baseValue: PValue {get}
-    var adjust: PValue{get}
+    var adjust: PValue {get}
 
     func value() -> PValue
     func adjustedData(_ adjustValue: PValue) -> Self
     func adjustZero() -> Self
 }
 
-extension DicDataElementProtocol{
+extension DicDataElementProtocol {
     func value() -> PValue {
         return min(.zero, self.baseValue + self.adjust)
     }
 }
 
-extension DicDataElementProtocol{
+extension DicDataElementProtocol {
     var debugDescription: String {
         return "(ruby: \(self.ruby), word: \(self.word), adjust: \(self.adjust), value: \(self.value()))"
     }
@@ -44,10 +44,10 @@ extension DicDataElementProtocol{
 func ==(lhs: DicDataElementProtocol, rhs: DicDataElementProtocol) -> Bool {
     return lhs.ruby == rhs.ruby && lhs.word == rhs.word && lhs.lcid == rhs.lcid && lhs.rcid == rhs.rcid && lhs.mid == rhs.mid
 }
-///LREかつSREかつV3E
+/// LREかつSREかつV3E
 struct LRE_SRE_V3E_DicDataElement: DicDataElementProtocol {
 
-    init(ruby: String, cid: Int, mid: Int, adjust: PValue = .zero){
+    init(ruby: String, cid: Int, mid: Int, adjust: PValue = .zero) {
         self.ruby = ruby
         self.cid = cid
         self.mid = mid
@@ -70,25 +70,24 @@ struct LRE_SRE_V3E_DicDataElement: DicDataElementProtocol {
     var word: String {
         return ruby
     }
-    
+
     var lcid: Int {
         return cid
     }
-    
+
     var rcid: Int {
         return cid
     }
 
-    
 }
 
-///LREかつSRE
-struct LRE_SRE_DicDataElement: DicDataElementProtocol{
+/// LREかつSRE
+struct LRE_SRE_DicDataElement: DicDataElementProtocol {
     func adjustZero() -> Self {
         return LRE_SRE_DicDataElement(ruby: ruby, cid: cid, mid: mid, value: baseValue, adjust: .zero)
     }
 
-    init(ruby: String, cid: Int, mid: Int, value: PValue, adjust: PValue = .zero){
+    init(ruby: String, cid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.ruby = ruby
         self.cid = cid
         self.mid = mid
@@ -109,23 +108,23 @@ struct LRE_SRE_DicDataElement: DicDataElementProtocol{
     var word: String {
         return ruby
     }
-    
+
     var lcid: Int {
         return cid
     }
-    
+
     var rcid: Int {
         return cid
     }
 }
 
-///LREかつV3E
-struct LRE_V3E_DicDataElement: DicDataElementProtocol{
+/// LREかつV3E
+struct LRE_V3E_DicDataElement: DicDataElementProtocol {
     func adjustZero() -> Self {
         return LRE_V3E_DicDataElement(string: word, ruby: ruby, cid: cid, mid: mid, adjust: .zero)
     }
 
-    init(string: String, ruby: String, cid: Int, mid: Int, adjust: PValue = .zero){
+    init(string: String, ruby: String, cid: Int, mid: Int, adjust: PValue = .zero) {
         self.ruby = ruby
         self.cid = cid
         self.mid = mid
@@ -147,19 +146,19 @@ struct LRE_V3E_DicDataElement: DicDataElementProtocol{
     var lcid: Int {
         return cid
     }
-    
+
     var rcid: Int {
         return cid
     }
 }
 
-///LRE
-struct LRE_DicDataElement: DicDataElementProtocol{
+/// LRE
+struct LRE_DicDataElement: DicDataElementProtocol {
     func adjustZero() -> Self {
         return LRE_DicDataElement(word: word, ruby: ruby, cid: cid, mid: mid, value: baseValue, adjust: .zero)
     }
 
-    init(word: String, ruby: String, cid: Int, mid: Int, value: PValue, adjust: PValue = .zero){
+    init(word: String, ruby: String, cid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.word = word
         self.ruby = ruby
         self.cid = cid
@@ -181,20 +180,19 @@ struct LRE_DicDataElement: DicDataElementProtocol{
     var lcid: Int {
         return cid
     }
-    
+
     var rcid: Int {
         return cid
     }
 }
 
-///SREかつV3E
-struct SRE_V3E_DicDataElement: DicDataElementProtocol{
+/// SREかつV3E
+struct SRE_V3E_DicDataElement: DicDataElementProtocol {
     func adjustZero() -> Self {
         return SRE_V3E_DicDataElement(ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, adjust: .zero)
     }
 
-
-    init(ruby: String, lcid: Int, rcid: Int, mid: Int, adjust: PValue = .zero){
+    init(ruby: String, lcid: Int, rcid: Int, mid: Int, adjust: PValue = .zero) {
         self.ruby = ruby
         self.lcid = lcid
         self.rcid = rcid
@@ -217,14 +215,13 @@ struct SRE_V3E_DicDataElement: DicDataElementProtocol{
     }
 }
 
-
-///SRE
+/// SRE
 struct SRE_DicDataElement: DicDataElementProtocol {
     func adjustZero() -> Self {
         return SRE_DicDataElement(ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: baseValue, adjust: .zero)
     }
 
-    init(ruby: String, lcid: Int, rcid: Int, mid: Int, value: PValue, adjust: PValue = .zero){
+    init(ruby: String, lcid: Int, rcid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.ruby = ruby
         self.lcid = lcid
         self.rcid = rcid
@@ -247,16 +244,16 @@ struct SRE_DicDataElement: DicDataElementProtocol {
     var word: String {
         return ruby
     }
-    
+
 }
 
-///V3E
+/// V3E
 struct V3E_DicDataElement: DicDataElementProtocol {
     func adjustZero() -> Self {
         return V3E_DicDataElement(string: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, adjust: .zero)
     }
 
-    init(string: String, ruby: String, lcid: Int, rcid: Int, mid: Int, adjust: PValue = .zero){
+    init(string: String, ruby: String, lcid: Int, rcid: Int, mid: Int, adjust: PValue = .zero) {
         self.word = string
         self.ruby = ruby
         self.lcid = lcid
@@ -282,7 +279,7 @@ struct All_DicDataElement: DicDataElementProtocol {
         return All_DicDataElement(string: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: baseValue, adjust: .zero)
     }
 
-    init(string: String, ruby: String, lcid: Int, rcid: Int, mid: Int, value: PValue, adjust: PValue = .zero){
+    init(string: String, ruby: String, lcid: Int, rcid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.word = string
         self.ruby = ruby
         self.lcid = lcid
@@ -306,7 +303,6 @@ struct All_DicDataElement: DicDataElementProtocol {
 
 }
 
-
 struct BOSEOSDicDataElement: DicDataElementProtocol {
     func adjustZero() -> BOSEOSDicDataElement {
         return self
@@ -315,7 +311,7 @@ struct BOSEOSDicDataElement: DicDataElementProtocol {
     static let BOSData = BOSEOSDicDataElement(cid: .zero)
     static let EOSData = BOSEOSDicDataElement(cid: 1316)
 
-    private init(cid: Int){
+    private init(cid: Int) {
         self.cid = cid
     }
     let word: String = ""
@@ -338,8 +334,8 @@ struct BOSEOSDicDataElement: DicDataElementProtocol {
 
 }
 
-///生成されたデータ。
-struct GeneratedDicDataElement: DicDataElementProtocol{
+/// 生成されたデータ。
+struct GeneratedDicDataElement: DicDataElementProtocol {
     func adjustZero() -> GeneratedDicDataElement {
         return GeneratedDicDataElement(word: word, ruby: ruby, cid: cid, mid: mid, value: baseValue, adjust: .zero)
     }
@@ -356,7 +352,7 @@ struct GeneratedDicDataElement: DicDataElementProtocol{
     func adjustedData(_ adjustValue: PValue) -> GeneratedDicDataElement {
         return GeneratedDicDataElement(word: word, ruby: ruby, cid: cid, mid: mid, value: baseValue, adjust: adjustValue + self.adjust)
     }
-    
+
     let word: String
     let ruby: String
     let cid: Int

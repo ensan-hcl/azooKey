@@ -8,26 +8,26 @@
 
 import Foundation
 
-extension Character{
-    ///小書きのかなカナ集合
+extension Character {
+    /// 小書きのかなカナ集合
     private static let kogakiKana: Set<Character> = [
         "ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "ゕ", "ゖ", "っ", "ゃ", "ゅ", "ょ", "ゎ",
         "ァ", "ィ", "ゥ", "ェ", "ォ", "ヵ", "ヶ", "ッ", "ャ", "ュ", "ョ", "ヮ"
     ]
-    ///濁点付きのかなカナ集合
+    /// 濁点付きのかなカナ集合
     private static let dakutenKana: Set<Character> = [
         "ゔ", "が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "づ", "で", "ど", "ば", "び", "ぶ", "べ", "ぼ",
         "ヴ", "ガ", "ギ", "グ", "ゲ", "ゴ", "ザ", "ジ", "ズ", "ゼ", "ゾ", "ダ", "ヂ", "ヅ", "デ", "ド", "バ", "ビ", "ブ", "ベ", "ボ"
     ]
 
-    ///小書きかなか否か
+    /// 小書きかなか否か
     var isKogana: Bool {
         return Character.kogakiKana.contains(self)
     }
 
-    ///自分が小書きであれば該当する文字を返す。
+    /// 自分が小書きであれば該当する文字を返す。
     var kogaki: Character {
-        switch self{
+        switch self {
         case "あ":return "ぁ"
         case "い":return "ぃ"
         case "う":return "ぅ"
@@ -56,9 +56,9 @@ extension Character{
         }
     }
 
-    ///小書きから大書きを返す
+    /// 小書きから大書きを返す
     var ogaki: Character {
-        switch self{
+        switch self {
         case "ぁ":return "あ"
         case "ぃ":return "い"
         case "ぅ":return "う"
@@ -87,13 +87,13 @@ extension Character{
         }
     }
 
-    ///濁点付きか否か
+    /// 濁点付きか否か
     var isDakuten: Bool {
         return Character.dakutenKana.contains(self)
     }
-    ///濁点をつけて返す
+    /// 濁点をつけて返す
     var dakuten: Character {
-        switch self{
+        switch self {
         case"う":return "ゔ"
         case"か":return "が"
         case"き":return "ぎ"
@@ -139,9 +139,9 @@ extension Character{
         default: return self
         }
     }
-    ///濁点を外して返す
+    /// 濁点を外して返す
     var mudakuten: Character {
-        switch self{
+        switch self {
         case"ゔ":return "う"
         case"が":return "か"
         case"ぎ":return "き"
@@ -187,16 +187,16 @@ extension Character{
         default: return self
         }
     }
-    ///半濁点かどうか
+    /// 半濁点かどうか
     var isHandakuten: Bool {
         return [
             "ぱ", "ぴ", "ぷ", "ぺ", "ぽ",
             "パ", "ピ", "プ", "ペ", "ポ"
         ].contains(self)
     }
-    ///半濁点をつけて返す
+    /// 半濁点をつけて返す
     var handakuten: Character {
-        switch self{
+        switch self {
         case"は":return "ぱ"
         case"ひ":return "ぴ"
         case"ふ":return "ぷ"
@@ -210,9 +210,9 @@ extension Character{
         default: return self
         }
     }
-    ///半濁点を外して返す
+    /// 半濁点を外して返す
     var muhandakuten: Character {
-        switch self{
+        switch self {
         case"ぱ":return "は"
         case"ぴ":return "ひ"
         case"ぷ":return "ふ"
@@ -227,57 +227,56 @@ extension Character{
         }
     }
 
-    ///濁点、小書き、半濁点などを相互に変換する関数。
+    /// 濁点、小書き、半濁点などを相互に変換する関数。
     func requestChange() -> String {
-        if self.isLowercase{
+        if self.isLowercase {
             return self.uppercased()
         }
-        if self.isUppercase{
+        if self.isUppercase {
             return self.lowercased()
         }
 
-        if Set(["あ", "い", "え", "お", "や", "ゆ", "よ", "わ"]).contains(self){
+        if Set(["あ", "い", "え", "お", "や", "ゆ", "よ", "わ"]).contains(self) {
             return String(self.kogaki)
         }
 
-        if Set(["ぁ", "ぃ", "ぇ", "ぉ", "ゃ", "ゅ", "ょ", "ゎ"]).contains(self){
+        if Set(["ぁ", "ぃ", "ぇ", "ぉ", "ゃ", "ゅ", "ょ", "ゎ"]).contains(self) {
             return String(self.ogaki)
         }
 
-        if Set(["か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "て", "と"]).contains(self){
+        if Set(["か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "て", "と"]).contains(self) {
             return String(self.dakuten)
         }
 
-        if Set(["が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "で", "ど"]).contains(self){
+        if Set(["が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "で", "ど"]).contains(self) {
             return String(self.mudakuten)
         }
 
-        if Set(["つ", "う"]).contains(self){
+        if Set(["つ", "う"]).contains(self) {
             return String(self.kogaki)
         }
 
-        if Set(["っ", "ぅ"]).contains(self){
+        if Set(["っ", "ぅ"]).contains(self) {
             return String(self.ogaki.dakuten)
         }
 
-        if Set(["づ", "ゔ"]).contains(self){
+        if Set(["づ", "ゔ"]).contains(self) {
             return String(self.mudakuten)
         }
 
-        if Set(["は", "ひ", "ふ", "へ", "ほ"]).contains(self){
+        if Set(["は", "ひ", "ふ", "へ", "ほ"]).contains(self) {
             return String(self.dakuten)
         }
 
-        if Set(["ば", "び", "ぶ", "べ", "ぼ"]).contains(self){
+        if Set(["ば", "び", "ぶ", "べ", "ぼ"]).contains(self) {
             return String(self.mudakuten.handakuten)
         }
 
-        if Set(["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"]).contains(self){
+        if Set(["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"]).contains(self) {
             return String(self.muhandakuten)
         }
 
         return String(self)
     }
-
 
 }

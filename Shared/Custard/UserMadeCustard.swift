@@ -30,8 +30,8 @@ struct UserMadeGridScrollCustard: Codable {
     var addTabBarAutomatically: Bool
 }
 
-extension UserMadeCustard{
-    enum CodingKeys: CodingKey{
+extension UserMadeCustard {
+    enum CodingKeys: CodingKey {
         case gridScroll
     }
 
@@ -45,7 +45,7 @@ extension UserMadeCustard{
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
+        guard let key = container.allKeys.first else {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
@@ -63,4 +63,3 @@ extension UserMadeCustard{
         }
     }
 }
-

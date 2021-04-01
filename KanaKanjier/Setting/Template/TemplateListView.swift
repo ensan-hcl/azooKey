@@ -20,14 +20,14 @@ struct TemplateDataModel {
     var data: TemplateData
     let variableSection: TemplateEditingViewVariableSection
 
-    init(_ data: TemplateData){
+    init(_ data: TemplateData) {
         self.data = data
         self.variableSection = TemplateEditingViewVariableSection()
         self.variableSection.selection = self.data.type
     }
 }
 
-//Listが大元のtemplatesを持ち、各EditingViewにBindingで渡して編集させる。
+// Listが大元のtemplatesを持ち、各EditingViewにBindingで渡して編集させる。
 struct TemplateListView: View {
     static let defaultData = [
         TemplateData(template: "<random type=\"int\" value=\"1,6\">", name: "サイコロ"),
@@ -42,18 +42,18 @@ struct TemplateListView: View {
     static let dataFileName = "user_templates.json"
     @ObservedObject private var data = TemplateDataList()
     @State private var previewStrings: [String] = []
-    init(){
-        if let savedData = TemplateData.load(){
-            self.data.templates = savedData.map{TemplateDataModel($0)}
+    init() {
+        if let savedData = TemplateData.load() {
+            self.data.templates = savedData.map {TemplateDataModel($0)}
         } else {
-            self.data.templates = Self.defaultData.map{TemplateDataModel($0)}
+            self.data.templates = Self.defaultData.map {TemplateDataModel($0)}
         }
-        self._previewStrings = State(initialValue: data.templates.map{$0.data.previewString})
+        self._previewStrings = State(initialValue: data.templates.map {$0.data.previewString})
         self.update()
     }
 
-    func update(){
-        self.previewStrings = data.templates.map{$0.data.previewString}
+    func update() {
+        self.previewStrings = data.templates.map {$0.data.previewString}
     }
 
     var indices: Range<Int> {
@@ -62,13 +62,13 @@ struct TemplateListView: View {
     }
 
     var body: some View {
-        Form{
-            List{
-                ForEach(indices, id: \.self){i in
-                    NavigationLink(destination: TemplateEditingView(data, index: i)){
-                        HStack{
+        Form {
+            List {
+                ForEach(indices, id: \.self) {i in
+                    NavigationLink(destination: TemplateEditingView(data, index: i)) {
+                        HStack {
                             Text(data.templates[i].data.name)
-                                Spacer()
+                            Spacer()
                             Text(previewStrings[i])
                                 .foregroundColor(.gray)
                         }
@@ -78,32 +78,32 @@ struct TemplateListView: View {
             }
         }.navigationBarTitle(Text("テンプレートの管理"), displayMode: .inline)
         .navigationBarItems(trailing: addButton)
-        .onAppear{
-            self.previewStrings = data.templates.map{$0.data.previewString}
+        .onAppear {
+            self.previewStrings = data.templates.map {$0.data.previewString}
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)){_ in
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) {_ in
             self.save()
         }
-        .onDisappear{
+        .onDisappear {
             self.save()
         }
-        .onReceive(timer){_ in
+        .onReceive(timer) {_ in
             self.update()
         }
     }
 
     var addButton: some View {
-        Button{
+        Button {
             let core = "new_template"
             var number = 0
             var name = core
-            while !data.templates.allSatisfy({$0.data.name != name}){
+            while !data.templates.allSatisfy({$0.data.name != name}) {
                 number += 1
                 name = "\(core)#\(number)"
             }
             let newData = TemplateData(template: DateTemplateLiteral.example.export(), name: name)
             data.templates.append(TemplateDataModel(newData))
-            self.previewStrings = data.templates.map{$0.data.previewString}
+            self.previewStrings = data.templates.map {$0.data.previewString}
         }label: {
             Image(systemName: "plus")
         }
@@ -114,8 +114,8 @@ struct TemplateListView: View {
         previewStrings.remove(atOffsets: offsets)
     }
 
-    func save(){
-        if let json = try? JSONEncoder().encode(self.data.templates.map{$0.data}){
+    func save() {
+        if let json = try? JSONEncoder().encode(self.data.templates.map {$0.data}) {
             guard let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(TemplateData.dataFileName) else { return }
             do {
                 try json.write(to: url)

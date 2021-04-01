@@ -10,8 +10,8 @@ import Foundation
 import SwiftUI
 
 struct ThemeData: Codable, Equatable {
-    
-    var id: Int? = nil
+
+    var id: Int?
     var backgroundColor: ThemeColor
     var picture: ThemePicture
     var textColor: ThemeColor
@@ -22,8 +22,8 @@ struct ThemeData: Codable, Equatable {
     var borderWidth: Double
     var normalKeyFillColor: ThemeColor
     var specialKeyFillColor: ThemeColor
-    var pushedKeyFillColor: ThemeColor   //自動で設定する
-    var suggestKeyFillColor: ThemeColor?  //自動で設定する
+    var pushedKeyFillColor: ThemeColor   // 自動で設定する
+    var suggestKeyFillColor: ThemeColor?  // 自動で設定する
 
     internal init(id: Int? = nil, backgroundColor: ThemeColor, picture: ThemePicture, textColor: ThemeColor, textFont: ThemeFontWeight, resultTextColor: ThemeColor, resultBackgroundColor: ThemeColor, borderColor: ThemeColor, borderWidth: Double, normalKeyFillColor: ThemeColor, specialKeyFillColor: ThemeColor, pushedKeyFillColor: ThemeColor, suggestKeyFillColor: ThemeColor? = nil) {
         self.id = id
@@ -71,7 +71,7 @@ struct ThemeData: Codable, Equatable {
         suggestKeyFillColor: nil
     )
 
-    enum CodingKeys: CodingKey{
+    enum CodingKeys: CodingKey {
         case id
         case backgroundColor
         case picture

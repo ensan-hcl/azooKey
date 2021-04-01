@@ -26,7 +26,7 @@ private struct _QwertyCustomKey: Codable {
         case longpresses
     }
 
-    init(name: String, input: String? = nil, longpresses: [_QwertyVariationKey] = []){
+    init(name: String, input: String? = nil, longpresses: [_QwertyVariationKey] = []) {
         self.name = name
         self.longpress = []
         self.input = input ?? name
@@ -40,7 +40,7 @@ private struct _QwertyCustomKey: Codable {
         self.name = name
         self.longpress = []
         self.input = (try? values.decode(String.self, forKey: .input)) ?? name
-        self.longpresses =  (try? values.decode([_QwertyVariationKey].self, forKey: .longpresses)) ?? longpress.map{_QwertyVariationKey(name: $0, input: $0)}
+        self.longpresses =  (try? values.decode([_QwertyVariationKey].self, forKey: .longpresses)) ?? longpress.map {_QwertyVariationKey(name: $0, input: $0)}
     }
 }
 
@@ -61,10 +61,10 @@ struct QwertyCustomKey: Codable {
 }
 
 private struct QwertyCustomKeysArray: Codable {
-    //let list: [_QwertyCustomKey]
+    // let list: [_QwertyCustomKey]
     let keys: [QwertyCustomKey]
 
-    init(keys: [QwertyCustomKey]){
+    init(keys: [QwertyCustomKey]) {
         self.keys = keys
     }
 
@@ -80,13 +80,13 @@ private struct QwertyCustomKeysArray: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let keys = try? container.decode([QwertyCustomKey].self, forKey: .keys){
+        if let keys = try? container.decode([QwertyCustomKey].self, forKey: .keys) {
             self.keys = keys
-        }else if let list = try? container.decode([_QwertyCustomKey].self, forKey: .list){
-            self.keys = list.map{key in
-                QwertyCustomKey(name: key.name, actions: [.input(key.input)], longpresses: key.longpresses.map{QwertyVariationKey(name: $0.name, actions: [.input($0.input)])})
+        } else if let list = try? container.decode([_QwertyCustomKey].self, forKey: .list) {
+            self.keys = list.map {key in
+                QwertyCustomKey(name: key.name, actions: [.input(key.input)], longpresses: key.longpresses.map {QwertyVariationKey(name: $0.name, actions: [.input($0.input)])})
             }
-        }else{
+        } else {
             self.keys = QwertyCustomKeysValue.defaultValue.keys
         }
     }
@@ -99,7 +99,7 @@ struct QwertyCustomKeysValue: Savable {
         QwertyCustomKey(name: "、", actions: [.input("、")], longpresses: [QwertyVariationKey(name: "、", actions: [.input("、")]), QwertyVariationKey(name: ",", actions: [.input(",")])]),
         QwertyCustomKey(name: "？", actions: [.input("？")], longpresses: [QwertyVariationKey(name: "？", actions: [.input("？")]), QwertyVariationKey(name: "?", actions: [.input("?")])]),
         QwertyCustomKey(name: "！", actions: [.input("！")], longpresses: [QwertyVariationKey(name: "！", actions: [.input("！")]), QwertyVariationKey(name: "!", actions: [.input("!")])]),
-        QwertyCustomKey(name: "・", actions: [.input("・")], longpresses: [QwertyVariationKey(name: "・", actions: [.input("・")]), QwertyVariationKey(name: "…", actions: [.input("…")])]),
+        QwertyCustomKey(name: "・", actions: [.input("・")], longpresses: [QwertyVariationKey(name: "・", actions: [.input("・")]), QwertyVariationKey(name: "…", actions: [.input("…")])])
     ])
 
     var saveValue: SaveValue {
@@ -107,7 +107,7 @@ struct QwertyCustomKeysValue: Savable {
         let encoder = JSONEncoder()
         if let encodedValue = try? encoder.encode(array) {
             return encodedValue
-        }else{
+        } else {
             return Data()
         }
     }
@@ -115,7 +115,7 @@ struct QwertyCustomKeysValue: Savable {
     var keys: [QwertyCustomKey]
 
     static func get(_ value: Any) -> QwertyCustomKeysValue? {
-        if let value = value as? SaveValue{
+        if let value = value as? SaveValue {
             let decoder = JSONDecoder()
             if let keys = try? decoder.decode(QwertyCustomKeysArray.self, from: value) {
                 return QwertyCustomKeysValue(keys: keys.keys)

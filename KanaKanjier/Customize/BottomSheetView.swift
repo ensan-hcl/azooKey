@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-///参考：https://swiftwithmajid.com/2019/12/11/building-bottom-sheet-in-swiftui/
+/// 参考：https://swiftwithmajid.com/2019/12/11/building-bottom-sheet-in-swiftui/
 struct BottomSheetView<Content: View>: View {
     @Binding var isOpen: Bool
 
@@ -19,9 +19,9 @@ struct BottomSheetView<Content: View>: View {
     let content: Content
 
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: () -> Content) {
-        if let minHeight = minHeight{
+        if let minHeight = minHeight {
             self.minHeight = minHeight
-        }else{
+        } else {
             self.minHeight = maxHeight * 0.2
         }
         self.maxHeight = maxHeight

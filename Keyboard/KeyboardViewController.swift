@@ -31,15 +31,15 @@ final class KeyboardViewController: UIInputViewController {
                 .environment(\.themeEnvironment, theme)
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        //初期化の順序としてこの位置に置くこと
+        // 初期化の順序としてこの位置に置くこと
         Store.shared.initialize()
         let indexManager = ThemeIndexManager.load()
         let theme = (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
         self.keyboardViewHost = KeyboardHostingController(rootView: Keyboard(theme: theme))
-        //コントロールセンターを出しにくくする。
+        // コントロールセンターを出しにくくする。
         keyboardViewHost.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
         keyboardViewHost.view.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +57,7 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.action.setDelegateViewController(self)
         SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         self.registerScreenActualSize()
         super.viewDidAppear(animated)
@@ -70,10 +70,10 @@ final class KeyboardViewController: UIInputViewController {
         self.view.becomeFirstResponder()
         SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
 
-        if SettingData.shared.bool(for: .useOSuserDict){
+        if SettingData.shared.bool(for: .useOSuserDict) {
             let osuserdict = OSUserDict()
-            self.requestSupplementaryLexicon{[unowned osuserdict] in
-                osuserdict.dict = $0.entries.map{entry in LRE_DicDataElement(word: entry.documentText, ruby: entry.userInput.applyingTransform(.hiraganaToKatakana, reverse: false)!, cid: 1288, mid: 501, value: -6)}
+            self.requestSupplementaryLexicon {[unowned osuserdict] in
+                osuserdict.dict = $0.entries.map {entry in LRE_DicDataElement(word: entry.documentText, ruby: entry.userInput.applyingTransform(.hiraganaToKatakana, reverse: false)!, cid: 1288, mid: 501, value: -6)}
             }
             Store.shared.action.sendToDicDataStore(.importOSUserDict(osuserdict))
         }
@@ -81,8 +81,8 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.appearedAgain()
     }
 
-    func registerScreenActualSize(){
-        if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds{
+    func registerScreenActualSize() {
+        if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
             SemiStaticStates.shared.setScreenSize(size: size)
         }
@@ -99,15 +99,15 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.closeKeyboard()
         debug("キーボードが閉じられました")
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds{
+        if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
             SemiStaticStates.shared.setScreenSize(size: size)
         }
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.registerScreenActualSize()
@@ -136,7 +136,7 @@ final class KeyboardViewController: UIInputViewController {
         debug(left, center, right)
         VariableStates.shared.action.notifySomethingWillChange(left: left, center: center, right: right)
     }
-    
+
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
 
@@ -156,12 +156,12 @@ final class KeyboardViewController: UIInputViewController {
         while let r = responder, !r.responds(to: selector) {
             responder = r.next
         }
-        //debug(responder)
+        // debug(responder)
         _ = responder?.perform(selector, with: url)
     }
 
-    func openApp(scheme: String){
-        guard let url = URL(string: scheme) else{
+    func openApp(scheme: String) {
+        guard let url = URL(string: scheme) else {
             debug("無効なschemeです")
             return
         }

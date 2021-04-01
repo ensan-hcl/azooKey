@@ -44,7 +44,6 @@ struct FontPicker: UIViewControllerRepresentable {
     }
 }
 
-
 struct FontPickView: View {
     @State private var isFontPickerPresented = false
     @State var selectedFont: Font = .body
@@ -57,15 +56,15 @@ struct FontPickView: View {
     }
 
     var body: some View {
-        VStack{
-            Button{
+        VStack {
+            Button {
                 isFontPickerPresented = true
             } label: {
                 Text("フォントを選択")
             }
             Text("テキスト Text").font(selectedFont)
         }
-        .sheet(isPresented: $isFontPickerPresented){
+        .sheet(isPresented: $isFontPickerPresented) {
             FontPicker(
                 configuration: .init(),
                 pickerResult: $selectedFont,

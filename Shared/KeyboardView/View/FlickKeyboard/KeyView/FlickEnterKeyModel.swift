@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-struct FlickEnterKeyModel: FlickKeyModelProtocol{
+struct FlickEnterKeyModel: FlickKeyModelProtocol {
     static var shared = FlickEnterKeyModel()
     let suggestModel = SuggestModel([:])
     let needSuggestView = false
 
     var pressActions: [ActionType] {
-        switch VariableStates.shared.enterKeyState{
+        switch VariableStates.shared.enterKeyState {
         case .complete:
             return [.enter]
         case .return:
@@ -24,9 +24,9 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
             return [.deselectAndUseAsInputting]
         }
     }
-    
+
     var longPressActions: LongpressActionType = .none
-    
+
     var flickKeys: [FlickDirection: FlickedKeyModel] = [:]
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
@@ -35,29 +35,29 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        switch states.enterKeyState{
+        switch states.enterKeyState {
         case .complete, .edit:
             return theme.specialKeyFillColor.color
         case let .return(type):
-            switch type{
+            switch type {
             case .default:
                 return theme.specialKeyFillColor.color
             default:
-                if theme == .default{
+                if theme == .default {
                     return Design.colors.specialEnterKeyColor
-                }else{
+                } else {
                     return theme.specialKeyFillColor.color
                 }
             }
         }
     }
-    
+
     func sound() {
-        switch VariableStates.shared.enterKeyState{
+        switch VariableStates.shared.enterKeyState {
         case .complete, .edit:
             Sound.tabOrOtherKey()
         case let .return(type):
-            switch type{
+            switch type {
             case .default:
                 Sound.click()
             default:
@@ -65,5 +65,5 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol{
             }
         }
     }
-    
+
 }

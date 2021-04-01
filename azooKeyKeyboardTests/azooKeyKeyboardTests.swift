@@ -9,7 +9,7 @@
 import XCTest
 @testable import Keyboard
 
-extension KanaComponent: Equatable{
+extension KanaComponent: Equatable {
     static func ==(lhs: KanaComponent, rhs: KanaComponent) -> Bool {
         return lhs.internalText == rhs.internalText && lhs.displayedText == rhs.displayedText && lhs.isFreezed == rhs.isFreezed && lhs.escapeRomanKanaConverting == rhs.escapeRomanKanaConverting
     }
@@ -28,7 +28,7 @@ class azooKeyKeyboardTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        do{
+        do {
             let holder = KanaRomanStateHolder()
 
             holder.insert("a", leftSideText: "")
@@ -64,7 +64,7 @@ class azooKeyKeyboardTests: XCTestCase {
             ])
         }
 
-        do{
+        do {
             let holder = KanaRomanStateHolder()
 
             holder.insert("k", leftSideText: "")
@@ -81,14 +81,14 @@ class azooKeyKeyboardTests: XCTestCase {
                 holder.components == [
                     KanaComponent(internalText: "ka", kana: "か"),
                     KanaComponent(internalText: "n", kana: "n", escapeRomanKanaConverting: false),
-                    KanaComponent(internalText: "y", kana: "y", escapeRomanKanaConverting: false),
+                    KanaComponent(internalText: "y", kana: "y", escapeRomanKanaConverting: false)
                 ]
             )
             holder.insert("u", leftSideText: "かny")
             XCTAssert(
                 holder.components == [
                     KanaComponent(internalText: "ka", kana: "か"),
-                    KanaComponent(internalText: "nyu", kana: "にゅ"),
+                    KanaComponent(internalText: "nyu", kana: "にゅ")
                 ]
             )
 
@@ -96,7 +96,7 @@ class azooKeyKeyboardTests: XCTestCase {
     }
 
     func roman2kanaTest() throws {
-        do{
+        do {
             XCTAssert("ka".roman2katakana == "カ")
             XCTAssert("te".roman2katakana == "テ")
             XCTAssert("ai".roman2katakana == "アイ")
@@ -108,12 +108,11 @@ class azooKeyKeyboardTests: XCTestCase {
             XCTAssert("ny".roman2katakana == "ny")
         }
 
-
     }
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
-        //let store = DicDataStore()
+        // let store = DicDataStore()
         measure {
             // Put the code you want to measure the time of here.
         }

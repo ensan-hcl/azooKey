@@ -9,9 +9,9 @@
 import Foundation
 import SwiftUI
 
-fileprivate extension CustardKeyLabelStyle{
+fileprivate extension CustardKeyLabelStyle {
     var keyLabelType: KeyLabelType {
-        switch self{
+        switch self {
         case let .text(value):
             return .text(value)
         case let .systemImage(value):
@@ -20,7 +20,7 @@ fileprivate extension CustardKeyLabelStyle{
     }
 }
 
-fileprivate extension CustardInterfaceLayoutScrollValue{
+fileprivate extension CustardInterfaceLayoutScrollValue {
     var scrollDirection: Axis.Set {
         switch self.direction {
         case .horizontal:
@@ -31,9 +31,9 @@ fileprivate extension CustardInterfaceLayoutScrollValue{
     }
 }
 
-fileprivate extension CustardInterfaceStyle{
+fileprivate extension CustardInterfaceStyle {
     var keyboardLayout: KeyboardLayout {
-        switch self{
+        switch self {
         case .tenkeyStyle:
             return .flick
         case .pcStyle:
@@ -42,13 +42,13 @@ fileprivate extension CustardInterfaceStyle{
     }
 }
 
-fileprivate extension CustardInterface{
+fileprivate extension CustardInterface {
     var tabDesign: TabDependentDesign {
-        switch self.keyLayout{
+        switch self.keyLayout {
         case let .gridFit(value):
             return TabDependentDesign(width: value.rowCount, height: value.columnCount, layout: keyStyle.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
         case let .gridScroll(value):
-            switch value.direction{
+            switch value.direction {
             case .vertical:
                 return TabDependentDesign(width: CGFloat(Int(value.rowCount)), height: CGFloat(value.columnCount), layout: .flick, orientation: VariableStates.shared.keyboardOrientation)
             case .horizontal:
@@ -63,8 +63,8 @@ fileprivate extension CustardInterface{
     }
 
     var flickKeyModels: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
-        return self.keys.reduce(into: [:]){dictionary, value in
-            switch value.key{
+        return self.keys.reduce(into: [:]) {dictionary, value in
+            switch value.key {
             case let .gridFit(data):
                 dictionary[.gridFit(x: data.x, y: data.y)] = (value.value.flickKeyModel, data.width, data.height)
             case let .gridScroll(data):
@@ -74,8 +74,8 @@ fileprivate extension CustardInterface{
     }
 
     var qwertyKeyModels: [KeyPosition: (model: QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
-        return self.keys.reduce(into: [:]){dictionary, value in
-            switch value.key{
+        return self.keys.reduce(into: [:]) {dictionary, value in
+            switch value.key {
             case let .gridFit(data):
                 dictionary[.gridFit(x: data.x, y: data.y)] = (value.value.qwertyKeyModel(layout: self.keyLayout), .unit(width: data.width, height: data.height))
             case let .gridScroll(data):
@@ -85,9 +85,9 @@ fileprivate extension CustardInterface{
     }
 }
 
-fileprivate extension CustardKeyDesign.ColorType{
+fileprivate extension CustardKeyDesign.ColorType {
     var flickKeyColorType: FlickKeyColorType {
-        switch self{
+        switch self {
         case .normal:
             return .normal
         case .special:
@@ -98,7 +98,7 @@ fileprivate extension CustardKeyDesign.ColorType{
     }
 
     var qwertyKeyColorType: QwertyUnpressedKeyColorType {
-        switch self{
+        switch self {
         case .normal:
             return .normal
         case .special:
@@ -109,7 +109,7 @@ fileprivate extension CustardKeyDesign.ColorType{
     }
 
     var simpleKeyColorType: SimpleUnpressedKeyColorType {
-        switch self{
+        switch self {
         case .normal:
             return .normal
         case .special:
@@ -142,12 +142,12 @@ fileprivate extension CustardInterfaceKey {
                 return FlickTabKeyModel.numberTabKeyModel
             }
         case let .custom(value):
-            let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variations.reduce(into: [:]){dictionary, variation in
-                switch variation.type{
+            let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variations.reduce(into: [:]) {dictionary, variation in
+                switch variation.type {
                 case let .flickVariation(direction):
                     dictionary[direction] = FlickedKeyModel(
                         labelType: variation.key.design.label.keyLabelType,
-                        pressActions: variation.key.press_actions.map{$0.actionType},
+                        pressActions: variation.key.press_actions.map {$0.actionType},
                         longPressActions: variation.key.longpress_actions.longpressActionType
                     )
                 case .longpressVariation:
@@ -156,7 +156,7 @@ fileprivate extension CustardInterfaceKey {
             }
             let model = FlickKeyModel(
                 labelType: value.design.label.keyLabelType,
-                pressActions: value.press_actions.map{$0.actionType},
+                pressActions: value.press_actions.map {$0.actionType},
                 longPressActions: value.longpress_actions.longpressActionType,
                 flickKeys: flickKeyModels,
                 needSuggestView: value.longpress_actions == .none && !value.variations.isEmpty,
@@ -167,7 +167,7 @@ fileprivate extension CustardInterfaceKey {
     }
 
     private func convertToQwertyKeyModel(model: FlickKeyModelProtocol) -> QwertyKeyModelProtocol {
-        let variations = VariationsModel([model.flickKeys[.left], model.flickKeys[.top], model.flickKeys[.right], model.flickKeys[.bottom]].compactMap{$0}.map{(label: $0.labelType, actions: $0.pressActions)})
+        let variations = VariationsModel([model.flickKeys[.left], model.flickKeys[.top], model.flickKeys[.right], model.flickKeys[.bottom]].compactMap {$0}.map {(label: $0.labelType, actions: $0.pressActions)})
         return QwertyKeyModel(labelType: .text("小ﾞﾟ"), pressActions: [.changeCharacterType], longPressActions: .none, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
     }
 
@@ -177,9 +177,9 @@ fileprivate extension CustardInterfaceKey {
             switch value {
             case .changeKeyboard:
                 let changeKeyboardKey: QwertyChangeKeyboardKeyModel
-                if let second = SettingData.shared.preferredLanguageSetting.second{
+                if let second = SettingData.shared.preferredLanguageSetting.second {
                     changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .secondTab(secondLanguage: second))
-                }else{
+                } else {
                     changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .tabBar)
                 }
                 return changeKeyboardKey
@@ -197,23 +197,23 @@ fileprivate extension CustardInterfaceKey {
                 return convertToQwertyKeyModel(model: FlickTabKeyModel.numberTabKeyModel)
             }
         case let .custom(value):
-            let variations: [(label: KeyLabelType, actions: [ActionType])] = value.variations.reduce(into: []){array, variation in
-                switch variation.type{
+            let variations: [(label: KeyLabelType, actions: [ActionType])] = value.variations.reduce(into: []) {array, variation in
+                switch variation.type {
                 case .flickVariation:
                     break
                 case .longpressVariation:
-                    array.append((variation.key.design.label.keyLabelType, variation.key.press_actions.map{$0.actionType}))
+                    array.append((variation.key.design.label.keyLabelType, variation.key.press_actions.map {$0.actionType}))
                 }
             }
 
             let model = QwertyKeyModel(
                 labelType: value.design.label.keyLabelType,
-                pressActions: value.press_actions.map{$0.actionType},
+                pressActions: value.press_actions.map {$0.actionType},
                 longPressActions: value.longpress_actions.longpressActionType,
                 variationsModel: VariationsModel(variations),
                 keyColorType: value.design.color.qwertyKeyColorType,
                 needSuggestView: value.longpress_actions == .none,
-                for: (1,1)
+                for: (1, 1)
             )
             return model
         }
@@ -222,7 +222,7 @@ fileprivate extension CustardInterfaceKey {
     var simpleKeyModel: SimpleKeyModelProtocol {
         switch self {
         case let .system(value):
-            switch value{
+            switch value {
             case .changeKeyboard:
                 return SimpleChangeKeyboardKeyModel()
             case .enter:
@@ -243,7 +243,7 @@ fileprivate extension CustardInterfaceKey {
                 keyType: .normal,
                 keyLabelType: value.design.label.keyLabelType,
                 unpressedKeyColorType: value.design.color.simpleKeyColorType,
-                pressActions: value.press_actions.map{$0.actionType},
+                pressActions: value.press_actions.map {$0.actionType},
                 longPressActions: value.longpress_actions.longpressActionType
             )
         }
@@ -257,7 +257,7 @@ struct CustomKeyboardView: View {
     private let custard: Custard
     private let tabDesign: TabDependentDesign
 
-    init(custard: Custard){
+    init(custard: Custard) {
         self.custard = custard
         self.tabDesign = custard.interface.tabDesign
     }
@@ -279,24 +279,24 @@ struct CustomKeyboardView: View {
     }
 
     var body: some View {
-        switch custard.interface.keyLayout{
+        switch custard.interface.keyLayout {
         case let .gridFit(value):
-            switch custard.interface.keyStyle{
+            switch custard.interface.keyStyle {
             case .tenkeyStyle:
                 let models = custard.interface.flickKeyModels
-                ZStack{
-                    ForEach(0..<value.rowCount, id: \.self){x in
-                        ForEach(0..<value.columnCount, id: \.self){y in
-                            if let data = models[.gridFit(x: x, y: y)]{
+                ZStack {
+                    ForEach(0..<value.rowCount, id: \.self) {x in
+                        ForEach(0..<value.columnCount, id: \.self) {y in
+                            if let data = models[.gridFit(x: x, y: y)] {
                                 let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
                                 FlickKeyView(model: data.model, size: info.size)
                                     .position(x: info.position.x, y: info.position.y)
                             }
                         }
                     }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
-                    ForEach(0..<value.rowCount, id: \.self){x in
-                        ForEach(0..<value.columnCount, id: \.self){y in
-                            if let data = models[.gridFit(x: x, y: y)]{
+                    ForEach(0..<value.rowCount, id: \.self) {x in
+                        ForEach(0..<value.columnCount, id: \.self) {y in
+                            if let data = models[.gridFit(x: x, y: y)] {
                                 let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
                                 SuggestView(model: data.model.suggestModel, tabDesign: tabDesign, size: info.size)
                                     .position(x: info.position.x, y: info.position.y)
@@ -306,10 +306,10 @@ struct CustomKeyboardView: View {
                 }
             case .pcStyle:
                 let models = custard.interface.qwertyKeyModels
-                ZStack{
-                    ForEach(0..<value.columnCount, id: \.self){y in
-                        ForEach(0..<value.rowCount, id: \.self){x in
-                            if let data = models[.gridFit(x: x, y: y)]{
+                ZStack {
+                    ForEach(0..<value.columnCount, id: \.self) {y in
+                        ForEach(0..<value.rowCount, id: \.self) {x in
+                            if let data = models[.gridFit(x: x, y: y)] {
                                 let info = qwertyKeyData(x: x, y: y, size: data.sizeType)
                                 QwertyKeyView(model: data.model, tabDesign: tabDesign, size: info.size)
                                     .position(x: info.position.x, y: info.position.y)
@@ -333,22 +333,22 @@ struct CustomKeyboardView: View {
             }
         case let .gridScroll(value):
             let height = tabDesign.keysHeight
-            let models = (0..<custard.interface.keys.count).compactMap{custard.interface.keys[.gridScroll(GridScrollPositionSpecifier($0))]}
-            switch value.direction{
+            let models = (0..<custard.interface.keys.count).compactMap {custard.interface.keys[.gridScroll(GridScrollPositionSpecifier($0))]}
+            switch value.direction {
             case .vertical:
                 let gridItem = GridItem(.fixed(tabDesign.keyViewWidth), spacing: tabDesign.horizontalSpacing/2)
-                ScrollView(.vertical){
-                    LazyVGrid(columns: Array(repeating: gridItem, count: Int(value.rowCount)), spacing: tabDesign.verticalSpacing/2){
-                        ForEach(0..<models.count, id: \.self){i in
+                ScrollView(.vertical) {
+                    LazyVGrid(columns: Array(repeating: gridItem, count: Int(value.rowCount)), spacing: tabDesign.verticalSpacing/2) {
+                        ForEach(0..<models.count, id: \.self) {i in
                             SimpleKeyView(model: models[i].simpleKeyModel, tabDesign: tabDesign)
                         }
                     }
                 }.frame(height: height)
             case .horizontal:
                 let gridItem = GridItem(.fixed(tabDesign.keyViewHeight), spacing: tabDesign.verticalSpacing/2)
-                ScrollView(.horizontal){
-                    LazyHGrid(rows: Array(repeating: gridItem, count: Int(value.columnCount)), spacing: tabDesign.horizontalSpacing/2){
-                        ForEach(0..<models.count, id: \.self){i in
+                ScrollView(.horizontal) {
+                    LazyHGrid(rows: Array(repeating: gridItem, count: Int(value.columnCount)), spacing: tabDesign.horizontalSpacing/2) {
+                        ForEach(0..<models.count, id: \.self) {i in
                             SimpleKeyView(model: models[i].simpleKeyModel, tabDesign: tabDesign)
                         }
                     }

@@ -19,13 +19,13 @@ extension PreferredLanguage: Savable {
     var saveValue: Data {
         if let encodedValue = try? JSONEncoder().encode(self) {
             return encodedValue
-        }else{
+        } else {
             return Data()
         }
     }
 
     static func get(_ value: Any) -> Self? {
-        if let data = value as? Data, let result = try? JSONDecoder().decode(Self.self, from: data){
+        if let data = value as? Data, let result = try? JSONDecoder().decode(Self.self, from: data) {
             return result
         }
         return nil

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension LanguageLayout{
+extension LanguageLayout {
     var label: LocalizedStringKey {
         switch self {
         case .flick:
@@ -27,14 +27,14 @@ struct LanguageLayoutSettingItemView: View {
 
     @State private var selection: LanguageLayout = .flick
     @State private var ignoreChange = false
-    let custardManager = CustardManager.load()
-    let item: ItemModel
+    private let custardManager = CustardManager.load()
+    private let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
 
-    let language: Language
-    let setTogether: Bool
+    private let language: Language
+    private let setTogether: Bool
 
-    enum Language{
+    enum Language {
         case japanese
         case english
 
@@ -50,7 +50,7 @@ struct LanguageLayoutSettingItemView: View {
 
     let id: Int
 
-    init(_ viewModel: ItemViewModel, language: Language = .japanese, setTogether: Bool = false, id: Int = 0){
+    init(_ viewModel: ItemViewModel, language: Language = .japanese, setTogether: Bool = false, id: Int = 0) {
         self.language = language
         self.setTogether = setTogether
         self.item = viewModel.item
@@ -59,28 +59,28 @@ struct LanguageLayoutSettingItemView: View {
         self.id = id
         self.types = {
             let keyboardlanguage: KeyboardLanguage
-            switch language{
+            switch language {
             case .japanese:
                 keyboardlanguage = .ja_JP
             case .english:
                 keyboardlanguage = .en_US
             }
-            return [.flick, .qwerty] + CustardManager.load().availableCustard(for: keyboardlanguage).map{.custard($0)}
+            return [.flick, .qwerty] + CustardManager.load().availableCustard(for: keyboardlanguage).map {.custard($0)}
         }()
     }
 
     private let types: [LanguageLayout]
 
-    var labelText: LocalizedStringKey {
-        if setTogether{
+    private var labelText: LocalizedStringKey {
+        if setTogether {
             return "キーボードの種類(現在: \(selection.label))"
-        }else{
+        } else {
             return "\(language.name)キーボードの種類(現在: \(selection.label))"
         }
     }
 
-    var tab: Tab.ExistentialTab {
-        switch (selection, language){
+    private var tab: Tab.ExistentialTab {
+        switch (selection, language) {
         case (.flick, .japanese):
             return .flick_hira
         case (.flick, .english):
@@ -90,18 +90,18 @@ struct LanguageLayoutSettingItemView: View {
         case (.qwerty, .english):
             return .qwerty_abc
         case let (.custard(identifier), _):
-            if let custard = try? custardManager.custard(identifier: identifier){
+            if let custard = try? custardManager.custard(identifier: identifier) {
                 return .custard(custard)
-            }else{
+            } else {
                 return .custard(.errorMessage)
             }
         }
     }
 
     var body: some View {
-        VStack{
+        VStack {
             Text(labelText)
-            CenterAlignedView{
+            CenterAlignedView {
                 KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
                     .allowsHitTesting(false)
                     .disabled(true)
@@ -114,29 +114,29 @@ struct LanguageLayoutSettingItemView: View {
             .labelsHidden()
             .pickerStyle(SegmentedPickerStyle())
         }
-        .onChange(of: selection){ _ in
-            if ignoreChange{
+        .onChange(of: selection) { _ in
+            if ignoreChange {
                 return
             }
             let type = selection
             self.viewModel.value = type
-            switch language{
+            switch language {
             case .japanese:
                 Store.variableSection.japaneseLayout = type
             case .english:
                 Store.variableSection.englishLayout = type
             }
-            if setTogether{
+            if setTogether {
                 Store.shared.englishLayoutSetting.value = type
                 Store.variableSection.englishLayout = type
             }
         }
-        .onAppear{
+        .onAppear {
             self.ignoreChange = true
             self.selection = viewModel.value
             self.ignoreChange = false
         }
-        .onDisappear{
+        .onDisappear {
             self.ignoreChange = true
         }
     }

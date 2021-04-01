@@ -6,11 +6,10 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-
 import SwiftUI
 
 struct FontSizeSettingItemView: View {
-    enum Target{
+    enum Target {
         case key
         case result
     }
@@ -21,33 +20,33 @@ struct FontSizeSettingItemView: View {
     typealias ItemViewModel = SettingItemViewModel<FontSizeSetting>
     typealias ItemModel = SettingItem<FontSizeSetting>
 
-    init(_ viewModel: ItemViewModel, _ target: Target, availableValues: [FontSizeSetting]){
+    init(_ viewModel: ItemViewModel, _ target: Target, availableValues: [FontSizeSetting]) {
         self.item = viewModel.item
         self.viewModel = viewModel
         self.target = target
         self.availableValues = availableValues
     }
-    
+
     let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
     @State private var isOn = false
 
     var body: some View {
-        HStack{
-            VStack{
-                HStack{
+        HStack {
+            VStack {
+                HStack {
                     Text(self.item.identifier.title)
-                    Button{
+                    Button {
                         isOn = true
                     }label: {
                         Image(systemName: "info.circle")
                     }
                 }
                 let size = CGFloat(viewModel.value.saveValue == -1 ? 18 : viewModel.value.saveValue)
-                switch self.target{
+                switch self.target {
                 case .key:
                     KeyView(fontSize: size)
-                    
+
                 case .result:
                     Text("サンプル")
                         .font(.system(size: size))
@@ -67,7 +66,7 @@ struct FontSizeSettingItemView: View {
             .clipped()
 
         }.frame(maxWidth: .infinity)
-        .alert(isPresented: $isOn){
+        .alert(isPresented: $isOn) {
             Alert(title: Text(self.item.description), dismissButton: .default(Text("OK"), action: {
                 isOn = false
             }))
@@ -80,13 +79,13 @@ struct KeyView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
     let fontSize: CGFloat
 
-    init(fontSize: CGFloat){
+    init(fontSize: CGFloat) {
         self.fontSize = fontSize
     }
 
     var size: CGSize {
         let screenWidth = UIScreen.main.bounds.width
-        switch storeVariableSection.japaneseLayout{
+        switch storeVariableSection.japaneseLayout {
         case .flick:
             return CGSize(width: screenWidth/5.6, height: screenWidth/8)
         case .qwerty:

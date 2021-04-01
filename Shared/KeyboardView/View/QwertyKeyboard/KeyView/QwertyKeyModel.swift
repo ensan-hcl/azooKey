@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-struct QwertyKeyModel: QwertyKeyModelProtocol{
-    
+struct QwertyKeyModel: QwertyKeyModelProtocol {
+
     let pressActions: [ActionType]
     var longPressActions: LongpressActionType
 
@@ -21,7 +21,7 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType
     let unpressedKeyColorType: QwertyUnpressedKeyColorType
 
-    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: LongpressActionType = .none, variationsModel: VariationsModel = VariationsModel([]), keyColorType: QwertyUnpressedKeyColorType = .normal, needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)){
+    init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: LongpressActionType = .none, variationsModel: VariationsModel = VariationsModel([]), keyColorType: QwertyUnpressedKeyColorType = .normal, needSuggestView: Bool = true, for scale: (normalCount: Int, forCount: Int) = (1, 1)) {
         self.labelType = labelType
         self.pressActions = pressActions
         self.longPressActions = longPressActions
@@ -32,13 +32,13 @@ struct QwertyKeyModel: QwertyKeyModelProtocol{
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        if states.aAKeyState == .capsLock, states.keyboardLanguage == .en_US, case let .text(text) = self.labelType{
+        if states.aAKeyState == .capsLock, states.keyboardLanguage == .en_US, case let .text(text) = self.labelType {
             return KeyLabel(.text(text.uppercased()), width: width, textColor: color)
         }
         return KeyLabel(self.labelType, width: width, textColor: color)
     }
 
-    func sound(){
+    func sound() {
         self.pressActions.first?.sound()
     }
 

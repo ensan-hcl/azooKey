@@ -9,18 +9,18 @@
 import Foundation
 import SwiftUI
 
-//M：基本は変わらない
+// M：基本は変わらない
 struct HorizontalFlickDataProvider {
-    //縦に並べる
+    // 縦に並べる
     var hiraKeyboard: [[FlickKeyModelProtocol]] = [
-        //第1列
+        // 第1列
         [
             FlickTabKeyModel.numberTabKeyModel,
             FlickTabKeyModel.abcTabKeyModel,
             FlickTabKeyModel.hiraTabKeyModel,
             FlickChangeKeyboardModel.shared
         ],
-        //第2列
+        // 第2列
         [
             FlickKeyModel(labelType: .text("あ"), pressActions: [.input("あ")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -81,7 +81,7 @@ struct HorizontalFlickDataProvider {
             FlickKogakiKeyModel.shared
 
         ],
-        //第3列
+        // 第3列
         [
             FlickKeyModel(labelType: .text("か"), pressActions: [.input("か")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -153,10 +153,10 @@ struct HorizontalFlickDataProvider {
                     labelType: .text("ー"),
                     pressActions: [.input("ー")]
                 )
-            ]),
+            ])
 
         ],
-        //第4列
+        // 第4列
         [
             FlickKeyModel(labelType: .text("さ"), pressActions: [.input("さ")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -217,18 +217,18 @@ struct HorizontalFlickDataProvider {
             ]),
             FlickKanaSymbolsKeyModel.shared
         ],
-        //第5列
+        // 第5列
         [
             FlickKeyModel.delete,
             FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
-        ],
+        ]
 
     ]
 
-    //縦に並べる
-    var abcKeyboard:[[FlickKeyModelProtocol]] = [
-        //第1列
+    // 縦に並べる
+    var abcKeyboard: [[FlickKeyModelProtocol]] = [
+        // 第1列
         [
             FlickTabKeyModel.numberTabKeyModel,
             FlickTabKeyModel.abcTabKeyModel,
@@ -236,7 +236,7 @@ struct HorizontalFlickDataProvider {
             FlickChangeKeyboardModel.shared
 
         ],
-        //第2列
+        // 第2列
         [
             FlickKeyModel(labelType: .text("@#/&_"), pressActions: [.input("@")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -264,7 +264,7 @@ struct HorizontalFlickDataProvider {
                 .top: FlickedKeyModel(
                     labelType: .text("I"),
                     pressActions: [.input("i")]
-                ),
+                )
             ]),
             FlickKeyModel(labelType: .text("PQRS"), pressActions: [.input("p")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -278,11 +278,11 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("S"),
                     pressActions: [.input("s")]
-                ),
+                )
             ]),
-            FlickAaKeyModel.shared,
+            FlickAaKeyModel.shared
         ],
-        //第3列
+        // 第3列
         [
             FlickKeyModel(labelType: .text("ABC"), pressActions: [.input("a")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -292,7 +292,7 @@ struct HorizontalFlickDataProvider {
                 .top: FlickedKeyModel(
                     labelType: .text("C"),
                     pressActions: [.input("c")]
-                ),
+                )
             ]),
             FlickKeyModel(labelType: .text("JKL"), pressActions: [.input("j")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -302,7 +302,7 @@ struct HorizontalFlickDataProvider {
                 .top: FlickedKeyModel(
                     labelType: .text("L"),
                     pressActions: [.input("l")]
-                ),
+                )
             ]),
             FlickKeyModel(labelType: .text("TUV"), pressActions: [.input("t")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -312,7 +312,7 @@ struct HorizontalFlickDataProvider {
                 .top: FlickedKeyModel(
                     labelType: .text("V"),
                     pressActions: [.input("v")]
-                ),
+                )
             ]),
             FlickKeyModel(labelType: .text("\'\"()"), pressActions: [.input("\'")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -326,11 +326,11 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text(")"),
                     pressActions: [.input(")")]
-                ),
-            ]),
+                )
+            ])
 
         ],
-        //第4列
+        // 第4列
         [
             FlickKeyModel(labelType: .text("DEF"), pressActions: [.input("d")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -340,7 +340,7 @@ struct HorizontalFlickDataProvider {
                 .top: FlickedKeyModel(
                     labelType: .text("F"),
                     pressActions: [.input("f")]
-                ),
+                )
             ]),
 
             FlickKeyModel(labelType: .text("MNO"), pressActions: [.input("m")], flickKeys: [
@@ -351,7 +351,7 @@ struct HorizontalFlickDataProvider {
                 .top: FlickedKeyModel(
                     labelType: .text("O"),
                     pressActions: [.input("o")]
-                ),
+                )
             ]),
 
             FlickKeyModel(labelType: .text("WXYZ"), pressActions: [.input("w")], flickKeys: [
@@ -366,7 +366,7 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("Z"),
                     pressActions: [.input("z")]
-                ),
+                )
             ]),
             FlickKeyModel(labelType: .text(".,?!"), pressActions: [.input(".")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -381,28 +381,28 @@ struct HorizontalFlickDataProvider {
                     labelType: .text("!"),
                     pressActions: [.input("!")]
                 )
-            ]),
+            ])
         ],
-        //第5列
+        // 第5列
         [
             FlickKeyModel.delete,
             FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
-        ],
+        ]
 
     ]
-    //縦に並べる
-    var numberKeyboard:[[FlickKeyModelProtocol]] = [
-        //第1列
+    // 縦に並べる
+    var numberKeyboard: [[FlickKeyModelProtocol]] = [
+        // 第1列
         [
             FlickTabKeyModel.numberTabKeyModel,
             FlickTabKeyModel.abcTabKeyModel,
             FlickTabKeyModel.hiraTabKeyModel,
             FlickChangeKeyboardModel.shared
         ],
-        //第2列
+        // 第2列
         [
-            FlickKeyModel(labelType: .symbols(["1","☆","♪","→"]), pressActions: [.input("1")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["1", "☆", "♪", "→"]), pressActions: [.input("1")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("☆"),
                     pressActions: [.input("☆")]
@@ -414,9 +414,9 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("→"),
                     pressActions: [.input("→")]
-                ),
+                )
             ]),
-            FlickKeyModel(labelType: .symbols(["4","○","＊","・"]), pressActions: [.input("4")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["4", "○", "＊", "・"]), pressActions: [.input("4")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("○"),
                     pressActions: [.input("○")]
@@ -428,9 +428,9 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("・"),
                     pressActions: [.input("・")]
-                ),
+                )
             ]),
-            FlickKeyModel(labelType: .symbols(["7","「","」",":"]), pressActions: [.input("7")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["7", "「", "」", ":"]), pressActions: [.input("7")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("「"),
                     pressActions: [.input("「")]
@@ -442,7 +442,7 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text(":"),
                     pressActions: [.input(":")]
-                ),
+                )
             ]),
             FlickKeyModel(labelType: .text("()[]"), pressActions: [.input("(")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -456,13 +456,13 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("]"),
                     pressActions: [.input("]")]
-                ),
+                )
 
-            ]),
+            ])
         ],
-        //第3列
+        // 第3列
         [
-            FlickKeyModel(labelType: .symbols(["2","¥","$","€"]), pressActions: [.input("2")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["2", "¥", "$", "€"]), pressActions: [.input("2")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("¥"),
                     pressActions: [.input("¥")]
@@ -474,9 +474,9 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("€"),
                     pressActions: [.input("€")]
-                ),
+                )
             ]),
-            FlickKeyModel(labelType: .symbols(["5","+","×","÷"]), pressActions: [.input("5")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["5", "+", "×", "÷"]), pressActions: [.input("5")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("+"),
                     pressActions: [.input("+")]
@@ -488,9 +488,9 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("÷"),
                     pressActions: [.input("÷")]
-                ),
+                )
             ]),
-            FlickKeyModel(labelType: .symbols(["8","〒","々","〆"]), pressActions: [.input("8")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["8", "〒", "々", "〆"]), pressActions: [.input("8")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("〒"),
                     pressActions: [.input("〒")]
@@ -502,9 +502,9 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("〆"),
                     pressActions: [.input("〆")]
-                ),
+                )
             ]),
-            FlickKeyModel(labelType: .symbols(["0","〜","…"]), pressActions: [.input("0")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["0", "〜", "…"]), pressActions: [.input("0")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("〜"),
                     pressActions: [.input("〜")]
@@ -512,13 +512,13 @@ struct HorizontalFlickDataProvider {
                 .top: FlickedKeyModel(
                     labelType: .text("…"),
                     pressActions: [.input("…")]
-                ),
-            ]),
+                )
+            ])
 
         ],
-        //第4列
+        // 第4列
         [
-            FlickKeyModel(labelType: .symbols(["3","%","°","#"]), pressActions: [.input("3")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["3", "%", "°", "#"]), pressActions: [.input("3")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("%"),
                     pressActions: [.input("%")]
@@ -530,10 +530,10 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("#"),
                     pressActions: [.input("#")]
-                ),
+                )
             ]),
 
-            FlickKeyModel(labelType: .symbols(["6","<","=",">"]), pressActions: [.input("6")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["6", "<", "=", ">"]), pressActions: [.input("6")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("<"),
                     pressActions: [.input("<")]
@@ -545,10 +545,10 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text(">"),
                     pressActions: [.input(">")]
-                ),
+                )
             ]),
 
-            FlickKeyModel(labelType: .symbols(["9","^","|","\\"]), pressActions: [.input("9")], flickKeys: [
+            FlickKeyModel(labelType: .symbols(["9", "^", "|", "\\"]), pressActions: [.input("9")], flickKeys: [
                 .left: FlickedKeyModel(
                     labelType: .text("^"),
                     pressActions: [.input("^")]
@@ -560,7 +560,7 @@ struct HorizontalFlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("\\"),
                     pressActions: [.input("\\")]
-                ),
+                )
             ]),
             FlickKeyModel(labelType: .text(".,-/"), pressActions: [.input(".")], flickKeys: [
                 .left: FlickedKeyModel(
@@ -575,14 +575,14 @@ struct HorizontalFlickDataProvider {
                     labelType: .text("/"),
                     pressActions: [.input("/")]
                 )
-            ]),
+            ])
         ],
-        //第5列
+        // 第5列
         [
             FlickKeyModel.delete,
             FlickSpaceKeyModel.shared,
             FlickEnterKeyModel.shared
-        ],
+        ]
 
     ]
 }

@@ -23,13 +23,13 @@ struct CustardManagerIndex: Codable {
     var availableTabBars: [Int] = []
     var metadata: [String: CustardInternalMetaData] = [:]
 
-    enum CodingKeys: CodingKey{
+    enum CodingKeys: CodingKey {
         case availableCustards
         case availableTabBars
         case metadata
     }
 
-    internal init(availableCustards: [String] = [], availableTabBars: [Int] = [], metadata: [String : CustardInternalMetaData] = [:]) {
+    internal init(availableCustards: [String] = [], availableTabBars: [Int] = [], metadata: [String: CustardInternalMetaData] = [:]) {
         self.availableCustards = availableCustards
         self.availableTabBars = availableTabBars
         self.metadata = metadata
@@ -56,7 +56,7 @@ struct CustardManager {
 
     private static func fileName(_ identifier: String) -> String {
         let hash = SHA256.hash(data: identifier.data(using: .utf8) ?? Data())
-        let value16 = hash.map{String.init($0, radix: 16, uppercase: true)}.joined()
+        let value16 = hash.map {String.init($0, radix: 16, uppercase: true)}.joined()
         return value16
     }
 
@@ -69,8 +69,8 @@ struct CustardManager {
     private static func directoryExistCheck() {
         let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
         let filePath = directoryPath.appendingPathComponent(directoryName).path
-        if !FileManager.default.fileExists(atPath: filePath){
-            do{
+        if !FileManager.default.fileExists(atPath: filePath) {
+            do {
                 debug("ファイルを新規作成")
                 try FileManager.default.createDirectory(atPath: filePath, withIntermediateDirectories: true)
             } catch {
@@ -82,7 +82,7 @@ struct CustardManager {
     static func load() -> Self {
         directoryExistCheck()
         let themeIndexURL = fileURL(name: "index.json")
-        do{
+        do {
             let data = try Data(contentsOf: themeIndexURL)
             let index = try JSONDecoder().decode(CustardManagerIndex.self, from: data)
             return self.init(index: index)
@@ -153,11 +153,11 @@ struct CustardManager {
             try data.write(to: fileURL)
         }
 
-        if !self.index.availableCustards.contains(custard.identifier){
+        if !self.index.availableCustards.contains(custard.identifier) {
             self.index.availableCustards.append(custard.identifier)
         }
 
-        if updateTabBar && !self.checkTabExistInTabBar(tab: .custom(custard.identifier)){
+        if updateTabBar && !self.checkTabExistInTabBar(tab: .custom(custard.identifier)) {
             try self.addTabBar(item: .init(label: .text(custard.metadata.display_name), actions: [.moveTab(.custom(custard.identifier))]))
         }
 
@@ -170,62 +170,62 @@ struct CustardManager {
         let data = try encoder.encode(tabBarData)
         let fileURL = Self.fileURL(name: "tabbar_\(tabBarData.identifier).tabbar")
         try data.write(to: fileURL)
-        if !self.index.availableTabBars.contains(tabBarData.identifier){
+        if !self.index.availableTabBars.contains(tabBarData.identifier) {
             self.index.availableTabBars.append(tabBarData.identifier)
         }
         self.save()
     }
 
-    mutating func removeCustard(identifier: String){
-        do{
+    mutating func removeCustard(identifier: String) {
+        do {
             let fileName = Self.fileName(identifier)
-            self.index.availableCustards.removeAll{$0 == identifier}
+            self.index.availableCustards.removeAll {$0 == identifier}
             self.index.metadata.removeValue(forKey: identifier)
             let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
             try FileManager.default.removeItem(atPath: fileURL.path)
             let editFileURL = Self.fileURL(name: "\(fileName)_edit.json")
             try? FileManager.default.removeItem(atPath: editFileURL.path)
             self.save()
-        }catch{
+        } catch {
             debug(error)
         }
     }
 
-    mutating func removeTabBar(identifier: Int){
-        do{
+    mutating func removeTabBar(identifier: Int) {
+        do {
             let fileURL = Self.fileURL(name: "tabbar_\(identifier).tabbar")
             try FileManager.default.removeItem(atPath: fileURL.path)
-            self.index.availableTabBars = self.index.availableTabBars.filter{$0 != identifier}
+            self.index.availableTabBars = self.index.availableTabBars.filter {$0 != identifier}
             self.save()
-        }catch{
+        } catch {
             debug(error)
         }
     }
 
     func availableCustard(for language: KeyboardLanguage) -> [String] {
-        switch language{
+        switch language {
         case .ja_JP:
-            return self.availableCustards.compactMap{
-                if let custard = try? self.custard(identifier: $0){
-                    if custard.language == .ja_JP{
+            return self.availableCustards.compactMap {
+                if let custard = try? self.custard(identifier: $0) {
+                    if custard.language == .ja_JP {
                         return custard.identifier
                     }
                 }
                 return nil
             }
         case .el_GR:
-            return self.availableCustards.compactMap{
-                if let custard = try? self.custard(identifier: $0){
-                    if custard.language == .el_GR{
+            return self.availableCustards.compactMap {
+                if let custard = try? self.custard(identifier: $0) {
+                    if custard.language == .el_GR {
                         return custard.identifier
                     }
                 }
                 return nil
             }
         case .en_US:
-            return self.availableCustards.compactMap{
-                if let custard = try? self.custard(identifier: $0){
-                    if custard.language == .en_US{
+            return self.availableCustards.compactMap {
+                if let custard = try? self.custard(identifier: $0) {
+                    if custard.language == .en_US {
                         return custard.identifier
                     }
                 }

@@ -14,53 +14,53 @@ protocol UserDefaultsKeys: RawRepresentable where RawValue == String {
     init?<T>(keyPath: WritableKeyPath<Manager, T>)
 }
 
-extension UserDefaultsKeys{
-    init?<T>(keyPath: WritableKeyPath<Manager, T>){
+extension UserDefaultsKeys {
+    init?<T>(keyPath: WritableKeyPath<Manager, T>) {
         let partialKeyPath = keyPath as PartialKeyPath
         self.init(keyPath: partialKeyPath)
     }
 }
 
-protocol UserDefaultsManager{
+protocol UserDefaultsManager {
     associatedtype Keys: UserDefaultsKeys where Keys.Manager == Self
     mutating func update<T: Codable>(_ value: KeyPath<Self, T>, newValue: T)
-    mutating func update<T: Codable>(_ value: KeyPath<Self, T>, process: (inout T) -> ())
+    mutating func update<T: Codable>(_ value: KeyPath<Self, T>, process: (inout T) -> Void)
 }
 
-extension UserDefaultsManager{
-    mutating func update<T: Codable>(_ value: KeyPath<Self, T>, newValue: T){
-        if let value = value as? WritableKeyPath{
+extension UserDefaultsManager {
+    mutating func update<T: Codable>(_ value: KeyPath<Self, T>, newValue: T) {
+        if let value = value as? WritableKeyPath {
             self[keyPath: value] = newValue
             update(value: value)
         }
     }
 
-    mutating func update<T: Codable>(_ value: KeyPath<Self, T>, process: (inout T) -> ()){
-        if let value = value as? WritableKeyPath{
+    mutating func update<T: Codable>(_ value: KeyPath<Self, T>, process: (inout T) -> Void) {
+        if let value = value as? WritableKeyPath {
             process(&self[keyPath: value])
             update(value: value)
         }
     }
 }
 
-fileprivate extension UserDefaultsManager{
-    mutating func update<T: Codable>(value: WritableKeyPath<Self, T>){
-        do{
+fileprivate extension UserDefaultsManager {
+    mutating func update<T: Codable>(value: WritableKeyPath<Self, T>) {
+        do {
             let data = try JSONEncoder().encode(self[keyPath: value])
-            if let key = Keys.init(keyPath: value){
+            if let key = Keys.init(keyPath: value) {
                 UserDefaults.standard.set(data, forKey: key.rawValue)
             }
-        }catch{
+        } catch {
             debug(error)
         }
     }
 
     static func load<T: KeyboardInternalSettingValue>(key: Keys) -> T {
-        if let value = UserDefaults.standard.data(forKey: key.rawValue){
-            do{
+        if let value = UserDefaults.standard.data(forKey: key.rawValue) {
+            do {
                 let value = try JSONDecoder().decode(T.self, from: value)
                 return value
-            }catch{
+            } catch {
                 debug(error)
             }
         }
@@ -79,8 +79,8 @@ struct KeyboardInternalSetting: UserDefaultsManager {
         typealias Manager = KeyboardInternalSetting
         case one_handed_mode_setting
 
-        init?(keyPath: PartialKeyPath<Manager>){
-            switch keyPath{
+        init?(keyPath: PartialKeyPath<Manager>) {
+            switch keyPath {
             case \Manager.oneHandedModeSetting:
                 self = .one_handed_mode_setting
             default:
@@ -99,8 +99,8 @@ struct ContainerInternalSetting: UserDefaultsManager {
         typealias Manager = ContainerInternalSetting
         case walkthrough_state
 
-        init?(keyPath: PartialKeyPath<Manager>){
-            switch keyPath{
+        init?(keyPath: PartialKeyPath<Manager>) {
+            switch keyPath {
             case \Manager.walkthroughState:
                 self = .walkthrough_state
             default:

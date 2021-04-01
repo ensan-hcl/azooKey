@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-//symbolタブ、123タブで表示される切り替えボタン
-struct QwertyTabKeyModel: QwertyKeyModelProtocol{
+// symbolタブ、123タブで表示される切り替えボタン
+struct QwertyTabKeyModel: QwertyKeyModelProtocol {
 
-    var pressActions: [ActionType]{
-        switch SemiStaticStates.shared.needsInputModeSwitchKey{
+    var pressActions: [ActionType] {
+        switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
-            switch VariableStates.shared.keyboardLanguage{
+            switch VariableStates.shared.keyboardLanguage {
             case .ja_JP, .none, .el_GR:
                 return [.moveTab(.user_dependent(.japanese))]
             case .en_US:
@@ -27,7 +27,7 @@ struct QwertyTabKeyModel: QwertyKeyModelProtocol{
 
     }
     let longPressActions: LongpressActionType = .none
-    ///暫定
+    /// 暫定
     let variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
@@ -35,14 +35,14 @@ struct QwertyTabKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
-    init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)){
+    init(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)) {
         self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        switch SemiStaticStates.shared.needsInputModeSwitchKey{
+        switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
-            switch states.keyboardLanguage{
+            switch states.keyboardLanguage {
             case .ja_JP, .none, .el_GR:
                 return KeyLabel(.text("あ"), width: width, textColor: color)
             case .en_US:

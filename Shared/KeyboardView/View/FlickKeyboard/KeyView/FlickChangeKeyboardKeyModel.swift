@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
+struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = false
 
     static let shared = FlickChangeKeyboardModel()
 
-    var pressActions: [ActionType]{
-        switch SemiStaticStates.shared.needsInputModeSwitchKey{
+    var pressActions: [ActionType] {
+        switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
             return []
         case false:
@@ -27,12 +27,12 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol{
     let suggestModel: SuggestModel
     let flickKeys: [FlickDirection: FlickedKeyModel] = [:]
 
-    init(){
+    init() {
         self.suggestModel = SuggestModel([:])
     }
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
-        switch SemiStaticStates.shared.needsInputModeSwitchKey{
+        switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
             return KeyLabel(.changeKeyboard, width: width)
         case false:

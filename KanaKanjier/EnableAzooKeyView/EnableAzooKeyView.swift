@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-private enum EnableAzooKeyViewStep{
+private enum EnableAzooKeyViewStep {
     case menu
     case append
     case finish
@@ -21,28 +21,28 @@ struct EnableAzooKeyView: View {
     @State private var showDoneMessage = false
 
     var body: some View {
-        ScrollView{
-            ScrollViewReader{value in
-                CenterAlignedView(padding: 30){
-                    switch self.step{
+        ScrollView {
+            ScrollViewReader {value in
+                CenterAlignedView(padding: 30) {
+                    switch self.step {
                     case .menu:
-                        VStack(alignment: .leading, spacing: 20){
+                        VStack(alignment: .leading, spacing: 20) {
                             Spacer()
-                            CenterAlignedView{
+                            CenterAlignedView {
                                 HeaderIconView()
                             }
                             EnableAzooKeyViewText("azooKeyを使う前に、iPhoneのキーボードのリストにazooKeyを追加する必要があります", with: "exclamationmark.triangle.fill")
-                            CenterAlignedView{
-                                EnableAzooKeyViewButton("手順を見る", systemName: "arrowtriangle.right.fill"){
+                            CenterAlignedView {
+                                EnableAzooKeyViewButton("手順を見る", systemName: "arrowtriangle.right.fill") {
                                     self.step = .append
                                 }
                             }
                         }
-                        .onAppear{
+                        .onAppear {
                             value.scrollTo(0, anchor: .top)
                         }
                     case .append:
-                        VStack(alignment: .leading, spacing: 20){
+                        VStack(alignment: .leading, spacing: 20) {
 
                             EnableAzooKeyViewHeader("追加する")
                             EnableAzooKeyViewText("下にスクロールして「追加する」を押して", with: "plus.circle")
@@ -51,25 +51,25 @@ struct EnableAzooKeyView: View {
                             EnableAzooKeyViewText("azooKeyをオンにして", with: "square.and.line.vertical.and.square.fill")
                             EnableAzooKeyViewImage("initSettingAzooKeySwitchImage-hand")
                             EnableAzooKeyViewText("このアプリを再び開いてください", with: "arrow.turn.down.left")
-                            CenterAlignedView{
-                                EnableAzooKeyViewButton("追加する", systemName: "plus.circle"){
+                            CenterAlignedView {
+                                EnableAzooKeyViewButton("追加する", systemName: "plus.circle") {
                                     if let url = URL(string: UIApplication.openSettingsURLString) {
                                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                                     }
                                 }
                             }
                             EnableAzooKeyViewText("この設定をしないとキーボードが使えません", with: "exclamationmark.triangle.fill")
-                            CenterAlignedView{
-                                EnableAzooKeyViewButton("閉じる", systemName: "xmark", style: .destructive){
+                            CenterAlignedView {
+                                EnableAzooKeyViewButton("閉じる", systemName: "xmark", style: .destructive) {
                                     Store.variableSection.requireFirstOpenView = false
                                 }
                             }
                         }
-                        .onAppear{
+                        .onAppear {
                             value.scrollTo(0, anchor: .top)
                         }
                     case .setting:
-                        VStack(alignment: .leading, spacing: 20){
+                        VStack(alignment: .leading, spacing: 20) {
                             EnableAzooKeyViewHeader("最初の設定")
                             Divider()
                             EnableAzooKeyViewText("キーボードの種類をお選びください", with: "keyboard")
@@ -79,54 +79,54 @@ struct EnableAzooKeyView: View {
                             AdditionalDictManageViewMain(style: .simple)
                             Divider()
                             EnableAzooKeyViewText("設定は「設定タブ」でいつでも変えられます", with: "gearshape")
-                            CenterAlignedView{
-                                EnableAzooKeyViewButton("完了", systemName: "checkmark"){
+                            CenterAlignedView {
+                                EnableAzooKeyViewButton("完了", systemName: "checkmark") {
                                     self.step = .finish
                                 }
                             }
                         }
-                        .onAppear{
+                        .onAppear {
                             value.scrollTo(0, anchor: .top)
                         }
 
                     case .finish:
-                        VStack(alignment: .leading, spacing: 20){
+                        VStack(alignment: .leading, spacing: 20) {
                             EnableAzooKeyViewHeader("azooKeyが使えます！")
                             EnableAzooKeyViewText("準備は完了です！", with: "checkmark")
-                            if showDoneMessage{
+                            if showDoneMessage {
                                 EnableAzooKeyViewText("azooKeyが開かれました！", with: "checkmark")
-                                CenterAlignedView{
-                                    EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill"){
+                                CenterAlignedView {
+                                    EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill") {
                                         Store.variableSection.requireFirstOpenView = false
                                     }
                                 }
-                            }else{
+                            } else {
                                 EnableAzooKeyViewText("キーボードの地球儀ボタンを長押しし、azooKeyを選択してください", with: "globe")
                             }
                             TextField("キーボードを開く", text: $text).textFieldStyle(RoundedBorderTextFieldStyle())
                             EnableAzooKeyViewImage("initSettingGlobeTapImage")
                             EnableAzooKeyViewText("azooKeyをお楽しみください！", with: "star.fill")
-                            if !showDoneMessage{
-                                CenterAlignedView{
-                                    EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill"){
+                            if !showDoneMessage {
+                                CenterAlignedView {
+                                    EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill") {
                                         Store.variableSection.requireFirstOpenView = false
                                     }
                                 }
                             }
                         }
-                        .onAppear{
+                        .onAppear {
                             value.scrollTo(0, anchor: .top)
                         }.onTapGesture {
                             UIApplication.shared.closeKeyboard()
                         }
-                        .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)){notification in
-                            //キーボードが開いた時
-                            //参考：https://stackoverflow.com/questions/26153336/how-do-i-find-out-the-current-keyboard-used-on-ios8
+                        .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) {_ in
+                            // キーボードが開いた時
+                            // 参考：https://stackoverflow.com/questions/26153336/how-do-i-find-out-the-current-keyboard-used-on-ios8
                             let currentKeyboardIdentifier = NSArray(array: UITextInputMode.activeInputModes)
                                 .filtered(using: NSPredicate(format: "isDisplayed = YES"))
                                 .first
-                                .flatMap{($0 as? UITextInputMode)?.value(forKey: "identifier") as? String}
-                            if currentKeyboardIdentifier == SharedStore.bundleName{
+                                .flatMap {($0 as? UITextInputMode)?.value(forKey: "identifier") as? String}
+                            if currentKeyboardIdentifier == SharedStore.bundleName {
                                 showDoneMessage = true
                             }
                         }
@@ -138,7 +138,7 @@ struct EnableAzooKeyView: View {
         .animation(.interactiveSpring(), value: step)
         .animation(.spring(), value: showDoneMessage)
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            if Store.shared.isKeyboardActivated{
+            if Store.shared.isKeyboardActivated {
                 self.step = .setting
                 Store.variableSection.isKeyboardActivated = true
             }

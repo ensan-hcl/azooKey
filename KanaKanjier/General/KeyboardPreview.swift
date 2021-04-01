@@ -21,7 +21,7 @@ struct KeyboardPreview: View {
     private let scale: CGFloat
     private let defaultTab: Tab.ExistentialTab?
 
-    init(theme: ThemeData, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil){
+    init(theme: ThemeData, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil) {
         SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
         resultModel.setResults([
             CandidateMock(text: "azooKey"),

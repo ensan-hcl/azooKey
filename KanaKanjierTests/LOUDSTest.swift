@@ -10,11 +10,11 @@ import Foundation
 import azooKey
 import XCTest
 
-extension FastLOUDSUIntTrie{
+extension FastLOUDSUIntTrie {
     static func readBinaryFile_UInt64(path: String) -> [UInt64] {
         do {
             let binaryData = try Data(contentsOf: URL(fileURLWithPath: path))
-            let ui64array = binaryData.withUnsafeBytes{pointer -> [UInt64] in
+            let ui64array = binaryData.withUnsafeBytes {pointer -> [UInt64] in
                 return Array(
                     UnsafeBufferPointer(
                         start: pointer.baseAddress!.assumingMemoryBound(to: UInt64.self),
@@ -27,14 +27,14 @@ extension FastLOUDSUIntTrie{
             print("Failed to read the file.")
             return []
         }
-        
+
     }
 }
 
 class LOUDSTest: XCTestCase {
     func build(_ identifier: String) -> FastLOUDSUIntTrie? {
         let nodeIndex2Characters: [Character]
-        do{
+        do {
             guard let path = Bundle(for: type(of: self)).path(forResource: identifier, ofType: "loudschars2") else {
                 print("ファイルが存在しません")
                 return nil
@@ -51,13 +51,13 @@ class LOUDSTest: XCTestCase {
             return nil
         }
 
-        let bytes = FastLOUDSUIntTrie.readBinaryFile_UInt64(path: path).map{$0.littleEndian}
+        let bytes = FastLOUDSUIntTrie.readBinaryFile_UInt64(path: path).map {$0.littleEndian}
         return FastLOUDSUIntTrie(bytes: bytes, nodeIndex2Character: nodeIndex2Characters)
     }
-    
+
     func getData(_ identifier: String, indices: [Int]) -> [String] {
         let data: Data
-        do{
+        do {
             guard let path = Bundle(for: type(of: self)).path(forResource: identifier, ofType: "loudstxt") else {
                 return []
             }
@@ -66,9 +66,9 @@ class LOUDSTest: XCTestCase {
             print("ファイルが存在しません: \(error)")
             data = Data()
         }
-        
+
         var indicesIterator = indices.sorted().makeIterator()
-        guard var targetIndex = indicesIterator.next() else{
+        guard var targetIndex = indicesIterator.next() else {
             return []
         }
         let bytes: [[UInt8]] = data.withUnsafeBytes {
@@ -76,58 +76,57 @@ class LOUDSTest: XCTestCase {
             var result: [UInt8] = []
             let newLineNumber = UInt8(ascii: "\n")
             var count = 0
-            
-            for byte in $0{
+
+            for byte in $0 {
                 let isNewLine = byte == newLineNumber
-                if count == targetIndex && !isNewLine{
+                if count == targetIndex && !isNewLine {
                     result.append(byte)
                 }
-                
-                if count > targetIndex{
-                    if result.count != 1 || result[0] != newLineNumber{
+
+                if count > targetIndex {
+                    if result.count != 1 || result[0] != newLineNumber {
                         results.append(result)
                     }
-                    if let _targetIndex = indicesIterator.next(){
+                    if let _targetIndex = indicesIterator.next() {
                         result = []
                         targetIndex = _targetIndex
-                        if count == targetIndex{
+                        if count == targetIndex {
                             result = [byte]
                         }
-                    }else{
+                    } else {
                         break
                     }
                 }
-                
+
                 count &+= isNewLine ? 1:0
             }
             return results
         }
-        return bytes.compactMap{String(bytes: $0, encoding: .utf8)}
+        return bytes.compactMap {String(bytes: $0, encoding: .utf8)}
 
     }
 
-
-    func testPerformanceBuild() throws{
+    func testPerformanceBuild() throws {
         print()
         self.measure {
             let louds = self.build("キ")
         }
     }
-    
-    func testPerformanceSearch() throws{
+
+    func testPerformanceSearch() throws {
         print()
         self.measure {
-            guard let louds = self.build("キ") else{
+            guard let louds = self.build("キ") else {
                 print("LOUDSの構築に失敗")
                 return
             }
-            if let index = louds.searchNodeIndex(chars: ["キ","ョ","ウ","シ"]){
+            if let index = louds.searchNodeIndex(chars: ["キ", "ョ", "ウ", "シ"]) {
                 let value = index.quotientAndRemainder(dividingBy: 2000)
-                let data = getData("キ\(value.quotient*2000)", indices: [value.remainder]).flatMap{$0.components(separatedBy: ",")}
+                let data = getData("キ\(value.quotient*2000)", indices: [value.remainder]).flatMap {$0.components(separatedBy: ",")}
                 print(data.count)
             }
         }
-        
+
     }
     /*childIndices results
      childIndices:  [0.003966, 0.003871, 0.003893, 0.005317, 0.005639, 0.005061, 0.003956, 0.003951, 0.003949, 0.003960]
@@ -142,68 +141,66 @@ class LOUDSTest: XCTestCase {
      1: [0.005932, 0.004631, 0.004751, 0.005673, 0.005709, 0.003962, 0.003947, 0.003956, 0.003939, 0.003982]
      2: [0.005419, 0.004603, 0.004453, 0.005292, 0.005268, 0.003948, 0.003687, 0.003727, 0.003692, 0.003661]
      3: [0.002337, 0.002246, 0.002241, 0.002268, 0.002139, 0.002076, 0.002035, 0.002073, 0.001968, 0.001888]
-    */
-    
-    func testPerformanceChildIndices() throws{
-        guard let louds = self.build("キ") else{
+     */
+
+    func testPerformanceChildIndices() throws {
+        guard let louds = self.build("キ") else {
             print("LOUDSの構築に失敗")
             return
         }
         self.measure {
-            for i in 0..<20000{
+            for i in 0..<20000 {
                 _ = louds.childNodeIndices3(from: i)
             }
         }
-        
+
     }
 
-
-    func testPerformancePurePrefix() throws{
-        guard let louds = self.build("キ") else{
+    func testPerformancePurePrefix() throws {
+        guard let louds = self.build("キ") else {
             print("LOUDSの構築に失敗")
             return
         }
         self.measure {
-            let indices = louds.prefixNodeIndices(chars: ["キ","ョ"])
+            let indices = louds.prefixNodeIndices(chars: ["キ", "ョ"])
             print(indices.count)
         }
-        
+
     }
 
-    func testPerformancePrefix() throws{
+    func testPerformancePrefix() throws {
         print()
         self.measure {
-            guard let louds = self.build("キ") else{
+            guard let louds = self.build("キ") else {
                 print("LOUDSの構築に失敗")
                 return
             }
-            let indices = louds.prefixNodeIndices(chars: ["キ","ョ"])
+            let indices = louds.prefixNodeIndices(chars: ["キ", "ョ"])
             let dict = [Int: [Int]].init(grouping: indices, by: {$0/2000})
-            let data = dict.flatMap{
-                getData("キ\($0.key &* 2000)", indices: $0.value.map{$0%2000})
+            let data = dict.flatMap {
+                getData("キ\($0.key &* 2000)", indices: $0.value.map {$0%2000})
             }
             print(data.count)
         }
-        
+
     }
-    
-    
-    func testPerformanceByfix() throws{
+
+    func testPerformanceByfix() throws {
         print()
         self.measure {
-            guard let louds = self.build("キ") else{
+            guard let louds = self.build("キ") else {
                 print("LOUDSの構築に失敗")
                 return
             }
-            let indices = louds.byfixNodeIndices(chars: ["キ","ョ","ウ","カ","シ"])
+            let indices = louds.byfixNodeIndices(chars: ["キ", "ョ", "ウ", "カ", "シ"])
             let dict = [Int: [Int]].init(grouping: indices, by: {$0/2000})
-            let data = dict.flatMap{
-                getData("キ\($0.key &* 2000)", indices: $0.value.map{$0%2000})
+            let data = dict.flatMap {
+                getData("キ\($0.key &* 2000)", indices: $0.value.map {$0%2000})
             }
             print(data.count)
-            //print(data)
-            //print(data.map{$0.components(separatedBy: ",").count})
+            // print(data)
+            // print(data.map{$0.components(separatedBy: ",").count})
         }
-        
+
     }
 }

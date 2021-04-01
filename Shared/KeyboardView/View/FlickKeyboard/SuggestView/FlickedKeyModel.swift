@@ -14,9 +14,9 @@ public enum FlickDirection: String, CustomStringConvertible, Codable {
     case top
     case right
     case bottom
-    
+
     public var description: String {
-        switch self{
+        switch self {
         case .left:
             return "左"
         case .top:
@@ -29,12 +29,12 @@ public enum FlickDirection: String, CustomStringConvertible, Codable {
     }
 }
 
-struct FlickedKeyModel{
+struct FlickedKeyModel {
     static let zero: FlickedKeyModel = FlickedKeyModel(labelType: .text(""), pressActions: [])
     let labelType: KeyLabelType
     let pressActions: [ActionType]
     let longPressActions: LongpressActionType
-    
+
     init(labelType: KeyLabelType, pressActions: [ActionType], longPressActions: LongpressActionType = .none) {
         self.labelType = labelType
         self.pressActions = pressActions
@@ -57,23 +57,23 @@ struct FlickedKeyModel{
             .allowsHitTesting(false)
             .opacity(isHidden ? 0:1)
     }
-    
+
     func label(width: CGFloat, theme: ThemeData) -> some View {
-        if theme != .default{
+        if theme != .default {
             return KeyLabel(self.labelType, width: width, textColor: .black)
         }
         return KeyLabel(self.labelType, width: width)
     }
-    
-    func flick(){
-        self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
+
+    func flick() {
+        self.pressActions.forEach {VariableStates.shared.action.registerAction($0)}
     }
 
-    func longFlickReserve(){
+    func longFlickReserve() {
         VariableStates.shared.action.reserveLongPressAction(longPressActions)
     }
 
-    func longFlickEnd(){
+    func longFlickEnd() {
         VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
     }
 

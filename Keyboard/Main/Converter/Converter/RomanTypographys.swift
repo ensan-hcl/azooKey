@@ -8,23 +8,23 @@
 
 import Foundation
 
-private extension UnicodeScalar{
-    ///ローマ字の大文字かどうか
+private extension UnicodeScalar {
+    /// ローマ字の大文字かどうか
     var isRomanUppercased: Bool {
         return ("A"..."Z").contains(self)
     }
-    ///ローマ字の小文字かどうか
+    /// ローマ字の小文字かどうか
     var isRomanLowercased: Bool {
         return ("a"..."z").contains(self)
     }
-    ///ローマ字の数字かどうか
+    /// ローマ字の数字かどうか
     var isRomanNumber: Bool {
         return ("0"..."9").contains(self)
     }
 }
 
-extension KanaKanjiConverter{
-    ///装飾文字に変換した結果を返す関数。
+extension KanaKanjiConverter {
+    /// 装飾文字に変換した結果を返す関数。
     /// - parameters:
     ///   - text: 対象文字列。
     /// - note:
@@ -32,7 +32,7 @@ extension KanaKanjiConverter{
     func typographicalCandidates(_ inputData: InputData) -> [Candidate] {
         let string = inputData.katakanaString
         let strings = self.typographicalLetters(from: string)
-        return strings.map{
+        return strings.map {
             Candidate(
                 text: $0,
                 value: -15,
@@ -43,27 +43,27 @@ extension KanaKanjiConverter{
         }
     }
 
-    ///装飾文字を実際に作る部分。
+    /// 装飾文字を実際に作る部分。
     /// - parameters:
     ///   - text: 対象文字列。
     private func typographicalLetters(from text: String) -> [String] {
-        if !text.onlyRomanAlphabetOrNumber{
+        if !text.onlyRomanAlphabetOrNumber {
             return []
         }
         let onlyRomanAlphabet = text.onlyRomanAlphabet
         var strings: [String] = []
-        ///𝐁𝐎𝐋𝐃
-        do{
-            let bold = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝐁𝐎𝐋𝐃
+        do {
+            let bold = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 119743)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 119737)!
                     return String(scalar)
                 }
-                if $0.isRomanNumber{
+                if $0.isRomanNumber {
                     let scalar = UnicodeScalar($0.value + 120734)!
                     return String(scalar)
                 }
@@ -72,14 +72,14 @@ extension KanaKanjiConverter{
             }.joined()
             strings.append(bold)
         }
-        ///𝐼𝑇𝐴𝐿𝐼𝐶
-        if onlyRomanAlphabet{
-            let italic = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝐼𝑇𝐴𝐿𝐼𝐶
+        if onlyRomanAlphabet {
+            let italic = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 119795)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     if $0 == "h"{
                         return "ℎ"
                     }
@@ -90,14 +90,14 @@ extension KanaKanjiConverter{
             }.joined()
             strings.append(italic)
         }
-        ///𝑩𝑶𝑳𝑫𝑰𝑻𝑨𝑳𝑰𝑪
-        if onlyRomanAlphabet{
-            let boldItalic = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝑩𝑶𝑳𝑫𝑰𝑻𝑨𝑳𝑰𝑪
+        if onlyRomanAlphabet {
+            let boldItalic = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 119847)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 119841)!
                     return String(scalar)
                 }
@@ -106,11 +106,11 @@ extension KanaKanjiConverter{
             strings.append(boldItalic)
         }
 
-        ///𝒮𝒸𝓇𝒾𝓅𝓉
-        if onlyRomanAlphabet{
-            let script = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
-                    switch $0{
+        /// 𝒮𝒸𝓇𝒾𝓅𝓉
+        if onlyRomanAlphabet {
+            let script = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
+                    switch $0 {
                     case "B":
                         return "ℬ"
                     case "E":
@@ -134,8 +134,8 @@ extension KanaKanjiConverter{
                     let scalar = UnicodeScalar($0.value + 119899)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
-                    switch $0{
+                if $0.isRomanLowercased {
+                    switch $0 {
                     case "e":
                         return "ℯ"
                     case "g":
@@ -152,14 +152,14 @@ extension KanaKanjiConverter{
             strings.append(script)
         }
 
-        ///𝓑𝓸𝓵𝓭𝓢𝓬𝓻𝓲𝓹𝓽
-        if onlyRomanAlphabet{
-            let boldScript = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝓑𝓸𝓵𝓭𝓢𝓬𝓻𝓲𝓹𝓽
+        if onlyRomanAlphabet {
+            let boldScript = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 119951)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 119945)!
                     return String(scalar)
                 }
@@ -167,11 +167,11 @@ extension KanaKanjiConverter{
             }.joined()
             strings.append(boldScript)
         }
-        ///𝔉𝔯𝔞𝔨𝔱𝔲𝔯
-        if onlyRomanAlphabet{
-            let fraktur = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
-                    switch $0{
+        /// 𝔉𝔯𝔞𝔨𝔱𝔲𝔯
+        if onlyRomanAlphabet {
+            let fraktur = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
+                    switch $0 {
                     case "C":
                         return "ℭ"
                     case "H":
@@ -187,7 +187,7 @@ extension KanaKanjiConverter{
                     let scalar = UnicodeScalar($0.value + 120003)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 119997)!
                     return String(scalar)
                 }
@@ -196,11 +196,11 @@ extension KanaKanjiConverter{
             strings.append(fraktur)
         }
 
-        ///𝕕𝕠𝕦𝕓𝕝𝕖𝕊𝕥𝕣𝕦𝕔𝕜
-        do{
-            let doubleStruck = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
-                    switch $0{
+        /// 𝕕𝕠𝕦𝕓𝕝𝕖𝕊𝕥𝕣𝕦𝕔𝕜
+        do {
+            let doubleStruck = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
+                    switch $0 {
                     case "C":
                         return "ℂ"
                     case "H":
@@ -220,11 +220,11 @@ extension KanaKanjiConverter{
                     let scalar = UnicodeScalar($0.value + 120055)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 120049)!
                     return String(scalar)
                 }
-                if $0.isRomanNumber{
+                if $0.isRomanNumber {
                     let scalar = UnicodeScalar($0.value + 120744)!
                     return String(scalar)
                 }
@@ -233,14 +233,14 @@ extension KanaKanjiConverter{
             strings.append(doubleStruck)
         }
 
-        ///𝕭𝖔𝖑𝖉𝕱𝖗𝖆𝖐𝖙𝖚𝖗
-        if onlyRomanAlphabet{
-            let boldFraktur = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝕭𝖔𝖑𝖉𝕱𝖗𝖆𝖐𝖙𝖚𝖗
+        if onlyRomanAlphabet {
+            let boldFraktur = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 120107)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 120101)!
                     return String(scalar)
                 }
@@ -250,18 +250,18 @@ extension KanaKanjiConverter{
             strings.append(boldFraktur)
         }
 
-        ///𝖲𝖺𝗇𝗌𝖲𝖾𝗋𝗂𝖿
-        do{
-            let sansSerif = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝖲𝖺𝗇𝗌𝖲𝖾𝗋𝗂𝖿
+        do {
+            let sansSerif = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 120159)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 120153)!
                     return String(scalar)
                 }
-                if $0.isRomanNumber{
+                if $0.isRomanNumber {
                     let scalar = UnicodeScalar($0.value + 120754)!
                     return String(scalar)
                 }
@@ -270,18 +270,18 @@ extension KanaKanjiConverter{
             strings.append(sansSerif)
         }
 
-        ///𝗦𝗮𝗻𝘀𝗦𝗲𝗿𝗶𝗳𝗕𝗼𝗹𝗱
-        do{
-            let sansSerifBold = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝗦𝗮𝗻𝘀𝗦𝗲𝗿𝗶𝗳𝗕𝗼𝗹𝗱
+        do {
+            let sansSerifBold = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 120211)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 120205)!
                     return String(scalar)
                 }
-                if $0.isRomanNumber{
+                if $0.isRomanNumber {
                     let scalar = UnicodeScalar($0.value + 120764)!
                     return String(scalar)
                 }
@@ -291,14 +291,14 @@ extension KanaKanjiConverter{
             strings.append(sansSerifBold)
         }
 
-        ///𝘚𝘢𝘯𝘴𝘚𝘦𝘳𝘪𝘧𝘐𝘵𝘢𝘭𝘪𝘤
-        if onlyRomanAlphabet{
-            let sansSerifItalic = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝘚𝘢𝘯𝘴𝘚𝘦𝘳𝘪𝘧𝘐𝘵𝘢𝘭𝘪𝘤
+        if onlyRomanAlphabet {
+            let sansSerifItalic = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 120263)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 120257)!
                     return String(scalar)
                 }
@@ -308,14 +308,14 @@ extension KanaKanjiConverter{
             strings.append(sansSerifItalic)
         }
 
-        ///𝙎𝙖𝙣𝙨𝙎𝙚𝙧𝙞𝙛𝘽𝙤𝙡𝙙𝙄𝙩𝙖𝙡𝙞𝙘
-        if onlyRomanAlphabet{
-            let sansSerifBoldItalic = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝙎𝙖𝙣𝙨𝙎𝙚𝙧𝙞𝙛𝘽𝙤𝙡𝙙𝙄𝙩𝙖𝙡𝙞𝙘
+        if onlyRomanAlphabet {
+            let sansSerifBoldItalic = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 120315)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 120309)!
                     return String(scalar)
                 }
@@ -325,18 +325,18 @@ extension KanaKanjiConverter{
             strings.append(sansSerifBoldItalic)
         }
 
-        ///𝙼𝚘𝚗𝚘𝚜𝚙𝚊𝚌𝚎
-        do{
-            let monospace = text.unicodeScalars.map{
-                if $0.isRomanUppercased{
+        /// 𝙼𝚘𝚗𝚘𝚜𝚙𝚊𝚌𝚎
+        do {
+            let monospace = text.unicodeScalars.map {
+                if $0.isRomanUppercased {
                     let scalar = UnicodeScalar($0.value + 120367)!
                     return String(scalar)
                 }
-                if $0.isRomanLowercased{
+                if $0.isRomanLowercased {
                     let scalar = UnicodeScalar($0.value + 120361)!
                     return String(scalar)
                 }
-                if $0.isRomanNumber{
+                if $0.isRomanNumber {
                     let scalar = UnicodeScalar($0.value + 120774)!
                     return String(scalar)
                 }

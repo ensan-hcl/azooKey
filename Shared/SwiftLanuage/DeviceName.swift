@@ -423,7 +423,7 @@ final class DeviceName {
         sysctlbyname("hw.machine", nil, &size, nil, 0)
         var machine = [CChar](repeating: 0, count: Int(size))
         sysctlbyname("hw.machine", &machine, &size, nil, 0)
-        let code: String = String(cString:machine)
+        let code: String = String(cString: machine)
         return code
     }
 
@@ -435,7 +435,7 @@ final class DeviceName {
         guard let deviceCode = getDecviceCode() else {
             return true
         }
-        switch deviceCode{
+        switch deviceCode {
         case .iPhone10_3, .iPhone10_6, .iPhone11_2, .iPhone11_4, .iPhone11_6, .iPhone11_8, .iPhone12_1, .iPhone12_3, .iPhone12_5, .iPhone13_1, .iPhone13_2, .iPhone13_3, .iPhone13_4:
             return false
         default:

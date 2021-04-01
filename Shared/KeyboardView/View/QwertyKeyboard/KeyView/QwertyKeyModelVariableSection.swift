@@ -9,23 +9,23 @@
 import Foundation
 import SwiftUI
 
-enum QwertyKeyPressState{
+enum QwertyKeyPressState {
     case unpressed
     case started(Date)
     case longPressed
     case variations
-    
+
     var isActive: Bool {
-        switch self{
+        switch self {
         case .unpressed:
             return false
         default:
             return true
         }
     }
-    
+
     var needVariationsView: Bool {
-        switch self{
+        switch self {
         case .variations:
             return true
         default:

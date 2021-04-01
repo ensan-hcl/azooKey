@@ -7,7 +7,7 @@
 //
 
 import Foundation
-fileprivate enum JapaneseNumber{
+private enum JapaneseNumber {
     case いち, に, さん, よん, ご, ろく, なな, はち, きゅう, れい
     case じゅう, ひゃく, せん, まん, おく, ちょう
     case おわり
@@ -45,7 +45,7 @@ fileprivate enum JapaneseNumber{
             return ""
         }
     }
-    
+
     var maxDigit: Int? {
         switch self {
         case .おわり:
@@ -100,14 +100,14 @@ fileprivate enum JapaneseNumber{
             return ""
         }
     }
-    
+
 }
 
-fileprivate enum Number{
+private enum Number {
     case Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine
-    var character: Character{
-        switch self{
-        
+    var character: Character {
+        switch self {
+
         case .Zero:
             return "0"
         case .One:
@@ -132,243 +132,241 @@ fileprivate enum Number{
     }
 }
 
-
-extension DicDataStore{
+extension DicDataStore {
     private func parseLiteral<S: StringProtocol>(input: S) -> [JapaneseNumber] {
         var chars = input.makeIterator()
         var tokens: [JapaneseNumber] = []
-        func judge(char: Character){
+        func judge(char: Character) {
             if char == "イ"{
                 if let char = chars.next(), char == "チ" || char == "ッ"{
                     tokens.append(.いち)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "オ"{
+            } else if char == "オ"{
                 if let char = chars.next(), char == "ク"{
                     tokens.append(.おく)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "キ"{
+            } else if char == "キ"{
                 if let char = chars.next(), char == "ュ"{
                     if let char = chars.next(), char == "ウ"{
                         tokens.append(.きゅう)
-                    }else{
+                    } else {
                         tokens.append(.エラー)
                         return
                     }
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ク"{
+            } else if char == "ク"{
                 tokens.append(.きゅう)
-            }else if char == "ゴ"{
+            } else if char == "ゴ"{
                 tokens.append(.ご)
-            }else if char == "サ"{
+            } else if char == "サ"{
                 if let char = chars.next(), char == "ン"{
                     tokens.append(.さん)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "シ"{
-                if let char = chars.next(){
+            } else if char == "シ"{
+                if let char = chars.next() {
                     if char == "チ"{
                         tokens.append(.なな)
-                    }else {
+                    } else {
                         tokens.append(.よん)
                         judge(char: char)
                     }
-                }else{
+                } else {
                     tokens.append(.よん)
                 }
-            }else if char == "ジ"{
+            } else if char == "ジ"{
                 if let char = chars.next(), char == "ュ"{
                     if let char = chars.next(), char == "ウ" || char == "ッ"{
                         tokens.append(.じゅう)
-                    }else{
+                    } else {
                         tokens.append(.エラー)
                         return
                     }
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "セ"{
+            } else if char == "セ"{
                 if let char = chars.next(), char == "ン"{
                     tokens.append(.せん)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ゼ"{
-                if let char = chars.next(){
+            } else if char == "ゼ"{
+                if let char = chars.next() {
                     if char == "ロ"{
                         tokens.append(.れい)
-                    }else if char == "ン"{
+                    } else if char == "ン"{
                         tokens.append(.せん)
-                    }else{
+                    } else {
                         tokens.append(.エラー)
                         return
                     }
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "チ"{
+            } else if char == "チ"{
                 if let char = chars.next(), char == "ョ"{
                     if let char = chars.next(), char == "ウ"{
                         tokens.append(.ちょう)
-                    }else{
+                    } else {
                         tokens.append(.エラー)
                         return
                     }
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ナ"{
+            } else if char == "ナ"{
                 if let char = chars.next(), char == "ナ"{
                     tokens.append(.なな)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ニ"{
+            } else if char == "ニ"{
                 tokens.append(.に)
-            }else if char == "ハ"{
+            } else if char == "ハ"{
                 if let char = chars.next(), char == "チ" || char == "ッ"{
                     tokens.append(.はち)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ヒ"{
+            } else if char == "ヒ"{
                 if let char = chars.next(), char == "ャ"{
                     if let char = chars.next(), char == "ク"{
                         tokens.append(.ひゃく)
-                    }else{
+                    } else {
                         tokens.append(.エラー)
                         return
                     }
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ビ"{
+            } else if char == "ビ"{
                 if let char = chars.next(), char == "ャ"{
                     if let char = chars.next(), char == "ク"{
                         tokens.append(.ひゃく)
-                    }else{
+                    } else {
                         tokens.append(.エラー)
                         return
                     }
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ピ"{
+            } else if char == "ピ"{
                 if let char = chars.next(), char == "ャ"{
                     if let char = chars.next(), char == "ク"{
                         tokens.append(.ひゃく)
-                    }else{
+                    } else {
                         tokens.append(.エラー)
                         return
                     }
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "マ"{
-                if let char = chars.next(){
+            } else if char == "マ"{
+                if let char = chars.next() {
                     if char == "ン"{
                         tokens.append(.まん)
-                    }else if char == "ル"{
+                    } else if char == "ル"{
                         tokens.append(.れい)
-                    }else{
+                    } else {
                         tokens.append(.エラー)
                         return
                     }
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ヨ"{
+            } else if char == "ヨ"{
                 if let char = chars.next(), char == "ン"{
                     tokens.append(.よん)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "レ"{
+            } else if char == "レ"{
                 if let char = chars.next(), char == "イ"{
                     tokens.append(.れい)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else if char == "ロ"{
+            } else if char == "ロ"{
                 if let char = chars.next(), char == "ク" || char == "ッ"{
                     tokens.append(.ろく)
-                }else{
+                } else {
                     tokens.append(.エラー)
                     return
                 }
-            }else{
+            } else {
                 tokens.append(.エラー)
                 return
             }
-            
+
         }
-        while let char = chars.next(){
+        while let char = chars.next() {
             judge(char: char)
         }
         tokens.append(.おわり)
         return tokens
     }
-    
-    
+
     private func parseTokens(tokens: [JapaneseNumber]) -> [(Number, Number, Number, Number)] {
-        var maxDigits: Int? = nil
+        var maxDigits: Int?
         var result: [(Number, Number, Number, Number)] = []
         var stack: (Number, Number, Number, Number) = (.Zero, .Zero, .Zero, .Zero)
         var tokens = tokens.makeIterator()
-        var curnum: Number? = nil
-        while let token = tokens.next(){
-            switch token{
+        var curnum: Number?
+        while let token = tokens.next() {
+            switch token {
             case .いち:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .One
             case .に:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Two
             case .さん:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Three
             case .よん:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Four
             case .ご:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Five
             case .ろく:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Six
             case .なな:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Seven
             case .はち:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Eight
             case .きゅう:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Nine
             case .れい:
-                if curnum != nil{return []}
+                if curnum != nil {return []}
                 curnum = .Zero
             case .じゅう:
                 stack.2 = curnum ?? .One
@@ -381,12 +379,12 @@ extension DicDataStore{
                 curnum = nil
             case .おわり, .まん, .おく, .ちょう:
                 stack.3 = curnum ?? .Zero
-                if let maxDigit = maxDigits{
-                    if maxDigit <= token.maxDigit!{
+                if let maxDigit = maxDigits {
+                    if maxDigit <= token.maxDigit! {
                         return []
                     }
                     result[maxDigit-token.maxDigit!] = stack
-                }else{
+                } else {
                     maxDigits = token.maxDigit!
                     result = [(Number, Number, Number, Number)].init(repeating: (.Zero, .Zero, .Zero, .Zero), count: maxDigits!)
                     result[0] = stack
@@ -398,44 +396,41 @@ extension DicDataStore{
             }
         }
         return result
-        
+
     }
-    
+
     func getJapaneseNumberDicData(head: String) -> DicData {
-        
+
         let tokens = parseLiteral(input: head)
-        
-        if !tokens.allSatisfy({$0 != .エラー}){
+
+        if !tokens.allSatisfy({$0 != .エラー}) {
             return []
         }
-        let kanji = tokens.map{$0.toKanji}.joined()
+        let kanji = tokens.map {$0.toKanji}.joined()
 
         let roman: String
-        if tokens.allSatisfy({$0.isNumber}){
-            roman = tokens.map{$0.toRoman}.joined()
-        }else if tokens.allSatisfy({$0.isNotNumber}){
+        if tokens.allSatisfy({$0.isNumber}) {
+            roman = tokens.map {$0.toRoman}.joined()
+        } else if tokens.allSatisfy({$0.isNotNumber}) {
             return []
-        }else{
+        } else {
             let result = parseTokens(tokens: tokens)
-            if result.isEmpty{
+            if result.isEmpty {
                 return []
             }
             var chars: [Character] = []
-            result.forEach{stack in
-                if chars.isEmpty{
-                    if stack.0 != .Zero{
+            result.forEach {stack in
+                if chars.isEmpty {
+                    if stack.0 != .Zero {
                         chars.append(contentsOf: [stack.0.character, stack.1.character, stack.2.character, stack.3.character])
-                    }
-                    else if stack.1 != .Zero{
+                    } else if stack.1 != .Zero {
                         chars.append(contentsOf: [stack.1.character, stack.2.character, stack.3.character])
-                    }
-                    else if stack.2 != .Zero{
+                    } else if stack.2 != .Zero {
                         chars.append(contentsOf: [stack.2.character, stack.3.character])
-                    }
-                    else if stack.3 != .Zero{
+                    } else if stack.3 != .Zero {
                         chars.append(stack.3.character)
                     }
-                }else{
+                } else {
                     chars.append(contentsOf: [stack.0.character, stack.1.character, stack.2.character, stack.3.character])
                 }
             }
@@ -446,5 +441,5 @@ extension DicDataStore{
             GeneratedDicDataElement(word: roman, ruby: head, cid: 1295, mid: 452, value: -16+4/PValue(roman.count))
         ]
     }
-    
+
 }

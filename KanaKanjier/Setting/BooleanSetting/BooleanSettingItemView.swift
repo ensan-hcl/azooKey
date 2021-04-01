@@ -8,9 +8,8 @@
 
 import SwiftUI
 
-
 struct BooleanSettingItemView: View {
-    init(_ viewModel: SettingItemViewModel<Bool>){
+    init(_ viewModel: SettingItemViewModel<Bool>) {
         self.item = viewModel.item
         self.viewModel = viewModel
     }
@@ -19,17 +18,17 @@ struct BooleanSettingItemView: View {
     @State private var isOn = false
 
     var body: some View {
-        HStack{
+        HStack {
             Toggle(isOn: self.$viewModel.value) {
                 Text(self.item.identifier.title)
-                Button{
+                Button {
                     isOn = true
                 }label: {
                     Image(systemName: "info.circle")
                 }
             }
             .toggleStyle(SwitchToggleStyle())
-            .alert(isPresented: $isOn){
+            .alert(isPresented: $isOn) {
                 Alert(title: Text(self.item.description), dismissButton: .default(Text("OK"), action: {
                     isOn = false
                 }))

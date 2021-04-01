@@ -8,12 +8,12 @@
 
 import Foundation
 
-final class OSUserDict{
+final class OSUserDict {
     var dict: DicDataStore.DicData = []
 }
 
-final class DicDataStore{
-    init(){
+final class DicDataStore {
+    init() {
         debug("DicDataStoreが初期化されました")
         self.setup()
     }
@@ -28,7 +28,7 @@ final class DicDataStore{
     private var importedLoudses: Set<String> = []
     private var charsID: [Character: UInt8] = [:]
     private var memory: LearningMemorys = LearningMemorys()
-    private var zeroHintPredictionDicData: DicData? = nil
+    private var zeroHintPredictionDicData: DicData?
 
     private var osUserDict = OSUserDict()
 
@@ -37,23 +37,23 @@ final class DicDataStore{
     private let cidCount = 1319
 
     private let numberFormatter = NumberFormatter()
-    ///初期化時のセットアップ用の関数。プロパティリストを読み込み、連接確率リストを読み込んで行分割し保存しておく。
-    private func setup(){
+    /// 初期化時のセットアップ用の関数。プロパティリストを読み込み、連接確率リストを読み込んで行分割し保存しておく。
+    private func setup() {
         numberFormatter.numberStyle = .spellOut
         numberFormatter.locale = .init(identifier: "ja-JP")
         self.ccLines = [[Int: PValue]].init(repeating: [:], count: cidCount)
 
-        do{
+        do {
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
-            charsID = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map{($0.element, UInt8($0.offset))})
+            charsID = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
             debug("ファイルが存在しません: \(error)")
         }
-        do{
+        do {
             let path = Bundle.main.bundlePath + "/mm.binary"
             do {
                 let binaryData = try Data(contentsOf: URL(fileURLWithPath: path), options: [.uncached])
-                let ui64array = binaryData.withUnsafeBytes{pointer -> [Float] in
+                let ui64array = binaryData.withUnsafeBytes {pointer -> [Float] in
                     return Array(
                         UnsafeBufferPointer(
                             start: pointer.baseAddress!.assumingMemoryBound(to: Float.self),
@@ -61,7 +61,7 @@ final class DicDataStore{
                         )
                     )
                 }
-                self.mmValue = ui64array.map{PValue($0)}
+                self.mmValue = ui64array.map {PValue($0)}
             } catch {
                 debug("Failed to read the file.")
                 self.mmValue = [PValue].init(repeating: .zero, count: self.midCount*self.midCount)
@@ -70,8 +70,8 @@ final class DicDataStore{
         self.loadLOUDS(identifier: "user")
     }
 
-    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification){
-        switch data{
+    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification) {
+        switch data {
         case .notifyAppearAgain:
             break
         case .reloadUserDict:
@@ -87,95 +87,95 @@ final class DicDataStore{
         }
     }
 
-    private func closeKeyboard(){
+    private func closeKeyboard() {
         self.memory.save()
     }
 
-    private func reloadUserDict(){
+    private func reloadUserDict() {
         self.loadLOUDS(identifier: "user")
     }
 
-    ///ペナルティ関数。文字数で決める。
+    /// ペナルティ関数。文字数で決める。
     private func getPenalty(data: DicDataElementProtocol) -> PValue {
         return -2.0/PValue(data.word.count)
     }
 
-    ///計算時に利用。無視すべきデータかどうか。
+    /// 計算時に利用。無視すべきデータかどうか。
     private func shouldBeRemoved(value: PValue, wordCount: Int) -> Bool {
         let d = value - self.treshold
-        if d < 0{
+        if d < 0 {
             return true
         }
         return 2.0/PValue(wordCount) < -d
     }
 
-    ///計算時に利用。無視すべきデータかどうか。
+    /// 計算時に利用。無視すべきデータかどうか。
     internal func shouldBeRemoved(data: DicDataElementProtocol) -> Bool {
         if data.adjust.isZero && (
             data is LRE_V3E_DicDataElement ||
-            data is V3E_DicDataElement ||
-            data is SRE_V3E_DicDataElement
-        ){
+                data is V3E_DicDataElement ||
+                data is SRE_V3E_DicDataElement
+        ) {
             return true
         }
         let d = data.value() - self.treshold
-        if d < 0{
+        if d < 0 {
             return true
         }
         return self.getPenalty(data: data) < -d
     }
 
-    private func loadLOUDS(identifier: String){
+    private func loadLOUDS(identifier: String) {
         importedLoudses.update(with: identifier)
-        if let louds = LOUDS.build(identifier){
+        if let louds = LOUDS.build(identifier) {
             self.loudses[identifier] = louds
-        }else{
+        } else {
             debug("loudsの読み込みに失敗、identifierは\(identifier)")
         }
     }
 
     private func perfectMatchLOUDS(identifier: String, key: String) -> [Int] {
-        if !importedLoudses.contains(identifier){
+        if !importedLoudses.contains(identifier) {
             self.loadLOUDS(identifier: identifier)
         }
         guard let louds = self.loudses[identifier] else {
             return []
         }
-        return [louds.searchNodeIndex(chars: key.map{self.charsID[$0, default: .max]})].compactMap{$0}
+        return [louds.searchNodeIndex(chars: key.map {self.charsID[$0, default: .max]})].compactMap {$0}
     }
 
     private func throughMatchLOUDS(identifier: String, key: String) -> [Int] {
-        if !importedLoudses.contains(identifier){
+        if !importedLoudses.contains(identifier) {
             self.loadLOUDS(identifier: identifier)
         }
         guard let louds = self.loudses[identifier] else {
             return []
         }
-        return louds.byfixNodeIndices(chars: key.map{self.charsID[$0, default: .max]})
+        return louds.byfixNodeIndices(chars: key.map {self.charsID[$0, default: .max]})
     }
 
     private func prefixMatchLOUDS(identifier: String, key: String, depth: Int = .max) -> [Int] {
-        if !importedLoudses.contains(identifier){
+        if !importedLoudses.contains(identifier) {
             self.loadLOUDS(identifier: identifier)
         }
         guard let louds = self.loudses[identifier] else {
             return []
         }
-        return louds.prefixNodeIndices(chars: key.map{self.charsID[$0, default: .max]}, maxDepth: depth)
+        return louds.prefixNodeIndices(chars: key.map {self.charsID[$0, default: .max]}, maxDepth: depth)
     }
 
     private func getDicData(identifier: String, indices: Set<Int>) -> [DicDataElementProtocol] {
-        //split = 2048
+        // split = 2048
         let dict = [Int: [Int]].init(grouping: indices, by: {$0 >> 11})
-        let data: [[Substring]] = dict.flatMap{(dictKeyValue) -> [[Substring]] in
-            let datablock: [String] = LOUDS.getData(identifier + "\(dictKeyValue.key)", indices: dictKeyValue.value.map{$0 & 2047})
-            let strings = datablock.flatMap{$0.split(separator: ",", omittingEmptySubsequences: false)}
-            return strings.map{$0.split(separator: "\t", omittingEmptySubsequences: false)}
+        let data: [[Substring]] = dict.flatMap {(dictKeyValue) -> [[Substring]] in
+            let datablock: [String] = LOUDS.getData(identifier + "\(dictKeyValue.key)", indices: dictKeyValue.value.map {$0 & 2047})
+            let strings = datablock.flatMap {$0.split(separator: ",", omittingEmptySubsequences: false)}
+            return strings.map {$0.split(separator: "\t", omittingEmptySubsequences: false)}
         }
-        return data.filter{$0.count > 5}.map{self.convertDicData(from: $0)}
+        return data.filter {$0.count > 5}.map {self.convertDicData(from: $0)}
     }
 
-    ///kana2latticeから参照する。
+    /// kana2latticeから参照する。
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - from: 起点
@@ -183,60 +183,60 @@ final class DicDataStore{
         conversionBenchmark.start(process: .辞書読み込み_全体)
         conversionBenchmark.start(process: .辞書読み込み_軽量データ読み込み)
         let toIndex = min(inputData.count, index + self.maxlength)
-        let segments = (index ..< toIndex).map{inputData[index...$0]}
-        let wisedicdata: DicData = (index ..< toIndex).flatMap{self.getWiseDicData(head: segments[$0-index], allowRomanLetter: $0+1 == toIndex)}
-        let memorydicdata: DicData = (index ..< toIndex).flatMap{self.getMatch(segments[$0-index])}
-        let osuserdictdicdata: DicData = (index ..< toIndex).flatMap{self.getMatchOSUserDict(segments[$0-index])}
+        let segments = (index ..< toIndex).map {inputData[index...$0]}
+        let wisedicdata: DicData = (index ..< toIndex).flatMap {self.getWiseDicData(head: segments[$0-index], allowRomanLetter: $0+1 == toIndex)}
+        let memorydicdata: DicData = (index ..< toIndex).flatMap {self.getMatch(segments[$0-index])}
+        let osuserdictdicdata: DicData = (index ..< toIndex).flatMap {self.getMatchOSUserDict(segments[$0-index])}
         conversionBenchmark.end(process: .辞書読み込み_軽量データ読み込み)
         conversionBenchmark.start(process: .辞書読み込み_誤り訂正候補列挙)
         var string2segment = [String: Int].init()
-        //indicesをreverseすることで、stringWithTypoは長さの長い順に並ぶ=removeでヒットしやすくなる
-        let stringWithTypoData: [(string: String, penalty: PValue)] = (index ..< toIndex).reversed().flatMap{(end) -> [(string: String, penalty: PValue)] in
+        // indicesをreverseすることで、stringWithTypoは長さの長い順に並ぶ=removeでヒットしやすくなる
+        let stringWithTypoData: [(string: String, penalty: PValue)] = (index ..< toIndex).reversed().flatMap {(end) -> [(string: String, penalty: PValue)] in
             let result = inputData.getRangeWithTypos(index, end)
-            result.forEach{
+            result.forEach {
                 string2segment[$0.string] = end-index
             }
             return inputData.getRangeWithTypos(index, end)
         }
 
-        let strings = stringWithTypoData.map{$0.string}
+        let strings = stringWithTypoData.map {$0.string}
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
         conversionBenchmark.end(process: .辞書読み込み_誤り訂正候補列挙)
         conversionBenchmark.start(process: .辞書読み込み_検索対象列挙)
         var stringSet: Set<String> = Set(strings)
-        strings.forEach{string in
-            if string.count > 4{
+        strings.forEach {string in
+            if string.count > 4 {
                 return
             }
-            if strings.contains(where: {$0 != string && $0.hasPrefix(string)}){
+            if strings.contains(where: {$0 != string && $0.hasPrefix(string)}) {
                 stringSet.remove(string)
             }
         }
         conversionBenchmark.end(process: .辞書読み込み_検索対象列挙)
         conversionBenchmark.start(process: .辞書読み込み_検索)
-        //先頭の文字: そこで検索したい文字列の集合
+        // 先頭の文字: そこで検索したい文字列の集合
         let group = [Character: [String]].init(grouping: stringSet, by: {$0.first!})
 
-        let indices: [(String, Set<Int>)] = group.map{dic in
+        let indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
-            let set = Set(dic.value.flatMap{string in self.throughMatchLOUDS(identifier: key, key: string)})
+            let set = Set(dic.value.flatMap {string in self.throughMatchLOUDS(identifier: key, key: string)})
             return (key, set)
         }
 
-        let userDictIndices = Set(stringSet.flatMap{self.throughMatchLOUDS(identifier: "user", key: $0)})
+        let userDictIndices = Set(stringSet.flatMap {self.throughMatchLOUDS(identifier: "user", key: $0)})
         conversionBenchmark.end(process: .辞書読み込み_検索)
 
         conversionBenchmark.start(process: .辞書読み込み_辞書データ生成)
-        let dicdata: DicData = (indices + [("user", userDictIndices)]).flatMap{(identifier, value) -> DicData in
-            let result: DicData = self.getDicData(identifier: identifier, indices: value).compactMap{(data: DicData.Element) in
+        let dicdata: DicData = (indices + [("user", userDictIndices)]).flatMap {(identifier, value) -> DicData in
+            let result: DicData = self.getDicData(identifier: identifier, indices: value).compactMap {(data: DicData.Element) in
                 let penalty = string2penalty[data.ruby, default: .zero]
-                if penalty.isZero{
+                if penalty.isZero {
                     return data
                 }
                 let ratio = Self.getTypoPenaltyRatio(data.lcid)
-                let pUnit: PValue = self.getPenalty(data: data)/2   //負の値
+                let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
                 let adjust = pUnit * penalty * ratio
-                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count){
+                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
                 }
                 return data.adjustedData(adjust)
@@ -251,27 +251,26 @@ final class DicDataStore{
         conversionBenchmark.end(process: .辞書読み込み_辞書データ生成)
         conversionBenchmark.start(process: .辞書読み込み_ノード生成)
 
-
-        if index == .zero{
-            let result: [LatticeNode] = totaldicdata.map{
+        if index == .zero {
+            let result: [LatticeNode] = totaldicdata.map {
                 let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]], rubyCount: nil)
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
-                //node.prevs.append(PreviousNodes(LatticeNode.PreviousNode.BOSNode))
+                // node.prevs.append(PreviousNodes(LatticeNode.PreviousNode.BOSNode))
 
                 return node
             }
             conversionBenchmark.end(process: .辞書読み込み_ノード生成)
             conversionBenchmark.end(process: .辞書読み込み_全体)
             return result
-        }else{
-            let result: [LatticeNode] = totaldicdata.map{LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]], rubyCount: nil)}
+        } else {
+            let result: [LatticeNode] = totaldicdata.map {LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]], rubyCount: nil)}
             conversionBenchmark.end(process: .辞書読み込み_ノード生成)
             conversionBenchmark.end(process: .辞書読み込み_全体)
             return result
         }
     }
 
-    ///kana2latticeから参照する。louds版。
+    /// kana2latticeから参照する。louds版。
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - to: 終点
@@ -288,31 +287,31 @@ final class DicDataStore{
 
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
-        let group = [Character: [String]].init(grouping: stringWithTypoData.map{$0.string}, by: {$0.first!})
+        let group = [Character: [String]].init(grouping: stringWithTypoData.map {$0.string}, by: {$0.first!})
 
         conversionBenchmark.end(process: .辞書読み込み_誤り訂正候補列挙)
         conversionBenchmark.start(process: .辞書読み込み_検索)
 
-        //先頭の文字: そこで検索したい文字列の集合
-        let indices: [(String, Set<Int>)] = group.map{dic in
+        // 先頭の文字: そこで検索したい文字列の集合
+        let indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
-            let set = Set(dic.value.flatMap{string in self.perfectMatchLOUDS(identifier: key, key: string)})
+            let set = Set(dic.value.flatMap {string in self.perfectMatchLOUDS(identifier: key, key: string)})
             return (key, set)
         }
-        let userDictIndices = Set(stringWithTypoData.flatMap{self.perfectMatchLOUDS(identifier: "user", key: $0.string)})
+        let userDictIndices = Set(stringWithTypoData.flatMap {self.perfectMatchLOUDS(identifier: "user", key: $0.string)})
         conversionBenchmark.end(process: .辞書読み込み_検索)
 
         conversionBenchmark.start(process: .辞書読み込み_辞書データ生成)
-        let dicdata: DicData = (indices + [("user", userDictIndices)]).flatMap{(identifier, value) -> DicData in
-            let result: DicData = self.getDicData(identifier: identifier, indices: value).compactMap{(data: DicData.Element) in
+        let dicdata: DicData = (indices + [("user", userDictIndices)]).flatMap {(identifier, value) -> DicData in
+            let result: DicData = self.getDicData(identifier: identifier, indices: value).compactMap {(data: DicData.Element) in
                 let penalty = string2penalty[data.ruby, default: .zero]
-                if penalty.isZero{
+                if penalty.isZero {
                     return data
                 }
                 let ratio = Self.getTypoPenaltyRatio(data.lcid)
-                let pUnit: PValue = self.getPenalty(data: data)/2   //負の値
+                let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
                 let adjust = pUnit * penalty * ratio
-                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count){
+                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
                 }
                 return data.adjustedData(adjust)
@@ -327,8 +326,8 @@ final class DicDataStore{
         totaldicdata.append(contentsOf: osuserdictdicdata)
         conversionBenchmark.end(process: .辞書読み込み_辞書データ生成)
         conversionBenchmark.start(process: .辞書読み込み_ノード生成)
-        if fromIndex == .zero{
-            let result: [LatticeNode] = totaldicdata.map{
+        if fromIndex == .zero {
+            let result: [LatticeNode] = totaldicdata.map {
                 let node = LatticeNode(data: $0, romanString: segment, rubyCount: nil)
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 return node
@@ -336,24 +335,23 @@ final class DicDataStore{
             conversionBenchmark.end(process: .辞書読み込み_ノード生成)
             conversionBenchmark.end(process: .辞書読み込み_全体)
             return result
-        }else{
-            let result: [LatticeNode] = totaldicdata.map{LatticeNode(data: $0, romanString: segment, rubyCount: nil)}
+        } else {
+            let result: [LatticeNode] = totaldicdata.map {LatticeNode(data: $0, romanString: segment, rubyCount: nil)}
             conversionBenchmark.end(process: .辞書読み込み_ノード生成)
             conversionBenchmark.end(process: .辞書読み込み_全体)
             return result
         }
     }
 
-
     internal func getZeroHintPredictionDicData() -> DicData {
-        if let dicdata = self.zeroHintPredictionDicData{
+        if let dicdata = self.zeroHintPredictionDicData {
             return dicdata
         }
-        do{
+        do {
             let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/p_null.csv", encoding: String.Encoding.utf8)
             let csvLines = csvString.split(separator: "\n")
-            let csvData = csvLines.map{$0.split(separator: ",", omittingEmptySubsequences: false)}
-            let dicdata: DicData = csvData.map{convertDicData(from: $0)}
+            let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
+            let dicdata: DicData = csvData.map {convertDicData(from: $0)}
             self.zeroHintPredictionDicData = dicdata
             return dicdata
         } catch {
@@ -363,34 +361,34 @@ final class DicDataStore{
         }
     }
 
-    ///辞書から予測変換データを読み込む関数
+    /// 辞書から予測変換データを読み込む関数
     /// - Parameters:
     ///   - head: 辞書を引く文字列
     /// - Returns:
     ///   発見されたデータのリスト。
     internal func getPredictionLOUDSDicData<S: StringProtocol>(head: S) -> DicData {
         let count = head.count
-        if count == .zero{
+        if count == .zero {
             return []
         }
-        if count == 1{
+        if count == 1 {
             do {
                 let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/p_\(head).csv", encoding: String.Encoding.utf8)
                 let csvLines = csvString.split(separator: "\n")
-                let csvData = csvLines.map{$0.split(separator: ",", omittingEmptySubsequences: false)}
-                let dicdata: DicData = csvData.map{self.convertDicData(from: $0)}
+                let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
+                let dicdata: DicData = csvData.map {self.convertDicData(from: $0)}
                 return dicdata
-            } catch  {
+            } catch {
                 debug("ファイルが存在しません: \(error)")
                 return []
             }
-        }else if count == 2{
+        } else if count == 2 {
             let first = String(head.first!)
-            //最大700件に絞ることによって低速化を回避する。
-            //FIXME: 場当たり的な対処。改善が求められる。
+            // 最大700件に絞ることによって低速化を回避する。
+            // FIXME: 場当たり的な対処。改善が求められる。
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head), depth: 5).prefix(700)
             return self.getDicData(identifier: first, indices: Set(prefixIndices))
-        }else{
+        } else {
             let first = String(head.first!)
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head)).prefix(700)
             return self.getDicData(identifier: first, indices: Set(prefixIndices))
@@ -408,33 +406,33 @@ final class DicDataStore{
         let mid = Int(dataString[4]) ?? .zero
         let value: PValue = PValue(dataString[5]) ?? -30.0
         let adjust: PValue = PValue(self.getSingleMemory(All_DicDataElement(string: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value)) * 3)
-        //取得したデータを辞書に加える。
+        // 取得したデータを辞書に加える。
         let latticeNodeData: DicDataElementProtocol
-        if LRE{
-            if SRE{
-                if V3E{
+        if LRE {
+            if SRE {
+                if V3E {
                     latticeNodeData = LRE_SRE_V3E_DicDataElement(ruby: ruby, cid: lcid, mid: mid, adjust: adjust)
-                }else{
+                } else {
                     latticeNodeData = LRE_SRE_DicDataElement(ruby: ruby, cid: lcid, mid: mid, value: value, adjust: adjust)
                 }
-            }else{
-                if V3E{
+            } else {
+                if V3E {
                     latticeNodeData = LRE_V3E_DicDataElement(string: string, ruby: ruby, cid: lcid, mid: mid, adjust: adjust)
-                }else{
+                } else {
                     latticeNodeData = LRE_DicDataElement(word: string, ruby: ruby, cid: lcid, mid: mid, value: value, adjust: adjust)
                 }
             }
-        }else{
-            if SRE{
-                if V3E{
+        } else {
+            if SRE {
+                if V3E {
                     latticeNodeData = SRE_V3E_DicDataElement(ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, adjust: adjust)
-                }else{
+                } else {
                     latticeNodeData = SRE_DicDataElement(ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: adjust)
                 }
-            }else{
-                if V3E{
+            } else {
+                if V3E {
                     latticeNodeData = V3E_DicDataElement(string: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, adjust: adjust)
-                }else{
+                } else {
                     latticeNodeData = All_DicDataElement(string: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: adjust)
                 }
             }
@@ -442,36 +440,36 @@ final class DicDataStore{
         return latticeNodeData
     }
 
-    ///補足的な辞書情報を得る。
+    /// 補足的な辞書情報を得る。
     private func getWiseDicData(head: String, allowRomanLetter: Bool) -> DicData {
         var result: DicData = []
         result.append(contentsOf: self.getJapaneseNumberDicData(head: head))
-        if let number = Float(head){
+        if let number = Float(head) {
             result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1295, mid: 361, value: -14))
-            if number.truncatingRemainder(dividingBy: 1) == 0{
+            if number.truncatingRemainder(dividingBy: 1) == 0 {
                 let int = Int(number)
-                if int < Int(1E18) && -Int(1E18) < int, let kansuji = self.numberFormatter.string(from: NSNumber(value: int)){
+                if int < Int(1E18) && -Int(1E18) < int, let kansuji = self.numberFormatter.string(from: NSNumber(value: int)) {
                     result.append(LRE_DicDataElement(word: kansuji, ruby: head, cid: 1295, mid: 361, value: -16))
                 }
             }
         }
 
-        //headを英単語として候補に追加する
-        if VariableStates.shared.keyboardLanguage == .en_US && head.onlyRomanAlphabet{
+        // headを英単語として候補に追加する
+        if VariableStates.shared.keyboardLanguage == .en_US && head.onlyRomanAlphabet {
             result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 40, value: -14))
         }
-        //入力を全てひらがな、カタカナに変換したものを候補に追加する
-        if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana{
-            if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head]{
+        // 入力を全てひらがな、カタカナに変換したものを候補に追加する
+        if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
+            if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head] {
                 result.append(LRE_DicDataElement(word: hiragana, ruby: katakana, cid: 1288, mid: 501, value: -13))
                 result.append(LRE_SRE_DicDataElement(ruby: katakana, cid: 1288, mid: 501, value: -14))
             }
         }
 
-        if head.count == 1, let hira = head.applyingTransform(.hiraganaToKatakana, reverse: true), allowRomanLetter || !head.onlyRomanAlphabet{
-            if head == hira{
+        if head.count == 1, let hira = head.applyingTransform(.hiraganaToKatakana, reverse: true), allowRomanLetter || !head.onlyRomanAlphabet {
+            if head == hira {
                 result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 501, value: -14))
-            }else{
+            } else {
                 result.append(LRE_DicDataElement(word: hira, ruby: head, cid: 1288, mid: 501, value: -13))
                 result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 501, value: -14))
             }
@@ -479,11 +477,10 @@ final class DicDataStore{
         return result
     }
 
-
     private func loadCCBinary(path: String) -> [(Int32, Float)] {
         do {
             let binaryData = try Data(contentsOf: URL(fileURLWithPath: path), options: [.uncached])
-            let ui64array = binaryData.withUnsafeBytes{pointer -> [(Int32, Float)] in
+            let ui64array = binaryData.withUnsafeBytes {pointer -> [(Int32, Float)] in
                 return Array(
                     UnsafeBufferPointer(
                         start: pointer.baseAddress!.assumingMemoryBound(to: (Int32, Float).self),
@@ -498,42 +495,42 @@ final class DicDataStore{
         }
     }
 
-    ///OSのユーザ辞書からrubyに等しい語を返す。
+    /// OSのユーザ辞書からrubyに等しい語を返す。
     private func getMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> DicData {
-        return self.osUserDict.dict.filter{$0.ruby == ruby}
+        return self.osUserDict.dict.filter {$0.ruby == ruby}
     }
 
-    ///OSのユーザ辞書からrubyに先頭一致する語を返す。
+    /// OSのユーザ辞書からrubyに先頭一致する語を返す。
     internal func getPrefixMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> DicData {
-        return self.osUserDict.dict.filter{$0.ruby.hasPrefix(ruby)}
+        return self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
     }
 
-    ///rubyに等しい語を返す。
+    /// rubyに等しい語を返す。
     private func getMatch<S: StringProtocol>(_ ruby: S) -> DicData {
         return self.memory.match(ruby)
     }
-    ///rubyに等しい語の回数を返す。
+    /// rubyに等しい語の回数を返す。
     internal func getSingleMemory(_ data: DicDataElementProtocol) -> Int {
         return self.memory.getSingle(data)
     }
-    ///rubyを先頭にもつ語を返す。
+    /// rubyを先頭にもつ語を返す。
     internal func getPrefixMemory<S: StringProtocol>(_ prefix: S) -> DicData {
         return self.memory.getPrefixDicData(prefix)
     }
-    ///二つの語の並び回数を返す。
+    /// 二つの語の並び回数を返す。
     internal func getMatch(_ previous: DicDataElementProtocol, next: DicDataElementProtocol) -> Int {
         return self.memory.matchNext(previous, next: next)
     }
-    ///一つの後から連結する次の語を返す。
+    /// 一つの後から連結する次の語を返す。
     internal func getNextMemory(_ data: DicDataElementProtocol) -> [(next: DicDataElementProtocol, count: Int)] {
         return self.memory.getNextData(data)
     }
 
-    //学習を反映する
-    internal func updateLearningData(_ candidate: Candidate, with previous: DicDataElementProtocol?){
+    // 学習を反映する
+    internal func updateLearningData(_ candidate: Candidate, with previous: DicDataElementProtocol?) {
         self.memory.update(candidate.data, lastData: previous)
     }
-    ///class idから連接確率を得る関数
+    /// class idから連接確率を得る関数
     /// - Parameters:
     ///   - former: 左側の語のid
     ///   - latter: 右側の語のid
@@ -541,19 +538,19 @@ final class DicDataStore{
     ///   連接確率の対数。
     /// - 要求があった場合ごとにファイルを読み込んで
     internal func getCCValue(_ former: Int, _ latter: Int) -> PValue {
-        if ccParsed.contains(former){
+        if ccParsed.contains(former) {
             let defaultValue = ccLines[former][-1, default: -25]
             return ccLines[former][latter, default: defaultValue]
         }
         let add: PValue = 3
         let path = Bundle.main.bundlePath + "/\(former).binary"
         let values = loadCCBinary(path: path)
-        ccLines[former] = [Int: PValue].init(uniqueKeysWithValues: values.map{(Int($0.0), PValue($0.1) + add)})
+        ccLines[former] = [Int: PValue].init(uniqueKeysWithValues: values.map {(Int($0.0), PValue($0.1) + add)})
         ccParsed.update(with: former)
         return ccLines[former][latter, default: -25]
     }
 
-    ///meaning idから意味連接尤度を得る関数
+    /// meaning idから意味連接尤度を得る関数
     /// - Parameters:
     ///   - former: 左側の語のid
     ///   - latter: 右側の語のid
@@ -561,19 +558,19 @@ final class DicDataStore{
     ///   意味連接確率の対数。
     /// - 要求があった場合ごとに確率値をパースして取得する。
     internal func getMMValue(_ former: Int, _ latter: Int) -> PValue {
-        if former == 500 || latter == 500{
+        if former == 500 || latter == 500 {
             return 0
         }
         return self.mmValue[former * self.midCount + latter]
     }
 
-    //誤り訂正候補の構築の際、ファイルが存在しているか事前にチェックし、存在していなければ以後の計算を打ち切ることで、計算を減らす。
+    // 誤り訂正候補の構築の際、ファイルが存在しているか事前にチェックし、存在していなければ以後の計算を打ち切ることで、計算を減らす。
     internal static func existFile<S: StringProtocol>(identifier: S) -> Bool {
         let fileName = identifier.prefix(1)
         let path = Bundle.main.bundlePath + "/" + fileName + ".louds"
         return FileManager.default.fileExists(atPath: path)
     }
-    
+
     /*
      文節の切れ目とは
 
@@ -588,100 +585,98 @@ final class DicDataStore{
      * 内容語→後置機能語
 
      の二通りとなる。
-     
+
      */
-    ///class idから、文節かどうかを判断する関数。
+    /// class idから、文節かどうかを判断する関数。
     /// - Parameters:
     ///   - c_former: 左側の語のid
     ///   - c_latter: 右側の語のid
     /// - Returns:
     ///   そこが文節であるかどうか。
     internal static func isClause(_ former: Int, _ latter: Int) -> Bool {
-        //EOSが基本多いので、この順の方がヒット率が上がると思われる。
+        // EOSが基本多いので、この順の方がヒット率が上がると思われる。
         let latter_wordtype = Self.judgeWordType(cid: latter)
-        if latter_wordtype == 3{
+        if latter_wordtype == 3 {
             return false
         }
         let former_wordtype = Self.judgeWordType(cid: former)
-        if former_wordtype == 3  {
+        if former_wordtype == 3 {
             return false
         }
-        if latter_wordtype == 0{
+        if latter_wordtype == 0 {
             return former_wordtype != 0
         }
-        if latter_wordtype == 1{
+        if latter_wordtype == 1 {
             return former_wordtype != 0
         }
         return false
     }
-    
-    private static let BOS_EOS_wordIDs: Set<Int> = [0,1316]
+
+    private static let BOS_EOS_wordIDs: Set<Int> = [0, 1316]
     private static let PREPOSITION_wordIDs: Set<Int> = [1315, 6, 557, 558, 559, 560]
-    private static let INPOSITION_wordIDs: Set<Int> = Set<Int>((561..<868).map{$0}
-                                            + (1283..<1297).map{$0}
-                                            + (1306..<1310).map{$0}
-                                            + (11..<53).map{$0}
-                                            + (555..<557).map{$0}
-                                            + (1281..<1283).map{$0}
-                                            ).union([1314, 3, 2, 4, 5, 1, 9])
+    private static let INPOSITION_wordIDs: Set<Int> = Set<Int>((561..<868).map {$0}
+                                                                + (1283..<1297).map {$0}
+                                                                + (1306..<1310).map {$0}
+                                                                + (11..<53).map {$0}
+                                                                + (555..<557).map {$0}
+                                                                + (1281..<1283).map {$0}
+    ).union([1314, 3, 2, 4, 5, 1, 9])
     /*
-    private static let POSTPOSITION_wordIDs: Set<Int> = Set<Int>((7...8).map{$0}
-                                            + (54..<555).map{$0}
-                                            + (868..<1281).map{$0}
-                                            + (1297..<1306).map{$0}
-                                            + (1310..<1314).map{$0}
-                                            ).union([10])
+     private static let POSTPOSITION_wordIDs: Set<Int> = Set<Int>((7...8).map{$0}
+     + (54..<555).map{$0}
+     + (868..<1281).map{$0}
+     + (1297..<1306).map{$0}
+     + (1310..<1314).map{$0}
+     ).union([10])
      */
     internal static func includeMMValueCalculation(_ data: DicDataElementProtocol) -> Bool {
-        //LREでない場合はfalseを返す。
+        // LREでない場合はfalseを返す。
         if     data is SRE_DicDataElement
                 || data is SRE_V3E_DicDataElement
                 || data is V3E_DicDataElement
                 || data is BOSEOSDicDataElement
-                || data is All_DicDataElement
-        {
+                || data is All_DicDataElement {
             return false
         }
-        //非自立動詞
-        if 895...1280 ~= data.lcid{
+        // 非自立動詞
+        if 895...1280 ~= data.lcid {
             return true
         }
-        //非自立名刺
-        if 1297...1305 ~= data.lcid{
+        // 非自立名刺
+        if 1297...1305 ~= data.lcid {
             return true
         }
-        //内容語かどうか
+        // 内容語かどうか
         return Self.INPOSITION_wordIDs.contains(data.lcid)
     }
 
     internal static func getTypoPenaltyRatio(_ lcid: Int) -> PValue {
-        //助詞147...368, 助動詞369...554
-        if 147...554 ~= lcid{
+        // 助詞147...368, 助動詞369...554
+        if 147...554 ~= lcid {
             return 2.5
         }
         return 1
     }
 
-
-    //カウントをゼロにすべき語の種類
+    // カウントをゼロにすべき語の種類
     internal static func needWValueMemory(_ data: DicDataElementProtocol) -> Bool {
-        //助詞、助動詞
-        if 147...554 ~= data.lcid{
+        // 助詞、助動詞
+        if 147...554 ~= data.lcid {
             return false
         }
-        //接頭辞
-        if 557...560 ~= data.lcid{
+        // 接頭辞
+        if 557...560 ~= data.lcid {
             return false
         }
-        //接尾名詞を除去
-        if 1297...1305 ~= data.lcid{
+        // 接尾名詞を除去
+        if 1297...1305 ~= data.lcid {
             return false
         }
-        //記号を除去
-        if 6...9 ~= data.lcid{
+        // 記号を除去
+        if 6...9 ~= data.lcid {
             return false
         }
-        if 0 == data.lcid || 1316 == data.lcid{
+        if 0 == data.lcid || 1316 == data.lcid {
             return false
         }
 
@@ -695,71 +690,70 @@ final class DicDataStore{
     ///   - 1 when core
     ///   - 2 when postposition
     internal static func judgeWordType(cid: Int) -> Int {
-        if Self.BOS_EOS_wordIDs.contains(cid){
-            return 3    //BOS/EOS
+        if Self.BOS_EOS_wordIDs.contains(cid) {
+            return 3    // BOS/EOS
         }
-        if Self.PREPOSITION_wordIDs.contains(cid){
-            return 0    //前置
+        if Self.PREPOSITION_wordIDs.contains(cid) {
+            return 0    // 前置
         }
         if Self.INPOSITION_wordIDs.contains(cid) {
-            return 1 //内容
+            return 1 // 内容
         }
-        return 2   //後置
+        return 2   // 後置
     }
 
-
     internal static let possibleNexts: [String: [String]] = [
-            "x":["ァ","ィ","ゥ","ェ","ォ","ッ","ャ","ュ","ョ","ヮ"],
-            "l":["ァ","ィ","ゥ","ェ","ォ","ッ","ャ","ュ","ョ","ヮ"],
-            "xt":["ッ"],
-            "lt":["ッ"],
-            "xts":["ッ"],
-            "lts":["ッ"],
-            "xy":["ャ","ュ","ョ"],
-            "ly":["ャ","ュ","ョ"],
-            "xw":["ヮ"],
-            "lw":["ヮ"],
-            "v":["ヴ"],
-            "k":["カ","キ","ク","ケ","コ"],
-            "q":["クァ","クィ","クゥ","クェ","クォ"],
-            "qy":["クャ","クィ","クュ","クェ","クョ"],
-            "qw":["クヮ","クィ","クゥ","クェ","クォ"],
-            "ky":["キャ","キィ","キュ","キェ","キョ"],
-            "g":["ガ","ギ","グ","ゲ","ゴ"],
-            "gy":["ギャ","ギィ","ギュ","ギェ","ギョ"],
-            "s":["サ","シ","ス","セ","ソ"],
-            "sy":["シャ","シィ","シュ","シェ","ショ"],
-            "sh":["シャ","シィ","シュ","シェ","ショ"],
-            "z":["ザ","ジ","ズ","ゼ","ゾ"],
-            "zy":["ジャ","ジィ","ジュ","ジェ","ジョ"],
-            "j":["ジ"],
-            "t":["タ","チ","ツ","テ","ト"],
-            "ty":["チャ","チィ","チュ","チェ","チョ"],
-            "ts":["ツ"],
-            "th":["テャ","ティ","テュ","テェ","テョ"],
-            "tw":["トァ","トィ","トゥ","トェ","トォ"],
-            "cy":["チャ","チィ","チュ","チェ","チョ"],
-            "ch":["チ"],
-            "d":["ダ","ヂ","ヅ","デ","ド"],
-            "dy":["ヂ"],
-            "dh":["デャ","ディ","デュ","デェ","デョ"],
-            "dw":["ドァ","ドィ","ドゥ","ドェ","ドォ"],
-            "n":["ナ","ニ","ヌ","ネ","ノ","ン"],
-            "ny":["ニャ","ニィ","ニュ","ニェ","ニョ"],
-            "h":["ハ","ヒ","フ","ヘ","ホ"],
-            "hy":["ヒャ","ヒィ","ヒュ","ヒェ","ヒョ"],
-            "hw":["ファ","フィ","フェ","フォ"],
-            "f":["フ"],
-            "b":["バ","ビ","ブ","ベ","ボ"],
-            "by":["ビャ","ビィ","ビュ","ビェ","ビョ"],
-            "p":["パ","ピ","プ","ペ","ポ"],
-            "py":["ピャ","ピィ","ピュ","ピェ","ピョ"],
-            "m":["マ","ミ","ム","メ","モ"],
-            "my":["ミャ","ミィ","ミュ","ミェ","ミョ"],
-            "y":["ヤ","ユ","イェ","ヨ"],
-            "r":["ラ","リ","ル","レ","ロ"],
-            "ry":["リャ","リィ","リュ","リェ","リョ"],
-            "w":["ワ","ウィ","ウェ","ヲ"],
-            "wy":["ヰ","ヱ"],
-        ]
+        "x": ["ァ", "ィ", "ゥ", "ェ", "ォ", "ッ", "ャ", "ュ", "ョ", "ヮ"],
+        "l": ["ァ", "ィ", "ゥ", "ェ", "ォ", "ッ", "ャ", "ュ", "ョ", "ヮ"],
+        "xt": ["ッ"],
+        "lt": ["ッ"],
+        "xts": ["ッ"],
+        "lts": ["ッ"],
+        "xy": ["ャ", "ュ", "ョ"],
+        "ly": ["ャ", "ュ", "ョ"],
+        "xw": ["ヮ"],
+        "lw": ["ヮ"],
+        "v": ["ヴ"],
+        "k": ["カ", "キ", "ク", "ケ", "コ"],
+        "q": ["クァ", "クィ", "クゥ", "クェ", "クォ"],
+        "qy": ["クャ", "クィ", "クュ", "クェ", "クョ"],
+        "qw": ["クヮ", "クィ", "クゥ", "クェ", "クォ"],
+        "ky": ["キャ", "キィ", "キュ", "キェ", "キョ"],
+        "g": ["ガ", "ギ", "グ", "ゲ", "ゴ"],
+        "gy": ["ギャ", "ギィ", "ギュ", "ギェ", "ギョ"],
+        "s": ["サ", "シ", "ス", "セ", "ソ"],
+        "sy": ["シャ", "シィ", "シュ", "シェ", "ショ"],
+        "sh": ["シャ", "シィ", "シュ", "シェ", "ショ"],
+        "z": ["ザ", "ジ", "ズ", "ゼ", "ゾ"],
+        "zy": ["ジャ", "ジィ", "ジュ", "ジェ", "ジョ"],
+        "j": ["ジ"],
+        "t": ["タ", "チ", "ツ", "テ", "ト"],
+        "ty": ["チャ", "チィ", "チュ", "チェ", "チョ"],
+        "ts": ["ツ"],
+        "th": ["テャ", "ティ", "テュ", "テェ", "テョ"],
+        "tw": ["トァ", "トィ", "トゥ", "トェ", "トォ"],
+        "cy": ["チャ", "チィ", "チュ", "チェ", "チョ"],
+        "ch": ["チ"],
+        "d": ["ダ", "ヂ", "ヅ", "デ", "ド"],
+        "dy": ["ヂ"],
+        "dh": ["デャ", "ディ", "デュ", "デェ", "デョ"],
+        "dw": ["ドァ", "ドィ", "ドゥ", "ドェ", "ドォ"],
+        "n": ["ナ", "ニ", "ヌ", "ネ", "ノ", "ン"],
+        "ny": ["ニャ", "ニィ", "ニュ", "ニェ", "ニョ"],
+        "h": ["ハ", "ヒ", "フ", "ヘ", "ホ"],
+        "hy": ["ヒャ", "ヒィ", "ヒュ", "ヒェ", "ヒョ"],
+        "hw": ["ファ", "フィ", "フェ", "フォ"],
+        "f": ["フ"],
+        "b": ["バ", "ビ", "ブ", "ベ", "ボ"],
+        "by": ["ビャ", "ビィ", "ビュ", "ビェ", "ビョ"],
+        "p": ["パ", "ピ", "プ", "ペ", "ポ"],
+        "py": ["ピャ", "ピィ", "ピュ", "ピェ", "ピョ"],
+        "m": ["マ", "ミ", "ム", "メ", "モ"],
+        "my": ["ミャ", "ミィ", "ミュ", "ミェ", "ミョ"],
+        "y": ["ヤ", "ユ", "イェ", "ヨ"],
+        "r": ["ラ", "リ", "ル", "レ", "ロ"],
+        "ry": ["リャ", "リィ", "リュ", "リェ", "リョ"],
+        "w": ["ワ", "ウィ", "ウェ", "ヲ"],
+        "wy": ["ヰ", "ヱ"]
+    ]
 }

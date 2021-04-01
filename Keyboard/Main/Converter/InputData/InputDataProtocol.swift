@@ -10,17 +10,17 @@ import Foundation
 
 /// 入力を管理するInputDataのprotocol
 /// - Note:structに対して付与すること。
-protocol InputDataProtocol{
-    var katakanaString: String  {get}
+protocol InputDataProtocol {
+    var katakanaString: String {get}
     var characters: [Character] {get}
-    var count: Int              {get}
-    
+    var count: Int {get}
+
     subscript(_ range: ClosedRange<Int>) -> String {get}
-    
-    ///誤り訂正候補を取得する関数。。
+
+    /// 誤り訂正候補を取得する関数。。
     ///   - left...right :の範囲の文字列が用いられる。
     func getRangeWithTypos(_ left: Int, _ right: Int) -> [(string: String, penalty: PValue)]
-    
+
     func isAfterDeletedCharacter(previous: Self) -> Int?
     func isAfterDeletedPrefixCharacter(previous: Self) -> Int?
     func isAfterAddedCharacter(previous: Self) -> Int?
@@ -28,18 +28,18 @@ protocol InputDataProtocol{
 
 }
 
-extension InputDataProtocol{
+extension InputDataProtocol {
     func translated<InputData: InputDataProtocol>() -> InputData {
-        if let data = self as? InputData{
+        if let data = self as? InputData {
             return data
         }
-        if let self = self as? DirectInputData{
-            if InputData.self == RomanInputData.self{
+        if let self = self as? DirectInputData {
+            if InputData.self == RomanInputData.self {
                 return RomanInputData(self.katakanaString, history: KanaRomanStateHolder(components: [KanaComponent(internalText: self.katakanaString, kana: self.katakanaString, isFreezed: true, escapeRomanKanaConverting: true)]), count: self.count) as! InputData
             }
         }
-        if let self = self as? RomanInputData{
-            if InputData.self == DirectInputData.self{
+        if let self = self as? RomanInputData {
+            if InputData.self == DirectInputData.self {
                 return DirectInputData(self.katakanaString, count: self.count) as! InputData
             }
         }
@@ -47,39 +47,39 @@ extension InputDataProtocol{
     }
 }
 
-extension InputDataProtocol{    
+extension InputDataProtocol {
     internal func isAfterAddedCharacter(previous: Self) -> Int? {
-        if self.characters.count <= previous.count{
+        if self.characters.count <= previous.count {
             return nil
         }
         let prefix: [Character] = Array(self.characters.prefix(previous.characters.count))
-        if prefix == previous.characters{
+        if prefix == previous.characters {
             return self.characters.count - previous.count
         }
         return nil
     }
-    
+
     internal func isAfterDeletedCharacter(previous: Self) -> Int? {
         let prefix: [Character] = Array(previous.characters.prefix(self.characters.count))
-        if prefix == self.characters{
+        if prefix == self.characters {
             let dif = previous.characters.count - self.characters.count
-            if dif == 0{
+            if dif == 0 {
                 return nil
             }
             return dif
-        }else{
+        } else {
             return nil
         }
     }
-    
+
     internal func isAfterDeletedPrefixCharacter(previous: Self) -> Int? {
-        if previous.katakanaString.hasSuffix(self.katakanaString){
+        if previous.katakanaString.hasSuffix(self.katakanaString) {
             let dif = previous.characters.count - self.characters.count
-            if dif == 0{
+            if dif == 0 {
                 return nil
             }
             return dif
-        }else{
+        } else {
             return nil
         }
     }
@@ -87,20 +87,18 @@ extension InputDataProtocol{
     internal func isAfterReplacedCharacter(previous: Self) -> (deleted: Int, added: Int)? {
         let endIndex = min(previous.characters.endIndex, self.characters.endIndex)
         var i = 0
-        while i<endIndex && previous.characters[i] == self.characters[i]{
+        while i<endIndex && previous.characters[i] == self.characters[i] {
             i += 1
         }
-        if i == 0{
+        if i == 0 {
             return nil
         }
         let deleted = previous.characters.count - i
         let added = self.characters.count - i
-        if deleted == 0 || added == 0{
+        if deleted == 0 || added == 0 {
             return nil
         }
         return (deleted, added)
     }
 
 }
-
-

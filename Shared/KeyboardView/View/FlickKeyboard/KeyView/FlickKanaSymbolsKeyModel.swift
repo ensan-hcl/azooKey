@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol{
+struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = true
 
     static let shared = FlickKanaSymbolsKeyModel()
@@ -28,8 +28,7 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol{
 
     var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.kanaSymbolsKeyFlick))
 
-
-    private init(){}
+    private init() {}
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         KeyLabel(self.labelType, width: width)

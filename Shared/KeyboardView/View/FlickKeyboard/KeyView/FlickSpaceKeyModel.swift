@@ -9,12 +9,12 @@
 import Foundation
 import SwiftUI
 
-struct FlickSpaceKeyModel: FlickKeyModelProtocol{
+struct FlickSpaceKeyModel: FlickKeyModelProtocol {
     static var shared = FlickSpaceKeyModel()
     let suggestModel: SuggestModel
     let needSuggestView = true
 
-    init(){
+    init() {
         self.suggestModel = SuggestModel(flickKeys, keyType: .normal)
     }
 

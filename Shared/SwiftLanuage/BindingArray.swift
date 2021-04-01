@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-extension Binding: IteratorProtocol where Value: IteratorProtocol{
+extension Binding: IteratorProtocol where Value: IteratorProtocol {
     public mutating func next() -> Binding<Value.Element>? {
         guard var item = wrappedValue.next() else {
             return nil
@@ -24,7 +24,7 @@ extension Binding: IteratorProtocol where Value: IteratorProtocol{
     }
 }
 
-extension Binding: Identifiable where Value: Identifiable{
+extension Binding: Identifiable where Value: Identifiable {
     public var id: Value.ID {
         wrappedValue.id
     }
@@ -32,7 +32,7 @@ extension Binding: Identifiable where Value: Identifiable{
     public typealias ID = Value.ID
 }
 
-extension Binding: Sequence where Value: BidirectionalCollection{
+extension Binding: Sequence where Value: BidirectionalCollection {
     public typealias Element = Binding<Value.Element>
     public typealias Iterator = Binding<Value.Iterator>
 
@@ -45,7 +45,7 @@ extension Binding: Sequence where Value: BidirectionalCollection{
     }
 }
 
-extension Binding: Collection where Value: BidirectionalCollection & MutableCollection{
+extension Binding: Collection where Value: BidirectionalCollection & MutableCollection {
     public subscript(position: Value.Index) -> Binding<Value.Element> {
         get {
             return Binding<Value.Element>(
@@ -80,4 +80,3 @@ extension Binding: BidirectionalCollection where Value: BidirectionalCollection 
 }
 
 extension Binding: RandomAccessCollection where Value: BidirectionalCollection & MutableCollection {}
-

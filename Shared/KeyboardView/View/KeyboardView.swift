@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 
-
 struct ThemeEnvironmentKey: EnvironmentKey {
     typealias Value = ThemeData
 
@@ -27,7 +26,6 @@ extension EnvironmentValues {
     }
 }
 
-
 struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
     private let resultModel: ResultModel<Candidate>
@@ -40,17 +38,17 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     private var sharedResultData = SharedResultData<Candidate>()
     private let defaultTab: Tab.ExistentialTab?
 
-    init(resultModel: ResultModel<Candidate>, defaultTab: Tab.ExistentialTab? = nil){
+    init(resultModel: ResultModel<Candidate>, defaultTab: Tab.ExistentialTab? = nil) {
         self.resultModel = resultModel
         self.defaultTab = defaultTab
     }
     var body: some View {
-        ZStack{
+        ZStack {
             theme.backgroundColor.color
                 .frame(maxWidth: .infinity)
                 .overlay(
-                    Group{
-                        if let image = theme.picture.image{
+                    Group {
+                        if let image = theme.picture.image {
                             image
                                 .resizable()
                                 .scaledToFill()
@@ -59,16 +57,16 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                         }
                     }
                 )
-            Group{
-                if isResultViewExpanded{
+            Group {
+                if isResultViewExpanded {
                     ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
-                }else{
-                    VStack(spacing: 0){
+                } else {
+                    VStack(spacing: 0) {
                         ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
                             .padding(.vertical, 6)
-                        if variableStates.refreshing{
+                        if variableStates.refreshing {
                             keyboardView(tab: variableStates.tabManager.currentTab.existential)
-                        }else{
+                        } else {
                             keyboardView(tab: variableStates.tabManager.currentTab.existential)
                         }
                     }
@@ -80,11 +78,11 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight)
             )
             .padding(.bottom, 2)
-            if variableStates.isTextMagnifying{
+            if variableStates.isTextMagnifying {
                 LargeTextView()
             }
-            ForEach(messageManager.necessaryMessages, id: \.id){data in
-                if messageManager.requireShow(data.id){
+            ForEach(messageManager.necessaryMessages, id: \.id) {data in
+                if messageManager.requireShow(data.id) {
                     MessageView(data: data, manager: $messageManager)
                 }
             }
@@ -94,14 +92,14 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
 
     func keyboardView(tab: Tab.ExistentialTab) -> some View {
         let target: Tab.ExistentialTab
-        if let defaultTab = defaultTab{
+        if let defaultTab = defaultTab {
             target = defaultTab
-        }else{
+        } else {
             target = tab
         }
 
-        return Group{
-            switch target{
+        return Group {
+            switch target {
             case .flick_hira:
                 FlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard)
             case .flick_abc:

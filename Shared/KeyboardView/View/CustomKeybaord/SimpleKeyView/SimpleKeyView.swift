@@ -17,7 +17,7 @@ struct SimpleKeyView: View {
     @State private var longpressing = false
     private let tabDesign: TabDependentDesign
 
-    init(model: SimpleKeyModelProtocol, tabDesign: TabDependentDesign){
+    init(model: SimpleKeyModelProtocol, tabDesign: TabDependentDesign) {
         self.model = model
         self.tabDesign = tabDesign
     }
@@ -46,15 +46,15 @@ struct SimpleKeyView: View {
             )
             .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
             .overlay(
-                Group{
-                    if !(model is SimpleChangeKeyboardKeyModel && SemiStaticStates.shared.needsInputModeSwitchKey){
-                        TouchDownAndTouchUpGestureView{
+                Group {
+                    if !(model is SimpleChangeKeyboardKeyModel && SemiStaticStates.shared.needsInputModeSwitchKey) {
+                        TouchDownAndTouchUpGestureView {
                             isPressed = true
                             pressStartDate = Date()
                             model.sound()
                             model.longPressReserve()
                         } touchMovedCallBack: {distance in
-                            if distance > 15{
+                            if distance > 15 {
                                 isPressed = false
                                 pressStartDate = Date()
                                 model.longPressEnd()
@@ -62,7 +62,7 @@ struct SimpleKeyView: View {
                         } touchUpCallBack: {distance in
                             isPressed = false
                             model.longPressEnd()
-                            if Date().timeIntervalSince(pressStartDate) < 0.4 && distance < 30{
+                            if Date().timeIntervalSince(pressStartDate) < 0.4 && distance < 30 {
                                 model.press()
                             }
                         }

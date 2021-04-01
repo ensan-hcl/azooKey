@@ -18,9 +18,9 @@ final class TrieNode<Key: Hashable, Value: Hashable> {
         self.children = children
     }
 
-    func findNode(for keys: [Key]) -> TrieNode<Key, Value>?{
+    func findNode(for keys: [Key]) -> TrieNode<Key, Value>? {
         var current: TrieNode<Key, Value> = self
-        for key in keys{
+        for key in keys {
             if let next = current.children[key] {
                 current = next
             } else {
@@ -30,9 +30,9 @@ final class TrieNode<Key: Hashable, Value: Hashable> {
         return current
     }
 
-    func find(for keys: [Key]) -> Set<Value>{
+    func find(for keys: [Key]) -> Set<Value> {
         var current: TrieNode<Key, Value> = self
-        for key in keys{
+        for key in keys {
             if let next = current.children[key] {
                 current = next
             } else {
@@ -70,38 +70,36 @@ final class TrieNode<Key: Hashable, Value: Hashable> {
         current.value = current.value.union(Set(values))
     }
 
-
     func prefix(for keys: [Key]) -> [Value] {
-        if let node = self.findNode(for: keys){
+        if let node = self.findNode(for: keys) {
             return node.flatChildren()
         }
         return []
     }
 
-
     func flatChildren() -> [Value] {
-        return self.children.flatMap{$0.value.flatChildren()} + self.value
+        return self.children.flatMap {$0.value.flatChildren()} + self.value
     }
 }
 
-extension TrieNode where Key == Character{
-    func findNode<S: StringProtocol>(for keys: S) -> TrieNode<Key, Value>?{
-        return self.findNode(for: keys.map{$0})
+extension TrieNode where Key == Character {
+    func findNode<S: StringProtocol>(for keys: S) -> TrieNode<Key, Value>? {
+        return self.findNode(for: keys.map {$0})
     }
 
-    func find<S: StringProtocol>(for keys: S) -> Set<Value>{
-        return self.find(for: keys.map{$0})
+    func find<S: StringProtocol>(for keys: S) -> Set<Value> {
+        return self.find(for: keys.map {$0})
     }
 
     func insertValue<S: StringProtocol>(for keys: S, value: Value) {
-        self.insertValue(for: keys.map{$0}, value: value)
+        self.insertValue(for: keys.map {$0}, value: value)
     }
 
     func insertValues<S: StringProtocol>(for keys: S, values: [Value]) {
-        self.insertValues(for: keys.map{$0}, values: values)
+        self.insertValues(for: keys.map {$0}, values: values)
     }
 
     func prefix<S: StringProtocol>(for keys: S) -> [Value] {
-        return self.prefix(for: keys.map{$0})
+        return self.prefix(for: keys.map {$0})
     }
 }

@@ -12,11 +12,11 @@ struct QwertyDataProvider {
     static func tabKeys(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)) -> (languageKey: QwertyKeyModelProtocol, numbersKey: QwertyKeyModelProtocol, symbolsKey: QwertyKeyModelProtocol, changeKeyboardKey: QwertyKeyModelProtocol) {
         let languageKey: QwertyKeyModelProtocol
         let first = SettingData.shared.preferredLanguageSetting.first
-        if let second = SettingData.shared.preferredLanguageSetting.second{
+        if let second = SettingData.shared.preferredLanguageSetting.second {
             languageKey = QwertySwitchLanguageKeyModel(rowInfo: rowInfo, languages: (first, second))
-        }else{
+        } else {
             let targetTab: Tab = {
-                switch first{
+                switch first {
                 case .en_US:
                     return .user_dependent(.english)
                 case .ja_JP:
@@ -32,9 +32,9 @@ struct QwertyDataProvider {
         let symbolsKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.toggleTabBar]))
 
         let changeKeyboardKey: QwertyKeyModelProtocol
-        if let second = SettingData.shared.preferredLanguageSetting.second{
+        if let second = SettingData.shared.preferredLanguageSetting.second {
             changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .secondTab(secondLanguage: second))
-        }else{
+        } else {
             changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .tabBar)
         }
         return (
@@ -45,7 +45,7 @@ struct QwertyDataProvider {
         )
     }
 
-        //横に並べる
+    // 横に並べる
     var numberKeyboard: [[QwertyKeyModelProtocol]] {[
         [
             QwertyKeyModel(
@@ -55,7 +55,7 @@ struct QwertyDataProvider {
                     (label: .text("1"), actions: [.input("1")] ),
                     (label: .text("１"), actions: [.input("１")] ),
                     (label: .text("一"), actions: [.input("一")] ),
-                    (label: .text("①"), actions: [.input("①")] ),
+                    (label: .text("①"), actions: [.input("①")] )
 
                 ], direction: .right)
             ),
@@ -66,7 +66,7 @@ struct QwertyDataProvider {
                     (label: .text("2"), actions: [.input("2")] ),
                     (label: .text("２"), actions: [.input("２")] ),
                     (label: .text("二"), actions: [.input("二")] ),
-                    (label: .text("②"), actions: [.input("②")] ),
+                    (label: .text("②"), actions: [.input("②")] )
 
                 ], direction: .right)
             ),
@@ -77,7 +77,7 @@ struct QwertyDataProvider {
                     (label: .text("3"), actions: [.input("3")] ),
                     (label: .text("３"), actions: [.input("３")] ),
                     (label: .text("三"), actions: [.input("三")] ),
-                    (label: .text("③"), actions: [.input("③")] ),
+                    (label: .text("③"), actions: [.input("③")] )
 
                 ])
             ),
@@ -88,7 +88,7 @@ struct QwertyDataProvider {
                     (label: .text("4"), actions: [.input("4")] ),
                     (label: .text("４"), actions: [.input("４")] ),
                     (label: .text("四"), actions: [.input("四")] ),
-                    (label: .text("④"), actions: [.input("④")] ),
+                    (label: .text("④"), actions: [.input("④")] )
                 ])
             ),
             QwertyKeyModel(
@@ -98,7 +98,7 @@ struct QwertyDataProvider {
                     (label: .text("5"), actions: [.input("5")] ),
                     (label: .text("５"), actions: [.input("５")] ),
                     (label: .text("五"), actions: [.input("五")] ),
-                    (label: .text("⑤"), actions: [.input("⑤")] ),
+                    (label: .text("⑤"), actions: [.input("⑤")] )
                 ])
             ),
             QwertyKeyModel(
@@ -108,7 +108,7 @@ struct QwertyDataProvider {
                     (label: .text("6"), actions: [.input("6")] ),
                     (label: .text("６"), actions: [.input("６")] ),
                     (label: .text("六"), actions: [.input("六")] ),
-                    (label: .text("⑥"), actions: [.input("⑥")] ),
+                    (label: .text("⑥"), actions: [.input("⑥")] )
                 ])
             ),
             QwertyKeyModel(
@@ -118,7 +118,7 @@ struct QwertyDataProvider {
                     (label: .text("7"), actions: [.input("7")] ),
                     (label: .text("７"), actions: [.input("７")] ),
                     (label: .text("七"), actions: [.input("七")] ),
-                    (label: .text("⑦"), actions: [.input("⑦")] ),
+                    (label: .text("⑦"), actions: [.input("⑦")] )
                 ])
             ),
             QwertyKeyModel(
@@ -128,7 +128,7 @@ struct QwertyDataProvider {
                     (label: .text("8"), actions: [.input("8")] ),
                     (label: .text("８"), actions: [.input("８")] ),
                     (label: .text("八"), actions: [.input("八")] ),
-                    (label: .text("⑧"), actions: [.input("⑧")] ),
+                    (label: .text("⑧"), actions: [.input("⑧")] )
                 ])
             ),
             QwertyKeyModel(
@@ -138,7 +138,7 @@ struct QwertyDataProvider {
                     (label: .text("9"), actions: [.input("9")] ),
                     (label: .text("９"), actions: [.input("９")] ),
                     (label: .text("九"), actions: [.input("九")] ),
-                    (label: .text("⑨"), actions: [.input("⑨")] ),
+                    (label: .text("⑨"), actions: [.input("⑨")] )
                 ], direction: .left)
             ),
             QwertyKeyModel(
@@ -148,9 +148,9 @@ struct QwertyDataProvider {
                     (label: .text("0"), actions: [.input("0")] ),
                     (label: .text("０"), actions: [.input("０")] ),
                     (label: .text("〇"), actions: [.input("〇")] ),
-                    (label: .text("⓪"), actions: [.input("⓪")] ),
+                    (label: .text("⓪"), actions: [.input("⓪")] )
                 ], direction: .left)
-            ),
+            )
         ],
         [
             QwertyKeyModel(labelType: .text("-"), pressActions: [.input("-")]),
@@ -159,7 +159,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("/")],
                 variationsModel: VariationsModel([
                     (label: .text("/"), actions: [.input("/")] ),
-                    (label: .text("\\"), actions: [.input("\\")] ),
+                    (label: .text("\\"), actions: [.input("\\")] )
                 ])
             ),
             QwertyKeyModel(
@@ -169,7 +169,7 @@ struct QwertyDataProvider {
                     (label: .text(":"), actions: [.input(":")] ),
                     (label: .text("："), actions: [.input("：")] ),
                     (label: .text(";"), actions: [.input(";")] ),
-                    (label: .text("；"), actions: [.input("；")] ),
+                    (label: .text("；"), actions: [.input("；")] )
                 ])
             ),
             QwertyKeyModel(
@@ -177,7 +177,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("@")],
                 variationsModel: VariationsModel([
                     (label: .text("@"), actions: [.input("@")] ),
-                    (label: .text("＠"), actions: [.input("＠")] ),
+                    (label: .text("＠"), actions: [.input("＠")] )
                 ])
             ),
             QwertyKeyModel(labelType: .text("("), pressActions: [.input("(")]),
@@ -190,7 +190,7 @@ struct QwertyDataProvider {
                     (label: .text("『"), actions: [.input("『")] ),
                     (label: .text("【"), actions: [.input("【")] ),
                     (label: .text("（"), actions: [.input("（")] ),
-                    (label: .text("《"), actions: [.input("《")] ),
+                    (label: .text("《"), actions: [.input("《")] )
                 ])
             ),
             QwertyKeyModel(
@@ -201,7 +201,7 @@ struct QwertyDataProvider {
                     (label: .text("』"), actions: [.input("』")] ),
                     (label: .text("】"), actions: [.input("】")] ),
                     (label: .text("）"), actions: [.input("）")] ),
-                    (label: .text("》"), actions: [.input("》")] ),
+                    (label: .text("》"), actions: [.input("》")] )
                 ])
             ),
             QwertyKeyModel(
@@ -215,28 +215,28 @@ struct QwertyDataProvider {
                     (label: .text("€"), actions: [.input("€")] ),
                     (label: .text("₿"), actions: [.input("₿")] ),
                     (label: .text("£"), actions: [.input("£")] ),
-                    (label: .text("¤"), actions: [.input("¤")] ),
+                    (label: .text("¤"), actions: [.input("¤")] )
                 ], direction: .left)
             ),
-            QwertyKeyModel(labelType: .text("&"), pressActions: [.input("&")]),
+            QwertyKeyModel(labelType: .text("&"), pressActions: [.input("&")])
         ],
 
         [
             Self.tabKeys(rowInfo: (7, 2, 0, 0)).symbolsKey
         ] + SettingData.shared.qwertyNumberTabKeySetting +
         [
-            QwertyFunctionalKeyModel.delete,
+            QwertyFunctionalKeyModel.delete
         ],
 
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).languageKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             QwertySpaceKeyModel(),
-            QwertyEnterKeyModel.shared,
-        ],
+            QwertyEnterKeyModel.shared
+        ]
     ]
     }
-    //横に並べる
+    // 横に並べる
     var symbolsKeyboard: [[QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(
@@ -278,7 +278,7 @@ struct QwertyDataProvider {
             QwertyKeyModel(
                 labelType: .text("="),
                 pressActions: [.input("=")]
-            ),
+            )
         ],
         [
             QwertyKeyModel(labelType: .text("_"), pressActions: [.input("_")]),
@@ -287,7 +287,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("\\")],
                 variationsModel: VariationsModel([
                     (label: .text("/"), actions: [.input("/")] ),
-                    (label: .text("\\"), actions: [.input("\\")] ),
+                    (label: .text("\\"), actions: [.input("\\")] )
                 ])
             ),
             QwertyKeyModel(
@@ -297,7 +297,7 @@ struct QwertyDataProvider {
                     (label: .text(":"), actions: [.input(":")] ),
                     (label: .text("："), actions: [.input("：")] ),
                     (label: .text(";"), actions: [.input(";")] ),
-                    (label: .text("；"), actions: [.input("；")] ),
+                    (label: .text("；"), actions: [.input("；")] )
                 ])
             ),
             QwertyKeyModel(
@@ -305,7 +305,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("|")],
                 variationsModel: VariationsModel([
                     (label: .text("@"), actions: [.input("@")] ),
-                    (label: .text("＠"), actions: [.input("＠")] ),
+                    (label: .text("＠"), actions: [.input("＠")] )
                 ])
             ),
             QwertyKeyModel(labelType: .text("<"), pressActions: [.input("<")]),
@@ -334,9 +334,9 @@ struct QwertyDataProvider {
                     (label: .text("€"), actions: [.input("€")] ),
                     (label: .text("₿"), actions: [.input("₿")] ),
                     (label: .text("£"), actions: [.input("£")] ),
-                    (label: .text("¤"), actions: [.input("¤")] ),
+                    (label: .text("¤"), actions: [.input("¤")] )
                 ], direction: .left)
-            ),
+            )
         ],
 
         [
@@ -346,7 +346,7 @@ struct QwertyDataProvider {
                 pressActions: [.input(".")],
                 variationsModel: VariationsModel([
                     (label: .text("。"), actions: [.input("。")] ),
-                    (label: .text("."), actions: [.input(".")] ),
+                    (label: .text("."), actions: [.input(".")] )
                 ]),
                 for: (7, 5)
             ),
@@ -355,7 +355,7 @@ struct QwertyDataProvider {
                 pressActions: [.input(",")],
                 variationsModel: VariationsModel([
                     (label: .text("、"), actions: [.input("、")] ),
-                    (label: .text(","), actions: [.input(",")] ),
+                    (label: .text(","), actions: [.input(",")] )
                 ]),
                 for: (7, 5)),
             QwertyKeyModel(
@@ -363,7 +363,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("?")],
                 variationsModel: VariationsModel([
                     (label: .text("？"), actions: [.input("？")] ),
-                    (label: .text("?"), actions: [.input("?")] ),
+                    (label: .text("?"), actions: [.input("?")] )
                 ]),
                 for: (7, 5)
             ),
@@ -372,21 +372,21 @@ struct QwertyDataProvider {
                 pressActions: [.input("!")],
                 variationsModel: VariationsModel([
                     (label: .text("！"), actions: [.input("！")] ),
-                    (label: .text("!"), actions: [.input("!")] ),
+                    (label: .text("!"), actions: [.input("!")] )
                 ]),
                 for: (7, 5)),
             QwertyKeyModel(labelType: .text("・"), pressActions: [.input("…")], for: (7, 5)),
-            QwertyFunctionalKeyModel.delete,
+            QwertyFunctionalKeyModel.delete
         ],
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).languageKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             QwertySpaceKeyModel(),
-            QwertyEnterKeyModel.shared,
-        ],
+            QwertyEnterKeyModel.shared
+        ]
     ]
 
-    //横に並べる
+    // 横に並べる
     var hiraKeyboard: [[QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
@@ -398,7 +398,7 @@ struct QwertyDataProvider {
             QwertyKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
             QwertyKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
             QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
-            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
+            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")])
         ],
         [
             QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
@@ -410,7 +410,7 @@ struct QwertyDataProvider {
             QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
             QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
             QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
-            QwertyKeyModel(labelType: .text("ー"), pressActions: [.input("ー")]),
+            QwertyKeyModel(labelType: .text("ー"), pressActions: [.input("ー")])
         ],
         [
             Self.tabKeys(rowInfo: (7, 2, 0, 0)).languageKey,
@@ -421,17 +421,17 @@ struct QwertyDataProvider {
             QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
             QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
             QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
-            QwertyFunctionalKeyModel.delete,
+            QwertyFunctionalKeyModel.delete
         ],
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             QwertySpaceKeyModel(),
-            QwertyEnterKeyModel.shared,
-        ],
+            QwertyEnterKeyModel.shared
+        ]
     ]
 
-    //横に並べる
+    // 横に並べる
     var abcKeyboard: [[QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
@@ -443,7 +443,7 @@ struct QwertyDataProvider {
             QwertyKeyModel(labelType: .text("u"), pressActions: [.input("u")]),
             QwertyKeyModel(labelType: .text("i"), pressActions: [.input("i")]),
             QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
-            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")]),
+            QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")])
         ],
         [
             QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
@@ -466,13 +466,13 @@ struct QwertyDataProvider {
             QwertyKeyModel(labelType: .text("b"), pressActions: [.input("b")]),
             QwertyKeyModel(labelType: .text("n"), pressActions: [.input("n")]),
             QwertyKeyModel(labelType: .text("m"), pressActions: [.input("m")]),
-            QwertyFunctionalKeyModel.delete,
+            QwertyFunctionalKeyModel.delete
         ],
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             QwertySpaceKeyModel(),
-            QwertyEnterKeyModel.shared,
-        ],
+            QwertyEnterKeyModel.shared
+        ]
     ]
 }

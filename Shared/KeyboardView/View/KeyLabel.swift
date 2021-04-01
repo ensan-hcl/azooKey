@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-enum KeyLabelType{
+enum KeyLabelType {
     case text(String)
     case symbols([String])
     case image(String)
@@ -19,7 +19,7 @@ enum KeyLabelType{
 }
 
 struct KeyLabel: View {
-    enum TextSize{
+    enum TextSize {
         case large
         case medium
         case small
@@ -49,7 +49,7 @@ struct KeyLabel: View {
         textColor ?? theme.textColor.color
     }
 
-    init(_ type: KeyLabelType, width: CGFloat, textSize: TextSize = .large, textColor: Color? = nil){
+    init(_ type: KeyLabelType, width: CGFloat, textSize: TextSize = .large, textColor: Color? = nil) {
         self.labelType = type
         self.width = width
         self.textColor = textColor
@@ -57,8 +57,8 @@ struct KeyLabel: View {
     }
 
     var body: some View {
-        Group{
-            switch self.labelType{
+        Group {
+            switch self.labelType {
             case let .text(text):
                 let font = Design.fonts.keyLabelFont(text: text, width: width, scale: self.textSize.scale, theme: theme)
                 Text(text)
@@ -71,7 +71,7 @@ struct KeyLabel: View {
                 let font = Design.fonts.keyLabelFont(text: mainText, width: width, scale: self.textSize.scale, theme: theme)
                 let subText = symbols.dropFirst().joined()
                 let subFont = Design.fonts.keyLabelFont(text: subText, width: width, scale: TextSize.xsmall.scale, theme: theme)
-                VStack{
+                VStack {
                     Text(mainText)
                         .font(font)
                     Text(subText)
@@ -99,8 +99,8 @@ struct KeyLabel: View {
             case let .selectable(primary, secondery):
                 let font = Design.fonts.keyLabelFont(text: primary+primary, width: width, scale: self.textSize.scale, theme: theme)
                 let subFont = Design.fonts.keyLabelFont(text: secondery+secondery, width: width, scale: TextSize.small.scale, theme: theme)
-            
-                HStack(alignment: .bottom){
+
+                HStack(alignment: .bottom) {
                     Text(primary)
                         .font(font)
                         .padding(.trailing, -5)

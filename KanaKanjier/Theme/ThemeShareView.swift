@@ -9,11 +9,11 @@
 import Foundation
 import SwiftUI
 
-final class ShareImage{
+final class ShareImage {
     private(set) var image: UIImage?
 
-    func setImage(_ uiImage: UIImage?){
-        if let uiImage = uiImage{
+    func setImage(_ uiImage: UIImage?) {
+        if let uiImage = uiImage {
             self.image = uiImage
         }
     }
@@ -21,33 +21,32 @@ final class ShareImage{
 
 struct ThemeShareView: View {
     private let theme: ThemeData
-    private let dismissProcess: () -> ()
+    private let dismissProcess: () -> Void
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
-    init(theme: ThemeData, shareImage: ShareImage, dismissProcess: @escaping () -> ()){
+    init(theme: ThemeData, shareImage: ShareImage, dismissProcess: @escaping () -> Void) {
         self.theme = theme
         self.dismissProcess = dismissProcess
         self.shareImage = shareImage
     }
     @State private var showActivityView: Bool = false
-    //キャプチャ用
+    // キャプチャ用
     @State private var captureRect: CGRect = .zero
     private var shareImage: ShareImage
 
-
     var body: some View {
-        VStack{
+        VStack {
             Text("着せ替えが完成しました🎉")
                 .font(.title)
                 .bold()
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Button{
+            Button {
                 shareImage.setImage(UIApplication.shared.windows[0].rootViewController?.view!.getImage(rect: self.captureRect))
                 showActivityView = true
             }label: {
-                HStack{
+                HStack {
                     Image(systemName: "square.and.arrow.up")
                     Text("シェアする")
                 }
@@ -59,10 +58,10 @@ struct ThemeShareView: View {
             }
             KeyboardPreview(theme: theme, scale: 0.9)
                 .background(RectangleGetter(rect: $captureRect))
-            Button{
+            Button {
                 self.dismissProcess()
             }label: {
-                HStack{
+                HStack {
                     Image(systemName: "xmark")
                     Text("閉じる")
                 }
@@ -74,7 +73,7 @@ struct ThemeShareView: View {
             }
 
         }.sheet(isPresented: self.$showActivityView) {
-            if let image = shareImage.image{
+            if let image = shareImage.image {
                 ActivityView(
                     activityItems: [TextActivityItem("azooKeyで着せ替えました！", hashtags: ["#azooKey"], links: ["https://apps.apple.com/jp/app/azookey/id1542709230"]), ImageActivityItem(image)],
                     applicationActivities: nil
@@ -84,17 +83,17 @@ struct ThemeShareView: View {
 
     }
 
-    func shareOnTwitter() {
+    private func shareOnTwitter() {
         let parameters = [
             "text": "azooKeyで着せ替えました！",
             "url": "https://apps.apple.com/jp/app/azookey/id1542709230",
             "hashtags": "azooKey",
             "related": "azooKey_dev"
         ]
-        //作成したテキストをエンコード
-        let encodedText = parameters.map{"\($0.key)=\($0.value)"}.joined(separator: "&").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        // 作成したテキストをエンコード
+        let encodedText = parameters.map {"\($0.key)=\($0.value)"}.joined(separator: "&").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
 
-        //エンコードしたテキストをURLに繋げ、URLを開いてツイート画面を表示させる
+        // エンコードしたテキストをURLに繋げ、URLを開いてツイート画面を表示させる
         if let encodedText = encodedText,
            let url = URL(string: "https://twitter.com/intent/tweet?text=\(encodedText)") {
             UIApplication.shared.open(url)
@@ -119,13 +118,12 @@ struct ActivityView: UIViewControllerRepresentable {
     }
 }
 
-
-private final class TextActivityItem: NSObject, UIActivityItemSource{
+private final class TextActivityItem: NSObject, UIActivityItemSource {
     let text: String
     let hashtags: [String]
     let links: [String]
 
-    init(_ text: String, hashtags: [String] = [], links: [String] = []){
+    init(_ text: String, hashtags: [String] = [], links: [String] = []) {
         self.text = text
         self.links = links
         self.hashtags = hashtags
@@ -136,26 +134,26 @@ private final class TextActivityItem: NSObject, UIActivityItemSource{
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        if activityType == .postToTwitter{
+        if activityType == .postToTwitter {
             return text + " " + hashtags.joined(separator: " ") + "\n" + links.joined(separator: "\n")
         }
         return text + "\n" + links.joined(separator: "\n")
     }
 }
 
-private final class ImageActivityItem:NSObject,UIActivityItemSource{
+private final class ImageActivityItem: NSObject, UIActivityItemSource {
 
     var image: UIImage?
-    init(_ image: UIImage?){
+    init(_ image: UIImage?) {
         self.image = image
     }
 
-    //実際に渡す
+    // 実際に渡す
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         return image
     }
 
-    //仮に渡す
+    // 仮に渡す
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return image ?? UIImage()
     }

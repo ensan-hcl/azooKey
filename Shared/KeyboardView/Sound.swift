@@ -9,12 +9,11 @@
 import Foundation
 import AudioToolbox
 
-
 /// 音を鳴らすためのツールセット
 ///  - important: staticでない関数を追加する際は一考せよ。
-struct Sound{
-    private init(){}
-    //使えそうな音
+struct Sound {
+    private init() {}
+    // 使えそうな音
     /* i
      1103: 高いクリック音
      1104: 純正クリック音
@@ -31,38 +30,38 @@ struct Sound{
 
     /// 入力を伴う操作を行う際に音を鳴らします。
     /// - Note: 押しはじめに鳴らす方が反応が良く感じます。
-    static func click(){
-        if SettingData.shared.bool(for: .enableSound){
+    static func click() {
+        if SettingData.shared.bool(for: .enableSound) {
             AudioServicesPlaySystemSound(1104)
         }
     }
 
     /// タブの移動、入力の確定、小仮名濁点化、カーソル移動などを伴う操作を行う際に音を鳴らします。
     /// - Note: 押しはじめに鳴らす方が反応が良く感じます。
-    static func tabOrOtherKey(){
-        if SettingData.shared.bool(for: .enableSound){
+    static func tabOrOtherKey() {
+        if SettingData.shared.bool(for: .enableSound) {
             AudioServicesPlaySystemSound(1156)
         }
     }
 
     /// 文字の削除などを伴う操作を行う際に音を鳴らします。
     /// - Note: 押しはじめに鳴らす方が反応が良く感じます。
-    static func delete(){
-        if SettingData.shared.bool(for: .enableSound){
+    static func delete() {
+        if SettingData.shared.bool(for: .enableSound) {
             AudioServicesPlaySystemSound(1155)
         }
     }
 
     /// 文字の一括削除の操作を行う際に音を鳴らします。
-    static func smoothDelete(){
-        if SettingData.shared.bool(for: .enableSound){
+    static func smoothDelete() {
+        if SettingData.shared.bool(for: .enableSound) {
             AudioServicesPlaySystemSound(1105)
         }
     }
 
     /// 操作のリセットを行うときに音を鳴らします。
-    static func reset(){
-        if SettingData.shared.bool(for: .enableSound){
+    static func reset() {
+        if SettingData.shared.bool(for: .enableSound) {
             AudioServicesPlaySystemSound(1533)
         }
     }

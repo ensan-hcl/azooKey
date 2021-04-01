@@ -8,9 +8,9 @@
 
 import Foundation
 
-enum MessageIdentifier: String, Hashable, CaseIterable{
+enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert0"
-    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"  //frozen
+    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"  // frozen
     case iOS14_5_new_emoji = "iOS_14_5_new_emoji"
 
     var key: String {
@@ -18,7 +18,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable{
     }
 
     var needUsingContainerApp: Bool {
-        switch self{
+        switch self {
         case .ver1_5_update_loudstxt:
             return true
         case .iOS14_5_new_emoji, .mock:
@@ -28,49 +28,49 @@ enum MessageIdentifier: String, Hashable, CaseIterable{
 
 }
 
-enum MessageLeftButtonStyle{
-    ///「詳細」と表示し、押した場合リンクにする
+enum MessageLeftButtonStyle {
+    /// 「詳細」と表示し、押した場合リンクにする
     case details(url: String)
 
-    ///「後で」と表示し、押した場合メッセージのステータスを完了に変更する
+    /// 「後で」と表示し、押した場合メッセージのステータスを完了に変更する
     case later
 }
 
-enum MessageRightButtonStyle{
-    ///指定した単語を表示し、押した場合収容アプリを開く
+enum MessageRightButtonStyle {
+    /// 指定した単語を表示し、押した場合収容アプリを開く
     case openContainer(text: String)
 
-    ///「了解」と表示し、押した場合メッセージのステータスを完了に変更する
+    /// 「了解」と表示し、押した場合メッセージのステータスを完了に変更する
     case OK
 }
 
-struct MessageData: Identifiable{
-    ///Uniqueな識別子
+struct MessageData: Identifiable {
+    /// Uniqueな識別子
     let id: MessageIdentifier
 
-    ///タイトル
+    /// タイトル
     let title: String
 
-    ///説明
+    /// 説明
     let description: String
 
-    ///左側のボタン
+    /// 左側のボタン
     let leftsideButton: MessageLeftButtonStyle
 
-    ///右側のボタン
+    /// 右側のボタン
     let rightsideButton: MessageRightButtonStyle
 
-    ///メッセージを表示する前提条件
+    /// メッセージを表示する前提条件
     let precondition: () -> Bool
 
-    ///収容アプリがDoneにすべき条件
+    /// 収容アプリがDoneにすべき条件
     let containerAppShouldMakeItDone: () -> Bool
 }
 
-struct MessageManager{
+struct MessageManager {
     static let userDefaults = UserDefaults.init(suiteName: SharedStore.appGroupKey)!
     func getMessagesContainerAppShouldMakeWhichDone() -> [MessageData] {
-        necessaryMessages.filter{$0.containerAppShouldMakeItDone()}
+        necessaryMessages.filter {$0.containerAppShouldMakeItDone()}
     }
     static let doneFlag = "done"
 
@@ -82,13 +82,13 @@ struct MessageManager{
             leftsideButton: .details(url: "https://azookey.netlify.app/messages/ver1_5"),
             rightsideButton: .openContainer(text: "更新"),
             precondition: {
-                //ユーザ辞書に登録があるのが条件。
+                // ユーザ辞書に登録があるのが条件。
                 let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
                 let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
                 return FileManager.default.fileExists(atPath: binaryFilePath)
             },
             containerAppShouldMakeItDone: {
-                //ユーザ辞書に登録がない場合はDoneにして良い。
+                // ユーザ辞書に登録がない場合はDoneにして良い。
                 let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
                 let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
                 return !FileManager.default.fileExists(atPath: binaryFilePath)
@@ -102,25 +102,25 @@ struct MessageManager{
             leftsideButton: .later,
             rightsideButton: .openContainer(text: "更新"),
             precondition: {
-                if #available(iOS 14.5, *){
+                if #available(iOS 14.5, *) {
                     return true
-                }else{
+                } else {
                     return false
                 }
             },
             containerAppShouldMakeItDone: { false }
-        ),
+        )
     ]
 
     private var needShow: [MessageIdentifier: Bool]
 
-    init(){
-        self.needShow = necessaryMessages.reduce(into: [:]){dict, value in
-            if value.id.needUsingContainerApp{
-                //収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
+    init() {
+        self.needShow = necessaryMessages.reduce(into: [:]) {dict, value in
+            if value.id.needUsingContainerApp {
+                // 収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
                 dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != Self.doneFlag
-            }else{
-                //本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
+            } else {
+                // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
                 dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: value.id.key) != Self.doneFlag
             }
         }
@@ -130,13 +130,13 @@ struct MessageManager{
         return needShow[id, default: false]
     }
 
-    mutating func done(_ id: MessageIdentifier){
+    mutating func done(_ id: MessageIdentifier) {
         self.needShow[id] = false
-        if id.needUsingContainerApp{
-            //収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
+        if id.needUsingContainerApp {
+            // 収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
             Self.userDefaults.setValue(Self.doneFlag, forKey: id.key)
-        }else{
-            //本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
+        } else {
+            // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
             Self.userDefaults.setValue(Self.doneFlag, forKey: id.key)
             UserDefaults.standard.setValue(Self.doneFlag, forKey: id.key)
         }

@@ -9,32 +9,32 @@
 import Foundation
 import SwiftUI
 
-struct TabBarView: View{
+struct TabBarView: View {
     @Environment(\.themeEnvironment) private var theme
     @ObservedObject private var variableStates = VariableStates.shared
 
     private let data: TabBarData
 
-    init(data: TabBarData){
+    init(data: TabBarData) {
         self.data = data
     }
 
     var body: some View {
-        Group{
-            ScrollView(.horizontal, showsIndicators: false){
-                HStack{
-                    ForEach(data.items.indices, id: \.self){i in
+        Group {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(data.items.indices, id: \.self) {i in
                         let item = data.items[i]
-                        Button{
-                            item.actions.forEach{(action: CodableActionData) in
+                        Button {
+                            item.actions.forEach {(action: CodableActionData) in
                                 variableStates.action.registerAction(action.actionType)
                             }
                         } label: {
-                            switch item.label{
+                            switch item.label {
                             case let .text(text):
                                 Text(text)
                             case let .imageAndText(value):
-                                HStack{
+                                HStack {
                                     Image(systemName: value.systemName)
                                     Text(value.text)
                                 }
@@ -49,4 +49,3 @@ struct TabBarView: View{
         }.frame(height: Design.shared.resultViewHeight())
     }
 }
-

@@ -9,21 +9,21 @@
 import Foundation
 import SwiftUI
 
-struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
+struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
 
-    enum FallBackType{
+    enum FallBackType {
         case tabBar
         case secondTab(secondLanguage: KeyboardLanguage)
     }
 
-    var pressActions: [ActionType]{
-        if SemiStaticStates.shared.needsInputModeSwitchKey{
+    var pressActions: [ActionType] {
+        if SemiStaticStates.shared.needsInputModeSwitchKey {
             return []
         }
-        switch self.fallBackType{
+        switch self.fallBackType {
         case let .secondTab(secondLanguage: language):
             let targetTab: Tab = {
-                switch language{
+                switch language {
                 case .en_US:
                     return .user_dependent(.english)
                 case .ja_JP:
@@ -32,7 +32,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
                     return .user_dependent(.japanese)
                 }
             }()
-            switch VariableStates.shared.tabManager.currentTab.existential{
+            switch VariableStates.shared.tabManager.currentTab.existential {
             case .qwerty_hira:
                 return [.moveTab(.existential(.qwerty_symbols))]
             case .qwerty_abc:
@@ -51,7 +51,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
     let fallBackType: FallBackType
 
     let longPressActions: LongpressActionType = .none
-    ///暫定
+    /// 暫定
     let variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
@@ -59,18 +59,18 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
-    init(keySizeType: QwertyKeySizeType, fallBackType: FallBackType){
+    init(keySizeType: QwertyKeySizeType, fallBackType: FallBackType) {
         self.keySizeType = keySizeType
         self.fallBackType = fallBackType
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        if SemiStaticStates.shared.needsInputModeSwitchKey{
+        if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.changeKeyboard, width: width, textColor: color)
         }
-        switch self.fallBackType{
+        switch self.fallBackType {
         case let .secondTab(secondLanguage: language):
-            switch states.tabManager.currentTab.existential{
+            switch states.tabManager.currentTab.existential {
             case .qwerty_hira:
                 return KeyLabel(.text("#+="), width: width, textColor: color)
             case .qwerty_abc:

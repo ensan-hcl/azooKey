@@ -7,14 +7,14 @@
 //
 
 import Foundation
-///ラティスのノード。これを用いて計算する。
+/// ラティスのノード。これを用いて計算する。
 protocol LatticeNodeProtocol: class {
     associatedtype RegisteredNode: RegisteredNodeProtocol
     var data: DicDataElementProtocol {get}
     var prevs: [RegisteredNode] {get set}
     var values: [PValue] {get set}
     var rubyCount: Int {get}
-    
+
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode
 
     func getCandidateData() -> [CandidateData]
@@ -24,14 +24,14 @@ protocol LatticeNodeProtocol: class {
     static var EOSNode: Self {get}
 }
 
-extension LatticeNodeProtocol{
+extension LatticeNodeProtocol {
     func getCandidateData() -> [CandidateData] {
-        let result = self.prevs.map{$0.getCandidateData()}
-        switch VariableStates.shared.inputStyle{
+        let result = self.prevs.map {$0.getCandidateData()}
+        switch VariableStates.shared.inputStyle {
         case .direct:
             break
         case .roman2kana:
-            result.forEach{
+            result.forEach {
                 $0.lastClause?.ruby = $0.lastClause?.ruby.roman2katakana ?? ""
             }
         }
@@ -39,12 +39,12 @@ extension LatticeNodeProtocol{
     }
 
     func translated<Node: LatticeNodeProtocol>() -> Node {
-        if let node = self as? Node{
+        if let node = self as? Node {
             return node
         }
-        if self is DirectLatticeNode{
-            if Node.self == RomanLatticeNode.self{
-                let prevs = self.prevs.map{
+        if self is DirectLatticeNode {
+            if Node.self == RomanLatticeNode.self {
+                let prevs = self.prevs.map {
                     RomanRegisteredNode(data: $0.data, registered: $0.prev, totalValue: $0.totalValue, rubyCount: $0.rubyCount, romanString: $0.ruby)
                 }
                 let node = RomanLatticeNode(data: self.data, romanString: self.data.ruby, rubyCount: self.rubyCount)
@@ -53,9 +53,9 @@ extension LatticeNodeProtocol{
                 return node as! Node
             }
         }
-        if self is RomanLatticeNode{
-            if Node.self == DirectLatticeNode.self{
-                let prevs = self.prevs.map{
+        if self is RomanLatticeNode {
+            if Node.self == DirectLatticeNode.self {
+                let prevs = self.prevs.map {
                     DirectRegisteredNode(data: $0.data, registered: $0.prev, totalValue: $0.totalValue, rubyCount: $0.rubyCount)
                 }
                 let node = DirectLatticeNode(data: self.data, romanString: self.data.ruby, rubyCount: self.rubyCount)
@@ -67,8 +67,8 @@ extension LatticeNodeProtocol{
         fatalError("Exception: Unknown condition")
     }
 }
-///ラティスのノード。これを用いて計算する。
-final class DirectLatticeNode: LatticeNodeProtocol{
+/// ラティスのノード。これを用いて計算する。
+final class DirectLatticeNode: LatticeNodeProtocol {
     typealias RegisteredNode = DirectRegisteredNode
     convenience init(data: DicDataElementProtocol, romanString: String, rubyCount: Int? = nil) {
         self.init(data: data, rubyCount: rubyCount)
@@ -87,19 +87,19 @@ final class DirectLatticeNode: LatticeNodeProtocol{
         return DirectRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
     }
 
-    init(data: DicDataElementProtocol, rubyCount: Int? = nil){
+    init(data: DicDataElementProtocol, rubyCount: Int? = nil) {
         self.data = data
         self.values = [data.value()]
-        if let rubyCount = rubyCount{
+        if let rubyCount = rubyCount {
             self.rubyCount = rubyCount
-        }else{
+        } else {
             self.rubyCount = data.ruby.count
         }
     }
 }
- 
-///ラティスのノード。これを用いて計算する。
-final class RomanLatticeNode: LatticeNodeProtocol{
+
+/// ラティスのノード。これを用いて計算する。
+final class RomanLatticeNode: LatticeNodeProtocol {
     typealias RegisteredNode = RomanRegisteredNode
 
     let data: DicDataElementProtocol
@@ -112,13 +112,13 @@ final class RomanLatticeNode: LatticeNodeProtocol{
         return RomanLatticeNode(data: BOSEOSDicDataElement.EOSData, romanString: "")
     }
 
-    init(data: DicDataElementProtocol, romanString: String, rubyCount: Int? = nil){
+    init(data: DicDataElementProtocol, romanString: String, rubyCount: Int? = nil) {
         self.data = data
         self.values = [data.value()]
         self.romanString = romanString
-        if let rubyCount = rubyCount{
+        if let rubyCount = rubyCount {
             self.rubyCount = rubyCount
-        }else{
+        } else {
             self.rubyCount = romanString.count
         }
     }
@@ -128,4 +128,3 @@ final class RomanLatticeNode: LatticeNodeProtocol{
     }
 
 }
- 

@@ -11,14 +11,14 @@ import SwiftUI
 struct HeaderIconView: View {
     @Environment(\.colorScheme) private var colorScheme
 
-    enum Size{
+    enum Size {
         case normal
         case large
     }
 
     let size: Size
 
-    init(size: Size = .normal){
+    init(size: Size = .normal) {
         self.size = size
     }
 
@@ -27,7 +27,7 @@ struct HeaderIconView: View {
     }
 
     private var iconSize: CGFloat {
-        switch self.size{
+        switch self.size {
         case .normal:
             return 40
         case .large:
@@ -36,9 +36,9 @@ struct HeaderIconView: View {
     }
 
     var body: some View {
-        Group{
-            if let font30 = Store.shared.iconFont(iconSize*0.75){
-                switch colorScheme{
+        Group {
+            if let font30 = Store.shared.iconFont(iconSize*0.75) {
+                switch colorScheme {
                 case .light:
                     Text("A")
                         .font(font30)
@@ -49,7 +49,7 @@ struct HeaderIconView: View {
                     Text("azooKey")
                         .font(Font(UIFont.systemFont(ofSize: 30)))
                 }
-            }else{
+            } else {
                 Text("azooKey")
                     .font(Font(UIFont.systemFont(ofSize: 30)))
             }

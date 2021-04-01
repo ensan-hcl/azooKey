@@ -9,14 +9,14 @@
 import Foundation
 import SwiftUI
 
-///実行中変更され、かつViewが変更を検知できるべき値。
-final class VariableStates: ObservableObject{
+/// 実行中変更され、かつViewが変更を検知できるべき値。
+final class VariableStates: ObservableObject {
     var action: ActionDepartment = ActionDepartment()
     static let shared = VariableStates()
     private(set) var inputStyle: InputStyle = .direct
     var tabManager = TabManager()
 
-    private init(){}
+    private init() {}
 
     @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
@@ -39,8 +39,8 @@ final class VariableStates: ObservableObject{
 
     @Published private(set) var resizingState: ResizingState = .fullwidth
 
-    func setResizingMode(_ state: ResizingState){
-        switch state{
+    func setResizingMode(_ state: ResizingState) {
+        switch state {
         case .fullwidth:
             interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight)
         case .onehanded, .resizing:
@@ -49,34 +49,34 @@ final class VariableStates: ObservableObject{
             interfacePosition = item.position
         }
         self.resizingState = state
-        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting){value in
-            value.update(layout: keyboardLayout, orientation: keyboardOrientation){value in
+        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
+            value.update(layout: keyboardLayout, orientation: keyboardOrientation) {value in
                 value.isLastOnehandedMode = state != .fullwidth
             }
         }
     }
 
-    func initialize(){
+    func initialize() {
         self.tabManager.initialize()
         self.refreshView()
     }
 
-    func closeKeybaord(){
+    func closeKeybaord() {
         self.tabManager.closeKeyboard()
     }
 
-    func refreshView(){
+    func refreshView() {
         refreshing.toggle()
     }
 
-    enum RoughEnterKeyState{
+    enum RoughEnterKeyState {
         case `return`
         case edit
         case complete
     }
 
-    func setEnterKeyState(_ state: RoughEnterKeyState){
-        switch state{
+    func setEnterKeyState(_ state: RoughEnterKeyState) {
+        switch state {
         case .return:
             self.enterKeyState = .return(enterKeyType)
         case .edit:
@@ -86,42 +86,42 @@ final class VariableStates: ObservableObject{
         }
     }
 
-    func setTab(_ tab: Tab){
+    func setTab(_ tab: Tab) {
         self.tabManager.moveTab(to: tab)
         self.refreshView()
     }
 
-    func setUIReturnKeyType(type: UIReturnKeyType){
+    func setUIReturnKeyType(type: UIReturnKeyType) {
         self.enterKeyType = type
-        if case let .return(prev) = self.enterKeyState, prev != type{
+        if case let .return(prev) = self.enterKeyState, prev != type {
             self.setEnterKeyState(.return)
         }
     }
 
-    func updateResizingState(){
+    func updateResizingState() {
         let isLastOnehandedMode = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation).isLastOnehandedMode
-        if isLastOnehandedMode{
+        if isLastOnehandedMode {
             self.setResizingMode(.onehanded)
-        }else{
+        } else {
             self.setResizingMode(.fullwidth)
         }
     }
 
-    func setKeyboardLayout(_ layout: KeyboardLayout){
+    func setKeyboardLayout(_ layout: KeyboardLayout) {
         self.keyboardLayout = layout
         self.updateResizingState()
     }
 
-    func setInputStyle(_ style: InputStyle){
+    func setInputStyle(_ style: InputStyle) {
         self.action.changeInputStyle(from: self.inputStyle, to: style)
         self.inputStyle = style
     }
 
-    ///workarounds
-    ///* 1回目に値を保存してしまう
-    ///* if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
-    func setOrientation(_ orientation: KeyboardOrientation){
-        if self.keyboardOrientation == orientation{
+    /// workarounds
+    /// * 1回目に値を保存してしまう
+    /// * if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
+    func setOrientation(_ orientation: KeyboardOrientation) {
+        if self.keyboardOrientation == orientation {
             self.refreshView()
             return
         }
@@ -130,4 +130,3 @@ final class VariableStates: ObservableObject{
     }
 
 }
-

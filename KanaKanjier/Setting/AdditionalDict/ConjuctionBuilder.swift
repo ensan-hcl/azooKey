@@ -8,14 +8,14 @@
 
 import Foundation
 
-fileprivate enum 活用の種類{
+private enum 活用の種類 {
     case 一段
     case 五段
     case サ変
     case ザ変
     case カ変
 }
-fileprivate enum 行{
+private enum 行 {
     case ア行
     case カ行
     case ガ行
@@ -421,8 +421,7 @@ fileprivate enum 行{
 
 }
 
-
-fileprivate extension String{
+fileprivate extension String {
     static var い: String {
         return "い"
     }
@@ -440,58 +439,58 @@ fileprivate extension String{
     }
 }
 
-struct ConjuctionBuilder{
+struct ConjuctionBuilder {
     static private func 動詞情報照会(cid: Int) -> (活用: 活用の種類, 行の名前: 行)? {
-        if cid == 583{
+        if cid == 583 {
             return (活用: .サ変, 行の名前: .unknown)
         }
-        if cid == 592{
+        if cid == 592 {
             return (活用: .ザ変, 行の名前: .unknown)
         }
-        if cid == 619{
+        if cid == 619 {
             return (活用: .一段, 行の名前: .unknown)
         }
-        if cid == 679{
+        if cid == 679 {
             return (活用: .五段, 行の名前: .カ行)
         }
-        if cid == 695{
+        if cid == 695 {
             return (活用: .五段, 行の名前: .カ行)
         }
-        if cid == 723{
+        if cid == 723 {
             return (活用: .五段, 行の名前: .ガ行)
         }
-        if cid == 731{
+        if cid == 731 {
             return (活用: .五段, 行の名前: .サ行)
         }
-        if cid == 738{
+        if cid == 738 {
             return (活用: .五段, 行の名前: .タ行)
         }
-        if cid == 746{
+        if cid == 746 {
             return (活用: .五段, 行の名前: .ナ行)
         }
-        if cid == 754{
+        if cid == 754 {
             return (活用: .五段, 行の名前: .バ行)
         }
-        if cid == 762{
+        if cid == 762 {
             return (活用: .五段, 行の名前: .マ行)
         }
-        if cid == 772{
+        if cid == 772 {
             return (活用: .五段, 行の名前: .ラ行)
         }
-        if cid == 802{
+        if cid == 802 {
             return (活用: .五段, 行の名前: .ワ行)
         }
-        if cid == 817{
+        if cid == 817 {
             return (活用: .五段, 行の名前: .ワ行)
         }
         return nil
     }
 
     static private func 活用形取得(データ: (word: String, ruby: String, cid: Int), 活用: 活用の種類, 行の名前: 行) -> [(word: String, ruby: String, cid: Int)] {
-        switch 活用{
+        switch 活用 {
         case .五段:
-            //可能動詞は無視する
-            switch データ.cid{
+            // 可能動詞は無視する
+            switch データ.cid {
             case 679:
                 let 語幹 = String(データ.word.dropLast())
                 let 語幹ルビ = String(データ.ruby.dropLast())
@@ -584,16 +583,16 @@ struct ConjuctionBuilder{
                 let 語幹ルビ = String(データ.ruby.dropLast())
                 let 仮定形 = (word: 語幹 + 行の名前.え段, ruby: 語幹ルビ + 行の名前.エ段, cid: 768)
                 let 仮定縮約 = (word: 語幹 + 行の名前.や段, ruby: 語幹ルビ + 行の名前.ヤ段, cid: 770)
-                let 体言接続特殊壱 = (word: 語幹 + String.ん, ruby: 語幹ルビ + "ン", cid: 774) //"走んなよ"などの類。
+                let 体言接続特殊壱 = (word: 語幹 + String.ん, ruby: 語幹ルビ + "ン", cid: 774) // "走んなよ"などの類。
                 let 体言接続特殊弐 = (word: 語幹, ruby: 語幹ルビ, cid: 776)
                 let 未然ウ接続 = (word: 語幹 + 行の名前.お段, ruby: 語幹ルビ + 行の名前.オ段, cid: 778)
                 let 未然形 = (word: 語幹 + 行の名前.あ段, ruby: 語幹ルビ + 行の名前.ア段, cid: 780)
-                let 未然特殊 = (word: 語幹 + String.ん, ruby: 語幹ルビ + "ン", cid: 782) //"走んない"などの類。
+                let 未然特殊 = (word: 語幹 + String.ん, ruby: 語幹ルビ + "ン", cid: 782) // "走んない"などの類。
                 let 命令エ = (word: 語幹 + 行の名前.え段, ruby: 語幹ルビ + 行の名前.エ段, cid: 784)
                 let 連用タ接続 = (word: 語幹 + String.小書きつ, ruby: 語幹ルビ + "ッ", cid: 786)
                 let 連用形 = (word: 語幹 + 行の名前.い段, ruby: 語幹ルビ + 行の名前.イ段, cid: 788)
                 return [仮定形, 仮定縮約, 体言接続特殊壱, 体言接続特殊弐, 未然ウ接続, 未然形, 未然特殊, 命令エ, 連用タ接続, 連用形]
-            case 802:                           //ワ行ウ音便
+            case 802:                           // ワ行ウ音便
                 let 語幹 = String(データ.word.dropLast())
                 let 語幹ルビ = String(データ.ruby.dropLast())
                 let 仮定形 = (word: 語幹 + 行の名前.え段, ruby: 語幹ルビ + 行の名前.エ段, cid: 800)
@@ -603,7 +602,7 @@ struct ConjuctionBuilder{
                 let 連用タ接続 = (word: 語幹 + "う", ruby: 語幹ルビ + "ウ", cid: 810)
                 let 連用形 = (word: 語幹 + 行の名前.い段, ruby: 語幹ルビ + 行の名前.イ段, cid: 812)
                 return [仮定形, 未然ウ接続, 未然形, 命令エ, 連用タ接続, 連用形]
-            case 817:                           //ワ行促音便
+            case 817:                           // ワ行促音便
                 let 語幹 = String(データ.word.dropLast())
                 let 語幹ルビ = String(データ.ruby.dropLast())
                 let 仮定形 = (word: 語幹 + 行の名前.え段, ruby: 語幹ルビ + 行の名前.エ段, cid: 814)
@@ -659,9 +658,9 @@ struct ConjuctionBuilder{
     }
 
     static func getConjugations(data: (word: String, ruby: String, cid: Int), addStandardForm: Bool = false) -> [(word: String, ruby: String, cid: Int)] {
-        if let 動詞の情報 = 動詞情報照会(cid: data.cid){
+        if let 動詞の情報 = 動詞情報照会(cid: data.cid) {
             let 活用形: [(word: String, ruby: String, cid: Int)] = 活用形取得(データ: data, 活用: 動詞の情報.活用, 行の名前: 動詞の情報.行の名前)
-            if addStandardForm{
+            if addStandardForm {
                 return 活用形 + [data]
             }
             return 活用形
@@ -670,4 +669,3 @@ struct ConjuctionBuilder{
 
     }
 }
-

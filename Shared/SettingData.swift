@@ -11,7 +11,7 @@ import SwiftUI
 
 typealias FlickCustomKeySettingData = (labelType: KeyLabelType, actions: [ActionType], longpressActions: LongpressActionType, flick: [FlickDirection: FlickedKeyModel])
 
-struct SettingData{
+struct SettingData {
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
     private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate, .useOSuserDict]
     private let flickCustomKeySettingItems: [Setting] = [.koganaKeyFlick, .kanaSymbolsKeyFlick, .hiraTabKeyFlick, .abcTabKeyFlick, .symbolsTabKeyFlick]
@@ -21,29 +21,29 @@ struct SettingData{
     private var flickCustomKeySetting: [Setting: FlickCustomKeySettingData]
     static var shared = SettingData()
 
-    private init(){
-        self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
+    private init() {
+        self.boolSettings = boolSettingItems.reduce(into: [:]) {dictionary, setting in
             dictionary[setting] = Self.getBoolSetting(setting)
         }
-        self.languageLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]){dictionary, setting in
+        self.languageLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]) {dictionary, setting in
             dictionary[setting] = Self.getLanguageLayoutSetting(setting)
         }
-        self.flickCustomKeySetting = flickCustomKeySettingItems.reduce(into: [:]){dictionary, setting in
+        self.flickCustomKeySetting = flickCustomKeySettingItems.reduce(into: [:]) {dictionary, setting in
             dictionary[setting] = Self.getFlickCustomKeySetting(for: setting)
         }
     }
 
-    mutating func reload(){
-        //bool値の設定を更新
-        self.boolSettings = boolSettingItems.reduce(into: [:]){dictionary, setting in
+    mutating func reload() {
+        // bool値の設定を更新
+        self.boolSettings = boolSettingItems.reduce(into: [:]) {dictionary, setting in
             dictionary[setting] = Self.getBoolSetting(setting)
         }
-        //レイアウトの設定を更新
-        self.languageLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]){dictionary, setting in
+        // レイアウトの設定を更新
+        self.languageLayoutSetting = [Setting.englishKeyboardLayout, Setting.japaneseKeyboardLayout].reduce(into: [:]) {dictionary, setting in
             dictionary[setting] = Self.getLanguageLayoutSetting(setting)
         }
-        //フリックカスタムキーの設定を更新
-        self.flickCustomKeySetting = flickCustomKeySettingItems.reduce(into: [:]){dictionary, setting in
+        // フリックカスタムキーの設定を更新
+        self.flickCustomKeySetting = flickCustomKeySettingItems.reduce(into: [:]) {dictionary, setting in
             dictionary[setting] = Self.getFlickCustomKeySetting(for: setting)
         }
 
@@ -59,7 +59,7 @@ struct SettingData{
     }
 
     internal func languageLayout(for key: Setting) -> LanguageLayout {
-        if key == .englishKeyboardLayout, let layout = self.languageLayoutSetting[Setting.japaneseKeyboardLayout]{
+        if key == .englishKeyboardLayout, let layout = self.languageLayoutSetting[Setting.japaneseKeyboardLayout] {
             return self.languageLayoutSetting[key, default: layout]
         }
         return self.languageLayoutSetting[key, default: .flick]
@@ -68,25 +68,25 @@ struct SettingData{
     private static func getFlickCustomKeySetting(for key: Setting) -> FlickCustomKeySettingData {
         let value = Self.userDefaults.value(forKey: key.key)
         let setting: KeyFlickSetting
-        if let value = value, let data = KeyFlickSetting.get(value){
+        if let value = value, let data = KeyFlickSetting.get(value) {
             setting = data
-        }else{
+        } else {
             setting = DefaultSetting.flickCustomKey(key)!
         }
-        let targets: [(path: KeyPath<KeyFlickSetting,FlickCustomKey>, direction: FlickDirection)] = [(\.left, .left), (\.top, .top), (\.right, .right), (\.bottom, .bottom)]
-        let dict: [FlickDirection: FlickedKeyModel] = targets.reduce(into: [:]){dict, target in
+        let targets: [(path: KeyPath<KeyFlickSetting, FlickCustomKey>, direction: FlickDirection)] = [(\.left, .left), (\.top, .top), (\.right, .right), (\.bottom, .bottom)]
+        let dict: [FlickDirection: FlickedKeyModel] = targets.reduce(into: [:]) {dict, target in
             let item = setting[keyPath: target.path]
             if item.label == ""{
                 return
             }
             let model = FlickedKeyModel(
                 labelType: .text(item.label),
-                pressActions: item.actions.map{$0.actionType},
+                pressActions: item.actions.map {$0.actionType},
                 longPressActions: item.longpressActions.longpressActionType
             )
             dict[target.direction] = model
         }
-        return (.text(setting.center.label), setting.center.actions.map{$0.actionType}, setting.center.longpressActions.longpressActionType, dict)
+        return (.text(setting.center.label), setting.center.actions.map {$0.actionType}, setting.center.longpressActions.longpressActionType, dict)
     }
 
     internal func flickCustomKeySetting(for key: Setting) -> FlickCustomKeySettingData {
@@ -94,11 +94,11 @@ struct SettingData{
     }
 
     private static func get(_ setting: Setting) -> KeyboardLayout {
-        switch setting{
+        switch setting {
         case .japaneseKeyboardLayout, .englishKeyboardLayout:
-            if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayout.get(string){
+            if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayout.get(string) {
                 return type
-            }else{
+            } else {
                 userDefaults.set(KeyboardLayout.flick.rawValue, forKey: setting.key)
                 return .flick
             }
@@ -112,11 +112,11 @@ struct SettingData{
     var keyViewFontSize = Self.getDoubleSetting(.keyViewFontSize) ?? -1
 
     private static func getKeyboardLayoutSetting(_ setting: Setting) -> KeyboardLayout {
-        switch setting{
+        switch setting {
         case .japaneseKeyboardLayout, .englishKeyboardLayout:
-            if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayout.get(string){
+            if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayout.get(string) {
                 return type
-            }else{
+            } else {
                 userDefaults.set(KeyboardLayout.flick.rawValue, forKey: setting.key)
                 return .flick
             }
@@ -125,16 +125,16 @@ struct SettingData{
     }
 
     private static func getLanguageLayoutSetting(_ setting: Setting) -> LanguageLayout {
-        switch setting{
+        switch setting {
         case .japaneseKeyboardLayout, .englishKeyboardLayout:
-            if let data = Self.userDefaults.data(forKey: setting.key), let type = LanguageLayout.get(data){
+            if let data = Self.userDefaults.data(forKey: setting.key), let type = LanguageLayout.get(data) {
                 return type
-            }else if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayout.get(string){
-                switch type{
+            } else if let string = Self.userDefaults.string(forKey: setting.key), let type = KeyboardLayout.get(string) {
+                switch type {
                 case .flick: return .flick
                 case .qwerty: return .qwerty
                 }
-            }else{
+            } else {
                 userDefaults.set(KeyboardLayout.flick.rawValue, forKey: setting.key)
                 return .flick
             }
@@ -143,18 +143,18 @@ struct SettingData{
     }
 
     private static func getBoolSetting(_ setting: Setting) -> Bool {
-        if let object = Self.userDefaults.object(forKey: setting.key), let bool = object as? Bool{
+        if let object = Self.userDefaults.object(forKey: setting.key), let bool = object as? Bool {
             return bool
-        }else if let bool = DefaultSetting.bool(setting){
+        } else if let bool = DefaultSetting.bool(setting) {
             return bool
         }
         return false
     }
 
     private static func getDoubleSetting(_ setting: Setting) -> Double? {
-        if let object = Self.userDefaults.object(forKey: setting.key), let value = object as? Double{
+        if let object = Self.userDefaults.object(forKey: setting.key), let value = object as? Double {
             return value
-        }else if let value = DefaultSetting.double(setting){
+        } else if let value = DefaultSetting.double(setting) {
             return value
         }
         return nil
@@ -163,9 +163,9 @@ struct SettingData{
     private static func learningTypeSetting(_ current: LearningType) -> LearningType {
         let result: LearningType
         if let object = Self.userDefaults.object(forKey: Setting.learningType.key),
-           let value = LearningType.get(object){
+           let value = LearningType.get(object) {
             result = value
-        }else{
+        } else {
             result = DefaultSetting.memorySetting
         }
         return result
@@ -173,8 +173,8 @@ struct SettingData{
 
     static func checkResetSetting() -> Bool {
         if let object = Self.userDefaults.object(forKey: Setting.memoryReset.key),
-           let identifier = MemoryResetCondition.identifier(object){
-            if let finished = UserDefaults.standard.string(forKey: "finished_reset"), finished == identifier{
+           let identifier = MemoryResetCondition.identifier(object) {
+            if let finished = UserDefaults.standard.string(forKey: "finished_reset"), finished == identifier {
                 return false
             }
             UserDefaults.standard.set(identifier, forKey: "finished_reset")
@@ -189,7 +189,7 @@ struct SettingData{
     }
 
     private static func preferredLanguageSetting() -> PreferredLanguage {
-        if let value = Self.userDefaults.value(forKey: Setting.preferredLanguage.key), let data = PreferredLanguage.get(value){
+        if let value = Self.userDefaults.value(forKey: Setting.preferredLanguage.key), let data = PreferredLanguage.get(value) {
             return data
         }
         return DefaultSetting.preferredLanguage
@@ -199,23 +199,23 @@ struct SettingData{
 
     var qwertyNumberTabKeySetting: [QwertyKeyModel] {
         let customKeys: QwertyCustomKeysValue
-        if let value = Self.userDefaults.value(forKey: Setting.numberTabCustomKeys.key), let keys = QwertyCustomKeysValue.get(value){
+        if let value = Self.userDefaults.value(forKey: Setting.numberTabCustomKeys.key), let keys = QwertyCustomKeysValue.get(value) {
             customKeys = keys
-        }else if let defaultValue = DefaultSetting.qwertyCustomKeys(.numberTabCustomKeys){
+        } else if let defaultValue = DefaultSetting.qwertyCustomKeys(.numberTabCustomKeys) {
             customKeys = defaultValue
-        }else{
+        } else {
             return []
         }
         let keys = customKeys.keys
         let count = keys.count
         let scale = (7, count)
-        return keys.map{key in
+        return keys.map {key in
             QwertyKeyModel(
                 labelType: .text(key.name),
-                pressActions: key.actions.map{$0.actionType},
+                pressActions: key.actions.map {$0.actionType},
                 variationsModel: VariationsModel(
-                    key.longpresses.map{item in
-                        (label: .text(item.name), actions: item.actions.map{$0.actionType})
+                    key.longpresses.map {item in
+                        (label: .text(item.name), actions: item.actions.map {$0.actionType})
                     }
                 ),
                 for: scale

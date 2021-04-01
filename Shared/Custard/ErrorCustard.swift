@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-extension Custard{
+extension Custard {
     static let errorMessage = Custard(
         identifier: "error_message",
         language: .undefined,

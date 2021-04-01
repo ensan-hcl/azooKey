@@ -25,7 +25,7 @@ struct ResizingRect: View {
     private let initialSize: CGSize
     private let minimumWidth: CGFloat = 120
 
-    init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize){
+    init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize) {
         self._size = size
         self._position = position
         self._initialPosition = .init(initialValue: position.wrappedValue)
@@ -42,22 +42,22 @@ struct ResizingRect: View {
         self.initialSize = initialSize
     }
 
-    func updateUserDefaults(){
-        //UserDefaultsのデータを更新する
-        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting){value in
+    func updateUserDefaults() {
+        // UserDefaultsのデータを更新する
+        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
             value.set(layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation, size: size, position: position)
         }
     }
 
-    //left < right, top < bottomとなるように修正
-    func correctOrder(){
+    // left < right, top < bottomとなるように修正
+    func correctOrder() {
         let (left, right) = (self.top_left_edge.current.x, self.bottom_right_edge.current.x)
         (self.top_left_edge.current.x, self.bottom_right_edge.current.x) = (min(left, right), max(left, right))
         let (top, bottom) = (self.top_left_edge.current.y, self.bottom_right_edge.current.y)
         (self.top_left_edge.current.y, self.bottom_right_edge.current.y) = (min(top, bottom), max(top, bottom))
     }
 
-    func setInitial(){
+    func setInitial() {
         self.initialPosition = self.position
         self.top_left_edge.initial = self.top_left_edge.current
         self.bottom_right_edge.initial = self.bottom_right_edge.current
@@ -65,7 +65,7 @@ struct ResizingRect: View {
 
     func gesture(x: KeyPath<Self, Binding<Position>>, y: KeyPath<Self, Binding<Position>>, top: Bool = true, left: Bool = true) -> some Gesture {
         return DragGesture(minimumDistance: .zero, coordinateSpace: .global)
-            .onChanged{value in
+            .onChanged {value in
                 let dx = value.location.x - value.startLocation.x
                 let dy = value.location.y - value.startLocation.y
                 self[keyPath: x].wrappedValue.current.x = self[keyPath: x].wrappedValue.initial.x + dx
@@ -75,7 +75,7 @@ struct ResizingRect: View {
                 position.x = (top_left_edge.current.x + bottom_right_edge.current.x - initialSize.width) / 2
                 position.y = (top_left_edge.current.y + bottom_right_edge.current.y - initialSize.height) / 2
             }
-            .onEnded{value in
+            .onEnded {_ in
                 self.correctOrder()
                 self.setInitial()
                 self.updateUserDefaults()
@@ -84,20 +84,20 @@ struct ResizingRect: View {
 
     func xGesture(target: KeyPath<Self, Binding<Position>>) -> some Gesture {
         return DragGesture(minimumDistance: .zero, coordinateSpace: .global)
-            .onChanged{value in
+            .onChanged {value in
                 let dx = value.location.x - value.startLocation.x
                 let before = self[keyPath: target].wrappedValue.current.x
                 self[keyPath: target].wrappedValue.current.x = self[keyPath: target].wrappedValue.initial.x + dx
                 let width = abs(bottom_right_edge.current.x - top_left_edge.current.x)
                 let px = (top_left_edge.current.x + bottom_right_edge.current.x - initialSize.width) / 2
-                if width < minimumWidth || px < -initialSize.width/2 || px > initialSize.width/2{
+                if width < minimumWidth || px < -initialSize.width/2 || px > initialSize.width/2 {
                     self[keyPath: target].wrappedValue.current.x = before
-                }else{
+                } else {
                     self.size.width = width
                     self.position.x = px
                 }
             }
-            .onEnded{value in
+            .onEnded {_ in
                 self.correctOrder()
                 self.setInitial()
                 self.updateUserDefaults()            }
@@ -105,21 +105,21 @@ struct ResizingRect: View {
 
     func yGesture(target: KeyPath<Self, Binding<Position>>) -> some Gesture {
         return DragGesture(minimumDistance: .zero, coordinateSpace: .global)
-            .onChanged{value in
+            .onChanged {value in
                 let dy = value.location.y - value.startLocation.y
                 let before = self[keyPath: target].wrappedValue.current.y
                 self[keyPath: target].wrappedValue.current.y = self[keyPath: target].wrappedValue.initial.y + dy
                 let height = abs(bottom_right_edge.current.y - top_left_edge.current.y)
                 let py = (top_left_edge.current.y + bottom_right_edge.current.y - initialSize.height) / 2
-                if py < -initialSize.height/2 || py > initialSize.height/2{
+                if py < -initialSize.height/2 || py > initialSize.height/2 {
                     self[keyPath: target].wrappedValue.current.y = before
-                }else{
+                } else {
                     self.size.height = height
                     self.position.y = py
                 }
 
             }
-            .onEnded{value in
+            .onEnded {_ in
                 self.correctOrder()
                 self.setInitial()
                 self.updateUserDefaults()            }
@@ -127,14 +127,14 @@ struct ResizingRect: View {
 
     var moveGesture: some Gesture {
         return DragGesture(minimumDistance: .zero, coordinateSpace: .global)
-            .onChanged{value in
+            .onChanged {value in
                 let dx = value.location.x - value.startLocation.x
                 let dy = value.location.y - value.startLocation.y
                 let px = self.initialPosition.x + dx
                 let py = self.initialPosition.y + dy
                 if  -initialSize.width/2 < px && px < initialSize.width/2 &&
-                        -initialSize.height/2 < py && py < initialSize.height/2{
-                    withAnimation(.interactiveSpring()){
+                        -initialSize.height/2 < py && py < initialSize.height/2 {
+                    withAnimation(.interactiveSpring()) {
                         self.position.x = px
                         self.position.y = py
                         self.top_left_edge.current.x = self.top_left_edge.initial.x + dx
@@ -144,14 +144,14 @@ struct ResizingRect: View {
                     }
                 }
             }
-            .onEnded{value in
+            .onEnded {_ in
                 self.setInitial()
                 self.updateUserDefaults()
             }
     }
 
     var body: some View {
-        ZStack{
+        ZStack {
             /*
              Path{path in
              path.move(to: CGPoint(x: 0, y: height * edgeRatio))
@@ -178,8 +178,8 @@ struct ResizingRect: View {
              }.stroke(edgeColor, lineWidth: lineWidth)
              .gesture(gesture(x: \.$bottom_right_edge.x, y: \.$bottom_right_edge.y, top: false, left: false))
              */
-            Path{path in
-                for i in 0..<4{
+            Path {path in
+                for i in 0..<4 {
                     let x = size.width / 24 * CGFloat(i)
                     let ratio = (1 - CGFloat(i) / 4) * 0.8
                     path.move(to: CGPoint(x: x, y: size.height / 2 - size.height * edgeRatio * ratio))
@@ -198,8 +198,8 @@ struct ResizingRect: View {
              }.stroke(Color.white, lineWidth: 3)
              .gesture(yGesture(y: \.$top_left_edge.y, top: true))
              */
-            Path{path in
-                for i in 0..<4{
+            Path {path in
+                for i in 0..<4 {
                     let x = size.width - size.width / 24 * CGFloat(i)
                     let ratio = (1 - CGFloat(i) / 4) * 0.8
                     path.move(to: CGPoint(x: x, y: size.height / 2 - size.height * edgeRatio * ratio))
@@ -218,7 +218,7 @@ struct ResizingRect: View {
              }.stroke(Color.white, lineWidth: 3)
              .gesture(yGesture(y: \.$bottom_right_edge.y, top: false))
              */
-            HStack{
+            HStack {
                 let cur = min(size.width, size.height) * 0.22
                 let max = min(initialSize.width, initialSize.height) * 0.22
                 let r = min(cur, max)
@@ -231,9 +231,9 @@ struct ResizingRect: View {
                             .font(Font.system(size: r*0.5))
                     )
                     .gesture(moveGesture)
-                Button{
+                Button {
                     Sound.reset()
-                    withAnimation(.interactiveSpring()){
+                    withAnimation(.interactiveSpring()) {
                         self.position = .zero
                         self.size.width = initialSize.width
                         self.size.height = initialSize.height
@@ -252,7 +252,7 @@ struct ResizingRect: View {
                                 .font(Font.system(size: r*0.5))
                         )
                 }
-                Button{
+                Button {
                     VariableStates.shared.setResizingMode(.onehanded)
                 }label: {
                     Circle()
@@ -274,13 +274,13 @@ struct ResizingBindingFrame: ViewModifier {
     @Binding private var position: CGPoint
     @Binding private var size: CGSize
 
-    init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize){
+    init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize) {
         self.initialSize = initialSize
         self._size = size
         self._position = position
     }
 
-    private enum HV{
+    private enum HV {
         case H, V
     }
     private var editButtonData: (max: CGFloat, position: CGPoint, stack: HV) {
@@ -294,13 +294,13 @@ struct ResizingBindingFrame: ViewModifier {
         if leftMargin == maxMargin {
             position = .init(x: maxMargin/2, y: initialSize.height/2)
             stack = .V
-        }else if rightMargin == maxMargin{
+        } else if rightMargin == maxMargin {
             position = .init(x: initialSize.width - maxMargin/2, y: initialSize.height/2)
             stack = .V
-        }else if topMargin == maxMargin{
+        } else if topMargin == maxMargin {
             position = .init(x: initialSize.width/2, y: maxMargin/2)
             stack = .H
-        }else{
+        } else {
             position = .init(x: initialSize.width/2, y: initialSize.height - maxMargin/2)
             stack = .H
         }
@@ -309,10 +309,10 @@ struct ResizingBindingFrame: ViewModifier {
 
     @ViewBuilder func editButton() -> some View {
         let data = self.editButtonData
-        if data.max >= 30{
+        if data.max >= 30 {
             let max = min(initialSize.width, initialSize.height) * 0.15
             let r = min(data.max * 0.7, max)
-            let button1 = Button{
+            let button1 = Button {
                 VariableStates.shared.setResizingMode(.resizing)
             }label: {
                 Circle()
@@ -326,7 +326,7 @@ struct ResizingBindingFrame: ViewModifier {
             }
             .frame(width: r, height: r)
 
-            let button2 = Button{
+            let button2 = Button {
                 VariableStates.shared.setResizingMode(.fullwidth)
             }label: {
                 Circle()
@@ -340,14 +340,14 @@ struct ResizingBindingFrame: ViewModifier {
             }
             .frame(width: r, height: r)
 
-            let button3 = Button{
+            let button3 = Button {
                 Sound.reset()
-                withAnimation(.interactiveSpring()){
+                withAnimation(.interactiveSpring()) {
                     self.position = .zero
                     self.size.width = initialSize.width
                     self.size.height = initialSize.height
                 }
-                KeyboardInternalSetting.shared.update(\.oneHandedModeSetting){value in
+                KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
                     value.set(layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation, size: initialSize, position: .zero)
                 }
             }label: {
@@ -361,16 +361,16 @@ struct ResizingBindingFrame: ViewModifier {
                     )
             }
 
-            switch data.stack{
+            switch data.stack {
             case .H:
-                HStack{
+                HStack {
                     button1
                     button2
                     button3
                 }
                 .position(x: data.position.x, y: data.position.y)
             case .V:
-                VStack{
+                VStack {
                     button1
                     button2
                     button3
@@ -391,7 +391,7 @@ struct ResizingBindingFrame: ViewModifier {
         case .fullwidth:
             content
         case .resizing:
-            ZStack{
+            ZStack {
                 content
                 Rectangle()
                     .fill(Color.black.opacity(0.2))

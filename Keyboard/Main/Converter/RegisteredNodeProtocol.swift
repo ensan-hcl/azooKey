@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol RegisteredNodeProtocol{
+protocol RegisteredNodeProtocol {
     var data: DicDataElementProtocol {get}
     var prev: RegisteredNodeProtocol? {get}
     var totalValue: PValue {get}
@@ -26,8 +26,8 @@ struct DirectRegisteredNode: RegisteredNodeProtocol {
     var ruby: String {
         return self.data.ruby
     }
-    
-    init(data: DicDataElementProtocol, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int){
+
+    init(data: DicDataElementProtocol, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int) {
         self.data = data
         self.prev = registered
         self.totalValue = totalValue
@@ -45,8 +45,8 @@ struct RomanRegisteredNode: RegisteredNodeProtocol {
     let totalValue: PValue
     let rubyCount: Int
     let ruby: String
-    
-    init(data: DicDataElementProtocol, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int, romanString: String){
+
+    init(data: DicDataElementProtocol, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int, romanString: String) {
         self.data = data
         self.prev = registered
         self.totalValue = totalValue
@@ -59,7 +59,7 @@ struct RomanRegisteredNode: RegisteredNodeProtocol {
     }
 }
 
-extension RegisteredNodeProtocol{
+extension RegisteredNodeProtocol {
     func getCandidateData() -> CandidateData {
         guard let prev = self.prev else {
             let unit = ClauseDataUnit()
@@ -68,41 +68,41 @@ extension RegisteredNodeProtocol{
             unit.rubyCount = self.rubyCount
             return CandidateData(clauses: [(clause: unit, value: .zero)], data: [])
         }
-        var lastcandidate = prev.getCandidateData()    //自分に至るregisterdそれぞれのデータに処理
-        
-        if self.data.word.isEmpty{
+        var lastcandidate = prev.getCandidateData()    // 自分に至るregisterdそれぞれのデータに処理
+
+        if self.data.word.isEmpty {
             return lastcandidate
         }
 
-        guard let lastClause = lastcandidate.lastClause else{
+        guard let lastClause = lastcandidate.lastClause else {
             return lastcandidate
         }
 
-        if lastClause.text.isEmpty || !DicDataStore.isClause(prev.data.rcid, self.data.lcid){
-            //文節ではないので、最後に追加する。
+        if lastClause.text.isEmpty || !DicDataStore.isClause(prev.data.rcid, self.data.lcid) {
+            // 文節ではないので、最後に追加する。
             lastClause.text.append(self.data.word)
             lastClause.ruby.append(self.ruby)
             lastClause.rubyCount += self.rubyCount
-            //最初だった場合を想定している
-            if (lastClause.mid == 500 && self.data.mid != 500) || DicDataStore.includeMMValueCalculation(self.data){
+            // 最初だった場合を想定している
+            if (lastClause.mid == 500 && self.data.mid != 500) || DicDataStore.includeMMValueCalculation(self.data) {
                 lastClause.mid = self.data.mid
             }
             lastcandidate.clauses[lastcandidate.clauses.count-1].value = self.totalValue
             lastcandidate.data.append(self.data)
             return lastcandidate
         }
-        //文節の区切りだった場合
-        else{
+        // 文節の区切りだった場合
+        else {
             let unit = ClauseDataUnit()
             unit.text = self.data.word
             unit.ruby = self.ruby
             unit.rubyCount = self.rubyCount
-            if DicDataStore.includeMMValueCalculation(self.data){
+            if DicDataStore.includeMMValueCalculation(self.data) {
                 unit.mid = self.data.mid
             }
-            //前の文節の処理
+            // 前の文節の処理
             lastClause.nextLcid = self.data.lcid
-            switch VariableStates.shared.inputStyle{
+            switch VariableStates.shared.inputStyle {
             case .direct:
                 break
             case .roman2kana:
@@ -114,4 +114,3 @@ extension RegisteredNodeProtocol{
         }
     }
 }
-

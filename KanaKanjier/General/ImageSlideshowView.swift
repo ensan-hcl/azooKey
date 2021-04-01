@@ -12,15 +12,15 @@ struct ImageSlideshowView: View {
     @State private var selection = 0
     private let timer = Timer.publish(every: 2.5, on: .main, in: .common).autoconnect()
     let pictures: [String]
-    init(pictures: [String]){
+    init(pictures: [String]) {
         self.pictures = pictures
     }
 
     var body: some View {
-        CenterAlignedView{
-            HStack{
-                ForEach(pictures.indices, id: \.self){i in
-                    if i == selection{
+        CenterAlignedView {
+            HStack {
+                ForEach(pictures.indices, id: \.self) {i in
+                    if i == selection {
 
                         Image(pictures[selection])
                             .resizable()
@@ -29,13 +29,13 @@ struct ImageSlideshowView: View {
                     }
                 }
             }
-            .onReceive(timer){_ in
+            .onReceive(timer) {_ in
                 self.update()
             }
         }
     }
 
-    func update(){
+    func update() {
         self.selection = (selection + 1) % pictures.count
     }
 }

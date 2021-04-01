@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct FileTools{
-    private init(){}
+struct FileTools {
+    private init() {}
 
-    static func saveTextFile(contents: String, to fileName: String, for ex: String = "txt"){
+    static func saveTextFile(contents: String, to fileName: String, for ex: String = "txt") {
         do {
             let fileManager = FileManager.default
             let library = try fileManager.url(for: .libraryDirectory,
@@ -43,7 +43,7 @@ struct FileTools{
         return ""
     }
 
-    static func removeTextFile(to fileName: String, for ex: String = "txt"){
+    static func removeTextFile(to fileName: String, for ex: String = "txt") {
         do {
             let fileManager = FileManager.default
             let library = try fileManager.url(for: .libraryDirectory,

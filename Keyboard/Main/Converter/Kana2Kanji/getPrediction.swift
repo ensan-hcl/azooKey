@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension Kana2Kanji{
-    ///CandidateDataの状態から予測変換候補を取得する関数
+extension Kana2Kanji {
+    /// CandidateDataの状態から予測変換候補を取得する関数
     /// - parameters:
     ///   - prepart: CandidateDataで、予測変換候補に至る前の部分。例えば「これはき」の「き」の部分から予測をする場合「これは」の部分がprepart。
     ///   - lastRuby:
@@ -23,12 +23,12 @@ extension Kana2Kanji{
         let datas: [DicDataElementProtocol]
         let lastData: DicDataElementProtocol?
         conversionBenchmark.start(process: .結果の処理_予測変換_日本語_雑多なデータ取得)
-        do{
+        do {
             var _str = ""
-            let prestring: String = prepart.clauses.map{$0.clause.text}.joined()
+            let prestring: String = prepart.clauses.map {$0.clause.text}.joined()
             var count: Int = .zero
-            while true{
-                if prestring == _str{
+            while true {
+                if prestring == _str {
                     break
                 }
                 _str += prepart.data[count].word
@@ -48,7 +48,7 @@ extension Kana2Kanji{
         let correspoindingCount: Int = lastCandidate.correspondingCount + lastRubyCount
         var ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
 
-        if lastCandidate.data.count > 1, let lastNext = lastData{
+        if lastCandidate.data.count > 1, let lastNext = lastData {
             let lastPrev: DicDataElementProtocol = lastCandidate.data[lastCandidate.data.endIndex - 2]
             ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
         }
@@ -56,18 +56,18 @@ extension Kana2Kanji{
 
         conversionBenchmark.start(process: .結果の処理_予測変換_日本語_Dicdataの読み込み)
         let dicdata: DicDataStore.DicData
-        switch VariableStates.shared.inputStyle{
+        switch VariableStates.shared.inputStyle {
         case .direct:
             dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: lastRuby)
         case .roman2kana:
             let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
             let roman: Substring = lastRuby.suffix(lastRuby.count - ruby.count)
-            if !roman.isEmpty{
+            if !roman.isEmpty {
                 let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
-                let possibleNexts: [Substring] = DicDataStore.possibleNexts[String(roman), default: []].map{ruby + $0}
+                let possibleNexts: [Substring] = DicDataStore.possibleNexts[String(roman), default: []].map {ruby + $0}
                 let _dicdata: DicDataStore.DicData = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
-                dicdata = _dicdata.filter{data in !possibleNexts.allSatisfy{!$0.hasPrefix(data.ruby)}}
-            }else{
+                dicdata = _dicdata.filter {data in !possibleNexts.allSatisfy {!$0.hasPrefix(data.ruby)}}
+            } else {
                 dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
             }
         }
@@ -76,16 +76,16 @@ extension Kana2Kanji{
         var result: [Candidate] = []
 
         result.reserveCapacity(N_best &+ 1)
-        (dicdata + memory + osuserdict).forEach{(data: DicDataElementProtocol) in
+        (dicdata + memory + osuserdict).forEach {(data: DicDataElementProtocol) in
             let includeMMValueCalculation = DicDataStore.includeMMValueCalculation(data)
             let mmValue: PValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
             let ccValue: PValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)
-            let penalty: PValue = -PValue(data.ruby.count &- lastRuby.count) * 3.0   //文字数差をペナルティとする
+            let penalty: PValue = -PValue(data.ruby.count &- lastRuby.count) * 3.0   // 文字数差をペナルティとする
             let wValue: PValue = data.value()
             let newValue: PValue = lastCandidate.value + mmValue + ccValue + wValue + penalty - ignoreCCValue
-            //追加すべきindexを取得する
+            // 追加すべきindexを取得する
             let lastindex: Int = (result.lastIndex(where: {$0.value >= newValue}) ?? -1) + 1
-            if lastindex >= N_best{
+            if lastindex >= N_best {
                 return
             }
             var nodedata: [DicDataElementProtocol] = datas
@@ -98,8 +98,8 @@ extension Kana2Kanji{
                 data: nodedata
             )
             result.insert(candidate, at: lastindex)
-            //カウントがオーバーしている場合は除去する
-            if result.count == N_best &+ 1{
+            // カウントがオーバーしている場合は除去する
+            if result.count == N_best &+ 1 {
                 result.removeLast()
             }
         }

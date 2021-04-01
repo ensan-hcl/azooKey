@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-final class SharedResultData<Candidate: ResultViewItemData>: ObservableObject{
+final class SharedResultData<Candidate: ResultViewItemData>: ObservableObject {
     @Published var results: [ResultData<Candidate>] = []
 }
 
@@ -21,7 +21,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
     @Environment(\.themeEnvironment) private var theme
 
-    init(isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>){
+    init(isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>) {
         self.sharedResultData = sharedResultData
         self._isResultViewExpanded = isResultViewExpanded
         self._splitedResults = State(initialValue: Self.registerResults(results: sharedResultData.results))
@@ -29,14 +29,14 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
     // FIXME: これはGridViewが使えないからこうなっている。
     var body: some View {
-        VStack{
-            HStack(alignment: .center){
+        VStack {
+            HStack(alignment: .center) {
                 Spacer()
                     .frame(height: 18)
-                //候補をしまうボタン
+                // 候補をしまうボタン
                 Button(action: {
                     self.collapse()
-                }){
+                }) {
                     Image(systemName: "chevron.up")
                         .font(Design.fonts.iconImageFont(theme: theme))
                         .frame(height: 18)
@@ -45,19 +45,19 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                 .padding(.trailing, 10)
             }
             .padding(.top, 10)
-            ScrollView{
-                LazyVStack(alignment: .leading){
-                    ForEach(splitedResults, id: \.id){results in
+            ScrollView {
+                LazyVStack(alignment: .leading) {
+                    ForEach(splitedResults, id: \.id) {results in
                         Divider()
-                        HStack{
-                            ForEach(results.results, id: \.id){datum in
+                        HStack {
+                            ForEach(results.results, id: \.id) {datum in
                                 Button(action: {
                                     self.pressed(data: datum)
-                                }){
+                                }) {
                                     Text(datum.candidate.text)
                                 }
                                 .buttonStyle(ResultButtonStyle(height: 18, theme: theme))
-                                .contextMenu{
+                                .contextMenu {
                                     ResultContextMenuView(text: datum.candidate.text)
                                 }
                             }
@@ -71,12 +71,12 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         .frame(height: VariableStates.shared.interfaceSize.height, alignment: .bottom)
     }
 
-    private func pressed(data: ResultData<Candidate>){
+    private func pressed(data: ResultData<Candidate>) {
         VariableStates.shared.action.notifyComplete(data.candidate)
         self.collapse()
     }
 
-    private func collapse(){
+    private func collapse() {
         isResultViewExpanded = false
     }
 
@@ -85,12 +85,12 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         var splited: [SplitedResultData<Candidate>] = []
         var curResult: [ResultData<Candidate>] = []
         let font = UIFont.systemFont(ofSize: Design.fonts.resultViewFontSize+1)
-        results.forEach{[unowned font] datum in
+        results.forEach {[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
-            if (curSum + width) < VariableStates.shared.interfaceSize.width{
+            if (curSum + width) < VariableStates.shared.interfaceSize.width {
                 curResult.append(datum)
                 curSum += width
-            }else{
+            } else {
                 splited.append(SplitedResultData(id: splited.count, results: curResult))
                 curSum = width
                 curResult = [datum]
@@ -102,7 +102,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
 }
 
-fileprivate struct SplitedResultData<Candidate: ResultViewItemData>: Identifiable{
+private struct SplitedResultData<Candidate: ResultViewItemData>: Identifiable {
     let id: Int
     let results: [ResultData<Candidate>]
 }

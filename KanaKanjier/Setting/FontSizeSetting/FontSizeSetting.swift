@@ -13,20 +13,20 @@ enum FontSizeSetting: Savable, Hashable {
     case value(Double)
 
     var saveValue: Double {
-        switch self{
+        switch self {
         case let .value(value):
             return value
         }
     }
 
     static func get(_ value: Any) -> FontSizeSetting? {
-        if let value = value as? SaveValue{
+        if let value = value as? SaveValue {
             return .value(value)
         }
         return nil
     }
 }
-extension FontSizeSetting: ExpressibleByFloatLiteral{
+extension FontSizeSetting: ExpressibleByFloatLiteral {
     init(floatLiteral value: Double) {
         self = .value(value)
     }
@@ -34,7 +34,7 @@ extension FontSizeSetting: ExpressibleByFloatLiteral{
     typealias FloatLiteralType = Double
 }
 
-extension FontSizeSetting: ExpressibleByIntegerLiteral{
+extension FontSizeSetting: ExpressibleByIntegerLiteral {
     init(integerLiteral value: Int) {
         self = .value(Double(value))
     }
@@ -42,15 +42,15 @@ extension FontSizeSetting: ExpressibleByIntegerLiteral{
     typealias IntegerLiteralType = Int
 }
 
-extension FontSizeSetting: CustomStringConvertible{
+extension FontSizeSetting: CustomStringConvertible {
     var display: LocalizedStringKey {
         LocalizedStringKey(stringLiteral: description)
     }
 
     var description: String {
-        switch self{
+        switch self {
         case let .value(value):
-            if value == -1{
+            if value == -1 {
                 return "自動"
             }
             return "\(value)"
@@ -58,9 +58,8 @@ extension FontSizeSetting: CustomStringConvertible{
     }
 }
 
-extension FontSizeSetting: Identifiable{
+extension FontSizeSetting: Identifiable {
     var id: Double {
         return self.saveValue
     }
 }
-

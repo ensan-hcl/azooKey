@@ -39,7 +39,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
         // PHPickerViewControllerDelegateの設定
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             for image in results {
-                if image.itemProvider.canLoadObject(ofClass: PHLivePhoto.self){
+                if image.itemProvider.canLoadObject(ofClass: PHLivePhoto.self) {
                     image.itemProvider.loadObject(ofClass: PHLivePhoto.self) { (livePhotoObject, error) in
                         // PHLivePhotoとして取得
                         if let livePhoto = livePhotoObject as? PHLivePhoto,
@@ -47,7 +47,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                             do {
                                 // Dataで取得
                                 let imageData: Data = try Data(contentsOf: imageUrl)
-                                if let uiImage = UIImage(data: imageData), let cgImage = uiImage.cgImage{
+                                if let uiImage = UIImage(data: imageData), let cgImage = uiImage.cgImage {
                                     self.parent.pickerResult = UIImage(cgImage: cgImage, scale: 1, orientation: uiImage.imageOrientation)
                                 }
                             } catch {
@@ -55,7 +55,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                             }
                         }
                     }
-                }else if image.itemProvider.canLoadObject(ofClass: UIImage.self) {
+                } else if image.itemProvider.canLoadObject(ofClass: UIImage.self) {
                     image.itemProvider.loadObject(ofClass: UIImage.self) { (selectedImage, error) in
                         if let error = error {
                             debug("error: \(error.localizedDescription)")
@@ -75,4 +75,3 @@ struct PhotoPicker: UIViewControllerRepresentable {
         }
     }
 }
-

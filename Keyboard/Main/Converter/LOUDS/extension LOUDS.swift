@@ -8,32 +8,32 @@
 
 import Foundation
 /*
-extension Array{
-    init(path: String, options: Data.ReadingOptions = []) throws {
-        do {
-            let binaryData = try Data(contentsOf: URL(fileURLWithPath: path), options: options) //2度読み込むことはないのでキャッシュ不要
-            let array = binaryData.withUnsafeBytes{pointer -> Array<Element> in
-                Array(
-                    UnsafeBufferPointer(
-                        start: pointer.baseAddress!.assumingMemoryBound(to: Element.self),
-                        count: pointer.count / MemoryLayout<Element>.size
-                    )
-                )
-            }
-            self = array
-        } catch {
-             debug("Failed to read the file.")
-            throw error
-        }
+ extension Array{
+ init(path: String, options: Data.ReadingOptions = []) throws {
+ do {
+ let binaryData = try Data(contentsOf: URL(fileURLWithPath: path), options: options) //2度読み込むことはないのでキャッシュ不要
+ let array = binaryData.withUnsafeBytes{pointer -> Array<Element> in
+ Array(
+ UnsafeBufferPointer(
+ start: pointer.baseAddress!.assumingMemoryBound(to: Element.self),
+ count: pointer.count / MemoryLayout<Element>.size
+ )
+ )
+ }
+ self = array
+ } catch {
+ debug("Failed to read the file.")
+ throw error
+ }
 
-    }
-}
-*/
-extension LOUDS{
+ }
+ }
+ */
+extension LOUDS {
     private static func loadLOUDSBinary(from url: URL) -> [UInt64]? {
         do {
-            let binaryData = try Data(contentsOf: url, options: [.uncached]) //2度読み込むことはないのでキャッシュ不要
-            let ui64array = binaryData.withUnsafeBytes{pointer -> [UInt64] in
+            let binaryData = try Data(contentsOf: url, options: [.uncached]) // 2度読み込むことはないのでキャッシュ不要
+            let ui64array = binaryData.withUnsafeBytes {pointer -> [UInt64] in
                 return Array(
                     UnsafeBufferPointer(
                         start: pointer.baseAddress!.assumingMemoryBound(to: UInt64.self),
@@ -48,8 +48,8 @@ extension LOUDS{
         }
     }
 
-    private static func getLOUDSURL(_ identifier: String) -> (chars: URL, louds: URL){
-        
+    private static func getLOUDSURL(_ identifier: String) -> (chars: URL, louds: URL) {
+
         if identifier == "user"{
             let directory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
             return (
@@ -64,7 +64,7 @@ extension LOUDS{
     }
 
     private static func getLoudstxtPath(_ identifier: String) -> String {
-        if identifier.hasPrefix("user"){
+        if identifier.hasPrefix("user") {
             let directory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
             return directory.appendingPathComponent("\(identifier).loudstxt").path
         }
@@ -72,7 +72,7 @@ extension LOUDS{
     }
 
     private static func getLoudstxt2Path(_ identifier: String) -> String {
-        if identifier.hasPrefix("user"){
+        if identifier.hasPrefix("user") {
             let directory = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
             return directory.appendingPathComponent("\(identifier).loudstxt2").path
         }
@@ -82,79 +82,79 @@ extension LOUDS{
     internal static func build(_ identifier: String) -> LOUDS? {
         let (charsURL, loudsURL) = Self.getLOUDSURL(identifier)
         let nodeIndex2ID: [UInt8]
-        do{
-            nodeIndex2ID = try Array(Data(contentsOf: charsURL, options: [.uncached]))   //2度読み込むことはないのでキャッシュ不要
+        do {
+            nodeIndex2ID = try Array(Data(contentsOf: charsURL, options: [.uncached]))   // 2度読み込むことはないのでキャッシュ不要
         } catch {
             debug("ファイルが存在しません: \(error)")
             return nil
         }
 
-        if let bytes = LOUDS.loadLOUDSBinary(from: loudsURL){
-            let louds = LOUDS(bytes: bytes.map{$0.littleEndian}, nodeIndex2ID: nodeIndex2ID)
+        if let bytes = LOUDS.loadLOUDSBinary(from: loudsURL) {
+            let louds = LOUDS(bytes: bytes.map {$0.littleEndian}, nodeIndex2ID: nodeIndex2ID)
             return louds
         }
         return nil
     }
     /*
-    internal static func getData(_ identifier: String, indices: [Int]) -> [String] {
-        let data: Data
-        do{
-            let path = Self.getLoudstxtPath(identifier)
-            data = try Data(contentsOf: URL(fileURLWithPath: path))
-        } catch {
-            debug("ファイルが存在しません: \(error)")
-            data = Data()
-        }
+     internal static func getData(_ identifier: String, indices: [Int]) -> [String] {
+     let data: Data
+     do{
+     let path = Self.getLoudstxtPath(identifier)
+     data = try Data(contentsOf: URL(fileURLWithPath: path))
+     } catch {
+     debug("ファイルが存在しません: \(error)")
+     data = Data()
+     }
 
-        var indicesIterator = indices.sorted().makeIterator()
-        guard var targetIndex = indicesIterator.next() else{
-            return []
-        }
-        let newLineNumber = UInt8(ascii: "\n")
+     var indicesIterator = indices.sorted().makeIterator()
+     guard var targetIndex = indicesIterator.next() else{
+     return []
+     }
+     let newLineNumber = UInt8(ascii: "\n")
 
-        let strings: [String] = data.withUnsafeBytes {
-            var results: [String] = []
-            results.reserveCapacity(indices.count)
-            var result: [UInt8] = []
-            var count = 0
-            for byte in $0{
-                let isNewLine = byte == newLineNumber
-                if count == targetIndex && !isNewLine{
-                    result.append(byte)
-                    continue
-                }
+     let strings: [String] = data.withUnsafeBytes {
+     var results: [String] = []
+     results.reserveCapacity(indices.count)
+     var result: [UInt8] = []
+     var count = 0
+     for byte in $0{
+     let isNewLine = byte == newLineNumber
+     if count == targetIndex && !isNewLine{
+     result.append(byte)
+     continue
+     }
 
-                if count > targetIndex{
-                    if let string = String(bytes: result, encoding: .utf8){
-                        results.append(string)
-                    }
-                    result = []
-                    if let _targetIndex = indicesIterator.next(){
-                        targetIndex = _targetIndex
-                        if count == targetIndex{
-                            result.append(byte)
-                        }
-                    }else{
-                        break
-                    }
-                }
+     if count > targetIndex{
+     if let string = String(bytes: result, encoding: .utf8){
+     results.append(string)
+     }
+     result = []
+     if let _targetIndex = indicesIterator.next(){
+     targetIndex = _targetIndex
+     if count == targetIndex{
+     result.append(byte)
+     }
+     }else{
+     break
+     }
+     }
 
-                if isNewLine{
-                    count = count &+ 1
-                }
-            }
-            if !result.isEmpty, let string = String(bytes: result, encoding: .utf8){
-                results.append(string)
-            }
-            return results
-        }
-        return strings
+     if isNewLine{
+     count = count &+ 1
+     }
+     }
+     if !result.isEmpty, let string = String(bytes: result, encoding: .utf8){
+     results.append(string)
+     }
+     return results
+     }
+     return strings
 
-    }*/
+     }*/
 
     internal static func getData(_ identifier: String, indices: [Int]) -> [String] {
         let binary: Data
-        do{
+        do {
             let path = Self.getLoudstxt2Path(identifier)
             binary = try Data(contentsOf: URL(fileURLWithPath: path))
         } catch {
@@ -162,7 +162,7 @@ extension LOUDS{
             return []
         }
 
-        let lc = binary[0..<2].withUnsafeBytes{pointer -> [UInt16] in
+        let lc = binary[0..<2].withUnsafeBytes {pointer -> [UInt16] in
             return Array(
                 UnsafeBufferPointer(
                     start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
@@ -172,7 +172,7 @@ extension LOUDS{
         }[0]
 
         let header_endIndex: UInt32 = 2 + UInt32(lc) * UInt32(MemoryLayout<UInt32>.size)
-        let i32array = binary[2..<header_endIndex].withUnsafeBytes{pointer -> [UInt32] in
+        let i32array = binary[2..<header_endIndex].withUnsafeBytes {pointer -> [UInt32] in
             return Array(
                 UnsafeBufferPointer(
                     start: pointer.baseAddress!.assumingMemoryBound(to: UInt32.self),
@@ -181,7 +181,7 @@ extension LOUDS{
             )
         }
 
-        return indices.compactMap{(index: Int) in
+        return indices.compactMap {(index: Int) in
             let startIndex = Int(i32array[index])
             let endIndex = index == (lc-1) ? binary.endIndex : Int(i32array[index + 1])
             return String(bytes: binary[startIndex ..< endIndex], encoding: .utf8)

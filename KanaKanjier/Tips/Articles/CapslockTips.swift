@@ -11,15 +11,15 @@ import SwiftUI
 
 struct CapsLockTipsView: View {
     var body: some View {
-        TipsContentView("大文字に固定する"){
-            TipsContentParagraph{
+        TipsContentView("大文字に固定する") {
+            TipsContentParagraph {
                 Text("大文字のみ入力するモード(Caps Lock)を利用できます。")
             }
-            TipsContentParagraph{
+            TipsContentParagraph {
                 Text("フリック入力では「a/A」キーを上にフリックします。")
                 Text("ローマ字入力では「Aa」キーを長押しします。")
             }
-            TipsContentParagraph{
+            TipsContentParagraph {
                 Text("どちらの入力方式でも\(systemImage: "capslock.fill")は大文字固定になっていることを意味します。")
                 Text("解除するにはもう一度キーを押してください。")
             }

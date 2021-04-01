@@ -12,24 +12,24 @@ struct MessageView: View {
     private let data: MessageData
     @Binding private var manager: MessageManager
 
-    init(data: MessageData, manager: Binding<MessageManager>){
+    init(data: MessageData, manager: Binding<MessageManager>) {
         self.data = data
         self._manager = manager
     }
 
     var body: some View {
-        ZStack{
+        ZStack {
             Color.black.opacity(0.5)
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.white)
                 .frame(width: SemiStaticStates.shared.screenWidth*0.8, height: Design.shared.keyboardScreenHeight*0.8)
-                .overlay(VStack{
+                .overlay(VStack {
                     Text(data.title)
                         .font(.title)
                         .bold()
                         .padding(.top)
                         .foregroundColor(.black)
-                    ScrollView{
+                    ScrollView {
                         Text(data.description)
                             .padding(.horizontal)
                             .foregroundColor(.black)
@@ -37,12 +37,12 @@ struct MessageView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     Divider()
-                    HStack{
-                        switch data.leftsideButton{
+                    HStack {
+                        switch data.leftsideButton {
                         case let .details(urlString):
-                            HStack{
+                            HStack {
                                 Spacer()
-                                Button{
+                                Button {
                                     VariableStates.shared.action.registerAction(.openApp(urlString))
                                 }label: {
                                     Text("詳細")
@@ -51,9 +51,9 @@ struct MessageView: View {
                                 Divider()
                             }
                         case .later:
-                            HStack{
+                            HStack {
                                 Spacer()
-                                Button{
+                                Button {
                                     self.manager.done(data.id)
                                 }label: {
                                     Text("後で")
@@ -62,11 +62,11 @@ struct MessageView: View {
                                 Divider()
                             }
                         }
-                        switch data.rightsideButton{
+                        switch data.rightsideButton {
                         case let .openContainer(text):
-                            HStack{
+                            HStack {
                                 Spacer()
-                                Button{
+                                Button {
                                     VariableStates.shared.action.registerAction(.openApp("azooKey://"))
                                 }label: {
                                     Text(text).bold()
@@ -74,9 +74,9 @@ struct MessageView: View {
                                 Spacer()
                             }
                         case .OK:
-                            HStack{
+                            HStack {
                                 Spacer()
-                                Button{
+                                Button {
                                     self.manager.done(data.id)
                                 }label: {
                                     Text("了解").bold()

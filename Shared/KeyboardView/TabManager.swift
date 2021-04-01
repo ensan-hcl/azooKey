@@ -31,11 +31,11 @@ enum Tab: Equatable {
         case custard(Custard)
 
         var inputStyle: InputStyle {
-            switch self{
+            switch self {
             case .qwerty_hira:
                 return .roman2kana
             case let .custard(custard):
-                switch custard.input_style{
+                switch custard.input_style {
                 case .direct:
                     return .direct
                 case .roman2kana:
@@ -47,13 +47,13 @@ enum Tab: Equatable {
         }
 
         var layout: KeyboardLayout {
-            switch self{
+            switch self {
             case .flick_hira, .flick_abc, .flick_numbersymbols:
                 return .flick
             case .qwerty_hira, .qwerty_abc, .qwerty_number, .qwerty_symbols:
                 return .qwerty
             case let .custard(custard):
-                switch custard.interface.keyStyle{
+                switch custard.interface.keyStyle {
                 case .tenkeyStyle:
                     return .flick
                 case .pcStyle:
@@ -63,13 +63,13 @@ enum Tab: Equatable {
         }
 
         var language: KeyboardLanguage? {
-            switch self{
+            switch self {
             case .flick_abc, .qwerty_abc:
                 return .en_US
             case .flick_hira, .qwerty_hira:
                 return .ja_JP
             case let .custard(custard):
-                switch custard.language{
+                switch custard.language {
                 case .ja_JP:
                     return .ja_JP
                 case .en_US:
@@ -92,10 +92,10 @@ enum Tab: Equatable {
         case english
 
         var actualTab: ExistentialTab {
-            //ユーザの設定に合わせて遷移先のタブ(非user_dependent)を返す
-            switch self{
+            // ユーザの設定に合わせて遷移先のタブ(非user_dependent)を返す
+            switch self {
             case .english:
-                switch SettingData.shared.languageLayout(for: .englishKeyboardLayout){
+                switch SettingData.shared.languageLayout(for: .englishKeyboardLayout) {
                 case .flick:
                     return .flick_abc
                 case .qwerty:
@@ -104,7 +104,7 @@ enum Tab: Equatable {
                     return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
                 }
             case .japanese:
-                switch SettingData.shared.languageLayout(for: .japaneseKeyboardLayout){
+                switch SettingData.shared.languageLayout(for: .japaneseKeyboardLayout) {
                 case .flick:
                     return .flick_hira
                 case .qwerty:
@@ -117,7 +117,7 @@ enum Tab: Equatable {
     }
 
     var inputStyle: InputStyle {
-        switch self{
+        switch self {
         case let .existential(tab):
             return tab.inputStyle
         case let .user_dependent(tab):
@@ -129,7 +129,7 @@ enum Tab: Equatable {
     }
 
     var layout: KeyboardLayout {
-        switch self{
+        switch self {
         case let .existential(tab):
             return tab.layout
         case let .user_dependent(tab):
@@ -141,7 +141,7 @@ enum Tab: Equatable {
     }
 
     var language: KeyboardLanguage? {
-        switch self{
+        switch self {
         case let .existential(tab):
             return tab.language
         case let .user_dependent(tab):
@@ -153,11 +153,11 @@ enum Tab: Equatable {
     }
 }
 
-extension TabData{
+extension TabData {
     var tab: Tab {
-        switch self{
+        switch self {
         case let .system(tab):
-            switch tab{
+            switch tab {
             case .flick_japanese:
                 return .existential(.flick_hira)
             case .flick_english:
@@ -180,25 +180,25 @@ extension TabData{
                 return .last_tab
             }
         case let .custom(identifier):
-            if let custard = try? CustardManager.load().custard(identifier: identifier){
+            if let custard = try? CustardManager.load().custard(identifier: identifier) {
                 return .existential(.custard(custard))
-            }else{
+            } else {
                 return .existential(.custard(.errorMessage))
             }
         }
     }
 }
 
-struct TabManager{
+struct TabManager {
     private(set) var currentTab: ManagerTab = .user_dependent(.japanese)
-    private(set) var lastTab: ManagerTab? = nil
+    private(set) var lastTab: ManagerTab?
 
-    enum ManagerTab{
+    enum ManagerTab {
         case existential(Tab.ExistentialTab)
         case user_dependent(Tab.UserDependentTab)
 
         var existential: Tab.ExistentialTab {
-            switch self{
+            switch self {
             case let .existential(tab):
                 return tab
             case let .user_dependent(tab):
@@ -208,7 +208,7 @@ struct TabManager{
     }
 
     func isCurrentTab(tab: Tab) -> Bool {
-        switch tab{
+        switch tab {
         case let .existential(actualTab):
             return currentTab.existential == actualTab
         case let .user_dependent(type):
@@ -218,11 +218,11 @@ struct TabManager{
         }
     }
 
-    mutating func initialize(){
-        switch lastTab{
+    mutating func initialize() {
+        switch lastTab {
         case .none:
             let targetTab: Tab = {
-                switch SettingData.shared.preferredLanguageSetting.first{
+                switch SettingData.shared.preferredLanguageSetting.first {
                 case .en_US:
                     return .user_dependent(.english)
                 case .ja_JP:
@@ -239,47 +239,47 @@ struct TabManager{
         }
     }
 
-    mutating func closeKeyboard(){
+    mutating func closeKeyboard() {
         self.lastTab = self.currentTab
     }
 
-    mutating private func moveTab(to destination: Tab.ExistentialTab){
-        //VariableStateの状態を遷移先のタブに合わせて適切に変更する
+    mutating private func moveTab(to destination: Tab.ExistentialTab) {
+        // VariableStateの状態を遷移先のタブに合わせて適切に変更する
         VariableStates.shared.setKeyboardLayout(destination.layout)
         VariableStates.shared.setInputStyle(destination.inputStyle)
-        if let language = destination.language{
+        if let language = destination.language {
             VariableStates.shared.keyboardLanguage = language
         }
 
-        //selfの状態を更新する
+        // selfの状態を更新する
         self.lastTab = self.currentTab
         self.currentTab = .existential(destination)
     }
 
-    mutating func moveTab(to destination: Tab){
-        //適切なタブを取得する
+    mutating func moveTab(to destination: Tab) {
+        // 適切なタブを取得する
         let actualTab: Tab.ExistentialTab
-        switch destination{
+        switch destination {
         case let .existential(tab):
             actualTab = tab
         case let .user_dependent(tab):
             actualTab = tab.actualTab
         case .last_tab:
-            guard let lastTab = self.lastTab else{
+            guard let lastTab = self.lastTab else {
                 return
             }
             actualTab = lastTab.existential
         }
 
-        //VariableStateの状態を遷移先のタブに合わせて適切に変更する
+        // VariableStateの状態を遷移先のタブに合わせて適切に変更する
         VariableStates.shared.setKeyboardLayout(actualTab.layout)
         VariableStates.shared.setInputStyle(actualTab.inputStyle)
-        if let language = actualTab.language{
+        if let language = actualTab.language {
             VariableStates.shared.keyboardLanguage = language
         }
 
-        //selfの状態を更新する
-        switch destination{
+        // selfの状態を更新する
+        switch destination {
         case let .existential(tab):
             self.lastTab = self.currentTab
             self.currentTab = .existential(tab)
@@ -287,7 +287,7 @@ struct TabManager{
             self.lastTab = self.currentTab
             self.currentTab = .user_dependent(tab)
         case .last_tab:
-            if let lasttab = self.lastTab{
+            if let lasttab = self.lastTab {
                 self.currentTab = lasttab
             }
             self.lastTab = nil

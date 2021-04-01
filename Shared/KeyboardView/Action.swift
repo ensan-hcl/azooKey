@@ -9,43 +9,43 @@
 import Foundation
 
 enum ActionType: Equatable {
-    //テキスト関係
-    case input(String)          //テキストの入力
-    case delete(Int)            //テキストの削除
-    case smoothDelete           //テキストの一括削除
+    // テキスト関係
+    case input(String)          // テキストの入力
+    case delete(Int)            // テキストの削除
+    case smoothDelete           // テキストの一括削除
     case smartDelete(ScanItem)
 
-    case deselectAndUseAsInputting   //選択を解除して編集中とみなす
-    //取り込み関係
-    case saveSelectedTextIfNeeded           //選択部分が存在していたら一時保存する。
-    case restoreSelectedTextIfNeeded        //選択部分の一時保存したデータを取り出して代入する
-    //カーソル関係
+    case deselectAndUseAsInputting   // 選択を解除して編集中とみなす
+    // 取り込み関係
+    case saveSelectedTextIfNeeded           // 選択部分が存在していたら一時保存する。
+    case restoreSelectedTextIfNeeded        // 選択部分の一時保存したデータを取り出して代入する
+    // カーソル関係
     case moveCursor(Int)
     case smartMoveCursor(ScanItem)
 
     case toggleShowMoveCursorView
     case enableResizingMode
-    //変換関連
+    // 変換関連
     case enter
-    case changeCharacterType    //濁点、半濁点、小さい文字
+    case changeCharacterType    // 濁点、半濁点、小さい文字
     case replaceLastCharacters([String: String])
     case changeCapsLockState(state: AaKeyState)
     case hideLearningMemory
-    //タブの変更
+    // タブの変更
     case moveTab(Tab)
     case toggleTabBar
 
-    //キーボードを閉じる
+    // キーボードを閉じる
     case dismissKeyboard
-    //アプリを開く
-    case openApp(String)    //アプリを開く
+    // アプリを開く
+    case openApp(String)    // アプリを開く
     #if DEBUG
-    //デバッグ用
+    // デバッグ用
     case DEBUG_DATA_INPUT
     #endif
 }
 
-extension ActionType{
+extension ActionType {
     static func makeFunctionInputActionSet(name: String, argumentCount: Int = 1) -> [ActionType] {
         /*
          sqrt()
@@ -72,9 +72,9 @@ struct LongpressActionType: Equatable {
     let `repeat`: [ActionType]
 }
 
-extension CodableActionData{
+extension CodableActionData {
     var actionType: ActionType {
-        switch self{
+        switch self {
         case let .input(value):
             return .input(value)
         case .replaceDefault:
@@ -100,7 +100,7 @@ extension CodableActionData{
         case .toggleCursorBar:
             return .toggleShowMoveCursorView
         case .toggleCapsLockState:
-            switch VariableStates.shared.aAKeyState{
+            switch VariableStates.shared.aAKeyState {
             case .normal:
                 return .changeCapsLockState(state: .capsLock)
             case .capsLock:
@@ -116,15 +116,15 @@ extension CodableActionData{
     }
 }
 
-extension CodableLongpressActionData{
+extension CodableLongpressActionData {
     var longpressActionType: LongpressActionType {
-        .init(start: self.start.map{$0.actionType}, repeat: self.repeat.map{$0.actionType})
+        .init(start: self.start.map {$0.actionType}, repeat: self.repeat.map {$0.actionType})
     }
 }
 
-extension ActionType{
-    func sound(){
-        switch self{
+extension ActionType {
+    func sound() {
+        switch self {
         case .input:
             Sound.click()
         case .delete:

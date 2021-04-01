@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol BenchmarkTarget{
+protocol BenchmarkTarget {
     associatedtype ProcessType: Hashable, CustomDebugStringConvertible
 }
 
-struct Kana2KanjiTarget: BenchmarkTarget{
+struct Kana2KanjiTarget: BenchmarkTarget {
     enum ProcessType: String, CustomDebugStringConvertible {
         case 辞書読み込み_全体
         case 辞書読み込み_軽量データ読み込み
@@ -48,19 +48,19 @@ struct Kana2KanjiTarget: BenchmarkTarget{
     }
 }
 
-final class BenchmarkTool<Target: BenchmarkTarget>{
+final class BenchmarkTool<Target: BenchmarkTarget> {
     var benchmarks: [Target.ProcessType: Double] = [:]
     private var timers: [Target.ProcessType: Date] = [:]
 
-    func start(process: Target.ProcessType){
+    func start(process: Target.ProcessType) {
         #if DEBUG
         self.timers[process] = Date()
         #endif
     }
 
-    func end(process: Target.ProcessType){
+    func end(process: Target.ProcessType) {
         #if DEBUG
-        guard let time = timers[process] else{
+        guard let time = timers[process] else {
             return
         }
         let benchmark = -time.timeIntervalSinceNow
@@ -68,16 +68,16 @@ final class BenchmarkTool<Target: BenchmarkTarget>{
         #endif
     }
 
-    func reset(){
+    func reset() {
         self.benchmarks = [:]
         self.timers = [:]
     }
 
-    func result(){
+    func result() {
         #if DEBUG
-        let pairs = self.benchmarks.map{(key: $0.key, value: $0.value)}
+        let pairs = self.benchmarks.map {(key: $0.key, value: $0.value)}
         debug("=== Benchmark Result ===")
-        debug(pairs.sorted{$0.value > $1.value}.map{"⏱\($0.key.debugDescription): \($0.value)"}.joined(separator: "\n"))
+        debug(pairs.sorted {$0.value > $1.value}.map {"⏱\($0.key.debugDescription): \($0.value)"}.joined(separator: "\n"))
         debug("=== === ===  === === ===")
         #endif
     }

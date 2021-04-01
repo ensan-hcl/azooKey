@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-enum FlickKeyColorType{
+enum FlickKeyColorType {
     case normal
     case tabkey
     case selected
@@ -32,8 +32,8 @@ protocol FlickKeyModelProtocol {
     var longPressActions: LongpressActionType {get}
     var flickKeys: [FlickDirection: FlickedKeyModel] {get}
     var needSuggestView: Bool {get}
-    
-    //描画に関わるものは変数としてVariableStatesを受け取る。こうすることでVariableStatesの更新に合わせて変更されるようになる。
+
+    // 描画に関わるものは変数としてVariableStatesを受け取る。こうすることでVariableStatesの更新に合わせて変更されるようになる。
     func label(width: CGFloat, states: VariableStates) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
@@ -50,28 +50,28 @@ protocol FlickKeyModelProtocol {
 
 }
 
-extension FlickKeyModelProtocol{
+extension FlickKeyModelProtocol {
     func isFlickAble(to direction: FlickDirection) -> Bool {
         return flickKeys.keys.contains(direction)
     }
-    
-    func press(){
-        self.pressActions.forEach{VariableStates.shared.action.registerAction($0)}
+
+    func press() {
+        self.pressActions.forEach {VariableStates.shared.action.registerAction($0)}
     }
-    
-    func longPressReserve(){
+
+    func longPressReserve() {
         VariableStates.shared.action.reserveLongPressAction(longPressActions)
     }
-    
-    func longPressEnd(){
+
+    func longPressEnd() {
         VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
     }
-    
-    func flick(to direction: FlickDirection){
+
+    func flick(to direction: FlickDirection) {
         self.flickKeys[direction]?.flick()
     }
-    
-    func suggestStateChanged(_ type: SuggestState){
+
+    func suggestStateChanged(_ type: SuggestState) {
         self.suggestModel.setSuggestState(type)
     }
 
@@ -88,4 +88,3 @@ extension FlickKeyModelProtocol{
     }
 
 }
-

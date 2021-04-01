@@ -10,9 +10,9 @@ import Foundation
 import XCTest
 
 class TextFileLines: XCTestCase {
-    func components(indices: [Int]){
-        let string:String
-        do{
+    func components(indices: [Int]) {
+        let string: String
+        do {
             guard let path = Bundle(for: type(of: self)).path(forResource: "lines", ofType: "txt") else {
                 print("ファイルが存在しません")
                 return
@@ -26,14 +26,13 @@ class TextFileLines: XCTestCase {
         }
 
         let splited = string.components(separatedBy: "\n")
-        let strings = indices.map{splited[$0]}
+        let strings = indices.map {splited[$0]}
         print(strings.count)
     }
 
-
-    func scans(indices: [Int]){
+    func scans(indices: [Int]) {
         let data: Data
-        do{
+        do {
             guard let path = Bundle(for: type(of: self)).path(forResource: "lines", ofType: "txt") else {
                 print("ファイルが存在しません")
                 return
@@ -46,41 +45,41 @@ class TextFileLines: XCTestCase {
             data = Data()
         }
         var indicesIterator = indices.sorted().makeIterator()
-        guard var targetIndex = indicesIterator.next() else{
+        guard var targetIndex = indicesIterator.next() else {
             return
         }
         let strings: [String] = data.withUnsafeBytes {
-            var results:[String] = []
+            var results: [String] = []
             results.reserveCapacity(indices.count)
-            var result:[UInt8] = []
+            var result: [UInt8] = []
             var count = 0
             let newLineNumber = UInt8(ascii: "\n")
-            for byte in $0{
+            for byte in $0 {
                 let isNewLine = byte == newLineNumber
-                if count == targetIndex && !isNewLine{
+                if count == targetIndex && !isNewLine {
                     result.append(byte)
                 }
 
-                if count > targetIndex{
-                    if let string = String(bytes: result, encoding: .utf8){
+                if count > targetIndex {
+                    if let string = String(bytes: result, encoding: .utf8) {
                         results.append(string)
                     }
                     result = []
-                    if let _targetIndex = indicesIterator.next(){
+                    if let _targetIndex = indicesIterator.next() {
                         targetIndex = _targetIndex
-                        if count == targetIndex{
+                        if count == targetIndex {
                             result.append(byte)
                         }
-                    }else{
+                    } else {
                         break
                     }
                 }
 
-                if isNewLine{
+                if isNewLine {
                     count = count &+ 1
                 }
             }
-            if !result.isEmpty, let string = String(bytes: result, encoding: .utf8){
+            if !result.isEmpty, let string = String(bytes: result, encoding: .utf8) {
                 results.append(string)
             }
 
@@ -90,9 +89,9 @@ class TextFileLines: XCTestCase {
         print(strings.count)
     }
 
-    func binary(indices: [Int]){
+    func binary(indices: [Int]) {
         let data: Data
-        do{
+        do {
             guard let path = Bundle(for: type(of: self)).path(forResource: "lines", ofType: "binary") else {
                 print("ファイルが存在しません")
                 return
@@ -105,7 +104,7 @@ class TextFileLines: XCTestCase {
             data = Data()
         }
         let header = data[0 ..< 8192]
-        let i32array = header.withUnsafeBytes{pointer -> [Int32] in
+        let i32array = header.withUnsafeBytes {pointer -> [Int32] in
             return Array(
                 UnsafeBufferPointer(
                     start: pointer.baseAddress!.assumingMemoryBound(to: Int32.self),
@@ -113,7 +112,7 @@ class TextFileLines: XCTestCase {
                 )
             )
         }
-        let strings: [String] = indices.compactMap{(index: Int) in
+        let strings: [String] = indices.compactMap {(index: Int) in
             let startIndex = Int(i32array[index])
             let endIndex = index == 2047 ? data.endIndex : Int(i32array[index + 1])
             return String(bytes: data[startIndex ..< endIndex], encoding: .utf8)

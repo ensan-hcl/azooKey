@@ -11,16 +11,16 @@ import SwiftUI
 struct TipsTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
     @State private var isTop = true
-    
+
     var body: some View {
-        VStack{
-            if isTop{
+        VStack {
+            if isTop {
                 HeaderIconView()
             }
             NavigationView {
                 Form {
-                    Section(header: Text("キーボードを使えるようにする")){
-                        if !storeVariableSection.isKeyboardActivated{
+                    Section(header: Text("キーボードを使えるようにする")) {
+                        if !storeVariableSection.isKeyboardActivated {
                             Text("キーボードを有効化する")
                                 .onTapGesture {
                                     Store.variableSection.requireFirstOpenView = true
@@ -31,7 +31,7 @@ struct TipsTabView: View {
                         }
                     }
 
-                    Section(header: Text("便利な使い方")){
+                    Section(header: Text("便利な使い方")) {
                         NavigationLink(destination: OneHandedModeTipsView()) {
                             Text("片手モードを使う")
                         }
@@ -55,7 +55,7 @@ struct TipsTabView: View {
                         }
                     }
 
-                    Section(header: Text("困ったときは")){
+                    Section(header: Text("困ったときは")) {
                         NavigationLink(destination: DynamicTypeSettingFailureTipsView()) {
                             Text("端末の文字サイズ設定が反映されない")
                         }

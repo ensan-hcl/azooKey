@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-///タブに依存するデザイン上の数値を計算するクラス
-final class TabDependentDesign{
+/// タブに依存するデザイン上の数値を計算するクラス
+final class TabDependentDesign {
     private let horizontalKeyCount: CGFloat
     private let verticalKeyCount: CGFloat
     private let layout: KeyboardLayout
@@ -23,24 +23,24 @@ final class TabDependentDesign{
         VariableStates.shared.interfaceSize.height
     }
 
-    init(width: Int, height: Int, layout: KeyboardLayout, orientation: KeyboardOrientation){
+    init(width: Int, height: Int, layout: KeyboardLayout, orientation: KeyboardOrientation) {
         self.horizontalKeyCount = CGFloat(width)
         self.verticalKeyCount = CGFloat(height)
         self.layout = layout
         self.orientation = orientation
     }
 
-    init(width: CGFloat, height: CGFloat, layout: KeyboardLayout, orientation: KeyboardOrientation){
+    init(width: CGFloat, height: CGFloat, layout: KeyboardLayout, orientation: KeyboardOrientation) {
         self.horizontalKeyCount = width
         self.verticalKeyCount = height
         self.layout = layout
         self.orientation = orientation
     }
 
-    ///screenWidthとhorizontalKeyCountに依存
+    /// screenWidthとhorizontalKeyCountに依存
     var keyViewWidth: CGFloat {
         let coefficient: CGFloat
-        switch (layout, orientation){
+        switch (layout, orientation) {
         case (_, .vertical):
             coefficient = 5/(5.1 + horizontalKeyCount/10)
         case (_, .horizontal):
@@ -48,8 +48,8 @@ final class TabDependentDesign{
         }
         return interfaceWidth / horizontalKeyCount * coefficient
     }
-    
-    ///This property calculate suitable height for normal keyView.
+
+    /// This property calculate suitable height for normal keyView.
     var keyViewHeight: CGFloat {
         let keyHeight = (keysHeight - (verticalKeyCount-1) * verticalSpacing)/verticalKeyCount
         return keyHeight
@@ -59,18 +59,18 @@ final class TabDependentDesign{
         keyViewWidth * horizontalKeyCount + horizontalSpacing * (horizontalKeyCount-1)
     }
 
-    //resultViewの幅を全体から引いたもの。キーを配置して良い部分の高さ。
+    // resultViewの幅を全体から引いたもの。キーを配置して良い部分の高さ。
     var keysHeight: CGFloat {
         interfaceHeight - (Design.shared.resultViewHeight() + 12)
     }
 
-    ///This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
+    /// This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
     var keyViewSize: CGSize {
         CGSize(width: keyViewWidth, height: keyViewHeight)
     }
 
     var verticalSpacing: CGFloat {
-        switch (layout, orientation){
+        switch (layout, orientation) {
         case (.flick, .vertical):
             return interfaceWidth*3/140
         case (.flick, .horizontal):
@@ -82,13 +82,13 @@ final class TabDependentDesign{
         }
     }
 
-    ///screenWidthとhorizontalKeyCountとkeyViewWidthに依存
+    /// screenWidthとhorizontalKeyCountとkeyViewWidthに依存
     var horizontalSpacing: CGFloat {
-        if horizontalKeyCount <= 1{
+        if horizontalKeyCount <= 1 {
             return 0
         }
         let coefficient: CGFloat
-        switch orientation{
+        switch orientation {
         case .vertical:
             coefficient = (5+horizontalKeyCount)/(7.5+horizontalKeyCount)
         case .horizontal:
@@ -129,9 +129,9 @@ final class TabDependentDesign{
     }
 }
 
-///タブに依存せず、キーボード全体で共通するデザイン上の数値を切り出した構造体。
-struct Design{
-    private init(){}
+/// タブに依存せず、キーボード全体で共通するデザイン上の数値を切り出した構造体。
+struct Design {
+    private init() {}
     static let shared = Design()
     static let colors = Colors.default
     static let fonts = Fonts.default
@@ -147,15 +147,15 @@ struct Design{
         VariableStates.shared.interfaceSize.width
     }
 
-    ///This property calculate suitable width for normal keyView.
+    /// This property calculate suitable width for normal keyView.
     var keyboardScreenHeight: CGFloat {
         keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth) + 2
     }
 
-    ///screenWidthに依存して決定する
-    ///12はresultViewのpadding
+    /// screenWidthに依存して決定する
+    /// 12はresultViewのpadding
     func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width) -> CGFloat {
-        switch (orientation, UIDevice.current.userInterfaceIdiom == .pad){
+        switch (orientation, UIDevice.current.userInterfaceIdiom == .pad) {
         case (.vertical, false):
             return 51/74 * screenWidth + 12
         case (.vertical, true):
@@ -165,35 +165,35 @@ struct Design{
         case (.horizontal, true):
             return 5/18 * screenWidth + 12
         }
-     }
+    }
 
-    ///keyboardHeightに依存して決定する
+    /// keyboardHeightに依存して決定する
     func resultViewHeight(keyboardHeight: CGFloat = VariableStates.shared.interfaceSize.height) -> CGFloat {
-        //let keyboardHeight = self.keyboardHeight(screenWidth: screenWidth)
-        switch (orientation, UIDevice.current.userInterfaceIdiom == .pad){
+        // let keyboardHeight = self.keyboardHeight(screenWidth: screenWidth)
+        switch (orientation, UIDevice.current.userInterfaceIdiom == .pad) {
         case (.vertical, false):
             return (keyboardHeight - 12) * 37 / 204
-            //return screenWidth / 8
+        // return screenWidth / 8
         case (.vertical, true):
             return (keyboardHeight - 12) * 31 / 180
-            //return screenWidth / 12
+        // return screenWidth / 12
         case (.horizontal, false):
             return (keyboardHeight - 12) * 28 / 153
-            //return screenWidth / 18
+        // return screenWidth / 18
         case (.horizontal, true):
             return (keyboardHeight - 12) * 9 / 55
-            //return screenWidth / 22
+        // return screenWidth / 22
         }
     }
 
     func largeTextViewFontSize(_ text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 10)
         let size = text.size(withAttributes: [.font: font])
-        //閉じるボタンの高さの分
+        // 閉じるボタンの高さの分
         return (self.keyboardScreenHeight - self.keyboardScreenHeight * 0.15) / size.height * 10
     }
 
-    enum Fonts{
+    enum Fonts {
         case `default`
 
         private var layout: KeyboardLayout {
@@ -202,7 +202,7 @@ struct Design{
 
         var iconFontSize: CGFloat {
             let userDecidedSize = SettingData.shared.keyViewFontSize
-            if userDecidedSize != -1{
+            if userDecidedSize != -1 {
                 return UIFontMetrics.default.scaledValue(for: CGFloat(userDecidedSize))
             }
             return UIFontMetrics.default.scaledValue(for: 20)
@@ -218,7 +218,7 @@ struct Design{
         }
 
         func resultViewFont(theme: ThemeData) -> Font {
-            //Font.custom("Mplus 1p Bold", size: resultViewFontSize).weight(theme.textFont.weight)
+            // Font.custom("Mplus 1p Bold", size: resultViewFontSize).weight(theme.textFont.weight)
             Font.system(size: resultViewFontSize).weight(theme.textFont.weight)
         }
 
@@ -228,18 +228,18 @@ struct Design{
                 return .system(size: CGFloat(userDecidedSize) * scale, weight: theme.textFont.weight, design: .default)
             }
             let maxFontSize: Int
-            switch Design.shared.layout{
+            switch Design.shared.layout {
             case .flick:
                 maxFontSize = Int(21 * scale)
             case .qwerty:
                 maxFontSize = Int(25 * scale)
             }
-            //段階的フォールバック
-            for fontsize in (10...maxFontSize).reversed(){
+            // 段階的フォールバック
+            for fontsize in (10...maxFontSize).reversed() {
                 let size = UIFontMetrics.default.scaledValue(for: CGFloat(fontsize))
                 let font = UIFont.systemFont(ofSize: size, weight: .regular)
                 let title_size = text.size(withAttributes: [.font: font])
-                if title_size.width < width * 0.95{
+                if title_size.width < width * 0.95 {
                     return Font.system(size: size, weight: theme.textFont.weight, design: .default)
                 }
             }
@@ -248,7 +248,7 @@ struct Design{
         }
     }
 
-    enum Colors{
+    enum Colors {
         case `default`
 
         private var layout: KeyboardLayout {
@@ -264,7 +264,7 @@ struct Design{
         }
 
         var normalKeyColor: Color {
-            switch Design.shared.layout{
+            switch Design.shared.layout {
             case .flick:
                 return Color("NormalKeyColor")
             case .qwerty:
@@ -277,7 +277,7 @@ struct Design{
         }
 
         var highlightedKeyColor: Color {
-            switch Design.shared.layout{
+            switch Design.shared.layout {
             case .flick:
                 return Color("HighlightedKeyColor")
             case .qwerty:
@@ -286,7 +286,7 @@ struct Design{
         }
 
         var suggestKeyColor: Color {
-            switch Design.shared.layout{
+            switch Design.shared.layout {
             case .flick:
                 return Color(UIColor.systemGray4)
             case .qwerty:
@@ -295,15 +295,15 @@ struct Design{
         }
     }
 
-    enum Language{
+    enum Language {
         case `default`
-        
+
         func getEnterKeyText(_ state: EnterKeyState) -> String {
             switch state {
             case .complete:
                 return "確定"
             case let .return(type):
-                switch type{
+                switch type {
                 case .default:
                     return "改行"
                 case .go:

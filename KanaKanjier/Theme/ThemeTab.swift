@@ -13,11 +13,11 @@ struct ThemeTabView: View {
     @State private var refresh = false
     @State private var manager = ThemeIndexManager.load()
 
-    @State private var editViewIndex: Int? = nil
+    @State private var editViewIndex: Int?
     @State private var editViewEnabled = false
 
-    func theme(at index: Int) -> ThemeData? {
-        do{
+    private func theme(at index: Int) -> ThemeData? {
+        do {
             return try manager.theme(at: index)
         } catch {
             debug(error)
@@ -27,13 +27,13 @@ struct ThemeTabView: View {
 
     private var listSection: some View {
         ForEach(manager.indices.reversed(), id: \.self) { index in
-            if let theme = theme(at: index){
-                HStack{
+            if let theme = theme(at: index) {
+                HStack {
                     KeyboardPreview(theme: theme, scale: 0.6)
                         .disabled(true)
-                    GeometryReader{geometry in
-                        CenterAlignedView{
-                            VStack{
+                    GeometryReader {geometry in
+                        CenterAlignedView {
+                            VStack {
                                 Spacer()
                                 Circle()
                                     .fill(manager.selectedIndex == index ? Color.blue : Color.systemGray4)
@@ -47,8 +47,8 @@ struct ThemeTabView: View {
                             }
                         }
                     }
-                    if editViewIndex == index{
-                        NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled){
+                    if editViewIndex == index {
+                        NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled) {
                             EmptyView()
                         }.frame(maxWidth: 1)
                     }
@@ -56,8 +56,8 @@ struct ThemeTabView: View {
                 .onTapGesture {
                     manager.select(at: index)
                 }
-                .contextMenu{
-                    Button{
+                .contextMenu {
+                    Button {
                         editViewIndex = index
                         editViewEnabled = true
                     }label: {
@@ -65,7 +65,7 @@ struct ThemeTabView: View {
                         Text("編集する")
                     }.disabled(index == 0)
 
-                    Button{
+                    Button {
                         manager.remove(index: index)
                     }label: {
                         Image(systemName: "trash")
@@ -79,39 +79,39 @@ struct ThemeTabView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("作る")){
-                    HStack{
-                            Button{
-                                editViewIndex = nil
-                                editViewEnabled = true
-                            }label: {
-                                Text("着せ替えを作成")
-                                    .foregroundColor(.primary)
+                Section(header: Text("作る")) {
+                    HStack {
+                        Button {
+                            editViewIndex = nil
+                            editViewEnabled = true
+                        }label: {
+                            Text("着せ替えを作成")
+                                .foregroundColor(.primary)
+                        }
+                        if editViewIndex == nil {
+                            NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled) {
+                                EmptyView()
                             }
-                            if editViewIndex == nil{
-                                NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled){
-                                    EmptyView()
-                                }
-                            }
+                        }
                     }
                 }
-                Section(header: Text("選ぶ")){
-                    if refresh{
+                Section(header: Text("選ぶ")) {
+                    if refresh {
                         listSection
-                    }else{
+                    } else {
                         listSection
                     }
                 }
             }
             .navigationBarTitle(Text("着せ替え"), displayMode: .large)
-            .onAppear{
-                //この位置にonAppearを置く。NavigationViewは画面の遷移中常に現れている。
+            .onAppear {
+                // この位置にonAppearを置く。NavigationViewは画面の遷移中常に現れている。
                 self.refresh.toggle()
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .onChange(of: storeVariableSection.japaneseLayout){_ in
-            SettingData.shared.reload() //設定をリロードする
+        .onChange(of: storeVariableSection.japaneseLayout) {_ in
+            SettingData.shared.reload() // 設定をリロードする
             self.refresh.toggle()
         }
     }

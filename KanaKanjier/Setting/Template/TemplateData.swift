@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TemplateData: Codable{
+struct TemplateData: Codable {
     var name: String
     var literal: TemplateLiteralProtocol
     var type: TemplateLiteralType
@@ -18,19 +18,19 @@ struct TemplateData: Codable{
         case name
     }
 
-    init(template: String, name: String){
+    init(template: String, name: String) {
         self.name = name
-        if template.dropFirst().hasPrefix("date"){
+        if template.dropFirst().hasPrefix("date") {
             self.type = .date
-        }else if template.dropFirst().hasPrefix("random"){
+        } else if template.dropFirst().hasPrefix("random") {
             self.type = .random
-        }else{
+        } else {
             debug("不明", template, name)
             self.type = .date
             self.literal = DateTemplateLiteral.example
             return
         }
-        switch self.type{
+        switch self.type {
         case .date:
             self.literal = DateTemplateLiteral.import(from: template)
         case .random:
@@ -58,7 +58,7 @@ struct TemplateData: Codable{
 
     static let dataFileName = "user_templates.json"
     static func load() -> [TemplateData]? {
-        do{
+        do {
             let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(Self.dataFileName)
             let json = try Data(contentsOf: url)
             let saveData = try JSONDecoder().decode([TemplateData].self, from: json)
@@ -70,22 +70,21 @@ struct TemplateData: Codable{
     }
 }
 
-protocol TemplateLiteralProtocol{
+protocol TemplateLiteralProtocol {
     func export() -> String
 
     func previewString() -> String
 }
 
-enum TemplateLiteralType{
+enum TemplateLiteralType {
     case date
     case random
 }
 
-
-extension TemplateLiteralProtocol{
+extension TemplateLiteralProtocol {
     static func parse<S: StringProtocol>(splited: [S], key: String) -> some StringProtocol {
-        let result = (splited.filter{$0.hasPrefix(key+"=\"")}.first ?? "").dropFirst(key.count+2).dropLast(1)
-        if result.hasSuffix("\""){
+        let result = (splited.filter {$0.hasPrefix(key+"=\"")}.first ?? "").dropFirst(key.count+2).dropLast(1)
+        if result.hasSuffix("\"") {
             return result.dropLast(1)
         }
         return result
@@ -100,12 +99,12 @@ struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
     var delta: String
     var deltaUnit: Int
 
-    enum CalendarType: String{
-        case western = "western"
-        case japanese = "japanese"
+    enum CalendarType: String {
+        case western
+        case japanese
 
         var identifier: Calendar.Identifier {
-            switch self{
+            switch self {
             case .western:
                 return .gregorian
             case .japanese:
@@ -114,7 +113,7 @@ struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
         }
     }
 
-    enum Language: String{
+    enum Language: String {
         case english = "en_US"
         case japanese = "ja_JP"
 
@@ -147,7 +146,6 @@ struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
         )
     }
 
-
     func export() -> String {
         return """
         <date format="\(format.escaped())" type="\(type.rawValue)" language="\(language.identifier)" delta="\(delta)" deltaunit="\(deltaUnit)">
@@ -155,28 +153,28 @@ struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
     }
 }
 
-struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable{
+struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable {
     static func == (lhs: RandomTemplateLiteral, rhs: RandomTemplateLiteral) -> Bool {
         return lhs.value == rhs.value
     }
 
     enum ValueType: String {
-        case int = "int"
-        case double = "double"
-        case string = "string"
+        case int
+        case double
+        case string
     }
-    enum Value: Equatable{
+    enum Value: Equatable {
         case int(from: Int, to: Int)
         case double(from: Double, to: Double)
         case string([String])
 
         var type: ValueType {
-            switch self{
+            switch self {
             case .int(from: _, to: _):
                 return .int
             case .double(from: _, to: _):
                 return .double
-            case .string(_):
+            case .string:
                 return .string
             }
         }
@@ -188,14 +186,14 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable{
             case let .double(from: left, to: right):
                 return "\(left),\(right)"
             case let .string(strings):
-                return strings.map{$0.escaped()}.joined(separator: ",")
+                return strings.map {$0.escaped()}.joined(separator: ",")
             }
         }
     }
     var value: Value
 
     func previewString() -> String {
-        switch value{
+        switch value {
         case let .int(from: left, to: right):
             return "\(Int.random(in: left...right))"
         case let .double(from: left, to: right):
@@ -212,7 +210,7 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable{
 
         let valueType = ValueType.init(rawValue: String(type))!
         let value: Value
-        switch valueType{
+        switch valueType {
         case .int:
             let splited = valueString.split(separator: ",")
             value = .int(from: Int(splited[0]) ?? 0, to: Int(splited[1]) ?? 0)

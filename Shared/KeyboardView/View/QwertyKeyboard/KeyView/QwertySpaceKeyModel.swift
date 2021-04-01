@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
-    
+struct QwertySpaceKeyModel: QwertyKeyModelProtocol {
+
     let pressActions: [ActionType] = [.input(" ")]
     var longPressActions: LongpressActionType = .init(start: [.toggleShowMoveCursorView])
 
@@ -19,10 +19,10 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol{
     let keySizeType: QwertyKeySizeType = .space
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .normal
 
-    init(){}
+    init() {}
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        switch states.keyboardLanguage{
+        switch states.keyboardLanguage {
         case .el_GR:
             return KeyLabel(.text("διάστημα"), width: width, textSize: .small, textColor: color)
         case .en_US:

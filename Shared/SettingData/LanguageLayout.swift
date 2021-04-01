@@ -16,7 +16,7 @@ enum LanguageLayout {
 }
 
 extension LanguageLayout: Codable, Hashable {
-    private enum CodingKeys: CodingKey{
+    private enum CodingKeys: CodingKey {
         case flick
         case qwerty
         case custard
@@ -36,7 +36,7 @@ extension LanguageLayout: Codable, Hashable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else{
+        guard let key = container.allKeys.first else {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
                     codingPath: container.codingPath,
@@ -64,13 +64,13 @@ extension LanguageLayout: Savable {
     var saveValue: Data {
         if let encodedValue = try? JSONEncoder().encode(self) {
             return encodedValue
-        }else{
+        } else {
             return Data()
         }
     }
 
     static func get(_ value: Any) -> LanguageLayout? {
-        if let data = value as? Data, let layout = try? JSONDecoder().decode(Self.self, from: data){
+        if let data = value as? Data, let layout = try? JSONDecoder().decode(Self.self, from: data) {
             return layout
         }
         return nil

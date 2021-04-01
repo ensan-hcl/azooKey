@@ -9,9 +9,9 @@
 import Foundation
 import SwiftUI
 
-fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection{
+fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
     var label: LocalizedStringKey {
-        switch self{
+        switch self {
         case .vertical:
             return "縦"
         case .horizontal:
@@ -25,7 +25,7 @@ struct EditingScrollCustardView: View {
         .gridScroll(0): .system(.changeKeyboard),
         .gridScroll(1): .custom(.init(design: .init(label: .systemImage("list.bullet"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
         .gridScroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
-        .gridScroll(3): .system(.enter),
+        .gridScroll(3): .system(.enter)
     ]
 
     @Environment(\.presentationMode) private var presentationMode
@@ -34,49 +34,49 @@ struct EditingScrollCustardView: View {
     @State private var editingItem = UserMadeGridScrollCustard(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
     @Binding private var manager: CustardManager
 
-    init(manager: Binding<CustardManager>, editingItem: UserMadeGridScrollCustard? = nil){
+    init(manager: Binding<CustardManager>, editingItem: UserMadeGridScrollCustard? = nil) {
         self._manager = manager
-        if let editingItem = editingItem{
+        if let editingItem = editingItem {
             self._editingItem = State(initialValue: editingItem)
         }
     }
 
     var body: some View {
-        VStack{
-            GeometryReader{geometry in
-                VStack{
-                    Form{
+        VStack {
+            GeometryReader {geometry in
+                VStack {
+                    Form {
                         TextField("タブの名前", text: $editingItem.tabName)
                         Text("一行ずつ登録したい文字や単語を入力してください")
-                        Button("プレビュー"){
+                        Button("プレビュー") {
                             UIApplication.shared.closeKeyboard()
                             showPreview = true
                         }
-                        DisclosureGroup{
-                            HStack{
+                        DisclosureGroup {
+                            HStack {
                                 Text("スクロール方向")
                                 Spacer()
-                                Picker("スクロール方向", selection: $editingItem.direction){
+                                Picker("スクロール方向", selection: $editingItem.direction) {
                                     Text("縦").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.vertical)
                                     Text("横").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.horizontal)
                                 }
                                 .pickerStyle(SegmentedPickerStyle())
                             }
-                            HStack{
+                            HStack {
                                 Text("縦方向キー数")
                                 Spacer()
                                 TextField("縦方向キー数", text: $editingItem.columnCount)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                             }
-                            HStack{
+                            HStack {
                                 Text("横方向キー数")
                                 Spacer()
                                 TextField("横方向キー数", text: $editingItem.rowCount)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                             }
-                            Toggle(isOn: $editingItem.addTabBarAutomatically){
+                            Toggle(isOn: $editingItem.addTabBarAutomatically) {
                                 Text("自動的にタブバーに追加")
                             }
                         } label: {
@@ -94,7 +94,7 @@ struct EditingScrollCustardView: View {
                     maxHeight: Design.shared.keyboardScreenHeight + 40,
                     minHeight: 0
                 ) {
-                    ZStack(alignment: .top){
+                    ZStack(alignment: .top) {
                         Color(.secondarySystemBackground)
                         KeyboardPreview(theme: .default, defaultTab: .custard(makeCustard(data: editingItem)))
                     }
@@ -105,25 +105,25 @@ struct EditingScrollCustardView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle(Text("カスタムタブを作る"), displayMode: .inline)
         .navigationBarItems(
-            leading: Button("キャンセル"){
+            leading: Button("キャンセル") {
                 presentationMode.wrappedValue.dismiss()
             },
-            trailing: Button("保存"){
+            trailing: Button("保存") {
                 self.save()
                 presentationMode.wrappedValue.dismiss()
             })
     }
 
-    func makeCustard(data: UserMadeGridScrollCustard) -> Custard {
+    private func makeCustard(data: UserMadeGridScrollCustard) -> Custard {
         var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = base
 
-        for substring in data.words.split(separator: "\n"){
-            let target = substring.components(separatedBy: "\\|").map{$0.components(separatedBy: "|")}.reduce(into: [String]()){array, value in
-                if let last = array.last, let first = value.first{
+        for substring in data.words.split(separator: "\n") {
+            let target = substring.components(separatedBy: "\\|").map {$0.components(separatedBy: "|")}.reduce(into: [String]()) {array, value in
+                if let last = array.last, let first = value.first {
                     array.removeLast()
                     array.append([last, first].joined(separator: "|"))
                     array.append(contentsOf: value.dropFirst())
-                }else{
+                } else {
                     array.append(contentsOf: value)
                 }
             }
@@ -149,15 +149,15 @@ struct EditingScrollCustardView: View {
         )
     }
 
-    func save(){
-        do{
+    private func save() {
+        do {
             try self.manager.saveCustard(
                 custard: makeCustard(data: editingItem),
                 metadata: .init(origin: .userMade),
                 userData: .gridScroll(editingItem),
                 updateTabBar: editingItem.addTabBarAutomatically
             )
-        }catch{
+        } catch {
             debug(error)
         }
     }

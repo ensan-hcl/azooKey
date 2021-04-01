@@ -27,4 +27,3 @@ extension View {
         self.modifier(FocusViewModifier(color: color, focused: focused))
     }
 }
-

@@ -8,19 +8,19 @@
 
 import Foundation
 
-struct SharedStore{
+struct SharedStore {
     static let bundleName = "DevEn3.azooKey.keyboard"
     static let appGroupKey = "group.com.azooKey.keyboard"
 }
 
-func debug(_ items: Any...){
+func debug(_ items: Any...) {
     #if DEBUG
-    print(items.map{"\($0)"}.joined(separator: " "))
+    print(items.map {"\($0)"}.joined(separator: " "))
     #endif
 }
 
-extension StringProtocol{
-    //エスケープが必要なのは次の文字:
+extension StringProtocol {
+    // エスケープが必要なのは次の文字:
     /*
      \ -> \\
      \0 -> \0
@@ -29,7 +29,7 @@ extension StringProtocol{
      , -> \c
      " -> \d
      */
-    //please use these letters in order to avoid user-inputting text crash
+    // please use these letters in order to avoid user-inputting text crash
     func escaped() -> String {
         var result = self.replacingOccurrences(of: "\\", with: "\\b")
         result = result.replacingOccurrences(of: "\0", with: "\\0")

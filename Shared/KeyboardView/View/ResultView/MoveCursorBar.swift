@@ -9,41 +9,39 @@
 import Foundation
 import SwiftUI
 
-private enum MoveCursorBarGestureState{
+private enum MoveCursorBarGestureState {
     case unactive
-    case moving(CGPoint, Int)   //右だったら+1、左だったら-1
+    case moving(CGPoint, Int)   // 右だったら+1、左だったら-1
 }
 
-struct MoveCursorBar: View{
+struct MoveCursorBar: View {
     @State private var gestureState: MoveCursorBarGestureState = .unactive
     @Environment(\.themeEnvironment) private var theme
 
     private var gesture: some Gesture {
         DragGesture(minimumDistance: 0)
-            .onChanged{value in
-                switch self.gestureState{
+            .onChanged {value in
+                switch self.gestureState {
                 case .unactive:
                     self.gestureState = .moving(value.location, 0)
                 case let .moving(previous, count):
                     let dx = (value.location.x - previous.x)
-                    if dx.isZero{
+                    if dx.isZero {
                         break
                     }
                     let newCount = count + Int(dx/abs(dx))
-                    if newCount > 1{
+                    if newCount > 1 {
                         self.gestureState = .moving(value.location, 0)
                         VariableStates.shared.action.registerAction(.moveCursor(1))
-                    }
-                    else if newCount < -1{
+                    } else if newCount < -1 {
                         self.gestureState = .moving(value.location, 0)
                         VariableStates.shared.action.registerAction(.moveCursor(-1))
-                    }
-                    else{
+                    } else {
                         self.gestureState = .moving(value.location, newCount)
                     }
                 }
             }
-            .onEnded{value in
+            .onEnded {_ in
                 self.gestureState = .unactive
             }
     }
@@ -64,14 +62,13 @@ struct MoveCursorBar: View{
         theme.resultTextColor.color
     }
 
-
     var body: some View {
-        Group{
+        Group {
             RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: 200)
                 .frame(height: Design.shared.resultViewHeight())
                 .cornerRadius(20)
                 .gesture(gesture)
-                .overlay(HStack{
+                .overlay(HStack {
                     Spacer()
                     Button(action: {
                         VariableStates.shared.action.registerAction(.moveCursor(-1))
@@ -93,4 +90,3 @@ struct MoveCursorBar: View{
         }.frame(height: Design.shared.resultViewHeight())
     }
 }
-

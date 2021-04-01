@@ -41,7 +41,7 @@ enum Setting: String {
     static let boolSetting: [Self] = [.wesJapCalender, .typographyLetter, .halfKana, .unicodeCandidate, .englishCandidate, .stopLearningWhenSearch, .enableSound]
 
     var title: LocalizedStringKey {
-        switch self{
+        switch self {
         case .japaneseKeyboardLayout:
             return "日本語キーボードの種類"
         case .englishKeyboardLayout:
@@ -90,7 +90,7 @@ enum Setting: String {
     }
 
     var explanation: LocalizedStringKey {
-        switch self{
+        switch self {
         case .japaneseKeyboardLayout:
             return "日本語の入力方法をフリック入力とローマ字入力から選択できます。"
         case .englishKeyboardLayout:
@@ -101,7 +101,7 @@ enum Setting: String {
         case .numberTabCustomKeys:
             return "数字タブの「、。！？…」部分に好きな記号や文字を割り当てて利用することができます。"
 
-        //flick layoutのカスタムキー
+        // flick layoutのカスタムキー
         case .koganaKeyFlick:
             return "「小ﾞﾟ」キーの「左」「上」「右」フリックに、好きな文字列を割り当てて利用することができます。"
         case .kanaSymbolsKeyFlick:
@@ -143,11 +143,11 @@ enum Setting: String {
     }
 }
 
-struct DefaultSetting{
-    private init(){}
+struct DefaultSetting {
+    private init() {}
 
     static func bool(_ setting: Setting) -> Bool? {
-        switch setting{
+        switch setting {
         case .wesJapCalender, .typographyLetter, .halfKana, .fullRoman, .unicodeCandidate, .englishCandidate:
             return true
         case .stopLearningWhenSearch, .enableSound, .useOSuserDict:
@@ -158,7 +158,7 @@ struct DefaultSetting{
     }
 
     static func double(_ setting: Setting) -> Double? {
-        switch setting{
+        switch setting {
         case .resultViewFontSize, .keyViewFontSize:
             return -1
         default: return nil
@@ -166,7 +166,7 @@ struct DefaultSetting{
     }
 
     static func flickCustomKey(_ setting: Setting) -> KeyFlickSetting? {
-        switch setting{
+        switch setting {
         case .koganaKeyFlick:
             return CustomizableFlickKey.kogana.defaultSetting
         case .kanaSymbolsKeyFlick:
@@ -183,7 +183,7 @@ struct DefaultSetting{
     }
 
     static func qwertyCustomKeys(_ setting: Setting) -> QwertyCustomKeysValue? {
-        switch setting{
+        switch setting {
         case .numberTabCustomKeys:
             return QwertyCustomKeysValue.defaultValue
         default:

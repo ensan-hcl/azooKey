@@ -9,20 +9,20 @@
 import Foundation
 import SwiftUI
 
-enum SuggestState{
+enum SuggestState {
     case oneDirection(FlickDirection)
     case all
     case nothing
-    
+
     var isActive: Bool {
-        if case .nothing = self{
+        if case .nothing = self {
             return false
         }
         return true
     }
 }
 
-//V：フリック・長押しされた時に表示されるビュー
+// V：フリック・長押しされた時に表示されるビュー
 struct SuggestView: View {
     private let model: SuggestModel
     @ObservedObject private var modelVariableSection: SuggestModelVariableSection
@@ -30,25 +30,25 @@ struct SuggestView: View {
     private let tabDesign: TabDependentDesign
     private let size: CGSize
 
-    init(model: SuggestModel, tabDesign: TabDependentDesign, size: CGSize){
+    init(model: SuggestModel, tabDesign: TabDependentDesign, size: CGSize) {
         self.model = model
         self.modelVariableSection = model.variableSection
         self.tabDesign = tabDesign
         self.size = size
     }
-     
+
     private func neededApeearView(direction: FlickDirection) -> some View {
-        if case .oneDirection(direction) = self.modelVariableSection.suggestState{
-            if let model = self.model.flickModels[direction]{
+        if case .oneDirection(direction) = self.modelVariableSection.suggestState {
+            if let model = self.model.flickModels[direction] {
                 return model.getSuggestView(size: size, isPointed: true, theme: theme)
-            }else{
+            } else {
                 return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
             }
         }
-        if case .all = self.modelVariableSection.suggestState{
-            if let model = self.model.flickModels[direction]{
+        if case .all = self.modelVariableSection.suggestState {
+            if let model = self.model.flickModels[direction] {
                 return model.getSuggestView(size: size, theme: theme)
-            }else{
+            } else {
                 return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
             }
         }
@@ -56,10 +56,10 @@ struct SuggestView: View {
     }
 
     var body: some View {
-        VStack(spacing: tabDesign.verticalSpacing){
-            if self.modelVariableSection.suggestState.isActive{
+        VStack(spacing: tabDesign.verticalSpacing) {
+            if self.modelVariableSection.suggestState.isActive {
                 self.neededApeearView(direction: .top)
-                HStack(spacing: tabDesign.horizontalSpacing){
+                HStack(spacing: tabDesign.horizontalSpacing) {
                     self.neededApeearView(direction: .left)
                     RoundedRectangle(cornerRadius: 5.0)
                         .strokeAndFill(

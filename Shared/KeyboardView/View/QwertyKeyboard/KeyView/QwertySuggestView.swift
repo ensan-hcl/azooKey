@@ -9,19 +9,19 @@
 import Foundation
 import SwiftUI
 
-enum VariationsViewDirection{
+enum VariationsViewDirection {
     case center, right, left
-    
-    var alignment: Alignment{
-        switch self{
+
+    var alignment: Alignment {
+        switch self {
         case .center: return .center
         case .right: return .leading
         case .left: return .trailing
         }
     }
-    
-    var edge: Edge.Set{
-        switch self{
+
+    var edge: Edge.Set {
+        switch self {
         case .center: return []
         case .right: return .leading
         case .left: return .trailing
@@ -30,7 +30,7 @@ enum VariationsViewDirection{
 
 }
 
-struct QwertySuggestView{
+struct QwertySuggestView {
     static func expandedPath(rdw: CGFloat, ldw: CGFloat, width: CGFloat, tabDesign: TabDependentDesign) -> some Shape {
         Path { path in
             path.move(to: CGPoint(x: 122, y: 281))
@@ -83,10 +83,10 @@ struct QwertySuggestView{
                 control2: CGPoint(x: 135, y: 281)
             )
         }
-        .offsetBy(dx:-175/2 + width/2, dy: 0 )
+        .offsetBy(dx: -175/2 + width/2, dy: 0 )
         .scale(x: width/109, y: (tabDesign.keyViewHeight*2+tabDesign.verticalSpacing)/281, anchor: .top)
     }
-    
+
     static func scaleToFrameSize(keyWidth: CGFloat, scale_y: CGFloat, color: Color, borderColor: Color, borderWidth: CGFloat, tabDesign: TabDependentDesign) -> some View {
         let height = (tabDesign.keyViewHeight*2 + tabDesign.verticalSpacing) * scale_y
         return expandedPath(rdw: 0, ldw: 0, width: keyWidth, tabDesign: tabDesign)
@@ -98,7 +98,7 @@ struct QwertySuggestView{
         let keyViewSize = tabDesign.keyViewSize
         let height = (keyViewSize.height*2 + tabDesign.verticalSpacing) * scale_y
         let dw = (keyViewSize.width * CGFloat(variationsCount - 1) + tabDesign.horizontalSpacing * CGFloat(variationsCount-1))*109/keyViewSize.width
-        switch direction{
+        switch direction {
         case .center:
             return expandedPath(rdw: dw/2, ldw: dw/2, width: keyWidth, tabDesign: tabDesign)
                 .strokeAndFill(fillContent: color, strokeContent: borderColor, lineWidth: borderWidth)

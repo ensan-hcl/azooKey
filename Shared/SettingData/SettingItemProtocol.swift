@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-protocol Savable{
+protocol Savable {
     associatedtype SaveValue
     var saveValue: SaveValue {get}
     static func get(_ value: Any) -> Self?
 }
 
-extension Savable{
+extension Savable {
     static func get(_ value: Any) -> Self? {
         return value as? Self
     }
@@ -22,34 +22,33 @@ extension Savable{
 
 extension Bool: Savable {
     typealias SaveValue = Bool
-    var saveValue: Bool{
+    var saveValue: Bool {
         return self
     }
 }
 
-
 struct SettingItem <Value: Savable> {
-    ///設定の名前
+    /// 設定の名前
     var identifier: Setting
     var value: Value
-    
-    init(identifier: Setting, defaultValue: Value){
+
+    init(identifier: Setting, defaultValue: Value) {
         self.identifier = identifier
         let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-        if let __value = userDefaults.value(forKey: identifier.key), let _value = Value.get(__value){
+        if let __value = userDefaults.value(forKey: identifier.key), let _value = Value.get(__value) {
             self.value = _value
-        }else{
+        } else {
             self.value = defaultValue
             userDefaults.setValue(defaultValue.saveValue, forKey: identifier.key)
         }
     }
 
-    init(identifier: Setting, initializedBy process: () -> Value){
+    init(identifier: Setting, initializedBy process: () -> Value) {
         self.identifier = identifier
         let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-        if let __value = userDefaults.value(forKey: identifier.key), let _value = Value.get(__value){
+        if let __value = userDefaults.value(forKey: identifier.key), let _value = Value.get(__value) {
             self.value = _value
-        }else{
+        } else {
             let defaultValue = process()
             self.value = defaultValue
             userDefaults.setValue(defaultValue.saveValue, forKey: identifier.key)
@@ -60,21 +59,21 @@ struct SettingItem <Value: Savable> {
         identifier.explanation
     }
 
-    func save(_ value: Value){
+    func save(_ value: Value) {
         let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
         userDefaults.set(value.saveValue, forKey: identifier.key)
     }
 }
 
-final class SettingItemViewModel<Value: Savable>: ObservableObject{
+final class SettingItemViewModel<Value: Savable>: ObservableObject {
     let item: SettingItem<Value>
-    @Published var value: Value{
+    @Published var value: Value {
         didSet {
             self.item.save(value)
         }
     }
-    
-    init(_ item: SettingItem<Value>){
+
+    init(_ item: SettingItem<Value>) {
         self.item = item
         self.value = item.value
     }

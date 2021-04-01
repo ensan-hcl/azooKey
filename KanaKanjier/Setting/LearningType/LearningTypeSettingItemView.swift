@@ -12,7 +12,7 @@ struct LearningTypeSettingItemView: View {
     typealias ItemViewModel = SettingItemViewModel<LearningType>
     typealias ItemModel = SettingItem<LearningType>
 
-    init(_ viewModel: ItemViewModel){
+    init(_ viewModel: ItemViewModel) {
         self.item = viewModel.item
         self.viewModel = viewModel
     }
@@ -21,7 +21,7 @@ struct LearningTypeSettingItemView: View {
     @State private var selection = 0    // 選択値と連携するプロパティ
 
     var body: some View {
-        HStack{
+        HStack {
             Text(self.item.identifier.title)
             Spacer()
             Picker(selection: $viewModel.value, label: Text("")) {

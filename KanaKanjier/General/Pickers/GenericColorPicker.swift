@@ -17,20 +17,20 @@ struct GenericColorPicker<T>: View {
 
     private let process: (Color) -> T
 
-    init(_ titleKey: LocalizedStringKey, selection: Binding<T>, supportsOpacity: Bool = true, initialValue: Color? = nil, convert process: @escaping (Color) -> T){
+    init(_ titleKey: LocalizedStringKey, selection: Binding<T>, supportsOpacity: Bool = true, initialValue: Color? = nil, convert process: @escaping (Color) -> T) {
         self.titleKey = titleKey
         self._selection = selection
         self.supportsOpacity = supportsOpacity
         self.process = process
-        if let initialValue = initialValue{
+        if let initialValue = initialValue {
             self._color = State(initialValue: initialValue)
         }
     }
 
     var body: some View {
         ColorPicker(titleKey, selection: $color, supportsOpacity: supportsOpacity)
-            .onChange(of: color){value in
-                if value == color{
+            .onChange(of: color) {value in
+                if value == color {
                     self.selection = process(value)
                 }
             }

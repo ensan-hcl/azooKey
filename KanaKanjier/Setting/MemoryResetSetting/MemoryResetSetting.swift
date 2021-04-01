@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct MemoryResetSettingItemView: View {
-    init(_ viewModel: SettingItemViewModel<MemoryResetCondition>){
+    init(_ viewModel: SettingItemViewModel<MemoryResetCondition>) {
         self.item = viewModel.item
         self.viewModel = viewModel
     }
@@ -18,15 +18,15 @@ struct MemoryResetSettingItemView: View {
     @State private var showAlert = false
 
     var body: some View {
-        Button{
+        Button {
             self.showAlert = true
         }label: {
-            HStack{
+            HStack {
                 Text(self.item.identifier.title)
                     .foregroundColor(.primary)
             }
         }
-        .alert(isPresented: $showAlert){
+        .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("学習履歴をリセットします。よろしいですか？"),
                 message: Text("この操作は取り消せません。"),
