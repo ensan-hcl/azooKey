@@ -45,7 +45,7 @@ struct CustomizeTabWalkthroughView: View {
                     // アイコンの辺の長さ
                     let length = geometry.size.width / 4.8
                     Image(systemName: "gearshape.2.fill")
-                        .font(.system(size: length/2, weight: .bold, design: .default))
+                        .font(.system(size: length / 2, weight: .bold, design: .default))
                         .background(
                             RoundedRectangle(cornerRadius: length * 0.17)
                                 .fill(Color.systemGray5)
@@ -53,7 +53,7 @@ struct CustomizeTabWalkthroughView: View {
                         )
                     Text("azooKeyを拡張する").font(.largeTitle).bold()
                         .padding()
-                    let imagesFont: Font = Font.system(size: length/2.4, weight: .light, design: .default)
+                    let imagesFont: Font = Font.system(size: length / 2.4, weight: .light, design: .default)
                     ForEach(items) {item in
                         HStack {
                             Image(systemName: item.image)
@@ -80,7 +80,7 @@ struct CustomizeTabWalkthroughView: View {
                         Text("始める")
                             .bold()
                             .padding()
-                            .frame(width: geometry.size.width*0.9)
+                            .frame(width: geometry.size.width * 0.9)
                             .foregroundColor(.background)
                             .background(
                                 RoundedRectangle(cornerRadius: length * 0.17)
@@ -90,7 +90,7 @@ struct CustomizeTabWalkthroughView: View {
                     }
                 }
                 .background(Color.background)
-                .position(x: geometry.size.width/2, y: geometry.size.height/2)
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             }
         }
         .onChange(of: isShowing) {value in

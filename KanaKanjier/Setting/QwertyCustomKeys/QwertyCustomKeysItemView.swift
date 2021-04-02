@@ -61,16 +61,16 @@ struct QwertyCustomKeysItemView: View {
     @State private var inputValue = ""
 
     private var padding: CGFloat {
-        return spacing/2
+        return spacing / 2
     }
 
     private let screenWidth = UIScreen.main.bounds.width
 
     private var keySize: CGSize {
-        return CGSize(width: screenWidth/12.2, height: screenWidth/9)
+        return CGSize(width: screenWidth / 12.2, height: screenWidth / 9)
     }
     private var spacing: CGFloat {
-        (screenWidth - keySize.width * 10)/(9+0.5)
+        (screenWidth - keySize.width * 10) / (9 + 0.5)
     }
     private func romanScaledKeyWidth(normal: Int, for count: Int) -> CGFloat {
         let width = keySize.width * CGFloat(normal) + spacing * CGFloat(normal - 1)
@@ -91,7 +91,7 @@ struct QwertyCustomKeysItemView: View {
 
     private var separator: some View {
         Rectangle()
-            .frame(width: 2, height: keySize.height*0.9)
+            .frame(width: 2, height: keySize.height * 0.9)
             .foregroundColor(.accentColor)
     }
 
@@ -349,7 +349,7 @@ struct QwertyCustomKeysItemView: View {
             var position = CGFloat.zero
             var index = index
             while index >= 0 {
-                position -= (width + padding*2)
+                position -= (width + padding * 2)
                 if position < delta {
                     return index
                 }
@@ -361,7 +361,7 @@ struct QwertyCustomKeysItemView: View {
             var position = CGFloat.zero
             var index = index + 1
             while index < endIndex {
-                position += (width + padding*2)
+                position += (width + padding * 2)
                 if delta < position {
                     return index
                 }

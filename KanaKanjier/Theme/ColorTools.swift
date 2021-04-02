@@ -68,7 +68,7 @@ struct ColorTools {
         // Calculate Value
         v = maxValue
 
-        return process(Double(h/360), Double(s), Double(v), Double(a))
+        return process(Double(h / 360), Double(s), Double(v), Double(a))
     }
 
 }

@@ -36,7 +36,9 @@ struct FontPicker: UIViewControllerRepresentable {
         }
         func fontPickerViewControllerDidPickFont(_ viewController: UIFontPickerViewController) {
             // attempt to read the selected font descriptor, but exit quietly if that fails
-            guard let descriptor = viewController.selectedFontDescriptor else { return }
+            guard let descriptor = viewController.selectedFontDescriptor else {
+                return
+            }
             debug((descriptor.fontAttributes[.family] as? String) ?? descriptor.postscriptName)
             self.parent.pickerResult = Font.custom((descriptor.fontAttributes[.family] as? String) ?? descriptor.postscriptName, size: 16, relativeTo: .body)
             self.parent.isPresented = false

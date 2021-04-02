@@ -126,16 +126,16 @@ struct FlickCustomKeysSettingView: View {
     @State private var inputValue = ""
 
     private var padding: CGFloat {
-        spacing/2
+        spacing / 2
     }
 
     private let screenWidth = UIScreen.main.bounds.width
 
     private var keySize: CGSize {
-        CGSize(width: screenWidth/5.6, height: screenWidth/8)
+        CGSize(width: screenWidth / 5.6, height: screenWidth / 8)
     }
     private var spacing: CGFloat {
-        (screenWidth - keySize.width * 5)/5
+        (screenWidth - keySize.width * 5) / 5
     }
 
     init(_ viewModel: ItemViewModel) {
@@ -145,7 +145,7 @@ struct FlickCustomKeysSettingView: View {
 
     private var separator: some View {
         Rectangle()
-            .frame(width: 2, height: keySize.height*0.9)
+            .frame(width: 2, height: keySize.height * 0.9)
             .foregroundColor(.accentColor)
     }
 

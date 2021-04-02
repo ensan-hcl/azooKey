@@ -198,7 +198,7 @@ struct ThemeEditView: View {
                     self.theme.normalKeyFillColor = .color(normalKeyColor)
                 }
                 if let pushedKeyColor = ColorTools.hsv(value, process: {h, s, v, opacity in
-                    let base = (floor(v-0.5) + 0.5)*2
+                    let base = (floor(v - 0.5) + 0.5) * 2
                     return Color(hue: h, saturation: s, brightness: v - base * 0.1, opacity: max(0.05, sqrt(opacity)))
                 }) {
                     self.theme.pushedKeyFillColor = .color(pushedKeyColor)

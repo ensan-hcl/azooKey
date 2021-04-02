@@ -219,7 +219,9 @@ struct TrimmingView: View {
 
 extension UIImage {
     fileprivate func fixedOrientation() -> UIImage? {
-        if self.imageOrientation == .up { return self }
+        if self.imageOrientation == .up {
+            return self
+        }
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         self.draw(in: CGRect(origin: .zero, size: self.size))
         let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -228,7 +230,9 @@ extension UIImage {
     }
 
     fileprivate func scaled(fit maxSize: CGSize) -> UIImage? {
-        if size.width < maxSize.width && size.height < maxSize.height { return self }
+        if size.width < maxSize.width && size.height < maxSize.height {
+            return self
+        }
         let r_w = size.width / maxSize.width
         let r_h = size.height / maxSize.height
         let r = max(r_w, r_h)

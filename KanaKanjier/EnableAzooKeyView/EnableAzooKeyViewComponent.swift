@@ -81,7 +81,7 @@ struct EnableAzooKeyViewButton: View {
                     .bold()
             }
             .padding()
-            .frame(width: width*0.9)
+            .frame(width: width * 0.9)
             .foregroundColor(.background)
             .background(
                 RoundedRectangle(cornerRadius: width / 4.8 * 0.17)

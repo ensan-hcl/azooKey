@@ -136,16 +136,16 @@ struct RandomTemplateLiteralSettingView: View {
                   let right = Int(intStringTo) else {
                 return
             }
-            let min = left<right ? left:right
-            let max = left<right ? right:left
+            let min = left < right ? left:right
+            let max = left < right ? right:left
             self.literal.value = .int(from: min, to: max)
         case .double:
             guard let left = Double(doubleStringFrom),
                   let right = Double(doubleStringTo) else {
                 return
             }
-            let min = left<right ? left:right
-            let max = left<right ? right:left
+            let min = left < right ? left:right
+            let max = left < right ? right:left
             self.literal.value = .double(from: min, to: max)
         case .string:
             let strings = stringsString.components(separatedBy: ",")
@@ -378,8 +378,8 @@ struct DateTemplateLiteralSettingView: View {
                                 .multilineTextAlignment(.trailing)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                             Picker(selection: $literal.deltaUnit, label: Text("")) {
-                                Text("日").tag(60*60*24)
-                                Text("時間").tag(60*60)
+                                Text("日").tag(60 * 60 * 24)
+                                Text("時間").tag(60 * 60)
                                 Text("分").tag(60)
                                 Text("秒").tag(1)
                             }

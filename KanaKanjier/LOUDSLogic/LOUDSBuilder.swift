@@ -43,12 +43,12 @@ struct LOUDSBuilder {
     private func BoolToUInt64(_ bools: [Bool]) -> [UInt64] {
         let unit = 64
         let value = bools.count.quotientAndRemainder(dividingBy: unit)
-        let _bools = bools + [Bool].init(repeating: true, count: (unit-value.remainder) % unit)
+        let _bools = bools + [Bool].init(repeating: true, count: (unit - value.remainder) % unit)
         var result = [UInt64]()
         for i in 0...value.quotient {
             var value: UInt64 = 0
             for j in 0..<unit {
-                value += (_bools[i*unit + j] ? 1:0) << (unit - j - 1)
+                value += (_bools[i * unit + j] ? 1:0) << (unit - j - 1)
             }
             result.append(value)
         }
@@ -129,7 +129,7 @@ struct LOUDSBuilder {
             array.append(array.last! + UInt32(value.count))
         }
 
-        let header = Data(bytes: headerArray, count: MemoryLayout<UInt32>.size*headerArray.count)
+        let header = Data(bytes: headerArray, count: MemoryLayout<UInt32>.size * headerArray.count)
         let binary = count + header + body
 
         return binary
@@ -190,7 +190,7 @@ struct LOUDSBuilder {
         let bytes = BoolToUInt64(bits)
 
         do {
-            let binary = Data(bytes: bytes, count: bytes.count*8)
+            let binary = Data(bytes: bytes, count: bytes.count * 8)
             try binary.write(to: URL(fileURLWithPath: binaryFilePath))
         } catch {
             debug(error)
@@ -205,17 +205,17 @@ struct LOUDSBuilder {
         }
 
         do {
-            let count = (data.count)/txtFileSplit
+            let count = (data.count) / txtFileSplit
             let indiceses: [Range<Int>] = (0...count).map {
-                let start = $0*txtFileSplit
-                let _end = ($0+1)*txtFileSplit
+                let start = $0 * txtFileSplit
+                let _end = ($0 + 1) * txtFileSplit
                 let end = data.count < _end ? data.count:_end
                 return start..<end
             }
 
             for indices in indiceses {
                 do {
-                    let start = indices.startIndex/txtFileSplit
+                    let start = indices.startIndex / txtFileSplit
                     let binary = make_loudstxt2(lines: Array(data[indices]))
                     try binary.write(to: URL(fileURLWithPath: loudsTxt2FilePath("\(start)")), options: .atomic)
                     try FileManager.default.removeItem(atPath: loudsTxtFilePath("\(start)"))

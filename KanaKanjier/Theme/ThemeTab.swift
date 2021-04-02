@@ -37,10 +37,10 @@ struct ThemeTabView: View {
                                 Spacer()
                                 Circle()
                                     .fill(manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                                    .frame(width: geometry.size.width/1.5, height: geometry.size.width/1.5)
+                                    .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
                                     .overlay(
                                         Image(systemName: "checkmark")
-                                            .font(Font.system(size: geometry.size.width/3).weight(.bold))
+                                            .font(Font.system(size: geometry.size.width / 3).weight(.bold))
                                             .foregroundColor(.white)
                                     )
                                 Spacer()

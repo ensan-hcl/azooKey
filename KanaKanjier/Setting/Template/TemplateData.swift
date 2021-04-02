@@ -83,7 +83,7 @@ enum TemplateLiteralType {
 
 extension TemplateLiteralProtocol {
     static func parse<S: StringProtocol>(splited: [S], key: String) -> some StringProtocol {
-        let result = (splited.filter {$0.hasPrefix(key+"=\"")}.first ?? "").dropFirst(key.count+2).dropLast(1)
+        let result = (splited.first {$0.hasPrefix(key + "=\"")} ?? "").dropFirst(key.count + 2).dropLast(1)
         if result.hasSuffix("\"") {
             return result.dropLast(1)
         }

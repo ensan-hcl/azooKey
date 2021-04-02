@@ -116,7 +116,9 @@ struct TemplateListView: View {
 
     func save() {
         if let json = try? JSONEncoder().encode(self.data.templates.map {$0.data}) {
-            guard let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(TemplateData.dataFileName) else { return }
+            guard let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(TemplateData.dataFileName) else {
+                return
+            }
             do {
                 try json.write(to: url)
             } catch {
