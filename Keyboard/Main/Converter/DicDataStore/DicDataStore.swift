@@ -50,9 +50,9 @@ final class DicDataStore {
             debug("ファイルが存在しません: \(error)")
         }
         do {
-            let path = Bundle.main.bundlePath + "/mm.binary"
+            let url = Bundle.main.bundleURL.appendingPathComponent("mm.binary")
             do {
-                let binaryData = try Data(contentsOf: URL(fileURLWithPath: path), options: [.uncached])
+                let binaryData = try Data(contentsOf: url, options: [.uncached])
                 let ui64array = binaryData.withUnsafeBytes {pointer -> [Float] in
                     return Array(
                         UnsafeBufferPointer(
@@ -477,9 +477,9 @@ final class DicDataStore {
         return result
     }
 
-    private func loadCCBinary(path: String) -> [(Int32, Float)] {
+    private func loadCCBinary(url: URL) -> [(Int32, Float)] {
         do {
-            let binaryData = try Data(contentsOf: URL(fileURLWithPath: path), options: [.uncached])
+            let binaryData = try Data(contentsOf: url, options: [.uncached])
             let ui64array = binaryData.withUnsafeBytes {pointer -> [(Int32, Float)] in
                 return Array(
                     UnsafeBufferPointer(
@@ -543,8 +543,8 @@ final class DicDataStore {
             return ccLines[former][latter, default: defaultValue]
         }
         let add: PValue = 3
-        let path = Bundle.main.bundlePath + "/\(former).binary"
-        let values = loadCCBinary(path: path)
+        let url = Bundle.main.bundleURL.appendingPathComponent("\(former).binary")
+        let values = loadCCBinary(url: url)
         ccLines[former] = [Int: PValue].init(uniqueKeysWithValues: values.map {(Int($0.0), PValue($0.1) + add)})
         ccParsed.update(with: former)
         return ccLines[former][latter, default: -25]
