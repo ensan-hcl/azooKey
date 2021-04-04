@@ -393,17 +393,15 @@ final class DicDataStore {
     }
 
     private func convertDicData<S: StringProtocol>(from dataString: [S]) -> DicdataElement {
-        let LRE = dataString[3].isEmpty
-        let SRE = dataString[1].isEmpty
-        let V3E = dataString[5].isEmpty
         let ruby = String(dataString[0])
-        let string = SRE ? ruby:String(dataString[1])
+        let word = dataString[1].isEmpty ? ruby:String(dataString[1])
         let lcid = Int(dataString[2]) ?? .zero
         let rcid = Int(dataString[3]) ?? lcid
         let mid = Int(dataString[4]) ?? .zero
         let value: PValue = PValue(dataString[5]) ?? -30.0
-        let adjust: PValue = PValue(self.getSingleMemory(DicdataElement(word: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value)) * 3)
-        return DicdataElement(word: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: adjust)
+        let element = DicdataElement(word: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value)
+        let adjust: PValue = PValue(self.getSingleMemory(element) * 3)
+        return element.adjustedData(adjust)
     }
 
     /// 補足的な辞書情報を得る。

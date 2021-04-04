@@ -2270,7 +2270,7 @@
 		1A64C8BE251315AD00ACD537 /* DicDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicDataStore.swift */; };
 		1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */; };
 		1A65C00B250B800E00F297BF /* LatticeNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */; };
-		1A67360625092C1E003FC654 /* DicDataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67360525092C1E003FC654 /* DicDataElement.swift */; };
+		1A67360625092C1E003FC654 /* DicdataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67360525092C1E003FC654 /* DicdataElement.swift */; };
 		1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A673609250AFBCB003FC654 /* Wareki.swift */; };
 		1A677370256F7AC30037AF22 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* Sound.swift */; };
 		1A6F959725144481007399AC /* QwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* QwertyKeyboardView.swift */; };
@@ -4783,7 +4783,7 @@
 		1A64C8BD251315AD00ACD537 /* DicDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicDataStore.swift; sourceTree = "<group>"; };
 		1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseNumber.swift; sourceTree = "<group>"; };
 		1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatticeNodeProtocol.swift; sourceTree = "<group>"; };
-		1A67360525092C1E003FC654 /* DicDataElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicDataElement.swift; sourceTree = "<group>"; };
+		1A67360525092C1E003FC654 /* DicdataElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicdataElement.swift; sourceTree = "<group>"; };
 		1A6736072509F39E003FC654 /* VerbConjugation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbConjugation.swift; sourceTree = "<group>"; };
 		1A673609250AFBCB003FC654 /* Wareki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wareki.swift; sourceTree = "<group>"; };
 		1A67736F256F7AC30037AF22 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
@@ -7478,7 +7478,7 @@
 			isa = PBXGroup;
 			children = (
 				1A64C8BD251315AD00ACD537 /* DicDataStore.swift */,
-				1A67360525092C1E003FC654 /* DicDataElement.swift */,
+				1A67360525092C1E003FC654 /* DicdataElement.swift */,
 				1A364E3125C8361A00A56583 /* LearningMemory.swift */,
 				1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */,
 			);
@@ -10478,7 +10478,7 @@
 				1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */,
 				1A58AB0D25037E9E00EB1864 /* ExpandedResultView.swift in Sources */,
 				1A3DC2152500D59F002CAA93 /* FlickKeyView.swift in Sources */,
-				1A67360625092C1E003FC654 /* DicDataElement.swift in Sources */,
+				1A67360625092C1E003FC654 /* DicdataElement.swift in Sources */,
 				1A4623F52524621F00EF5B02 /* extension LOUDS.swift in Sources */,
 				1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */,
 				1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */,

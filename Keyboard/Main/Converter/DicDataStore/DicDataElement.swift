@@ -1,5 +1,5 @@
 //
-//  DicDataElementProtocol.swift
+//  DicdataElement.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/10.
