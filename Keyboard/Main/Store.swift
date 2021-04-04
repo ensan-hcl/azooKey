@@ -575,7 +575,7 @@ private final class InputManager {
             correspondingCount: self.inputtedText.count,
             lastMid: 501,
             data: [
-                LRE_SRE_DicDataElement(ruby: self.inputtedText, cid: 1298, mid: 501, value: -18)
+                DicdataElement(ruby: self.inputtedText, cid: 1298, mid: 501, value: -18)
             ]
         )
         let actions: [ActionType]

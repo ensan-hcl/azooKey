@@ -38,7 +38,7 @@ extension KanaKanjiConverter {
                 value: -15,
                 correspondingCount: inputData.characters.count,
                 lastMid: 501,
-                data: [LRE_DicDataElement(word: $0, ruby: string, cid: 1288, mid: 501, value: -15)]
+                data: [DicdataElement(word: $0, ruby: string, cid: 1288, mid: 501, value: -15)]
             )
         }
     }

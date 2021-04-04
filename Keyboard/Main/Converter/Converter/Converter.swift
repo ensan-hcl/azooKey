@@ -18,7 +18,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     private var previousInputData: InputData?
     private var nodes: [[LatticeNode]] = []
     private var completedData: Candidate?
-    private var lastData: DicDataElementProtocol?
+    private var lastData: DicdataElement?
 
     /// リセットする関数
     func clear() {
@@ -139,7 +139,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             }
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language) {
                 if !completions.isEmpty {
-                    let data = [LRE_SRE_DicDataElement(ruby: ruby, cid: 1288, mid: 501, value: penalty)]
+                    let data = [DicdataElement(ruby: ruby, cid: 1288, mid: 501, value: penalty)]
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
@@ -152,7 +152,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 var value: PValue = -5 + penalty
                 let delta: PValue = -10/PValue(completions.count)
                 completions.forEach {word in
-                    let data = [LRE_SRE_DicDataElement(ruby: word, cid: 1288, mid: 501, value: value)]
+                    let data = [DicdataElement(ruby: word, cid: 1288, mid: 501, value: value)]
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
@@ -170,7 +170,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let range = NSRange(location: 0, length: ruby.utf16.count)
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language) {
                 if !completions.isEmpty {
-                    let data = [LRE_SRE_DicDataElement(ruby: ruby, cid: 1288, mid: 501, value: penalty)]
+                    let data = [DicdataElement(ruby: ruby, cid: 1288, mid: 501, value: penalty)]
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
@@ -183,7 +183,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 var value: PValue = -5 + penalty
                 let delta: PValue = -10/PValue(completions.count)
                 completions.forEach {word in
-                    let data = [LRE_SRE_DicDataElement(ruby: word, cid: 1288, mid: 501, value: value)]
+                    let data = [DicdataElement(ruby: word, cid: 1288, mid: 501, value: value)]
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
@@ -271,7 +271,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let string = inputData.katakanaString
         do {
             // カタカナ
-            let data = LRE_SRE_DicDataElement(ruby: string, cid: 1288, mid: 501, value: -14)
+            let data = DicdataElement(ruby: string, cid: 1288, mid: 501, value: -14)
             let katakana = Candidate(
                 text: string,
                 value: -14,
@@ -284,7 +284,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let hiraganaString = string.applyingTransform(.hiraganaToKatakana, reverse: true)!
         do {
             // ひらがな
-            let data = LRE_DicDataElement(word: hiraganaString, ruby: string, cid: 1288, mid: 501, value: -14.5)
+            let data = DicdataElement(word: hiraganaString, ruby: string, cid: 1288, mid: 501, value: -14.5)
 
             let hiragana = Candidate(
                 text: hiraganaString,
@@ -298,7 +298,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         do {
             // 大文字
             let word = string.uppercased()
-            let data = LRE_DicDataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
+            let data = DicdataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
             let uppercasedLetter = Candidate(
                 text: word,
                 value: -14.6,
@@ -311,7 +311,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         if SettingData.shared.bool(for: .fullRoman) {
             // 全角英数字
             let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: true) ?? ""
-            let data = LRE_DicDataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
+            let data = DicdataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
             let fullWidthLetter = Candidate(
                 text: word,
                 value: -14.7,
@@ -324,7 +324,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         if SettingData.shared.bool(for: .halfKana) {
             // 半角カタカナ
             let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
-            let data = LRE_DicDataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
+            let data = DicdataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
             let halfWidthKatakana = Candidate(
                 text: word,
                 value: -15,
@@ -423,7 +423,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         // 最初の辞書データ
         let dicCandidates: [Candidate] = result.nodes[0]
-            .filter {!($0.data is GeneratedDicDataElement)}
+           // .filter {!($0.data is GeneratedDicDataElement)}
             .map {
                 Candidate(
                     text: $0.data.word,

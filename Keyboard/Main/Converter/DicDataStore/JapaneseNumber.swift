@@ -436,9 +436,15 @@ extension DicDataStore {
             }
             roman = String(chars)
         }
+        /*
         return [
             GeneratedDicDataElement(word: kanji, ruby: head, cid: 1295, mid: 452, value: -17+PValue(head.count)/3),
             GeneratedDicDataElement(word: roman, ruby: head, cid: 1295, mid: 452, value: -16+4/PValue(roman.count))
+        ]
+        */
+        return [
+            DicdataElement(word: kanji, ruby: head, cid: 1295, mid: 452, value: -17+PValue(head.count)/3),
+            DicdataElement(word: roman, ruby: head, cid: 1295, mid: 452, value: -16+4/PValue(roman.count))
         ]
     }
 

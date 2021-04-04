@@ -9,7 +9,7 @@
 import Foundation
 
 private struct DicDataElementCore: Hashable {
-    internal init(data: DicDataElementProtocol) {
+    internal init(data: DicdataElement) {
         self.word = data.word
         self.ruby = data.ruby
         self.lcid = data.lcid
@@ -23,10 +23,10 @@ private struct DicDataElementCore: Hashable {
 }
 
 private final class LearningMemoryElement {
-    var data: DicDataElementProtocol
+    var data: DicdataElement
     var count: Int
     var next: [(index: Int, count: Int)]
-    init(data: DicDataElementProtocol, count: Int, next: [(index: Int, count: Int)] = []) {
+    init(data: DicdataElement, count: Int, next: [(index: Int, count: Int)] = []) {
         self.data = data
         self.count = count
         self.next = next
@@ -72,7 +72,7 @@ struct LearningMemorys {
         return Array(dicdata)
     }
 
-    func getSingle(_ data: DicDataElementProtocol) -> Int {
+    func getSingle(_ data: DicdataElement) -> Int {
         if let index = self.core2Index[.init(data: data)] {
             return values[index].count
         }
@@ -84,14 +84,14 @@ struct LearningMemorys {
         return Array(dicdata)
     }
 
-    func getNextData(_ data: DicDataElementProtocol) -> [(next: DicDataElementProtocol, count: Int)] {
+    func getNextData(_ data: DicdataElement) -> [(next: DicdataElement, count: Int)] {
         if let index = self.core2Index[.init(data: data)] {
             return values[index].next.map {(next: self.values[$0.index].data, count: $0.count)}
         }
         return []
     }
 
-    func matchNext(_ previous: DicDataElementProtocol, next: DicDataElementProtocol) -> Int {
+    func matchNext(_ previous: DicdataElement, next: DicdataElement) -> Int {
         if let nextIndex = self.core2Index[.init(data: next)],
            let previousIndex = self.core2Index[.init(data: previous)],
            let next = values[previousIndex].next.last(where: {$0.index == nextIndex}) {
@@ -100,7 +100,7 @@ struct LearningMemorys {
         return .zero
     }
 
-    mutating func update(_ data: [DicDataElementProtocol], lastData: DicDataElementProtocol?) {
+    mutating func update(_ data: [DicdataElement], lastData: DicdataElement?) {
         if !SettingData.shared.learningType.needUpdateMemory {
             return
         }
@@ -227,7 +227,7 @@ struct LearningMemorys {
                 return nil
             }
             let count: Int = Int(splited[0]) ?? 1
-            let data: DicDataElementProtocol = Self.convertLatticeNodeData(from: splited[1...6])
+            let data: DicdataElement = Self.convertLatticeNodeData(from: splited[1...6])
             if splited[7].isEmpty {
                 return LearningMemoryElement(data: data, count: count, next: [])
             }
@@ -240,49 +240,16 @@ struct LearningMemorys {
         return values
     }
 
-    private static func convertLatticeNodeData(from dataString: ArraySlice<String.SubSequence>) -> DicDataElementProtocol {
+    private static func convertLatticeNodeData(from dataString: ArraySlice<String.SubSequence>) -> DicdataElement {
         let delta = dataString.startIndex
-        let LRE = dataString[3+delta].isEmpty
         let SRE = dataString[1+delta].isEmpty
-        let V3E = dataString[5+delta].isEmpty
         let ruby = String(dataString[0+delta]).unescaped()
         let word = SRE ? ruby:String(dataString[1+delta]).unescaped()
         let lcid = Int(dataString[2+delta]) ?? .zero
         let rcid = Int(dataString[3+delta]) ?? lcid
         let mid = Int(dataString[4+delta]) ?? .zero
         let value: PValue = PValue(dataString[5+delta]) ?? -30.0
-        // 取得したデータを辞書に加える。
-        let latticeNodeData: DicDataElementProtocol
-        if LRE {
-            if SRE {
-                if V3E {
-                    latticeNodeData = LRE_SRE_V3E_DicDataElement(ruby: ruby, cid: lcid, mid: mid, adjust: .zero)
-                } else {
-                    latticeNodeData = LRE_SRE_DicDataElement(ruby: ruby, cid: lcid, mid: mid, value: value, adjust: .zero)
-                }
-            } else {
-                if V3E {
-                    latticeNodeData = LRE_V3E_DicDataElement(string: word, ruby: ruby, cid: lcid, mid: mid, adjust: .zero)
-                } else {
-                    latticeNodeData = LRE_DicDataElement(word: word, ruby: ruby, cid: lcid, mid: mid, value: value, adjust: .zero)
-                }
-            }
-        } else {
-            if SRE {
-                if V3E {
-                    latticeNodeData = SRE_V3E_DicDataElement(ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, adjust: .zero)
-                } else {
-                    latticeNodeData = SRE_DicDataElement(ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: .zero)
-                }
-            } else {
-                if V3E {
-                    latticeNodeData = V3E_DicDataElement(string: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, adjust: .zero)
-                } else {
-                    latticeNodeData = All_DicDataElement(string: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: .zero)
-                }
-            }
-        }
-        return latticeNodeData
+        return DicdataElement(word: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: .zero)
     }
 
 }

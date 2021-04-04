@@ -9,7 +9,7 @@
 import Foundation
 
 protocol RegisteredNodeProtocol {
-    var data: DicDataElementProtocol {get}
+    var data: DicdataElement {get}
     var prev: RegisteredNodeProtocol? {get}
     var totalValue: PValue {get}
     var ruby: String {get}
@@ -19,7 +19,7 @@ protocol RegisteredNodeProtocol {
 }
 
 struct DirectRegisteredNode: RegisteredNodeProtocol {
-    let data: DicDataElementProtocol
+    let data: DicdataElement
     let prev: RegisteredNodeProtocol?
     let totalValue: PValue
     let rubyCount: Int
@@ -27,7 +27,7 @@ struct DirectRegisteredNode: RegisteredNodeProtocol {
         return self.data.ruby
     }
 
-    init(data: DicDataElementProtocol, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int) {
+    init(data: DicdataElement, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int) {
         self.data = data
         self.prev = registered
         self.totalValue = totalValue
@@ -35,18 +35,18 @@ struct DirectRegisteredNode: RegisteredNodeProtocol {
     }
 
     static func BOSNode() -> DirectRegisteredNode {
-        DirectRegisteredNode(data: BOSEOSDicDataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0)
+        DirectRegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0)
     }
 }
 
 struct RomanRegisteredNode: RegisteredNodeProtocol {
-    let data: DicDataElementProtocol
+    let data: DicdataElement
     let prev: RegisteredNodeProtocol?
     let totalValue: PValue
     let rubyCount: Int
     let ruby: String
 
-    init(data: DicDataElementProtocol, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int, romanString: String) {
+    init(data: DicdataElement, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int, romanString: String) {
         self.data = data
         self.prev = registered
         self.totalValue = totalValue
@@ -55,7 +55,7 @@ struct RomanRegisteredNode: RegisteredNodeProtocol {
     }
 
     static func BOSNode() -> RomanRegisteredNode {
-        RomanRegisteredNode(data: BOSEOSDicDataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0, romanString: "")
+        RomanRegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0, romanString: "")
     }
 }
 

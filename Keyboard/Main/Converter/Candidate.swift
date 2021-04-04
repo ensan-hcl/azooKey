@@ -29,9 +29,9 @@ final class ClauseDataUnit {
 struct CandidateData {
     typealias ClausesUnit = (clause: ClauseDataUnit, value: PValue)
     var clauses: [ClausesUnit]
-    var data: [DicDataElementProtocol]
+    var data: [DicdataElement]
 
-    init(clauses: [ClausesUnit], data: [DicDataElementProtocol]) {
+    init(clauses: [ClausesUnit], data: [DicdataElement]) {
         self.clauses = clauses
         self.data = data
     }
@@ -56,7 +56,7 @@ struct Candidate: ResultViewItemData {
     /// 最後のmid(予測変換に利用)
     let lastMid: Int
     /// DicDataElement列
-    let data: [DicDataElementProtocol]
+    let data: [DicdataElement]
     /// 変換として選択した際に実行する`action`。
     /// - note: 括弧を入力した際にカーソルを移動するために追加した変数
     let actions: [ActionType]
@@ -64,7 +64,7 @@ struct Candidate: ResultViewItemData {
     /// - note: 文字数表示のために追加したフラグ
     let inputable: Bool
 
-    init(text: String, value: PValue, correspondingCount: Int, lastMid: Int, data: [DicDataElementProtocol], actions: [ActionType] = [], inputable: Bool = true) {
+    init(text: String, value: PValue, correspondingCount: Int, lastMid: Int, data: [DicdataElement], actions: [ActionType] = [], inputable: Bool = true) {
         self.text = text
         self.value = value
         self.correspondingCount = correspondingCount

@@ -20,8 +20,8 @@ extension Kana2Kanji {
     /// - note:
     ///     この関数の役割は意味連接の考慮にある。
     func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, lastRubyCount: Int, N_best: Int) -> [Candidate] {
-        let datas: [DicDataElementProtocol]
-        let lastData: DicDataElementProtocol?
+        let datas: [DicdataElement]
+        let lastData: DicdataElement?
         conversionBenchmark.start(process: .結果の処理_予測変換_日本語_雑多なデータ取得)
         do {
             var _str = ""
@@ -38,8 +38,8 @@ extension Kana2Kanji {
             datas = Array(prepart.data.prefix(count))
         }
 
-        let memory: [DicDataElementProtocol] = dicdataStore.getPrefixMemory(lastRuby)
-        let osuserdict: [DicDataElementProtocol] = dicdataStore.getPrefixMatchOSUserDict(lastRuby)
+        let memory: [DicdataElement] = dicdataStore.getPrefixMemory(lastRuby)
+        let osuserdict: [DicdataElement] = dicdataStore.getPrefixMatchOSUserDict(lastRuby)
 
         let lastCandidate: Candidate = prepart.isEmpty ? Candidate(text: "", value: .zero, correspondingCount: 0, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
         let lastRcid: Int = lastCandidate.data.last?.rcid ?? 1316
@@ -49,7 +49,7 @@ extension Kana2Kanji {
         var ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
 
         if lastCandidate.data.count > 1, let lastNext = lastData {
-            let lastPrev: DicDataElementProtocol = lastCandidate.data[lastCandidate.data.endIndex - 2]
+            let lastPrev: DicdataElement = lastCandidate.data[lastCandidate.data.endIndex - 2]
             ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
         }
         conversionBenchmark.end(process: .結果の処理_予測変換_日本語_雑多なデータ取得)
@@ -76,7 +76,7 @@ extension Kana2Kanji {
         var result: [Candidate] = []
 
         result.reserveCapacity(N_best &+ 1)
-        (dicdata + memory + osuserdict).forEach {(data: DicDataElementProtocol) in
+        (dicdata + memory + osuserdict).forEach {(data: DicdataElement) in
             let includeMMValueCalculation = DicDataStore.includeMMValueCalculation(data)
             let mmValue: PValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
             let ccValue: PValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)
@@ -88,7 +88,7 @@ extension Kana2Kanji {
             if lastindex >= N_best {
                 return
             }
-            var nodedata: [DicDataElementProtocol] = datas
+            var nodedata: [DicdataElement] = datas
             nodedata.append(data)
             let candidate: Candidate = Candidate(
                 text: lastCandidate.text + data.word,

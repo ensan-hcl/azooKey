@@ -18,7 +18,7 @@ final class DicDataStore {
         self.setup()
     }
 
-    typealias DicData = [DicDataElementProtocol]
+    typealias DicData = [DicdataElement]
     private var ccParsed: Set<Int> = []
     private var ccLines: [[Int: PValue]] = []
     private var mmValue: [PValue] = []
@@ -96,7 +96,7 @@ final class DicDataStore {
     }
 
     /// ペナルティ関数。文字数で決める。
-    private func getPenalty(data: DicDataElementProtocol) -> PValue {
+    private func getPenalty(data: DicdataElement) -> PValue {
         return -2.0/PValue(data.word.count)
     }
 
@@ -110,15 +110,12 @@ final class DicDataStore {
     }
 
     /// 計算時に利用。無視すべきデータかどうか。
-    internal func shouldBeRemoved(data: DicDataElementProtocol) -> Bool {
-        if data.adjust.isZero && (
-            data is LRE_V3E_DicDataElement ||
-                data is V3E_DicDataElement ||
-                data is SRE_V3E_DicDataElement
-        ) {
+    internal func shouldBeRemoved(data: DicdataElement) -> Bool {
+        let value = data.value()
+        if value <= -30 {
             return true
         }
-        let d = data.value() - self.treshold
+        let d = value - self.treshold
         if d < 0 {
             return true
         }
@@ -164,7 +161,7 @@ final class DicDataStore {
         return louds.prefixNodeIndices(chars: key.map {self.charsID[$0, default: .max]}, maxDepth: depth)
     }
 
-    private func getDicData(identifier: String, indices: Set<Int>) -> [DicDataElementProtocol] {
+    private func getDicData(identifier: String, indices: Set<Int>) -> [DicdataElement] {
         // split = 2048
         let dict = [Int: [Int]].init(grouping: indices, by: {$0 >> 11})
         let data: [[Substring]] = dict.flatMap {(dictKeyValue) -> [[Substring]] in
@@ -395,7 +392,7 @@ final class DicDataStore {
         }
     }
 
-    private func convertDicData<S: StringProtocol>(from dataString: [S]) -> DicDataElementProtocol {
+    private func convertDicData<S: StringProtocol>(from dataString: [S]) -> DicdataElement {
         let LRE = dataString[3].isEmpty
         let SRE = dataString[1].isEmpty
         let V3E = dataString[5].isEmpty
@@ -405,39 +402,8 @@ final class DicDataStore {
         let rcid = Int(dataString[3]) ?? lcid
         let mid = Int(dataString[4]) ?? .zero
         let value: PValue = PValue(dataString[5]) ?? -30.0
-        let adjust: PValue = PValue(self.getSingleMemory(All_DicDataElement(string: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value)) * 3)
-        // 取得したデータを辞書に加える。
-        let latticeNodeData: DicDataElementProtocol
-        if LRE {
-            if SRE {
-                if V3E {
-                    latticeNodeData = LRE_SRE_V3E_DicDataElement(ruby: ruby, cid: lcid, mid: mid, adjust: adjust)
-                } else {
-                    latticeNodeData = LRE_SRE_DicDataElement(ruby: ruby, cid: lcid, mid: mid, value: value, adjust: adjust)
-                }
-            } else {
-                if V3E {
-                    latticeNodeData = LRE_V3E_DicDataElement(string: string, ruby: ruby, cid: lcid, mid: mid, adjust: adjust)
-                } else {
-                    latticeNodeData = LRE_DicDataElement(word: string, ruby: ruby, cid: lcid, mid: mid, value: value, adjust: adjust)
-                }
-            }
-        } else {
-            if SRE {
-                if V3E {
-                    latticeNodeData = SRE_V3E_DicDataElement(ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, adjust: adjust)
-                } else {
-                    latticeNodeData = SRE_DicDataElement(ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: adjust)
-                }
-            } else {
-                if V3E {
-                    latticeNodeData = V3E_DicDataElement(string: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, adjust: adjust)
-                } else {
-                    latticeNodeData = All_DicDataElement(string: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: adjust)
-                }
-            }
-        }
-        return latticeNodeData
+        let adjust: PValue = PValue(self.getSingleMemory(DicdataElement(word: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value)) * 3)
+        return DicdataElement(word: string, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value, adjust: adjust)
     }
 
     /// 補足的な辞書情報を得る。
@@ -445,33 +411,33 @@ final class DicDataStore {
         var result: DicData = []
         result.append(contentsOf: self.getJapaneseNumberDicData(head: head))
         if let number = Float(head) {
-            result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1295, mid: 361, value: -14))
+            result.append(DicdataElement(ruby: head, cid: 1295, mid: 361, value: -14))
             if number.truncatingRemainder(dividingBy: 1) == 0 {
                 let int = Int(number)
                 if int < Int(1E18) && -Int(1E18) < int, let kansuji = self.numberFormatter.string(from: NSNumber(value: int)) {
-                    result.append(LRE_DicDataElement(word: kansuji, ruby: head, cid: 1295, mid: 361, value: -16))
+                    result.append(DicdataElement(word: kansuji, ruby: head, cid: 1295, mid: 361, value: -16))
                 }
             }
         }
 
         // headを英単語として候補に追加する
         if VariableStates.shared.keyboardLanguage == .en_US && head.onlyRomanAlphabet {
-            result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 40, value: -14))
+            result.append(DicdataElement(ruby: head, cid: 1288, mid: 40, value: -14))
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
             if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head] {
-                result.append(LRE_DicDataElement(word: hiragana, ruby: katakana, cid: 1288, mid: 501, value: -13))
-                result.append(LRE_SRE_DicDataElement(ruby: katakana, cid: 1288, mid: 501, value: -14))
+                result.append(DicdataElement(word: hiragana, ruby: katakana, cid: 1288, mid: 501, value: -13))
+                result.append(DicdataElement(ruby: katakana, cid: 1288, mid: 501, value: -14))
             }
         }
 
         if head.count == 1, let hira = head.applyingTransform(.hiraganaToKatakana, reverse: true), allowRomanLetter || !head.onlyRomanAlphabet {
             if head == hira {
-                result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 501, value: -14))
+                result.append(DicdataElement(ruby: head, cid: 1288, mid: 501, value: -14))
             } else {
-                result.append(LRE_DicDataElement(word: hira, ruby: head, cid: 1288, mid: 501, value: -13))
-                result.append(LRE_SRE_DicDataElement(ruby: head, cid: 1288, mid: 501, value: -14))
+                result.append(DicdataElement(word: hira, ruby: head, cid: 1288, mid: 501, value: -13))
+                result.append(DicdataElement(ruby: head, cid: 1288, mid: 501, value: -14))
             }
         }
         return result
@@ -510,7 +476,7 @@ final class DicDataStore {
         return self.memory.match(ruby)
     }
     /// rubyに等しい語の回数を返す。
-    internal func getSingleMemory(_ data: DicDataElementProtocol) -> Int {
+    internal func getSingleMemory(_ data: DicdataElement) -> Int {
         return self.memory.getSingle(data)
     }
     /// rubyを先頭にもつ語を返す。
@@ -518,16 +484,16 @@ final class DicDataStore {
         return self.memory.getPrefixDicData(prefix)
     }
     /// 二つの語の並び回数を返す。
-    internal func getMatch(_ previous: DicDataElementProtocol, next: DicDataElementProtocol) -> Int {
+    internal func getMatch(_ previous: DicdataElement, next: DicdataElement) -> Int {
         return self.memory.matchNext(previous, next: next)
     }
     /// 一つの後から連結する次の語を返す。
-    internal func getNextMemory(_ data: DicDataElementProtocol) -> [(next: DicDataElementProtocol, count: Int)] {
+    internal func getNextMemory(_ data: DicdataElement) -> [(next: DicdataElement, count: Int)] {
         return self.memory.getNextData(data)
     }
 
     // 学習を反映する
-    internal func updateLearningData(_ candidate: Candidate, with previous: DicDataElementProtocol?) {
+    internal func updateLearningData(_ candidate: Candidate, with previous: DicdataElement?) {
         self.memory.update(candidate.data, lastData: previous)
     }
     /// class idから連接確率を得る関数
@@ -629,13 +595,9 @@ final class DicDataStore {
      + (1310..<1314).map{$0}
      ).union([10])
      */
-    internal static func includeMMValueCalculation(_ data: DicDataElementProtocol) -> Bool {
+    internal static func includeMMValueCalculation(_ data: DicdataElement) -> Bool {
         // LREでない場合はfalseを返す。
-        if     data is SRE_DicDataElement
-                || data is SRE_V3E_DicDataElement
-                || data is V3E_DicDataElement
-                || data is BOSEOSDicDataElement
-                || data is All_DicDataElement {
+        if !data.isLRE {
             return false
         }
         // 非自立動詞
@@ -659,7 +621,7 @@ final class DicDataStore {
     }
 
     // カウントをゼロにすべき語の種類
-    internal static func needWValueMemory(_ data: DicDataElementProtocol) -> Bool {
+    internal static func needWValueMemory(_ data: DicdataElement) -> Bool {
         // 助詞、助動詞
         if 147...554 ~= data.lcid {
             return false

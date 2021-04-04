@@ -10,7 +10,7 @@ import Foundation
 /// ラティスのノード。これを用いて計算する。
 protocol LatticeNodeProtocol: class {
     associatedtype RegisteredNode: RegisteredNodeProtocol
-    var data: DicDataElementProtocol {get}
+    var data: DicdataElement {get}
     var prevs: [RegisteredNode] {get set}
     var values: [PValue] {get set}
     var rubyCount: Int {get}
@@ -19,7 +19,7 @@ protocol LatticeNodeProtocol: class {
 
     func getCandidateData() -> [CandidateData]
 
-    init(data: DicDataElementProtocol, romanString: String, rubyCount: Int?)
+    init(data: DicdataElement, romanString: String, rubyCount: Int?)
 
     static var EOSNode: Self {get}
 }
@@ -70,24 +70,24 @@ extension LatticeNodeProtocol {
 /// ラティスのノード。これを用いて計算する。
 final class DirectLatticeNode: LatticeNodeProtocol {
     typealias RegisteredNode = DirectRegisteredNode
-    convenience init(data: DicDataElementProtocol, romanString: String, rubyCount: Int? = nil) {
+    convenience init(data: DicdataElement, romanString: String, rubyCount: Int? = nil) {
         self.init(data: data, rubyCount: rubyCount)
     }
 
-    let data: DicDataElementProtocol
+    let data: DicdataElement
     var prevs: [RegisteredNode] = []
     let rubyCount: Int
     var values: [PValue] = []
 
     static var EOSNode: DirectLatticeNode {
-        return DirectLatticeNode(data: BOSEOSDicDataElement.EOSData)
+        return DirectLatticeNode(data: DicdataElement.EOSData)
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> DirectRegisteredNode {
         return DirectRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
     }
 
-    init(data: DicDataElementProtocol, rubyCount: Int? = nil) {
+    init(data: DicdataElement, rubyCount: Int? = nil) {
         self.data = data
         self.values = [data.value()]
         if let rubyCount = rubyCount {
@@ -102,17 +102,17 @@ final class DirectLatticeNode: LatticeNodeProtocol {
 final class RomanLatticeNode: LatticeNodeProtocol {
     typealias RegisteredNode = RomanRegisteredNode
 
-    let data: DicDataElementProtocol
+    let data: DicdataElement
     var prevs: [RegisteredNode] = []
     var values: [PValue] = []
     let romanString: String
     let rubyCount: Int
 
     static var EOSNode: RomanLatticeNode {
-        return RomanLatticeNode(data: BOSEOSDicDataElement.EOSData, romanString: "")
+        return RomanLatticeNode(data: DicdataElement.EOSData, romanString: "")
     }
 
-    init(data: DicDataElementProtocol, romanString: String, rubyCount: Int? = nil) {
+    init(data: DicdataElement, romanString: String, rubyCount: Int? = nil) {
         self.data = data
         self.values = [data.value()]
         self.romanString = romanString
