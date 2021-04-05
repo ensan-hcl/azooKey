@@ -78,13 +78,13 @@ extension RegisteredNodeProtocol {
             return lastcandidate
         }
 
-        if lastClause.text.isEmpty || !DicDataStore.isClause(prev.data.rcid, self.data.lcid) {
+        if lastClause.text.isEmpty || !DicdataStore.isClause(prev.data.rcid, self.data.lcid) {
             // 文節ではないので、最後に追加する。
             lastClause.text.append(self.data.word)
             lastClause.ruby.append(self.ruby)
             lastClause.rubyCount += self.rubyCount
             // 最初だった場合を想定している
-            if (lastClause.mid == 500 && self.data.mid != 500) || DicDataStore.includeMMValueCalculation(self.data) {
+            if (lastClause.mid == 500 && self.data.mid != 500) || DicdataStore.includeMMValueCalculation(self.data) {
                 lastClause.mid = self.data.mid
             }
             lastcandidate.clauses[lastcandidate.clauses.count-1].value = self.totalValue
@@ -97,7 +97,7 @@ extension RegisteredNodeProtocol {
             unit.text = self.data.word
             unit.ruby = self.ruby
             unit.rubyCount = self.rubyCount
-            if DicDataStore.includeMMValueCalculation(self.data) {
+            if DicdataStore.includeMMValueCalculation(self.data) {
                 unit.mid = self.data.mid
             }
             // 前の文節の処理

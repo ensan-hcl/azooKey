@@ -22,9 +22,9 @@ final class Store {
     func settingCheck() {
         SettingData.shared.reload()
         if SettingData.checkResetSetting() {
-            self.action.sendToDicDataStore(.resetMemory)
+            self.action.sendToDicdataStore(.resetMemory)
         }
-        self.action.sendToDicDataStore(.notifyLearningType(SettingData.shared.learningType))
+        self.action.sendToDicdataStore(.notifyLearningType(SettingData.shared.learningType))
     }
 
     /// Call this method after initialize
@@ -75,14 +75,14 @@ final class KeyboardActionDepartment: ActionDepartment {
     }
 
     fileprivate func appearedAgain() {
-        self.sendToDicDataStore(.reloadUserDict)
+        self.sendToDicdataStore(.reloadUserDict)
     }
 
     func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
         self.inputManager.setTextDocumentProxy(proxy)
     }
 
-    enum DicDataStoreNotification {
+    enum DicdataStoreNotification {
         case notifyLearningType(LearningType)
         case importOSUserDict(OSUserDict)
         case notifyAppearAgain
@@ -91,8 +91,8 @@ final class KeyboardActionDepartment: ActionDepartment {
         case resetMemory
     }
 
-    func sendToDicDataStore(_ data: DicDataStoreNotification) {
-        self.inputManager.sendToDicDataStore(data)
+    func sendToDicdataStore(_ data: DicdataStoreNotification) {
+        self.inputManager.sendToDicdataStore(data)
     }
 
     func setDelegateViewController(_ controller: KeyboardViewController) {
@@ -401,7 +401,7 @@ final class KeyboardActionDepartment: ActionDepartment {
 
     private func hideLearningMemory() {
         SettingData.shared.writeLearningTypeSetting(to: .nothing)
-        self.sendToDicDataStore(.notifyLearningType(.nothing))
+        self.sendToDicdataStore(.notifyLearningType(.nothing))
     }
 
     #if DEBUG
@@ -473,9 +473,9 @@ private final class InputManager {
         }
     }
 
-    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification) {
-        self._romanConverter?.sendToDicDataStore(data)
-        self._directConverter?.sendToDicDataStore(data)
+    func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
+        self._romanConverter?.sendToDicdataStore(data)
+        self._directConverter?.sendToDicdataStore(data)
     }
 
     fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
@@ -561,7 +561,7 @@ private final class InputManager {
 
     fileprivate func closeKeyboard() {
         debug("キーボードを閉じます")
-        self.sendToDicDataStore(.closeKeyboard)
+        self.sendToDicdataStore(.closeKeyboard)
         self._romanConverter = nil
         self._directConverter = nil
         self.clear()

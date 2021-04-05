@@ -215,7 +215,7 @@ private struct RomanKanaConvertingLattice {
             return false
         }
         let katakana = self.components[0].string.roman2katakana
-        return (katakana.count == 1 && !katakana.containsRomanAlphabet && !DicDataStore.existFile(identifier: katakana))
+        return (katakana.count == 1 && !katakana.containsRomanAlphabet && !DicdataStore.existFile(identifier: katakana))
     }
 
     func appending(_ string: String, isFreezed: Bool = false) -> Self {

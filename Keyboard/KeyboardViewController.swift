@@ -75,7 +75,7 @@ final class KeyboardViewController: UIInputViewController {
             self.requestSupplementaryLexicon {[unowned osuserdict] in
                 osuserdict.dict = $0.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.applyingTransform(.hiraganaToKatakana, reverse: false)!, cid: 1288, mid: 501, value: -6)}
             }
-            Store.shared.action.sendToDicDataStore(.importOSUserDict(osuserdict))
+            Store.shared.action.sendToDicdataStore(.importOSUserDict(osuserdict))
         }
 
         Store.shared.appearedAgain()

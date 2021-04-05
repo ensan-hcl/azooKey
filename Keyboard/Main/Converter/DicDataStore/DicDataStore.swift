@@ -1,5 +1,5 @@
 //
-//  DicDataStore.swift
+//  DicdataStore.swift
 //  Keyboard
 //
 //  Created by β α on 2020/09/17.
@@ -9,16 +9,16 @@
 import Foundation
 
 final class OSUserDict {
-    var dict: DicDataStore.DicData = []
+    var dict: DicdataStore.Dicdata = []
 }
 
-final class DicDataStore {
+final class DicdataStore {
     init() {
-        debug("DicDataStoreが初期化されました")
+        debug("DicdataStoreが初期化されました")
         self.setup()
     }
 
-    typealias DicData = [DicdataElement]
+    typealias Dicdata = [DicdataElement]
     private var ccParsed: Set<Int> = []
     private var ccLines: [[Int: PValue]] = []
     private var mmValue: [PValue] = []
@@ -28,7 +28,7 @@ final class DicDataStore {
     private var importedLoudses: Set<String> = []
     private var charsID: [Character: UInt8] = [:]
     private var memory: LearningMemorys = LearningMemorys()
-    private var zeroHintPredictionDicData: DicData?
+    private var zeroHintPredictionDicdata: Dicdata?
 
     private var osUserDict = OSUserDict()
 
@@ -70,7 +70,7 @@ final class DicDataStore {
         self.loadLOUDS(identifier: "user")
     }
 
-    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification) {
+    func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
         switch data {
         case .notifyAppearAgain:
             break
@@ -161,7 +161,7 @@ final class DicDataStore {
         return louds.prefixNodeIndices(chars: key.map {self.charsID[$0, default: .max]}, maxDepth: depth)
     }
 
-    private func getDicData(identifier: String, indices: Set<Int>) -> [DicdataElement] {
+    private func getDicdata(identifier: String, indices: Set<Int>) -> [DicdataElement] {
         // split = 2048
         let dict = [Int: [Int]].init(grouping: indices, by: {$0 >> 11})
         let data: [[Substring]] = dict.flatMap {(dictKeyValue) -> [[Substring]] in
@@ -169,7 +169,7 @@ final class DicDataStore {
             let strings = datablock.flatMap {$0.split(separator: ",", omittingEmptySubsequences: false)}
             return strings.map {$0.split(separator: "\t", omittingEmptySubsequences: false)}
         }
-        return data.filter {$0.count > 5}.map {self.convertDicData(from: $0)}
+        return data.filter {$0.count > 5}.map {self.convertDicdata(from: $0)}
     }
 
     /// kana2latticeから参照する。
@@ -181,9 +181,9 @@ final class DicDataStore {
         conversionBenchmark.start(process: .辞書読み込み_軽量データ読み込み)
         let toIndex = min(inputData.count, index + self.maxlength)
         let segments = (index ..< toIndex).map {inputData[index...$0]}
-        let wisedicdata: DicData = (index ..< toIndex).flatMap {self.getWiseDicData(head: segments[$0-index], allowRomanLetter: $0+1 == toIndex)}
-        let memorydicdata: DicData = (index ..< toIndex).flatMap {self.getMatch(segments[$0-index])}
-        let osuserdictdicdata: DicData = (index ..< toIndex).flatMap {self.getMatchOSUserDict(segments[$0-index])}
+        let wisedicdata: Dicdata = (index ..< toIndex).flatMap {self.getWiseDicdata(head: segments[$0-index], allowRomanLetter: $0+1 == toIndex)}
+        let memorydicdata: Dicdata = (index ..< toIndex).flatMap {self.getMatch(segments[$0-index])}
+        let osuserdictdicdata: Dicdata = (index ..< toIndex).flatMap {self.getMatchOSUserDict(segments[$0-index])}
         conversionBenchmark.end(process: .辞書読み込み_軽量データ読み込み)
         conversionBenchmark.start(process: .辞書読み込み_誤り訂正候補列挙)
         var string2segment = [String: Int].init()
@@ -224,8 +224,8 @@ final class DicDataStore {
         conversionBenchmark.end(process: .辞書読み込み_検索)
 
         conversionBenchmark.start(process: .辞書読み込み_辞書データ生成)
-        let dicdata: DicData = (indices + [("user", userDictIndices)]).flatMap {(identifier, value) -> DicData in
-            let result: DicData = self.getDicData(identifier: identifier, indices: value).compactMap {(data: DicData.Element) in
+        let dicdata: Dicdata = (indices + [("user", userDictIndices)]).flatMap {(identifier, value) -> Dicdata in
+            let result: Dicdata = self.getDicdata(identifier: identifier, indices: value).compactMap {(data: Dicdata.Element) in
                 let penalty = string2penalty[data.ruby, default: .zero]
                 if penalty.isZero {
                     return data
@@ -240,7 +240,7 @@ final class DicDataStore {
             }
             return result
         }
-        var totaldicdata: DicData = []
+        var totaldicdata: Dicdata = []
         totaldicdata.append(contentsOf: dicdata)
         totaldicdata.append(contentsOf: wisedicdata)
         totaldicdata.append(contentsOf: memorydicdata)
@@ -275,9 +275,9 @@ final class DicDataStore {
         conversionBenchmark.start(process: .辞書読み込み_全体)
         conversionBenchmark.start(process: .辞書読み込み_軽量データ読み込み)
         let segment = inputData[fromIndex...toIndex]
-        let wisedicdata: DicData = self.getWiseDicData(head: segment, allowRomanLetter: toIndex == inputData.count - 1)
-        let memorydicdata: DicData = self.getMatch(segment)
-        let osuserdictdicdata: DicData = self.getMatchOSUserDict(segment)
+        let wisedicdata: Dicdata = self.getWiseDicdata(head: segment, allowRomanLetter: toIndex == inputData.count - 1)
+        let memorydicdata: Dicdata = self.getMatch(segment)
+        let osuserdictdicdata: Dicdata = self.getMatchOSUserDict(segment)
 
         conversionBenchmark.end(process: .辞書読み込み_軽量データ読み込み)
         conversionBenchmark.start(process: .辞書読み込み_誤り訂正候補列挙)
@@ -299,8 +299,8 @@ final class DicDataStore {
         conversionBenchmark.end(process: .辞書読み込み_検索)
 
         conversionBenchmark.start(process: .辞書読み込み_辞書データ生成)
-        let dicdata: DicData = (indices + [("user", userDictIndices)]).flatMap {(identifier, value) -> DicData in
-            let result: DicData = self.getDicData(identifier: identifier, indices: value).compactMap {(data: DicData.Element) in
+        let dicdata: Dicdata = (indices + [("user", userDictIndices)]).flatMap {(identifier, value) -> Dicdata in
+            let result: Dicdata = self.getDicdata(identifier: identifier, indices: value).compactMap {(data: Dicdata.Element) in
                 let penalty = string2penalty[data.ruby, default: .zero]
                 if penalty.isZero {
                     return data
@@ -316,7 +316,7 @@ final class DicDataStore {
             return result
         }
 
-        var totaldicdata: DicData = []
+        var totaldicdata: Dicdata = []
         totaldicdata.append(contentsOf: dicdata)
         totaldicdata.append(contentsOf: wisedicdata)
         totaldicdata.append(contentsOf: memorydicdata)
@@ -340,20 +340,20 @@ final class DicDataStore {
         }
     }
 
-    internal func getZeroHintPredictionDicData() -> DicData {
-        if let dicdata = self.zeroHintPredictionDicData {
+    internal func getZeroHintPredictionDicdata() -> Dicdata {
+        if let dicdata = self.zeroHintPredictionDicdata {
             return dicdata
         }
         do {
             let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/p_null.csv", encoding: String.Encoding.utf8)
             let csvLines = csvString.split(separator: "\n")
             let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
-            let dicdata: DicData = csvData.map {convertDicData(from: $0)}
-            self.zeroHintPredictionDicData = dicdata
+            let dicdata: Dicdata = csvData.map {convertDicdata(from: $0)}
+            self.zeroHintPredictionDicdata = dicdata
             return dicdata
         } catch {
             debug(error)
-            self.zeroHintPredictionDicData = []
+            self.zeroHintPredictionDicdata = []
             return []
         }
     }
@@ -363,7 +363,7 @@ final class DicDataStore {
     ///   - head: 辞書を引く文字列
     /// - Returns:
     ///   発見されたデータのリスト。
-    internal func getPredictionLOUDSDicData<S: StringProtocol>(head: S) -> DicData {
+    internal func getPredictionLOUDSDicdata<S: StringProtocol>(head: S) -> Dicdata {
         let count = head.count
         if count == .zero {
             return []
@@ -373,7 +373,7 @@ final class DicDataStore {
                 let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/p_\(head).csv", encoding: String.Encoding.utf8)
                 let csvLines = csvString.split(separator: "\n")
                 let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
-                let dicdata: DicData = csvData.map {self.convertDicData(from: $0)}
+                let dicdata: Dicdata = csvData.map {self.convertDicdata(from: $0)}
                 return dicdata
             } catch {
                 debug("ファイルが存在しません: \(error)")
@@ -384,15 +384,15 @@ final class DicDataStore {
             // 最大700件に絞ることによって低速化を回避する。
             // FIXME: 場当たり的な対処。改善が求められる。
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head), depth: 5).prefix(700)
-            return self.getDicData(identifier: first, indices: Set(prefixIndices))
+            return self.getDicdata(identifier: first, indices: Set(prefixIndices))
         } else {
             let first = String(head.first!)
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head)).prefix(700)
-            return self.getDicData(identifier: first, indices: Set(prefixIndices))
+            return self.getDicdata(identifier: first, indices: Set(prefixIndices))
         }
     }
 
-    private func convertDicData<S: StringProtocol>(from dataString: [S]) -> DicdataElement {
+    private func convertDicdata<S: StringProtocol>(from dataString: [S]) -> DicdataElement {
         let ruby = String(dataString[0])
         let word = dataString[1].isEmpty ? ruby:String(dataString[1])
         let lcid = Int(dataString[2]) ?? .zero
@@ -405,9 +405,9 @@ final class DicDataStore {
     }
 
     /// 補足的な辞書情報を得る。
-    private func getWiseDicData(head: String, allowRomanLetter: Bool) -> DicData {
-        var result: DicData = []
-        result.append(contentsOf: self.getJapaneseNumberDicData(head: head))
+    private func getWiseDicdata(head: String, allowRomanLetter: Bool) -> Dicdata {
+        var result: Dicdata = []
+        result.append(contentsOf: self.getJapaneseNumberDicdata(head: head))
         if let number = Float(head) {
             result.append(DicdataElement(ruby: head, cid: 1295, mid: 361, value: -14))
             if number.truncatingRemainder(dividingBy: 1) == 0 {
@@ -460,17 +460,17 @@ final class DicDataStore {
     }
 
     /// OSのユーザ辞書からrubyに等しい語を返す。
-    private func getMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> DicData {
+    private func getMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> Dicdata {
         return self.osUserDict.dict.filter {$0.ruby == ruby}
     }
 
     /// OSのユーザ辞書からrubyに先頭一致する語を返す。
-    internal func getPrefixMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> DicData {
+    internal func getPrefixMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> Dicdata {
         return self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
     }
 
     /// rubyに等しい語を返す。
-    private func getMatch<S: StringProtocol>(_ ruby: S) -> DicData {
+    private func getMatch<S: StringProtocol>(_ ruby: S) -> Dicdata {
         return self.memory.match(ruby)
     }
     /// rubyに等しい語の回数を返す。
@@ -478,8 +478,8 @@ final class DicDataStore {
         return self.memory.getSingle(data)
     }
     /// rubyを先頭にもつ語を返す。
-    internal func getPrefixMemory<S: StringProtocol>(_ prefix: S) -> DicData {
-        return self.memory.getPrefixDicData(prefix)
+    internal func getPrefixMemory<S: StringProtocol>(_ prefix: S) -> Dicdata {
+        return self.memory.getPrefixDicdata(prefix)
     }
     /// 二つの語の並び回数を返す。
     internal func getMatch(_ previous: DicdataElement, next: DicdataElement) -> Int {

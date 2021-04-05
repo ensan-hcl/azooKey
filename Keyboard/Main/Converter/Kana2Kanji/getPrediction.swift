@@ -55,20 +55,20 @@ extension Kana2Kanji {
         conversionBenchmark.end(process: .結果の処理_予測変換_日本語_雑多なデータ取得)
 
         conversionBenchmark.start(process: .結果の処理_予測変換_日本語_Dicdataの読み込み)
-        let dicdata: DicDataStore.DicData
+        let dicdata: DicdataStore.Dicdata
         switch VariableStates.shared.inputStyle {
         case .direct:
-            dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: lastRuby)
+            dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: lastRuby)
         case .roman2kana:
             let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
             let roman: Substring = lastRuby.suffix(lastRuby.count - ruby.count)
             if !roman.isEmpty {
                 let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
-                let possibleNexts: [Substring] = DicDataStore.possibleNexts[String(roman), default: []].map {ruby + $0}
-                let _dicdata: DicDataStore.DicData = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
+                let possibleNexts: [Substring] = DicdataStore.possibleNexts[String(roman), default: []].map {ruby + $0}
+                let _dicdata: DicdataStore.Dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: ruby)
                 dicdata = _dicdata.filter {data in !possibleNexts.allSatisfy {!$0.hasPrefix(data.ruby)}}
             } else {
-                dicdata = self.dicdataStore.getPredictionLOUDSDicData(head: ruby)
+                dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: ruby)
             }
         }
         conversionBenchmark.end(process: .結果の処理_予測変換_日本語_Dicdataの読み込み)
@@ -77,7 +77,7 @@ extension Kana2Kanji {
 
         result.reserveCapacity(N_best &+ 1)
         (dicdata + memory + osuserdict).forEach {(data: DicdataElement) in
-            let includeMMValueCalculation = DicDataStore.includeMMValueCalculation(data)
+            let includeMMValueCalculation = DicdataStore.includeMMValueCalculation(data)
             let mmValue: PValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
             let ccValue: PValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)
             let penalty: PValue = -PValue(data.ruby.count &- lastRuby.count) * 3.0   // 文字数差をペナルティとする

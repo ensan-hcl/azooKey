@@ -2267,7 +2267,7 @@
 		1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */; };
 		1A64A8D5257C91500022C081 /* FontSizeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8D4257C91500022C081 /* FontSizeSetting.swift */; };
 		1A64A8E0257C925E0022C081 /* FontSizeSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8DF257C925E0022C081 /* FontSizeSettingItemView.swift */; };
-		1A64C8BE251315AD00ACD537 /* DicDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicDataStore.swift */; };
+		1A64C8BE251315AD00ACD537 /* DicdataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicdataStore.swift */; };
 		1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */; };
 		1A65C00B250B800E00F297BF /* LatticeNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */; };
 		1A67360625092C1E003FC654 /* DicdataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67360525092C1E003FC654 /* DicdataElement.swift */; };
@@ -2391,7 +2391,7 @@
 		1AF1CB09252F2278002FCC66 /* extension LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623F42524621F00EF5B02 /* extension LOUDS.swift */; };
 		1AF1CB0F252F227C002FCC66 /* extension UInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623EE252461A800EF5B02 /* extension UInt.swift */; };
 		1AF1CB15252F22A7002FCC66 /* all.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8401250F65110093A701 /* all.swift */; };
-		1AF1CB1B252F22AB002FCC66 /* DicDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicDataStore.swift */; };
+		1AF1CB1B252F22AB002FCC66 /* DicdataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicdataStore.swift */; };
 		1AF1CB21252F22EB002FCC66 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2062500D4FF002CAA93 /* Store.swift */; };
 		1AF1CB38253011E8002FCC66 /* Combinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1CB37253011E8002FCC66 /* Combinations.swift */; };
 		1AF1D0D62530B666002FCC66 /* TextFileLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1D0D52530B665002FCC66 /* TextFileLines.swift */; };
@@ -4780,7 +4780,7 @@
 		1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjuctionBuilder.swift; sourceTree = "<group>"; };
 		1A64A8D4257C91500022C081 /* FontSizeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSizeSetting.swift; sourceTree = "<group>"; };
 		1A64A8DF257C925E0022C081 /* FontSizeSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSizeSettingItemView.swift; sourceTree = "<group>"; };
-		1A64C8BD251315AD00ACD537 /* DicDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicDataStore.swift; sourceTree = "<group>"; };
+		1A64C8BD251315AD00ACD537 /* DicdataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicdataStore.swift; sourceTree = "<group>"; };
 		1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseNumber.swift; sourceTree = "<group>"; };
 		1A65C00A250B800E00F297BF /* LatticeNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatticeNodeProtocol.swift; sourceTree = "<group>"; };
 		1A67360525092C1E003FC654 /* DicdataElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicdataElement.swift; sourceTree = "<group>"; };
@@ -5213,7 +5213,7 @@
 				1A3DC22E2500D6EE002CAA93 /* Dictionary */,
 				1A4623E32524616F00EF5B02 /* LOUDS */,
 				1AE4DB7A25163C5700A24158 /* InputData */,
-				1A64C8C7251372AB00ACD537 /* DicDataStore */,
+				1A64C8C7251372AB00ACD537 /* DicdataStore */,
 				1A8A8400250F64FC0093A701 /* Kana2Kanji */,
 				1A9218E9255238D5005F45C4 /* Converter */,
 				1ADDE8652545D48900E524E1 /* Candidate.swift */,
@@ -7474,15 +7474,15 @@
 			path = FontSizeSetting;
 			sourceTree = "<group>";
 		};
-		1A64C8C7251372AB00ACD537 /* DicDataStore */ = {
+		1A64C8C7251372AB00ACD537 /* DicdataStore */ = {
 			isa = PBXGroup;
 			children = (
-				1A64C8BD251315AD00ACD537 /* DicDataStore.swift */,
+				1A64C8BD251315AD00ACD537 /* DicdataStore.swift */,
 				1A67360525092C1E003FC654 /* DicdataElement.swift */,
 				1A364E3125C8361A00A56583 /* LearningMemory.swift */,
 				1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */,
 			);
-			path = DicDataStore;
+			path = DicdataStore;
 			sourceTree = "<group>";
 		};
 		1A677375256F7ADD0037AF22 /* General */ = {
@@ -10460,7 +10460,7 @@
 				1AA346872567D8CA00B41A16 /* UserSetting.swift in Sources */,
 				1A3DC21F2500D5F2002CAA93 /* FlickEnterKeyModel.swift in Sources */,
 				1A3ACEFA25F9F9AA007E9938 /* ResizingRect.swift in Sources */,
-				1A64C8BE251315AD00ACD537 /* DicDataStore.swift in Sources */,
+				1A64C8BE251315AD00ACD537 /* DicdataStore.swift in Sources */,
 				1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,
 				1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */,
@@ -10532,7 +10532,7 @@
 				1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */,
 				1AF1CB0F252F227C002FCC66 /* extension UInt.swift in Sources */,
 				1AF1CB15252F22A7002FCC66 /* all.swift in Sources */,
-				1AF1CB1B252F22AB002FCC66 /* DicDataStore.swift in Sources */,
+				1AF1CB1B252F22AB002FCC66 /* DicdataStore.swift in Sources */,
 				1AF1CAF4252F2228002FCC66 /* azooKeyKeyboardTests.swift in Sources */,
 				1AF1CB09252F2278002FCC66 /* extension LOUDS.swift in Sources */,
 				1AF1CB03252F2274002FCC66 /* LOUDS.swift in Sources */,

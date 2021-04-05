@@ -14,7 +14,7 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
     typealias RegisteredNode = LatticeNode.RegisteredNode
 
     let ccBonusUnit = 5
-    var dicdataStore = DicDataStore()
+    var dicdataStore = DicdataStore()
 
     /// CandidateDataの状態からCandidateに変更する関数
     /// - parameters:
@@ -52,14 +52,14 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
     /// - note:
     ///   「食べちゃ-てる」「食べちゃ-いる」などの間抜けな候補を返すことが多いため、学習によるもの以外を無効化している。
     func getZeroHintPredictionCandidates<T: Collection>(preparts: T, N_best: Int) -> [Candidate] where T.Element == Candidate {
-        // let dicdata = self.dicdataStore.getZeroHintPredictionDicData()
+        // let dicdata = self.dicdataStore.getZeroHintPredictionDicdata()
         var result: [Candidate] = []
         /*
          result.reserveCapacity(N_best + 1)
          preparts.forEach{candidate in
          dicdata.forEach{data in
          let ccValue = self.dicdataStore.getCCValue(candidate.rcid, data.lcid)
-         let isInposition = DicDataStore.isInposition(data)
+         let isInposition = DicdataStore.isInposition(data)
          let mmValue = isInposition ? self.dicdataStore.getMMValue(candidate.lastMid, data.mid):0.0
          let wValue = data.value()
          let newValue = candidate.value + mmValue + ccValue + wValue
@@ -89,7 +89,7 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
                         return
                     }
                     let ccValue = self.dicdataStore.getCCValue(last.rcid, data.lcid)
-                    let includeMMValueCalculation = DicDataStore.includeMMValueCalculation(data)
+                    let includeMMValueCalculation = DicdataStore.includeMMValueCalculation(data)
                     let mmValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(candidate.lastMid, data.mid):.zero
                     let wValue = data.value()
                     let bonus = PValue(count * 1)

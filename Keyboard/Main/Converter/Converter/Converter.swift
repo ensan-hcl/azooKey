@@ -63,8 +63,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     /// 上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
     /// - Parameters:
     ///   - data: 行うべき操作。
-    func sendToDicDataStore(_ data: KeyboardActionDepartment.DicDataStoreNotification) {
-        self.converter.dicdataStore.sendToDicDataStore(data)
+    func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
+        self.converter.dicdataStore.sendToDicdataStore(data)
     }
     /// 確定操作後、内部状態のキャッシュを変更する関数。
     /// - Parameters:
@@ -423,7 +423,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         // 最初の辞書データ
         let dicCandidates: [Candidate] = result.nodes[0]
-           // .filter {!($0.data is GeneratedDicDataElement)}
+           // .filter {!($0.data is GeneratedDicdataElement)}
             .map {
                 Candidate(
                     text: $0.data.word,

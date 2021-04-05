@@ -55,7 +55,7 @@ struct Candidate: ResultViewItemData {
     let correspondingCount: Int
     /// 最後のmid(予測変換に利用)
     let lastMid: Int
-    /// DicDataElement列
+    /// DicdataElement列
     let data: [DicdataElement]
     /// 変換として選択した際に実行する`action`。
     /// - note: 括弧を入力した際にカーソルを移動するために追加した変数

@@ -8,7 +8,7 @@
 
 import Foundation
 
-private struct DicDataElementCore: Hashable {
+private struct DicdataElementCore: Hashable {
     internal init(data: DicdataElement) {
         self.word = data.word
         self.ruby = data.ruby
@@ -38,7 +38,7 @@ struct LearningMemorys {
     static let memoryFileName = "learningMemory"
     private var values: [LearningMemoryElement]
     private var index2order: [Int]  // index→values内の位置
-    private var core2Index: [DicDataElementCore: Int]
+    private var core2Index: [DicdataElementCore: Int]
 
     private func getMinOrderIndex() -> Int? {
         let pair = self.index2order.enumerated().min(by: {$0.element < $1.element})
@@ -67,7 +67,7 @@ struct LearningMemorys {
         }
     }
 
-    func match<S: StringProtocol>(_ ruby: S) -> DicDataStore.DicData {
+    func match<S: StringProtocol>(_ ruby: S) -> DicdataStore.Dicdata {
         let dicdata = self.values.lazy.filter {$0.data.ruby == ruby}.map {$0.data.adjustedData(Self.matchAdjust(memory: $0))}
         return Array(dicdata)
     }
@@ -79,7 +79,7 @@ struct LearningMemorys {
         return .zero
     }
 
-    func getPrefixDicData<S: StringProtocol>(_ prefix: S) -> DicDataStore.DicData {
+    func getPrefixDicdata<S: StringProtocol>(_ prefix: S) -> DicdataStore.Dicdata {
         let dicdata = self.values.lazy.filter {$0.data.ruby != prefix && $0.data.ruby.hasPrefix(prefix)}.map {$0.data.adjustedData(Self.matchAdjust(memory: $0))}
         return Array(dicdata)
     }
@@ -112,7 +112,7 @@ struct LearningMemorys {
         datalist.indices.forEach {i in
             let _lastIndex = lastIndex
             if i != .zero || lastData == nil {
-                let needMemoryCount = DicDataStore.needWValueMemory(datalist[i])
+                let needMemoryCount = DicdataStore.needWValueMemory(datalist[i])
                 let countDelta = needMemoryCount ? 1:0
                 // すでにデータが存在している場合
                 if let index = core2Index[.init(data: datalist[i])] {

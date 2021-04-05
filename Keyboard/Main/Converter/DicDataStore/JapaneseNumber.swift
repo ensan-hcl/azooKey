@@ -132,7 +132,7 @@ private enum Number {
     }
 }
 
-extension DicDataStore {
+extension DicdataStore {
     private func parseLiteral<S: StringProtocol>(input: S) -> [JapaneseNumber] {
         var chars = input.makeIterator()
         var tokens: [JapaneseNumber] = []
@@ -399,7 +399,7 @@ extension DicDataStore {
 
     }
 
-    func getJapaneseNumberDicData(head: String) -> DicData {
+    func getJapaneseNumberDicdata(head: String) -> Dicdata {
 
         let tokens = parseLiteral(input: head)
 
@@ -438,8 +438,8 @@ extension DicDataStore {
         }
         /*
         return [
-            GeneratedDicDataElement(word: kanji, ruby: head, cid: 1295, mid: 452, value: -17+PValue(head.count)/3),
-            GeneratedDicDataElement(word: roman, ruby: head, cid: 1295, mid: 452, value: -16+4/PValue(roman.count))
+            GeneratedDicdataElement(word: kanji, ruby: head, cid: 1295, mid: 452, value: -17+PValue(head.count)/3),
+            GeneratedDicdataElement(word: roman, ruby: head, cid: 1295, mid: 452, value: -16+4/PValue(roman.count))
         ]
         */
         return [
