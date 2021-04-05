@@ -65,6 +65,10 @@ struct DicdataElement: Equatable {
     var isLRE: Bool {
         return self.lcid == self.rcid
     }
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.ruby == rhs.ruby && lhs.word == rhs.word && lhs.lcid == rhs.lcid && lhs.rcid == rhs.rcid && lhs.mid == rhs.mid
+    }
 }
 
 extension DicdataElement: CustomDebugStringConvertible {
