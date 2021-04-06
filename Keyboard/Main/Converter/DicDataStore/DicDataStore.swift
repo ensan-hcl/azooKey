@@ -506,12 +506,12 @@ final class DicdataStore {
             let defaultValue = ccLines[former][-1, default: -25]
             return ccLines[former][latter, default: defaultValue]
         }
-        let add: PValue = 3
         let url = Bundle.main.bundleURL.appendingPathComponent("\(former).binary")
         let values = loadCCBinary(url: url)
-        ccLines[former] = [Int: PValue].init(uniqueKeysWithValues: values.map {(Int($0.0), PValue($0.1) + add)})
+        ccLines[former] = [Int: PValue].init(uniqueKeysWithValues: values.map {(Int($0.0), PValue($0.1))})
         ccParsed.update(with: former)
-        return ccLines[former][latter, default: -25]
+        let defaultValue = ccLines[former][-1, default: -25]
+        return ccLines[former][latter, default: defaultValue]
     }
 
     /// meaning idから意味連接尤度を得る関数

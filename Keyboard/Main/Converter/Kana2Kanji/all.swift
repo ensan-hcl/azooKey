@@ -48,8 +48,13 @@ extension Kana2Kanji {
                 }
                 // 生起確率を取得する。
                 let wValue: PValue = node.data.value()
-                // valuesを更新する
-                node.values = node.prevs.map {$0.totalValue + wValue}
+                if i == 0 {
+                    // valuesを更新する
+                    node.values = node.prevs.map {$0.totalValue + wValue + self.dicdataStore.getCCValue($0.data.rcid, node.data.lcid)}
+                } else {
+                    // valuesを更新する
+                    node.values = node.prevs.map {$0.totalValue + wValue}
+                }
                 // 変換した文字数
                 let nextIndex: Int = i &+ node.rubyCount
                 // 文字数がcountと等しい場合登録する

@@ -87,8 +87,13 @@ extension Kana2Kanji {
                 }
                 // 生起確率を取得する。
                 let wValue = node.data.value()
-                // valuesを更新する
-                node.values = node.prevs.map {$0.totalValue + wValue}
+                if i == 0{
+                    // valuesを更新する
+                    node.values = node.prevs.map {$0.totalValue + wValue + self.dicdataStore.getCCValue($0.data.rcid, node.data.lcid)}
+                } else {
+                    // valuesを更新する
+                    node.values = node.prevs.map {$0.totalValue + wValue}
+                }
                 // 最後に至るので
                 node.prevs.indices.forEach {
                     let newnode = node.getSqueezedNode($0, value: node.values[$0])

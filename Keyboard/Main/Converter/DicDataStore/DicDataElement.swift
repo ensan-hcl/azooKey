@@ -67,7 +67,7 @@ struct DicdataElement: Equatable {
     }
 
     static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.ruby == rhs.ruby && lhs.word == rhs.word && lhs.lcid == rhs.lcid && lhs.rcid == rhs.rcid && lhs.mid == rhs.mid
+        return lhs.word == rhs.word && lhs.ruby == rhs.ruby && lhs.lcid == rhs.lcid && lhs.mid == rhs.mid && lhs.rcid == rhs.rcid
     }
 }
 
