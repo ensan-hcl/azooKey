@@ -10,6 +10,55 @@ import Foundation
 import SwiftUI
 import PhotosUI
 
+private struct ThemeColorTranslator: Intertranslator {
+    typealias First = ThemeColor
+    typealias Second = Color
+
+    static func convert(_ first: ThemeColor) -> Color {
+        first.color
+    }
+
+    static func convert(_ second: Color) -> ThemeColor {
+        .color(second)
+    }
+}
+
+private struct ThemeSpecialKeyColorTranslator: Intertranslator {
+    typealias First = ThemeColor
+    typealias Second = Color
+
+    static func convert(_ first: ThemeColor) -> Color {
+        ThemeColorTranslator.convert(first)
+    }
+
+    static func convert(_ second: Color) -> ThemeColor {
+        if let keyColor = ColorTools.rgba(second, process: {r, g, b, opacity in
+            return Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
+        }) {
+            return .color(keyColor)
+        }
+        return .color(second)
+    }
+}
+
+private struct ThemeNormalKeyColorTranslator: Intertranslator {
+    typealias First = ThemeColor
+    typealias Second = Color
+
+    static func convert(_ first: ThemeColor) -> Color {
+        ThemeColorTranslator.convert(first)
+    }
+
+    static func convert(_ second: Color) -> ThemeColor {
+        if let keyColor = ColorTools.rgba(second, process: {r, g, b, opacity in
+            return Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
+        }) {
+            return .color(keyColor)
+        }
+        return .color(second)
+    }
+}
+
 struct ThemeEditView: View {
     private let base: ThemeData
     @State private var theme: ThemeData = .base
@@ -27,6 +76,15 @@ struct ThemeEditView: View {
 
     @ObservedObject private var storeVariableSection = Store.variableSection
 
+    @BindingTranslate<ThemeData, ThemeColorTranslator> private var backgroundColor = \.backgroundColor
+    @BindingTranslate<ThemeData, ThemeColorTranslator> private var resultBackgroundColor = \.resultBackgroundColor
+    @BindingTranslate<ThemeData, ThemeColorTranslator> private var resultTextColor = \.resultTextColor
+    @BindingTranslate<ThemeData, ThemeColorTranslator> private var textColor = \.textColor
+    @BindingTranslate<ThemeData, ThemeColorTranslator> private var borderColor = \.borderColor
+
+    @BindingTranslate<ThemeData, ThemeNormalKeyColorTranslator> private var normalKeyFillColor = \.normalKeyFillColor
+    @BindingTranslate<ThemeData, ThemeSpecialKeyColorTranslator> private var specialKeyFillColor = \.specialKeyFillColor
+
     private enum ViewType {
         case editor
         case themeShareView
@@ -34,7 +92,6 @@ struct ThemeEditView: View {
 
     private let title: LocalizedStringKey
 
-    @State private var normalKeyColor = ThemeData.base.normalKeyFillColor.color
     @State private var tab: Tab.ExistentialTab
     private var shareImage = ShareImage()
 
@@ -58,7 +115,6 @@ struct ThemeEditView: View {
                 theme.id = index
                 self._theme = State(initialValue: theme)
                 self.base = theme
-                self._normalKeyColor = State(initialValue: theme.normalKeyFillColor.color)
             } catch {
                 debug(error)
                 self.base = .base
@@ -109,7 +165,7 @@ struct ThemeEditView: View {
                                     Text("\(systemImage: "photo")画像を選ぶ")
                                 }
                             }
-                            GenericColorPicker("背景の色", selection: $theme.backgroundColor, initialValue: base.backgroundColor.color) {.color($0)}
+                            ColorPicker("背景の色", selection: $theme.translated($backgroundColor))
                         }
                     }
                     Section(header: Text("文字")) {
@@ -122,24 +178,15 @@ struct ThemeEditView: View {
                     }
 
                     Section(header: Text("変換候補")) {
-                        GenericColorPicker("変換候補の文字の色", selection: $theme.resultTextColor, initialValue: base.resultTextColor.color) {.color($0)}
-                        GenericColorPicker("変換候補の背景色", selection: $theme.resultBackgroundColor, initialValue: base.resultBackgroundColor.color) {.color($0)}
+                        ColorPicker("変換候補の文字の色", selection: $theme.translated($resultTextColor))
+                        ColorPicker("変換候補の背景色", selection: $theme.translated($resultBackgroundColor))
                     }
 
                     Section(header: Text("キー")) {
-                        GenericColorPicker("キーの文字の色", selection: $theme.textColor, initialValue: base.textColor.color) {.color($0)}
-
-                        ColorPicker("通常キーの背景色", selection: $normalKeyColor)
-                        GenericColorPicker("特殊キーの背景色", selection: $theme.specialKeyFillColor, initialValue: base.specialKeyFillColor.color) {value in
-                            if let specialKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
-                                return Color(red: r, green: g, blue: b, opacity: max(0.005, opacity))
-                            }) {
-                                return .color(specialKeyColor)
-                            }
-                            return .color(value)
-                        }
-
-                        GenericColorPicker("枠線の色", selection: $theme.borderColor, initialValue: base.borderColor.color) {.color($0)}
+                        ColorPicker("キーの文字の色", selection: $theme.translated($textColor))
+                        ColorPicker("通常キーの背景色", selection: $theme.translated($normalKeyFillColor))
+                        ColorPicker("特殊キーの背景色", selection: $theme.translated($specialKeyFillColor))
+                        ColorPicker("枠線の色", selection: $theme.translated($borderColor))
                         HStack {
                             Text("枠線の太さ")
                             Slider(value: $theme.borderWidth, in: 0...10)
@@ -150,7 +197,6 @@ struct ThemeEditView: View {
                         Button {
                             self.pickedImage = nil
                             self.trimmedImage = nil
-                            self.normalKeyColor = self.base.normalKeyFillColor.color
                             self.selectFontRowValue = 4
                             self.theme = self.base
                         } label: {
@@ -191,13 +237,8 @@ struct ThemeEditView: View {
                     self.theme.picture = .none
                 }
             }
-            .onChange(of: normalKeyColor) {value in
-                if let normalKeyColor = ColorTools.rgba(value, process: {r, g, b, opacity in
-                    return Color(red: r, green: g, blue: b, opacity: max(0.001, opacity))
-                }) {
-                    self.theme.normalKeyFillColor = .color(normalKeyColor)
-                }
-                if let pushedKeyColor = ColorTools.hsv(value, process: {h, s, v, opacity in
+            .onChange(of: theme.normalKeyFillColor) {value in
+                if let pushedKeyColor = ColorTools.hsv(value.color, process: {h, s, v, opacity in
                     let base = (floor(v - 0.5) + 0.5) * 2
                     return Color(hue: h, saturation: s, brightness: v - base * 0.1, opacity: max(0.05, sqrt(opacity)))
                 }) {
