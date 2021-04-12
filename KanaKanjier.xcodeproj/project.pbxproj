@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A0E8D5B25EC940C00A9BAE5 /* GenericColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D5A25EC940C00A9BAE5 /* GenericColorPicker.swift */; };
 		1A0E8D6825EDD74000A9BAE5 /* DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */; };
 		1A0E8D7F25EF273600A9BAE5 /* CodableDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D7E25EF273600A9BAE5 /* CodableDictionary.swift */; };
 		1A0E8D8825EFC04D00A9BAE5 /* CodableDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D7E25EF273600A9BAE5 /* CodableDictionary.swift */; };
@@ -4965,7 +4964,6 @@
 			isa = PBXGroup;
 			children = (
 				1AE1023525D0C99200CA7277 /* PhotoPicker.swift */,
-				1A0E8D5A25EC940C00A9BAE5 /* GenericColorPicker.swift */,
 				1A10D81425E506710095CB67 /* DocumentPicker.swift */,
 				1A18424225DD6857003985AB /* FontPicker.swift */,
 			);
@@ -7826,6 +7824,7 @@
 			children = (
 				1A3DC20F2500D571002CAA93 /* HorizontalKeyboardView.swift */,
 				1A4E1F5B2615CADA009B6EB7 /* KeyFlickSettingItemView.swift */,
+				1A0E8D5A25EC940C00A9BAE5 /* GenericColorPicker.swift */,
 				1A6736072509F39E003FC654 /* VerbConjugation.swift */,
 			);
 			path = deprecated;
@@ -10233,7 +10232,6 @@
 				1AC031642512138F004CA505 /* SettingItemProtocol.swift in Sources */,
 				1AF6798125CEDBA400F3987B /* FlickKeyboardView.swift in Sources */,
 				1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */,
-				1A0E8D5B25EC940C00A9BAE5 /* GenericColorPicker.swift in Sources */,
 				1AB8C3D825E256EE00D39BC5 /* EditingTabBarView.swift in Sources */,
 				1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */,
 				1A18425D25DE6678003985AB /* CustomKeyboard.swift in Sources */,

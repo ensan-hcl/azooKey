@@ -9,9 +9,15 @@
 import SwiftUI
 
 struct FontPicker: UIViewControllerRepresentable {
-    let configuration: UIFontPickerViewController.Configuration
-    @Binding var pickerResult: Font
-    @Binding var isPresented: Bool
+    init(configuration: UIFontPickerViewController.Configuration, pickerResult: Binding<Font>, isPresented: Binding<Bool>) {
+        self.configuration = configuration
+        self._pickerResult = pickerResult
+        self._isPresented = isPresented
+    }
+
+    private let configuration: UIFontPickerViewController.Configuration
+    @Binding private var pickerResult: Font
+    @Binding private var isPresented: Bool
 
     func makeUIViewController(context: Context) -> UIFontPickerViewController {
         let controller = UIFontPickerViewController(configuration: configuration)
@@ -48,9 +54,9 @@ struct FontPicker: UIViewControllerRepresentable {
 
 struct FontPickView: View {
     @State private var isFontPickerPresented = false
-    @State var selectedFont: Font = .body
+    @State private var selectedFont: Font = .body
 
-    var fontPickerConfig: UIFontPickerViewController.Configuration {
+    private var fontPickerConfig: UIFontPickerViewController.Configuration {
         let config = UIFontPickerViewController.Configuration()
         config.displayUsingSystemFont = false
         config.includeFaces = true

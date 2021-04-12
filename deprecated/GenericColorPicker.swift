@@ -1,3 +1,4 @@
+/*
 //
 //  GenericColorPicker.swift
 //  KanaKanjier
@@ -37,3 +38,4 @@ struct GenericColorPicker<T>: View {
     }
 
 }
+*/
