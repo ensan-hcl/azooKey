@@ -9,6 +9,24 @@
 import Foundation
 import SwiftUI
 
+private struct OptionalTranslator: Intertranslator {
+    typealias First = KeyboardLanguage?
+    typealias Second = KeyboardLanguage
+
+    static func convert(_ first: First) -> Second {
+        return first ?? .none
+    }
+
+    static func convert(_ second: KeyboardLanguage) -> KeyboardLanguage? {
+        switch second {
+        case .none:
+            return nil
+        default:
+            return second
+        }
+    }
+}
+
 struct PreferredLanguageSettingView: View {
     typealias ItemViewModel = SettingItemViewModel<PreferredLanguage>
     typealias ItemModel = SettingItem<PreferredLanguage>
@@ -16,28 +34,21 @@ struct PreferredLanguageSettingView: View {
     init(_ viewModel: ItemViewModel) {
         self.item = viewModel.item
         self.viewModel = viewModel
-        self._secondLanguage = State(initialValue: viewModel.value.second ?? .none)
     }
-    let item: ItemModel
+
+    private let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
-    @State private var secondLanguage: KeyboardLanguage    // 選択値と連携するプロパティ
+    @BindingTranslate<PreferredLanguage, OptionalTranslator> private var second = \.second
 
     var body: some View {
         Picker(selection: $viewModel.value.first, label: Text("第1言語")) {
             Text("日本語").tag(KeyboardLanguage.ja_JP)
             Text("英語").tag(KeyboardLanguage.en_US)
         }
-        Picker(selection: $secondLanguage, label: Text("第2言語")) {
+        Picker(selection: $viewModel.value.translated($second), label: Text("第2言語")) {
             Text("日本語").tag(KeyboardLanguage.ja_JP)
             Text("英語").tag(KeyboardLanguage.en_US)
             Text("指定しない").tag(KeyboardLanguage.none)
-        }
-        .onChange(of: secondLanguage) { value in
-            if value == .none {
-                viewModel.value.second = nil
-            } else {
-                viewModel.value.second = value
-            }
         }
     }
 }
