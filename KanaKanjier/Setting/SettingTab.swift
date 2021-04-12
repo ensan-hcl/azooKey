@@ -11,7 +11,6 @@ import StoreKit
 
 struct SettingTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
-    @State private var text = ""
 
     var body: some View {
         NavigationView {
@@ -54,23 +53,6 @@ struct SettingTabView: View {
                 Section(header: Text("サウンド")) {
                     BooleanSettingItemView(Store.shared.enableSoundSetting)
                 }
-                /*
-                 Section(header: Text("言語")){
-                 HStack{
-                 Text("使用言語の設定")
-                 Spacer()
-                 Picker(selection: $text, label: Text("")) {
-                 Text("日本語のみ").tag("ja")
-                 Text("英語のみ").tag("en")
-                 Text("日本語・英語").tag("ja_en")
-                 }
-                 .labelsHidden()
-                 .pickerStyle(WheelPickerStyle())
-                 .frame(width: 150, height: 70)
-                 .clipped()
-                 }
-                 }
-                 */
                 Section(header: Text("表示")) {
                     FontSizeSettingItemView(Store.shared.keyViewFontSizeSetting, .key, availableValues: [
                         -1,

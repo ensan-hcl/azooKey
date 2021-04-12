@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct CandidateMock: ResultViewItemData {
+private struct CandidateMock: ResultViewItemData {
     let inputable: Bool = true
     var text: String
 }

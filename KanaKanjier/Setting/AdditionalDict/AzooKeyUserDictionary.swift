@@ -9,7 +9,7 @@
 import SwiftUI
 import Foundation
 
-final class UserDictManagerVariables: ObservableObject {
+private final class UserDictManagerVariables: ObservableObject {
     @Published var items: [UserDictionaryData] = [
         UserDictionaryData(ruby: "あずき", word: "azooKey", isVerb: false, isPersonName: true, isPlaceName: false, id: 0)
     ]
@@ -59,7 +59,7 @@ struct AzooKeyUserDictionaryView: View {
     }
 }
 
-struct UserDictionaryDataListView: View {
+private struct UserDictionaryDataListView: View {
     private let exceptionKey = "その他"
 
     @ObservedObject private var variables: UserDictManagerVariables
@@ -148,7 +148,7 @@ struct UserDictionaryDataListView: View {
 
 }
 
-struct UserDictionaryDataSettingView: View {
+private struct UserDictionaryDataSettingView: View {
     @ObservedObject private var item: EditableUserDictionaryData
     @ObservedObject private var variables: UserDictManagerVariables
     private let cancelable: Bool
@@ -258,12 +258,12 @@ struct UserDictionaryDataSettingView: View {
         }
     }
 
-    enum HighlightType {
+    private enum HighlightType {
         case normal
         case background
     }
 
-    func highlight<S: StringProtocol>(_ text: S) -> [(text: String, type: HighlightType)] {
+    private func highlight<S: StringProtocol>(_ text: S) -> [(text: String, type: HighlightType)] {
         if let range = text.range(of: "\\{\\{.*?\\}\\}", options: .regularExpression) {
             let lowerSide = text[text.startIndex ..< range.lowerBound]
             let internalSide = text[range]
@@ -275,7 +275,7 @@ struct UserDictionaryDataSettingView: View {
         }
     }
 
-    func save() {
+    private func save() {
         if item.error == nil {
             if let itemIndex = variables.items.firstIndex(where: {$0.id == self.item.id}) {
                 variables.items[itemIndex] = item.makeStableData()
@@ -293,10 +293,10 @@ struct UserDictionaryDataSettingView: View {
     }
 }
 
-struct HighlightableTextField<Content: View>: View {
-    let title: LocalizedStringKey
+private struct HighlightableTextField<Content: View>: View {
+    private let title: LocalizedStringKey
     @Binding private var text: String
-    let covering: (String) -> Content
+    private let covering: (String) -> Content
 
     init(_ title: LocalizedStringKey, text: Binding<String>, @ViewBuilder covering: @escaping (String) -> Content) {
         self.title = title

@@ -14,6 +14,14 @@ public protocol Intertranslator {
 
     static func convert(_ first: First) -> Second
     static func convert(_ second: Second) -> First
+
+    static func convert(_ second: Second, current: First?) -> First
+}
+
+extension Intertranslator {
+    static func convert(_ second: Second, current: First?) -> First {
+        return Self.convert(second)
+    }
 }
 
 @propertyWrapper
@@ -37,7 +45,7 @@ private class ReferenceStorage<T>{
 }
 
 @propertyWrapper
-public struct OtherPrioirMixir<T, Translator: Intertranslator> {
+public struct BindingStorageTranslate<T, Translator: Intertranslator> {
     public var wrappedValue: WritableKeyPath<T, Translator.Second>
     fileprivate var storage: ReferenceStorage<Translator.First?> = .init(nil)
 
@@ -61,13 +69,13 @@ public extension Binding {
         })
     }
 
-    func translated<Translator: Intertranslator>(_ storage: OtherPrioirMixir<Value, Translator>) -> Binding<Translator.First> {
+    func translated<Translator: Intertranslator>(_ storage: BindingStorageTranslate<Value, Translator>) -> Binding<Translator.First> {
         Binding<Translator.First>(get: {
             if let value = storage.storage.value{
                 return value
             }
             let subValue = self.wrappedValue[keyPath: storage.wrappedValue]
-            let mainValue = Translator.convert(subValue)
+            let mainValue = Translator.convert(subValue, current: storage.storage.value)
             storage.storage.value = mainValue
             return mainValue
         }, set: {newValue in

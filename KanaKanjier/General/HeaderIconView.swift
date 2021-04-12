@@ -16,7 +16,7 @@ struct HeaderIconView: View {
         case large
     }
 
-    let size: Size
+    private let size: Size
 
     init(size: Size = .normal) {
         self.size = size

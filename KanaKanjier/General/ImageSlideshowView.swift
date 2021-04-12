@@ -11,7 +11,7 @@ import SwiftUI
 struct ImageSlideshowView: View {
     @State private var selection = 0
     private let timer = Timer.publish(every: 2.5, on: .main, in: .common).autoconnect()
-    let pictures: [String]
+    private let pictures: [String]
     init(pictures: [String]) {
         self.pictures = pictures
     }
@@ -35,7 +35,7 @@ struct ImageSlideshowView: View {
         }
     }
 
-    func update() {
+    private func update() {
         self.selection = (selection + 1) % pictures.count
     }
 }
