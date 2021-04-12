@@ -59,13 +59,25 @@ private struct ThemeNormalKeyColorTranslator: Intertranslator {
     }
 }
 
+private struct ThemeFontDoubleTranslator: Intertranslator {
+    typealias First = ThemeFontWeight
+    typealias Second = Double
+
+    static func convert(_ first: First) -> Second {
+        return Double(first.rawValue)
+    }
+
+    static func convert(_ second: Second) -> First {
+        return ThemeFontWeight.init(rawValue: Int(second)) ?? .regular
+    }
+}
+
 struct ThemeEditView: View {
     private let base: ThemeData
     @State private var theme: ThemeData = .base
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
-    @State private var selectFontRowValue: Double = 4
     @Binding private var manager: ThemeIndexManager
 
     @State private var trimmedImage: UIImage?
@@ -84,6 +96,8 @@ struct ThemeEditView: View {
 
     @BindingTranslate<ThemeData, ThemeNormalKeyColorTranslator> private var normalKeyFillColor = \.normalKeyFillColor
     @BindingTranslate<ThemeData, ThemeSpecialKeyColorTranslator> private var specialKeyFillColor = \.specialKeyFillColor
+
+    @BindingTranslate<ThemeData, ThemeFontDoubleTranslator> private var textFont = \.textFont
 
     private enum ViewType {
         case editor
@@ -171,9 +185,7 @@ struct ThemeEditView: View {
                     Section(header: Text("文字")) {
                         HStack {
                             Text("文字の太さ")
-                            Slider(value: $selectFontRowValue, in: 1...9.9) {_ in
-                                theme.textFont = ThemeFontWeight.init(rawValue: Int(selectFontRowValue)) ?? .regular
-                            }
+                            Slider(value: $theme.translated($textFont), in: 1...9.9)
                         }
                     }
 
@@ -197,7 +209,6 @@ struct ThemeEditView: View {
                         Button {
                             self.pickedImage = nil
                             self.trimmedImage = nil
-                            self.selectFontRowValue = 4
                             self.theme = self.base
                         } label: {
                             Text("リセットする")
