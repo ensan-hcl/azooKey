@@ -9,104 +9,123 @@
 import Foundation
 import SwiftUI
 
-enum AdditionalDict: String {
-    case emoji
-    case kaomoji
+struct AdditionalSystemDictManager: OnOffSettingSet {
+    var state: [Target: Bool]
 
-    var dictFileIdentifiers: [String] {
-        switch self {
-        case .emoji:
-            if #available(iOS 14.5, *) {
-                return ["emoji...12_dict.tsv", "emoji13_dict.tsv", "emji13.1_dict.tsv"]
-            } else if #available(iOS 14.2, *) {
-                return ["emoji...12_dict.tsv", "emoji13_dict.tsv"]
-            } else {
-                return ["emoji...12_dict.tsv"]
+    init(dataList: [String]) {
+        self.state = Target.allCases.reduce(into: [:]) {dict, target in
+            dict[target] = dataList.contains(target.rawValue)
+        }
+    }
+
+    enum Target: String, CaseIterable {
+        case emoji
+        case kaomoji
+
+        var dictFileIdentifiers: [String] {
+            switch self {
+            case .emoji:
+                var targets = ["emoji...12_dict.tsv"]
+                if #available(iOS 14.2, *) {
+                    targets.append("emoji13_dict.tsv")
+                }
+                if #available(iOS 14.5, *) {
+                    targets.append("emji13.1_dict.tsv")
+                }
+                return targets
+            case .kaomoji:
+                return ["kaomoji_dict.tsv"]
             }
-        case .kaomoji:
-            return ["kaomoji_dict.tsv"]
+        }
+    }
+}
+struct AdditionalDictBlockManager: OnOffSettingSet {
+    var state: [Target: Bool]
+
+    init(dataList: [String]) {
+        self.state = Target.allCases.reduce(into: [:]) {dict, target in
+            dict[target] = dataList.contains(target.rawValue)
+        }
+    }
+
+    enum Target: String, CaseIterable {
+        case gokiburi
+        case spiders
+
+        var characters: [String] {
+            switch self {
+            case .gokiburi:
+                return ["\u{1FAB3}"]
+            case .spiders:
+                return ["🕸", "🕷"]
+            }
+        }
+    }
+
+    subscript(_ key: Target) -> Bool {
+        get {
+            return state[key, default: false]
+        }
+        set {
+            state[key] = newValue
         }
     }
 }
 
-enum AdditionalDictBlockTarget: String {
-    case gokiburi
-    case spiders
+protocol OnOffSettingSet {
+    associatedtype Target: Hashable, CaseIterable, RawRepresentable where Target.RawValue == String
+    var state: [Target: Bool] { get set }
+}
 
-    var target: [String] {
-        switch self {
-        case .gokiburi:
-            return ["\u{1FAB3}"]
-        case .spiders:
-            return ["🕸", "🕷"]
+extension OnOffSettingSet {
+    subscript(_ key: Target) -> Bool {
+        get {
+            return state[key, default: false]
+        }
+        set {
+            state[key] = newValue
         }
     }
 }
 
 final class AdditionalDictManager: ObservableObject {
-    @Published var kaomoji: Bool {
+    @Published var systemDict: AdditionalSystemDictManager {
         didSet {
             self.userDictUpdate()
         }
     }
 
-    @Published var emoji: Bool {
-        didSet {
-            self.userDictUpdate()
-        }
-    }
-
-    @Published var gokiburi: Bool {
-        didSet {
-            self.userDictUpdate()
-        }
-    }
-
-    @Published var spiders: Bool {
+    @Published var blockTargets: AdditionalDictBlockManager {
         didSet {
             self.userDictUpdate()
         }
     }
 
     init() {
-        if let list = UserDefaults.standard.array(forKey: "additional_dict") as? [String] {
-            self.kaomoji = list.contains("kaomoji")
-            self.emoji = list.contains("emoji")
-        } else {
-            self.kaomoji = false
-            self.emoji = false
-        }
+        let systemDictList = UserDefaults.standard.array(forKey: "additional_dict") as? [String]
+        self.systemDict = .init(dataList: systemDictList ?? [])
 
-        if let list = UserDefaults.standard.array(forKey: "additional_dict_blocks") as? [String] {
-            self.gokiburi = list.contains("gokiburi")
-            self.spiders = list.contains("spiders")
-        } else {
-            self.gokiburi = true
-            self.spiders = false
-        }
+        let blockList = UserDefaults.standard.array(forKey: "additional_dict_blocks") as? [String]
+        self.blockTargets = .init(dataList: blockList ?? [])
     }
 
     func userDictUpdate() {
         var targets: [String] = []
         var list: [String] = []
-        if kaomoji {
-            targets.append(contentsOf: AdditionalDict.kaomoji.dictFileIdentifiers)
-            list.append("kaomoji")
-        }
-        if emoji {
-            targets.append(contentsOf: AdditionalDict.emoji.dictFileIdentifiers)
-            list.append("emoji")
+        AdditionalSystemDictManager.Target.allCases.forEach { target in
+            if self.systemDict[target] {
+                list.append(target.rawValue)
+                targets.append(contentsOf: target.dictFileIdentifiers)
+            }
         }
 
         var blocklist: [String] = []
         var blockTargets: [String] = []
-        if gokiburi {
-            blocklist.append("gokiburi")
-            blockTargets.append(contentsOf: AdditionalDictBlockTarget.gokiburi.target)    // ゴキブリの絵文字
-        }
-        if spiders {
-            blocklist.append("spiders")
-            blockTargets.append(contentsOf: AdditionalDictBlockTarget.spiders.target)    // クモの絵文字
+        AdditionalDictBlockManager.Target.allCases.forEach { target in
+            if self.blockTargets[target] {
+                blocklist.append(target.rawValue)
+                blockTargets.append(contentsOf: target.characters)
+            }
         }
         UserDefaults.standard.setValue(list, forKey: "additional_dict")
         UserDefaults.standard.setValue(blocklist, forKey: "additional_dict_blocks")
@@ -132,11 +151,11 @@ struct AdditionalDictManageViewMain: View {
 
     var body: some View {
         Section(header: Text("利用するもの")) {
-            Toggle(isOn: $viewModel.emoji) {
+            Toggle(isOn: $viewModel.systemDict[.emoji]) {
                 Text("絵文字")
                 Text("🥺🌎♨️")
             }
-            Toggle(isOn: $viewModel.kaomoji) {
+            Toggle(isOn: $viewModel.systemDict[.kaomoji]) {
                 Text("顔文字")
                 Text("(◍•ᴗ•◍)")
             }
@@ -144,11 +163,11 @@ struct AdditionalDictManageViewMain: View {
         Section(header: Text("不快な絵文字を表示しない")) {
             if self.style == .all {
                 if #available(iOS 14.2, *) {
-                    Toggle(isOn: $viewModel.gokiburi) {
+                    Toggle(isOn: $viewModel.blockTargets[.gokiburi]) {
                         Text("ゴキブリの絵文字を非表示")
                     }
                 }
-                Toggle(isOn: $viewModel.spiders) {
+                Toggle(isOn: $viewModel.blockTargets[.spiders]) {
                     Text("クモの絵文字を非表示")
                 }
             }
