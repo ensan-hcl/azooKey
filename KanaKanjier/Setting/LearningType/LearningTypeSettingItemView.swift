@@ -16,7 +16,7 @@ struct LearningTypeSettingItemView: View {
         self.item = viewModel.item
         self.viewModel = viewModel
     }
-    let item: ItemModel
+    private let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
     @State private var selection = 0    // 選択値と連携するプロパティ
 

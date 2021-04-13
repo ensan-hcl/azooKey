@@ -9,9 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct ColorTools {
-    private init() {}
-
+enum ColorTools {
     static func rgba(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
         guard let rgba = color.cgColor?.components else {
             return nil

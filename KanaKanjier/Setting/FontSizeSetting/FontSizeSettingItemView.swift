@@ -14,8 +14,8 @@ struct FontSizeSettingItemView: View {
         case result
     }
 
-    let availableValues: [FontSizeSetting]
-    let target: Target
+    private let availableValues: [FontSizeSetting]
+    private let target: Target
 
     typealias ItemViewModel = SettingItemViewModel<FontSizeSetting>
     typealias ItemModel = SettingItem<FontSizeSetting>
@@ -27,7 +27,7 @@ struct FontSizeSettingItemView: View {
         self.availableValues = availableValues
     }
 
-    let item: ItemModel
+    private let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
     @State private var isOn = false
 
@@ -75,15 +75,16 @@ struct FontSizeSettingItemView: View {
     }
 
 }
-struct KeyView: View {
+
+private struct KeyView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
-    let fontSize: CGFloat
+    private let fontSize: CGFloat
 
     init(fontSize: CGFloat) {
         self.fontSize = fontSize
     }
 
-    var size: CGSize {
+    private var size: CGSize {
         let screenWidth = UIScreen.main.bounds.width
         switch storeVariableSection.japaneseLayout {
         case .flick:

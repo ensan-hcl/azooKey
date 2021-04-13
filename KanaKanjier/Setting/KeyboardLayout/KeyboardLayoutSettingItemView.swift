@@ -48,15 +48,12 @@ struct LanguageLayoutSettingItemView: View {
         }
     }
 
-    let id: Int
-
     init(_ viewModel: ItemViewModel, language: Language = .japanese, setTogether: Bool = false, id: Int = 0) {
         self.language = language
         self.setTogether = setTogether
         self.item = viewModel.item
         self.viewModel = viewModel
         self._selection = State(initialValue: viewModel.value)
-        self.id = id
         self.types = {
             let keyboardlanguage: KeyboardLanguage
             switch language {

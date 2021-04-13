@@ -150,8 +150,8 @@ struct UpdateInfomationView: View {
 }
 
 private struct HeadlineView: View {
-    let version: String
-    let releaseDate: String
+    private let version: String
+    private let releaseDate: String
     init(_ version: String, releaseDate: String) {
         self.version = version
         self.releaseDate = releaseDate
@@ -171,8 +171,8 @@ private struct HeadlineView: View {
 }
 
 private struct ParagraphView: View {
-    let headline: String
-    let points: () -> [String]
+    private let headline: String
+    private let points: () -> [String]
 
     init(_ headline: String, @ArrayBuilder<String> points: @escaping () -> [String] = {return [String]()}) {
         self.headline = headline

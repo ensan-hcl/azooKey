@@ -13,7 +13,7 @@ struct BooleanSettingItemView: View {
         self.item = viewModel.item
         self.viewModel = viewModel
     }
-    let item: SettingItem<Bool>
+    private let item: SettingItem<Bool>
     @ObservedObject private var viewModel: SettingItemViewModel<Bool>
     @State private var isOn = false
 

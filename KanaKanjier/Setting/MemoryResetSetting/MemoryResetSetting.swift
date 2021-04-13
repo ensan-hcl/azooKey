@@ -13,7 +13,7 @@ struct MemoryResetSettingItemView: View {
         self.item = viewModel.item
         self.viewModel = viewModel
     }
-    let item: SettingItem<MemoryResetCondition>
+    private let item: SettingItem<MemoryResetCondition>
     @ObservedObject private var viewModel: SettingItemViewModel<MemoryResetCondition>
     @State private var showAlert = false
 
