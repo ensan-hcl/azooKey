@@ -21,38 +21,22 @@ struct ContentView: View {
             TabView(selection: $selection) {
                 TipsTabView()
                     .tabItem {
-                        VStack {
-                            Image(systemName: "lightbulb.fill").font(.system(size: 20, weight: .light))
-                                .foregroundColor(.systemGray2)
-                            Text("使い方")
-                        }
+                        TabItem(title: "使い方", systemImage: "lightbulb.fill")
                     }
                     .tag(0)
                 ThemeTabView()
                     .tabItem {
-                        VStack {
-                            Image(systemName: "photo").font(.system(size: 20, weight: .light))
-                                .foregroundColor(.systemGray2)
-                            Text("着せ替え")
-                        }
+                        TabItem(title: "着せ替え", systemImage: "photo")
                     }
                     .tag(1)
                 CustomizeTabView()
                     .tabItem {
-                        VStack {
-                            Image(systemName: "gearshape.2.fill").font(.system(size: 20, weight: .light))
-                                .foregroundColor(.systemGray2)
-                            Text("拡張")
-                        }
+                        TabItem(title: "拡張", systemImage: "gearshape.2.fill")
                     }
                     .tag(2)
                 SettingTabView()
                     .tabItem {
-                        VStack {
-                            Image(systemName: "wrench.fill").font(.system(size: 20, weight: .light))
-                                .foregroundColor(.systemGray2)
-                            Text("設定")
-                        }
+                        TabItem(title: "設定", systemImage: "wrench.fill")
                     }
                     .tag(3)
             }
@@ -95,6 +79,24 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+    }
+}
+
+private struct TabItem: View {
+    init(title: LocalizedStringKey, systemImage: String) {
+        self.title = title
+        self.systemImage = systemImage
+    }
+
+    private let title: LocalizedStringKey
+    private let systemImage: String
+
+    var body: some View {
+        VStack {
+            Image(systemName: systemImage).font(.system(size: 20, weight: .light))
+                .foregroundColor(.systemGray2)
+            Text(title)
         }
     }
 }
