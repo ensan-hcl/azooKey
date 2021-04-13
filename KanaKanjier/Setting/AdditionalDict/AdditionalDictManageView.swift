@@ -9,6 +9,22 @@
 import Foundation
 import SwiftUI
 
+protocol OnOffSettingSet {
+    associatedtype Target: Hashable, CaseIterable, RawRepresentable where Target.RawValue == String
+    var state: [Target: Bool] { get set }
+}
+
+extension OnOffSettingSet {
+    subscript(_ key: Target) -> Bool {
+        get {
+            return state[key, default: false]
+        }
+        set {
+            state[key] = newValue
+        }
+    }
+}
+
 struct AdditionalSystemDictManager: OnOffSettingSet {
     var state: [Target: Bool]
 
@@ -39,6 +55,7 @@ struct AdditionalSystemDictManager: OnOffSettingSet {
         }
     }
 }
+
 struct AdditionalDictBlockManager: OnOffSettingSet {
     var state: [Target: Bool]
 
@@ -59,31 +76,6 @@ struct AdditionalDictBlockManager: OnOffSettingSet {
             case .spiders:
                 return ["🕸", "🕷"]
             }
-        }
-    }
-
-    subscript(_ key: Target) -> Bool {
-        get {
-            return state[key, default: false]
-        }
-        set {
-            state[key] = newValue
-        }
-    }
-}
-
-protocol OnOffSettingSet {
-    associatedtype Target: Hashable, CaseIterable, RawRepresentable where Target.RawValue == String
-    var state: [Target: Bool] { get set }
-}
-
-extension OnOffSettingSet {
-    subscript(_ key: Target) -> Bool {
-        get {
-            return state[key, default: false]
-        }
-        set {
-            state[key] = newValue
         }
     }
 }
@@ -127,6 +119,7 @@ final class AdditionalDictManager: ObservableObject {
                 blockTargets.append(contentsOf: target.characters)
             }
         }
+
         UserDefaults.standard.setValue(list, forKey: "additional_dict")
         UserDefaults.standard.setValue(blocklist, forKey: "additional_dict_blocks")
 
@@ -143,7 +136,7 @@ struct AdditionalDictManageViewMain: View {
         case all
     }
     private let style: Style
-    @ObservedObject private var viewModel = AdditionalDictManager()
+    @StateObject private var viewModel = AdditionalDictManager()
 
     init(style: Style = .all) {
         self.style = style
