@@ -296,6 +296,7 @@ struct ThemeEditView: View {
         case .themeShareView:
             ThemeShareView(theme: self.theme, shareImage: shareImage) {
                 presentationMode.wrappedValue.dismiss()
+                Store.shared.shouldTryRequestReview = true
             }
             .navigationBarTitle(Text("完了"), displayMode: .inline)
             .navigationBarItems(leading: EmptyView(), trailing: EmptyView())
