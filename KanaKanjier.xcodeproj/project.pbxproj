@@ -7627,9 +7627,9 @@
 				1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */,
 				1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */,
 				1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */,
+				1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */,
 				1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */,
 				1AB8C3DD25E2854C00D39BC5 /* CodableActionDataEditor.swift */,
-				1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */,
 			);
 			path = Customize;
 			sourceTree = "<group>";
