@@ -165,26 +165,6 @@ private struct UserDictionaryDataSettingView: View {
                 HStack {
                     TextField("単語", text: $item.word)
                         .padding(.vertical, 2)
-                    // FIXME: 技術的に厳しかった
-                    /*
-                     HighlightableTextField("単語", text: $item.word){text in
-                     let parts = highlight(text)
-                     HStack(spacing: 0){
-                     ForEach(parts.indices, id: \.self){i in
-                     switch parts[i].type{
-                     case .normal:
-                     Text(parts[i].text)
-                     case .background:
-                     Text(parts[i].text)
-                     .foregroundColor(.orange)
-                     .bold()
-                     .tracking(-0.5)
-                     }
-                     }
-                     Spacer()
-                     }
-                     }
-                     */
                     Divider()
                     PasteLongPressButton($item.word)
                         .padding(.horizontal, 5)
@@ -258,23 +238,6 @@ private struct UserDictionaryDataSettingView: View {
         }
     }
 
-    private enum HighlightType {
-        case normal
-        case background
-    }
-
-    private func highlight<S: StringProtocol>(_ text: S) -> [(text: String, type: HighlightType)] {
-        if let range = text.range(of: "\\{\\{.*?\\}\\}", options: .regularExpression) {
-            let lowerSide = text[text.startIndex ..< range.lowerBound]
-            let internalSide = text[range]
-            let upperSide = text[range.upperBound ..< text.endIndex]
-
-            return highlight(lowerSide) + [(String(internalSide), .background)] + highlight(upperSide)
-        } else {
-            return [(String(text), .normal)]
-        }
-    }
-
     private func save() {
         if item.error == nil {
             if let itemIndex = variables.items.firstIndex(where: {$0.id == self.item.id}) {
@@ -289,30 +252,6 @@ private struct UserDictionaryDataSettingView: View {
             let builder = LOUDSBuilder(txtFileSplit: 2048)
             builder.process()
             Store.shared.noticeReloadUserDict()
-        }
-    }
-}
-
-private struct HighlightableTextField<Content: View>: View {
-    private let title: LocalizedStringKey
-    @Binding private var text: String
-    private let covering: (String) -> Content
-
-    init(_ title: LocalizedStringKey, text: Binding<String>, @ViewBuilder covering: @escaping (String) -> Content) {
-        self.title = title
-        self._text = text
-        self.covering = covering
-    }
-
-    var body: some View {
-        ZStack(alignment: .trailing) {
-            covering(text)
-                .allowsHitTesting(false)
-                .lineLimit(1)
-                .truncationMode(.head)
-            TextField(title, text: $text)
-                .foregroundColor(.clear)
-
         }
     }
 }
