@@ -100,7 +100,7 @@ struct QwertyCustomKeysItemView: View {
             Spacer(minLength: 10)
                 .fixedSize()
             Text("編集したいキーを選択してください。")
-                .font(.caption)
+                .padding(.vertical)
             HStack(spacing: 0) {
                 ForEach(viewModel.value.keys.indices, id: \.self) {i in
                     if editState.allowDrag && selectState.targetIndex == i {
@@ -629,7 +629,7 @@ private struct DraggableItem: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
             .stroke(strokeColor)
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
             .focus(.accentColor, focused: focused)
             .focus(.systemGray, focused: longpressFocused)
 

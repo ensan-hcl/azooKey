@@ -301,7 +301,7 @@ private struct CustomKeySettingFlickKeyView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
             .stroke(strokeColor)
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
             .focus(.accentColor, focused: focused)
             .overlay(Text(label))
             .onTapGesture {
