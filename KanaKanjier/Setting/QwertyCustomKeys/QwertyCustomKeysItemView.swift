@@ -8,38 +8,14 @@
 
 import SwiftUI
 
-fileprivate final class SelectState: ObservableObject, Hashable {
-    @Published var targetIndex = -1
-    @Published var selectedIndex = -1
-    @Published var longpressTargetIndex = -1
-    @Published var longpressSelectedIndex = -1
-
-    func reset() {
-        self.selectedIndex = -1
-        self.targetIndex = -1
-    }
-
-    static func == (lhs: SelectState, rhs: SelectState) -> Bool {
-        return lhs.selectedIndex == rhs.selectedIndex && lhs.longpressSelectedIndex == rhs.longpressSelectedIndex && lhs.targetIndex == rhs.targetIndex && lhs.longpressTargetIndex == rhs.longpressTargetIndex
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(targetIndex)
-        hasher.combine(longpressTargetIndex)
-        hasher.combine(selectedIndex)
-        hasher.combine(longpressSelectedIndex)
-    }
-}
-
-fileprivate final class EditState: ObservableObject {
+private final class EditState: ObservableObject {
     enum State {
-        case none
-        case drag
-        case label
-        case action
+        case none, drag, label, action
     }
+
     @Published var state = State.none
     @Published var details = false
+
     var allowDrag: Bool {
         return state == .drag
     }
@@ -67,11 +43,11 @@ private protocol QwertyKey {
 extension QwertyCustomKey: QwertyKey {}
 extension QwertyVariationKey: QwertyKey {}
 
-fileprivate extension QwertyCustomKeysValue {
-    subscript(_ state: SelectState) -> QwertyKey {
+private extension QwertyCustomKeysValue {
+    subscript(_ state: Selection) -> QwertyKey {
         get {
-            let sIndex = state.selectedIndex
-            let lpsIndex = state.longpressSelectedIndex
+            let sIndex = state.selectIndex
+            let lpsIndex = state.longpressSelectIndex
             if lpsIndex == -1 && sIndex != -1 {
                 return self.keys[sIndex]
             } else {
@@ -79,11 +55,11 @@ fileprivate extension QwertyCustomKeysValue {
             }
         }
         set {
-            let sIndex = state.selectedIndex
+            let sIndex = state.selectIndex
             guard sIndex >= 0 else {
                 return
             }
-            let lpsIndex = state.longpressSelectedIndex
+            let lpsIndex = state.longpressSelectIndex
             if lpsIndex == -1, let key = newValue as? QwertyCustomKey {
                 self.keys[sIndex] = key
             } else if let key = newValue as? QwertyVariationKey {
@@ -93,17 +69,38 @@ fileprivate extension QwertyCustomKeysValue {
     }
 }
 
+private struct Selection: Hashable {
+    var selectIndex = -1 {
+        didSet {
+            if selectIndex != -1 {
+                self.longpressSelectIndex = -1
+                self.enabled = true
+                self.longpressEnabled = false
+            } else {
+                self.enabled = false
+            }
+        }
+    }
+    var longpressSelectIndex = -1 {
+        didSet {
+            self.enabled = longpressSelectIndex == -1
+            self.longpressEnabled = longpressSelectIndex != -1
+        }
+    }
+    var enabled = false
+    var longpressEnabled = false
+}
+
 struct QwertyCustomKeysItemView: View {
-    @ObservedObject private var selectState = SelectState()
-    @ObservedObject private var editState = EditState()
+    @StateObject private var editState = EditState()
+    @State private var inputValue = ""
+    @State private var selection = Selection()
 
     typealias ItemViewModel = SettingItemViewModel<QwertyCustomKeysValue>
     typealias ItemModel = SettingItem<QwertyCustomKeysValue>
 
     private let item: ItemModel
     @ObservedObject private var viewModel: ItemViewModel
-
-    @State private var inputValue = ""
 
     private var padding: CGFloat {
         return spacing / 2
@@ -134,12 +131,6 @@ struct QwertyCustomKeysItemView: View {
         self.viewModel = viewModel
     }
 
-    private var separator: some View {
-        Rectangle()
-            .frame(width: 2, height: keySize.height * 0.9)
-            .foregroundColor(.accentColor)
-    }
-
     var body: some View {
         VStack {
             Spacer(minLength: 10)
@@ -151,51 +142,43 @@ struct QwertyCustomKeysItemView: View {
                 if viewModel.value.keys.isEmpty {
                     Button("デフォルトに戻す") {
                         viewModel.value.keys = QwertyCustomKeysValue.defaultValue.keys
-                        selectState.longpressSelectedIndex = -1
+                        selection.longpressSelectIndex = -1
                     }
                 }
             }
-            HStack(spacing: 0) {
-                ForEach(viewModel.value.keys.indices, id: \.self) {i in
-                    if editState.allowDrag && selectState.targetIndex == i {
-                        separator
-                            .focus(.accentColor, focused: true)
+            DraggableView(items: $viewModel.value.keys, selection: $selection.selectIndex, enabled: selection.enabled && editState.allowDrag, width: width, height: keySize.height, padding: padding) {item, isSelected in
+                let strokeColor: Color = {
+                    if !isSelected {
+                        return .primary
                     }
-                    DraggableItem(selectState: selectState, editState: editState, index: i, label: viewModel.value.keys[i].name, update: update, onEnd: onEnd)
-                        .frame(width: width, height: keySize.height)
-                        .padding(padding)
-                        .zIndex(selectState.selectedIndex == i ? 1:0)
-                }
-                if editState.allowDrag && selectState.targetIndex == viewModel.value.keys.endIndex {
-                    separator
-                        .focus(.accentColor, focused: true)
-                }
-            }.scaledToFit()
-            if self.selectState.selectedIndex != -1 {
+                    if selection.longpressSelectIndex != -1 {
+                        return .systemGray
+                    }
+                    return .accentColor
+                }()
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(strokeColor)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
+                    .focus(.accentColor, focused: isSelected && selection.longpressSelectIndex == -1)
+                    .focus(.systemGray, focused: isSelected && selection.longpressSelectIndex != -1)
+                    .overlay(Text(item.name))
+            }
+
+            if selection.selectIndex != -1 {
                 Spacer(minLength: 50)
                     .fixedSize()
                 Text("長押しした時の候補")
                     .padding(.vertical)
-                Button("追加する"){
-                    self.addLongpressKey(sIndex: self.selectState.selectedIndex)
+                Button("追加する") {
+                    self.addLongpressKey(sIndex: selection.selectIndex)
                 }
-                let longpresses = viewModel.value.keys[selectState.selectedIndex].longpresses
-                HStack(spacing: 0) {
-                    ForEach(longpresses.indices, id: \.self) {i in
-                        if editState.allowDrag && selectState.longpressTargetIndex == i {
-                            separator
-                                .focus(.accentColor, focused: true)
-                        }
-                        DraggableItem(selectState: selectState, editState: editState, index: i, label: longpresses[i].name, long: true, update: longPressUpdate, onEnd: longPressOnEnd)
-                            .frame(width: variationWidth, height: keySize.height)
-                            .padding(padding)
-                            .zIndex(selectState.longpressSelectedIndex == i ? 1:0)
-                    }
-                    if editState.allowDrag && selectState.longpressTargetIndex == longpresses.endIndex {
-                        separator
-                            .focus(.accentColor, focused: true)
-                    }
-                }.scaledToFit()
+                DraggableView(items: $viewModel.value.keys[selection.selectIndex].longpresses, selection: $selection.longpressSelectIndex, enabled: selection.longpressEnabled && editState.allowDrag, width: variationWidth, height: keySize.height, padding: padding) {item, isSelected in
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(isSelected ? Color.accentColor : .primary)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
+                        .focus(.accentColor, focused: isSelected)
+                        .overlay(Text(item.name))
+                }
             }
             Spacer()
             if editState.editLabel {
@@ -204,7 +187,7 @@ struct QwertyCustomKeysItemView: View {
             if editState.editAction {
                 inputEditor
             }
-            if selectState.selectedIndex != -1 {
+            if selection.selectIndex != -1 {
                 HStack {
                     ForEach(specifiers) {specifier in
                         Spacer()
@@ -228,16 +211,13 @@ struct QwertyCustomKeysItemView: View {
             editState.details.toggle()
         })
         .background(Color.secondarySystemBackground)
-        .onChange(of: selectState.selectedIndex) {_ in
-            self.reloadInputValue()
-        }
-        .onChange(of: selectState.longpressSelectedIndex) {_ in
+        .onChange(of: selection) {_ in
             self.reloadInputValue()
         }
     }
 
     private func reloadInputValue() {
-        if selectState.selectedIndex != -1, let string = getInputText(actions: viewModel.value[selectState].actions) {
+        if selection.selectIndex != -1, let string = getInputText(actions: viewModel.value[selection].actions) {
             inputValue = string
         }
     }
@@ -255,7 +235,7 @@ struct QwertyCustomKeysItemView: View {
                 .font(.caption)
             Text("入力される文字とは異なっていても構いません。")
                 .font(.caption)
-            TextField("ラベル", text: $viewModel.value[selectState].name)
+            TextField("ラベル", text: $viewModel.value[selection].name)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
@@ -268,14 +248,14 @@ struct QwertyCustomKeysItemView: View {
 
     private var inputEditor: some View {
         VStack {
-            if self.getInputText(actions: viewModel.value[selectState].actions) == nil {
+            if self.getInputText(actions: viewModel.value[selection].actions) == nil {
                 Text("このキーには入力以外の複数のアクションが設定されています。")
                     .font(.caption)
                 Text("現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
                     .font(.caption)
                 Button("入力を設定する") {
                     inputValue = ""
-                    viewModel.value[selectState].actions = [.input("")]
+                    viewModel.value[selection].actions = [.input("")]
                 }
             } else {
                 Text("キーを押して入力される文字を設定します。")
@@ -284,109 +264,20 @@ struct QwertyCustomKeysItemView: View {
                     .font(.caption)
                 TextField("入力される文字", text: $inputValue)
                     .onChange(of: inputValue) { string in
-                        viewModel.value[selectState].actions = [.input(string)]
-                        if viewModel.value[selectState].name.isEmpty {
-                            viewModel.value[selectState].name = string
+                        viewModel.value[selection].actions = [.input(string)]
+                        if viewModel.value[selection].name.isEmpty {
+                            viewModel.value[selection].name = string
                         }
                     }
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal)
             }
         }
         .frame(maxHeight: 80)
         .padding(.vertical, 3)
         .background(RoundedRectangle(cornerRadius: 4).fill(Color.systemGray6).shadow(color: .primary, radius: 1, x: 0, y: 1))
         .padding()
-    }
-
-    private func pointedIndex(index: Int, delta: CGFloat) -> Int {
-        if delta.isZero {
-            return index
-        }
-
-        let endIndex: Int
-        let width: CGFloat
-        if selectState.longpressSelectedIndex == -1 {
-            endIndex = viewModel.value.keys.endIndex
-            width = self.width
-        } else {
-            endIndex = viewModel.value.keys[selectState.selectedIndex].longpresses.endIndex
-            width = self.variationWidth
-        }
-
-        if delta < 0 {
-            // 負の場合
-            var position = CGFloat.zero
-            var index = index
-            while index >= 0 {
-                position -= (width + padding * 2)
-                if position < delta {
-                    return index
-                }
-                index -= 1
-            }
-            return 0
-        } else {
-            // 正の場合
-            var position = CGFloat.zero
-            var index = index + 1
-            while index < endIndex {
-                position += (width + padding * 2)
-                if delta < position {
-                    return index
-                }
-
-                index += 1
-            }
-            return endIndex
-        }
-
-    }
-
-    private func update(index: Int, delta: CGFloat) {
-        let targetIndex = self.pointedIndex(index: index, delta: delta)
-        self.selectState.targetIndex = targetIndex
-    }
-
-    private func longPressUpdate(index: Int, delta: CGFloat) {
-        let targetIndex = self.pointedIndex(index: index, delta: delta)
-        self.selectState.longpressTargetIndex = targetIndex
-    }
-
-    private func onEnd() {
-        let selectedIndex = selectState.selectedIndex
-        let targetIndex = selectState.targetIndex
-        if targetIndex != -1 {
-            if selectedIndex > targetIndex {
-                let item = self.viewModel.value.keys.remove(at: selectedIndex)
-                self.viewModel.value.keys.insert(item, at: targetIndex)
-                self.selectState.selectedIndex = targetIndex
-            } else if selectedIndex < targetIndex {
-                self.viewModel.value.keys.insert(self.viewModel.value.keys[selectedIndex], at: targetIndex)
-                self.viewModel.value.keys.remove(at: selectedIndex)
-                self.selectState.selectedIndex = targetIndex - 1
-            }
-        }
-        self.selectState.targetIndex = -1
-    }
-
-    private func longPressOnEnd() {
-        let selectedKeyIndex = selectState.selectedIndex
-        let selectedIndex = selectState.longpressSelectedIndex
-        let targetIndex = selectState.longpressTargetIndex
-        if targetIndex != -1 {
-            if selectedIndex > targetIndex {
-                let item = viewModel.value.keys[selectedKeyIndex].longpresses.remove(at: selectedIndex)
-                viewModel.value.keys[selectedKeyIndex].longpresses.insert(item, at: targetIndex)
-                self.selectState.longpressSelectedIndex = targetIndex
-            } else if selectedIndex < targetIndex {
-                viewModel.value.keys[selectedKeyIndex].longpresses.insert(viewModel.value.keys[selectedKeyIndex].longpresses[selectedIndex], at: targetIndex)
-                viewModel.value.keys[selectedKeyIndex].longpresses.remove(at: selectedIndex)
-                self.selectState.longpressSelectedIndex = targetIndex - 1
-            }
-        }
-        self.selectState.longpressTargetIndex = -1
     }
 
     private enum ToolBarButtonSpecifier: Int, Identifiable {
@@ -415,13 +306,13 @@ struct QwertyCustomKeysItemView: View {
         case .delete:
             ToolBarButton(systemImage: "trash", labelText: "削除") {
                 if editState.state == .none {
-                    let sIndex = selectState.selectedIndex
-                    let lpsIndex = selectState.longpressSelectedIndex
+                    let sIndex = selection.selectIndex
+                    let lpsIndex = selection.longpressSelectIndex
                     if lpsIndex == -1 && sIndex != -1 {
-                        self.selectState.selectedIndex = -1
+                        selection.selectIndex = -1
                         self.viewModel.value.keys.remove(at: sIndex)
                     } else {
-                        self.selectState.longpressSelectedIndex = -1
+                        selection.longpressSelectIndex = -1
                         self.viewModel.value.keys[sIndex].longpresses.remove(at: lpsIndex)
                     }
                 }
@@ -443,8 +334,8 @@ struct QwertyCustomKeysItemView: View {
             }
             .foregroundColor(editState.editLabel ? .accentColor : .primary)
         case .actions:
-            NavigationLink(destination: CodableActionDataEditor($viewModel.value[selectState].actions, availableCustards: CustardManager.load().availableCustards)) {
-                ToolBarButtonLabel(systemImage: "terminal", labelText: "アクション")
+            NavigationLink(destination: CodableActionDataEditor($viewModel.value[selection].actions, availableCustards: CustardManager.load().availableCustards)) {
+                ToolBarButton(systemImage: "terminal", labelText: "アクション")
             }
             .foregroundColor(.primary)
         }
@@ -452,27 +343,29 @@ struct QwertyCustomKeysItemView: View {
 
     private func addPressKey() {
         self.viewModel.value.keys.append(QwertyCustomKey(name: "", actions: [.input("")], longpresses: []))
-        selectState.selectedIndex = self.viewModel.value.keys.endIndex - 1
+        selection.selectIndex = self.viewModel.value.keys.endIndex - 1
         editState.state = .action
     }
+
     private func addLongpressKey(sIndex: Int) {
         self.viewModel.value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", actions: [.input("")]))
-        selectState.longpressSelectedIndex = self.viewModel.value.keys[sIndex].longpresses.endIndex - 1
+        selection.longpressSelectIndex = self.viewModel.value.keys[sIndex].longpresses.endIndex - 1
         editState.state = .action
     }
-
 }
 
-private struct ToolBarButtonLabel: View {
-    init(systemImage: String, labelText: LocalizedStringKey) {
+private struct ToolBarButton: View {
+    init(systemImage: String, labelText: LocalizedStringKey, action: (() -> Void)? = nil) {
         self.systemImage = systemImage
         self.labelText = labelText
+        self.action = action
     }
 
     private let systemImage: String
     private let labelText: LocalizedStringKey
+    private let action: (() -> Void)?
 
-    var body: some View {
+    var label: some View {
         VStack {
             Image(systemName: systemImage)
                 .font(.system(size: 23))
@@ -481,150 +374,13 @@ private struct ToolBarButtonLabel: View {
                 .font(.system(size: 10))
         }
     }
-}
-
-private struct ToolBarButton: View {
-    init(systemImage: String, labelText: LocalizedStringKey, action: @escaping () -> Void) {
-        self.systemImage = systemImage
-        self.labelText = labelText
-        self.action = action
-    }
-
-    private let systemImage: String
-    private let labelText: LocalizedStringKey
-    private let action: () -> Void
 
     var body: some View {
-        Button {
-            action()
-        }label: {
-            ToolBarButtonLabel(systemImage: systemImage, labelText: labelText)
+        if let action = action {
+            Button.init(action: action, label: { label })
+                .padding(.horizontal, 10)
+        } else {
+            label
         }
-        .padding(.horizontal, 10)
-    }
-}
-
-private struct DraggableItem: View {
-    private enum DragState {
-        case inactive
-        case dragging(translation: CGSize)
-
-        var translation: CGSize {
-            switch self {
-            case .inactive:
-                return .zero
-            case .dragging(let translation):
-                return translation
-            }
-        }
-
-        var isActive: Bool {
-            switch self {
-            case .inactive:
-                return false
-            case .dragging:
-                return true
-            }
-        }
-
-        var isDragging: Bool {
-            switch self {
-            case .inactive:
-                return false
-            case .dragging:
-                return true
-            }
-        }
-    }
-
-    @GestureState private var dragState = DragState.inactive
-    @State private var viewState: CGSize = .zero
-    @ObservedObject private var selectState: SelectState
-    @ObservedObject private var editState: EditState
-
-    private let index: Int
-    private let label: String
-    private let long: Bool
-
-    private let onEnd: () -> Void
-    private let update: (Int, CGFloat) -> Void
-
-    init(selectState: SelectState, editState: EditState, index: Int, label: String, long: Bool = false, update: @escaping (Int, CGFloat) -> Void, onEnd: @escaping () -> Void) {
-        self.selectState = selectState
-        self.editState = editState
-        self.index = index
-        self.label = label
-        self.long = long
-        self.update = update
-        self.onEnd = onEnd
-    }
-
-    private var focused: Bool {
-        if long && selectState.longpressSelectedIndex == index {
-            return true
-        }
-        if !long && selectState.selectedIndex == index {
-            return selectState.longpressSelectedIndex == -1
-        }
-        return false
-    }
-
-    private var strokeColor: Color {
-        if focused {
-            return .accentColor
-        }
-        if longpressFocused {
-            return .systemGray
-        }
-        return .primary
-    }
-
-    private var longpressFocused: Bool {
-        return !long && selectState.selectedIndex == index && selectState.longpressSelectedIndex != -1
-    }
-
-    var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .stroke(strokeColor)
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
-            .focus(.accentColor, focused: focused)
-            .focus(.systemGray, focused: longpressFocused)
-
-            .overlay(Text(label))
-            .offset(
-                x: viewState.width + dragState.translation.width,
-                y: viewState.height + dragState.translation.height
-            )
-            .onTapGesture {
-                if !long {
-                    self.selectState.selectedIndex = index
-                    self.selectState.longpressSelectedIndex = -1
-                } else {
-                    self.selectState.longpressSelectedIndex = index
-                }
-            }
-            .gesture(
-                DragGesture()
-                    .updating($dragState) {value, state, _ in
-                        if !long {
-                            if self.selectState.selectedIndex == index && editState.allowDrag {
-                                update(index, value.translation.width)
-                                state = .dragging(translation: value.translation)
-                                return
-                            }
-                        } else {
-                            if self.selectState.longpressSelectedIndex == index && editState.allowDrag {
-                                update(index, value.translation.width)
-                                state = .dragging(translation: value.translation)
-                                return
-                            }
-                        }
-                    }
-                    .onEnded {_ in
-                        if editState.allowDrag {
-                            self.onEnd()
-                        }
-                    }
-            )
     }
 }

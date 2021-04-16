@@ -42,6 +42,7 @@
 		1A26F34C25E8ACFD003CDA0D /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE61C2257286E5008078D3 /* Color.swift */; };
 		1A26F35925E8C147003CDA0D /* StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */; };
 		1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
+		1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C293826273E9900DFE465 /* DraggableView.swift */; };
 		1A30CE8B26023B52007C1A2D /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1A30CE8C26023B52007C1A2D /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A364E3125C8361A00A56583 /* LearningMemory.swift */; };
@@ -2554,6 +2555,7 @@
 		1A2602E92514F7D100EAD647 /* QwertyVariationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyVariationsView.swift; sourceTree = "<group>"; };
 		1A2602F32514FB6E00EAD647 /* VariationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationsModel.swift; sourceTree = "<group>"; };
 		1A26F34125E8AACA003CDA0D /* StrokeAndFill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeAndFill.swift; sourceTree = "<group>"; };
+		1A2C293826273E9900DFE465 /* DraggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
 		1A30CE8A26023B52007C1A2D /* CodableSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableSupport.swift; sourceTree = "<group>"; };
 		1A364E3125C8361A00A56583 /* LearningMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningMemory.swift; sourceTree = "<group>"; };
 		1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionaryData.swift; sourceTree = "<group>"; };
@@ -7720,6 +7722,7 @@
 				1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */,
 				1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */,
 				1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */,
+				1A2C293826273E9900DFE465 /* DraggableView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -10334,6 +10337,7 @@
 				1A5C7EAC25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift in Sources */,
 				1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */,
 				1AF6797725CEDB9B00F3987B /* QwertyChangeKeyboardKeyModel.swift in Sources */,
+				1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */,
 				1AF6799325CEDBB500F3987B /* FlickAaKeyModel.swift in Sources */,
 				1AF6794225CEDB7E00F3987B /* MoveCursorBar.swift in Sources */,
 				1AF6795725CEDB8E00F3987B /* QwertyKeyboardView.swift in Sources */,
