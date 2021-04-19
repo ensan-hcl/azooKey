@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct DicdataElement: Equatable {
+struct DicdataElement: Equatable, Hashable {
     static let BOSData = Self.init(word: "", ruby: "", cid: 0, mid: 500, value: 0, adjust: 0)
     static let EOSData = Self.init(word: "", ruby: "", cid: 1316, mid: 500, value: 0, adjust: 0)
 
@@ -68,6 +68,13 @@ struct DicdataElement: Equatable {
 
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.word == rhs.word && lhs.ruby == rhs.ruby && lhs.lcid == rhs.lcid && lhs.mid == rhs.mid && lhs.rcid == rhs.rcid
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(word)
+        hasher.combine(ruby)
+        hasher.combine(lcid)
+        hasher.combine(rcid)
     }
 }
 

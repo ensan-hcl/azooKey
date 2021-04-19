@@ -8,20 +8,7 @@
 
 import Foundation
 
-private struct DicdataElementCore: Hashable {
-    internal init(data: DicdataElement) {
-        self.word = data.word
-        self.ruby = data.ruby
-        self.lcid = data.lcid
-        self.rcid = data.rcid
-    }
-
-    let word: String
-    let ruby: String
-    let lcid: Int
-    let rcid: Int
-}
-
+//内部の値を頻繁に変更するため、参照型にしている
 private final class LearningMemoryElement {
     var data: DicdataElement
     var count: Int
@@ -38,7 +25,7 @@ struct LearningMemorys {
     static let memoryFileName = "learningMemory"
     private var values: [LearningMemoryElement]
     private var index2order: [Int]  // index→values内の位置
-    private var core2Index: [DicdataElementCore: Int]
+    private var core2Index: [DicdataElement: Int]
 
     private func getMinOrderIndex() -> Int? {
         let pair = self.index2order.enumerated().min(by: {$0.element < $1.element})
@@ -73,7 +60,7 @@ struct LearningMemorys {
     }
 
     func getSingle(_ data: DicdataElement) -> Int {
-        if let index = self.core2Index[.init(data: data)] {
+        if let index = self.core2Index[data] {
             return values[index].count
         }
         return .zero
@@ -85,15 +72,15 @@ struct LearningMemorys {
     }
 
     func getNextData(_ data: DicdataElement) -> [(next: DicdataElement, count: Int)] {
-        if let index = self.core2Index[.init(data: data)] {
+        if let index = self.core2Index[data] {
             return values[index].next.map {(next: self.values[$0.index].data, count: $0.count)}
         }
         return []
     }
 
     func matchNext(_ previous: DicdataElement, next: DicdataElement) -> Int {
-        if let nextIndex = self.core2Index[.init(data: next)],
-           let previousIndex = self.core2Index[.init(data: previous)],
+        if let nextIndex = self.core2Index[next],
+           let previousIndex = self.core2Index[previous],
            let next = values[previousIndex].next.last(where: {$0.index == nextIndex}) {
             return next.count
         }
@@ -115,7 +102,7 @@ struct LearningMemorys {
                 let needMemoryCount = DicdataStore.needWValueMemory(datalist[i])
                 let countDelta = needMemoryCount ? 1:0
                 // すでにデータが存在している場合
-                if let index = core2Index[.init(data: datalist[i])] {
+                if let index = core2Index[datalist[i]] {
                     self.updateOrder(at: index)
                     lastIndex = index
                     self.values[index].count += countDelta
@@ -126,7 +113,7 @@ struct LearningMemorys {
                         let data = datalist[i]
                         self.values.append(LearningMemoryElement(data: data, count: countDelta))
                         self.index2order.append(self.index2order.count)
-                        self.core2Index[.init(data: data)] = self.index2order.count - 1
+                        self.core2Index[data] = self.index2order.count - 1
                         // 最大数になっている場合、最も古いデータを更新する
                     } else if let minIndex = self.getMinOrderIndex() {
                         self.values.forEach {
@@ -134,9 +121,9 @@ struct LearningMemorys {
                         }
                         let data = datalist[i]
                         let oldData = values[minIndex].data
-                        self.core2Index.removeValue(forKey: .init(data: oldData))
+                        self.core2Index.removeValue(forKey: oldData)
                         self.values[minIndex] = LearningMemoryElement(data: data, count: countDelta)
-                        self.core2Index[.init(data: data)] = minIndex
+                        self.core2Index[data] = minIndex
                         self.updateOrder(at: minIndex)
                         lastIndex = minIndex
                     }
@@ -211,7 +198,7 @@ struct LearningMemorys {
         self.values.reserveCapacity(Self.memoryCount + 1)
         self.index2order = Array(values.indices)
         self.core2Index = values.indices.reduce(into: [:]) {dictionary, i in
-            dictionary[.init(data: values[i].data)] = i
+            dictionary[values[i].data] = i
         }
     }
 
