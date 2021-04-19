@@ -10,7 +10,7 @@ import Foundation
 
 /// LOUDS
 struct LOUDS {
-    typealias Unit = UInt64
+    private typealias Unit = UInt64
     private static let unit = 64
     private static let uExp = 6
 
@@ -19,7 +19,7 @@ struct LOUDS {
     private let nodeIndex2ID: [UInt8]
     private let rankLarge: [Int]
 
-    init(bytes: [Unit], nodeIndex2ID: [UInt8]) {
+    init(bytes: [UInt64], nodeIndex2ID: [UInt8]) {
         self.bits = bytes
         self.nodeIndex2ID = nodeIndex2ID
         self.indices = self.bits.indices
@@ -28,6 +28,7 @@ struct LOUDS {
         }
     }
 
+    //parentNodeIndex個の0を探索し、その次から1個増えるまでのIndexを返す。
     private func childNodeIndices(from parentNodeIndex: Int) -> Range<Int> {
         var left = -1
         while true {

@@ -21,8 +21,8 @@ private final class LearningMemoryElement {
 }
 
 struct LearningMemorys {
-    static let memoryCount = 100
-    static let memoryFileName = "learningMemory"
+    private static let memoryCount = 100
+    private static let memoryFileName = "learningMemory"
     private var values: [LearningMemoryElement]
     private var index2order: [Int]  // index→values内の位置
     private var core2Index: [DicdataElement: Int]
@@ -227,7 +227,7 @@ struct LearningMemorys {
         return values
     }
 
-    private static func convertLatticeNodeData(from dataString: ArraySlice<String.SubSequence>) -> DicdataElement {
+    private static func convertLatticeNodeData<T: RandomAccessCollection, U: StringProtocol>(from dataString: T) -> DicdataElement where T.Element == U, T.Index == Int {
         let delta = dataString.startIndex
         let ruby = String(dataString[0+delta]).unescaped()
         let word = dataString[1+delta].isEmpty ? ruby:String(dataString[1+delta]).unescaped()

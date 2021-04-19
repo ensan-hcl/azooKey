@@ -16,8 +16,6 @@ final class ClauseDataUnit {
     var ruby: String = ""
     var rubyCount: Int = 0
 
-    init() {}
-
     func merge(with unit: ClauseDataUnit) {
         self.text.append(unit.text)
         self.ruby.append(unit.ruby)
@@ -88,8 +86,8 @@ struct Candidate: ResultViewItemData {
         )
     }
 
-    static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"
-    static let randomExpression = "<random type=\".*?\" value=\".*?\">"
+    private static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"
+    private static let randomExpression = "<random type=\".*?\" value=\".*?\">"
 
     @inlinable func parseTemplate() -> Candidate {
         var newText = text

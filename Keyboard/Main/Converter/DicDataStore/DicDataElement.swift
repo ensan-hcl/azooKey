@@ -12,10 +12,6 @@ struct DicdataElement: Equatable, Hashable {
     static let BOSData = Self.init(word: "", ruby: "", cid: 0, mid: 500, value: 0, adjust: 0)
     static let EOSData = Self.init(word: "", ruby: "", cid: 1316, mid: 500, value: 0, adjust: 0)
 
-    func adjustZero() -> Self {
-        return .init(word: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: baseValue, adjust: .zero)
-    }
-
     init(word: String, ruby: String, lcid: Int, rcid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.word = word
         self.ruby = ruby

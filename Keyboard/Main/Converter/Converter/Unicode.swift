@@ -32,6 +32,5 @@ extension KanaKanjiConverter {
             }
         }
         return []
-
     }
 }
