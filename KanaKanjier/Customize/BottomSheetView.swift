@@ -11,12 +11,12 @@ import SwiftUI
 
 /// 参考：https://swiftwithmajid.com/2019/12/11/building-bottom-sheet-in-swiftui/
 struct BottomSheetView<Content: View>: View {
-    @Binding var isOpen: Bool
+    @Binding private var isOpen: Bool
 
-    let maxHeight: CGFloat
-    let minHeight: CGFloat
-    let headerColor: Color
-    let content: Content
+    private let maxHeight: CGFloat
+    private let minHeight: CGFloat
+    private let headerColor: Color
+    private let content: Content
 
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: () -> Content) {
         if let minHeight = minHeight {

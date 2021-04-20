@@ -14,9 +14,7 @@ struct EmojiKaomojiTipsView: View {
                 Text("絵文字と顔文字は別々にオン・オフを選択可能です。")
                 Text("絵文字の一覧を表示したい場合、標準の絵文字キーボードをご利用ください。")
             }
-
             AdditionalDictManageViewMain()
-
         }
     }
 }

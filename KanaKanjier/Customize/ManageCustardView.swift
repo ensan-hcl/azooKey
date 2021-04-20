@@ -131,8 +131,8 @@ struct ManageCustardView: View {
     @State private var alertType = AlertType.none
     @Binding private var manager: CustardManager
     @State private var showDocumentPicker = false
-    @State var selectedDocument: Data = Data()
-    @State var addTabBar = true
+    @State private var selectedDocument: Data = Data()
+    @State private var addTabBar = true
     init(manager: Binding<CustardManager>) {
         self._manager = manager
     }

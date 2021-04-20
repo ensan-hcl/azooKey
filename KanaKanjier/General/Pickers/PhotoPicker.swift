@@ -11,9 +11,15 @@ import SwiftUI
 import PhotosUI
 
 struct PhotoPicker: UIViewControllerRepresentable {
-    let configuration: PHPickerConfiguration
-    @Binding var pickerResult: UIImage?
-    @Binding var isPresented: Bool
+    internal init(configuration: PHPickerConfiguration, pickerResult: Binding<UIImage?>, isPresented: Binding<Bool>) {
+        self.configuration = configuration
+        self._pickerResult = pickerResult
+        self._isPresented = isPresented
+    }
+
+    private let configuration: PHPickerConfiguration
+    @Binding private var pickerResult: UIImage?
+    @Binding private var isPresented: Bool
 
     func makeUIViewController(context: Context) -> PHPickerViewController {
         let controller = PHPickerViewController(configuration: configuration)

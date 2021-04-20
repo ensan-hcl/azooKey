@@ -10,7 +10,11 @@ import Foundation
 import SwiftUI
 
 struct RectangleGetter: View {
-    @Binding var rect: CGRect
+    @Binding private var rect: CGRect
+
+    init(rect: Binding<CGRect>) {
+        self._rect = rect
+    }
 
     var body: some View {
         GeometryReader { geometry in

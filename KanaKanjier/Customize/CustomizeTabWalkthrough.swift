@@ -19,6 +19,10 @@ private struct Item: Identifiable {
 struct CustomizeTabWalkthroughView: View {
     @Binding var isShowing: Bool
 
+    init(isShowing: Binding<Bool>) {
+        self._isShowing = isShowing
+    }
+
     private let items: [Item] = [
         .init(
             image: "rectangle.and.pencil.and.ellipsis",

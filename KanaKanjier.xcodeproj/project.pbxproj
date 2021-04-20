@@ -94,7 +94,6 @@
 		1A4623BC25240D2700EF5B02 /* TxtFileSpliting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623BB25240D2700EF5B02 /* TxtFileSpliting.swift */; };
 		1A4623C22524159400EF5B02 /* aozora.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1A4623C12524159300EF5B02 /* aozora.csv */; };
 		1A4623E52524617B00EF5B02 /* LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623E42524617B00EF5B02 /* LOUDS.swift */; };
-		1A4623EF252461A800EF5B02 /* extension UInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623EE252461A800EF5B02 /* extension UInt.swift */; };
 		1A4623F52524621F00EF5B02 /* extension LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623F42524621F00EF5B02 /* extension LOUDS.swift */; };
 		1A4624802524D0A200EF5B02 /* LOUDSTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A46247F2524D0A200EF5B02 /* LOUDSTest.swift */; };
 		1A4624C32524DCE900EF5B02 /* キ20000.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1A4624B52524DCDF00EF5B02 /* キ20000.loudstxt */; };
@@ -2391,7 +2390,6 @@
 		1AF1CAF4252F2228002FCC66 /* azooKeyKeyboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1CAF3252F2228002FCC66 /* azooKeyKeyboardTests.swift */; };
 		1AF1CB03252F2274002FCC66 /* LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623E42524617B00EF5B02 /* LOUDS.swift */; };
 		1AF1CB09252F2278002FCC66 /* extension LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623F42524621F00EF5B02 /* extension LOUDS.swift */; };
-		1AF1CB0F252F227C002FCC66 /* extension UInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623EE252461A800EF5B02 /* extension UInt.swift */; };
 		1AF1CB15252F22A7002FCC66 /* all.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8401250F65110093A701 /* all.swift */; };
 		1AF1CB1B252F22AB002FCC66 /* DicdataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicdataStore.swift */; };
 		1AF1CB21252F22EB002FCC66 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2062500D4FF002CAA93 /* Store.swift */; };
@@ -2610,7 +2608,6 @@
 		1A4623BB25240D2700EF5B02 /* TxtFileSpliting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxtFileSpliting.swift; sourceTree = "<group>"; };
 		1A4623C12524159300EF5B02 /* aozora.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aozora.csv; sourceTree = "<group>"; };
 		1A4623E42524617B00EF5B02 /* LOUDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDS.swift; sourceTree = "<group>"; };
-		1A4623EE252461A800EF5B02 /* extension UInt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension UInt.swift"; sourceTree = "<group>"; };
 		1A4623F42524621F00EF5B02 /* extension LOUDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension LOUDS.swift"; sourceTree = "<group>"; };
 		1A46247F2524D0A200EF5B02 /* LOUDSTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDSTest.swift; sourceTree = "<group>"; };
 		1A4624B52524DCDF00EF5B02 /* キ20000.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "キ20000.loudstxt"; sourceTree = "<group>"; };
@@ -5246,7 +5243,6 @@
 			children = (
 				1A4623E42524617B00EF5B02 /* LOUDS.swift */,
 				1A4623F42524621F00EF5B02 /* extension LOUDS.swift */,
-				1A4623EE252461A800EF5B02 /* extension UInt.swift */,
 			);
 			path = LOUDS;
 			sourceTree = "<group>";
@@ -10491,7 +10487,6 @@
 				1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */,
 				1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */,
 				1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */,
-				1A4623EF252461A800EF5B02 /* extension UInt.swift in Sources */,
 				1AD4DDD1258718F600A6FA18 /* QwertyTabKeyModel.swift in Sources */,
 				1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */,
 				1A2602EA2514F7D100EAD647 /* QwertyVariationsView.swift in Sources */,
@@ -10538,7 +10533,6 @@
 			files = (
 				1AF1CB21252F22EB002FCC66 /* Store.swift in Sources */,
 				1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */,
-				1AF1CB0F252F227C002FCC66 /* extension UInt.swift in Sources */,
 				1AF1CB15252F22A7002FCC66 /* all.swift in Sources */,
 				1AF1CB1B252F22AB002FCC66 /* DicdataStore.swift in Sources */,
 				1AF1CAF4252F2228002FCC66 /* azooKeyKeyboardTests.swift in Sources */,

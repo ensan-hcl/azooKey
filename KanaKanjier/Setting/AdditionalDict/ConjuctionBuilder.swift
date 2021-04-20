@@ -421,7 +421,7 @@ private enum 行 {
 
 }
 
-fileprivate extension String {
+private extension String {
     static var い: String {
         return "い"
     }

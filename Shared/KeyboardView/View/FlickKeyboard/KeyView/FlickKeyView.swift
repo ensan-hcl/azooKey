@@ -27,9 +27,9 @@ enum KeyPressState {
 struct FlickKeyView: View {
     private let model: FlickKeyModelProtocol
 
-    @State var suggestState: SuggestState = .nothing
-    @State var pressState: KeyPressState = .inactive
-    @State var startLocation: CGPoint?
+    @State private var suggestState: SuggestState = .nothing
+    @State private var pressState: KeyPressState = .inactive
+    @State private var startLocation: CGPoint?
 
     @ObservedObject private var variableStates = VariableStates.shared
 

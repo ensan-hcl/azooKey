@@ -106,7 +106,7 @@ struct RomanInputData: InputDataProtocol {
 }
 
 extension RomanInputData {
-    fileprivate static func getTypo(_ string: String) -> [String] {
+    private static func getTypo(_ string: String) -> [String] {
         let count = string.count
         if count > 1 {
             return Self.possibleTypo[string, default: []]

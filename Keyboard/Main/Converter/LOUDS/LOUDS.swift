@@ -8,6 +8,10 @@
 
 import Foundation
 
+private extension UInt64 {
+    static let prefixOne: UInt64 = 1 << 63
+}
+
 /// LOUDS
 struct LOUDS {
     private typealias Unit = UInt64
@@ -40,7 +44,7 @@ struct LOUDS {
             }
         }
         guard let i = (left &+ 1 ..< self.bits.count).first(where: {(index: Int) in self.rankLarge[index &+ 1] >= parentNodeIndex}) else {
-            return 0..<0
+            return 0 ..< 0
         }
 
         return self.bits.withUnsafeBufferPointer {(buffer: UnsafeBufferPointer<Unit>) -> Range<Int> in
@@ -49,7 +53,7 @@ struct LOUDS {
             var count = Unit(Self.unit &- byte.nonzeroBitCount) // 0の数
             var k = Self.unit
 
-            for c in 0..<Self.unit {
+            for c in 0 ..< Self.unit {
                 if count == dif {
                     k = c
                     break
@@ -66,11 +70,11 @@ struct LOUDS {
                 }
                 let byte2 = buffer[j]
                 // 最初の0を探す作業
-                let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+                let a = (0 ..< Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
                 return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
             } else {
                 // 次の0を探す作業
-                let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+                let a = (k ..< Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
                 return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
             }
         }
@@ -89,7 +93,7 @@ struct LOUDS {
             }
             return prev
         }
-        return findFlag ? index:nil
+        return findFlag ? index : nil
     }
 
     private func prefixNodeIndices(nodeIndex: Int, depth: Int = 0, maxDepth: Int) -> [Int] {
@@ -97,7 +101,7 @@ struct LOUDS {
         if depth == maxDepth {
             return Array(childNodeIndices)
         }
-        return childNodeIndices + childNodeIndices.flatMap {self.prefixNodeIndices(nodeIndex: $0, depth: depth+1, maxDepth: maxDepth)}
+        return childNodeIndices + childNodeIndices.flatMap {self.prefixNodeIndices(nodeIndex: $0, depth: depth + 1, maxDepth: maxDepth)}
     }
 
     internal func prefixNodeIndices(chars: [UInt8], maxDepth: Int) -> [Int] {

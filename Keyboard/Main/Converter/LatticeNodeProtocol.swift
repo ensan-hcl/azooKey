@@ -83,8 +83,8 @@ final class DirectLatticeNode: LatticeNodeProtocol {
         return DirectLatticeNode(data: DicdataElement.EOSData)
     }
 
-    func getSqueezedNode(_ index: Int, value: PValue) -> DirectRegisteredNode {
-        return DirectRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
+    func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {
+        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
     }
 
     init(data: DicdataElement, rubyCount: Int? = nil) {
@@ -124,7 +124,7 @@ final class RomanLatticeNode: LatticeNodeProtocol {
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {
-        return RomanRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount, romanString: self.romanString)
+        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount, romanString: self.romanString)
     }
 
 }

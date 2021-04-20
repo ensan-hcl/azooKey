@@ -68,7 +68,7 @@ extension DirectInputData {
     /// 誤り訂正候補を取得する関数
     /// - parameters:
     ///  - string: 元の文字列
-    fileprivate static func getTypo(_ string: String) -> [String] {
+    private static func getTypo(_ string: String) -> [String] {
         let count = string.count
         if count > 1 {
             return Self.possibleTypo[string, default: []]
