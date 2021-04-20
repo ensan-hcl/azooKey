@@ -454,7 +454,7 @@ final class DicdataStore {
             }
             return ui64array
         } catch {
-            debug("Failed to read the file.")
+            debug("Failed to read the file.", error)
             return []
         }
     }
