@@ -41,6 +41,7 @@ struct EditingTabBarView: View {
 
     var body: some View {
         Form {
+            Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
             Section {
                 Button(action: add) {
                     HStack {

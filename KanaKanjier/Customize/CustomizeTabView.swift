@@ -60,15 +60,9 @@ struct CustomizeTabView: View {
                             Text("変換候補欄に何も表示されていない状態で、変換候補欄を長押しすると表示されます。")
                             Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
                         }
-                        DisclosureGroup("もっと便利にする") {
-                            Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
-                            NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager)) {
-                                HStack {
-                                    Text("タブバーを編集")
-                                        .foregroundColor(.accentColor)
-                                    Spacer()
-                                }
-                            }
+                        NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager)) {
+                            Text("タブバーを編集")
+                                .foregroundColor(.accentColor)
                         }
                     }
 
