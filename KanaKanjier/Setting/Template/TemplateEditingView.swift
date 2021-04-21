@@ -9,10 +9,12 @@
 import Foundation
 import SwiftUI
 
+// TODO: CancelableEditorへの準拠
 struct TemplateEditingView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject private var data: TemplateDataList
-    let index: Int
+    private let index: Int
+    let base: TemplateData
 
     @ObservedObject private var variableSection: TemplateEditingViewVariableSection
     @State private var name: String = ""
@@ -20,11 +22,12 @@ struct TemplateEditingView: View {
     init(_ data: TemplateDataList, index: Int) {
         self.index = index
         self.data = data
+        self.base = data.templates[index].data
         self._name = State(initialValue: data.templates[index].data.name)
         self.variableSection = data.templates[index].variableSection
     }
 
-    var doneButton: some View {
+    private var doneButton: some View {
         Button {
             // validation
             let sames = data.templates.indices.filter {data.templates[$0].data.name == name}
@@ -50,7 +53,7 @@ struct TemplateEditingView: View {
                 HStack {
                     Text("名前")
                     TextField("テンプレート名", text: $name)
-
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
                 let sames = data.templates.indices.filter {data.templates[$0].data.name == name}
                 if sames != [index] && !sames.isEmpty {
@@ -75,13 +78,21 @@ struct TemplateEditingView: View {
             }
         }.navigationBarTitle(Text("テンプレートを編集"), displayMode: .inline)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(trailing: doneButton)
+        .navigationBarItems(
+            // leading: Button("キャンセル", action: cancel),
+            trailing: doneButton
+        )
+    }
+
+    func cancel() {
+        // data.templates[index].data = base
+        presentationMode.wrappedValue.dismiss()
     }
 }
 
 struct RandomTemplateLiteralSettingView: View {
     static let templateLiteralType = TemplateLiteralType.random
-    enum Error {
+    private enum Error {
         case nan
         case stringIsNil
     }
@@ -126,7 +137,7 @@ struct RandomTemplateLiteralSettingView: View {
         self._previewString = State(initialValue: self.literal.previewString())
     }
 
-    func update() {
+    private func update() {
         if variableSection.selection != Self.templateLiteralType {
             return
         }
@@ -155,7 +166,7 @@ struct RandomTemplateLiteralSettingView: View {
         self.data.templates[index].data.literal = self.literal
     }
 
-    func warning(_ type: Error) -> some View {
+    private func warning(_ type: Error) -> some View {
         let warningSymbol = Image(systemName: "exclamationmark.triangle")
         switch type {
         case .nan:
@@ -243,7 +254,7 @@ struct RandomTemplateLiteralSettingView: View {
 }
 
 struct DateTemplateLiteralSettingView: View {
-    static let templateLiteralType = TemplateLiteralType.date
+    private static let templateLiteralType = TemplateLiteralType.date
     // リテラル
     @ObservedObject private var data: TemplateDataList
 
@@ -289,7 +300,7 @@ struct DateTemplateLiteralSettingView: View {
         }
     }
 
-    static let yyyy年MM月dd日: DateFormatter = {
+    private static let yyyy年MM月dd日: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy年MM月dd日"
         f.locale = Locale(identifier: "ja_JP")
@@ -297,7 +308,7 @@ struct DateTemplateLiteralSettingView: View {
         return f
     }()
 
-    static let HH_mm: DateFormatter = {
+    private static let HH_mm: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "HH:mm"
         f.locale = Locale(identifier: "ja_JP")
@@ -305,7 +316,7 @@ struct DateTemplateLiteralSettingView: View {
         return f
     }()
 
-    static let yyyy_MM_dd: DateFormatter = {
+    private static let yyyy_MM_dd: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy/MM/dd"
         f.locale = Locale(identifier: "ja_JP")
@@ -313,7 +324,7 @@ struct DateTemplateLiteralSettingView: View {
         return f
     }()
 
-    func update() {
+    private func update() {
         if formatSelection == "カスタム"{
             self.date = Date().advanced(by: (Double(literal.delta) ?? .nan) * Double(literal.deltaUnit))
             self.data.templates[index].data.literal = self.literal
@@ -358,7 +369,6 @@ struct DateTemplateLiteralSettingView: View {
                         Image(systemName: "arrow.clockwise")
                         Text("更新")
                     }
-
                 }
             }
             if formatSelection == "カスタム"{
@@ -372,7 +382,6 @@ struct DateTemplateLiteralSettingView: View {
                     VStack {
                         HStack {
                             Text("ズレ")
-
                             Spacer()
                             TextField("ズレ", text: $literal.delta)
                                 .multilineTextAlignment(.trailing)
@@ -388,23 +397,13 @@ struct DateTemplateLiteralSettingView: View {
                             Text("\(systemImage: "exclamationmark.triangle")値が無効です。有効な数値を入力してください")
                         }
                     }
-
-                    HStack {
-                        Text("暦の種類")
-                        Spacer()
-                        Picker(selection: $literal.type, label: Text("")) {
-                            Text("西暦").tag(DateTemplateLiteral.CalendarType.western)
-                            Text("和暦").tag(DateTemplateLiteral.CalendarType.japanese)
-                        }
+                    Picker("暦の種類", selection: $literal.type) {
+                        Text("西暦").tag(DateTemplateLiteral.CalendarType.western)
+                        Text("和暦").tag(DateTemplateLiteral.CalendarType.japanese)
                     }
-                    HStack {
-                        Text("言語")
-                        Spacer()
-                        Picker(selection: $literal.language, label: Text("")) {
-                            Text("日本語").tag(DateTemplateLiteral.Language.japanese)
-                            Text("英語").tag(DateTemplateLiteral.Language.english)
-                        }
-
+                    Picker("言語", selection: $literal.language) {
+                        Text("日本語").tag(DateTemplateLiteral.Language.japanese)
+                        Text("英語").tag(DateTemplateLiteral.Language.english)
                     }
                 }
                 .onChange(of: literal) {value in
@@ -417,7 +416,6 @@ struct DateTemplateLiteralSettingView: View {
                     FallbackLink("Web検索", destination: "https://www.google.com/search?q=yyyymmddhhmm")
                 }
             }
-
         }
     }
 }

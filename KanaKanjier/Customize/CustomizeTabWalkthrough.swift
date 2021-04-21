@@ -17,7 +17,7 @@ private struct Item: Identifiable {
 }
 
 struct CustomizeTabWalkthroughView: View {
-    @Binding var isShowing: Bool
+    @Binding private var isShowing: Bool
 
     init(isShowing: Binding<Bool>) {
         self._isShowing = isShowing
@@ -55,7 +55,7 @@ struct CustomizeTabWalkthroughView: View {
                                 .fill(Color.systemGray5)
                                 .frame(width: length, height: length)
                         )
-                    Text("azooKeyを拡張する").font(.largeTitle).bold()
+                    Text("azooKeyを拡張する").font(.largeTitle.bold())
                         .padding()
                     let imagesFont: Font = Font.system(size: length / 2.4, weight: .light, design: .default)
                     ForEach(items) {item in
@@ -66,8 +66,7 @@ struct CustomizeTabWalkthroughView: View {
                                 .foregroundColor(.blue)
                             VStack(alignment: .leading) {
                                 Text(item.headline)
-                                    .font(.subheadline)
-                                    .bold()
+                                    .font(.subheadline.bold())
                                 Text(item.body)
                                     .foregroundColor(.gray)
                                     .font(.subheadline)

@@ -20,13 +20,15 @@ fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
     }
 
 }
-struct EditingScrollCustardView: View {
-    private let base: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
+struct EditingScrollCustardView: CancelableEditor {
+    private static let `default`: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
         .gridScroll(0): .system(.changeKeyboard),
         .gridScroll(1): .custom(.init(design: .init(label: .systemImage("list.bullet"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
         .gridScroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
         .gridScroll(3): .system(.enter)
     ]
+
+    let base: UserMadeGridScrollCustard
 
     @Environment(\.presentationMode) private var presentationMode
 
@@ -36,9 +38,8 @@ struct EditingScrollCustardView: View {
 
     init(manager: Binding<CustardManager>, editingItem: UserMadeGridScrollCustard? = nil) {
         self._manager = manager
-        if let editingItem = editingItem {
-            self._editingItem = State(initialValue: editingItem)
-        }
+        self.base = editingItem ?? UserMadeGridScrollCustard(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
+        self._editingItem = State(initialValue: self.base)
     }
 
     var body: some View {
@@ -105,9 +106,7 @@ struct EditingScrollCustardView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle(Text("カスタムタブを作る"), displayMode: .inline)
         .navigationBarItems(
-            leading: Button("キャンセル") {
-                presentationMode.wrappedValue.dismiss()
-            },
+            leading: Button("キャンセル", action: cancel),
             trailing: Button("保存") {
                 self.save()
                 presentationMode.wrappedValue.dismiss()
@@ -115,7 +114,7 @@ struct EditingScrollCustardView: View {
     }
 
     private func makeCustard(data: UserMadeGridScrollCustard) -> Custard {
-        var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = base
+        var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = Self.default
 
         for substring in data.words.split(separator: "\n") {
             let target = substring.components(separatedBy: "\\|").map {$0.components(separatedBy: "|")}.reduce(into: [String]()) {array, value in
@@ -160,5 +159,9 @@ struct EditingScrollCustardView: View {
         } catch {
             debug(error)
         }
+    }
+
+    func cancel() {
+        presentationMode.wrappedValue.dismiss()
     }
 }

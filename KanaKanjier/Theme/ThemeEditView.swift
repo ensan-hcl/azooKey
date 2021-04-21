@@ -72,8 +72,8 @@ private struct ThemeFontDoubleTranslator: Intertranslator {
     }
 }
 
-struct ThemeEditView: View {
-    private let base: ThemeData
+struct ThemeEditView: CancelableEditor {
+    let base: ThemeData
     @State private var theme: ThemeData = .base
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -264,11 +264,7 @@ struct ThemeEditView: View {
             .navigationBarTitle(Text(self.title), displayMode: .inline)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(
-                leading: Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Text("キャンセル")
-                },
+                leading: Button("キャンセル", action: cancel),
                 trailing: Button {
                     do {
                         try self.save()
@@ -301,6 +297,10 @@ struct ThemeEditView: View {
             .navigationBarTitle(Text("完了"), displayMode: .inline)
             .navigationBarItems(leading: EmptyView(), trailing: EmptyView())
         }
+    }
+
+    func cancel() {
+        presentationMode.wrappedValue.dismiss()
     }
 
     private func save() throws {

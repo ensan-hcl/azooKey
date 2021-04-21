@@ -37,8 +37,7 @@ struct ThemeShareView: View {
     var body: some View {
         VStack {
             Text("着せ替えが完成しました🎉")
-                .font(.title)
-                .bold()
+                .font(.title.bold())
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -50,7 +49,7 @@ struct ThemeShareView: View {
                     Image(systemName: "square.and.arrow.up")
                     Text("シェアする")
                 }
-                .font(Font.body.bold())
+                .font(.body.bold())
                 .foregroundColor(.white)
                 .padding()
                 .background(RoundedRectangle(cornerRadius: 3).foregroundColor(.blue))
@@ -65,7 +64,7 @@ struct ThemeShareView: View {
                     Image(systemName: "xmark")
                     Text("閉じる")
                 }
-                .font(Font.body.bold())
+                .font(.body.bold())
                 .foregroundColor(.white)
                 .padding()
                 .background(RoundedRectangle(cornerRadius: 3).foregroundColor(.blue))

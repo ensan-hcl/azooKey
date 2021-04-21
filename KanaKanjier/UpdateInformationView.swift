@@ -174,7 +174,7 @@ private struct ParagraphView: View {
     private let headline: String
     private let points: () -> [String]
 
-    init(_ headline: String, @ArrayBuilder<String> points: @escaping () -> [String] = {return [String]()}) {
+    init(_ headline: String, @ArrayBuilder points: @escaping () -> [String] = {return [String]()}) {
         self.headline = headline
         self.points = points
     }

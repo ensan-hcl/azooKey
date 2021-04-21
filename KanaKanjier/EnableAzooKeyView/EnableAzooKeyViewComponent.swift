@@ -22,7 +22,7 @@ struct EnableAzooKeyViewHeader: View {
                         .font(font)
                 }
                 Text(text)
-                    .font(Font.system(.title).bold())
+                    .font(.title.bold())
             }
             .multilineTextAlignment(.leading)
             .padding(.vertical)
@@ -75,7 +75,7 @@ struct EnableAzooKeyViewButton: View {
             HStack {
                 if let systemName = systemName {
                     Image(systemName: systemName)
-                        .font(Font.body.bold())
+                        .font(.body.bold())
                 }
                 Text(text)
                     .bold()
