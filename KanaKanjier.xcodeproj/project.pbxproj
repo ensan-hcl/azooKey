@@ -112,6 +112,7 @@
 		1A4624D02524DCE900EF5B02 /* キ6000.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1A4624C22524DCE800EF5B02 /* キ6000.loudstxt */; };
 		1A4624DA2525FAE000EF5B02 /* ForEach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4624D92525FAE000EF5B02 /* ForEach.swift */; };
 		1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4624E92526384F00EF5B02 /* GeneralPerformance.swift */; };
+		1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */; };
 		1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4E09042527390100E7ABE5 /* TipsView.swift */; };
 		1A4E0EB0260E26CF009B6EB7 /* p_ナ.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1A4E0E65260E26CE009B6EB7 /* p_ナ.csv */; };
 		1A4E0EB1260E26CF009B6EB7 /* p_ニ.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1A4E0E66260E26CE009B6EB7 /* p_ニ.csv */; };
@@ -2626,6 +2627,7 @@
 		1A4624C22524DCE800EF5B02 /* キ6000.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "キ6000.loudstxt"; sourceTree = "<group>"; };
 		1A4624D92525FAE000EF5B02 /* ForEach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForEach.swift; sourceTree = "<group>"; };
 		1A4624E92526384F00EF5B02 /* GeneralPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralPerformance.swift; sourceTree = "<group>"; };
+		1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableEditor.swift; sourceTree = "<group>"; };
 		1A4E09042527390100E7ABE5 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
 		1A4E0E65260E26CE009B6EB7 /* p_ナ.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "p_ナ.csv"; sourceTree = "<group>"; };
 		1A4E0E66260E26CE009B6EB7 /* p_ニ.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "p_ニ.csv"; sourceTree = "<group>"; };
@@ -7712,6 +7714,7 @@
 			children = (
 				1A10D81325E506460095CB67 /* Pickers */,
 				1ACEEFCF25665E3600899DA2 /* FallbackLink.swift */,
+				1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */,
 				1AFA575F2584810800477DC2 /* Focus.swift */,
 				1AFA4BB2257E169100477DC2 /* PasteButton.swift */,
 				1ACEEFDD25665F0100899DA2 /* CenterAlignedView.swift */,
@@ -10293,6 +10296,7 @@
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A18425525DE6163003985AB /* CustardData.swift in Sources */,
 				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
+				1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */,
 				1AF678FB25CED91C00F3987B /* ActionDepartment.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
 				1AF6A54725FCF1240037D5ED /* OneHandedModeTips.swift in Sources */,

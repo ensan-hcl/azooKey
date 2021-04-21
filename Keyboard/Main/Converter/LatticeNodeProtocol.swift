@@ -8,7 +8,7 @@
 
 import Foundation
 /// ラティスのノード。これを用いて計算する。
-protocol LatticeNodeProtocol: class {
+protocol LatticeNodeProtocol: AnyObject {
     associatedtype RegisteredNode: RegisteredNodeProtocol
     var data: DicdataElement {get}
     var prevs: [RegisteredNode] {get set}

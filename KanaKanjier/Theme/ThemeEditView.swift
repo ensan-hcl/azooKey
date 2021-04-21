@@ -138,7 +138,7 @@ struct ThemeEditView: View {
             self.base = .base
             self.title = "着せ替えを作成"
         }
-        self.theme.suggestKeyFillColor = .color(Color.init(white: 1))
+        self.theme.suggestKeyFillColor = .color(.init(white: 1))
     }
     // PHPickerの設定
     private var config: PHPickerConfiguration {
@@ -242,8 +242,8 @@ struct ThemeEditView: View {
             .onChange(of: trimmedImage) {value in
                 if let value = value {
                     self.theme.picture = .uiImage(value)
-                    self.theme.backgroundColor = .color(Color.white.opacity(0))
-                    self.theme.resultBackgroundColor = .color(Color.white.opacity(0))
+                    self.theme.backgroundColor = .color(.white.opacity(0))
+                    self.theme.resultBackgroundColor = .color(.white.opacity(0))
                 } else {
                     self.theme.picture = .none
                 }

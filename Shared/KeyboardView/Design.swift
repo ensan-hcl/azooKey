@@ -288,7 +288,7 @@ struct Design {
         var suggestKeyColor: Color {
             switch Design.shared.layout {
             case .flick:
-                return Color(UIColor.systemGray4)
+                return .systemGray4
             case .qwerty:
                 return Color("RomanHighlightedKeyColor")
             }

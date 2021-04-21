@@ -43,10 +43,10 @@ struct FlickedKeyModel {
 
     func getSuggestView(size: CGSize, isHidden: Bool = false, isPointed: Bool = false, theme: ThemeData) -> some View {
         var pointedColor: Color {
-            theme != .default ? .white : Color(UIColor.systemGray4)
+            theme != .default ? .white : .systemGray4
         }
         var unpointedColor: Color {
-            theme != .default ? .white : Color(UIColor.systemGray5)
+            theme != .default ? .white : .systemGray5
         }
 
         let color = isPointed ? pointedColor : unpointedColor

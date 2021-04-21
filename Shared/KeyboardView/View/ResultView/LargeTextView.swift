@@ -29,7 +29,7 @@ struct LargeTextView: View {
                     .font(.body)
             }.frame(width: nil, height: Design.shared.keyboardScreenHeight*0.15)
         }
-        .background(Color(UIColor.systemBackground))
+        .background(Color.background)
         .frame(height: Design.shared.keyboardScreenHeight, alignment: .bottom)
     }
 }

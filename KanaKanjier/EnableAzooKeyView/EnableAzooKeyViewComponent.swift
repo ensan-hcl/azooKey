@@ -85,7 +85,7 @@ struct EnableAzooKeyViewButton: View {
             .foregroundColor(.background)
             .background(
                 RoundedRectangle(cornerRadius: width / 4.8 * 0.17)
-                    .fill(self.style == .emphasized ? Color.blue : Color.red)
+                    .fill(self.style == .emphasized ? Color.blue : .red)
             )
         }
     }

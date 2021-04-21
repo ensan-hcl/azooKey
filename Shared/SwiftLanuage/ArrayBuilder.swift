@@ -8,7 +8,7 @@
 
 import Foundation
 
-@_functionBuilder
+@resultBuilder
 struct ArrayBuilder<T> {
     public static func buildBlock(_ values: T...) -> [T] {
         return values
