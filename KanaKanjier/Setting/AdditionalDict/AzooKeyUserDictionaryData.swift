@@ -20,34 +20,25 @@ final class EditableUserDictionaryData: ObservableObject {
         }
     }()
 
-    @Published var ruby: String
-    @Published var word: String
-    @Published var isVerb: Bool
-    @Published var isPersonName: Bool
-    @Published var isPlaceName: Bool
-
+    @Published var data: UserDictionaryData
     let id: Int
 
-    init(ruby: String, word: String, isVerb: Bool, isPersonName: Bool, isPlaceName: Bool, id: Int) {
-        self.ruby = ruby
-        self.word = word
-        self.id = id
-        self.isVerb = isVerb
-        self.isPersonName = isPersonName
-        self.isPlaceName = isPlaceName
+    init(data: UserDictionaryData) {
+        self.data = data
+        self.id = data.id
     }
 
     func neadVerbCheck() -> Bool {
-        let result = self.ruby.last == "る" && ["る", "ル"].contains(self.word.last)
+        let result = self.data.ruby.last == "る" && ["る", "ル"].contains(self.data.word.last)
         return result
     }
 
     var mizenkeiRuby: String {
-        self.ruby.dropLast() + "らない"
+        self.data.ruby.dropLast() + "らない"
     }
 
     var mizenkeiWord: String {
-        self.word.dropLast() + "らない"
+        self.data.word.dropLast() + "らない"
     }
 
     enum AppendError {
@@ -69,25 +60,33 @@ final class EditableUserDictionaryData: ObservableObject {
     }
 
     var error: AppendError? {
-        if ruby.isEmpty {
-            return .rubyEmpty
-        }
-        if word.isEmpty {
+        if self.data.word.isEmpty {
             return .wordEmpty
         }
-        if !self.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy({self.availableChars.contains($0)}) {
+        if self.data.ruby.isEmpty {
+            return .rubyEmpty
+        }
+        if !self.data.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!.allSatisfy({self.availableChars.contains($0)}) {
             return .unavailableCharacter
         }
         return nil
     }
 
     func makeStableData() -> UserDictionaryData {
-        if !self.neadVerbCheck() && isVerb {
-            isVerb = false
+        var result = self.data
+        if !self.neadVerbCheck() && self.data.isVerb {
+            result.isVerb = false
         }
-        return UserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
+        return result
     }
 
+    func copy() -> EditableUserDictionaryData {
+        return .init(data: data)
+    }
+
+    func reset(from copy: EditableUserDictionaryData) {
+        self.data = copy.data
+    }
 }
 
 struct UserDictionary: Codable {
@@ -122,15 +121,15 @@ struct UserDictionary: Codable {
 }
 
 struct UserDictionaryData: Identifiable, Codable {
-    let ruby: String
-    let word: String
-    let isVerb: Bool
-    let isPersonName: Bool
-    let isPlaceName: Bool
+    var ruby: String
+    var word: String
+    var isVerb: Bool
+    var isPersonName: Bool
+    var isPlaceName: Bool
     let id: Int
 
     func makeEditableData() -> EditableUserDictionaryData {
-        return EditableUserDictionaryData(ruby: ruby, word: word, isVerb: isVerb, isPersonName: isPersonName, isPlaceName: isPlaceName, id: id)
+        return EditableUserDictionaryData(data: self)
     }
 
     static func emptyData(id: Int) -> Self {
