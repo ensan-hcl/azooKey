@@ -107,12 +107,8 @@ struct RandomTemplateLiteralSettingView: View {
     // 表示用
     @State private var previewString: String = ""
 
-    @State private var intStringFrom: String = "1"
-    @State private var intStringTo: String = "6"
-
-    @State private var doubleStringFrom: String = "0"
-    @State private var doubleStringTo: String = "1"
-
+    @State private var intStringRange = (left: "1", right: "6")
+    @State private var doubleStringRange = (left: "0", right: "1")
     @State private var stringsString: String = "グー,チョキ,パー"
 
     fileprivate init(_ template: Binding<TemplateData>) {
@@ -122,11 +118,9 @@ struct RandomTemplateLiteralSettingView: View {
             self._type = State(initialValue: template.value.type)
             switch template.value {
             case let .int(from: left, to: right):
-                self._intStringFrom = State(initialValue: "\(left)")
-                self._intStringTo = State(initialValue: "\(right)")
+                self._intStringRange = State(initialValue: ("\(left)", "\(right)"))
             case let .double(from: left, to: right):
-                self._doubleStringFrom = State(initialValue: "\(left)")
-                self._doubleStringTo = State(initialValue: "\(right)")
+                self._doubleStringRange = State(initialValue: ("\(left)", "\(right)"))
             case let .string(strings):
                 self._stringsString = State(initialValue: strings.joined(separator: ","))
             }
@@ -140,21 +134,17 @@ struct RandomTemplateLiteralSettingView: View {
         }
         switch self.type {
         case .int:
-            guard let left = Int(intStringFrom),
-                  let right = Int(intStringTo) else {
+            guard let left = Int(intStringRange.left),
+                  let right = Int(intStringRange.right) else {
                 return
             }
-            let min = left < right ? left:right
-            let max = left < right ? right:left
-            self.literal.value = .int(from: min, to: max)
+            self.literal.value = .int(from: min(left, right), to: max(left, right))
         case .double:
-            guard let left = Double(doubleStringFrom),
-                  let right = Double(doubleStringTo) else {
+            guard let left = Double(doubleStringRange.left),
+                  let right = Double(doubleStringRange.right) else {
                 return
             }
-            let min = left < right ? left:right
-            let max = left < right ? right:left
-            self.literal.value = .double(from: min, to: max)
+            self.literal.value = .double(from: min(left, right), to: max(left, right))
         case .string:
             let strings = stringsString.components(separatedBy: ",")
             self.literal.value = .string(strings)
@@ -192,42 +182,42 @@ struct RandomTemplateLiteralSettingView: View {
             case .int:
                 VStack {
                     HStack {
-                        TextField("左端の値", text: $intStringFrom)
+                        TextField("左端の値", text: $intStringRange.left)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Text("から")
                     }
-                    if Int(intStringFrom) == nil {
+                    if Int(intStringRange.left) == nil {
                         warning(.nan)
                     }
                 }
                 VStack {
                     HStack {
-                        TextField("右端の値", text: $intStringTo)
+                        TextField("右端の値", text: $intStringRange.right)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Text("まで")
                     }
-                    if Int(intStringTo) == nil {
+                    if Int(intStringRange.right) == nil {
                         warning(.nan)
                     }
                 }
             case .double:
                 VStack {
                     HStack {
-                        TextField("左端の値", text: $doubleStringFrom)
+                        TextField("左端の値", text: $doubleStringRange.left)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Text("から")
                     }
-                    if Double(doubleStringFrom) == nil {
+                    if Double(doubleStringRange.left) == nil {
                         warning(.nan)
                     }
                 }
                 VStack {
                     HStack {
-                        TextField("右端の値", text: $doubleStringTo)
+                        TextField("右端の値", text: $doubleStringRange.right)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Text("まで")
                     }
-                    if Double(doubleStringTo) == nil {
+                    if Double(doubleStringRange.right) == nil {
                         warning(.nan)
                     }
                 }
@@ -242,7 +232,7 @@ struct RandomTemplateLiteralSettingView: View {
                     }
                 }
             }
-        }.font(.body)
+        }
     }
 }
 
@@ -339,13 +329,12 @@ struct DateTemplateLiteralSettingView: View {
                             formatter.dateFormat = value
                             formatter.locale = Locale(identifier: "ja_JP")
                             formatter.calendar = Calendar(identifier: .gregorian)
-                            update()
                         } else {
                             formatter.dateFormat = literal.format
                             formatter.locale = Locale(identifier: literal.language.identifier)
                             formatter.calendar = Calendar(identifier: literal.type.identifier)
-                            update()
                         }
+                        update()
                     }
                 }
             }
