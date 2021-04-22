@@ -13,7 +13,7 @@ struct TemplateData: Codable {
     var literal: TemplateLiteralProtocol
     var type: TemplateLiteralType
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case template
         case name
     }

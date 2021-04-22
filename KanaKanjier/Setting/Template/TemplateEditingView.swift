@@ -9,42 +9,19 @@
 import Foundation
 import SwiftUI
 
-// TODO: CancelableEditorへの準拠
-struct TemplateEditingView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @ObservedObject private var data: TemplateDataList
-    private let index: Int
+struct TemplateEditingView: CancelableEditor {
+    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     let base: TemplateData
+    @Binding private var template: TemplateData
+    @State private var editingTemplate: TemplateData
+    // 名前の一覧
+    private let validationInfo: [String]
 
-    @ObservedObject private var variableSection: TemplateEditingViewVariableSection
-    @State private var name: String = ""
-
-    init(_ data: TemplateDataList, index: Int) {
-        self.index = index
-        self.data = data
-        self.base = data.templates[index].data
-        self._name = State(initialValue: data.templates[index].data.name)
-        self.variableSection = data.templates[index].variableSection
-    }
-
-    private var doneButton: some View {
-        Button {
-            // validation
-            let sames = data.templates.indices.filter {data.templates[$0].data.name == name}
-            if sames != [index] && !sames.isEmpty {
-                return
-            }
-            if name.isEmpty {
-                return
-            }
-            // データの更新
-            data.templates[index].data.name = self.name
-            data.templates[index].data.type = self.variableSection.selection
-            // 画面を閉じる
-            presentationMode.wrappedValue.dismiss()
-        } label: {
-            Text("完了")
-        }
+    init(_ template: Binding<TemplateData>, validationInfo: [String]) {
+        self._template = template
+        self.base = template.wrappedValue
+        self._editingTemplate = State(initialValue: template.wrappedValue)
+        self.validationInfo = validationInfo
     }
 
     var body: some View {
@@ -52,53 +29,78 @@ struct TemplateEditingView: View {
             VStack {
                 HStack {
                     Text("名前")
-                    TextField("テンプレート名", text: $name)
+                    TextField("テンプレート名", text: $editingTemplate.name)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                let sames = data.templates.indices.filter {data.templates[$0].data.name == name}
-                if sames != [index] && !sames.isEmpty {
-                    Text("\(systemImage: "exclamationmark.triangle")名前が重複しています")
-                }
-                if name.isEmpty {
-                    Text("\(systemImage: "exclamationmark.triangle")名前を入力してください")
+                if case let .nameError(message) = validation() {
+                    Label(message, systemImage: "exclamationmark.triangle")
+                        .foregroundColor(.primary)
                 }
             }
-            Picker(selection: $variableSection.selection, label: Text("")) {
+            Picker(selection: $editingTemplate.type, label: Text("")) {
                 Text("時刻").tag(TemplateLiteralType.date)
                 Text("ランダム").tag(TemplateLiteralType.random)
             }
             .labelsHidden()
             .pickerStyle(SegmentedPickerStyle())
-
-            switch variableSection.selection {
+            switch editingTemplate.type {
             case .date:
-                DateTemplateLiteralSettingView(data, index: index, variableSection: variableSection)
+                DateTemplateLiteralSettingView($editingTemplate)
             case .random:
-                RandomTemplateLiteralSettingView(data, index: index, variableSection: variableSection)
+                RandomTemplateLiteralSettingView($editingTemplate)
             }
-        }.navigationBarTitle(Text("テンプレートを編集"), displayMode: .inline)
+        }
+        .navigationBarTitle(Text("テンプレートを編集"), displayMode: .inline)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
-            // leading: Button("キャンセル", action: cancel),
-            trailing: doneButton
+            leading: Button("キャンセル", action: cancel),
+            trailing: Button("完了", action: save)
         )
     }
 
+    private enum ValidationResult {
+        case success
+        case nameError(LocalizedStringKey)
+    }
+
+    private func validation() -> ValidationResult {
+        if editingTemplate.name.isEmpty {
+            return .nameError("名前を入力してください")
+        }
+        if editingTemplate.name != base.name {
+            let sames = validationInfo.filter {$0 == editingTemplate.name}
+            if sames.count == 1 {
+                return .nameError("名前が重複しています")
+            }
+        }
+        return .success
+    }
+
+    private func save() {
+        guard case .success = validation() else {
+            return
+        }
+        // データの更新
+        template = editingTemplate
+        // 画面を閉じる
+        presentationMode.wrappedValue.dismiss()
+    }
+
     func cancel() {
-        // data.templates[index].data = base
+        template = base
         presentationMode.wrappedValue.dismiss()
     }
 }
 
 struct RandomTemplateLiteralSettingView: View {
-    static let templateLiteralType = TemplateLiteralType.random
+    private static let templateLiteralType = TemplateLiteralType.random
     private enum Error {
         case nan
         case stringIsNil
     }
     private let timer = Timer.publish(every: 0.8, on: .main, in: .common).autoconnect()
     // リテラル
-    @ObservedObject private var data: TemplateDataList
+    @Binding private var template: TemplateData
 
     @State private var literal = RandomTemplateLiteral(value: .int(from: 1, to: 6))
     @State private var type: RandomTemplateLiteral.ValueType = .int
@@ -113,14 +115,9 @@ struct RandomTemplateLiteralSettingView: View {
 
     @State private var stringsString: String = "グー,チョキ,パー"
 
-    @ObservedObject private var variableSection: TemplateEditingViewVariableSection
-    private let index: Int
-
-    fileprivate init(_ data: TemplateDataList, index: Int, variableSection: TemplateEditingViewVariableSection) {
-        self.index = index
-        self.data = data
-        self.variableSection = variableSection
-        if let template = data.templates[index].data.literal as? RandomTemplateLiteral {
+    fileprivate init(_ template: Binding<TemplateData>) {
+        self._template = template
+        if let template = template.wrappedValue.literal as? RandomTemplateLiteral {
             self._literal = State(initialValue: template)
             self._type = State(initialValue: template.value.type)
             switch template.value {
@@ -138,7 +135,7 @@ struct RandomTemplateLiteralSettingView: View {
     }
 
     private func update() {
-        if variableSection.selection != Self.templateLiteralType {
+        if template.type != Self.templateLiteralType {
             return
         }
         switch self.type {
@@ -163,7 +160,7 @@ struct RandomTemplateLiteralSettingView: View {
             self.literal.value = .string(strings)
         }
         self.previewString = self.literal.previewString()
-        self.data.templates[index].data.literal = self.literal
+        self.template.literal = self.literal
     }
 
     private func warning(_ type: Error) -> some View {
@@ -186,10 +183,7 @@ struct RandomTemplateLiteralSettingView: View {
                 }
             }
             Section(header: Text("プレビュー")) {
-                HStack {
-                    Text(previewString)
-                    Spacer()
-                }
+                Text(previewString)
             }.onReceive(timer) {_ in
                 self.update()
             }
@@ -250,30 +244,24 @@ struct RandomTemplateLiteralSettingView: View {
             }
         }.font(.body)
     }
-
 }
 
 struct DateTemplateLiteralSettingView: View {
     private static let templateLiteralType = TemplateLiteralType.date
     // リテラル
-    @ObservedObject private var data: TemplateDataList
+    @Binding private var template: TemplateData
 
     @State private var literal = DateTemplateLiteral.example
-    private let index: Int
     // 選択されているテンプレート
     @State private var formatSelection = "yyyy年MM月dd日"
     // 表示用
     @State private var date: Date = Date()
     @State private var dateString: String = ""
-    @ObservedObject private var variableSection: TemplateEditingViewVariableSection
-
     @State private var formatter: DateFormatter = DateFormatter()
 
-    fileprivate init(_ data: TemplateDataList, index: Int, variableSection: TemplateEditingViewVariableSection) {
-        self.data = data
-        self.index = index
-        self.variableSection = variableSection
-        if let template = data.templates[index].data.literal as? DateTemplateLiteral {
+    fileprivate init(_ template: Binding<TemplateData>) {
+        self._template = template
+        if let template = template.wrappedValue.literal as? DateTemplateLiteral {
             if template.language == DateTemplateLiteral.example.language,
                template.type == DateTemplateLiteral.example.type,
                template.delta == DateTemplateLiteral.example.delta,
@@ -298,6 +286,7 @@ struct DateTemplateLiteralSettingView: View {
             self.formatter.locale = Locale(identifier: "ja_JP")
             self.formatter.calendar = Calendar(identifier: .gregorian)
         }
+        self.update()
     }
 
     private static let yyyy年MM月dd日: DateFormatter = {
@@ -325,12 +314,14 @@ struct DateTemplateLiteralSettingView: View {
     }()
 
     private func update() {
-        if formatSelection == "カスタム"{
-            self.date = Date().advanced(by: (Double(literal.delta) ?? .nan) * Double(literal.deltaUnit))
-            self.data.templates[index].data.literal = self.literal
-        } else {
-            self.date = Date()
-            self.data.templates[index].data.literal = DateTemplateLiteral(format: formatSelection, type: .western, language: .japanese, delta: "0", deltaUnit: 1)
+        DispatchQueue.main.async {
+            if formatSelection == "カスタム"{
+                self.date = Date().advanced(by: (Double(literal.delta) ?? .nan) * Double(literal.deltaUnit))
+                self.template.literal = self.literal
+            } else {
+                self.date = Date()
+                self.template.literal = DateTemplateLiteral(format: formatSelection, type: .western, language: .japanese, delta: "0", deltaUnit: 1)
+            }
         }
     }
 
@@ -355,7 +346,6 @@ struct DateTemplateLiteralSettingView: View {
                             formatter.calendar = Calendar(identifier: literal.type.identifier)
                             update()
                         }
-                        update()
                     }
                 }
             }
@@ -363,9 +353,7 @@ struct DateTemplateLiteralSettingView: View {
                 HStack {
                     Text(formatter.string(from: date))
                     Spacer()
-                    Button {
-                        update()
-                    } label: {
+                    Button(action: update) {
                         Image(systemName: "arrow.clockwise")
                         Text("更新")
                     }
