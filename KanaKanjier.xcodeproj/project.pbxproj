@@ -43,6 +43,7 @@
 		1A26F35925E8C147003CDA0D /* StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */; };
 		1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
 		1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C293826273E9900DFE465 /* DraggableView.swift */; };
+		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A30CE8B26023B52007C1A2D /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1A30CE8C26023B52007C1A2D /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A364E3125C8361A00A56583 /* LearningMemory.swift */; };
@@ -2555,6 +2556,7 @@
 		1A2602F32514FB6E00EAD647 /* VariationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationsModel.swift; sourceTree = "<group>"; };
 		1A26F34125E8AACA003CDA0D /* StrokeAndFill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeAndFill.swift; sourceTree = "<group>"; };
 		1A2C293826273E9900DFE465 /* DraggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
+		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A30CE8A26023B52007C1A2D /* CodableSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableSupport.swift; sourceTree = "<group>"; };
 		1A364E3125C8361A00A56583 /* LearningMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningMemory.swift; sourceTree = "<group>"; };
 		1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionaryData.swift; sourceTree = "<group>"; };
@@ -7716,6 +7718,7 @@
 				1ACEEFCF25665E3600899DA2 /* FallbackLink.swift */,
 				1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */,
 				1AFA575F2584810800477DC2 /* Focus.swift */,
+				1A3022AE2631663200E4495C /* OnEnterBackground.swift */,
 				1AFA4BB2257E169100477DC2 /* PasteButton.swift */,
 				1ACEEFDD25665F0100899DA2 /* CenterAlignedView.swift */,
 				1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */,
@@ -10273,6 +10276,7 @@
 				1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */,
 				1A64A8E0257C925E0022C081 /* FontSizeSettingItemView.swift in Sources */,
 				1A4057D8255841C70073C6F7 /* LearningType.swift in Sources */,
+				1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */,
 				1A3ACF2225FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */,
 				1AB8C3CE25E2509300D39BC5 /* CustomizeTabView.swift in Sources */,
 				1AF6798F25CEDBB500F3987B /* FlickKeyView.swift in Sources */,

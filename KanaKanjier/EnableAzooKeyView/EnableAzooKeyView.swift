@@ -116,7 +116,8 @@ struct EnableAzooKeyView: View {
                         }
                         .onAppear {
                             value.scrollTo(0, anchor: .top)
-                        }.onTapGesture {
+                        }
+                        .onTapGesture {
                             UIApplication.shared.closeKeyboard()
                         }
                         .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) {_ in
@@ -137,7 +138,7 @@ struct EnableAzooKeyView: View {
         }
         .animation(.interactiveSpring(), value: step)
         .animation(.spring(), value: showDoneMessage)
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+        .onEnterForeground { _ in
             if Store.shared.isKeyboardActivated {
                 self.step = .setting
                 Store.variableSection.isKeyboardActivated = true

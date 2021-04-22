@@ -362,7 +362,7 @@ struct URLImportCustardView: View {
                 data.download(from: url)
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+        .onEnterForeground { _ in
             if let url = storeVariableSection.importFile {
                 data.reset()
                 data.download(from: url)

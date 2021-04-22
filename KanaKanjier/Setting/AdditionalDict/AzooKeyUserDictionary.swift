@@ -198,7 +198,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
         .onDisappear {
             self.save()
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) {_ in
+        .onEnterBackground {_ in
             self.save()
         }
     }

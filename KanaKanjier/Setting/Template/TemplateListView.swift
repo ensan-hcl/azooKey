@@ -70,7 +70,7 @@ struct TemplateListView: View {
         .onAppear {
             self.previewStrings = data.templates.map {$0.previewString}
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) {_ in
+        .onEnterBackground {_ in
             self.save()
         }
         .onDisappear {
