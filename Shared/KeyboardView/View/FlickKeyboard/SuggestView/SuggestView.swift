@@ -40,14 +40,14 @@ struct SuggestView: View {
     private func neededApeearView(direction: FlickDirection) -> some View {
         if case .oneDirection(direction) = self.modelVariableSection.suggestState {
             if let model = self.model.flickModels[direction] {
-                return model.getSuggestView(size: size, isPointed: true, theme: theme)
+                return model.getSuggestView(size: size, isHidden: false, isPointed: true, theme: theme)
             } else {
                 return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
             }
         }
         if case .all = self.modelVariableSection.suggestState {
             if let model = self.model.flickModels[direction] {
-                return model.getSuggestView(size: size, theme: theme)
+                return model.getSuggestView(size: size, isHidden: false, theme: theme)
             } else {
                 return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
             }

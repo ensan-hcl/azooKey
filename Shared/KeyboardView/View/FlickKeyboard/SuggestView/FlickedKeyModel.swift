@@ -41,7 +41,7 @@ struct FlickedKeyModel {
         self.longPressActions = longPressActions
     }
 
-    func getSuggestView(size: CGSize, isHidden: Bool = false, isPointed: Bool = false, theme: ThemeData) -> some View {
+    func getSuggestView(size: CGSize, isHidden: Bool, isPointed: Bool = false, theme: ThemeData) -> some View {
         var pointedColor: Color {
             theme != .default ? .white : .systemGray4
         }
