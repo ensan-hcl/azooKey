@@ -13,20 +13,20 @@ enum UserMadeCustard: Codable {
 }
 
 struct UserMadeGridScrollCustard: Codable {
-    internal init(tabName: String, direction: CustardInterfaceLayoutScrollValue.ScrollDirection, columnCount: String, rowCount: String, words: String, addTabBarAutomatically: Bool) {
-        self.tabName = tabName
-        self.direction = direction
-        self.columnCount = columnCount
-        self.rowCount = rowCount
-        self.words = words
-        self.addTabBarAutomatically = true
-    }
-
     var tabName: String
     var direction: CustardInterfaceLayoutScrollValue.ScrollDirection
     var columnCount: String
     var rowCount: String
     var words: String
+    var addTabBarAutomatically: Bool
+}
+
+struct UserMadeTenKeyCustard: Codable {
+    var tabName: String
+    var rowCount: String
+    var columnCount: String
+    var inputStyle: CustardInputStyle
+    var language: CustardLanguage
     var addTabBarAutomatically: Bool
 }
 

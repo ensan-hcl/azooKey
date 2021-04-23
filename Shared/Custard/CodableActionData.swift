@@ -278,7 +278,7 @@ public extension CodableActionData {
     }
 }
 
-public struct CodableLongpressActionData: Codable, Equatable {
+public struct CodableLongpressActionData: Codable, Hashable {
     public static let none = CodableLongpressActionData()
     public init(start: [CodableActionData] = [], repeat: [CodableActionData] = []) {
         self.start = start

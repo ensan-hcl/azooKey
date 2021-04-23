@@ -278,34 +278,3 @@ struct FlickCustomKeysSettingView: View {
         }
     }
 }
-
-private struct CustomKeySettingFlickKeyView: View {
-    private let position: FlickKeyPosition
-    private let label: String
-    @Binding private var selectedPosition: FlickKeyPosition?
-
-    init(_ position: FlickKeyPosition, label: String, selectedPosition: Binding<FlickKeyPosition?>) {
-        self.position = position
-        self.label = label
-        self._selectedPosition = selectedPosition
-    }
-
-    private var focused: Bool {
-        selectedPosition == position
-    }
-
-    private var strokeColor: Color {
-        focused ? .accentColor : .primary
-    }
-
-    var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .stroke(strokeColor)
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
-            .focus(.accentColor, focused: focused)
-            .overlay(Text(label))
-            .onTapGesture {
-                self.selectedPosition = position
-            }
-    }
-}

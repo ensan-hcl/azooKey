@@ -1,0 +1,47 @@
+//
+//  CustomKeySettingFlickKeyView.swift
+//  KanaKanjier
+//
+//  Created by β α on 2021/04/23.
+//  Copyright © 2021 DevEn3. All rights reserved.
+//
+
+import Foundation
+import SwiftUI
+
+struct CustomKeySettingFlickKeyView<Label: View>: View {
+    private let position: FlickKeyPosition
+    @Binding private var selectedPosition: FlickKeyPosition?
+    private let label: () -> Label
+
+    init(_ position: FlickKeyPosition, label: String, selectedPosition: Binding<FlickKeyPosition?>) where Label == Text {
+        self.position = position
+        self.label = { Text(verbatim: label) }
+        self._selectedPosition = selectedPosition
+    }
+
+    init(_ position: FlickKeyPosition, selectedPosition: Binding<FlickKeyPosition?>, @ViewBuilder label: @escaping () -> Label) {
+        self.position = position
+        self.label = label
+        self._selectedPosition = selectedPosition
+    }
+
+    private var focused: Bool {
+        selectedPosition == position
+    }
+
+    private var strokeColor: Color {
+        focused ? .accentColor : .primary
+    }
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .stroke(strokeColor)
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
+            .focus(.accentColor, focused: focused)
+            .overlay(label())
+            .onTapGesture {
+                self.selectedPosition = position
+            }
+    }
+}

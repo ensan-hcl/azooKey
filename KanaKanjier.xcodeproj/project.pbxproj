@@ -44,6 +44,9 @@
 		1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
 		1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C293826273E9900DFE465 /* DraggableView.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
+		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
+		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
+		1A3022B52632A22700E4495C /* CustomKeySettingFlickKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B42632A22700E4495C /* CustomKeySettingFlickKeyView.swift */; };
 		1A30CE8B26023B52007C1A2D /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1A30CE8C26023B52007C1A2D /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A364E3125C8361A00A56583 /* LearningMemory.swift */; };
@@ -2557,6 +2560,9 @@
 		1A26F34125E8AACA003CDA0D /* StrokeAndFill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeAndFill.swift; sourceTree = "<group>"; };
 		1A2C293826273E9900DFE465 /* DraggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
+		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
+		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
+		1A3022B42632A22700E4495C /* CustomKeySettingFlickKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeySettingFlickKeyView.swift; sourceTree = "<group>"; };
 		1A30CE8A26023B52007C1A2D /* CodableSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableSupport.swift; sourceTree = "<group>"; };
 		1A364E3125C8361A00A56583 /* LearningMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningMemory.swift; sourceTree = "<group>"; };
 		1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionaryData.swift; sourceTree = "<group>"; };
@@ -7629,6 +7635,8 @@
 				1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */,
 				1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */,
 				1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */,
+				1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */,
+				1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */,
 				1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */,
 				1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */,
 				1AB8C3DD25E2854C00D39BC5 /* CodableActionDataEditor.swift */,
@@ -7674,6 +7682,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */,
+				1A3022B42632A22700E4495C /* CustomKeySettingFlickKeyView.swift */,
 			);
 			path = FlickCustomKeys;
 			sourceTree = "<group>";
@@ -10249,6 +10258,7 @@
 				1AC0315D25120A17004CA505 /* SettingTab.swift in Sources */,
 				1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */,
 				1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */,
+				1A3022B52632A22700E4495C /* CustomKeySettingFlickKeyView.swift in Sources */,
 				1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */,
 				1A39A1A2259325D7008DDCFE /* AzooKeyUserDictionaryData.swift in Sources */,
 				1AE102DA25D43E9100CA7277 /* ThemeManager.swift in Sources */,
@@ -10306,6 +10316,7 @@
 				1AF6A54725FCF1240037D5ED /* OneHandedModeTips.swift in Sources */,
 				1A10D81525E506710095CB67 /* DocumentPicker.swift in Sources */,
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
+				1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */,
 				1AB8C40425E3884200D39BC5 /* BottomSheetView.swift in Sources */,
 				1A0E8D6825EDD74000A9BAE5 /* DeviceName.swift in Sources */,
 				1AF6797C25CEDB9B00F3987B /* QwertyKeyModelProtocol.swift in Sources */,
@@ -10369,6 +10380,7 @@
 				1AF616BB256D40CB001A0B32 /* MemoryResetCondition.swift in Sources */,
 				1A18424325DD6857003985AB /* FontPicker.swift in Sources */,
 				1A9B0A2D25635090004203BB /* EmojiKaomojiView.swift in Sources */,
+				1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */,
 				1AB8C36225DFE80A00D39BC5 /* SimpleKeyModel.swift in Sources */,
 				1AF679AD25CEE66F00F3987B /* KeyboardPreview.swift in Sources */,
 				1AF6797025CEDB9B00F3987B /* VariationsModel.swift in Sources */,

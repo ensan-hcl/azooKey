@@ -42,6 +42,11 @@ fileprivate extension CustardInterfaceStyle {
     }
 }
 
+enum KeyPosition: Hashable {
+    case gridFit(x: Int, y: Int)
+    case gridScroll(index: Int)
+}
+
 fileprivate extension CustardInterface {
     var tabDesign: TabDependentDesign {
         switch self.keyLayout {
@@ -55,11 +60,6 @@ fileprivate extension CustardInterface {
                 return TabDependentDesign(width: CGFloat(value.rowCount), height: CGFloat(Int(value.columnCount)), layout: .flick, orientation: VariableStates.shared.keyboardOrientation)
             }
         }
-    }
-
-    enum KeyPosition: Hashable {
-        case gridFit(x: Int, y: Int)
-        case gridScroll(index: Int)
     }
 
     var flickKeyModels: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
@@ -121,7 +121,7 @@ fileprivate extension CustardKeyDesign.ColorType {
 
 }
 
-fileprivate extension CustardInterfaceKey {
+extension CustardInterfaceKey {
     var flickKeyModel: FlickKeyModelProtocol {
         switch self {
         case let .system(value):
@@ -262,14 +262,6 @@ struct CustomKeyboardView: View {
         self.tabDesign = custard.interface.tabDesign
     }
 
-    private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
-        let width = tabDesign.keyViewWidth(widthCount: width)
-        let height = tabDesign.keyViewHeight(heightCount: height)
-        let dx = width * 0.5 + tabDesign.keyViewWidth * CGFloat(x) + tabDesign.horizontalSpacing * CGFloat(x)
-        let dy = height * 0.5 + tabDesign.keyViewHeight * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
-        return (CGPoint(x: dx, y: dy), CGSize(width: width, height: height))
-    }
-
     private func qwertyKeyData(x: Int, y: Int, size: QwertyKeySizeType) -> (position: CGPoint, size: CGSize) {
         let width = size.width(design: tabDesign)
         let height = size.height(design: tabDesign)
@@ -283,26 +275,8 @@ struct CustomKeyboardView: View {
         case let .gridFit(value):
             switch custard.interface.keyStyle {
             case .tenkeyStyle:
-                let models = custard.interface.flickKeyModels
-                ZStack {
-                    ForEach(0..<value.rowCount, id: \.self) {x in
-                        ForEach(0..<value.columnCount, id: \.self) {y in
-                            if let data = models[.gridFit(x: x, y: y)] {
-                                let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
-                                FlickKeyView(model: data.model, size: info.size)
-                                    .position(x: info.position.x, y: info.position.y)
-                            }
-                        }
-                    }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
-                    ForEach(0..<value.rowCount, id: \.self) {x in
-                        ForEach(0..<value.columnCount, id: \.self) {y in
-                            if let data = models[.gridFit(x: x, y: y)] {
-                                let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
-                                SuggestView(model: data.model.suggestModel, tabDesign: tabDesign, size: info.size)
-                                    .position(x: info.position.x, y: info.position.y)
-                            }
-                        }
-                    }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+                CustardFlickKeysView(models: custard.interface.flickKeyModels, tabDesign: tabDesign, layout: value){view, _, _ in
+                    view
                 }
             case .pcStyle:
                 let models = custard.interface.qwertyKeyModels
@@ -317,19 +291,6 @@ struct CustomKeyboardView: View {
                         }
                     }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
                 }
-            /*
-             VStack(spacing: tabDesign.verticalSpacing){
-             ForEach(0..<value.columnCount, id: \.self){y in
-             HStack(spacing: tabDesign.horizontalSpacing){
-             ForEach(0..<value.rowCount, id: \.self){x in
-             if let model = models[.gridFit(GridFitPositionSpecifier(x: x, y: y))]{
-             QwertyKeyView(model: model, tabDesign: tabDesign)
-             }
-             }
-             }
-             }
-             }
-             */
             }
         case let .gridScroll(value):
             let height = tabDesign.keysHeight
@@ -354,6 +315,67 @@ struct CustomKeyboardView: View {
                     }
                 }.frame(height: height)
             }
+        }
+    }
+}
+
+struct CustardFlickKeysView<Content: View>: View {
+    init(models: [KeyPosition : (model: FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, needSuggest: Bool = true, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
+        self.models = models
+        self.tabDesign = tabDesign
+        self.layout = layout
+        self.needSuggest = needSuggest
+        self.contentGenerator = generator
+    }
+
+    private let contentGenerator: (FlickKeyView, Int, Int) -> (Content)
+    private let models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)]
+    private let tabDesign: TabDependentDesign
+    private let layout: CustardInterfaceLayoutGridValue
+    private let needSuggest: Bool
+
+    private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
+        let width = tabDesign.keyViewWidth(widthCount: width)
+        let height = tabDesign.keyViewHeight(heightCount: height)
+        let dx = width * 0.5 + tabDesign.keyViewWidth * CGFloat(x) + tabDesign.horizontalSpacing * CGFloat(x)
+        let dy = height * 0.5 + tabDesign.keyViewHeight * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
+        return (CGPoint(x: dx, y: dy), CGSize(width: width, height: height))
+    }
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<layout.rowCount, id: \.self) {x in
+                ForEach(0..<layout.columnCount, id: \.self) {y in
+                    if let data = models[.gridFit(x: x, y: y)] {
+                        let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
+                        contentGenerator(FlickKeyView(model: data.model, size: info.size), x, y)
+                            .position(x: info.position.x, y: info.position.y)
+                    }
+                }
+            }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+            if needSuggest{
+                ForEach(0..<layout.rowCount, id: \.self) {x in
+                    ForEach(0..<layout.columnCount, id: \.self) {y in
+                        if let data = models[.gridFit(x: x, y: y)] {
+                            let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
+                            SuggestView(model: data.model.suggestModel, tabDesign: tabDesign, size: info.size)
+                                .position(x: info.position.x, y: info.position.y)
+                        }
+                    }
+                }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+            }
+            /*
+             let suggests = models.filter{key, value in
+             return value.model.suggestModel.variableSection.suggestState.isActive
+             }.map{(key: $0.key, value: $0.value)}
+             ForEach(suggests.indices, id: \.self){ i in
+             if case let .gridFit(x: x, y: y) = suggests[i].key{
+             let info = flickKeyData(x: x, y: y, width: suggests[i].value.width, height: suggests[i].value.height)
+             SuggestView(model: suggests[i].value.model.suggestModel, tabDesign: tabDesign, size: info.size)
+             .position(x: info.position.x, y: info.position.y)
+             }
+             }
+             */
         }
     }
 }
