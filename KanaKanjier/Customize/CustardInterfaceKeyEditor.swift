@@ -75,6 +75,7 @@ fileprivate extension CustardInterfaceCustomKey {
     enum LabelImageNameKey { case labelImageName }
     enum LabelTypeKey { case labelType }
     enum PressActionKey { case pressAction }
+    enum InputActionKey { case inputAction }
     enum LongpressActionKey { case longpressAction }
 
     subscript(label: LabelTextKey, position: FlickKeyPosition) -> String {
@@ -155,6 +156,24 @@ fileprivate extension CustardInterfaceCustomKey {
         }
     }
 
+    subscript(inputAction: InputActionKey, position: FlickKeyPosition) -> String {
+        get {
+            if let direction = position.flickDirection {
+                return self[direction][.inputAction]
+            }
+            if case let .input(value) = self.press_actions.first {
+                return value
+            }
+            return ""
+        }
+        set {
+            if let direction = position.flickDirection {
+                self[direction][.inputAction] = newValue
+            }
+            self.press_actions = [.input(newValue)]
+        }
+    }
+
     subscript(action: LongpressActionKey, position: FlickKeyPosition) -> CodableLongpressActionData {
         get {
             if let direction = position.flickDirection {
@@ -175,6 +194,7 @@ fileprivate extension CustardInterfaceCustomKey {
 fileprivate extension CustardInterfaceVariationKey {
     enum LabelTextKey { case labelText }
     enum PressActionKey { case pressAction }
+    enum InputActionKey { case inputAction }
     enum LongpressActionKey { case longpressAction }
     enum LabelImageNameKey { case labelImageName }
     enum LabelTypeKey { case labelType }
@@ -220,7 +240,7 @@ fileprivate extension CustardInterfaceVariationKey {
         }
     }
 
-    subscript(label: PressActionKey) -> [CodableActionData] {
+    subscript(pressAction: PressActionKey) -> [CodableActionData] {
         get {
             return self.press_actions
         }
@@ -229,7 +249,19 @@ fileprivate extension CustardInterfaceVariationKey {
         }
     }
 
-    subscript(label: LongpressActionKey) -> CodableLongpressActionData {
+    subscript(inputAction: InputActionKey) -> String {
+        get {
+            if case let .input(value) = self.press_actions.first {
+                return value
+            }
+            return ""
+        }
+        set {
+            self.press_actions = [.input(newValue)]
+        }
+    }
+
+    subscript(longpressAction: LongpressActionKey) -> CodableLongpressActionData {
         get {
             return self.longpress_actions
         }
@@ -270,39 +302,57 @@ struct CustardInterfaceKeyEditor: View {
                             customKeyEditor(position: position)
                         }
                     }
-                case let .system(_):
+                case .system:
                     systemKeyEditor()
                 }
             }
+        }
+        .onChange(of: selectedPosition) {value in
+            bottomSheetShown = value != nil
         }
         .background(Color.secondarySystemBackground)
         .navigationTitle(Text("キーの編集"))
     }
 
+    private var keyPicker: some View {
+        Picker("キーの種類", selection: $key) {
+            if [CustardInterfaceKey.system(.enter), .custom(.flickSpace), .custom(.flickDelete), .system(.changeKeyboard), .system(.flickKogaki), .system(.flickKutoten), .system(.flickHiraTab), .system(.flickAbcTab), .system(.flickStar123Tab)].contains(key) {
+                Text("カスタム").tag(CustardInterfaceKey.custom(.empty))
+            } else {
+                Text("カスタム").tag(key)
+            }
+            Text("改行キー").tag(CustardInterfaceKey.system(.enter))
+            Text("削除キー").tag(CustardInterfaceKey.custom(.flickDelete))
+            Text("空白キー").tag(CustardInterfaceKey.custom(.flickSpace))
+            Text("地球儀キー").tag(CustardInterfaceKey.system(.changeKeyboard))
+            Text("小書き・濁点化キー").tag(CustardInterfaceKey.system(.flickKogaki))
+            Text("句読点キー").tag(CustardInterfaceKey.system(.flickKutoten))
+            Text("日本語タブキー").tag(CustardInterfaceKey.system(.flickHiraTab))
+            Text("英語タブキー").tag(CustardInterfaceKey.system(.flickAbcTab))
+            Text("記号タブキー").tag(CustardInterfaceKey.system(.flickStar123Tab))
+        }
+    }
+
     private func systemKeyEditor() -> some View {
         Form {
-            Picker("キーの種類", selection: $key) {
-                if [CustardInterfaceKey.system(.enter), .custom(.flickSpace), .custom(.flickDelete), .system(.changeKeyboard), .system(.flickKogaki), .system(.flickKutoten)].contains(key) {
-                    Text("カスタム").tag(CustardInterfaceKey.custom(.init(design: .init(label: .text(""), color: .normal), press_actions: [], longpress_actions: .none, variations: [])))
-                } else {
-                    Text("カスタム").tag(key)
-                }
-                Text("改行キー").tag(CustardInterfaceKey.system(.enter))
-                Text("削除キー").tag(CustardInterfaceKey.custom(.flickDelete))
-                Text("空白キー").tag(CustardInterfaceKey.custom(.flickSpace))
-                Text("地球儀キー").tag(CustardInterfaceKey.system(.changeKeyboard))
-                Text("小書き・濁点化キー").tag(CustardInterfaceKey.system(.flickKogaki))
-                Text("句読点キー").tag(CustardInterfaceKey.system(.flickKutoten))
+            Section {
+                keyPicker
             }
-
-            Button("リセット") {
-                key = .custom(.init(design: .init(label: .text(""), color: .normal), press_actions: [], longpress_actions: .none, variations: []))
-            }.foregroundColor(.red)
+            Section {
+                Button("リセット") {
+                    key = .custom(.empty)
+                }.foregroundColor(.red)
+            }
         }
     }
 
     private func customKeyEditor(position: FlickKeyPosition) -> some View {
         Form {
+            Section(header: Text("入力")) {
+                Text("キーを押して入力される文字を設定します。")
+                TextField("入力", text: $key[.custom][.inputAction, position])
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
             Section(header: Text("ラベル")) {
                 Text("キーに表示される文字を設定します。")
                 Picker("ラベルの種類", selection: $key[.custom][.labelType, position]) {
@@ -345,22 +395,20 @@ struct CustardInterfaceKeyEditor: View {
             }
 
             if position == .center {
-                Picker("キーの種類", selection: $key) {
-                    if [CustardInterfaceKey.system(.enter), .custom(.flickSpace), .custom(.flickDelete), .system(.changeKeyboard), .system(.flickKogaki), .system(.flickKutoten)].contains(key) {
-                        Text("カスタム").tag(CustardInterfaceKey.custom(.init(design: .init(label: .text(""), color: .normal), press_actions: [], longpress_actions: .none, variations: [])))
-                    } else {
-                        Text("カスタム").tag(key)
-                    }
-                    Text("改行キー").tag(CustardInterfaceKey.system(.enter))
-                    Text("削除キー").tag(CustardInterfaceKey.custom(.flickDelete))
-                    Text("空白キー").tag(CustardInterfaceKey.custom(.flickSpace))
-                    Text("地球儀キー").tag(CustardInterfaceKey.system(.changeKeyboard))
-                    Text("小書き・濁点化キー").tag(CustardInterfaceKey.system(.flickKogaki))
-                    Text("句読点キー").tag(CustardInterfaceKey.system(.flickKutoten))
+                Section {
+                    keyPicker
                 }
-
-                Button("リセット") {
-                    key = .custom(.init(design: .init(label: .text(""), color: .normal), press_actions: [], longpress_actions: .none, variations: []))
+                Section {
+                    Button("リセット") {
+                        key = .custom(.empty)
+                    }.foregroundColor(.red)
+                }
+            }
+            if let direction = position.flickDirection {
+                Button("クリア") {
+                    key[.custom].variations.removeAll {
+                        $0.type == .flickVariation(direction)
+                    }
                 }.foregroundColor(.red)
             }
         }

@@ -14,7 +14,6 @@
 		1A10D80225E4F56D0095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
 		1A10D80725E4F5710095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
 		1A10D80D25E501C80095CB67 /* UserMadeCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */; };
-		1A10D80E25E501C80095CB67 /* UserMadeCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */; };
 		1A10D81525E506710095CB67 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D81425E506710095CB67 /* DocumentPicker.swift */; };
 		1A12DC5225C1C3EA00316009 /* lines.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DC5025C1C3E900316009 /* lines.txt */; };
 		1A12DC5325C1C3EA00316009 /* lines.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DC5125C1C3E900316009 /* lines.binary */; };
@@ -47,6 +46,9 @@
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
 		1A3022B52632A22700E4495C /* CustomKeySettingFlickKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B42632A22700E4495C /* CustomKeySettingFlickKeyView.swift */; };
+		1A3022B72633966E00E4495C /* KeyPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B62633966E00E4495C /* KeyPosition.swift */; };
+		1A3022B8263396FF00E4495C /* UserMadeCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */; };
+		1A3022B92633970300E4495C /* KeyPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B62633966E00E4495C /* KeyPosition.swift */; };
 		1A30CE8B26023B52007C1A2D /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1A30CE8C26023B52007C1A2D /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A364E3125C8361A00A56583 /* LearningMemory.swift */; };
@@ -2563,6 +2565,7 @@
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
 		1A3022B42632A22700E4495C /* CustomKeySettingFlickKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeySettingFlickKeyView.swift; sourceTree = "<group>"; };
+		1A3022B62633966E00E4495C /* KeyPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPosition.swift; sourceTree = "<group>"; };
 		1A30CE8A26023B52007C1A2D /* CodableSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableSupport.swift; sourceTree = "<group>"; };
 		1A364E3125C8361A00A56583 /* LearningMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningMemory.swift; sourceTree = "<group>"; };
 		1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionaryData.swift; sourceTree = "<group>"; };
@@ -5004,6 +5007,7 @@
 			isa = PBXGroup;
 			children = (
 				1A18425C25DE6678003985AB /* CustomKeyboard.swift */,
+				1A3022B62633966E00E4495C /* KeyPosition.swift */,
 				1AB8C35925DFE73E00D39BC5 /* SimpleKeyView */,
 			);
 			path = CustomKeybaord;
@@ -10321,6 +10325,7 @@
 				1A0E8D6825EDD74000A9BAE5 /* DeviceName.swift in Sources */,
 				1AF6797C25CEDB9B00F3987B /* QwertyKeyModelProtocol.swift in Sources */,
 				1AF6791525CED9A200F3987B /* ChangeKeyboardButtonView.swift in Sources */,
+				1A3022B72633966E00E4495C /* KeyPosition.swift in Sources */,
 				1A4057DF255843330073C6F7 /* BooleanSettingItemView.swift in Sources */,
 				1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */,
 				1AF6791A25CEDAF300F3987B /* SettingData.swift in Sources */,
@@ -10454,13 +10459,13 @@
 				1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */,
 				1A3DC2FF2500F837002CAA93 /* extension Character.swift in Sources */,
 				1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */,
-				1A10D80E25E501C80095CB67 /* UserMadeCustard.swift in Sources */,
 				1A5C7ECA25F3792300A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,
 				1AE102E425D43E9700CA7277 /* ThemeManager.swift in Sources */,
 				1AF678A125CDA07A00F3987B /* SettingData.swift in Sources */,
 				1A26F34325E8AACA003CDA0D /* StrokeAndFill.swift in Sources */,
+				1A3022B8263396FF00E4495C /* UserMadeCustard.swift in Sources */,
 				1A3DC20E2500D55F002CAA93 /* FlickDataProvider.swift in Sources */,
 				1ACC0F0825CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */,
 				1A18425E25DE6678003985AB /* CustomKeyboard.swift in Sources */,
@@ -10477,6 +10482,7 @@
 				1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */,
 				1A2602B4251489E500EAD647 /* QwertySpaceKeyModel.swift in Sources */,
 				1ACB07DD25E71ED70077DE04 /* BindingArray.swift in Sources */,
+				1A3022B92633970300E4495C /* KeyPosition.swift in Sources */,
 				1AC3DB7626234CD70086F9EC /* BindingTranslator.swift in Sources */,
 				1A30CE8C26023B52007C1A2D /* CodableSupport.swift in Sources */,
 				1A3DC2172500D5AB002CAA93 /* Action.swift in Sources */,

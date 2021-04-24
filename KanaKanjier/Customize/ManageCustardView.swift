@@ -161,9 +161,10 @@ struct ManageCustardView: View {
                 NavigationLink(destination: EditingScrollCustardView(manager: $manager)) {
                     Text("作る")
                 }
-
+                NavigationLink(destination: EditingTenkeyCustardView(manager: $manager)) {
+                    Text("フリック式のカスタムタブを作る")
+                }
             }
-
             if let value = data.downloadedData,
                let custards = (data.custards ?? data.process(data: value)) {
                 ForEach(custards, id: \.identifier) {custard in

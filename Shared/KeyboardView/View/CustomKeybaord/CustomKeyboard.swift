@@ -42,11 +42,6 @@ fileprivate extension CustardInterfaceStyle {
     }
 }
 
-enum KeyPosition: Hashable {
-    case gridFit(x: Int, y: Int)
-    case gridScroll(index: Int)
-}
-
 fileprivate extension CustardInterface {
     var tabDesign: TabDependentDesign {
         switch self.keyLayout {

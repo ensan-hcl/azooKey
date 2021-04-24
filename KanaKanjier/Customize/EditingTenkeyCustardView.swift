@@ -9,18 +9,12 @@
 import Foundation
 import SwiftUI
 
-private struct KeysKeyData: Hashable {
-    var model: CustardInterfaceKey
-    var width: Int
-    var height: Int
-}
-
 extension CustardInterfaceCustomKey {
     static let empty: Self = .init(design: .init(label: .text(""), color: .normal), press_actions: [], longpress_actions: .none, variations: [])
 }
 
-fileprivate extension Dictionary where Key == KeyPosition, Value == KeysKeyData {
-    subscript(key: Key) -> KeysKeyData {
+fileprivate extension Dictionary where Key == KeyPosition, Value == UserMadeTenKeyCustard.KeyData {
+    subscript(key: Key) -> Value {
         get {
             return self[key, default: .init(model: .custom(.empty), width: 1, height: 1)]
         }
@@ -32,36 +26,19 @@ fileprivate extension Dictionary where Key == KeyPosition, Value == KeysKeyData 
 
 // TODO: CancelableEditorへの準拠
 struct EditingTenkeyCustardView: View {
-    private static let emptyKey: CustardInterfaceKey = .custom(.init(design: .init(label: .text(""), color: .normal), press_actions: [], longpress_actions: .none, variations: []))
-    private static let `default` = Custard.init(
-        identifier: "new_tab",
-        language: .none,
-        input_style: .direct,
-        metadata: .init(
-            custard_version: .v1_0,
-            display_name: "新規タブ"
-        ),
-        interface: .init(
-            keyStyle: .tenkeyStyle,
-            keyLayout: .gridFit(.init(rowCount: 5, columnCount: 4)),
-            keys: (0..<5).reduce(into: [:]) {dict, x in
-                (0..<4).forEach {y in
-                    dict[.gridFit(.init(x: x, y: y))] = emptyKey
-                }
-            }
-        )
-    )
-    @State private var editingItem = UserMadeTenKeyCustard(tabName: "新規タブ", rowCount: "5", columnCount: "4", inputStyle: .direct, language: .none, addTabBarAutomatically: true)
-    @State private var keys: [KeyPosition: KeysKeyData] = Self.default.interface.keys.reduce(into: [:]) {dict, item in
-        if case let .gridFit(value) = item.key {
-            dict[.gridFit(x: value.x, y: value.y)] = .init(model: item.value, width: value.width, height: value.height)
+    private static let emptyKeys: [KeyPosition: UserMadeTenKeyCustard.KeyData] = (0..<5).reduce(into: [:]) {dict, x in
+        (0..<4).forEach {y in
+            dict[.gridFit(x: x, y: y)] = .init(model: .custom(.empty), width: 1, height: 1)
         }
     }
+    private static let emptyItem: UserMadeTenKeyCustard = .init(tabName: "新規タブ", rowCount: "5", columnCount: "4", inputStyle: .direct, language: .none, keys: emptyKeys, addTabBarAutomatically: true)
+
+    @State private var editingItem = emptyItem
 
     private var models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
         return (0..<layout.rowCount).reduce(into: [:]) {dict, x in
             (0..<layout.columnCount).forEach {y in
-                if let value = keys[.gridFit(x: x, y: y)] {
+                if let value = editingItem.keys[.gridFit(x: x, y: y)] {
                     dict[.gridFit(x: x, y: y)] = (value.model.flickKeyModel, value.width, value.height)
                 } else {
                     dict[.gridFit(x: x, y: y)] = (CustardInterfaceKey.custom(.empty).flickKeyModel, 1, 1)
@@ -74,35 +51,65 @@ struct EditingTenkeyCustardView: View {
         .init(rowCount: max(Int(editingItem.rowCount) ?? 1, 1), columnCount: max(Int(editingItem.columnCount) ?? 1, 1))
     }
 
+    private var custard: Custard {
+        return Custard.init(
+            identifier: editingItem.tabName,
+            language: editingItem.language,
+            input_style: editingItem.inputStyle,
+            metadata: .init(
+                custard_version: .v1_0,
+                display_name: editingItem.tabName
+            ),
+            interface: .init(
+                keyStyle: .tenkeyStyle,
+                keyLayout: .gridFit(layout),
+                keys: editingItem.keys.reduce(into: [:]) {dict, item in
+                    if case let .gridFit(x: x, y: y) = item.key {
+                        dict[.gridFit(.init(x: x, y: y, width: item.value.width, height: item.value.height))] = item.value.model
+                    }
+                }
+            )
+        )
+    }
+
     init(manager: Binding<CustardManager>) {
     }
 
     var body: some View {
         VStack {
             Form {
+                TextField("タブの名前", text: $editingItem.tabName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 Button("プレビュー") {
                     UIApplication.shared.closeKeyboard()
                 }
-                DisclosureGroup("詳細設定") {
-                    HStack {
-                        Text("縦方向キー数")
-                        Spacer()
-                        TextField("縦方向キー数", text: $editingItem.columnCount)
-                            .keyboardType(.numberPad)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                    }
-                    HStack {
-                        Text("横方向キー数")
-                        Spacer()
-                        TextField("横方向キー数", text: $editingItem.rowCount)
-                            .keyboardType(.numberPad)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                    }
-                    Text("入力方式")
+                HStack {
+                    Text("縦方向キー数")
+                    Spacer()
+                    TextField("縦方向キー数", text: $editingItem.columnCount)
+                        .keyboardType(.numberPad)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
+                HStack {
+                    Text("横方向キー数")
+                    Spacer()
+                    TextField("横方向キー数", text: $editingItem.rowCount)
+                        .keyboardType(.numberPad)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                }
+                Picker("言語", selection: $editingItem.language) {
+                    Text("なし").tag(CustardLanguage.none)
+                    Text("日本語").tag(CustardLanguage.ja_JP)
+                    Text("英語").tag(CustardLanguage.en_US)
+                }
+                Picker("入力方式", selection: $editingItem.inputStyle) {
+                    Text("そのまま入力").tag(CustardInputStyle.direct)
+                    Text("ローマ字入力").tag(CustardInputStyle.roman2kana)
+                }
+                Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
             }
             CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout, needSuggest: false) {view, x, y in
-                NavigationLink(destination: CustardInterfaceKeyEditor(key: $keys[.gridFit(x: x, y: y)].model)) {
+                NavigationLink(destination: CustardInterfaceKeyEditor(key: $editingItem.keys[.gridFit(x: x, y: y)].model)) {
                     view.disabled(true)
                 }
             }

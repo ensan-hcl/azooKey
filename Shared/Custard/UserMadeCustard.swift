@@ -27,7 +27,57 @@ struct UserMadeTenKeyCustard: Codable {
     var columnCount: String
     var inputStyle: CustardInputStyle
     var language: CustardLanguage
+    var keys: [KeyPosition: KeyData]
     var addTabBarAutomatically: Bool
+
+    struct KeyData: Codable, Hashable {
+        init(model: CustardInterfaceKey, width: Int, height: Int) {
+            self.model = model
+            self.width = width
+            self.height = height
+        }
+
+        private enum CodingKeys: CodingKey {
+            case type, key, width, height
+        }
+
+        private enum ModelType: String, Codable {
+            case system, custom
+        }
+
+        var model: CustardInterfaceKey
+        var width: Int
+        var height: Int
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(width, forKey: .width)
+            try container.encode(height, forKey: .height)
+            switch self.model{
+            case let .system(value):
+                try container.encode(ModelType.system, forKey: .type)
+                try container.encode(value, forKey: .key)
+            case let .custom(value):
+                try container.encode(ModelType.custom, forKey: .type)
+                try container.encode(value, forKey: .key)
+            }
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.width = try container.decode(Int.self, forKey: .width)
+            self.height = try container.decode(Int.self, forKey: .height)
+            let type = try container.decode(ModelType.self, forKey: .type)
+            switch type {
+            case .system:
+                let key = try container.decode(CustardInterfaceSystemKey.self, forKey: .key)
+                self.model = .system(key)
+            case .custom:
+                let key = try container.decode(CustardInterfaceCustomKey.self, forKey: .key)
+                self.model = .custom(key)
+            }
+        }
+    }
 }
 
 extension UserMadeCustard {
