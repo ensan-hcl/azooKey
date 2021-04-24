@@ -110,12 +110,19 @@ struct CustardInformationView: View {
                     Text(metadata.origin.description)
                 }
                 if metadata.origin == .userMade,
-                   let userdata = try? manager.userMadeCustardData(identifier: custard.identifier),
-                   case let .gridScroll(value) = userdata {
-                    NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: value)) {
-                        Text("編集する")
-                    }
-                    .foregroundColor(.accentColor)
+                   let userdata = try? manager.userMadeCustardData(identifier: custard.identifier) {
+                    switch userdata {
+                    case let .gridScroll(value):
+                        NavigationLink(destination: EditingScrollCustardView(manager: $manager, editingItem: value)) {
+                            Text("編集する")
+                        }
+                        .foregroundColor(.accentColor)
+                    case let .tenkey(value):
+                        NavigationLink(destination: EditingTenkeyCustardView(manager: $manager, editingItem: value)) {
+                            Text("編集する")
+                        }
+                        .foregroundColor(.accentColor)
+                   }
                 }
             }
 

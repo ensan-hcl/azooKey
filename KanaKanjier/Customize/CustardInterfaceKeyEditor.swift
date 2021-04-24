@@ -169,8 +169,9 @@ fileprivate extension CustardInterfaceCustomKey {
         set {
             if let direction = position.flickDirection {
                 self[direction][.inputAction] = newValue
+            } else {
+                self.press_actions = [.input(newValue)]
             }
-            self.press_actions = [.input(newValue)]
         }
     }
 

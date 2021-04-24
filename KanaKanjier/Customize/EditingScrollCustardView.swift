@@ -27,18 +27,18 @@ struct EditingScrollCustardView: CancelableEditor {
         .gridScroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
         .gridScroll(3): .system(.enter)
     ]
-
+    private static let emptyItem: UserMadeGridScrollCustard = .init(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
     let base: UserMadeGridScrollCustard
 
     @Environment(\.presentationMode) private var presentationMode
 
     @State private var showPreview = false
-    @State private var editingItem = UserMadeGridScrollCustard(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
+    @State private var editingItem: UserMadeGridScrollCustard
     @Binding private var manager: CustardManager
 
     init(manager: Binding<CustardManager>, editingItem: UserMadeGridScrollCustard? = nil) {
         self._manager = manager
-        self.base = editingItem ?? UserMadeGridScrollCustard(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
+        self.base = editingItem ?? Self.emptyItem
         self._editingItem = State(initialValue: self.base)
     }
 
@@ -102,7 +102,7 @@ struct EditingScrollCustardView: CancelableEditor {
                 }
             }
         }
-        .background(Color(.secondarySystemBackground))
+        .background(Color.secondarySystemBackground)
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle(Text("カスタムタブを作る"), displayMode: .inline)
         .navigationBarItems(

@@ -10,6 +10,50 @@ import Foundation
 
 enum UserMadeCustard: Codable {
     case gridScroll(UserMadeGridScrollCustard)
+    case tenkey(UserMadeTenKeyCustard)
+}
+
+extension UserMadeCustard {
+    enum CodingKeys: CodingKey {
+        case gridScroll
+        case tenkey
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case let .gridScroll(value):
+            try container.encode(value, forKey: .gridScroll)
+        case let .tenkey(value):
+            try container.encode(value, forKey: .tenkey)
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard let key = container.allKeys.first else {
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(
+                    codingPath: container.codingPath,
+                    debugDescription: "Unabled to decode UserMadeCustard."
+                )
+            )
+        }
+        switch key {
+        case .gridScroll:
+            let value = try container.decode(
+                UserMadeGridScrollCustard.self,
+                forKey: .gridScroll
+            )
+            self = .gridScroll(value)
+        case .tenkey:
+            let value = try container.decode(
+                UserMadeTenKeyCustard.self,
+                forKey: .tenkey
+            )
+            self = .tenkey(value)
+        }
+    }
 }
 
 struct UserMadeGridScrollCustard: Codable {
@@ -76,40 +120,6 @@ struct UserMadeTenKeyCustard: Codable {
                 let key = try container.decode(CustardInterfaceCustomKey.self, forKey: .key)
                 self.model = .custom(key)
             }
-        }
-    }
-}
-
-extension UserMadeCustard {
-    enum CodingKeys: CodingKey {
-        case gridScroll
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-        case let .gridScroll(value):
-            try container.encode(value, forKey: .gridScroll)
-        }
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let key = container.allKeys.first else {
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Unabled to decode UserMadeCustard."
-                )
-            )
-        }
-        switch key {
-        case .gridScroll:
-            let value = try container.decode(
-                UserMadeGridScrollCustard.self,
-                forKey: .gridScroll
-            )
-            self = .gridScroll(value)
         }
     }
 }

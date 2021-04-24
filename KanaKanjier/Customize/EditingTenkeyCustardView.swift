@@ -24,7 +24,6 @@ fileprivate extension Dictionary where Key == KeyPosition, Value == UserMadeTenK
     }
 }
 
-// TODO: CancelableEditorへの準拠
 struct EditingTenkeyCustardView: View {
     private static let emptyKeys: [KeyPosition: UserMadeTenKeyCustard.KeyData] = (0..<5).reduce(into: [:]) {dict, x in
         (0..<4).forEach {y in
@@ -33,7 +32,11 @@ struct EditingTenkeyCustardView: View {
     }
     private static let emptyItem: UserMadeTenKeyCustard = .init(tabName: "新規タブ", rowCount: "5", columnCount: "4", inputStyle: .direct, language: .none, keys: emptyKeys, addTabBarAutomatically: true)
 
-    @State private var editingItem = emptyItem
+    @Environment(\.presentationMode) private var presentationMode
+
+    private let base: UserMadeTenKeyCustard
+    @State private var editingItem: UserMadeTenKeyCustard
+    @Binding private var manager: CustardManager
 
     private var models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
         return (0..<layout.rowCount).reduce(into: [:]) {dict, x in
@@ -72,7 +75,10 @@ struct EditingTenkeyCustardView: View {
         )
     }
 
-    init(manager: Binding<CustardManager>) {
+    init(manager: Binding<CustardManager>, editingItem: UserMadeTenKeyCustard? = nil) {
+        self._manager = manager
+        self.base = editingItem ?? Self.emptyItem
+        self._editingItem = State(initialValue: self.base)
     }
 
     var body: some View {
@@ -115,6 +121,31 @@ struct EditingTenkeyCustardView: View {
             }
         }
         .background(Color.secondarySystemBackground)
+        .navigationBarBackButtonHidden(true)
         .navigationTitle(Text("カスタムタブを作る"))
+        .navigationBarItems(
+            leading: Button("キャンセル", action: cancel),
+            trailing: Button("保存") {
+                self.save()
+                presentationMode.wrappedValue.dismiss()
+            }
+        )
+    }
+
+    private func save() {
+        do {
+            try self.manager.saveCustard(
+                custard: custard,
+                metadata: .init(origin: .userMade),
+                userData: .tenkey(editingItem),
+                updateTabBar: editingItem.addTabBarAutomatically
+            )
+        } catch {
+            debug(error)
+        }
+    }
+
+    func cancel() {
+        presentationMode.wrappedValue.dismiss()
     }
 }
