@@ -11,6 +11,15 @@ struct UpdateInfomationView: View {
     var body: some View {
         Form {
             Group {
+                VersionView("1.6.1", releaseDate: "2021年04月xx日") {
+                    ParagraphView("カスタムタブ機能を改善しました。") {
+                        "フリック入力できるカスタムタブを作成する機能を追加"
+                    }
+                    ParagraphView("不具合を修正しました。") {
+                        "着せ替え機能で色を変更してもカラーピッカーの表示が変化しない問題を修正"
+                    }
+                    ParagraphView("その他デザイン・変換機能の軽微な改善を行いました。")
+                }
                 VersionView("1.6", releaseDate: "2021年03月29日") {
                     ParagraphView("カスタムタブ機能を追加しました。") {
                         "オリジナルのタブを作成できるカスタムタブ機能の導入"
@@ -186,10 +195,9 @@ private struct ParagraphView: View {
             ForEach(allPoints.indices, id: \.self) {i in
                 Text("・\(allPoints[i])")
             }
-            .lineLimit(nil)
-            .fixedSize(horizontal: false, vertical: true)
-
         }
+        .lineLimit(nil)
+        .fixedSize(horizontal: false, vertical: true)
         .multilineTextAlignment(.leading)
         .padding(.bottom, 3)
     }
