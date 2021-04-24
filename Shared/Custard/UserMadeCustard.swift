@@ -72,6 +72,7 @@ struct UserMadeTenKeyCustard: Codable {
     var inputStyle: CustardInputStyle
     var language: CustardLanguage
     var keys: [KeyPosition: KeyData]
+    var emptyKeys: Set<KeyPosition> = []
     var addTabBarAutomatically: Bool
 
     struct KeyData: Codable, Hashable {

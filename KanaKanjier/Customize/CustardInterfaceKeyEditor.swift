@@ -272,13 +272,32 @@ fileprivate extension CustardInterfaceVariationKey {
     }
 }
 
+private struct IntStringConversion: Intertranslator {
+    typealias First = Int
+    typealias Second = String
+
+    static func convert(_ first: Int) -> String {
+        return String(first)
+    }
+    static func convert(_ second: String) -> Int {
+        return max(Int(second) ?? 1, 1)
+    }
+}
+
 struct CustardInterfaceKeyEditor: View {
     @Binding private var key: CustardInterfaceKey
+    @Binding private var width: Int
+    @Binding private var height: Int
+    @BindingTranslate<Int, IntStringConversion> private var widthTranslator = \.self
+    @BindingTranslate<Int, IntStringConversion> private var heightTranslator = \.self
+
     @State private var selectedPosition: FlickKeyPosition? = .center
     @State private var bottomSheetShown = false
 
-    init(key: Binding<CustardInterfaceKey>) {
-        self._key = key
+    init(data: Binding<UserMadeTenKeyCustard.KeyData>) {
+        self._key = data.model
+        self._width = data.width
+        self._height = data.height
     }
 
     private let screenWidth = UIScreen.main.bounds.width
@@ -334,10 +353,26 @@ struct CustardInterfaceKeyEditor: View {
         }
     }
 
+    @ViewBuilder private var sizePicker: some View {
+        HStack {
+            Text("縦")
+            TextField("縦", text: $height.translated($heightTranslator))
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+        }
+        HStack {
+            Text("横")
+            TextField("横", text: $width.translated($widthTranslator))
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+        }
+    }
+
     private func systemKeyEditor() -> some View {
         Form {
             Section {
                 keyPicker
+            }
+            Section(header: Text("キーのサイズ")) {
+                sizePicker
             }
             Section {
                 Button("リセット") {
@@ -396,6 +431,9 @@ struct CustardInterfaceKeyEditor: View {
             }
 
             if position == .center {
+                Section(header: Text("キーのサイズ")) {
+                    sizePicker
+                }
                 Section {
                     keyPicker
                 }
