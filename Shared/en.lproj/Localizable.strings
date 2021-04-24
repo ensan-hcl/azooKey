@@ -149,7 +149,7 @@
 "キーをカスタマイズする" = "Customize keys";
 
 
-"端末の文字サイズ設定が反映されない" = "Setting of device's font size doesn't affect";
+"端末の文字サイズ設定が反映されない" = "Setting of device's font size doesn't work";
 "端末の文字サイズの設定を変更しても、キーボードに表示される文字の大きさが変わらないことがあります。" = "Sometimes the setting of your device's font size doesn't affect the keyboard.";
 "一度端末を再起動していただくと設定が反映されます。" = "Please reboot your device, and the setting can work.";
 "azooKeyの設定タブよりキーの文字サイズを設定することが可能です。そちらもお試しください。" = "On the Settings tab in azooKey, you can set key font size. Please try it.";
@@ -164,10 +164,14 @@
 "日本語" = "Japanese";
 "英語" = "English";
 "ギリシャ語" = "Greek";
+"なし" = "None";
 "現在" = "Current";
 "キーボードの種類" = "Keyboard Layout";
 "フリック入力" = "Flick";
 "ローマ字入力" = "Qwerty";
+
+"そのまま入力" = "Direct input style";
+"ローマ字かな入力" = "Roman Kana input style";
 
 "azooKeyでは一部キーのカスタマイズが可能です。「設定」タブから変更できます。" = "With azooKey, you can customize some of the keys. You can change keys on the Settings tab.";
 "フリック入力では、ひらがなタブの「小ﾞﾟ」キーと「､｡?!」キーのフリックに最大3方向まで好きな文字を登録することができます。" = "Using flick input style, you can register at most three letters on the key 「小ﾞﾟ」 and 「､｡?!」.";
@@ -190,10 +194,15 @@
 "リセット" = "Reset";
 "入力" = "Input";
 "ラベル" = "Labels";
+"ラベルの種類" = "Type of label";
+"テキスト" = "Text";
+"システムアイコン" = "System icon";
 "キーに表示される文字を設定します。" = "Set the label.";
 "入力される文字とは異なっていても構いません。" = "Not necessarily equal to input letter.";
 "キーを押して入力される文字を設定します。" = "Set letters inputted when you press this key.";
 "キーを押して移動するタブを設定します。" = "Set the destination tab when you press this key.";
+"キーを押したときの動作をより詳しく設定します。" = "Set actions when you press this key in detail.";
+"キーを長押ししたときの動作をより詳しく設定します。" = "Set actions when you longpress this key in detail.";
 "入力される文字" = "Inputted letters";
 "キーの見た目は「ラベル」で設定できます。" = "You can set labels for the appearance.";
 "キーを追加する" = "Add a new key";
@@ -204,10 +213,35 @@
 "現在のアクションを消去して移動するタブを設定するには「タブを設定する」を押してください" = "To delete current actions and set destination tab, please push 'set destination tab.'";
 "タブを設定する" = "Set destination tab";
 "入力を設定する" = "Set inputted letters";
+"アクションを編集する" = "Edit press action";
+"長押しアクションを編集する" = "Edit longpress action";
 "長押し" = "Longpress";
+"長押しアクション" = "Longpress action";
+
+"キーの色" = "Color of this key";
+"キーの色を設定します。" = "Set the color of this key.";
+"通常のキー" = "Color of normal keys";
+"特別なキー" = "Color of special keys";
+"押されているキー" = "Color of selected keys";
+
+"キーのサイズ" = "Size of this key";
+"キーの種類" = "Type of this key";
+"カスタム" = "Custom";
+"改行キー" = "Return key";
+"削除キー" = "Delete key";
+"空白キー" = "Space key";
+"地球儀キー" = "Globe key";
+"小書き・濁点化キー" = "Japanese Voiced kana key";
+"句読点キー" = "Japanese punctuation key";
+"日本語タブキー" = "Japanese tab key";
+"英語タブキー" = "English tab key";
+"記号タブキー" = "Symbols tab key";
+
+"共有する" = "Share";
 
 "長押しした時の候補" = "Selectable variations when you longpress this key";
 "削除" = "Remove";
+"クリア" = "Clear";
 "移動" = "Move";
 "追加" = "Add";
 
@@ -333,7 +367,11 @@
 "URLを取得中" = "Getting URL";
 "ファイルを処理中" = "Processing file";
 "カスタムタブがまだありません" = "Custom tabs have yet created";
-"登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。" = "You can make custom tabs only by list up the words and sentences.";
+"登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。" = "You can make scroll style custom tabs only by listing up the words and sentences.";
+"スクロール式のカスタムタブを作る" = "Make scroll style custom tabs";
+"フリック式のカスタムタブを作成することができます。" = "You can make tenkey style custom tabs.";
+"フリック式のカスタムタブを作る" = "Make tenkey style custom tabs";
+
 "「%@(%@)」の読み込みに成功しました" = "Successfuly imported '%1$@'(%2$@)";
 "保存" = "Save";
 "タブバーに追加" = "Add to tab bar";
@@ -357,7 +395,7 @@
 "変換なし" = "None";
 "指定なし" = "Not specified";
 "ダイレクト" = "Direct";
-"ローマ字かな入力" = "Roman to kana";
+"ローマ字かな入力" = "Roman to kana input style";
 "このアプリで作成" = "Made in this app";
 "読み込んだデータ" = "Imported data";
 "カスタムタブの情報" = "Information of custom tab";
@@ -394,6 +432,8 @@
 "片手モードをオン" = "Enable one-handed mode";
 "片手モードをオンにする" = "Enable one-handed mode";
 "%@など" = "%@, etc";
+
+"キーの編集" = "Edit key";
 
 "確定" = "Complete";
 "大文字/小文字、拗音/濁音/半濁音の切り替え" = "Change uppercase ⇆ lowercase";

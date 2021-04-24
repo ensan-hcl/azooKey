@@ -131,7 +131,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                 }
                 Picker("入力方式", selection: $editingItem.inputStyle) {
                     Text("そのまま入力").tag(CustardInputStyle.direct)
-                    Text("ローマ字入力").tag(CustardInputStyle.roman2kana)
+                    Text("ローマ字かな入力").tag(CustardInputStyle.roman2kana)
                 }
                 Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
             }

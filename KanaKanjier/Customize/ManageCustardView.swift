@@ -159,11 +159,14 @@ struct ManageCustardView: View {
             Section(header: Text("作る")) {
                 Text("登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
                 NavigationLink(destination: EditingScrollCustardView(manager: $manager)) {
-                    Text("作る")
+                    Text("スクロール式のカスタムタブを作る")
                 }
+                .foregroundColor(.accentColor)
+                Text("フリック式のカスタムタブを作成することができます。")
                 NavigationLink(destination: EditingTenkeyCustardView(manager: $manager)) {
                     Text("フリック式のカスタムタブを作る")
                 }
+                .foregroundColor(.accentColor)
             }
             if let value = data.downloadedData,
                let custards = (data.custards ?? data.process(data: value)) {
