@@ -5365,7 +5365,7 @@
 				1A4E0EAF260E26CE009B6EB7 /* p_テ.csv */,
 			);
 			name = p;
-			path = "../../../../../AzooKey-dict/workspaces/2021:01:30/_results/p";
+			path = "../../../../../AzooKey-dict/workspaces/2020:12:12/_results/p";
 			sourceTree = "<group>";
 		};
 		1A4E0F03260E2723009B6EB7 /* cb */ = {
