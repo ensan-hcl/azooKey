@@ -218,6 +218,8 @@ struct CodableActionEditor: View {
                             Text("負の値を指定すると左にカーソルが動きます")
                         case .moveTab:
                             ActionMoveTabEditView($action, availableCustards: availableCustards)
+                        case .replaceLastCharacters:
+                            EmptyView()
                         default:
                             EmptyView()
                         }
