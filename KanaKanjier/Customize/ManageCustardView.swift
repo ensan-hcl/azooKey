@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 private enum AlertType {
     case none
@@ -254,12 +255,17 @@ struct ManageCustardView: View {
                 )
             }
         }
-        .sheet(isPresented: $showDocumentPicker) {
-            DocumentPicker(
-                pickerResult: $data.downloadedData,
-                isPresented: $showDocumentPicker,
-                extensions: ["txt", "custard", "json"]
-            )
+        .fileImporter(isPresented: $showDocumentPicker, allowedContentTypes: ["txt", "custard", "json"].compactMap {UTType(filenameExtension: $0, conformingTo: .text)}) {result in
+            switch result {
+            case let .success(url):
+                if url.startAccessingSecurityScopedResource(), let importedData = try? Data.init(contentsOf: url) {
+                    data.downloadedData = importedData
+                } else {
+                    debug("error: 不正なURL)")
+                }
+            case let .failure(error):
+                debug(error)
+            }
         }
     }
 

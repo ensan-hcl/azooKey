@@ -14,7 +14,6 @@
 		1A10D80225E4F56D0095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
 		1A10D80725E4F5710095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
 		1A10D80D25E501C80095CB67 /* UserMadeCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */; };
-		1A10D81525E506710095CB67 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D81425E506710095CB67 /* DocumentPicker.swift */; };
 		1A12DC5225C1C3EA00316009 /* lines.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DC5025C1C3E900316009 /* lines.txt */; };
 		1A12DC5325C1C3EA00316009 /* lines.binary in Resources */ = {isa = PBXBuildFile; fileRef = 1A12DC5125C1C3E900316009 /* lines.binary */; };
 		1A12E24225C3E1CB00316009 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24125C3E1CA00316009 /* MessageView.swift */; };
@@ -4976,7 +4975,6 @@
 			isa = PBXGroup;
 			children = (
 				1AE1023525D0C99200CA7277 /* PhotoPicker.swift */,
-				1A10D81425E506710095CB67 /* DocumentPicker.swift */,
 				1A18424225DD6857003985AB /* FontPicker.swift */,
 			);
 			path = Pickers;
@@ -7844,6 +7842,7 @@
 				1A4E1F5B2615CADA009B6EB7 /* KeyFlickSettingItemView.swift */,
 				1A0E8D5A25EC940C00A9BAE5 /* GenericColorPicker.swift */,
 				1A6736072509F39E003FC654 /* VerbConjugation.swift */,
+				1A10D81425E506710095CB67 /* DocumentPicker.swift */,
 			);
 			path = deprecated;
 			sourceTree = "<group>";
@@ -10318,7 +10317,6 @@
 				1AF678FB25CED91C00F3987B /* ActionDepartment.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
 				1AF6A54725FCF1240037D5ED /* OneHandedModeTips.swift in Sources */,
-				1A10D81525E506710095CB67 /* DocumentPicker.swift in Sources */,
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
 				1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */,
 				1AB8C40425E3884200D39BC5 /* BottomSheetView.swift in Sources */,
