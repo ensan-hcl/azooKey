@@ -86,8 +86,8 @@ struct CodableActionDataEditor: View {
                 }
                 Section(header: Text("アクション")) {
                     List {
-                        ForEach($actions) {(action: Binding<EditingCodableActionData>) in
-                            CodableActionEditor(action: action, availableCustards: availableCustards)
+                        ForEach(actions.indices, id: \.self) {i in
+                            CodableActionEditor(action: $actions[i], availableCustards: availableCustards)
                         }
                         .onDelete(perform: delete)
                         .onMove(perform: onMove)
@@ -420,8 +420,8 @@ struct CodableLongpressActionDataEditor: View {
                     }
 
                     List {
-                        ForEach($startActions) {(action: Binding<EditingCodableActionData>) in
-                            CodableActionEditor(action: action, availableCustards: availableCustards)
+                        ForEach(startActions.indices, id: \.self) {i in
+                            CodableActionEditor(action: $startActions[i], availableCustards: availableCustards)
                         }
                         .onDelete(perform: {startActions.remove(atOffsets: $0)})
                         .onMove(perform: {startActions.move(fromOffsets: $0, toOffset: $1)})
@@ -439,8 +439,8 @@ struct CodableLongpressActionDataEditor: View {
                     }
 
                     List {
-                        ForEach($repeatActions) {(action: Binding<EditingCodableActionData>) in
-                            CodableActionEditor(action: action, availableCustards: availableCustards)
+                        ForEach(repeatActions.indices, id: \.self) {i in
+                            CodableActionEditor(action: $repeatActions[i], availableCustards: availableCustards)
                         }
                         .onDelete(perform: {repeatActions.remove(atOffsets: $0)})
                         .onMove(perform: {repeatActions.move(fromOffsets: $0, toOffset: $1)})

@@ -5,7 +5,7 @@
 //  Created by β α on 2021/02/25.
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
-
+/*
 import Foundation
 import SwiftUI
 extension Binding: IteratorProtocol where Value: IteratorProtocol {
@@ -50,7 +50,8 @@ extension Binding: Collection where Value: BidirectionalCollection & MutableColl
         get {
             return Binding<Value.Element>(
                 get: {
-                    wrappedValue[position]
+                    print(position, wrappedValue)
+                    return wrappedValue[position]
                 },
                 set: {
                     wrappedValue[position] = $0
@@ -58,6 +59,7 @@ extension Binding: Collection where Value: BidirectionalCollection & MutableColl
             )
         }
     }
+
     public var startIndex: Value.Index {
         wrappedValue.startIndex
     }
@@ -80,3 +82,4 @@ extension Binding: BidirectionalCollection where Value: BidirectionalCollection 
 }
 
 extension Binding: RandomAccessCollection where Value: BidirectionalCollection & MutableCollection {}
+*/
