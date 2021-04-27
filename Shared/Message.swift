@@ -11,7 +11,7 @@ import Foundation
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert0"
     case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"  // frozen
-    case iOS14_5_new_emoji = "iOS_14_5_new_emoji"
+    case iOS14_5_new_emoji = "iOS_14_5_new_emoji_fixed_ver_1_6_1"
 
     var key: String {
         return self.rawValue + "_status"

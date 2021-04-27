@@ -50,7 +50,6 @@ extension Binding: Collection where Value: BidirectionalCollection & MutableColl
         get {
             return Binding<Value.Element>(
                 get: {
-                    print(position, wrappedValue)
                     return wrappedValue[position]
                 },
                 set: {
