@@ -2336,6 +2336,8 @@
 		1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */; };
 		1AB8C40425E3884200D39BC5 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */; };
 		1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABD077725479B6500DD0F7C /* Dictionary.swift */; };
+		1ABF7D9526395DEC0045D6B2 /* BindingConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF7D9426395DEC0045D6B2 /* BindingConvert.swift */; };
+		1ABF7D9626395DEC0045D6B2 /* BindingConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABF7D9426395DEC0045D6B2 /* BindingConvert.swift */; };
 		1AC03159251103EF004CA505 /* Designs.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC03158251103EF004CA505 /* Designs.xcassets */; };
 		1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */; };
 		1AC0315D25120A17004CA505 /* SettingTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC0315C25120A17004CA505 /* SettingTab.swift */; };
@@ -4842,6 +4844,7 @@
 		1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCustardView.swift; sourceTree = "<group>"; };
 		1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
 		1ABD077725479B6500DD0F7C /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		1ABF7D9426395DEC0045D6B2 /* BindingConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingConvert.swift; sourceTree = "<group>"; };
 		1AC03158251103EF004CA505 /* Designs.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Designs.xcassets; sourceTree = "<group>"; };
 		1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteredNodeProtocol.swift; sourceTree = "<group>"; };
 		1AC0315C25120A17004CA505 /* SettingTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTab.swift; sourceTree = "<group>"; };
@@ -5038,6 +5041,7 @@
 				1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */,
 				1ACE61C2257286E5008078D3 /* Color.swift */,
 				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
+				1ABF7D9426395DEC0045D6B2 /* BindingConvert.swift */,
 				1AC3DB7426234CD70086F9EC /* BindingTranslator.swift */,
 			);
 			path = SwiftUI;
@@ -10362,6 +10366,7 @@
 				1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */,
 				1AE1025625D1788300CA7277 /* Capture.swift in Sources */,
 				1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */,
+				1ABF7D9526395DEC0045D6B2 /* BindingConvert.swift in Sources */,
 				1AF6793825CEDB7800F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1AF6799B25CEDBC000F3987B /* Design.swift in Sources */,
 				1ACE00752567525000899DA2 /* QwertyCustomKeySetting.swift in Sources */,
@@ -10488,6 +10493,7 @@
 				1AA346872567D8CA00B41A16 /* UserSetting.swift in Sources */,
 				1A3DC21F2500D5F2002CAA93 /* FlickEnterKeyModel.swift in Sources */,
 				1A3ACEFA25F9F9AA007E9938 /* ResizingRect.swift in Sources */,
+				1ABF7D9626395DEC0045D6B2 /* BindingConvert.swift in Sources */,
 				1A64C8BE251315AD00ACD537 /* DicdataStore.swift in Sources */,
 				1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,
