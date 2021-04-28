@@ -65,10 +65,8 @@ struct FontPickView: View {
 
     var body: some View {
         VStack {
-            Button {
+            Button("フォントを選択") {
                 isFontPickerPresented = true
-            } label: {
-                Text("フォントを選択")
             }
             Text("テキスト Text").font(selectedFont)
         }

@@ -78,20 +78,18 @@ struct CustomizeTabWalkthroughView: View {
                             .fixedSize(horizontal: false, vertical: true)
                         }
 
-                        Button {
+                        Button("始める") {
                             isShowing = false
-                        }label: {
-                            Text("始める")
-                                .bold()
-                                .padding()
-                                .frame(width: geometry.size.width * 0.9)
-                                .foregroundColor(.background)
-                                .background(
-                                    RoundedRectangle(cornerRadius: length * 0.17)
-                                        .fill(Color.blue)
-                                )
-                                .padding(.top, 30)
                         }
+                        .font(.body.bold())
+                        .padding()
+                        .frame(width: geometry.size.width * 0.9)
+                        .foregroundColor(.background)
+                        .background(
+                            RoundedRectangle(cornerRadius: length * 0.17)
+                                .fill(Color.blue)
+                        )
+                        .padding(.top, 30)
                     }
                     .background(Color.background)
                     .position(x: geometry.size.width / 2, y: geometry.size.height / 2)

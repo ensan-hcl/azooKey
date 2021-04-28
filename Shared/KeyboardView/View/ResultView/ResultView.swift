@@ -54,12 +54,10 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                             LazyHStack(spacing: 10) {
                                 ForEach(modelVariableSection.results, id: \.id) {(data: ResultData<Candidate>) in
                                     if data.candidate.inputable {
-                                        Button {
+                                        Button(data.candidate.text) {
                                             Sound.click()
                                             self.pressed(candidate: data.candidate)
-                                        } label: {
-                                            Text(data.candidate.text)
-                                        }
+                                        } 
                                         .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
                                         .contextMenu {
                                             ResultContextMenuView(text: data.candidate.text)

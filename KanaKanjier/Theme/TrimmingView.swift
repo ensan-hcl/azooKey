@@ -171,11 +171,9 @@ struct TrimmingView: View {
         }
         .navigationBarTitle(Text("画像をトリミング"), displayMode: .inline)
         .navigationBarBackButtonHidden(true)
-        .navigationBarItems(trailing: Button {
+        .navigationBarItems(trailing: Button("完了") {
             updateResult()
             presentationMode.wrappedValue.dismiss()
-        }label: {
-            Text("完了")
         })
 
     }

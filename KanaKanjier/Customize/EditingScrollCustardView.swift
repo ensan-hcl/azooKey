@@ -53,7 +53,7 @@ struct EditingScrollCustardView: CancelableEditor {
                             UIApplication.shared.closeKeyboard()
                             showPreview = true
                         }
-                        DisclosureGroup {
+                        DisclosureGroup("詳細設定") {
                             HStack {
                                 Text("スクロール方向")
                                 Spacer()
@@ -80,8 +80,6 @@ struct EditingScrollCustardView: CancelableEditor {
                             Toggle(isOn: $editingItem.addTabBarAutomatically) {
                                 Text("自動的にタブバーに追加")
                             }
-                        } label: {
-                            Text("詳細設定")
                         }
                     }
                     .frame(height: geometry.size.height * 0.4)
@@ -110,7 +108,8 @@ struct EditingScrollCustardView: CancelableEditor {
             trailing: Button("保存") {
                 self.save()
                 presentationMode.wrappedValue.dismiss()
-            })
+            }
+        )
     }
 
     private func makeCustard(data: UserMadeGridScrollCustard) -> Custard {

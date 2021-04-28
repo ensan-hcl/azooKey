@@ -24,21 +24,19 @@ struct FallbackLink: View {
     }
 
     var body: some View {
-        Button {
+        Button("\(systemImage: "arrow.up.forward.square") \(title)") {
             // 外部ブラウザでURLを開く
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             } else {
                 self.showAlert = true
             }
-        } label: {
-            Text("\(systemImage: "arrow.up.forward.square") \(title)")
-        }.alert(isPresented: $showAlert) {
+        }
+        .alert(isPresented: $showAlert) {
             Alert(title: Text("ブラウザを開けませんでした"), message: Text("URLをコピーします。"), dismissButton: .default(Text("OK"), action: {
                 UIPasteboard.general.string = url.absoluteString
                 self.showAlert = false
             }))
-
         }
     }
 }

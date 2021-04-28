@@ -81,13 +81,11 @@ struct ThemeTabView: View {
             Form {
                 Section(header: Text("作る")) {
                     HStack {
-                        Button {
+                        Button("着せ替えを作成") {
                             editViewIndex = nil
                             editViewEnabled = true
-                        }label: {
-                            Text("着せ替えを作成")
-                                .foregroundColor(.primary)
                         }
+                        .foregroundColor(.primary)
                         if editViewIndex == nil {
                             NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled) {
                                 EmptyView()

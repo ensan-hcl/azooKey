@@ -18,14 +18,10 @@ struct MemoryResetSettingItemView: View {
     @State private var showAlert = false
 
     var body: some View {
-        Button {
+        Button(self.item.identifier.title) {
             self.showAlert = true
-        }label: {
-            HStack {
-                Text(self.item.identifier.title)
-                    .foregroundColor(.primary)
-            }
         }
+        .foregroundColor(.red)
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("学習履歴をリセットします。よろしいですか？"),

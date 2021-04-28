@@ -196,7 +196,7 @@ struct CodableActionEditor: View {
         HStack {
             VStack(spacing: 20) {
                 if action.data.hasAssociatedValue {
-                    DisclosureGroup {
+                    DisclosureGroup(action.data.label) {
                         switch action.data {
                         case let .input(value):
                             ActionEditTextField("入力する文字", action: $action) {value} convert: {.input($0)}
@@ -223,8 +223,6 @@ struct CodableActionEditor: View {
                         default:
                             EmptyView()
                         }
-                    } label: {
-                        Text(action.data.label)
                     }
                 } else {
                     Text(action.data.label)

@@ -57,20 +57,14 @@ struct ThemeShareView: View {
             }
             KeyboardPreview(theme: theme, scale: 0.9)
                 .background(RectangleGetter(rect: $captureRect))
-            Button {
+            Button("\(systemImage: "xmark")閉じる") {
                 self.dismissProcess()
-            }label: {
-                HStack {
-                    Image(systemName: "xmark")
-                    Text("閉じる")
-                }
-                .font(.body.bold())
-                .foregroundColor(.white)
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 3).foregroundColor(.blue))
-                .padding()
             }
-
+            .font(.body.bold())
+            .foregroundColor(.white)
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 3).foregroundColor(.blue))
+            .padding()
         }.sheet(isPresented: self.$showActivityView) {
             if let image = shareImage.image {
                 ActivityView(
@@ -79,7 +73,6 @@ struct ThemeShareView: View {
                 )
             }
         }
-
     }
 
     private func shareOnTwitter() {

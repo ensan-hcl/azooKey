@@ -161,10 +161,8 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         Button {
                             editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
                         } label: {
-                            HStack {
-                                Image(systemName: "trash")
-                                Text("削除する")
-                            }
+                            Image(systemName: "trash")
+                            Text("削除する")
                         }
                     }
                 }

@@ -75,11 +75,10 @@ struct EnableAzooKeyViewButton: View {
             HStack {
                 if let systemName = systemName {
                     Image(systemName: systemName)
-                        .font(.body.bold())
                 }
                 Text(text)
-                    .bold()
             }
+            .font(.body.bold())
             .padding()
             .frame(width: width * 0.9)
             .foregroundColor(.background)

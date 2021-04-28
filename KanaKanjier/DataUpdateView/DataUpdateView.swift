@@ -35,12 +35,10 @@ struct DataUpdateView: View {
                             }
                         }
                         .padding()
-                    Button {
+                    Button("閉じる") {
                         manager.done(id)
-                    } label: {
-                        Text("閉じる")
-                            .padding()
                     }
+                    .padding()
                 }
             } else {
                 ProgressView("データの更新処理中です")

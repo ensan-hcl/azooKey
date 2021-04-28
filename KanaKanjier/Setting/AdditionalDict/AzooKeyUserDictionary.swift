@@ -72,17 +72,10 @@ private struct UserDictionaryDataListView: View {
             }
 
             Section {
-                CenterAlignedView {
-                    Button {
-                        let id = variables.items.map {$0.id}.max()
-                        self.variables.selectedItem = UserDictionaryData.emptyData(id: (id ?? -1) + 1).makeEditableData()
-                        self.variables.mode = .details
-                    } label: {
-                        HStack {
-                            Image(systemName: "plus")
-                            Text("追加する")
-                        }
-                    }
+                Button("\(systemImage: "plus")追加する") {
+                    let id = variables.items.map {$0.id}.max()
+                    self.variables.selectedItem = UserDictionaryData.emptyData(id: (id ?? -1) + 1).makeEditableData()
+                    self.variables.mode = .details
                 }
             }
 

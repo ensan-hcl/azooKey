@@ -209,31 +209,17 @@ struct ManageCustardView: View {
                             Text(failure.description).foregroundColor(.red)
                         }
                     }
-                    DisclosureGroup {
-
-                        Button {
+                    DisclosureGroup("iCloudから読み込む") {
+                        Button("読み込む") {
                             showDocumentPicker = true
-                        } label: {
-                            Text("読み込む")
                         }
-
-                    } label: {
-                        Text("iCloudから読み込む")
                     }
-
-                    DisclosureGroup {
-                        HStack {
-                            TextField("URLを入力", text: $urlString)
-                        }
-                        Button {
+                    DisclosureGroup("URLから読み込む") {
+                        TextField("URLを入力", text: $urlString)
+                        Button("読み込む") {
                             data.download(from: urlString)
-                        } label: {
-                            Text("読み込む")
                         }
-                    } label: {
-                        Text("URLから読み込む")
                     }
-
                     Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
                     FallbackLink("カスタムタブファイルの作り方", destination: "https://github.com/ensan-hcl/CustardKit")
                 }

@@ -41,10 +41,8 @@ struct MessageView: View {
                         case let .details(urlString):
                             HStack {
                                 Spacer()
-                                Button {
+                                Button("詳細") {
                                     VariableStates.shared.action.registerAction(.openApp(urlString))
-                                }label: {
-                                    Text("詳細")
                                 }
                                 Spacer()
                                 Divider()
@@ -52,10 +50,8 @@ struct MessageView: View {
                         case .later:
                             HStack {
                                 Spacer()
-                                Button {
+                                Button("後で") {
                                     self.manager.done(data.id)
-                                }label: {
-                                    Text("後で")
                                 }
                                 Spacer()
                                 Divider()
