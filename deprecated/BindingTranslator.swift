@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+/*
 public protocol Intertranslator {
     associatedtype First
     associatedtype Second
@@ -84,3 +84,4 @@ public extension Binding {
         })
     }
 }
+*/

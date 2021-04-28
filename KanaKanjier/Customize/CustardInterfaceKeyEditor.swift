@@ -288,8 +288,7 @@ struct CustardInterfaceKeyEditor: View {
     @Binding private var key: CustardInterfaceKey
     @Binding private var width: Int
     @Binding private var height: Int
-    @BindingTranslate<Int, IntStringConversion> private var widthTranslator = \.self
-    @BindingTranslate<Int, IntStringConversion> private var heightTranslator = \.self
+    private let intStringConverter = IntStringConversion.self
 
     @State private var selectedPosition: FlickKeyPosition? = .center
     @State private var bottomSheetShown = false
@@ -356,12 +355,12 @@ struct CustardInterfaceKeyEditor: View {
     @ViewBuilder private var sizePicker: some View {
         HStack {
             Text("縦")
-            TextField("縦", text: $height.translated($heightTranslator))
+            TextField("縦", text: $height.converted(intStringConverter))
                 .textFieldStyle(RoundedBorderTextFieldStyle())
         }
         HStack {
             Text("横")
-            TextField("横", text: $width.translated($widthTranslator))
+            TextField("横", text: $width.converted(intStringConverter))
                 .textFieldStyle(RoundedBorderTextFieldStyle())
         }
     }
