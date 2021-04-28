@@ -88,16 +88,9 @@ struct ThemeEditView: CancelableEditor {
 
     @ObservedObject private var storeVariableSection = Store.variableSection
 
-    @BindingTranslate<ThemeData, ThemeColorTranslator> private var backgroundColor = \.backgroundColor
-    @BindingTranslate<ThemeData, ThemeColorTranslator> private var resultBackgroundColor = \.resultBackgroundColor
-    @BindingTranslate<ThemeData, ThemeColorTranslator> private var resultTextColor = \.resultTextColor
-    @BindingTranslate<ThemeData, ThemeColorTranslator> private var textColor = \.textColor
-    @BindingTranslate<ThemeData, ThemeColorTranslator> private var borderColor = \.borderColor
-
-    @BindingTranslate<ThemeData, ThemeNormalKeyColorTranslator> private var normalKeyFillColor = \.normalKeyFillColor
-    @BindingTranslate<ThemeData, ThemeSpecialKeyColorTranslator> private var specialKeyFillColor = \.specialKeyFillColor
-
-    @BindingTranslate<ThemeData, ThemeFontDoubleTranslator> private var textFont = \.textFont
+    private let colorConverter = ThemeColorTranslator.self
+    private let normalColorConverter = ThemeNormalKeyColorTranslator.self
+    private let specialColorConverter = ThemeSpecialKeyColorTranslator.self
 
     private enum ViewType {
         case editor
@@ -155,50 +148,38 @@ struct ThemeEditView: CancelableEditor {
                 Form {
                     Section(header: Text("背景")) {
                         if trimmedImage != nil {
-                            Button {
+                            Button("\(systemImage: "photo")画像を選び直す") {
                                 self.isSheetPresented = true
-                            } label: {
-                                HStack {
-                                    Text("\(systemImage: "photo")画像を選び直す")
-                                }
                             }
-                            Button {
+                            Button("画像を削除") {
                                 pickedImage = nil
                                 trimmedImage = nil
-                            } label: {
-                                HStack {
-                                    Text("画像を削除")
-                                        .foregroundColor(.red)
-                                }
                             }
+                            .foregroundColor(.red)
                         } else {
-                            Button {
+                            Button("\(systemImage: "photo")画像を選ぶ") {
                                 self.isSheetPresented = true
-                            } label: {
-                                HStack {
-                                    Text("\(systemImage: "photo")画像を選ぶ")
-                                }
                             }
-                            ColorPicker("背景の色", selection: $theme.translated($backgroundColor))
+                            ColorPicker("背景の色", selection: $theme.backgroundColor.converted(colorConverter))
                         }
                     }
                     Section(header: Text("文字")) {
                         HStack {
                             Text("文字の太さ")
-                            Slider(value: $theme.translated($textFont), in: 1...9.9)
+                            Slider(value: $theme.textFont.converted(ThemeFontDoubleTranslator.self), in: 1...9.9)
                         }
                     }
 
                     Section(header: Text("変換候補")) {
-                        ColorPicker("変換候補の文字の色", selection: $theme.translated($resultTextColor))
-                        ColorPicker("変換候補の背景色", selection: $theme.translated($resultBackgroundColor))
+                        ColorPicker("変換候補の文字の色", selection: $theme.resultTextColor.converted(colorConverter))
+                        ColorPicker("変換候補の背景色", selection: $theme.resultBackgroundColor.converted(colorConverter))
                     }
 
                     Section(header: Text("キー")) {
-                        ColorPicker("キーの文字の色", selection: $theme.translated($textColor))
-                        ColorPicker("通常キーの背景色", selection: $theme.translated($normalKeyFillColor))
-                        ColorPicker("特殊キーの背景色", selection: $theme.translated($specialKeyFillColor))
-                        ColorPicker("枠線の色", selection: $theme.translated($borderColor))
+                        ColorPicker("キーの文字の色", selection: $theme.textColor.converted(colorConverter))
+                        ColorPicker("通常キーの背景色", selection: $theme.normalKeyFillColor.converted(normalColorConverter))
+                        ColorPicker("特殊キーの背景色", selection: $theme.specialKeyFillColor.converted(specialColorConverter))
+                        ColorPicker("枠線の色", selection: $theme.borderColor.converted(colorConverter))
                         HStack {
                             Text("枠線の太さ")
                             Slider(value: $theme.borderWidth, in: 0...10)
@@ -206,16 +187,13 @@ struct ThemeEditView: CancelableEditor {
                     }
 
                     Section {
-                        Button {
+                        Button("リセットする") {
                             self.pickedImage = nil
                             self.trimmedImage = nil
                             self.theme = self.base
-                        } label: {
-                            Text("リセットする")
-                                .foregroundColor(.red)
                         }
+                        .foregroundColor(.red)
                     }
-
                 }
                 KeyboardPreview(theme: self.theme, defaultTab: tab)
                 NavigationLink(destination: Group {
@@ -229,9 +207,8 @@ struct ThemeEditView: CancelableEditor {
                 }, isActive: $isTrimmingViewPresented) {
                     EmptyView()
                 }
-
             }
-            .background(Color(.secondarySystemBackground))
+            .background(Color.secondarySystemBackground)
             .onChange(of: pickedImage) {value in
                 if value != nil {
                     self.isTrimmingViewPresented = true
@@ -265,7 +242,7 @@ struct ThemeEditView: CancelableEditor {
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(
                 leading: Button("キャンセル", action: cancel),
-                trailing: Button {
+                trailing: Button("完了") {
                     do {
                         try self.save()
                     } catch {
@@ -273,9 +250,8 @@ struct ThemeEditView: CancelableEditor {
                     }
                     // presentationMode.wrappedValue.dismiss()
                     self.viewType = .themeShareView
-                }label: {
-                    Text("完了")
-                })
+                }
+            )
             .onChange(of: storeVariableSection.japaneseLayout) {value in
                 SettingData.shared.reload() // 設定をリロードする
                 self.tab = {
