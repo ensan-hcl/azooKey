@@ -143,9 +143,7 @@ enum Setting: String {
     }
 }
 
-struct DefaultSetting {
-    private init() {}
-
+enum DefaultSetting {
     static func bool(_ setting: Setting) -> Bool? {
         switch setting {
         case .wesJapCalender, .typographyLetter, .halfKana, .fullRoman, .unicodeCandidate, .englishCandidate:

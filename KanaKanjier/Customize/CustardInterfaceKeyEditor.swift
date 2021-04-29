@@ -458,7 +458,7 @@ struct CustardInterfaceKeyEditor: View {
             keyView(key: key, position: .bottom)
         }
     }
-    
+
     @ViewBuilder private func keyView(key: CustardInterfaceCustomKey, position: FlickKeyPosition) -> some View {
         switch key[.labelType, position] {
         case .text:

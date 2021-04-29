@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SharedStore {
+enum SharedStore {
     static let bundleName = "DevEn3.azooKey.keyboard"
     static let appGroupKey = "group.com.azooKey.keyboard"
 }

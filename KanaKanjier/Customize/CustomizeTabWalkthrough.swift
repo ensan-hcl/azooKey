@@ -18,11 +18,11 @@ private struct Item: Identifiable {
 
 struct CustomizeTabWalkthroughView: View {
     @Binding private var isShowing: Bool
-    
+
     init(isShowing: Binding<Bool>) {
         self._isShowing = isShowing
     }
-    
+
     private let items: [Item] = [
         .init(
             image: "rectangle.and.pencil.and.ellipsis",
@@ -39,9 +39,9 @@ struct CustomizeTabWalkthroughView: View {
             headline: "カスタムタブの読み込み",
             body: "カスタムタブはファイルとして共有可能です。パソコンで作ったファイルや他の人の作ったファイルを読み込んで利用できます。"
         )
-        
+
     ]
-    
+
     var body: some View {
         if ContainerInternalSetting.shared.walkthroughState.shouldDisplay(identifier: .extensions) {
             GeometryReader {geometry in
@@ -77,7 +77,7 @@ struct CustomizeTabWalkthroughView: View {
                             .lineLimit(nil)
                             .fixedSize(horizontal: false, vertical: true)
                         }
-                        
+
                         Button("始める") {
                             isShowing = false
                         }

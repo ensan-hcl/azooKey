@@ -13,11 +13,11 @@ import PhotosUI
 private struct ThemeColorTranslator: Intertranslator {
     typealias First = ThemeColor
     typealias Second = Color
-    
+
     static func convert(_ first: ThemeColor) -> Color {
         first.color
     }
-    
+
     static func convert(_ second: Color) -> ThemeColor {
         .color(second)
     }
@@ -26,11 +26,11 @@ private struct ThemeColorTranslator: Intertranslator {
 private struct ThemeSpecialKeyColorTranslator: Intertranslator {
     typealias First = ThemeColor
     typealias Second = Color
-    
+
     static func convert(_ first: ThemeColor) -> Color {
         ThemeColorTranslator.convert(first)
     }
-    
+
     static func convert(_ second: Color) -> ThemeColor {
         if let keyColor = ColorTools.rgba(second, process: {r, g, b, opacity in
             return Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
@@ -44,11 +44,11 @@ private struct ThemeSpecialKeyColorTranslator: Intertranslator {
 private struct ThemeNormalKeyColorTranslator: Intertranslator {
     typealias First = ThemeColor
     typealias Second = Color
-    
+
     static func convert(_ first: ThemeColor) -> Color {
         ThemeColorTranslator.convert(first)
     }
-    
+
     static func convert(_ second: Color) -> ThemeColor {
         if let keyColor = ColorTools.rgba(second, process: {r, g, b, opacity in
             return Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
@@ -62,11 +62,11 @@ private struct ThemeNormalKeyColorTranslator: Intertranslator {
 private struct ThemeFontDoubleTranslator: Intertranslator {
     typealias First = ThemeFontWeight
     typealias Second = Double
-    
+
     static func convert(_ first: First) -> Second {
         return Double(first.rawValue)
     }
-    
+
     static func convert(_ second: Second) -> First {
         return ThemeFontWeight.init(rawValue: Int(second)) ?? .regular
     }
@@ -77,31 +77,31 @@ struct ThemeEditView: CancelableEditor {
     @State private var theme: ThemeData = .base
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+
     @Binding private var manager: ThemeIndexManager
-    
+
     @State private var trimmedImage: UIImage?
     @State private var isTrimmingViewPresented = false
     @State private var pickedImage: UIImage?
     @State private var isSheetPresented = false
     @State private var viewType = ViewType.editor
-    
+
     @ObservedObject private var storeVariableSection = Store.variableSection
-    
+
     private let colorConverter = ThemeColorTranslator.self
     private let normalColorConverter = ThemeNormalKeyColorTranslator.self
     private let specialColorConverter = ThemeSpecialKeyColorTranslator.self
-    
+
     private enum ViewType {
         case editor
         case themeShareView
     }
-    
+
     private let title: LocalizedStringKey
-    
+
     @State private var tab: Tab.ExistentialTab
     private var shareImage = ShareImage()
-    
+
     init(index: Int?, manager: Binding<ThemeIndexManager>) {
         let tab: Tab.ExistentialTab = {
             switch Store.variableSection.japaneseLayout {
@@ -113,7 +113,7 @@ struct ThemeEditView: CancelableEditor {
                 return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
             }
         }()
-        
+
         self._tab = State(initialValue: tab)
         self._manager = manager
         if let index = index {
@@ -140,7 +140,7 @@ struct ThemeEditView: CancelableEditor {
         config.selectionLimit = 1
         return config
     }
-    
+
     var body: some View {
         switch viewType {
         case .editor:
@@ -169,12 +169,12 @@ struct ThemeEditView: CancelableEditor {
                             Slider(value: $theme.textFont.converted(ThemeFontDoubleTranslator.self), in: 1...9.9)
                         }
                     }
-                    
+
                     Section(header: Text("変換候補")) {
                         ColorPicker("変換候補の文字の色", selection: $theme.resultTextColor.converted(colorConverter))
                         ColorPicker("変換候補の背景色", selection: $theme.resultBackgroundColor.converted(colorConverter))
                     }
-                    
+
                     Section(header: Text("キー")) {
                         ColorPicker("キーの文字の色", selection: $theme.textColor.converted(colorConverter))
                         ColorPicker("通常キーの背景色", selection: $theme.normalKeyFillColor.converted(normalColorConverter))
@@ -185,7 +185,7 @@ struct ThemeEditView: CancelableEditor {
                             Slider(value: $theme.borderWidth, in: 0...10)
                         }
                     }
-                    
+
                     Section {
                         Button("リセットする") {
                             self.pickedImage = nil
@@ -274,11 +274,11 @@ struct ThemeEditView: CancelableEditor {
             .navigationBarItems(leading: EmptyView(), trailing: EmptyView())
         }
     }
-    
+
     func cancel() {
         presentationMode.wrappedValue.dismiss()
     }
-    
+
     private func save() throws {
         // テーマを保存する
         let id = try manager.saveTheme(theme: self.theme)
