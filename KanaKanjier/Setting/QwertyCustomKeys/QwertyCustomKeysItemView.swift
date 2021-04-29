@@ -67,6 +67,20 @@ private extension QwertyCustomKeysValue {
             }
         }
     }
+
+    enum InputKey {case input}
+
+    subscript(_ key: InputKey, _ state: Selection) -> String {
+        get {
+            if case let .input(value) = self[state].actions.first {
+                return value
+            }
+            return ""
+        }
+        set {
+            self[state].actions = [.input(newValue)]
+        }
+    }
 }
 
 private struct Selection: Hashable {
@@ -93,7 +107,6 @@ private struct Selection: Hashable {
 
 struct QwertyCustomKeysItemView: View {
     @StateObject private var editState = EditState()
-    @State private var inputValue = ""
     @State private var selection = Selection()
 
     typealias ItemViewModel = SettingItemViewModel<QwertyCustomKeysValue>
@@ -206,27 +219,21 @@ struct QwertyCustomKeysItemView: View {
         .frame(maxWidth: .infinity)
         .navigationBarTitle("カスタムキーの設定", displayMode: .inline)
         .navigationBarItems(trailing: Button(editState.details ? "完了" : "詳細設定") {
-            self.reloadInputValue()
             editState.state = .none
             editState.details.toggle()
         })
         .background(Color.secondarySystemBackground)
-        .onChange(of: selection) {_ in
-            self.reloadInputValue()
-        }
     }
 
-    private func reloadInputValue() {
-        if selection.selectIndex != -1, let string = getInputText(actions: viewModel.value[selection].actions) {
-            inputValue = string
+    private var isInputTextEditable: Bool {
+        let actions = viewModel.value[selection].actions
+        if actions.count == 1, case .input = actions.first {
+            return true
         }
-    }
-
-    private func getInputText(actions: [CodableActionData]) -> String? {
-        if actions.count == 1, let action = actions.first, case let .input(value) = action {
-            return value
+        if actions.isEmpty {
+            return true
         }
-        return nil
+        return false
     }
 
     private var labelEditor: some View {
@@ -248,27 +255,20 @@ struct QwertyCustomKeysItemView: View {
 
     private var inputEditor: some View {
         VStack {
-            if self.getInputText(actions: viewModel.value[selection].actions) == nil {
+            if !isInputTextEditable {
                 Text("このキーには入力以外の複数のアクションが設定されています。")
                     .font(.caption)
                 Text("現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
                     .font(.caption)
                 Button("入力を設定する") {
-                    inputValue = ""
-                    viewModel.value[selection].actions = [.input("")]
+                    viewModel.value[.input, selection] = ""
                 }
             } else {
                 Text("キーを押して入力される文字を設定します。")
                     .font(.caption)
                 Text("キーの見た目は「ラベル」で設定できます。")
                     .font(.caption)
-                TextField("入力される文字", text: $inputValue)
-                    .onChange(of: inputValue) { string in
-                        viewModel.value[selection].actions = [.input(string)]
-                        if viewModel.value[selection].name.isEmpty {
-                            viewModel.value[selection].name = string
-                        }
-                    }
+                TextField("入力される文字", text: $viewModel.value[.input, selection])
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
