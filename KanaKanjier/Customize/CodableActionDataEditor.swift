@@ -86,8 +86,8 @@ struct CodableActionDataEditor: View {
                 }
                 Section(header: Text("アクション")) {
                     List {
-                        ForEach(actions.indices, id: \.self) {i in
-                            CodableActionEditor(action: $actions[i], availableCustards: availableCustards)
+                        ForEach($actions.identifiableItems) {item in
+                            CodableActionEditor(action: item.bindedItem, availableCustards: availableCustards)
                         }
                         .onDelete(perform: delete)
                         .onMove(perform: onMove)
@@ -98,50 +98,10 @@ struct CodableActionDataEditor: View {
                 isOpen: self.$bottomSheetShown,
                 maxHeight: geometry.size.height * 0.7
             ) {
-                let press: (CodableActionData) -> Void = { action in
+                ActionPicker { action in
                     add(new: action)
                     bottomSheetShown = false
                 }
-                Form {
-                    Section(header: Text("基本")) {
-                        Button("タブの移動") {
-                            press(.moveTab(.system(.user_japanese)))
-                        }
-                        Button("タブバーの表示") {
-                            press(.toggleTabBar)
-                        }
-                        Button("文字の入力") {
-                            press(.input("😁"))
-                        }
-                        Button("文字の削除") {
-                            press(.delete(1))
-                        }
-                    }
-                    Section(header: Text("高度")) {
-                        Button("文頭まで削除") {
-                            press(.smartDeleteDefault)
-                        }
-                        Button("カーソル移動") {
-                            press(.moveCursor(-1))
-                        }
-                        Button("片手モードをオン") {
-                            press(.enableResizingMode)
-                        }
-                        Button("入力の確定") {
-                            press(.complete)
-                        }
-                        Button("Caps lock") {
-                            press(.toggleCapsLockState)
-                        }
-                        Button("カーソルバーの表示") {
-                            press(.toggleCursorBar)
-                        }
-                        Button("キーボードを閉じる") {
-                            press(.dismissKeyboard)
-                        }
-                    }
-                }
-                .foregroundColor(.primary)
             }
         }
         .onChange(of: actions) {_ in
@@ -416,10 +376,9 @@ struct CodableLongpressActionDataEditor: View {
                             Text("アクションを追加")
                         }
                     }
-
                     List {
-                        ForEach(startActions.indices, id: \.self) {i in
-                            CodableActionEditor(action: $startActions[i], availableCustards: availableCustards)
+                        ForEach($startActions.identifiableItems) {item in
+                            CodableActionEditor(action: item.bindedItem, availableCustards: availableCustards)
                         }
                         .onDelete(perform: {startActions.remove(atOffsets: $0)})
                         .onMove(perform: {startActions.move(fromOffsets: $0, toOffset: $1)})
@@ -437,8 +396,8 @@ struct CodableLongpressActionDataEditor: View {
                     }
 
                     List {
-                        ForEach(repeatActions.indices, id: \.self) {i in
-                            CodableActionEditor(action: $repeatActions[i], availableCustards: availableCustards)
+                        ForEach($repeatActions.identifiableItems) {item in
+                            CodableActionEditor(action: item.bindedItem, availableCustards: availableCustards)
                         }
                         .onDelete(perform: {repeatActions.remove(atOffsets: $0)})
                         .onMove(perform: {repeatActions.move(fromOffsets: $0, toOffset: $1)})
@@ -450,50 +409,10 @@ struct CodableLongpressActionDataEditor: View {
                 isOpen: self.$bottomSheetShown,
                 maxHeight: geometry.size.height * 0.7
             ) {
-                let press: (CodableActionData) -> Void = { action in
+                ActionPicker { action in
                     add(new: action)
                     bottomSheetShown = false
                 }
-                Form {
-                    Section(header: Text("基本")) {
-                        Button("タブの移動") {
-                            press(.moveTab(.system(.user_japanese)))
-                        }
-                        Button("タブバーの表示") {
-                            press(.toggleTabBar)
-                        }
-                        Button("カーソル移動") {
-                            press(.moveCursor(-1))
-                        }
-                        Button("文字の入力") {
-                            press(.input("😁"))
-                        }
-                        Button("文字の削除") {
-                            press(.delete(1))
-                        }
-                    }
-                    Section(header: Text("高度")) {
-                        Button("文頭まで削除") {
-                            press(.smartDeleteDefault)
-                        }
-                        Button("片手モードをオン") {
-                            press(.enableResizingMode)
-                        }
-                        Button("入力の確定") {
-                            press(.complete)
-                        }
-                        Button("Caps lock") {
-                            press(.toggleCapsLockState)
-                        }
-                        Button("カーソルバーの表示") {
-                            press(.toggleCursorBar)
-                        }
-                        Button("キーボードを閉じる") {
-                            press(.dismissKeyboard)
-                        }
-                    }
-                }
-                .foregroundColor(.primary)
             }
         }
         .onChange(of: startActions) {value in
@@ -527,5 +446,56 @@ struct CodableLongpressActionDataEditor: View {
                 Text("完了")
             }
         }
+    }
+}
+
+struct ActionPicker: View {
+    private let process: (CodableActionData) -> Void
+
+    init(process: @escaping (CodableActionData) -> Void) {
+        self.process = process
+    }
+
+    var body: some View {
+        Form {
+            Section(header: Text("基本")) {
+                Button("タブの移動") {
+                    process(.moveTab(.system(.user_japanese)))
+                }
+                Button("タブバーの表示") {
+                    process(.toggleTabBar)
+                }
+                Button("カーソル移動") {
+                    process(.moveCursor(-1))
+                }
+                Button("文字の入力") {
+                    process(.input("😁"))
+                }
+                Button("文字の削除") {
+                    process(.delete(1))
+                }
+            }
+            Section(header: Text("高度")) {
+                Button("文頭まで削除") {
+                    process(.smartDeleteDefault)
+                }
+                Button("片手モードをオン") {
+                    process(.enableResizingMode)
+                }
+                Button("入力の確定") {
+                    process(.complete)
+                }
+                Button("Caps lock") {
+                    process(.toggleCapsLockState)
+                }
+                Button("カーソルバーの表示") {
+                    process(.toggleCursorBar)
+                }
+                Button("キーボードを閉じる") {
+                    process(.dismissKeyboard)
+                }
+            }
+        }
+        .foregroundColor(.primary)
     }
 }
