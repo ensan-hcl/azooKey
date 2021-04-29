@@ -156,13 +156,9 @@ struct AdditionalDictManageViewMain: View {
         Section(header: Text("不快な絵文字を表示しない")) {
             if self.style == .all {
                 if #available(iOS 14.2, *) {
-                    Toggle(isOn: $viewModel.blockTargets[.gokiburi]) {
-                        Text("ゴキブリの絵文字を非表示")
-                    }
+                    Toggle("ゴキブリの絵文字を非表示", isOn: $viewModel.blockTargets[.gokiburi])
                 }
-                Toggle(isOn: $viewModel.blockTargets[.spiders]) {
-                    Text("クモの絵文字を非表示")
-                }
+                Toggle("クモの絵文字を非表示", isOn: $viewModel.blockTargets[.spiders])
             }
         }
     }

@@ -77,9 +77,7 @@ struct EditingScrollCustardView: CancelableEditor {
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                             }
-                            Toggle(isOn: $editingItem.addTabBarAutomatically) {
-                                Text("自動的にタブバーに追加")
-                            }
+                            Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                         }
                     }
                     .frame(height: geometry.size.height * 0.4)

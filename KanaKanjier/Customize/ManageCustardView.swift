@@ -171,9 +171,7 @@ struct ManageCustardView: View {
                         CenterAlignedView {
                             KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
                         }
-                        Toggle(isOn: $addTabBar) {
-                            Text("タブバーに追加")
-                        }
+                        Toggle("タブバーに追加", isOn: $addTabBar)
                         Button("保存") {
                             if manager.availableCustards.contains(custard.identifier) {
                                 self.showAlert = true
@@ -303,9 +301,7 @@ struct URLImportCustardView: View {
                         CenterAlignedView {
                             KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
                         }
-                        Toggle(isOn: $addTabBar) {
-                            Text("タブバーに追加")
-                        }
+                        Toggle("タブバーに追加", isOn: $addTabBar)
                         Button("保存") {
                             if manager.availableCustards.contains(custard.identifier) {
                                 self.showAlert = true

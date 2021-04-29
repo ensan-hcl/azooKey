@@ -164,16 +164,10 @@ private struct UserDictionaryDataEditor: CancelableEditor {
             }
             Section(header: Text("詳細な設定")) {
                 if item.neadVerbCheck() {
-                        Toggle(isOn: $item.data.isVerb) {
-                            Text("「\(item.mizenkeiWord)(\(item.mizenkeiRuby))」と言える")
-                        }
+                    Toggle("「\(item.mizenkeiWord)(\(item.mizenkeiRuby))」と言える", isOn: $item.data.isVerb)
                 }
-                    Toggle(isOn: $item.data.isPersonName) {
-                        Text("人・動物・会社などの名前である")
-                    }
-                    Toggle(isOn: $item.data.isPlaceName) {
-                        Text("場所・建物などの名前である")
-                    }
+                Toggle("人・動物・会社などの名前である", isOn: $item.data.isPersonName)
+                Toggle("場所・建物などの名前である", isOn: $item.data.isPlaceName)
             }
         }
         .navigationTitle(Text("設定"))
