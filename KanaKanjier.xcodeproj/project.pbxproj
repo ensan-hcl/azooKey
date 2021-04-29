@@ -2354,8 +2354,6 @@
 		1AC8A5D3259815C300B71E5A /* FlickCustomKeySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */; };
 		1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5DC25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift */; };
 		1ACB07CA25E552940077DE04 /* EditingScrollCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */; };
-		1ACB07DC25E71ED70077DE04 /* BindingArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACB07DB25E71ED70077DE04 /* BindingArray.swift */; };
-		1ACB07DD25E71ED70077DE04 /* BindingArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACB07DB25E71ED70077DE04 /* BindingArray.swift */; };
 		1ACC0F0725CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */; };
 		1ACC0F0825CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC0F0625CF9A7700FC1B8A /* FlickSpaceKeyModel.swift */; };
 		1ACC0F0E25CFE7FF00FC1B8A /* ThemeEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACC0F0D25CFE7FF00FC1B8A /* ThemeEditView.swift */; };
@@ -7674,7 +7672,6 @@
 			isa = PBXGroup;
 			children = (
 				1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */,
-				1ACB07DB25E71ED70077DE04 /* BindingArray.swift */,
 				1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */,
 				1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */,
 				1A30CE8A26023B52007C1A2D /* CodableSupport.swift */,
@@ -7844,6 +7841,7 @@
 				1A4E1F5B2615CADA009B6EB7 /* KeyFlickSettingItemView.swift */,
 				1A0E8D5A25EC940C00A9BAE5 /* GenericColorPicker.swift */,
 				1A0E8D7E25EF273600A9BAE5 /* CodableDictionary.swift */,
+				1ACB07DB25E71ED70077DE04 /* BindingArray.swift */,
 				1A6736072509F39E003FC654 /* VerbConjugation.swift */,
 				1AC3DB7426234CD70086F9EC /* BindingTranslator.swift */,
 				1A10D81425E506710095CB67 /* DocumentPicker.swift */,
@@ -10334,7 +10332,6 @@
 				1A3ACF1725FB78BF007E9938 /* InternalSetting.swift in Sources */,
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */,
-				1ACB07DC25E71ED70077DE04 /* BindingArray.swift in Sources */,
 				1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */,
 				1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */,
 				1AF6797925CEDB9B00F3987B /* QwertyKeyModel.swift in Sources */,
@@ -10482,7 +10479,6 @@
 				1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */,
 				1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */,
 				1A2602B4251489E500EAD647 /* QwertySpaceKeyModel.swift in Sources */,
-				1ACB07DD25E71ED70077DE04 /* BindingArray.swift in Sources */,
 				1A3022B92633970300E4495C /* KeyPosition.swift in Sources */,
 				1A30CE8C26023B52007C1A2D /* CodableSupport.swift in Sources */,
 				1A3DC2172500D5AB002CAA93 /* Action.swift in Sources */,
