@@ -147,9 +147,7 @@ struct ManageCustardView: View {
                     List {
                         ForEach(manager.availableCustards, id: \.self) {identifier in
                             if let custard = try? manager.custard(identifier: identifier) {
-                                NavigationLink(destination: CustardInformationView(custard: custard, manager: $manager)) {
-                                    Text(identifier)
-                                }
+                                NavigationLink(identifier, destination: CustardInformationView(custard: custard, manager: $manager))
                             }
                         }
                         .onDelete(perform: delete)
@@ -159,15 +157,11 @@ struct ManageCustardView: View {
 
             Section(header: Text("作る")) {
                 Text("登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
-                NavigationLink(destination: EditingScrollCustardView(manager: $manager)) {
-                    Text("スクロール式のカスタムタブを作る")
-                }
-                .foregroundColor(.accentColor)
+                NavigationLink("スクロール式のカスタムタブを作る", destination: EditingScrollCustardView(manager: $manager))
+                    .foregroundColor(.accentColor)
                 Text("フリック式のカスタムタブを作成することができます。")
-                NavigationLink(destination: EditingTenkeyCustardView(manager: $manager)) {
-                    Text("フリック式のカスタムタブを作る")
-                }
-                .foregroundColor(.accentColor)
+                NavigationLink("フリック式のカスタムタブを作る", destination: EditingTenkeyCustardView(manager: $manager))
+                    .foregroundColor(.accentColor)
             }
             if let value = data.downloadedData,
                let custards = (data.custards ?? data.process(data: value)) {

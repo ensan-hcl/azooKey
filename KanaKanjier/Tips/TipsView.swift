@@ -26,46 +26,23 @@ struct TipsTabView: View {
                                     Store.variableSection.requireFirstOpenView = true
                                 }
                         }
-                        NavigationLink(destination: SelctInputStyleTipsView()) {
-                            Text("入力方法を選ぶ")
-                        }
+                        NavigationLink("入力方法を選ぶ", destination: SelctInputStyleTipsView())
                     }
 
                     Section(header: Text("便利な使い方")) {
-                        NavigationLink(destination: OneHandedModeTipsView()) {
-                            Text("片手モードを使う")
-                        }
-                        NavigationLink(destination: CursorMoveTipsView()) {
-                            Text("カーソルを自由に移動する")
-                        }
-                        NavigationLink(destination: SmoothDeleteTipsView()) {
-                            Text("文頭まで一気に消す")
-                        }
-                        NavigationLink(destination: KanjiLargeTextTipsView()) {
-                            Text("漢字を拡大表示する")
-                        }
-                        NavigationLink(destination: CapsLockTipsView()) {
-                            Text("大文字に固定する")
-                        }
-                        NavigationLink(destination: TemplateSettingTipsView()) {
-                            Text("タイムスタンプを使う")
-                        }
-                        NavigationLink(destination: CustomKeyTipsView()) {
-                            Text("キーをカスタマイズする")
-                        }
+                        NavigationLink("片手モードを使う", destination: OneHandedModeTipsView())
+                        NavigationLink("カーソルを自由に移動する", destination: CursorMoveTipsView())
+                        NavigationLink("文頭まで一気に消す", destination: SmoothDeleteTipsView())
+                        NavigationLink("漢字を拡大表示する", destination: KanjiLargeTextTipsView())
+                        NavigationLink("大文字に固定する", destination: CapsLockTipsView())
+                        NavigationLink("タイムスタンプを使う", destination: TemplateSettingTipsView())
+                        NavigationLink("キーをカスタマイズする", destination: CustomKeyTipsView())
                     }
 
                     Section(header: Text("困ったときは")) {
-                        NavigationLink(destination: DynamicTypeSettingFailureTipsView()) {
-                            Text("端末の文字サイズ設定が反映されない")
-                        }
-                        NavigationLink(destination: EmojiKaomojiTipsView()) {
-                            Text("絵文字や顔文字の変換候補を表示したい")
-                        }
-                        NavigationLink(destination: ContactView()) {
-                            Text("バグの報告や機能のリクエストをしたい")
-                        }
-
+                        NavigationLink("端末の文字サイズ設定が反映されない", destination: DynamicTypeSettingFailureTipsView())
+                        NavigationLink("絵文字や顔文字の変換候補を表示したい", destination: EmojiKaomojiTipsView())
+                        NavigationLink("バグの報告や機能のリクエストをしたい", destination: ContactView())
                     }
                 }
                 .navigationBarTitle(Text("使い方"), displayMode: .large)

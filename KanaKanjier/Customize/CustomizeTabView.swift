@@ -40,13 +40,8 @@ struct CustomizeTabView: View {
                             Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
                         }
                         ImageSlideshowView(pictures: ["custard_1", "custard_2", "custard_3" ])
-                        NavigationLink(destination: ManageCustardView(manager: $manager)) {
-                            HStack {
-                                Text("カスタムタブの管理")
-                                    .foregroundColor(.accentColor)
-                                Spacer()
-                            }
-                        }
+                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $manager))
+                            .foregroundColor(.accentColor)
                     }
                     Section(header: Text("タブバー")) {
                         Text("カスタムタブを使うにはタブバーを利用します。")
@@ -60,10 +55,8 @@ struct CustomizeTabView: View {
                             Text("変換候補欄に何も表示されていない状態で、変換候補欄を長押しすると表示されます。")
                             Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
                         }
-                        NavigationLink(destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager)) {
-                            Text("タブバーを編集")
-                                .foregroundColor(.accentColor)
-                        }
+                        NavigationLink("タブバーを編集", destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager))
+                            .foregroundColor(.accentColor)
                     }
 
                     Section(header: Text("カスタムキー")) {
@@ -71,24 +64,14 @@ struct CustomizeTabView: View {
                             Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
                             ImageSlideshowView(pictures: ["flickCustomKeySetting0", "flickCustomKeySetting1", "flickCustomKeySetting2"])
                         }
-                        NavigationLink(destination: FlickCustomKeysSettingSelectView()) {
-                            HStack {
-                                Text("設定する")
-                                    .foregroundColor(.accentColor)
-                                Spacer()
-                            }
-                        }
+                        NavigationLink("設定する", destination: FlickCustomKeysSettingSelectView())
+                            .foregroundColor(.accentColor)
                         VStack {
                             Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
                             ImageSlideshowView(pictures: ["qwertyCustomKeySetting0", "qwertyCustomKeySetting1", "qwertyCustomKeySetting2"])
                         }
-                        NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)) {
-                            HStack {
-                                Text("設定する")
-                                    .foregroundColor(.accentColor)
-                                Spacer()
-                            }
-                        }
+                        NavigationLink("設定する", destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew))
+                            .foregroundColor(.accentColor)
                     }
                 }
                 .navigationBarTitle(Text("拡張"), displayMode: .large)

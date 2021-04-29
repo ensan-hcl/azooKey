@@ -415,17 +415,12 @@ struct CustardInterfaceKeyEditor: View {
             }
             Section(header: Text("アクション")) {
                 Text("キーを押したときの動作をより詳しく設定します。")
-                NavigationLink(destination: CodableActionDataEditor($key[.custom][.pressAction, position], availableCustards: CustardManager.load().availableCustards)) {
-                    Text("アクションを編集する")
-                }
+                NavigationLink("アクションを編集する", destination: CodableActionDataEditor($key[.custom][.pressAction, position], availableCustards: CustardManager.load().availableCustards))
                 .foregroundColor(.accentColor)
             }
             Section(header: Text("長押しアクション")) {
                 Text("キーを長押ししたときの動作をより詳しく設定します。")
-                NavigationLink(destination: CodableLongpressActionDataEditor($key[.custom][.longpressAction, position], availableCustards: CustardManager.load().availableCustards)) {
-                    Text("長押しアクションを編集する")
-                        .foregroundColor(.accentColor)
-                }
+                NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($key[.custom][.longpressAction, position], availableCustards: CustardManager.load().availableCustards))
                 .foregroundColor(.accentColor)
             }
 

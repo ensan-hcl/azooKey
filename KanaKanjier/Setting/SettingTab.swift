@@ -16,12 +16,7 @@ struct SettingTabView: View {
         NavigationView {
             Form {
                 Section(header: Text("キーボードの種類")) {
-                    NavigationLink(destination: KeyboardLayoutTypeDetailsView()) {
-                        HStack {
-                            Text("キーボードの種類を設定する")
-                            Spacer()
-                        }
-                    }
+                    NavigationLink("キーボードの種類を設定する", destination: KeyboardLayoutTypeDetailsView())
                 }
                 Section(header: Text("言語")) {
                     PreferredLanguageSettingView(Store.shared.preferredLanguage)
@@ -31,24 +26,14 @@ struct SettingTabView: View {
                         Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
                         ImageSlideshowView(pictures: ["flickCustomKeySetting0", "flickCustomKeySetting1", "flickCustomKeySetting2"])
                     }
-                    NavigationLink(destination: FlickCustomKeysSettingSelectView()) {
-                        HStack {
-                            Text("設定する")
-                                .foregroundColor(.accentColor)
-                            Spacer()
-                        }
-                    }
+                    NavigationLink("設定する", destination: FlickCustomKeysSettingSelectView())
+                    .foregroundColor(.accentColor)
                     VStack {
                         Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
                         ImageSlideshowView(pictures: ["qwertyCustomKeySetting0", "qwertyCustomKeySetting1", "qwertyCustomKeySetting2"])
                     }
-                    NavigationLink(destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew)) {
-                        HStack {
-                            Text("設定する")
-                                .foregroundColor(.accentColor)
-                            Spacer()
-                        }
-                    }
+                    NavigationLink("設定する", destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew))
+                    .foregroundColor(.accentColor)
                 }
                 Section(header: Text("サウンド")) {
                     BooleanSettingItemView(Store.shared.enableSoundSetting)
@@ -100,30 +85,15 @@ struct SettingTabView: View {
                     BooleanSettingItemView(Store.shared.typographyLetterSetting)
                     BooleanSettingItemView(Store.shared.wesJapCalenderSetting)
                     BooleanSettingItemView(Store.shared.unicodeCandidateSetting)
-                    NavigationLink(destination: AdditionalDictManageView()) {
-                        HStack {
-                            Text("絵文字と顔文字")
-                            Spacer()
-                        }
-                    }
+                    NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                 }
                 Section(header: Text("ユーザ辞書")) {
                     BooleanSettingItemView(Store.shared.iOSUserDictSetting)
-                    NavigationLink(destination: AzooKeyUserDictionaryView()) {
-                        HStack {
-                            Text("azooKeyユーザ辞書")
-                            Spacer()
-                        }
-                    }
+                    NavigationLink("azooKeyユーザ辞書", destination: AzooKeyUserDictionaryView())
                 }
 
                 Section(header: Text("テンプレート")) {
-                    NavigationLink(destination: TemplateListView()) {
-                        HStack {
-                            Text("テンプレートの管理")
-                            Spacer()
-                        }
-                    }
+                    NavigationLink("テンプレートの管理", destination: TemplateListView())
                 }
 
                 Section(header: Text("学習機能")) {
@@ -132,28 +102,13 @@ struct SettingTabView: View {
                     MemoryResetSettingItemView(Store.shared.memoryResetSetting)
                 }
                 Section(header: Text("このアプリについて")) {
-                    NavigationLink(destination: ContactView()) {
-                        HStack {
-                            Text("お問い合わせ")
-                            Spacer()
-                        }
-                    }
+                    NavigationLink("お問い合わせ", destination: ContactView())
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
                         .foregroundColor(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
                         .foregroundColor(.primary)
-                    NavigationLink(destination: UpdateInfomationView()) {
-                        HStack {
-                            Text("更新履歴")
-                            Spacer()
-                        }
-                    }
-                    NavigationLink(destination: OpenSourceSoftWaresLicenceView()) {
-                        HStack {
-                            Text("オープンソースソフトウェア")
-                            Spacer()
-                        }
-                    }
+                    NavigationLink("更新履歴", destination: UpdateInfomationView())
+                    NavigationLink("オープンソースソフトウェア", destination: OpenSourceSoftWaresLicenceView())
                     HStack {
                         Text("URL Scheme")
                         Spacer()
@@ -164,9 +119,7 @@ struct SettingTabView: View {
                         Spacer()
                         Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "取得中です")
                     }
-
                 }
-
             }
             .navigationBarTitle(Text("設定"), displayMode: .large)
             .onAppear {
