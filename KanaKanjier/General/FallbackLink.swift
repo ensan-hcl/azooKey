@@ -12,17 +12,17 @@ struct FallbackLink: View {
     @State private var showAlert = false
     private let title: LocalizedStringKey
     private let url: URL
-
+    
     init(_ title: LocalizedStringKey, destination: String) {
         self.title = title
         self.url = URL(string: destination)!
     }
-
+    
     init(_ title: LocalizedStringKey, destination: URL) {
         self.title = title
         self.url = destination
     }
-
+    
     var body: some View {
         Button("\(systemImage: "arrow.up.forward.square") \(title)") {
             // 外部ブラウザでURLを開く

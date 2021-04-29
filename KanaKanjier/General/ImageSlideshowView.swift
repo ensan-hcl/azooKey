@@ -15,13 +15,13 @@ struct ImageSlideshowView: View {
     init(pictures: [String]) {
         self.pictures = pictures
     }
-
+    
     var body: some View {
         CenterAlignedView {
             HStack {
                 ForEach(pictures.indices, id: \.self) {i in
                     if i == selection {
-
+                        
                         Image(pictures[selection])
                             .resizable()
                             .scaledToFit()
@@ -34,7 +34,7 @@ struct ImageSlideshowView: View {
             }
         }
     }
-
+    
     private func update() {
         self.selection = (selection + 1) % pictures.count
     }

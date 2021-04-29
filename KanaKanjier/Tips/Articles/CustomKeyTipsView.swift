@@ -22,8 +22,6 @@ struct CustomKeyTipsView: View {
                 Text("ローマ字入力では、数字タブの一部キーに好きな文字と長押ししたときの候補を登録することができます。")
                 ImageSlideshowView(pictures: ["qwertyCustomKeySetting0", "qwertyCustomKeySetting1", "qwertyCustomKeySetting2"])
             }
-
         }
-
     }
 }

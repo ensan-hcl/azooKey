@@ -15,7 +15,7 @@ struct CustomizeTabView: View {
     @State private var manager: CustardManager
     @State private var showImportView = false
     @ObservedObject private var storeVariableSection = Store.variableSection
-
+    
     init() {
         var manager = CustardManager.load()
         self._manager = State(initialValue: manager)
@@ -30,7 +30,7 @@ struct CustomizeTabView: View {
             }
         }
     }
-
+    
     var body: some View {
         ZStack {
             NavigationView {
@@ -58,7 +58,7 @@ struct CustomizeTabView: View {
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager))
                             .foregroundColor(.accentColor)
                     }
-
+                    
                     Section(header: Text("カスタムキー")) {
                         VStack {
                             Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")

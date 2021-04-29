@@ -103,99 +103,99 @@ struct EditingTenkeyCustardView: CancelableEditor {
         VStack {
             GeometryReader {_ in
                 VStack {
-            Form {
-                TextField("タブの名前", text: $editingItem.tabName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Button("プレビュー") {
-                    showPreview = true
-                    UIApplication.shared.closeKeyboard()
-                }
-                HStack {
-                    Text("縦方向キー数")
-                    Spacer()
-                    TextField("縦方向キー数", text: $editingItem.columnCount)
-                        .keyboardType(.numberPad)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                HStack {
-                    Text("横方向キー数")
-                    Spacer()
-                    TextField("横方向キー数", text: $editingItem.rowCount)
-                        .keyboardType(.numberPad)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                Picker("言語", selection: $editingItem.language) {
-                    Text("なし").tag(CustardLanguage.none)
-                    Text("日本語").tag(CustardLanguage.ja_JP)
-                    Text("英語").tag(CustardLanguage.en_US)
-                }
-                Picker("入力方式", selection: $editingItem.inputStyle) {
-                    Text("そのまま入力").tag(CustardInputStyle.direct)
-                    Text("ローマ字かな入力").tag(CustardInputStyle.roman2kana)
-                }
-                Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
-            }
-            CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout, needSuggest: false) {view, x, y in
-                if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
-                    if !isCovered(at: (x, y)) {
-                        Button {
-                            editingItem.emptyKeys.remove(.gridFit(x: x, y: y))
-                        } label: {
-                            view.disabled(true)
-                                .opacity(0)
-                                .overlay(
-                                    Rectangle().stroke(style: .init(lineWidth: 2, dash: [5]))
-                                )
-                                .overlay(
-                                    Image(systemName: "plus.circle")
-                                        .foregroundColor(.accentColor)
-                                )
+                    Form {
+                        TextField("タブの名前", text: $editingItem.tabName)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Button("プレビュー") {
+                            showPreview = true
+                            UIApplication.shared.closeKeyboard()
+                        }
+                        HStack {
+                            Text("縦方向キー数")
+                            Spacer()
+                            TextField("縦方向キー数", text: $editingItem.columnCount)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        HStack {
+                            Text("横方向キー数")
+                            Spacer()
+                            TextField("横方向キー数", text: $editingItem.rowCount)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        Picker("言語", selection: $editingItem.language) {
+                            Text("なし").tag(CustardLanguage.none)
+                            Text("日本語").tag(CustardLanguage.ja_JP)
+                            Text("英語").tag(CustardLanguage.en_US)
+                        }
+                        Picker("入力方式", selection: $editingItem.inputStyle) {
+                            Text("そのまま入力").tag(CustardInputStyle.direct)
+                            Text("ローマ字かな入力").tag(CustardInputStyle.roman2kana)
+                        }
+                        Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
+                    }
+                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout, needSuggest: false) {view, x, y in
+                        if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
+                            if !isCovered(at: (x, y)) {
+                                Button {
+                                    editingItem.emptyKeys.remove(.gridFit(x: x, y: y))
+                                } label: {
+                                    view.disabled(true)
+                                        .opacity(0)
+                                        .overlay(
+                                            Rectangle().stroke(style: .init(lineWidth: 2, dash: [5]))
+                                        )
+                                        .overlay(
+                                            Image(systemName: "plus.circle")
+                                                .foregroundColor(.accentColor)
+                                        )
+                                }
+                            }
+                        } else {
+                            NavigationLink(destination: CustardInterfaceKeyEditor(data: $editingItem.keys[.gridFit(x: x, y: y)])) {
+                                view.disabled(true)
+                                    .border(Color.primary)
+                            }
+                            .contextMenu {
+                                Button {
+                                    editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
+                                } label: {
+                                    Image(systemName: "trash")
+                                    Text("削除する")
+                                }
+                            }
                         }
                     }
-                } else {
-                    NavigationLink(destination: CustardInterfaceKeyEditor(data: $editingItem.keys[.gridFit(x: x, y: y)])) {
-                        view.disabled(true)
-                            .border(Color.primary)
-                    }
-                    .contextMenu {
-                        Button {
-                            editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
-                        } label: {
-                            Image(systemName: "trash")
-                            Text("削除する")
-                        }
+                }
+                BottomSheetView(
+                    isOpen: $showPreview,
+                    maxHeight: Design.shared.keyboardScreenHeight + 40,
+                    minHeight: 0
+                ) {
+                    ZStack(alignment: .top) {
+                        Color.secondarySystemBackground
+                        KeyboardPreview(theme: .default, defaultTab: .custard(custard))
                     }
                 }
-            }
-                }
-            BottomSheetView(
-                isOpen: $showPreview,
-                maxHeight: Design.shared.keyboardScreenHeight + 40,
-                minHeight: 0
-            ) {
-                ZStack(alignment: .top) {
-                    Color.secondarySystemBackground
-                    KeyboardPreview(theme: .default, defaultTab: .custard(custard))
-                }
-            }
 
-        }
-        .onChange(of: editingItem.rowCount) {_ in
-            updateModel()
-        }
-        .onChange(of: editingItem.columnCount) {_ in
-            updateModel()
-        }
-        .background(Color.secondarySystemBackground)
-        .navigationBarBackButtonHidden(true)
-        .navigationTitle(Text("カスタムタブを作る"))
-        .navigationBarItems(
-            leading: Button("キャンセル", action: cancel),
-            trailing: Button("保存") {
-                self.save()
-                presentationMode.wrappedValue.dismiss()
             }
-        )
+            .onChange(of: editingItem.rowCount) {_ in
+                updateModel()
+            }
+            .onChange(of: editingItem.columnCount) {_ in
+                updateModel()
+            }
+            .background(Color.secondarySystemBackground)
+            .navigationBarBackButtonHidden(true)
+            .navigationTitle(Text("カスタムタブを作る"))
+            .navigationBarItems(
+                leading: Button("キャンセル", action: cancel),
+                trailing: Button("保存") {
+                    self.save()
+                    presentationMode.wrappedValue.dismiss()
+                }
+            )
         }
     }
 

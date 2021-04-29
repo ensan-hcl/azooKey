@@ -23,7 +23,6 @@ struct CapsLockTipsView: View {
                 Text("どちらの入力方式でも\(systemImage: "capslock.fill")は大文字固定になっていることを意味します。")
                 Text("解除するにはもう一度キーを押してください。")
             }
-
         }
     }
 }

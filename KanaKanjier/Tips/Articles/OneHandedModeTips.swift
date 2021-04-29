@@ -29,7 +29,6 @@ struct OneHandedModeTipsView: View {
                 Text("\(systemImage: "arrow.triangle.2.circlepath")をタップするとリセットされます。")
                 TipsImage("oneHandedMode_3")
             }
-
             TipsContentParagraph {
                 Text("\(systemImage: "checkmark")を押して完了したあとは通常のキーボードと同様に使えます。")
                 Text("\(systemImage: "aspectratio")を押すと再度編集できます。")

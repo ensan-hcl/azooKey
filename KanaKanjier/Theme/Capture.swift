@@ -11,17 +11,17 @@ import SwiftUI
 
 struct RectangleGetter: View {
     @Binding private var rect: CGRect
-
+    
     init(rect: Binding<CGRect>) {
         self._rect = rect
     }
-
+    
     var body: some View {
         GeometryReader { geometry in
             self.createView(proxy: geometry)
         }
     }
-
+    
     func createView(proxy: GeometryProxy) -> some View {
         DispatchQueue.main.async {
             self.rect = proxy.frame(in: .global)

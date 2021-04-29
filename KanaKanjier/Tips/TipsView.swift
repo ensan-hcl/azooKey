@@ -11,7 +11,7 @@ import SwiftUI
 struct TipsTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
     @State private var isTop = true
-
+    
     var body: some View {
         VStack {
             if isTop {
@@ -28,7 +28,7 @@ struct TipsTabView: View {
                         }
                         NavigationLink("入力方法を選ぶ", destination: SelctInputStyleTipsView())
                     }
-
+                    
                     Section(header: Text("便利な使い方")) {
                         NavigationLink("片手モードを使う", destination: OneHandedModeTipsView())
                         NavigationLink("カーソルを自由に移動する", destination: CursorMoveTipsView())
@@ -38,7 +38,7 @@ struct TipsTabView: View {
                         NavigationLink("タイムスタンプを使う", destination: TemplateSettingTipsView())
                         NavigationLink("キーをカスタマイズする", destination: CustomKeyTipsView())
                     }
-
+                    
                     Section(header: Text("困ったときは")) {
                         NavigationLink("端末の文字サイズ設定が反映されない", destination: DynamicTypeSettingFailureTipsView())
                         NavigationLink("絵文字や顔文字の変換候補を表示したい", destination: EmojiKaomojiTipsView())

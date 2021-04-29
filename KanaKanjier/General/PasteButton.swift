@@ -10,11 +10,11 @@ import SwiftUI
 
 struct PasteButton: View {
     @Binding private var text: String
-
+    
     init(_ text: Binding<String>) {
         self._text = text
     }
-
+    
     var body: some View {
         Button {
             if let string = UIPasteboard.general.string {
@@ -28,11 +28,11 @@ struct PasteButton: View {
 
 struct PasteLongPressButton: View {
     @Binding private var text: String
-
+    
     init(_ text: Binding<String>) {
         self._text = text
     }
-
+    
     var body: some View {
         Image(systemName: "doc.on.clipboard")
             .onLongPressGesture(minimumDuration: 0.5) {

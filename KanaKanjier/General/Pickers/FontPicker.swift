@@ -14,29 +14,29 @@ struct FontPicker: UIViewControllerRepresentable {
         self._pickerResult = pickerResult
         self._isPresented = isPresented
     }
-
+    
     private let configuration: UIFontPickerViewController.Configuration
     @Binding private var pickerResult: Font
     @Binding private var isPresented: Bool
-
+    
     func makeUIViewController(context: Context) -> UIFontPickerViewController {
         let controller = UIFontPickerViewController(configuration: configuration)
         controller.delegate = context.coordinator
         return controller
     }
-
+    
     func updateUIViewController(_ uiViewController: UIFontPickerViewController, context: Context) {
-
+        
     }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-
+    
     /// PHPickerViewControllerDelegate => Coordinator
     class Coordinator: NSObject, UIFontPickerViewControllerDelegate {
         private let parent: FontPicker
-
+        
         init(_ parent: FontPicker) {
             self.parent = parent
         }
@@ -55,14 +55,14 @@ struct FontPicker: UIViewControllerRepresentable {
 struct FontPickView: View {
     @State private var isFontPickerPresented = false
     @State private var selectedFont: Font = .body
-
+    
     private var fontPickerConfig: UIFontPickerViewController.Configuration {
         let config = UIFontPickerViewController.Configuration()
         config.displayUsingSystemFont = false
         config.includeFaces = true
         return config
     }
-
+    
     var body: some View {
         VStack {
             Button("フォントを選択") {

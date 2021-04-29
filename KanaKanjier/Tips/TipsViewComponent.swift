@@ -62,5 +62,4 @@ struct TipsImage: View {
                 .frame(maxWidth: Store.shared.imageMaximumWidth)
         }
     }
-
 }

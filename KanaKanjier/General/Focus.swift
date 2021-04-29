@@ -7,10 +7,15 @@
 //
 
 import SwiftUI
-struct FocusViewModifier: ViewModifier {
-    let color: Color
-    let focused: Bool
-
+private struct FocusViewModifier: ViewModifier {
+    init(color: Color, focused: Bool) {
+        self.color = color
+        self.focused = focused
+    }
+    
+    private let color: Color
+    private let focused: Bool
+    
     func body(content: Content) -> some View {
         let shadowColor = focused ? color:.clear
         let shadowRadius: CGFloat = focused ? 0.5:.zero

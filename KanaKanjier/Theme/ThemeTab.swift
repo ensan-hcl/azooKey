@@ -12,10 +12,10 @@ struct ThemeTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
     @State private var refresh = false
     @State private var manager = ThemeIndexManager.load()
-
+    
     @State private var editViewIndex: Int?
     @State private var editViewEnabled = false
-
+    
     private func theme(at index: Int) -> ThemeData? {
         do {
             return try manager.theme(at: index)
@@ -24,7 +24,7 @@ struct ThemeTabView: View {
             return nil
         }
     }
-
+    
     private var listSection: some View {
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
@@ -64,7 +64,7 @@ struct ThemeTabView: View {
                         Image(systemName: "pencil")
                         Text("編集する")
                     }.disabled(index == 0)
-
+                    
                     Button {
                         manager.remove(index: index)
                     }label: {
@@ -75,7 +75,7 @@ struct ThemeTabView: View {
             }
         }
     }
-
+    
     var body: some View {
         NavigationView {
             Form {

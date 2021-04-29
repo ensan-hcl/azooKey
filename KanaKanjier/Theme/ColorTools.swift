@@ -21,7 +21,7 @@ enum ColorTools {
         let a = rgba[3]
         return process(Double(r), Double(g), Double(b), Double(a))
     }
-
+    
     static func hsv(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
         guard let rgba = color.cgColor?.components else {
             return nil
@@ -31,15 +31,15 @@ enum ColorTools {
         let g = rgba[1]
         let b = rgba[2]
         let a = rgba[3]
-
+        
         let maxValue = max(max(r, g), b)
         let minValue = min(min(r, g), b)
         let sub = maxValue - minValue
-
+        
         var h: CGFloat = 0
         var s: CGFloat = 0
         var v: CGFloat = 0
-
+        
         // Calculate Hue
         if sub == 0 {
             // MAX = MIN(例・S = 0)のとき、 Hは定義されない。
@@ -57,16 +57,16 @@ enum ColorTools {
                 h += 360
             }
         }
-
+        
         // Calculate Saturation
         if maxValue > 0 {
             s = sub / maxValue
         }
-
+        
         // Calculate Value
         v = maxValue
-
+        
         return process(Double(h / 360), Double(s), Double(v), Double(a))
     }
-
+    
 }

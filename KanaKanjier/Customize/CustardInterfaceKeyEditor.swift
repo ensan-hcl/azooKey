@@ -416,12 +416,12 @@ struct CustardInterfaceKeyEditor: View {
             Section(header: Text("アクション")) {
                 Text("キーを押したときの動作をより詳しく設定します。")
                 NavigationLink("アクションを編集する", destination: CodableActionDataEditor($key[.custom][.pressAction, position], availableCustards: CustardManager.load().availableCustards))
-                .foregroundColor(.accentColor)
+                    .foregroundColor(.accentColor)
             }
             Section(header: Text("長押しアクション")) {
                 Text("キーを長押ししたときの動作をより詳しく設定します。")
                 NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($key[.custom][.longpressAction, position], availableCustards: CustardManager.load().availableCustards))
-                .foregroundColor(.accentColor)
+                    .foregroundColor(.accentColor)
             }
 
             if position == .center {
@@ -458,7 +458,7 @@ struct CustardInterfaceKeyEditor: View {
             keyView(key: key, position: .bottom)
         }
     }
-
+    
     @ViewBuilder private func keyView(key: CustardInterfaceCustomKey, position: FlickKeyPosition) -> some View {
         switch key[.labelType, position] {
         case .text:
@@ -468,7 +468,7 @@ struct CustardInterfaceKeyEditor: View {
             CustomKeySettingFlickKeyView(position, selectedPosition: $selectedPosition) {
                 Image(systemName: key[.labelImageName, position])
             }
-                .frame(width: keySize.width, height: keySize.height)
+            .frame(width: keySize.width, height: keySize.height)
         }
     }
 }
