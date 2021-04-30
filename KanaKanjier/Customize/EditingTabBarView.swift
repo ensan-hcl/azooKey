@@ -53,23 +53,23 @@ struct EditingTabBarView: View {
 
             Section(header: Text("アイテム")) {
                 List {
-                    ForEach(items.indices, id: \.self) {i in
+                    ForEach($items.identifiableItems) {value in
                         HStack {
                             VStack(spacing: 20) {
                                 DisclosureGroup {
                                     HStack {
                                         Text("表示")
                                         Spacer()
-                                        TabNavigationViewItemLabelEditView("ラベルを設定", label: $items[i].label)
+                                        TabNavigationViewItemLabelEditView("ラベルを設定", label: value.$item.label)
                                     }
-                                    NavigationLink(destination: CodableActionDataEditor($items[i].actions, availableCustards: manager.availableCustards)) {
+                                    NavigationLink(destination: CodableActionDataEditor(value.$item.actions, availableCustards: manager.availableCustards)) {
                                         Text("押した時の動作")
                                         Spacer()
-                                        Text(makeLabelText(item: items[i]))
+                                        Text(makeLabelText(item: value.item))
                                             .foregroundColor(.gray)
                                     }
                                 } label: {
-                                    switch items[i].label {
+                                    switch value.item.label {
                                     case let .text(text):
                                         Text(text)
                                     case let .imageAndText(value):

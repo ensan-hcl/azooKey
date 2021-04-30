@@ -86,8 +86,8 @@ struct CodableActionDataEditor: View {
                 }
                 Section(header: Text("アクション")) {
                     List {
-                        ForEach($actions.identifiableItems) {item in
-                            CodableActionEditor(action: item.bindedItem, availableCustards: availableCustards)
+                        ForEach($actions.identifiableItems) {value in
+                            CodableActionEditor(action: value.$item, availableCustards: availableCustards)
                         }
                         .onDelete(perform: delete)
                         .onMove(perform: onMove)
@@ -377,8 +377,8 @@ struct CodableLongpressActionDataEditor: View {
                         }
                     }
                     List {
-                        ForEach($startActions.identifiableItems) {item in
-                            CodableActionEditor(action: item.bindedItem, availableCustards: availableCustards)
+                        ForEach($startActions.identifiableItems) {value in
+                            CodableActionEditor(action: value.$item, availableCustards: availableCustards)
                         }
                         .onDelete(perform: {startActions.remove(atOffsets: $0)})
                         .onMove(perform: {startActions.move(fromOffsets: $0, toOffset: $1)})
@@ -396,8 +396,8 @@ struct CodableLongpressActionDataEditor: View {
                     }
 
                     List {
-                        ForEach($repeatActions.identifiableItems) {item in
-                            CodableActionEditor(action: item.bindedItem, availableCustards: availableCustards)
+                        ForEach($repeatActions.identifiableItems) {value in
+                            CodableActionEditor(action: value.$item, availableCustards: availableCustards)
                         }
                         .onDelete(perform: {repeatActions.remove(atOffsets: $0)})
                         .onMove(perform: {repeatActions.move(fromOffsets: $0, toOffset: $1)})

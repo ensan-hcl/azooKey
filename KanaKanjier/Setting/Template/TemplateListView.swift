@@ -12,6 +12,12 @@ final class TemplateDataList: ObservableObject {
     @Published var templates: [TemplateData] = []
 }
 
+extension TemplateData: Identifiable {
+    var id: String {
+        self.name
+    }
+}
+
 // このモデルがNavigation状態を管理し、プレビューが遷移後も更新し続けるのを防ぐ
 private final class NavigationModel: ObservableObject {
     @Published var linkSelection: Int? = nil {
@@ -53,12 +59,13 @@ struct TemplateListView: View {
     var body: some View {
         Form {
             List {
-                ForEach(data.templates.indices, id: \.self) {i in
-                    NavigationLink(destination: TemplateEditingView($data.templates[i], validationInfo: data.templates.map {$0.name}), tag: i, selection: $navigationModel.linkSelection) {
+                let validationInfo = data.templates.map {$0.name}
+                ForEach($data.templates.identifiableItems) {value in
+                    NavigationLink(destination: TemplateEditingView(value.$item, validationInfo: validationInfo), tag: value.index, selection: $navigationModel.linkSelection) {
                         HStack {
-                            Text(data.templates[i].name)
+                            Text(value.item.name)
                             Spacer()
-                            Text(previewStrings[i])
+                            Text(previewStrings[value.index])
                                 .foregroundColor(.gray)
                         }
                     }
