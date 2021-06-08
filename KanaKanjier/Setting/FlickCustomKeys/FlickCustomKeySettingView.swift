@@ -77,7 +77,7 @@ struct FlickCustomKeysSettingSelectView: View {
                 Text("abc").tag(CustomizableFlickKey.abcTab)
                 Text("☆123").tag(CustomizableFlickKey.symbolsTab)
             }
-            .pickerStyle(SegmentedPickerStyle())
+            .pickerStyle(.segmented)
             .padding()
 
             switch selection {
@@ -161,7 +161,7 @@ struct FlickCustomKeysSettingView: View {
                                     if self.isInputActionEditable(actions: viewModel.value[keyPath: position.keyPath].actions) {
                                         Text("キーを押して入力される文字を設定します。")
                                         TextField("入力", text: $viewModel.value[.input, position])
-                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                                            .textFieldStyle(.roundedBorder)
                                     } else {
                                         Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
                                         Button("入力を設定する") {
@@ -186,7 +186,7 @@ struct FlickCustomKeysSettingView: View {
                             Section(header: Text("ラベル")) {
                                 Text("キーに表示される文字を設定します。")
                                 TextField("ラベル", text: $viewModel.value[.label, position])
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .textFieldStyle(.roundedBorder)
                             }
                             Section(header: Text("アクション")) {
                                 Text("キーを押したときの動作をより詳しく設定します。")

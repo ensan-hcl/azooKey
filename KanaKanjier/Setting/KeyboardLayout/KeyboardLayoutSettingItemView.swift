@@ -109,7 +109,7 @@ struct LanguageLayoutSettingItemView: View {
                 }
             }
             .labelsHidden()
-            .pickerStyle(SegmentedPickerStyle())
+            .pickerStyle(.segmented)
         }
         .onChange(of: selection) { _ in
             if ignoreChange {

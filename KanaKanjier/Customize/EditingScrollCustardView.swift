@@ -61,21 +61,21 @@ struct EditingScrollCustardView: CancelableEditor {
                                     Text("縦").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.vertical)
                                     Text("横").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.horizontal)
                                 }
-                                .pickerStyle(SegmentedPickerStyle())
+                                .pickerStyle(.segmented)
                             }
                             HStack {
                                 Text("縦方向キー数")
                                 Spacer()
                                 TextField("縦方向キー数", text: $editingItem.columnCount)
                                     .keyboardType(.numberPad)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .textFieldStyle(.roundedBorder)
                             }
                             HStack {
                                 Text("横方向キー数")
                                 Spacer()
                                 TextField("横方向キー数", text: $editingItem.rowCount)
                                     .keyboardType(.numberPad)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .textFieldStyle(.roundedBorder)
                             }
                             Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                         }

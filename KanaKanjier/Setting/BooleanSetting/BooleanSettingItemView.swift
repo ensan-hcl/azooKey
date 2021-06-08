@@ -27,7 +27,7 @@ struct BooleanSettingItemView: View {
                     Image(systemName: "info.circle")
                 }
             }
-            .toggleStyle(SwitchToggleStyle())
+            .toggleStyle(.switch)
             .alert(isPresented: $isOn) {
                 Alert(title: Text(self.item.description), dismissButton: .default(Text("OK"), action: {
                     isOn = false

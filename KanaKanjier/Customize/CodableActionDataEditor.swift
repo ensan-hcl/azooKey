@@ -214,7 +214,7 @@ struct ActionEditTextField: View {
                     action.data = data
                 }
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
     }
 }
 
@@ -232,7 +232,7 @@ struct ActionOpenAppEditView: View {
 
     var body: some View {
         TextField("URL Scheme", text: $value)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
             .onChange(of: value) {value in
                 action.data = .openURL(value)
             }

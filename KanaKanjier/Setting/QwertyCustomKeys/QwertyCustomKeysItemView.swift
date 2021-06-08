@@ -243,7 +243,7 @@ struct QwertyCustomKeysItemView: View {
             Text("入力される文字とは異なっていても構いません。")
                 .font(.caption)
             TextField("ラベル", text: $viewModel.value[selection].name)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
         }
@@ -269,7 +269,7 @@ struct QwertyCustomKeysItemView: View {
                 Text("キーの見た目は「ラベル」で設定できます。")
                     .font(.caption)
                 TextField("入力される文字", text: $viewModel.value[.input, selection])
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
             }

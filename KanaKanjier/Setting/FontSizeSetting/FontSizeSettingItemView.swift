@@ -61,7 +61,7 @@ struct FontSizeSettingItemView: View {
                 }
             }
             .labelsHidden()
-            .pickerStyle(WheelPickerStyle())
+            .pickerStyle(.wheel)
             .frame(width: 100, height: 70)
             .clipped()
 

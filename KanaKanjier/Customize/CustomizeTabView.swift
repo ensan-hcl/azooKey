@@ -86,7 +86,7 @@ struct CustomizeTabView: View {
                     }
                 }
             }
-            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationViewStyle(.stack)
             .onChange(of: storeVariableSection.importFile) { value in
                 showImportView = value != nil
             }

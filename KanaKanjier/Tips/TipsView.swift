@@ -47,7 +47,7 @@ struct TipsTabView: View {
                 }
                 .navigationBarTitle(Text("使い方"), displayMode: .large)
             }
-            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationViewStyle(.stack)
         }
     }
 }

@@ -30,7 +30,7 @@ struct TemplateEditingView: CancelableEditor {
                 HStack {
                     Text("名前")
                     TextField("テンプレート名", text: $editingTemplate.name)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textFieldStyle(.roundedBorder)
                 }
                 if case let .nameError(message) = validation() {
                     Label(message, systemImage: "exclamationmark.triangle")
@@ -42,7 +42,7 @@ struct TemplateEditingView: CancelableEditor {
                 Text("ランダム").tag(TemplateLiteralType.random)
             }
             .labelsHidden()
-            .pickerStyle(SegmentedPickerStyle())
+            .pickerStyle(.segmented)
             switch editingTemplate.type {
             case .date:
                 DateTemplateLiteralSettingView($editingTemplate)
@@ -183,7 +183,7 @@ struct RandomTemplateLiteralSettingView: View {
                 VStack {
                     HStack {
                         TextField("左端の値", text: $intStringRange.left)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .textFieldStyle(.roundedBorder)
                         Text("から")
                     }
                     if Int(intStringRange.left) == nil {
@@ -193,7 +193,7 @@ struct RandomTemplateLiteralSettingView: View {
                 VStack {
                     HStack {
                         TextField("右端の値", text: $intStringRange.right)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .textFieldStyle(.roundedBorder)
                         Text("まで")
                     }
                     if Int(intStringRange.right) == nil {
@@ -204,7 +204,7 @@ struct RandomTemplateLiteralSettingView: View {
                 VStack {
                     HStack {
                         TextField("左端の値", text: $doubleStringRange.left)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .textFieldStyle(.roundedBorder)
                         Text("から")
                     }
                     if Double(doubleStringRange.left) == nil {
@@ -214,7 +214,7 @@ struct RandomTemplateLiteralSettingView: View {
                 VStack {
                     HStack {
                         TextField("右端の値", text: $doubleStringRange.right)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .textFieldStyle(.roundedBorder)
                         Text("まで")
                     }
                     if Double(doubleStringRange.right) == nil {
@@ -225,7 +225,7 @@ struct RandomTemplateLiteralSettingView: View {
                 VStack {
                     HStack {
                         TextField("表示する値(カンマ区切り)", text: $stringsString)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .textFieldStyle(.roundedBorder)
                     }
                     if stringsString.isEmpty {
                         warning(.stringIsNil)
@@ -354,7 +354,7 @@ struct DateTemplateLiteralSettingView: View {
                         Text("書式")
                         Spacer()
                         TextField("書式を入力", text: $literal.format)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .textFieldStyle(.roundedBorder)
                     }
                     VStack {
                         HStack {
@@ -362,7 +362,7 @@ struct DateTemplateLiteralSettingView: View {
                             Spacer()
                             TextField("ズレ", text: $literal.delta)
                                 .multilineTextAlignment(.trailing)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .textFieldStyle(.roundedBorder)
                             Picker(selection: $literal.deltaUnit, label: Text("")) {
                                 Text("日").tag(60 * 60 * 24)
                                 Text("時間").tag(60 * 60)
