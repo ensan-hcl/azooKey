@@ -92,7 +92,13 @@ private final class ImportedCustardData: ObservableObject {
     }
 
     func download(from urlString: String) {
-        self.download(from: URL(string: urlString))
+        if #available(iOS 15, *) {
+            Task {
+                await self.downloadAsync(from: URL(string: urlString))
+            }
+        } else {
+            self.download(from: URL(string: urlString))
+        }
     }
 
     func download(from url: URL?) {
@@ -123,6 +129,24 @@ private final class ImportedCustardData: ObservableObject {
         task.resume()
     }
 
+    @available(iOS 15, *)
+    @MainActor
+    func downloadAsync(from url: URL?) async {
+        self.processState = .getURL
+        guard let url = url else {
+            self.failureData = .invalidURL
+            self.processState = .none
+            return
+        }
+        do {
+            self.processState = .getFile
+            let (data, _) = try await URLSession.shared.data(from: url)
+            self.downloadedData = data
+        } catch {
+            self.failureData = .invalidData
+            self.processState = .none
+        }
+    }
 }
 
 struct ManageCustardView: View {
