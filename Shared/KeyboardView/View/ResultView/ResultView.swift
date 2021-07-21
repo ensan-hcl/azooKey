@@ -41,23 +41,24 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 
     var body: some View {
-        Group {[unowned modelVariableSection] in
+        Group {
             if variableStates.showMoveCursorBar {
                 MoveCursorBar()
             } else if variableStates.showTabBar {
                 let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
                 TabBarView(data: tabBarData)
             } else {
-                HStack {
+                HStack { [weak modelVariableSection] in
                     ScrollView(.horizontal, showsIndicators: false) {
                         ScrollViewReader {scrollViewProxy in
                             LazyHStack(spacing: 10) {
-                                ForEach(modelVariableSection.results, id: \.id) {(data: ResultData<Candidate>) in
+                                let results: [ResultData<Candidate>] = modelVariableSection?.results ?? []
+                                ForEach(results, id: \.id) {(data: ResultData<Candidate>) in
                                     if data.candidate.inputable {
                                         Button(data.candidate.text) {
                                             Sound.click()
                                             self.pressed(candidate: data.candidate)
-                                        } 
+                                        }
                                         .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
                                         .contextMenu {
                                             ResultContextMenuView(text: data.candidate.text)
@@ -70,13 +71,12 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                     }
                                 }
                             }.onAppear {
-                                modelVariableSection.scrollViewProxy = scrollViewProxy
+                                modelVariableSection?.scrollViewProxy = scrollViewProxy
                             }
                         }
                         .padding(.horizontal, 5)
                     }
-
-                    if modelVariableSection.results.count > 1 {
+                    if (modelVariableSection?.results.count ?? 0) > 1 {
                         // 候補を展開するボタン
                         Button(action: {
                             self.expand()
