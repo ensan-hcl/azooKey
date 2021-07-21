@@ -357,11 +357,13 @@ struct CustardInterfaceKeyEditor: View {
             Text("縦")
             TextField("縦", text: $height.converted(intStringConverter))
                 .textFieldStyle(.roundedBorder)
+                .submitLabel(.done)
         }
         HStack {
             Text("横")
             TextField("横", text: $width.converted(intStringConverter))
                 .textFieldStyle(.roundedBorder)
+                .submitLabel(.done)
         }
     }
 
@@ -387,6 +389,7 @@ struct CustardInterfaceKeyEditor: View {
                 Text("キーを押して入力される文字を設定します。")
                 TextField("入力", text: $key[.custom][.inputAction, position])
                     .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
             }
             Section(header: Text("ラベル")) {
                 Text("キーに表示される文字を設定します。")
@@ -398,9 +401,11 @@ struct CustardInterfaceKeyEditor: View {
                 case .text:
                     TextField("ラベル", text: $key[.custom][.labelText, position])
                         .textFieldStyle(.roundedBorder)
+                        .submitLabel(.done)
                 case .systemImage:
                     TextField("アイコンの名前", text: $key[.custom][.labelImageName, position])
                         .textFieldStyle(.roundedBorder)
+                        .submitLabel(.done)
                 }
             }
             if position == .center {

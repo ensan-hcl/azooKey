@@ -31,6 +31,7 @@ struct TemplateEditingView: CancelableEditor {
                     Text("名前")
                     TextField("テンプレート名", text: $editingTemplate.name)
                         .textFieldStyle(.roundedBorder)
+                        .submitLabel(.done)
                 }
                 if case let .nameError(message) = validation() {
                     Label(message, systemImage: "exclamationmark.triangle")
@@ -184,6 +185,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("左端の値", text: $intStringRange.left)
                             .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
                         Text("から")
                     }
                     if Int(intStringRange.left) == nil {
@@ -194,6 +196,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("右端の値", text: $intStringRange.right)
                             .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
                         Text("まで")
                     }
                     if Int(intStringRange.right) == nil {
@@ -205,6 +208,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("左端の値", text: $doubleStringRange.left)
                             .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
                         Text("から")
                     }
                     if Double(doubleStringRange.left) == nil {
@@ -215,6 +219,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("右端の値", text: $doubleStringRange.right)
                             .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
                         Text("まで")
                     }
                     if Double(doubleStringRange.right) == nil {
@@ -226,6 +231,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("表示する値(カンマ区切り)", text: $stringsString)
                             .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
                     }
                     if stringsString.isEmpty {
                         warning(.stringIsNil)
@@ -355,6 +361,7 @@ struct DateTemplateLiteralSettingView: View {
                         Spacer()
                         TextField("書式を入力", text: $literal.format)
                             .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
                     }
                     VStack {
                         HStack {
@@ -363,6 +370,7 @@ struct DateTemplateLiteralSettingView: View {
                             TextField("ズレ", text: $literal.delta)
                                 .multilineTextAlignment(.trailing)
                                 .textFieldStyle(.roundedBorder)
+                                .submitLabel(.done)
                             Picker(selection: $literal.deltaUnit, label: Text("")) {
                                 Text("日").tag(60 * 60 * 24)
                                 Text("時間").tag(60 * 60)

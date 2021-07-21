@@ -246,6 +246,7 @@ struct QwertyCustomKeysItemView: View {
                 .textFieldStyle(.roundedBorder)
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
+                .submitLabel(.done)
         }
         .frame(maxHeight: 80)
         .padding(.vertical, 3)
@@ -272,6 +273,7 @@ struct QwertyCustomKeysItemView: View {
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
+                    .submitLabel(.done)
             }
         }
         .frame(maxHeight: 80)

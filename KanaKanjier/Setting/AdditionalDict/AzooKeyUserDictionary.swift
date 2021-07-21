@@ -143,6 +143,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                 HStack {
                     TextField("単語", text: $item.data.word)
                         .padding(.vertical, 2)
+                        .submitLabel(.done)
                     Divider()
                     PasteLongPressButton($item.data.word)
                         .padding(.horizontal, 5)
@@ -150,6 +151,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                 HStack {
                     TextField("読み", text: $item.data.ruby)
                         .padding(.vertical, 2)
+                        .submitLabel(.done)
                     Divider()
                     PasteLongPressButton($item.data.ruby)
                         .padding(.horizontal, 5)

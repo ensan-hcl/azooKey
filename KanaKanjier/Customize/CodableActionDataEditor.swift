@@ -215,6 +215,7 @@ struct ActionEditTextField: View {
                 }
             }
             .textFieldStyle(.roundedBorder)
+            .submitLabel(.done)
     }
 }
 
@@ -236,6 +237,7 @@ struct ActionOpenAppEditView: View {
             .onChange(of: value) {value in
                 action.data = .openURL(value)
             }
+            .submitLabel(.done)
     }
 }
 

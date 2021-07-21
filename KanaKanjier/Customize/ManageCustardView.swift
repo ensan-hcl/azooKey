@@ -208,6 +208,10 @@ struct ManageCustardView: View {
                     }
                     DisclosureGroup("URLから読み込む") {
                         TextField("URLを入力", text: $urlString)
+                            .submitLabel(.go)
+                            .onSubmit {
+                                data.download(from: urlString)
+                            }
                         Button("読み込む") {
                             data.download(from: urlString)
                         }

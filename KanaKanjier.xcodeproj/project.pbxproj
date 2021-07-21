@@ -2280,6 +2280,8 @@
 		1A7817AC2575C898007661D8 /* emoji13_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7817AB2575C898007661D8 /* emoji13_dict.tsv */; };
 		1A7817B22575C89D007661D8 /* emoji...12_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */; };
 		1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */; };
+		1A7F546F26A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
+		1A7F547026A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
 		1A8437BF25F3668E0040DC5D /* PreferredLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8437BE25F3668E0040DC5D /* PreferredLanguage.swift */; };
 		1A8437C025F3668E0040DC5D /* PreferredLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8437BE25F3668E0040DC5D /* PreferredLanguage.swift */; };
 		1A8654BC2526F50400006582 /* LanguageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8654BB2526F50400006582 /* LanguageLayout.swift */; };
@@ -4803,6 +4805,7 @@
 		1A7817AB2575C898007661D8 /* emoji13_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji13_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji13_dict.tsv"; sourceTree = "<group>"; };
 		1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji...12_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji...12_dict.tsv"; sourceTree = "<group>"; };
 		1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabWalkthrough.swift; sourceTree = "<group>"; };
+		1A7F546E26A81F3B0032E91E /* Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Availability.swift; sourceTree = "<group>"; };
 		1A8437BE25F3668E0040DC5D /* PreferredLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredLanguage.swift; sourceTree = "<group>"; };
 		1A8654BB2526F50400006582 /* LanguageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageLayout.swift; sourceTree = "<group>"; };
 		1A86F47925352AF200B92B49 /* swift-algorithm-topN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "swift-algorithm-topN.swift"; sourceTree = "<group>"; };
@@ -5038,6 +5041,7 @@
 			isa = PBXGroup;
 			children = (
 				1A26F34125E8AACA003CDA0D /* StrokeAndFill.swift */,
+				1A7F546E26A81F3B0032E91E /* Availability.swift */,
 				1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */,
 				1ACE61C2257286E5008078D3 /* Color.swift */,
 				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
@@ -10379,6 +10383,7 @@
 				1ACEEFE92566601700899DA2 /* TipsViewComponent.swift in Sources */,
 				1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */,
 				1A5C7EC525F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */,
+				1A7F546F26A81F3B0032E91E /* Availability.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,
 				1AE1023D25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
 				1A64A8D5257C91500022C081 /* FontSizeSetting.swift in Sources */,
@@ -10437,6 +10442,7 @@
 				1A86F4B82539356100B92B49 /* only_contains.swift in Sources */,
 				1A12E24825C41A7100316009 /* Message.swift in Sources */,
 				1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */,
+				1A7F547026A81F3B0032E91E /* Availability.swift in Sources */,
 				1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */,
 				1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */,
 				1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */,

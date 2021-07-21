@@ -48,6 +48,7 @@ struct EditingScrollCustardView: CancelableEditor {
                 VStack {
                     Form {
                         TextField("タブの名前", text: $editingItem.tabName)
+                            .submitLabel(.done)
                         Text("一行ずつ登録したい文字や単語を入力してください")
                         Button("プレビュー") {
                             UIApplication.shared.closeKeyboard()
@@ -69,6 +70,7 @@ struct EditingScrollCustardView: CancelableEditor {
                                 TextField("縦方向キー数", text: $editingItem.columnCount)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(.roundedBorder)
+                                    .submitLabel(.done)
                             }
                             HStack {
                                 Text("横方向キー数")
@@ -76,6 +78,7 @@ struct EditingScrollCustardView: CancelableEditor {
                                 TextField("横方向キー数", text: $editingItem.rowCount)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(.roundedBorder)
+                                    .submitLabel(.done)
                             }
                             Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                         }

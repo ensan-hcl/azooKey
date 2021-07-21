@@ -106,6 +106,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                     Form {
                         TextField("タブの名前", text: $editingItem.tabName)
                             .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
                         Button("プレビュー") {
                             showPreview = true
                             UIApplication.shared.closeKeyboard()
@@ -116,6 +117,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                             TextField("縦方向キー数", text: $editingItem.columnCount)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
+                                .submitLabel(.done)
                         }
                         HStack {
                             Text("横方向キー数")
@@ -123,6 +125,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                             TextField("横方向キー数", text: $editingItem.rowCount)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
+                                .submitLabel(.done)
                         }
                         Picker("言語", selection: $editingItem.language) {
                             Text("なし").tag(CustardLanguage.none)

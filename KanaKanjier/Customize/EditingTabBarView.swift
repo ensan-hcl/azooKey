@@ -186,5 +186,6 @@ struct TabNavigationViewItemLabelEditView: View {
                 label = .text(value)
             }
             .textFieldStyle(.roundedBorder)
+            .submitLabel(.done)
     }
 }
