@@ -82,10 +82,9 @@ private struct UserDictionaryDataListView: View {
             let currentGroupedItems: [String: [UserDictionaryData]] = Dictionary(grouping: variables.items, by: {$0.ruby.first.map {String($0)} ?? exceptionKey}).mapValues {$0.sorted {$0.id < $1.id}}
             let keys = currentGroupedItems.keys
             let currentKeys: [String] = keys.contains(exceptionKey) ? [exceptionKey] + keys.filter {$0 != exceptionKey}.sorted() : keys.sorted()
-
-            ForEach(currentKeys, id: \.self) {key in
-                Section(header: Text(key)) {
-                    List {
+            List {
+                ForEach(currentKeys, id: \.self) {key in
+                    Section(header: Text(key)) {
                         ForEach(currentGroupedItems[key]!) {data in
                             Button {
                                 self.variables.selectedItem = data.makeEditableData()
