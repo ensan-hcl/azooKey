@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+// FIXME: (Xcode13 beta3) 削除ボタンを用いると落ちるが、こちら側の不手際かiOSのバグか不明
+
 private final class EditState: ObservableObject {
     enum State {
         case none, drag
