@@ -44,48 +44,36 @@ struct EditingTabBarView: View {
             Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
             Section {
                 Button(action: add) {
-                    HStack {
-                        Image(systemName: "plus")
-                        Text("アイテムを追加")
-                    }
+                    Label("アイテムを追加", systemImage: "plus")
                 }
             }
-
             Section(header: Text("アイテム")) {
-                List {
-                    ForEach($items.identifiableItems) {value in
-                        HStack {
-                            VStack(spacing: 20) {
-                                DisclosureGroup {
-                                    HStack {
-                                        Text("表示")
-                                        Spacer()
-                                        TabNavigationViewItemLabelEditView("ラベルを設定", label: value.$item.label)
-                                    }
-                                    NavigationLink(destination: CodableActionDataEditor(value.$item.actions, availableCustards: manager.availableCustards)) {
-                                        Text("押した時の動作")
-                                        Spacer()
-                                        Text(makeLabelText(item: value.item))
-                                            .foregroundColor(.gray)
-                                    }
-                                } label: {
-                                    switch value.item.label {
-                                    case let .text(text):
-                                        Text(text)
-                                    case let .imageAndText(value):
-                                        HStack {
-                                            Image(systemName: value.systemName)
-                                            Text(value.text)
-                                        }
-                                    case let .image(image):
-                                        Image(systemName: image)
-                                    }
-                                }
+                if editMode == .inactive {
+                    ForEach($items) { $item in
+                        MiniDisclosureGroup {
+                            HStack {
+                                Label("ラベル", systemImage: "rectangle.and.pencil.and.ellipsis")
+                                Spacer()
+                                TabNavigationViewItemLabelEditView("ラベルを設定", label: $item.label)
                             }
+                            NavigationLink(destination: CodableActionDataEditor($item.actions, availableCustards: manager.availableCustards)) {
+                                Label("アクション", systemImage: "terminal")
+
+                                Text(makeLabelText(item: item))
+                                    .foregroundColor(.gray)
+                            }
+                        } label: {
+                            label(labelType: item.label)
                         }
                     }
-                    .onDelete(perform: delete)
-                    .onMove(perform: onMove)
+                } else {
+                    List {
+                        ForEach($items.identifiableItems) {value in
+                            label(labelType: value.item.label)
+                        }
+                        .onDelete(perform: delete)
+                        .onMove(perform: onMove)
+                    }
                 }
             }
         }
@@ -95,6 +83,20 @@ struct EditingTabBarView: View {
         .navigationBarTitle(Text("タブバーの編集"), displayMode: .inline)
         .navigationBarItems(trailing: editButton)
         .environment(\.editMode, $editMode)
+    }
+
+    @ViewBuilder private func label(labelType: TabBarItemLabelType) -> some View {
+        switch labelType {
+        case let .text(text):
+            Text(text)
+        case let .imageAndText(value):
+            HStack {
+                Image(systemName: value.systemName)
+                Text(value.text)
+            }
+        case let .image(image):
+            Image(systemName: image)
+        }
     }
 
     private func makeLabelText(item: EditingTabBarItem) -> LocalizedStringKey {
@@ -159,6 +161,34 @@ struct EditingTabBarView: View {
     private func onMove(source: IndexSet, destination: Int) {
         items.move(fromOffsets: source, toOffset: destination)
     }
+}
+
+private struct MiniDisclosureGroup<Label: View, Content: View>: View {
+    private var label: () -> Label
+    private var content: () -> Content
+    @State private var hidden = true
+    init(@ViewBuilder content: @escaping () -> Content, @ViewBuilder label: @escaping () -> Label) {
+        self.label = label
+        self.content = content
+    }
+
+    var body: some View {
+        HStack {
+            self.label()
+            Spacer()
+            Button {
+                hidden.toggle()
+            } label: {
+                Image(systemName: hidden ? "chevron.right" : "chevron.down")
+                    .font(.system(.caption).bold())
+                    .foregroundColor(.accentColor)
+            }
+        }
+        if !hidden {
+            self.content()
+        }
+    }
+
 }
 
 struct TabNavigationViewItemLabelEditView: View {
