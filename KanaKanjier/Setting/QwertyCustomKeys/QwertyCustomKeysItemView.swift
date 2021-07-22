@@ -10,7 +10,7 @@ import SwiftUI
 
 private final class EditState: ObservableObject {
     enum State {
-        case none, drag, label, action
+        case none, drag
     }
 
     @Published var state = State.none
@@ -19,13 +19,6 @@ private final class EditState: ObservableObject {
     var allowDrag: Bool {
         return state == .drag
     }
-    var editLabel: Bool {
-        return state == .label
-    }
-    var editAction: Bool {
-        return state == .action
-    }
-
     func toggle(_ state: State) {
         if self.state == state {
             self.state = .none
@@ -108,7 +101,7 @@ private struct Selection: Hashable {
 struct QwertyCustomKeysItemView: View {
     @StateObject private var editState = EditState()
     @State private var selection = Selection()
-
+    @State private var bottomSheetShown = false
     typealias ItemViewModel = SettingItemViewModel<QwertyCustomKeysValue>
     typealias ItemModel = SettingItem<QwertyCustomKeysValue>
 
@@ -145,83 +138,125 @@ struct QwertyCustomKeysItemView: View {
     }
 
     var body: some View {
-        VStack {
-            Spacer(minLength: 10)
-                .fixedSize()
-            Text("編集したいキーを選択してください。")
-                .padding(.vertical)
+        GeometryReader { geometry in
             VStack {
-                Button("キーを追加する", action: self.addPressKey)
+                Spacer(minLength: 10)
+                    .fixedSize()
+                if editState.allowDrag {
+                    Text("キーをドラッグして移動してください。")  // TODO: ローカライズ
+                        .padding(.vertical)
+                } else {
+                    Text("編集したいキーを選択してください。")
+                        .padding(.vertical)
+                }
                 if viewModel.value.keys.isEmpty {
                     Button("デフォルトに戻す") {
                         viewModel.value.keys = QwertyCustomKeysValue.defaultValue.keys
                         selection.longpressSelectIndex = -1
                     }
                 }
-            }
-            DraggableView(items: $viewModel.value.keys, selection: $selection.selectIndex, enabled: selection.enabled && editState.allowDrag, width: width, height: keySize.height, padding: padding) {item, isSelected in
-                let strokeColor: Color = {
-                    if !isSelected {
-                        return .primary
-                    }
-                    if selection.longpressSelectIndex != -1 {
-                        return .systemGray
-                    }
-                    return .accentColor
-                }()
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(strokeColor)
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
-                    .focus(.accentColor, focused: isSelected && selection.longpressSelectIndex == -1)
-                    .focus(.systemGray, focused: isSelected && selection.longpressSelectIndex != -1)
-                    .overlay(Text(item.name))
-            }
-
-            if selection.selectIndex != -1 {
-                Spacer(minLength: 50)
-                    .fixedSize()
-                Text("長押しした時の候補")
-                    .padding(.vertical)
-                Button("追加する") {
-                    self.addLongpressKey(sIndex: selection.selectIndex)
-                }
-                DraggableView(items: $viewModel.value.keys[selection.selectIndex].longpresses, selection: $selection.longpressSelectIndex, enabled: selection.longpressEnabled && editState.allowDrag, width: variationWidth, height: keySize.height, padding: padding) {item, isSelected in
+                DraggableView(items: $viewModel.value.keys, selection: $selection.selectIndex, enabled: selection.enabled && editState.allowDrag, width: width, height: keySize.height, padding: padding) {item, isSelected in
+                    let strokeColor: Color = {
+                        if !isSelected {
+                            return .primary
+                        }
+                        if selection.longpressSelectIndex != -1 {
+                            return .systemGray
+                        }
+                        return .accentColor
+                    }()
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(isSelected ? Color.accentColor : .primary)
+                        .stroke(strokeColor)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
-                        .focus(.accentColor, focused: isSelected)
+                        .focus(.accentColor, focused: isSelected && selection.longpressSelectIndex == -1)
+                        .focus(.systemGray, focused: isSelected && selection.longpressSelectIndex != -1)
                         .overlay(Text(item.name))
                 }
-            }
-            Spacer()
-            if editState.editLabel {
-                labelEditor
-            }
-            if editState.editAction {
-                inputEditor
-            }
-            if selection.selectIndex != -1 {
-                HStack {
-                    ForEach(specifiers) {specifier in
-                        Spacer()
-                        self.button(specifier: specifier)
-                        Spacer()
+
+                if selection.selectIndex != -1 {
+                    Spacer(minLength: 50)
+                        .fixedSize()
+                    Text("長押しした時の候補")
+                        .padding(.vertical)
+                    DraggableView(items: $viewModel.value.keys[selection.selectIndex].longpresses, selection: $selection.longpressSelectIndex, enabled: selection.longpressEnabled && editState.allowDrag, width: variationWidth, height: keySize.height, padding: padding) {item, isSelected in
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(isSelected ? Color.accentColor : .primary)
+                            .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
+                            .focus(.accentColor, focused: isSelected)
+                            .overlay(Text(item.name))
                     }
                 }
-                .frame(maxHeight: 50)
-                .padding(.vertical, 3)
-                .background(RoundedRectangle(cornerRadius: 4).fill(Color.systemGray6).shadow(color: .primary, radius: 1, x: 0, y: 1))
-                .padding()
-                Spacer(minLength: 20)
-                    .fixedSize()
+                Spacer()
+            }
+            .onChange(of: selection) { newValue in
+                bottomSheetShown = newValue.selectIndex != -1
+                editState.state = .none
+            }
+            .navigationBarTitle("カスタムキーの設定", displayMode: .inline)
+            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+
+            BottomSheetView(
+                isOpen: self.$bottomSheetShown,
+                maxHeight: geometry.size.height * 0.7
+            ) {
+                Form {
+                    if selection.selectIndex != -1 {
+                        Section(header: Text("移動・追加")) { // TODO: ローカライズ
+                            Button("このキーを並び替える") { // TODO: ローカライズ
+                                bottomSheetShown = false
+                                editState.toggle(.drag)
+                            }
+                            Button("キーを追加する", action: self.addPressKey)
+                            Button("このキーに長押しキーを追加する") { // TODO: ローカライズ
+                                self.addLongpressKey(sIndex: selection.selectIndex)
+                            }
+                        }
+                        Section(header: Text("入力")) {
+                            if self.isInputTextEditable {
+                                Text("キーを押して入力される文字を設定します。")
+                                TextField("入力", text: $viewModel.value[.input, selection])
+                                    .textFieldStyle(.roundedBorder)
+                                    .submitLabel(.done)
+                            } else {
+                                Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
+                                Button("入力を設定する") {
+                                    viewModel.value[.input, selection] = ""
+                                }
+                                .foregroundColor(.accentColor)
+                            }
+                        }
+                        Section(header: Text("ラベル")) {
+                            Text("キーに表示される文字を設定します。")
+                            TextField("ラベル", text: $viewModel.value[selection].name)
+                                .textFieldStyle(.roundedBorder)
+                                .submitLabel(.done)
+                        }
+                        Section(header: Text("アクション")) {
+                            Text("キーを押したときの動作をより詳しく設定します。")
+                            NavigationLink("アクションを編集する", destination: CodableActionDataEditor($viewModel.value[selection].actions, availableCustards: CustardManager.load().availableCustards))
+                                .foregroundColor(.accentColor)
+                        }
+                        Button("削除") {
+                            bottomSheetShown = false
+                            if editState.state == .none {
+                                let sIndex = selection.selectIndex
+                                let lpsIndex = selection.longpressSelectIndex
+                                if lpsIndex == -1 && sIndex != -1 {
+                                    selection.selectIndex = -1
+                                    self.viewModel.value.keys.remove(at: sIndex)
+                                } else {
+                                    selection.longpressSelectIndex = -1
+                                    self.viewModel.value.keys[sIndex].longpresses.remove(at: lpsIndex)
+                                }
+                            }
+                        }
+                        .foregroundColor(.red)
+                    } else {
+                        Button("キーを追加する", action: self.addPressKey)
+                    }
+                }
             }
         }
-        .frame(maxWidth: .infinity)
-        .navigationBarTitle("カスタムキーの設定", displayMode: .inline)
-        .navigationBarItems(trailing: Button(editState.details ? "完了" : "詳細設定") {
-            editState.state = .none
-            editState.details.toggle()
-        })
         .background(Color.secondarySystemBackground)
     }
 
@@ -236,153 +271,13 @@ struct QwertyCustomKeysItemView: View {
         return false
     }
 
-    private var labelEditor: some View {
-        VStack {
-            Text("キーに表示される文字を設定します。")
-                .font(.caption)
-            Text("入力される文字とは異なっていても構いません。")
-                .font(.caption)
-            TextField("ラベル", text: $viewModel.value[selection].name)
-                .textFieldStyle(.roundedBorder)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal)
-                .submitLabel(.done)
-        }
-        .frame(maxHeight: 80)
-        .padding(.vertical, 3)
-        .background(RoundedRectangle(cornerRadius: 4).fill(Color.systemGray6).shadow(color: .primary, radius: 1, x: 0, y: 1))
-        .padding()
-    }
-
-    private var inputEditor: some View {
-        VStack {
-            if !isInputTextEditable {
-                Text("このキーには入力以外の複数のアクションが設定されています。")
-                    .font(.caption)
-                Text("現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
-                    .font(.caption)
-                Button("入力を設定する") {
-                    viewModel.value[.input, selection] = ""
-                }
-            } else {
-                Text("キーを押して入力される文字を設定します。")
-                    .font(.caption)
-                Text("キーの見た目は「ラベル」で設定できます。")
-                    .font(.caption)
-                TextField("入力される文字", text: $viewModel.value[.input, selection])
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal)
-                    .submitLabel(.done)
-            }
-        }
-        .frame(maxHeight: 80)
-        .padding(.vertical, 3)
-        .background(RoundedRectangle(cornerRadius: 4).fill(Color.systemGray6).shadow(color: .primary, radius: 1, x: 0, y: 1))
-        .padding()
-    }
-
-    private enum ToolBarButtonSpecifier: Int, Identifiable {
-        case delete
-        case move
-        case input
-        case label
-        case actions
-
-        var id: Int {
-            self.rawValue
-        }
-    }
-
-    private var specifiers: [ToolBarButtonSpecifier] {
-        if editState.details {
-            return [.delete, .move, .actions, .label]
-        } else {
-            return [.delete, .move, .input, .label]
-        }
-    }
-
-    @ViewBuilder
-    private func button(specifier: ToolBarButtonSpecifier) -> some View {
-        switch specifier {
-        case .delete:
-            ToolBarButton(systemImage: "trash", labelText: "削除") {
-                if editState.state == .none {
-                    let sIndex = selection.selectIndex
-                    let lpsIndex = selection.longpressSelectIndex
-                    if lpsIndex == -1 && sIndex != -1 {
-                        selection.selectIndex = -1
-                        self.viewModel.value.keys.remove(at: sIndex)
-                    } else {
-                        selection.longpressSelectIndex = -1
-                        self.viewModel.value.keys[sIndex].longpresses.remove(at: lpsIndex)
-                    }
-                }
-            }
-            .foregroundColor(editState.state == .none ? .primary:.systemGray)
-        case .move:
-            ToolBarButton(systemImage: "arrow.left.arrow.right", labelText: "移動") {
-                editState.toggle(.drag)
-            }
-            .foregroundColor(editState.allowDrag ? .accentColor:.primary)
-        case .input:
-            ToolBarButton(systemImage: "text.cursor", labelText: "入力") {
-                editState.toggle(.action)
-            }
-            .foregroundColor(editState.editAction ? .accentColor:.primary)
-        case .label:
-            ToolBarButton(systemImage: "questionmark.square", labelText: "ラベル") {
-                editState.toggle(.label)
-            }
-            .foregroundColor(editState.editLabel ? .accentColor : .primary)
-        case .actions:
-            NavigationLink(destination: CodableActionDataEditor($viewModel.value[selection].actions, availableCustards: CustardManager.load().availableCustards)) {
-                ToolBarButton(systemImage: "terminal", labelText: "アクション")
-            }
-            .foregroundColor(.primary)
-        }
-    }
-
     private func addPressKey() {
         self.viewModel.value.keys.append(QwertyCustomKey(name: "", actions: [.input("")], longpresses: []))
         selection.selectIndex = self.viewModel.value.keys.endIndex - 1
-        editState.state = .action
     }
 
     private func addLongpressKey(sIndex: Int) {
         self.viewModel.value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", actions: [.input("")]))
         selection.longpressSelectIndex = self.viewModel.value.keys[sIndex].longpresses.endIndex - 1
-        editState.state = .action
-    }
-}
-
-private struct ToolBarButton: View {
-    init(systemImage: String, labelText: LocalizedStringKey, action: (() -> Void)? = nil) {
-        self.systemImage = systemImage
-        self.labelText = labelText
-        self.action = action
-    }
-
-    private let systemImage: String
-    private let labelText: LocalizedStringKey
-    private let action: (() -> Void)?
-
-    var label: some View {
-        VStack {
-            Image(systemName: systemImage)
-                .font(.system(size: 23))
-            Spacer()
-            Text(labelText)
-                .font(.system(size: 10))
-        }
-    }
-
-    var body: some View {
-        if let action = action {
-            Button.init(action: action, label: { label })
-                .padding(.horizontal, 10)
-        } else {
-            label
-        }
     }
 }
