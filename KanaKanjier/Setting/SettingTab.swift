@@ -27,13 +27,13 @@ struct SettingTabView: View {
                         ImageSlideshowView(pictures: ["flickCustomKeySetting0", "flickCustomKeySetting1", "flickCustomKeySetting2"])
                     }
                     NavigationLink("設定する", destination: FlickCustomKeysSettingSelectView())
-                    .foregroundColor(.accentColor)
+                        .foregroundColor(.accentColor)
                     VStack {
                         Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
                         ImageSlideshowView(pictures: ["qwertyCustomKeySetting0", "qwertyCustomKeySetting1", "qwertyCustomKeySetting2"])
                     }
                     NavigationLink("設定する", destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew))
-                    .foregroundColor(.accentColor)
+                        .foregroundColor(.accentColor)
                 }
                 Section(header: Text("サウンド")) {
                     BooleanSettingItemView(Store.shared.enableSoundSetting)
@@ -41,36 +41,36 @@ struct SettingTabView: View {
                 Section(header: Text("表示")) {
                     FontSizeSettingItemView(Store.shared.keyViewFontSizeSetting, .key, availableValues: [
                         -1,
-                        15,
-                        16,
-                        17,
-                        18,
-                        19,
-                        20,
-                        21,
-                        22,
-                        23,
-                        24,
-                        25,
-                        26,
-                        27,
-                        28
+                         15,
+                         16,
+                         17,
+                         18,
+                         19,
+                         20,
+                         21,
+                         22,
+                         23,
+                         24,
+                         25,
+                         26,
+                         27,
+                         28
                     ])
                     FontSizeSettingItemView(Store.shared.resultViewFontSizeSetting, .result, availableValues: [
                         -1,
-                        12,
-                        13,
-                        14,
-                        15,
-                        16,
-                        17,
-                        18,
-                        19,
-                        20,
-                        21,
-                        22,
-                        23,
-                        24
+                         12,
+                         13,
+                         14,
+                         15,
+                         16,
+                         17,
+                         18,
+                         19,
+                         20,
+                         21,
+                         22,
+                         23,
+                         24
                     ])
                 }
                 Section(header: Text("変換")) {
