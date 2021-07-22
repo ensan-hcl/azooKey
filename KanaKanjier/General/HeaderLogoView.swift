@@ -59,3 +59,29 @@ struct HeaderLogoView: View {
         .padding(.bottom, -5)
     }
 }
+
+struct AzooKeyIcon: View {
+    @Environment(\.colorScheme) private var colorScheme
+    private var fontSize: CGFloat
+    init(fontSize: CGFloat) {
+        self.fontSize = fontSize
+    }
+    private var color: Color {
+        switch colorScheme {
+        case .light:
+            return .init(red: 0.398, green: 0.113, blue: 0.218)
+        case .dark:
+            return .white
+        @unknown default:
+            return .init(red: 0.398, green: 0.113, blue: 0.218)
+        }
+    }
+
+    var body: some View {
+        if let font = Store.shared.iconFont(fontSize) {
+            Text("1")
+                .font(font)
+                .foregroundColor(color)
+        }
+    }
+}

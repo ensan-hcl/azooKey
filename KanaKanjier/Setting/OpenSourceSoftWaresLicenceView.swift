@@ -95,6 +95,7 @@ struct OpenSourceSoftWaresLicenceView: View {
             Section {
                 Text("本アプリケーションは多くのオープンソースソフトウェアを用いて作成されています。この場を借りて感謝申し上げます。")
             }
+            Group {
             Section {
                 Text("JMdict/EDICT").font(.title).padding()
                 Text("本アプリケーションは基礎的な語彙の基盤としてJMdict/EDICTを使用しています。これらのファイルはElectronic Dictionary Research and Development Groupの所有物であり、ライセンスに基づいて使用されています。")
@@ -155,6 +156,16 @@ struct OpenSourceSoftWaresLicenceView: View {
                 FallbackLink("Kaomojic", destination: "https://github.com/mika-f/kaomojic")
             }
 
+            }
+            Section {
+                HStack {
+                    AzooKeyIcon(fontSize: 60)
+                    Spacer()
+                    Text("azooKeyを使ってくれてありがとう！")  // TODO: ローカライズ
+                }
+                .animation(.interpolatingSpring(stiffness: 30, damping: 5))
+
+            }
         }
         .multilineTextAlignment(.leading)
         .navigationBarTitle(Text("オープンソースソフトウェア"), displayMode: .inline)
