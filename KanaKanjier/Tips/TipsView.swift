@@ -15,7 +15,7 @@ struct TipsTabView: View {
     var body: some View {
         VStack {
             if isTop {
-                HeaderIconView()
+                HeaderLogoView()
             }
             NavigationView {
                 Form {

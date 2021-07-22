@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct HeaderIconView: View {
+struct HeaderLogoView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     enum Size {

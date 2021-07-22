@@ -29,7 +29,7 @@ struct EnableAzooKeyView: View {
                         VStack(alignment: .leading, spacing: 20) {
                             Spacer()
                             CenterAlignedView {
-                                HeaderIconView()
+                                HeaderLogoView()
                             }
                             EnableAzooKeyViewText("azooKeyを使う前に、iPhoneのキーボードのリストにazooKeyを追加する必要があります", with: "exclamationmark.triangle.fill")
                             CenterAlignedView {

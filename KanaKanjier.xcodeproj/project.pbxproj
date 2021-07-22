@@ -53,7 +53,7 @@
 		1A39A1A2259325D7008DDCFE /* AzooKeyUserDictionaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */; };
 		1A3A07D8259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */; };
 		1A3A16042528BFF900A5BA4F /* SelctInputStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */; };
-		1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */; };
+		1A3A160E2528C70800A5BA4F /* HeaderLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A160D2528C70800A5BA4F /* HeaderLogoView.swift */; };
 		1A3A162C2529671300A5BA4F /* FlickCustomKeySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */; };
 		1A3A16322529712300A5BA4F /* FlickKogakiKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */; };
 		1A3ACEF925F9F9AA007E9938 /* ResizingRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */; };
@@ -2572,7 +2572,7 @@
 		1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionaryData.swift; sourceTree = "<group>"; };
 		1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayoutTypeDetailsView.swift; sourceTree = "<group>"; };
 		1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelctInputStyle.swift; sourceTree = "<group>"; };
-		1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderIconView.swift; sourceTree = "<group>"; };
+		1A3A160D2528C70800A5BA4F /* HeaderLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderLogoView.swift; sourceTree = "<group>"; };
 		1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickCustomKeySetting.swift; sourceTree = "<group>"; };
 		1A3A16312529712300A5BA4F /* FlickKogakiKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKogakiKeyModel.swift; sourceTree = "<group>"; };
 		1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizingRect.swift; sourceTree = "<group>"; };
@@ -7739,7 +7739,7 @@
 				1A3022AE2631663200E4495C /* OnEnterBackground.swift */,
 				1AFA4BB2257E169100477DC2 /* PasteButton.swift */,
 				1ACEEFDD25665F0100899DA2 /* CenterAlignedView.swift */,
-				1A3A160D2528C70800A5BA4F /* HeaderIconView.swift */,
+				1A3A160D2528C70800A5BA4F /* HeaderLogoView.swift */,
 				1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */,
 				1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */,
 				1A2C293826273E9900DFE465 /* DraggableView.swift */,
@@ -10340,7 +10340,7 @@
 				1A3ACF1725FB78BF007E9938 /* InternalSetting.swift in Sources */,
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */,
-				1A3A160E2528C70800A5BA4F /* HeaderIconView.swift in Sources */,
+				1A3A160E2528C70800A5BA4F /* HeaderLogoView.swift in Sources */,
 				1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */,
 				1AF6797925CEDB9B00F3987B /* QwertyKeyModel.swift in Sources */,
 				1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */,
