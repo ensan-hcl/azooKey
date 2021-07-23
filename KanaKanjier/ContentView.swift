@@ -55,7 +55,7 @@ struct ContentView: View {
                     selection = 2
                 }
             }
-            BottomSheetView(isOpen: $showWalkthrough, maxHeight: UIScreen.main.bounds.height * 0.9, minHeight: 0, headerColor: .background) {
+            .sheet(isOpen: $showWalkthrough, maxHeight: UIScreen.main.bounds.height * 0.9, minHeight: 0, headerColor: .background) {
                 CustomizeTabWalkthroughView(isShowing: $showWalkthrough)
                     .background(Color.background)
             }

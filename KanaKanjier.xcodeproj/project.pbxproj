@@ -7653,7 +7653,6 @@
 				1ACB07C925E552940077DE04 /* EditingScrollCustardView.swift */,
 				1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */,
 				1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */,
-				1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */,
 				1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */,
 				1AB8C3DD25E2854C00D39BC5 /* CodableActionDataEditor.swift */,
 			);
@@ -7748,6 +7747,7 @@
 				1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */,
 				1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */,
 				1A2C293826273E9900DFE465 /* DraggableView.swift */,
+				1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";

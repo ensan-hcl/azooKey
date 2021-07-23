@@ -71,3 +71,16 @@ struct BottomSheetView<Content: View>: View {
         }
     }
 }
+
+extension View {
+    @ViewBuilder func sheet<Content: View>(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: @escaping () -> Content) -> some View {
+        if #available(iOS 14.5, *) {
+            self.sheet(isPresented: isOpen, onDismiss: nil, content: content)
+        } else {
+            ZStack {
+                self
+                BottomSheetView(isOpen: isOpen, maxHeight: maxHeight, minHeight: minHeight, headerColor: headerColor, content: content)
+            }
+        }
+    }
+}
