@@ -194,10 +194,6 @@ final class Store {
         return keyboards.contains(bundleName)
     }
 
-    func iconFont(_ size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font? {
-        return Font.custom("AzooKeyIcon-Regular", size: size, relativeTo: style)
-    }
-
     let imageMaximumWidth: CGFloat = 500
 
     var shouldTryRequestReview: Bool = false

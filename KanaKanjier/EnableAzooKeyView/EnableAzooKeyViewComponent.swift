@@ -17,10 +17,7 @@ struct EnableAzooKeyViewHeader: View {
     var body: some View {
         CenterAlignedView {
             HStack {
-                if let font = Store.shared.iconFont(30, relativeTo: .title) {
-                    Text("1")
-                        .font(font)
-                }
+                AzooKeyIcon(fontSize: 30, relativeTo: .title)
                 Text(text)
                     .font(.title.bold())
             }

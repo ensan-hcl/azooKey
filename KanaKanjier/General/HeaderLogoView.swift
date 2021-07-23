@@ -37,7 +37,7 @@ struct HeaderLogoView: View {
 
     var body: some View {
         Group {
-            if let font30 = Store.shared.iconFont(iconSize * 0.75) {
+            if let font30 = Design.fonts.azooKeyIconFont(iconSize * 0.75) {
                 switch colorScheme {
                 case .light:
                     Text("A")
