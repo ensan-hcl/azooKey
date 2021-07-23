@@ -68,25 +68,16 @@ struct EnableAzooKeyViewButton: View {
     }
 
     var body: some View {
-        let width = UIScreen.main.bounds.width
-        Button {
-            action()
-        }label: {
+        Button(action: action) {
             HStack {
                 if let systemName = systemName {
                     Image(systemName: systemName)
                 }
                 Text(text)
             }
-            .font(.body.bold())
-            .padding()
-            .frame(width: width * 0.9)
-            .foregroundColor(.background)
-            .background(
-                RoundedRectangle(cornerRadius: width / 4.8 * 0.17)
-                    .fill(self.style == .emphasized ? Color.blue : .red)
-            )
+            .foregroundColor(.white)
         }
+        .buttonStyle(LargeButtonStyle(backgroundColor: self.style == .emphasized ? .blue : .red))
     }
 }
 
