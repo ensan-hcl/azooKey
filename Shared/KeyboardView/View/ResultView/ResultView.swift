@@ -100,7 +100,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                                     Sound.click()
                                                     self.pressed(candidate: data.candidate)
                                                 }
-                                                .buttonStyle(ResultButtonStyle(height: buttonHeight, theme: theme))
+                                                .buttonStyle(ResultButtonStyle(height: buttonHeight))
                                                 .contextMenu {
                                                     ResultContextMenuView(text: data.candidate.text)
                                                 }
@@ -125,7 +125,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                     .font(Design.fonts.iconImageFont(theme: theme))
                                     .frame(height: 18)
                             }
-                            .buttonStyle(ResultButtonStyle(height: buttonHeight, theme: theme))
+                            .buttonStyle(ResultButtonStyle(height: buttonHeight))
                             .padding(.trailing, 10)
                         }
                     }
@@ -182,10 +182,9 @@ struct ResultModel<Candidate: ResultViewItemData> {
 
 struct ResultButtonStyle: ButtonStyle {
     private let height: CGFloat
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
 
-    init(height: CGFloat, theme: ThemeData) {
-        self.theme = theme
+    init(height: CGFloat) {
         self.height = height
     }
 

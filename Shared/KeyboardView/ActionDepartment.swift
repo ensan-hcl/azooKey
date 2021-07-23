@@ -21,7 +21,7 @@ class ActionDepartment {
     func notifyComplete(_ candidate: ResultViewItemData) {}
     func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {}
 
-    func makeChangeKeyboardButtonView(theme: ThemeData) -> ChangeKeyboardButtonView {
-        ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize, theme: theme)
+    func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
+        ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize)
     }
 }

@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 struct TabBarView: View {
-    @Environment(\.themeEnvironment) private var theme
     @ObservedObject private var variableStates = VariableStates.shared
 
     private let data: TabBarData
@@ -42,7 +41,7 @@ struct TabBarView: View {
                                 Image(systemName: image)
                             }
                         }
-                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
+                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6))
                     }
                 }
             }

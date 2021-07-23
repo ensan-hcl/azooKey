@@ -41,7 +41,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                         .font(Design.fonts.iconImageFont(theme: theme))
                         .frame(height: 18)
                 }
-                .buttonStyle(ResultButtonStyle(height: 18, theme: theme))
+                .buttonStyle(ResultButtonStyle(height: 18))
                 .padding(.trailing, 10)
             }
             .padding(.top, 10)
@@ -56,7 +56,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                                 }) {
                                     Text(datum.candidate.text)
                                 }
-                                .buttonStyle(ResultButtonStyle(height: 18, theme: theme))
+                                .buttonStyle(ResultButtonStyle(height: 18))
                                 .contextMenu {
                                     ResultContextMenuView(text: datum.candidate.text)
                                 }

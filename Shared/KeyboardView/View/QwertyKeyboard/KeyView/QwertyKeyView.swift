@@ -152,7 +152,7 @@ struct QwertyKeyView: View {
                             tabDesign: tabDesign
                         )
                         .overlay(
-                            QwertyVariationsView(model: self.model.variationsModel, theme: theme, tabDesign: tabDesign)
+                            QwertyVariationsView(model: self.model.variationsModel, tabDesign: tabDesign)
                                 .padding(.bottom, height)
                                 .padding(self.model.variationsModel.direction.edge, 15),
                             alignment: self.model.variationsModel.direction.alignment

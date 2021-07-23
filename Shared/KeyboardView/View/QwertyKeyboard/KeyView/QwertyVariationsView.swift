@@ -12,12 +12,11 @@ import SwiftUI
 struct QwertyVariationsView: View {
     private let model: VariationsModel
     @ObservedObject private var modelVariableSection: VariationsModelVariableSection
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
     private let tabDesign: TabDependentDesign
-    init(model: VariationsModel, theme: ThemeData, tabDesign: TabDependentDesign) {
+    init(model: VariationsModel, tabDesign: TabDependentDesign) {
         self.model = model
         self.modelVariableSection = model.variableSection
-        self.theme = theme
         self.tabDesign = tabDesign
     }
 

@@ -12,12 +12,11 @@ import SwiftUI
 struct ChangeKeyboardButtonView: UIViewRepresentable {
     private let selector: Selector?
     private let size: CGFloat
-    private let theme: ThemeData
+    @Environment(\.themeEnvironment) private var theme
 
-    init(selector: Selector? = nil, size: CGFloat, theme: ThemeData) {
+    init(selector: Selector? = nil, size: CGFloat) {
         self.selector = selector
         self.size = size
-        self.theme = theme
     }
 
     private var weight: UIImage.SymbolWeight {

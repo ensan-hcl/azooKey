@@ -88,9 +88,9 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
-    func makeChangeKeyboardButtonView(size: CGFloat, theme: ThemeData) -> ChangeKeyboardButtonView {
+    func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
         let selector = #selector(self.handleInputModeList(from:with:))
-        let view = ChangeKeyboardButtonView(selector: selector, size: size, theme: theme)
+        let view = ChangeKeyboardButtonView(selector: selector, size: size)
         return view
     }
 
