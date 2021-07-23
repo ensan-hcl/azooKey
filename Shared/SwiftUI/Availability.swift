@@ -59,7 +59,55 @@ enum _Available_Bool: ExpressibleByBooleanLiteral {
         case .true: return true
         }
     }
+}
 
+// HorizontalEdge
+enum _Available_HorizontalEdge {
+    case leading, trailing
+    @available(iOS 15, *)
+    var horizontalEdge: HorizontalEdge {
+        switch self {
+        case .leading: return .leading
+        case .trailing: return .trailing
+        }
+    }
+}
+
+// VerticalEdge
+enum _Available_VerticalEdge {
+    case bottom, top
+    @available(iOS 15, *)
+    var verticalEdge: VerticalEdge {
+        switch self {
+        case .bottom: return .bottom
+        case .top: return .top
+        }
+    }
+    enum Set {
+        case all, bottom, top
+        @available(iOS 15, *)
+        var set: VerticalEdge.Set {
+            switch self {
+            case .all: return .all
+            case .bottom: return .bottom
+            case .top: return .top
+            }
+        }
+    }
+}
+
+
+// Visibility
+enum _Available_Visibility {
+    case automatic, hidden, visible
+    @available(iOS 15, *)
+    var visibility: Visibility {
+        switch self {
+        case .automatic: return .automatic
+        case .hidden: return .hidden
+        case .visible: return .visible
+        }
+    }
 }
 
 extension View {
@@ -91,3 +139,24 @@ extension View {
     }
 }
 
+extension View {
+    @ViewBuilder
+    func swipeActions<T: View>(edge: _Available_HorizontalEdge = .trailing, allowsFullSwipe: Bool = true, content: () -> T) -> some View {
+        if #available(iOS 15, *) {
+            self.swipeActions(edge: edge.horizontalEdge, allowsFullSwipe: allowsFullSwipe, content: content)
+        } else {
+            self
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func listRowSeparator(_ visibility: _Available_Visibility, edges: _Available_VerticalEdge.Set = .all) -> some View {
+        if #available(iOS 15, *) {
+            self.listRowSeparator(visibility.visibility, edges: edges.set)
+        } else {
+            self
+        }
+    }
+}

@@ -2372,6 +2372,8 @@
 		1ACEEFF72566786A00899DA2 /* kaomoji_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1ACEEFF62566786A00899DA2 /* kaomoji_dict.tsv */; };
 		1AD4454326AA8E93003CF854 /* LargeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4454226AA8E93003CF854 /* LargeButtonStyle.swift */; };
 		1AD4454426AA8E94003CF854 /* LargeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4454226AA8E93003CF854 /* LargeButtonStyle.swift */; };
+		1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4454526AAB8E4003CF854 /* DisclosuringList.swift */; };
+		1AD4454726AAB8E4003CF854 /* DisclosuringList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4454526AAB8E4003CF854 /* DisclosuringList.swift */; };
 		1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */; };
 		1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1AD4DDD1258718F600A6FA18 /* QwertyTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDD0258718F600A6FA18 /* QwertyTabKeyModel.swift */; };
@@ -4883,6 +4885,7 @@
 		1ACEEFE82566601700899DA2 /* TipsViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsViewComponent.swift; sourceTree = "<group>"; };
 		1ACEEFF62566786A00899DA2 /* kaomoji_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = kaomoji_dict.tsv; sourceTree = "<group>"; };
 		1AD4454226AA8E93003CF854 /* LargeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeButtonStyle.swift; sourceTree = "<group>"; };
+		1AD4454526AAB8E4003CF854 /* DisclosuringList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosuringList.swift; sourceTree = "<group>"; };
 		1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMesureTools.swift; sourceTree = "<group>"; };
 		1AD4DDD0258718F600A6FA18 /* QwertyTabKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyTabKeyModel.swift; sourceTree = "<group>"; };
 		1ADDE8652545D48900E524E1 /* Candidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Candidate.swift; sourceTree = "<group>"; };
@@ -5053,6 +5056,7 @@
 				1ACE61C2257286E5008078D3 /* Color.swift */,
 				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
 				1ABF7D9426395DEC0045D6B2 /* BindingConvert.swift */,
+				1AD4454526AAB8E4003CF854 /* DisclosuringList.swift */,
 				1ABF7DA4263B08710045D6B2 /* IdentifiableItems.swift */,
 				1ABF7D972639869B0045D6B2 /* Intertranslator.swift */,
 				1A7F547226A96A870032E91E /* AzooKeyIcon.swift */,
@@ -10328,6 +10332,7 @@
 				1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */,
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
 				1AF6798625CEDBAE00F3987B /* SuggestModel.swift in Sources */,
+				1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */,
 				1A8654BC2526F50400006582 /* LanguageLayout.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A18425525DE6163003985AB /* CustardData.swift in Sources */,
@@ -10455,6 +10460,7 @@
 				1A12E24825C41A7100316009 /* Message.swift in Sources */,
 				1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */,
 				1A7F547026A81F3B0032E91E /* Availability.swift in Sources */,
+				1AD4454726AAB8E4003CF854 /* DisclosuringList.swift in Sources */,
 				1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */,
 				1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */,
 				1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */,

@@ -48,33 +48,23 @@ struct EditingTabBarView: View {
                 }
             }
             Section(header: Text("アイテム")) {
-                if editMode == .inactive {
-                    ForEach($items) { $item in
-                        MiniDisclosureGroup {
-                            HStack {
-                                Label("ラベル", systemImage: "rectangle.and.pencil.and.ellipsis")
-                                Spacer()
-                                TabNavigationViewItemLabelEditView("ラベルを設定", label: $item.label)
-                            }
-                            NavigationLink(destination: CodableActionDataEditor($item.actions, availableCustards: manager.availableCustards)) {
-                                Label("アクション", systemImage: "terminal")
+                DisclosuringList($items) { $item in
+                    HStack {
+                        Label("ラベル", systemImage: "rectangle.and.pencil.and.ellipsis")
+                        Spacer()
+                        TabNavigationViewItemLabelEditView("ラベルを設定", label: $item.label)
+                    }
+                    NavigationLink(destination: CodableActionDataEditor($item.actions, availableCustards: manager.availableCustards)) {
+                        Label("アクション", systemImage: "terminal")
 
-                                Text(makeLabelText(item: item))
-                                    .foregroundColor(.gray)
-                            }
-                        } label: {
-                            label(labelType: item.label)
-                        }
+                        Text(makeLabelText(item: item))
+                            .foregroundColor(.gray)
                     }
-                } else {
-                    List {
-                        ForEach($items.identifiableItems) {value in
-                            label(labelType: value.item.label)
-                        }
-                        .onDelete(perform: delete)
-                        .onMove(perform: onMove)
-                    }
+                } label: { item in
+                    label(labelType: item.label)
                 }
+                .onDelete(perform: delete)
+                .onMove(perform: move)
             }
         }
         .onChange(of: items) {_ in
@@ -158,37 +148,9 @@ struct EditingTabBarView: View {
         items.remove(atOffsets: offsets)
     }
 
-    private func onMove(source: IndexSet, destination: Int) {
+    private func move(source: IndexSet, destination: Int) {
         items.move(fromOffsets: source, toOffset: destination)
     }
-}
-
-private struct MiniDisclosureGroup<Label: View, Content: View>: View {
-    private var label: () -> Label
-    private var content: () -> Content
-    @State private var hidden = true
-    init(@ViewBuilder content: @escaping () -> Content, @ViewBuilder label: @escaping () -> Label) {
-        self.label = label
-        self.content = content
-    }
-
-    var body: some View {
-        HStack {
-            self.label()
-            Spacer()
-            Button {
-                hidden.toggle()
-            } label: {
-                Image(systemName: hidden ? "chevron.right" : "chevron.down")
-                    .font(.system(.caption).bold())
-                    .foregroundColor(.accentColor)
-            }
-        }
-        if !hidden {
-            self.content()
-        }
-    }
-
 }
 
 struct TabNavigationViewItemLabelEditView: View {
