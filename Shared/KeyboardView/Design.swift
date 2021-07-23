@@ -200,6 +200,10 @@ struct Design {
             VariableStates.shared.keyboardLayout
         }
 
+        func azooKeyIconFont(_ size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font? {
+            return Font.custom("AzooKeyIcon-Regular", size: size, relativeTo: style)
+        }
+
         var iconFontSize: CGFloat {
             let userDecidedSize = SettingData.shared.keyViewFontSize
             if userDecidedSize != -1 {

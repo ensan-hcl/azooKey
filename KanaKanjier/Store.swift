@@ -61,6 +61,11 @@ final class Store {
         defaultValue: false
     ))
 
+    var displayTabBarButtonSetting = SettingItemViewModel(SettingItem<Bool>(
+        identifier: .displayTabBarButton,
+        defaultValue: true
+    ))
+
     var typographyLetterSetting = SettingItemViewModel(SettingItem<Bool>(
         identifier: .typographyLetter,
         defaultValue: true

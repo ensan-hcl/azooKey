@@ -40,6 +40,20 @@ struct ResultView<Candidate: ResultViewItemData>: View {
         self._isResultViewExpanded = isResultViewExpanded
     }
 
+    private var buttonHeight: CGFloat {
+        Design.shared.resultViewHeight()*0.6
+    }
+
+    private var tabBarButtonBackgroundColor: Color {
+        ColorTools.hsv(theme.resultBackgroundColor.color) { h, s, v, a in
+            return Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
+        } ?? theme.normalKeyFillColor.color
+    }
+
+    private var tabBarButtonLabelColor: Color {
+        theme.resultTextColor.color
+    }
+
     var body: some View {
         Group {
             if variableStates.showMoveCursorBar {
@@ -48,51 +62,76 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                 let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
                 TabBarView(data: tabBarData)
             } else {
-                HStack { [weak modelVariableSection] in
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        ScrollViewReader {scrollViewProxy in
-                            LazyHStack(spacing: 10) {
-                                let results: [ResultData<Candidate>] = modelVariableSection?.results ?? []
-                                ForEach(results, id: \.id) {(data: ResultData<Candidate>) in
-                                    if data.candidate.inputable {
-                                        Button(data.candidate.text) {
-                                            Sound.click()
-                                            self.pressed(candidate: data.candidate)
-                                        }
-                                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
-                                        .contextMenu {
-                                            ResultContextMenuView(text: data.candidate.text)
-                                        }
-                                        .id(data.id)
+                Group { [weak modelVariableSection] in
+                    let results: [ResultData<Candidate>] = modelVariableSection?.results ?? []
+                    if results.isEmpty  {
+                        HStack {
+                            Spacer()
+                            Button {
+                                variableStates.action.registerAction(.toggleTabBar)
+                            } label: {
+                                ZStack {
+                                    if SettingData.shared.bool(for: .displayTabBarButton){
+                                        Circle()
+                                            .strokeAndFill(fillContent: tabBarButtonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
+                                            .frame(width: Design.shared.resultViewHeight()*0.8, height: Design.shared.resultViewHeight()*0.8)
+                                        AzooKeyIcon(fontSize: Design.shared.resultViewHeight()*0.7, color: .color(tabBarButtonLabelColor))
                                     } else {
-                                        Text(data.candidate.text)
-                                            .font(Design.fonts.resultViewFont(theme: theme))
-                                            .underline(true, color: .accentColor)
+                                        EmptyView()
                                     }
                                 }
-                            }.onAppear {
-                                modelVariableSection?.scrollViewProxy = scrollViewProxy
                             }
+                            .frame(height: buttonHeight)
+                            .padding(.all, 5)
+                            Spacer()
                         }
-                        .padding(.horizontal, 5)
-                    }
-                    if (modelVariableSection?.results.count ?? 0) > 1 {
-                        // 候補を展開するボタン
-                        Button(action: {
-                            self.expand()
-                        }) {
-                            Image(systemName: "chevron.down")
-                                .font(Design.fonts.iconImageFont(theme: theme))
-                                .frame(height: 18)
+                        .background(Color.init(.sRGB, white: 1, opacity: 0.001))
+                        .onLongPressGesture {
+                            variableStates.action.registerAction(.toggleTabBar)
                         }
-                        .buttonStyle(ResultButtonStyle(height: Design.shared.resultViewHeight()*0.6, theme: theme))
-                        .padding(.trailing, 10)
+                    } else {
+                        HStack {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                ScrollViewReader {scrollViewProxy in
+                                    LazyHStack(spacing: 10) {
+                                        ForEach(results, id: \.id) {(data: ResultData<Candidate>) in
+                                            if data.candidate.inputable {
+                                                Button(data.candidate.text) {
+                                                    Sound.click()
+                                                    self.pressed(candidate: data.candidate)
+                                                }
+                                                .buttonStyle(ResultButtonStyle(height: buttonHeight, theme: theme))
+                                                .contextMenu {
+                                                    ResultContextMenuView(text: data.candidate.text)
+                                                }
+                                                .id(data.id)
+                                            } else {
+                                                Text(data.candidate.text)
+                                                    .font(Design.fonts.resultViewFont(theme: theme))
+                                                    .underline(true, color: .accentColor)
+                                            }
+                                        }
+                                    }.onAppear {
+                                        modelVariableSection?.scrollViewProxy = scrollViewProxy
+                                    }
+                                }
+                                .padding(.horizontal, 5)
+                            }
+                            // 候補を展開するボタン
+                            Button(action: {
+                                self.expand()
+                            }) {
+                                Image(systemName: "chevron.down")
+                                    .font(Design.fonts.iconImageFont(theme: theme))
+                                    .frame(height: 18)
+                            }
+                            .buttonStyle(ResultButtonStyle(height: buttonHeight, theme: theme))
+                            .padding(.trailing, 10)
+                        }
                     }
-                }.frame(height: Design.shared.resultViewHeight())
+                }
+                .frame(height: Design.shared.resultViewHeight())
             }
-        }
-        .onLongPressGesture {
-            variableStates.action.registerAction(.toggleTabBar)
         }
     }
 

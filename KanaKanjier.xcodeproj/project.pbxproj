@@ -2282,6 +2282,9 @@
 		1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */; };
 		1A7F546F26A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
 		1A7F547026A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
+		1A7F547126A96A5F0032E91E /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
+		1A7F547326A96A870032E91E /* AzooKeyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F547226A96A870032E91E /* AzooKeyIcon.swift */; };
+		1A7F547426A96A870032E91E /* AzooKeyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F547226A96A870032E91E /* AzooKeyIcon.swift */; };
 		1A8437BF25F3668E0040DC5D /* PreferredLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8437BE25F3668E0040DC5D /* PreferredLanguage.swift */; };
 		1A8437C025F3668E0040DC5D /* PreferredLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8437BE25F3668E0040DC5D /* PreferredLanguage.swift */; };
 		1A8654BC2526F50400006582 /* LanguageLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8654BB2526F50400006582 /* LanguageLayout.swift */; };
@@ -4806,6 +4809,7 @@
 		1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = emoji...12_dict.tsv; path = "../../../AzooKey-dict/追加記号/絵文字/emoji...12_dict.tsv"; sourceTree = "<group>"; };
 		1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabWalkthrough.swift; sourceTree = "<group>"; };
 		1A7F546E26A81F3B0032E91E /* Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Availability.swift; sourceTree = "<group>"; };
+		1A7F547226A96A870032E91E /* AzooKeyIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyIcon.swift; sourceTree = "<group>"; };
 		1A8437BE25F3668E0040DC5D /* PreferredLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredLanguage.swift; sourceTree = "<group>"; };
 		1A8654BB2526F50400006582 /* LanguageLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageLayout.swift; sourceTree = "<group>"; };
 		1A86F47925352AF200B92B49 /* swift-algorithm-topN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "swift-algorithm-topN.swift"; sourceTree = "<group>"; };
@@ -5048,6 +5052,7 @@
 				1ABF7D9426395DEC0045D6B2 /* BindingConvert.swift */,
 				1ABF7DA4263B08710045D6B2 /* IdentifiableItems.swift */,
 				1ABF7D972639869B0045D6B2 /* Intertranslator.swift */,
+				1A7F547226A96A870032E91E /* AzooKeyIcon.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -9207,6 +9212,7 @@
 				1A4E1C8E26103069009B6EB7 /* ッ0.loudstxt2 in Resources */,
 				1A4E14C1260E273C009B6EB7 /* 993.binary in Resources */,
 				1A4E1E002610306B009B6EB7 /* カ.louds in Resources */,
+				1A7F547126A96A5F0032E91E /* AzooKeyIcon-Regular.otf in Resources */,
 				1A4E18B6260E273F009B6EB7 /* 410.binary in Resources */,
 				1A4E1EAF2610306C009B6EB7 /* デ3.loudstxt2 in Resources */,
 				1A4E164D260E273D009B6EB7 /* 624.binary in Resources */,
@@ -10301,6 +10307,7 @@
 				1A3ACF2225FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */,
 				1AB8C3CE25E2509300D39BC5 /* CustomizeTabView.swift in Sources */,
 				1AF6798F25CEDBB500F3987B /* FlickKeyView.swift in Sources */,
+				1A7F547326A96A870032E91E /* AzooKeyIcon.swift in Sources */,
 				1AA346AA2567F15700B41A16 /* SharedStore.swift in Sources */,
 				1AF6799125CEDBB500F3987B /* FlickKeyModelProtocol.swift in Sources */,
 				1AF6794725CEDB8200F3987B /* ResultView.swift in Sources */,
@@ -10457,6 +10464,7 @@
 				1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */,
 				1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */,
 				1AE1023E25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
+				1A7F547426A96A870032E91E /* AzooKeyIcon.swift in Sources */,
 				1A26F34C25E8ACFD003CDA0D /* Color.swift in Sources */,
 				1A3DC2212500D600002CAA93 /* FlickTabKeyModel.swift in Sources */,
 				1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */,

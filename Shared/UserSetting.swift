@@ -22,6 +22,7 @@ enum Setting: String {
 
     case learningType = "memory_learining_styple_setting"
     case stopLearningWhenSearch = "stop_learning_when_search"
+
     case unicodeCandidate = "unicode_candidate"
     case wesJapCalender = "western_japanese_calender_candidate"
     case typographyLetter = "typography_roman_candidate"
@@ -29,10 +30,14 @@ enum Setting: String {
     case halfKana = "half_kana_candidate"
     case fullRoman = "full_roman_candidate"
     case memoryReset = "memory_reset_setting"
+    case useOSuserDict = "use_OS_user_dict"
+
     case enableSound = "sound_enable_setting"
+
     case resultViewFontSize = "result_view_font_size"
     case keyViewFontSize = "key_view_font_size"
-    case useOSuserDict = "use_OS_user_dict"
+
+    case displayTabBarButton = "display_tab_bar_button"
 
     var key: String {
         self.rawValue
@@ -84,6 +89,8 @@ enum Setting: String {
             return "変換候補の表示サイズ"
         case .keyViewFontSize:
             return "キーの表示サイズ"
+        case .displayTabBarButton:
+            return "タブバーボタン" // TODO: ローカライズ
         case .useOSuserDict:
             return "OSのユーザ辞書の利用"
         }
@@ -137,6 +144,8 @@ enum Setting: String {
             return "変換候補の文字の大きさを指定できます。"
         case .keyViewFontSize:
             return "キーの文字の大きさを指定できます。文字が大きすぎる場合表示が崩れることがあります。"
+        case .displayTabBarButton:
+            return "変換候補欄が空のときにタブバーボタンを表示します" // TODO: ローカライズ
         case .useOSuserDict:
             return "iOS標準のユーザ辞書を利用します。"
         }
@@ -146,7 +155,7 @@ enum Setting: String {
 enum DefaultSetting {
     static func bool(_ setting: Setting) -> Bool? {
         switch setting {
-        case .wesJapCalender, .typographyLetter, .halfKana, .fullRoman, .unicodeCandidate, .englishCandidate:
+        case .wesJapCalender, .typographyLetter, .halfKana, .fullRoman, .unicodeCandidate, .englishCandidate, .displayTabBarButton:
             return true
         case .stopLearningWhenSearch, .enableSound, .useOSuserDict:
             return false

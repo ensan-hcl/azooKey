@@ -35,43 +35,48 @@ struct SettingTabView: View {
                     NavigationLink("設定する", destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew))
                         .foregroundColor(.accentColor)
                 }
-                Section(header: Text("サウンド")) {
-                    BooleanSettingItemView(Store.shared.enableSoundSetting)
-                }
-                Section(header: Text("表示")) {
-                    FontSizeSettingItemView(Store.shared.keyViewFontSizeSetting, .key, availableValues: [
-                        -1,
-                         15,
-                         16,
-                         17,
-                         18,
-                         19,
-                         20,
-                         21,
-                         22,
-                         23,
-                         24,
-                         25,
-                         26,
-                         27,
-                         28
-                    ])
-                    FontSizeSettingItemView(Store.shared.resultViewFontSizeSetting, .result, availableValues: [
-                        -1,
-                         12,
-                         13,
-                         14,
-                         15,
-                         16,
-                         17,
-                         18,
-                         19,
-                         20,
-                         21,
-                         22,
-                         23,
-                         24
-                    ])
+                Group {
+                    Section(header: Text("タブバー")) {
+                        BooleanSettingItemView(Store.shared.displayTabBarButtonSetting)
+                    }
+                    Section(header: Text("サウンド")) {
+                        BooleanSettingItemView(Store.shared.enableSoundSetting)
+                    }
+                    Section(header: Text("表示")) {
+                        FontSizeSettingItemView(Store.shared.keyViewFontSizeSetting, .key, availableValues: [
+                            -1,
+                             15,
+                             16,
+                             17,
+                             18,
+                             19,
+                             20,
+                             21,
+                             22,
+                             23,
+                             24,
+                             25,
+                             26,
+                             27,
+                             28
+                        ])
+                        FontSizeSettingItemView(Store.shared.resultViewFontSizeSetting, .result, availableValues: [
+                            -1,
+                             12,
+                             13,
+                             14,
+                             15,
+                             16,
+                             17,
+                             18,
+                             19,
+                             20,
+                             21,
+                             22,
+                             23,
+                             24
+                        ])
+                    }
                 }
                 Section(header: Text("変換")) {
                     switch storeVariableSection.japaneseLayout {

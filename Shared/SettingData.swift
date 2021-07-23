@@ -13,7 +13,7 @@ typealias FlickCustomKeySettingData = (labelType: KeyLabelType, actions: [Action
 
 struct SettingData {
     private static let userDefaults = UserDefaults(suiteName: SharedStore.appGroupKey)!
-    private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate, .useOSuserDict]
+    private let boolSettingItems: [Setting] = [.unicodeCandidate, .wesJapCalender, .halfKana, .fullRoman, .typographyLetter, .enableSound, .englishCandidate, .useOSuserDict, .displayTabBarButton]
     private let flickCustomKeySettingItems: [Setting] = [.koganaKeyFlick, .kanaSymbolsKeyFlick, .hiraTabKeyFlick, .abcTabKeyFlick, .symbolsTabKeyFlick]
 
     private var boolSettings: [Setting: Bool]
