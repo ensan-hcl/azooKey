@@ -13,25 +13,35 @@ struct DisclosuringList<Item: Identifiable, Label: View, Content: View>: View {
     @Binding private var items: [Item]
     private let label: (Item) -> Label
     private let content: (Binding<Item>) -> Content
-    private var delete: Optional<(IndexSet) -> ()> = nil
-    private var move: Optional<(IndexSet, Int) -> ()> = nil
+    private var delete: ((IndexSet) -> Void)?
+    private var move: ((IndexSet, Int) -> Void)?
+    private var disclosingCondition: (Item) -> Bool = { _ in true }
 
     init(_ items: Binding<[Item]>, @ViewBuilder content: @escaping (Binding<Item>) -> Content, @ViewBuilder label: @escaping (Item) -> Label) {
         self._items = items
         self.label = label
         self.content = content
     }
+
+    @ViewBuilder
+    private func editableView(_ value: Binding<[Item]>.IdentifiableItem) -> some View {
+        switch disclosingCondition(value.item) {
+        case true:
+            MiniDisclosureGroup {
+                content(value.$item)
+                    .listRowSeparator(.hidden, edges: .top)
+            } label: {
+                label(value.item)
+                    .listRowSeparator(.hidden, edges: .bottom)
+            }
+        case false:
+            label(value.item)
+        }
+    }
+
     var body: some View {
         if editMode?.wrappedValue == .inactive {
-            ForEach($items.identifiableItems) { value in
-                MiniDisclosureGroup {
-                    content(value.$item)
-                        .listRowSeparator(.hidden, edges: .top)
-                } label: {
-                    label(value.item)
-                        .listRowSeparator(.hidden, edges: .bottom)
-                }
-            }
+            ForEach($items.identifiableItems, content: editableView)
         } else {
             List {
                 ForEach($items.identifiableItems) {value in
@@ -43,15 +53,21 @@ struct DisclosuringList<Item: Identifiable, Label: View, Content: View>: View {
         }
     }
 
-    func onDelete(perform action: Optional<(IndexSet) -> ()>) -> Self {
+    func onDelete(perform action: ((IndexSet) -> Void)?) -> Self {
         var result = self
         result.delete = action
         return result
     }
 
-    func onMove(perform action: Optional<(IndexSet, Int) -> ()>) -> Self {
+    func onMove(perform action: ((IndexSet, Int) -> Void)?) -> Self {
         var result = self
         result.move = action
+        return result
+    }
+
+    func disclosed(when condition: @escaping (Item) -> Bool) -> Self {
+        var result = self
+        result.disclosingCondition = condition
         return result
     }
 }

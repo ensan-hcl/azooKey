@@ -85,13 +85,14 @@ struct CodableActionDataEditor: View {
                     }
                 }
                 Section(header: Text("アクション")) {
-                    List {
-                        ForEach($actions.identifiableItems) {value in
-                            CodableActionEditor(action: value.$item, availableCustards: availableCustards)
-                        }
-                        .onDelete(perform: delete)
-                        .onMove(perform: onMove)
+                    DisclosuringList($actions) { $action in
+                        CodableActionEditor(action: $action, availableCustards: availableCustards)
+                    } label: { action in
+                        Text(action.data.label)
                     }
+                    .onDelete(perform: delete)
+                    .onMove(perform: onMove)
+                    .disclosed { item in item.data.hasAssociatedValue }
                 }
             }
             BottomSheetView(
@@ -143,7 +144,7 @@ struct CodableActionDataEditor: View {
     }
 }
 
-struct CodableActionEditor: View {
+private struct CodableActionEditor: View {
     init(action: Binding<EditingCodableActionData>, availableCustards: [String]) {
         self.availableCustards = availableCustards
         self._action = action
@@ -153,46 +154,36 @@ struct CodableActionEditor: View {
     private let availableCustards: [String]
 
     var body: some View {
-        HStack {
-            VStack(spacing: 20) {
-                if action.data.hasAssociatedValue {
-                    DisclosureGroup(action.data.label) {
-                        switch action.data {
-                        case let .input(value):
-                            ActionEditTextField("入力する文字", action: $action) {value} convert: {.input($0)}
-                        case let .delete(count):
-                            ActionEditTextField("削除する文字数", action: $action) {"\(count)"} convert: {value in
-                                if let count = Int(value) {
-                                    return .delete(count)
-                                }
-                                return nil
-                            }
-                            Text("負の値を指定すると右側の文字を削除します")
-                        case let .moveCursor(count):
-                            ActionEditTextField("移動する文字数", action: $action) {"\(count)"} convert: {value in
-                                if let count = Int(value) {
-                                    return .moveCursor(count)
-                                }
-                                return nil
-                            }
-                            Text("負の値を指定すると左にカーソルが動きます")
-                        case .moveTab:
-                            ActionMoveTabEditView($action, availableCustards: availableCustards)
-                        case .replaceLastCharacters:
-                            EmptyView()
-                        default:
-                            EmptyView()
-                        }
-                    }
-                } else {
-                    Text(action.data.label)
+        switch action.data {
+        case let .input(value):
+            ActionEditTextField("入力する文字", action: $action) {value} convert: {.input($0)}
+        case let .delete(count):
+            ActionEditTextField("削除する文字数", action: $action) {"\(count)"} convert: {value in
+                if let count = Int(value) {
+                    return .delete(count)
                 }
+                return nil
             }
+            Text("負の値を指定すると右側の文字を削除します")
+        case let .moveCursor(count):
+            ActionEditTextField("移動する文字数", action: $action) {"\(count)"} convert: {value in
+                if let count = Int(value) {
+                    return .moveCursor(count)
+                }
+                return nil
+            }
+            Text("負の値を指定すると左にカーソルが動きます")
+        case .moveTab:
+            ActionMoveTabEditView($action, availableCustards: availableCustards)
+        case .replaceLastCharacters:
+            EmptyView()
+        default:
+            EmptyView()
         }
     }
 }
 
-struct ActionEditTextField: View {
+private struct ActionEditTextField: View {
     private let title: LocalizedStringKey
     @Binding private var action: EditingCodableActionData
     private let convert: (String) -> CodableActionData?
@@ -219,29 +210,7 @@ struct ActionEditTextField: View {
     }
 }
 
-struct ActionOpenAppEditView: View {
-    @Binding private var action: EditingCodableActionData
-
-    init(_ action: Binding<EditingCodableActionData>) {
-        self._action = action
-        if case let .openURL(value) = action.wrappedValue.data {
-            self._value = State(initialValue: "\(value)")
-        }
-    }
-
-    @State private var value = ""
-
-    var body: some View {
-        TextField("URL Scheme", text: $value)
-            .textFieldStyle(.roundedBorder)
-            .onChange(of: value) {value in
-                action.data = .openURL(value)
-            }
-            .submitLabel(.done)
-    }
-}
-
-struct ActionMoveTabEditView: View {
+private struct ActionMoveTabEditView: View {
     @Binding private var action: EditingCodableActionData
     private let availableCustards: [String]
     @State private var selectedTab: TabData = .system(.user_japanese)
@@ -320,7 +289,7 @@ struct AvailableTabPicker: View {
     }
 
     var body: some View {
-        Picker(selection: $selectedTab, label: Text("タブを選択")) {
+        Picker(selection: $selectedTab, label: Text("移動先のタブ")) { // TODO: ローカライズ
             ForEach(items.indices, id: \.self) {i in
                 Text(LocalizedStringKey(items[i].label)).tag(items[i].tab)
             }
@@ -378,13 +347,14 @@ struct CodableLongpressActionDataEditor: View {
                             Text("アクションを追加")
                         }
                     }
-                    List {
-                        ForEach($startActions.identifiableItems) {value in
-                            CodableActionEditor(action: value.$item, availableCustards: availableCustards)
-                        }
-                        .onDelete(perform: {startActions.remove(atOffsets: $0)})
-                        .onMove(perform: {startActions.move(fromOffsets: $0, toOffset: $1)})
+                    DisclosuringList($startActions) { $action in
+                        CodableActionEditor(action: $action, availableCustards: availableCustards)
+                    } label: { action in
+                        Text(action.data.label)
                     }
+                    .onDelete(perform: {startActions.remove(atOffsets: $0)})
+                    .onMove(perform: {startActions.move(fromOffsets: $0, toOffset: $1)})
+                    .disclosed { item in item.data.hasAssociatedValue }
                 }
                 Section(header: Text("押している間のアクション")) {
                     Button {
@@ -396,16 +366,15 @@ struct CodableLongpressActionDataEditor: View {
                             Text("アクションを追加")
                         }
                     }
-
-                    List {
-                        ForEach($repeatActions.identifiableItems) {value in
-                            CodableActionEditor(action: value.$item, availableCustards: availableCustards)
-                        }
-                        .onDelete(perform: {repeatActions.remove(atOffsets: $0)})
-                        .onMove(perform: {repeatActions.move(fromOffsets: $0, toOffset: $1)})
+                    DisclosuringList($repeatActions) { $action in
+                        CodableActionEditor(action: $action, availableCustards: availableCustards)
+                    } label: { action in
+                        Text(action.data.label)
                     }
+                    .onDelete(perform: {repeatActions.remove(atOffsets: $0)})
+                    .onMove(perform: {repeatActions.move(fromOffsets: $0, toOffset: $1)})
+                    .disclosed { item in item.data.hasAssociatedValue }
                 }
-
             }
             BottomSheetView(
                 isOpen: self.$bottomSheetShown,
@@ -451,7 +420,7 @@ struct CodableLongpressActionDataEditor: View {
     }
 }
 
-struct ActionPicker: View {
+private struct ActionPicker: View {
     private let process: (CodableActionData) -> Void
 
     init(process: @escaping (CodableActionData) -> Void) {
