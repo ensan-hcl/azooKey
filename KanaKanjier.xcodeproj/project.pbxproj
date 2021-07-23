@@ -2376,6 +2376,7 @@
 		1AD4DDB42586EAB200A6FA18 /* TimeMesureTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */; };
 		1AD4DDC7258717A000A6FA18 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1AD4DDD1258718F600A6FA18 /* QwertyTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDD0258718F600A6FA18 /* QwertyTabKeyModel.swift */; };
+		1AD5E17826AB230F001B4FF7 /* CustomKeysSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5E17726AB230F001B4FF7 /* CustomKeysSettingView.swift */; };
 		1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDE8652545D48900E524E1 /* Candidate.swift */; };
 		1ADEBD9D25DCA9C700114F47 /* emoji13.1_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */; };
 		1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1022E25D0C86500CA7277 /* ThemePicture.swift */; };
@@ -4887,6 +4888,7 @@
 		1AD4454526AAB8E4003CF854 /* DisclosuringList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosuringList.swift; sourceTree = "<group>"; };
 		1AD4DDB32586EAB200A6FA18 /* TimeMesureTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMesureTools.swift; sourceTree = "<group>"; };
 		1AD4DDD0258718F600A6FA18 /* QwertyTabKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyTabKeyModel.swift; sourceTree = "<group>"; };
+		1AD5E17726AB230F001B4FF7 /* CustomKeysSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeysSettingView.swift; sourceTree = "<group>"; };
 		1ADDE8652545D48900E524E1 /* Candidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Candidate.swift; sourceTree = "<group>"; };
 		1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji13.1_dict.tsv; sourceTree = "<group>"; };
 		1AE1022E25D0C86500CA7277 /* ThemePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicture.swift; sourceTree = "<group>"; };
@@ -7670,8 +7672,7 @@
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
 				1A5C7EAA25F36A5E00A7CBA8 /* PreferredLanguage */,
 				1ACE00712567518100899DA2 /* KeyboardLayout */,
-				1ACE006F2567514400899DA2 /* FlickCustomKeys */,
-				1ACE00732567521200899DA2 /* QwertyCustomKeys */,
+				1AD5E17626AB22F6001B4FF7 /* CustomKeys */,
 				1AE70BDF258DB4A0009B9B8B /* Template */,
 				1AF616B9256D40A5001A0B32 /* MemoryResetSetting */,
 				1A64A8DA257C91550022C081 /* FontSizeSetting */,
@@ -7774,6 +7775,16 @@
 				1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */,
 			);
 			path = Articles;
+			sourceTree = "<group>";
+		};
+		1AD5E17626AB22F6001B4FF7 /* CustomKeys */ = {
+			isa = PBXGroup;
+			children = (
+				1ACE006F2567514400899DA2 /* FlickCustomKeys */,
+				1ACE00732567521200899DA2 /* QwertyCustomKeys */,
+				1AD5E17726AB230F001B4FF7 /* CustomKeysSettingView.swift */,
+			);
+			path = CustomKeys;
 			sourceTree = "<group>";
 		};
 		1AE4DB7A25163C5700A24158 /* InputData */ = {
@@ -10360,6 +10371,7 @@
 				1AF6797925CEDB9B00F3987B /* QwertyKeyModel.swift in Sources */,
 				1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
+				1AD5E17826AB230F001B4FF7 /* CustomKeysSettingView.swift in Sources */,
 				1ACB07CA25E552940077DE04 /* EditingScrollCustardView.swift in Sources */,
 				1A8437BF25F3668E0040DC5D /* PreferredLanguage.swift in Sources */,
 				1AF6798E25CEDBB500F3987B /* FlickKanaSymbolsKeyModel.swift in Sources */,

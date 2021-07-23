@@ -22,18 +22,7 @@ struct SettingTabView: View {
                     PreferredLanguageSettingView(Store.shared.preferredLanguage)
                 }
                 Section(header: Text("カスタムキー")) {
-                    VStack {
-                        Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
-                        ImageSlideshowView(pictures: ["flickCustomKeySetting0", "flickCustomKeySetting1", "flickCustomKeySetting2"])
-                    }
-                    NavigationLink("設定する", destination: FlickCustomKeysSettingSelectView())
-                        .foregroundColor(.accentColor)
-                    VStack {
-                        Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
-                        ImageSlideshowView(pictures: ["qwertyCustomKeySetting0", "qwertyCustomKeySetting1", "qwertyCustomKeySetting2"])
-                    }
-                    NavigationLink("設定する", destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew))
-                        .foregroundColor(.accentColor)
+                    CustomKeysSettingView()
                 }
                 Group {
                     Section(header: Text("タブバー")) {
