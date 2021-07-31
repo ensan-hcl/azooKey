@@ -19,7 +19,7 @@ enum ColorTools {
         let g = rgba[1]
         let b = rgba[2]
         let a = rgba[3]
-        return process(Double(r), Double(g), Double(b), Double(a))
+        return process(r, g, b, a)
     }
 
     static func hsv(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
@@ -66,7 +66,7 @@ enum ColorTools {
         // Calculate Value
         v = maxValue
 
-        return process(Double(h / 360), Double(s), Double(v), Double(a))
+        return process(h / 360, s, v, a)
     }
 
 }

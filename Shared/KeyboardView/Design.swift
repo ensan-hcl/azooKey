@@ -207,7 +207,7 @@ struct Design {
         var iconFontSize: CGFloat {
             let userDecidedSize = SettingData.shared.keyViewFontSize
             if userDecidedSize != -1 {
-                return UIFontMetrics.default.scaledValue(for: CGFloat(userDecidedSize))
+                return UIFontMetrics.default.scaledValue(for: userDecidedSize)
             }
             return UIFontMetrics.default.scaledValue(for: 20)
         }
@@ -218,7 +218,7 @@ struct Design {
 
         var resultViewFontSize: CGFloat {
             let size = SettingData.shared.resultViewFontSize
-            return CGFloat(size == -1 ? 18: size)
+            return size == -1 ? 18: size
         }
 
         func resultViewFont(theme: ThemeData) -> Font {
@@ -229,7 +229,7 @@ struct Design {
         func keyLabelFont(text: String, width: CGFloat, scale: CGFloat, theme: ThemeData) -> Font {
             let userDecidedSize = SettingData.shared.keyViewFontSize
             if userDecidedSize != -1 {
-                return .system(size: CGFloat(userDecidedSize) * scale, weight: theme.textFont.weight, design: .default)
+                return .system(size: userDecidedSize * scale, weight: theme.textFont.weight, design: .default)
             }
             let maxFontSize: Int
             switch Design.shared.layout {

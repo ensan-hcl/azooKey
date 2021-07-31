@@ -42,7 +42,7 @@ struct FontSizeSettingItemView: View {
                         Image(systemName: "info.circle")
                     }
                 }
-                let size = CGFloat(viewModel.value.saveValue == -1 ? 18 : viewModel.value.saveValue)
+                let size = viewModel.value.saveValue == -1 ? 18 : viewModel.value.saveValue
                 switch self.target {
                 case .key:
                     KeyView(fontSize: size)

@@ -208,14 +208,10 @@ struct FlickKeyView: View {
         theme.borderColor.color
     }
 
-    private var keyBorderWidth: CGFloat {
-        CGFloat(theme.borderWidth)
-    }
-
     var body: some View {
         let keySize = (width: size.width, height: size.height)
         RoundedRectangle(cornerRadius: 6)
-            .strokeAndFill(fillContent: keyFillColor, strokeContent: keyBorderColor, lineWidth: keyBorderWidth)
+            .strokeAndFill(fillContent: keyFillColor, strokeContent: keyBorderColor, lineWidth: theme.borderWidth)
             .frame(width: keySize.width, height: keySize.height)
             .gesture(gesture)
             .overlay(model.label(width: keySize.width, states: variableStates))

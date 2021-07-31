@@ -51,7 +51,7 @@ struct FlickedKeyModel {
 
         let color = isPointed ? pointedColor : unpointedColor
         return RoundedRectangle(cornerRadius: 5.0)
-            .strokeAndFill(fillContent: color, strokeContent: theme.borderColor.color, lineWidth: CGFloat(theme.borderWidth))
+            .strokeAndFill(fillContent: color, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
             .frame(width: size.width, height: size.height)
             .overlay(self.label(width: size.width, theme: theme))
             .allowsHitTesting(false)

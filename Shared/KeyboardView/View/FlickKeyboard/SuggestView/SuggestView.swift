@@ -65,7 +65,7 @@ struct SuggestView: View {
                         .strokeAndFill(
                             fillContent: theme.specialKeyFillColor.color,
                             strokeContent: theme.borderColor.color,
-                            lineWidth: CGFloat(theme.borderWidth)
+                            lineWidth: theme.borderWidth
                         )
                         .frame(width: size.width, height: size.height)
                     self.neededApeearView(direction: .right)

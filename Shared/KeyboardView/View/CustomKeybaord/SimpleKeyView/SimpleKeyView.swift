@@ -22,14 +22,6 @@ struct SimpleKeyView: View {
         self.tabDesign = tabDesign
     }
 
-    private var keyBorderColor: Color {
-        theme.borderColor.color
-    }
-
-    private var keyBorderWidth: CGFloat {
-        CGFloat(theme.borderWidth)
-    }
-
     @State private var isPressed = false
     @State private var pressStartDate = Date()
 
@@ -39,8 +31,8 @@ struct SimpleKeyView: View {
                 RoundedRectangle(cornerRadius: 6)
                     .strokeAndFill(
                         fillContent: isPressed ? model.backGroundColorWhenPressed(theme: theme) : model.unpressedKeyColorType.color(states: variableStates, theme: theme),
-                        strokeContent: keyBorderColor,
-                        lineWidth: keyBorderWidth
+                        strokeContent: theme.borderColor.color,
+                        lineWidth: theme.borderWidth
                     )
                     .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
             )
