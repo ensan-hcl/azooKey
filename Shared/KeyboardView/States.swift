@@ -92,15 +92,23 @@ final class SemiStaticStates {
     /// - do not  consider using screenHeight
     private(set) var screenWidth: CGFloat = .zero
     private(set) var screenHeight: CGFloat = .zero
+
+    /// Function to set the size of keyboard
+    /// - Parameter size: only `size.width` used, and `size.height` has almost no needs, but using a bit.
     func setScreenSize(size: CGSize) {
         if self.screenWidth == size.width {
             return
         }
-        VariableStates.shared.setOrientation(size.width<size.height ? .vertical : .horizontal)
+        if #available(iOS 15, *) {
+            VariableStates.shared.setOrientation(UIScreen.main.bounds.size.width<UIScreen.main.bounds.size.height ? .vertical : .horizontal)
+        } else {
+            VariableStates.shared.setOrientation(size.width<size.height ? .vertical : .horizontal)
+        }
         let width = size.width
         let height = Design.shared.keyboardHeight(screenWidth: width)
         self.screenWidth = width
         self.screenHeight = height
+        debug("SemiStaticStates setScreenSize", width, height)
         let (layout, orientation) = (layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
         KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
             value.setIfFirst(layout: layout, orientation: orientation, size: .init(width: width, height: height), position: .zero)

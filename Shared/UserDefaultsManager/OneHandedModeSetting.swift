@@ -40,8 +40,8 @@ struct OneHandedModeSetting: Codable, KeyboardInternalSettingValue {
         self[keyPath: keyPath(layout: layout, orientation: orientation)].position = position
     }
 
-    mutating func setIfFirst(layout: KeyboardLayout, orientation: KeyboardOrientation, size: CGSize, position: CGPoint) {
-        if !self[keyPath: keyPath(layout: layout, orientation: orientation)].hasUsed {
+    mutating func setIfFirst(layout: KeyboardLayout, orientation: KeyboardOrientation, size: CGSize, position: CGPoint, forced: Bool = false) {
+        if !self[keyPath: keyPath(layout: layout, orientation: orientation)].hasUsed || forced {
             self[keyPath: keyPath(layout: layout, orientation: orientation)].hasUsed = true
             self[keyPath: keyPath(layout: layout, orientation: orientation)].size = size
             self[keyPath: keyPath(layout: layout, orientation: orientation)].position = position

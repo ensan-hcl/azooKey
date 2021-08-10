@@ -55,7 +55,9 @@ final class KeyboardViewController: UIInputViewController {
 
         Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
         Store.shared.action.setDelegateViewController(self)
-        SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
+        if #available(iOS 15, *) {} else {
+            SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -84,6 +86,7 @@ final class KeyboardViewController: UIInputViewController {
     func registerScreenActualSize() {
         if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
+            debug("registerScreenActualSize", size)
             SemiStaticStates.shared.setScreenSize(size: size)
         }
     }
@@ -101,17 +104,31 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        // 縦持ち 375.0 272.5
+        // 横持ち 667.0 216.5
         super.viewWillTransition(to: size, with: coordinator)
-        if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
-            let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
+        UIScreen.main.bounds.width > UIScreen.main.bounds.height ? print("横持ち") : print("縦持ち")
+        if #available(iOS 15, *) {
+            debug("viewWillTransition", size)
             SemiStaticStates.shared.setScreenSize(size: size)
+        } else {
+            if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
+                let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
+                debug("viewWillTransition", size)
+                SemiStaticStates.shared.setScreenSize(size: size)
+            }
         }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.registerScreenActualSize()
-        debug("描画終わり", self.view.frame.size)
+        if #available(iOS 15, *) {
+            self.view.frame.size.height = ceil(SemiStaticStates.shared.screenHeight) + 2
+            self.updateViewConstraints()
+        } else {
+            self.registerScreenActualSize()
+        }
+        debug("viewDidLayoutSubviews", self.view.frame.size, keyboardViewHost.view.frame.size)
     }
 
     /*
