@@ -211,7 +211,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         Section(header: Text("入力")) {
                             if self.isInputTextEditable {
                                 Text("キーを押して入力される文字を設定します。")
-                                TextField("入力", text: $value[.input, selection])
+                                TextField(localized: "入力", text: $value[.input, selection])
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
                             } else {
@@ -224,7 +224,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         }
                         Section(header: Text("ラベル")) {
                             Text("キーに表示される文字を設定します。")
-                            TextField("ラベル", text: $value[selection].name)
+                            TextField(localized: "ラベル", text: $value[selection].name)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
                         }

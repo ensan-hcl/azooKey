@@ -104,7 +104,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
             GeometryReader {_ in
                 VStack {
                     Form {
-                        TextField("タブの名前", text: $editingItem.tabName)
+                        TextField(localized: "タブの名前", text: $editingItem.tabName)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
                         Button("プレビュー") {
@@ -114,7 +114,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         HStack {
                             Text("縦方向キー数")
                             Spacer()
-                            TextField("縦方向キー数", text: $editingItem.columnCount)
+                            TextField(localized: "縦方向キー数", text: $editingItem.columnCount)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
@@ -122,7 +122,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         HStack {
                             Text("横方向キー数")
                             Spacer()
-                            TextField("横方向キー数", text: $editingItem.rowCount)
+                            TextField(localized: "横方向キー数", text: $editingItem.rowCount)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)

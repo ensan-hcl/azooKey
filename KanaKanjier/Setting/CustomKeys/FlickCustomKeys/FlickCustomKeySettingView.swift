@@ -154,7 +154,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                                 Section(header: Text("入力")) {
                                     if self.isInputActionEditable(actions: value[keyPath: position.keyPath].actions) {
                                         Text("キーを押して入力される文字を設定します。")
-                                        TextField("入力", text: $value[.input, position])
+                                        TextField(localized: "入力", text: $value[.input, position])
                                             .textFieldStyle(.roundedBorder)
                                             .submitLabel(.done)
                                     } else {
@@ -180,7 +180,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                             }
                             Section(header: Text("ラベル")) {
                                 Text("キーに表示される文字を設定します。")
-                                TextField("ラベル", text: $value[.label, position])
+                                TextField(localized: "ラベル", text: $value[.label, position])
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
                             }

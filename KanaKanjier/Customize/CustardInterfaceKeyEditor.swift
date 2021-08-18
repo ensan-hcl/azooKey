@@ -355,13 +355,13 @@ struct CustardInterfaceKeyEditor: View {
     @ViewBuilder private var sizePicker: some View {
         HStack {
             Text("縦")
-            TextField("縦", text: $height.converted(intStringConverter))
+            TextField(localized: "縦", text: $height.converted(intStringConverter))
                 .textFieldStyle(.roundedBorder)
                 .submitLabel(.done)
         }
         HStack {
             Text("横")
-            TextField("横", text: $width.converted(intStringConverter))
+            TextField(localized: "横", text: $width.converted(intStringConverter))
                 .textFieldStyle(.roundedBorder)
                 .submitLabel(.done)
         }
@@ -387,7 +387,7 @@ struct CustardInterfaceKeyEditor: View {
         Form {
             Section(header: Text("入力")) {
                 Text("キーを押して入力される文字を設定します。")
-                TextField("入力", text: $key[.custom][.inputAction, position])
+                TextField(localized: "入力", text: $key[.custom][.inputAction, position])
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
             }
@@ -399,11 +399,11 @@ struct CustardInterfaceKeyEditor: View {
                 }
                 switch key[.custom][.labelType, position] {
                 case .text:
-                    TextField("ラベル", text: $key[.custom][.labelText, position])
+                    TextField(localized: "ラベル", text: $key[.custom][.labelText, position])
                         .textFieldStyle(.roundedBorder)
                         .submitLabel(.done)
                 case .systemImage:
-                    TextField("アイコンの名前", text: $key[.custom][.labelImageName, position])
+                    TextField(localized: "アイコンの名前", text: $key[.custom][.labelImageName, position])
                         .textFieldStyle(.roundedBorder)
                         .submitLabel(.done)
                 }

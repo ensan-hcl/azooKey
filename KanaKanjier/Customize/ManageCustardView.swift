@@ -231,7 +231,7 @@ struct ManageCustardView: View {
                         }
                     }
                     DisclosureGroup("URLから読み込む") {
-                        TextField("URLを入力", text: $urlString)
+                        TextField(localized: "URLを入力", text: $urlString)
                             .submitLabel(.go)
                             .onSubmit {
                                 data.download(from: urlString)

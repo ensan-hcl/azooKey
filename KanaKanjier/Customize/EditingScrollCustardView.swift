@@ -18,8 +18,8 @@ fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
             return "横"
         }
     }
-
 }
+
 struct EditingScrollCustardView: CancelableEditor {
     private static let `default`: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
         .gridScroll(0): .system(.changeKeyboard),
@@ -47,7 +47,7 @@ struct EditingScrollCustardView: CancelableEditor {
             GeometryReader {geometry in
                 VStack {
                     Form {
-                        TextField("タブの名前", text: $editingItem.tabName)
+                        TextField(localized: "タブの名前", text: $editingItem.tabName)
                             .submitLabel(.done)
                         Text("一行ずつ登録したい文字や単語を入力してください")
                         Button("プレビュー") {
@@ -67,7 +67,7 @@ struct EditingScrollCustardView: CancelableEditor {
                             HStack {
                                 Text("縦方向キー数")
                                 Spacer()
-                                TextField("縦方向キー数", text: $editingItem.columnCount)
+                                TextField(localized: "縦方向キー数", text: $editingItem.columnCount)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
@@ -75,7 +75,7 @@ struct EditingScrollCustardView: CancelableEditor {
                             HStack {
                                 Text("横方向キー数")
                                 Spacer()
-                                TextField("横方向キー数", text: $editingItem.rowCount)
+                                TextField(localized: "横方向キー数", text: $editingItem.rowCount)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
