@@ -140,7 +140,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                 Spacer(minLength: 10)
                     .fixedSize()
                 if editState.allowDrag {
-                    Text("キーをドラッグして移動してください。")  // TODO: ローカライズ
+                    Text("キーをドラッグして移動してください。")
                         .padding(.vertical)
                 } else {
                     Text("編集したいキーを選択してください。")
@@ -198,13 +198,13 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
             ) {
                 Form {
                     if selection.selectIndex != -1 {
-                        Section(header: Text("移動・追加")) { // TODO: ローカライズ
-                            Button("このキーを並び替える") { // TODO: ローカライズ
+                        Section(header: Text("移動・追加")) {
+                            Button("このキーを並び替える") {
                                 bottomSheetShown = false
                                 editState.toggle(.drag)
                             }
                             Button("キーを追加する", action: self.addPressKey)
-                            Button("このキーに長押しキーを追加する") { // TODO: ローカライズ
+                            Button("このキーに長押しキーを追加する") {
                                 self.addLongpressKey(sIndex: selection.selectIndex)
                             }
                         }

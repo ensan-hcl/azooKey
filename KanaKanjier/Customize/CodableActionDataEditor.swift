@@ -289,7 +289,7 @@ struct AvailableTabPicker: View {
     }
 
     var body: some View {
-        Picker(selection: $selectedTab, label: Text("移動先のタブ")) { // TODO: ローカライズ
+        Picker(selection: $selectedTab, label: Text("移動先のタブ")) {
             ForEach(items.indices, id: \.self) {i in
                 Text(LocalizedStringKey(items[i].label)).tag(items[i].tab)
             }

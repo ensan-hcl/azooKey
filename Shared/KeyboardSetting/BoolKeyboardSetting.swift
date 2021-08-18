@@ -111,7 +111,7 @@ extension KeyboardSettingKey where Self == MemoryResetFlag {
 
 struct EnableKeySound: BoolKeyboardSettingKey {
     static let title: LocalizedStringKey = "キー音のON/OFF"
-    static let explanation: LocalizedStringKey = "キーを押した際に音を鳴らします♪" // TODO: ローカライズ
+    static let explanation: LocalizedStringKey = "キーを押した際に音を鳴らします♪"
     static let defaultValue = false
     static let key: String = "sound_enable_setting"
 }
@@ -122,7 +122,7 @@ extension KeyboardSettingKey where Self == EnableKeySound {
 
 struct UseOSUserDict: BoolKeyboardSettingKey {
     static let title: LocalizedStringKey = "OSのユーザ辞書の利用"
-    static let explanation: LocalizedStringKey = "iOS標準のユーザ辞書を利用します。" // TODO: iPadOSに対応
+    static let explanation: LocalizedStringKey = "OS標準のユーザ辞書を利用します。"
     static let defaultValue = false
     static let key: String = "use_OS_user_dict"
 }
@@ -132,8 +132,8 @@ extension KeyboardSettingKey where Self == UseOSUserDict {
 }
 
 struct DisplayTabBarButton: BoolKeyboardSettingKey {
-    static let title: LocalizedStringKey = "タブバーボタン" // TODO: ローカライズ
-    static let explanation: LocalizedStringKey = "変換候補欄が空のときにタブバーボタンを表示します" // TODO: ローカライズ
+    static let title: LocalizedStringKey = "タブバーボタン"
+    static let explanation: LocalizedStringKey = "変換候補欄が空のときにタブバーボタンを表示します"
     static let defaultValue = true
     static let key: String = "display_tab_bar_button"
 }

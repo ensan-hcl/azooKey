@@ -161,7 +161,7 @@ struct OpenSourceSoftWaresLicenceView: View {
                 HStack {
                     AzooKeyIcon(fontSize: 60)
                     Spacer()
-                    Text("azooKeyを使ってくれてありがとう！")  // TODO: ローカライズ
+                    Text("azooKeyを使ってくれてありがとう！")
                 }
                 .animation(.interpolatingSpring(stiffness: 30, damping: 5))
 

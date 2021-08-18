@@ -251,7 +251,7 @@
 
 "サウンド" = "Sounds";
 "キー音のON/OFF" = "Enable keyboard sounds";
-"キーを押した際に音を鳴らします。" = "Make sounds when you press keys.";
+"キーを押した際に音を鳴らします♪" = "Make sounds when you press keys♪";
 
 "表示" = "Display";
 "キーの表示サイズ" = "Font size of key labels";
@@ -287,7 +287,7 @@
 
 "ユーザ辞書" = "Text replacement";
 "OSのユーザ辞書の利用" = "Use device text replacement";
-"iOS標準のユーザ辞書を利用します。" = "Use device text replacement and display the candidates.";
+"OS標準のユーザ辞書を利用します。" = "Use device text replacement and display the candidates.";
 "azooKeyユーザ辞書" = "azooKey's Text replacement";
 "変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。" = "You can add text replacements. It is different from thee device's text replacements.";
 
@@ -470,18 +470,15 @@
 "最後に表示していたタブ" = "Last used tab";
 
 "移動先：%@" = "Destination: %@";
-
-
-
-/*"" = "";
-"" = "";
-"" = "";
-"" = "";
-"" = "";
-"" = "";
-"" = "";
-"" = "";
-"" = "";
+"azooKeyを使ってくれてありがとう！" = "Thank you for using azooKey!";
+"移動先のタブ" = "Tab to move";
+"キーをドラッグして移動してください。" = "Drag the key to move it.";
+"移動・追加" = "Move/Add";
+"このキーを並び替える" = "Rearrange this key";
+"このキーに長押しキーを追加する" = "Add a new alternative key which appears when longpressed";
+"タブバーボタン" = "Tab bar button";
+"変換候補欄が空のときにタブバーボタンを表示します" = "Display tab bar button when there is no candidates";
+/*
 "" = "";
 "" = "";
 "" = "";
