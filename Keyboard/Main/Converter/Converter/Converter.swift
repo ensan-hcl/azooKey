@@ -88,14 +88,17 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   `賢い変換候補
     private func getWiseCandidate(_ inputData: InputData) -> [Candidate] {
         var result = [Candidate]()
-        if SettingData.shared.bool(for: .wesJapCalender) {
+        @KeyboardSetting(.westernJapaneseCalender) var westernJapaneseCalender
+        if westernJapaneseCalender {
             result.append(contentsOf: self.toWareki(inputData))
             result.append(contentsOf: self.toSeirekiCandidates(inputData))
         }
-        if SettingData.shared.bool(for: .typographyLetter) {
+        @KeyboardSetting(.typographyLetter) var typographyLetter
+        if typographyLetter {
             result.append(contentsOf: self.typographicalCandidates(inputData))
         }
-        if SettingData.shared.bool(for: .unicodeCandidate) {
+        @KeyboardSetting(.unicodeCandidate) var unicodeCandidate
+        if unicodeCandidate {
             result.append(contentsOf: self.unicode(inputData))
         }
         return result
@@ -251,8 +254,9 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     /// - Returns:
     ///   付加的な変換候補
     private func getTopLevelAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
+        @KeyboardSetting(.englishCandidate) var englishCandidate
         var candidates: [Candidate] = []
-        if SettingData.shared.bool(for: .englishCandidate) {
+        if englishCandidate {
             switch VariableStates.shared.inputStyle {
             case .direct: break
             case .roman2kana:
@@ -308,7 +312,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             )
             candidates.append(uppercasedLetter)
         }
-        if SettingData.shared.bool(for: .fullRoman) {
+        @KeyboardSetting(.fullRomanCandidate) var fullRomanCandidate
+        if fullRomanCandidate {
             // 全角英数字
             let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: true) ?? ""
             let data = DicdataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)
@@ -321,7 +326,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             )
             candidates.append(fullWidthLetter)
         }
-        if SettingData.shared.bool(for: .halfKana) {
+        @KeyboardSetting(.halfKanaCandidate) var halfKanaCandidate
+        if halfKanaCandidate {
             // 半角カタカナ
             let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
             let data = DicdataElement(word: word, ruby: string, cid: 1288, mid: 501, value: -15)

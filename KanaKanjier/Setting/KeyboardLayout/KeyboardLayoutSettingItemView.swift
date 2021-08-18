@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  LanguageLayoutSettingView.swift
 //  KanaKanjier
 //
 //  Created by β α on 2020/11/09.
@@ -21,16 +21,10 @@ extension LanguageLayout {
     }
 }
 
-struct LanguageLayoutSettingItemView: View {
-    typealias ItemViewModel = SettingItemViewModel<LanguageLayout>
-    typealias ItemModel = SettingItem<LanguageLayout>
-
+struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: View {
     @State private var selection: LanguageLayout = .flick
     @State private var ignoreChange = false
     private let custardManager = CustardManager.load()
-    private let item: ItemModel
-    @ObservedObject private var viewModel: ItemViewModel
-
     private let language: Language
     private let setTogether: Bool
 
@@ -48,12 +42,10 @@ struct LanguageLayoutSettingItemView: View {
         }
     }
 
-    init(_ viewModel: ItemViewModel, language: Language = .japanese, setTogether: Bool = false, id: Int = 0) {
+    init(_ key: SettingKey, language: Language = .japanese, setTogether: Bool = false) {
         self.language = language
         self.setTogether = setTogether
-        self.item = viewModel.item
-        self.viewModel = viewModel
-        self._selection = State(initialValue: viewModel.value)
+        self._selection = State(initialValue: SettingKey.value)
         self.types = {
             let keyboardlanguage: KeyboardLanguage
             switch language {
@@ -116,7 +108,7 @@ struct LanguageLayoutSettingItemView: View {
                 return
             }
             let type = selection
-            self.viewModel.value = type
+            SettingKey.value = type
             switch language {
             case .japanese:
                 Store.variableSection.japaneseLayout = type
@@ -124,13 +116,13 @@ struct LanguageLayoutSettingItemView: View {
                 Store.variableSection.englishLayout = type
             }
             if setTogether {
-                Store.shared.englishLayoutSetting.value = type
+                EnglishKeyboardLayout.value = type
                 Store.variableSection.englishLayout = type
             }
         }
         .onAppear {
             self.ignoreChange = true
-            self.selection = viewModel.value
+            self.selection = SettingKey.value
             self.ignoreChange = false
         }
         .onDisappear {

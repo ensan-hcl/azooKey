@@ -9,6 +9,7 @@
 import Foundation
 
 enum SharedStore {
+    static let userDefaults = UserDefaults(suiteName: Self.appGroupKey)!
     static let bundleName = "DevEn3.azooKey.keyboard"
     static let appGroupKey = "group.com.azooKey.keyboard"
 }

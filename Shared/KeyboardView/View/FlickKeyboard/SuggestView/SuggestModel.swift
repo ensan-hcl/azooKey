@@ -12,7 +12,7 @@ import SwiftUI
 enum SuggestModelKeyType {
     case normal
     case enter(Int)
-    case custom(Setting)
+    case custom(CustomizableFlickKey)
     case aA
 }
 
@@ -24,7 +24,7 @@ struct SuggestModel {
         case .normal, .enter:
             return _flickModels
         case let .custom(setting):
-            return SettingData.shared.flickCustomKeySetting(for: setting).flick
+            return setting.get().flick
         case .aA:
             return FlickAaKeyModel.shared.flickKeys
         }

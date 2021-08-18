@@ -57,7 +57,8 @@ struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
         } else if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.text(VariableStates.shared.keyboardLanguage.symbol), width: width, textColor: color)
         } else {
-            return KeyLabel(.text(SettingData.shared.preferredLanguageSetting.first.symbol), width: width, textColor: color)
+            @KeyboardSetting(.preferredLanguage) var preferredLanguage
+            return KeyLabel(.text(preferredLanguage.first.symbol), width: width, textColor: color)
         }
     }
 

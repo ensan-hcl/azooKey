@@ -72,7 +72,8 @@ final class KeyboardViewController: UIInputViewController {
         self.view.becomeFirstResponder()
         SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
 
-        if SettingData.shared.bool(for: .useOSuserDict) {
+        @KeyboardSetting(.useOSUserDict) var useOSUserDict
+        if useOSUserDict {
             let osuserdict = OSUserDict()
             self.requestSupplementaryLexicon {[unowned osuserdict] in
                 osuserdict.dict = $0.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.applyingTransform(.hiraganaToKatakana, reverse: false)!, cid: 1288, mid: 501, value: -6)}

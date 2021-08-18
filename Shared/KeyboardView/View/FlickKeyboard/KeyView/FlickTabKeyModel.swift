@@ -10,33 +10,33 @@ import Foundation
 import SwiftUI
 
 struct FlickTabKeyModel: FlickKeyModelProtocol {
-    private let setting: Setting
+    private let key: CustomizableFlickKey
     let needSuggestView: Bool = true
 
-    static let hiraTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.japanese), setting: .hiraTabKeyFlick)
-    static let abcTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.english), setting: .abcTabKeyFlick)
-    static let numberTabKeyModel = FlickTabKeyModel(tab: .existential(.flick_numbersymbols), setting: .symbolsTabKeyFlick)
+    static let hiraTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.japanese), key: .hiraTab)
+    static let abcTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.english), key: .abcTab)
+    static let numberTabKeyModel = FlickTabKeyModel(tab: .existential(.flick_numbersymbols), key: .symbolsTab)
 
     var pressActions: [ActionType] {
-        SettingData.shared.flickCustomKeySetting(for: setting).actions
+        key.get().actions
     }
     var longPressActions: LongpressActionType {
-        SettingData.shared.flickCustomKeySetting(for: setting).longpressActions
+        key.get().longpressActions
     }
     var labelType: KeyLabelType {
-        SettingData.shared.flickCustomKeySetting(for: setting).labelType
+        key.get().labelType
     }
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        SettingData.shared.flickCustomKeySetting(for: setting).flick
+        key.get().flick
     }
 
     let suggestModel: SuggestModel
     var tab: Tab
 
-    private init(tab: Tab, setting: Setting) {
-        self.setting = setting
+    private init(tab: Tab, key: CustomizableFlickKey) {
+        self.key = key
         self.tab = tab
-        self.suggestModel = SuggestModel([:], keyType: .custom(setting))
+        self.suggestModel = SuggestModel([:], keyType: .custom(key))
     }
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {

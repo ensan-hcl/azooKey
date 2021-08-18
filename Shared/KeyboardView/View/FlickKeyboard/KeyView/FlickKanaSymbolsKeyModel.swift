@@ -12,21 +12,22 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = true
 
     static let shared = FlickKanaSymbolsKeyModel()
+    @KeyboardSetting(.kanaSymbolsFlickCustomKey) private var customKey
 
     var pressActions: [ActionType] {
-        SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).actions
+        customKey.compiled().actions
     }
     var longPressActions: LongpressActionType {
-        SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).longpressActions
+        customKey.compiled().longpressActions
     }
     var labelType: KeyLabelType {
-        SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).labelType
+        customKey.compiled().labelType
     }
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        SettingData.shared.flickCustomKeySetting(for: .kanaSymbolsKeyFlick).flick
+        customKey.compiled().flick
     }
 
-    var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.kanaSymbolsKeyFlick))
+    var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.kanaSymbols))
 
     private init() {}
 

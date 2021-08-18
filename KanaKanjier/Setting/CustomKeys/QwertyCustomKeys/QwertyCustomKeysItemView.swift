@@ -1,5 +1,5 @@
 //
-//  QwertyCustomKeysItemView.swift
+//  QwertyCustomKeysSettingView.swift
 //  KanaKanjier
 //
 //  Created by β α on 2020/12/12.
@@ -100,15 +100,11 @@ private struct Selection: Hashable {
     var longpressEnabled = false
 }
 
-struct QwertyCustomKeysItemView: View {
+struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: View {
     @StateObject private var editState = EditState()
+    @State private var value: QwertyCustomKeysValue
     @State private var selection = Selection()
     @State private var bottomSheetShown = false
-    typealias ItemViewModel = SettingItemViewModel<QwertyCustomKeysValue>
-    typealias ItemModel = SettingItem<QwertyCustomKeysValue>
-
-    private let item: ItemModel
-    @ObservedObject private var viewModel: ItemViewModel
 
     private var padding: CGFloat {
         return spacing / 2
@@ -128,15 +124,14 @@ struct QwertyCustomKeysItemView: View {
         return (width - necessarySpacing) / CGFloat(count)
     }
     private var width: CGFloat {
-        return romanScaledKeyWidth(normal: 7, for: viewModel.value.keys.count)
+        return romanScaledKeyWidth(normal: 7, for: value.keys.count)
     }
     private var variationWidth: CGFloat {
         return romanScaledKeyWidth(normal: 7, for: 7)
     }
 
-    init(_ viewModel: ItemViewModel) {
-        self.item = viewModel.item
-        self.viewModel = viewModel
+    init(_ key: SettingKey) {
+        self._value = .init(initialValue: SettingKey.value)
     }
 
     var body: some View {
@@ -151,13 +146,13 @@ struct QwertyCustomKeysItemView: View {
                     Text("編集したいキーを選択してください。")
                         .padding(.vertical)
                 }
-                if viewModel.value.keys.isEmpty {
+                if value.keys.isEmpty {
                     Button("デフォルトに戻す") {
-                        viewModel.value.keys = QwertyCustomKeysValue.defaultValue.keys
+                        value.keys = QwertyCustomKeysValue.defaultValue.keys
                         selection.longpressSelectIndex = -1
                     }
                 }
-                DraggableView(items: $viewModel.value.keys, selection: $selection.selectIndex, enabled: selection.enabled && editState.allowDrag, width: width, height: keySize.height, padding: padding) {item, isSelected in
+                DraggableView(items: $value.keys, selection: $selection.selectIndex, enabled: selection.enabled && editState.allowDrag, width: width, height: keySize.height, padding: padding) {item, isSelected in
                     let strokeColor: Color = {
                         if !isSelected {
                             return .primary
@@ -180,7 +175,7 @@ struct QwertyCustomKeysItemView: View {
                         .fixedSize()
                     Text("長押しした時の候補")
                         .padding(.vertical)
-                    DraggableView(items: $viewModel.value.keys[selection.selectIndex].longpresses, selection: $selection.longpressSelectIndex, enabled: selection.longpressEnabled && editState.allowDrag, width: variationWidth, height: keySize.height, padding: padding) {item, isSelected in
+                    DraggableView(items: $value.keys[selection.selectIndex].longpresses, selection: $selection.longpressSelectIndex, enabled: selection.longpressEnabled && editState.allowDrag, width: variationWidth, height: keySize.height, padding: padding) {item, isSelected in
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(isSelected ? Color.accentColor : .primary)
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
@@ -216,26 +211,26 @@ struct QwertyCustomKeysItemView: View {
                         Section(header: Text("入力")) {
                             if self.isInputTextEditable {
                                 Text("キーを押して入力される文字を設定します。")
-                                TextField("入力", text: $viewModel.value[.input, selection])
+                                TextField("入力", text: $value[.input, selection])
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
                             } else {
                                 Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
                                 Button("入力を設定する") {
-                                    viewModel.value[.input, selection] = ""
+                                    value[.input, selection] = ""
                                 }
                                 .foregroundColor(.accentColor)
                             }
                         }
                         Section(header: Text("ラベル")) {
                             Text("キーに表示される文字を設定します。")
-                            TextField("ラベル", text: $viewModel.value[selection].name)
+                            TextField("ラベル", text: $value[selection].name)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
                         }
                         Section(header: Text("アクション")) {
                             Text("キーを押したときの動作をより詳しく設定します。")
-                            NavigationLink("アクションを編集する", destination: CodableActionDataEditor($viewModel.value[selection].actions, availableCustards: CustardManager.load().availableCustards))
+                            NavigationLink("アクションを編集する", destination: CodableActionDataEditor($value[selection].actions, availableCustards: CustardManager.load().availableCustards))
                                 .foregroundColor(.accentColor)
                         }
                         Button("削除") {
@@ -245,10 +240,10 @@ struct QwertyCustomKeysItemView: View {
                                 let lpsIndex = selection.longpressSelectIndex
                                 if lpsIndex == -1 && sIndex != -1 {
                                     selection.selectIndex = -1
-                                    self.viewModel.value.keys.remove(at: sIndex)
+                                    value.keys.remove(at: sIndex)
                                 } else {
                                     selection.longpressSelectIndex = -1
-                                    self.viewModel.value.keys[sIndex].longpresses.remove(at: lpsIndex)
+                                    value.keys[sIndex].longpresses.remove(at: lpsIndex)
                                 }
                             }
                         }
@@ -260,10 +255,13 @@ struct QwertyCustomKeysItemView: View {
             }
         }
         .background(Color.secondarySystemBackground)
+        .onChange(of: value) { newValue in
+            SettingKey.value = newValue
+        }
     }
 
     private var isInputTextEditable: Bool {
-        let actions = viewModel.value[selection].actions
+        let actions = value[selection].actions
         if actions.count == 1, case .input = actions.first {
             return true
         }
@@ -274,12 +272,12 @@ struct QwertyCustomKeysItemView: View {
     }
 
     private func addPressKey() {
-        self.viewModel.value.keys.append(QwertyCustomKey(name: "", actions: [.input("")], longpresses: []))
-        selection.selectIndex = self.viewModel.value.keys.endIndex - 1
+        value.keys.append(QwertyCustomKey(name: "", actions: [.input("")], longpresses: []))
+        selection.selectIndex = value.keys.endIndex - 1
     }
 
     private func addLongpressKey(sIndex: Int) {
-        self.viewModel.value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", actions: [.input("")]))
-        selection.longpressSelectIndex = self.viewModel.value.keys[sIndex].longpresses.endIndex - 1
+        value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", actions: [.input("")]))
+        selection.longpressSelectIndex = value.keys[sIndex].longpresses.endIndex - 1
     }
 }

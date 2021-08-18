@@ -95,7 +95,8 @@ enum Tab: Equatable {
             // ユーザの設定に合わせて遷移先のタブ(非user_dependent)を返す
             switch self {
             case .english:
-                switch SettingData.shared.languageLayout(for: .englishKeyboardLayout) {
+                @KeyboardSetting(.englishKeyboardLayout) var layout
+                switch layout {
                 case .flick:
                     return .flick_abc
                 case .qwerty:
@@ -104,7 +105,8 @@ enum Tab: Equatable {
                     return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
                 }
             case .japanese:
-                switch SettingData.shared.languageLayout(for: .japaneseKeyboardLayout) {
+                @KeyboardSetting(.japaneseKeyboardLayout) var layout
+                switch layout {
                 case .flick:
                     return .flick_hira
                 case .qwerty:
@@ -222,7 +224,8 @@ struct TabManager {
         switch lastTab {
         case .none:
             let targetTab: Tab = {
-                switch SettingData.shared.preferredLanguageSetting.first {
+                @KeyboardSetting(.preferredLanguage) var preferredLanguage
+                switch preferredLanguage.first {
                 case .en_US:
                     return .user_dependent(.english)
                 case .ja_JP:

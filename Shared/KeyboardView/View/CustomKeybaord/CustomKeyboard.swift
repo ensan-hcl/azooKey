@@ -171,8 +171,9 @@ extension CustardInterfaceKey {
         case let .system(value):
             switch value {
             case .changeKeyboard:
+                @KeyboardSetting(.preferredLanguage) var preferredLanguage
                 let changeKeyboardKey: QwertyChangeKeyboardKeyModel
-                if let second = SettingData.shared.preferredLanguageSetting.second {
+                if let second = preferredLanguage.second {
                     changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .secondTab(secondLanguage: second))
                 } else {
                     changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .tabBar)

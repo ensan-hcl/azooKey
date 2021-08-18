@@ -253,7 +253,6 @@ struct ThemeEditView: CancelableEditor {
                 }
             )
             .onChange(of: storeVariableSection.japaneseLayout) {value in
-                SettingData.shared.reload() // 設定をリロードする
                 self.tab = {
                     switch value {
                     case .flick:

@@ -66,7 +66,6 @@ enum CustomizableFlickKey: String, Codable {
                 right: FlickCustomKey(label: "", actions: []),
                 bottom: FlickCustomKey(label: "", actions: [])
             )
-
         }
     }
 
@@ -90,7 +89,7 @@ enum FlickKeyPosition: String, Codable {
     case center = "center"
 }
 
-struct FlickCustomKey: Codable {
+struct FlickCustomKey: Codable, Equatable {
     var label: String
     var actions: [CodableActionData]
     var longpressActions: CodableLongpressActionData
@@ -133,7 +132,7 @@ struct FlickCustomKey: Codable {
     }
 }
 
-struct KeyFlickSetting: Savable, Codable {
+struct KeyFlickSetting: Savable, Codable, Equatable {
     typealias SaveValue = Data
     var saveValue: Data {
         let encoder = JSONEncoder()
@@ -182,7 +181,7 @@ struct KeyFlickSetting: Savable, Codable {
         self.top = top
         self.right = right
         self.bottom = bottom
-
+        // レガシー
         self.targetKeyIdentifier = identifier.rawValue
     }
 
@@ -243,5 +242,45 @@ struct KeyFlickSetting: Savable, Codable {
 
         }
         return nil
+    }
+}
+
+extension KeyFlickSetting {
+    typealias SettingData = (labelType: KeyLabelType, actions: [ActionType], longpressActions: LongpressActionType, flick: [FlickDirection: FlickedKeyModel])
+
+    func compiled() -> SettingData {
+        let targets: [(path: KeyPath<KeyFlickSetting, FlickCustomKey>, direction: FlickDirection)] = [(\.left, .left), (\.top, .top), (\.right, .right), (\.bottom, .bottom)]
+        let dict: [FlickDirection: FlickedKeyModel] = targets.reduce(into: [:]) {dict, target in
+            let item = self[keyPath: target.path]
+            if item.label == ""{
+                return
+            }
+            let model = FlickedKeyModel(
+                labelType: .text(item.label),
+                pressActions: item.actions.map {$0.actionType},
+                longPressActions: item.longpressActions.longpressActionType
+            )
+            dict[target.direction] = model
+        }
+        return (.text(self.center.label), self.center.actions.map {$0.actionType}, self.center.longpressActions.longpressActionType, dict)
+    }
+}
+
+extension CustomizableFlickKey {
+    func get() -> KeyFlickSetting.SettingData {
+        let setting: KeyFlickSetting
+        switch self {
+        case .kogana:
+            setting = KoganaFlickCustomKey.value
+        case .kanaSymbols:
+            setting = KanaSymbolsFlickCustomKey.value
+        case .hiraTab:
+            setting = HiraTabFlickCustomKey.value
+        case .abcTab:
+            setting = AbcTabFlickCustomKey.value
+        case .symbolsTab:
+            setting = SymbolsTabFlickCustomKey.value
+        }
+        return setting.compiled()
     }
 }

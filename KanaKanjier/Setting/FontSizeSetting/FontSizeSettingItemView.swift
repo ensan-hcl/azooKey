@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct FontSizeSettingItemView: View {
+struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
     enum Target {
         case key
         case result
@@ -17,32 +17,27 @@ struct FontSizeSettingItemView: View {
     private let availableValues: [FontSizeSetting]
     private let target: Target
 
-    typealias ItemViewModel = SettingItemViewModel<FontSizeSetting>
-    typealias ItemModel = SettingItem<FontSizeSetting>
+    @State private var value: FontSizeSetting
+    @State private var isOn = false
 
-    init(_ viewModel: ItemViewModel, _ target: Target, availableValues: [FontSizeSetting]) {
-        self.item = viewModel.item
-        self.viewModel = viewModel
+    init(_ key: SettingKey, _ target: Target, availableValues: [FontSizeSetting]) {
+        self._value = .init(initialValue: .value(SettingKey.value))
         self.target = target
         self.availableValues = availableValues
     }
-
-    private let item: ItemModel
-    @ObservedObject private var viewModel: ItemViewModel
-    @State private var isOn = false
 
     var body: some View {
         HStack {
             VStack {
                 HStack {
-                    Text(self.item.identifier.title)
+                    Text(SettingKey.title)
                     Button {
                         isOn = true
                     }label: {
                         Image(systemName: "info.circle")
                     }
                 }
-                let size = viewModel.value.saveValue == -1 ? 18 : viewModel.value.saveValue
+                let size = value.saveValue == -1 ? 18 : value.saveValue
                 switch self.target {
                 case .key:
                     KeyView(fontSize: size)
@@ -55,7 +50,7 @@ struct FontSizeSettingItemView: View {
                 }
             }
             Spacer()
-            Picker(selection: $viewModel.value, label: Text("")) {
+            Picker(selection: $value, label: Text("")) {
                 ForEach(self.availableValues) {data in
                     Text(data.display).tag(data)
                 }
@@ -64,16 +59,17 @@ struct FontSizeSettingItemView: View {
             .pickerStyle(.wheel)
             .frame(width: 100, height: 70)
             .clipped()
+            .onChange(of: value) { value in
+                SettingKey.value = value.saveValue
+            }
 
         }.frame(maxWidth: .infinity)
-        .alert(isPresented: $isOn) {
-            Alert(title: Text(self.item.description), dismissButton: .default(Text("OK"), action: {
-                isOn = false
-            }))
-        }
-
+            .alert(isPresented: $isOn) {
+                Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK"), action: {
+                    isOn = false
+                }))
+            }
     }
-
 }
 
 private struct KeyView: View {

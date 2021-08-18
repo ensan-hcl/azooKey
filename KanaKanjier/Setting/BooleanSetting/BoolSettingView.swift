@@ -1,5 +1,5 @@
 //
-//  BooleanSettingItemView.swift
+//  BoolSettingView.swift
 //  KanaKanjier
 //
 //  Created by β α on 2020/11/09.
@@ -8,19 +8,14 @@
 
 import SwiftUI
 
-struct BooleanSettingItemView: View {
-    init(_ viewModel: SettingItemViewModel<Bool>) {
-        self.item = viewModel.item
-        self.viewModel = viewModel
-    }
-    private let item: SettingItem<Bool>
-    @ObservedObject private var viewModel: SettingItemViewModel<Bool>
+struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
+    init(_ key: SettingKey) {}
     @State private var isOn = false
 
     var body: some View {
         HStack {
-            Toggle(isOn: self.$viewModel.value) {
-                Text(self.item.identifier.title)
+            Toggle(isOn: .init(get: {SettingKey.value}, set: {SettingKey.value = $0})) {
+                Text(SettingKey.title)
                 Button {
                     isOn = true
                 }label: {
@@ -29,7 +24,7 @@ struct BooleanSettingItemView: View {
             }
             .toggleStyle(.switch)
             .alert(isPresented: $isOn) {
-                Alert(title: Text(self.item.description), dismissButton: .default(Text("OK"), action: {
+                Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK"), action: {
                     isOn = false
                 }))
             }

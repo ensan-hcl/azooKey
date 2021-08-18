@@ -109,7 +109,6 @@ struct ThemeTabView: View {
         }
         .navigationViewStyle(.stack)
         .onChange(of: storeVariableSection.japaneseLayout) {_ in
-            SettingData.shared.reload() // 設定をリロードする
             self.refresh.toggle()
         }
     }

@@ -44,7 +44,7 @@ private struct _QwertyCustomKey: Codable {
     }
 }
 
-struct QwertyVariationKey: Codable {
+struct QwertyVariationKey: Codable, Equatable {
     internal init(name: String, actions: [CodableActionData]) {
         self.name = name
         self.actions = actions
@@ -54,7 +54,7 @@ struct QwertyVariationKey: Codable {
     var actions: [CodableActionData]
 }
 
-struct QwertyCustomKey: Codable {
+struct QwertyCustomKey: Codable, Equatable {
     var name: String
     var actions: [CodableActionData]
     var longpresses: [QwertyVariationKey]
@@ -92,7 +92,7 @@ private struct QwertyCustomKeysArray: Codable {
     }
 }
 
-struct QwertyCustomKeysValue: Savable {
+struct QwertyCustomKeysValue: Savable, Equatable {
     typealias SaveValue = Data
     static let defaultValue = QwertyCustomKeysValue(keys: [
         QwertyCustomKey(name: "。", actions: [.input("。")], longpresses: [QwertyVariationKey(name: "。", actions: [.input("。")]), QwertyVariationKey(name: ".", actions: [.input(".")])]),
@@ -122,5 +122,25 @@ struct QwertyCustomKeysValue: Savable {
             }
         }
         return nil
+    }
+}
+
+extension QwertyCustomKeysValue {
+    func compiled() -> [QwertyKeyModel] {
+        let keys = self.keys
+        let count = keys.count
+        let scale = (7, count)
+        return keys.map {key in
+            QwertyKeyModel(
+                labelType: .text(key.name),
+                pressActions: key.actions.map {$0.actionType},
+                variationsModel: VariationsModel(
+                    key.longpresses.map {item in
+                        (label: .text(item.name), actions: item.actions.map {$0.actionType})
+                    }
+                ),
+                for: scale
+            )
+        }
     }
 }

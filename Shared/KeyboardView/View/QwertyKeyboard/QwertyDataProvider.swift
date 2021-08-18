@@ -10,9 +10,10 @@ import Foundation
 
 struct QwertyDataProvider {
     static func tabKeys(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)) -> (languageKey: QwertyKeyModelProtocol, numbersKey: QwertyKeyModelProtocol, symbolsKey: QwertyKeyModelProtocol, changeKeyboardKey: QwertyKeyModelProtocol) {
+        @KeyboardSetting(.preferredLanguage) var preferredLanguage
         let languageKey: QwertyKeyModelProtocol
-        let first = SettingData.shared.preferredLanguageSetting.first
-        if let second = SettingData.shared.preferredLanguageSetting.second {
+        let first = preferredLanguage.first
+        if let second = preferredLanguage.second {
             languageKey = QwertySwitchLanguageKeyModel(rowInfo: rowInfo, languages: (first, second))
         } else {
             let targetTab: Tab = {
@@ -32,7 +33,7 @@ struct QwertyDataProvider {
         let symbolsKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.toggleTabBar]))
 
         let changeKeyboardKey: QwertyKeyModelProtocol
-        if let second = SettingData.shared.preferredLanguageSetting.second {
+        if let second = preferredLanguage.second {
             changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .secondTab(secondLanguage: second))
         } else {
             changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .tabBar)
@@ -223,7 +224,7 @@ struct QwertyDataProvider {
 
         [
             Self.tabKeys(rowInfo: (7, 2, 0, 0)).symbolsKey
-        ] + SettingData.shared.qwertyNumberTabKeySetting +
+        ] + NumberTabCustomKeysSetting.value.compiled() +
         [
             QwertyFunctionalKeyModel.delete
         ],

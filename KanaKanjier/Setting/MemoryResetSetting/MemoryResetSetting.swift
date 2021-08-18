@@ -9,16 +9,10 @@
 import SwiftUI
 
 struct MemoryResetSettingItemView: View {
-    init(_ viewModel: SettingItemViewModel<MemoryResetCondition>) {
-        self.item = viewModel.item
-        self.viewModel = viewModel
-    }
-    private let item: SettingItem<MemoryResetCondition>
-    @ObservedObject private var viewModel: SettingItemViewModel<MemoryResetCondition>
     @State private var showAlert = false
 
     var body: some View {
-        Button(self.item.identifier.title) {
+        Button("学習のリセット") {
             self.showAlert = true
         }
         .foregroundColor(.red)
@@ -30,7 +24,7 @@ struct MemoryResetSettingItemView: View {
                     self.showAlert = false
                 }),
                 secondaryButton: .destructive(Text("リセットする"), action: {
-                    self.viewModel.value = .need
+                    MemoryResetCondition.set(value: .need)
                     self.showAlert = false
                 })
             )

@@ -18,11 +18,12 @@ struct FlickKogakiKeyModel: FlickKeyModelProtocol {
 
     let labelType: KeyLabelType = .text("小ﾞﾟ")
 
+    @KeyboardSetting(.koganaFlickCustomKey) private var customKey
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        SettingData.shared.flickCustomKeySetting(for: .koganaKeyFlick).flick
+        customKey.compiled().flick
     }
 
-    var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.koganaKeyFlick))
+    var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.kogana))
 
     private init() {}
 

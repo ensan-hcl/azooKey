@@ -56,7 +56,7 @@ struct CustomizeTabView: View {
                             Text("変換候補欄に何も表示されていない状態で、変換候補欄を長押しすると表示されます。")
                             Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
                         }
-                        BooleanSettingItemView(Store.shared.displayTabBarButtonSetting)
+                        BoolSettingView(.displayTabBarButton)
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager))
                             .foregroundColor(.accentColor)
                     }

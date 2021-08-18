@@ -82,35 +82,29 @@ struct FlickCustomKeysSettingSelectView: View {
 
             switch selection {
             case .kogana:
-                FlickCustomKeysSettingView(Store.shared.koganaKeyFlickSetting)
+                FlickCustomKeySettingView(.koganaFlickCustomKey)
             case .kanaSymbols:
-                FlickCustomKeysSettingView(Store.shared.kanaSymbolsKeyFlickSetting)
+                FlickCustomKeySettingView(.kanaSymbolsFlickCustomKey)
             case .hiraTab:
-                FlickCustomKeysSettingView(Store.shared.hiraTabKeyFlickSetting)
+                FlickCustomKeySettingView(.hiraTabFlickCustomKey)
             case .abcTab:
-                FlickCustomKeysSettingView(Store.shared.abcTabKeyFlickSetting)
+                FlickCustomKeySettingView(.abcTabFlickCustomKey)
             case .symbolsTab:
-                FlickCustomKeysSettingView(Store.shared.symbolsTabKeyFlickSetting)
+                FlickCustomKeySettingView(.symbolsTabFlickCustomKey)
             }
         }
         .background(Color.secondarySystemBackground)
     }
 }
 
-struct FlickCustomKeysSettingView: View {
-    @State private var selectedPosition: FlickKeyPosition?
-
-    typealias ItemViewModel = SettingItemViewModel<KeyFlickSetting>
-    typealias ItemModel = SettingItem<KeyFlickSetting>
-
-    private let item: ItemModel
-    @ObservedObject private var viewModel: ItemViewModel
-
+struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: View {
     @State private var bottomSheetShown = false
+    @State private var selectedPosition: FlickKeyPosition?
+    @State private var value: KeyFlickSetting
+    // @Binding(get: { SettingKey.value }, set: { SettingKey.value = $0 }) private var value
 
-    init(_ viewModel: ItemViewModel) {
-        self.item = viewModel.item
-        self.viewModel = viewModel
+    init(_ key: SettingKey) {
+        self._value = .init(initialValue: SettingKey.value)
     }
 
     private let screenWidth = UIScreen.main.bounds.width
@@ -123,31 +117,31 @@ struct FlickCustomKeysSettingView: View {
     }
 
     var body: some View {
-        GeometryReader {geometry in
+        GeometryReader { geometry in
             VStack {
                 Text("編集したい方向を選択してください。")
                     .padding(.vertical)
 
                 VStack {
-                    CustomKeySettingFlickKeyView(.top, label: viewModel.value[.label, .top], selectedPosition: $selectedPosition)
+                    CustomKeySettingFlickKeyView(.top, label: value[.label, .top], selectedPosition: $selectedPosition)
                         .frame(width: keySize.width, height: keySize.height)
                     HStack {
-                        CustomKeySettingFlickKeyView(.left, label: viewModel.value[.label, .left], selectedPosition: $selectedPosition)
+                        CustomKeySettingFlickKeyView(.left, label: value[.label, .left], selectedPosition: $selectedPosition)
                             .frame(width: keySize.width, height: keySize.height)
-                        CustomKeySettingFlickKeyView(.center, label: viewModel.value[.label, .center], selectedPosition: $selectedPosition)
+                        CustomKeySettingFlickKeyView(.center, label: value[.label, .center], selectedPosition: $selectedPosition)
                             .frame(width: keySize.width, height: keySize.height)
-                        CustomKeySettingFlickKeyView(.right, label: viewModel.value[.label, .right], selectedPosition: $selectedPosition)
+                        CustomKeySettingFlickKeyView(.right, label: value[.label, .right], selectedPosition: $selectedPosition)
                             .frame(width: keySize.width, height: keySize.height)
                     }
-                    CustomKeySettingFlickKeyView(.bottom, label: viewModel.value[.label, .bottom], selectedPosition: $selectedPosition)
+                    CustomKeySettingFlickKeyView(.bottom, label: value[.label, .bottom], selectedPosition: $selectedPosition)
                         .frame(width: keySize.width, height: keySize.height)
                 }
                 Spacer()
             }.navigationBarTitle("カスタムキーの設定", displayMode: .inline)
-            .onChange(of: selectedPosition) {value in
-                bottomSheetShown = value != nil
-            }
-            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                .onChange(of: selectedPosition) {value in
+                    bottomSheetShown = value != nil
+                }
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             if let position = selectedPosition {
                 BottomSheetView(
                     isOpen: self.$bottomSheetShown,
@@ -158,26 +152,26 @@ struct FlickCustomKeysSettingView: View {
                             switch mainEditor {
                             case .input:
                                 Section(header: Text("入力")) {
-                                    if self.isInputActionEditable(actions: viewModel.value[keyPath: position.keyPath].actions) {
+                                    if self.isInputActionEditable(actions: value[keyPath: position.keyPath].actions) {
                                         Text("キーを押して入力される文字を設定します。")
-                                        TextField("入力", text: $viewModel.value[.input, position])
+                                        TextField("入力", text: $value[.input, position])
                                             .textFieldStyle(.roundedBorder)
                                             .submitLabel(.done)
                                     } else {
                                         Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
                                         Button("入力を設定する") {
-                                            viewModel.value[.input, position] = ""
+                                            value[.input, position] = ""
                                         }
                                         .foregroundColor(.accentColor)
                                     }
                                 }
                             case .tab:
                                 Section(header: Text("タブ")) {
-                                    let tab = self.getTab(actions: viewModel.value[keyPath: position.keyPath].actions)
-                                    if tab != nil || viewModel.value[keyPath: position.keyPath].actions.isEmpty {
+                                    let tab = self.getTab(actions: value[keyPath: position.keyPath].actions)
+                                    if tab != nil || value[keyPath: position.keyPath].actions.isEmpty {
                                         Text("キーを押して移動するタブを設定します。")
-                                        AvailableTabPicker(tab ?? .system(.user_japanese)) {value in
-                                            viewModel.value[keyPath: position.keyPath].actions = [.moveTab(value)]
+                                        AvailableTabPicker(tab ?? .system(.user_japanese)) {tabData in
+                                            value[keyPath: position.keyPath].actions = [.moveTab(tabData)]
                                         }
                                     } else {
                                         tabSetter(keyPath: position.keyPath)
@@ -186,23 +180,21 @@ struct FlickCustomKeysSettingView: View {
                             }
                             Section(header: Text("ラベル")) {
                                 Text("キーに表示される文字を設定します。")
-                                TextField("ラベル", text: $viewModel.value[.label, position])
+                                TextField("ラベル", text: $value[.label, position])
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
                             }
                             Section(header: Text("アクション")) {
                                 Text("キーを押したときの動作をより詳しく設定します。")
-                                NavigationLink("アクションを編集する", destination: CodableActionDataEditor($viewModel.value[keyPath: position.bindedKeyPath].actions, availableCustards: CustardManager.load().availableCustards))
-                                .foregroundColor(.accentColor)
+                                NavigationLink("アクションを編集する", destination: CodableActionDataEditor($value[keyPath: position.bindedKeyPath].actions, availableCustards: CustardManager.load().availableCustards))
+                                    .foregroundColor(.accentColor)
                             }
                             Section(header: Text("長押しアクション")) {
                                 Text("キーを長押ししたときの動作をより詳しく設定します。")
-                                NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($viewModel.value[keyPath: position.bindedKeyPath].longpressActions, availableCustards: CustardManager.load().availableCustards))
-                                .foregroundColor(.accentColor)
+                                NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($value[keyPath: position.bindedKeyPath].longpressActions, availableCustards: CustardManager.load().availableCustards))
+                                    .foregroundColor(.accentColor)
                             }
-                            Button("リセット") {
-                                self.reload()
-                            }
+                            Button("リセット", action: reload)
                             .foregroundColor(.red)
                         } else {
                             Text("このキーは編集できません")
@@ -212,18 +204,21 @@ struct FlickCustomKeysSettingView: View {
                 }
             }
         }
+        .onChange(of: value) { newValue in
+            SettingKey.value = newValue
+        }
     }
 
     @ViewBuilder private func tabSetter(keyPath: WritableKeyPath<KeyFlickSetting, FlickCustomKey>) -> some View {
         Text("このキーにはタブ移動以外のアクションが設定されています。現在のアクションを消去して移動するタブを設定するには「タブを設定する」を押してください")
         Button("タブを設定する") {
-            viewModel.value[keyPath: keyPath].actions = [.moveTab(.system(.user_japanese))]
+            value[keyPath: keyPath].actions = [.moveTab(.system(.user_japanese))]
         }
         .foregroundColor(.accentColor)
     }
 
     private func isPossiblePosition(_ position: FlickKeyPosition) -> Bool {
-        return self.viewModel.value.identifier.ablePosition.contains(position)
+        value.identifier.ablePosition.contains(position)
     }
 
     private func isInputActionEditable(actions: [CodableActionData]) -> Bool {
@@ -245,7 +240,7 @@ struct FlickCustomKeysSettingView: View {
 
     private func reload() {
         if let position = selectedPosition, self.isPossiblePosition(position) {
-            viewModel.value[keyPath: position.keyPath] = viewModel.value.identifier.defaultSetting[keyPath: position.keyPath]
+            value[keyPath: position.keyPath] = value.identifier.defaultSetting[keyPath: position.keyPath]
         }
     }
 
@@ -255,7 +250,7 @@ struct FlickCustomKeysSettingView: View {
     }
 
     private var mainEditor: MainEditorSpecifier {
-        switch self.viewModel.value.identifier {
+        switch value.identifier {
         case .kanaSymbols, .kogana:
             return .input
         case .hiraTab, .abcTab, .symbolsTab:

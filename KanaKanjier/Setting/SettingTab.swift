@@ -19,20 +19,20 @@ struct SettingTabView: View {
                     NavigationLink("キーボードの種類を設定する", destination: KeyboardLayoutTypeDetailsView())
                 }
                 Section(header: Text("言語")) {
-                    PreferredLanguageSettingView(Store.shared.preferredLanguage)
+                    PreferredLanguageSettingView()
                 }
                 Section(header: Text("カスタムキー")) {
                     CustomKeysSettingView()
                 }
                 Group {
                     Section(header: Text("タブバー")) {
-                        BooleanSettingItemView(Store.shared.displayTabBarButtonSetting)
+                        BoolSettingView(.displayTabBarButton)
                     }
                     Section(header: Text("サウンド")) {
-                        BooleanSettingItemView(Store.shared.enableSoundSetting)
+                        BoolSettingView(.enableKeySound)
                     }
                     Section(header: Text("表示")) {
-                        FontSizeSettingItemView(Store.shared.keyViewFontSizeSetting, .key, availableValues: [
+                        FontSizeSettingView(.keyViewFontSize, .key, availableValues: [
                             -1,
                              15,
                              16,
@@ -49,7 +49,7 @@ struct SettingTabView: View {
                              27,
                              28
                         ])
-                        FontSizeSettingItemView(Store.shared.resultViewFontSizeSetting, .result, availableValues: [
+                        FontSizeSettingView(.resultViewFontSize, .result, availableValues: [
                             -1,
                              12,
                              13,
@@ -68,21 +68,16 @@ struct SettingTabView: View {
                     }
                 }
                 Section(header: Text("変換")) {
-                    switch storeVariableSection.japaneseLayout {
-                    case .flick:
-                        EmptyView()
-                    case .qwerty, .custard:
-                        BooleanSettingItemView(Store.shared.englishCandidateSetting)
-                    }
-                    BooleanSettingItemView(Store.shared.halfKanaSetting)
-                    BooleanSettingItemView(Store.shared.fullRomanSetting)
-                    BooleanSettingItemView(Store.shared.typographyLetterSetting)
-                    BooleanSettingItemView(Store.shared.wesJapCalenderSetting)
-                    BooleanSettingItemView(Store.shared.unicodeCandidateSetting)
+                    BoolSettingView(.englishCandidate)
+                    BoolSettingView(.halfKanaCandidate)
+                    BoolSettingView(.fullRomanCandidate)
+                    BoolSettingView(.typographyLetter)
+                    BoolSettingView(.westernJapaneseCalender)
+                    BoolSettingView(.unicodeCandidate)
                     NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                 }
                 Section(header: Text("ユーザ辞書")) {
-                    BooleanSettingItemView(Store.shared.iOSUserDictSetting)
+                    BoolSettingView(.useOSUserDict)
                     NavigationLink("azooKeyユーザ辞書", destination: AzooKeyUserDictionaryView())
                 }
 
@@ -91,9 +86,8 @@ struct SettingTabView: View {
                 }
 
                 Section(header: Text("学習機能")) {
-                    // BooleanSettingItemView(Store.shared.stopLearningWhenSearchSetting)
-                    LearningTypeSettingItemView(Store.shared.memorySetting)
-                    MemoryResetSettingItemView(Store.shared.memoryResetSetting)
+                    LearningTypeSettingView()
+                    MemoryResetSettingItemView()
                 }
                 Section(header: Text("このアプリについて")) {
                     NavigationLink("お問い合わせ", destination: ContactView())

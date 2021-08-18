@@ -8,28 +8,25 @@
 
 import SwiftUI
 
-struct LearningTypeSettingItemView: View {
-    typealias ItemViewModel = SettingItemViewModel<LearningType>
-    typealias ItemModel = SettingItem<LearningType>
-
-    init(_ viewModel: ItemViewModel) {
-        self.item = viewModel.item
-        self.viewModel = viewModel
+struct LearningTypeSettingView: View {
+    @State private var selection: LearningType
+    init() {
+        self._selection = .init(initialValue: LearningTypeSetting.value)
     }
-    private let item: ItemModel
-    @ObservedObject private var viewModel: ItemViewModel
-    @State private var selection = 0    // 選択値と連携するプロパティ
 
     var body: some View {
         HStack {
-            Text(self.item.identifier.title)
+            Text(LearningTypeSetting.title)
             Spacer()
-            Picker(selection: $viewModel.value, label: Text("")) {
+            Picker(selection: $selection, label: Text("")) {
                 ForEach(0 ..< LearningType.allCases.count) { i in
                     Text(LearningType.allCases[i].string).tag(LearningType.allCases[i])
                 }
             }
             .frame(maxWidth: .infinity)
+            .onChange(of: selection) { value in
+                LearningTypeSetting.value = value
+            }
         }
     }
 }

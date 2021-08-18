@@ -32,6 +32,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     @Binding private var isResultViewExpanded: Bool
     @Environment(\.themeEnvironment) private var theme
+    @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
     init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>) {
         self.model = model
@@ -71,7 +72,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                 variableStates.action.registerAction(.toggleTabBar)
                             } label: {
                                 ZStack {
-                                    if SettingData.shared.bool(for: .displayTabBarButton){
+                                    if displayTabBarButton {
                                         Circle()
                                             .strokeAndFill(fillContent: tabBarButtonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
                                             .frame(width: Design.shared.resultViewHeight()*0.8, height: Design.shared.resultViewHeight()*0.8)

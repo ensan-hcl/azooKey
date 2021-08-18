@@ -21,6 +21,8 @@ private final class LearningMemoryElement {
 }
 
 struct LearningMemorys {
+    @KeyboardSetting(.learningType) private var learningType
+
     private static let memoryCount = 100
     private static let memoryFileName = "learningMemory"
     private var values: [LearningMemoryElement]
@@ -88,7 +90,7 @@ struct LearningMemorys {
     }
 
     mutating func update(_ data: [DicdataElement], lastData: DicdataElement?) {
-        if !SettingData.shared.learningType.needUpdateMemory {
+        if !learningType.needUpdateMemory {
             return
         }
 
@@ -161,7 +163,7 @@ struct LearningMemorys {
     }
 
     func save(force: Bool = false) {
-        if !force && !SettingData.shared.learningType.needUpdateMemory {
+        if !force && !learningType.needUpdateMemory {
             return
         }
         let string: String = self.values.map {
@@ -179,15 +181,15 @@ struct LearningMemorys {
     }
 
     init() {
-        if SettingData.checkResetSetting() {
+        if MemoryResetCondition.shouldReset() {
             // リセットする。
             self.values = []
             self.index2order = []
             self.core2Index = [:]
             self.save(force: true)
         }
-
-        if !SettingData.shared.learningType.needUsingMemory {
+        @KeyboardSetting(.learningType) var learningType
+        if !learningType.needUsingMemory {
             self.values = []
             self.index2order = []
             self.core2Index = [:]

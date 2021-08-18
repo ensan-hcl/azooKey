@@ -20,11 +20,11 @@ final class Store {
     }
 
     func settingCheck() {
-        SettingData.shared.reload()
-        if SettingData.checkResetSetting() {
+        if MemoryResetCondition.shouldReset() {
             self.action.sendToDicdataStore(.resetMemory)
         }
-        self.action.sendToDicdataStore(.notifyLearningType(SettingData.shared.learningType))
+        @KeyboardSetting(.learningType) var learningType
+        self.action.sendToDicdataStore(.notifyLearningType(learningType))
     }
 
     /// Call this method after initialize
@@ -400,7 +400,7 @@ final class KeyboardActionDepartment: ActionDepartment {
     }
 
     private func hideLearningMemory() {
-        SettingData.shared.writeLearningTypeSetting(to: .nothing)
+        LearningTypeSetting.value = .nothing
         self.sendToDicdataStore(.notifyLearningType(.nothing))
     }
 

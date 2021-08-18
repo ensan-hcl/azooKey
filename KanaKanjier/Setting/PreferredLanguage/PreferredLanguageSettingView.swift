@@ -28,26 +28,24 @@ private struct OptionalTranslator: Intertranslator {
 }
 
 struct PreferredLanguageSettingView: View {
-    typealias ItemViewModel = SettingItemViewModel<PreferredLanguage>
-    private typealias ItemModel = SettingItem<PreferredLanguage>
-
-    init(_ viewModel: ItemViewModel) {
-        self.item = viewModel.item
-        self.viewModel = viewModel
+    @State private var selection: PreferredLanguage
+    init() {
+        self._selection = .init(initialValue: PreferredLanguageSetting.value)
     }
 
-    private let item: ItemModel
-    @ObservedObject private var viewModel: ItemViewModel
-
     var body: some View {
-        Picker("第1言語", selection: $viewModel.value.first) {
-            Text("日本語").tag(KeyboardLanguage.ja_JP)
-            Text("英語").tag(KeyboardLanguage.en_US)
-        }
-        Picker("第2言語", selection: $viewModel.value.second.converted(OptionalTranslator.self)) {
-            Text("日本語").tag(KeyboardLanguage.ja_JP)
-            Text("英語").tag(KeyboardLanguage.en_US)
-            Text("指定しない").tag(KeyboardLanguage.none)
+        Group {
+            Picker("第1言語", selection: $selection.first) {
+                Text("日本語").tag(KeyboardLanguage.ja_JP)
+                Text("英語").tag(KeyboardLanguage.en_US)
+            }
+            Picker("第2言語", selection: $selection.second.converted(OptionalTranslator.self)) {
+                Text("日本語").tag(KeyboardLanguage.ja_JP)
+                Text("英語").tag(KeyboardLanguage.en_US)
+                Text("指定しない").tag(KeyboardLanguage.none)
+            }
+        }.onChange(of: selection) { value in
+            PreferredLanguageSetting.value = value
         }
     }
 }

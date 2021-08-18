@@ -19,7 +19,7 @@ struct CustomKeysSettingView: View {
         ImageSlideshowView(pictures: ["qwertyCustomKeySetting0", "qwertyCustomKeySetting1", "qwertyCustomKeySetting2"])
             .listRowSeparator(.hidden, edges: .bottom)
         Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
-        NavigationLink("設定する", destination: QwertyCustomKeysItemView(Store.shared.numberTabCustomKeysSettingNew))
+        NavigationLink("設定する", destination: QwertyCustomKeysSettingView(.numberTabCustomKeys))
             .foregroundColor(.accentColor)
             .listRowSeparator(.visible, edges: .all)
     }

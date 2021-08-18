@@ -11,9 +11,10 @@ import SwiftUI
 
 // M：基本は変わらない
 struct FlickDataProvider {
+    @KeyboardSetting(.preferredLanguage) private static var preferredLanguage
     static func TabKeys() -> [FlickKeyModelProtocol] {
         let first: FlickKeyModelProtocol = {
-            switch SettingData.shared.preferredLanguageSetting.first {
+            switch preferredLanguage.first {
             case .el_GR: return FlickChangeKeyboardModel.shared
             case .en_US: return FlickTabKeyModel.abcTabKeyModel
             case .ja_JP: return FlickTabKeyModel.hiraTabKeyModel
@@ -22,7 +23,7 @@ struct FlickDataProvider {
         }()
 
         let second: FlickKeyModelProtocol? = {
-            guard let second = SettingData.shared.preferredLanguageSetting.second else {
+            guard let second = preferredLanguage.second else {
                 return nil
             }
             switch second {

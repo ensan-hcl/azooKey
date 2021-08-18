@@ -25,23 +25,6 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
             return false
         }
     }
-
-}
-
-enum MessageLeftButtonStyle {
-    /// 「詳細」と表示し、押した場合リンクにする
-    case details(url: String)
-
-    /// 「後で」と表示し、押した場合メッセージのステータスを完了に変更する
-    case later
-}
-
-enum MessageRightButtonStyle {
-    /// 指定した単語を表示し、押した場合収容アプリを開く
-    case openContainer(text: String)
-
-    /// 「了解」と表示し、押した場合メッセージのステータスを完了に変更する
-    case OK
 }
 
 struct MessageData: Identifiable {
@@ -65,10 +48,25 @@ struct MessageData: Identifiable {
 
     /// 収容アプリがDoneにすべき条件
     let containerAppShouldMakeItDone: () -> Bool
+
+    enum MessageLeftButtonStyle {
+        /// 「詳細」と表示し、押した場合リンクにする
+        case details(url: String)
+
+        /// 「後で」と表示し、押した場合メッセージのステータスを完了に変更する
+        case later
+    }
+
+    enum MessageRightButtonStyle {
+        /// 指定した単語を表示し、押した場合収容アプリを開く
+        case openContainer(text: String)
+
+        /// 「了解」と表示し、押した場合メッセージのステータスを完了に変更する
+        case OK
+    }
 }
 
 struct MessageManager {
-    static let userDefaults = UserDefaults.init(suiteName: SharedStore.appGroupKey)!
     func getMessagesContainerAppShouldMakeWhichDone() -> [MessageData] {
         necessaryMessages.filter {$0.containerAppShouldMakeItDone()}
     }
@@ -118,10 +116,10 @@ struct MessageManager {
         self.needShow = necessaryMessages.reduce(into: [:]) {dict, value in
             if value.id.needUsingContainerApp {
                 // 収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
-                dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != Self.doneFlag
+                dict[value.id] = value.precondition() && SharedStore.userDefaults.string(forKey: value.id.key) != Self.doneFlag
             } else {
                 // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
-                dict[value.id] = value.precondition() && Self.userDefaults.string(forKey: value.id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: value.id.key) != Self.doneFlag
+                dict[value.id] = value.precondition() && SharedStore.userDefaults.string(forKey: value.id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: value.id.key) != Self.doneFlag
             }
         }
     }
@@ -134,10 +132,10 @@ struct MessageManager {
         self.needShow[id] = false
         if id.needUsingContainerApp {
             // 収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
-            Self.userDefaults.setValue(Self.doneFlag, forKey: id.key)
+            SharedStore.userDefaults.setValue(Self.doneFlag, forKey: id.key)
         } else {
             // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
-            Self.userDefaults.setValue(Self.doneFlag, forKey: id.key)
+            SharedStore.userDefaults.setValue(Self.doneFlag, forKey: id.key)
             UserDefaults.standard.setValue(Self.doneFlag, forKey: id.key)
         }
     }
