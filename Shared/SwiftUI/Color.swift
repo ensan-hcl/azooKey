@@ -17,4 +17,5 @@ extension Color {
     static let systemGray6 = Color(.systemGray6)
     static let secondarySystemBackground = Color(.secondarySystemBackground)
     static let background = Color(.systemBackground)
+    static let label = Color(.label)
 }

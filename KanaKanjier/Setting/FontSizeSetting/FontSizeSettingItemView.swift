@@ -28,28 +28,33 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
 
     var body: some View {
         HStack {
-            VStack {
+            Text(SettingKey.title)
+            Button {
+                isOn = true
+            } label: {
                 HStack {
-                    Text(SettingKey.title)
-                    Button {
-                        isOn = true
-                    }label: {
-                        Image(systemName: "info.circle")
-                    }
-                }
-                let size = value.saveValue == -1 ? 18 : value.saveValue
-                switch self.target {
-                case .key:
-                    KeyView(fontSize: size)
-
-                case .result:
-                    Text("サンプル")
-                        .font(.system(size: size))
-                        .underline()
-                        .padding()
+                    Image(systemName: "info.circle")
                 }
             }
             Spacer()
+            let size = value.saveValue == -1 ? 18 : value.saveValue
+            switch self.target {
+            case .key:
+                KeyView(fontSize: size)
+
+            case .result:
+                Text("サンプル")
+                    .font(.system(size: size))
+                    .underline()
+                    .padding()
+            }
+        }
+        .alert(isPresented: $isOn) {
+            Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK")) {
+                isOn = false
+            })
+        }
+        .listRowSeparator(.hidden)
             Picker(selection: $value, label: Text("")) {
                 ForEach(self.availableValues) {data in
                     Text(data.display).tag(data)
@@ -57,17 +62,10 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
             }
             .labelsHidden()
             .pickerStyle(.wheel)
-            .frame(width: 100, height: 70)
+            .frame(height: 70)
             .clipped()
             .onChange(of: value) { value in
                 SettingKey.value = value.saveValue
-            }
-
-        }.frame(maxWidth: .infinity)
-            .alert(isPresented: $isOn) {
-                Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK"), action: {
-                    isOn = false
-                }))
             }
     }
 }
