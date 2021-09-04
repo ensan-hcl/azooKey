@@ -65,7 +65,7 @@ struct MoveCursorBar: View {
     var body: some View {
         Group {
             RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: 200)
-                .frame(height: Design.shared.resultViewHeight())
+                .frame(height: Design.resultViewHeight())
                 .cornerRadius(20)
                 .gesture(gesture)
                 .overlay(HStack {
@@ -87,6 +87,6 @@ struct MoveCursorBar: View {
                     })
                     Spacer()
                 }.foregroundColor(symbolsColor))
-        }.frame(height: Design.shared.resultViewHeight())
+        }.frame(height: Design.resultViewHeight())
     }
 }

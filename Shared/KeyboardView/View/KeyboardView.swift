@@ -52,7 +52,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: SemiStaticStates.shared.screenWidth, height: Design.shared.keyboardScreenHeight)
+                                .frame(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight)
                                 .clipped()
                         }
                     }
@@ -87,7 +87,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 }
             }
         }
-        .frame(height: Design.shared.keyboardScreenHeight)
+        .frame(height: Design.keyboardScreenHeight)
     }
 
     func keyboardView(tab: Tab.ExistentialTab) -> some View {

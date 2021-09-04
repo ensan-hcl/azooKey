@@ -91,7 +91,7 @@ struct EditingScrollCustardView: CancelableEditor {
                 }
                 BottomSheetView(
                     isOpen: $showPreview,
-                    maxHeight: Design.shared.keyboardScreenHeight + 40,
+                    maxHeight: Design.keyboardScreenHeight + 40,
                     minHeight: 0
                 ) {
                     ZStack(alignment: .top) {

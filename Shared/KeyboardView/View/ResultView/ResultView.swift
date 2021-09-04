@@ -42,7 +42,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 
     private var buttonHeight: CGFloat {
-        Design.shared.resultViewHeight()*0.6
+        Design.resultViewHeight()*0.6
     }
 
     private var tabBarButtonBackgroundColor: Color {
@@ -75,8 +75,8 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                     if displayTabBarButton {
                                         Circle()
                                             .strokeAndFill(fillContent: tabBarButtonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
-                                            .frame(width: Design.shared.resultViewHeight()*0.8, height: Design.shared.resultViewHeight()*0.8)
-                                        AzooKeyIcon(fontSize: Design.shared.resultViewHeight()*0.7, color: .color(tabBarButtonLabelColor))
+                                            .frame(width: Design.resultViewHeight()*0.8, height: Design.resultViewHeight()*0.8)
+                                        AzooKeyIcon(fontSize: Design.resultViewHeight()*0.7, color: .color(tabBarButtonLabelColor))
                                     } else {
                                         EmptyView()
                                     }
@@ -131,7 +131,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                         }
                     }
                 }
-                .frame(height: Design.shared.resultViewHeight())
+                .frame(height: Design.resultViewHeight())
             }
         }
     }

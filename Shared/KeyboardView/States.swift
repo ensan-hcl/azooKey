@@ -105,7 +105,7 @@ final class SemiStaticStates {
             VariableStates.shared.setOrientation(size.width<size.height ? .vertical : .horizontal)
         }
         let width = size.width
-        let height = Design.shared.keyboardHeight(screenWidth: width)
+        let height = Design.keyboardHeight(screenWidth: width)
         self.screenWidth = width
         self.screenHeight = height
         debug("SemiStaticStates setScreenSize", width, height)

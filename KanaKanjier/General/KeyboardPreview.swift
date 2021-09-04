@@ -37,6 +37,6 @@ struct KeyboardPreview: View {
         KeyboardView<CandidateMock>(resultModel: resultModel, defaultTab: defaultTab)
             .environment(\.themeEnvironment, theme)
             .scaleEffect(scale)
-            .frame(width: SemiStaticStates.shared.screenWidth * scale, height: Design.shared.keyboardScreenHeight * scale)
+            .frame(width: SemiStaticStates.shared.screenWidth * scale, height: Design.keyboardScreenHeight * scale)
     }
 }
