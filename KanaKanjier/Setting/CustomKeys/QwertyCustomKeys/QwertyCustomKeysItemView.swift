@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-// FIXME: (Xcode13 beta3) 削除ボタンを用いると落ちるが、こちら側の不手際かiOSのバグか不明
-
 private final class EditState: ObservableObject {
     enum State {
         case none, drag
@@ -170,7 +168,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         .overlay(Text(item.name))
                 }
 
-                if selection.selectIndex != -1 {
+                if value.keys.indices ~= selection.selectIndex {
                     Spacer(minLength: 50)
                         .fixedSize()
                     Text("長押しした時の候補")
@@ -185,19 +183,21 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                 }
                 Spacer()
             }
-            .onChange(of: selection) { newValue in
-                bottomSheetShown = newValue.selectIndex != -1
-                editState.state = .none
-            }
             .navigationBarTitle("カスタムキーの設定", displayMode: .inline)
             .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
 
             BottomSheetView(
-                isOpen: self.$bottomSheetShown,
+                isOpen: $bottomSheetShown,
                 maxHeight: geometry.size.height * 0.7
             ) {
                 Form {
-                    if selection.selectIndex != -1 {
+                    if value.keys.indices ~= selection.selectIndex {
+                        let binded = {
+                            Binding.init(
+                                get: { value },
+                                set: { value = $0 }
+                            )
+                        }()
                         Section(header: Text("移動・追加")) {
                             Button("このキーを並び替える") {
                                 bottomSheetShown = false
@@ -211,7 +211,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         Section(header: Text("入力")) {
                             if self.isInputTextEditable {
                                 Text("キーを押して入力される文字を設定します。")
-                                TextField(localized: "入力", text: $value[.input, selection])
+                                TextField(localized: "入力", text: binded[.input, selection])
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
                             } else {
@@ -224,13 +224,13 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         }
                         Section(header: Text("ラベル")) {
                             Text("キーに表示される文字を設定します。")
-                            TextField(localized: "ラベル", text: $value[selection].name)
+                            TextField(localized: "ラベル", text: binded[selection].name)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
                         }
                         Section(header: Text("アクション")) {
                             Text("キーを押したときの動作をより詳しく設定します。")
-                            NavigationLink("アクションを編集する", destination: CodableActionDataEditor($value[selection].actions, availableCustards: CustardManager.load().availableCustards))
+                            NavigationLink("アクションを編集する", destination: CodableActionDataEditor(binded[selection].actions, availableCustards: CustardManager.load().availableCustards))
                                 .foregroundColor(.accentColor)
                         }
                         Button("削除") {
@@ -239,8 +239,10 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                 let sIndex = selection.selectIndex
                                 let lpsIndex = selection.longpressSelectIndex
                                 if lpsIndex == -1 && sIndex != -1 {
+                                    DispatchQueue.main.async {
+                                        value.keys.remove(at: sIndex)
+                                    }
                                     selection.selectIndex = -1
-                                    value.keys.remove(at: sIndex)
                                 } else {
                                     selection.longpressSelectIndex = -1
                                     value.keys[sIndex].longpresses.remove(at: lpsIndex)
@@ -255,8 +257,15 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
             }
         }
         .background(Color.secondarySystemBackground)
+        .onAppear {
+            self.value = SettingKey.value   // Stateの状態が元に戻ってしまう問題への応急処置
+        }
         .onChange(of: value) { newValue in
             SettingKey.value = newValue
+        }
+        .onChange(of: selection) { newValue in
+            bottomSheetShown = value.keys.indices ~= newValue.selectIndex
+            editState.state = .none
         }
     }
 

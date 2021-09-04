@@ -9,18 +9,18 @@
 import Foundation
 import SwiftUI
 
-struct DraggableView<Content: View, T>: View {
-    private let contentConverter: (T, Bool) -> Content
+struct DraggableView<Content: View, Collection: BidirectionalCollection & RandomAccessCollection & RangeReplaceableCollection>: View where Collection.Index == Int {
+    private let contentConverter: (Collection.Element, Bool) -> Content
     private var width: CGFloat
     private var height: CGFloat
     private let padding: CGFloat
 
-    @Binding private var items: [T]
+    @Binding private var items: Collection
     @Binding private var selectedIndex: Int
     @State private var targetIndex: Int = -1
     private let enabled: Bool
 
-    init(items: Binding<[T]>, selection: Binding<Int>, enabled: Bool = true, width: CGFloat, height: CGFloat, padding: CGFloat = 5, @ViewBuilder content: @escaping (T, Bool) -> Content) {
+    init(items: Binding<Collection>, selection: Binding<Int>, enabled: Bool = true, width: CGFloat, height: CGFloat, padding: CGFloat = 5, @ViewBuilder content: @escaping (Collection.Element, Bool) -> Content) {
         self._items = items
         self._selectedIndex = selection
         self.width = width
