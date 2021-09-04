@@ -13,21 +13,22 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
     @State private var isOn = false
 
     var body: some View {
-        HStack {
-            Toggle(isOn: .init(get: {SettingKey.value}, set: {SettingKey.value = $0})) {
-                Text(SettingKey.title)
-                Button {
-                    isOn = true
-                }label: {
-                    Image(systemName: "info.circle")
-                }
+        Toggle(isOn: .init(get: {SettingKey.value}, set: {SettingKey.value = $0})) {
+            Text(SettingKey.title)
+            Button {
+                isOn = true
+            }label: {
+                Image(systemName: "info.circle")
             }
-            .toggleStyle(.switch)
-            .alert(isPresented: $isOn) {
-                Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK"), action: {
+        }
+        .toggleStyle(.switch)
+        .alert(isPresented: $isOn) {
+            Alert(
+                title: Text(SettingKey.explanation),
+                dismissButton: .default(Text("OK")) {
                     isOn = false
-                }))
-            }
+                }
+            )
         }
     }
 }
