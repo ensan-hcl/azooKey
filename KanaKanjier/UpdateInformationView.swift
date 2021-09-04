@@ -11,6 +11,14 @@ struct UpdateInfomationView: View {
     var body: some View {
         Form {
             Group {
+                VersionView("1.6.2", releaseDate: "2021年09月07日") {
+                    ParagraphView("カスタムタブ機能を改善しました。") {
+                        "タブバー表示ボタンを追加"
+                    }
+                    ParagraphView("iOS15に対応しました") {
+                        "挙動の変更によって動かなくなった機能を修正"
+                    }
+                }
                 VersionView("1.6.1", releaseDate: "2021年04月27日") {
                     ParagraphView("カスタムタブ機能を改善しました。") {
                         "フリック入力できるカスタムタブを作成する機能を追加"
