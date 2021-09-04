@@ -10,10 +10,8 @@ import Foundation
 import AudioToolbox
 
 /// 音を鳴らすためのツールセット
-///  - important: staticでない関数を追加する際は一考せよ。
-struct Sound {
+enum Sound {
     @KeyboardSetting(.enableKeySound) private static var enableSound
-    private init() {}
     // 使えそうな音
     /* i
      1103: 高いクリック音
@@ -66,5 +64,4 @@ struct Sound {
             AudioServicesPlaySystemSound(1533)
         }
     }
-
 }
