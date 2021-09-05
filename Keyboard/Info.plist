@@ -4,10 +4,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>AzooKeyIcon-Regular.otf</string>
-	</array>
 	<key>CFBundleDisplayName</key>
 	<string>azooKey</string>
 	<key>CFBundleExecutable</key>
@@ -42,5 +38,9 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).KeyboardViewController</string>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>AzooKeyIcon-Regular.otf</string>
+	</array>
 </dict>
 </plist>

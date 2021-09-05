@@ -10811,7 +10811,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6.1;
+				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				SWIFT_VERSION = 5.0;
@@ -10837,7 +10837,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6.1;
+				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				SWIFT_VERSION = 5.0;
@@ -10951,7 +10951,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6.1;
+				MARKETING_VERSION = 1.6.2;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=300";
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
@@ -10982,7 +10982,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.6.1;
+				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
 				SKIP_INSTALL = YES;
