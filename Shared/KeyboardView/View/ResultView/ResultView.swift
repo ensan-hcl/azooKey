@@ -76,7 +76,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                         Circle()
                                             .strokeAndFill(fillContent: tabBarButtonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
                                             .frame(width: Design.resultViewHeight()*0.8, height: Design.resultViewHeight()*0.8)
-                                        AzooKeyIcon(fontSize: Design.resultViewHeight()*0.7, color: .color(tabBarButtonLabelColor))
+                                        AzooKeyIcon(fixedSize: Design.resultViewHeight()*0.6, color: .color(tabBarButtonLabelColor))
                                     } else {
                                         EmptyView()
                                     }

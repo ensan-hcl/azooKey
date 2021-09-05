@@ -199,7 +199,11 @@ enum Design {
             VariableStates.shared.keyboardLayout
         }
 
-        func azooKeyIconFont(_ size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font? {
+        func azooKeyIconFont(fixedSize: CGFloat) -> Font {
+            return Font.custom("AzooKeyIcon-Regular", fixedSize: fixedSize)
+        }
+
+        func azooKeyIconFont(_ size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font {
             return Font.custom("AzooKeyIcon-Regular", size: size, relativeTo: style)
         }
 

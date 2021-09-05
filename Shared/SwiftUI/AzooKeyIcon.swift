@@ -10,18 +10,26 @@ import SwiftUI
 
 struct AzooKeyIcon: View {
     @Environment(\.colorScheme) private var colorScheme
-    private let fontSize: CGFloat
     private let color: Color
-    private let textStyle: Font.TextStyle
+    private let arguments: Arguments
     enum Color {
         case auto
         case color(SwiftUI.Color)
     }
-    init(fontSize: CGFloat, relativeTo textStyle: Font.TextStyle = .body, color: Color = .auto) {
-        self.fontSize = fontSize
-        self.textStyle = textStyle
-        self.color = color
+    private enum Arguments {
+        case relative(size: CGFloat, textStyle: Font.TextStyle)
+        case fixed(size: CGFloat)
     }
+    init(fontSize: CGFloat, relativeTo textStyle: Font.TextStyle = .body, color: Color = .auto) {
+        self.color = color
+        self.arguments = .relative(size: fontSize, textStyle: textStyle)
+    }
+
+    init(fixedSize: CGFloat, color: Color = .auto) {
+        self.color = color
+        self.arguments = .fixed(size: fixedSize)
+    }
+
     private var foregroundColor: SwiftUI.Color {
         switch self.color {
         case .auto:
@@ -39,9 +47,14 @@ struct AzooKeyIcon: View {
     }
 
     var body: some View {
-        if let font = Design.fonts.azooKeyIconFont(fontSize, relativeTo: textStyle) {
+        switch self.arguments {
+        case let .relative(size: size, textStyle: textStyle):
             Text("1")
-                .font(font)
+                .font(Design.fonts.azooKeyIconFont(size, relativeTo: textStyle))
+                .foregroundColor(foregroundColor)
+        case let .fixed(size: size):
+            Text("1")
+                .font(Design.fonts.azooKeyIconFont(fixedSize: size))
                 .foregroundColor(foregroundColor)
         }
     }
