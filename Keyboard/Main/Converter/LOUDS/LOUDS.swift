@@ -20,21 +20,41 @@ struct LOUDS {
 
     private let bits: [Unit]
     private let indices: Range<Int>
-    private let nodeIndex2ID: [UInt8]
+    private let char2nodeIndices: [[Int]]
+    /// 0の数（1の数ではない）
     private let rankLarge: [Int]
 
     init(bytes: [UInt64], nodeIndex2ID: [UInt8]) {
         self.bits = bytes
-        self.nodeIndex2ID = nodeIndex2ID
+        self.char2nodeIndices = nodeIndex2ID.enumerated().reduce(into: .init(repeating: [], count: 1 << 8)) { list, data in
+            list[Int(data.element)].append(data.offset)
+        }
         self.indices = self.bits.indices
         self.rankLarge = bytes.reduce(into: [0]) {
             $0.append(($0.last ?? 0) &+ (Self.unit &- $1.nonzeroBitCount))
         }
     }
 
-    //parentNodeIndex個の0を探索し、その次から1個増えるまでのIndexを返す。
+    /// parentNodeIndex個の0を探索し、その次から1個増えるまでのIndexを返す。
+    /// ⏱0.087694 : LOUDS_検索_childNodeIndices
     private func childNodeIndices(from parentNodeIndex: Int) -> Range<Int> {
-        var left = -1
+        /*
+        conversionBenchmark.start(process: .LOUDS_検索_childNodeIndices)
+        defer {
+            conversionBenchmark.end(process: .LOUDS_検索_childNodeIndices)
+        }
+         */
+        // 求めるのは、
+        // startIndex == 自身の左側にparentNodeIndex個の0があるような最小のindex
+        // endIndex == 自身の左側にparentNodeIndex+1個の0があるような最小のindex
+        // すなわち、childNodeIndicesである。
+        // まずstartIndexを発見し、そこから0が現れる点を探すことでendIndexを見つける方針で実装している。
+
+        // 探索パート①
+        // rankLargeは左側の0の数を示すので、difを取っている
+        // まず最低限の絞り込みを行う。leftを探索する。
+        // 探しているのは、startIndexが含まれるbitsのindex `i`
+        var left = (parentNodeIndex >> Self.uExp) &- 1
         while true {
             let dif = parentNodeIndex &- self.rankLarge[left &+ 1]
             if dif >= Self.unit {
@@ -48,6 +68,9 @@ struct LOUDS {
         }
 
         return self.bits.withUnsafeBufferPointer {(buffer: UnsafeBufferPointer<Unit>) -> Range<Int> in
+            // 探索パート②
+            // 目標は`k`の発見
+            // 今のbyteの中を探索し、超過分(dif)の0を手に入れたところでkが確定する。
             let byte = buffer[i]
             let dif = self.rankLarge[i &+ 1] &- parentNodeIndex   // 0の数の超過分
             var count = Unit(Self.unit &- byte.nonzeroBitCount) // 0の数
@@ -80,20 +103,40 @@ struct LOUDS {
         }
     }
 
-    internal func searchNodeIndex(chars: [UInt8]) -> Int? {
-        var findFlag = true
-        let index = chars.reduce(1) {prev, char in
-            if findFlag {
-                // ここはfirstで書かない方が速度が上がった
-                let childrenNodeIndices = self.childNodeIndices(from: prev)
-                for nodeIndex in childrenNodeIndices where self.nodeIndex2ID[nodeIndex] == char {
-                    return nodeIndex
-                }
-                findFlag = false
+    /// charIndexを取得する
+    /// `childNodeIndices`と差し引きして、二分探索部分の速度への影響は高々0.02秒ほど
+    /// ⏱0.105213 : LOUDS_検索_searchCharNodeIndex
+    private func searchCharNodeIndex(from parentNodeIndex: Int, char: UInt8) -> Int? {
+        // char2nodeIndicesには単調増加性があるので二分探索が成立する
+        let childNodeIndices = self.childNodeIndices(from: parentNodeIndex)
+        let nodeIndices = self.char2nodeIndices[Int(char)]
+        var left = nodeIndices.startIndex
+        var right = nodeIndices.endIndex
+        while left < right {
+            let mid = (left + right) >> 1
+            if childNodeIndices.startIndex <= nodeIndices[mid] {
+                right = mid
+            } else {
+                left = mid + 1
             }
-            return prev
         }
-        return findFlag ? index : nil
+        if left < nodeIndices.endIndex && childNodeIndices.contains(nodeIndices[left]) {
+            return nodeIndices[left]
+        } else {
+            return nil
+        }
+    }
+
+    internal func searchNodeIndex(chars: [UInt8]) -> Int? {
+        var index = 1
+        for char in chars {
+            if let nodeIndex = self.searchCharNodeIndex(from: index, char: char){
+                index = nodeIndex
+            } else {
+                return nil
+            }
+        }
+        return index
     }
 
     private func prefixNodeIndices(nodeIndex: Int, depth: Int = 0, maxDepth: Int) -> [Int] {
@@ -105,23 +148,31 @@ struct LOUDS {
     }
 
     internal func prefixNodeIndices(chars: [UInt8], maxDepth: Int) -> [Int] {
+        conversionBenchmark.start(process: .LOUDS_前方一致検索)
+        defer {
+            conversionBenchmark.end(process: .LOUDS_前方一致検索)
+        }
         guard let nodeIndex = self.searchNodeIndex(chars: chars) else {
             return []
         }
         return self.prefixNodeIndices(nodeIndex: nodeIndex, maxDepth: maxDepth)
     }
 
+    /// charsの前方に一致するエントリのindexを全て集める
+    /// 例えばcharsが「しんせいしゃ」だったら「し」や「しん」や「しんせ」に対応するエントリのindexも含む
+    /// 以前はreduceで実装していたが、速度的に変わらないので読みやすさのためにforとfirstで書き換えた
+    /// ⏱0.043821 : `LOUDS_byfix検索`
     internal func byfixNodeIndices(chars: [UInt8]) -> [Int] {
-        var findFlag = true
-        return chars.reduce(into: [1]) {prev, char in
-            if findFlag {
-                // ここはfirstで書かない方が速度が上がった
-                let childrenNodeIndices = self.childNodeIndices(from: prev.last!)
-                for nodeIndex in childrenNodeIndices where self.nodeIndex2ID[nodeIndex] == char {
-                    return prev.append(nodeIndex)
-                }
-                findFlag = false
+        conversionBenchmark.start(process: .LOUDS_byfix検索)
+        var indices = [1]
+        for char in chars {
+            if let nodeIndex = self.searchCharNodeIndex(from: indices.last!, char: char) {
+                indices.append(nodeIndex)
+            } else {
+                break
             }
         }
+        conversionBenchmark.end(process: .LOUDS_byfix検索)
+        return indices
     }
 }

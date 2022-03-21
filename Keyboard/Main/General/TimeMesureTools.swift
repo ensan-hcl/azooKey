@@ -14,6 +14,13 @@ protocol BenchmarkTarget {
 
 struct Kana2KanjiTarget: BenchmarkTarget {
     enum ProcessType: String, CustomDebugStringConvertible {
+        case LOUDSTXT2読み込み_全体
+        case LOUDS_前方一致検索
+        case LOUDS_byfix検索
+        case LOUDS_検索_childNodeIndices
+        case LOUDS_検索_searchCharNodeIndex
+        case LOUDS_ビルド
+        case LOUDS_ビルド_バイナリ読み込み
         case 辞書読み込み_全体
         case 辞書読み込み_軽量データ読み込み
         case 辞書読み込み_誤り訂正候補列挙
@@ -49,8 +56,15 @@ struct Kana2KanjiTarget: BenchmarkTarget {
 }
 
 final class BenchmarkTool<Target: BenchmarkTarget> {
-    var benchmarks: [Target.ProcessType: Double] = [:]
+    var benchmarks: [Target.ProcessType: (Int, Double)] = [:]
     private var timers: [Target.ProcessType: Date] = [:]
+    private var timeFormatter = NumberFormatter()
+
+    init() {
+        self.timeFormatter.maximumIntegerDigits = 2
+        self.timeFormatter.maximumFractionDigits = 6
+        self.timeFormatter.minimumFractionDigits = 6
+    }
 
     func start(process: Target.ProcessType) {
         #if DEBUG
@@ -64,7 +78,8 @@ final class BenchmarkTool<Target: BenchmarkTarget> {
             return
         }
         let benchmark = -time.timeIntervalSinceNow
-        benchmarks[process, default: .zero] += benchmark
+        let (count, timeSum) = benchmarks[process, default: (.zero, .zero)]
+        benchmarks[process, default: (.zero, .zero)] = (count+1, timeSum + benchmark)
         #endif
     }
 
@@ -77,10 +92,16 @@ final class BenchmarkTool<Target: BenchmarkTarget> {
         #if DEBUG
         let pairs = self.benchmarks.map {(key: $0.key, value: $0.value)}
         debug("=== Benchmark Result ===")
-        debug(pairs.sorted {$0.value > $1.value}.map {"⏱\($0.key.debugDescription): \($0.value)"}.joined(separator: "\n"))
+        debug(pairs.sorted {$0.value > $1.value}.map {"⏱\(self.timeFormatter.string(from: NSNumber(value: $0.value.1)) ?? "") - \($0.value.0): \($0.key.debugDescription)"}.joined(separator: "\n"))
         debug("=== === ===  === === ===")
         #endif
     }
 }
+
+
+// MARK: 速度測定用のベンチマークツール
+// ターゲットとして次の文章を用いる。
+// ベンチマークツールそのものの速度への影響があるので注意が必要
+//  ようしょうきからてにすすいえいやきゅうしょうりんじけんぽうなどさまざまなすぽーつをけいけんしながらそだちしょうがっこうじだいはろさんせるすきんこうにたいざいしておりごるふやてにすをならっていた
 
 var conversionBenchmark = BenchmarkTool<Kana2KanjiTarget>()

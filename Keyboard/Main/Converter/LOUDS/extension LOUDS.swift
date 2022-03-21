@@ -13,6 +13,10 @@ extension LOUDS {
     private static let bundleURL = Bundle.main.bundleURL
 
     private static func loadLOUDSBinary(from url: URL) -> [UInt64]? {
+        conversionBenchmark.start(process: .LOUDS_ビルド_バイナリ読み込み)
+        defer {
+            conversionBenchmark.end(process: .LOUDS_ビルド_バイナリ読み込み)
+        }
         do {
             let binaryData = try Data(contentsOf: url, options: [.uncached]) // 2度読み込むことはないのでキャッシュ不要
             let ui64array = binaryData.withUnsafeBytes {pointer -> [UInt64] in
@@ -52,6 +56,10 @@ extension LOUDS {
     }
 
     internal static func build(_ identifier: String) -> LOUDS? {
+        conversionBenchmark.start(process: .LOUDS_ビルド)
+        defer {
+            conversionBenchmark.end(process: .LOUDS_ビルド)
+        }
         let (charsURL, loudsURL) = getLOUDSURL(identifier)
         let nodeIndex2ID: [UInt8]
         do {
@@ -69,6 +77,9 @@ extension LOUDS {
     }
 
     internal static func getData(_ identifier: String, indices: [Int]) -> [String] {
+        // この処理は大きなボトルネックにはなっていない
+        conversionBenchmark.start(process: .LOUDSTXT2読み込み_全体)
+
         let binary: Data
         do {
             let url = getLoudstxt2URL(identifier)
@@ -88,7 +99,7 @@ extension LOUDS {
         }[0]
 
         let header_endIndex: UInt32 = 2 + UInt32(lc) * UInt32(MemoryLayout<UInt32>.size)
-        let i32array = binary[2..<header_endIndex].withUnsafeBytes {pointer -> [UInt32] in
+        let i32array = binary[2..<header_endIndex].withUnsafeBytes {(pointer: UnsafeRawBufferPointer) -> [UInt32] in
             return Array(
                 UnsafeBufferPointer(
                     start: pointer.baseAddress!.assumingMemoryBound(to: UInt32.self),
@@ -97,11 +108,12 @@ extension LOUDS {
             )
         }
 
-        return indices.compactMap {(index: Int) in
+        let result: [String] = indices.compactMap {(index: Int) -> String? in
             let startIndex = Int(i32array[index])
             let endIndex = index == (lc-1) ? binary.endIndex : Int(i32array[index + 1])
             return String(bytes: binary[startIndex ..< endIndex], encoding: .utf8)
         }
-
+        conversionBenchmark.end(process: .LOUDSTXT2読み込み_全体)
+        return result
     }
 }
