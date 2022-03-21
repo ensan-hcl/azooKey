@@ -160,9 +160,9 @@ struct TabNavigationViewItemLabelEditView: View {
         switch label.wrappedValue {
         case let .text(text):
             self._labelText = State(initialValue: text)
-        case let .image(systemName: image):
+        case .image:
             break
-        case let .imageAndText(value):
+        case .imageAndText:
             break
         }
     }

@@ -96,7 +96,7 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
                     .disabled(true)
             }
             Picker(selection: $selection, label: Text(labelText)) {
-                ForEach(0 ..< types.count) { i in
+                ForEach(0 ..< types.count, id: \.self) { i in
                     Text(types[i].label).tag(types[i])
                 }
             }

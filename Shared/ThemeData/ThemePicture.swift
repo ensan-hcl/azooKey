@@ -19,7 +19,7 @@ enum ThemePicture: Equatable {
         switch self {
         case .none:
             return nil
-        case let .path(path):
+        case .path:
             let data = Data()   // この部分でpathから画像を読み込む
             return UIImage(data: data).flatMap {Image(uiImage: $0)}
         case let .asset(name):

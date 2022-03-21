@@ -20,7 +20,7 @@ extension TemplateData: Identifiable {
 
 // このモデルがNavigation状態を管理し、プレビューが遷移後も更新し続けるのを防ぐ
 private final class NavigationModel: ObservableObject {
-    @Published var linkSelection: Int? = nil {
+    @Published var linkSelection: Int? {
         didSet {
             self.shouldUpdate = linkSelection == nil
         }

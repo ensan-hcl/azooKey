@@ -2260,7 +2260,7 @@
 		1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */; };
 		1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB02250290D800EB1864 /* SuggestModel.swift */; };
 		1A58AB0D25037E9E00EB1864 /* ExpandedResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */; };
-		1A5B1CE026D1E495007D4E1C /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5B1CDF26D1E495007D4E1C /* App.swift */; };
+		1A5B1CE026D1E495007D4E1C /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5B1CDF26D1E495007D4E1C /* MainApp.swift */; };
 		1A5C7EAC25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C7EAB25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift */; };
 		1A5C7EC525F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C7EC425F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift */; };
 		1A5C7ECA25F3792300A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C7EC425F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift */; };
@@ -4799,7 +4799,7 @@
 		1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestView.swift; sourceTree = "<group>"; };
 		1A58AB02250290D800EB1864 /* SuggestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestModel.swift; sourceTree = "<group>"; };
 		1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedResultView.swift; sourceTree = "<group>"; };
-		1A5B1CDF26D1E495007D4E1C /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		1A5B1CDF26D1E495007D4E1C /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		1A5C7EAB25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredLanguageSettingView.swift; sourceTree = "<group>"; };
 		1A5C7EC425F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyLanguageSwitchKeyModel.swift; sourceTree = "<group>"; };
 		1A60058425275CB9008E2B92 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -5127,7 +5127,7 @@
 			children = (
 				1AC0315E25120AA2004CA505 /* azooKey.entitlements */,
 				1AC031602512129A004CA505 /* Store.swift */,
-				1A5B1CDF26D1E495007D4E1C /* App.swift */,
+				1A5B1CDF26D1E495007D4E1C /* MainApp.swift */,
 				1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */,
 				1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */,
 				1A3DC1C92500D44B002CAA93 /* ContentView.swift */,
@@ -10353,7 +10353,7 @@
 				1AB8C3E825E2A1F000D39BC5 /* CodableActionData.swift in Sources */,
 				1AF6799625CEDBB500F3987B /* FlickEnterKeyModel.swift in Sources */,
 				1AF6798725CEDBAE00F3987B /* FlickedKeyModel.swift in Sources */,
-				1A5B1CE026D1E495007D4E1C /* App.swift in Sources */,
+				1A5B1CE026D1E495007D4E1C /* MainApp.swift in Sources */,
 				1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */,
 				1AC8A5AA2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */,
@@ -10727,6 +10727,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -10773,8 +10774,11 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = fast;
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -10784,8 +10788,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_OPTIMIZE_OBJECT_LIFETIME = YES;
 				SWIFT_VERSION = 5.0;
@@ -10800,7 +10805,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_ENTITLEMENTS = KanaKanjier/azooKey.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"KanaKanjier/Preview Content\"";
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
@@ -10814,6 +10820,7 @@
 				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
+				PROVISIONING_PROFILE_SPECIFIER = azooKey_21_09_06;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -10826,11 +10833,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_ENTITLEMENTS = KanaKanjier/azooKey.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"KanaKanjier/Preview Content\"";
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				ENABLE_PREVIEWS = YES;
+				"GCC_OPTIMIZATION_LEVEL[arch=*]" = s;
 				INFOPLIST_FILE = KanaKanjier/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -10840,6 +10849,7 @@
 				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
+				PROVISIONING_PROFILE_SPECIFIER = azooKey_21_09_06;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -10939,7 +10949,8 @@
 				ASSETCATALOG_COMPILER_OPTIMIZATION = time;
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_ENTITLEMENTS = Keyboard/Keyboard.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				GCC_OPTIMIZATION_LEVEL = fast;
@@ -10955,6 +10966,7 @@
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=300";
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
+				PROVISIONING_PROFILE_SPECIFIER = azooKey_keyboard_21_09_06;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;
@@ -10970,7 +10982,8 @@
 				ASSETCATALOG_COMPILER_OPTIMIZATION = time;
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_ENTITLEMENTS = Keyboard/Keyboard.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				GCC_OPTIMIZATION_LEVEL = fast;
@@ -10985,6 +10998,7 @@
 				MARKETING_VERSION = 1.6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
+				PROVISIONING_PROFILE_SPECIFIER = azooKey_keyboard_21_09_06;
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;

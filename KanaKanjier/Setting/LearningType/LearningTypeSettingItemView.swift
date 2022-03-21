@@ -19,7 +19,7 @@ struct LearningTypeSettingView: View {
             Text(LearningTypeSetting.title)
             Spacer()
             Picker(selection: $selection, label: Text("")) {
-                ForEach(0 ..< LearningType.allCases.count) { i in
+                ForEach(0 ..< LearningType.allCases.count, id: \.self) { i in
                     Text(LearningType.allCases[i].string).tag(LearningType.allCases[i])
                 }
             }

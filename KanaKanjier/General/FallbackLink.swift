@@ -33,10 +33,14 @@ struct FallbackLink: View {
             }
         }
         .alert(isPresented: $showAlert) {
-            Alert(title: Text("ブラウザを開けませんでした"), message: Text("URLをコピーします。"), dismissButton: .default(Text("OK"), action: {
-                UIPasteboard.general.string = url.absoluteString
-                self.showAlert = false
-            }))
+            Alert(
+                title: Text("ブラウザを開けませんでした"),
+                message: Text("URLをコピーします。"),
+                dismissButton: .default(Text("OK")) {
+                    UIPasteboard.general.string = url.absoluteString
+                    self.showAlert = false
+                }
+            )
         }
     }
 }
