@@ -10,7 +10,7 @@ import Foundation
 
 protocol RegisteredNodeProtocol {
     var data: DicdataElement {get}
-    var prev: RegisteredNodeProtocol? {get}
+    var prev: (any RegisteredNodeProtocol)? {get}
     var totalValue: PValue {get}
     var ruby: String {get}
     var rubyCount: Int {get}
@@ -20,14 +20,14 @@ protocol RegisteredNodeProtocol {
 
 struct DirectRegisteredNode: RegisteredNodeProtocol {
     let data: DicdataElement
-    let prev: RegisteredNodeProtocol?
+    let prev: (any RegisteredNodeProtocol)?
     let totalValue: PValue
     let rubyCount: Int
     var ruby: String {
         return self.data.ruby
     }
 
-    init(data: DicdataElement, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int) {
+    init(data: DicdataElement, registered: (any RegisteredNodeProtocol)?, totalValue: PValue, rubyCount: Int) {
         self.data = data
         self.prev = registered
         self.totalValue = totalValue
@@ -41,12 +41,12 @@ struct DirectRegisteredNode: RegisteredNodeProtocol {
 
 struct RomanRegisteredNode: RegisteredNodeProtocol {
     let data: DicdataElement
-    let prev: RegisteredNodeProtocol?
+    let prev: (any RegisteredNodeProtocol)?
     let totalValue: PValue
     let rubyCount: Int
     let ruby: String
 
-    init(data: DicdataElement, registered: RegisteredNodeProtocol?, totalValue: PValue, rubyCount: Int, romanString: String) {
+    init(data: DicdataElement, registered: (any RegisteredNodeProtocol)?, totalValue: PValue, rubyCount: Int, romanString: String) {
         self.data = data
         self.prev = registered
         self.totalValue = totalValue
