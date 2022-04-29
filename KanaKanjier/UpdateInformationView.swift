@@ -10,6 +10,7 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form {
+            // version 1.6系
             Group {
                 VersionView("1.6.3", releaseDate: "2022年xx月xx日") {
                     ParagraphView("不具合を修正しました。") {
@@ -59,6 +60,9 @@ struct UpdateInfomationView: View {
                     }
                     ParagraphView("その他デザイン・変換機能・パフォーマンスの軽微な改善を行いました。")
                 }
+            }
+            // version 1.5系
+            Group {
                 VersionView("1.5.1", releaseDate: "2021年02月15日") {
                     ParagraphView("機能を改善しました。") {
                         "一部機能を英語対応"
@@ -79,6 +83,9 @@ struct UpdateInfomationView: View {
                     }
                     ParagraphView("その他デザイン・変換機能・操作性の軽微な改善を行いました。")
                 }
+            }
+            // version 1.4系
+            Group {
                 VersionView("1.4.4", releaseDate: "2021年01月30日") {
                     ParagraphView("不具合を修正しました。") {
                         "テンプレートの編集が完了できないことがある不具合"
