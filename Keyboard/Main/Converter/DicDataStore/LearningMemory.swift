@@ -98,7 +98,7 @@ struct LearningMemorys {
 
         var lastIndex: Int?
         // elementは参照型であることに留意
-        datalist.indices.forEach {i in
+        for i in datalist.indices {
             let _lastIndex = lastIndex
             if i != .zero || lastData == nil {
                 let needMemoryCount = DicdataStore.needWValueMemory(datalist[i])
@@ -118,8 +118,8 @@ struct LearningMemorys {
                         self.core2Index[data] = self.index2order.count - 1
                         // 最大数になっている場合、最も古いデータを更新する
                     } else if let minIndex = self.getMinOrderIndex() {
-                        self.values.forEach {
-                            $0.next = $0.next.lazy.filter {$0.index != minIndex}
+                        for value in self.values {
+                            value.next = value.next.lazy.filter {$0.index != minIndex}
                         }
                         let data = datalist[i]
                         let oldData = values[minIndex].data
@@ -134,7 +134,7 @@ struct LearningMemorys {
 
             guard let prevIndex = _lastIndex,
                   let nextIndex = lastIndex else {
-                return
+                continue
             }
 
             let prev = self.values[prevIndex]

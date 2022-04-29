@@ -111,10 +111,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   `candidates`から重複を削除したもの。
     private func getUniqueCandidate(_ candidates: [Candidate]) -> [Candidate] {
         var result = [Candidate]()
-        candidates.forEach {(candidate: Candidate) in
-            if candidate.text.isEmpty {
-                return
-            }
+        for candidate in candidates where !candidate.text.isEmpty {
             if let index = result.firstIndex(where: {$0.text == candidate.text}) {
                 if result[index].value < candidate.value {
                     result[index] = candidate
@@ -154,14 +151,15 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 }
                 var value: PValue = -5 + penalty
                 let delta: PValue = -10/PValue(completions.count)
-                completions.forEach {word in
+                for word in completions {
                     let data = [DicdataElement(ruby: word, cid: 1288, mid: 501, value: value)]
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
                         correspondingCount: inputData.characters.count,
                         lastMid: 501,
-                        data: data)
+                        data: data
+                    )
                     result.append(candidate)
                     value += delta
                 }
@@ -185,14 +183,15 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 }
                 var value: PValue = -5 + penalty
                 let delta: PValue = -10/PValue(completions.count)
-                completions.forEach {word in
+                for word in completions {
                     let data = [DicdataElement(ruby: word, cid: 1288, mid: 501, value: value)]
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
                         correspondingCount: inputData.characters.count,
                         lastMid: 501,
-                        data: data)
+                        data: data
+                    )
                     result.append(candidate)
                     value += delta
                 }

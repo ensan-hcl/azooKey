@@ -76,7 +76,7 @@ extension Kana2Kanji {
         var result: [Candidate] = []
 
         result.reserveCapacity(N_best &+ 1)
-        (dicdata + memory + osuserdict).forEach {(data: DicdataElement) in
+        for data in (dicdata + memory + osuserdict) {
             let includeMMValueCalculation = DicdataStore.includeMMValueCalculation(data)
             let mmValue: PValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
             let ccValue: PValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)
@@ -86,7 +86,7 @@ extension Kana2Kanji {
             // 追加すべきindexを取得する
             let lastindex: Int = (result.lastIndex(where: {$0.value >= newValue}) ?? -1) + 1
             if lastindex >= N_best {
-                return
+                continue
             }
             var nodedata: [DicdataElement] = datas
             nodedata.append(data)

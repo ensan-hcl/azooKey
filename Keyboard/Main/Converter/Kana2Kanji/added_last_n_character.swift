@@ -101,7 +101,7 @@ extension Kana2Kanji {
         conversionBenchmark.start(process: .変換_結果処理)
         let result = LatticeNode.EOSNode
 
-        addedNodes.indices.forEach {(i: Int) in
+        for i in addedNodes.indices {
             for node in addedNodes[i] {
                 if node.prevs.isEmpty {
                     continue

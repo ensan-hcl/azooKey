@@ -419,7 +419,7 @@ extension DicdataStore {
                 return []
             }
             var chars: [Character] = []
-            result.forEach {stack in
+            for stack in result {
                 if chars.isEmpty {
                     if stack.0 != .Zero {
                         chars.append(contentsOf: [stack.0.character, stack.1.character, stack.2.character, stack.3.character])

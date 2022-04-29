@@ -63,16 +63,16 @@ struct RomanInputData: InputDataProtocol {
             }
         }
         var result: [(lattice: RomanKanaConvertingLattice, penalty: PValue)] = []
-        nodes.indices.forEach {(i: Int) in
+        for i in nodes.indices {
             let correct = String(self.characters[left + i])
             if i == .zero {
                 if let component = history.freezedData(internalCharacterCount: left + i + 1) {
                     let lattice = RomanKanaConvertingLattice([(string: component.displayedText, isFreezed: true)], count: component.displayedText.count)
                     result = [(lattice: lattice, penalty: .zero)]
-                    return
+                    continue
                 }
                 result = nodes[i].map {(RomanKanaConvertingLattice([(string: $0, isFreezed: false)], count: $0.count), $0 == correct ? .zero:unit)}
-                return
+                continue
             }
             result = result.flatMap {(lattice: RomanKanaConvertingLattice, penalty: PValue) -> [(lattice: RomanKanaConvertingLattice, penalty: PValue)] in
                 // 訂正数上限(3個)

@@ -80,14 +80,10 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
          }
          }
          */
-
-        preparts.forEach {candidate in
+        for candidate in preparts {
             if let last = candidate.data.last {
                 let nexts = self.dicdataStore.getNextMemory(last)
-                nexts.forEach {data, count in
-                    if count <= 1 {
-                        return
-                    }
+                for (data, count) in nexts where count > 1 {
                     let ccValue = self.dicdataStore.getCCValue(last.rcid, data.lcid)
                     let includeMMValueCalculation = DicdataStore.includeMMValueCalculation(data)
                     let mmValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(candidate.lastMid, data.mid):.zero

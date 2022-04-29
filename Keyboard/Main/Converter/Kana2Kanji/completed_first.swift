@@ -34,7 +34,7 @@ extension Kana2Kanji {
         // (2)
         let result = LatticeNode.EOSNode
 
-        nodes.indices.forEach {(i: Int) in
+        for i in nodes.indices {
             for node in nodes[i] {
                 if node.prevs.isEmpty {
                     continue
