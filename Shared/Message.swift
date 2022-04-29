@@ -10,8 +10,9 @@ import Foundation
 
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert0"
-    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"  // frozen
-    case iOS14_5_new_emoji = "iOS_14_5_new_emoji_fixed_ver_1_6_1"
+    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"           // MARK: frozen
+    case iOS14_5_new_emoji = "iOS_14_5_new_emoji_fixed_ver_1_6_1"    // MARK: frozen
+    case iOS15_4_new_emoji = "iOS_15_4_new_emoji"
 
     var key: String {
         return self.rawValue + "_status"
@@ -21,7 +22,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
         switch self {
         case .ver1_5_update_loudstxt:
             return true
-        case .iOS14_5_new_emoji, .mock:
+        case .iOS14_5_new_emoji, .iOS15_4_new_emoji, .mock:
             return false
         }
     }
@@ -101,6 +102,22 @@ struct MessageManager {
             rightsideButton: .openContainer(text: "更新"),
             precondition: {
                 if #available(iOS 14.5, *) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            containerAppShouldMakeItDone: { false }
+        ),
+
+        MessageData(
+            id: .iOS15_4_new_emoji,
+            title: "お知らせ",
+            description: "iOS15.4で新しい絵文字が追加されました。本体アプリを開き、データを更新しますか？",
+            leftsideButton: .later,
+            rightsideButton: .openContainer(text: "更新"),
+            precondition: {
+                if #available(iOS 15.4, *) {
                     return true
                 } else {
                     return false

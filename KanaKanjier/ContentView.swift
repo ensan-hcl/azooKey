@@ -71,7 +71,7 @@ struct ContentView: View {
                             builder.process()
                             Store.shared.noticeReloadUserDict()
                         }
-                    case .iOS14_5_new_emoji:
+                    case .iOS14_5_new_emoji, .iOS15_4_new_emoji:
                         // 絵文字を更新する
                         DataUpdateView(id: data.id, manager: $messageManager) {
                             AdditionalDictManager().userDictUpdate()

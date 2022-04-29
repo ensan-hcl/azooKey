@@ -48,6 +48,9 @@ struct AdditionalSystemDictManager: OnOffSettingSet {
                 if #available(iOS 14.5, *) {
                     targets.append("emoji13.1_dict.tsv")
                 }
+                if #available(iOS 15.4, *) {
+                    targets.append("emoji14.0_dict.tsv")
+                }
                 return targets
             case .kaomoji:
                 return ["kaomoji_dict.tsv"]

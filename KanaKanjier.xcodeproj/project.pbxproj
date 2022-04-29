@@ -2305,6 +2305,7 @@
 		1AA346AF2567F15C00B41A16 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346A92567F15700B41A16 /* SharedStore.swift */; };
 		1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */; };
 		1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */; };
+		1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */; };
 		1AB4E45D251C80CA00A58F3F /* LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB4E45C251C80CA00A58F3F /* LOUDS.swift */; };
 		1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */; };
 		1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5076A255ECC3C003C0BF2 /* Trie.swift */; };
@@ -4839,6 +4840,7 @@
 		1AA346A92567F15700B41A16 /* SharedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStore.swift; sourceTree = "<group>"; };
 		1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSlideshowView.swift; sourceTree = "<group>"; };
 		1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyTipsView.swift; sourceTree = "<group>"; };
+		1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji14.0_dict.tsv; sourceTree = "<group>"; };
 		1AB4E45C251C80CA00A58F3F /* LOUDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDS.swift; sourceTree = "<group>"; };
 		1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalDictManageView.swift; sourceTree = "<group>"; };
 		1AB5076A255ECC3C003C0BF2 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
@@ -7586,6 +7588,7 @@
 				1A7817B12575C89D007661D8 /* emoji...12_dict.tsv */,
 				1A7817AB2575C898007661D8 /* emoji13_dict.tsv */,
 				1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */,
+				1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */,
 			);
 			path = DataSet;
 			sourceTree = "<group>";
@@ -8053,6 +8056,7 @@
 				1ACEEFF72566786A00899DA2 /* kaomoji_dict.tsv in Resources */,
 				1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */,
 				1AC5876525D930D000BB060E /* Localizable.strings in Resources */,
+				1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */,
 				1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */,
 				1A7817B22575C89D007661D8 /* emoji...12_dict.tsv in Resources */,
 				1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */,
