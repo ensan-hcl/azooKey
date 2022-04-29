@@ -20,14 +20,14 @@ extension Kana2Kanji {
         //FIXME: completedDataを使ってなくない？
         let start = RegisteredNode.BOSNode()
         let nodes: Nodes = previousResult.nodes.suffix(count)
-        nodes.indices.forEach {(i: Int) in
+        for i in nodes.indices {
             if i == .zero {
-                nodes[i].forEach {
-                    $0.prevs = [start]
+                for node in nodes[i] {
+                    node.prevs = [start]
                 }
             } else {
-                nodes[i].forEach {
-                    $0.prevs = []
+                for node in nodes[i] {
+                    node.prevs = []
                 }
             }
         }
@@ -35,16 +35,16 @@ extension Kana2Kanji {
         let result = LatticeNode.EOSNode
 
         nodes.indices.forEach {(i: Int) in
-            nodes[i].forEach {(node: LatticeNode) in
+            for node in nodes[i] {
                 if node.prevs.isEmpty {
-                    return
+                    continue
                 }
                 if self.dicdataStore.shouldBeRemoved(data: node.data) {
-                    return
+                    continue
                 }
                 // 生起確率を取得する。
                 let wValue = node.data.value()
-                if i == 0{
+                if i == 0 {
                     // valuesを更新する
                     node.values = node.prevs.map {$0.totalValue + wValue + self.dicdataStore.getCCValue($0.data.rcid, node.data.lcid)}
                 } else {
@@ -55,21 +55,21 @@ extension Kana2Kanji {
                 let nextIndex = node.rubyCount + i
                 // 文字数がcountと等しくない場合は先に進む
                 if nextIndex != count {
-                    nodes[nextIndex].forEach {(nextnode: LatticeNode) in
+                    for nextnode in nodes[nextIndex] {
                         if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
-                            return
+                            continue
                         }
                         // クラスの連続確率を計算する。
                         let ccValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
                         let ccBonus = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
                         let ccSum = ccValue + ccBonus
                         // nodeの持っている全てのprevnodeに対して
-                        node.values.indices.forEach {(index: Int) in
+                        for index in node.values.indices {
                             let newValue = ccSum + node.values[index]
                             // 追加すべきindexを取得する
                             let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
                             if lastindex == N_best {
-                                return
+                                continue
                             }
                             let newnode = node.getSqueezedNode(index, value: newValue)
                             nextnode.prevs.insert(newnode, at: lastindex)
@@ -81,8 +81,8 @@ extension Kana2Kanji {
                     }
                     // countと等しければ変換が完成したので終了する
                 } else {
-                    node.prevs.indices.forEach {
-                        let newnode = node.getSqueezedNode($0, value: node.values[$0])
+                    for index in node.prevs.indices {
+                        let newnode = node.getSqueezedNode(index, value: node.values[index])
                         result.prevs.append(newnode)
                     }
                 }

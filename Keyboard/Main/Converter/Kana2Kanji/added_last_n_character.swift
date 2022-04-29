@@ -50,20 +50,20 @@ extension Kana2Kanji {
 
         // (2)
         conversionBenchmark.start(process: .変換_処理)
-        nodes.indices.forEach {(i: Int) in
-            nodes[i].forEach {(node: LatticeNode) in
+        for i in nodes.indices {
+            for node in nodes[i] {
                 if node.prevs.isEmpty {
-                    return
+                    continue
                 }
                 if self.dicdataStore.shouldBeRemoved(data: node.data) {
-                    return
+                    continue
                 }
                 // 変換した文字数
                 let nextIndex = node.rubyCount + i
-                addedNodes[nextIndex].forEach {(nextnode: LatticeNode) in
+                for nextnode in addedNodes[nextIndex] {
                     // この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                     if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
-                        return
+                        continue
                     }
                     // クラスの連続確率を計算する。
                     conversionBenchmark.start(process: .変換_処理_連接コスト計算_全体)
@@ -77,12 +77,12 @@ extension Kana2Kanji {
                     conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
                     // nodeの持っている全てのprevnodeに対して
                     conversionBenchmark.start(process: .変換_処理_N_Best計算)
-                    node.values.indices.forEach {(index: Int) in
+                    for index in node.values.indices {
                         let newValue: PValue = ccSum + node.values[index]
                         // 追加すべきindexを取得する
                         let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                         if lastindex == N_best {
-                            return
+                            continue
                         }
                         let newnode: RegisteredNode = node.getSqueezedNode(index, value: newValue)
                         nextnode.prevs.insert(newnode, at: lastindex)
@@ -102,12 +102,12 @@ extension Kana2Kanji {
         let result = LatticeNode.EOSNode
 
         addedNodes.indices.forEach {(i: Int) in
-            addedNodes[i].forEach {(node: LatticeNode) in
+            for node in addedNodes[i] {
                 if node.prevs.isEmpty {
-                    return
+                    continue
                 }
                 if self.dicdataStore.shouldBeRemoved(data: node.data) {
-                    return
+                    continue
                 }
                 // 生起確率を取得する。
                 let wValue = node.data.value()
@@ -122,15 +122,15 @@ extension Kana2Kanji {
                 let nextIndex = node.rubyCount + i
                 if count == nextIndex {
                     // 最後に至るので
-                    node.prevs.indices.forEach {
-                        let newnode = node.getSqueezedNode($0, value: node.values[$0])
+                    for index in node.prevs.indices {
+                        let newnode = node.getSqueezedNode(index, value: node.values[index])
                         result.prevs.append(newnode)
                     }
                 } else {
-                    addedNodes[nextIndex].forEach {(nextnode: LatticeNode) in
+                    for nextnode in addedNodes[nextIndex] {
                         // この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                         if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
-                            return
+                            continue
                         }
                         // クラスの連続確率を計算する。
                         conversionBenchmark.start(process: .変換_処理_連接コスト計算_全体)
@@ -144,12 +144,12 @@ extension Kana2Kanji {
                         conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
                         // nodeの持っている全てのprevnodeに対して
                         conversionBenchmark.start(process: .変換_処理_N_Best計算)
-                        node.values.indices.forEach {(index: Int) in
+                        for index in node.values.indices {
                             let newValue: PValue = ccSum + node.values[index]
                             // 追加すべきindexを取得する
                             let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                             if lastindex == N_best {
-                                return
+                                continue
                             }
                             let newnode: RegisteredNode = node.getSqueezedNode(index, value: newValue)
                             nextnode.prevs.insert(newnode, at: lastindex)

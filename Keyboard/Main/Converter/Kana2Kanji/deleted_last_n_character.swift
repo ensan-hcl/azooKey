@@ -30,19 +30,19 @@ extension Kana2Kanji {
         // (1)
         let result = LatticeNode.EOSNode
 
-        previousResult.nodes.indices.forEach {(i: Int) in
-            previousResult.nodes[i].forEach {(node: LatticeNode) in
+        for i in previousResult.nodes.indices {
+            for node in previousResult.nodes[i] {
                 if node.prevs.isEmpty {
-                    return
+                    continue
                 }
                 if self.dicdataStore.shouldBeRemoved(data: node.data) {
-                    return
+                    continue
                 }
                 let nextIndex = node.rubyCount + i
                 if nextIndex == count {
                     // 変換した文字数
-                    node.prevs.indices.forEach {
-                        let newnode = node.getSqueezedNode($0, value: node.values[$0])
+                    for index in node.prevs.indices {
+                        let newnode = node.getSqueezedNode(index, value: node.values[index])
                         result.prevs.append(newnode)
                     }
                 }

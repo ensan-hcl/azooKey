@@ -37,14 +37,14 @@ extension Kana2Kanji {
         conversionBenchmark.end(process: .変換_辞書読み込み)
         conversionBenchmark.start(process: .変換_処理)
         // 「i文字目から始まるnodes」に対して
-        nodes.indices.forEach {(i: Int) in
+        for i in nodes.indices {
             // それぞれのnodeに対して
-            nodes[i].forEach {(node: LatticeNode) in
+            for node in nodes[i] {
                 if node.prevs.isEmpty {
-                    return
+                    continue
                 }
                 if self.dicdataStore.shouldBeRemoved(data: node.data) {
-                    return
+                    continue
                 }
                 // 生起確率を取得する。
                 let wValue: PValue = node.data.value()
@@ -59,16 +59,16 @@ extension Kana2Kanji {
                 let nextIndex: Int = i &+ node.rubyCount
                 // 文字数がcountと等しい場合登録する
                 if nextIndex == count {
-                    node.prevs.indices.forEach {
-                        let newnode: RegisteredNode = node.getSqueezedNode($0, value: node.values[$0])
+                    for index in node.prevs.indices {
+                        let newnode: RegisteredNode = node.getSqueezedNode(index, value: node.values[index])
                         result.prevs.append(newnode)
                     }
                 } else {
                     // nodeの繋がる次にあり得る全てのnextnodeに対して
-                    nodes[nextIndex].forEach {(nextnode: LatticeNode) in
+                    for nextnode in nodes[nextIndex] {
                         // この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                         if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
-                            return
+                            continue
                         }
                         // クラスの連続確率を計算する。
                         conversionBenchmark.start(process: .変換_処理_連接コスト計算_全体)
@@ -82,12 +82,12 @@ extension Kana2Kanji {
                         conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
                         // nodeの持っている全てのprevnodeに対して
                         conversionBenchmark.start(process: .変換_処理_N_Best計算)
-                        node.values.indices.forEach {(index: Int) in
+                        for index in node.values.indices {
                             let newValue: PValue = ccSum + node.values[index]
                             // 追加すべきindexを取得する
                             let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                             if lastindex == N_best {
-                                return
+                                continue
                             }
                             let newnode: RegisteredNode = node.getSqueezedNode(index, value: newValue)
                             nextnode.prevs.insert(newnode, at: lastindex)

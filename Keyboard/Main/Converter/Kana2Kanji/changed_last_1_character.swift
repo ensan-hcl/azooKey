@@ -40,32 +40,32 @@ extension Kana2Kanji {
         }
 
         // (3)
-        nodes.indices.forEach {(i: Int) in
-            nodes[i].forEach {(node: LatticeNode) in
+        for i in nodes.indices {
+            for node in nodes[i] {
                 if node.prevs.isEmpty {
-                    return
+                    continue
                 }
                 if self.dicdataStore.shouldBeRemoved(data: node.data) {
-                    return
+                    continue
                 }
                 // 変換した文字数
                 let nextIndex = node.rubyCount + i
-                addedNodes[nextIndex].forEach {(nextnode: LatticeNode) in
+                for nextnode in addedNodes[nextIndex] {
                     // この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                     if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
-                        return
+                        continue
                     }
                     // クラスの連続確率を計算する。
                     let ccValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
                     let ccBonus = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
                     let ccSum = ccValue + ccBonus
                     // nodeの持っている全てのprevnodeに対して
-                    node.values.indices.forEach {(index: Int) in
+                    for index in node.values.indices {
                         let newValue = ccSum + node.values[index]
                         // 追加すべきindexを取得する
                         let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
                         if lastindex == N_best {
-                            return
+                            continue
                         }
                         let newnode = node.getSqueezedNode(index, value: newValue)
                         nextnode.prevs.insert(newnode, at: lastindex)
@@ -80,14 +80,14 @@ extension Kana2Kanji {
         }
 
         let result = LatticeNode.EOSNode
-        addedNodes.indices.forEach {(i: Int) in
-            addedNodes[i].forEach {(node: LatticeNode) in
+        for i in addedNodes.indices {
+            for node in addedNodes[i] {
                 if node.prevs.isEmpty {
-                    return
+                    continue
                 }
                 // 生起確率を取得する。
                 let wValue = node.data.value()
-                if i == 0{
+                if i == 0 {
                     // valuesを更新する
                     node.values = node.prevs.map {$0.totalValue + wValue + self.dicdataStore.getCCValue($0.data.rcid, node.data.lcid)}
                 } else {
@@ -95,8 +95,8 @@ extension Kana2Kanji {
                     node.values = node.prevs.map {$0.totalValue + wValue}
                 }
                 // 最後に至るので
-                node.prevs.indices.forEach {
-                    let newnode = node.getSqueezedNode($0, value: node.values[$0])
+                for index in node.prevs.indices {
+                    let newnode = node.getSqueezedNode(index, value: node.values[index])
                     result.prevs.append(newnode)
                 }
             }
