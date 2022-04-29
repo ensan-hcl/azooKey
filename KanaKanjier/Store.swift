@@ -91,4 +91,11 @@ final class StoreVariableSection: ObservableObject {
     @Published var japaneseLayout: LanguageLayout = .flick
     @Published var englishLayout: LanguageLayout = .flick
     @Published var importFile: URL?
+
+    init() {
+        @KeyboardSetting(.japaneseKeyboardLayout) var japaneseKeyboardLayout
+        self.japaneseLayout = japaneseKeyboardLayout
+        @KeyboardSetting(.englishKeyboardLayout) var englishKeyboardLayout
+        self.englishLayout = englishKeyboardLayout
+    }
 }
