@@ -225,7 +225,6 @@ final class DicdataStore {
 
         var indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
-            print("辞書読み込み_検索", key, dic.value)
             let set = Set(dic.value.flatMap {string in self.throughMatchLOUDS(identifier: key, key: string)})
             return (key, set)
         }

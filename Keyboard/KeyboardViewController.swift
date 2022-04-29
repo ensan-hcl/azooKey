@@ -108,7 +108,7 @@ final class KeyboardViewController: UIInputViewController {
         // 縦持ち 375.0 272.5
         // 横持ち 667.0 216.5
         super.viewWillTransition(to: size, with: coordinator)
-        UIScreen.main.bounds.width > UIScreen.main.bounds.height ? print("横持ち") : print("縦持ち")
+        debug(UIScreen.main.bounds.width > UIScreen.main.bounds.height ? "横持ち" : "縦持ち")
         if #available(iOS 15, *) {
             debug("viewWillTransition", size)
             SemiStaticStates.shared.setScreenSize(size: size)
