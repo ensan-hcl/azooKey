@@ -67,7 +67,7 @@ final class DicdataStore {
                 self.mmValue = [PValue].init(repeating: .zero, count: self.midCount*self.midCount)
             }
         }
-        self.loadLOUDS(identifier: "user")
+        let _ = self.loadLOUDS(identifier: "user")
     }
 
     func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
@@ -92,7 +92,7 @@ final class DicdataStore {
     }
 
     private func reloadUserDict() {
-        self.loadLOUDS(identifier: "user")
+        let _ = self.loadLOUDS(identifier: "user")
     }
 
     /// ペナルティ関数。文字数で決める。
