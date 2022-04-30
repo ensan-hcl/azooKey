@@ -10,16 +10,25 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form {
-            // version 1.6系
+            // version 1.7系
             Group {
-                VersionView("1.6.3", releaseDate: "2022年xx月xx日") {
+                VersionView("1.7", releaseDate: "2022年xx月xx日") {
+                    ParagraphView("機能を追加しました。") {
+                        "ライブ変換が設定できるようになりました"
+                    }
                     ParagraphView("不具合を修正しました。") {
                         "一部環境でQwertyキーボードの着せ替えができない問題を修正"
+                        "特定の条件でカスタムキーの編集が反映されない問題を修正"
                     }
                     ParagraphView("機能を改善しました。") {
                         "iOS15.4以降で利用可能なUnicode14.0に対応した絵文字のデータを追加"
+                        "辞書データをアップデートしました"
                     }
+                    ParagraphView("その他デザイン・パフォーマンスの軽微な改善を行いました。")
                 }
+            }
+            // version 1.6系
+            Group {
                 VersionView("1.6.2", releaseDate: "2021年09月06日") {
                     ParagraphView("カスタムタブ機能を改善しました。") {
                         "タブバー表示ボタンを追加"
