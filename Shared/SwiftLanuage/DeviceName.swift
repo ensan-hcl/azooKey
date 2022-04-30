@@ -114,6 +114,14 @@ final class DeviceName {
         case iPhone13_3 = "iPhone13,3"
         /// iPhone 12 Pro Max
         case iPhone13_4 = "iPhone13,4"
+        /// iPhone 13 mini
+        case iPhone14_4 = "iPhone14,4"
+        /// iPhone 13
+        case iPhone14_5 = "iPhone14,5"
+        /// iPhone13  Pro
+        case iPhone14_2 = "iPhone14,2"
+        /// iPhone13 Pro Max
+        case iPhone14_3 = "iPhone14,3"
 
         // MARK: iPad
         /// iPad 1
@@ -238,6 +246,30 @@ final class DeviceName {
         case iPad13_1 = "iPad13,1"
         /// iPad Air 4th generation Cellular
         case iPad13_2 = "iPad13,2"
+        /// iPad Pro 11inch 3rd generation WiFi
+        case iPad13_4 = "iPad13,4"
+        /// iPad Pro 11inch 3rd generation WiFi
+        case iPad13_5 = "iPad13,5"
+        /// iPad Pro 11inch 3rd generation Cellular
+        case iPad13_6 = "iPad13,6"
+        /// iPad Pro 11inch 3rd generation Cellular
+        case iPad13_7 = "iPad13,7"
+        /// iPad Pro 12inch 5th generation WiFi
+        case iPad13_8 = "iPad13,8"
+        /// iPad Pro 12inch 5th generation WiFi
+        case iPad13_9 = "iPad13,9"
+        /// iPad Pro 12inch 5th generation Cellular
+        case iPad13_10 = "iPad13,10"
+        /// iPad Pro 12inch 5th generation Cellular
+        case iPad13_11 = "iPad13,11"
+        /// iPad mini 6th generation WiFi
+        case iPad14_1 = "iPad14,1"
+        /// iPad mini 6th generation Cellular
+        case iPad14_2 = "iPad14,2"
+        /// iPad 9th generation WiFi
+        case iPad12_1 = "iPad12,1"
+        /// iPad 9th generation Cellular
+        case iPad12_2 = "iPad12,2"
 
         /// device name
         func deviceName() -> String {
@@ -283,7 +315,7 @@ final class DeviceName {
             case .iPhone8_2:
                 return "iPhone 6s Plus"
             case .iPhone8_4:
-                return "iPhone SE 1th Generation"
+                return "iPhone SE 1st Generation"
             case .iPhone9_1, .iPhone9_3:
                 return "iPhone 7"
             case .iPhone9_2, .iPhone9_4:
@@ -323,9 +355,9 @@ final class DeviceName {
             case .iPad2_2, .iPad2_3:
                 return "iPad 2 Cellular"
             case .iPad2_5:
-                return "iPad mini 1th Generation WiFi"
+                return "iPad mini 1st Generation WiFi"
             case .iPad2_6, .iPad2_7:
-                return "iPad mini 1th Generation Cellular"
+                return "iPad mini 1st Generation Cellular"
             case .iPad3_1:
                 return "iPad 3 WiFi"
             case .iPad3_2, .iPad3_3:
@@ -335,9 +367,9 @@ final class DeviceName {
             case .iPad3_5, .iPad3_6:
                 return "iPad 4 Cellular"
             case .iPad4_1:
-                return "iPad Air 1th Generation WiFi"
+                return "iPad Air 1st Generation WiFi"
             case .iPad4_2, .iPad4_3:
-                return "iPad Air Generation Cellular"
+                return "iPad Air 1st Generation Cellular"
             case .iPad4_4:
                 return "iPad mini 2 WiFi"
             case .iPad4_5, .iPad4_6:
@@ -414,6 +446,30 @@ final class DeviceName {
                 return "iPad Air 4th Generation WiFi"
             case .iPad13_2:
                 return "iPad Air 4th Generation Cellular"
+            case .iPad13_4, .iPad13_5:
+                return "iPad Pro 11inch 3rd Generation WiFi"
+            case .iPad13_6, .iPad13_7:
+                return "iPad Pro 11inch 3rd Generation Cellular"
+            case .iPad13_8, .iPad13_9:
+                return "iPad Pro 12.9inch 5th Generation WiFi"
+            case .iPad13_10, .iPad13_11:
+                return "iPad Pro 12.9inch 5th Generation Cellular"
+            case .iPhone14_4:
+                return "iPhone 13 mini"
+            case .iPhone14_5:
+                return "iPhone 13"
+            case .iPhone14_2:
+                return "iPhone 13 Pro"
+            case .iPhone14_3:
+                return "iPhone 13 Pro Max"
+            case .iPad14_1:
+                return "iPad mini 6th Generation WiFi"
+            case .iPad14_2:
+                return "iPad mini 6th Generation Cellular"
+            case .iPad12_1:
+                return "iPad 9th generation WiFi"
+            case .iPad12_2:
+                return "iPad 9th generation Cellular"
             }
         }
     }
@@ -436,7 +492,9 @@ final class DeviceName {
             return true
         }
         switch deviceCode {
-        case .iPhone10_3, .iPhone10_6, .iPhone11_2, .iPhone11_4, .iPhone11_6, .iPhone11_8, .iPhone12_1, .iPhone12_3, .iPhone12_5, .iPhone13_1, .iPhone13_2, .iPhone13_3, .iPhone13_4:
+        case .iPhone10_3, .iPhone10_6, .iPhone11_2, .iPhone11_4, .iPhone11_6, .iPhone11_8, .iPhone12_1, .iPhone12_3, .iPhone12_5, .iPhone13_1, .iPhone13_2, .iPhone13_3, .iPhone13_4, .iPhone14_2, .iPhone14_3, .iPhone14_4, .iPhone14_5:
+            return false
+        case .iPad8_1, .iPad8_2, .iPad8_5, .iPad8_6, .iPad8_7, .iPad8_8, .iPad8_9, .iPad8_10, .iPad8_11, .iPad8_12, .iPad13_1, .iPad13_2, .iPad13_4, .iPad13_5, .iPad13_6, .iPad13_7, .iPad13_8, .iPad13_9, .iPad13_10, .iPad13_11, .iPad14_1, .iPad14_2:
             return false
         default:
             return true
