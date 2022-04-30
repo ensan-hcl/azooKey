@@ -114,4 +114,8 @@ struct Candidate: ResultViewItemData {
             inputable: inputable
         )
     }
+
+    func getDebugInformation() -> String {
+        return self.data.debugDescription
+    }
 }

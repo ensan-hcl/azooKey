@@ -107,7 +107,7 @@ final class KeyboardActionDepartment: ActionDepartment {
     /// - Parameters:
     ///   - text: String。確定された文字列。
     ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
-    override func notifyComplete(_ candidate: ResultViewItemData) {
+    override func notifyComplete(_ candidate: any ResultViewItemData) {
         guard let candidate = candidate as? Candidate else {
             debug("確定できません")
             return

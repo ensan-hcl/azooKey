@@ -12,6 +12,7 @@ import SwiftUI
 protocol ResultViewItemData {
     var text: String {get}
     var inputable: Bool {get}
+    func getDebugInformation() -> String
 }
 
 private final class ResultModelVariableSection<Candidate: ResultViewItemData>: ObservableObject {
@@ -103,7 +104,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                                 }
                                                 .buttonStyle(ResultButtonStyle(height: buttonHeight))
                                                 .contextMenu {
-                                                    ResultContextMenuView(text: data.candidate.text)
+                                                    ResultContextMenuView(candidate: data.candidate)
                                                 }
                                                 .id(data.id)
                                             } else {
@@ -146,22 +147,30 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 }
 
-struct ResultContextMenuView: View {
-    private let text: String
+struct ResultContextMenuView<Candidate: ResultViewItemData>: View {
+    private let candidate: Candidate
 
-    init(text: String) {
-        self.text = text
+    init(candidate: Candidate) {
+        self.candidate = candidate
     }
 
     var body: some View {
         Group {
             Button(action: {
-                VariableStates.shared.magnifyingText = text
+                VariableStates.shared.magnifyingText = candidate.text
                 VariableStates.shared.isTextMagnifying = true
             }) {
                 Text("大きな文字で表示する")
                 Image(systemName: "plus.magnifyingglass")
             }
+            #if DEBUG
+            Button(action: {
+                debug(self.candidate.getDebugInformation())
+            }) {
+                Text("デバッグ情報を表示する")
+                Image(systemName: "ladybug.fill")
+            }
+            #endif
         }
     }
 }

@@ -58,7 +58,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                                 }
                                 .buttonStyle(ResultButtonStyle(height: 18))
                                 .contextMenu {
-                                    ResultContextMenuView(text: datum.candidate.text)
+                                    ResultContextMenuView(candidate: datum.candidate)
                                 }
                             }
                         }
