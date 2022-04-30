@@ -23,7 +23,7 @@ struct RomanInputData: InputDataProtocol {
             let index = history.supremumIndexWithFreezing(for: input)
             self.history = KanaRomanStateHolder(components: Array(history.components.prefix(index + 1)))
         }
-        self.katakanaString = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
+        self.katakanaString = input.toKatakana()
         let romanString = self.history.components.map {$0.internalText}.joined()   // split由来のデータではかな文字が含まれる
         if let count = count {
             self.count = count
@@ -267,7 +267,7 @@ private struct RomanKanaConvertingLattice {
                     throw ConvertError.containsRomanLetter
                 }
             }
-            return strings.joined().applyingTransform(.hiraganaToKatakana, reverse: false)!
+            return strings.joined().toKatakana()
         } catch {
             return nil
         }

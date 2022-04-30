@@ -322,6 +322,9 @@ final class KeyboardActionDepartment: ActionDepartment {
         if self.inputManager.isAfterAdjusted() {
             return
         }
+        if self.inputManager.liveConversionManager.enabled {
+            self.inputManager.clear()
+        }
         debug("something did happen by user!")
         let b_left = self.tempTextData.left
         let b_center = self.tempTextData.center
@@ -429,7 +432,10 @@ private final class InputManager {
         return inputtedText.count
     }
     private var afterAdjusted: Bool = false
-
+    fileprivate var liveConversionManager = LiveConversionManager()
+    private var liveConversionEnabled: Bool {
+        return liveConversionManager.enabled && !self.isSelected
+    }
     private typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
     private typealias DirectConverter = KanaKanjiConverter<DirectInputData, DirectLatticeNode>
     /// かな漢字変換を受け持つ変換器。
@@ -501,10 +507,16 @@ private final class InputManager {
 
     /// 変換を選択した場合に呼ばれる
     fileprivate func complete(candidate: Candidate) {
-        // 入力部分を削除する
+        // カーソルから左の入力部分を削除し、変換後の文字列+残りの文字列を後で入力し直す
         let leftsideInputedText = self.inputtedText.prefix(self.cursorPosition)
+        let count: Int
+        if liveConversionEnabled {
+            count = self.liveConversionManager.lastUsedCandidate?.text.count ?? self.cursorPosition
+        } else {
+            count = self.cursorPosition
+        }
         if !self.isSelected {
-            (0..<self.cursorPosition).forEach {_ in
+            (0..<count).forEach {_ in
                 self.proxy.deleteBackward()
             }
         }
@@ -522,7 +534,6 @@ private final class InputManager {
             self.cursorPosition -= candidate.correspondingCount
             self.inputtedText = String(self.inputtedText.dropFirst(candidate.correspondingCount))
             self.directConverter.setCompletedData(candidate)
-
         case .roman2kana:
             self.romanConverter.updateLearningData(candidate)
             let displayedTextCount = self.kanaRomanStateHolder.complete(candidate.correspondingCount)
@@ -535,6 +546,9 @@ private final class InputManager {
             self.cursorPosition -= displayedTextCount
             self.inputtedText = String(self.inputtedText.dropFirst(displayedTextCount))
             self.romanConverter.setCompletedData(candidate)
+        }
+        if liveConversionEnabled {
+            self.liveConversionManager.lastUsedCandidate = nil
         }
         if self.cursorPosition == 0 {
             self.cursorPosition = self.cursorMaximumPosition
@@ -551,7 +565,7 @@ private final class InputManager {
         self.inputtedText = ""
         self.cursorPosition = self.cursorMinimumPosition
         self.isSelected = false
-
+        self.liveConversionManager.clear()
         self.setResult()
         self.kanaRomanStateHolder = KanaRomanStateHolder()
         self._romanConverter?.clear()
@@ -759,7 +773,11 @@ private final class InputManager {
             self.cursorPosition = 0
             self.kanaRomanStateHolder.delete(kanaCount: leftSideText.count, leftSideText: leftSideText)
             // 削除を実行する
-            self.proxy.deleteBackward(count: leftSideText.count)
+            if liveConversionEnabled {
+                self.proxy.deleteBackward(count: self.liveConversionManager.lastUsedCandidate?.text.count ?? leftSideText.count)
+            } else {
+                self.proxy.deleteBackward(count: leftSideText.count)
+            }
             self.moveCursor(count: self.cursorMaximumPosition)
             // 文字がもうなかった場合
             if self.inputtedText.isEmpty {
@@ -942,6 +960,9 @@ private final class InputManager {
 
     /// キーボード経由でのカーソル移動
     fileprivate func moveCursor(count: Int) {
+        if liveConversionEnabled {
+            self.clear()
+        }
         if count == 0 {
             return
         }
@@ -1029,6 +1050,9 @@ private final class InputManager {
         if text.isEmpty {
             return
         }
+        if text.hasPrefix("http") {
+            return
+        }
         inputtedText = text
         kanaRomanStateHolder.components = text.map {KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
         cursorPosition = cursorMaximumPosition
@@ -1050,6 +1074,14 @@ private final class InputManager {
     fileprivate func userDeselectedText() {
         self.clear()
         VariableStates.shared.setEnterKeyState(.return)
+    }
+
+    fileprivate class LiveConversionManager {
+        var enabled = false
+        var lastUsedCandidate: Candidate? = nil
+        func clear() {
+            self.lastUsedCandidate = nil
+        }
     }
 
     fileprivate enum ResultOptions {
@@ -1077,6 +1109,20 @@ private final class InputManager {
                     result = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
                 }
                 results.append(contentsOf: result)
+                if liveConversionEnabled {
+                    if self.cursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map{$0.ruby}.joined().count == input_hira.count}) {
+                        let request = firstCandidate.text
+                        if let previousCandidate = self.liveConversionManager.lastUsedCandidate {
+                            let lastCount = previousCandidate.text.count
+                            let delta = self.cursorPosition - previousCandidate.data.reduce(0){$0 + $1.ruby.count}
+                            self.proxy.deleteBackward(count: lastCount + delta)
+                        } else {
+                            self.proxy.deleteBackward(count: self.cursorPosition)
+                        }
+                        self.proxy.insertText(request)
+                        self.liveConversionManager.lastUsedCandidate = firstCandidate
+                    }
+                }
             // Storeに通知し、ResultViewに表示する。
             case .mojiCount:
                 let input = self.inputtedText.prefix(self.cursorPosition)

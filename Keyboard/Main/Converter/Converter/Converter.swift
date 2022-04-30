@@ -284,7 +284,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             )
             candidates.append(katakana)
         }
-        let hiraganaString = string.applyingTransform(.hiraganaToKatakana, reverse: true)!
+        let hiraganaString = string.toHiragana()
         do {
             // ひらがな
             let data = DicdataElement(word: hiraganaString, ruby: string, cid: 1288, mid: 501, value: -14.5)

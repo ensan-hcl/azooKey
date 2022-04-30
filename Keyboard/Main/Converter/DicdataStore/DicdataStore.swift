@@ -438,7 +438,8 @@ final class DicdataStore {
             }
         }
 
-        if head.count == 1, let hira = head.applyingTransform(.hiraganaToKatakana, reverse: true), allowRomanLetter || !head.onlyRomanAlphabet {
+        let hira = head.toKatakana()
+        if head.count == 1, allowRomanLetter || !head.onlyRomanAlphabet {
             if head == hira {
                 result.append(DicdataElement(ruby: head, cid: 1288, mid: 501, value: -14))
             } else {

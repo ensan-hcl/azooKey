@@ -19,7 +19,7 @@ struct DirectInputData: InputDataProtocol {
         } else {
             self.count = input.count
         }
-        self.katakanaString = input.applyingTransform(.hiraganaToKatakana, reverse: false) ?? ""
+        self.katakanaString = input.toKatakana()
         self.characters = Array(self.katakanaString)
     }
 

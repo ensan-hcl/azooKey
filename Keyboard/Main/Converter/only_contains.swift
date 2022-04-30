@@ -32,6 +32,14 @@ extension StringProtocol {
 }
 
 extension StringProtocol {
+    @inlinable func toKatakana() -> String {
+        return self.applyingTransform(.hiraganaToKatakana, reverse: false) ?? String(self)
+    }
+
+    @inlinable func toHiragana() -> String {
+        return self.applyingTransform(.hiraganaToKatakana, reverse: true) ?? String(self)
+    }
+
     @inlinable
     public func indexFromStart(_ offset: Int) -> Index {
         return self.index(self.startIndex, offsetBy: offset)
