@@ -1077,10 +1077,16 @@ private final class InputManager {
     }
 
     fileprivate class LiveConversionManager {
+        init() {
+            @KeyboardSetting(.liveConversion) var enabled
+            self.enabled = enabled
+        }
         var enabled = false
         var lastUsedCandidate: Candidate? = nil
         func clear() {
             self.lastUsedCandidate = nil
+            @KeyboardSetting(.liveConversion) var enabled
+            self.enabled = enabled
         }
     }
 

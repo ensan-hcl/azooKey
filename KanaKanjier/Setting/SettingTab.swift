@@ -68,6 +68,7 @@ struct SettingTabView: View {
                     }
                 }
                 Section(header: Text("変換")) {
+                    BoolSettingView(.liveConversion)
                     BoolSettingView(.englishCandidate)
                     BoolSettingView(.halfKanaCandidate)
                     BoolSettingView(.fullRomanCandidate)

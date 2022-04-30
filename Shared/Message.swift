@@ -13,6 +13,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
     case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"           // MARK: frozen
     case iOS14_5_new_emoji = "iOS_14_5_new_emoji_fixed_ver_1_6_1"    // MARK: frozen
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"
+    case liveconversion_introduction = "liveconversion_introduction"
 
     var key: String {
         return self.rawValue + "_status"
@@ -22,7 +23,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
         switch self {
         case .ver1_5_update_loudstxt:
             return true
-        case .iOS14_5_new_emoji, .iOS15_4_new_emoji, .mock:
+        case .iOS14_5_new_emoji, .iOS15_4_new_emoji, .liveconversion_introduction, .mock:
             return false
         }
     }
@@ -122,6 +123,19 @@ struct MessageManager {
                 } else {
                     return false
                 }
+            },
+            containerAppShouldMakeItDone: { false }
+        ),
+
+        MessageData(
+            id: .liveconversion_introduction,
+            title: "お知らせ",
+            description: "「ライブ変換」機能がサポートされました！「設定」から有効化できます。",
+            leftsideButton: .later,
+            rightsideButton: .openContainer(text: "設定する"),
+            precondition: {
+                @KeyboardSetting(.liveConversion) var enabled
+                return enabled == false
             },
             containerAppShouldMakeItDone: { false }
         )

@@ -13,6 +13,10 @@ struct KeyboardLayoutTypeDetailsView: View {
     var body: some View {
         Form {
             Section {
+                Text("macOSなどに搭載されている、入力中の文字列を自動的に変換する「ライブ変換」が利用できます。") // TODO: Localize
+                BoolSettingView(.liveConversion)
+            }
+            Section {
                 LanguageLayoutSettingView(.japaneseKeyboardLayout, language: .japanese).padding(.vertical)
                 LanguageLayoutSettingView(.englishKeyboardLayout, language: .english).padding(.vertical)
             }

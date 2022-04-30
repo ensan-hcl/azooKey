@@ -54,6 +54,17 @@ extension KeyboardSettingKey where Self == WesternJapaneseCalender {
     static var westernJapaneseCalender: Self { .init() }
 }
 
+struct LiveConversionInputMode: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "ライブ変換" // TODO: Localize
+    static let explanation: LocalizedStringKey = "入力中の文字列を自動的に変換します。" // TODO: Localize
+    static let defaultValue = false
+    static let key: String = "live_conversion"
+}
+
+extension KeyboardSettingKey where Self == LiveConversionInputMode {
+    static var liveConversion: Self { .init() }
+}
+
 struct TypographyLetter: BoolKeyboardSettingKey {
     static let title: LocalizedStringKey = "装飾英字変換"
     static let explanation: LocalizedStringKey = "英字入力をした際、「𝕥𝕪𝕡𝕠𝕘𝕣𝕒𝕡𝕙𝕪」のような装飾字体を候補に表示します。"
