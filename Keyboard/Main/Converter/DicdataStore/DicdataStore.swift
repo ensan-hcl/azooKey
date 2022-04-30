@@ -193,8 +193,8 @@ final class DicdataStore {
         // indicesをreverseすることで、stringWithTypoは長さの長い順に並ぶ=removeでヒットしやすくなる
         let stringWithTypoData: [(string: String, penalty: PValue)] = (index ..< toIndex).reversed().flatMap {(end) -> [(string: String, penalty: PValue)] in
             let result = inputData.getRangeWithTypos(index, end)
-            result.forEach {
-                string2segment[$0.string] = end-index
+            for item in result {
+                string2segment[item.string] = end-index
             }
             return result
         }

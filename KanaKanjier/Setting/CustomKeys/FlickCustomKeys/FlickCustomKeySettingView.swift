@@ -99,7 +99,7 @@ struct FlickCustomKeysSettingSelectView: View {
 
 struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: View {
     @State private var bottomSheetShown = false
-    @State private var selectedPosition: FlickKeyPosition?
+    @State private var selectedPosition: FlickKeyPosition = .center
     @State private var value: KeyFlickSetting
     // @Binding(get: { SettingKey.value }, set: { SettingKey.value = $0 }) private var value
 
@@ -138,8 +138,8 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                 }
                 Spacer()
             }.navigationBarTitle("カスタムキーの設定", displayMode: .inline)
-                .onChange(of: selectedPosition) {value in
-                    bottomSheetShown = value != nil
+                .onChange(of: selectedPosition) {_ in
+                    bottomSheetShown = true
                 }
                 .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             if let position = selectedPosition {
@@ -154,7 +154,13 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                                 Section(header: Text("入力")) {
                                     if self.isInputActionEditable(actions: value[keyPath: position.keyPath].actions) {
                                         Text("キーを押して入力される文字を設定します。")
-                                        TextField(localized: "入力", text: $value[.input, position])
+                                        TextField("入力", text: Binding(
+                                            get: {
+                                                value[.input, position]
+                                            },
+                                            set: {
+                                                value[.input, position] = $0
+                                            }))
                                             .textFieldStyle(.roundedBorder)
                                             .submitLabel(.done)
                                     } else {
@@ -180,7 +186,13 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                             }
                             Section(header: Text("ラベル")) {
                                 Text("キーに表示される文字を設定します。")
-                                TextField(localized: "ラベル", text: $value[.label, position])
+                                TextField("ラベル", text: Binding(
+                                    get: {
+                                        value[.label, position]
+                                    },
+                                    set: {
+                                        value[.label, position] = $0
+                                    }))
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
                             }
@@ -239,8 +251,8 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
     }
 
     private func reload() {
-        if let position = selectedPosition, self.isPossiblePosition(position) {
-            value[keyPath: position.keyPath] = value.identifier.defaultSetting[keyPath: position.keyPath]
+        if self.isPossiblePosition(selectedPosition) {
+            value[keyPath: selectedPosition.keyPath] = value.identifier.defaultSetting[keyPath: selectedPosition.keyPath]
         }
     }
 

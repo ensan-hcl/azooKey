@@ -16,9 +16,9 @@ struct BottomSheetView<Content: View>: View {
     private let maxHeight: CGFloat
     private let minHeight: CGFloat
     private let headerColor: Color
-    private let content: Content
+    private let content: () -> Content
 
-    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: () -> Content) {
+    init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: @escaping () -> Content) {
         if let minHeight = minHeight {
             self.minHeight = minHeight
         } else {
@@ -26,7 +26,7 @@ struct BottomSheetView<Content: View>: View {
         }
         self.maxHeight = maxHeight
         self.headerColor = headerColor
-        self.content = content()
+        self.content = content
         self._isOpen = isOpen
     }
 
@@ -48,7 +48,7 @@ struct BottomSheetView<Content: View>: View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
                 self.indicator.padding()
-                self.content
+                self.content()
             }
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)
             .background(headerColor)

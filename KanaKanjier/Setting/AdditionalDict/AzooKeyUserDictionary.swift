@@ -140,7 +140,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
         Form {
             Section(header: Text("読みと単語"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")) {
                 HStack {
-                    TextField(localized: "単語", text: $item.data.word)
+                    TextField("単語", text: $item.data.word)
                         .padding(.vertical, 2)
                         .submitLabel(.done)
                     Divider()
@@ -148,7 +148,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                         .padding(.horizontal, 5)
                 }
                 HStack {
-                    TextField(localized: "読み", text: $item.data.ruby)
+                    TextField("読み", text: $item.data.ruby)
                         .padding(.vertical, 2)
                         .submitLabel(.done)
                     Divider()

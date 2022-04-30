@@ -103,7 +103,7 @@ struct EnableAzooKeyView: View {
                             } else {
                                 EnableAzooKeyViewText("キーボードの地球儀ボタンを長押しし、azooKeyを選択してください", with: "globe")
                             }
-                            TextField(localized: "キーボードを開く", text: $text)
+                            TextField("キーボードを開く", text: $text)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.continue)
                                 .onSubmit {

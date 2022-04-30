@@ -11,16 +11,16 @@ import SwiftUI
 
 struct CustomKeySettingFlickKeyView<Label: View>: View {
     private let position: FlickKeyPosition
-    @Binding private var selectedPosition: FlickKeyPosition?
+    @Binding private var selectedPosition: FlickKeyPosition
     private let label: () -> Label
 
-    init(_ position: FlickKeyPosition, label: String, selectedPosition: Binding<FlickKeyPosition?>) where Label == Text {
+    init(_ position: FlickKeyPosition, label: String, selectedPosition: Binding<FlickKeyPosition>) where Label == Text {
         self.position = position
         self.label = { Text(verbatim: label) }
         self._selectedPosition = selectedPosition
     }
 
-    init(_ position: FlickKeyPosition, selectedPosition: Binding<FlickKeyPosition?>, @ViewBuilder label: @escaping () -> Label) {
+    init(_ position: FlickKeyPosition, selectedPosition: Binding<FlickKeyPosition>, @ViewBuilder label: @escaping () -> Label) {
         self.position = position
         self.label = label
         self._selectedPosition = selectedPosition

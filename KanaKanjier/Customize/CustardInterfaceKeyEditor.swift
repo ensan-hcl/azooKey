@@ -290,7 +290,7 @@ struct CustardInterfaceKeyEditor: View {
     @Binding private var height: Int
     private let intStringConverter = IntStringConversion.self
 
-    @State private var selectedPosition: FlickKeyPosition? = .center
+    @State private var selectedPosition: FlickKeyPosition = .center
     @State private var bottomSheetShown = false
 
     init(data: Binding<UserMadeTenKeyCustard.KeyData>) {
@@ -316,18 +316,16 @@ struct CustardInterfaceKeyEditor: View {
                     Text("編集したい方向を選択してください。")
                         .padding(.vertical)
                     keysView(key: value)
-                    if let position = selectedPosition {
-                        BottomSheetView(isOpen: self.$bottomSheetShown, maxHeight: geometry.size.height * 0.7) {
-                            customKeyEditor(position: position)
-                        }
+                    BottomSheetView(isOpen: self.$bottomSheetShown, maxHeight: geometry.size.height * 0.7) {
+                        customKeyEditor(position: selectedPosition)
                     }
                 case .system:
                     systemKeyEditor()
                 }
             }
         }
-        .onChange(of: selectedPosition) {value in
-            bottomSheetShown = value != nil
+        .onChange(of: selectedPosition) {_ in
+            bottomSheetShown = true
         }
         .background(Color.secondarySystemBackground)
         .navigationTitle(Text("キーの編集"))
@@ -355,13 +353,13 @@ struct CustardInterfaceKeyEditor: View {
     @ViewBuilder private var sizePicker: some View {
         HStack {
             Text("縦")
-            TextField(localized: "縦", text: $height.converted(intStringConverter))
+            TextField("縦", text: $height.converted(intStringConverter))
                 .textFieldStyle(.roundedBorder)
                 .submitLabel(.done)
         }
         HStack {
             Text("横")
-            TextField(localized: "横", text: $width.converted(intStringConverter))
+            TextField("横", text: $width.converted(intStringConverter))
                 .textFieldStyle(.roundedBorder)
                 .submitLabel(.done)
         }
@@ -383,13 +381,40 @@ struct CustardInterfaceKeyEditor: View {
         }
     }
 
+    private func isInputActionEditable(position: FlickKeyPosition) -> Bool {
+        let actions = self.key[.custom][.pressAction, position]
+        if actions.count == 1, case .input = actions.first {
+            return true
+        }
+        if actions.isEmpty {
+            return true
+        }
+        return false
+    }
+
     private func customKeyEditor(position: FlickKeyPosition) -> some View {
         Form {
             Section(header: Text("入力")) {
-                Text("キーを押して入力される文字を設定します。")
-                TextField(localized: "入力", text: $key[.custom][.inputAction, position])
+                if self.isInputActionEditable(position: position) {
+                    Text("キーを押して入力される文字を設定します。")
+                    // FIXME: バグを防ぐため一時的にBindingオブジェクトを手動生成する形にしている
+                    TextField("入力", text: Binding(
+                        get: {
+                            key[.custom][.inputAction, position]
+                        },
+                        set: {
+                            key[.custom][.inputAction, position] = $0
+                        })
+                    )
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
+                } else {
+                    Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
+                    Button("入力を設定する") {
+                        key[.custom][.inputAction, position] = ""
+                    }
+                    .foregroundColor(.accentColor)
+                }
             }
             Section(header: Text("ラベル")) {
                 Text("キーに表示される文字を設定します。")
@@ -399,11 +424,25 @@ struct CustardInterfaceKeyEditor: View {
                 }
                 switch key[.custom][.labelType, position] {
                 case .text:
-                    TextField(localized: "ラベル", text: $key[.custom][.labelText, position])
+                    TextField("ラベル", text: Binding(
+                        get: {
+                            key[.custom][.labelText, position]
+                        },
+                        set: {
+                            key[.custom][.labelText, position] = $0
+                        })
+                    )
                         .textFieldStyle(.roundedBorder)
                         .submitLabel(.done)
                 case .systemImage:
-                    TextField(localized: "アイコンの名前", text: $key[.custom][.labelImageName, position])
+                    TextField("アイコンの名前", text: Binding(
+                        get: {
+                            key[.custom][.labelImageName, position]
+                        },
+                        set: {
+                            key[.custom][.labelImageName, position] = $0
+                        })
+                    )
                         .textFieldStyle(.roundedBorder)
                         .submitLabel(.done)
                 }

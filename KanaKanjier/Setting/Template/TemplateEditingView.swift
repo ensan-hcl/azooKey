@@ -29,7 +29,7 @@ struct TemplateEditingView: CancelableEditor {
             VStack {
                 HStack {
                     Text("名前")
-                    TextField(localized: "テンプレート名", text: $editingTemplate.name)
+                    TextField("テンプレート名", text: $editingTemplate.name)
                         .textFieldStyle(.roundedBorder)
                         .submitLabel(.done)
                 }
@@ -183,7 +183,7 @@ struct RandomTemplateLiteralSettingView: View {
             case .int:
                 VStack {
                     HStack {
-                        TextField(localized: "左端の値", text: $intStringRange.left)
+                        TextField("左端の値", text: $intStringRange.left)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
                         Text("から")
@@ -194,7 +194,7 @@ struct RandomTemplateLiteralSettingView: View {
                 }
                 VStack {
                     HStack {
-                        TextField(localized: "右端の値", text: $intStringRange.right)
+                        TextField("右端の値", text: $intStringRange.right)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
                         Text("まで")
@@ -206,7 +206,7 @@ struct RandomTemplateLiteralSettingView: View {
             case .double:
                 VStack {
                     HStack {
-                        TextField(localized: "左端の値", text: $doubleStringRange.left)
+                        TextField("左端の値", text: $doubleStringRange.left)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
                         Text("から")
@@ -217,7 +217,7 @@ struct RandomTemplateLiteralSettingView: View {
                 }
                 VStack {
                     HStack {
-                        TextField(localized: "右端の値", text: $doubleStringRange.right)
+                        TextField("右端の値", text: $doubleStringRange.right)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
                         Text("まで")
@@ -229,7 +229,7 @@ struct RandomTemplateLiteralSettingView: View {
             case .string:
                 VStack {
                     HStack {
-                        TextField(localized: "表示する値(カンマ区切り)", text: $stringsString)
+                        TextField("表示する値(カンマ区切り)", text: $stringsString)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
                     }
@@ -359,7 +359,7 @@ struct DateTemplateLiteralSettingView: View {
                     HStack {
                         Text("書式")
                         Spacer()
-                        TextField(localized: "書式を入力", text: $literal.format)
+                        TextField("書式を入力", text: $literal.format)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
                     }
@@ -367,7 +367,7 @@ struct DateTemplateLiteralSettingView: View {
                         HStack {
                             Text("ズレ")
                             Spacer()
-                            TextField(localized: "ズレ", text: $literal.delta)
+                            TextField("ズレ", text: $literal.delta)
                                 .multilineTextAlignment(.trailing)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
