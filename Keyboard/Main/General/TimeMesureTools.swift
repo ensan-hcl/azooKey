@@ -57,8 +57,8 @@ struct Kana2KanjiTarget: BenchmarkTarget {
 
 final class BenchmarkTool<Target: BenchmarkTarget> {
     var benchmarks: [Target.ProcessType: (Int, Double)] = [:]
-    private var timers: [Target.ProcessType: Date] = [:]
-    private var timeFormatter = NumberFormatter()
+    var timers: [Target.ProcessType: Date] = [:]
+    var timeFormatter = NumberFormatter()
 
     init() {
         self.timeFormatter.maximumIntegerDigits = 2
@@ -66,12 +66,14 @@ final class BenchmarkTool<Target: BenchmarkTarget> {
         self.timeFormatter.minimumFractionDigits = 6
     }
 
+    @inlinable
     func start(process: Target.ProcessType) {
         #if DEBUG
         self.timers[process] = Date()
         #endif
     }
 
+    @inlinable
     func end(process: Target.ProcessType) {
         #if DEBUG
         guard let time = timers[process] else {
@@ -88,6 +90,7 @@ final class BenchmarkTool<Target: BenchmarkTarget> {
         self.timers = [:]
     }
 
+    @inlinable
     func result() {
         #if DEBUG
         let pairs = self.benchmarks.map {(key: $0.key, value: $0.value)}
