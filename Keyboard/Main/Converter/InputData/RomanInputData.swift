@@ -252,11 +252,11 @@ private struct RomanKanaConvertingLattice {
                     let roman2katakana = components[$0].string.roman2katakana
 
                     if $0 == components.endIndex - 1 {
-                        if let last = roman2katakana.last, last == nextCharacter && String(last).onlyRomanAlphabet {
-                            return roman2katakana.dropLast() + "っ"
-                        }
                         if let last = roman2katakana.last, last == "n" && !["a", "i", "u", "e", "o", "n", "y"].contains(nextCharacter) {
                             return roman2katakana.dropLast() + "ん"
+                        }
+                        if let last = roman2katakana.last, last == nextCharacter && String(last).onlyRomanAlphabet {
+                            return roman2katakana.dropLast() + "っ"
                         }
                         return roman2katakana
                     }
