@@ -263,6 +263,9 @@
 
 
 "変換" = "Candidates";
+"ライブ変換" = "Live Conversion";
+"入力中の文字列を自動的に変換します。" = "Hiragana characters you input are immediately converted into kanji text, without manual operation";
+"macOSなどに搭載されている、入力中の文字列を自動的に変換する「ライブ変換」が利用できます。" = "You can use 'Live Conversion' with which hiragana characters you input are immediately converted into kanji text. This feature is often used in macOS, and now this feature is available on iOS!";
 "日本語入力中の英単語変換" = "Conversion to English words during Japanese input";
 "「いんてれsちんg」→「interesting」のように、ローマ字日本語入力中も英語への変換候補を表示します。" = "Display English word candidates during qwerty Japanese inputting like 「いんてれsちんg」→「interesting」.";
 "半角カナ変換" = "Half-width kana candidates";

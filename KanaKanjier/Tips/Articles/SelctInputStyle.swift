@@ -18,7 +18,7 @@ struct SelctInputStyleTipsView: View {
             LanguageLayoutSettingView(.japaneseKeyboardLayout, language: .japanese).padding(.vertical)
             LanguageLayoutSettingView(.englishKeyboardLayout, language: .english).padding(.vertical)
             TipsContentParagraph {
-                Text("macOSなどに搭載されている、入力中の文字列を自動的に変換する「ライブ変換」が利用できます。") // TODO: Localize
+                Text("macOSなどに搭載されている、入力中の文字列を自動的に変換する「ライブ変換」が利用できます。")
                 BoolSettingView(.liveConversion)
             }
             TipsContentParagraph(style: .caption) {

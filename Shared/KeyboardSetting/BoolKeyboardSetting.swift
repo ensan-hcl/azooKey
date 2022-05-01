@@ -55,8 +55,8 @@ extension KeyboardSettingKey where Self == WesternJapaneseCalender {
 }
 
 struct LiveConversionInputMode: BoolKeyboardSettingKey {
-    static let title: LocalizedStringKey = "ライブ変換" // TODO: Localize
-    static let explanation: LocalizedStringKey = "入力中の文字列を自動的に変換します。" // TODO: Localize
+    static let title: LocalizedStringKey = "ライブ変換"
+    static let explanation: LocalizedStringKey = "入力中の文字列を自動的に変換します。"
     static let defaultValue = false
     static let key: String = "live_conversion"
 }
