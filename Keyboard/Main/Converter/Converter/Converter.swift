@@ -391,7 +391,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         // 予測変換
         conversionBenchmark.start(process: .結果の処理_予測変換_全体)
         conversionBenchmark.start(process: .結果の処理_予測変換_日本語_全体)
-        let prediction_candidates: [Candidate] = requirePrediction ? self.getUniqueCandidate(self.getPredictionCandidate(sums)) : []
+        let prediction_candidates: [Candidate] = requirePrediction ? Array(self.getUniqueCandidate(self.getPredictionCandidate(sums)).sorted {$0.value>$1.value}.prefix(4)) : []
         conversionBenchmark.end(process: .結果の処理_予測変換_日本語_全体)
 
         // 英単語の予測変換。appleのapiを使うため、処理が異なる。
