@@ -1116,8 +1116,13 @@ private final class InputManager {
                 }
                 results.append(contentsOf: result)
                 if liveConversionEnabled {
+                    let candidate: Candidate
                     if self.cursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map{$0.ruby}.joined().count == input_hira.count}) {
-                        let request = firstCandidate.text
+                        candidate = firstCandidate
+                    } else {
+                        candidate = .init(text: String(input_hira), value: 0, correspondingCount: input_hira.count, lastMid: 0, data: [.init(ruby: String(input_hira), cid: 0, mid: 0, value: 0)])
+                    }
+                    if self.cursorPosition > 0 {
                         if let previousCandidate = self.liveConversionManager.lastUsedCandidate {
                             let lastCount = previousCandidate.text.count
                             let delta = self.cursorPosition - previousCandidate.data.reduce(0){$0 + $1.ruby.count}
@@ -1125,8 +1130,8 @@ private final class InputManager {
                         } else {
                             self.proxy.deleteBackward(count: self.cursorPosition)
                         }
-                        self.proxy.insertText(request)
-                        self.liveConversionManager.lastUsedCandidate = firstCandidate
+                        self.proxy.insertText(candidate.text)
+                        self.liveConversionManager.lastUsedCandidate = candidate
                     }
                 }
             // Storeに通知し、ResultViewに表示する。
