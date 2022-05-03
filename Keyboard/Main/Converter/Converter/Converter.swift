@@ -384,10 +384,10 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         conversionBenchmark.end(process: .結果の処理_文節化)
         conversionBenchmark.start(process: .結果の処理_文全体変換)
         let sums: [(CandidateData, Candidate)] = clauseResult.map {($0, converter.processClauseCandidate($0))}
-        // 文章全体を変換した場合の候補上位五件
-        let sentence_candidates = self.getUniqueCandidate(sums.map {$0.1}).sorted {$0.value>$1.value}.prefix(5)
+        // 文章全体を変換した場合の候補上位五件を作る
+        let whole_sentence_unique_candidates = self.getUniqueCandidate(sums.map {$0.1})
+        let sentence_candidates = whole_sentence_unique_candidates.sorted {$0.value>$1.value}.prefix(5)
         conversionBenchmark.end(process: .結果の処理_文全体変換)
-
         // 予測変換
         conversionBenchmark.start(process: .結果の処理_予測変換_全体)
         conversionBenchmark.start(process: .結果の処理_予測変換_日本語_全体)
@@ -447,13 +447,30 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
          */
         conversionBenchmark.start(process: .結果の処理_並び替え)
 
-        let word_candidates: [Candidate] = self.getUniqueCandidate((dicCandidates+additionalCandidates).filter {!seenCandidate.contains($0.text)}).sorted {
-            let count0 = $0.correspondingCount
-            let count1 = $1.correspondingCount
-            return count0 == count1 ? $0.value>$1.value : count0 > count1
-        }
+        let word_candidates: [Candidate] = self.getUniqueCandidate(
+            (dicCandidates+additionalCandidates)
+                .filter {
+                    !seenCandidate.contains($0.text)
+                }
+            )
+            .sorted {
+                let count0 = $0.correspondingCount
+                let count1 = $1.correspondingCount
+                return count0 == count1 ? $0.value>$1.value : count0 > count1
+            }
 
         var result = Array(full_candidate)
+
+        // 最低でも1つ、入力に完全一致する候補が入るようにする
+        let checkRuby: (Candidate) -> Bool = {$0.data.reduce("") {$0 + $1.ruby} == inputData.katakanaString}
+        if !result.contains(where: checkRuby) {
+            if let candidate = sentence_candidates.first(where: checkRuby) {
+                result.append(candidate)
+            } else if let candidate = whole_sentence_unique_candidates.first(where: checkRuby) {
+                result.append(candidate)
+            }
+        }
+
         result.append(contentsOf: clause_candidates)
         result.append(contentsOf: wise_candidates)
         result.append(contentsOf: word_candidates)
