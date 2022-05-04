@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import DequeModule
 
 final class Store {
     static let shared = Store()
@@ -436,6 +437,19 @@ private final class InputManager {
     private var liveConversionEnabled: Bool {
         return liveConversionManager.enabled && !self.isSelected
     }
+    private var candidatesLog: Deque<DicdataElement> = []
+
+    private func updateLog(candidate: Candidate) {
+        candidatesLog.append(contentsOf: candidate.data)
+        while candidatesLog.count > 100 {  // 最大100個までログを取る
+            candidatesLog.removeFirst()
+        }
+    }
+
+    private func getMatch(word: String) -> DicdataElement? {
+        return candidatesLog.last(where: {$0.word == word})
+    }
+
     private typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
     private typealias DirectConverter = KanaKanjiConverter<DirectInputData, DirectLatticeNode>
     /// かな漢字変換を受け持つ変換器。
@@ -507,6 +521,7 @@ private final class InputManager {
 
     /// 変換を選択した場合に呼ばれる
     fileprivate func complete(candidate: Candidate) {
+        self.updateLog(candidate: candidate)
         // カーソルから左の入力部分を削除し、変換後の文字列+残りの文字列を後で入力し直す
         let leftsideInputedText = self.inputtedText.prefix(self.cursorPosition)
         let count: Int
@@ -583,7 +598,7 @@ private final class InputManager {
 
     // 単純に確定した場合のデータ
     fileprivate func enter() -> [ActionType] {
-        let _candidate = Candidate(
+        var _candidate = Candidate(
             text: self.inputtedText,
             value: -18,
             correspondingCount: self.inputtedText.count,
@@ -592,6 +607,10 @@ private final class InputManager {
                 DicdataElement(ruby: self.inputtedText, cid: 1298, mid: 501, value: -18)
             ]
         )
+        if liveConversionEnabled, let candidate = liveConversionManager.lastUsedCandidate {
+            _candidate = candidate
+        }
+        self.updateLog(candidate: _candidate)
         let actions: [ActionType]
         switch VariableStates.shared.inputStyle {
         case .direct:
@@ -600,7 +619,6 @@ private final class InputManager {
             self.directConverter.updateLearningData(candidate)
         case .roman2kana:
             actions = self.romanConverter.getApporopriateActions(_candidate)
-
             let candidate = _candidate.withActions(actions)
             self.romanConverter.updateLearningData(candidate)
         }
@@ -1054,6 +1072,9 @@ private final class InputManager {
             return
         }
         inputtedText = text
+        if let element = self.getMatch(word: text) {
+            inputtedText = element.ruby
+        }
         kanaRomanStateHolder.components = text.map {KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
         cursorPosition = cursorMaximumPosition
         isSelected = true
