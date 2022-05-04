@@ -1115,12 +1115,21 @@ private final class InputManager {
                     result = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
                 }
                 results.append(contentsOf: result)
+                // TODO: 最後の1単語のライブ変換を抑制したい
+                // TODO: ローマ字入力中に最後の単語が優先される問題
                 if liveConversionEnabled {
-                    let candidate: Candidate
+                    var candidate: Candidate
                     if self.cursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map{$0.ruby}.joined().count == input_hira.count}) {
                         candidate = firstCandidate
                     } else {
                         candidate = .init(text: String(input_hira), value: 0, correspondingCount: input_hira.count, lastMid: 0, data: [.init(ruby: String(input_hira), cid: 0, mid: 0, value: 0)])
+                    }
+                    if let last = candidate.data.last, last.ruby.count < 2 {
+                        let ruby_hira = last.ruby.toHiragana()
+                        let newElement = DicdataElement(word: ruby_hira, ruby: last.ruby, lcid: last.lcid, rcid: last.rcid, mid: last.mid, value: last.adjustedData(0).value(), adjust: last.adjust)
+                        let newCandidate = Candidate(text: candidate.data.dropLast().map{$0.word}.joined() + ruby_hira, value: candidate.value, correspondingCount: candidate.correspondingCount, lastMid: candidate.lastMid, data: candidate.data.dropLast() + [newElement])
+                        debug(candidate, newCandidate)
+                        candidate = newCandidate
                     }
                     if self.cursorPosition > 0 {
                         if let previousCandidate = self.liveConversionManager.lastUsedCandidate {
