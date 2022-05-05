@@ -8,8 +8,6 @@
 
 import Foundation
 
-// FIXME: TextFieldのイニシャライザの優先順位が変わっており、ローカライズがtitleに対して働かない
-
 enum SharedStore {
     static let userDefaults = UserDefaults(suiteName: Self.appGroupKey)!
     static let bundleName = "DevEn3.azooKey.keyboard"

@@ -27,7 +27,6 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         self._splitedResults = State(initialValue: Self.registerResults(results: sharedResultData.results))
     }
 
-    // FIXME: これはGridViewが使えないからこうなっている。
     var body: some View {
         VStack {
             HStack(alignment: .center) {
