@@ -16,7 +16,7 @@ enum SharedStore {
     static let appGroupKey = "group.com.azooKey.keyboard"
 }
 
-func debug(_ items: Any...) {
+@inlinable func debug(_ items: Any...) {
     #if DEBUG
     print(items.map {"\($0)"}.joined(separator: " "))
     #endif
