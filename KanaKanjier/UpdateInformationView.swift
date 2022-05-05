@@ -15,6 +15,7 @@ struct UpdateInfomationView: View {
                 VersionView("1.7", releaseDate: "2022年xx月xx日") {
                     ParagraphView("機能を追加しました。") {
                         "ライブ変換が設定できるようになりました"
+                        "一部のケースで再変換が可能になりました"
                     }
                     ParagraphView("不具合を修正しました。") {
                         "一部環境でQwertyキーボードの着せ替えができない問題を修正"
@@ -22,7 +23,7 @@ struct UpdateInfomationView: View {
                     }
                     ParagraphView("機能を改善しました。") {
                         "iOS15.4以降で利用可能なUnicode14.0に対応した絵文字のデータを追加"
-                        "辞書データをアップデートしました"
+                        "辞書データを大幅にアップデートしました"
                     }
                     ParagraphView("その他デザイン・パフォーマンスの軽微な改善を行いました。")
                 }
