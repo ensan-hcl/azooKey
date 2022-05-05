@@ -12,7 +12,7 @@ struct UpdateInfomationView: View {
         Form {
             // version 1.7系
             Group {
-                VersionView("1.7", releaseDate: "2022年xx月xx日") {
+                VersionView("1.7", releaseDate: "2022年05月06日") {
                     ParagraphView("機能を追加しました。") {
                         "ライブ変換が設定できるようになりました"
                         "一部のケースで再変換が可能になりました"
