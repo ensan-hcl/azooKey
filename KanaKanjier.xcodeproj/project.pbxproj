@@ -1009,6 +1009,8 @@
 		1A9476AB28234D8F006E22A9 /* p_ツ.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1A94766028234D8E006E22A9 /* p_ツ.csv */; };
 		1A9476AC28234D8F006E22A9 /* p_ド.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1A94766128234D8E006E22A9 /* p_ド.csv */; };
 		1A9476AD28234D8F006E22A9 /* p_テ.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1A94766228234D8E006E22A9 /* p_テ.csv */; };
+		1A9476B028240928006E22A9 /* CidData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9476AF28240928006E22A9 /* CidData.swift */; };
+		1A9476B128240928006E22A9 /* CidData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9476AF28240928006E22A9 /* CidData.swift */; };
 		1A9B0A2D25635090004203BB /* EmojiKaomojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */; };
 		1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9B0A4825642935004203BB /* EnableAzooKeyView.swift */; };
 		1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9B0A4F25642C38004203BB /* EnableAzooKeyViewComponent.swift */; };
@@ -3578,6 +3580,7 @@
 		1A94766028234D8E006E22A9 /* p_ツ.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "p_ツ.csv"; sourceTree = "<group>"; };
 		1A94766128234D8E006E22A9 /* p_ド.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "p_ド.csv"; sourceTree = "<group>"; };
 		1A94766228234D8E006E22A9 /* p_テ.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "p_テ.csv"; sourceTree = "<group>"; };
+		1A9476AF28240928006E22A9 /* CidData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CidData.swift; sourceTree = "<group>"; };
 		1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiKaomojiView.swift; sourceTree = "<group>"; };
 		1A9B0A4825642935004203BB /* EnableAzooKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableAzooKeyView.swift; sourceTree = "<group>"; };
 		1A9B0A4F25642C38004203BB /* EnableAzooKeyViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableAzooKeyViewComponent.swift; sourceTree = "<group>"; };
@@ -6349,6 +6352,14 @@
 			path = p;
 			sourceTree = "<group>";
 		};
+		1A9476AE2824090F006E22A9 /* Converter */ = {
+			isa = PBXGroup;
+			children = (
+				1A9476AF28240928006E22A9 /* CidData.swift */,
+			);
+			path = Converter;
+			sourceTree = "<group>";
+		};
 		1A9B09BD25600445004203BB /* DataSet */ = {
 			isa = PBXGroup;
 			children = (
@@ -6384,6 +6395,7 @@
 				1AC03158251103EF004CA505 /* Designs.xcassets */,
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1A12E24725C41A7100316009 /* Message.swift */,
+				1A9476AE2824090F006E22A9 /* Converter */,
 				1AD2B8D626C272E60053CE4A /* KeyboardSetting */,
 				1A3ACF1525FB78B1007E9938 /* UserDefaultsManager */,
 				1A26F34025E8AAAC003CDA0D /* SwiftUI */,
@@ -10449,6 +10461,7 @@
 				1AF6799525CEDBB500F3987B /* FlickKeyModel.swift in Sources */,
 				1AC0315D25120A17004CA505 /* SettingTab.swift in Sources */,
 				1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */,
+				1A9476B028240928006E22A9 /* CidData.swift in Sources */,
 				1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */,
 				1A3022B52632A22700E4495C /* CustomKeySettingFlickKeyView.swift in Sources */,
 				1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */,
@@ -10738,6 +10751,7 @@
 				1AC8A5AB2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
 				1AB8C37525E0067700D39BC5 /* SimpleKeyView.swift in Sources */,
 				1A8A8402250F65110093A701 /* all.swift in Sources */,
+				1A9476B128240928006E22A9 /* CidData.swift in Sources */,
 				1AB8C38E25E1190900D39BC5 /* TabManager.swift in Sources */,
 				1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */,
 				1A6F959725144481007399AC /* QwertyKeyboardView.swift in Sources */,

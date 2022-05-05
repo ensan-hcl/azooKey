@@ -22,7 +22,7 @@ extension KanaKanjiConverter {
             value: -15,
             correspondingCount: inputData.characters.count,
             lastMid: 501,
-            data: [DicdataElement(word: $0, ruby: string, cid: 1288, mid: 501, value: -15)]
+            data: [DicdataElement(word: $0, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)]
         )]} ?? []
     }
 
@@ -103,7 +103,7 @@ extension KanaKanjiConverter {
                 value: -18,
                 correspondingCount: inputData.characters.count,
                 lastMid: 237,
-                data: [DicdataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -18)]
+                data: [DicdataElement(word: $0, ruby: string, cid: CIDData.一般名詞.cid, mid: 237, value: -18)]
             )
         }
         let makeResult1: (String) -> Candidate = {
@@ -112,7 +112,7 @@ extension KanaKanjiConverter {
                 value: -19,
                 correspondingCount: inputData.characters.count,
                 lastMid: 237,
-                data: [DicdataElement(word: $0, ruby: string, cid: 1285, mid: 237, value: -19)]
+                data: [DicdataElement(word: $0, ruby: string, cid: CIDData.一般名詞.cid, mid: 237, value: -19)]
             )
         }
 

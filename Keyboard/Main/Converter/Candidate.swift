@@ -11,7 +11,7 @@ import Foundation
 // 一文節を担う
 final class ClauseDataUnit {
     var mid: Int = 500
-    var nextLcid = 1316
+    var nextLcid = CIDData.EOS.cid
     var text: String = ""
     var ruby: String = ""
     var rubyCount: Int = 0

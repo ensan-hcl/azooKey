@@ -417,34 +417,34 @@ final class DicdataStore {
         var result: Dicdata = []
         result.append(contentsOf: self.getJapaneseNumberDicdata(head: head))
         if let number = Float(head) {
-            result.append(DicdataElement(ruby: head, cid: 1295, mid: 361, value: -14))
+            result.append(DicdataElement(ruby: head, cid: CIDData.数.cid, mid: 361, value: -14))
             if number.truncatingRemainder(dividingBy: 1) == 0 {
                 let int = Int(number)
                 if int < Int(1E18) && -Int(1E18) < int, let kansuji = self.numberFormatter.string(from: NSNumber(value: int)) {
-                    result.append(DicdataElement(word: kansuji, ruby: head, cid: 1295, mid: 361, value: -16))
+                    result.append(DicdataElement(word: kansuji, ruby: head, cid: CIDData.数.cid, mid: 361, value: -16))
                 }
             }
         }
 
         // headを英単語として候補に追加する
         if VariableStates.shared.keyboardLanguage == .en_US && head.onlyRomanAlphabet {
-            result.append(DicdataElement(ruby: head, cid: 1288, mid: 40, value: -14))
+            result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 40, value: -14))
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
             if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head] {
-                result.append(DicdataElement(word: hiragana, ruby: katakana, cid: 1288, mid: 501, value: -13))
-                result.append(DicdataElement(ruby: katakana, cid: 1288, mid: 501, value: -14))
+                result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
+                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             }
         }
 
         let hira = head.toKatakana()
         if head.count == 1, allowRomanLetter || !head.onlyRomanAlphabet {
             if head == hira {
-                result.append(DicdataElement(ruby: head, cid: 1288, mid: 501, value: -14))
+                result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             } else {
-                result.append(DicdataElement(word: hira, ruby: head, cid: 1288, mid: 501, value: -13))
-                result.append(DicdataElement(ruby: head, cid: 1288, mid: 501, value: -14))
+                result.append(DicdataElement(word: hira, ruby: head, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
+                result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             }
         }
         return result
@@ -584,7 +584,7 @@ final class DicdataStore {
         return false
     }
 
-    private static let BOS_EOS_wordIDs: Set<Int> = [0, 1316]
+    private static let BOS_EOS_wordIDs: Set<Int> = [CIDData.BOS.cid, CIDData.EOS.cid]
     private static let PREPOSITION_wordIDs: Set<Int> = [1315, 6, 557, 558, 559, 560]
     private static let INPOSITION_wordIDs: Set<Int> = Set<Int>((561..<868).map {$0}
                                                                 + (1283..<1297).map {$0}

@@ -604,7 +604,7 @@ private final class InputManager {
             correspondingCount: self.inputtedText.count,
             lastMid: 501,
             data: [
-                DicdataElement(ruby: self.inputtedText, cid: 1298, mid: 501, value: -18)
+                DicdataElement(ruby: self.inputtedText, cid: CIDData.固有名詞.cid, mid: 501, value: -18)
             ]
         )
         if liveConversionEnabled, let candidate = liveConversionManager.lastUsedCandidate {

@@ -108,11 +108,11 @@ struct LOUDSBuilder {
         }
         let cid: Int
         if data.isPersonName {
-            cid = 1289
+            cid = CIDData.人名一般.cid
         } else if data.isPlaceName {
-            cid = 1293
+            cid = CIDData.地名一般.cid
         } else {
-            cid = 1288
+            cid = CIDData.固有名詞.cid
         }
         return ["\(katakanaRuby)\t\(parseTemplate(data.word))\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
     }

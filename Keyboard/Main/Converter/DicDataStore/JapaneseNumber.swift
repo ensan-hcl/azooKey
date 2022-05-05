@@ -436,15 +436,9 @@ extension DicdataStore {
             }
             roman = String(chars)
         }
-        /*
         return [
-            GeneratedDicdataElement(word: kanji, ruby: head, cid: 1295, mid: 452, value: -17+PValue(head.count)/3),
-            GeneratedDicdataElement(word: roman, ruby: head, cid: 1295, mid: 452, value: -16+4/PValue(roman.count))
-        ]
-        */
-        return [
-            DicdataElement(word: kanji, ruby: head, cid: 1295, mid: 452, value: -17+PValue(head.count)/3),
-            DicdataElement(word: roman, ruby: head, cid: 1295, mid: 452, value: -16+4/PValue(roman.count))
+            DicdataElement(word: kanji, ruby: head, cid: CIDData.数.cid, mid: 452, value: -17+PValue(head.count)/3),
+            DicdataElement(word: roman, ruby: head, cid: CIDData.数.cid, mid: 452, value: -16+4/PValue(roman.count))
         ]
     }
 
