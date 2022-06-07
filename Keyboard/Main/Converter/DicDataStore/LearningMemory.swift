@@ -56,7 +56,7 @@ struct LearningMemorys {
         }
     }
 
-    func match<S: StringProtocol>(_ ruby: S) -> DicdataStore.Dicdata {
+    func match(_ ruby: some StringProtocol) -> DicdataStore.Dicdata {
         let dicdata = self.values.lazy.filter {$0.data.ruby == ruby}.map {$0.data.adjustedData(Self.matchAdjust(memory: $0))}
         return Array(dicdata)
     }
@@ -68,7 +68,7 @@ struct LearningMemorys {
         return .zero
     }
 
-    func getPrefixDicdata<S: StringProtocol>(_ prefix: S) -> DicdataStore.Dicdata {
+    func getPrefixDicdata(_ prefix: some StringProtocol) -> DicdataStore.Dicdata {
         let dicdata = self.values.lazy.filter {$0.data.ruby != prefix && $0.data.ruby.hasPrefix(prefix)}.map {$0.data.adjustedData(Self.matchAdjust(memory: $0))}
         return Array(dicdata)
     }
@@ -229,7 +229,7 @@ struct LearningMemorys {
         return values
     }
 
-    private static func convertLatticeNodeData<T: RandomAccessCollection, U: StringProtocol>(from dataString: T) -> DicdataElement where T.Element == U, T.Index == Int {
+    private static func convertLatticeNodeData<S: StringProtocol, T: RandomAccessCollection<S>>(from dataString: T) -> DicdataElement where T.Index == Int {
         let delta = dataString.startIndex
         let ruby = String(dataString[0+delta]).unescaped()
         let word = dataString[1+delta].isEmpty ? ruby:String(dataString[1+delta]).unescaped()

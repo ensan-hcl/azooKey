@@ -51,7 +51,7 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
     ///   ゼロヒント予測変換の結果
     /// - note:
     ///   「食べちゃ-てる」「食べちゃ-いる」などの間抜けな候補を返すことが多いため、学習によるもの以外を無効化している。
-    func getZeroHintPredictionCandidates<T: Collection>(preparts: T, N_best: Int) -> [Candidate] where T.Element == Candidate {
+    func getZeroHintPredictionCandidates(preparts: some Collection<Candidate>, N_best: Int) -> [Candidate] {
         // let dicdata = self.dicdataStore.getZeroHintPredictionDicdata()
         var result: [Candidate] = []
         /*

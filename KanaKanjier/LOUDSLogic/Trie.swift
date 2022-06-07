@@ -83,23 +83,23 @@ final class TrieNode<Key: Hashable, Value: Hashable> {
 }
 
 extension TrieNode where Key == Character {
-    func findNode<S: StringProtocol>(for keys: S) -> TrieNode<Key, Value>? {
+    func findNode(for keys: some StringProtocol) -> TrieNode<Key, Value>? {
         return self.findNode(for: keys.map {$0})
     }
 
-    func find<S: StringProtocol>(for keys: S) -> Set<Value> {
+    func find(for keys: some StringProtocol) -> Set<Value> {
         return self.find(for: keys.map {$0})
     }
 
-    func insertValue<S: StringProtocol>(for keys: S, value: Value) {
+    func insertValue(for keys: some StringProtocol, value: Value) {
         self.insertValue(for: keys.map {$0}, value: value)
     }
 
-    func insertValues<S: StringProtocol>(for keys: S, values: [Value]) {
+    func insertValues(for keys: some StringProtocol, values: [Value]) {
         self.insertValues(for: keys.map {$0}, values: values)
     }
 
-    func prefix<S: StringProtocol>(for keys: S) -> [Value] {
+    func prefix(for keys: some StringProtocol) -> [Value] {
         return self.prefix(for: keys.map {$0})
     }
 }

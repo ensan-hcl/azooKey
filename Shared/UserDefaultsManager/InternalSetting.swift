@@ -11,11 +11,11 @@ import Foundation
 protocol UserDefaultsKeys: RawRepresentable where RawValue == String {
     associatedtype Manager: UserDefaultsManager
     init?(keyPath: PartialKeyPath<Manager>)
-    init?<T>(keyPath: WritableKeyPath<Manager, T>)
+    init?(keyPath: WritableKeyPath<Manager, some Any>)
 }
 
 extension UserDefaultsKeys {
-    init?<T>(keyPath: WritableKeyPath<Manager, T>) {
+    init?(keyPath: WritableKeyPath<Manager, some Any>) {
         let partialKeyPath = keyPath as PartialKeyPath
         self.init(keyPath: partialKeyPath)
     }
@@ -44,7 +44,7 @@ extension UserDefaultsManager {
 }
 
 fileprivate extension UserDefaultsManager {
-    mutating func update<T: Codable>(value: WritableKeyPath<Self, T>) {
+    mutating func update(value: WritableKeyPath<Self, some Codable>) {
         do {
             let data = try JSONEncoder().encode(self[keyPath: value])
             if let key = Keys.init(keyPath: value) {

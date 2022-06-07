@@ -51,7 +51,7 @@ final class KanaRomanStateHolder {
 
     // 左側=leftSideTextの部分に対してテキストを挿入する
     @discardableResult
-    func insert<S: StringProtocol>(_ input: String, leftSideText: S, isFreezed: Bool = false) -> (result: String, delete: Int, input: String) {
+    func insert(_ input: String, leftSideText: some StringProtocol, isFreezed: Bool = false) -> (result: String, delete: Int, input: String) {
         if isFreezed {
             let component = KanaComponent(internalText: input, kana: input, isFreezed: true, escapeRomanKanaConverting: true)
             if components.isEmpty {
@@ -87,7 +87,7 @@ final class KanaRomanStateHolder {
     }
 
     // 左側=leftSideTextの部分に対してテキストを挿入する
-    func complete<S: StringProtocol>(_ completed: S) {
+    func complete(_ completed: some StringProtocol) {
         let index = supremumIndexWithFreezing(for: completed)
         components = Array(components.dropFirst(index + 1))
     }
@@ -123,7 +123,7 @@ final class KanaRomanStateHolder {
     }
 
     // 左側=leftSideTextの部分に対してかな文字count分削除する
-    func delete<S: StringProtocol>(kanaCount: Int, leftSideText: S) {
+    func delete(kanaCount: Int, leftSideText: some StringProtocol) {
         if self.components.isEmpty {
             return
         }
@@ -156,7 +156,7 @@ final class KanaRomanStateHolder {
     }
 
     // 左側=leftSideTextとなるようにカーソルを移動したとして、freezeを実行する
-    func freeze<S: StringProtocol>(leftSideText: S) {
+    func freeze(leftSideText: some StringProtocol) {
         let result = supremumIndex(for: leftSideText)
         if !result.match {
             let component = components[result.index]
@@ -171,7 +171,7 @@ final class KanaRomanStateHolder {
     }
 
     // 左側=leftSideTextとなるようにカーソルを移動したとして、freezeを実行する
-    func supremumIndexWithFreezing<S: StringProtocol>(for leftSideText: S) -> Int {
+    func supremumIndexWithFreezing(for leftSideText: some StringProtocol) -> Int {
         let result = supremumIndex(for: leftSideText)
         if !result.match {
             let component = components[result.index]
@@ -186,7 +186,7 @@ final class KanaRomanStateHolder {
         return supremumIndex(for: leftSideText).index
     }
 
-    func supremumIndex<S: StringProtocol>(for leftSideText: S) -> (index: Int, match: Bool) {
+    func supremumIndex(for leftSideText: some StringProtocol) -> (index: Int, match: Bool) {
         var index = count
         let mappedKana = components.map {$0.displayedText}
         while true {
