@@ -12,7 +12,7 @@ import SwiftUI
 extension StoredInUserDefault where Value == KeyFlickSetting {
     static func get() -> Value? {
         let value = SharedStore.userDefaults.value(forKey: key)
-        if let value = value, let data = KeyFlickSetting.get(value) {
+        if let value, let data = KeyFlickSetting.get(value) {
             return data
         }
         return nil

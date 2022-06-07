@@ -147,7 +147,7 @@ struct CustardManager {
         let fileName = Self.fileName(custard.identifier)
         let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
         try data.write(to: fileURL)
-        if let userData = userData {
+        if let userData {
             let fileURL = Self.fileURL(name: "\(fileName)_edit.json")
             let data = try encoder.encode(userData)
             try data.write(to: fileURL)

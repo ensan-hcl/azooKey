@@ -57,7 +57,7 @@ fileprivate final class ShareURL {
     private(set) var url: URL?
 
     func setURL(_ url: URL?) {
-        if let url = url {
+        if let url {
             self.url = url
         }
     }

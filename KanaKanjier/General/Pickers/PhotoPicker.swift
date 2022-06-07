@@ -63,7 +63,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
                     }
                 } else if image.itemProvider.canLoadObject(ofClass: UIImage.self) {
                     image.itemProvider.loadObject(ofClass: UIImage.self) { (selectedImage, error) in
-                        if let error = error {
+                        if let error {
                             debug("error: \(error.localizedDescription)")
                             return
                         }

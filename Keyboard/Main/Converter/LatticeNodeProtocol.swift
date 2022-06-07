@@ -90,7 +90,7 @@ final class DirectLatticeNode: LatticeNodeProtocol {
     init(data: DicdataElement, rubyCount: Int? = nil) {
         self.data = data
         self.values = [data.value()]
-        if let rubyCount = rubyCount {
+        if let rubyCount {
             self.rubyCount = rubyCount
         } else {
             self.rubyCount = data.ruby.count
@@ -116,7 +116,7 @@ final class RomanLatticeNode: LatticeNodeProtocol {
         self.data = data
         self.values = [data.value()]
         self.romanString = romanString
-        if let rubyCount = rubyCount {
+        if let rubyCount {
             self.rubyCount = rubyCount
         } else {
             self.rubyCount = romanString.count

@@ -13,7 +13,7 @@ final class ShareImage {
     private(set) var image: UIImage?
 
     func setImage(_ uiImage: UIImage?) {
-        if let uiImage = uiImage {
+        if let uiImage {
             self.image = uiImage
         }
     }
@@ -86,7 +86,7 @@ struct ThemeShareView: View {
         let encodedText = parameters.map {"\($0.key)=\($0.value)"}.joined(separator: "&").addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
 
         // エンコードしたテキストをURLに繋げ、URLを開いてツイート画面を表示させる
-        if let encodedText = encodedText,
+        if let encodedText,
            let url = URL(string: "https://twitter.com/intent/tweet?text=\(encodedText)") {
             UIApplication.shared.open(url)
         }

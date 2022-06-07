@@ -34,7 +34,7 @@ struct FlickDataProvider {
             }
         }()
 
-        if let second = second {
+        if let second {
             return [
                 FlickTabKeyModel.numberTabKeyModel,
                 second,

@@ -14,7 +14,7 @@ struct DirectInputData: InputDataProtocol {
     internal let count: Int
 
     internal init(_ input: String, count: Int? = nil) {
-        if let count = count {
+        if let count {
             self.count = count
         } else {
             self.count = input.count

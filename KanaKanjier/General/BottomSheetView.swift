@@ -19,7 +19,7 @@ struct BottomSheetView<Content: View>: View {
     private let content: () -> Content
 
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: @escaping () -> Content) {
-        if let minHeight = minHeight {
+        if let minHeight {
             self.minHeight = minHeight
         } else {
             self.minHeight = maxHeight * 0.2

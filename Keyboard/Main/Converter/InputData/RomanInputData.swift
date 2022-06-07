@@ -25,7 +25,7 @@ struct RomanInputData: InputDataProtocol {
         }
         self.katakanaString = input.toKatakana()
         let romanString = self.history.components.map {$0.internalText}.joined()   // split由来のデータではかな文字が含まれる
-        if let count = count {
+        if let count {
             self.count = count
         } else {
             self.count = romanString.count

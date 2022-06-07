@@ -40,7 +40,7 @@ struct ChangeKeyboardButtonView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UIButton {
         let button = UIButton(type: .custom)
-        if let selector = selector {
+        if let selector {
             button.addTarget(nil, action: selector, for: .allTouchEvents)
         }
         let largeConfig = UIImage.SymbolConfiguration(pointSize: size, weight: weight, scale: .default)

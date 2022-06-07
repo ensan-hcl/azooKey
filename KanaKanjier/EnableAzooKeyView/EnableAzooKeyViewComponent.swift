@@ -37,7 +37,7 @@ struct EnableAzooKeyViewText: View {
 
     var body: some View {
         HStack {
-            if let systemName = systemName {
+            if let systemName {
                 Image(systemName: systemName)
             }
             Text(text)
@@ -67,7 +67,7 @@ struct EnableAzooKeyViewButton: View {
     var body: some View {
         Button(action: action) {
             HStack {
-                if let systemName = systemName {
+                if let systemName {
                     Image(systemName: systemName)
                 }
                 Text(text)

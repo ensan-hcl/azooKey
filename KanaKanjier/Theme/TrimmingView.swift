@@ -97,7 +97,7 @@ struct TrimmingView: View {
                     Color.black
                     let ratio = fitratio(screenSize: geometry.size) // scaledToFitによる縮小比
                     let size = frameSize(screenSize: geometry.size) // フレームのサイズ
-                    if let cgImage = cgImage {
+                    if let cgImage {
                         Group {
                             // 画像の縦に対する横の長さが、フレームの縦に対する横の長さよりも小さい場合
                             if self.imageAspectRatio <= self.aspectRatio.width / self.aspectRatio.height {

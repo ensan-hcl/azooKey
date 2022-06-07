@@ -92,7 +92,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
 
     func keyboardView(tab: Tab.ExistentialTab) -> some View {
         let target: Tab.ExistentialTab
-        if let defaultTab = defaultTab {
+        if let defaultTab {
             target = defaultTab
         } else {
             target = tab
