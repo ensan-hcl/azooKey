@@ -8,7 +8,7 @@
 
 import Foundation
 
-//内部の値を頻繁に変更するため、参照型にしている
+// 内部の値を頻繁に変更するため、参照型にしている
 private final class LearningMemoryElement {
     var data: DicdataElement
     var count: Int

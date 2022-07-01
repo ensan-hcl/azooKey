@@ -428,7 +428,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
 
         // 最初の辞書データ
         let dicCandidates: [Candidate] = result.nodes[0]
-           // .filter {!($0.data is GeneratedDicdataElement)}
+            // .filter {!($0.data is GeneratedDicdataElement)}
             .map {
                 Candidate(
                     text: $0.data.word,
@@ -452,12 +452,12 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 .filter {
                     !seenCandidate.contains($0.text)
                 }
-            )
-            .sorted {
-                let count0 = $0.correspondingCount
-                let count1 = $1.correspondingCount
-                return count0 == count1 ? $0.value>$1.value : count0 > count1
-            }
+        )
+        .sorted {
+            let count0 = $0.correspondingCount
+            let count1 = $1.correspondingCount
+            return count0 == count1 ? $0.value>$1.value : count0 > count1
+        }
 
         var result = Array(full_candidate)
 

@@ -20,7 +20,7 @@ enum KeyPosition: Hashable, Codable {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self{
+        switch self {
         case let .gridFit(x: x, y: y):
             try container.encode(ValueType.gridFit, forKey: .type)
             try container.encode(x, forKey: .x)
@@ -47,4 +47,3 @@ enum KeyPosition: Hashable, Codable {
         }
     }
 }
-

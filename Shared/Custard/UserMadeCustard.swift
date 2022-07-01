@@ -98,7 +98,7 @@ struct UserMadeTenKeyCustard: Codable {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(width, forKey: .width)
             try container.encode(height, forKey: .height)
-            switch self.model{
+            switch self.model {
             case let .system(value):
                 try container.encode(ModelType.system, forKey: .type)
                 try container.encode(value, forKey: .key)

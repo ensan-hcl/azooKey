@@ -34,36 +34,36 @@ struct SettingTabView: View {
                     Section(header: Text("表示")) {
                         FontSizeSettingView(.keyViewFontSize, .key, availableValues: [
                             -1,
-                             15,
-                             16,
-                             17,
-                             18,
-                             19,
-                             20,
-                             21,
-                             22,
-                             23,
-                             24,
-                             25,
-                             26,
-                             27,
-                             28
+                            15,
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23,
+                            24,
+                            25,
+                            26,
+                            27,
+                            28
                         ])
                         FontSizeSettingView(.resultViewFontSize, .result, availableValues: [
                             -1,
-                             12,
-                             13,
-                             14,
-                             15,
-                             16,
-                             17,
-                             18,
-                             19,
-                             20,
-                             21,
-                             22,
-                             23,
-                             24
+                            12,
+                            13,
+                            14,
+                            15,
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23,
+                            24
                         ])
                     }
                 }

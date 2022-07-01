@@ -39,10 +39,10 @@ struct LOUDS {
     /// ⏱0.087694 : LOUDS_検索_childNodeIndices
     private func childNodeIndices(from parentNodeIndex: Int) -> Range<Int> {
         /*
-        conversionBenchmark.start(process: .LOUDS_検索_childNodeIndices)
-        defer {
-            conversionBenchmark.end(process: .LOUDS_検索_childNodeIndices)
-        }
+         conversionBenchmark.start(process: .LOUDS_検索_childNodeIndices)
+         defer {
+         conversionBenchmark.end(process: .LOUDS_検索_childNodeIndices)
+         }
          */
         // 求めるのは、
         // startIndex == 自身の左側にparentNodeIndex個の0があるような最小のindex
@@ -130,7 +130,7 @@ struct LOUDS {
     internal func searchNodeIndex(chars: [UInt8]) -> Int? {
         var index = 1
         for char in chars {
-            if let nodeIndex = self.searchCharNodeIndex(from: index, char: char){
+            if let nodeIndex = self.searchCharNodeIndex(from: index, char: char) {
                 index = nodeIndex
             } else {
                 return nil

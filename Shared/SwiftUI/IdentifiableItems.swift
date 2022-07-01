@@ -32,4 +32,3 @@ extension Binding where Value: RandomAccessCollection & MutableCollection, Value
         }
     }
 }
-

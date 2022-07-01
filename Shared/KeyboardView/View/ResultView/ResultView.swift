@@ -66,7 +66,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
             } else {
                 Group { [weak modelVariableSection] in
                     let results: [ResultData<Candidate>] = modelVariableSection?.results ?? []
-                    if results.isEmpty  {
+                    if results.isEmpty {
                         HStack {
                             Spacer()
                             Button {

@@ -95,7 +95,7 @@ struct FlickKeyView: View {
                         // 状態がoneDirectionでなかったら
                         if case .oneDirection = self.modelVariableSection.suggestState {} else {
                             // アニメーションをつけながら
-                            withAnimation(.easeIn(duration:0)) {
+                            withAnimation(.easeIn(duration: 0)) {
                                 // サジェストの方向を登録する。
                                 self.modelVariableSection.suggestState = .oneDirection(d)
                                 // サジェストを通告する。
@@ -126,7 +126,7 @@ struct FlickKeyView: View {
                         // 状態がoneDirectionでなかったら
                         if case .oneDirection = self.modelVariableSection.suggestState {} else {
                             // アニメーションをつけながら
-                            withAnimation(.easeIn(duration:0)) {
+                            withAnimation(.easeIn(duration: 0)) {
                                 self.modelVariableSection.pressState = .oneDirectionSuggested(d, Date())
                                 // サジェストの方向を登録する。
                                 self.modelVariableSection.suggestState = .oneDirection(d)

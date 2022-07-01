@@ -96,65 +96,65 @@ struct OpenSourceSoftWaresLicenceView: View {
                 Text("本アプリケーションは多くのオープンソースソフトウェアを用いて作成されています。この場を借りて感謝申し上げます。")
             }
             Group {
-            Section {
-                Text("JMdict/EDICT").font(.title).padding()
-                Text("本アプリケーションは基礎的な語彙の基盤としてJMdict/EDICTを使用しています。これらのファイルはElectronic Dictionary Research and Development Groupの所有物であり、ライセンスに基づいて使用されています。")
-                FallbackLink("Licence", destination: "https://www.edrdg.org/edrdg/licence.html")
-                FallbackLink("JMdict-EDICT Dictionary Project", destination: "https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project")
-            }
-            Section {
-                Text("IPAdic").font(.title).padding()
-                Text("本アプリケーションは基礎的な語彙の基盤としてIPAdicを使用しています。")
-                Text(licence_ipadic)
-            }
-            Section {
-                Text("MeCab").font(.title).padding()
-                Text("本アプリケーションは形態素解析器としてMeCabを使用しています。")
-                FallbackLink("MeCab: Yet Another Part-of-Speech and Morphological Analyzer", destination: "https://taku910.github.io/mecab/")
-                Text(licence_mecab)
-            }
-            Section {
-                Text("mecab-ipadic-NEologd").font(.title).padding()
-                Text("本アプリケーションは固有名詞などの解析のためmecab-ipadic-NEologdを使用しています。")
-                FallbackLink("Licence", destination: "https://github.com/neologd/mecab-ipadic-neologd/blob/master/COPYING")
-                FallbackLink("mecab-ipadic-NEologd : Neologism dictionary for MeCab", destination: "https://github.com/neologd/mecab-ipadic-neologd")
-            }
-            Section {
-                Text("MJ文字情報一覧表").font(.title).padding()
-                Text("本アプリケーションは音読みから漢字への変換を行うためMJ文字情報一覧表を使用しています。")
-                Text("本アプリケーションの持つ辞書のうち、MJ文字情報一覧表から派生した部分はクリエイティブ・コモンズ 表示 – 継承 2.1 日本 ライセンスを継承し、その著作権は独立行政法人情報処理推進機構(IPA)に帰属します。")
-                FallbackLink("MJ文字情報一覧表 | 文字情報基盤整備事業", destination: "https://mojikiban.ipa.go.jp/1311.html#")
-            }
-            Section {
-                Text("japanese-word2vec-model-builder").font(.title).padding()
-                Text("本アプリケーションは変換精度の向上のためjapanese-word2vec-model-builderを使用しています。")
-                FallbackLink("Licence", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder/blob/master/LICENSE")
-                FallbackLink("Japanese Word2Vec Model Builder", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder")
-            }
+                Section {
+                    Text("JMdict/EDICT").font(.title).padding()
+                    Text("本アプリケーションは基礎的な語彙の基盤としてJMdict/EDICTを使用しています。これらのファイルはElectronic Dictionary Research and Development Groupの所有物であり、ライセンスに基づいて使用されています。")
+                    FallbackLink("Licence", destination: "https://www.edrdg.org/edrdg/licence.html")
+                    FallbackLink("JMdict-EDICT Dictionary Project", destination: "https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project")
+                }
+                Section {
+                    Text("IPAdic").font(.title).padding()
+                    Text("本アプリケーションは基礎的な語彙の基盤としてIPAdicを使用しています。")
+                    Text(licence_ipadic)
+                }
+                Section {
+                    Text("MeCab").font(.title).padding()
+                    Text("本アプリケーションは形態素解析器としてMeCabを使用しています。")
+                    FallbackLink("MeCab: Yet Another Part-of-Speech and Morphological Analyzer", destination: "https://taku910.github.io/mecab/")
+                    Text(licence_mecab)
+                }
+                Section {
+                    Text("mecab-ipadic-NEologd").font(.title).padding()
+                    Text("本アプリケーションは固有名詞などの解析のためmecab-ipadic-NEologdを使用しています。")
+                    FallbackLink("Licence", destination: "https://github.com/neologd/mecab-ipadic-neologd/blob/master/COPYING")
+                    FallbackLink("mecab-ipadic-NEologd : Neologism dictionary for MeCab", destination: "https://github.com/neologd/mecab-ipadic-neologd")
+                }
+                Section {
+                    Text("MJ文字情報一覧表").font(.title).padding()
+                    Text("本アプリケーションは音読みから漢字への変換を行うためMJ文字情報一覧表を使用しています。")
+                    Text("本アプリケーションの持つ辞書のうち、MJ文字情報一覧表から派生した部分はクリエイティブ・コモンズ 表示 – 継承 2.1 日本 ライセンスを継承し、その著作権は独立行政法人情報処理推進機構(IPA)に帰属します。")
+                    FallbackLink("MJ文字情報一覧表 | 文字情報基盤整備事業", destination: "https://mojikiban.ipa.go.jp/1311.html#")
+                }
+                Section {
+                    Text("japanese-word2vec-model-builder").font(.title).padding()
+                    Text("本アプリケーションは変換精度の向上のためjapanese-word2vec-model-builderを使用しています。")
+                    FallbackLink("Licence", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder/blob/master/LICENSE")
+                    FallbackLink("Japanese Word2Vec Model Builder", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder")
+                }
 
-            Section {
-                Text("Emoji-IME-Dictionary").font(.title).padding()
-                Text("本アプリケーションは絵文字への変換候補を表示するためにEmoji-IME-Dictionaryのデータを使用しています。")
-                FallbackLink("Licence", destination: "https://github.com/peaceiris/emoji-ime-dictionary/blob/main/LICENSE")
-                FallbackLink("Emoji-IME-Dictionary", destination: "https://github.com/peaceiris/emoji-ime-dictionary")
-            }
+                Section {
+                    Text("Emoji-IME-Dictionary").font(.title).padding()
+                    Text("本アプリケーションは絵文字への変換候補を表示するためにEmoji-IME-Dictionaryのデータを使用しています。")
+                    FallbackLink("Licence", destination: "https://github.com/peaceiris/emoji-ime-dictionary/blob/main/LICENSE")
+                    FallbackLink("Emoji-IME-Dictionary", destination: "https://github.com/peaceiris/emoji-ime-dictionary")
+                }
 
-            Section {
-                Text("Kaomojitoka to Google IME Dictionary").font(.title).padding()
-                Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojitoka to Google IME Dictionaryのデータを使用しています。")
-                FallbackLink("Licence", destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary/blob/master/LICENSE")
-                FallbackLink(
-                    "Kaomojitoka to Google IME Dictionary",
-                    destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary"
-                )
-            }
+                Section {
+                    Text("Kaomojitoka to Google IME Dictionary").font(.title).padding()
+                    Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojitoka to Google IME Dictionaryのデータを使用しています。")
+                    FallbackLink("Licence", destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary/blob/master/LICENSE")
+                    FallbackLink(
+                        "Kaomojitoka to Google IME Dictionary",
+                        destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary"
+                    )
+                }
 
-            Section {
-                Text("Kaomojic").font(.title).padding()
-                Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojicのデータを使用しています。")
-                FallbackLink("Licence", destination: "https://github.com/mika-f/kaomojic/blob/develop/LICENSE")
-                FallbackLink("Kaomojic", destination: "https://github.com/mika-f/kaomojic")
-            }
+                Section {
+                    Text("Kaomojic").font(.title).padding()
+                    Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojicのデータを使用しています。")
+                    FallbackLink("Licence", destination: "https://github.com/mika-f/kaomojic/blob/develop/LICENSE")
+                    FallbackLink("Kaomojic", destination: "https://github.com/mika-f/kaomojic")
+                }
 
             }
             Section {

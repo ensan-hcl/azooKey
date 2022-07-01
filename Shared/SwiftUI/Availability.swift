@@ -96,7 +96,6 @@ enum _Available_VerticalEdge {
     }
 }
 
-
 // Visibility
 enum _Available_Visibility {
     case automatic, hidden, visible

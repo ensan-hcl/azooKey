@@ -271,7 +271,7 @@ struct CustomKeyboardView: View {
         case let .gridFit(value):
             switch custard.interface.keyStyle {
             case .tenkeyStyle:
-                CustardFlickKeysView(models: custard.interface.flickKeyModels, tabDesign: tabDesign, layout: value){view, _, _ in
+                CustardFlickKeysView(models: custard.interface.flickKeyModels, tabDesign: tabDesign, layout: value) {view, _, _ in
                     view
                 }
             case .pcStyle:
@@ -349,7 +349,7 @@ struct CustardFlickKeysView<Content: View>: View {
                     }
                 }
             }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
-            if needSuggest{
+            if needSuggest {
                 ForEach(0..<layout.rowCount, id: \.self) {x in
                     ForEach(0..<layout.columnCount, id: \.self) {y in
                         if let data = models[.gridFit(x: x, y: y)] {

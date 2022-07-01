@@ -101,7 +101,6 @@ final class BenchmarkTool<Target: BenchmarkTarget> {
     }
 }
 
-
 // MARK: 速度測定用のベンチマークツール
 // ターゲットとして次の文章を用いる。
 // ベンチマークツールそのものの速度への影響があるので注意が必要

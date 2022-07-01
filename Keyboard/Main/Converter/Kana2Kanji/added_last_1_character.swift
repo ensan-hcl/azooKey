@@ -102,7 +102,7 @@ extension Kana2Kanji {
                 }
                 // 生起確率を取得する。
                 let wValue = node.data.value()
-                if i == 0{
+                if i == 0 {
                     // valuesを更新する
                     node.values = node.prevs.map {$0.totalValue + wValue + self.dicdataStore.getCCValue($0.data.rcid, node.data.lcid)}
                 } else {

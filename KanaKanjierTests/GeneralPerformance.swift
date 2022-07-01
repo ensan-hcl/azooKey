@@ -281,7 +281,7 @@ class GeneralPerformance: XCTestCase {
         var dict: [Int: [Int]] = [:]
         values.forEach {value in
             let rq = value.quotientAndRemainder(dividingBy: 1000)
-            dict[rq.quotient*1000, default:[]].append(rq.remainder)
+            dict[rq.quotient*1000, default: []].append(rq.remainder)
         }
         self.measure {
             (0..<100000).forEach {i in
@@ -295,7 +295,7 @@ class GeneralPerformance: XCTestCase {
         var dict: [Int: [Int]] = [:]
         values.forEach {value in
             let rq = value.quotientAndRemainder(dividingBy: 1000)
-            dict[rq.quotient*1000, default:[]].append(rq.remainder)
+            dict[rq.quotient*1000, default: []].append(rq.remainder)
         }
         self.measure {
             (0..<100000).forEach {i in
@@ -369,7 +369,7 @@ class GeneralPerformance: XCTestCase {
         self.measure {
             values.forEach {value in
                 let rq = value.quotientAndRemainder(dividingBy: 1000)
-                dict[rq.quotient*1000, default:[]].append(rq.remainder)
+                dict[rq.quotient*1000, default: []].append(rq.remainder)
             }
         }
     }

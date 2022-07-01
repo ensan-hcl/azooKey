@@ -55,18 +55,18 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
             })
         }
         .listRowSeparator(.hidden)
-            Picker(selection: $value, label: Text("")) {
-                ForEach(self.availableValues) {data in
-                    Text(data.display).tag(data)
-                }
+        Picker(selection: $value, label: Text("")) {
+            ForEach(self.availableValues) {data in
+                Text(data.display).tag(data)
             }
-            .labelsHidden()
-            .pickerStyle(.wheel)
-            .frame(height: 70)
-            .clipped()
-            .onChange(of: value) { value in
-                SettingKey.value = value.saveValue
-            }
+        }
+        .labelsHidden()
+        .pickerStyle(.wheel)
+        .frame(height: 70)
+        .clipped()
+        .onChange(of: value) { value in
+            SettingKey.value = value.saveValue
+        }
     }
 }
 

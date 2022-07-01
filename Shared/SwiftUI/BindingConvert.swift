@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-public extension Binding{
+public extension Binding {
     func converted<T>(forward forwardConverter: @escaping (Value) -> T, backward backwardConverter: @escaping (T) -> Value) -> Binding<T> {
         .init(
             get: {

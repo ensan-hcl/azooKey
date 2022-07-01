@@ -19,7 +19,7 @@ final class DicdataStore {
     }
 
     typealias Dicdata = [DicdataElement]
-    private var ccParsed: Array<Bool> = .init(repeating: false, count: 1319)
+    private var ccParsed: [Bool] = .init(repeating: false, count: 1319)
     private var ccLines: [[Int: PValue]] = []
     private var mmValue: [PValue] = []
     private let treshold: PValue = -17
@@ -67,7 +67,7 @@ final class DicdataStore {
                 self.mmValue = [PValue].init(repeating: .zero, count: self.midCount*self.midCount)
             }
         }
-        let _ = self.loadLOUDS(identifier: "user")
+        _ = self.loadLOUDS(identifier: "user")
     }
 
     func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
@@ -92,7 +92,7 @@ final class DicdataStore {
     }
 
     private func reloadUserDict() {
-        let _ = self.loadLOUDS(identifier: "user")
+        _ = self.loadLOUDS(identifier: "user")
     }
 
     /// ペナルティ関数。文字数で決める。
