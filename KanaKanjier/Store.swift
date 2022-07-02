@@ -21,29 +21,7 @@ final class Store {
         self.messageManager.getMessagesContainerAppShouldMakeWhichDone().forEach {
             messageManager.done($0.id)
         }
-        /*
-         let contents = ["user0.loudstxt2", "user.loudschars2", "user1.loudstxt2", "user.louds", "user4.loudstxt2", "user2.loudstxt2", "user5.loudstxt2", "user3.loudstxt2"]
-         for fileName in contents{
-         let filePath = directoryPath.appendingPathComponent(fileName).path
-         if let attr = try? FileManager.default.attributesOfItem(atPath: filePath){
-         print(attr[.size], fileName)
-         }
-         }
-
-         print("themes内部")
-         let theme_contents = ["theme_15.theme", "theme_22_bg.png", "theme_18_bg.png", "theme_20_bg.png", "theme_18.theme", "theme_4.theme", "theme_23.theme", "theme_2.theme", "theme_15_bg.png", "theme_19.theme", "theme_2_bg.png", "theme_23_bg.png", "index.json", "theme_24.theme", "theme_3.theme", "theme_20.theme", "theme_22.theme", "theme_1.theme"]
-
-         for fileName in theme_contents{
-         let filePath = directoryPath.appendingPathComponent("themes/"+fileName).path
-         if let attr = try? FileManager.default.attributesOfItem(atPath: filePath){
-         print(attr[.size], fileName)
-         }
-         }
-
-         if let files = try? FileManager.default.contentsOfDirectory(atPath: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].path){
-         print(files)
-         }
-         */
+        SharedStore.setInitialAppVersion()
     }
 
     func noticeReloadUserDict() {
@@ -82,7 +60,6 @@ final class Store {
     func showCustardImportView(url: URL) {
         Self.variableSection.importFile = url
     }
-
 }
 
 final class StoreVariableSection: ObservableObject {

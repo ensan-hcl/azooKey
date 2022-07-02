@@ -1015,6 +1015,8 @@
 		1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9B0A4825642935004203BB /* EnableAzooKeyView.swift */; };
 		1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9B0A4F25642C38004203BB /* EnableAzooKeyViewComponent.swift */; };
 		1A9B0A6E2565797E004203BB /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9B0A6D2565797E004203BB /* ContactView.swift */; };
+		1A9E89FD286FFD7600CEFD94 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */; };
+		1A9E89FE286FFD7600CEFD94 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */; };
 		1A9E908F2822CEC100E73846 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 1A9E908E2822CEC100E73846 /* DequeModule */; };
 		1AA346962567F04300B41A16 /* QwertyCustomKeySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE00742567525000899DA2 /* QwertyCustomKeySetting.swift */; };
 		1AA346AA2567F15700B41A16 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346A92567F15700B41A16 /* SharedStore.swift */; };
@@ -3585,6 +3587,7 @@
 		1A9B0A4825642935004203BB /* EnableAzooKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableAzooKeyView.swift; sourceTree = "<group>"; };
 		1A9B0A4F25642C38004203BB /* EnableAzooKeyViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableAzooKeyViewComponent.swift; sourceTree = "<group>"; };
 		1A9B0A6D2565797E004203BB /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
+		1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		1AA346A92567F15700B41A16 /* SharedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStore.swift; sourceTree = "<group>"; };
 		1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSlideshowView.swift; sourceTree = "<group>"; };
 		1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyTipsView.swift; sourceTree = "<group>"; };
@@ -7807,6 +7810,7 @@
 				1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */,
 				1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */,
 				1A30CE8A26023B52007C1A2D /* CodableSupport.swift */,
+				1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */,
 			);
 			path = SwiftLanuage;
 			sourceTree = "<group>";
@@ -10539,6 +10543,7 @@
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */,
 				1A3A160E2528C70800A5BA4F /* HeaderLogoView.swift in Sources */,
+				1A9E89FD286FFD7600CEFD94 /* AppVersion.swift in Sources */,
 				1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */,
 				1AF6797925CEDB9B00F3987B /* QwertyKeyModel.swift in Sources */,
 				1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */,
@@ -10754,6 +10759,7 @@
 				1A9476B128240928006E22A9 /* CidData.swift in Sources */,
 				1AB8C38E25E1190900D39BC5 /* TabManager.swift in Sources */,
 				1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */,
+				1A9E89FE286FFD7600CEFD94 /* AppVersion.swift in Sources */,
 				1A6F959725144481007399AC /* QwertyKeyboardView.swift in Sources */,
 				1AFA574E25827C7700477DC2 /* FlickAaKeyModel.swift in Sources */,
 				1AF678AF25CE3B4A00F3987B /* States.swift in Sources */,

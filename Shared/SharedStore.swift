@@ -12,6 +12,30 @@ enum SharedStore {
     static let userDefaults = UserDefaults(suiteName: Self.appGroupKey)!
     static let bundleName = "DevEn3.azooKey.keyboard"
     static let appGroupKey = "group.com.azooKey.keyboard"
+
+    private static var appVersionString: String? {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+    }
+    private static let initialAppVersionKey = "InitialAppVersion"
+    static var currentAppVersion: AppVersion? {
+        if let appVersionString = appVersionString {
+            return AppVersion(appVersionString)
+        }
+        return nil
+    }
+    // this value will be 1.8.0 at minimum
+    static var initialAppVersion: AppVersion? {
+        if let appVersionString = userDefaults.string(forKey: initialAppVersionKey) {
+            return AppVersion(appVersionString)
+        }
+        return nil
+    }
+
+    static func setInitialAppVersion() {
+        if initialAppVersion == nil, let appVersionString = appVersionString {
+            SharedStore.userDefaults.set(appVersionString, forKey: initialAppVersionKey)
+        }
+    }
 }
 
 @inlinable func debug(_ items: Any...) {

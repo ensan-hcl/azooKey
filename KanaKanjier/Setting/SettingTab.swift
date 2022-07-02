@@ -106,7 +106,7 @@ struct SettingTabView: View {
                     HStack {
                         Text("バージョン")
                         Spacer()
-                        Text(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "取得中です")
+                        Text(SharedStore.currentAppVersion?.description ?? "取得中です")
                     }
                 }
             }
