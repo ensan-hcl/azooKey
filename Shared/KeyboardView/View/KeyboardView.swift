@@ -26,6 +26,23 @@ extension EnvironmentValues {
     }
 }
 
+struct MessageEnvironmentKey: EnvironmentKey {
+    typealias Value = Bool
+
+    static var defaultValue = true
+}
+
+extension EnvironmentValues {
+    var showMessage: Bool {
+        get {
+            return self[MessageEnvironmentKey.self]
+        }
+        set {
+            self[MessageEnvironmentKey.self] = newValue
+        }
+    }
+}
+
 struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
     private let resultModel: ResultModel<Candidate>
@@ -34,6 +51,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @State private var isResultViewExpanded = false
 
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.showMessage) private var showMessage
 
     private var sharedResultData = SharedResultData<Candidate>()
     private let defaultTab: Tab.ExistentialTab?
@@ -81,9 +99,11 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
             if variableStates.isTextMagnifying {
                 LargeTextView()
             }
-            ForEach(messageManager.necessaryMessages, id: \.id) {data in
-                if messageManager.requireShow(data.id) {
-                    MessageView(data: data, manager: $messageManager)
+            if showMessage {
+                ForEach(messageManager.necessaryMessages, id: \.id) {data in
+                    if messageManager.requireShow(data.id) {
+                        MessageView(data: data, manager: $messageManager)
+                    }
                 }
             }
         }

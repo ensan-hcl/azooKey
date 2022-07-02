@@ -11,10 +11,57 @@ import SwiftUI
 struct MessageView: View {
     private let data: MessageData
     @Binding private var manager: MessageManager
-
     init(data: MessageData, manager: Binding<MessageManager>) {
         self.data = data
         self._manager = manager
+    }
+
+    @ViewBuilder private var leftSideButton: some View {
+        switch data.leftsideButton {
+        case let .details(urlString):
+            HStack {
+                Spacer()
+                Button("詳細") {
+                    VariableStates.shared.action.registerAction(.openApp(urlString))
+                }
+                Spacer()
+                Divider()
+            }
+        case .later:
+            HStack {
+                Spacer()
+                Button("後で") {
+                    self.manager.done(data.id)
+                }
+                Spacer()
+                Divider()
+            }
+        }
+    }
+
+    @ViewBuilder private var rightSideButton: some View {
+        switch data.rightsideButton {
+        case let .openContainer(text):
+            HStack {
+                Spacer()
+                Button {
+                    VariableStates.shared.action.registerAction(.openApp("azooKey://"))
+                }label: {
+                    Text(text).bold()
+                }
+                Spacer()
+            }
+        case .OK:
+            HStack {
+                Spacer()
+                Button {
+                    self.manager.done(data.id)
+                }label: {
+                    Text("了解").bold()
+                }
+                Spacer()
+            }
+        }
     }
 
     var body: some View {
@@ -37,48 +84,8 @@ struct MessageView: View {
                     }
                     Divider()
                     HStack {
-                        switch data.leftsideButton {
-                        case let .details(urlString):
-                            HStack {
-                                Spacer()
-                                Button("詳細") {
-                                    VariableStates.shared.action.registerAction(.openApp(urlString))
-                                }
-                                Spacer()
-                                Divider()
-                            }
-                        case .later:
-                            HStack {
-                                Spacer()
-                                Button("後で") {
-                                    self.manager.done(data.id)
-                                }
-                                Spacer()
-                                Divider()
-                            }
-                        }
-                        switch data.rightsideButton {
-                        case let .openContainer(text):
-                            HStack {
-                                Spacer()
-                                Button {
-                                    VariableStates.shared.action.registerAction(.openApp("azooKey://"))
-                                }label: {
-                                    Text(text).bold()
-                                }
-                                Spacer()
-                            }
-                        case .OK:
-                            HStack {
-                                Spacer()
-                                Button {
-                                    self.manager.done(data.id)
-                                }label: {
-                                    Text("了解").bold()
-                                }
-                                Spacer()
-                            }
-                        }
+                        leftSideButton
+                        rightSideButton
                     }.padding(.bottom)
                 })
         }
