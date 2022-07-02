@@ -34,6 +34,14 @@ struct ThemeShareView: View {
     @State private var captureRect: CGRect = .zero
     private var shareImage: ShareImage
 
+    @ViewBuilder private var keyboardPreview: some View {
+        if #available(iOS 15, *) {
+            KeyboardPreview(theme: theme, scale: 0.9)
+        } else {
+            KeyboardPreview(theme: theme, scale: 0.9)
+                .background(RectangleGetter(rect: $captureRect))
+        }
+    }
     var body: some View {
         VStack {
             Text("着せ替えが完成しました🎉")
@@ -42,29 +50,23 @@ struct ThemeShareView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             Button {
-                shareImage.setImage(UIApplication.shared.windows[0].rootViewController?.view!.getImage(rect: self.captureRect))
-                showActivityView = true
-            }label: {
-                HStack {
-                    Image(systemName: "square.and.arrow.up")
-                    Text("シェアする")
+                if #available(iOS 15, *) {
+                    shareImage.setImage(keyboardPreview.snapshot())
+                } else {
+                    shareImage.setImage(UIApplication.shared.windows[0].rootViewController?.view!.getImage(rect: self.captureRect))
                 }
-                .font(.body.bold())
-                .foregroundColor(.white)
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 3).foregroundColor(.blue))
-                .padding()
+                showActivityView = true
+            } label: {
+                Label("シェアする", systemImage: "square.and.arrow.up")
             }
-            KeyboardPreview(theme: theme, scale: 0.9)
-                .background(RectangleGetter(rect: $captureRect))
-            Button("\(systemImage: "xmark")閉じる") {
+            .buttonStyle(ShareButtonStyle())
+            keyboardPreview
+            Button {
                 self.dismissProcess()
+            } label: {
+                Label("閉じる", systemImage: "xmark")
             }
-            .font(.body.bold())
-            .foregroundColor(.white)
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 3).foregroundColor(.blue))
-            .padding()
+            .buttonStyle(ShareButtonStyle())
         }.sheet(isPresented: self.$showActivityView) {
             if let image = shareImage.image {
                 ActivityView(
@@ -148,5 +150,34 @@ private final class ImageActivityItem: NSObject, UIActivityItemSource {
     // 仮に渡す
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return image ?? UIImage()
+    }
+}
+
+private struct ShareButtonStyle: ButtonStyle {
+    @ViewBuilder func makeBody(configuration: Configuration) -> some View {
+        configuration
+            .label
+            .font(.body.bold())
+            .foregroundColor(.white)
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 3).foregroundColor(.blue))
+            .padding()
+    }
+}
+
+private extension View {
+    func snapshot() -> UIImage {
+        let controller = UIHostingController(rootView: self)
+        let view = controller.view
+
+        let targetSize = controller.view.intrinsicContentSize
+        view?.bounds = CGRect(origin: .zero, size: targetSize)
+        view?.backgroundColor = .clear
+
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+
+        return renderer.image { _ in
+            view?.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
+        }
     }
 }
