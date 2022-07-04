@@ -14,7 +14,6 @@ struct AppVersion: Codable, Equatable, Comparable, Hashable, LosslessStringConve
         case nonIntegerValue
     }
     init?(_ description: String) {
-        print(description)
         if let versionSequence = try? description.split(separator: ".").map({ (value: Substring) throws -> Int in
             guard let value = Int(value) else { throw ParseError.nonIntegerValue }
             return value

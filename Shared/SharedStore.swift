@@ -23,7 +23,7 @@ enum SharedStore {
         }
         return nil
     }
-    // this value will be 1.8.0 at minimum
+    // this value will be 1.7.1 at minimum
     static var initialAppVersion: AppVersion? {
         if let appVersionString = userDefaults.string(forKey: initialAppVersionKey) {
             return AppVersion(appVersionString)
