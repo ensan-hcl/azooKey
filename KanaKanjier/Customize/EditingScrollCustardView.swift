@@ -115,7 +115,7 @@ struct EditingScrollCustardView: CancelableEditor {
 
     private func makeCustard(data: UserMadeGridScrollCustard) -> Custard {
         var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = Self.default
-
+        // TODO: ここで「|」および「\|」が特殊な動作に充てられていることを明確化する
         for substring in data.words.split(separator: "\n") {
             let target = substring.components(separatedBy: "\\|").map {$0.components(separatedBy: "|")}.reduce(into: [String]()) {array, value in
                 if let last = array.last, let first = value.first {
