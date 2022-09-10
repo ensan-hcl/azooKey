@@ -263,7 +263,11 @@ enum Design {
         }
 
         var backGroundColor: Color {
-            Color("BackGroundColor")
+            if #available(iOS 15, *) {
+                return Color("BackGroundColor_iOS15")
+            } else {
+                return Color("BackGroundColor")
+            }
         }
 
         var specialEnterKeyColor: Color {
