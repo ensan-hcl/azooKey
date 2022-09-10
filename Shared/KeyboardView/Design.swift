@@ -282,7 +282,11 @@ enum Design {
         }
 
         var specialKeyColor: Color {
-            return Color("TabKeyColor")
+            if #available(iOS 15, *) {
+                return Color("TabKeyColor_iOS15")
+            } else {
+                return Color("TabKeyColor")
+            }
         }
 
         var highlightedKeyColor: Color {
