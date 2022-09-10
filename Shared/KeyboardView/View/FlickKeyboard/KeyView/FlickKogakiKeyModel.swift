@@ -32,13 +32,14 @@ struct FlickKogakiKeyModel: FlickKeyModelProtocol {
     }
 
     func flickSensitivity(to direction: FlickDirection) -> CGFloat {
+        @KeyboardSetting<FlickSensitivitySettingKey>(.flickSensitivity) var flickSensitivity
         switch direction {
         case .left, .bottom:
-            return 25
+            return 25 / flickSensitivity
         case .top:
-            return 50
+            return 50 / flickSensitivity
         case .right:
-            return 70
+            return 70 / flickSensitivity
         }
     }
 

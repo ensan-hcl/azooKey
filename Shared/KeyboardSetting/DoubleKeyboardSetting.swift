@@ -53,3 +53,15 @@ struct KeyViewFontSize: DoubleKeyboardSettingKey {
 extension KeyboardSettingKey where Self == KeyViewFontSize {
     static var keyViewFontSize: Self { .init() }
 }
+
+/// フリック感度。値は0.5~2.0くらいを想定。でかい方が鈍い。
+struct FlickSensitivitySettingKey: DoubleKeyboardSettingKey {
+    static let title: LocalizedStringKey = "フリックの感度"  // TODO: Localize
+    static let explanation: LocalizedStringKey = "どれだけ指を動かしたらフリックと判定するか調整できます。"   // TODO: Localize
+    static let defaultValue: Double = 1
+    static let key: String = "flick_sensitivity_setting"
+}
+
+extension DoubleKeyboardSettingKey where Self == FlickSensitivitySettingKey {
+    static var flickSensitivity: Self { .init() }
+}

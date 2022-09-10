@@ -10,8 +10,28 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form {
+            // version 1.8系
+            Group {
+                VersionView("1.8", releaseDate: "2022年xx月xx日") {
+                    ParagraphView("機能を追加しました。") {
+                        "フリック感度を調整できるようになりました"
+                    }
+                    ParagraphView("機能を改善しました。") {
+                        "辞書データを大幅にアップデートしました"
+                    }
+                    ParagraphView("既知の不具合。") {
+                        "iPadOS 16以降のiPad Proで「スペースを拡大」の設定を有効化している場合、キーボードの左側に大きな隙間が現れる問題が生じています。原因は調査中です。"
+                    }
+                    ParagraphView("その他デザインの軽微な改善を行いました。")
+                }
+            }
             // version 1.7系
             Group {
+                VersionView("1.7.2", releaseDate: "2022年07月03日") {
+                    ParagraphView("不具合を修正しました。") {
+                        "誤った変換候補が頻繁に現れる問題の修正"
+                    }
+                }
                 VersionView("1.7.1", releaseDate: "2022年07月02日") {
                     ParagraphView("不具合を修正しました。") {
                         "着せ替えのシェア機能がiOS15で正しく動作しない問題を修正"

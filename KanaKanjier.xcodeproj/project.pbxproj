@@ -1445,6 +1445,7 @@
 		1A5C7EC525F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C7EC425F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift */; };
 		1A5C7ECA25F3792300A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C7EC425F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift */; };
 		1A60058525275CB9008E2B92 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1A60058425275CB9008E2B92 /* Settings.bundle */; };
+		1A61E8F028CCD93000C5107A /* FlickSensitivitySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A61E8EF28CCD93000C5107A /* FlickSensitivitySettingView.swift */; };
 		1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */; };
 		1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */; };
 		1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */; };
@@ -4033,6 +4034,7 @@
 		1A5C7EAB25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredLanguageSettingView.swift; sourceTree = "<group>"; };
 		1A5C7EC425F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyLanguageSwitchKeyModel.swift; sourceTree = "<group>"; };
 		1A60058425275CB9008E2B92 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		1A61E8EF28CCD93000C5107A /* FlickSensitivitySettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickSensitivitySettingView.swift; sourceTree = "<group>"; };
 		1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInformationView.swift; sourceTree = "<group>"; };
 		1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionary.swift; sourceTree = "<group>"; };
 		1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjuctionBuilder.swift; sourceTree = "<group>"; };
@@ -6758,6 +6760,14 @@
 			path = PreferredLanguage;
 			sourceTree = "<group>";
 		};
+		1A61E8EE28CCD91E00C5107A /* FlickSensitivitySetting */ = {
+			isa = PBXGroup;
+			children = (
+				1A61E8EF28CCD93000C5107A /* FlickSensitivitySettingView.swift */,
+			);
+			path = FlickSensitivitySetting;
+			sourceTree = "<group>";
+		};
 		1A64A8DA257C91550022C081 /* FontSizeSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -7027,6 +7037,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
+				1A61E8EE28CCD91E00C5107A /* FlickSensitivitySetting */,
 				1A5C7EAA25F36A5E00A7CBA8 /* PreferredLanguage */,
 				1ACE00712567518100899DA2 /* KeyboardLayout */,
 				1AD5E17626AB22F6001B4FF7 /* CustomKeys */,
@@ -10516,6 +10527,7 @@
 				1A10D80225E4F56D0095CB67 /* ErrorCustard.swift in Sources */,
 				1AF6799525CEDBB500F3987B /* FlickKeyModel.swift in Sources */,
 				1AC0315D25120A17004CA505 /* SettingTab.swift in Sources */,
+				1A61E8F028CCD93000C5107A /* FlickSensitivitySettingView.swift in Sources */,
 				1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */,
 				1A9476B028240928006E22A9 /* CidData.swift in Sources */,
 				1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */,

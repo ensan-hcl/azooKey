@@ -84,7 +84,8 @@ extension FlickKeyModelProtocol {
     }
 
     func flickSensitivity(to direction: FlickDirection) -> CGFloat {
-        return 25
+        @KeyboardSetting<FlickSensitivitySettingKey>(.flickSensitivity) var flickSensitivity
+        return 25 / flickSensitivity
     }
 
 }

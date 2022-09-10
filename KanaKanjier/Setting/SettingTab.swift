@@ -21,6 +21,9 @@ struct SettingTabView: View {
                 Section(header: Text("言語")) {
                     PreferredLanguageSettingView()
                 }
+                Section(header: Text("操作性")) {
+                    FlickSensitivitySettingView(.flickSensitivity)
+                }
                 Section(header: Text("カスタムキー")) {
                     CustomKeysSettingView()
                 }
