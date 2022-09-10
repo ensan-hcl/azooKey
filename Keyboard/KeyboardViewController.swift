@@ -55,7 +55,12 @@ final class KeyboardViewController: UIInputViewController {
 
         Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
         Store.shared.action.setDelegateViewController(self)
-        if #available(iOS 15, *) {} else {
+        debug("viewDidLoad", UIScreen.main.bounds.size, UIScreen.main.currentMode?.size, self.view.window?.bounds)
+        if #available(iOS 16, *) {
+            SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
+        } else if #available(iOS 15, *) {
+            // Do nothing
+        } else {
             SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
         }
     }
@@ -84,6 +89,7 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.appearedAgain()
     }
 
+    @available(iOS, deprecated: 15.0)
     func registerScreenActualSize() {
         if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
@@ -129,7 +135,7 @@ final class KeyboardViewController: UIInputViewController {
         } else {
             self.registerScreenActualSize()
         }
-        debug("viewDidLayoutSubviews", self.view.frame.size, keyboardViewHost.view.frame.size)
+        debug("viewDidLayoutSubviews", self.view.frame.size, keyboardViewHost.view.frame.size, self.view.window?.bounds, self.keyboardViewHost.view.window?.bounds, keyboardViewHost.view.window?.window?.bounds)
     }
 
     /*

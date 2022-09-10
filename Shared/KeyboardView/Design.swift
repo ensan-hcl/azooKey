@@ -142,11 +142,9 @@ enum Design {
     private static var layout: KeyboardLayout {
         VariableStates.shared.keyboardLayout
     }
-    private static var screenWidth: CGFloat {
-        VariableStates.shared.interfaceSize.width
-    }
 
     /// This property calculate suitable width for normal keyView.
+    /// キーボードの高さはスクリーンの幅から決定するため、キーボードスクリーンの高さはこのように書いて良い。
     static var keyboardScreenHeight: CGFloat {
         keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth) + 2
     }

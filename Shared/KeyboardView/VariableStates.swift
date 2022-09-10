@@ -22,6 +22,7 @@ final class VariableStates: ObservableObject {
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published private(set) var keyboardLayout: KeyboardLayout = .flick
 
+    // 片手モードの実行時、キーボードの幅はinterfaceSizeによって決定できる。
     @Published var interfaceSize: CGSize = .zero
     @Published var interfacePosition: CGPoint = .zero
 

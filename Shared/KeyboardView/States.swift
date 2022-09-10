@@ -90,11 +90,13 @@ final class SemiStaticStates {
     }
 
     /// - do not  consider using screenHeight
+    /// - スクリーンそのもののサイズ。キーボードビューの幅は片手モードなどによって変更が生じうるため、`screenWidth`は限定的な場面でのみ使うことが望まし。
     private(set) var screenWidth: CGFloat = .zero
     private(set) var screenHeight: CGFloat = .zero
 
     /// Function to set the size of keyboard
     /// - Parameter size: only `size.width` used, and `size.height` has almost no needs, but using a bit.
+    /// - 副作用として、この関数はデバイスの向きを決定し、UIのサイズを調整する。
     func setScreenSize(size: CGSize) {
         if self.screenWidth == size.width {
             return
@@ -110,6 +112,8 @@ final class SemiStaticStates {
         self.screenHeight = height
         debug("SemiStaticStates setScreenSize", width, height)
         let (layout, orientation) = (layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
+
+        // 片手モードの処理
         KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
             value.setIfFirst(layout: layout, orientation: orientation, size: .init(width: width, height: height), position: .zero)
         }
