@@ -15,19 +15,21 @@ struct SettingTabView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("キーボードの種類")) {
-                    NavigationLink("キーボードの種類を設定する", destination: KeyboardLayoutTypeDetailsView())
-                }
-                Section(header: Text("言語")) {
-                    PreferredLanguageSettingView()
-                }
-                Section(header: Text("操作性")) {
-                    FlickSensitivitySettingView(.flickSensitivity)
-                }
-                Section(header: Text("カスタムキー")) {
-                    CustomKeysSettingView()
+                Group {
+                    Section(header: Text("キーボードの種類")) {
+                        NavigationLink("キーボードの種類を設定する", destination: KeyboardLayoutTypeDetailsView())
+                    }
+                    Section(header: Text("言語")) {
+                        PreferredLanguageSettingView()
+                    }
+                    Section(header: Text("操作性")) {
+                        FlickSensitivitySettingView(.flickSensitivity)
+                    }
                 }
                 Group {
+                    Section(header: Text("カスタムキー")) {
+                        CustomKeysSettingView()
+                    }
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
                     }
@@ -35,39 +37,8 @@ struct SettingTabView: View {
                         BoolSettingView(.enableKeySound)
                     }
                     Section(header: Text("表示")) {
-                        FontSizeSettingView(.keyViewFontSize, .key, availableValues: [
-                            -1,
-                            15,
-                            16,
-                            17,
-                            18,
-                            19,
-                            20,
-                            21,
-                            22,
-                            23,
-                            24,
-                            25,
-                            26,
-                            27,
-                            28
-                        ])
-                        FontSizeSettingView(.resultViewFontSize, .result, availableValues: [
-                            -1,
-                            12,
-                            13,
-                            14,
-                            15,
-                            16,
-                            17,
-                            18,
-                            19,
-                            20,
-                            21,
-                            22,
-                            23,
-                            24
-                        ])
+                        FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)
+                        FontSizeSettingView(.resultViewFontSize, .result, availableValueRange: 12...24)
                     }
                 }
                 Section(header: Text("変換")) {

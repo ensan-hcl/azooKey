@@ -157,27 +157,30 @@ struct UpdateInfomationView: View {
                     ParagraphView("その他軽微なデザイン・変換機能・操作性の改善を行いました。")
                 }
             }
-            VersionView("1.3.1", releaseDate: "2020年12月18日") {
-                ParagraphView("不具合を修正しました。") {
-                    "iPhone X以降の端末で一部キーが反応しない問題"
+            // version 1.3系
+            Group {
+                VersionView("1.3.1", releaseDate: "2020年12月18日") {
+                    ParagraphView("不具合を修正しました。") {
+                        "iPhone X以降の端末で一部キーが反応しない問題"
+                    }
                 }
-            }
-            VersionView("1.3", releaseDate: "2020年12月15日") {
-                ParagraphView("機能を追加しました。") {
-                    "英語入力中、大文字に固定する機能を追加"
-                    "ローマ字での日本語入力中、英語への変換を表示する機能のON/OFF設定を追加"
+                VersionView("1.3", releaseDate: "2020年12月15日") {
+                    ParagraphView("機能を追加しました。") {
+                        "英語入力中、大文字に固定する機能を追加"
+                        "ローマ字での日本語入力中、英語への変換を表示する機能のON/OFF設定を追加"
+                    }
+                    ParagraphView("機能を改善しました。") {
+                        "ローマ字カスタムキーの編集画面を一新"
+                    }
+                    ParagraphView("技術的に解決困難な不具合のため、文字数カウント機能を削除しました。") {
+                        "今後別の形でのカウント機能の実装を検討します。"
+                    }
+                    ParagraphView("不具合を修正しました。") {
+                        "ローマ字での日本語入力中、一部の入力が正しく反映されない問題"
+                    }
+                    ParagraphView("記号の変換を改善しました。")
+                    ParagraphView("その他軽微なデザイン・変換機能の改善を行いました。")
                 }
-                ParagraphView("機能を改善しました。") {
-                    "ローマ字カスタムキーの編集画面を一新"
-                }
-                ParagraphView("技術的に解決困難な不具合のため、文字数カウント機能を削除しました。") {
-                    "今後別の形でのカウント機能の実装を検討します。"
-                }
-                ParagraphView("不具合を修正しました。") {
-                    "ローマ字での日本語入力中、一部の入力が正しく反映されない問題"
-                }
-                ParagraphView("記号の変換を改善しました。")
-                ParagraphView("その他軽微なデザイン・変換機能の改善を行いました。")
             }
 
             VersionView("1.2.1", releaseDate: "2020年12月10日") {

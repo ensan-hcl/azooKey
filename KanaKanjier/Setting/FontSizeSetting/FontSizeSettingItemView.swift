@@ -14,16 +14,17 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
         case result
     }
 
-    private let availableValues: [FontSizeSetting]
+    private let availableValueRange: ClosedRange<Double>
     private let target: Target
 
-    @State private var value: FontSizeSetting
+    @State private var localValue: Double = -1
     @State private var isOn = false
 
-    init(_ key: SettingKey, _ target: Target, availableValues: [FontSizeSetting]) {
-        self._value = .init(initialValue: .value(SettingKey.value))
+    init(_ key: SettingKey, _ target: Target, availableValueRange: ClosedRange<Double>) {
         self.target = target
-        self.availableValues = availableValues
+        self.availableValueRange = availableValueRange
+        _localValue = State(initialValue: SettingKey.value)
+
     }
 
     var body: some View {
@@ -37,7 +38,7 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
                 }
             }
             Spacer()
-            let size = value.saveValue == -1 ? 18 : value.saveValue
+            let size = localValue == -1 ? SettingKey.defaultValue : localValue
             switch self.target {
             case .key:
                 KeyView(fontSize: size)
@@ -55,17 +56,22 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
             })
         }
         .listRowSeparator(.hidden)
-        Picker(selection: $value, label: Text("")) {
-            ForEach(self.availableValues) {data in
-                Text(data.display).tag(data)
+        Toggle("自動", isOn: .init(get: {SettingKey.value == -1}, set: {
+            if $0 {
+                SettingKey.value = -1
+                localValue = -1
+            } else {
+                SettingKey.value = SettingKey.defaultValue
+                localValue = SettingKey.defaultValue
             }
-        }
-        .labelsHidden()
-        .pickerStyle(.wheel)
-        .frame(height: 70)
-        .clipped()
-        .onChange(of: value) { value in
-            SettingKey.value = value.saveValue
+        }))
+
+        if localValue != -1 {
+            Slider(value: $localValue, in: availableValueRange) { (edited: Bool) in
+                if edited {
+                    SettingKey.value = localValue
+                }
+            }
         }
     }
 }
