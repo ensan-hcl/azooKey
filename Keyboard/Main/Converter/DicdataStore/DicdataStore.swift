@@ -412,24 +412,11 @@ final class DicdataStore {
         return element.adjustedData(adjust)
     }
 
-    /// 部分がカタカナである可能性を調べる
-    /// 小さいほどよい。
-    private func getKatakanaScore<S: StringProtocol>(_ katakana: __shared S) -> PValue {
-        var score: PValue = 1
-        // テキスト分析によってこれらのカタカナが入っている場合カタカナ語である可能性が高いと分かった。
-        for c in katakana {
-            if "プヴペィフ".contains(c) {
-                score *= 0.5
-            } else if "ュピポ".contains(c) {
-                score *= 0.6
-            } else if "パォグーム".contains(c) {
-                score *= 0.7
-            }
-        }
-        return score
-    }
-
     /// 補足的な辞書情報を得る。
+    ///  - parameters:
+    ///     - head: 先頭の単語の文字列
+    /// - note
+    ///     - 入力全体をカタカナとかひらがなに変換するやつは、Converter側でやっているので注意。
     private func getWiseDicdata(head: String, allowRomanLetter: Bool) -> Dicdata {
         var result: Dicdata = []
         result.append(contentsOf: self.getJapaneseNumberDicdata(head: head))
@@ -448,15 +435,16 @@ final class DicdataStore {
             result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 40, value: -14))
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
+        // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
         if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
             if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head] {
                 result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
-                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -14 * getKatakanaScore(katakana)))
+                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             }
         }
 
-        let hira = head.toKatakana()
         if head.count == 1, allowRomanLetter || !head.onlyRomanAlphabet {
+            let hira = head.toKatakana()
             if head == hira {
                 result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             } else {

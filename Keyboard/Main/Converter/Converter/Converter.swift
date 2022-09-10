@@ -265,6 +265,23 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         }
         return candidates
     }
+    /// 部分がカタカナである可能性を調べる
+    /// 小さいほどよい。
+    private func getKatakanaScore<S: StringProtocol>(_ katakana: __shared S) -> PValue {
+        var score: PValue = 1
+        // テキスト分析によってこれらのカタカナが入っている場合カタカナ語である可能性が高いと分かった。
+        for c in katakana {
+            if "プヴペィフ".contains(c) {
+                score *= 0.5
+            } else if "ュピポ".contains(c) {
+                score *= 0.6
+            } else if "パォグーム".contains(c) {
+                score *= 0.7
+            }
+        }
+        return score
+    }
+
     /// 付加的な変換候補を生成する関数
     /// - Parameters:
     ///   - inputData: 変換対象のInputData。
@@ -275,10 +292,11 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let string = inputData.katakanaString
         do {
             // カタカナ
-            let data = DicdataElement(ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -14)
+            let value = -14 * getKatakanaScore(string)
+            let data = DicdataElement(ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: value)
             let katakana = Candidate(
                 text: string,
-                value: -14,
+                value: value,
                 correspondingCount: inputData.characters.count,
                 lastMid: 501,
                 data: [data]
