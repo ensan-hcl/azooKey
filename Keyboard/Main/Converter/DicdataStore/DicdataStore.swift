@@ -412,6 +412,23 @@ final class DicdataStore {
         return element.adjustedData(adjust)
     }
 
+    /// 部分がカタカナである可能性を調べる
+    /// 小さいほどよい。
+    private func getKatakanaScore<S: StringProtocol>(_ katakana: __shared S) -> PValue {
+        var score: PValue = 1
+        // テキスト分析によってこれらのカタカナが入っている場合カタカナ語である可能性が高いと分かった。
+        for c in katakana {
+            if "プヴペィフ".contains(c) {
+                score *= 0.5
+            } else if "ュピポ".contains(c) {
+                score *= 0.6
+            } else if "パォグーム".contains(c) {
+                score *= 0.7
+            }
+        }
+        return score
+    }
+
     /// 補足的な辞書情報を得る。
     private func getWiseDicdata(head: String, allowRomanLetter: Bool) -> Dicdata {
         var result: Dicdata = []
@@ -434,7 +451,7 @@ final class DicdataStore {
         if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
             if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head] {
                 result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
-                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
+                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -14 * getKatakanaScore(katakana)))
             }
         }
 
