@@ -101,6 +101,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         if unicodeCandidate {
             result.append(contentsOf: self.unicode(inputData))
         }
+        result.append(contentsOf: self.toVersionCandidate(inputData))
         return result
     }
 

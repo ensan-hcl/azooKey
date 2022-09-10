@@ -9,9 +9,27 @@
 import Foundation
 
 extension KanaKanjiConverter {
+    /// バージョン情報を表示する関数。
+    /// Mozcは「バージョン」で言語モデルのバージョンが表示されるらしいので、azooKeyもこれをつけて「azooKey 1.7.2」とか表示させよう。
+    /// - parameters:
+    ///  - inputData: 入力情報。
+    func toVersionCandidate(_ inputData: InputData) -> [Candidate] {
+        if inputData.katakanaString == "バージョン", let version = SharedStore.currentAppVersion?.description {
+            let versionString = "azooKey Verion \(version)"
+            return [Candidate(
+                text: versionString,
+                value: -30,
+                correspondingCount: inputData.characters.count,
+                lastMid: 501,
+                data: [DicdataElement(word: versionString, ruby: inputData.katakanaString, cid: CIDData.固有名詞.cid, mid: 501, value: -30)]
+            )]
+        }
+        return []
+    }
+
     /// 西暦に変換した結果を返す関数。
     /// - parameters:
-    ///   - text: 対象文字列。
+    ///   - inputData: 入力情報。
     /// - note:
     ///    現在英字のみ。ギリシャ文字や数字に対応する必要あり。
     func toSeirekiCandidates(_ inputData: InputData) -> [Candidate] {
