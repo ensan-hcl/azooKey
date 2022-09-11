@@ -13,10 +13,6 @@ extension LOUDS {
     private static let bundleURL = Bundle.main.bundleURL
 
     private static func loadLOUDSBinary(from url: URL) -> [UInt64]? {
-        conversionBenchmark.start(process: .LOUDS_ビルド_バイナリ読み込み)
-        defer {
-            conversionBenchmark.end(process: .LOUDS_ビルド_バイナリ読み込み)
-        }
         do {
             let binaryData = try Data(contentsOf: url, options: [.uncached]) // 2度読み込むことはないのでキャッシュ不要
             let ui64array = binaryData.withUnsafeBytes {pointer -> [UInt64] in
@@ -56,10 +52,6 @@ extension LOUDS {
     }
 
     internal static func build(_ identifier: String) -> LOUDS? {
-        conversionBenchmark.start(process: .LOUDS_ビルド)
-        defer {
-            conversionBenchmark.end(process: .LOUDS_ビルド)
-        }
         let (charsURL, loudsURL) = getLOUDSURL(identifier)
         let nodeIndex2ID: [UInt8]
         do {
@@ -78,7 +70,6 @@ extension LOUDS {
 
     internal static func getData(_ identifier: String, indices: [Int]) -> [String] {
         // この処理は大きなボトルネックにはなっていない
-        conversionBenchmark.start(process: .LOUDSTXT2読み込み_全体)
 
         let binary: Data
         do {
@@ -113,7 +104,6 @@ extension LOUDS {
             let endIndex = index == (lc-1) ? binary.endIndex : Int(i32array[index + 1])
             return String(bytes: binary[startIndex ..< endIndex], encoding: .utf8)
         }
-        conversionBenchmark.end(process: .LOUDSTXT2読み込み_全体)
         return result
     }
 }

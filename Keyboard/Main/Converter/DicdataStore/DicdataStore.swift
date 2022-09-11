@@ -183,16 +183,11 @@ final class DicdataStore {
     ///   - from: 起点
     internal func getLOUDSData<LatticeNode: LatticeNodeProtocol>(inputData: some InputDataProtocol, from index: Int) -> [LatticeNode] {
         // ⏱0.426499 : 辞書読み込み_全体
-        conversionBenchmark.start(process: .辞書読み込み_全体)
-        defer {
-            conversionBenchmark.end(process: .辞書読み込み_全体)
-        }
         let toIndex = min(inputData.count, index + self.maxlength)
         let segments = (index ..< toIndex).map {inputData[index...$0]}
 
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
         // ⏱0.125108 : 辞書読み込み_誤り訂正候補列挙
-        conversionBenchmark.start(process: .辞書読み込み_誤り訂正候補列挙)
         var string2segment = [String: Int].init()
         // indicesをreverseすることで、stringWithTypoは長さの長い順に並ぶ=removeでヒットしやすくなる
         let stringWithTypoData: [(string: String, penalty: PValue)] = (index ..< toIndex).reversed().flatMap {(end) -> [(string: String, penalty: PValue)] in
@@ -204,11 +199,9 @@ final class DicdataStore {
         }
 
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
-        conversionBenchmark.end(process: .辞書読み込み_誤り訂正候補列挙)
 
         // MARK: 検索対象を列挙していく。prefixの共通するものを削除して検索をなるべく減らすことが目的。
         // ⏱0.021212 : 辞書読み込み_検索対象列挙
-        conversionBenchmark.start(process: .辞書読み込み_検索対象列挙)
         // prefixの共通するものを削除して検索をなるべく減らす
         let strings = stringWithTypoData.map { $0.string }
         let stringSet = strings.reduce(into: Set(strings)) { (`set`, string) in
@@ -219,11 +212,9 @@ final class DicdataStore {
                 set.remove(string)
             }
         }
-        conversionBenchmark.end(process: .辞書読み込み_検索対象列挙)
 
         // MARK: 列挙した検索対象から、順に検索を行う。この時点ではindicesを取得するのみ。
         // ⏱0.222327 : 辞書読み込み_検索
-        conversionBenchmark.start(process: .辞書読み込み_検索)
         // 先頭の文字: そこで検索したい文字列の集合
         let group = [Character: [String]].init(grouping: stringSet, by: {$0.first!})
 
@@ -233,11 +224,9 @@ final class DicdataStore {
             return (key, set)
         }
         indices.append(("user", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "user", key: $0)}))
-        conversionBenchmark.end(process: .辞書読み込み_検索)
 
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
         // ⏱0.077118 : 辞書読み込み_辞書データ生成
-        conversionBenchmark.start(process: .辞書読み込み_辞書データ生成)
         var dicdata: Dicdata = []
         for (identifier, value) in indices {
             let result = self.getDicdata(identifier: identifier, indices: value)
@@ -263,9 +252,6 @@ final class DicdataStore {
             dicdata.append(contentsOf: self.getMatch(segments[i-index]))
             dicdata.append(contentsOf: self.getMatchOSUserDict(segments[i-index]))
         }
-        conversionBenchmark.end(process: .辞書読み込み_辞書データ生成)
-        
-        conversionBenchmark.start(process: .辞書読み込み_ノード生成)
 
         if index == .zero {
             let result: [LatticeNode] = dicdata.map {
@@ -273,11 +259,9 @@ final class DicdataStore {
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 return node
             }
-            conversionBenchmark.end(process: .辞書読み込み_ノード生成)
             return result
         } else {
             let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]], rubyCount: nil)}
-            conversionBenchmark.end(process: .辞書読み込み_ノード生成)
             return result
         }
     }
@@ -287,20 +271,11 @@ final class DicdataStore {
     ///   - inputData: 入力データ
     ///   - to: 終点
     internal func getLOUDSData<LatticeNode: LatticeNodeProtocol>(inputData: some InputDataProtocol, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
-        conversionBenchmark.start(process: .辞書読み込み_全体)
-        defer {
-            conversionBenchmark.end(process: .辞書読み込み_全体)
-        }
-
         let segment = inputData[fromIndex...toIndex]
-
-        conversionBenchmark.start(process: .辞書読み込み_誤り訂正候補列挙)
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
-        conversionBenchmark.end(process: .辞書読み込み_誤り訂正候補列挙)
 
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
-        conversionBenchmark.start(process: .辞書読み込み_検索)
         // 先頭の文字: そこで検索したい文字列の集合
         let group = [Character: [String]].init(grouping: stringWithTypoData.map {$0.string}, by: {$0.first!})
 
@@ -315,9 +290,6 @@ final class DicdataStore {
             self.perfectMatchLOUDS(identifier: "user", key: string)
         }
         indices.append(("user", set))
-        conversionBenchmark.end(process: .辞書読み込み_検索)
-
-        conversionBenchmark.start(process: .辞書読み込み_辞書データ生成)
         var dicdata: Dicdata = []
         for (identifier, value) in indices {
             let result: Dicdata = self.getDicdata(identifier: identifier, indices: value).compactMap {(data: Dicdata.Element) in
@@ -339,20 +311,15 @@ final class DicdataStore {
         dicdata.append(contentsOf: self.getWiseDicdata(head: segment, allowRomanLetter: toIndex == inputData.count - 1))
         dicdata.append(contentsOf: self.getMatch(segment))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
-        conversionBenchmark.end(process: .辞書読み込み_辞書データ生成)
-
-        conversionBenchmark.start(process: .辞書読み込み_ノード生成)
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
                 let node = LatticeNode(data: $0, romanString: segment, rubyCount: nil)
                 node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
                 return node
             }
-            conversionBenchmark.end(process: .辞書読み込み_ノード生成)
             return result
         } else {
             let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, romanString: segment, rubyCount: nil)}
-            conversionBenchmark.end(process: .辞書読み込み_ノード生成)
             return result
         }
     }

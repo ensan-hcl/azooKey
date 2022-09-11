@@ -38,12 +38,6 @@ struct LOUDS {
     /// parentNodeIndex個の0を探索し、その次から1個増えるまでのIndexを返す。
     /// ⏱0.087694 : LOUDS_検索_childNodeIndices
     private func childNodeIndices(from parentNodeIndex: Int) -> Range<Int> {
-        /*
-         conversionBenchmark.start(process: .LOUDS_検索_childNodeIndices)
-         defer {
-         conversionBenchmark.end(process: .LOUDS_検索_childNodeIndices)
-         }
-         */
         // 求めるのは、
         // startIndex == 自身の左側にparentNodeIndex個の0があるような最小のindex
         // endIndex == 自身の左側にparentNodeIndex+1個の0があるような最小のindex
@@ -151,10 +145,6 @@ struct LOUDS {
     }
 
     internal func prefixNodeIndices(chars: [UInt8], maxDepth: Int) -> [Int] {
-        conversionBenchmark.start(process: .LOUDS_前方一致検索)
-        defer {
-            conversionBenchmark.end(process: .LOUDS_前方一致検索)
-        }
         guard let nodeIndex = self.searchNodeIndex(chars: chars) else {
             return []
         }
@@ -166,7 +156,6 @@ struct LOUDS {
     /// 以前はreduceで実装していたが、速度的に変わらないので読みやすさのためにforとfirstで書き換えた
     /// ⏱0.043821 : `LOUDS_byfix検索`
     internal func byfixNodeIndices(chars: [UInt8]) -> [Int] {
-        conversionBenchmark.start(process: .LOUDS_byfix検索)
         var indices = [1]
         for char in chars {
             if let nodeIndex = self.searchCharNodeIndex(from: indices.last!, char: char) {
@@ -175,7 +164,6 @@ struct LOUDS {
                 break
             }
         }
-        conversionBenchmark.end(process: .LOUDS_byfix検索)
         return indices
     }
 }

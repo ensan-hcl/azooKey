@@ -29,13 +29,9 @@ extension Kana2Kanji {
     /// (4)ノードをアップデートした上で返却する。
     func kana2lattice_all(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: Nodes) {
         debug("新規に計算を行います。inputされた文字列は\(inputData.count)文字分の\(inputData.characters)")
-        conversionBenchmark.start(process: .変換_全体)
         let count: Int = inputData.count
         let result: LatticeNode = LatticeNode.EOSNode
-        conversionBenchmark.start(process: .変換_辞書読み込み)
         let nodes: [[LatticeNode]] = (.zero ..< count).map {dicdataStore.getLOUDSData(inputData: inputData, from: $0)}
-        conversionBenchmark.end(process: .変換_辞書読み込み)
-        conversionBenchmark.start(process: .変換_処理)
         // 「i文字目から始まるnodes」に対して
         for (i, nodeArray) in nodes.enumerated() {
             // それぞれのnodeに対して
@@ -71,17 +67,10 @@ extension Kana2Kanji {
                             continue
                         }
                         // クラスの連続確率を計算する。
-                        conversionBenchmark.start(process: .変換_処理_連接コスト計算_全体)
-                        conversionBenchmark.start(process: .変換_処理_連接コスト計算_CCValue)
                         let ccValue: PValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
-                        conversionBenchmark.end(process: .変換_処理_連接コスト計算_CCValue)
-                        conversionBenchmark.start(process: .変換_処理_連接コスト計算_Memory)
                         let ccBonus: PValue = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
-                        conversionBenchmark.end(process: .変換_処理_連接コスト計算_Memory)
                         let ccSum: PValue = ccValue + ccBonus
-                        conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
                         // nodeの持っている全てのprevnodeに対して
-                        conversionBenchmark.start(process: .変換_処理_N_Best計算)
                         // ⏱0.116483
                         for (index, value) in node.values.enumerated() {
                             let newValue: PValue = ccSum + value
@@ -98,13 +87,10 @@ extension Kana2Kanji {
                             // removeしてからinsertした方が速い (insertはO(N)なので)
                             nextnode.prevs.insert(newnode, at: lastindex)
                         }
-                        conversionBenchmark.end(process: .変換_処理_N_Best計算)
                     }
                 }
             }
         }
-        conversionBenchmark.end(process: .変換_処理)
-        conversionBenchmark.end(process: .変換_全体)
         return (result: result, nodes: nodes)
     }
 

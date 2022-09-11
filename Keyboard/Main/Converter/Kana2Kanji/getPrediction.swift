@@ -22,7 +22,6 @@ extension Kana2Kanji {
     func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, lastRubyCount: Int, N_best: Int) -> [Candidate] {
         let datas: [DicdataElement]
         let lastData: DicdataElement?
-        conversionBenchmark.start(process: .結果の処理_予測変換_日本語_雑多なデータ取得)
         do {
             var _str = ""
             let prestring: String = prepart.clauses.map {$0.clause.text}.joined()
@@ -52,9 +51,6 @@ extension Kana2Kanji {
             let lastPrev: DicdataElement = lastCandidate.data[lastCandidate.data.endIndex - 2]
             ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
         }
-        conversionBenchmark.end(process: .結果の処理_予測変換_日本語_雑多なデータ取得)
-
-        conversionBenchmark.start(process: .結果の処理_予測変換_日本語_Dicdataの読み込み)
         let dicdata: DicdataStore.Dicdata
         switch VariableStates.shared.inputStyle {
         case .direct:
@@ -71,8 +67,7 @@ extension Kana2Kanji {
                 dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: ruby)
             }
         }
-        conversionBenchmark.end(process: .結果の処理_予測変換_日本語_Dicdataの読み込み)
-        conversionBenchmark.start(process: .結果の処理_予測変換_日本語_連接計算)
+
         var result: [Candidate] = []
 
         result.reserveCapacity(N_best &+ 1)
@@ -103,7 +98,7 @@ extension Kana2Kanji {
                 result.removeLast()
             }
         }
-        conversionBenchmark.end(process: .結果の処理_予測変換_日本語_連接計算)
+
         return result
     }
 }

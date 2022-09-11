@@ -27,24 +27,20 @@ extension Kana2Kanji {
     /// (4)ノードをアップデートした上で返却する。
     func kana2lattice_addedLast(_ inputData: InputData, N_best: Int, previousResult: (inputData: InputData, nodes: Nodes) ) -> (result: LatticeNode, nodes: Nodes) {
         debug("一文字追加。内部文字列は\(inputData.characters).\(previousResult.nodes.map {($0.first?.data.ruby, $0.first?.rubyCount)})")
-        conversionBenchmark.start(process: .変換_全体)
         // (0)
         var nodes = previousResult.nodes
         let count = previousResult.inputData.count
 
         // (1)
-        conversionBenchmark.start(process: .変換_辞書読み込み)
         let addedNodes: [[LatticeNode]] = (0...count).map {(i: Int) in
             if count-i >= self.dicdataStore.maxlength {
                 return []
             }
             return self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: count)
         }
-        conversionBenchmark.end(process: .変換_辞書読み込み)
 
         // ココが一番時間がかかっていた。
         // (2)
-        conversionBenchmark.start(process: .変換_処理)
         for (i, nodeArray) in nodes.enumerated() {
             for node in nodeArray {
                 if node.prevs.isEmpty {
@@ -61,16 +57,9 @@ extension Kana2Kanji {
                         continue
                     }
                     // クラスの連続確率を計算する。
-                    conversionBenchmark.start(process: .変換_処理_連接コスト計算_全体)
-                    conversionBenchmark.start(process: .変換_処理_連接コスト計算_CCValue)
                     let ccValue: PValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
-                    conversionBenchmark.end(process: .変換_処理_連接コスト計算_CCValue)
-                    conversionBenchmark.start(process: .変換_処理_連接コスト計算_Memory)
                     let ccBonus: PValue = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
-                    conversionBenchmark.end(process: .変換_処理_連接コスト計算_Memory)
                     let ccSum: PValue = ccValue + ccBonus
-                    conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
-                    conversionBenchmark.start(process: .変換_処理_N_Best計算)
                     // nodeの持っている全てのprevnodeに対して
                     for (index, value) in node.values.enumerated() {
                         let newValue: PValue = ccSum + value
@@ -87,14 +76,11 @@ extension Kana2Kanji {
                         // removeしてからinsertした方が速い (insertはO(N)なので)
                         nextnode.prevs.insert(newnode, at: lastindex)
                     }
-                    conversionBenchmark.end(process: .変換_処理_N_Best計算)
                 }
             }
         }
-        conversionBenchmark.end(process: .変換_処理)
 
         // (3)
-        conversionBenchmark.start(process: .変換_結果処理)
         let result = LatticeNode.EOSNode
         for (i, nodeArray) in addedNodes.enumerated() {
             for node in nodeArray {
@@ -118,8 +104,6 @@ extension Kana2Kanji {
             }
         }
 
-        conversionBenchmark.end(process: .変換_結果処理)
-
         // (4)
         for (index, nodeArray) in addedNodes.enumerated() {
             if index < nodes.endIndex {
@@ -127,7 +111,6 @@ extension Kana2Kanji {
             }
         }
         nodes.append(addedNodes.last ?? [])
-        conversionBenchmark.end(process: .変換_全体)
         return (result: result, nodes: nodes)
     }
 }
