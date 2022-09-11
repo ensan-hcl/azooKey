@@ -20,13 +20,13 @@ extension Kana2Kanji {
         // FIXME: completedDataを使ってなくない？
         let start = RegisteredNode.BOSNode()
         let nodes: Nodes = previousResult.nodes.suffix(count)
-        for i in nodes.indices {
+        for (i, nodeArray) in nodes.enumerated() {
             if i == .zero {
-                for node in nodes[i] {
+                for node in nodeArray {
                     node.prevs = [start]
                 }
             } else {
-                for node in nodes[i] {
+                for node in nodeArray {
                     node.prevs = []
                 }
             }
@@ -34,8 +34,8 @@ extension Kana2Kanji {
         // (2)
         let result = LatticeNode.EOSNode
 
-        for i in nodes.indices {
-            for node in nodes[i] {
+        for (i, nodeArray) in nodes.enumerated() {
+            for node in nodeArray {
                 if node.prevs.isEmpty {
                     continue
                 }
@@ -64,8 +64,8 @@ extension Kana2Kanji {
                         let ccBonus = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
                         let ccSum = ccValue + ccBonus
                         // nodeの持っている全てのprevnodeに対して
-                        for index in node.values.indices {
-                            let newValue = ccSum + node.values[index]
+                        for (index, value) in node.values.enumerated() {
+                            let newValue = ccSum + value
                             // 追加すべきindexを取得する
                             let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
                             if lastindex == N_best {

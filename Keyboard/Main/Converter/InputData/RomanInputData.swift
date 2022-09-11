@@ -63,7 +63,7 @@ struct RomanInputData: InputDataProtocol {
             }
         }
         var result: [(lattice: RomanKanaConvertingLattice, penalty: PValue)] = []
-        for i in nodes.indices {
+        for (i, nodeArray) in nodes.enumerated() {
             let correct = String(self.characters[left + i])
             if i == .zero {
                 if let component = history.freezedData(internalCharacterCount: left + i + 1) {
@@ -71,7 +71,7 @@ struct RomanInputData: InputDataProtocol {
                     result = [(lattice: lattice, penalty: .zero)]
                     continue
                 }
-                result = nodes[i].map {(RomanKanaConvertingLattice([(string: $0, isFreezed: false)], count: $0.count), $0 == correct ? .zero:unit)}
+                result = nodeArray.map {(RomanKanaConvertingLattice([(string: $0, isFreezed: false)], count: $0.count), $0 == correct ? .zero:unit)}
                 continue
             }
             result = result.flatMap {(lattice: RomanKanaConvertingLattice, penalty: PValue) -> [(lattice: RomanKanaConvertingLattice, penalty: PValue)] in
@@ -245,13 +245,13 @@ private struct RomanKanaConvertingLattice {
 
     func roman2kanaWithoutRomanLetters(nextCharacter: Character) -> String? {
         do {
-            let strings: [String] = try components.indices.map {
-                if components[$0].isFreezed {
-                    return components[$0].string
+            let strings: [String] = try components.enumerated().map { (index, component) in
+                if component.isFreezed {
+                    return component.string
                 } else {
-                    let roman2katakana = components[$0].string.roman2katakana
+                    let roman2katakana = component.string.roman2katakana
 
-                    if $0 == components.endIndex - 1 {
+                    if index == components.endIndex - 1 {
                         if let last = roman2katakana.last, last == "n" && !["a", "i", "u", "e", "o", "n", "y"].contains(nextCharacter) {
                             return roman2katakana.dropLast() + "ん"
                         }

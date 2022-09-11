@@ -30,8 +30,8 @@ extension Kana2Kanji {
 
         // (1)
         conversionBenchmark.start(process: .変換_辞書読み込み)
-        var nodes = previousResult.nodes.indices.map {(i: Int) in
-            return previousResult.nodes[i].filter {i + $0.rubyCount <= commonCount}
+        var nodes = previousResult.nodes.enumerated().map {(i: Int, nodes: [LatticeNode]) in
+            return nodes.filter {i + $0.rubyCount <= commonCount}
         }
         while nodes.last?.isEmpty ?? false {
             nodes.removeLast()
@@ -51,8 +51,8 @@ extension Kana2Kanji {
 
         // (2)
         conversionBenchmark.start(process: .変換_処理)
-        for i in nodes.indices {
-            for node in nodes[i] {
+        for (i, nodeArray) in nodes.enumerated() {
+            for node in nodeArray {
                 if node.prevs.isEmpty {
                     continue
                 }
@@ -77,8 +77,8 @@ extension Kana2Kanji {
                     conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
                     conversionBenchmark.start(process: .変換_処理_N_Best計算)
                     // nodeの持っている全てのprevnodeに対して
-                    for index in node.values.indices {
-                        let newValue: PValue = ccSum + node.values[index]
+                    for (index, value) in node.values.enumerated() {
+                        let newValue: PValue = ccSum + value
                         // 追加すべきindexを取得する
                         let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                         if lastindex == N_best {
@@ -99,8 +99,8 @@ extension Kana2Kanji {
 
         // (3)
         let result = LatticeNode.EOSNode
-        for i in addedNodes.indices {
-            for node in addedNodes[i] {
+        for (i, nodes) in addedNodes.enumerated() {
+            for node in nodes {
                 if node.prevs.isEmpty {
                     continue
                 }
@@ -143,8 +143,8 @@ extension Kana2Kanji {
 
                         conversionBenchmark.start(process: .変換_処理_N_Best計算)
                         // nodeの持っている全てのprevnodeに対して
-                        for index in node.values.indices {
-                            let newValue = ccSum + node.values[index]
+                        for (index, value) in node.values.enumerated() {
+                            let newValue = ccSum + value
                             // 追加すべきindexを取得する
                             let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                             if lastindex == N_best {
@@ -164,12 +164,17 @@ extension Kana2Kanji {
         }
         conversionBenchmark.end(process: .変換_処理)
 
-        let updatedNodes = nodes.indices.map {
-            return nodes[$0] + addedNodes[$0]
-        } + addedNodes.suffix(counts.added)
+        for (index, nodeArray) in addedNodes.enumerated() {
+            if index < nodes.endIndex {
+                nodes[index].append(contentsOf: nodeArray)
+            }
+        }
+        for nodeArray in addedNodes.suffix(counts.added) {
+            nodes.append(nodeArray)
+        }
         conversionBenchmark.end(process: .変換_全体)
 
-        return (result: result, nodes: updatedNodes)
+        return (result: result, nodes: nodes)
     }
 
 }

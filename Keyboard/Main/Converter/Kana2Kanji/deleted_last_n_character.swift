@@ -30,8 +30,8 @@ extension Kana2Kanji {
         // (1)
         let result = LatticeNode.EOSNode
 
-        for i in previousResult.nodes.indices {
-            for node in previousResult.nodes[i] {
+        for (i, nodeArray) in previousResult.nodes.enumerated() {
+            for node in nodeArray {
                 if node.prevs.isEmpty {
                     continue
                 }
@@ -41,8 +41,8 @@ extension Kana2Kanji {
                 let nextIndex = node.rubyCount + i
                 if nextIndex == count {
                     // 変換した文字数
-                    for index in node.prevs.indices {
-                        let newnode = node.getSqueezedNode(index, value: node.values[index])
+                    for (index, value) in node.values.enumerated() {
+                        let newnode = node.getSqueezedNode(index, value: value)
                         result.prevs.append(newnode)
                     }
                 }
@@ -50,8 +50,8 @@ extension Kana2Kanji {
         }
 
         // (2)
-        let updatedNodes = previousResult.nodes.indices.prefix(count).map {(i: Int) in
-            return previousResult.nodes[i].filter {i + $0.rubyCount <= count}
+        let updatedNodes = previousResult.nodes.enumerated().prefix(count).map {(i: Int, nodeArray: [LatticeNode]) in
+            return nodeArray.filter {i + $0.rubyCount <= count}
         }
         return (result: result, nodes: updatedNodes)
     }

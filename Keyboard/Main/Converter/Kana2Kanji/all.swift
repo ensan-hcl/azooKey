@@ -37,9 +37,9 @@ extension Kana2Kanji {
         conversionBenchmark.end(process: .変換_辞書読み込み)
         conversionBenchmark.start(process: .変換_処理)
         // 「i文字目から始まるnodes」に対して
-        for i in nodes.indices {
+        for (i, nodeArray) in nodes.enumerated() {
             // それぞれのnodeに対して
-            for node in nodes[i] {
+            for node in nodeArray {
                 if node.prevs.isEmpty {
                     continue
                 }
@@ -82,8 +82,8 @@ extension Kana2Kanji {
                         conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
                         // nodeの持っている全てのprevnodeに対して
                         conversionBenchmark.start(process: .変換_処理_N_Best計算)
-                        for index in node.values.indices {
-                            let newValue: PValue = ccSum + node.values[index]
+                        for (index, value) in node.values.enumerated() {
+                            let newValue: PValue = ccSum + value
                             // 追加すべきindexを取得する
                             let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                             if lastindex == N_best {

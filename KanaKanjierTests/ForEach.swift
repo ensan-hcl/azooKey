@@ -70,4 +70,29 @@ class ForEachTest: XCTestCase {
 
     }
 
+    // 最適化ありで平均0.285s
+    func testPerformanceForIndicesAndValue() throws {
+        let values = (0..<100000000).map {_ in Int.random(in: 0..<1000000)}
+        var x = 0
+        self.measure {
+                for index in values.indices {
+                    x += values[index] + values[index] + values[index] + values[index] + index + index + index + index
+                    x -= values[index] + values[index] + values[index] + values[index] + index + index + index + index
+                }
+        }
+    }
+
+    // 最適化ありで平均0.169s
+    // indexとvalueの両方を扱う場面ではenumerated()を使うと良い。
+    func testPerformanceForEnumerated() throws {
+        let values = (0..<100000000).map {_ in Int.random(in: 0..<1000000)}
+        var x = 0
+        self.measure {
+                for (index, value) in values.enumerated() {
+                    x += value + value + value + value + index + index + index + index
+                    x -= value + value + value + value + index + index + index + index
+                }
+        }
+    }
+
 }

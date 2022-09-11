@@ -27,8 +27,8 @@ extension Kana2Kanji {
         let count = inputData.count
 
         // (1)
-        let nodes = previousNodes.indices.map {(i: Int) in
-            return previousNodes[i].filter {i + $0.rubyCount < count}
+        var nodes = previousNodes.enumerated().map {(i: Int, nodeArray: [LatticeNode]) in
+            return nodeArray.filter {i + $0.rubyCount < count}
         }
 
         // (2)
@@ -40,8 +40,8 @@ extension Kana2Kanji {
         }
 
         // (3)
-        for i in nodes.indices {
-            for node in nodes[i] {
+        for (i, nodeArray) in nodes.enumerated() {
+            for node in nodeArray {
                 if node.prevs.isEmpty {
                     continue
                 }
@@ -60,8 +60,8 @@ extension Kana2Kanji {
                     let ccBonus = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
                     let ccSum = ccValue + ccBonus
                     // nodeの持っている全てのprevnodeに対して
-                    for index in node.values.indices {
-                        let newValue = ccSum + node.values[index]
+                    for (index, value) in node.values.enumerated() {
+                        let newValue = ccSum + value
                         // 追加すべきindexを取得する
                         let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
                         if lastindex == N_best {
@@ -80,8 +80,8 @@ extension Kana2Kanji {
         }
 
         let result = LatticeNode.EOSNode
-        for i in addedNodes.indices {
-            for node in addedNodes[i] {
+        for (i, nodes) in addedNodes.enumerated() {
+            for node in nodes {
                 if node.prevs.isEmpty {
                     continue
                 }
@@ -102,10 +102,13 @@ extension Kana2Kanji {
             }
         }
 
-        let updatedNodes = nodes.indices.map {
-            return nodes[$0] + addedNodes[$0]
+        for (index, nodeArray) in addedNodes.enumerated() {
+            if index < nodes.endIndex {
+                nodes[index].append(contentsOf: nodeArray)
+            }
         }
-        return (result: result, nodes: updatedNodes)
+
+        return (result: result, nodes: nodes)
     }
 
 }
