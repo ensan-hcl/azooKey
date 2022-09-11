@@ -49,7 +49,8 @@ struct RomanInputData: InputDataProtocol {
         let triple = unit*3
         let nextLetter = (right + 1 == characters.count) ? "\0" : self.characters[right + 1]
         let nodes = (0..<count).map {(i: Int) in
-            Self.lengths.map {i+$0}.flatMap {(j: Int) -> [String] in
+            Self.lengths.flatMap {(k: Int) -> [String] in
+                let j = i + k
                 if count <= j {
                     return []
                 }

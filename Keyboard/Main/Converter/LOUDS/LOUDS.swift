@@ -140,11 +140,14 @@ struct LOUDS {
     }
 
     private func prefixNodeIndices(nodeIndex: Int, depth: Int = 0, maxDepth: Int) -> [Int] {
-        let childNodeIndices = self.childNodeIndices(from: nodeIndex)
+        var childNodeIndices = Array(self.childNodeIndices(from: nodeIndex))
         if depth == maxDepth {
-            return Array(childNodeIndices)
+            return childNodeIndices
         }
-        return childNodeIndices + childNodeIndices.flatMap {self.prefixNodeIndices(nodeIndex: $0, depth: depth + 1, maxDepth: maxDepth)}
+        for index in childNodeIndices {
+            childNodeIndices.append(contentsOf: self.prefixNodeIndices(nodeIndex: index, depth: depth + 1, maxDepth: maxDepth))
+        }
+        return childNodeIndices
     }
 
     internal func prefixNodeIndices(chars: [UInt8], maxDepth: Int) -> [Int] {

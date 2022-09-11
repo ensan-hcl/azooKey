@@ -437,7 +437,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         // 文全体を変換するパターン
         let full_candidate = getUniqueCandidate(best10 + foreign_candidates + (zeroHintPrediction_candidates + toplevel_additional_candidate)).sorted {$0.value>$1.value}.prefix(5)
         // 重複のない変換候補を作成するための集合
-        var seenCandidate: Set<String> = Set(full_candidate.map {$0.text})
+        var seenCandidate: Set<String> = full_candidate.mapSet {$0.text}
         // 文節のみ変換するパターン
         let clause_candidates = self.getUniqueCandidate(clauseCandidates.filter {!seenCandidate.contains($0.text)}).sorted {$0.value>$1.value}.prefix(5)
         seenCandidate.formUnion(clause_candidates.map {$0.text})
