@@ -82,6 +82,7 @@ extension Kana2Kanji {
                         conversionBenchmark.end(process: .変換_処理_連接コスト計算_全体)
                         // nodeの持っている全てのprevnodeに対して
                         conversionBenchmark.start(process: .変換_処理_N_Best計算)
+                        // ⏱0.116483
                         for (index, value) in node.values.enumerated() {
                             let newValue: PValue = ccSum + value
                             // 追加すべきindexを取得する
@@ -90,11 +91,12 @@ extension Kana2Kanji {
                                 continue
                             }
                             let newnode: RegisteredNode = node.getSqueezedNode(index, value: newValue)
-                            nextnode.prevs.insert(newnode, at: lastindex)
                             // カウントがオーバーしている場合は除去する
-                            if nextnode.prevs.count > N_best {
+                            if nextnode.prevs.count >= N_best {
                                 nextnode.prevs.removeLast()
                             }
+                            // removeしてからinsertした方が速い (insertはO(N)なので)
+                            nextnode.prevs.insert(newnode, at: lastindex)
                         }
                         conversionBenchmark.end(process: .変換_処理_N_Best計算)
                     }

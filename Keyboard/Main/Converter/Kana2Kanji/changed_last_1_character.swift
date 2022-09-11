@@ -68,11 +68,12 @@ extension Kana2Kanji {
                             continue
                         }
                         let newnode = node.getSqueezedNode(index, value: newValue)
-                        nextnode.prevs.insert(newnode, at: lastindex)
                         // カウントがオーバーしている場合は除去する
-                        if nextnode.prevs.count > N_best {
+                        if nextnode.prevs.count >= N_best {
                             nextnode.prevs.removeLast()
                         }
+                        // removeしてからinsertした方が速い (insertはO(N)なので)
+                        nextnode.prevs.insert(newnode, at: lastindex)
                     }
                 }
             }
