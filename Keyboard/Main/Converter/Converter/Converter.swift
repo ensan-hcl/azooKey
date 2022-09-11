@@ -28,7 +28,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         self.lastData = nil
     }
 
-    func translated<S: InputDataProtocol, T: LatticeNodeProtocol>(from conveter: KanaKanjiConverter<S, T>) {
+    func translated(from conveter: KanaKanjiConverter<some InputDataProtocol, some LatticeNodeProtocol>) {
         self.nodes = conveter.translateNodes()
         self.previousInputData = conveter.previousInputData?.translated()
     }

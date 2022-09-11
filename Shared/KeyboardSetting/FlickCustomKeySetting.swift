@@ -121,9 +121,9 @@ struct FlickCustomKey: Codable, Equatable {
         let input = try? container.decode(String.self, forKey: .input)
 
         self.label = label
-        if let actions = actions {
+        if let actions {
             self.actions = actions
-        } else if let input = input {
+        } else if let input {
             self.actions = [.input(input)]
         } else {
             self.actions = []

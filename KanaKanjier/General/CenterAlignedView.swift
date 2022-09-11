@@ -18,7 +18,7 @@ struct CenterAlignedView<Content: View>: View {
     }
 
     var body: some View {
-        if let padding = padding {
+        if let padding {
             HStack {
                 Spacer(minLength: padding)
                 self.content()

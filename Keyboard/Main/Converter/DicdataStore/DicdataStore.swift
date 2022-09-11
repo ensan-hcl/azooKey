@@ -173,7 +173,7 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - from: 起点
-    internal func getLOUDSData<T: InputDataProtocol, LatticeNode: LatticeNodeProtocol>(inputData: T, from index: Int) -> [LatticeNode] {
+    internal func getLOUDSData<LatticeNode: LatticeNodeProtocol>(inputData: some InputDataProtocol, from index: Int) -> [LatticeNode] {
         conversionBenchmark.start(process: .辞書読み込み_全体)
         defer {
             conversionBenchmark.end(process: .辞書読み込み_全体)
@@ -277,7 +277,7 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - to: 終点
-    internal func getLOUDSData<T: InputDataProtocol, LatticeNode: LatticeNodeProtocol>(inputData: T, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
+    internal func getLOUDSData<LatticeNode: LatticeNodeProtocol>(inputData: some InputDataProtocol, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
         conversionBenchmark.start(process: .辞書読み込み_全体)
         defer {
             conversionBenchmark.end(process: .辞書読み込み_全体)
@@ -371,7 +371,7 @@ final class DicdataStore {
     ///   - head: 辞書を引く文字列
     /// - Returns:
     ///   発見されたデータのリスト。
-    internal func getPredictionLOUDSDicdata<S: StringProtocol>(head: S) -> Dicdata {
+    internal func getPredictionLOUDSDicdata(head: some StringProtocol) -> Dicdata {
         let count = head.count
         if count == .zero {
             return []
@@ -400,7 +400,7 @@ final class DicdataStore {
         }
     }
 
-    private func convertDicdata<S: StringProtocol>(from dataString: [S]) -> DicdataElement {
+    private func convertDicdata(from dataString: [some StringProtocol]) -> DicdataElement {
         let ruby = String(dataString[0])
         let word = dataString[1].isEmpty ? ruby:String(dataString[1])
         let lcid = Int(dataString[2]) ?? .zero
@@ -474,17 +474,17 @@ final class DicdataStore {
     }
 
     /// OSのユーザ辞書からrubyに等しい語を返す。
-    private func getMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> Dicdata {
+    private func getMatchOSUserDict(_ ruby: some StringProtocol) -> Dicdata {
         return self.osUserDict.dict.filter {$0.ruby == ruby}
     }
 
     /// OSのユーザ辞書からrubyに先頭一致する語を返す。
-    internal func getPrefixMatchOSUserDict<S: StringProtocol>(_ ruby: S) -> Dicdata {
+    internal func getPrefixMatchOSUserDict(_ ruby: some StringProtocol) -> Dicdata {
         return self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
     }
 
     /// rubyに等しい語を返す。
-    private func getMatch<S: StringProtocol>(_ ruby: S) -> Dicdata {
+    private func getMatch(_ ruby: some StringProtocol) -> Dicdata {
         return self.memory.match(ruby)
     }
     /// rubyに等しい語の回数を返す。
@@ -492,7 +492,7 @@ final class DicdataStore {
         return self.memory.getSingle(data)
     }
     /// rubyを先頭にもつ語を返す。
-    internal func getPrefixMemory<S: StringProtocol>(_ prefix: S) -> Dicdata {
+    internal func getPrefixMemory(_ prefix: some StringProtocol) -> Dicdata {
         return self.memory.getPrefixDicdata(prefix)
     }
     /// 二つの語の並び回数を返す。
@@ -542,7 +542,7 @@ final class DicdataStore {
     }
 
     // 誤り訂正候補の構築の際、ファイルが存在しているか事前にチェックし、存在していなければ以後の計算を打ち切ることで、計算を減らす。
-    internal static func existFile<S: StringProtocol>(identifier: S) -> Bool {
+    internal static func existFile(identifier: some StringProtocol) -> Bool {
         let fileName = identifier.prefix(1)
         let path = Bundle.main.bundlePath + "/" + fileName + ".louds"
         return FileManager.default.fileExists(atPath: path)

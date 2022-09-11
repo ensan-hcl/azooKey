@@ -19,7 +19,7 @@ struct BottomSheetView<Content: View>: View {
     private let content: () -> Content
 
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: @escaping () -> Content) {
-        if let minHeight = minHeight {
+        if let minHeight {
             self.minHeight = minHeight
         } else {
             self.minHeight = maxHeight * 0.2
@@ -73,7 +73,7 @@ struct BottomSheetView<Content: View>: View {
 }
 
 extension View {
-    @ViewBuilder func sheet<Content: View>(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: @escaping () -> Content) -> some View {
+    @ViewBuilder func sheet(isOpen: Binding<Bool>, maxHeight: CGFloat, minHeight: CGFloat? = nil, headerColor: Color = .systemGray4, @ViewBuilder content: @escaping () -> some View) -> some View {
         if #available(iOS 14.5, *) {
             self.sheet(isPresented: isOpen, onDismiss: nil, content: content)
         } else {

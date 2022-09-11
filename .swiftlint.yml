@@ -1,0 +1,30 @@
+# document: https://github.com/realm/SwiftLint
+disabled_rules:
+  - line_length
+  - file_length
+  - type_body_length
+  - function_body_length
+  - identifier_name
+  - cyclomatic_complexity
+  - large_tuple
+opt_in_rules:
+  - unused_import
+  - unused_declaration
+  - conditional_returns_on_newline
+  - empty_count #要素が何もないことを確認する際はcount == 0よりもisEmptyを用いてチェックする．
+  - first_where #.filter { }.firstよりも.first(where:)を用いる．
+  - operator_usage_whitespace #演算子の左右に空白を
+  - redundant_nil_coalescing #?? nilを禁止
+
+included:
+  - KanaKanjier
+excluded:
+  - LOUDSBuilder
+  - ValuesBinary
+  - deprecated
+  - KanaKanjierUITests
+  - KanaKanjierTests
+type_name:
+  excluded: 
+    - ID
+    - 行

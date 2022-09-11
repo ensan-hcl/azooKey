@@ -133,7 +133,7 @@ private enum Number {
 }
 
 extension DicdataStore {
-    private func parseLiteral<S: StringProtocol>(input: S) -> [JapaneseNumber] {
+    private func parseLiteral(input: some StringProtocol) -> [JapaneseNumber] {
         var chars = input.makeIterator()
         var tokens: [JapaneseNumber] = []
         func judge(char: Character) {

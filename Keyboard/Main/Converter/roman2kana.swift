@@ -533,7 +533,7 @@ enum Roman2Kana {
     ]
 }
 extension String {
-    static func roman2katakana<S: StringProtocol>(currentText: S, added: String) -> (result: String, delete: Int, input: String) {
+    static func roman2katakana(currentText: some StringProtocol, added: String) -> (result: String, delete: Int, input: String) {
         let last_3 = currentText.suffix(3)
         if let kana = Roman2Kana.katakanaChanges[last_3 + added] {
             return (result: currentText.prefix(currentText.count-last_3.count) + kana, delete: last_3.count, input: kana)
@@ -559,7 +559,7 @@ extension String {
         return (result: currentText + added, delete: .zero, input: added)
     }
 
-    static func roman2hiragana<S: StringProtocol>(currentText: S, added: String) -> (result: String, delete: Int, input: String) {
+    static func roman2hiragana(currentText: some StringProtocol, added: String) -> (result: String, delete: Int, input: String) {
         let last_3 = currentText.suffix(3)
         if let kana = Roman2Kana.hiraganaChanges[last_3 + added] {
             return (result: currentText.prefix(currentText.count-last_3.count) + kana, delete: last_3.count, input: kana)
@@ -585,7 +585,7 @@ extension String {
         return (result: currentText + added, delete: .zero, input: added)
     }
 
-    static func roman2hiraganaConsideringDisplaying<C: BidirectionalCollection>(current: C, added: String) -> (result: String, components: [KanaComponent], delete: Int, input: String) where C.Element == KanaComponent {
+    static func roman2hiraganaConsideringDisplaying(current: some BidirectionalCollection<KanaComponent>, added: String) -> (result: String, components: [KanaComponent], delete: Int, input: String) {
         if !added.onlyRomanAlphabet {
             let components = current + [KanaComponent(internalText: added, kana: added, escapeRomanKanaConverting: false)]
             return (current.map {$0.displayedText}.joined() + added, components, .zero, added)

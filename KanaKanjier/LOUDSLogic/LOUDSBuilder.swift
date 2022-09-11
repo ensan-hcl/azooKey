@@ -80,7 +80,7 @@ struct LOUDSBuilder {
         return (paths, blocks, useradds)
     }
 
-    func parseTemplate<S: StringProtocol>(_ word: S) -> String {
+    func parseTemplate(_ word: some StringProtocol) -> String {
         if let range = word.range(of: "\\{\\{.*?\\}\\}", options: .regularExpression) {
             let center: String
             if let data = templateData.first(where: {$0.name == word[range].dropFirst(2).dropLast(2)}) {

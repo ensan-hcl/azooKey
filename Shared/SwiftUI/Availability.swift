@@ -140,7 +140,7 @@ extension View {
 
 extension View {
     @ViewBuilder
-    func swipeActions<T: View>(edge: _Available_HorizontalEdge = .trailing, allowsFullSwipe: Bool = true, content: () -> T) -> some View {
+    func swipeActions(edge: _Available_HorizontalEdge = .trailing, allowsFullSwipe: Bool = true, content: () -> some View) -> some View {
         if #available(iOS 15, *) {
             self.swipeActions(edge: edge.horizontalEdge, allowsFullSwipe: allowsFullSwipe, content: content)
         } else {

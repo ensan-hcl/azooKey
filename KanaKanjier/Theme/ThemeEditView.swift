@@ -116,7 +116,7 @@ struct ThemeEditView: CancelableEditor {
 
         self._tab = State(initialValue: tab)
         self._manager = manager
-        if let index = index {
+        if let index {
             do {
                 var theme = try manager.wrappedValue.theme(at: index)
                 theme.id = index
@@ -197,9 +197,9 @@ struct ThemeEditView: CancelableEditor {
                 }
                 KeyboardPreview(theme: self.theme, defaultTab: tab)
                 NavigationLink(destination: Group {
-                    if let image = pickedImage {
+                    if let pickedImage {
                         TrimmingView(
-                            uiImage: image,
+                            uiImage: pickedImage,
                             resultImage: $trimmedImage,
                             maxSize: CGSize(width: 1280, height: 720),
                             aspectRatio: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight)
@@ -217,7 +217,7 @@ struct ThemeEditView: CancelableEditor {
                 }
             }
             .onChange(of: trimmedImage) {value in
-                if let value = value {
+                if let value {
                     self.theme.picture = .uiImage(value)
                     self.theme.backgroundColor = .color(.white.opacity(0))
                     self.theme.resultBackgroundColor = .color(.white.opacity(0))
