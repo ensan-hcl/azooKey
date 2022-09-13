@@ -97,18 +97,22 @@ final class SemiStaticStates {
     /// Function to set the size of keyboard
     /// - Parameter size: only `size.width` used, and `size.height` has almost no needs, but using a bit.
     /// - 副作用として、この関数はデバイスの向きを決定し、UIのサイズを調整する。
-    func setScreenSize(size: CGSize) {
+    func setScreenSize(size: CGSize, orientation: KeyboardOrientation? = nil) {
         if self.screenWidth == size.width {
             return
         }
-        if #available(iOS 15, *) {
+        if let orientation {
+            VariableStates.shared.setOrientation(orientation)
+        } else if #available(iOS 15, *) {
             VariableStates.shared.setOrientation(UIScreen.main.bounds.size.width<UIScreen.main.bounds.size.height ? .vertical : .horizontal)
         } else {
             VariableStates.shared.setOrientation(size.width<size.height ? .vertical : .horizontal)
         }
         let width = size.width
-        let height = Design.keyboardHeight(screenWidth: width)
         self.screenWidth = width
+        // screenWidthを更新してからDesign.keyboardHeightを呼ぶ必要がある。
+        // あまりいいデザインではない・・・。
+        let height = Design.keyboardHeight(screenWidth: width)
         self.screenHeight = height
         debug("SemiStaticStates setScreenSize", width, height)
         let (layout, orientation) = (layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
@@ -122,7 +126,8 @@ final class SemiStaticStates {
             VariableStates.shared.interfaceSize = CGSize(width: width, height: height)
         case .onehanded, .resizing:
             let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: layout, orientation: orientation)
-            VariableStates.shared.interfaceSize = item.size
+            // 安全のため、指示されたwidth, heightを超える値を許可しない。
+            VariableStates.shared.interfaceSize = CGSize(width: min(width, item.size.width), height: min(height, item.size.height))
             VariableStates.shared.interfacePosition = item.position
         }
     }

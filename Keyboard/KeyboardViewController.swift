@@ -56,9 +56,7 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
         Store.shared.action.setDelegateViewController(self)
         debug("viewDidLoad", UIScreen.main.bounds.size, UIScreen.main.currentMode?.size, self.view.window?.bounds)
-        if #available(iOS 16, *) {
-            SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
-        } else if #available(iOS 15, *) {
+        if #available(iOS 15, *) {
             // Do nothing
         } else {
             SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
@@ -75,6 +73,8 @@ final class KeyboardViewController: UIInputViewController {
         gr1.delaysTouchesBegan = false
 
         self.view.becomeFirstResponder()
+        self.updateViewConstraints()
+
         SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
 
         @KeyboardSetting(.useOSUserDict) var useOSUserDict
@@ -89,7 +89,6 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.appearedAgain()
     }
 
-    @available(iOS, deprecated: 15.0)
     func registerScreenActualSize() {
         if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
@@ -111,13 +110,12 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        // 縦持ち 375.0 272.5
-        // 横持ち 667.0 216.5
         super.viewWillTransition(to: size, with: coordinator)
-        debug(UIScreen.main.bounds.width > UIScreen.main.bounds.height ? "横持ち" : "縦持ち")
+        // この関数は「これから」向きが変わる場合に呼ばれるので、デバイスの向きによってwidthとheightが逆転するUIScreen.main.bounds.sizeを用いて向きを確かめることができる。
+        // なお、UIScreen.mainは非推奨である。これからデバイスの向きどうやってとったらええねん。
         if #available(iOS 15, *) {
-            debug("viewWillTransition", size)
-            SemiStaticStates.shared.setScreenSize(size: size)
+            debug("viewWillTransition", size, UIScreen.main.bounds.size)
+            SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical)
         } else {
             if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
                 let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
@@ -130,12 +128,13 @@ final class KeyboardViewController: UIInputViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if #available(iOS 15, *) {
-            self.view.frame.size.height = ceil(SemiStaticStates.shared.screenHeight) + 2
+            debug("viewDidLayoutSubviews", Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth), SemiStaticStates.shared.screenWidth, SemiStaticStates.shared.screenHeight)
+            self.view.frame.size.height = Design.keyboardScreenHeight
             self.updateViewConstraints()
         } else {
             self.registerScreenActualSize()
         }
-        debug("viewDidLayoutSubviews", self.view.frame.size, keyboardViewHost.view.frame.size, self.view.window?.bounds, self.keyboardViewHost.view.window?.bounds, keyboardViewHost.view.window?.window?.bounds)
+        debug("viewDidLayoutSubviews", UIScreen.main.bounds, SemiStaticStates.shared.screenHeight, self.view.frame.size, keyboardViewHost.view.frame.size, self.view.window?.bounds, self.keyboardViewHost.view.window?.bounds, keyboardViewHost.view.window?.window?.bounds)
     }
 
     /*

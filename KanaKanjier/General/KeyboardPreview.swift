@@ -25,7 +25,10 @@ struct KeyboardPreview: View {
     private let defaultTab: Tab.ExistentialTab?
 
     init(theme: ThemeData, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil) {
-        SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
+        SemiStaticStates.shared.setScreenSize(
+            size: UIScreen.main.bounds.size,
+            orientation: UIDevice.current.orientation == UIDeviceOrientation.unknown ? .vertical : (UIDevice.current.orientation == UIDeviceOrientation.portrait ? .vertical : .horizontal)
+        )
         resultModel.setResults([
             CandidateMock(text: "azooKey"),
             CandidateMock(text: "あずーきー"),

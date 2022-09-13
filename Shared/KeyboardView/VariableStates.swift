@@ -43,10 +43,11 @@ final class VariableStates: ObservableObject {
     func setResizingMode(_ state: ResizingState) {
         switch state {
         case .fullwidth:
-            interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight)
+            interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight)
         case .onehanded, .resizing:
             let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation)
-            interfaceSize = item.size
+            // キーボードスクリーンのサイズを超えないように設定
+            interfaceSize = CGSize(width: min(item.size.width, SemiStaticStates.shared.screenWidth), height: min(item.size.height, Design.keyboardScreenHeight))
             interfacePosition = item.position
         }
         self.resizingState = state
