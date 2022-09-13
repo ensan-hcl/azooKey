@@ -67,7 +67,10 @@ struct CustardManager {
     }
 
     private static func directoryExistCheck() {
-        let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
+        guard let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey) else {
+            debug("container is unavailable")
+            return
+        }
         let filePath = directoryPath.appendingPathComponent(directoryName).path
         if !FileManager.default.fileExists(atPath: filePath) {
             do {
