@@ -1194,7 +1194,7 @@ private final class InputManager {
         /// - warning:
         ///   この関数を呼んで結果を得た場合、必ずそのCandidateで確定処理を行う必要がある。
         func candidateForCompleteFirstClause() -> Candidate? {
-            let minCount = 10
+            @KeyboardSetting(.automaticCompletionTreshold) var minCount
             guard let history = headClauseCandidateHistories.first else {
                 return nil
             }

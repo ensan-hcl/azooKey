@@ -41,28 +41,34 @@ struct SettingTabView: View {
                         FontSizeSettingView(.resultViewFontSize, .result, availableValueRange: 12...24)
                     }
                 }
-                Section(header: Text("変換")) {
-                    BoolSettingView(.liveConversion)
-                    BoolSettingView(.englishCandidate)
-                    BoolSettingView(.halfKanaCandidate)
-                    BoolSettingView(.fullRomanCandidate)
-                    BoolSettingView(.typographyLetter)
-                    BoolSettingView(.westernJapaneseCalender)
-                    BoolSettingView(.unicodeCandidate)
-                    NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
-                }
-                Section(header: Text("ユーザ辞書")) {
-                    BoolSettingView(.useOSUserDict)
-                    NavigationLink("azooKeyユーザ辞書", destination: AzooKeyUserDictionaryView())
-                }
+                Group {
+                    Section(header: Text("ライブ変換")) {
+                        BoolSettingView(.liveConversion)
+                        NavigationLink("詳しい設定", destination: LiveConversionSettingView())
+                    }
 
-                Section(header: Text("テンプレート")) {
-                    NavigationLink("テンプレートの管理", destination: TemplateListView())
-                }
+                    Section(header: Text("変換")) {
+                        BoolSettingView(.englishCandidate)
+                        BoolSettingView(.halfKanaCandidate)
+                        BoolSettingView(.fullRomanCandidate)
+                        BoolSettingView(.typographyLetter)
+                        BoolSettingView(.westernJapaneseCalender)
+                        BoolSettingView(.unicodeCandidate)
+                        NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
+                    }
+                    Section(header: Text("ユーザ辞書")) {
+                        BoolSettingView(.useOSUserDict)
+                        NavigationLink("azooKeyユーザ辞書", destination: AzooKeyUserDictionaryView())
+                    }
 
-                Section(header: Text("学習機能")) {
-                    LearningTypeSettingView()
-                    MemoryResetSettingItemView()
+                    Section(header: Text("テンプレート")) {
+                        NavigationLink("テンプレートの管理", destination: TemplateListView())
+                    }
+
+                    Section(header: Text("学習機能")) {
+                        LearningTypeSettingView()
+                        MemoryResetSettingItemView()
+                    }
                 }
                 Section(header: Text("このアプリについて")) {
                     NavigationLink("お問い合わせ", destination: ContactView())
