@@ -1106,21 +1106,24 @@ private final class InputManager {
         }
         var enabled = false
         private(set) var lastUsedCandidate: Candidate?
-        private var headClauseCandidateHistory: [Candidate] = []
         private var headClauseCandidateHistories: [[Candidate]] = []
 
         func clear() {
             self.lastUsedCandidate = nil
             @KeyboardSetting(.liveConversion) var enabled
             self.enabled = enabled
-            self.headClauseCandidateHistory = []
+            self.headClauseCandidateHistories = []
         }
 
-        private func updateHistories(newCandidate: Candidate) {
+        private func updateHistories(newCandidate: Candidate, firstClauseCandidates: [Candidate]) {
             var data = newCandidate.data[...]
             var count = 0
             while data.count > 0 {
-                let clause = Candidate.makePrefixClauseCandidate(data: data)
+                var clause = Candidate.makePrefixClauseCandidate(data: data)
+                // ローマ字向けに補正処理を入れる
+                if count == 0, let first = firstClauseCandidates.first(where: {$0.text == clause.text}){
+                    clause.correspondingCount = first.correspondingCount
+                }
                 if self.headClauseCandidateHistories.count <= count {
                     self.headClauseCandidateHistories.append([clause])
                 } else {
@@ -1132,8 +1135,9 @@ private final class InputManager {
         }
 
         /// `lastUsedCandidate`を更新する関数
-        func setLastUsedCandidate(_ candidate: Candidate?) {
+        func setLastUsedCandidate(_ candidate: Candidate?, firstClauseCandidates: [Candidate] = []) {
             if let candidate {
+                // 削除や置換ではなく付加的な変更である場合に限って更新を実施する。
                 let isAdditive: Bool
                 if let lastUsedCandidate {
                     let lastLength = lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}
@@ -1144,11 +1148,11 @@ private final class InputManager {
                 }
                 self.lastUsedCandidate = candidate
                 if isAdditive {
-                    self.updateHistories(newCandidate: candidate)
+                    self.updateHistories(newCandidate: candidate, firstClauseCandidates: firstClauseCandidates)
                 }
             } else {
                 self.lastUsedCandidate = nil
-                self.headClauseCandidateHistory = []
+                self.headClauseCandidateHistories = []
             }
         }
 
@@ -1212,6 +1216,7 @@ private final class InputManager {
 
     fileprivate func setResult(options: [ResultOptions] = [.convertInput]) {
         var results = [Candidate]()
+        var firstClauseResults = [Candidate]()
         options.forEach {option in
             switch option {
             case .convertInput:
@@ -1220,13 +1225,12 @@ private final class InputManager {
                 switch VariableStates.shared.inputStyle {
                 case .direct:
                     let inputData = DirectInputData(String(input_hira))
-                    result = self.directConverter.requestCandidates(inputData, N_best: 10)
+                    (result, firstClauseResults) = self.directConverter.requestCandidates(inputData, N_best: 10)
                 case .roman2kana:
                     let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
                     let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
                     let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
-
-                    result = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
+                    (result, firstClauseResults) = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
                 }
                 results.append(contentsOf: result)
                 // TODO: 最後の1単語のライブ変換を抑制したい
@@ -1245,10 +1249,12 @@ private final class InputManager {
                     if self.cursorPosition > 0 {
                         self.proxy.deleteBackward(count: self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.cursorPosition))
                         self.proxy.insertText(candidate.text)
-                        self.liveConversionManager.setLastUsedCandidate(candidate)
+                        self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
                     }
                     #if DEBUG
                     // 自動確定の実施
+                    // 現在の実装では、qwertyキーボードにおいてcorrespondingCountがバグるため、動作が正しくない。
+                    // この問題を根本的に解決するには、requestCandidatesにおいてclause candidateが独立に返ってきて、先頭の候補のcorrespondingCountを報告してくれる必要がある。
                     if let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
                         debug("Complete first clause", firstClause)
                         self.complete(candidate: firstClause)

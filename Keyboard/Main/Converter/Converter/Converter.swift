@@ -370,12 +370,13 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
     /// - Returns:
     ///   重複のない変換候補。
-    private func processResult(inputData: InputData, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> [Candidate] {
+    private func processResult(inputData: InputData, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         self.previousInputData = inputData
         self.nodes = result.nodes
         let clauseResult = result.result.getCandidateData()
         if clauseResult.isEmpty {
-            return self.getUniqueCandidate(self.getAdditionalCandidate(inputData))   // アーリーリターン
+            let candidates = self.getUniqueCandidate(self.getAdditionalCandidate(inputData))
+            return (candidates, candidates)   // アーリーリターン
         }
         let clauseCandidates: [Candidate] = clauseResult.map {(candidateData: CandidateData) -> Candidate in
             let first = candidateData.clauses.first!
@@ -481,7 +482,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             item.withActions(self.getApporopriateActions(item))
             item.parseTemplate()
         }
-        return result
+        return (result, Array(clause_candidates))
     }
 
     /// 入力からラティスを構築する関数。状況に応じて呼ぶ関数を分ける。
@@ -563,16 +564,16 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
     /// - Returns:
     ///   重複のない変換候補。
-    func requestCandidates(_ inputData: InputData, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> [Candidate] {
+    func requestCandidates(_ inputData: InputData, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         debug("入力は", inputData.characters)
         // stringが無の場合
         if inputData.characters.isEmpty {
-            return []
+            return (.init(), .init())
         }
         let start1 = Date()
 
         guard let result = self.convertToLattice(inputData, N_best: N_best) else {
-            return []
+            return (.init(), .init())
         }
 
         debug("ラティス構築", -start1.timeIntervalSinceNow)

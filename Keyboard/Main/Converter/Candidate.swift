@@ -51,7 +51,7 @@ struct Candidate: ResultViewItemData {
     /// 評価値
     let value: PValue
     /// 内部文字列で対応する文字数。
-    let correspondingCount: Int
+    var correspondingCount: Int
     /// 最後のmid(予測変換に利用)
     let lastMid: Int
     /// DicdataElement列
