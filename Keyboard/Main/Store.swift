@@ -1137,18 +1137,24 @@ private final class InputManager {
         /// `lastUsedCandidate`を更新する関数
         func setLastUsedCandidate(_ candidate: Candidate?, firstClauseCandidates: [Candidate] = []) {
             if let candidate {
-                // 削除や置換ではなく付加的な変更である場合に限って更新を実施する。
-                let isAdditive: Bool
+                // 削除や置換ではなく付加的な変更である場合に限って更新を実施したい。
+                let diff: Int
                 if let lastUsedCandidate {
                     let lastLength = lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}
                     let newLength = candidate.data.reduce(0) {$0 + $1.ruby.count}
-                    isAdditive = lastLength < newLength
+                    diff = newLength - lastLength
                 } else {
-                    isAdditive = true
+                    diff = 1
                 }
                 self.lastUsedCandidate = candidate
-                if isAdditive {
+                // 追加である場合
+                if diff > 0 {
                     self.updateHistories(newCandidate: candidate, firstClauseCandidates: firstClauseCandidates)
+                } else if diff < 0 {
+                    // 削除や置換の場合には最後尾のログを1つ落とす。
+                    self.headClauseCandidateHistories.mutatingForeach {
+                        $0.popLast()
+                    }
                 }
             } else {
                 self.lastUsedCandidate = nil
