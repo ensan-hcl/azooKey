@@ -476,6 +476,11 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         result.append(contentsOf: clause_candidates)
         result.append(contentsOf: wise_candidates)
         result.append(contentsOf: word_candidates)
+
+        result.mutatingForeach { item in
+            item.withActions(self.getApporopriateActions(item))
+            item.parseTemplate()
+        }
         return result
     }
 
@@ -574,12 +579,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         let start2 = Date()
         let candidates = self.processResult(inputData: inputData, result: result, requirePrediction: requirePrediction, requireEnglishPrediction: requireEnglishPrediction)
         debug("ラティス処理", -start2.timeIntervalSinceNow)
-
-        let results = candidates.map {
-            $0.withActions(self.getApporopriateActions($0)).parseTemplate()
-        }
         debug("全体", -start1.timeIntervalSinceNow)
 
-        return results
+        return candidates
     }
 }

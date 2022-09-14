@@ -615,12 +615,14 @@ private final class InputManager {
         switch VariableStates.shared.inputStyle {
         case .direct:
             actions = self.directConverter.getApporopriateActions(_candidate)
-            let candidate = _candidate.withActions(actions)
-            self.directConverter.updateLearningData(candidate)
+            _candidate.withActions(actions)
+            _candidate.parseTemplate()
+            self.directConverter.updateLearningData(_candidate)
         case .roman2kana:
             actions = self.romanConverter.getApporopriateActions(_candidate)
-            let candidate = _candidate.withActions(actions)
-            self.romanConverter.updateLearningData(candidate)
+            _candidate.withActions(actions)
+            _candidate.parseTemplate()
+            self.romanConverter.updateLearningData(_candidate)
         }
         self.clear()
         return actions
@@ -1148,10 +1150,12 @@ private final class InputManager {
                     if let last = candidate.data.last, last.ruby.count < 2 {
                         let ruby_hira = last.ruby.toHiragana()
                         let newElement = DicdataElement(word: ruby_hira, ruby: last.ruby, lcid: last.lcid, rcid: last.rcid, mid: last.mid, value: last.adjustedData(0).value(), adjust: last.adjust)
-                        let newCandidate = Candidate(text: candidate.data.dropLast().map {$0.word}.joined() + ruby_hira, value: candidate.value, correspondingCount: candidate.correspondingCount, lastMid: candidate.lastMid, data: candidate.data.dropLast() + [newElement])
+                        var newCandidate = Candidate(text: candidate.data.dropLast().map {$0.word}.joined() + ruby_hira, value: candidate.value, correspondingCount: candidate.correspondingCount, lastMid: candidate.lastMid, data: candidate.data.dropLast() + [newElement])
+                        newCandidate.parseTemplate()
                         debug(candidate, newCandidate)
                         candidate = newCandidate
                     }
+                    debug("Live Conversion:", candidate)
                     if self.cursorPosition > 0 {
                         if let previousCandidate = self.liveConversionManager.lastUsedCandidate {
                             let lastCount = previousCandidate.text.count

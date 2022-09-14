@@ -46,7 +46,7 @@ struct CandidateData {
 /// 変換候補のデータ
 struct Candidate: ResultViewItemData {
     /// 入力となるテキスト
-    let text: String
+    var text: String
     /// 評価値
     let value: PValue
     /// 内部文字列で対応する文字数。
@@ -57,7 +57,7 @@ struct Candidate: ResultViewItemData {
     let data: [DicdataElement]
     /// 変換として選択した際に実行する`action`。
     /// - note: 括弧を入力した際にカーソルを移動するために追加した変数
-    let actions: [ActionType]
+    var actions: [ActionType]
     /// 入力できるものか
     /// - note: 文字数表示のために追加したフラグ
     let inputable: Bool
@@ -74,22 +74,14 @@ struct Candidate: ResultViewItemData {
     /// 後から`action`を追加した形を生成する関数
     /// - parameters:
     ///  - actions: 実行する`action`
-    @inlinable func withActions(_ actions: [ActionType]) -> Candidate {
-        return Candidate(
-            text: text,
-            value: value,
-            correspondingCount: correspondingCount,
-            lastMid: lastMid,
-            data: data,
-            actions: actions,
-            inputable: inputable
-        )
+    @inlinable mutating func withActions(_ actions: [ActionType]) {
+        self.actions = actions
     }
 
     private static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"
     private static let randomExpression = "<random type=\".*?\" value=\".*?\">"
 
-    @inlinable func parseTemplate() -> Candidate {
+    static func parseTemplate(_ text: String) -> String {
         var newText = text
         while let range = newText.range(of: Self.dateExpression, options: .regularExpression) {
             let templateString = String(newText[range])
@@ -103,16 +95,13 @@ struct Candidate: ResultViewItemData {
             let value = template.previewString()
             newText.replaceSubrange(range, with: value)
         }
+        return newText.unescaped()
+    }
 
-        return Candidate(
-            text: newText.unescaped(),
-            value: value,
-            correspondingCount: correspondingCount,
-            lastMid: lastMid,
-            data: data,
-            actions: actions,
-            inputable: inputable
-        )
+    @inlinable mutating func parseTemplate() {
+        // ここでCandidate.textとdata.map(\.word).join("")の整合性が壊れることに注意
+        // ただし、dataの方を加工するのは望ましい挙動ではない。
+        self.text = Self.parseTemplate(text)
     }
 
     func getDebugInformation() -> String {

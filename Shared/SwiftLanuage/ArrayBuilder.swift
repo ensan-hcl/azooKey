@@ -33,3 +33,11 @@ extension Collection {
         return set
     }
 }
+
+extension MutableCollection {
+    mutating func mutatingForeach(transform closure: (inout Element) throws -> ()) rethrows {
+        for index in self.indices {
+            try closure(&self[index])
+        }
+    }
+}
