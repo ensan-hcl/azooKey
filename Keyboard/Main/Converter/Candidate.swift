@@ -11,6 +11,7 @@ import Foundation
 // 一文節を担う
 final class ClauseDataUnit {
     var mid: Int = 500
+    // 次の文節のlcid
     var nextLcid = CIDData.EOS.cid
     var text: String = ""
     var ruby: String = ""
@@ -81,7 +82,7 @@ struct Candidate: ResultViewItemData {
     private static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"
     private static let randomExpression = "<random type=\".*?\" value=\".*?\">"
 
-    static func parseTemplate(_ text: String) -> String {
+    private static func parseTemplate(_ text: String) -> String {
         var newText = text
         while let range = newText.range(of: Self.dateExpression, options: .regularExpression) {
             let templateString = String(newText[range])
@@ -107,4 +108,35 @@ struct Candidate: ResultViewItemData {
     func getDebugInformation() -> String {
         return self.data.debugDescription
     }
+
+    /// 入力を文としたとき、prefixになる文節に対応するCandidateを作る
+    static func makePrefixClauseCandidate(data: some Collection<DicdataElement>) -> Candidate {
+        var text = ""
+        var correspondingCount = 0
+        var lastRcid = CIDData.BOS.cid
+        var lastMid = 501
+        var candidateData: [DicdataElement] = []
+        for item in data {
+            // 文節だったら
+            if DicdataStore.isClause(lastRcid, item.lcid) {
+                break
+            }
+            text.append(item.word)
+            correspondingCount += item.ruby.count
+            lastRcid = item.rcid
+            // 最初だった場合を想定している
+            if item.mid != 500 && DicdataStore.includeMMValueCalculation(item) {
+                lastMid = item.mid
+            }
+            candidateData.append(item)
+        }
+        return Candidate(
+            text: text,
+            value: -5,
+            correspondingCount: correspondingCount,
+            lastMid: lastMid,
+            data: candidateData
+        )
+    }
+
 }

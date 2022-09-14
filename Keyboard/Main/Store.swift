@@ -563,7 +563,7 @@ private final class InputManager {
             self.romanConverter.setCompletedData(candidate)
         }
         if liveConversionEnabled {
-            self.liveConversionManager.lastUsedCandidate = nil
+            self.liveConversionManager.setLastUsedCandidate(nil)
         }
         if self.cursorPosition == 0 {
             self.cursorPosition = self.cursorMaximumPosition
@@ -1105,11 +1105,102 @@ private final class InputManager {
             self.enabled = enabled
         }
         var enabled = false
-        var lastUsedCandidate: Candidate?
+        private(set) var lastUsedCandidate: Candidate?
+        private var headClauseCandidateHistory: [Candidate] = []
+        private var headClauseCandidateHistories: [[Candidate]] = []
+
         func clear() {
             self.lastUsedCandidate = nil
             @KeyboardSetting(.liveConversion) var enabled
             self.enabled = enabled
+            self.headClauseCandidateHistory = []
+        }
+
+        private func updateHistories(newCandidate: Candidate) {
+            var data = newCandidate.data[...]
+            var count = 0
+            while data.count > 0 {
+                let clause = Candidate.makePrefixClauseCandidate(data: data)
+                if self.headClauseCandidateHistories.count <= count {
+                    self.headClauseCandidateHistories.append([clause])
+                } else {
+                    self.headClauseCandidateHistories[count].append(clause)
+                }
+                data = data.dropFirst(clause.data.count)
+                count += 1
+            }
+        }
+
+        /// `lastUsedCandidate`を更新する関数
+        func setLastUsedCandidate(_ candidate: Candidate?) {
+            if let candidate {
+                let isAdditive: Bool
+                if let lastUsedCandidate {
+                    let lastLength = lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}
+                    let newLength = candidate.data.reduce(0) {$0 + $1.ruby.count}
+                    isAdditive = lastLength < newLength
+                } else {
+                    isAdditive = true
+                }
+                self.lastUsedCandidate = candidate
+                if isAdditive {
+                    self.updateHistories(newCandidate: candidate)
+                }
+            } else {
+                self.lastUsedCandidate = nil
+                self.headClauseCandidateHistory = []
+            }
+        }
+
+        /// 条件に応じてCandidateを微調整するための関数
+        func adjustCandidate(candidate: inout Candidate) {
+            if let last = candidate.data.last, last.ruby.count < 2 {
+                let ruby_hira = last.ruby.toHiragana()
+                let newElement = DicdataElement(word: ruby_hira, ruby: last.ruby, lcid: last.lcid, rcid: last.rcid, mid: last.mid, value: last.adjustedData(0).value(), adjust: last.adjust)
+                var newCandidate = Candidate(text: candidate.data.dropLast().map {$0.word}.joined() + ruby_hira, value: candidate.value, correspondingCount: candidate.correspondingCount, lastMid: candidate.lastMid, data: candidate.data.dropLast() + [newElement])
+                newCandidate.parseTemplate()
+                debug(candidate, newCandidate)
+                candidate = newCandidate
+            }
+        }
+
+        /// `insert`の前に削除すべき長さを返す関数。
+        func calculateNecessaryBackspaceCount(rubyCursorPosition: Int) -> Int {
+            if let lastUsedCandidate {
+                // 直前のCandidateでinsertされた長さ
+                let lastCount = lastUsedCandidate.text.count
+                // 現在のカーソル位置から、直前のCandidateのルビとしての長さを引いている
+                // カーソル位置は「ルビとしての長さ」なので、「田中」に対するrubyCursorPositionは「タナカ|」の3であることが期待できる。
+                // 一方lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}はタナカの3文字なので3である。
+                // 従ってこの例ではdelta=0と言える。
+                let delta = rubyCursorPosition - lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}
+                return lastCount + delta
+            } else {
+                return rubyCursorPosition
+            }
+        }
+
+        /// 最初の文節を確定して良い場合Candidateを返す関数
+        /// - warning:
+        ///   この関数を呼んで結果を得た場合、必ずそのCandidateで確定処理を行う必要がある。
+        func candidateForCompleteFirstClause() -> Candidate? {
+            let minCount = 10
+            guard let history = headClauseCandidateHistories.first else {
+                return nil
+            }
+            if history.count < minCount {
+                return nil
+            }
+
+            // 過去十分な回数変動がなければ、prefixを確定して良い
+            debug("History", history)
+            let texts = history.suffix(minCount).mapSet{ $0.text }
+            if texts.count == 1 {
+                headClauseCandidateHistories.removeFirst()
+                return history.last!
+            } else {
+                return nil
+            }
         }
     }
 
@@ -1147,26 +1238,22 @@ private final class InputManager {
                     } else {
                         candidate = .init(text: String(input_hira), value: 0, correspondingCount: input_hira.count, lastMid: 0, data: [.init(ruby: String(input_hira), cid: 0, mid: 0, value: 0)])
                     }
-                    if let last = candidate.data.last, last.ruby.count < 2 {
-                        let ruby_hira = last.ruby.toHiragana()
-                        let newElement = DicdataElement(word: ruby_hira, ruby: last.ruby, lcid: last.lcid, rcid: last.rcid, mid: last.mid, value: last.adjustedData(0).value(), adjust: last.adjust)
-                        var newCandidate = Candidate(text: candidate.data.dropLast().map {$0.word}.joined() + ruby_hira, value: candidate.value, correspondingCount: candidate.correspondingCount, lastMid: candidate.lastMid, data: candidate.data.dropLast() + [newElement])
-                        newCandidate.parseTemplate()
-                        debug(candidate, newCandidate)
-                        candidate = newCandidate
-                    }
+                    self.liveConversionManager.adjustCandidate(candidate: &candidate)
                     debug("Live Conversion:", candidate)
+
+                    // カーソルなどを調整する
                     if self.cursorPosition > 0 {
-                        if let previousCandidate = self.liveConversionManager.lastUsedCandidate {
-                            let lastCount = previousCandidate.text.count
-                            let delta = self.cursorPosition - previousCandidate.data.reduce(0) {$0 + $1.ruby.count}
-                            self.proxy.deleteBackward(count: lastCount + delta)
-                        } else {
-                            self.proxy.deleteBackward(count: self.cursorPosition)
-                        }
+                        self.proxy.deleteBackward(count: self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.cursorPosition))
                         self.proxy.insertText(candidate.text)
-                        self.liveConversionManager.lastUsedCandidate = candidate
+                        self.liveConversionManager.setLastUsedCandidate(candidate)
                     }
+                    #if DEBUG
+                    // 自動確定の実施
+                    if let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
+                        debug("Complete first clause", firstClause)
+                        self.complete(candidate: firstClause)
+                    }
+                    #endif
                 }
             // Storeに通知し、ResultViewに表示する。
             case .mojiCount:
