@@ -14,10 +14,13 @@ struct UpdateInfomationView: View {
             Group {
                 VersionView("1.8", releaseDate: "2022年xx月xx日") {
                     ParagraphView("機能を追加しました。") {
-                        "フリック感度を調整できるようになりました"
+                        "フリック感度の調整機能を追加"
+                        "ライブ変換中の「自動確定」機能を追加"
                     }
                     ParagraphView("機能を改善しました。") {
+                        "iOS　16に正式に対応しました"
                         "辞書データを大幅にアップデートしました"
+                        "ライブ変換の不具合を複数修正しました"
                     }
                     ParagraphView("既知の不具合。") {
                         "iPadOS 16以降のiPad Proで「スペースを拡大」の設定を有効化している場合、キーボードの左側に大きな隙間が現れる問題が生じています。原因は調査中です。"
