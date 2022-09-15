@@ -9,10 +9,10 @@
 import SwiftUI
 
 struct LiveConversionSettingView: View {
-    private static let stregth = [Int.max, 16, 13, 10, 6]
-    @State private var autocompletionStrength = 0
+    private static let stregth: [AutomaticCompletionStrengthKey.Value] = [.disabled, .weak, .normal, .strong, .ultrastrong]
+    @State private var autocompletionStrength: AutomaticCompletionStrengthKey.Value = .normal
     init() {
-        self._autocompletionStrength = State(initialValue: Self.stregth.firstIndex(of: AutomaticCompletionTresholdKey.value) ?? 2)
+        self._autocompletionStrength = State(initialValue: AutomaticCompletionStrengthKey.value)
     }
     var body: some View {
         Form {
@@ -22,18 +22,14 @@ struct LiveConversionSettingView: View {
             Section(header: Text("自動確定")) {
                 Text("自動確定を使うと長い文章を打っているときに候補の選択がしやすくなります。")
                 Picker("自動確定の速さ", selection: $autocompletionStrength) {
-                    Text("しない").tag(0)
-                    Text("ゆっくり").tag(1)
-                    Text("普通").tag(2)
-                    Text("速い").tag(3)
-                    Text("とても速い").tag(4)
+                    Text("しない").tag(Self.stregth[0])
+                    Text("ゆっくり").tag(Self.stregth[1])
+                    Text("普通").tag(Self.stregth[2])
+                    Text("少し速い").tag(Self.stregth[3])
+                    Text("速い").tag(Self.stregth[4])
                 }
-                .labelsHidden()
-                .pickerStyle(.segmented)
                 .onChange(of: autocompletionStrength) { newValue in
-                    if 0 <= newValue && newValue < Self.stregth.count {
-                        AutomaticCompletionTresholdKey.value = Self.stregth[newValue]
-                    }
+                    AutomaticCompletionStrengthKey.value = newValue
                 }
             }
         }.navigationBarTitle(Text("ライブ変換の設定"), displayMode: .inline)

@@ -1151,10 +1151,16 @@ private final class InputManager {
                 if diff > 0 {
                     self.updateHistories(newCandidate: candidate, firstClauseCandidates: firstClauseCandidates)
                 } else if diff < 0 {
-                    // 削除や置換の場合には最後尾のログを1つ落とす。
+                    // 削除の場合には最後尾のログを1つ落とす。
                     self.headClauseCandidateHistories.mutatingForeach {
-                        $0.popLast()
+                        _ = $0.popLast()
                     }
+                } else {
+                    // 置換の場合には更新を追加で入れる。
+                    self.headClauseCandidateHistories.mutatingForeach {
+                        _ = $0.popLast()
+                    }
+                    self.updateHistories(newCandidate: candidate, firstClauseCandidates: firstClauseCandidates)
                 }
             } else {
                 self.lastUsedCandidate = nil
@@ -1194,17 +1200,17 @@ private final class InputManager {
         /// - warning:
         ///   この関数を呼んで結果を得た場合、必ずそのCandidateで確定処理を行う必要がある。
         func candidateForCompleteFirstClause() -> Candidate? {
-            @KeyboardSetting(.automaticCompletionTreshold) var minCount
+            @KeyboardSetting(.automaticCompletionStrength) var strength
             guard let history = headClauseCandidateHistories.first else {
                 return nil
             }
-            if history.count < minCount {
+            if history.count < strength.treshold {
                 return nil
             }
 
             // 過去十分な回数変動がなければ、prefixを確定して良い
             debug("History", history)
-            let texts = history.suffix(minCount).mapSet{ $0.text }
+            let texts = history.suffix(strength.treshold).mapSet{ $0.text }
             if texts.count == 1 {
                 headClauseCandidateHistories.removeFirst()
                 return history.last!
@@ -1257,15 +1263,11 @@ private final class InputManager {
                         self.proxy.insertText(candidate.text)
                         self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
                     }
-                    #if DEBUG
                     // 自動確定の実施
-                    // 現在の実装では、qwertyキーボードにおいてcorrespondingCountがバグるため、動作が正しくない。
-                    // この問題を根本的に解決するには、requestCandidatesにおいてclause candidateが独立に返ってきて、先頭の候補のcorrespondingCountを報告してくれる必要がある。
                     if let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
                         debug("Complete first clause", firstClause)
                         self.complete(candidate: firstClause)
                     }
-                    #endif
                 }
             // Storeに通知し、ResultViewに表示する。
             case .mojiCount:
