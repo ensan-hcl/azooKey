@@ -206,6 +206,11 @@ struct MessageManager {
                 if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
                     return true
                 }
+                // ライブ変換が無効の場合、今後有効化する際にはこの機能を発見できるので、Done
+                @KeyboardSetting(.liveConversion) var enabled
+                if !enabled {
+                    return true
+                }
                 return false
             },
             containerAppShouldMakeItDone: { false }
