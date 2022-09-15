@@ -266,6 +266,15 @@
 "ライブ変換" = "Live Conversion";
 "入力中の文字列を自動的に変換します。" = "Hiragana characters you input are immediately converted into kanji text, without manual operation";
 "macOSなどに搭載されている、入力中の文字列を自動的に変換する「ライブ変換」が利用できます。" = "You can use 'Live Conversion' with which hiragana characters you input are immediately converted into kanji text. This feature is often used in macOS, and now this feature is available on iOS!";
+"自動確定" = "Auto Prefix Completion";
+"自動確定を使うと長い文章を打っているときに候補の選択がしやすくなります。" = "With auto-prefix-completion, selecting candidate is more easy when you are inputting long text.";
+"自動確定の速さ" = "Speed of Auto Prefix Completion";
+"しない" = "Disabled";
+"ゆっくり" = "Slow";
+"普通" = "Normal";
+"少し速い" = "Fast";
+"速い" = "Very fast";
+
 "日本語入力中の英単語変換" = "Conversion to English words during Japanese input";
 "「いんてれsちんg」→「interesting」のように、ローマ字日本語入力中も英語への変換候補を表示します。" = "Display English word candidates during qwerty Japanese inputting like 「いんてれsちんg」→「interesting」.";
 "半角カナ変換" = "Half-width kana candidates";
@@ -296,6 +305,7 @@
 
 "追加する" = "Add";
 "詳細設定" = "Details";
+"詳しい設定" = "Details";
 "単語" = "Word";
 "読み" = "Ruby";
 "読みと単語" = "Ruby and word";
@@ -305,6 +315,14 @@
 "読みが空です" = "Ruby is empty";
 "単語が空です" = "Word is empty";
 "読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください" = "Contains unusable characters. Please use hiragana, roman letters, and numbers.";
+
+"フリックの感度" = "Flicking sensitivity";
+"操作性" = "Usability";
+"設定: とても反応しにくい" = "Setting: Very insensitive";
+"設定: 反応しにくい" = "Setting: Insensitive";
+"設定: 普通" = "Setting: Normal";
+"設定: 反応しやすい" = "Setting: Sensitive";
+"設定: とても反応しやすい" = "Setting: Very sensitive";
 
 "テンプレート" = "Templates";
 "テンプレートの管理" = "Manage templates";
