@@ -50,7 +50,13 @@ struct ThemeShareView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             Button {
-                if #available(iOS 15, *) {
+                if #available(iOS 16, *) {
+                    let renderer = ImageRenderer(content: keyboardPreview)
+                    renderer.scale = 3.0
+                    if let image = renderer.uiImage {
+                        shareImage.setImage(image)
+                    }
+                } else if #available(iOS 15, *) {
                     shareImage.setImage(keyboardPreview.snapshot())
                 } else {
                     shareImage.setImage(UIApplication.shared.windows[0].rootViewController?.view!.getImage(rect: self.captureRect))
