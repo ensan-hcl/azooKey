@@ -9,11 +9,12 @@
 import Foundation
 
 enum MessageIdentifier: String, Hashable, CaseIterable {
-    case mock = "mock_alert0"
+    case mock = "mock_alert_2022_09_16_03"
     case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"           // MARK: frozen
     case iOS14_5_new_emoji = "iOS_14_5_new_emoji_fixed_ver_1_6_1"    // MARK: frozen
-    case iOS15_4_new_emoji = "iOS_15_4_new_emoji"
-    case liveconversion_introduction = "liveconversion_introduction"
+    case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
+    case liveconversion_introduction = "liveconversion_introduction" // MARK: frozen
+    case ver1_7_autocomplete_introduction = "ver1_7_autocomplete_introduction" // MARK: frozen
 
     var key: String {
         return self.rawValue + "_status"
@@ -23,7 +24,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
         switch self {
         case .ver1_5_update_loudstxt:
             return true
-        case .iOS14_5_new_emoji, .iOS15_4_new_emoji, .liveconversion_introduction, .mock:
+        case .iOS14_5_new_emoji, .iOS15_4_new_emoji, .liveconversion_introduction, .ver1_7_autocomplete_introduction, .mock:
             return false
         }
     }
@@ -48,6 +49,9 @@ struct MessageData: Identifiable {
     /// メッセージを表示する前提条件
     let precondition: () -> Bool
 
+    /// メッセージを表示せずにDoneにして良い条件
+    let silentDoneCondition: () -> Bool
+
     /// 収容アプリがDoneにすべき条件
     let containerAppShouldMakeItDone: () -> Bool
 
@@ -57,6 +61,9 @@ struct MessageData: Identifiable {
 
         /// 「後で」と表示し、押した場合メッセージのステータスを完了に変更する
         case later
+
+        /// 「了解」と表示し、押した場合メッセージのステータスを完了に変更する
+        case OK
     }
 
     enum MessageRightButtonStyle {
@@ -87,6 +94,13 @@ struct MessageManager {
                 let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
                 return FileManager.default.fileExists(atPath: binaryFilePath)
             },
+            silentDoneCondition: {
+                // ダウンロードがv1.8以降の場合はDone
+                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
+                    return true
+                }
+                return false
+            },
             containerAppShouldMakeItDone: {
                 // ユーザ辞書に登録がない場合はDoneにして良い。
                 let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
@@ -108,6 +122,13 @@ struct MessageManager {
                     return false
                 }
             },
+            silentDoneCondition: {
+                // ダウンロードがv1.8以降の場合はDone
+                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
+                    return true
+                }
+                return false
+            },
             containerAppShouldMakeItDone: { false }
         ),
 
@@ -124,6 +145,13 @@ struct MessageManager {
                     return false
                 }
             },
+            silentDoneCondition: {
+                // ダウンロードがv1.8以降の場合はDone
+                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
+                    return true
+                }
+                return false
+            },
             containerAppShouldMakeItDone: { false }
         ),
 
@@ -136,6 +164,49 @@ struct MessageManager {
             precondition: {
                 @KeyboardSetting(.liveConversion) var enabled
                 return enabled == false
+            },
+            silentDoneCondition: {
+                // ライブ変換が有効になっている場合はDone
+                @KeyboardSetting(.liveConversion) var enabled
+                if enabled {
+                    return true
+                }
+                // ダウンロードがv1.8以降の場合はDone
+                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
+                    return true
+                }
+                return false
+            },
+            containerAppShouldMakeItDone: { false }
+        ),
+
+        MessageData(
+            id: .ver1_7_autocomplete_introduction,
+            title: "お知らせ",
+            description: "「ライブ変換」機能の利用中、自動で文頭の文節を確定するようになりました！「設定」で挙動を調整できます。",
+            leftsideButton: .OK,
+            rightsideButton: .openContainer(text: "設定する"),
+            precondition: {
+                // ライブ変換を使っていない場合は表示しない
+                @KeyboardSetting(.liveConversion) var enabled
+                if !enabled {
+                    return false
+                }
+                // ライブ変換を使っていても、ダウンロードがv1.8以降の場合は表示しない
+                // なぜならv1.8以降ではデフォルトでこの挙動がオンだから。
+                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
+                    return false
+                }
+                // initialAppVersionは1.7.1以降で追加されたAPIなので、これがnilの場合は1.7以前であることを期待して表示してしまって良い。
+                // それ以外の場合は表示する。
+                return true
+            },
+            silentDoneCondition: {
+                // ダウンロードがv1.8以降の場合はDone
+                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
+                    return true
+                }
+                return false
             },
             containerAppShouldMakeItDone: { false }
         )
@@ -151,6 +222,12 @@ struct MessageManager {
             } else {
                 // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
                 dict[value.id] = value.precondition() && SharedStore.userDefaults.string(forKey: value.id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: value.id.key) != Self.doneFlag
+            }
+        }
+        // 勝手にDoneにしてしまって問題のないものについては、この段階でDoneにする。
+        for item in necessaryMessages {
+            if item.silentDoneCondition() {
+                self.done(item.id)
             }
         }
     }

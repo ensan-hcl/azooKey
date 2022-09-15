@@ -36,6 +36,15 @@ struct MessageView: View {
                 Spacer()
                 Divider()
             }
+        case .OK:
+            HStack {
+                Spacer()
+                Button("了解") {
+                    self.manager.done(data.id)
+                }
+                Spacer()
+                Divider()
+            }
         }
     }
 

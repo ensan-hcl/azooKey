@@ -78,3 +78,9 @@ extension StringProtocol {
     }
 
 }
+
+extension AppVersion {
+    static let azooKey_v1_8 = AppVersion("1.8")!
+    static let azooKey_v1_7_2 = AppVersion("1.7.2")!
+    static let azooKey_v1_7_1 = AppVersion("1.7.1")!
+}
