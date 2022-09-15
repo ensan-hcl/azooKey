@@ -264,6 +264,7 @@
 
 "変換" = "Candidates";
 "ライブ変換" = "Live Conversion";
+"ライブ変換の設定" = "Settings for Live Conversion";
 "入力中の文字列を自動的に変換します。" = "Hiragana characters you input are immediately converted into kanji text, without manual operation";
 "macOSなどに搭載されている、入力中の文字列を自動的に変換する「ライブ変換」が利用できます。" = "You can use 'Live Conversion' with which hiragana characters you input are immediately converted into kanji text. This feature is often used in macOS, and now this feature is available on iOS!";
 "自動確定" = "Auto Prefix Completion";
@@ -317,6 +318,7 @@
 "読みに使用できない文字が含まれます。ひらがな、英字、数字を指定してください" = "Contains unusable characters. Please use hiragana, roman letters, and numbers.";
 
 "フリックの感度" = "Flicking sensitivity";
+"どれだけ指を動かしたらフリックと判定するか調整できます。" = "You can adjust how much you move your finger to determine a flick.";
 "操作性" = "Usability";
 "設定: とても反応しにくい" = "Setting: Very insensitive";
 "設定: 反応しにくい" = "Setting: Insensitive";

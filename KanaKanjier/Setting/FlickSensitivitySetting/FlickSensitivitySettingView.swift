@@ -14,7 +14,6 @@ struct FlickSensitivitySettingView: View {
 
     init(_ key: SettingKey) {}
 
-    // TODO: Localize
     private var explanation: LocalizedStringKey {
         switch localValue {
         case 0.33 ... 0.5: return "設定: とても反応しにくい"

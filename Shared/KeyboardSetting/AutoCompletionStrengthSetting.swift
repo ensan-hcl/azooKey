@@ -27,8 +27,8 @@ struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
             }
         }
     }
-    static let title: LocalizedStringKey = "自動確定の頻度"
-    static let explanation: LocalizedStringKey = "ライブ変換中の自動確定の強さを設定できます。強くするほど、すぐに確定しようとします。"
+    static let title: LocalizedStringKey = "自動確定の速さ"
+    static let explanation: LocalizedStringKey = "自動確定を使うと長い文章を打っているときに候補の選択がしやすくなります。"
     static let defaultValue: Value = Value.normal
     static let key: String = "automatic_completion_strength"
 
