@@ -62,7 +62,7 @@ struct ContentView: View {
             ForEach(messageManager.necessaryMessages, id: \.id) {data in
                 if messageManager.requireShow(data.id) {
                     switch data.id {
-                    case .mock, .liveconversion_introduction, .ver1_7_autocomplete_introduction:
+                    case .mock, .liveconversion_introduction, .ver1_8_autocomplete_introduction:
                         EmptyView()
                     case .ver1_5_update_loudstxt:
                         // ユーザ辞書を更新する

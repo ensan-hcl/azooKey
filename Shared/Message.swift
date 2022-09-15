@@ -14,7 +14,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
     case iOS14_5_new_emoji = "iOS_14_5_new_emoji_fixed_ver_1_6_1"    // MARK: frozen
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
     case liveconversion_introduction = "liveconversion_introduction" // MARK: frozen
-    case ver1_7_autocomplete_introduction = "ver1_7_autocomplete_introduction" // MARK: frozen
+    case ver1_8_autocomplete_introduction = "ver1_8_autocomplete_introduction" // MARK: frozen
 
     var key: String {
         return self.rawValue + "_status"
@@ -24,7 +24,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
         switch self {
         case .ver1_5_update_loudstxt:
             return true
-        case .iOS14_5_new_emoji, .iOS15_4_new_emoji, .liveconversion_introduction, .ver1_7_autocomplete_introduction, .mock:
+        case .iOS14_5_new_emoji, .iOS15_4_new_emoji, .liveconversion_introduction, .ver1_8_autocomplete_introduction, .mock:
             return false
         }
     }
@@ -181,7 +181,7 @@ struct MessageManager {
         ),
 
         MessageData(
-            id: .ver1_7_autocomplete_introduction,
+            id: .ver1_8_autocomplete_introduction,
             title: "お知らせ",
             description: "「ライブ変換」機能の利用中、自動で文頭の文節を確定するようになりました！「設定」で挙動を調整できます。",
             leftsideButton: .OK,
