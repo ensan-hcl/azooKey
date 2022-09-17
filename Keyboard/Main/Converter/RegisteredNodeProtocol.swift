@@ -16,6 +16,7 @@ protocol RegisteredNodeProtocol {
     var rubyCount: Int {get}
 
     static func BOSNode() -> Self
+    static func fromLastCandidate(_ candidate: Candidate) -> Self
 }
 
 struct DirectRegisteredNode: RegisteredNodeProtocol {
@@ -37,6 +38,15 @@ struct DirectRegisteredNode: RegisteredNodeProtocol {
     static func BOSNode() -> DirectRegisteredNode {
         DirectRegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0)
     }
+
+    static func fromLastCandidate(_ candidate: Candidate) -> DirectRegisteredNode {
+        DirectRegisteredNode(
+            data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid , rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
+            registered: nil,
+            totalValue: 0,
+            rubyCount: 0
+        )
+    }
 }
 
 struct RomanRegisteredNode: RegisteredNodeProtocol {
@@ -56,6 +66,16 @@ struct RomanRegisteredNode: RegisteredNodeProtocol {
 
     static func BOSNode() -> RomanRegisteredNode {
         RomanRegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0, romanString: "")
+    }
+
+    static func fromLastCandidate(_ candidate: Candidate) -> RomanRegisteredNode {
+        RomanRegisteredNode(
+            data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid , rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
+            registered: nil,
+            totalValue: 0,
+            rubyCount: 0,
+            romanString: ""
+        )
     }
 }
 

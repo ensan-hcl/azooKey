@@ -1167,12 +1167,12 @@ private final class InputManager {
                 } else if diff < 0 {
                     // 削除の場合には最後尾のログを1つ落とす。
                     self.headClauseCandidateHistories.mutatingForeach {
-                        $0.removeLast()
+                        _ = $0.popLast()
                     }
                 } else {
                     // 置換の場合には更新を追加で入れる。
                     self.headClauseCandidateHistories.mutatingForeach {
-                        $0.removeLast()
+                        _ = $0.popLast()
                     }
                     self.updateHistories(newCandidate: candidate, firstClauseCandidates: firstClauseCandidates)
                 }

@@ -17,8 +17,7 @@ extension Kana2Kanji {
         debug("確定直後の変換、元の文字は：", previousResult.inputData.characters, "新しい文字は：", inputData.characters)
         let count = inputData.count
         // (1)
-        // FIXME: completedDataを使ってなくない？
-        let start = RegisteredNode.BOSNode()
+        let start = RegisteredNode.fromLastCandidate(completedData)
         let nodes: Nodes = previousResult.nodes.suffix(count)
         for (i, nodeArray) in nodes.enumerated() {
             if i == .zero {
