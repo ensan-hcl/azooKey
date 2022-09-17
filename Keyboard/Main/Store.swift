@@ -526,10 +526,12 @@ private final class InputManager {
         let leftsideInputedText = self.inputtedText.prefix(self.cursorPosition)
         let count: Int
         if liveConversionEnabled {
+            // cursorPositionは変換前の「キョウノテンキ|」のような文字列における位置を示すが、ライブ変換中は「今日の天気|」のような状態になっている。そこでその場合には「今日の天気|」の方の長さを使って削除を実行する。
             count = self.liveConversionManager.lastUsedCandidate?.text.count ?? self.cursorPosition
         } else {
             count = self.cursorPosition
         }
+        debug("complete: ", count, self.liveConversionManager.lastUsedCandidate)
         if !self.isSelected {
             (0..<count).forEach {_ in
                 self.proxy.deleteBackward()
@@ -539,6 +541,7 @@ private final class InputManager {
 
         switch VariableStates.shared.inputStyle {
         case .direct:
+            print("complete:", candidate, inputtedText, cursorPosition)
             self.directConverter.updateLearningData(candidate)
             self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.correspondingCount))
             if candidate.correspondingCount == inputtedText.count {
@@ -547,7 +550,7 @@ private final class InputManager {
                 return
             }
             self.cursorPosition -= candidate.correspondingCount
-            self.inputtedText = String(self.inputtedText.dropFirst(candidate.correspondingCount))
+            self.inputtedText.removeFirst(candidate.correspondingCount)
             self.directConverter.setCompletedData(candidate)
         case .roman2kana:
             self.romanConverter.updateLearningData(candidate)
@@ -559,11 +562,13 @@ private final class InputManager {
                 return
             }
             self.cursorPosition -= displayedTextCount
-            self.inputtedText = String(self.inputtedText.dropFirst(displayedTextCount))
+            self.inputtedText.removeFirst(displayedTextCount)
             self.romanConverter.setCompletedData(candidate)
         }
-        if liveConversionEnabled {
+        if liveConversionEnabled && self.inputtedText.isEmpty {
             self.liveConversionManager.setLastUsedCandidate(nil)
+        } else if self.liveConversionManager.isFirstClauseCompletion {
+            self.liveConversionManager.updateAfterFirstClauseCompletion()
         }
         if self.cursorPosition == 0 {
             self.cursorPosition = self.cursorMaximumPosition
@@ -1105,6 +1110,8 @@ private final class InputManager {
             self.enabled = enabled
         }
         var enabled = false
+
+        private(set) var isFirstClauseCompletion: Bool = false
         private(set) var lastUsedCandidate: Candidate?
         private var headClauseCandidateHistories: [[Candidate]] = []
 
@@ -1113,6 +1120,13 @@ private final class InputManager {
             @KeyboardSetting(.liveConversion) var enabled
             self.enabled = enabled
             self.headClauseCandidateHistories = []
+        }
+
+        func updateAfterFirstClauseCompletion() {
+            // ここはどうにかしたい
+            self.lastUsedCandidate = nil
+            // フラグを戻す
+            self.isFirstClauseCompletion = false
         }
 
         private func updateHistories(newCandidate: Candidate, firstClauseCandidates: [Candidate]) {
@@ -1153,12 +1167,12 @@ private final class InputManager {
                 } else if diff < 0 {
                     // 削除の場合には最後尾のログを1つ落とす。
                     self.headClauseCandidateHistories.mutatingForeach {
-                        _ = $0.popLast()
+                        $0.removeLast()
                     }
                 } else {
                     // 置換の場合には更新を追加で入れる。
                     self.headClauseCandidateHistories.mutatingForeach {
-                        _ = $0.popLast()
+                        $0.removeLast()
                     }
                     self.updateHistories(newCandidate: candidate, firstClauseCandidates: firstClauseCandidates)
                 }
@@ -1213,6 +1227,7 @@ private final class InputManager {
             let texts = history.suffix(strength.treshold).mapSet{ $0.text }
             if texts.count == 1 {
                 headClauseCandidateHistories.removeFirst()
+                self.isFirstClauseCompletion = true
                 return history.last!
             } else {
                 return nil
@@ -1237,9 +1252,11 @@ private final class InputManager {
                 switch VariableStates.shared.inputStyle {
                 case .direct:
                     let inputData = DirectInputData(String(input_hira))
+                    debug("value to be input", inputData)
                     (result, firstClauseResults) = self.directConverter.requestCandidates(inputData, N_best: 10)
                 case .roman2kana:
                     let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
+                    debug("value to be input", inputData)
                     let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
                     let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
                     (result, firstClauseResults) = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
@@ -1262,11 +1279,6 @@ private final class InputManager {
                         self.proxy.deleteBackward(count: self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.cursorPosition))
                         self.proxy.insertText(candidate.text)
                         self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
-                    }
-                    // 自動確定の実施
-                    if let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
-                        debug("Complete first clause", firstClause)
-                        self.complete(candidate: firstClause)
                     }
                 }
             // Storeに通知し、ResultViewに表示する。
@@ -1299,7 +1311,16 @@ private final class InputManager {
                 }
             }
         }
+        debug("results to be registered:", results)
         Store.shared.registerResult(results)
+
+        if liveConversionEnabled {
+            // 自動確定の実施
+            if let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
+                debug("Complete first clause", firstClause)
+                self.complete(candidate: firstClause)
+            }
+        }
     }
     #if DEBUG
     // debug中であることを示す。

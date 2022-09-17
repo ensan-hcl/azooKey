@@ -25,6 +25,14 @@ final class ClauseDataUnit {
     }
 }
 
+#if DEBUG
+extension ClauseDataUnit: CustomDebugStringConvertible {
+    var debugDescription: String {
+        return "ClauseDataUnit(mid: \(mid), nextLcid: \(nextLcid), text: \(text), ruby: \(ruby), rubyCount: \(rubyCount))"
+    }
+}
+#endif
+
 struct CandidateData {
     typealias ClausesUnit = (clause: ClauseDataUnit, value: PValue)
     var clauses: [ClausesUnit]
@@ -82,7 +90,7 @@ struct Candidate: ResultViewItemData {
     private static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"
     private static let randomExpression = "<random type=\".*?\" value=\".*?\">"
 
-    private static func parseTemplate(_ text: String) -> String {
+    static func parseTemplate(_ text: String) -> String {
         var newText = text
         while let range = newText.range(of: Self.dateExpression, options: .regularExpression) {
             let templateString = String(newText[range])
