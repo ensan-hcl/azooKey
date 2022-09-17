@@ -10,7 +10,7 @@ import XCTest
 @testable import Keyboard
 
 extension KanaComponent: Equatable {
-    static func ==(lhs: KanaComponent, rhs: KanaComponent) -> Bool {
+    public static func ==(lhs: KanaComponent, rhs: KanaComponent) -> Bool {
         return lhs.internalText == rhs.internalText && lhs.displayedText == rhs.displayedText && lhs.isFreezed == rhs.isFreezed && lhs.escapeRomanKanaConverting == rhs.escapeRomanKanaConverting
     }
 }
