@@ -1077,6 +1077,10 @@ private final class InputManager {
         if text.isEmpty {
             return
         }
+        // 長すぎるのはダメ
+        if text.count > 100 {
+            return
+        }
         if text.hasPrefix("http") {
             return
         }
