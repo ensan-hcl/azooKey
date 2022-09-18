@@ -105,6 +105,47 @@ class HashTest: XCTestCase {
             }
         }
     }
+
+    @inlinable func fnv1a_update(hash: inout UInt64, value: UInt64) {
+        hash ^= value
+        hash &*= 1099511628211
+    }
+    @inlinable func fnv1a_update(hash: inout UInt64, value: UInt8) {
+        hash ^= UInt64(value)
+        hash &*= 1099511628211
+    }
+    @inlinable func fnv1a_update(hash: inout UInt64, value: Int) {
+        hash ^= UInt64(value)
+        hash &*= 1099511628211
+    }
+
+    // 手で実装したFNV1aハッシュ
+    // 0.04秒 (標準ライブラリの8種と遜色なし)
+    // なんだちゃんと実装すれば速いじゃん。
+    func testperformanceManualFNV1aHash() throws {
+        let element = DicdataMock.random()
+        measure {
+            for _ in 0...300000 {
+                var hash: UInt64 = 14695981039346656037
+                hash = element.word.utf8.reduce(into: hash, fnv1a_update)
+                hash = element.ruby.utf8.reduce(into: hash, fnv1a_update)
+                fnv1a_update(hash: &hash, value: element.lcid)
+                fnv1a_update(hash: &hash, value: element.rcid)
+                do {
+                    let hash1 = hash
+                }
+                do {
+                    hash = element.word.utf8.reduce(into: hash, fnv1a_update)
+                    let hash2 = hash
+                }
+                do {
+                    fnv1a_update(hash: &hash, value: element.lcid)
+                    let hash3 = hash
+                }
+            }
+        }
+    }
+
     /// 8つのハッシュの計算にかかる時間を調べる。
     /// ただし標準ライブラリのハッシュ関数はStableではない。(オワリ)
     func testperformanceStandardHash() throws {

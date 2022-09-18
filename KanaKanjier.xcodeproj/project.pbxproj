@@ -41,6 +41,7 @@
 		1A26F35925E8C147003CDA0D /* StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */; };
 		1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
 		1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C293826273E9900DFE465 /* DraggableView.swift */; };
+		1A2C2FDF28D710170001A0BB /* BloomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C2FDE28D710170001A0BB /* BloomFilter.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -2640,6 +2641,7 @@
 		1A2602F32514FB6E00EAD647 /* VariationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationsModel.swift; sourceTree = "<group>"; };
 		1A26F34125E8AACA003CDA0D /* StrokeAndFill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeAndFill.swift; sourceTree = "<group>"; };
 		1A2C293826273E9900DFE465 /* DraggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
+		1A2C2FDE28D710170001A0BB /* BloomFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomFilter.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -5304,6 +5306,7 @@
 				1A86F47925352AF200B92B49 /* swift-algorithm-topN.swift */,
 				1AC19AF12531AA800077BF8D /* Set.swift */,
 				1AB4E45C251C80CA00A58F3F /* LOUDS.swift */,
+				1A2C2FDE28D710170001A0BB /* BloomFilter.swift */,
 				1AFB685628D5769700B5C717 /* HashPerformance.swift */,
 				1A4623C12524159300EF5B02 /* aozora.csv */,
 				1A46245C2524D06800EF5B02 /* data */,
@@ -10740,6 +10743,7 @@
 				1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */,
 				1AB4E45D251C80CA00A58F3F /* LOUDS.swift in Sources */,
 				1A4624DA2525FAE000EF5B02 /* ForEach.swift in Sources */,
+				1A2C2FDF28D710170001A0BB /* BloomFilter.swift in Sources */,
 				1AF1D0D62530B666002FCC66 /* TextFileLines.swift in Sources */,
 				1A4623BC25240D2700EF5B02 /* TxtFileSpliting.swift in Sources */,
 			);
@@ -11080,7 +11084,7 @@
 				CODE_SIGN_ENTITLEMENTS = KanaKanjier/azooKey.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"KanaKanjier/Preview Content\"";
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				ENABLE_PREVIEWS = YES;
@@ -11111,7 +11115,7 @@
 				CODE_SIGN_ENTITLEMENTS = KanaKanjier/azooKey.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"KanaKanjier/Preview Content\"";
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				ENABLE_PREVIEWS = YES;
@@ -11236,7 +11240,7 @@
 				CODE_SIGN_ENTITLEMENTS = Keyboard/Keyboard.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_WARN_UNUSED_PARAMETER = YES;
@@ -11270,7 +11274,7 @@
 				CODE_SIGN_ENTITLEMENTS = Keyboard/Keyboard.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_WARN_UNUSED_PARAMETER = YES;
