@@ -1080,6 +1080,14 @@ private final class InputManager {
         if text.hasPrefix("http") {
             return
         }
+        // 改行文字はだめ
+        if text.contains("\n") || text.contains("\r") {
+            return
+        }
+        // 空白文字もだめ
+        if text.contains(" ") || text.contains("\t") {
+            return
+        }
         inputtedText = text
         if let element = self.getMatch(word: text) {
             inputtedText = element.ruby
@@ -1087,16 +1095,7 @@ private final class InputManager {
         kanaRomanStateHolder.components = text.map {KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
         cursorPosition = cursorMaximumPosition
         isSelected = true
-        if text.split(separator: " ", omittingEmptySubsequences: false).count > 1 || text.components(separatedBy: .newlines).count > 1 {
-            // FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
-            // 参照: https://qiita.com/ensan_hcl/items/476ffb665cd37cb312da
-            // self.setResult(options: [.mojiCount, .wordCount])
-            setResult(options: [])
-        } else {
-            // FIXME: textDocumentProxy.selectedTextの不具合により、機能を制限している。
-            // 参照: https://qiita.com/ensan_hcl/items/476ffb665cd37cb312da
-            setResult(options: [.convertInput])
-        }
+        setResult()
         VariableStates.shared.setEnterKeyState(.edit)
     }
 
@@ -1246,84 +1245,46 @@ private final class InputManager {
         }
     }
 
-    fileprivate enum ResultOptions {
-        case convertInput
-        case mojiCount
-        case wordCount
-    }
-
-    fileprivate func setResult(options: [ResultOptions] = [.convertInput]) {
+    fileprivate func setResult() {
         var results = [Candidate]()
         var firstClauseResults = [Candidate]()
-        options.forEach {option in
-            switch option {
-            case .convertInput:
-                let input_hira = self.inputtedText.prefix(self.cursorPosition)
-                let result: [Candidate]
-                switch VariableStates.shared.inputStyle {
-                case .direct:
-                    let inputData = DirectInputData(String(input_hira))
-                    debug("value to be input", inputData)
-                    (result, firstClauseResults) = self.directConverter.requestCandidates(inputData, N_best: 10)
-                case .roman2kana:
-                    let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
-                    debug("value to be input", inputData)
-                    let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
-                    let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
-                    (result, firstClauseResults) = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
-                }
-                results.append(contentsOf: result)
-                // TODO: 最後の1単語のライブ変換を抑制したい
-                // TODO: ローマ字入力中に最後の単語が優先される問題
-                if liveConversionEnabled {
-                    var candidate: Candidate
-                    if self.cursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map {$0.ruby}.joined().count == input_hira.count}) {
-                        candidate = firstCandidate
-                    } else {
-                        candidate = .init(text: String(input_hira), value: 0, correspondingCount: input_hira.count, lastMid: 0, data: [.init(ruby: String(input_hira), cid: 0, mid: 0, value: 0)])
-                    }
-                    self.liveConversionManager.adjustCandidate(candidate: &candidate)
-                    debug("Live Conversion:", candidate)
+        let input_hira = self.inputtedText.prefix(self.cursorPosition)
+        let result: [Candidate]
+        switch VariableStates.shared.inputStyle {
+        case .direct:
+            let inputData = DirectInputData(String(input_hira))
+            debug("value to be input", inputData)
+            (result, firstClauseResults) = self.directConverter.requestCandidates(inputData, N_best: 10)
+        case .roman2kana:
+            let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
+            debug("value to be input", inputData)
+            let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
+            let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
+            (result, firstClauseResults) = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
+        }
+        results.append(contentsOf: result)
+        // TODO: 最後の1単語のライブ変換を抑制したい
+        // TODO: ローマ字入力中に最後の単語が優先される問題
+        if liveConversionEnabled {
+            var candidate: Candidate
+            if self.cursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map {$0.ruby}.joined().count == input_hira.count}) {
+                candidate = firstCandidate
+            } else {
+                candidate = .init(text: String(input_hira), value: 0, correspondingCount: input_hira.count, lastMid: 0, data: [.init(ruby: String(input_hira), cid: 0, mid: 0, value: 0)])
+            }
+            self.liveConversionManager.adjustCandidate(candidate: &candidate)
+            debug("Live Conversion:", candidate)
 
-                    // カーソルなどを調整する
-                    if self.cursorPosition > 0 {
-                        let deleteCount = self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.cursorPosition)
-                        self.proxy.deleteBackward(count: deleteCount)
-                        self.proxy.insertText(candidate.text)
-                        debug("Live Conversion View Update: delete \(deleteCount) letters, insert \(candidate.text)")
-                        self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
-                    }
-                }
-            // Storeに通知し、ResultViewに表示する。
-            case .mojiCount:
-                let input = self.inputtedText.prefix(self.cursorPosition)
-                let count = input.filter {!$0.isNewline}.count
-                let mojisu = Candidate(
-                    text: "文字数:\(count)",
-                    value: 0,
-                    correspondingCount: 0,
-                    lastMid: 0,
-                    data: [],
-                    inputable: false
-                )
-                results.append(mojisu)
-            case .wordCount:
-                let input = self.inputtedText.prefix(self.cursorPosition)
-                if input.isEnglishSentence {
-                    let count = input.components(separatedBy: .newlines).map {$0.split(separator: " ").count}.reduce(0, +)
-                    results.append(
-                        Candidate(
-                            text: "単語数:\(count)",
-                            value: 0,
-                            correspondingCount: 0,
-                            lastMid: 0,
-                            data: [],
-                            inputable: false
-                        )
-                    )
-                }
+            // カーソルなどを調整する
+            if self.cursorPosition > 0 {
+                let deleteCount = self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.cursorPosition)
+                self.proxy.deleteBackward(count: deleteCount)
+                self.proxy.insertText(candidate.text)
+                debug("Live Conversion View Update: delete \(deleteCount) letters, insert \(candidate.text)")
+                self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
             }
         }
+
         debug("results to be registered:", results)
         Store.shared.registerResult(results)
 
