@@ -565,10 +565,12 @@ private final class InputManager {
             self.inputtedText.removeFirst(displayedTextCount)
             self.romanConverter.setCompletedData(candidate)
         }
-        if liveConversionEnabled && self.inputtedText.isEmpty {
-            self.liveConversionManager.setLastUsedCandidate(nil)
-        } else if self.liveConversionManager.isFirstClauseCompletion {
-            self.liveConversionManager.updateAfterFirstClauseCompletion()
+        if liveConversionEnabled {
+            if self.inputtedText.isEmpty {
+                self.liveConversionManager.setLastUsedCandidate(nil)
+            } else  {
+                self.liveConversionManager.updateAfterFirstClauseCompletion()
+            }
         }
         if self.cursorPosition == 0 {
             self.cursorPosition = self.cursorMaximumPosition
@@ -1127,6 +1129,8 @@ private final class InputManager {
             self.lastUsedCandidate = nil
             // フラグを戻す
             self.isFirstClauseCompletion = false
+            // 最初を落とす
+            headClauseCandidateHistories.removeFirst()
         }
 
         private func updateHistories(newCandidate: Candidate, firstClauseCandidates: [Candidate]) {
@@ -1198,11 +1202,19 @@ private final class InputManager {
         func calculateNecessaryBackspaceCount(rubyCursorPosition: Int) -> Int {
             if let lastUsedCandidate {
                 // 直前のCandidateでinsertされた長さ
+                // 通常、この文字数を消せば問題がない
                 let lastCount = lastUsedCandidate.text.count
+                // 直前に部分確定が行われた場合は話が異なる
+                // この場合、「本来の文字数 == ルビカウントの和」と「今のカーソルポジション」の差分をとり、その文字数がinsertされたのだと判定していた
+                // 「愛してる」において「愛し」を部分確定した場合を考える
+                // 本来のルビカウントは5である
+                // 一方、rubyCursorPositionとしては2が与えられる
+                // 故に3文字に対応する部分が確定されているので、
                 // 現在のカーソル位置から、直前のCandidateのルビとしての長さを引いている
                 // カーソル位置は「ルビとしての長さ」なので、「田中」に対するrubyCursorPositionは「タナカ|」の3であることが期待できる。
                 // 一方lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}はタナカの3文字なので3である。
                 // 従ってこの例ではdelta=0と言える。
+                debug("Live Conversion Delete Count Calc:", lastUsedCandidate, rubyCursorPosition)
                 let delta = rubyCursorPosition - lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}
                 return lastCount + delta
             } else {
@@ -1226,7 +1238,6 @@ private final class InputManager {
             debug("History", history)
             let texts = history.suffix(strength.treshold).mapSet{ $0.text }
             if texts.count == 1 {
-                headClauseCandidateHistories.removeFirst()
                 self.isFirstClauseCompletion = true
                 return history.last!
             } else {
@@ -1276,8 +1287,10 @@ private final class InputManager {
 
                     // カーソルなどを調整する
                     if self.cursorPosition > 0 {
-                        self.proxy.deleteBackward(count: self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.cursorPosition))
+                        let deleteCount = self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.cursorPosition)
+                        self.proxy.deleteBackward(count: deleteCount)
                         self.proxy.insertText(candidate.text)
+                        debug("Live Conversion View Update: delete \(deleteCount) letters, insert \(candidate.text)")
                         self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
                     }
                 }
@@ -1322,6 +1335,7 @@ private final class InputManager {
             }
         }
     }
+
     #if DEBUG
     // debug中であることを示す。
     fileprivate var isDebugMode: Bool = false
