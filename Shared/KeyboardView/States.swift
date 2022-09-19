@@ -98,7 +98,7 @@ final class SemiStaticStates {
     /// - Parameter size: only `size.width` used, and `size.height` has almost no needs, but using a bit.
     /// - 副作用として、この関数はデバイスの向きを決定し、UIのサイズを調整する。
     func setScreenSize(size: CGSize, orientation: KeyboardOrientation? = nil) {
-        if self.screenWidth == size.width {
+        if self.screenWidth == size.width && orientation == VariableStates.shared.keyboardOrientation {
             return
         }
         if let orientation {

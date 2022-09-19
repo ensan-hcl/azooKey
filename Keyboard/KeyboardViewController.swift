@@ -112,16 +112,16 @@ final class KeyboardViewController: UIInputViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         // この関数は「これから」向きが変わる場合に呼ばれるので、デバイスの向きによってwidthとheightが逆転するUIScreen.main.bounds.sizeを用いて向きを確かめることができる。
+        // ただしこの時点でのUIScreen.mainの値はOSバージョンで変わる
         // なお、UIScreen.mainは非推奨である。これからデバイスの向きどうやってとったらええねん。
-        if #available(iOS 15, *) {
-            debug("viewWillTransition", size, UIScreen.main.bounds.size)
+        debug("viewWillTransition", size, UIScreen.main.bounds.size)
+        if #available(iOS 16, *) {
             SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical)
-        } else {
-            if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
-                let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
-                debug("viewWillTransition", size)
-                SemiStaticStates.shared.setScreenSize(size: size)
-            }
+        } else if #available(iOS 15, *) {
+            SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal)
+        } else if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
+            let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
+            SemiStaticStates.shared.setScreenSize(size: size)
         }
     }
 
