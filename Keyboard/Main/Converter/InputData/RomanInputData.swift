@@ -13,27 +13,17 @@ struct RomanInputData: InputDataProtocol {
     internal let characters: [Character]
     /// kana2Latticeにおける分割数だと思うこと。
     internal let count: Int
-    internal let history: KanaRomanStateHolder
-    internal let freezed: [Bool]
-    internal init(_ input: String, history: KanaRomanStateHolder, count: Int? = nil) {
-        // 入力とhistoryが正しく対応するように調整する。
-        if input.isEmpty {
-            self.history = KanaRomanStateHolder()
-        } else {
-            let index = history.supremumIndexWithFreezing(for: input)
-            self.history = KanaRomanStateHolder(components: Array(history.components.prefix(index + 1)))
-        }
-        self.katakanaString = input.toKatakana()
-        let romanString = self.history.components.map {$0.internalText}.joined()   // split由来のデータではかな文字が含まれる
+    internal var history: ComposingText
+    internal init(_ input: ComposingText, count: Int? = nil) {
+        self.history = input.prefixToCursorPosition()
+        self.katakanaString = input.convertTarget.toKatakana()
+        let romanString = String(self.history.input)   // split由来のデータではかな文字が含まれる
         if let count {
             self.count = count
         } else {
             self.count = romanString.count
         }
-        self.characters = Array(romanString)
-        self.freezed = self.history.components.reduce(into: []) {array, component in
-            array.append(contentsOf: [Bool].init(repeating: component.isFreezed, count: component.internalText.count))
-        }
+        self.characters = self.history.input
     }
 
     subscript(_ range: ClosedRange<Int>) -> String {
@@ -54,24 +44,13 @@ struct RomanInputData: InputDataProtocol {
                 if count <= j {
                     return []
                 }
-                if i == j && freezed[left + i] {
-                    return [String(self.characters[left + i])]
-                }
-                if (left + i ... left + j).allSatisfy({!freezed[$0]}) {
-                    return Self.getTypo(String(self.characters[left + i ... left + j]))
-                }
-                return []
+                return Self.getTypo(String(self.characters[left + i ... left + j]))
             }
         }
         var result: [(lattice: RomanKanaConvertingLattice, penalty: PValue)] = []
         for (i, nodeArray) in nodes.enumerated() {
             let correct = String(self.characters[left + i])
             if i == .zero {
-                if let component = history.freezedData(internalCharacterCount: left + i + 1) {
-                    let lattice = RomanKanaConvertingLattice([(string: component.displayedText, isFreezed: true)], count: component.displayedText.count)
-                    result = [(lattice: lattice, penalty: .zero)]
-                    continue
-                }
                 result = nodeArray.map {(RomanKanaConvertingLattice([(string: $0, isFreezed: false)], count: $0.count), $0 == correct ? .zero:unit)}
                 continue
             }
@@ -79,9 +58,6 @@ struct RomanInputData: InputDataProtocol {
                 // 訂正数上限(3個)
                 if lattice.count != i {
                     return [(lattice, penalty)]
-                }
-                if let component = history.freezedData(internalCharacterCount: left + i + 1) {
-                    return [(lattice: lattice.appending(component.displayedText, isFreezed: true), penalty: penalty)]
                 }
                 if penalty == triple {
                     return [(lattice.appending(correct), penalty)]
@@ -137,68 +113,26 @@ extension RomanInputData {
 }
 
 extension RomanInputData {
-    /*
-     internal func isAfterAddedCharacter(previous: Self) -> Int? {
-     let count_a = self.characters.count
-     let count_b = previous.characters.count
-     if count_b-count_a >= 0{
-     return nil
-     }
-     let prefix: [Character] = Array(self.characters.prefix(count_b))
-     if prefix == previous.characters{
-     //nとっのパターンの場合は判定しない。
-     if prefix.last == "n" || self.characters.suffix(count_a-count_b).first == prefix.last{
-     return nil
-     }
-     return self.characters.count - previous.count
-     }
-     return nil
-     }
-     */
     internal func isAfterDeletedCharacter(previous: RomanInputData) -> Int? {
+        // 意図はprevious.characters.hasPrefix(self.characters)だが、そういうAPIがないのでこうしている
         if Array(previous.characters.prefix(self.characters.count)) == self.characters {
             let count_a = self.characters.count
             let count_b = previous.characters.count
             if count_b-count_a <= 0 {
                 return nil
             }
-
-            let minCount = min(count_a, count_b)
-            if self.freezed.prefix(minCount) != previous.freezed.prefix(minCount) {
-                return nil
-            }
-
             return count_b-count_a
-        } else {
-            return nil
         }
+        return nil
     }
 
     internal func isAfterReplacedCharacter(previous: RomanInputData) -> (deleted: Int, added: Int)? {
-        let displayedText_s = self.history.components.flatMap {Array($0.displayedText)}
-        let displayedText_p = previous.history.components.flatMap {Array($0.displayedText)}
-        let displayedText_endIndex = min(displayedText_s.endIndex, displayedText_p.endIndex)
-
-        var i = 0
-        while i<displayedText_endIndex && displayedText_s[i] == displayedText_p[i] {
-            i += 1
-        }
-        if i == 0 || i == displayedText_endIndex {
+        // 共通接頭辞を求める
+        let common = String(self.history.input).commonPrefix(with: String(previous.history.input))
+        if common == "" {
             return nil
         }
-        let common = String(displayedText_s.prefix(i))  // 共通部分
-        let result = self.history.supremumIndex(for: common)
-        if result.match {
-            let index = self.history.components[0...result.index].map {$0.internalText.count}.reduce(0, +)
-            let deleted = previous.characters.count - index
-            let added = self.characters.count - index
-            if deleted == 0 || added == 0 {
-                return nil
-            }
-            return (deleted, added)
-        } else {
-            return nil
-        }
+        return (previous.history.input.count - common.count, self.history.input.count - common.count)
     }
 }
 

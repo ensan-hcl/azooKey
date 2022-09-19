@@ -264,7 +264,6 @@
 		1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
 		1AE3DF02258A20A2007C7C4A /* FlickCustomKeySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */; };
 		1AE4DB6B2515CCF200A24158 /* InputDataProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */; };
-		1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB742515FE1C00A24158 /* KanaComponent.swift */; };
 		1AE4DB7C25163C6B00A24158 /* DirectInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */; };
 		1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE4DB852516D0D600A24158 /* RomanInputData.swift */; };
 		1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */; };
@@ -2832,7 +2831,6 @@
 		1AE1913525D4A3370044EE4B /* ThemeShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeShareView.swift; sourceTree = "<group>"; };
 		1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AzooKeyIcon-Regular.otf"; sourceTree = "<group>"; };
 		1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputDataProtocol.swift; sourceTree = "<group>"; };
-		1AE4DB742515FE1C00A24158 /* KanaComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaComponent.swift; sourceTree = "<group>"; };
 		1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectInputData.swift; sourceTree = "<group>"; };
 		1AE4DB852516D0D600A24158 /* RomanInputData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanInputData.swift; sourceTree = "<group>"; };
 		1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListView.swift; sourceTree = "<group>"; };
@@ -5795,7 +5793,6 @@
 				1AE4DB6A2515CCF200A24158 /* InputDataProtocol.swift */,
 				1AE4DB7B25163C6B00A24158 /* DirectInputData.swift */,
 				1AE4DB852516D0D600A24158 /* RomanInputData.swift */,
-				1AE4DB742515FE1C00A24158 /* KanaComponent.swift */,
 			);
 			path = InputData;
 			sourceTree = "<group>";
@@ -10772,7 +10769,6 @@
 				1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */,
 				1AFB685028D56E8200B5C717 /* CodableSupport.swift in Sources */,
 				1A3DC2FF2500F837002CAA93 /* extension Character.swift in Sources */,
-				1AE4DB752515FE1C00A24158 /* KanaComponent.swift in Sources */,
 				1A5C7ECA25F3792300A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE4DB862516D0D700A24158 /* RomanInputData.swift in Sources */,

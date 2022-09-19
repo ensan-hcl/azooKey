@@ -35,7 +35,11 @@ extension InputDataProtocol {
         }
         if let self = self as? DirectInputData {
             if InputData.self == RomanInputData.self {
-                return RomanInputData(self.katakanaString, history: KanaRomanStateHolder(components: [KanaComponent(internalText: self.katakanaString, kana: self.katakanaString, isFreezed: true, escapeRomanKanaConverting: true)]), count: self.count) as! InputData
+                var composingText = ComposingText()
+                composingText.setInputStyle(.direct)
+                _ = composingText.insertAtCursorPosition(self.katakanaString.toHiragana())
+                composingText.setInputStyle(.roman2kana)
+                return RomanInputData(composingText) as! InputData
             }
         }
         if let self = self as? RomanInputData {
