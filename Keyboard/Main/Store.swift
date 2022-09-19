@@ -1140,6 +1140,7 @@ private final class InputManager {
         VariableStates.shared.setEnterKeyState(.return)
     }
 
+    // ライブ変換を管理するためのクラス
     fileprivate class LiveConversionManager {
         init() {
             @KeyboardSetting(.liveConversion) var enabled
@@ -1148,6 +1149,7 @@ private final class InputManager {
         var enabled = false
 
         private(set) var isFirstClauseCompletion: Bool = false
+        // 現在ディスプレイに表示されている候補
         private(set) var lastUsedCandidate: Candidate?
         private var headClauseCandidateHistories: [[Candidate]] = []
 
@@ -1280,6 +1282,7 @@ private final class InputManager {
         }
     }
 
+    // 変換リクエストを送信し、結果を反映する関数
     fileprivate func setResult() {
         var results = [Candidate]()
         var firstClauseResults = [Candidate]()
