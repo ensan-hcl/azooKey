@@ -603,7 +603,7 @@ private final class InputManager {
         self.clear()
     }
 
-    // 単純に確定した場合のデータ
+    // MARK: 単純に確定した場合はひらがな列に対して候補を作成する
     fileprivate func enter() -> [ActionType] {
         var _candidate = Candidate(
             text: self.inputtedText,
@@ -635,7 +635,7 @@ private final class InputManager {
         return actions
     }
 
-    // MARK: キーボード経由での操作。
+    // MARK: キーボード経由でユーザがinputを行った場合に呼び出す
     fileprivate func input(text: String) {
         if self.isSelected {
             // 選択は解除される
@@ -714,6 +714,8 @@ private final class InputManager {
         setResult()
     }
 
+    /// テキストの進行方向に削除する
+    /// `ab|c → ab|`のイメージ
     fileprivate func deleteForward(count: Int, requireSetResult: Bool = true) {
         if count < 0 {
             return
@@ -747,6 +749,8 @@ private final class InputManager {
         }
     }
 
+    /// テキストの進行方向と逆に削除する
+    /// `ab|c → a|c`のイメージ
     fileprivate func deleteBackward(count: Int, requireSetResult: Bool = true) {
         if count == 0 {
             return
@@ -786,6 +790,7 @@ private final class InputManager {
         }
     }
 
+    /// 特定の文字まで削除する
     fileprivate func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
         // 選択状態ではオール削除になる
         if self.isSelected {
@@ -829,6 +834,7 @@ private final class InputManager {
         }
     }
 
+    /// テキストの進行方向に、特定の文字まで削除する
     fileprivate func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
         // 選択状態ではオール削除になる
         if self.isSelected {
@@ -864,6 +870,7 @@ private final class InputManager {
         }
     }
 
+    /// テキストの進行方向と逆に、特定の文字までカーソルを動かす
     fileprivate func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
         // 選択状態では最も左にカーソルを移動
         if isSelected {
@@ -894,6 +901,7 @@ private final class InputManager {
         }
     }
 
+    /// テキストの進行方向に、特定の文字までカーソルを動かす
     fileprivate func smartMoveCursorForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
         // 選択状態では最も左にカーソルを移動
         if isSelected {
@@ -923,6 +931,8 @@ private final class InputManager {
         }
     }
 
+    /// これから選択を解除するときに呼ぶ関数
+    /// ぶっちゃけ役割不明
     fileprivate func deselect() {
         if isSelected {
             clear()
@@ -930,6 +940,7 @@ private final class InputManager {
         }
     }
 
+    /// 選択状態にあるテキストを再度入力し、編集可能な状態にする
     fileprivate func edit() {
         if isSelected {
             let selectedText = inputtedText
@@ -939,6 +950,9 @@ private final class InputManager {
         }
     }
 
+    /// 文字のreplaceを実施する
+    /// `changeCharacter`を`CustardKit`で扱うためのAPI。
+    /// キーボード経由でのみ実行される。
     fileprivate func replaceLastCharacters(table: [String: String]) {
         debug(table, inputtedText, isSelected)
         if isSelected {
@@ -948,17 +962,21 @@ private final class InputManager {
             $0.max = max($0.max, $1.count)
             $0.min = min($0.min, $1.count)
         }
+        // 入力状態の場合、入力中のテキストの範囲でreplaceを実施する。
         if !inputtedText.isEmpty {
             let leftside = inputtedText.prefix(cursorPosition)
             for count in (counts.min...counts.max).reversed() where count <= cursorPosition {
                 if let replace = table[String(leftside.suffix(count))] {
+                    // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
                     self.deleteBackward(count: count, requireSetResult: false)
+                    // ここで変換が行われる。内部的には差分管理システムによって「置換」の場合のキャッシュ変換が呼ばれる。
                     self.input(text: replace)
                     break
                 }
             }
             return
         }
+        // 入力状態ではない場合、または言語の指定がない場合は、入力中のテキストの範囲でreplaceを実施する。
         if VariableStates.shared.keyboardLanguage == .none {
             let leftside = proxy.documentContextBeforeInput ?? ""
             for count in (counts.min...counts.max).reversed() where count <= leftside.count {
@@ -969,37 +987,47 @@ private final class InputManager {
                 }
             }
         }
-        return
     }
 
+    /// カーソル左側の1文字を変更する関数
+    /// ひらがなの場合は小書き・濁点・半濁点化し、英字・ギリシャ文字・キリル文字の場合は大文字・小文字化する
     fileprivate func changeCharacter() {
         if self.isSelected {
             return
         }
-        let char = self.inputtedText.prefix(self.cursorPosition).last ?? "\0"
+        guard let char = self.inputtedText.prefix(self.cursorPosition).last else {
+            return
+        }
         let changed = char.requestChange()
+        // 同じ文字の場合は無視する
         if Character(changed) == char {
             return
         }
+        // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
         self.deleteBackward(count: 1, requireSetResult: false)
+        // inputの内部でsetResultが発生する
         self.input(text: changed)
     }
 
     /// キーボード経由でのカーソル移動
     fileprivate func moveCursor(count: Int) {
+        // ライブ変換中のカーソル移動はとてもじゃないがハンドルできないのでクリアする
         if liveConversionEnabled {
             self.clear()
         }
         if count == 0 {
             return
         }
+        // カーソルを移動した直後、挙動が不安定であるためにafterAdjustedを使う
         afterAdjusted = true
+        // 入力中の文字が空の場合は普通に動かす
         if inputtedText.isEmpty {
             proxy.moveCursor(count: count)
             return
         }
         debug("moveCursor, cursorPosition:", cursorPosition, count)
         // カーソル位置の正規化
+        // 動かしすぎないようにする
         if cursorPosition + count > cursorMaximumPosition {
             proxy.moveCursor(count: cursorMaximumPosition - cursorPosition)
             cursorPosition = cursorMaximumPosition
@@ -1045,6 +1073,7 @@ private final class InputManager {
         setResult()
     }
 
+    // ユーザがキーボードを経由せずペーストした場合の処理
     fileprivate func userPastedText(text: String) {
         // 入力された分を反映する
         inputtedText = text
@@ -1054,14 +1083,12 @@ private final class InputManager {
         VariableStates.shared.setEnterKeyState(.complete)
     }
 
+    // ユーザがキーボードを経由せずカットした場合の処理
     fileprivate func userCutText(text: String) {
-        inputtedText = ""
-        cursorPosition = .zero
-        isSelected = false
-        setResult()
-        VariableStates.shared.setEnterKeyState(.return)
+        self.clear()
     }
 
+    // ユーザが選択領域で文字を入力した場合
     fileprivate func userReplacedSelectedText(text: String) {
         // 新たな入力を反映
         inputtedText = text
@@ -1072,7 +1099,7 @@ private final class InputManager {
         VariableStates.shared.setEnterKeyState(.complete)
     }
 
-    // ユーザが文章を選択した場合、その部分を入力中であるとみなす
+    // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
     fileprivate func userSelectedText(text: String) {
         if text.isEmpty {
             return
@@ -1092,11 +1119,15 @@ private final class InputManager {
         if text.contains(" ") || text.contains("\t") {
             return
         }
-        inputtedText = text
+        // 過去のログを見て、再変換に利用する
         if let element = self.getMatch(word: text) {
-            inputtedText = element.ruby
+            inputtedText = element.ruby.toHiragana()
+        } else {
+            inputtedText = text
         }
+        // ローマ字かな変換モジュールは単純に各文字の列挙にする
         kanaRomanStateHolder.components = text.map {KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
+        // カーソルポジションを反映する
         cursorPosition = cursorMaximumPosition
         isSelected = true
         setResult()
