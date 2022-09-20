@@ -44,6 +44,9 @@ extension InputDataProtocol {
         }
         if let self = self as? RomanInputData {
             if InputData.self == DirectInputData.self {
+                // TODO: ここをもう少しマシな処理に切り替える
+                // 現在はログデータを壊さないようにするための処理としてcountを与えている
+                // そうではなく、ログデータ自体をtranslateするべきである
                 return DirectInputData(self.katakanaString, count: self.count) as! InputData
             }
         }
