@@ -528,7 +528,7 @@ private final class InputManager {
             self.romanConverter.updateLearningData(candidate)
         }
         self.composingText.complete(correspondingCount: candidate.correspondingCount)
-        self.proxy.insertText(candidate.text + self.composingText.convertTarget)
+        self.proxy.insertText(candidate.text + self.composingText.convertTargetBeforeCursor)
         if self.composingText.convertTarget.isEmpty {
             self.clear()
             VariableStates.shared.setEnterKeyState(.return)
@@ -561,7 +561,7 @@ private final class InputManager {
 
     fileprivate func clear() {
         debug("クリアしました")
-        self.composingText = .init()
+        self.composingText.clear()
         self.isSelected = false
         self.liveConversionManager.clear()
         self.setResult()
@@ -615,10 +615,12 @@ private final class InputManager {
         if self.isSelected {
             // 選択は解除される
             self.isSelected = false
-
+            // composingTextをクリアする
+            self.composingText.clear()
             // キーボードの状態と無関係にdirectに設定し、入力をそのまま持たせる
             self.composingText.setInputStyle(.direct)
             let _ = self.composingText.insertAtCursorPosition(text)
+            self.composingText.setInputStyle(VariableStates.shared.inputStyle)
 
             // 実際に入力する
             self.proxy.insertText(text)
@@ -981,10 +983,11 @@ private final class InputManager {
         } else if composingText.convertTargetCursorPosition + count < 0 {
             count = 0 - composingText.convertTargetCursorPosition
         }
-        proxy.moveCursor(count: count)
         composingText.moveCursorFromCursorPosition(count: count)
-
-        setResult()
+        proxy.moveCursor(count: count)
+        if count != 0 {
+            setResult()
+        }
     }
 
     // MARK: userが勝手にカーソルを何かした場合の後処理
@@ -1718,5 +1721,11 @@ struct ComposingText {
         text.input = Array(text.input.prefix(index))
         text.convertTarget = String(text.convertTarget.prefix(text.convertTargetCursorPosition))
         return text
+    }
+
+    mutating func clear() {
+        self.input = []
+        self.convertTarget = ""
+        self.convertTargetCursorPosition = 0
     }
 }

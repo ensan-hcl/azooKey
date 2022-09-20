@@ -12,18 +12,13 @@ struct RomanInputData: InputDataProtocol {
     internal let katakanaString: String
     internal let characters: [Character]
     /// kana2Latticeにおける分割数だと思うこと。
-    internal let count: Int
-    internal var history: ComposingText
-    internal init(_ input: ComposingText, count: Int? = nil) {
-        self.history = input.prefixToCursorPosition()
-        self.katakanaString = input.convertTarget.toKatakana()
-        let romanString = String(self.history.input)   // split由来のデータではかな文字が含まれる
-        if let count {
-            self.count = count
-        } else {
-            self.count = romanString.count
-        }
-        self.characters = self.history.input
+    internal var count: Int {
+        return characters.count
+    }
+    internal init(_ composingText: ComposingText) {
+        let composingText = composingText.prefixToCursorPosition()
+        self.katakanaString = composingText.convertTarget.toKatakana()
+        self.characters = composingText.input
     }
 
     subscript(_ range: ClosedRange<Int>) -> String {
@@ -128,11 +123,15 @@ extension RomanInputData {
 
     internal func isAfterReplacedCharacter(previous: RomanInputData) -> (deleted: Int, added: Int)? {
         // 共通接頭辞を求める
-        let common = String(self.history.input).commonPrefix(with: String(previous.history.input))
+        let common = String(self.characters).commonPrefix(with: String(previous.characters))
         if common == "" {
             return nil
         }
-        return (previous.history.input.count - common.count, self.history.input.count - common.count)
+        let (deleted, added) = (previous.characters.count - common.count, self.characters.count - common.count)
+        if deleted == 0 || added == 0 {
+            return nil
+        }
+        return (deleted, added)
     }
 }
 

@@ -496,12 +496,14 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             return nil
         }
 
-        guard let previousInputData = self.previousInputData else {
+        guard let previousInputData else {
             debug("convertToLattice: 新規計算用の関数を呼びますA")
             let result = converter.kana2lattice_all(inputData, N_best: N_best)
             self.previousInputData = inputData
             return result
         }
+
+        // TODO: 完全に同一のデータの場合のケースを追加する
 
         // 文節確定の後の場合
         if let lastClause = self.completedData, let _ = inputData.isAfterDeletedPrefixCharacter(previous: previousInputData) {
