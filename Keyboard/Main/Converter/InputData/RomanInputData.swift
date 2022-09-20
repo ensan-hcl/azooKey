@@ -107,34 +107,6 @@ extension RomanInputData {
     ]
 }
 
-extension RomanInputData {
-    internal func isAfterDeletedCharacter(previous: RomanInputData) -> Int? {
-        // 意図はprevious.characters.hasPrefix(self.characters)だが、そういうAPIがないのでこうしている
-        if Array(previous.characters.prefix(self.characters.count)) == self.characters {
-            let count_a = self.characters.count
-            let count_b = previous.characters.count
-            if count_b-count_a <= 0 {
-                return nil
-            }
-            return count_b-count_a
-        }
-        return nil
-    }
-
-    internal func isAfterReplacedCharacter(previous: RomanInputData) -> (deleted: Int, added: Int)? {
-        // 共通接頭辞を求める
-        let common = String(self.characters).commonPrefix(with: String(previous.characters))
-        if common == "" {
-            return nil
-        }
-        let (deleted, added) = (previous.characters.count - common.count, self.characters.count - common.count)
-        if deleted == 0 || added == 0 {
-            return nil
-        }
-        return (deleted, added)
-    }
-}
-
 private struct RomanKanaConvertingLattice {
     var components: [(string: String, isFreezed: Bool)]
     var count: Int = 0

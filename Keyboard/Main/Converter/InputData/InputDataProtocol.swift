@@ -64,8 +64,7 @@ extension InputDataProtocol {
     }
 
     internal func isAfterDeletedCharacter(previous: Self) -> Int? {
-        let prefix: [Character] = Array(previous.characters.prefix(self.characters.count))
-        if prefix == self.characters {
+        if Array(previous.characters.prefix(self.characters.count)) == self.characters {
             let dif = previous.characters.count - self.characters.count
             if dif == 0 {
                 return nil
@@ -89,20 +88,16 @@ extension InputDataProtocol {
     }
 
     internal func isAfterReplacedCharacter(previous: Self) -> (deleted: Int, added: Int)? {
-        let endIndex = min(previous.characters.endIndex, self.characters.endIndex)
-        var i = 0
-        while i<endIndex && previous.characters[i] == self.characters[i] {
-            i += 1
-        }
-        if i == 0 {
+        // 共通接頭辞を求める
+        let common = String(self.characters).commonPrefix(with: String(previous.characters))
+        if common == "" {
             return nil
         }
-        let deleted = previous.characters.count - i
-        let added = self.characters.count - i
+        let deleted = previous.characters.count - common.count
+        let added = self.characters.count - common.count
         if deleted == 0 || added == 0 {
             return nil
         }
         return (deleted, added)
     }
-
 }
