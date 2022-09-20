@@ -12,7 +12,13 @@ struct UpdateInfomationView: View {
         Form {
             // version 1.8系
             Group {
-                VersionView("1.8", releaseDate: "2022年xx月xx日") {
+                VersionView("1.8.1", releaseDate: "2022年09月20日") {
+                    ParagraphView("不具合を修正しました") {
+                        "iOS 15でデバイスの回転が正しく行えなくなる問題を修正"
+                        "再変換機能が不具合を起こす可能性がある問題を修正"
+                    }
+                }
+                VersionView("1.8", releaseDate: "2022年09月19日") {
                     ParagraphView("機能を追加しました。") {
                         "フリック感度の調整機能を追加"
                         "ライブ変換中の「自動確定」機能を追加"
