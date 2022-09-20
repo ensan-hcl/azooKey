@@ -61,8 +61,8 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
                 SettingKey.value = -1
                 localValue = -1
             } else {
-                SettingKey.value = SettingKey.defaultValue
-                localValue = SettingKey.defaultValue
+                SettingKey.value = 16
+                localValue = 16
             }
         }))
 
