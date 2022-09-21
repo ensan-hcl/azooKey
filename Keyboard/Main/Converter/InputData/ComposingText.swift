@@ -373,3 +373,153 @@ extension ComposingText.InputElement: CustomDebugStringConvertible {
         }
     }
 }
+
+extension ComposingText.InputElement: Equatable {}
+
+extension ComposingText: InputDataProtocol {
+    var katakanaString: String {
+        convertTarget.toKatakana()
+    }
+
+    var characters: [Character] {
+        input.map(\.character)
+    }
+
+    var count: Int {
+        characters.count
+    }
+
+    subscript(range: ClosedRange<Int>) -> String {
+        String(self.characters[range]).toKatakana()
+    }
+
+    private func shouldBeRemovedForDicdataStore(components: [InputElement]) -> Bool {
+        let input = ComposingText.getConvertTarget(for: components).toKatakana()
+        if input.isEmpty {
+            return false
+        }
+        return !String(input.first!).containsRomanAlphabet && !DicdataStore.existFile(identifier: String(input.first!))
+    }
+
+    func getRangeWithTypos(_ left: Int, _ right: Int) -> [(string: String, penalty: PValue)] {
+        let count = right - left + 1
+        let unit: PValue = 3.5
+        let triple = unit*3
+        let nextLetter = (right + 1 == characters.count) ? "\0" : self.characters[right + 1]
+        // 各iから始まる候補を列挙する
+        // 例えばinput = [d(あ), r(s), r(i), r(t), r(s), d(は), d(は), d(れ)]の場合
+        // nodes =      [[d(あ)], [r(s)], [r(i)], [r(t), [r(t), r(a)]], [r(s)], [d(は), d(ば), d(ぱ)], [d(れ)]]
+        // となる
+        let nodes = (0..<count).map {(i: Int) in
+            Self.lengths.flatMap {(k: Int) -> [[InputElement]] in
+                let j = i + k
+                if count <= j {
+                    return []
+                }
+                return Self.getTypo(self.input[left + i ... left + j])
+            }
+        }
+
+        var result: [(elements: [InputElement], penalty: PValue)] = []
+        for (i, nodeArray) in nodes.enumerated() {
+            let correct = [self.input[left + i]].map {InputElement(character: Character(String($0.character).toKatakana()), inputStyle: $0.inputStyle)}
+            if i == .zero {
+                result = nodeArray.map {($0, $0 == correct ? .zero:unit)}
+                continue
+            }
+            result = result.flatMap {(elements: [InputElement], penalty: PValue) -> [(elements: [InputElement], penalty: PValue)] in
+                if elements.count != i {
+                    return [(elements, penalty)]
+                }
+                // 訂正数上限(3個)
+                if penalty == triple {
+                    return [(elements + correct, penalty)]
+                }
+                return nodes[i].compactMap {
+                    let _elements = elements + $0
+                    if shouldBeRemovedForDicdataStore(components: _elements) {
+                        return nil
+                    }
+                    return (elements: _elements, penalty: penalty + ($0 == correct ? .zero : unit))
+                }
+            }
+        }
+        debug("getRangeWithTypos", result)
+        return result.map {
+            (ComposingText.getConvertTarget(for: $0.elements).toKatakana(), $0.penalty)
+        }
+    }
+}
+
+extension ComposingText {
+    private static func getTypo(_ elements: some Collection<InputElement>) -> [[InputElement]] {
+        let key = elements.reduce(into: "") {$0.append($1.character)}.toKatakana()
+
+        if (elements.allSatisfy{$0.inputStyle == .direct}) {
+            if key.count > 1 {
+                return Self.directPossibleTypo[key, default: []].map {$0.map{InputElement(character: $0, inputStyle: .direct)}}
+            } else if key.count == 1 {
+                var result = Self.directPossibleTypo[key, default: []].map {$0.map{InputElement(character: $0, inputStyle: .direct)}}
+                result.append(key.map{InputElement(character: $0, inputStyle: .direct)})
+                return result
+            }
+        }
+        if (elements.allSatisfy{$0.inputStyle == .roman2kana}) {
+            if key.count > 1 {
+                return Self.roman2KanaPossibleTypo[key, default: []].map {$0.map{InputElement(character: $0, inputStyle: .roman2kana)}}
+            } else if key.count == 1 {
+                var result = Self.roman2KanaPossibleTypo[key, default: []].map {$0.map{InputElement(character: $0, inputStyle: .roman2kana)}}
+                result.append(key.map{InputElement(character: $0, inputStyle: .roman2kana)})
+                return result
+            }
+        }
+        return []
+    }
+
+    private static let lengths = [0, 1]
+
+    /// ダイレクト入力用
+    private static let directPossibleTypo: [String: [String]] = [
+        "カ": ["ガ"],
+        "キ": ["ギ"],
+        "ク": ["グ"],
+        "ケ": ["ゲ"],
+        "コ": ["ゴ"],
+        "サ": ["ザ"],
+        "シ": ["ジ"],
+        "ス": ["ズ"],
+        "セ": ["ゼ"],
+        "ソ": ["ゾ"],
+        "タ": ["ダ"],
+        "チ": ["ヂ"],
+        "ツ": ["ヅ", "ッ"],
+        "テ": ["デ"],
+        "ト": ["ド"],
+        "ハ": ["バ", "パ"],
+        "ヒ": ["ビ", "ピ"],
+        "フ": ["ブ", "プ"],
+        "ヘ": ["ベ", "ペ"],
+        "ホ": ["ボ", "ポ"],
+        "バ": ["パ"],
+        "ビ": ["ピ"],
+        "ブ": ["プ"],
+        "ベ": ["ペ"],
+        "ボ": ["ポ"],
+        "ヤ": ["ャ"],
+        "ユ": ["ュ"],
+        "ヨ": ["ョ"]
+    ]
+
+    private static let roman2KanaPossibleTypo: [String: [String]] = [
+        "bs": ["ba"],
+        "no": ["bo"],
+        "li": ["ki"],
+        "lo": ["ko"],
+        "lu": ["ku"],
+        "my": ["mu"],
+        "tp": ["to"],
+        "ts": ["ta"],
+        "wi": ["wo"],
+        "pu": ["ou"]
+    ]
+}

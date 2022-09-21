@@ -441,8 +441,8 @@ private final class InputManager {
         return candidatesLog.last(where: {$0.word == word})
     }
 
-    private typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
-    private typealias DirectConverter = KanaKanjiConverter<DirectInputData, DirectLatticeNode>
+    private typealias RomanConverter = KanaKanjiConverter<ComposingText, RomanLatticeNode>
+    private typealias DirectConverter = KanaKanjiConverter<ComposingText, DirectLatticeNode>
     /// かな漢字変換を受け持つ変換器。
     private var _romanConverter: RomanConverter?
     private var _directConverter: DirectConverter?
@@ -1226,14 +1226,14 @@ private final class InputManager {
         switch VariableStates.shared.inputStyle {
         case .direct:
             let inputData = DirectInputData(input_hira)
-            debug("value to be input", inputData)
-            (result, firstClauseResults) = self.directConverter.requestCandidates(inputData, N_best: 10)
+            debug("setResult value to be input", composingText)
+            (result, firstClauseResults) = self.directConverter.requestCandidates(composingText, N_best: 10)
         case .roman2kana:
             let inputData = RomanInputData(self.composingText)
-            debug("value to be input", inputData)
+            debug("setResult value to be input", composingText)
             let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
             let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
-            (result, firstClauseResults) = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
+            (result, firstClauseResults) = self.romanConverter.requestCandidates(composingText, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
         }
         results.append(contentsOf: result)
         // TODO: 最後の1単語のライブ変換を抑制したい
