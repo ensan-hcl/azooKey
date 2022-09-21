@@ -18,7 +18,7 @@ struct RomanInputData: InputDataProtocol {
     internal init(_ composingText: ComposingText) {
         let composingText = composingText.prefixToCursorPosition()
         self.katakanaString = composingText.convertTarget.toKatakana()
-        self.characters = composingText.input
+        self.characters = composingText.input.map {$0.character}
     }
 
     subscript(_ range: ClosedRange<Int>) -> String {

@@ -36,9 +36,7 @@ extension InputDataProtocol {
         if let self = self as? DirectInputData {
             if InputData.self == RomanInputData.self {
                 var composingText = ComposingText()
-                composingText.setInputStyle(.direct)
-                _ = composingText.insertAtCursorPosition(self.katakanaString.toHiragana())
-                composingText.setInputStyle(.roman2kana)
+                _ = composingText.insertAtCursorPosition(self.katakanaString.toHiragana(), inputStyle: .direct)
                 return RomanInputData(composingText) as! InputData
             }
         }

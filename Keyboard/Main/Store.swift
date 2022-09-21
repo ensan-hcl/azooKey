@@ -466,7 +466,6 @@ private final class InputManager {
     }
 
     func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
-        self.composingText.setInputStyle(afterStyle)
         switch (beforeStyle, afterStyle) {
         case (.direct, .roman2kana):
             let converter = RomanConverter()
@@ -519,7 +518,6 @@ private final class InputManager {
         }
         self.isSelected = false
 
-        self.composingText.setInputStyle(VariableStates.shared.inputStyle)
         debug("complete:", candidate, composingText)
         switch VariableStates.shared.inputStyle {
         case .direct:
@@ -618,9 +616,7 @@ private final class InputManager {
             // composingTextをクリアする
             self.composingText.clear()
             // キーボードの状態と無関係にdirectに設定し、入力をそのまま持たせる
-            self.composingText.setInputStyle(.direct)
-            let _ = self.composingText.insertAtCursorPosition(text)
-            self.composingText.setInputStyle(VariableStates.shared.inputStyle)
+            let _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
 
             // 実際に入力する
             self.proxy.insertText(text)
@@ -648,8 +644,7 @@ private final class InputManager {
             return
         }
 
-        self.composingText.setInputStyle(VariableStates.shared.inputStyle)
-        let operation = self.composingText.insertAtCursorPosition(text)
+        let operation = self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
         for _ in 0 ..< operation.delete {
             self.proxy.deleteBackward()
         }
@@ -680,7 +675,6 @@ private final class InputManager {
         }
 
 
-        self.composingText.setInputStyle(VariableStates.shared.inputStyle)
         self.composingText.moveCursorFromCursorPosition(count: count)
         self.composingText.backspaceFromCursorPosition(count: count)
         debug("Input Manager deleteForward: ", composingText)
@@ -718,7 +712,6 @@ private final class InputManager {
             return
         }
 
-        self.composingText.setInputStyle(VariableStates.shared.inputStyle)
         self.composingText.backspaceFromCursorPosition(count: count)
         debug("Input Manager deleteBackword: ", composingText)
         // 削除を実行する
@@ -792,7 +785,6 @@ private final class InputManager {
         if !self.composingText.isEmpty {
             let count = self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition
 
-            self.composingText.setInputStyle(VariableStates.shared.inputStyle)
             self.composingText.moveCursorFromCursorPosition(count: count)
             self.composingText.backspaceFromCursorPosition(count: count)
 
@@ -1022,9 +1014,7 @@ private final class InputManager {
     // ユーザがキーボードを経由せずペーストした場合の処理
     fileprivate func userPastedText(text: String) {
         // 入力された分を反映する
-        self.composingText.setInputStyle(.direct)
-        _ = self.composingText.insertAtCursorPosition(text)
-        self.composingText.setInputStyle(VariableStates.shared.inputStyle)
+        _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
 
         isSelected = false
         setResult()
@@ -1039,9 +1029,7 @@ private final class InputManager {
     // ユーザが選択領域で文字を入力した場合
     fileprivate func userReplacedSelectedText(text: String) {
         // 新たな入力を反映
-        self.composingText.setInputStyle(.direct)
-        _ = self.composingText.insertAtCursorPosition(text)
-        self.composingText.setInputStyle(VariableStates.shared.inputStyle)
+        _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
 
         isSelected = false
 
@@ -1070,13 +1058,11 @@ private final class InputManager {
             return
         }
         // 過去のログを見て、再変換に利用する
-        composingText.setInputStyle(.direct)
         if let element = self.getMatch(word: text) {
-            _ = self.composingText.insertAtCursorPosition(element.ruby.toHiragana())
+            _ = self.composingText.insertAtCursorPosition(element.ruby.toHiragana(), inputStyle: .direct)
         } else {
-            _ = self.composingText.insertAtCursorPosition(text)
+            _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
         }
-        self.composingText.setInputStyle(VariableStates.shared.inputStyle)
 
         isSelected = true
         setResult()

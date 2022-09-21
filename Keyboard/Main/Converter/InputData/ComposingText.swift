@@ -7,24 +7,19 @@
 //
 
 /// ユーザ入力、変換対象文字列、ディスプレイされる文字列、の3つを同時にハンドルするための構造体
-/// ローマ字入力でライブ変換を使う場合を考える。`kyouhaame`との入力は
 ///  - `input`: `[k, y, o, u, h, a, a, m, e]`
 ///  - `convertTarget`: `きょうはあめ`
-///  - `displayText`:`今日は雨
 /// のようになる。`
 /// カーソルのポジションもこのクラスが管理する。
+/// 設計方針として、inputStyleに関わる実装の違いは全てアップデート方法の違いとして吸収し、`input` / `delete` / `moveCursor` / `complete`時の違いとしては露出させないようにすることを目指した。
 struct ComposingText {
-    private(set) var inputStyle: InputStyle = .direct
-    var liveConversionEnabled: Bool = false
-
-    var convertTargetCursorPosition: Int = 0
-    private(set) var input: [Character] = []
+    private(set) var convertTargetCursorPosition: Int = 0
+    private(set) var input: [InputElement] = []
     private(set) var convertTarget: String = ""
-    private(set) var displayText: String = ""
 
-    /// ライブ変換が有効化されている場合、カーソル移動を許さない
-    var allowCursorMove: Bool {
-        return !liveConversionEnabled
+    struct InputElement {
+        var character: Character
+        var inputStyle: InputStyle
     }
 
     /// 変換しなくて良いか
@@ -52,194 +47,179 @@ struct ComposingText {
     /// 例えば`input`が`[k, y, o, u]`で`target`が`き|`の場合を考える。
     /// この状態では`input`に対応するカーソル位置が存在しない。
     /// この場合、`input`を`[き, ょ, u]`と置き換えた上で`1`を返す。
-
     private mutating func forceGetInputCursorPosition(target: some StringProtocol) -> Int {
-        debug("ComposingText forceGetInputCursorPosition", target, input, convertTarget)
+        debug("ComposingText forceGetInputCursorPosition", self)
         if target.isEmpty {
             return 0
         }
-        // inputを変換するメソッド
-        switch inputStyle {
-        case .direct:
-            // 直接入力の場合、厳密に一致する
-            return target.count
-        case .roman2kana:
-            // 動作例1
-            // input: `k, a, n, s, h, a`
-            // convetTarget: `か ん し| ゃ`
-            // convertTargetCursorPosition: 3
-            // target: かんし
-            // 動作
-            // 1. character = "k"
-            //    roman2kana = "k"
-            //    count = 1
-            // 2. character = "a"
-            //    roman2kana = "か"
-            //    count = 2
-            //    target.hasPrefix(roman2kana)がtrueなので、lastPrefixIndex = 2, lastPrefix = "か"
-            // 3. character = "n"
-            //    roman2kana = "かn"
-            //    count = 3
-            // 4. character = "s"
-            //    roman2kana = "かんs"
-            //    count = 4
-            // 5. character = "h"
-            //    roman2kana = "かんsh"
-            //    count = 5
-            // 6. character = "a"
-            //    roman2kana = "かんしゃ"
-            //    count = 6
-            //    roman2kana.hasPrefix(target)がtrueなので、変換しすぎているとみなして調整の実行
-            //    replaceCountは6-2 = 4、したがって`n, s, h, a`が消去される
-            //    input = [k, a]
-            //    count = 2
-            //    roman2kana.count == 4, lastPrefix.count = 1なので、3文字分のsuffix`ん,し,ゃ`が追加される
-            //    input = [k, a, ん, し, ゃ]
-            //    count = 5
-            //    while
-            //       1. roman2kana = かんし
-            //          count = 4
-            //       break
-            // return count = 4
-            //
-            // 動作例2
-            // input: `k, a, n, s, h, a`
-            // convetTarget: `か ん し| ゃ`
-            // convertTargetCursorPosition: 2
-            // target: かん
-            // 動作
-            // 1. character = "k"
-            //    roman2kana = "k"
-            //    count = 1
-            // 2. character = "a"
-            //    roman2kana = "か"
-            //    count = 2
-            //    target.hasPrefix(roman2kana)がtrueなので、lastPrefixIndex = 2, lastPrefix = "か"
-            // 3. character = "n"
-            //    roman2kana = "かn"
-            //    count = 3
-            // 4. character = "s"
-            //    roman2kana = "かんs"
-            //    count = 4
-            //    roman2kana.hasPrefix(target)がtrueなので、変換しすぎているとみなして調整の実行
-            //    replaceCountは4-2 = 2、したがって`n, s`が消去される
-            //    input = [k, a] ... [h, a]
-            //    count = 2
-            //    roman2kana.count == 3, lastPrefix.count = 1なので、2文字分のsuffix`ん,s`が追加される
-            //    input = [k, a, ん, s]
-            //    count = 4
-            //    while
-            //       1. roman2kana = かん
-            //          count = 3
-            //       break
-            // return count = 3
-            //
-            // 動作例3
-            // input: `i, t, t, a`
-            // convetTarget: `い っ| た`
-            // convertTargetCursorPosition: 2
-            // target: いっ
-            // 動作
-            // 1. character = "i"
-            //    roman2kana = "い"
-            //    count = 1
-            //    target.hasPrefix(roman2kana)がtrueなので、lastPrefixIndex = 1, lastPrefix = "い"
-            // 2. character = "t"
-            //    roman2kana = "いt"
-            //    count = 2
-            // 3. character = "t"
-            //    roman2kana = "いっt"
-            //    count = 3
-            //    roman2kana.hasPrefix(target)がtrueなので、変換しすぎているとみなして調整の実行
-            //    replaceCountは3-1 = 2、したがって`t, t`が消去される
-            //    input = [i] ... [a]
-            //    count = 1
-            //    roman2kana.count == 3, lastPrefix.count = 1なので、2文字分のsuffix`っ,t`が追加される
-            //    input = [i, っ, t, a]
-            //    count = 3
-            //    while
-            //       1. roman2kana = いっ
-            //          count = 2
-            //       break
-            // return count = 2
+        // 動作例1
+        // input: `k, a, n, s, h, a` (全てroman2kana)
+        // convetTarget: `か ん し| ゃ`
+        // convertTargetCursorPosition: 3
+        // target: かんし
+        // 動作
+        // 1. character = "k"
+        //    roman2kana = "k"
+        //    count = 1
+        // 2. character = "a"
+        //    roman2kana = "か"
+        //    count = 2
+        //    target.hasPrefix(roman2kana)がtrueなので、lastPrefixIndex = 2, lastPrefix = "か"
+        // 3. character = "n"
+        //    roman2kana = "かn"
+        //    count = 3
+        // 4. character = "s"
+        //    roman2kana = "かんs"
+        //    count = 4
+        // 5. character = "h"
+        //    roman2kana = "かんsh"
+        //    count = 5
+        // 6. character = "a"
+        //    roman2kana = "かんしゃ"
+        //    count = 6
+        //    roman2kana.hasPrefix(target)がtrueなので、変換しすぎているとみなして調整の実行
+        //    replaceCountは6-2 = 4、したがって`n, s, h, a`が消去される
+        //    input = [k, a]
+        //    count = 2
+        //    roman2kana.count == 4, lastPrefix.count = 1なので、3文字分のsuffix`ん,し,ゃ`が追加される
+        //    input = [k, a, ん, し, ゃ]
+        //    count = 5
+        //    while
+        //       1. roman2kana = かんし
+        //          count = 4
+        //       break
+        // return count = 4
+        //
+        // 動作例2
+        // input: `k, a, n, s, h, a` (全てroman2kana)
+        // convetTarget: `か ん し| ゃ`
+        // convertTargetCursorPosition: 2
+        // target: かん
+        // 動作
+        // 1. character = "k"
+        //    roman2kana = "k"
+        //    count = 1
+        // 2. character = "a"
+        //    roman2kana = "か"
+        //    count = 2
+        //    target.hasPrefix(roman2kana)がtrueなので、lastPrefixIndex = 2, lastPrefix = "か"
+        // 3. character = "n"
+        //    roman2kana = "かn"
+        //    count = 3
+        // 4. character = "s"
+        //    roman2kana = "かんs"
+        //    count = 4
+        //    roman2kana.hasPrefix(target)がtrueなので、変換しすぎているとみなして調整の実行
+        //    replaceCountは4-2 = 2、したがって`n, s`が消去される
+        //    input = [k, a] ... [h, a]
+        //    count = 2
+        //    roman2kana.count == 3, lastPrefix.count = 1なので、2文字分のsuffix`ん,s`が追加される
+        //    input = [k, a, ん, s]
+        //    count = 4
+        //    while
+        //       1. roman2kana = かん
+        //          count = 3
+        //       break
+        // return count = 3
+        //
+        // 動作例3
+        // input: `i, t, t, a` (全てroman2kana)
+        // convetTarget: `い っ| た`
+        // convertTargetCursorPosition: 2
+        // target: いっ
+        // 動作
+        // 1. character = "i"
+        //    roman2kana = "い"
+        //    count = 1
+        //    target.hasPrefix(roman2kana)がtrueなので、lastPrefixIndex = 1, lastPrefix = "い"
+        // 2. character = "t"
+        //    roman2kana = "いt"
+        //    count = 2
+        // 3. character = "t"
+        //    roman2kana = "いっt"
+        //    count = 3
+        //    roman2kana.hasPrefix(target)がtrueなので、変換しすぎているとみなして調整の実行
+        //    replaceCountは3-1 = 2、したがって`t, t`が消去される
+        //    input = [i] ... [a]
+        //    count = 1
+        //    roman2kana.count == 3, lastPrefix.count = 1なので、2文字分のsuffix`っ,t`が追加される
+        //    input = [i, っ, t, a]
+        //    count = 3
+        //    while
+        //       1. roman2kana = いっ
+        //          count = 2
+        //       break
+        // return count = 2
 
-            var roman2kana = ""
-            var count = 0
-            var lastPrefixIndex = 0
-            var lastPrefix = ""
-            for character in input {
-                (roman2kana, _, _) = String.roman2hiragana(currentText: roman2kana, added: String(character))
-                count += 1
+        var count = 0
+        var lastPrefixIndex = 0
+        var lastPrefix = ""
+        var converting: [ConvertTargetElement] = []
 
-                // 一致していたらその時点のカウントを返す
-                if roman2kana == target {
-                    return count
-                }
-                // 一致ではないのにhasPrefixが成立する場合、変換しすぎている
-                // この場合、inputの変換が必要になる。
-                // 例えばcovnertTargetが「あき|ょ」で、`[a, k, y, o]`まで見て「あきょ」になってしまった場合、「あき」がprefixとなる。
-                // この場合、lastPrefix=1なので、1番目から現在までの入力をひらがなで置き換える
-                else if roman2kana.hasPrefix(target) {
-                    let replaceCount = count - lastPrefixIndex
-                    let suffix = roman2kana.suffix(roman2kana.count - lastPrefix.count)
-                    self.input = self.input.prefix(count - replaceCount) + suffix + self.input.suffix(self.input.count - count)
+        for element in input {
+            Self.updateConvertTargetElements(currentElements: &converting, newElement: element)
+            var converted = converting.reduce(into: "") {$0 += $1.string}
+            count += 1
 
-                    count -= replaceCount
-                    count += suffix.count
-                    while roman2kana != target {
-                        _ = roman2kana.popLast()
-                        count -= 1
-                    }
-                    break
-                }
-                // prefixになっている場合は更新する
-                else if target.hasPrefix(roman2kana) {
-                    lastPrefixIndex = count
-                    lastPrefix = roman2kana
-                }
-
+            // 一致していたらその時点のカウントを返す
+            if converted == target {
+                return count
             }
-            return count
+            // 一致ではないのにhasPrefixが成立する場合、変換しすぎている
+            // この場合、inputの変換が必要になる。
+            // 例えばcovnertTargetが「あき|ょ」で、`[a, k, y, o]`まで見て「あきょ」になってしまった場合、「あき」がprefixとなる。
+            // この場合、lastPrefix=1なので、1番目から現在までの入力をひらがな(suffix)で置き換える
+            else if converted.hasPrefix(target) {
+                let replaceCount = count - lastPrefixIndex
+                let suffix = converted.suffix(converted.count - lastPrefix.count)
+                self.input.removeSubrange(count - replaceCount ..< count)
+                self.input.insert(contentsOf: suffix.map {InputElement(character: $0, inputStyle: .direct)}, at: count - replaceCount)
+
+                count -= replaceCount
+                count += suffix.count
+                while converted != target {
+                    _ = converted.popLast()
+                    count -= 1
+                }
+                break
+            }
+            // prefixになっている場合は更新する
+            else if target.hasPrefix(converted) {
+                lastPrefixIndex = count
+                lastPrefix = converted
+            }
+
         }
+        return count
     }
 
     struct ViewOperation {
         var delete: Int
         var input: String
-        var moveCursor: Int
+    }
+
+    private func diff(from oldString: some StringProtocol, to newString: String) -> (delete: Int, input: String) {
+        let common = oldString.commonPrefix(with: newString)
+        return (oldString.count - common.count, String(newString.dropFirst(common.count)))
     }
 
     /// 現在のカーソル位置に文字を追加する関数
-    mutating func insertAtCursorPosition(_ string: String) -> ViewOperation {
+    mutating func insertAtCursorPosition(_ string: String, inputStyle: InputStyle) -> ViewOperation {
         let inputCursorPosition = self.forceGetInputCursorPosition(target: self.convertTarget.prefix(convertTargetCursorPosition))
+        // originalInput, convertTarget, convertTargetCursorPositionの3つを更新する
+        // originalInputを更新
+        self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
+        let oldConvertTarget = self.convertTarget.prefix(self.convertTargetCursorPosition)
+        let newConvertTarget = Self.getConvertTarget(for: self.input.prefix(inputCursorPosition + string.count))
+        let diff = self.diff(from: oldConvertTarget, to: newConvertTarget)
+        // convertTargetを更新
+        self.convertTarget.removeFirst(convertTargetCursorPosition)
+        self.convertTarget.insert(contentsOf: newConvertTarget, at: convertTarget.startIndex)
+        // convertTargetCursorPositionを更新
+        self.convertTargetCursorPosition -= diff.delete
+        self.convertTargetCursorPosition += diff.input.count
 
-        // input, convertTarget, convertTargetCursorPositionの3つを更新する
-
-        switch inputStyle {
-        case .direct:
-            // inputを更新
-            self.input.insert(contentsOf: Array(string), at: inputCursorPosition)
-            self.convertTarget = String(self.input)
-            // カーソルを1つ進める
-            self.convertTargetCursorPosition += string.count
-
-            return ViewOperation(delete: 0, input: string, moveCursor: 0)
-        case .roman2kana:
-            // inputを更新
-            self.input.insert(contentsOf: Array(string), at: inputCursorPosition)
-            var roman2kana = ""
-            for c in self.input.prefix(inputCursorPosition) {
-                (roman2kana, _, _) = String.roman2hiragana(currentText: roman2kana, added: String(c))
-            }
-            let (newConvertTargetPrefix, deleteCount, input) = String.roman2hiragana(currentText: roman2kana, added: string)
-            // convertTargetの更新
-            self.convertTarget.removeFirst(convertTargetCursorPosition)
-            self.convertTarget.insert(contentsOf: newConvertTargetPrefix, at: convertTarget.startIndex)
-            // カーソルを更新する
-            self.convertTargetCursorPosition = newConvertTargetPrefix.count
-
-            return ViewOperation(delete: deleteCount, input: input, moveCursor: 0)
-        }
+        return ViewOperation(delete: diff.delete, input: diff.input)
     }
 
     /// 現在のカーソル位置から文字を削除する関数
@@ -249,67 +229,54 @@ struct ComposingText {
             return
         }
         let count = min(convertTargetCursorPosition, count)
+        // 動作例1
+        // convertTarget: かんしゃ|
+        // input: [k, a, n, s, h, a]
+        // count = 1
+        // currentPrefix = かんしゃ
+        // これから行く位置
+        //  targetCursorPosition = forceGetInputCursorPosition(かんし) = 4
+        //  副作用でinputは[k, a, ん, し, ゃ]
+        // 現在の位置
+        //  inputCursorPosition = forceGetInputCursorPosition(かんしゃ) = 5
+        //  副作用でinputは[k, a, ん, し, ゃ]
+        // inputを更新する
+        //  input =   (input.prefix(targetCursorPosition) = [k, a, ん, し])
+        //          + (input.suffix(input.count - inputCursorPosition) = [])
+        //        =   [k, a, ん, し]
 
-        // input, convertTarget, convertTargetCursorPositionの3つを更新する
-        switch inputStyle {
-        case .direct:
-            self.input = self.input.prefix(convertTargetCursorPosition - count) + self.input.suffix(self.convertTarget.count - self.convertTargetCursorPosition)
-            self.convertTargetCursorPosition -= count
-            self.convertTarget = String(self.input)
-        case .roman2kana:
-            // 動作例1
-            // convertTarget: かんしゃ|
-            // input: [k, a, n, s, h, a]
-            // count = 1
-            // currentPrefix = かんしゃ
-            // これから行く位置
-            //  targetCursorPosition = forceGetInputCursorPosition(かんし) = 4
-            //  副作用でinputは[k, a, ん, し, ゃ]
-            // 現在の位置
-            //  inputCursorPosition = forceGetInputCursorPosition(かんしゃ) = 5
-            //  副作用でinputは[k, a, ん, し, ゃ]
-            // inputを更新する
-            //  input =   (input.prefix(targetCursorPosition) = [k, a, ん, し])
-            //          + (input.suffix(input.count - inputCursorPosition) = [])
-            //        =   [k, a, ん, し]
+        // 動作例2
+        // convertTarget: かんしゃ|
+        // input: [k, a, n, s, h, a]
+        // count = 2
+        // currentPrefix = かんしゃ
+        // これから行く位置
+        //  targetCursorPosition = forceGetInputCursorPosition(かん) = 3
+        //  副作用でinputは[k, a, ん, s, h, a]
+        // 現在の位置
+        //  inputCursorPosition = forceGetInputCursorPosition(かんしゃ) = 6
+        //  副作用でinputは[k, a, ん, s, h, a]
+        // inputを更新する
+        //  input =   (input.prefix(targetCursorPosition) = [k, a, ん])
+        //          + (input.suffix(input.count - inputCursorPosition) = [])
+        //        =   [k, a, ん]
 
-            // 動作例2
-            // convertTarget: かんしゃ|
-            // input: [k, a, n, s, h, a]
-            // count = 2
-            // currentPrefix = かんしゃ
-            // これから行く位置
-            //  targetCursorPosition = forceGetInputCursorPosition(かん) = 3
-            //  副作用でinputは[k, a, ん, s, h, a]
-            // 現在の位置
-            //  inputCursorPosition = forceGetInputCursorPosition(かんしゃ) = 6
-            //  副作用でinputは[k, a, ん, s, h, a]
-            // inputを更新する
-            //  input =   (input.prefix(targetCursorPosition) = [k, a, ん])
-            //          + (input.suffix(input.count - inputCursorPosition) = [])
-            //        =   [k, a, ん]
+        // 今いる位置
+        let currentPrefix = self.convertTarget.prefix(convertTargetCursorPosition)
 
-            // 今いる位置
-            let currentPrefix = self.convertTarget.prefix(convertTargetCursorPosition)
+        // この2つの値はこの順で計算する。
+        // これから行く位置
+        let targetCursorPosition = self.forceGetInputCursorPosition(target: currentPrefix.dropLast(count))
+        // 現在の位置
+        let inputCursorPosition = self.forceGetInputCursorPosition(target: currentPrefix)
 
-            // この2つの値はこの順で計算する。
-            // これから行く位置
-            let targetCursorPosition = self.forceGetInputCursorPosition(target: currentPrefix.dropLast(count))
-            // 現在の位置
-            let inputCursorPosition = self.forceGetInputCursorPosition(target: currentPrefix)
+        // inputを更新する
+        self.input.removeSubrange(targetCursorPosition ..< inputCursorPosition)
+        // カーソルを更新する
+        self.convertTargetCursorPosition -= count
 
-            // inputを更新する
-            self.input = self.input.prefix(targetCursorPosition) + self.input.suffix(self.input.count - inputCursorPosition)
-            // カーソルを更新する
-            self.convertTargetCursorPosition -= count
-
-            // convetTargetを更新する
-            var roman2kana = ""
-            for c in self.input {
-                (roman2kana, _, _) = String.roman2hiragana(currentText: roman2kana, added: String(c))
-            }
-            self.convertTarget = roman2kana
-        }
+        // convetTargetを更新する
+        self.convertTarget = Self.getConvertTarget(for: self.input)
     }
 
     /// 現在のカーソル位置からカーソルを動かす関数
@@ -325,33 +292,12 @@ struct ComposingText {
     mutating func complete(correspondingCount: Int) {
         let correspondingCount = min(correspondingCount, self.input.count)
         self.input.removeFirst(correspondingCount)
-
         // convetTargetを更新する
-        switch inputStyle {
-        case .direct:
-            // カーソルの位置は、消す文字数の分削除する
-            let cursorDelta = self.convertTarget.count - self.input.count
-            self.convertTarget = String(self.input)
-            self.convertTargetCursorPosition -= cursorDelta
-        case .roman2kana:
-            var roman2kana = ""
-            for c in self.input {
-                (roman2kana, _, _) = String.roman2hiragana(currentText: roman2kana, added: String(c))
-            }
-            // カーソルの位置は、消す文字数の分削除する
-            let cursorDelta = self.convertTarget.count - roman2kana.count
-
-            self.convertTarget = roman2kana
-            self.convertTargetCursorPosition -= cursorDelta
-        }
-    }
-
-    mutating func setInputStyle(_ newStyle: InputStyle) {
-        if newStyle == inputStyle {
-            return
-        }
-        self.input = Array(self.convertTarget)
-        self.inputStyle = newStyle
+        let newConvertTarget = Self.getConvertTarget(for: self.input)
+        // カーソルの位置は、消す文字数の分削除する
+        let cursorDelta = self.convertTarget.count - newConvertTarget.count
+        self.convertTarget = newConvertTarget
+        self.convertTargetCursorPosition -= cursorDelta
     }
 
     func prefixToCursorPosition() -> ComposingText {
@@ -366,5 +312,64 @@ struct ComposingText {
         self.input = []
         self.convertTarget = ""
         self.convertTargetCursorPosition = 0
+    }
+}
+
+extension ComposingText {
+    static func getConvertTarget(for elements: some Sequence<InputElement>) -> String {
+        var convertTargetElements: [ConvertTargetElement] = []
+        for element in elements {
+            updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+        }
+        return convertTargetElements.reduce(into: "") {$0 += $1.string}
+    }
+
+    // inputStyleが同一であるような文字列を集積したもの
+    // k, o, r, e, h, aまでをローマ字入力し、p, e, nをダイレクト入力、d, e, s, uをローマ字入力した場合、
+    // originalInputに対して[ElementComposition(これは, roman2kana), ElementComposition(pen, direct), ElementComposition(です, roman2kana)]、のようになる。
+    struct ConvertTargetElement {
+        var string: String
+        var inputStyle: InputStyle
+    }
+
+    static func updateConvertTargetElements(currentElements: inout [ConvertTargetElement], newElement: InputElement) {
+        // currentElementsが空の場合、および
+        // 直前のElementの入力方式が同じでない場合は、新たなConvertTargetElementを作成して追加する
+        if currentElements.last?.inputStyle != newElement.inputStyle {
+            currentElements.append(ConvertTargetElement(string: updateConvertTarget(current: "", inputStyle: newElement.inputStyle, newCharacter: newElement.character), inputStyle: newElement.inputStyle))
+            return
+        }
+        // 末尾のエレメントの文字列を更新する
+        updateConvertTarget(&currentElements[currentElements.endIndex - 1].string, inputStyle: newElement.inputStyle, newCharacter: newElement.character)
+    }
+
+    static func updateConvertTarget(current: String, inputStyle: InputStyle, newCharacter: Character) -> String {
+        switch inputStyle {
+        case .direct:
+            return current + String(newCharacter)
+        case .roman2kana:
+            return String.roman2hiragana(currentText: current, added: String(newCharacter)).result
+        }
+    }
+
+    static func updateConvertTarget(_ convertTarget: inout String, inputStyle: InputStyle, newCharacter: Character) {
+        switch inputStyle {
+        case .direct:
+            convertTarget.append(newCharacter)
+        case .roman2kana:
+            convertTarget = String.roman2hiragana(currentText: convertTarget, added: String(newCharacter)).result
+        }
+    }
+
+}
+
+extension ComposingText.InputElement: CustomDebugStringConvertible {
+    var debugDescription: String {
+        switch self.inputStyle {
+        case .direct:
+            return "direct(\(character))"
+        case .roman2kana:
+            return "roman2kana(\(character))"
+        }
     }
 }
