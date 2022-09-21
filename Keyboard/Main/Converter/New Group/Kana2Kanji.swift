@@ -11,7 +11,7 @@ import UIKit
 typealias PValue = Float16
 
 struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol> {
-    typealias RegisteredNode = LatticeNode.RegisteredNode
+    typealias RegisteredNode = ComposingTextRegisteredNode
 
     let ccBonusUnit = 5
     var dicdataStore = DicdataStore()

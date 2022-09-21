@@ -9,13 +9,12 @@
 import Foundation
 /// ラティスのノード。これを用いて計算する。
 protocol LatticeNodeProtocol: AnyObject {
-    associatedtype RegisteredNode: RegisteredNodeProtocol
     var data: DicdataElement {get}
-    var prevs: [RegisteredNode] {get set}
+    var prevs: [ComposingTextRegisteredNode] {get set}
     var values: [PValue] {get set}
     var rubyCount: Int {get}
 
-    func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode
+    func getSqueezedNode(_ index: Int, value: PValue) -> ComposingTextRegisteredNode
 
     func getCandidateData() -> [CandidateData]
 
@@ -44,23 +43,17 @@ extension LatticeNodeProtocol {
         }
         if self is DirectLatticeNode {
             if Node.self == RomanLatticeNode.self {
-                let prevs = self.prevs.map {
-                    RomanRegisteredNode(data: $0.data, registered: $0.prev, totalValue: $0.totalValue, rubyCount: $0.rubyCount, romanString: $0.ruby)
-                }
                 let node = RomanLatticeNode(data: self.data, romanString: self.data.ruby, rubyCount: self.rubyCount)
-                node.prevs = prevs
-                node.values = values
+                node.prevs = self.prevs
+                node.values = self.values
                 return node as! Node
             }
         }
         if self is RomanLatticeNode {
             if Node.self == DirectLatticeNode.self {
-                let prevs = self.prevs.map {
-                    DirectRegisteredNode(data: $0.data, registered: $0.prev, totalValue: $0.totalValue, rubyCount: $0.rubyCount)
-                }
                 let node = DirectLatticeNode(data: self.data, romanString: self.data.ruby, rubyCount: self.rubyCount)
-                node.prevs = prevs
-                node.values = values
+                node.prevs = self.prevs
+                node.values = self.values
                 return node as! Node
             }
         }
@@ -69,7 +62,7 @@ extension LatticeNodeProtocol {
 }
 /// ラティスのノード。これを用いて計算する。
 final class DirectLatticeNode: LatticeNodeProtocol {
-    typealias RegisteredNode = DirectRegisteredNode
+    typealias RegisteredNode = ComposingTextRegisteredNode
     convenience init(data: DicdataElement, romanString: String, rubyCount: Int? = nil) {
         self.init(data: data, rubyCount: rubyCount)
     }
@@ -84,7 +77,7 @@ final class DirectLatticeNode: LatticeNodeProtocol {
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {
-        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount)
+        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, convertTargetLength: rubyCount, input: data.ruby)
     }
 
     init(data: DicdataElement, rubyCount: Int? = nil) {
@@ -100,7 +93,7 @@ final class DirectLatticeNode: LatticeNodeProtocol {
 
 /// ラティスのノード。これを用いて計算する。
 final class RomanLatticeNode: LatticeNodeProtocol {
-    typealias RegisteredNode = RomanRegisteredNode
+    typealias RegisteredNode = ComposingTextRegisteredNode
 
     let data: DicdataElement
     var prevs: [RegisteredNode] = []
@@ -124,7 +117,7 @@ final class RomanLatticeNode: LatticeNodeProtocol {
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {
-        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, rubyCount: rubyCount, romanString: self.romanString)
+        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, convertTargetLength: rubyCount, input: self.romanString)
     }
 
 }

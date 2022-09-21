@@ -256,7 +256,7 @@ final class DicdataStore {
         if index == .zero {
             let result: [LatticeNode] = dicdata.map {
                 let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]], rubyCount: nil)
-                node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
+                node.prevs.append(ComposingTextRegisteredNode.BOSNode())
                 return node
             }
             return result
@@ -314,7 +314,7 @@ final class DicdataStore {
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
                 let node = LatticeNode(data: $0, romanString: segment, rubyCount: nil)
-                node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
+                node.prevs.append(ComposingTextRegisteredNode.BOSNode())
                 return node
             }
             return result
