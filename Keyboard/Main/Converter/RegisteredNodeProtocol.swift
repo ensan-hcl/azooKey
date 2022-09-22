@@ -19,67 +19,7 @@ protocol RegisteredNodeProtocol {
     static func fromLastCandidate(_ candidate: Candidate) -> Self
 }
 
-struct DirectRegisteredNode: RegisteredNodeProtocol {
-    let data: DicdataElement
-    let prev: (any RegisteredNodeProtocol)?
-    let totalValue: PValue
-    let rubyCount: Int
-    var ruby: String {
-        return self.data.ruby
-    }
-
-    init(data: DicdataElement, registered: (any RegisteredNodeProtocol)?, totalValue: PValue, rubyCount: Int) {
-        self.data = data
-        self.prev = registered
-        self.totalValue = totalValue
-        self.rubyCount = rubyCount
-    }
-
-    static func BOSNode() -> DirectRegisteredNode {
-        DirectRegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0)
-    }
-
-    static func fromLastCandidate(_ candidate: Candidate) -> DirectRegisteredNode {
-        DirectRegisteredNode(
-            data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid , rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
-            registered: nil,
-            totalValue: 0,
-            rubyCount: 0
-        )
-    }
-}
-
-struct RomanRegisteredNode: RegisteredNodeProtocol {
-    let data: DicdataElement
-    let prev: (any RegisteredNodeProtocol)?
-    let totalValue: PValue
-    let rubyCount: Int
-    let ruby: String
-
-    init(data: DicdataElement, registered: (any RegisteredNodeProtocol)?, totalValue: PValue, rubyCount: Int, romanString: String) {
-        self.data = data
-        self.prev = registered
-        self.totalValue = totalValue
-        self.ruby = romanString
-        self.rubyCount = rubyCount
-    }
-
-    static func BOSNode() -> RomanRegisteredNode {
-        RomanRegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, rubyCount: 0, romanString: "")
-    }
-
-    static func fromLastCandidate(_ candidate: Candidate) -> RomanRegisteredNode {
-        RomanRegisteredNode(
-            data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid , rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
-            registered: nil,
-            totalValue: 0,
-            rubyCount: 0,
-            romanString: ""
-        )
-    }
-}
-
-struct ComposingTextRegisteredNode: RegisteredNodeProtocol {
+struct RegisteredNode: RegisteredNodeProtocol {
     let data: DicdataElement
     let prev: (any RegisteredNodeProtocol)?
     let totalValue: PValue
@@ -98,7 +38,7 @@ struct ComposingTextRegisteredNode: RegisteredNodeProtocol {
         input
     }
 
-    init(data: DicdataElement, registered: (any RegisteredNodeProtocol)?, totalValue: PValue, convertTargetLength: Int, input: String) {
+    init(data: DicdataElement, registered: RegisteredNode?, totalValue: PValue, convertTargetLength: Int, input: String) {
         self.data = data
         self.prev = registered
         self.totalValue = totalValue
@@ -106,12 +46,12 @@ struct ComposingTextRegisteredNode: RegisteredNodeProtocol {
         self.convertTargetLength = convertTargetLength
     }
 
-    static func BOSNode() -> ComposingTextRegisteredNode {
-        ComposingTextRegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, convertTargetLength: 0, input: "")
+    static func BOSNode() -> RegisteredNode {
+        RegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, convertTargetLength: 0, input: "")
     }
 
-    static func fromLastCandidate(_ candidate: Candidate) -> ComposingTextRegisteredNode {
-        ComposingTextRegisteredNode(
+    static func fromLastCandidate(_ candidate: Candidate) -> RegisteredNode {
+        RegisteredNode(
             data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid , rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
             registered: nil,
             totalValue: 0,
@@ -166,6 +106,7 @@ extension RegisteredNodeProtocol {
             // 前の文節の処理
             lastClause.nextLcid = self.data.lcid
             // TODO: ここに手を加える必要がある
+            // この部分は`input`が不完全であるため不適切な実装になっている。改善が必要。
             switch VariableStates.shared.inputStyle {
             case .direct:
                 break

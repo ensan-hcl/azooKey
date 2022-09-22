@@ -181,7 +181,7 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - from: 起点
-    internal func getLOUDSData<LatticeNode: LatticeNodeProtocol>(inputData: some InputDataProtocol, from index: Int) -> [LatticeNode] {
+    internal func getLOUDSData(inputData: some InputDataProtocol, from index: Int) -> [LatticeNode] {
         // ⏱0.426499 : 辞書読み込み_全体
         let toIndex = min(inputData.count, index + self.maxlength)
         let segments = (index ..< toIndex).map {inputData[index...$0]}
@@ -256,7 +256,7 @@ final class DicdataStore {
         if index == .zero {
             let result: [LatticeNode] = dicdata.map {
                 let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]], rubyCount: nil)
-                node.prevs.append(ComposingTextRegisteredNode.BOSNode())
+                node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
@@ -270,7 +270,7 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - to: 終点
-    internal func getLOUDSData<LatticeNode: LatticeNodeProtocol>(inputData: some InputDataProtocol, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
+    internal func getLOUDSData(inputData: some InputDataProtocol, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
         let segment = inputData[fromIndex...toIndex]
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
@@ -314,7 +314,7 @@ final class DicdataStore {
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
                 let node = LatticeNode(data: $0, romanString: segment, rubyCount: nil)
-                node.prevs.append(ComposingTextRegisteredNode.BOSNode())
+                node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result

@@ -232,10 +232,6 @@ final class KeyboardActionDepartment: ActionDepartment {
         }
     }
 
-    override func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
-        self.inputManager.changeInputStyle(from: beforeStyle, to: afterStyle)
-    }
-
     /// 押した場合に行われる。
     /// - Parameters:
     ///   - action: 行われた動作。
@@ -441,50 +437,11 @@ private final class InputManager {
         return candidatesLog.last(where: {$0.word == word})
     }
 
-    private typealias RomanConverter = KanaKanjiConverter<ComposingText, ComposingTextLatticeNode>
-    private typealias DirectConverter = KanaKanjiConverter<ComposingText, ComposingTextLatticeNode>
     /// かな漢字変換を受け持つ変換器。
-    private var _romanConverter: RomanConverter?
-    private var _directConverter: DirectConverter?
-
-    private var romanConverter: RomanConverter {
-        self._directConverter = nil
-        if let romanConverter = self._romanConverter {
-            return romanConverter
-        }
-        self._romanConverter = RomanConverter()
-        return self._romanConverter!
-    }
-
-    private var directConverter: DirectConverter {
-        self._romanConverter = nil
-        if let flickConverter = self._directConverter {
-            return flickConverter
-        }
-        self._directConverter = DirectConverter()
-        return self._directConverter!
-    }
-
-    func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
-        switch (beforeStyle, afterStyle) {
-        case (.direct, .roman2kana):
-            let converter = RomanConverter()
-            converter.translated(from: self.directConverter)
-            self._romanConverter = converter
-            self._directConverter = nil
-        case (.roman2kana, .direct):
-            let converter = DirectConverter()
-            converter.translated(from: self.romanConverter)
-            self._directConverter = converter
-            self._romanConverter = nil
-        default:
-            return
-        }
-    }
+    private var kanaKanjiConverter = KanaKanjiConverter()
 
     func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
-        self._romanConverter?.sendToDicdataStore(data)
-        self._directConverter?.sendToDicdataStore(data)
+        self.kanaKanjiConverter.sendToDicdataStore(data)
     }
 
     fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
@@ -519,12 +476,7 @@ private final class InputManager {
         self.isSelected = false
 
         debug("complete:", candidate, composingText)
-        switch VariableStates.shared.inputStyle {
-        case .direct:
-            self.directConverter.updateLearningData(candidate)
-        case .roman2kana:
-            self.romanConverter.updateLearningData(candidate)
-        }
+        self.kanaKanjiConverter.updateLearningData(candidate)
         self.composingText.complete(correspondingCount: candidate.correspondingCount)
         self.proxy.insertText(candidate.text + self.composingText.convertTargetBeforeCursor)
         if self.composingText.convertTarget.isEmpty {
@@ -532,13 +484,7 @@ private final class InputManager {
             VariableStates.shared.setEnterKeyState(.return)
             return
         }
-
-        switch VariableStates.shared.inputStyle {
-        case .direct:
-            self.directConverter.setCompletedData(candidate)
-        case .roman2kana:
-            self.romanConverter.setCompletedData(candidate)
-        }
+        self.kanaKanjiConverter.setCompletedData(candidate)
 
         if liveConversionEnabled {
             if self.composingText.convertTarget.isEmpty {
@@ -563,16 +509,13 @@ private final class InputManager {
         self.isSelected = false
         self.liveConversionManager.clear()
         self.setResult()
-        self._romanConverter?.clear()
-        self._directConverter?.clear()
+        self.kanaKanjiConverter.clear()
         VariableStates.shared.setEnterKeyState(.return)
     }
 
     fileprivate func closeKeyboard() {
         debug("キーボードを閉じます")
         self.sendToDicdataStore(.closeKeyboard)
-        self._romanConverter = nil
-        self._directConverter = nil
         self.clear()
     }
 
@@ -591,19 +534,10 @@ private final class InputManager {
             _candidate = candidate
         }
         self.updateLog(candidate: _candidate)
-        let actions: [ActionType]
-        switch VariableStates.shared.inputStyle {
-        case .direct:
-            actions = self.directConverter.getApporopriateActions(_candidate)
-            _candidate.withActions(actions)
-            _candidate.parseTemplate()
-            self.directConverter.updateLearningData(_candidate)
-        case .roman2kana:
-            actions = self.romanConverter.getApporopriateActions(_candidate)
-            _candidate.withActions(actions)
-            _candidate.parseTemplate()
-            self.romanConverter.updateLearningData(_candidate)
-        }
+        let actions = self.kanaKanjiConverter.getApporopriateActions(_candidate)
+        _candidate.withActions(actions)
+        _candidate.parseTemplate()
+        self.kanaKanjiConverter.updateLearningData(_candidate)
         self.clear()
         return actions
     }
@@ -1223,18 +1157,18 @@ private final class InputManager {
         var firstClauseResults = [Candidate]()
         let input_hira = String(self.composingText.convertTargetBeforeCursor)
         let result: [Candidate]
+        debug("setResult value to be input", composingText)
+        let requireJapanesePrediction: Bool
+        let requireEnglishPrediction: Bool
         switch VariableStates.shared.inputStyle {
         case .direct:
-            let inputData = DirectInputData(input_hira)
-            debug("setResult value to be input", composingText)
-            (result, firstClauseResults) = self.directConverter.requestCandidates(composingText, N_best: 10)
+            requireJapanesePrediction = true
+            requireEnglishPrediction = true
         case .roman2kana:
-            let inputData = RomanInputData(self.composingText)
-            debug("setResult value to be input", composingText)
-            let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
-            let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
-            (result, firstClauseResults) = self.romanConverter.requestCandidates(composingText, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
+            requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
+            requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
         }
+        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(composingText, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
         results.append(contentsOf: result)
         // TODO: 最後の1単語のライブ変換を抑制したい
         // TODO: ローマ字入力中に最後の単語が優先される問題

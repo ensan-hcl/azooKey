@@ -10,9 +10,7 @@ import Foundation
 import UIKit
 typealias PValue = Float16
 
-struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol> {
-    typealias RegisteredNode = ComposingTextRegisteredNode
-
+struct Kana2Kanji<InputData: InputDataProtocol> {
     let ccBonusUnit = 5
     var dicdataStore = DicdataStore()
 

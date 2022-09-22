@@ -10,8 +10,9 @@ import Foundation
 import UIKit
 
 /// かな漢字変換の管理を受け持つクラス
-final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol> {
-    private var converter = Kana2Kanji<InputData, LatticeNode>()
+final class KanaKanjiConverter {
+    typealias InputData = ComposingText
+    private var converter = Kana2Kanji<InputData>()
     private var checker = UITextChecker()
 
     // 前回の変換や確定の情報を取っておく部分。
@@ -26,38 +27,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         self.nodes = []
         self.completedData = nil
         self.lastData = nil
-    }
-
-    func translated(from conveter: KanaKanjiConverter<some InputDataProtocol, some LatticeNodeProtocol>) {
-        self.nodes = conveter.translateNodes()
-        self.previousInputData = conveter.previousInputData?.translated()
-    }
-
-    /// translationする関数
-    private func translateNodes<Node: LatticeNodeProtocol>() -> [[Node]] {
-        if let nodes = self.nodes as? [[Node]] {
-            return nodes
-        }
-        if let nodes = self.nodes as? [[DirectLatticeNode]] {
-            if RomanLatticeNode.self == Node.self {
-                return nodes.map {line in
-                    line.map {node in
-                        node.translated() as Node
-                    }
-                }
-            }
-        }
-        if let nodes = self.nodes as? [[RomanLatticeNode]] {
-            if DirectLatticeNode.self == Node.self {
-                return nodes.map {line in
-                    line.map {node in
-                        node.translated() as Node
-                    }
-                }
-            }
-        }
-
-        fatalError("Unknown pattern \(Node.self) \(LatticeNode.self)")
     }
 
     /// 上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
