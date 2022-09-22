@@ -12,8 +12,8 @@ protocol RegisteredNodeProtocol {
     var data: DicdataElement {get}
     var prev: (any RegisteredNodeProtocol)? {get}
     var totalValue: PValue {get}
-    var ruby: String {get}
-    var rubyCount: Int {get}
+    var input: String {get}
+    var convertTargetLength: Int {get}
 
     static func BOSNode() -> Self
     static func fromLastCandidate(_ candidate: Candidate) -> Self
@@ -28,15 +28,6 @@ struct RegisteredNode: RegisteredNodeProtocol {
     // ダイレクト入力中であれば「今日は」に対して「キョウハ」
     // ローマ字入力中であれば「今日は」に対してkyouhaになる
     var input: String
-
-    var rubyCount: Int {
-        convertTargetLength
-    }
-
-    // カタカナ
-    var ruby: String {
-        input
-    }
 
     init(data: DicdataElement, registered: RegisteredNode?, totalValue: PValue, convertTargetLength: Int, input: String) {
         self.data = data
@@ -67,8 +58,8 @@ extension RegisteredNodeProtocol {
         guard let prev = self.prev else {
             let unit = ClauseDataUnit()
             unit.mid = self.data.mid
-            unit.ruby = self.ruby
-            unit.rubyCount = self.rubyCount
+            unit.ruby = self.input
+            unit.rubyCount = self.convertTargetLength
             return CandidateData(clauses: [(clause: unit, value: .zero)], data: [])
         }
         var lastcandidate = prev.getCandidateData()    // 自分に至るregisterdそれぞれのデータに処理
@@ -84,8 +75,8 @@ extension RegisteredNodeProtocol {
         if lastClause.text.isEmpty || !DicdataStore.isClause(prev.data.rcid, self.data.lcid) {
             // 文節ではないので、最後に追加する。
             lastClause.text.append(self.data.word)
-            lastClause.ruby.append(self.ruby)
-            lastClause.rubyCount += self.rubyCount
+            lastClause.ruby.append(self.input)
+            lastClause.rubyCount += self.convertTargetLength
             // 最初だった場合を想定している
             if (lastClause.mid == 500 && self.data.mid != 500) || DicdataStore.includeMMValueCalculation(self.data) {
                 lastClause.mid = self.data.mid
@@ -98,8 +89,8 @@ extension RegisteredNodeProtocol {
         else {
             let unit = ClauseDataUnit()
             unit.text = self.data.word
-            unit.ruby = self.ruby
-            unit.rubyCount = self.rubyCount
+            unit.ruby = self.input
+            unit.rubyCount = self.convertTargetLength
             if DicdataStore.includeMMValueCalculation(self.data) {
                 unit.mid = self.data.mid
             }
