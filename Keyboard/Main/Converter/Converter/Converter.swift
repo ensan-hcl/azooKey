@@ -12,7 +12,7 @@ import UIKit
 /// かな漢字変換の管理を受け持つクラス
 final class KanaKanjiConverter {
     typealias InputData = ComposingText
-    private var converter = Kana2Kanji<InputData>()
+    private var converter = Kana2Kanji()
     private var checker = UITextChecker()
 
     // 前回の変換や確定の情報を取っておく部分。
