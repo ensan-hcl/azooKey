@@ -165,6 +165,7 @@ extension RegisteredNodeProtocol {
             }
             // 前の文節の処理
             lastClause.nextLcid = self.data.lcid
+            // TODO: ここに手を加える必要がある
             switch VariableStates.shared.inputStyle {
             case .direct:
                 break

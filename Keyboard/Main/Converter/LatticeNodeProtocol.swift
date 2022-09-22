@@ -121,3 +121,39 @@ final class RomanLatticeNode: LatticeNodeProtocol {
     }
 
 }
+
+
+/// ラティスのノード。これを用いて計算する。
+final class ComposingTextLatticeNode: LatticeNodeProtocol {
+    typealias RegisteredNode = ComposingTextRegisteredNode
+
+    let data: DicdataElement
+    var prevs: [ComposingTextRegisteredNode] = []
+    var values: [PValue] = []
+    let input: String
+    let convertTargetLength: Int
+
+    convenience init(data: DicdataElement, romanString: String, rubyCount: Int? = nil) {
+        self.init(data: data, input: romanString, convertTargetLength: rubyCount ?? romanString.count)
+    }
+
+    var rubyCount: Int {
+        convertTargetLength
+    }
+
+    static var EOSNode: ComposingTextLatticeNode {
+        return ComposingTextLatticeNode(data: DicdataElement.EOSData, romanString: "")
+    }
+
+    init(data: DicdataElement, input: String, convertTargetLength: Int) {
+        self.data = data
+        self.values = [data.value()]
+        self.input = input
+        self.convertTargetLength = convertTargetLength
+    }
+
+    func getSqueezedNode(_ index: Int, value: PValue) -> ComposingTextRegisteredNode {
+        return ComposingTextRegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, convertTargetLength: convertTargetLength, input: self.input)
+    }
+
+}

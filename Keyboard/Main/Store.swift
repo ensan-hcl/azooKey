@@ -441,8 +441,8 @@ private final class InputManager {
         return candidatesLog.last(where: {$0.word == word})
     }
 
-    private typealias RomanConverter = KanaKanjiConverter<ComposingText, RomanLatticeNode>
-    private typealias DirectConverter = KanaKanjiConverter<ComposingText, DirectLatticeNode>
+    private typealias RomanConverter = KanaKanjiConverter<ComposingText, ComposingTextLatticeNode>
+    private typealias DirectConverter = KanaKanjiConverter<ComposingText, ComposingTextLatticeNode>
     /// かな漢字変換を受け持つ変換器。
     private var _romanConverter: RomanConverter?
     private var _directConverter: DirectConverter?
