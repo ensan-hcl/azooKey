@@ -55,7 +55,7 @@ extension Kana2Kanji {
                     continue
                 }
                 // 変換した文字数
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 for nextnode in addedNodes[nextIndex] {
                     // この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                     if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
@@ -107,7 +107,7 @@ extension Kana2Kanji {
                     node.values = node.prevs.map {$0.totalValue + wValue}
                 }
                 // 変換した文字数
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 if count == nextIndex {
                     // 最後に至るので
                     for index in node.prevs.indices {

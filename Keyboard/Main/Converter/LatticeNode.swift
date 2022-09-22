@@ -13,15 +13,16 @@ final class LatticeNode {
     let data: DicdataElement
     var prevs: [RegisteredNode] = []
     var values: [PValue] = []
+    // ユーザの行った入力に対応する文字列
+    // 本来[ComposingText.InputElement]的なものであるべき。
     let input: String
+    // ディスプレイされたテキストで対応する文字数
+    // korega -> これが -> 3
+    // koれga -> これが -> 3
     let convertTargetLength: Int
 
     convenience init(data: DicdataElement, romanString: String, rubyCount: Int? = nil) {
         self.init(data: data, input: romanString, convertTargetLength: rubyCount ?? romanString.count)
-    }
-
-    var rubyCount: Int {
-        convertTargetLength
     }
 
     static var EOSNode: LatticeNode {

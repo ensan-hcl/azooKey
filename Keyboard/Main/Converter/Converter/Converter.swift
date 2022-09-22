@@ -407,7 +407,7 @@ final class KanaKanjiConverter {
                 Candidate(
                     text: $0.data.word,
                     value: $0.data.value(),
-                    correspondingCount: $0.rubyCount,
+                    correspondingCount: $0.convertTargetLength,
                     lastMid: $0.data.mid,
                     data: [$0.data]
                 )

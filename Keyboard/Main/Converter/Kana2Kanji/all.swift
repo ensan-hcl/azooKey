@@ -52,7 +52,7 @@ extension Kana2Kanji {
                     node.values = node.prevs.map {$0.totalValue + wValue}
                 }
                 // 変換した文字数
-                let nextIndex: Int = i &+ node.rubyCount
+                let nextIndex: Int = i &+ node.convertTargetLength
                 // 文字数がcountと等しい場合登録する
                 if nextIndex == count {
                     for index in node.prevs.indices {

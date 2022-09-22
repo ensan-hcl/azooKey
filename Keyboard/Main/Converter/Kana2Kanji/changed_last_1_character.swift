@@ -28,7 +28,7 @@ extension Kana2Kanji {
 
         // (1)
         var nodes = previousNodes.enumerated().map {(i: Int, nodeArray: [LatticeNode]) in
-            return nodeArray.filter {i + $0.rubyCount < count}
+            return nodeArray.filter {i + $0.convertTargetLength < count}
         }
 
         // (2)
@@ -49,7 +49,7 @@ extension Kana2Kanji {
                     continue
                 }
                 // 変換した文字数
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 for nextnode in addedNodes[nextIndex] {
                     // この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                     if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
