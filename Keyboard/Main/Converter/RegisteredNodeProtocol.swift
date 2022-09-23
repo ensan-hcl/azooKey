@@ -96,14 +96,6 @@ extension RegisteredNodeProtocol {
             }
             // 前の文節の処理
             lastClause.nextLcid = self.data.lcid
-            // TODO: ここに手を加える必要がある
-            // この部分は`input`が不完全であるため不適切な実装になっている。改善が必要。
-            switch VariableStates.shared.inputStyle {
-            case .direct:
-                break
-            case .roman2kana:
-                lastClause.ruby = lastClause.ruby.roman2katakana
-            }
             lastcandidate.clauses.append((clause: unit, value: self.totalValue))
             lastcandidate.data.append(self.data)
             return lastcandidate

@@ -41,16 +41,6 @@ final class LatticeNode {
     }
 
     func getCandidateData() -> [CandidateData] {
-        let result = self.prevs.map {$0.getCandidateData()}
-        // TODO: ここはそのうち書き換える必要がある
-        switch VariableStates.shared.inputStyle {
-        case .direct:
-            break
-        case .roman2kana:
-            result.forEach {
-                $0.lastClause?.ruby = $0.lastClause?.ruby.roman2katakana ?? ""
-            }
-        }
-        return result
+        return self.prevs.map {$0.getCandidateData()}
     }
 }
