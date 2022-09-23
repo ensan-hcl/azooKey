@@ -30,7 +30,7 @@ extension KanaKanjiConverter {
     /// - note:
     ///    現在英字のみ。ギリシャ文字や数字に対応する必要あり。
     func typographicalCandidates(_ inputData: InputData) -> [Candidate] {
-        let string = inputData.katakanaString
+        let string = inputData.convertTarget.toKatakana()
         let strings = self.typographicalLetters(from: string)
         return strings.map {
             Candidate(

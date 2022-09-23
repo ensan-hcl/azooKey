@@ -25,8 +25,8 @@ extension Kana2Kanji {
     func kana2lattice_changed(_ inputData: InputData, N_best: Int, counts: (deleted: Int, added: Int), previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
         debug("kana2lattice_changed", inputData, counts, previousResult.inputData)
         // (0)
-        let count = inputData.count
-        let commonCount = previousResult.inputData.count - counts.deleted
+        let count = inputData.input.count
+        let commonCount = previousResult.inputData.input.count - counts.deleted
 
         // (1)
         var nodes = previousResult.nodes.enumerated().map {(i: Int, nodes: [LatticeNode]) in

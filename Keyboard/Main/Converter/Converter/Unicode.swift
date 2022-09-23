@@ -13,7 +13,7 @@ extension KanaKanjiConverter {
     /// - parameters:
     func unicode(_ inputData: InputData) -> [Candidate] {
         let value0: PValue = -10
-        let string = inputData.katakanaString
+        let string = inputData.convertTarget.toKatakana()
         if string.count < 5 {
             return []
         }

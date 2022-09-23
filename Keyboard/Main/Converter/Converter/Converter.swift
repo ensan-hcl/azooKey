@@ -258,7 +258,7 @@ final class KanaKanjiConverter {
     ///   付加的な変換候補
     private func getAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
         var candidates: [Candidate] = []
-        let string = inputData.katakanaString
+        let string = inputData.convertTarget.toKatakana()
         do {
             // カタカナ
             let value = -14 * getKatakanaScore(string)
@@ -434,7 +434,7 @@ final class KanaKanjiConverter {
         var result = Array(full_candidate)
 
         // 最低でも1つ、入力に完全一致する候補が入るようにする
-        let checkRuby: (Candidate) -> Bool = {$0.data.reduce("") {$0 + $1.ruby} == inputData.katakanaString}
+        let checkRuby: (Candidate) -> Bool = {$0.data.reduce("") {$0 + $1.ruby} == inputData.convertTarget.toKatakana()}
         if !result.contains(where: checkRuby) {
             if let candidate = sentence_candidates.first(where: checkRuby) {
                 result.append(candidate)

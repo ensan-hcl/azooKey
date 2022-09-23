@@ -14,14 +14,14 @@ extension KanaKanjiConverter {
     /// - parameters:
     ///  - inputData: 入力情報。
     func toVersionCandidate(_ inputData: InputData) -> [Candidate] {
-        if inputData.katakanaString == "バージョン", let version = SharedStore.currentAppVersion?.description {
+        if inputData.convertTarget.toKatakana() == "バージョン", let version = SharedStore.currentAppVersion?.description {
             let versionString = "azooKey Verion \(version)"
             return [Candidate(
                 text: versionString,
                 value: -30,
                 correspondingCount: inputData.characters.count,
                 lastMid: 501,
-                data: [DicdataElement(word: versionString, ruby: inputData.katakanaString, cid: CIDData.固有名詞.cid, mid: 501, value: -30)]
+                data: [DicdataElement(word: versionString, ruby: inputData.convertTarget.toKatakana(), cid: CIDData.固有名詞.cid, mid: 501, value: -30)]
             )]
         }
         return []
@@ -33,7 +33,7 @@ extension KanaKanjiConverter {
     /// - note:
     ///    現在英字のみ。ギリシャ文字や数字に対応する必要あり。
     func toSeirekiCandidates(_ inputData: InputData) -> [Candidate] {
-        let string = inputData.katakanaString
+        let string = inputData.convertTarget.toKatakana()
         let result = self.toSeireki(string)
         return result.map {[Candidate(
             text: $0,
@@ -113,7 +113,7 @@ extension KanaKanjiConverter {
     /// - parameters:
     ///   - string: 入力
     func toWareki(_ inputData: InputData) -> [Candidate] {
-        let string = inputData.katakanaString
+        let string = inputData.convertTarget.toKatakana()
 
         let makeResult0: (String) -> Candidate = {
             return Candidate(

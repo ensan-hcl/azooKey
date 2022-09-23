@@ -483,17 +483,9 @@ extension ComposingText.InputElement: CustomDebugStringConvertible {
 
 extension ComposingText.InputElement: Equatable {}
 
-extension ComposingText: InputDataProtocol {
-    var katakanaString: String {
-        convertTarget.toKatakana()
-    }
-
+extension ComposingText {
     var characters: [Character] {
         input.map(\.character)
-    }
-
-    var count: Int {
-        characters.count
     }
 
     subscript(range: ClosedRange<Int>) -> String {
@@ -632,4 +624,55 @@ extension ComposingText {
         "wi": ["wo"],
         "pu": ["ou"]
     ]
+}
+
+extension ComposingText {
+    internal func isAfterAddedCharacter(previous: Self) -> Int? {
+        if self.input.count <= previous.input.count {
+            return nil
+        }
+        let prefix: [Character] = Array(self.characters.prefix(previous.input.count))
+        if prefix == previous.characters {
+            return self.input.count - previous.input.count
+        }
+        return nil
+    }
+
+    internal func isAfterDeletedCharacter(previous: Self) -> Int? {
+        if Array(previous.characters.prefix(self.input.count)) == self.characters {
+            let dif = previous.input.count - self.input.count
+            if dif == 0 {
+                return nil
+            }
+            return dif
+        } else {
+            return nil
+        }
+    }
+
+    internal func isAfterDeletedPrefixCharacter(previous: Self) -> Int? {
+        if previous.convertTarget.hasSuffix(self.convertTarget) {
+            let dif = previous.input.count - self.input.count
+            if dif == 0 {
+                return nil
+            }
+            return dif
+        } else {
+            return nil
+        }
+    }
+
+    internal func isAfterReplacedCharacter(previous: Self) -> (deleted: Int, added: Int)? {
+        // 共通接頭辞を求める
+        let common = String(self.characters).commonPrefix(with: String(previous.characters))
+        if common == "" {
+            return nil
+        }
+        let deleted = previous.input.count - common.count
+        let added = self.input.count - common.count
+        if deleted == 0 || added == 0 {
+            return nil
+        }
+        return (deleted, added)
+    }
 }

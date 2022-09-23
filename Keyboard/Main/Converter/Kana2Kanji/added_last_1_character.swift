@@ -29,7 +29,7 @@ extension Kana2Kanji {
         debug("一文字追加。内部文字列は\(inputData.characters).\(previousResult.nodes.map {($0.first?.data.ruby, $0.first?.convertTargetLength)})")
         // (0)
         var nodes = previousResult.nodes
-        let count = previousResult.inputData.count
+        let count = previousResult.inputData.input.count
 
         // (1)
         let addedNodes: [[LatticeNode]] = (0...count).map {(i: Int) in

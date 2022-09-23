@@ -181,9 +181,9 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - from: 起点
-    internal func getLOUDSData(inputData: some InputDataProtocol, from index: Int) -> [LatticeNode] {
+    internal func getLOUDSData(inputData: ComposingText, from index: Int) -> [LatticeNode] {
         // ⏱0.426499 : 辞書読み込み_全体
-        let toIndex = min(inputData.count, index + self.maxlength)
+        let toIndex = min(inputData.input.count, index + self.maxlength)
         let segments = (index ..< toIndex).map {inputData[index...$0]}
 
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
@@ -270,7 +270,7 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - to: 終点
-    internal func getLOUDSData(inputData: some InputDataProtocol, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
+    internal func getLOUDSData(inputData: ComposingText, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
         let segment = inputData[fromIndex...toIndex]
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
@@ -308,7 +308,7 @@ final class DicdataStore {
             dicdata.append(contentsOf: result)
         }
 
-        dicdata.append(contentsOf: self.getWiseDicdata(head: segment, allowRomanLetter: toIndex == inputData.count - 1))
+        dicdata.append(contentsOf: self.getWiseDicdata(head: segment, allowRomanLetter: toIndex == inputData.input.count - 1))
         dicdata.append(contentsOf: self.getMatch(segment))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
