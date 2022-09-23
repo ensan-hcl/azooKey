@@ -48,7 +48,7 @@ struct ComposingText {
     /// この状態では`input`に対応するカーソル位置が存在しない。
     /// この場合、`input`を`[き, ょ, u]`と置き換えた上で`1`を返す。
     private mutating func forceGetInputCursorPosition(target: some StringProtocol) -> Int {
-        debug("ComposingText forceGetInputCursorPosition", self)
+        debug("ComposingText forceGetInputCursorPosition", self, target)
         if target.isEmpty {
             return 0
         }
@@ -173,7 +173,7 @@ struct ComposingText {
                 let replaceCount = count - lastPrefixIndex
                 let suffix = converted.suffix(converted.count - lastPrefix.count)
                 self.input.removeSubrange(count - replaceCount ..< count)
-                self.input.insert(contentsOf: suffix.map {InputElement(character: $0, inputStyle: .direct)}, at: count - replaceCount)
+                self.input.insert(contentsOf: suffix.map {InputElement(character: $0, inputStyle: $0.isRomanLetter ? .roman2kana : .direct)}, at: count - replaceCount)
 
                 count -= replaceCount
                 count += suffix.count
@@ -262,7 +262,7 @@ struct ComposingText {
         //        =   [k, a, ん]
 
         // 今いる位置
-        let currentPrefix = self.convertTarget.prefix(convertTargetCursorPosition)
+        let currentPrefix = self.convertTargetBeforeCursor
 
         // この2つの値はこの順で計算する。
         // これから行く位置
@@ -319,6 +319,113 @@ extension ComposingText {
     static func getConvertTarget(for elements: some Sequence<InputElement>) -> String {
         var convertTargetElements: [ConvertTargetElement] = []
         for element in elements {
+            updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+        }
+        return convertTargetElements.reduce(into: "") {$0 += $1.string}
+    }
+
+    /// 「正当な」部分領域を返す関数
+    /// `elements[leftIndex ..< rightIndex]が正当であればこれをConvertTargetに変換して返す。
+    ///  - examples
+    ///  `elements = [r(k, a, n, s, h, a)]`のとき、`k,a,n,s,h,a`や`k, a`は正当だが`a, n`や`s, h`は正当ではない。`k, a, n`は特に正当であるとみなす。
+    ///
+    static func getConvertTargetForValidPart(part partialElements: [InputElement], of originalElements: [InputElement], from leftIndex: Int, to rightIndex: Int) -> String? {
+        debug("getConvertTargetForValidPart", partialElements, originalElements, leftIndex, rightIndex)
+        if leftIndex < originalElements.startIndex || originalElements.endIndex < rightIndex {
+            return nil
+        }
+        if leftIndex == rightIndex {
+            return nil
+        }
+        // 正当性のチェックを行う
+        // 基本的に、convertTargetと正しく対応する部分のみを取り出したい。
+        // leftIndexの位置にある`el`のチェック
+        // 許されるパターンは以下の通り
+        // * leftIndex == startIndex
+        // * el:direct
+        // * (_:direct) -> el
+        // * (a|i|u|e|o:roman2kana) -> el                  // aka、のような場合、ka部分を正当とみなす
+        // * (e-1:roman2kana and not n) && e-1 == es       // tta、のような場合、ta部分を正当とみなすが、nnaはだめ。
+        // * (n:roman2kana) -> el && el not a|i|u|e|o|y|n  // nka、のような場合、ka部分を正当とみなすが、nnaはだめ。
+        // TODO: このルールは「zl」のような矢印入力を阻む可能性がある。対策として、矢印はダイレクト入力するようにしたい。
+        guard let firstElement = partialElements.first else {
+            return nil
+        }
+        checkIsStartValid: do {
+            // 左端か、directなElementである場合
+            guard leftIndex != originalElements.startIndex && firstElement.inputStyle == .roman2kana else {
+                break checkIsStartValid
+            }
+            let prevLastElement = originalElements[leftIndex - 1]
+            if prevLastElement.inputStyle != .roman2kana {
+                break checkIsStartValid
+            }
+            if ["a", "i", "u", "e", "o"].contains(prevLastElement.character) {
+                break checkIsStartValid
+            }
+            if prevLastElement.character != "n" && prevLastElement.character.isRomanLetter && prevLastElement.character == firstElement.character {
+                break checkIsStartValid
+            }
+            let n_suffix = originalElements[0 ..< leftIndex - 1].suffix(where: {$0.inputStyle == .roman2kana && $0.character == "n"})
+            if n_suffix.count % 2 == 0 && n_suffix.count > 0 {
+                break checkIsStartValid
+            }
+            if n_suffix.count % 2 == 1 && !["a", "i", "u", "e", "o", "y", "n"].contains(firstElement.character) {
+                break checkIsStartValid
+            }
+            return nil
+        }
+        // rightIndexの位置にあるerのチェック
+        // 許されるパターンは以下の通り
+        // * rightIndex == endIndex
+        // * er:direct
+        // * er -> (_:direct)
+        // * er == a|i|u|e|o                                          // aka、のような場合、a部分を正当とみなす
+        // * er != n && er -> er == e+1                               // kka、のような場合、k部分を正当とみなす
+        // * er == n && er -> (e+1:roman2kana and not a|i|u|e|o|n|y)  // (nn)*nka、のような場合、(nn)*n部分を正当とみなす
+        // * er == n && er -> (e+1:roman2kana)  // (nn)*a、のような場合、nn部分を正当とみなす
+        guard let lastElement = partialElements.last else {
+            return nil
+        }
+        var part = partialElements
+        checkIsEndValid: do {
+            // 左端か、directなElementである場合
+            guard rightIndex != originalElements.endIndex && lastElement.inputStyle == .roman2kana else {
+                break checkIsEndValid
+            }
+            if lastElement.inputStyle != .roman2kana {
+                break checkIsEndValid
+            }
+            let nextFirstElement = originalElements[rightIndex]
+            if nextFirstElement.inputStyle != .roman2kana {
+                break checkIsEndValid
+            }
+            if ["a", "i", "u", "e", "o"].contains(lastElement.character) {
+                break checkIsEndValid
+            }
+            if lastElement.character != "n" && lastElement.character.isRomanLetter && lastElement.character == nextFirstElement.character {
+                // partを書き換える
+                part.removeLast()
+                part.append(InputElement(character: "っ", inputStyle: .direct))
+                break checkIsEndValid
+            }
+            let n_suffix = partialElements.suffix(where: {$0.inputStyle == .roman2kana && $0.character == "n"})
+            // nnが偶数個なら許す
+            if n_suffix.count > 0 && n_suffix.count % 2 == 0 {
+                break checkIsEndValid
+            }
+            // nが最後に1つ余っていて、characterが条件を満たせば許す
+            if n_suffix.count % 2 == 1 && !["a", "i", "u", "e", "o", "y", "n"].contains(nextFirstElement.character) {
+                // partを書き換える
+                part.removeLast()
+                part.append(InputElement(character: "ん", inputStyle: .direct))
+                break checkIsEndValid
+            }
+            return nil
+        }
+        // ここまで来たらvalid
+        var convertTargetElements: [ConvertTargetElement] = []
+        for element in part {
             updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
         }
         return convertTargetElements.reduce(into: "") {$0 += $1.string}
@@ -405,7 +512,6 @@ extension ComposingText: InputDataProtocol {
         let count = right - left + 1
         let unit: PValue = 3.5
         let triple = unit*3
-        let nextLetter = (right + 1 == characters.count) ? "\0" : self.characters[right + 1]
         // 各iから始まる候補を列挙する
         // 例えばinput = [d(あ), r(s), r(i), r(t), r(s), d(は), d(は), d(れ)]の場合
         // nodes =      [[d(あ)], [r(s)], [r(i)], [r(t), [r(t), r(a)]], [r(s)], [d(は), d(ば), d(ぱ)], [d(れ)]]
@@ -444,10 +550,14 @@ extension ComposingText: InputDataProtocol {
                 }
             }
         }
-        debug("getRangeWithTypos", result)
-        return result.map {
-            (ComposingText.getConvertTarget(for: $0.elements).toKatakana(), $0.penalty)
+        let filtered: [(string: String, penalty: PValue)] = result.compactMap {
+            if let convertTarget = ComposingText.getConvertTargetForValidPart(part: $0.elements, of: self.input, from: left, to: right + 1) {
+                return (convertTarget.toKatakana(), $0.penalty)
+            }
+            return nil
         }
+        debug("getRangeWithTypos", filtered)
+        return filtered
     }
 }
 

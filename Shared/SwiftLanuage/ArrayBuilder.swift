@@ -41,3 +41,14 @@ extension MutableCollection {
         }
     }
 }
+
+extension BidirectionalCollection where Self: MutableCollection {
+    func suffix(where condition: (Element) -> Bool) -> SubSequence where Self.Index == Int {
+        var left = self.endIndex
+        var right = self.endIndex
+        while left != self.startIndex, condition(self[left-1]) {
+            left -= 1
+        }
+        return self[left ..< right]
+    }
+}

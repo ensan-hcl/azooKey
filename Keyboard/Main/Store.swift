@@ -1155,9 +1155,7 @@ private final class InputManager {
     fileprivate func setResult() {
         var results = [Candidate]()
         var firstClauseResults = [Candidate]()
-        let input_hira = String(self.composingText.convertTargetBeforeCursor)
         let result: [Candidate]
-        debug("setResult value to be input", composingText)
         let requireJapanesePrediction: Bool
         let requireEnglishPrediction: Bool
         switch VariableStates.shared.inputStyle {
@@ -1168,16 +1166,18 @@ private final class InputManager {
             requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
             requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
         }
-        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(composingText, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
+        let inputData = composingText.prefixToCursorPosition()
+        debug("setResult value to be input", inputData)
+        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
         results.append(contentsOf: result)
         // TODO: 最後の1単語のライブ変換を抑制したい
         // TODO: ローマ字入力中に最後の単語が優先される問題
         if liveConversionEnabled {
             var candidate: Candidate
-            if self.composingText.convertTargetCursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map {$0.ruby}.joined().count == input_hira.count}) {
+            if self.composingText.convertTargetCursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map {$0.ruby}.joined().count == inputData.convertTarget.count}) {
                 candidate = firstCandidate
             } else {
-                candidate = .init(text: String(input_hira), value: 0, correspondingCount: input_hira.count, lastMid: 0, data: [.init(ruby: String(input_hira), cid: 0, mid: 0, value: 0)])
+                candidate = .init(text: inputData.convertTarget, value: 0, correspondingCount: inputData.convertTarget.count, lastMid: 0, data: [.init(ruby: inputData.convertTarget.toKatakana(), cid: 0, mid: 0, value: 0)])
             }
             self.liveConversionManager.adjustCandidate(candidate: &candidate)
             debug("Live Conversion:", candidate)
