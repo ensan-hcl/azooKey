@@ -58,8 +58,8 @@ extension RegisteredNodeProtocol {
         guard let prev = self.prev else {
             let unit = ClauseDataUnit()
             unit.mid = self.data.mid
-            unit.ruby = self.input
-            unit.rubyCount = self.convertTargetLength
+            unit.convertTarget = self.input
+            unit.convertTargetLength = self.convertTargetLength
             return CandidateData(clauses: [(clause: unit, value: .zero)], data: [])
         }
         var lastcandidate = prev.getCandidateData()    // 自分に至るregisterdそれぞれのデータに処理
@@ -75,8 +75,8 @@ extension RegisteredNodeProtocol {
         if lastClause.text.isEmpty || !DicdataStore.isClause(prev.data.rcid, self.data.lcid) {
             // 文節ではないので、最後に追加する。
             lastClause.text.append(self.data.word)
-            lastClause.ruby.append(self.input)
-            lastClause.rubyCount += self.convertTargetLength
+            lastClause.convertTarget.append(self.input)
+            lastClause.convertTargetLength += self.convertTargetLength
             // 最初だった場合を想定している
             if (lastClause.mid == 500 && self.data.mid != 500) || DicdataStore.includeMMValueCalculation(self.data) {
                 lastClause.mid = self.data.mid
@@ -89,8 +89,8 @@ extension RegisteredNodeProtocol {
         else {
             let unit = ClauseDataUnit()
             unit.text = self.data.word
-            unit.ruby = self.input
-            unit.rubyCount = self.convertTargetLength
+            unit.convertTarget = self.input
+            unit.convertTargetLength = self.convertTargetLength
             if DicdataStore.includeMMValueCalculation(self.data) {
                 unit.mid = self.data.mid
             }

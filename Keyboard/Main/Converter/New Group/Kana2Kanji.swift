@@ -32,7 +32,7 @@ struct Kana2Kanji {
         let text = data.clauses.map {$0.clause.text}.joined()
         let value = data.clauses.last!.value + mmValue.value
         let lastMid = data.clauses.last!.clause.mid
-        let correspondingCount = data.clauses.map {$0.clause.rubyCount}.reduce(0, +)
+        let correspondingCount = data.clauses.map {$0.clause.convertTargetLength}.reduce(0, +)
         return Candidate(
             text: text,
             value: value,

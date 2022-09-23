@@ -14,13 +14,13 @@ final class ClauseDataUnit {
     // 次の文節のlcid
     var nextLcid = CIDData.EOS.cid
     var text: String = ""
-    var ruby: String = ""
-    var rubyCount: Int = 0
+    var convertTarget: String = ""
+    var convertTargetLength: Int = 0
 
     func merge(with unit: ClauseDataUnit) {
         self.text.append(unit.text)
-        self.ruby.append(unit.ruby)
-        self.rubyCount += unit.rubyCount
+        self.convertTarget.append(unit.convertTarget)
+        self.convertTargetLength += unit.convertTargetLength
         self.nextLcid = unit.nextLcid
     }
 }
@@ -28,7 +28,7 @@ final class ClauseDataUnit {
 #if DEBUG
 extension ClauseDataUnit: CustomDebugStringConvertible {
     var debugDescription: String {
-        return "ClauseDataUnit(mid: \(mid), nextLcid: \(nextLcid), text: \(text), ruby: \(ruby), rubyCount: \(rubyCount))"
+        return "ClauseDataUnit(mid: \(mid), nextLcid: \(nextLcid), text: \(text), convertTarget: \(convertTarget), convertTargetLength: \(convertTargetLength))"
     }
 }
 #endif
@@ -58,7 +58,7 @@ struct Candidate: ResultViewItemData {
     var text: String
     /// 評価値
     let value: PValue
-    /// 内部文字列で対応する文字数。
+    /// composingText.inputにおいて対応する文字数。
     var correspondingCount: Int
     /// 最後のmid(予測変換に利用)
     let lastMid: Int

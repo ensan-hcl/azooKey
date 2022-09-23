@@ -197,15 +197,15 @@ final class KanaKanjiConverter {
                 newUnit.merge(with: oldlastPart.clause)     // マージする。
                 let newValue = lastUnit.value + oldlastPart.value
                 let newlastPart: CandidateData.ClausesUnit = (clause: newUnit, value: newValue)
-                let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: newlastPart.clause.ruby, lastRubyCount: newlastPart.clause.rubyCount, N_best: 5)
+                let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: newlastPart.clause.convertTarget, lastRubyCount: newlastPart.clause.convertTargetLength, N_best: 5)
                 candidates += predictions
                 lastpart = newlastPart
                 if !predictions.isEmpty {
                     count += 1
                 }
             } else {
-                let lastRuby = prepart.lastClause!.ruby
-                let lastRubyCount = prepart.lastClause!.rubyCount
+                let lastRuby = prepart.lastClause!.convertTarget
+                let lastRubyCount = prepart.lastClause!.convertTargetLength
                 lastpart = prepart.clauses.popLast()
                 let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: lastRuby, lastRubyCount: lastRubyCount, N_best: 5)
                 candidates += predictions
@@ -363,7 +363,7 @@ final class KanaKanjiConverter {
             return Candidate(
                 text: first.clause.text,
                 value: first.value,
-                correspondingCount: first.clause.rubyCount,
+                correspondingCount: first.clause.convertTargetLength,
                 lastMid: first.clause.mid,
                 data: Array(candidateData.data[0...count])
             )
