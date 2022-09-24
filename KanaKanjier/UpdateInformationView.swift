@@ -10,6 +10,20 @@ import SwiftUI
 struct UpdateInfomationView: View {
     var body: some View {
         Form {
+            // version 1.9系
+            Group {
+                VersionView("1.9", releaseDate: "2022年xx月xx日") {
+                    ParagraphView("機能を追加しました。") {
+                        "未定"
+                    }
+                    ParagraphView("機能を改善しました。") {
+                        "ローマ字入力のさまざまな不具合を修正"
+                        "ローマ字入力のパフォーマンスが向上"
+                        "カスタムタブにおいて複数のアクションを連続して実行する場合のパフォーマンスが向上"
+                    }
+                    ParagraphView("その他デザインの軽微な改善を行いました。")
+                }
+            }
             // version 1.8系
             Group {
                 VersionView("1.8.1", releaseDate: "2022年09月20日") {
@@ -191,26 +205,27 @@ struct UpdateInfomationView: View {
                     ParagraphView("その他軽微なデザイン・変換機能の改善を行いました。")
                 }
             }
+            // version 1.2系
+            Group {
+                VersionView("1.2.1", releaseDate: "2020年12月10日") {
+                    ParagraphView("不具合を修正しました。") {
+                        "ローマ字カスタムキーの編集で削除ができなくなる問題"
+                    }
+                }
 
-            VersionView("1.2.1", releaseDate: "2020年12月10日") {
-                ParagraphView("不具合を修正しました。") {
-                    "ローマ字カスタムキーの編集で削除ができなくなる問題"
+                VersionView("1.2", releaseDate: "2020年12月09日") {
+                    ParagraphView("機能を追加しました。") {
+                        "azooKeyユーザ辞書機能を追加"
+                        "キーの文字サイズを変更する機能を追加"
+                        "ローマ字での日本語入力中、英単語の変換候補も表示するよう変更"
+                    }
+                    ParagraphView("不具合を修正しました。") {
+                        "ローマ字での英語入力中、一部の候補を選択した場合に正しく変換されない問題"
+                    }
+                    ParagraphView("記号の変換を改善しました。")
+                    ParagraphView("その他軽微なデザイン・操作性の改善を行いました。")
                 }
             }
-
-            VersionView("1.2", releaseDate: "2020年12月09日") {
-                ParagraphView("機能を追加しました。") {
-                    "azooKeyユーザ辞書機能を追加"
-                    "キーの文字サイズを変更する機能を追加"
-                    "ローマ字での日本語入力中、英単語の変換候補も表示するよう変更"
-                }
-                ParagraphView("不具合を修正しました。") {
-                    "ローマ字での英語入力中、一部の候補を選択した場合に正しく変換されない問題"
-                }
-                ParagraphView("記号の変換を改善しました。")
-                ParagraphView("その他軽微なデザイン・操作性の改善を行いました。")
-            }
-
             VersionView("1.1", releaseDate: "2020年12月06日") {
                 ParagraphView("機能を改善しました。") {
                     "ローマ字入力中の矢印入力に対応"
