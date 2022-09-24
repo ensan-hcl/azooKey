@@ -71,12 +71,22 @@ struct EnableAzooKeyView: View {
                     case .setting:
                         VStack(alignment: .leading, spacing: 20) {
                             EnableAzooKeyViewHeader("最初の設定")
-                            Divider()
-                            EnableAzooKeyViewText("キーボードの種類をお選びください", with: "keyboard")
-                            LanguageLayoutSettingView(.japaneseKeyboardLayout, setTogether: true)
-                            Divider()
-                            EnableAzooKeyViewText("絵文字と顔文字を設定しましょう", with: "face.smiling")
-                            AdditionalDictManageViewMain(style: .simple)
+                            Group {
+                                Divider()
+                                EnableAzooKeyViewText("キーボードの種類をお選びください", with: "keyboard")
+                                LanguageLayoutSettingView(.japaneseKeyboardLayout, setTogether: true)
+                            }
+                            Group {
+                                Divider()
+                                // TODO: Localize
+                                EnableAzooKeyViewText("ライブ変換を使用しますか？", with: "character.cursor.ibeam")
+                                BoolSettingView(.liveConversion)
+                            }
+                            Group {
+                                Divider()
+                                EnableAzooKeyViewText("絵文字と顔文字を設定しましょう", with: "face.smiling")
+                                AdditionalDictManageViewMain(style: .simple)
+                            }
                             Divider()
                             EnableAzooKeyViewText("設定は「設定タブ」でいつでも変えられます", with: "gearshape")
                             CenterAlignedView {
