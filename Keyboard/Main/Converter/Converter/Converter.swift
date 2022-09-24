@@ -475,34 +475,36 @@ final class KanaKanjiConverter {
         // TODO: 完全に同一のデータの場合のケースを追加する
 
         // 文節確定の後の場合
-        if let lastClause = self.completedData, let _ = inputData.isAfterDeletedPrefixCharacter(previous: previousInputData) {
-            debug("convertToLattice: 文節確定用の関数を呼びます")
-            let result = converter.kana2lattice_afterComplete(inputData, completedData: lastClause, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
+        if let completedData, previousInputData.inputHasSuffix(inputOf: inputData) {
+            debug("convertToLattice: 文節確定用の関数を呼びます、確定された文節は\(completedData)")
+            let result = converter.kana2lattice_afterComplete(inputData, completedData: completedData, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             self.completedData = nil
             return result
         }
 
+        let diff = inputData.differenceSuffix(to: previousInputData)
+
         // 一文字消した場合
-        if let deletedCount = inputData.isAfterDeletedCharacter(previous: previousInputData) {
-            debug("convertToLattice: 最後尾削除用の関数を呼びます, 消した文字数は\(deletedCount)")
-            let result = converter.kana2lattice_deletedLast(deletedCount: deletedCount, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
+        if diff.deleted > 0 && diff.added.isEmpty {
+            debug("convertToLattice: 最後尾削除用の関数を呼びます, 消した文字数は\(diff.deleted)")
+            let result = converter.kana2lattice_deletedLast(deletedCount: diff.deleted, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
         }
 
         // 一文字変わった場合
-        if let counts = inputData.isAfterReplacedCharacter(previous: previousInputData) {
-            debug("convertToLattice: 最後尾文字置換用の関数を呼びますA")
-            let result = converter.kana2lattice_changed(inputData, N_best: N_best, counts: counts, previousResult: (inputData: previousInputData, nodes: nodes))
+        if diff.deleted > 0 {
+            debug("convertToLattice: 最後尾文字置換用の関数を呼びます、差分は\(diff)")
+            let result = converter.kana2lattice_changed(inputData, N_best: N_best, counts: (diff.deleted, diff.added.count), previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
         }
 
         // 1文字増やした場合
-        if let addedCount = inputData.isAfterAddedCharacter(previous: previousInputData) {
-            debug("convertToLattice: 最後尾追加用の関数を呼びます")
-            let result = converter.kana2lattice_added(inputData, N_best: N_best, addedCount: addedCount, previousResult: (inputData: previousInputData, nodes: nodes))
+        if diff.deleted == 0 && !diff.added.isEmpty {
+            debug("convertToLattice: 最後尾追加用の関数を呼びます、追加文字は\(diff.added)")
+            let result = converter.kana2lattice_added(inputData, N_best: N_best, addedCount: diff.added.count, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
         }

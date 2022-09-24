@@ -213,7 +213,7 @@
 		1AC5876525D930D000BB060E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
 		1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */; };
 		1AC8A594259587A200B71E5A /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A593259587A200B71E5A /* Design.swift */; };
-		1AC8A5AA2595934C00B71E5A /* ArrayBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */; };
+		1AC8A5AA2595934C00B71E5A /* ArrayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayUtils.swift */; };
 		1AC8A5B92595C10A00B71E5A /* StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */; };
 		1AC8A5D3259815C300B71E5A /* FlickCustomKeySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */; };
 		1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5DC25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift */; };
@@ -2544,7 +2544,7 @@
 		1AFB68502518F18A00C649C4 /* MoveCursorBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB684F2518F18A00C649C4 /* MoveCursorBar.swift */; };
 		1AFB685028D56E8200B5C717 /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
 		1AFB685128D56E8200B5C717 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */; };
-		1AFB685228D56E8200B5C717 /* ArrayBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */; };
+		1AFB685228D56E8200B5C717 /* ArrayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayUtils.swift */; };
 		1AFB685328D56F1800B5C717 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
 		1AFB685728D5769700B5C717 /* HashPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB685628D5769700B5C717 /* HashPerformance.swift */; };
 		1AFB685A28D5CCB300B5C717 /* FNV in Frameworks */ = {isa = PBXBuildFile; productRef = 1AFB685928D5CCB300B5C717 /* FNV */; };
@@ -2793,7 +2793,7 @@
 		1AC5876D25D930E700BB060E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSettingTipsView.swift; sourceTree = "<group>"; };
 		1AC8A593259587A200B71E5A /* Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Design.swift; sourceTree = "<group>"; };
-		1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayBuilder.swift; sourceTree = "<group>"; };
+		1AC8A5A92595934C00B71E5A /* ArrayUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayUtils.swift; sourceTree = "<group>"; };
 		1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringInterpolation.swift; sourceTree = "<group>"; };
 		1AC8A5D2259815C300B71E5A /* FlickCustomKeySettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickCustomKeySettingView.swift; sourceTree = "<group>"; };
 		1AC8A5DC25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKanaSymbolsKeyModel.swift; sourceTree = "<group>"; };
@@ -5665,7 +5665,7 @@
 		1ACB07DA25E71EC00077DE04 /* SwiftLanuage */ = {
 			isa = PBXGroup;
 			children = (
-				1AC8A5A92595934C00B71E5A /* ArrayBuilder.swift */,
+				1AC8A5A92595934C00B71E5A /* ArrayUtils.swift */,
 				1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */,
 				1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */,
 				1A30CE8A26023B52007C1A2D /* CodableSupport.swift */,
@@ -10595,7 +10595,7 @@
 				1AF6798725CEDBAE00F3987B /* FlickedKeyModel.swift in Sources */,
 				1A5B1CE026D1E495007D4E1C /* MainApp.swift in Sources */,
 				1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */,
-				1AC8A5AA2595934C00B71E5A /* ArrayBuilder.swift in Sources */,
+				1AC8A5AA2595934C00B71E5A /* ArrayUtils.swift in Sources */,
 				1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */,
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
 				1AF6798625CEDBAE00F3987B /* SuggestModel.swift in Sources */,
@@ -10773,7 +10773,7 @@
 				1A18425E25DE6678003985AB /* CustomKeyboard.swift in Sources */,
 				1A2602A42514820300EAD647 /* QwertyDataProvider.swift in Sources */,
 				1A8A8404250F65410093A701 /* added_last_1_character.swift in Sources */,
-				1AFB685228D56E8200B5C717 /* ArrayBuilder.swift in Sources */,
+				1AFB685228D56E8200B5C717 /* ArrayUtils.swift in Sources */,
 				1A347FE528D22E7F007D7852 /* AutoCompletionStrengthSetting.swift in Sources */,
 				1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */,
 				1A3DC2232500D60F002CAA93 /* FlickedKeyModel.swift in Sources */,
