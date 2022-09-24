@@ -65,16 +65,27 @@ struct EnableAzooKeyViewButton: View {
     }
 
     var body: some View {
-        Button(action: action) {
-            HStack {
+        switch style {
+        case .emphasized:
+            Button(action: action) {
                 if let systemName {
-                    Image(systemName: systemName)
+                    Label(text, systemImage: systemName)
+                } else {
+                    Text(text)
                 }
-                Text(text)
             }
+            .buttonStyle(LargeButtonStyle(backgroundColor: .blue))
             .foregroundColor(.white)
+        case .destructive:
+            Button(action: action) {
+                if let systemName {
+                    Label(text, systemImage: systemName)
+                } else {
+                    Text(text)
+                }
+            }
+            .foregroundColor(.red)
         }
-        .buttonStyle(LargeButtonStyle(backgroundColor: self.style == .emphasized ? .blue : .red))
     }
 }
 
