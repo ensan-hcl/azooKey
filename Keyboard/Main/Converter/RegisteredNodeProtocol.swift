@@ -14,20 +14,17 @@ protocol RegisteredNodeProtocol {
     var totalValue: PValue {get}
     var input: String {get}
     var convertTargetLength: Int {get}
-
-    static func BOSNode() -> Self
-    static func fromLastCandidate(_ candidate: Candidate) -> Self
 }
 
 struct RegisteredNode: RegisteredNodeProtocol {
     let data: DicdataElement
     let prev: (any RegisteredNodeProtocol)?
     let totalValue: PValue
-    var convertTargetLength: Int
+    let convertTargetLength: Int
     // 入力に対応する文字列
     // ダイレクト入力中であれば「今日は」に対して「キョウハ」
     // ローマ字入力中であれば「今日は」に対してkyouhaになる
-    var input: String
+    let input: String
 
     init(data: DicdataElement, registered: RegisteredNode?, totalValue: PValue, convertTargetLength: Int, input: String) {
         self.data = data
@@ -55,7 +52,7 @@ struct RegisteredNode: RegisteredNodeProtocol {
 
 extension RegisteredNodeProtocol {
     func getCandidateData() -> CandidateData {
-        guard let prev = self.prev else {
+        guard let prev else {
             let unit = ClauseDataUnit()
             unit.mid = self.data.mid
             unit.convertTarget = self.input
