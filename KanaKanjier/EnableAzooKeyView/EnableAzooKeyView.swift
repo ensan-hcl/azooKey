@@ -119,7 +119,9 @@ struct EnableAzooKeyView: View {
                                 .onSubmit {
                                     Store.variableSection.requireFirstOpenView = false
                                 }
-                            EnableAzooKeyViewImage("initSettingGlobeTapImage")
+                            if !showDoneMessage {
+                                EnableAzooKeyViewImage("initSettingGlobeTapImage")
+                            }
                             EnableAzooKeyViewText("azooKeyをお楽しみください！", with: "star.fill")
                             if !showDoneMessage {
                                 CenterAlignedView {
