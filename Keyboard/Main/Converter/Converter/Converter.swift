@@ -57,11 +57,11 @@ final class KanaKanjiConverter {
     ///   `賢い変換候補
     private func getWiseCandidate(_ inputData: InputData) -> [Candidate] {
         var result = [Candidate]()
-        @KeyboardSetting(.westernJapaneseCalender) var westernJapaneseCalender
-        if westernJapaneseCalender {
-            result.append(contentsOf: self.toWareki(inputData))
-            result.append(contentsOf: self.toSeirekiCandidates(inputData))
-        }
+
+        // toWareki/toSeirekiCandidatesは以前は設定可能にしていたが、特にoffにする需要がなさそうなので常時有効化した
+        result.append(contentsOf: self.toWareki(inputData))
+        result.append(contentsOf: self.toSeirekiCandidates(inputData))
+
         @KeyboardSetting(.typographyLetter) var typographyLetter
         if typographyLetter {
             result.append(contentsOf: self.typographicalCandidates(inputData))

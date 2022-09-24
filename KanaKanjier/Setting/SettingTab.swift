@@ -52,7 +52,6 @@ struct SettingTabView: View {
                         BoolSettingView(.halfKanaCandidate)
                         BoolSettingView(.fullRomanCandidate)
                         BoolSettingView(.typographyLetter)
-                        BoolSettingView(.westernJapaneseCalender)
                         BoolSettingView(.unicodeCandidate)
                         NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                     }

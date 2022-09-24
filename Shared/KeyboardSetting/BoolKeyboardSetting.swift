@@ -43,17 +43,6 @@ extension KeyboardSettingKey where Self == UnicodeCandidate {
     static var unicodeCandidate: Self { .init() }
 }
 
-struct WesternJapaneseCalender: BoolKeyboardSettingKey {
-    static let title: LocalizedStringKey = "西暦⇄和暦変換"
-    static let explanation: LocalizedStringKey = "「2020ねん→令和2年」「れいわ2ねん→2020年」のように西暦と和暦を相互に変換して候補に表示します。"
-    static let defaultValue = true
-    static let key: String = "western_japanese_calender_candidate"
-}
-
-extension KeyboardSettingKey where Self == WesternJapaneseCalender {
-    static var westernJapaneseCalender: Self { .init() }
-}
-
 struct LiveConversionInputMode: BoolKeyboardSettingKey {
     static let title: LocalizedStringKey = "ライブ変換"
     static let explanation: LocalizedStringKey = "入力中の文字列を自動的に変換します。"
