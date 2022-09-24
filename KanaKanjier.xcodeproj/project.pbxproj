@@ -2687,7 +2687,7 @@
 		1A3DC2272500D64D002CAA93 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension CGPoint.swift"; sourceTree = "<group>"; };
 		1A3DC22C2500D6C6002CAA93 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
-		1A3DC2FA2500D72D002CAA93 /* Kana2Kanji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Kana2Kanji.swift; path = "../New Group/Kana2Kanji.swift"; sourceTree = "<group>"; };
+		1A3DC2FA2500D72D002CAA93 /* Kana2Kanji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kana2Kanji.swift; sourceTree = "<group>"; };
 		1A3DC2FE2500F837002CAA93 /* extension Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension Character.swift"; sourceTree = "<group>"; };
 		1A4057DE255843330073C6F7 /* BoolSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolSettingView.swift; sourceTree = "<group>"; };
 		1A4057E8255843460073C6F7 /* KeyboardLayoutSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayoutSettingItemView.swift; sourceTree = "<group>"; };
