@@ -121,7 +121,6 @@
 		1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4624E92526384F00EF5B02 /* GeneralPerformance.swift */; };
 		1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */; };
 		1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4E09042527390100E7ABE5 /* TipsView.swift */; };
-		1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */; };
 		1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB02250290D800EB1864 /* SuggestModel.swift */; };
 		1A58AB0D25037E9E00EB1864 /* ExpandedResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */; };
 		1A5B1CE026D1E495007D4E1C /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5B1CDF26D1E495007D4E1C /* MainApp.swift */; };
@@ -2716,7 +2715,6 @@
 		1A4624E92526384F00EF5B02 /* GeneralPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralPerformance.swift; sourceTree = "<group>"; };
 		1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableEditor.swift; sourceTree = "<group>"; };
 		1A4E09042527390100E7ABE5 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
-		1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestView.swift; sourceTree = "<group>"; };
 		1A58AB02250290D800EB1864 /* SuggestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestModel.swift; sourceTree = "<group>"; };
 		1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedResultView.swift; sourceTree = "<group>"; };
 		1A5B1CDF26D1E495007D4E1C /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
@@ -5256,7 +5254,6 @@
 				1AC0316225121384004CA505 /* Setting */,
 				1A12E25625C447D800316009 /* DataUpdateView */,
 				1A9B0A4E25642C23004203BB /* EnableAzooKeyView */,
-				1A57166B2513BF6A00502D3E /* KeyboardTestView.swift */,
 				1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */,
 				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
 				1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */,
@@ -10561,7 +10558,6 @@
 				1AB8C3BF25E2303200D39BC5 /* TabBar.swift in Sources */,
 				1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */,
 				1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */,
-				1A57166C2513BF6A00502D3E /* KeyboardTestView.swift in Sources */,
 				1AB8C37025E0067600D39BC5 /* SimpleKeyView.swift in Sources */,
 				1AD2B8DE26C29FD10053CE4A /* FlickCustomKeyKeyboardSetting.swift in Sources */,
 				1AF6794C25CEDB8400F3987B /* ExpandedResultView.swift in Sources */,
