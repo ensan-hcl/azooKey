@@ -42,6 +42,9 @@ struct ResultView<Candidate: ResultViewItemData>: View {
         self._isResultViewExpanded = isResultViewExpanded
     }
 
+    private var buttonWidth: CGFloat {
+        Design.resultViewHeight()*0.5
+    }
     private var buttonHeight: CGFloat {
         Design.resultViewHeight()*0.6
     }
@@ -87,7 +90,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                             .padding(.all, 5)
                             Spacer()
                         }
-                        .background(Color.init(.sRGB, white: 1, opacity: 0.001))
+                        .background(Color(.sRGB, white: 1, opacity: 0.001))
                         .onLongPressGesture {
                             variableStates.action.registerAction(.toggleTabBar)
                         }
@@ -123,9 +126,13 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                             Button(action: {
                                 self.expand()
                             }) {
-                                Image(systemName: "chevron.down")
-                                    .font(Design.fonts.iconImageFont(theme: theme))
-                                    .frame(height: 18)
+                                ZStack {
+                                    Color(white: 1, opacity: 0.001)
+                                        .frame(width: buttonWidth)
+                                    Image(systemName: "chevron.down")
+                                        .font(Design.fonts.iconImageFont(theme: theme))
+                                        .frame(height: 18)
+                                }
                             }
                             .buttonStyle(ResultButtonStyle(height: buttonHeight))
                             .padding(.trailing, 10)

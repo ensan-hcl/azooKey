@@ -18,6 +18,12 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
     @Binding private var isResultViewExpanded: Bool
 
     @State private var splitedResults: [SplitedResultData<Candidate>]
+    private var buttonWidth: CGFloat {
+        Design.resultViewHeight()*0.5
+    }
+    private var buttonHeight: CGFloat {
+        Design.resultViewHeight()*0.6
+    }
 
     @Environment(\.themeEnvironment) private var theme
 
@@ -36,11 +42,15 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                 Button(action: {
                     self.collapse()
                 }) {
-                    Image(systemName: "chevron.up")
-                        .font(Design.fonts.iconImageFont(theme: theme))
-                        .frame(height: 18)
+                    ZStack {
+                        Color(white: 1, opacity: 0.001)
+                            .frame(width: buttonWidth)
+                        Image(systemName: "chevron.up")
+                            .font(Design.fonts.iconImageFont(theme: theme))
+                            .frame(height: 18)
+                    }
                 }
-                .buttonStyle(ResultButtonStyle(height: 18))
+                .buttonStyle(ResultButtonStyle(height: buttonHeight))
                 .padding(.trailing, 10)
             }
             .padding(.top, 10)
