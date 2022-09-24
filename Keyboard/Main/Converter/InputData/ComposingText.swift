@@ -506,11 +506,9 @@ extension ComposingText.InputElement: CustomDebugStringConvertible {
 
 extension ComposingText.InputElement: Equatable {}
 
-extension ComposingText {
-    subscript(range: ClosedRange<Int>) -> String {
-        self.input[range].reduce(into: ""){$0.append($1.character)}.toKatakana()
-    }
 
+// MARK: 誤り訂正用のAPI
+extension ComposingText {
     private func shouldBeRemovedForDicdataStore(components: [InputElement]) -> Bool {
         let input = ComposingText.getConvertTarget(for: components).toKatakana()
         if input.isEmpty {
@@ -570,9 +568,7 @@ extension ComposingText {
         debug("getRangeWithTypos", filtered)
         return filtered
     }
-}
 
-extension ComposingText {
     private static func getTypo(_ elements: some Collection<InputElement>) -> [[InputElement]] {
         let key = elements.reduce(into: "") {$0.append($1.character)}.toKatakana()
 
@@ -645,6 +641,7 @@ extension ComposingText {
     ]
 }
 
+// MARK: 差分計算用のAPI
 extension ComposingText {
     func differenceSuffix(to previousData: ComposingText) -> (deleted: Int, added: [InputElement]) {
         let common = self.input.commonPrefix(with: previousData.input)

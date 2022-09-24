@@ -184,7 +184,9 @@ final class DicdataStore {
     internal func getLOUDSData(inputData: ComposingText, from index: Int) -> [LatticeNode] {
         // ⏱0.426499 : 辞書読み込み_全体
         let toIndex = min(inputData.input.count, index + self.maxlength)
-        let segments = (index ..< toIndex).map {inputData[index...$0]}
+        let segments = (index ..< toIndex).map {
+            inputData.input[index...$0].reduce(into: ""){$0.append($1.character)}.toKatakana()
+        }
 
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
         // ⏱0.125108 : 辞書読み込み_誤り訂正候補列挙
@@ -271,7 +273,8 @@ final class DicdataStore {
     ///   - inputData: 入力データ
     ///   - to: 終点
     internal func getLOUDSData(inputData: ComposingText, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
-        let segment = inputData[fromIndex...toIndex]
+        let segment = inputData.input[fromIndex...toIndex].reduce(into: ""){$0.append($1.character)}.toKatakana()
+
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
 
