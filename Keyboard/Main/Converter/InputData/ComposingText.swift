@@ -347,26 +347,40 @@ extension ComposingText {
         // * (a|i|u|e|o:roman2kana) -> el                  // aka、のような場合、ka部分を正当とみなす
         // * (e-1:roman2kana and not n) && e-1 == es       // tta、のような場合、ta部分を正当とみなすが、nnaはだめ。
         // * (n:roman2kana) -> el && el not a|i|u|e|o|y|n  // nka、のような場合、ka部分を正当とみなすが、nnaはだめ。
-        // TODO: このルールは「zl」のような矢印入力を阻む可能性がある。対策として、矢印はダイレクト入力するようにしたい。
         guard let firstElement = partialElements.first else {
             return nil
         }
+        let string = partialElements.reduce(into: "") {$0.append($1.character)}
         checkIsStartValid: do {
             // 左端か、directなElementである場合
             guard leftIndex != originalElements.startIndex && firstElement.inputStyle == .roman2kana else {
                 break checkIsStartValid
             }
-            let prevLastElement = originalElements[leftIndex - 1]
-            if prevLastElement.inputStyle != .roman2kana {
+
+            // 句読点や矢印のエスケープ
+            if !string.containsRomanAlphabet {
                 break checkIsStartValid
             }
+            if ["zl", "zk", "zj", "zh"].contains(string) {
+                break checkIsStartValid
+            }
+
+            let prevLastElement = originalElements[leftIndex - 1]
+            if prevLastElement.inputStyle != .roman2kana || !prevLastElement.character.isRomanLetter {
+                break checkIsStartValid
+            }
+
             if ["a", "i", "u", "e", "o"].contains(prevLastElement.character) {
                 break checkIsStartValid
             }
-            if prevLastElement.character != "n" && prevLastElement.character.isRomanLetter && prevLastElement.character == firstElement.character {
+            if prevLastElement.character != "n" && prevLastElement.character == firstElement.character {
                 break checkIsStartValid
             }
-            let n_suffix = originalElements[0 ..< leftIndex - 1].suffix(where: {$0.inputStyle == .roman2kana && $0.character == "n"})
+            let last_2 = originalElements[0 ..< leftIndex].suffix(2)
+            if ["zl", "zk", "zj", "zh"].contains(last_2.reduce(into: "") {$0.append($1.character)}) {
+                break checkIsStartValid
+            }
+            let n_suffix = originalElements[0 ..< leftIndex].suffix(where: {$0.inputStyle == .roman2kana && $0.character == "n"})
             if n_suffix.count % 2 == 0 && n_suffix.count > 0 {
                 break checkIsStartValid
             }
@@ -396,14 +410,23 @@ extension ComposingText {
             if lastElement.inputStyle != .roman2kana {
                 break checkIsEndValid
             }
+
+            // 句読点や矢印のエスケープ
+            if !string.containsRomanAlphabet {
+                break checkIsEndValid
+            }
+            if ["zl", "zk", "zj", "zh"].contains(string) {
+                break checkIsEndValid
+            }
+
             let nextFirstElement = originalElements[rightIndex]
-            if nextFirstElement.inputStyle != .roman2kana {
+            if nextFirstElement.inputStyle != .roman2kana  || !nextFirstElement.character.isRomanLetter {
                 break checkIsEndValid
             }
             if ["a", "i", "u", "e", "o"].contains(lastElement.character) {
                 break checkIsEndValid
             }
-            if lastElement.character != "n" && lastElement.character.isRomanLetter && lastElement.character == nextFirstElement.character {
+            if lastElement.character != "n" && lastElement.character == nextFirstElement.character {
                 // partを書き換える
                 part.removeLast()
                 part.append(InputElement(character: "っ", inputStyle: .direct))
