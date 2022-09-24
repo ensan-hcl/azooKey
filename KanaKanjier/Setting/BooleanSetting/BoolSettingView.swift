@@ -14,11 +14,13 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
 
     var body: some View {
         Toggle(isOn: .init(get: {SettingKey.value}, set: {SettingKey.value = $0})) {
-            Text(SettingKey.title)
-            Button {
-                isOn = true
-            }label: {
-                Image(systemName: "info.circle")
+            HStack {
+                Text(SettingKey.title)
+                Button {
+                    isOn = true
+                }label: {
+                    Image(systemName: "questionmark.circle")
+                }
             }
         }
         .toggleStyle(.switch)

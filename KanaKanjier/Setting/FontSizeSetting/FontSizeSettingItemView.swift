@@ -33,9 +33,7 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
             Button {
                 isOn = true
             } label: {
-                HStack {
-                    Image(systemName: "info.circle")
-                }
+                Image(systemName: "questionmark.circle")
             }
             Spacer()
             let size = localValue == -1 ? SettingKey.defaultValue : localValue
