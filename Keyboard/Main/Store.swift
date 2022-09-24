@@ -992,6 +992,8 @@ private final class InputManager {
             return
         }
         // 過去のログを見て、再変換に利用する
+        // 再変換処理をもっと上手くやりたい
+        composingText.clear()
         if let element = self.getMatch(word: text) {
             _ = self.composingText.insertAtCursorPosition(element.ruby.toHiragana(), inputStyle: .direct)
         } else {
