@@ -23,13 +23,14 @@ extension Kana2Kanji {
     /// (5)ノードをアップデートした上で返却する。
 
     func kana2lattice_changed(_ inputData: InputData, N_best: Int, counts: (deleted: Int, added: Int), previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
+        debug("kana2lattice_changed", inputData, counts, previousResult.inputData)
         // (0)
-        let count = inputData.count
-        let commonCount = previousResult.inputData.count - counts.deleted
+        let count = inputData.input.count
+        let commonCount = previousResult.inputData.input.count - counts.deleted
 
         // (1)
         var nodes = previousResult.nodes.enumerated().map {(i: Int, nodes: [LatticeNode]) in
-            return nodes.filter {i + $0.rubyCount <= commonCount}
+            return nodes.filter {i + $0.convertTargetLength <= commonCount}
         }
         while nodes.last?.isEmpty ?? false {
             nodes.removeLast()
@@ -56,7 +57,7 @@ extension Kana2Kanji {
                     continue
                 }
                 // 変換した文字数
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 for nextnode in addedNodes[nextIndex] {
                     if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
                         continue
@@ -107,7 +108,7 @@ extension Kana2Kanji {
                     // valuesを更新する
                     node.values = node.prevs.map {$0.totalValue + wValue}
                 }
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 if count == nextIndex {
                     // 最後に至るので
                     for index in node.prevs.indices {

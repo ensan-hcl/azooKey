@@ -115,7 +115,6 @@ final class VariableStates: ObservableObject {
     }
 
     func setInputStyle(_ style: InputStyle) {
-        self.action.changeInputStyle(from: self.inputStyle, to: style)
         self.inputStyle = style
     }
 

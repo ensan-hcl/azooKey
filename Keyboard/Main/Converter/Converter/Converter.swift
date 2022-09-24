@@ -10,8 +10,9 @@ import Foundation
 import UIKit
 
 /// かな漢字変換の管理を受け持つクラス
-final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol> {
-    private var converter = Kana2Kanji<InputData, LatticeNode>()
+final class KanaKanjiConverter {
+    typealias InputData = ComposingText
+    private var converter = Kana2Kanji()
     private var checker = UITextChecker()
 
     // 前回の変換や確定の情報を取っておく部分。
@@ -26,38 +27,6 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         self.nodes = []
         self.completedData = nil
         self.lastData = nil
-    }
-
-    func translated(from conveter: KanaKanjiConverter<some InputDataProtocol, some LatticeNodeProtocol>) {
-        self.nodes = conveter.translateNodes()
-        self.previousInputData = conveter.previousInputData?.translated()
-    }
-
-    /// translationする関数
-    private func translateNodes<Node: LatticeNodeProtocol>() -> [[Node]] {
-        if let nodes = self.nodes as? [[Node]] {
-            return nodes
-        }
-        if let nodes = self.nodes as? [[DirectLatticeNode]] {
-            if RomanLatticeNode.self == Node.self {
-                return nodes.map {line in
-                    line.map {node in
-                        node.translated() as Node
-                    }
-                }
-            }
-        }
-        if let nodes = self.nodes as? [[RomanLatticeNode]] {
-            if DirectLatticeNode.self == Node.self {
-                return nodes.map {line in
-                    line.map {node in
-                        node.translated() as Node
-                    }
-                }
-            }
-        }
-
-        fatalError("Unknown pattern \(Node.self) \(LatticeNode.self)")
     }
 
     /// 上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
@@ -133,7 +102,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         switch language {
         case "en-US":
             var result: [Candidate] = []
-            let ruby = String(inputData.characters)
+            let ruby = String(inputData.input.map{$0.character})
             let range = NSRange(location: 0, length: ruby.utf16.count)
             if !ruby.onlyRomanAlphabet {
                 return result
@@ -144,7 +113,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: ruby.count,
                         lastMid: 501,
                         data: data
                     )
@@ -157,7 +126,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: ruby.count,
                         lastMid: 501,
                         data: data
                     )
@@ -168,7 +137,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             return result
         case "el":
             var result: [Candidate] = []
-            let ruby = String(inputData.characters)
+            let ruby = String(inputData.input.map{$0.character})
             let range = NSRange(location: 0, length: ruby.utf16.count)
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language) {
                 if !completions.isEmpty {
@@ -176,7 +145,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: ruby.count,
                         lastMid: 501,
                         data: data
                     )
@@ -189,7 +158,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: ruby.count,
                         lastMid: 501,
                         data: data
                     )
@@ -228,15 +197,15 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 newUnit.merge(with: oldlastPart.clause)     // マージする。
                 let newValue = lastUnit.value + oldlastPart.value
                 let newlastPart: CandidateData.ClausesUnit = (clause: newUnit, value: newValue)
-                let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: newlastPart.clause.ruby, lastRubyCount: newlastPart.clause.rubyCount, N_best: 5)
+                let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: newlastPart.clause.convertTarget, lastRubyCount: newlastPart.clause.convertTargetLength, N_best: 5)
                 candidates += predictions
                 lastpart = newlastPart
                 if !predictions.isEmpty {
                     count += 1
                 }
             } else {
-                let lastRuby = prepart.lastClause!.ruby
-                let lastRubyCount = prepart.lastClause!.rubyCount
+                let lastRuby = prepart.lastClause!.convertTarget
+                let lastRubyCount = prepart.lastClause!.convertTargetLength
                 lastpart = prepart.clauses.popLast()
                 let predictions = converter.getPredicitonCandidates(prepart: prepart, lastRuby: lastRuby, lastRubyCount: lastRubyCount, N_best: 5)
                 candidates += predictions
@@ -289,7 +258,8 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     ///   付加的な変換候補
     private func getAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
         var candidates: [Candidate] = []
-        let string = inputData.katakanaString
+        let string = inputData.convertTarget.toKatakana()
+        let correspondingCount = inputData.input.count
         do {
             // カタカナ
             let value = -14 * getKatakanaScore(string)
@@ -297,7 +267,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let katakana = Candidate(
                 text: string,
                 value: value,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -311,7 +281,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let hiragana = Candidate(
                 text: hiraganaString,
                 value: -14.5,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -324,7 +294,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let uppercasedLetter = Candidate(
                 text: word,
                 value: -14.6,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -338,7 +308,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let fullWidthLetter = Candidate(
                 text: word,
                 value: -14.7,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -352,7 +322,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             let halfWidthKatakana = Candidate(
                 text: word,
                 value: -15,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -394,7 +364,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
             return Candidate(
                 text: first.clause.text,
                 value: first.value,
-                correspondingCount: first.clause.rubyCount,
+                correspondingCount: first.clause.convertTargetLength,
                 lastMid: first.clause.mid,
                 data: Array(candidateData.data[0...count])
             )
@@ -438,7 +408,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
                 Candidate(
                     text: $0.data.word,
                     value: $0.data.value(),
-                    correspondingCount: $0.rubyCount,
+                    correspondingCount: $0.convertTargetLength,
                     lastMid: $0.data.mid,
                     data: [$0.data]
                 )
@@ -465,7 +435,7 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
         var result = Array(full_candidate)
 
         // 最低でも1つ、入力に完全一致する候補が入るようにする
-        let checkRuby: (Candidate) -> Bool = {$0.data.reduce("") {$0 + $1.ruby} == inputData.katakanaString}
+        let checkRuby: (Candidate) -> Bool = {$0.data.reduce("") {$0 + $1.ruby} == inputData.convertTarget.toKatakana()}
         if !result.contains(where: checkRuby) {
             if let candidate = sentence_candidates.first(where: checkRuby) {
                 result.append(candidate)
@@ -492,46 +462,51 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     /// - Returns:
     ///   結果のラティスノードと、計算済みノードの全体
     private func convertToLattice(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]])? {
-        if inputData.characters.isEmpty {
+        if inputData.convertTarget.isEmpty {
             return nil
         }
 
-        guard let previousInputData = self.previousInputData else {
+        guard let previousInputData else {
             debug("convertToLattice: 新規計算用の関数を呼びますA")
             let result = converter.kana2lattice_all(inputData, N_best: N_best)
             self.previousInputData = inputData
             return result
         }
 
+        // TODO: 完全に同一のデータの場合のケースを追加する
+        debug("convertToLattice: before \(previousInputData) after \(inputData)")
+
         // 文節確定の後の場合
-        if let lastClause = self.completedData, let _ = inputData.isAfterDeletedPrefixCharacter(previous: previousInputData) {
-            debug("convertToLattice: 文節確定用の関数を呼びます")
-            let result = converter.kana2lattice_afterComplete(inputData, completedData: lastClause, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
+        if let completedData, previousInputData.inputHasSuffix(inputOf: inputData) {
+            debug("convertToLattice: 文節確定用の関数を呼びます、確定された文節は\(completedData)")
+            let result = converter.kana2lattice_afterComplete(inputData, completedData: completedData, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             self.completedData = nil
             return result
         }
 
+        let diff = inputData.differenceSuffix(to: previousInputData)
+
         // 一文字消した場合
-        if let deletedCount = inputData.isAfterDeletedCharacter(previous: previousInputData) {
-            debug("convertToLattice: 最後尾削除用の関数を呼びます, 消した文字数は\(deletedCount)")
-            let result = converter.kana2lattice_deletedLast(deletedCount: deletedCount, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
+        if diff.deleted > 0 && diff.added.isEmpty {
+            debug("convertToLattice: 最後尾削除用の関数を呼びます, 消した文字数は\(diff.deleted)")
+            let result = converter.kana2lattice_deletedLast(deletedCount: diff.deleted, N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
         }
 
         // 一文字変わった場合
-        if let counts = inputData.isAfterReplacedCharacter(previous: previousInputData) {
-            debug("convertToLattice: 最後尾文字置換用の関数を呼びますA")
-            let result = converter.kana2lattice_changed(inputData, N_best: N_best, counts: counts, previousResult: (inputData: previousInputData, nodes: nodes))
+        if diff.deleted > 0 {
+            debug("convertToLattice: 最後尾文字置換用の関数を呼びます、差分は\(diff)")
+            let result = converter.kana2lattice_changed(inputData, N_best: N_best, counts: (diff.deleted, diff.added.count), previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
         }
 
         // 1文字増やした場合
-        if let addedCount = inputData.isAfterAddedCharacter(previous: previousInputData) {
-            debug("convertToLattice: 最後尾追加用の関数を呼びます")
-            let result = converter.kana2lattice_added(inputData, N_best: N_best, addedCount: addedCount, previousResult: (inputData: previousInputData, nodes: nodes))
+        if diff.deleted == 0 && !diff.added.isEmpty {
+            debug("convertToLattice: 最後尾追加用の関数を呼びます、追加文字は\(diff.added)")
+            let result = converter.kana2lattice_added(inputData, N_best: N_best, addedCount: diff.added.count, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
             return result
         }
@@ -565,9 +540,9 @@ final class KanaKanjiConverter<InputData: InputDataProtocol, LatticeNode: Lattic
     /// - Returns:
     ///   重複のない変換候補。
     func requestCandidates(_ inputData: InputData, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
-        debug("入力は", inputData.characters)
-        // stringが無の場合
-        if inputData.characters.isEmpty {
+        debug("requestCandidates 入力は", inputData)
+        // 変換対象が無の場合
+        if inputData.convertTarget.isEmpty {
             return (.init(), .init())
         }
         let start1 = Date()

@@ -30,13 +30,13 @@ extension KanaKanjiConverter {
     /// - note:
     ///    現在英字のみ。ギリシャ文字や数字に対応する必要あり。
     func typographicalCandidates(_ inputData: InputData) -> [Candidate] {
-        let string = inputData.katakanaString
+        let string = inputData.convertTarget.toKatakana()
         let strings = self.typographicalLetters(from: string)
         return strings.map {
             Candidate(
                 text: $0,
                 value: -15,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: inputData.input.count,
                 lastMid: 501,
                 data: [DicdataElement(word: $0, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)]
             )

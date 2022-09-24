@@ -181,11 +181,12 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - from: 起点
-    internal func getLOUDSData<LatticeNode: LatticeNodeProtocol>(inputData: some InputDataProtocol, from index: Int) -> [LatticeNode] {
+    internal func getLOUDSData(inputData: ComposingText, from index: Int) -> [LatticeNode] {
         // ⏱0.426499 : 辞書読み込み_全体
-        let toIndex = min(inputData.count, index + self.maxlength)
-        let segments = (index ..< toIndex).map {inputData[index...$0]}
-
+        let toIndex = min(inputData.input.count, index + self.maxlength)
+        let segments = (index ..< toIndex).reduce(into: []) { (segments: inout [String], rightIndex: Int) in
+            segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character).toKatakana())
+        }
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
         // ⏱0.125108 : 辞書読み込み_誤り訂正候補列挙
         var string2segment = [String: Int].init()
@@ -256,7 +257,7 @@ final class DicdataStore {
         if index == .zero {
             let result: [LatticeNode] = dicdata.map {
                 let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]], rubyCount: nil)
-                node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
+                node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
@@ -270,8 +271,9 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - to: 終点
-    internal func getLOUDSData<LatticeNode: LatticeNodeProtocol>(inputData: some InputDataProtocol, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
-        let segment = inputData[fromIndex...toIndex]
+    internal func getLOUDSData(inputData: ComposingText, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
+        let segment = inputData.input[fromIndex...toIndex].reduce(into: ""){$0.append($1.character)}.toKatakana()
+
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
 
@@ -308,13 +310,13 @@ final class DicdataStore {
             dicdata.append(contentsOf: result)
         }
 
-        dicdata.append(contentsOf: self.getWiseDicdata(head: segment, allowRomanLetter: toIndex == inputData.count - 1))
+        dicdata.append(contentsOf: self.getWiseDicdata(head: segment, allowRomanLetter: toIndex == inputData.input.count - 1))
         dicdata.append(contentsOf: self.getMatch(segment))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
                 let node = LatticeNode(data: $0, romanString: segment, rubyCount: nil)
-                node.prevs.append(LatticeNode.RegisteredNode.BOSNode())
+                node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result

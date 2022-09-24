@@ -14,8 +14,8 @@ extension Kana2Kanji {
     ///
     /// (2)次に、再度計算して良い候補を得る。
     func kana2lattice_afterComplete(_ inputData: InputData, completedData: Candidate, N_best: Int, previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
-        debug("確定直後の変換、元の文字は：", previousResult.inputData.characters, "新しい文字は：", inputData.characters)
-        let count = inputData.count
+        debug("確定直後の変換、前は：", previousResult.inputData, "後は：", inputData)
+        let count = inputData.input.count
         // (1)
         let start = RegisteredNode.fromLastCandidate(completedData)
         let nodes: Nodes = previousResult.nodes.suffix(count)
@@ -51,7 +51,7 @@ extension Kana2Kanji {
                     node.values = node.prevs.map {$0.totalValue + wValue}
                 }
                 // 変換した文字数
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 // 文字数がcountと等しくない場合は先に進む
                 if nextIndex != count {
                     for nextnode in nodes[nextIndex] {

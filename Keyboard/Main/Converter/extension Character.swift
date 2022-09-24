@@ -25,6 +25,11 @@ extension Character {
         return Character.kogakiKana.contains(self)
     }
 
+    /// ローマ字(a-z, A-Zか否か)
+    var isRomanLetter: Bool {
+        return self.isASCII && self.isCased
+    }
+
     /// 自分が小書きであれば該当する文字を返す。
     var kogaki: Character {
         switch self {

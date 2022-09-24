@@ -27,17 +27,17 @@ extension Kana2Kanji {
     ///
     /// (4)ノードをアップデートした上で返却する。
     func kana2lattice_added(_ inputData: InputData, N_best: Int, addedCount: Int, previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
-        debug("\(addedCount)文字追加。追加されたのは「\(inputData.characters.suffix(addedCount))」")
+        debug("\(addedCount)文字追加。追加されたのは「\(inputData.input.suffix(addedCount))」")
         if addedCount == 1 {
             return kana2lattice_addedLast(inputData, N_best: N_best, previousResult: previousResult)
         }
         // (0)
         var nodes = previousResult.nodes
-        let count = inputData.count
+        let count = inputData.input.count
 
         // (1)
         let addedNodes: [[LatticeNode]] = ( .zero ..< count).map {(i: Int) in
-            (previousResult.inputData.count ..< max(previousResult.inputData.count, min(count, i+self.dicdataStore.maxlength+1))).flatMap {j -> [LatticeNode] in
+            (previousResult.inputData.input.count ..< max(previousResult.inputData.input.count, min(count, i+self.dicdataStore.maxlength+1))).flatMap {j -> [LatticeNode] in
                 if j<i {
                     return []
                 }
@@ -55,7 +55,7 @@ extension Kana2Kanji {
                     continue
                 }
                 // 変換した文字数
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 for nextnode in addedNodes[nextIndex] {
                     // この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                     if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
@@ -107,7 +107,7 @@ extension Kana2Kanji {
                     node.values = node.prevs.map {$0.totalValue + wValue}
                 }
                 // 変換した文字数
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 if count == nextIndex {
                     // 最後に至るので
                     for index in node.prevs.indices {

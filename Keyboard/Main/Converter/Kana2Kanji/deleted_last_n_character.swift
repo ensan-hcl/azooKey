@@ -25,8 +25,8 @@ extension Kana2Kanji {
     /// (2)次に、返却用ノードを計算する。文字数が超過するものはfilterで除去する。
 
     func kana2lattice_deletedLast(deletedCount: Int, N_best: Int, previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
-        debug("削除の連続性を利用した変換、元の文字は：", previousResult.inputData.katakanaString)
-        let count = previousResult.inputData.count-deletedCount
+        debug("削除の連続性を利用した変換、元の文字は：", previousResult.inputData.convertTarget)
+        let count = previousResult.inputData.input.count-deletedCount
         // (1)
         let result = LatticeNode.EOSNode
 
@@ -38,7 +38,7 @@ extension Kana2Kanji {
                 if self.dicdataStore.shouldBeRemoved(data: node.data) {
                     continue
                 }
-                let nextIndex = node.rubyCount + i
+                let nextIndex = node.convertTargetLength + i
                 if nextIndex == count {
                     // 変換した文字数
                     for (index, value) in node.values.enumerated() {
@@ -51,7 +51,7 @@ extension Kana2Kanji {
 
         // (2)
         let updatedNodes = previousResult.nodes.enumerated().prefix(count).map {(i: Int, nodeArray: [LatticeNode]) in
-            return nodeArray.filter {i + $0.rubyCount <= count}
+            return nodeArray.filter {i + $0.convertTargetLength <= count}
         }
         return (result: result, nodes: updatedNodes)
     }

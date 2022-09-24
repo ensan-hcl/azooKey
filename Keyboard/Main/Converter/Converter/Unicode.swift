@@ -13,7 +13,7 @@ extension KanaKanjiConverter {
     /// - parameters:
     func unicode(_ inputData: InputData) -> [Candidate] {
         let value0: PValue = -10
-        let string = inputData.katakanaString
+        let string = inputData.convertTarget.toKatakana()
         if string.count < 5 {
             return []
         }
@@ -24,7 +24,7 @@ extension KanaKanjiConverter {
                     Candidate(
                         text: char,
                         value: value0,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: inputData.input.count,
                         lastMid: 500,
                         data: [DicdataElement(word: char, ruby: string, cid: .zero, mid: 500, value: value0)]
                     )

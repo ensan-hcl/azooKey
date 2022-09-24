@@ -10,9 +10,8 @@ import Foundation
 import UIKit
 typealias PValue = Float16
 
-struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol> {
-    typealias RegisteredNode = LatticeNode.RegisteredNode
-
+struct Kana2Kanji {
+    typealias InputData = ComposingText
     let ccBonusUnit = 5
     var dicdataStore = DicdataStore()
 
@@ -33,7 +32,7 @@ struct Kana2Kanji<InputData: InputDataProtocol, LatticeNode: LatticeNodeProtocol
         let text = data.clauses.map {$0.clause.text}.joined()
         let value = data.clauses.last!.value + mmValue.value
         let lastMid = data.clauses.last!.clause.mid
-        let correspondingCount = data.clauses.map {$0.clause.rubyCount}.reduce(0, +)
+        let correspondingCount = data.clauses.map {$0.clause.convertTargetLength}.reduce(0, +)
         return Candidate(
             text: text,
             value: value,

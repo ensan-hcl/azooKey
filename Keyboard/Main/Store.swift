@@ -154,7 +154,7 @@ final class KeyboardActionDepartment: ActionDepartment {
 
         case .saveSelectedTextIfNeeded:
             if self.inputManager.isSelected {
-                self.tempSavedSelectedText = self.inputManager.inputtedText
+                self.tempSavedSelectedText = self.inputManager.composingText.convertTarget
             }
         case .restoreSelectedTextIfNeeded:
             if let tmp = self.tempSavedSelectedText {
@@ -230,10 +230,6 @@ final class KeyboardActionDepartment: ActionDepartment {
             }
         #endif
         }
-    }
-
-    override func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
-        self.inputManager.changeInputStyle(from: beforeStyle, to: afterStyle)
     }
 
     /// 押した場合に行われる。
@@ -419,20 +415,11 @@ final class KeyboardActionDepartment: ActionDepartment {
 private final class InputManager {
     fileprivate var proxy: UITextDocumentProxy!
 
-    // 現在入力中の文字
-    fileprivate var inputtedText: String = ""
-    private var kanaRomanStateHolder = KanaRomanStateHolder()
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
     fileprivate var isSelected = false
-    // 現在のカーソル位置。カーソル左側の文字数に等しい
-    private var cursorPosition = 0
-    // カーソルの取りうる最小位置。
-    private let cursorMinimumPosition: Int = 0
-    /// カーソルの動ける最大範囲。`inputtedText`の文字数に等しい。
-    private var cursorMaximumPosition: Int {
-        return inputtedText.count
-    }
     private var afterAdjusted: Bool = false
+
+    private(set) var composingText = ComposingText()
     fileprivate var liveConversionManager = LiveConversionManager()
     private var liveConversionEnabled: Bool {
         return liveConversionManager.enabled && !self.isSelected
@@ -450,65 +437,15 @@ private final class InputManager {
         return candidatesLog.last(where: {$0.word == word})
     }
 
-    private typealias RomanConverter = KanaKanjiConverter<RomanInputData, RomanLatticeNode>
-    private typealias DirectConverter = KanaKanjiConverter<DirectInputData, DirectLatticeNode>
     /// かな漢字変換を受け持つ変換器。
-    private var _romanConverter: RomanConverter?
-    private var _directConverter: DirectConverter?
-
-    private var romanConverter: RomanConverter {
-        self._directConverter = nil
-        if let romanConverter = self._romanConverter {
-            return romanConverter
-        }
-        self._romanConverter = RomanConverter()
-        return self._romanConverter!
-    }
-
-    private var directConverter: DirectConverter {
-        self._romanConverter = nil
-        if let flickConverter = self._directConverter {
-            return flickConverter
-        }
-        self._directConverter = DirectConverter()
-        return self._directConverter!
-    }
-
-    func changeInputStyle(from beforeStyle: InputStyle, to afterStyle: InputStyle) {
-        switch (beforeStyle, afterStyle) {
-        case (.direct, .roman2kana):
-            let stateHolder = KanaRomanStateHolder(components: [KanaComponent(internalText: self.inputtedText, kana: self.inputtedText, isFreezed: true, escapeRomanKanaConverting: true)])
-            self.kanaRomanStateHolder = stateHolder
-            let converter = RomanConverter()
-            converter.translated(from: self.directConverter)
-            self._romanConverter = converter
-            self._directConverter = nil
-        case (.roman2kana, .direct):
-            let converter = DirectConverter()
-            converter.translated(from: self.romanConverter)
-            self._directConverter = converter
-            self._romanConverter = nil
-        default:
-            return
-        }
-    }
+    private var kanaKanjiConverter = KanaKanjiConverter()
 
     func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
-        self._romanConverter?.sendToDicdataStore(data)
-        self._directConverter?.sendToDicdataStore(data)
+        self.kanaKanjiConverter.sendToDicdataStore(data)
     }
 
     fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
         self.proxy = proxy
-    }
-
-    private var isRomanKanaInputMode: Bool {
-        switch VariableStates.shared.inputStyle {
-        case .direct:
-            return false
-        case .roman2kana:
-            return true
-        }
     }
 
     func isAfterAdjusted() -> Bool {
@@ -523,13 +460,12 @@ private final class InputManager {
     fileprivate func complete(candidate: Candidate) {
         self.updateLog(candidate: candidate)
         // カーソルから左の入力部分を削除し、変換後の文字列+残りの文字列を後で入力し直す
-        let leftsideInputedText = self.inputtedText.prefix(self.cursorPosition)
         let count: Int
         if liveConversionEnabled {
-            // cursorPositionは変換前の「キョウノテンキ|」のような文字列における位置を示すが、ライブ変換中は「今日の天気|」のような状態になっている。そこでその場合には「今日の天気|」の方の長さを使って削除を実行する。
-            count = self.liveConversionManager.lastUsedCandidate?.text.count ?? self.cursorPosition
+            // composingText.convertTargetCursorPositionは変換前の「キョウノテンキ|」のような文字列における位置を示すが、ライブ変換中は「今日の天気|」のような状態になっている。そこでその場合には「今日の天気|」の方の長さを使って削除を実行する。
+            count = self.liveConversionManager.lastUsedCandidate?.text.count ?? self.composingText.convertTargetCursorPosition
         } else {
-            count = self.cursorPosition
+            count = self.composingText.convertTargetCursorPosition
         }
         debug("complete: ", count, self.liveConversionManager.lastUsedCandidate)
         if !self.isSelected {
@@ -539,43 +475,28 @@ private final class InputManager {
         }
         self.isSelected = false
 
-        switch VariableStates.shared.inputStyle {
-        case .direct:
-            print("complete:", candidate, inputtedText, cursorPosition)
-            self.directConverter.updateLearningData(candidate)
-            self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(candidate.correspondingCount))
-            if candidate.correspondingCount == inputtedText.count {
-                self.clear()
-                VariableStates.shared.setEnterKeyState(.return)
-                return
-            }
-            self.cursorPosition -= candidate.correspondingCount
-            self.inputtedText.removeFirst(candidate.correspondingCount)
-            self.directConverter.setCompletedData(candidate)
-        case .roman2kana:
-            self.romanConverter.updateLearningData(candidate)
-            let displayedTextCount = self.kanaRomanStateHolder.complete(candidate.correspondingCount)
-            self.proxy.insertText(candidate.text + leftsideInputedText.dropFirst(displayedTextCount))
-            if self.kanaRomanStateHolder.components.isEmpty {
-                self.clear()
-                VariableStates.shared.setEnterKeyState(.return)
-                return
-            }
-            self.cursorPosition -= displayedTextCount
-            self.inputtedText.removeFirst(displayedTextCount)
-            self.romanConverter.setCompletedData(candidate)
+        debug("complete:", candidate, composingText)
+        self.kanaKanjiConverter.updateLearningData(candidate)
+        self.composingText.complete(correspondingCount: candidate.correspondingCount)
+        self.proxy.insertText(candidate.text + self.composingText.convertTargetBeforeCursor)
+        if self.composingText.convertTarget.isEmpty {
+            self.clear()
+            VariableStates.shared.setEnterKeyState(.return)
+            return
         }
+        self.kanaKanjiConverter.setCompletedData(candidate)
+
         if liveConversionEnabled {
-            if self.inputtedText.isEmpty {
+            if self.composingText.convertTarget.isEmpty {
                 self.liveConversionManager.setLastUsedCandidate(nil)
             } else  {
                 self.liveConversionManager.updateAfterFirstClauseCompletion()
             }
         }
-        if self.cursorPosition == 0 {
-            self.cursorPosition = self.cursorMaximumPosition
-            // 入力の直後、documentContextAfterInputは間違っていることがあるため、ここではoffsetをinputtedTextから直接計算する。
-            let offset = inputtedText.utf16.count
+        if self.composingText.isAtStartIndex {
+            self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count)
+            // 入力の直後、documentContextAfterInputは間違っていることがあるため、ここではoffsetをcomposingTextから直接計算する。
+            let offset = self.composingText.convertTarget.utf16.count
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
             self.afterAdjusted = true
         }
@@ -584,53 +505,39 @@ private final class InputManager {
 
     fileprivate func clear() {
         debug("クリアしました")
-        self.inputtedText = ""
-        self.cursorPosition = self.cursorMinimumPosition
+        self.composingText.clear()
         self.isSelected = false
         self.liveConversionManager.clear()
         self.setResult()
-        self.kanaRomanStateHolder = KanaRomanStateHolder()
-        self._romanConverter?.clear()
-        self._directConverter?.clear()
+        self.kanaKanjiConverter.clear()
         VariableStates.shared.setEnterKeyState(.return)
     }
 
     fileprivate func closeKeyboard() {
         debug("キーボードを閉じます")
         self.sendToDicdataStore(.closeKeyboard)
-        self._romanConverter = nil
-        self._directConverter = nil
         self.clear()
     }
 
     // MARK: 単純に確定した場合はひらがな列に対して候補を作成する
     fileprivate func enter() -> [ActionType] {
         var _candidate = Candidate(
-            text: self.inputtedText,
+            text: self.composingText.convertTarget,
             value: -18,
-            correspondingCount: self.inputtedText.count,
+            correspondingCount: self.composingText.input.count,
             lastMid: 501,
             data: [
-                DicdataElement(ruby: self.inputtedText, cid: CIDData.固有名詞.cid, mid: 501, value: -18)
+                DicdataElement(ruby: self.composingText.convertTarget.toKatakana(), cid: CIDData.固有名詞.cid, mid: 501, value: -18)
             ]
         )
         if liveConversionEnabled, let candidate = liveConversionManager.lastUsedCandidate {
             _candidate = candidate
         }
         self.updateLog(candidate: _candidate)
-        let actions: [ActionType]
-        switch VariableStates.shared.inputStyle {
-        case .direct:
-            actions = self.directConverter.getApporopriateActions(_candidate)
-            _candidate.withActions(actions)
-            _candidate.parseTemplate()
-            self.directConverter.updateLearningData(_candidate)
-        case .roman2kana:
-            actions = self.romanConverter.getApporopriateActions(_candidate)
-            _candidate.withActions(actions)
-            _candidate.parseTemplate()
-            self.romanConverter.updateLearningData(_candidate)
-        }
+        let actions = self.kanaKanjiConverter.getApporopriateActions(_candidate)
+        _candidate.withActions(actions)
+        _candidate.parseTemplate()
+        self.kanaKanjiConverter.updateLearningData(_candidate)
         self.clear()
         return actions
     }
@@ -640,21 +547,11 @@ private final class InputManager {
         if self.isSelected {
             // 選択は解除される
             self.isSelected = false
+            // composingTextをクリアする
+            self.composingText.clear()
+            // キーボードの状態と無関係にdirectに設定し、入力をそのまま持たせる
+            let _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
 
-            self.inputtedText = text
-            self.kanaRomanStateHolder = KanaRomanStateHolder()
-            switch VariableStates.shared.inputStyle {
-            case .direct:
-                break
-            case .roman2kana:
-                if isRomanKanaInputMode {
-                    kanaRomanStateHolder.insert(text, leftSideText: "")
-                } else {
-                    kanaRomanStateHolder.insert(text, leftSideText: "", isFreezed: true)
-                }
-            }
-
-            self.cursorPosition = self.cursorMaximumPosition
             // 実際に入力する
             self.proxy.insertText(text)
             setResult()
@@ -681,33 +578,13 @@ private final class InputManager {
             return
         }
 
-        // 選択されていない場合
-
-        let leftSideText = inputtedText.prefix(cursorPosition)
-        let rightSideText = inputtedText.dropFirst(cursorPosition)
-
-        switch VariableStates.shared.inputStyle {
-        case .direct:
-            self.inputtedText = leftSideText + text + rightSideText
-            self.proxy.insertText(text)
-            self.cursorPosition += text.count
-
-        case .roman2kana:
-            if isRomanKanaInputMode {
-                let roman2hiragana = kanaRomanStateHolder.insert(text, leftSideText: leftSideText)
-                self.inputtedText = roman2hiragana.result + rightSideText
-                (0..<max(0, roman2hiragana.delete)).forEach {_ in
-                    self.proxy.deleteBackward()
-                }
-                self.proxy.insertText(roman2hiragana.input)
-                self.cursorPosition += roman2hiragana.input.count - roman2hiragana.delete
-            } else {
-                kanaRomanStateHolder.insert(text, leftSideText: leftSideText, isFreezed: true)
-                self.inputtedText = leftSideText + text + rightSideText
-                self.proxy.insertText(text)
-                self.cursorPosition += text.count
-            }
+        let operation = self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
+        for _ in 0 ..< operation.delete {
+            self.proxy.deleteBackward()
         }
+        self.proxy.insertText(operation.input)
+
+        debug("Input Manager input: ", composingText)
 
         VariableStates.shared.setEnterKeyState(.complete)
 
@@ -721,30 +598,28 @@ private final class InputManager {
             return
         }
 
-        if self.inputtedText.isEmpty {
+        if self.composingText.convertTarget.isEmpty {
             self.proxy.deleteForward(count: count)
             return
         }
 
         // 一番右端にいるときは削除させない
-        if !self.inputtedText.isEmpty && self.cursorPosition == self.cursorMaximumPosition {
+        if !self.composingText.isEmpty && self.composingText.isAtEndIndex {
             return
         }
+
+
+        self.composingText.moveCursorFromCursorPosition(count: count)
+        self.composingText.backspaceFromCursorPosition(count: count)
+        debug("Input Manager deleteForward: ", composingText)
         // 削除を実行する
         self.proxy.deleteForward(count: count)
-        if VariableStates.shared.inputStyle == .roman2kana {
-            // ステートホルダーを調整する
-            self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition+count))
-        }
-        let leftSideText = self.inputtedText.prefix(max(0, self.cursorPosition))
-        let rightSideText = self.inputtedText.suffix(self.cursorMaximumPosition - self.cursorPosition - count)
-        self.inputtedText = String(leftSideText + rightSideText)
 
         if requireSetResult {
             setResult()
         }
 
-        if self.inputtedText.isEmpty {
+        if self.composingText.isEmpty {
             VariableStates.shared.setEnterKeyState(.return)
         }
     }
@@ -767,25 +642,20 @@ private final class InputManager {
             return
         }
         // 一番左端にいるときは削除させない
-        if !self.inputtedText.isEmpty && self.cursorPosition == self.cursorMinimumPosition {
+        if !self.composingText.isEmpty && self.composingText.isAtStartIndex {
             return
         }
+
+        self.composingText.backspaceFromCursorPosition(count: count)
+        debug("Input Manager deleteBackword: ", composingText)
         // 削除を実行する
         self.proxy.deleteBackward(count: count)
-        if VariableStates.shared.inputStyle == .roman2kana {
-            // ステートホルダーを調整する
-            self.kanaRomanStateHolder.delete(kanaCount: count, leftSideText: self.inputtedText.prefix(self.cursorPosition))
-        }
-        let leftSideText = self.inputtedText.prefix(max(0, self.cursorPosition-count))
-        let rightSideText = self.inputtedText.suffix(self.cursorMaximumPosition - self.cursorPosition)
-        self.inputtedText = String(leftSideText + rightSideText)
-        // 消せる文字がなかった場合、0未満になってしまうので
-        self.cursorPosition = max(self.cursorMinimumPosition, self.cursorPosition - count)
+
         if requireSetResult {
             setResult()
         }
 
-        if self.inputtedText.isEmpty {
+        if self.composingText.isEmpty {
             VariableStates.shared.setEnterKeyState(.return)
         }
     }
@@ -799,20 +669,22 @@ private final class InputManager {
             return
         }
         // 入力中の場合
-        if !self.inputtedText.isEmpty {
-            let leftSideText = self.inputtedText.prefix(self.cursorPosition)
-            self.inputtedText.removeFirst(self.cursorPosition)
-            self.cursorPosition = 0
-            self.kanaRomanStateHolder.delete(kanaCount: leftSideText.count, leftSideText: leftSideText)
+        if !self.composingText.isEmpty {
             // 削除を実行する
+            let leftSideText = self.composingText.convertTargetBeforeCursor
+
             if liveConversionEnabled {
                 self.proxy.deleteBackward(count: self.liveConversionManager.lastUsedCandidate?.text.count ?? leftSideText.count)
             } else {
                 self.proxy.deleteBackward(count: leftSideText.count)
             }
-            self.moveCursor(count: self.cursorMaximumPosition)
+            // カーソルより前を全部消す
+            self.composingText.backspaceFromCursorPosition(count: self.composingText.convertTargetCursorPosition)
+
+            // カーソルを先頭に移動する
+            self.moveCursor(count: self.composingText.convertTarget.count)
             // 文字がもうなかった場合
-            if self.inputtedText.isEmpty {
+            if self.composingText.isEmpty {
                 self.clear()
                 return
             }
@@ -835,6 +707,7 @@ private final class InputManager {
     }
 
     /// テキストの進行方向に、特定の文字まで削除する
+    /// 入力中はカーソルから右側を全部消す
     fileprivate func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
         // 選択状態ではオール削除になる
         if self.isSelected {
@@ -843,13 +716,16 @@ private final class InputManager {
             return
         }
         // 入力中の場合
-        if !self.inputtedText.isEmpty {
-            let count = cursorMaximumPosition - cursorPosition
-            self.inputtedText.removeLast(count)
+        if !self.composingText.isEmpty {
+            let count = self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition
+
+            self.composingText.moveCursorFromCursorPosition(count: count)
+            self.composingText.backspaceFromCursorPosition(count: count)
+
             self.proxy.moveCursor(count: count)
             self.proxy.deleteBackward(count: count)
             // 文字がもうなかった場合
-            if inputtedText.isEmpty {
+            if self.composingText.isEmpty {
                 clear()
                 setResult()
             }
@@ -874,15 +750,14 @@ private final class InputManager {
     fileprivate func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
         // 選択状態では最も左にカーソルを移動
         if isSelected {
-            let count = cursorPosition
             deselect()
-            moveCursor(count: -count)
+            self.composingText.moveCursorFromCursorPosition(count: -self.composingText.convertTargetCursorPosition)
             setResult()
             return
         }
         // 入力中の場合
-        if !inputtedText.isEmpty {
-            moveCursor(count: -cursorPosition)
+        if !composingText.isEmpty {
+            self.composingText.moveCursorFromCursorPosition(count: -self.composingText.convertTargetCursorPosition)
             setResult()
             return
         }
@@ -906,13 +781,13 @@ private final class InputManager {
         // 選択状態では最も左にカーソルを移動
         if isSelected {
             deselect()
-            moveCursor(count: cursorMaximumPosition - cursorPosition)
+            self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
             setResult()
             return
         }
         // 入力中の場合
-        if !inputtedText.isEmpty {
-            moveCursor(count: cursorMaximumPosition - cursorPosition)
+        if !composingText.isEmpty {
+            self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
             setResult()
             return
         }
@@ -943,7 +818,7 @@ private final class InputManager {
     /// 選択状態にあるテキストを再度入力し、編集可能な状態にする
     fileprivate func edit() {
         if isSelected {
-            let selectedText = inputtedText
+            let selectedText = composingText.convertTarget
             deleteBackward(count: 1)
             input(text: selectedText)
             VariableStates.shared.setEnterKeyState(.complete)
@@ -954,7 +829,7 @@ private final class InputManager {
     /// `changeCharacter`を`CustardKit`で扱うためのAPI。
     /// キーボード経由でのみ実行される。
     fileprivate func replaceLastCharacters(table: [String: String]) {
-        debug(table, inputtedText, isSelected)
+        debug(table, composingText, isSelected)
         if isSelected {
             return
         }
@@ -963,12 +838,12 @@ private final class InputManager {
             $0.min = min($0.min, $1.count)
         }
         // 入力状態の場合、入力中のテキストの範囲でreplaceを実施する。
-        if !inputtedText.isEmpty {
-            let leftside = inputtedText.prefix(cursorPosition)
-            for count in (counts.min...counts.max).reversed() where count <= cursorPosition {
+        if !composingText.isEmpty {
+            let leftside = composingText.convertTargetBeforeCursor
+            for count in (counts.min...counts.max).reversed() where count <= composingText.convertTargetCursorPosition {
                 if let replace = table[String(leftside.suffix(count))] {
                     // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
-                    self.deleteBackward(count: count, requireSetResult: false)
+                    self.deleteBackward(count: leftside.suffix(count).count, requireSetResult: false)
                     // ここで変換が行われる。内部的には差分管理システムによって「置換」の場合のキャッシュ変換が呼ばれる。
                     self.input(text: replace)
                     break
@@ -995,7 +870,7 @@ private final class InputManager {
         if self.isSelected {
             return
         }
-        guard let char = self.inputtedText.prefix(self.cursorPosition).last else {
+        guard let char = self.composingText.convertTargetBeforeCursor.last else {
             return
         }
         let changed = char.requestChange()
@@ -1021,63 +896,60 @@ private final class InputManager {
         // カーソルを移動した直後、挙動が不安定であるためにafterAdjustedを使う
         afterAdjusted = true
         // 入力中の文字が空の場合は普通に動かす
-        if inputtedText.isEmpty {
+        if composingText.isEmpty {
             proxy.moveCursor(count: count)
             return
         }
-        debug("moveCursor, cursorPosition:", cursorPosition, count)
+        debug("Input Manager moveCursor:", composingText, count)
         // カーソル位置の正規化
         // 動かしすぎないようにする
-        if cursorPosition + count > cursorMaximumPosition {
-            proxy.moveCursor(count: cursorMaximumPosition - cursorPosition)
-            cursorPosition = cursorMaximumPosition
-            setResult()
-            return
+        var count = count
+        if composingText.convertTargetCursorPosition + count > composingText.convertTarget.count {
+            count = composingText.convertTarget.count - composingText.convertTargetCursorPosition
+        } else if composingText.convertTargetCursorPosition + count < 0 {
+            count = 0 - composingText.convertTargetCursorPosition
         }
-        if  cursorPosition + count < cursorMinimumPosition {
-            proxy.moveCursor(count: cursorMinimumPosition - cursorPosition)
-            cursorPosition = cursorMinimumPosition
-            setResult()
-            return
-        }
-
+        composingText.moveCursorFromCursorPosition(count: count)
         proxy.moveCursor(count: count)
-        cursorPosition += count
-        setResult()
+        if count != 0 {
+            setResult()
+        }
     }
 
     // MARK: userが勝手にカーソルを何かした場合の後処理
     fileprivate func userMovedCursor(count: Int) {
-        debug("userによるカーソル移動を検知、今の位置は\(cursorPosition)、動かしたオフセットは\(count)")
-        if inputtedText.isEmpty {
+        debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
+        if composingText.isEmpty {
             // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
         }
 
-        cursorPosition += count
+        let originalPossition = composingText.convertTargetCursorPosition
+        let actualPosition = originalPossition + count
+        if actualPosition > composingText.convertTarget.count {
+            proxy.moveCursor(count: composingText.convertTarget.count - actualPosition)
+            composingText.moveCursorFromCursorPosition(count: composingText.convertTarget.count - originalPossition)
+            setResult()
+            afterAdjusted = true
+            return
+        }
+        if actualPosition < 0 {
+            proxy.moveCursor(count: -actualPosition)
+            composingText.moveCursorFromCursorPosition(count: 0 - originalPossition)
+            setResult()
+            afterAdjusted = true
+            return
+        }
 
-        if cursorPosition > cursorMaximumPosition {
-            proxy.moveCursor(count: cursorMaximumPosition - cursorPosition)
-            cursorPosition = cursorMaximumPosition
-            setResult()
-            afterAdjusted = true
-            return
-        }
-        if cursorPosition < cursorMinimumPosition {
-            proxy.moveCursor(count: cursorMinimumPosition - cursorPosition)
-            cursorPosition = cursorMinimumPosition
-            setResult()
-            afterAdjusted = true
-            return
-        }
+        composingText.moveCursorFromCursorPosition(count: count)
         setResult()
     }
 
     // ユーザがキーボードを経由せずペーストした場合の処理
     fileprivate func userPastedText(text: String) {
         // 入力された分を反映する
-        inputtedText = text
-        cursorPosition = cursorMaximumPosition
+        _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
+
         isSelected = false
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
@@ -1091,8 +963,8 @@ private final class InputManager {
     // ユーザが選択領域で文字を入力した場合
     fileprivate func userReplacedSelectedText(text: String) {
         // 新たな入力を反映
-        inputtedText = text
-        cursorPosition = cursorMaximumPosition
+        _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
+
         isSelected = false
 
         setResult()
@@ -1120,15 +992,14 @@ private final class InputManager {
             return
         }
         // 過去のログを見て、再変換に利用する
+        // 再変換処理をもっと上手くやりたい
+        composingText.clear()
         if let element = self.getMatch(word: text) {
-            inputtedText = element.ruby.toHiragana()
+            _ = self.composingText.insertAtCursorPosition(element.ruby.toHiragana(), inputStyle: .direct)
         } else {
-            inputtedText = text
+            _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
         }
-        // ローマ字かな変換モジュールは単純に各文字の列挙にする
-        kanaRomanStateHolder.components = text.map {KanaComponent(internalText: String($0), kana: String($0), isFreezed: true, escapeRomanKanaConverting: true)}
-        // カーソルポジションを反映する
-        cursorPosition = cursorMaximumPosition
+
         isSelected = true
         setResult()
         VariableStates.shared.setEnterKeyState(.edit)
@@ -1286,36 +1157,36 @@ private final class InputManager {
     fileprivate func setResult() {
         var results = [Candidate]()
         var firstClauseResults = [Candidate]()
-        let input_hira = self.inputtedText.prefix(self.cursorPosition)
         let result: [Candidate]
+        let requireJapanesePrediction: Bool
+        let requireEnglishPrediction: Bool
         switch VariableStates.shared.inputStyle {
         case .direct:
-            let inputData = DirectInputData(String(input_hira))
-            debug("value to be input", inputData)
-            (result, firstClauseResults) = self.directConverter.requestCandidates(inputData, N_best: 10)
+            requireJapanesePrediction = true
+            requireEnglishPrediction = true
         case .roman2kana:
-            let inputData = RomanInputData(String(input_hira), history: self.kanaRomanStateHolder)
-            debug("value to be input", inputData)
-            let requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
-            let requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
-            (result, firstClauseResults) = self.romanConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
+            requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
+            requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
         }
+        let inputData = composingText.prefixToCursorPosition()
+        debug("setResult value to be input", inputData)
+        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
         results.append(contentsOf: result)
         // TODO: 最後の1単語のライブ変換を抑制したい
         // TODO: ローマ字入力中に最後の単語が優先される問題
         if liveConversionEnabled {
             var candidate: Candidate
-            if self.cursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map {$0.ruby}.joined().count == input_hira.count}) {
+            if self.composingText.convertTargetCursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map {$0.ruby}.joined().count == inputData.convertTarget.count}) {
                 candidate = firstCandidate
             } else {
-                candidate = .init(text: String(input_hira), value: 0, correspondingCount: input_hira.count, lastMid: 0, data: [.init(ruby: String(input_hira), cid: 0, mid: 0, value: 0)])
+                candidate = .init(text: inputData.convertTarget, value: 0, correspondingCount: inputData.convertTarget.count, lastMid: 0, data: [.init(ruby: inputData.convertTarget.toKatakana(), cid: 0, mid: 0, value: 0)])
             }
             self.liveConversionManager.adjustCandidate(candidate: &candidate)
             debug("Live Conversion:", candidate)
 
             // カーソルなどを調整する
-            if self.cursorPosition > 0 {
-                let deleteCount = self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.cursorPosition)
+            if self.composingText.convertTargetCursorPosition > 0 {
+                let deleteCount = self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.composingText.convertTargetCursorPosition)
                 self.proxy.deleteBackward(count: deleteCount)
                 self.proxy.insertText(candidate.text)
                 debug("Live Conversion View Update: delete \(deleteCount) letters, insert \(candidate.text)")
@@ -1415,5 +1286,4 @@ extension UITextDocumentProxy {
             self.deleteBackward()
         }
     }
-
 }
