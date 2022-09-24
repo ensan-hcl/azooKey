@@ -843,7 +843,7 @@ private final class InputManager {
             for count in (counts.min...counts.max).reversed() where count <= composingText.convertTargetCursorPosition {
                 if let replace = table[String(leftside.suffix(count))] {
                     // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
-                    self.deleteBackward(count: count, requireSetResult: false)
+                    self.deleteBackward(count: leftside.suffix(count).count, requireSetResult: false)
                     // ここで変換が行われる。内部的には差分管理システムによって「置換」の場合のキャッシュ変換が呼ばれる。
                     self.input(text: replace)
                     break

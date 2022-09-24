@@ -83,6 +83,8 @@ extension Collection where Self.Element: Equatable {
         for (i, value) in self.enumerated() where i < collection.count {
             if value == collection[collection.index(collection.startIndex, offsetBy: i)] {
                 prefix.append(value)
+            } else {
+                break
             }
         }
         return prefix

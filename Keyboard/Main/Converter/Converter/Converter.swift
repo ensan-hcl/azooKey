@@ -474,6 +474,7 @@ final class KanaKanjiConverter {
         }
 
         // TODO: 完全に同一のデータの場合のケースを追加する
+        debug("convertToLattice: before \(previousInputData) after \(inputData)")
 
         // 文節確定の後の場合
         if let completedData, previousInputData.inputHasSuffix(inputOf: inputData) {
