@@ -77,7 +77,7 @@
 		1A3DC1DD2500D44E002CAA93 /* KanaKanjierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1DC2500D44E002CAA93 /* KanaKanjierTests.swift */; };
 		1A3DC1E82500D44E002CAA93 /* KanaKanjierUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1E72500D44E002CAA93 /* KanaKanjierUITests.swift */; };
 		1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */; };
-		1A3DC2002500D488002CAA93 /* Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1A3DC2002500D488002CAA93 /* Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2062500D4FF002CAA93 /* Store.swift */; };
 		1A3DC20A2500D51F002CAA93 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1A3DC20C2500D53B002CAA93 /* FlickKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20B2500D53B002CAA93 /* FlickKeyboardView.swift */; };
@@ -2585,15 +2585,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		1A3DC2042500D488002CAA93 /* Embed App Extensions */ = {
+		1A3DC2042500D488002CAA93 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				1A3DC2002500D488002CAA93 /* Keyboard.appex in Embed App Extensions */,
+				1A3DC2002500D488002CAA93 /* Keyboard.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1AF1CB32253011D3002FCC66 /* Embed Frameworks */ = {
@@ -8079,7 +8079,7 @@
 				1A3DC1BE2500D44A002CAA93 /* Sources */,
 				1A3DC1BF2500D44A002CAA93 /* Frameworks */,
 				1A3DC1C02500D44A002CAA93 /* Resources */,
-				1A3DC2042500D488002CAA93 /* Embed App Extensions */,
+				1A3DC2042500D488002CAA93 /* Embed Foundation Extensions */,
 				1AF1CB32253011D3002FCC66 /* Embed Frameworks */,
 				1A4E1F4A261582E8009B6EB7 /* ShellScript */,
 			);
@@ -8180,7 +8180,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1330;
+				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = DevEn3;
 				TargetAttributes = {
 					1A3DC1C12500D44A002CAA93 = {
@@ -11258,8 +11258,8 @@
 				SKIP_INSTALL = YES;
 				STRIP_STYLE = "non-global";
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_DISABLE_SAFETY_CHECKS = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Ounchecked";
+				SWIFT_DISABLE_SAFETY_CHECKS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
