@@ -27,7 +27,7 @@ extension Kana2Kanji {
     ///
     /// (4)ノードをアップデートした上で返却する。
     func kana2lattice_added(_ inputData: InputData, N_best: Int, addedCount: Int, previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
-        debug("\(addedCount)文字追加。追加されたのは「\(inputData.characters.suffix(addedCount))」")
+        debug("\(addedCount)文字追加。追加されたのは「\(inputData.input.suffix(addedCount))」")
         if addedCount == 1 {
             return kana2lattice_addedLast(inputData, N_best: N_best, previousResult: previousResult)
         }

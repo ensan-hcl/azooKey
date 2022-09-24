@@ -24,7 +24,7 @@ extension KanaKanjiConverter {
                     Candidate(
                         text: char,
                         value: value0,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: inputData.input.count,
                         lastMid: 500,
                         data: [DicdataElement(word: char, ruby: string, cid: .zero, mid: 500, value: value0)]
                     )

@@ -36,7 +36,7 @@ extension KanaKanjiConverter {
             Candidate(
                 text: $0,
                 value: -15,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: inputData.input.count,
                 lastMid: 501,
                 data: [DicdataElement(word: $0, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)]
             )

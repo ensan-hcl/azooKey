@@ -19,7 +19,7 @@ extension KanaKanjiConverter {
             return [Candidate(
                 text: versionString,
                 value: -30,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: inputData.input.count,
                 lastMid: 501,
                 data: [DicdataElement(word: versionString, ruby: inputData.convertTarget.toKatakana(), cid: CIDData.固有名詞.cid, mid: 501, value: -30)]
             )]
@@ -38,7 +38,7 @@ extension KanaKanjiConverter {
         return result.map {[Candidate(
             text: $0,
             value: -15,
-            correspondingCount: inputData.characters.count,
+            correspondingCount: inputData.input.count,
             lastMid: 501,
             data: [DicdataElement(word: $0, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)]
         )]} ?? []
@@ -119,7 +119,7 @@ extension KanaKanjiConverter {
             return Candidate(
                 text: $0,
                 value: -18,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: inputData.input.count,
                 lastMid: 237,
                 data: [DicdataElement(word: $0, ruby: string, cid: CIDData.一般名詞.cid, mid: 237, value: -18)]
             )
@@ -128,7 +128,7 @@ extension KanaKanjiConverter {
             return Candidate(
                 text: $0,
                 value: -19,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: inputData.input.count,
                 lastMid: 237,
                 data: [DicdataElement(word: $0, ruby: string, cid: CIDData.一般名詞.cid, mid: 237, value: -19)]
             )

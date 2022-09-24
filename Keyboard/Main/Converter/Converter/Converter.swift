@@ -102,7 +102,7 @@ final class KanaKanjiConverter {
         switch language {
         case "en-US":
             var result: [Candidate] = []
-            let ruby = String(inputData.characters)
+            let ruby = String(inputData.input.map{$0.character})
             let range = NSRange(location: 0, length: ruby.utf16.count)
             if !ruby.onlyRomanAlphabet {
                 return result
@@ -113,7 +113,7 @@ final class KanaKanjiConverter {
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: ruby.count,
                         lastMid: 501,
                         data: data
                     )
@@ -126,7 +126,7 @@ final class KanaKanjiConverter {
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: ruby.count,
                         lastMid: 501,
                         data: data
                     )
@@ -137,7 +137,7 @@ final class KanaKanjiConverter {
             return result
         case "el":
             var result: [Candidate] = []
-            let ruby = String(inputData.characters)
+            let ruby = String(inputData.input.map{$0.character})
             let range = NSRange(location: 0, length: ruby.utf16.count)
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language) {
                 if !completions.isEmpty {
@@ -145,7 +145,7 @@ final class KanaKanjiConverter {
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: ruby.count,
                         lastMid: 501,
                         data: data
                     )
@@ -158,7 +158,7 @@ final class KanaKanjiConverter {
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
-                        correspondingCount: inputData.characters.count,
+                        correspondingCount: ruby.count,
                         lastMid: 501,
                         data: data
                     )
@@ -259,6 +259,7 @@ final class KanaKanjiConverter {
     private func getAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
         var candidates: [Candidate] = []
         let string = inputData.convertTarget.toKatakana()
+        let correspondingCount = inputData.input.count
         do {
             // カタカナ
             let value = -14 * getKatakanaScore(string)
@@ -266,7 +267,7 @@ final class KanaKanjiConverter {
             let katakana = Candidate(
                 text: string,
                 value: value,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -280,7 +281,7 @@ final class KanaKanjiConverter {
             let hiragana = Candidate(
                 text: hiraganaString,
                 value: -14.5,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -293,7 +294,7 @@ final class KanaKanjiConverter {
             let uppercasedLetter = Candidate(
                 text: word,
                 value: -14.6,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -307,7 +308,7 @@ final class KanaKanjiConverter {
             let fullWidthLetter = Candidate(
                 text: word,
                 value: -14.7,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -321,7 +322,7 @@ final class KanaKanjiConverter {
             let halfWidthKatakana = Candidate(
                 text: word,
                 value: -15,
-                correspondingCount: inputData.characters.count,
+                correspondingCount: correspondingCount,
                 lastMid: 501,
                 data: [data]
             )
@@ -461,7 +462,7 @@ final class KanaKanjiConverter {
     /// - Returns:
     ///   結果のラティスノードと、計算済みノードの全体
     private func convertToLattice(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]])? {
-        if inputData.characters.isEmpty {
+        if inputData.convertTarget.isEmpty {
             return nil
         }
 
@@ -538,9 +539,9 @@ final class KanaKanjiConverter {
     /// - Returns:
     ///   重複のない変換候補。
     func requestCandidates(_ inputData: InputData, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
-        debug("入力は", inputData.characters)
-        // stringが無の場合
-        if inputData.characters.isEmpty {
+        debug("requestCandidates 入力は", inputData)
+        // 変換対象が無の場合
+        if inputData.convertTarget.isEmpty {
             return (.init(), .init())
         }
         let start1 = Date()

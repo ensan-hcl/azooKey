@@ -28,7 +28,7 @@ extension Kana2Kanji {
     ///
     /// (4)ノードをアップデートした上で返却する。
     func kana2lattice_all(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: Nodes) {
-        debug("新規に計算を行います。inputされた文字列は\(inputData.input.count)文字分の\(inputData.characters)")
+        debug("新規に計算を行います。inputされた文字列は\(inputData.input.count)文字分の\(inputData.convertTarget)")
         let count: Int = inputData.input.count
         let result: LatticeNode = LatticeNode.EOSNode
         let nodes: [[LatticeNode]] = (.zero ..< count).map {dicdataStore.getLOUDSData(inputData: inputData, from: $0)}

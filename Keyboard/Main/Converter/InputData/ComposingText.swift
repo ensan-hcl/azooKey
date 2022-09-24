@@ -507,12 +507,8 @@ extension ComposingText.InputElement: CustomDebugStringConvertible {
 extension ComposingText.InputElement: Equatable {}
 
 extension ComposingText {
-    var characters: [Character] {
-        input.map(\.character)
-    }
-
     subscript(range: ClosedRange<Int>) -> String {
-        String(self.characters[range]).toKatakana()
+        self.input[range].reduce(into: ""){$0.append($1.character)}.toKatakana()
     }
 
     private func shouldBeRemovedForDicdataStore(components: [InputElement]) -> Bool {
