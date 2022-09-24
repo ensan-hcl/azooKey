@@ -114,9 +114,7 @@ final class KeyboardActionDepartment: ActionDepartment {
             return
         }
         self.inputManager.complete(candidate: candidate)
-        candidate.actions.forEach {
-            self.doAction($0)
-        }
+        self.doActions(candidate.actions)
     }
 
     private func showResultView() {
@@ -124,30 +122,58 @@ final class KeyboardActionDepartment: ActionDepartment {
         VariableStates.shared.showMoveCursorBar = false
     }
 
-    private func doAction(_ action: ActionType) {
+    /// 複数のアクションを実行する
+    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
+    ///  サポートされている最適化
+    /// - `setResult`を一度のみ実施する
+    private func doActions(_ actions: [ActionType]) {
+        let isSetActionTrigger = actions.map { action in
+            switch action {
+            case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
+                return true
+            default:
+                return false
+            }
+        }
+        if let lastIndex = isSetActionTrigger.lastIndex(where: { $0 }) {
+            for (i, action) in actions.enumerated() {
+                if i == lastIndex {
+                    self.doAction(action, requireSetResult: true)
+                } else {
+                    self.doAction(action, requireSetResult: false)
+                }
+            }
+        } else {
+            for action in actions {
+                self.doAction(action)
+            }
+        }
+    }
+
+    private func doAction(_ action: ActionType, requireSetResult: Bool = true) {
         switch action {
         case let .input(text):
             self.showResultView()
             if VariableStates.shared.aAKeyState == .capsLock && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage) {
                 let input = text.uppercased()
-                self.inputManager.input(text: input)
+                self.inputManager.input(text: input, requireSetResult: requireSetResult)
             } else {
-                self.inputManager.input(text: text)
+                self.inputManager.input(text: text, requireSetResult: requireSetResult)
             }
         case let .delete(count):
             self.showResultView()
-            self.inputManager.deleteBackward(count: count)
+            self.inputManager.deleteBackward(count: count, requireSetResult: requireSetResult)
 
         case .smoothDelete:
             Sound.smoothDelete()
             self.showResultView()
-            self.inputManager.smoothDelete()
+            self.inputManager.smoothDelete(requireSetResult: requireSetResult)
         case let .smartDelete(item):
             switch item.direction {
             case .forward:
-                self.inputManager.smoothDelete(to: item.targets.map {Character($0)})
+                self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             case .backward:
-                self.inputManager.smoothDelete(to: item.targets.map {Character($0)})
+                self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
         case .deselectAndUseAsInputting:
             self.inputManager.edit()
@@ -162,13 +188,13 @@ final class KeyboardActionDepartment: ActionDepartment {
                 self.tempSavedSelectedText = nil
             }
         case let .moveCursor(count):
-            self.inputManager.moveCursor(count: count)
+            self.inputManager.moveCursor(count: count, requireSetResult: requireSetResult)
         case let .smartMoveCursor(item):
             switch item.direction {
             case .forward:
-                self.inputManager.smartMoveCursorForward(to: item.targets.map {Character($0)})
+                self.inputManager.smartMoveCursorForward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             case .backward:
-                self.inputManager.smartMoveCursorBackward(to: item.targets.map {Character($0)})
+                self.inputManager.smartMoveCursorBackward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
         case let .changeCapsLockState(state):
             VariableStates.shared.aAKeyState = state
@@ -178,15 +204,13 @@ final class KeyboardActionDepartment: ActionDepartment {
         case .enter:
             self.showResultView()
             let actions = self.inputManager.enter()
-            actions.forEach {
-                self.doAction($0)
-            }
+            self.doActions(actions)
         case .changeCharacterType:
             self.showResultView()
-            self.inputManager.changeCharacter()
+            self.inputManager.changeCharacter(requireSetResult: requireSetResult)
         case let .replaceLastCharacters(table):
             self.showResultView()
-            self.inputManager.replaceLastCharacters(table: table)
+            self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult)
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
         case .toggleTabBar:
@@ -239,6 +263,13 @@ final class KeyboardActionDepartment: ActionDepartment {
         self.doAction(action)
     }
 
+    /// 押した場合に行われる。
+    /// - Parameters:
+    ///   - action: 行われた複数の動作。
+    override func registerActions(_ actions: [ActionType]) {
+        self.doActions(actions)
+    }
+
     /// 長押しを予約する関数。
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
@@ -252,18 +283,14 @@ final class KeyboardActionDepartment: ActionDepartment {
             let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
             if span > 0.4 {
                 action.repeat.first?.sound()
-                action.repeat.forEach {
-                    self?.doAction($0)
-                }
+                self?.doActions(action.repeat)
             }
         })
         self.timers.append((type: action, timer: startTimer))
 
         let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
             action.start.first?.sound()
-            action.start.forEach {
-                self?.doAction($0)
-            }
+            self?.doActions(action.start)
         })
         self.timers.append((type: action, timer: repeatTimer))
     }
@@ -543,7 +570,7 @@ private final class InputManager {
     }
 
     // MARK: キーボード経由でユーザがinputを行った場合に呼び出す
-    fileprivate func input(text: String) {
+    fileprivate func input(text: String, requireSetResult: Bool = true) {
         if self.isSelected {
             // 選択は解除される
             self.isSelected = false
@@ -588,7 +615,9 @@ private final class InputManager {
 
         VariableStates.shared.setEnterKeyState(.complete)
 
-        setResult()
+        if requireSetResult {
+            setResult()
+        }
     }
 
     /// テキストの進行方向に削除する
@@ -661,7 +690,7 @@ private final class InputManager {
     }
 
     /// 特定の文字まで削除する
-    fileprivate func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
+    fileprivate func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態ではオール削除になる
         if self.isSelected {
             self.proxy.deleteBackward()
@@ -688,7 +717,9 @@ private final class InputManager {
                 self.clear()
                 return
             }
-            setResult()
+            if requireSetResult {
+                setResult()
+            }
             return
         }
 
@@ -708,7 +739,7 @@ private final class InputManager {
 
     /// テキストの進行方向に、特定の文字まで削除する
     /// 入力中はカーソルから右側を全部消す
-    fileprivate func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
+    fileprivate func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態ではオール削除になる
         if self.isSelected {
             self.proxy.deleteBackward()
@@ -747,18 +778,22 @@ private final class InputManager {
     }
 
     /// テキストの進行方向と逆に、特定の文字までカーソルを動かす
-    fileprivate func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
+    fileprivate func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態では最も左にカーソルを移動
         if isSelected {
             deselect()
             self.composingText.moveCursorFromCursorPosition(count: -self.composingText.convertTargetCursorPosition)
-            setResult()
+            if requireSetResult {
+                setResult()
+            }
             return
         }
         // 入力中の場合
         if !composingText.isEmpty {
             self.composingText.moveCursorFromCursorPosition(count: -self.composingText.convertTargetCursorPosition)
-            setResult()
+            if requireSetResult {
+                setResult()
+            }
             return
         }
 
@@ -777,18 +812,22 @@ private final class InputManager {
     }
 
     /// テキストの進行方向に、特定の文字までカーソルを動かす
-    fileprivate func smartMoveCursorForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"]) {
+    fileprivate func smartMoveCursorForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態では最も左にカーソルを移動
         if isSelected {
             deselect()
             self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
-            setResult()
+            if requireSetResult {
+                setResult()
+            }
             return
         }
         // 入力中の場合
         if !composingText.isEmpty {
             self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
-            setResult()
+            if requireSetResult {
+                setResult()
+            }
             return
         }
 
@@ -828,7 +867,7 @@ private final class InputManager {
     /// 文字のreplaceを実施する
     /// `changeCharacter`を`CustardKit`で扱うためのAPI。
     /// キーボード経由でのみ実行される。
-    fileprivate func replaceLastCharacters(table: [String: String]) {
+    fileprivate func replaceLastCharacters(table: [String: String], requireSetResult: Bool = true) {
         debug(table, composingText, isSelected)
         if isSelected {
             return
@@ -840,18 +879,23 @@ private final class InputManager {
         // 入力状態の場合、入力中のテキストの範囲でreplaceを実施する。
         if !composingText.isEmpty {
             let leftside = composingText.convertTargetBeforeCursor
+            var found = false
             for count in (counts.min...counts.max).reversed() where count <= composingText.convertTargetCursorPosition {
                 if let replace = table[String(leftside.suffix(count))] {
                     // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
                     self.deleteBackward(count: leftside.suffix(count).count, requireSetResult: false)
                     // ここで変換が行われる。内部的には差分管理システムによって「置換」の場合のキャッシュ変換が呼ばれる。
-                    self.input(text: replace)
+                    self.input(text: replace, requireSetResult: requireSetResult)
+                    found = true
                     break
                 }
             }
+            if !found && requireSetResult {
+                self.setResult()
+            }
             return
         }
-        // 入力状態ではない場合、または言語の指定がない場合は、入力中のテキストの範囲でreplaceを実施する。
+        // 言語の指定がない場合は、入力中のテキストの範囲でreplaceを実施する。
         if VariableStates.shared.keyboardLanguage == .none {
             let leftside = proxy.documentContextBeforeInput ?? ""
             for count in (counts.min...counts.max).reversed() where count <= leftside.count {
@@ -866,7 +910,7 @@ private final class InputManager {
 
     /// カーソル左側の1文字を変更する関数
     /// ひらがなの場合は小書き・濁点・半濁点化し、英字・ギリシャ文字・キリル文字の場合は大文字・小文字化する
-    fileprivate func changeCharacter() {
+    fileprivate func changeCharacter(requireSetResult: Bool = true) {
         if self.isSelected {
             return
         }
@@ -881,11 +925,11 @@ private final class InputManager {
         // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
         self.deleteBackward(count: 1, requireSetResult: false)
         // inputの内部でsetResultが発生する
-        self.input(text: changed)
+        self.input(text: changed, requireSetResult: requireSetResult)
     }
 
     /// キーボード経由でのカーソル移動
-    fileprivate func moveCursor(count: Int) {
+    fileprivate func moveCursor(count: Int, requireSetResult: Bool = true) {
         // ライブ変換中のカーソル移動はとてもじゃないがハンドルできないのでクリアする
         if liveConversionEnabled {
             self.clear()
@@ -911,7 +955,7 @@ private final class InputManager {
         }
         composingText.moveCursorFromCursorPosition(count: count)
         proxy.moveCursor(count: count)
-        if count != 0 {
+        if count != 0 && requireSetResult {
             setResult()
         }
     }

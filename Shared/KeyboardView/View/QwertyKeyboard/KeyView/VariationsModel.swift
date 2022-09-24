@@ -28,7 +28,7 @@ struct VariationsModel {
         }
 
         let selected = self.variableSection.selection
-        self.variations[selected].actions.forEach {VariableStates.shared.action.registerAction($0)}
+        VariableStates.shared.action.registerActions(self.variations[selected].actions)
     }
 
     func registerLocation(dx: CGFloat, tabDesign: TabDependentDesign) {

@@ -66,7 +66,7 @@ struct FlickedKeyModel {
     }
 
     func flick() {
-        self.pressActions.forEach {VariableStates.shared.action.registerAction($0)}
+        VariableStates.shared.action.registerActions(self.pressActions)
     }
 
     func longFlickReserve() {

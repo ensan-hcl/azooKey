@@ -97,7 +97,7 @@ protocol QwertyKeyModelProtocol {
 
 extension QwertyKeyModelProtocol {
     func press() {
-        self.pressActions.forEach {VariableStates.shared.action.registerAction($0)}
+        VariableStates.shared.action.registerActions(self.pressActions)
     }
 
     func longPressReserve() {
