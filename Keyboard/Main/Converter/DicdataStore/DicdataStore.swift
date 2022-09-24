@@ -184,10 +184,9 @@ final class DicdataStore {
     internal func getLOUDSData(inputData: ComposingText, from index: Int) -> [LatticeNode] {
         // ⏱0.426499 : 辞書読み込み_全体
         let toIndex = min(inputData.input.count, index + self.maxlength)
-        let segments = (index ..< toIndex).map {
-            inputData.input[index...$0].reduce(into: ""){$0.append($1.character)}.toKatakana()
+        let segments = (index ..< toIndex).reduce(into: []) { (segments: inout [String], rightIndex: Int) in
+            segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character).toKatakana())
         }
-
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
         // ⏱0.125108 : 辞書読み込み_誤り訂正候補列挙
         var string2segment = [String: Int].init()
