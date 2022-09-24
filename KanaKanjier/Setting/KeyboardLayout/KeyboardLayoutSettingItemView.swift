@@ -62,9 +62,9 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
 
     private var labelText: LocalizedStringKey {
         if setTogether {
-            return "キーボードの種類(現在: \(selection.label))"
+            return "キーボードの種類 (現在: \(selection.label))"
         } else {
-            return "\(language.name)キーボードの種類(現在: \(selection.label))"
+            return "\(language.name)キーボードの種類 (現在: \(selection.label))"
         }
     }
 
@@ -88,20 +88,36 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
     }
 
     var body: some View {
-        VStack {
-            Text(labelText)
-            CenterAlignedView {
-                KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
-                    .allowsHitTesting(false)
-                    .disabled(true)
-            }
-            Picker(selection: $selection, label: Text(labelText)) {
-                ForEach(0 ..< types.count, id: \.self) { i in
-                    Text(types[i].label).tag(types[i])
+        Group {
+            // ラベルの数でUIを出し分ける
+            if types.count > 3 {
+                Picker(selection: $selection, label: Text(labelText)) {
+                    ForEach(0 ..< types.count, id: \.self) { i in
+                        Text(types[i].label).tag(types[i])
+                    }
+                }
+                CenterAlignedView {
+                    KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                        .allowsHitTesting(false)
+                        .disabled(true)
+                }
+            } else {
+                VStack {
+                    Text(labelText)
+                    CenterAlignedView {
+                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                            .allowsHitTesting(false)
+                            .disabled(true)
+                    }
+                    Picker(selection: $selection, label: Text(labelText)) {
+                        ForEach(0 ..< types.count, id: \.self) { i in
+                            Text(types[i].label).tag(types[i])
+                        }
+                    }
+                    .labelsHidden()
+                    .pickerStyle(.segmented)
                 }
             }
-            .labelsHidden()
-            .pickerStyle(.segmented)
         }
         .onChange(of: selection) { _ in
             if ignoreChange {

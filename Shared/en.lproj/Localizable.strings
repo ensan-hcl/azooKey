@@ -79,8 +79,8 @@
 "入力方法を選ぶ" = "Select input style";
 "キーボードの入力方式" = "Select input style";
 "キーボードの種類を設定する" = "Select input style";
-"キーボードの種類(現在: %@)" = "Keyboard layout (current: %@)";
-"%@キーボードの種類(現在: %@)" = "%1$@ keyboard layout (current: %2$@)";
+"キーボードの種類 (現在: %@)" = "Keyboard layout (current: %@)";
+"%@キーボードの種類 (現在: %@)" = "%1$@ keyboard layout (current: %2$@)";
 "日本語・英語に対応したカスタムタブを読み込んだ場合、これを選ぶことも可能です" = "If you have imported custom tabs that support Japanese or English, you can choose them as a default keyboard.";
 
 "片手モードを使う" = "Use one-handed mode";

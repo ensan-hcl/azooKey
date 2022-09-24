@@ -18,6 +18,8 @@ struct KeyboardLayoutTypeDetailsView: View {
             }
             Section {
                 LanguageLayoutSettingView(.japaneseKeyboardLayout, language: .japanese).padding(.vertical)
+            }
+            Section {
                 LanguageLayoutSettingView(.englishKeyboardLayout, language: .english).padding(.vertical)
             }
         }.navigationBarTitle(Text("キーボードの入力方式"), displayMode: .inline)
