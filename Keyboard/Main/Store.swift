@@ -506,17 +506,9 @@ private final class InputManager {
     fileprivate func complete(candidate: Candidate) {
         self.updateLog(candidate: candidate)
         // カーソルから左の入力部分を削除し、変換後の文字列+残りの文字列を後で入力し直す
-        let count: Int
-        if liveConversionEnabled {
-            // composingText.convertTargetCursorPositionは変換前の「キョウノテンキ|」のような文字列における位置を示すが、ライブ変換中は「今日の天気|」のような状態になっている。そこでその場合には「今日の天気|」の方の長さを使って削除を実行する。
-            count = self.liveConversionManager.lastUsedCandidate?.text.count ?? self.composingText.convertTargetCursorPosition
-        } else {
-            count = self.composingText.convertTargetCursorPosition
-        }
-        debug("complete: ", count, self.liveConversionManager.lastUsedCandidate)
         if !self.isSelected {
             // 消しすぎることはないのでエラーは無視できる
-            try? self.displayedTextManager.deleteBackward(count: count)
+            try? self.displayedTextManager.deleteBackward(count: self.displayedTextManager.displayedTextCursorPosition)
         }
         self.isSelected = false
 
@@ -649,15 +641,12 @@ private final class InputManager {
             return
         }
 
-        // TODO: ここのロジックもcomposingText側に移管したい
-        let adjustedCount = min(self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition, count)
-        // count文字消せるのは自明なので、返り値は無視できる
-        _ = self.composingText.moveCursorFromCursorPosition(count: adjustedCount)
-        self.composingText.backspaceFromCursorPosition(count: adjustedCount)
+        let operation = self.composingText.deleteForwardFromCursorPosition(count: count)
         debug("Input Manager deleteForward: ", composingText)
         // 削除を実行する
-        // adjustedCount文字消せるのは自明なので、消し過ぎの可能性は考えなくて大丈夫な状況
-        try? self.displayedTextManager.deleteForward(count: adjustedCount)
+        // 消し過ぎの可能性は考えなくて大丈夫な状況
+        // ただしoperation.deleteは負の値である
+        try? self.displayedTextManager.deleteForward(count: -operation.delete)
 
         if requireSetResult {
             setResult()
@@ -691,14 +680,12 @@ private final class InputManager {
             return
         }
 
-        // TODO: ここのロジックもcomposingText側に移管したい
-        let adjustedCount = min(self.composingText.convertTargetCursorPosition, count)
-        self.composingText.backspaceFromCursorPosition(count: adjustedCount)
+        let operation = self.composingText.deleteBackwardFromCursorPosition(count: count)
         debug("Input Manager deleteBackword: ", composingText)
 
         // 削除を実行する
-        // adjustedCount文字消せるのは自明なので、消し過ぎの可能性は考えなくて大丈夫な状況
-        try? self.displayedTextManager.deleteBackward(count: adjustedCount, isComposing: !self.composingText.isEmpty)
+        // 消し過ぎの可能性は考えなくて大丈夫な状況
+        try? self.displayedTextManager.deleteBackward(count: operation.delete)
 
         if requireSetResult {
             setResult()
@@ -722,14 +709,12 @@ private final class InputManager {
             // 削除を実行する
             let leftSideText = self.composingText.convertTargetBeforeCursor
 
-            // 消し過ぎの可能性は考えなくて大丈夫な状況
-            if liveConversionEnabled {
-                try? self.displayedTextManager.deleteBackward(count: self.liveConversionManager.lastUsedCandidate?.text.count ?? leftSideText.count)
-            } else {
-                try? self.displayedTextManager.deleteBackward(count: leftSideText.count)
-            }
             // カーソルより前を全部消す
-            self.composingText.backspaceFromCursorPosition(count: self.composingText.convertTargetCursorPosition)
+            // 消し過ぎの可能性は考えなくて大丈夫な状況
+            try? self.displayedTextManager.deleteBackward(count: self.displayedTextManager.displayedTextCursorPosition)
+            // カーソルより前を全部消す
+            // 戻り値は無視できる
+            _ = self.composingText.deleteBackwardFromCursorPosition(count: self.composingText.convertTargetCursorPosition)
 
             // カーソルを先頭に移動する
             self.moveCursor(count: self.composingText.convertTarget.count)
@@ -771,13 +756,10 @@ private final class InputManager {
         }
         // 入力中の場合
         if !self.composingText.isEmpty {
-            let count = self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition
-            // count文字消せるのは自明なので、返り値は無視できる
-            _ = self.composingText.moveCursorFromCursorPosition(count: count)
-            self.composingText.backspaceFromCursorPosition(count: count)
-
             // 消し過ぎの可能性は考えなくて大丈夫な状況
-            try? self.displayedTextManager.deleteForward(count: count)
+            try? self.displayedTextManager.deleteForward(count: self.displayedTextManager.displayedText.count -  self.displayedTextManager.displayedTextCursorPosition)
+            // count文字消せるのは自明なので、返り値は無視できる
+            _ = self.composingText.deleteForwardFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
             // 文字がもうなかった場合
             if self.composingText.isEmpty {
                 clear()

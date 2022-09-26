@@ -223,13 +223,25 @@ struct ComposingText {
         return ViewOperation(delete: diff.delete, input: diff.input)
     }
 
+
+    mutating func deleteForwardFromCursorPosition(count: Int) -> ViewOperation {
+        let count = min(convertTarget.count - convertTargetCursorPosition, count)
+        if count == 0 {
+            return ViewOperation(delete: 0, input: "")
+        }
+        self.convertTargetCursorPosition += count
+        self.deleteBackwardFromCursorPosition(count: count)
+        return ViewOperation(delete: -count, input: "")
+    }
+
     /// 現在のカーソル位置から文字を削除する関数
     /// エッジケースとして、`sha: しゃ|`の状態で1文字消すような場合がある。
-    mutating func backspaceFromCursorPosition(count: Int) {
-        if self.convertTargetCursorPosition == 0 {
-            return
-        }
+    mutating func deleteBackwardFromCursorPosition(count: Int) -> ViewOperation {
         let count = min(convertTargetCursorPosition, count)
+
+        if count == 0 {
+            return ViewOperation(delete: 0, input: "")
+        }
         // 動作例1
         // convertTarget: かんしゃ|
         // input: [k, a, n, s, h, a]
@@ -278,6 +290,8 @@ struct ComposingText {
 
         // convetTargetを更新する
         self.convertTarget = Self.getConvertTarget(for: self.input)
+
+        return ViewOperation(delete: count, input: "")
     }
 
     /// 現在のカーソル位置からカーソルを動かす関数
