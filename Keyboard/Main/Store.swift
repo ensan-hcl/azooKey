@@ -626,11 +626,8 @@ private final class InputManager {
         }
 
         let operation = self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
-        // 消しすぎることはないのでエラーは無視できる
-        try? self.displayedTextManager.deleteBackward(count: operation.delete)
-        self.displayedTextManager.insertText(operation.input)
-
         debug("Input Manager input: ", composingText)
+        self.displayedTextManager.replace(count: operation.delete, with: operation.input)
 
         VariableStates.shared.setEnterKeyState(.complete)
 
@@ -940,9 +937,7 @@ private final class InputManager {
             let leftside = displayedTextManager.documentContextBeforeInput ?? ""
             for count in (counts.min...counts.max).reversed() where count <= leftside.count {
                 if let replace = table[String(leftside.suffix(count))] {
-                    // 消し過ぎの可能性は考えなくて大丈夫な状況
-                    try? self.displayedTextManager.deleteBackward(count: count, isComposing: false)
-                    self.displayedTextManager.insertText(replace, isComposing: false)
+                    self.displayedTextManager.replace(count: count, with: replace, isComposing: false)
                     break
                 }
             }
@@ -1277,9 +1272,7 @@ private final class InputManager {
             // カーソルなどを調整する
             if self.composingText.convertTargetCursorPosition > 0 {
                 let deleteCount = self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.composingText.convertTargetCursorPosition)
-                // 消し過ぎの可能性は考えなくて大丈夫な状況
-                try? self.displayedTextManager.deleteBackward(count: deleteCount)
-                self.displayedTextManager.insertText(candidate.text)
+                self.displayedTextManager.replace(count: deleteCount, with: candidate.text)
                 debug("Live Conversion View Update: delete \(deleteCount) letters, insert \(candidate.text)")
                 self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
             }
@@ -1564,6 +1557,25 @@ final class UIDisplayedComposingTextManager {
                 self.rawDeleteForward(count: delta)
                 throw OperationError.deleteTooMuch
             }
+        }
+    }
+
+    // カーソルから前count文字をtextで置換する
+    func replace(count: Int, with text: String, isComposing: Bool = true) {
+        if isComposing {
+            let leftIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition - count)
+            let rightIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition)
+            self.displayedText.removeSubrange(leftIndex ..< rightIndex)
+            self.displayedText.insert(contentsOf: text, at: leftIndex)
+            self.displayedTextCursorPosition -= count
+            self.displayedTextCursorPosition += text.count
+        }
+
+        if isMarkedTextEnabled && isComposing {
+            self.updateMarkedText()
+        } else {
+            self.rawDeleteBackward(count: count)
+            self.proxy.insertText(text)
         }
     }
 }
