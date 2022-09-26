@@ -948,11 +948,6 @@ private final class InputManager {
 
     /// キーボード経由でのカーソル移動
     fileprivate func moveCursor(count: Int, requireSetResult: Bool = true) {
-        // ライブ変換中のカーソル移動はとてもじゃないがハンドルできないのでクリアする
-        // TODO: この後の`displayedTextManager.moveCursor`でも同様のチェックを実施しているので、最終的な挙動の設計の時にはどちらかに統合する
-        if liveConversionEnabled {
-            self.clear()
-        }
         if count == 0 {
             return
         }
