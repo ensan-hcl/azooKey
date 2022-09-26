@@ -540,7 +540,7 @@ private final class InputManager {
             }
         }
         if self.composingText.isAtStartIndex {
-            self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count)
+            _ = self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count)
             // 入力の直後、documentContextAfterInputは間違っていることがあるため、ここではoffsetをcomposingTextから直接計算する。
             let offset = self.composingText.convertTarget.utf16.count
             self.displayedTextManager.unsafeMoveCursor(unsafeCount: offset)
@@ -643,28 +643,22 @@ private final class InputManager {
             return
         }
 
-        if self.composingText.isEmpty {
+        guard !self.composingText.isEmpty else {
             // 消し過ぎの可能性は考えなくて大丈夫な状況
             try? self.displayedTextManager.deleteForward(count: count, isComposing: false)
             return
         }
 
-        // 一番右端にいるときは削除させない
-        if !self.composingText.isEmpty && self.composingText.isAtEndIndex {
-            return
-        }
-
-
-        self.composingText.moveCursorFromCursorPosition(count: count)
-        self.composingText.backspaceFromCursorPosition(count: count)
+        // TODO: ここのロジックもcomposingText側に移管したい
+        let adjustedCount = min(self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition, count)
+        // count文字消せるのは自明なので、返り値は無視できる
+        _ = self.composingText.moveCursorFromCursorPosition(count: adjustedCount)
+        self.composingText.backspaceFromCursorPosition(count: adjustedCount)
         debug("Input Manager deleteForward: ", composingText)
         // 削除を実行する
-        do {
-            try self.displayedTextManager.deleteForward(count: count)
-        } catch {
-            self.clear()
-            return
-        }
+        // adjustedCount文字消せるのは自明なので、消し過ぎの可能性は考えなくて大丈夫な状況
+        try? self.displayedTextManager.deleteForward(count: adjustedCount)
+
         if requireSetResult {
             setResult()
         }
@@ -691,20 +685,20 @@ private final class InputManager {
             self.deleteForward(count: abs(count), requireSetResult: requireSetResult)
             return
         }
-        // 一番左端にいるときは削除させない
-        if !self.composingText.isEmpty && self.composingText.isAtStartIndex {
+        guard !self.composingText.isEmpty else {
+            // 消し過ぎの可能性は考えなくて大丈夫な状況
+            try? self.displayedTextManager.deleteBackward(count: count, isComposing: false)
             return
         }
 
-        // 削除を実行する
-        do {
-            try self.displayedTextManager.deleteBackward(count: count, isComposing: !self.composingText.isEmpty)
-        } catch {
-            self.clear()
-            return
-        }
-        self.composingText.backspaceFromCursorPosition(count: count)
+        // TODO: ここのロジックもcomposingText側に移管したい
+        let adjustedCount = min(self.composingText.convertTargetCursorPosition, count)
+        self.composingText.backspaceFromCursorPosition(count: adjustedCount)
         debug("Input Manager deleteBackword: ", composingText)
+
+        // 削除を実行する
+        // adjustedCount文字消せるのは自明なので、消し過ぎの可能性は考えなくて大丈夫な状況
+        try? self.displayedTextManager.deleteBackward(count: adjustedCount, isComposing: !self.composingText.isEmpty)
 
         if requireSetResult {
             setResult()
@@ -778,8 +772,8 @@ private final class InputManager {
         // 入力中の場合
         if !self.composingText.isEmpty {
             let count = self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition
-
-            self.composingText.moveCursorFromCursorPosition(count: count)
+            // count文字消せるのは自明なので、返り値は無視できる
+            _ = self.composingText.moveCursorFromCursorPosition(count: count)
             self.composingText.backspaceFromCursorPosition(count: count)
 
             // 消し過ぎの可能性は考えなくて大丈夫な状況
@@ -812,8 +806,9 @@ private final class InputManager {
     fileprivate func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態では最も左にカーソルを移動
         if isSelected {
+            let count = self.composingText.convertTarget.count
             deselect()
-            self.composingText.moveCursorFromCursorPosition(count: -self.composingText.convertTargetCursorPosition)
+            try? self.displayedTextManager.moveCursor(count: count, isComposing: false)
             if requireSetResult {
                 setResult()
             }
@@ -821,7 +816,13 @@ private final class InputManager {
         }
         // 入力中の場合
         if !composingText.isEmpty {
-            self.composingText.moveCursorFromCursorPosition(count: -self.composingText.convertTargetCursorPosition)
+            let operation = self.composingText.moveCursorFromCursorPosition(count: -self.composingText.convertTargetCursorPosition)
+            do {
+                try self.displayedTextManager.moveCursor(count: operation.cursor)
+            } catch {
+                self.clear()
+                return
+            }
             if requireSetResult {
                 setResult()
             }
@@ -846,10 +847,10 @@ private final class InputManager {
 
     /// テキストの進行方向に、特定の文字までカーソルを動かす
     fileprivate func smartMoveCursorForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
-        // 選択状態では最も左にカーソルを移動
+        // 選択状態では最も右にカーソルを移動
         if isSelected {
             deselect()
-            self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
+            try? self.displayedTextManager.moveCursor(count: 1, isComposing: false)
             if requireSetResult {
                 setResult()
             }
@@ -857,7 +858,13 @@ private final class InputManager {
         }
         // 入力中の場合
         if !composingText.isEmpty {
-            self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
+            let operation = self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
+            do {
+                try self.displayedTextManager.moveCursor(count: operation.cursor)
+            } catch {
+                self.clear()
+                return
+            }
             if requireSetResult {
                 setResult()
             }
@@ -983,17 +990,10 @@ private final class InputManager {
             return
         }
         debug("Input Manager moveCursor:", composingText, count)
-        // カーソル位置の正規化
-        // 動かしすぎないようにする
-        var count = count
-        if composingText.convertTargetCursorPosition + count > composingText.convertTarget.count {
-            count = composingText.convertTarget.count - composingText.convertTargetCursorPosition
-        } else if composingText.convertTargetCursorPosition + count < 0 {
-            count = 0 - composingText.convertTargetCursorPosition
-        }
-        composingText.moveCursorFromCursorPosition(count: count)
+
+        let operation = self.composingText.moveCursorFromCursorPosition(count: count)
         do {
-            try self.displayedTextManager.moveCursor(count: count)
+            try self.displayedTextManager.moveCursor(count: operation.cursor)
         } catch {
             self.clear()
         }
@@ -1009,24 +1009,12 @@ private final class InputManager {
             // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
         }
-
-        let originalPossition = composingText.convertTargetCursorPosition
-        let actualPosition = originalPossition + count
-        // 許容範囲を超えていた場合の調整
-        // 単にカーソルを調整することが目的なので、更新は別のタイミングで行う
-        let correctCount: Int
-        if actualPosition > composingText.convertTarget.count {
-            try? self.displayedTextManager.moveCursor(count: composingText.convertTarget.count - actualPosition, isComposing: false)
+        let operation = composingText.moveCursorFromCursorPosition(count: count)
+        let delta = operation.cursor - count
+        if delta != 0 {
+            try? self.displayedTextManager.moveCursor(count: delta, isComposing: false)
             afterAdjusted = true
-            correctCount = composingText.convertTarget.count - originalPossition
-        } else if actualPosition < 0 {
-            try? self.displayedTextManager.moveCursor(count: -actualPosition, isComposing: false)
-            afterAdjusted = true
-            correctCount = 0 - originalPossition
-        } else {
-            correctCount = count
         }
-        composingText.moveCursorFromCursorPosition(count: correctCount)
         setResult()
     }
 
@@ -1466,7 +1454,8 @@ final class UIDisplayedComposingTextManager {
         }
     }
 
-    // isComposingの場合
+    // isComposingの場合、countはadjust済みであることを期待する
+    // されていなかった場合は例外を投げる
     func deleteBackward(count: Int, isComposing: Bool = true) throws {
         if count == 0 {
             return
@@ -1523,6 +1512,8 @@ final class UIDisplayedComposingTextManager {
         }
     }
 
+    // isComposingの場合、countはadjust済みであることを期待する
+    // されていなかった場合は例外を投げる
     func deleteForward(count: Int = 1, isComposing: Bool = true) throws {
         if count == 0 {
             return

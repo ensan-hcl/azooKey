@@ -196,6 +196,7 @@ struct ComposingText {
     struct ViewOperation {
         var delete: Int
         var input: String
+        var cursor: Int = 0
     }
 
     private func diff(from oldString: some StringProtocol, to newString: String) -> (delete: Int, input: String) {
@@ -280,10 +281,10 @@ struct ComposingText {
     }
 
     /// 現在のカーソル位置からカーソルを動かす関数
-    mutating func moveCursorFromCursorPosition(count: Int) {
+    mutating func moveCursorFromCursorPosition(count: Int) -> ViewOperation {
+        let count = max(min(self.convertTarget.count - self.convertTargetCursorPosition, count), -self.convertTargetCursorPosition)
         self.convertTargetCursorPosition += count
-        self.convertTargetCursorPosition = max(0, self.convertTargetCursorPosition)
-        self.convertTargetCursorPosition = min(self.convertTargetCursorPosition, self.convertTarget.count)
+        return ViewOperation(delete: 0, input: "", cursor: count)
     }
 
     /// 文頭の方を確定させる関数
