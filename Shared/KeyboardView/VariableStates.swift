@@ -14,7 +14,7 @@ final class VariableStates: ObservableObject {
     var action: ActionDepartment = ActionDepartment()
     static let shared = VariableStates()
     private(set) var inputStyle: InputStyle = .direct
-    var tabManager = TabManager()
+    private(set) var tabManager = TabManager()
 
     private init() {}
 
