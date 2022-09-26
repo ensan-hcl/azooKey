@@ -457,19 +457,25 @@ final class KeyboardActionDepartment: ActionDepartment {
 
 // ActionDepartmentの状態を保存する部分
 private final class InputManager {
-    private var proxy: UITextDocumentProxy!
+    // 入力中の文字列を管理する構造体
+    private(set) var composingText = ComposingText()
+    // 表示される文字列を管理するクラス
     private var displayedTextManager = DisplayedTextManager()
+    // TODO: displayedTextManagerとliveConversionManagerを何らかの形で統合したい
+    // ライブ変換を管理するクラス
+    fileprivate var liveConversionManager = LiveConversionManager()
 
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
+    // TODO: isSelectedとafterAdjustedはdisplayedTextManagerが持っているべき
     fileprivate var isSelected = false
     private var afterAdjusted: Bool = false
 
-    private(set) var composingText = ComposingText()
-    fileprivate var liveConversionManager = LiveConversionManager()
+    // 再変換機能の提供のために用いる辞書
+    private var candidatesLog: Deque<DicdataElement> = []
+
     private var liveConversionEnabled: Bool {
         return liveConversionManager.enabled && !self.isSelected
     }
-    private var candidatesLog: Deque<DicdataElement> = []
 
     private func updateLog(candidate: Candidate) {
         candidatesLog.append(contentsOf: candidate.data)
