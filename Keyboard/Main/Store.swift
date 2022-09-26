@@ -458,7 +458,7 @@ final class KeyboardActionDepartment: ActionDepartment {
 // ActionDepartmentの状態を保存する部分
 private final class InputManager {
     private var proxy: UITextDocumentProxy!
-    private var displayedTextManager = UIDisplayedComposingTextManager()
+    private var displayedTextManager = DisplayedTextManager()
 
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
     fileprivate var isSelected = false
@@ -1289,7 +1289,7 @@ private final class InputManager {
 }
 
 /// UI側の入力中のテキストの更新を受け持つクラス
-final class UIDisplayedComposingTextManager {
+final class DisplayedTextManager {
     init() {
         @KeyboardSetting(.liveConversion) var enabled
         self.isLiveConversionEnabled = enabled
