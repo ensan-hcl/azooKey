@@ -517,7 +517,7 @@ private final class InputManager {
         self.composingText.complete(correspondingCount: candidate.correspondingCount)
         self.displayedTextManager.insertText(candidate.text, isComposing: false)
         self.displayedTextManager.insertText(String(self.composingText.convertTargetBeforeCursor))
-        if self.composingText.convertTarget.isEmpty {
+        guard !self.composingText.isEmpty else {
             self.clear()
             VariableStates.shared.setEnterKeyState(.return)
             return
@@ -525,12 +525,9 @@ private final class InputManager {
         self.kanaKanjiConverter.setCompletedData(candidate)
 
         if liveConversionEnabled {
-            if self.composingText.convertTarget.isEmpty {
-                self.liveConversionManager.setLastUsedCandidate(nil)
-            } else  {
-                self.liveConversionManager.updateAfterFirstClauseCompletion()
-            }
+            self.liveConversionManager.updateAfterFirstClauseCompletion()
         }
+        // 左端にある場合はカーソルを右端に持っていく
         if self.composingText.isAtStartIndex {
             _ = self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count)
             // 入力の直後、documentContextAfterInputは間違っていることがあるため、ここではoffsetをcomposingTextから直接計算する。
