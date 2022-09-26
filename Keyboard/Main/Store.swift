@@ -703,9 +703,6 @@ private final class InputManager {
         }
         // 入力中の場合
         if !self.composingText.isEmpty {
-            // 削除を実行する
-            let leftSideText = self.composingText.convertTargetBeforeCursor
-
             // カーソルより前を全部消す
             // 消し過ぎの可能性は考えなくて大丈夫な状況
             try? self.displayedTextManager.deleteBackward(count: self.displayedTextManager.displayedTextCursorPosition)
