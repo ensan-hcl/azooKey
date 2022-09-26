@@ -13,8 +13,9 @@ struct UpdateInfomationView: View {
             // version 1.9系
             Group {
                 VersionView("1.9", releaseDate: "2022年xx月xx日") {
-                    ParagraphView("機能を追加しました。") {
-                        "未定"
+                    ParagraphView("「入力中のテキストを保護」する機能を追加しました。") {
+                        "この機能を有効化すると、一部のWebアプリでazooKeyの挙動が安定します"
+                        "実験的な機能であり、不具合があったり挙動に変更があったりする可能性があります"
                     }
                     ParagraphView("機能を改善しました。") {
                         "着せ替えの利用時に変換候補の拡大表示ボタンが押しにくくなる問題を修正"
