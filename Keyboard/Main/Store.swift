@@ -490,7 +490,6 @@ private final class InputManager {
     }
 
     fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
-        // self.proxy = proxy
         self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
