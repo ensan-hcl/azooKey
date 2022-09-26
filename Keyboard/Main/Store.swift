@@ -292,7 +292,36 @@ final class KeyboardActionDepartment: ActionDepartment {
     override func notifySomethingWillChange(left: String, center: String, right: String) {
         self.tempTextData = (left: left, center: center, right: right)
     }
-    // MARK: left/center/rightとして得られる情報は以下の通り
+    // MARK: iOS16以降
+    /*
+     |はカーソル位置。二つある場合は選択範囲
+     ---------------------
+     |abc              :nil/nil/abc
+     ---------------------
+     abc|def           :abc/nil/def
+     ---------------------
+     abc|def|ghi       :abc/def/ghi
+     ---------------------
+     abc|              :abc/nil/nil
+     ---------------------
+     abc|              :abc/nil/nil  // MARK: ここが以前と違う。以前はこの場合afterInputにEmptyが来ていたが、nilになっている。
+
+     ---------------------
+     :\n/nil/def
+     |def
+     ---------------------
+     abc|              :abc/nil/nil  // MARK: ここが以前と違う。以前はこの場合afterInputにEmptyが来ていたが、nilになっている。
+     def
+     ---------------------
+     abc
+     |def              :abc\n/nil/def  // MARK: ここが以前と違う。以前はこの場合afterInputにEmptyが来ていたが、\nabcになっている。
+     ---------------------
+     a|bc
+     d|ef              :a/bc \n d/ef
+     ---------------------
+     */
+
+    // MARK: iOS15以前でleft/center/rightとして得られる情報は以下の通り
     /*
      |はカーソル位置。二つある場合は選択範囲
      ---------------------
@@ -321,6 +350,17 @@ final class KeyboardActionDepartment: ActionDepartment {
      ---------------------
      */
 
+    private func adjustLeftString(_ left: String) -> String {
+        if #available(iOS 16, *) {
+            var newLeft = left.components(separatedBy: "\n").last ?? ""
+            if left.contains("\n") && newLeft.isEmpty {
+                newLeft = "\n"
+            }
+            return newLeft
+        }
+        return left
+    }
+
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
         if self.inputManager.isAfterAdjusted() {
@@ -329,7 +369,9 @@ final class KeyboardActionDepartment: ActionDepartment {
         if self.inputManager.liveConversionManager.enabled {
             self.inputManager.clear()
         }
-        let b_left = self.tempTextData.left
+        let a_left = adjustLeftString(a_left)
+
+        let b_left = adjustLeftString(self.tempTextData.left)
         let b_center = self.tempTextData.center
         let b_right = self.tempTextData.right
         debug("user operation happend: \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
@@ -449,7 +491,7 @@ private final class InputManager {
 
     fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
         // self.proxy = proxy
-        self.displayedTextManager.setProxy(proxy)
+        self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
     func isAfterAdjusted() -> Bool {
@@ -473,7 +515,8 @@ private final class InputManager {
         }
         debug("complete: ", count, self.liveConversionManager.lastUsedCandidate)
         if !self.isSelected {
-            self.displayedTextManager.deleteBackward(count: count)
+            // 消しすぎることはないのでエラーは無視できる
+            try? self.displayedTextManager.deleteBackward(count: count)
         }
         self.isSelected = false
 
@@ -557,7 +600,7 @@ private final class InputManager {
             let _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
 
             // 実際に入力する
-            self.displayedTextManager.insertText(text, isComposing: false)
+            self.displayedTextManager.insertText(text)
             setResult()
 
             VariableStates.shared.setEnterKeyState(.complete)
@@ -565,25 +608,26 @@ private final class InputManager {
         }
 
         if text == "\n"{
-            self.displayedTextManager.insertText(text, isComposing: false)
             self.clear()
+            self.displayedTextManager.insertText(text, isComposing: false)
             return
         }
         // スペースだった場合
         if text == " " || text == "　" || text == "\t" || text == "\0"{
-            self.displayedTextManager.insertText(text, isComposing: false)
             self.clear()
+            self.displayedTextManager.insertText(text, isComposing: false)
             return
         }
 
         if VariableStates.shared.keyboardLanguage == .none {
-            self.displayedTextManager.insertText(text, isComposing: false)
             self.clear()
+            self.displayedTextManager.insertText(text, isComposing: false)
             return
         }
 
         let operation = self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
-        self.displayedTextManager.deleteBackward(count: operation.delete)
+        // 消しすぎることはないのでエラーは無視できる
+        try? self.displayedTextManager.deleteBackward(count: operation.delete)
         self.displayedTextManager.insertText(operation.input)
 
         debug("Input Manager input: ", composingText)
@@ -603,7 +647,8 @@ private final class InputManager {
         }
 
         if self.composingText.isEmpty {
-            self.displayedTextManager.deleteForward(count: count, isComposing: false)
+            // 消し過ぎの可能性は考えなくて大丈夫な状況
+            try? self.displayedTextManager.deleteForward(count: count, isComposing: false)
             return
         }
 
@@ -617,8 +662,12 @@ private final class InputManager {
         self.composingText.backspaceFromCursorPosition(count: count)
         debug("Input Manager deleteForward: ", composingText)
         // 削除を実行する
-        self.displayedTextManager.deleteForward(count: count)
-
+        do {
+            try self.displayedTextManager.deleteForward(count: count)
+        } catch {
+            self.clear()
+            return
+        }
         if requireSetResult {
             setResult()
         }
@@ -636,7 +685,7 @@ private final class InputManager {
         }
         // 選択状態ではオール削除になる
         if self.isSelected {
-            self.displayedTextManager.unsafeDeleteBackward()
+            self.displayedTextManager.rawDeleteBackward()
             self.clear()
             return
         }
@@ -651,8 +700,12 @@ private final class InputManager {
         }
 
         // 削除を実行する
-        self.displayedTextManager.deleteBackward(count: count, isComposing: !self.composingText.isEmpty)
-
+        do {
+            try self.displayedTextManager.deleteBackward(count: count, isComposing: !self.composingText.isEmpty)
+        } catch {
+            self.clear()
+            return
+        }
         self.composingText.backspaceFromCursorPosition(count: count)
         debug("Input Manager deleteBackword: ", composingText)
 
@@ -669,7 +722,7 @@ private final class InputManager {
     fileprivate func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態ではオール削除になる
         if self.isSelected {
-            self.displayedTextManager.unsafeDeleteBackward()
+            self.displayedTextManager.rawDeleteBackward()
             self.clear()
             return
         }
@@ -678,10 +731,11 @@ private final class InputManager {
             // 削除を実行する
             let leftSideText = self.composingText.convertTargetBeforeCursor
 
+            // 消し過ぎの可能性は考えなくて大丈夫な状況
             if liveConversionEnabled {
-                self.displayedTextManager.deleteBackward(count: self.liveConversionManager.lastUsedCandidate?.text.count ?? leftSideText.count)
+                try? self.displayedTextManager.deleteBackward(count: self.liveConversionManager.lastUsedCandidate?.text.count ?? leftSideText.count)
             } else {
-                self.displayedTextManager.deleteBackward(count: leftSideText.count)
+                try? self.displayedTextManager.deleteBackward(count: leftSideText.count)
             }
             // カーソルより前を全部消す
             self.composingText.backspaceFromCursorPosition(count: self.composingText.convertTargetCursorPosition)
@@ -704,12 +758,14 @@ private final class InputManager {
             if nexts.contains(last) {
                 break
             } else {
-                self.displayedTextManager.deleteBackward(count: 1, isComposing: false)
+                // 消し過ぎの可能性は考えなくて大丈夫な状況
+                try? self.displayedTextManager.deleteBackward(count: 1, isComposing: false)
                 deletedCount += 1
             }
         }
         if deletedCount == 0 {
-            self.displayedTextManager.deleteBackward(count: 1, isComposing: false)
+            // 消し過ぎの可能性は考えなくて大丈夫な状況
+            try? self.displayedTextManager.deleteBackward(count: 1, isComposing: false)
         }
     }
 
@@ -718,7 +774,7 @@ private final class InputManager {
     fileprivate func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態ではオール削除になる
         if self.isSelected {
-            self.displayedTextManager.unsafeDeleteBackward()
+            self.displayedTextManager.rawDeleteBackward()
             self.clear()
             return
         }
@@ -729,7 +785,8 @@ private final class InputManager {
             self.composingText.moveCursorFromCursorPosition(count: count)
             self.composingText.backspaceFromCursorPosition(count: count)
 
-            self.displayedTextManager.deleteForward(count: count)
+            // 消し過ぎの可能性は考えなくて大丈夫な状況
+            try? self.displayedTextManager.deleteForward(count: count)
             // 文字がもうなかった場合
             if self.composingText.isEmpty {
                 clear()
@@ -743,12 +800,14 @@ private final class InputManager {
             if nexts.contains(first) {
                 break
             } else {
-                self.displayedTextManager.deleteForward(count: 1, isComposing: false)
+                // 消し過ぎの可能性は考えなくて大丈夫な状況
+                try? self.displayedTextManager.deleteForward(count: 1, isComposing: false)
                 deletedCount += 1
             }
         }
         if deletedCount == 0 {
-            self.displayedTextManager.deleteForward(count: 1, isComposing: false)
+            // 消し過ぎの可能性は考えなくて大丈夫な状況
+            try? self.displayedTextManager.deleteForward(count: 1, isComposing: false)
         }
     }
 
@@ -834,11 +893,12 @@ private final class InputManager {
     }
 
     /// 選択状態にあるテキストを再度入力し、編集可能な状態にする
-    // TODO: MarkedText併用時の挙動に不具合がある
     fileprivate func edit() {
         if isSelected {
             let selectedText = composingText.convertTarget
-            self.displayedTextManager.unsafeDeleteBackward()
+            self.displayedTextManager.rawDeleteBackward()
+            self.isSelected = false
+            self.composingText.clear()
             self.input(text: selectedText)
             VariableStates.shared.setEnterKeyState(.complete)
         }
@@ -880,7 +940,8 @@ private final class InputManager {
             let leftside = displayedTextManager.documentContextBeforeInput ?? ""
             for count in (counts.min...counts.max).reversed() where count <= leftside.count {
                 if let replace = table[String(leftside.suffix(count))] {
-                    self.displayedTextManager.deleteBackward(count: count, isComposing: false)
+                    // 消し過ぎの可能性は考えなくて大丈夫な状況
+                    try? self.displayedTextManager.deleteBackward(count: count, isComposing: false)
                     self.displayedTextManager.insertText(replace, isComposing: false)
                     break
                 }
@@ -1216,7 +1277,8 @@ private final class InputManager {
             // カーソルなどを調整する
             if self.composingText.convertTargetCursorPosition > 0 {
                 let deleteCount = self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.composingText.convertTargetCursorPosition)
-                self.displayedTextManager.deleteBackward(count: deleteCount)
+                // 消し過ぎの可能性は考えなくて大丈夫な状況
+                try? self.displayedTextManager.deleteBackward(count: deleteCount)
                 self.displayedTextManager.insertText(candidate.text)
                 debug("Live Conversion View Update: delete \(deleteCount) letters, insert \(candidate.text)")
                 self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
@@ -1239,8 +1301,6 @@ private final class InputManager {
     // debug中であることを示す。
     fileprivate var isDebugMode: Bool = false
     #endif
-
-
 
     #if DEBUG
     fileprivate func setDebugResult() {
@@ -1283,17 +1343,17 @@ final class UIDisplayedComposingTextManager {
     // Viewに表示されているテキスト全体
     // ライブ変換が有効になっている場合、convertedTextが「きょうは」のときに「今日は」が入る
     // 無効になっている場合はconvertedTextと一致する
-    var displayedText: String = ""
+    private(set) var displayedText: String = ""
     // その中でのカーソルポジション
-    var displayedTextCursorPosition = 0
+    private(set) var displayedTextCursorPosition = 0
     // ライブ変換の有効化状態
-    var isLiveConversionEnabled: Bool
+    private(set) var isLiveConversionEnabled: Bool
     // marked textの有効化状態
-    var isMarkedTextEnabled: Bool
+    private(set) var isMarkedTextEnabled: Bool
     // proxy
     private var proxy: UITextDocumentProxy!
 
-    func setProxy(_ proxy: UITextDocumentProxy!) {
+    func setTextDocumentProxy(_ proxy: UITextDocumentProxy!) {
         self.proxy = proxy
     }
 
@@ -1353,6 +1413,8 @@ final class UIDisplayedComposingTextManager {
         }
     }
 
+    /// MarkedTextを更新する関数
+    /// この関数自体はisMarkedTextEnabledのチェックを行わない。
     func updateMarkedText() {
         self.proxy.setMarkedText(self.displayedText, selectedRange: NSRange(location: self.displayedTextCursorPosition, length: 0))
     }
@@ -1379,8 +1441,9 @@ final class UIDisplayedComposingTextManager {
         self.proxy.adjustTextPosition(byCharacterOffset: unsafeCount)
     }
 
-    enum MoveCursorError: Error {
+    enum OperationError: Error {
         case liveConversion
+        case deleteTooMuch
     }
 
     func moveCursor(count: Int, isComposing: Bool = true) throws {
@@ -1388,7 +1451,7 @@ final class UIDisplayedComposingTextManager {
         if isComposing && isLiveConversionEnabled {
             let offset = self.getActualOffset(count: count)
             self.proxy.adjustTextPosition(byCharacterOffset: offset)
-            throw MoveCursorError.liveConversion
+            throw OperationError.liveConversion
         }
         // 更新
         if isComposing {
@@ -1403,47 +1466,24 @@ final class UIDisplayedComposingTextManager {
         }
     }
 
-    // 入力中は呼ばない。
-    func unsafeDeleteBackward() {
-        self.proxy.deleteBackward()
-    }
-
-
-    func completePrefix(delete count: Int, replace string: String) {
-        if count < 0 {
-            return
+    // ただ与えられた回数の削除を実行する関数
+    func rawDeleteBackward(count: Int = 1) {
+        for _ in 0 ..< count {
+            self.proxy.deleteBackward()
         }
-        let count = min(count, self.displayedTextCursorPosition)
-        let leftIndex = self.displayedText.startIndex
-        let rightIndex = self.displayedText.indexFromStart(count)
-        self.displayedText.removeSubrange(leftIndex ..< rightIndex)
-        self.displayedTextCursorPosition -= count
-
-        if isMarkedTextEnabled {
-            self.proxy.insertText(string)
-            self.updateMarkedText()
-        } else {
-            (0..<count).forEach { _ in
-                self.proxy.deleteBackward()
-            }
-            self.proxy.insertText(string)
-        }
-
     }
 
     // isComposingの場合
-    func deleteBackward(count: Int, isComposing: Bool = true) {
+    func deleteBackward(count: Int, isComposing: Bool = true) throws {
         if count == 0 {
             return
         }
         if count < 0 {
-            self.deleteForward(count: abs(count), isComposing: isComposing)
+            try self.deleteForward(count: abs(count), isComposing: isComposing)
             return
         }
         if !isComposing {
-            for _ in 0..<count {
-                self.proxy.deleteBackward()
-            }
+            self.rawDeleteBackward(count: count)
             return
         }
 
@@ -1456,56 +1496,74 @@ final class UIDisplayedComposingTextManager {
         if isMarkedTextEnabled && isComposing {
             self.updateMarkedText()
         } else {
-            (0..<adjustedCount).forEach { _ in
-                self.proxy.deleteBackward()
-            }
+            self.rawDeleteBackward(count: adjustedCount)
         }
 
         let delta = count - adjustedCount
         if delta > 0 {
             if isMarkedTextEnabled {
                 if displayedText.isEmpty {
-                    for _ in 0..<delta {
-                        self.proxy.deleteBackward()
-                    }
+                    self.rawDeleteBackward(count: delta)
+                    throw OperationError.deleteTooMuch
                 }
             } else {
-                for _ in 0..<delta {
-                    self.proxy.deleteBackward()
-                }
-                // ただしこの場合はclear扱いにしたい
-                // TODO: 変換にもそれを教える必要がある
-                self.clear()
+                self.rawDeleteBackward(count: delta)
+                throw OperationError.deleteTooMuch
             }
         }
     }
 
-    // TODO: この関数はisComposingの場合countが一定範囲内であることを前提に書かれている
-    func deleteForward(count: Int = 1, isComposing: Bool = true) {
+    // ただ与えられた回数の削除を入力方向に実行する関数
+    // カーソルが動かせない場合を検知するために工夫を入れている
+    // TODO: iOS16以降のテキストフィールドの仕様変更で動かなくなっている。直す必要があるが、どうしようもない気がしている。
+    func rawDeleteForward(count: Int) {
+        for _ in 0 ..< count {
+            let before_b = self.proxy.documentContextBeforeInput
+            let before_a = self.proxy.documentContextAfterInput
+            // 例外は無視できる
+            try? self.moveCursor(count: 1, isComposing: false)
+            if before_a != self.proxy.documentContextAfterInput || before_b != self.proxy.documentContextBeforeInput {
+                self.proxy.deleteBackward()
+            } else {
+                return
+            }
+        }
+    }
+
+    func deleteForward(count: Int = 1, isComposing: Bool = true) throws {
         if count == 0 {
             return
         }
         if count < 0 {
-            self.deleteBackward(count: abs(count), isComposing: isComposing)
+            try self.deleteBackward(count: abs(count), isComposing: isComposing)
             return
         }
-        if isComposing {
-            let leftIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition)
-            let rightIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition + count)
-            self.displayedText.removeSubrange(leftIndex ..< rightIndex)
+        if !isComposing {
+            self.rawDeleteForward(count: count)
+            return
         }
+
+        let adjustedCount = min(self.displayedText.count - self.displayedTextCursorPosition, count)
+        let leftIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition)
+        let rightIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition + adjustedCount)
+        self.displayedText.removeSubrange(leftIndex ..< rightIndex)
+
         if isMarkedTextEnabled && isComposing {
             self.updateMarkedText()
         } else {
-            (0..<count).forEach { _ in
-                if self.proxy.documentContextAfterInput == nil {
-                    return
+            self.rawDeleteForward(count: adjustedCount)
+        }
+        let delta = count - adjustedCount
+        if delta > 0 {
+            if isMarkedTextEnabled {
+                if displayedText.isEmpty {
+                    self.rawDeleteForward(count: delta)
+                    throw OperationError.deleteTooMuch
                 }
-                // 例外は無視できる
-                try? self.moveCursor(count: 1, isComposing: false)
-                self.proxy.deleteBackward()
+            } else {
+                self.rawDeleteForward(count: delta)
+                throw OperationError.deleteTooMuch
             }
         }
-
     }
 }
