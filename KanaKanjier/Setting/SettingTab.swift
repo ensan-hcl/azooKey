@@ -53,6 +53,7 @@ struct SettingTabView: View {
                         BoolSettingView(.fullRomanCandidate)
                         BoolSettingView(.typographyLetter)
                         BoolSettingView(.unicodeCandidate)
+                        MarkedTextSettingView(.markedTextSetting)
                         NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                     }
                     Section(header: Text("ユーザ辞書")) {

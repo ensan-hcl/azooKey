@@ -154,6 +154,9 @@
 		1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8405250F65770093A701 /* changed_last_1_character.swift */; };
 		1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8407250F65B40093A701 /* deleted_last_n_character.swift */; };
 		1A8A840A250F65DA0093A701 /* completed_first.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8409250F65DA0093A701 /* completed_first.swift */; };
+		1A8E454328E1379C00133D3B /* MarkedTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */; };
+		1A8E454428E1379C00133D3B /* MarkedTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */; };
+		1A8E454728E1390100133D3B /* MarkedTextSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454628E1390100133D3B /* MarkedTextSettingView.swift */; };
 		1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */; };
 		1A9218E4255238CE005F45C4 /* RomanTypographys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9218E3255238CD005F45C4 /* RomanTypographys.swift */; };
 		1A9218F7255238E9005F45C4 /* Unicode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9218F6255238E9005F45C4 /* Unicode.swift */; };
@@ -2744,6 +2747,8 @@
 		1A8A8405250F65770093A701 /* changed_last_1_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changed_last_1_character.swift; sourceTree = "<group>"; };
 		1A8A8407250F65B40093A701 /* deleted_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deleted_last_n_character.swift; sourceTree = "<group>"; };
 		1A8A8409250F65DA0093A701 /* completed_first.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = completed_first.swift; sourceTree = "<group>"; };
+		1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedTextSetting.swift; sourceTree = "<group>"; };
+		1A8E454628E1390100133D3B /* MarkedTextSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedTextSettingView.swift; sourceTree = "<group>"; };
 		1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothDeleteTipsView.swift; sourceTree = "<group>"; };
 		1A9218E3255238CD005F45C4 /* RomanTypographys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomanTypographys.swift; sourceTree = "<group>"; };
 		1A9218F6255238E9005F45C4 /* Unicode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unicode.swift; sourceTree = "<group>"; };
@@ -5524,6 +5529,14 @@
 			path = Kana2Kanji;
 			sourceTree = "<group>";
 		};
+		1A8E454528E138F300133D3B /* MarkedTextSetting */ = {
+			isa = PBXGroup;
+			children = (
+				1A8E454628E1390100133D3B /* MarkedTextSettingView.swift */,
+			);
+			path = MarkedTextSetting;
+			sourceTree = "<group>";
+		};
 		1A9218E9255238D5005F45C4 /* Converter */ = {
 			isa = PBXGroup;
 			children = (
@@ -5641,6 +5654,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
+				1A8E454528E138F300133D3B /* MarkedTextSetting */,
 				1A347FE628D22F8E007D7852 /* LiveConversionSetting */,
 				1A61E8EE28CCD91E00C5107A /* FlickSensitivitySetting */,
 				1A5C7EAA25F36A5E00A7CBA8 /* PreferredLanguage */,
@@ -5757,6 +5771,7 @@
 			children = (
 				1AD2B8D326C270610053CE4A /* KeyboardSetting.swift */,
 				1AD2B8D726C272F80053CE4A /* BoolKeyboardSetting.swift */,
+				1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */,
 				1A347FE328D22E7F007D7852 /* AutoCompletionStrengthSetting.swift */,
 				1AD2B8E626C2C74D0053CE4A /* DoubleKeyboardSetting.swift */,
 				1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */,
@@ -10573,6 +10588,7 @@
 				1A64A8E0257C925E0022C081 /* FontSizeSettingItemView.swift in Sources */,
 				1AD2B8E726C2C74D0053CE4A /* DoubleKeyboardSetting.swift in Sources */,
 				1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */,
+				1A8E454728E1390100133D3B /* MarkedTextSettingView.swift in Sources */,
 				1AD2B8D426C270610053CE4A /* KeyboardSetting.swift in Sources */,
 				1A3ACF2225FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */,
 				1AB8C3CE25E2509300D39BC5 /* CustomizeTabView.swift in Sources */,
@@ -10590,6 +10606,7 @@
 				1AF6799625CEDBB500F3987B /* FlickEnterKeyModel.swift in Sources */,
 				1AF6798725CEDBAE00F3987B /* FlickedKeyModel.swift in Sources */,
 				1A5B1CE026D1E495007D4E1C /* MainApp.swift in Sources */,
+				1A8E454328E1379C00133D3B /* MarkedTextSetting.swift in Sources */,
 				1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */,
 				1AC8A5AA2595934C00B71E5A /* ArrayUtils.swift in Sources */,
 				1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */,
@@ -10764,6 +10781,7 @@
 				1AD2B8E226C2B0880053CE4A /* LanguageLayoutKeyboardSetting.swift in Sources */,
 				1A26F34325E8AACA003CDA0D /* StrokeAndFill.swift in Sources */,
 				1A3022B8263396FF00E4495C /* UserMadeCustard.swift in Sources */,
+				1A8E454428E1379C00133D3B /* MarkedTextSetting.swift in Sources */,
 				1A3DC20E2500D55F002CAA93 /* FlickDataProvider.swift in Sources */,
 				1ACC0F0825CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */,
 				1A18425E25DE6678003985AB /* CustomKeyboard.swift in Sources */,
