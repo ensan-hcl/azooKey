@@ -127,7 +127,7 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return []
         } else {
-            return [.toggleShowMoveCursorView]
+            return [.toggleMoveCursorBar]
         }
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special

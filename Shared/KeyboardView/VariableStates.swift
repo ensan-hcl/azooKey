@@ -40,6 +40,8 @@ final class VariableStates: ObservableObject {
 
     @Published private(set) var resizingState: ResizingState = .fullwidth
 
+    var moveCursorBarState = MoveCursorBarState()
+
     func setResizingMode(_ state: ResizingState) {
         switch state {
         case .fullwidth:
@@ -60,6 +62,7 @@ final class VariableStates: ObservableObject {
 
     func initialize() {
         self.tabManager.initialize()
+        self.moveCursorBarState.clear()
         self.refreshView()
     }
 

@@ -23,7 +23,7 @@ enum ActionType: Equatable {
     case moveCursor(Int)
     case smartMoveCursor(ScanItem)
 
-    case toggleShowMoveCursorView
+    case toggleMoveCursorBar
     case enableResizingMode
     // 変換関連
     case enter
@@ -98,7 +98,7 @@ extension CodableActionData {
         case .enableResizingMode:
             return .enableResizingMode
         case .toggleCursorBar:
-            return .toggleShowMoveCursorView
+            return .toggleMoveCursorBar
         case .toggleCapsLockState:
             switch VariableStates.shared.aAKeyState {
             case .normal:
@@ -131,7 +131,7 @@ extension ActionType {
             Sound.delete()
         case .smoothDelete, .smartDelete, .smartMoveCursor:
             Sound.smoothDelete()
-        case .moveTab, .enter, .changeCharacterType, .toggleShowMoveCursorView, .moveCursor, .enableResizingMode, .replaceLastCharacters, .changeCapsLockState, .toggleTabBar:
+        case .moveTab, .enter, .changeCharacterType, .toggleMoveCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .changeCapsLockState, .toggleTabBar:
             Sound.tabOrOtherKey()
         case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return

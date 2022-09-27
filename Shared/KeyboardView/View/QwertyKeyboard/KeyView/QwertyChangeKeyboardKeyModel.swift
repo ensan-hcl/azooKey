@@ -42,7 +42,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
             case .qwerty_symbols:
                 return [.moveTab(targetTab)]
             default:
-                return [.toggleShowMoveCursorView]
+                return [.toggleMoveCursorBar]
             }
         case .tabBar:
             return [.toggleTabBar]

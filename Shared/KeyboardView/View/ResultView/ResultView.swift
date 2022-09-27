@@ -187,10 +187,6 @@ struct ResultModel<Candidate: ResultViewItemData> {
 
     func setResults(_ results: [Candidate]) {
         self.variableSection.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
-        self.scrollTop()
-    }
-
-    func scrollTop() {
         if let proxy = self.variableSection.scrollViewProxy {
             proxy.scrollTo(0, anchor: .trailing)
         }

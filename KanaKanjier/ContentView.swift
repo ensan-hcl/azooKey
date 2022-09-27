@@ -39,6 +39,13 @@ struct ContentView: View {
                         TabItem(title: "設定", systemImage: "wrench.fill")
                     }
                     .tag(3)
+                #if DEBUG
+                TestView(itemWidth: 50)
+                    .tabItem {
+                        TabItem(title: "テスト", systemImage: "keyboard")
+                    }
+                    .tag(4)
+                #endif
             }
             .fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView) {
                 EnableAzooKeyView()
@@ -100,3 +107,86 @@ private struct TabItem: View {
         }
     }
 }
+
+#if DEBUG
+struct TestView: View {
+    private enum MoveCursorBarGestureState {
+        case unactive
+        case moving(start: CGPoint, last: CGPoint)
+    }
+
+    let itemWidth: CGFloat
+
+    @State private var displayLeftIndex = 0
+    @State private var displayRightIndex = 10
+    @State private var delta: CGFloat = 0
+    @State private var gestureState: MoveCursorBarGestureState = .unactive
+
+    @State private var viewWidth: CGFloat = 3000
+
+    private var gesture: some Gesture {
+        DragGesture(minimumDistance: 10)
+            .onChanged {value in
+                switch self.gestureState {
+                case .unactive:
+                    self.gestureState = .moving(start: value.location, last: value.location)
+                case let .moving(startLocation, latestLocation):
+                    gestureState = .moving(start: startLocation, last: value.location)
+                    let dx = value.location.x - latestLocation.x
+                    if dx.isZero {
+                        break
+                    }
+                    withAnimation(.linear(duration: 0.05)) {
+                        delta += dx
+                        debug("delta: \(delta), dx: \(dx)")
+                    }
+                    // -100より小さい位置が先頭の場合はrangeを狭める
+                    while CGFloat(displayLeftIndex) * itemWidth + delta < -2 * itemWidth {
+                        displayLeftIndex += 1
+                    }
+                    // -70より小さい位置が先頭の場合はrangeを広げる
+                    while CGFloat(displayLeftIndex) * itemWidth + delta >= -0.5 * itemWidth {
+                        displayLeftIndex -= 1
+                    }
+
+                    // 800より大きい位置が末尾の場合はrangeを狭める
+                    while CGFloat(displayRightIndex) * itemWidth + delta > viewWidth + 2 * itemWidth {
+                        displayRightIndex -= 1
+                    }
+                    // 770より小さい位置が末尾の場合はrangeを広げる
+                    while CGFloat(displayRightIndex) * itemWidth + delta <= viewWidth + 0.5 * itemWidth {
+                        displayRightIndex += 1
+                    }
+                    debug(displayLeftIndex, displayRightIndex, delta, displayRightIndex - displayLeftIndex)
+                }
+            }
+            .onEnded {_ in
+                self.gestureState = .unactive
+            }
+    }
+
+    let values = Array("あいうえおかきくけこ")
+
+    func getItem(at index: Int) -> some View {
+        Text(verbatim: String(values[((index % 10) + 10) % 10]))
+            .padding()
+            .background(Color.yellow)
+
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            ForEach(displayLeftIndex ..< displayRightIndex, id: \.self) { i in
+                getItem(at: i)
+                    .frame(width: itemWidth)
+                    .position(x: CGFloat(i) * itemWidth)
+                    .offset(x: delta)
+            }
+            .gesture(gesture)
+            .onAppear {
+                viewWidth = geometry.size.width
+            }
+        }
+    }
+}
+#endif

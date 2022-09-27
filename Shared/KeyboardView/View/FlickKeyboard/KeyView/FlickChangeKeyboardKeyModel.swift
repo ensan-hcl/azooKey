@@ -19,7 +19,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
         case true:
             return []
         case false:
-            return [.toggleShowMoveCursorView]
+            return [.toggleMoveCursorBar]
         }
     }
     var longPressActions: LongpressActionType = .none
