@@ -197,7 +197,8 @@ struct MoveCursorBar: View {
 
     private var textView: some View {
         HStack(spacing: .zero) {
-            ForEach(state.displayLeftIndex ..< state.displayRightIndex, id: \.self) { i in
+            // 多めに描画しておく
+            ForEach(state.displayLeftIndex - 4 ..< state.displayRightIndex + 4, id: \.self) { i in
                 Text(verbatim: state.getItem(at: i))
                     .font(.system(size: Design.fonts.resultViewFontSize).bold())
                     .frame(width: state.itemWidth, height: Design.resultViewHeight())
@@ -206,6 +207,8 @@ struct MoveCursorBar: View {
         .allowsHitTesting(false)
         .foregroundColor(theme.resultTextColor.color.opacity(0.4))
         .drawingGroup()
+        .frame(width: state.viewWidth)
+        .clipped()
     }
 
     private var foregroundButtons: some View {
