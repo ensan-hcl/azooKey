@@ -122,14 +122,19 @@ struct FlickKeyView: View {
                     }
                 case .longPressed:
                     // もし距離が25px以上離れていて、サジェストが必要な設定だったら
-                    if startLocation.distance(to: value.location) > self.model.flickSensitivity(to: d) &&  self.model.needSuggestView {
+                    if self.model.isFlickAble(to: d) && startLocation.distance(to: value.location) > self.model.flickSensitivity(to: d) &&  self.model.needSuggestView {
                         // 状態がoneDirectionでなかったら
                         if case .oneDirection = suggestState {} else {
-                            pressState = .oneDirectionSuggested(d, Date())
                             // サジェストの方向を登録する。
                             suggestState = .oneDirection(d)
                             // サジェストを通告する。
                             self.model.suggestStateChanged(.oneDirection(d))
+                            // 一つの方向でサジェストされた状態を登録する。
+                            pressState = .oneDirectionSuggested(d, Date())
+                            // 長押しは終わりと判断して終了する。
+                            self.model.longPressEnd()
+                            // 長フリックを予約する
+                            self.model.flickKeys[d]?.longFlickReserve()
                         }
                     }
                 case let .longFlicked(direction):
