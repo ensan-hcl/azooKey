@@ -29,7 +29,7 @@ class MoveCursorBarState: ObservableObject {
     @Published fileprivate var line: [String] = []
 
     func updateLine(leftText: String, rightText: String) {
-        debug("updateLine", viewWidth, itemWidth, itemCount, line)
+        debug("updateLine", leftText, rightText, viewWidth, itemWidth, itemCount, line)
         var left = leftText.map {String($0)}
         if left.first == "\n" {
             left.removeFirst()

@@ -383,17 +383,18 @@ final class KeyboardActionDepartment: ActionDepartment {
 
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
+        let a_left = adjustLeftString(a_left)
+        let b_left = adjustLeftString(self.tempTextData.left)
+        // moveCursorBarStateの更新
+        VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
         // カーソルを動かした直後に一度通知がくるので無視する
         if self.inputManager.isAfterAdjusted() {
+            debug("non user operation: after cursor move", a_left, a_center, a_right)
             return
         }
         if self.inputManager.liveConversionManager.enabled {
             self.inputManager.clear()
         }
-        let a_left = adjustLeftString(a_left)
-        let b_left = adjustLeftString(self.tempTextData.left)
-        // moveCursorBarStateの更新
-        VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
         let b_center = self.tempTextData.center
         let b_right = self.tempTextData.right
         debug("user operation happend: \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
