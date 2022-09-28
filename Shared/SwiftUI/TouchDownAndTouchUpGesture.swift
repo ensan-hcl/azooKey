@@ -10,9 +10,14 @@ import Foundation
 import SwiftUI
 
 struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
-    let touchDownCallBack: (() -> Void)
-    let touchMovedCallBack: ((CGFloat) -> Void)
-    let touchUpCallBack: ((CGFloat) -> Void)
+    let touchDownCallBack: () -> Void
+    let touchMovedCallBack: (GestureState) -> Void
+    let touchUpCallBack: (GestureState) -> Void
+
+    struct GestureState {
+        var distance: CGFloat
+        var time: CGFloat
+    }
 
     func makeUIView(context: UIViewRepresentableContext<Self>) -> Self.UIViewType {
         let view = UIView(frame: .zero)
@@ -23,11 +28,13 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
     }
 
     class Coordinator: NSObject, UIGestureRecognizerDelegate {
-        var touchDownCallback: (() -> Void)
-        var touchMovedCallBack: ((CGFloat) -> Void)
-        var touchUpCallback: ((CGFloat) -> Void)
+        var touchDownCallback: () -> Void
+        var touchMovedCallBack: (GestureState) -> Void
+        var touchUpCallback: (GestureState) -> Void
 
-        init(touchDownCallback: @escaping (() -> Void), touchMovedCallBack: @escaping ((CGFloat) -> Void), touchUpCallback: @escaping ((CGFloat) -> Void)) {
+        var touchStart: Date = Date()
+
+        init(touchDownCallback: @escaping () -> Void, touchMovedCallBack: @escaping (GestureState) -> Void, touchUpCallback: @escaping (GestureState) -> Void) {
             self.touchDownCallback = touchDownCallback
             self.touchMovedCallBack = touchMovedCallBack
             self.touchUpCallback = touchUpCallback
@@ -36,11 +43,12 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
         @objc func tap(gesture: SingleScrollAndLongpressGestureRecognizer) {
             switch gesture.state {
             case .began:
+                self.touchStart = Date()
                 self.touchDownCallback()
             case .changed:
-                self.touchMovedCallBack(gesture.distance)
+                self.touchMovedCallBack(GestureState(distance: gesture.distance, time: Date().timeIntervalSince(self.touchStart)))
             case .cancelled, .ended:
-                self.touchUpCallback(gesture.distance)
+                self.touchUpCallback(GestureState(distance: gesture.distance, time: Date().timeIntervalSince(self.touchStart)))
             case .possible, .failed:
                 break
             @unknown default:

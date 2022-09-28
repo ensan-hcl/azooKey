@@ -214,31 +214,54 @@ struct MoveCursorBar: View {
         ZStack(alignment: .center) {
             textView
             HStack(spacing: .zero) {
-                Button {
-                    withAnimation(.linear(duration: 0.15)) {
-                        state.move(-1)
-                    }
-                } label: {
-                    Image(systemName: "chevron.left.2")
-                        .font(symbolFont(size: 18))
-                        .foregroundColor(symbolsColor)
-                        .padding()
-                }
-                Spacer()
+
+
+                Image(systemName: "chevron.left.2")
+                    .font(symbolFont(size: 18))
+                    .foregroundColor(symbolsColor)
+                    .padding()
+                    .overlay(
+                        TouchDownAndTouchUpGestureView {
+                            VariableStates.shared.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]))
+                        } touchMovedCallBack: { state in
+                            if state.distance > 20 { // 20以上動いたらダメ
+                                debug("touch failed")
+                            }
+                        } touchUpCallBack: { gestureState in
+                            VariableStates.shared.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
+                            if gestureState.time < 0.4 {
+                                withAnimation(.linear(duration: 0.15)) {
+                                    state.move(-1)
+                                }
+                            }
+                        }
+                    )
+                    Spacer()
                 Text(verbatim: "│")
                     .font(.system(size: Design.fonts.resultViewFontSize + 4))
                     .foregroundColor(symbolsColor)
+                    .allowsHitTesting(false)
                 Spacer()
-                Button {
-                    withAnimation(.linear(duration: 0.15)) {
-                        state.move(1)
-                    }
-                } label: {
                     Image(systemName: "chevron.right.2")
                         .font(symbolFont(size: 18))
                         .foregroundColor(symbolsColor)
                         .padding()
-                }
+                        .overlay(
+                            TouchDownAndTouchUpGestureView {
+                                VariableStates.shared.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]))
+                            } touchMovedCallBack: { state in
+                                if state.distance > 20 { // 20以上動いたらダメ
+                                    debug("touch failed")
+                                }
+                            } touchUpCallBack: { gestureState in
+                                VariableStates.shared.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(1)]))
+                                if gestureState.time < 0.4 {
+                                    withAnimation(.linear(duration: 0.15)) {
+                                        state.move(1)
+                                    }
+                                }
+                            }
+                        )
             }
         }
     }

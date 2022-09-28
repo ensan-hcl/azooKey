@@ -5182,6 +5182,7 @@
 				1ABF7D9426395DEC0045D6B2 /* BindingConvert.swift */,
 				1ABF7DA4263B08710045D6B2 /* IdentifiableItems.swift */,
 				1ABF7D972639869B0045D6B2 /* Intertranslator.swift */,
+				1AB8C38125E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift */,
 				1A7F547226A96A870032E91E /* AzooKeyIcon.swift */,
 			);
 			path = SwiftUI;
@@ -5629,7 +5630,6 @@
 			children = (
 				1AB8C35A25DFE77300D39BC5 /* SimpleKeyView.swift */,
 				1AB8C36125DFE80A00D39BC5 /* SimpleKeyModel.swift */,
-				1AB8C38125E0FAE800D39BC5 /* TouchDownAndTouchUpGesture.swift */,
 			);
 			path = SimpleKeyView;
 			sourceTree = "<group>";
