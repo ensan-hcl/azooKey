@@ -11,7 +11,7 @@ import SwiftUI
 
 class MoveCursorBarState: ObservableObject {
     @Published private(set) var displayLeftIndex = 0
-    @Published private(set) var displayRightIndex = 12
+    @Published private(set) var displayRightIndex = 0
     fileprivate var centerIndex: Int {
         return displayLeftIndex + itemCount / 2
     }
@@ -60,7 +60,6 @@ class MoveCursorBarState: ObservableObject {
         let diff: Int
         if index < 0 {
             diff = -1
-            return
         } else if line.count <= index {
             diff = 1
         } else {
