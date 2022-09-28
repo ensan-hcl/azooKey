@@ -160,6 +160,7 @@ final class KeyboardActionDepartment: ActionDepartment {
             } else {
                 self.inputManager.input(text: text, requireSetResult: requireSetResult)
             }
+
         case let .delete(count):
             self.showResultView()
             self.inputManager.deleteBackward(count: count, requireSetResult: requireSetResult)
@@ -168,6 +169,7 @@ final class KeyboardActionDepartment: ActionDepartment {
             Sound.smoothDelete()
             self.showResultView()
             self.inputManager.smoothDelete(requireSetResult: requireSetResult)
+
         case let .smartDelete(item):
             switch item.direction {
             case .forward:
@@ -175,6 +177,7 @@ final class KeyboardActionDepartment: ActionDepartment {
             case .backward:
                 self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
+
         case .deselectAndUseAsInputting:
             self.inputManager.edit()
 
@@ -182,13 +185,16 @@ final class KeyboardActionDepartment: ActionDepartment {
             if self.inputManager.isSelected {
                 self.tempSavedSelectedText = self.inputManager.composingText.convertTarget
             }
+
         case .restoreSelectedTextIfNeeded:
             if let tmp = self.tempSavedSelectedText {
                 self.inputManager.input(text: tmp)
                 self.tempSavedSelectedText = nil
             }
+
         case let .moveCursor(count):
             self.inputManager.moveCursor(count: count, requireSetResult: requireSetResult)
+
         case let .smartMoveCursor(item):
             switch item.direction {
             case .forward:
@@ -196,23 +202,31 @@ final class KeyboardActionDepartment: ActionDepartment {
             case .backward:
                 self.inputManager.smartMoveCursorBackward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
+
         case let .changeCapsLockState(state):
             VariableStates.shared.aAKeyState = state
+
         case .toggleMoveCursorBar:
+            self.inputManager.updateSurroundingText()
             VariableStates.shared.showTabBar = false
             VariableStates.shared.showMoveCursorBar.toggle()
+
         case .enter:
             self.showResultView()
             let actions = self.inputManager.enter()
             self.doActions(actions)
+
         case .changeCharacterType:
             self.showResultView()
             self.inputManager.changeCharacter(requireSetResult: requireSetResult)
+
         case let .replaceLastCharacters(table):
             self.showResultView()
             self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult)
+
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
+
         case .toggleTabBar:
             VariableStates.shared.showMoveCursorBar = false
             VariableStates.shared.showTabBar.toggle()
@@ -228,11 +242,17 @@ final class KeyboardActionDepartment: ActionDepartment {
 
         case let .openApp(scheme):
             delegate.openApp(scheme: scheme)
+
         #if DEBUG
         // MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
             self.inputManager.setDebugResult()
         #endif
+        }
+
+        // VariableStateに操作の結果を反映する
+        if requireSetResult {
+            self.inputManager.updateSurroundingText()
         }
     }
 
@@ -363,10 +383,6 @@ final class KeyboardActionDepartment: ActionDepartment {
 
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
-        let a_left = adjustLeftString(a_left)
-        let b_left = adjustLeftString(self.tempTextData.left)
-        // moveCursorBarStateの更新
-        VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
         // カーソルを動かした直後に一度通知がくるので無視する
         if self.inputManager.isAfterAdjusted() {
             return
@@ -374,6 +390,10 @@ final class KeyboardActionDepartment: ActionDepartment {
         if self.inputManager.liveConversionManager.enabled {
             self.inputManager.clear()
         }
+        let a_left = adjustLeftString(a_left)
+        let b_left = adjustLeftString(self.tempTextData.left)
+        // moveCursorBarStateの更新
+        VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
         let b_center = self.tempTextData.center
         let b_right = self.tempTextData.right
         debug("user operation happend: \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
@@ -868,6 +888,27 @@ private final class InputManager {
             // ここを実行する場合変換中ではないので例外は無視できる
             try? self.displayedTextManager.moveCursor(count: 1)
         }
+    }
+
+    /// iOS16以上の仕様変更に対応するため追加されたAPI
+    fileprivate func adjustLeftString(_ left: String) -> String {
+        if #available(iOS 16, *) {
+            var newLeft = left.components(separatedBy: "\n").last ?? ""
+            if left.contains("\n") && newLeft.isEmpty {
+                newLeft = "\n"
+            }
+            return newLeft
+        }
+        return left
+    }
+
+    fileprivate func updateSurroundingText() {
+        debug("updateSurroundingText Triggered")
+        let left = adjustLeftString(self.displayedTextManager.documentContextBeforeInput ?? "")
+        let center = self.displayedTextManager.selectedText ?? ""
+        let right = self.displayedTextManager.documentContextAfterInput ?? ""
+
+        VariableStates.shared.moveCursorBarState.updateLine(leftText: left + center, rightText: right)
     }
 
     /// これから選択を解除するときに呼ぶ関数

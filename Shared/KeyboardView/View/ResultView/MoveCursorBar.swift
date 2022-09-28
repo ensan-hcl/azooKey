@@ -10,13 +10,11 @@ import Foundation
 import SwiftUI
 
 class MoveCursorBarState: ObservableObject {
-    @Published fileprivate var displayLeftIndex = 0
-    @Published fileprivate var displayRightIndex = 12
-    private var validRange = (left: 0, right: 12)
+    @Published private(set) var displayLeftIndex = 0
+    @Published private(set) var displayRightIndex = 12
     fileprivate var centerIndex: Int {
         return displayLeftIndex + itemCount / 2
     }
-    @Published fileprivate var delta: CGFloat = 0
 
     fileprivate var itemCount: Int {
         // 偶数にする
@@ -25,32 +23,20 @@ class MoveCursorBarState: ObservableObject {
     fileprivate var itemWidth: CGFloat {
         return Design.fonts.resultViewFontSize * 1.3
     }
-    @Published fileprivate var viewWidth: CGFloat = 3000
+    fileprivate var viewWidth: CGFloat {
+        return VariableStates.shared.interfaceSize.width * 0.85
+    }
     @Published fileprivate var line: [String] = []
 
     func updateLine(leftText: String, rightText: String) {
-        let half = itemCount / 2
-        let left: [String]
-        if leftText.count > half {
-            validRange.left = 0
-            left = leftText.map {String($0)}
-        } else {
-            validRange.left = half-leftText.count
-            left = Array(repeating: "", count: half - leftText.count) + leftText.map {String($0)}
+        debug("updateLine", viewWidth, itemWidth, itemCount, line)
+        var left = leftText.map {String($0)}
+        if left.first == "\n" {
+            left.removeFirst()
         }
-        let right: [String]
-        if rightText.count > half {
-            right = rightText.map {String($0)} + ["⏎"]
-        } else {
-            right = rightText.map {String($0)} + ["⏎"] + Array(repeating: "", count: half - rightText.count)
-        }
-        validRange.right = left.count + rightText.count + 2
-
-        self.line = left + right
-
-        self.displayLeftIndex = left.count - half
+        self.line = left + rightText.map {String($0)} + ["⏎"]
+        self.displayLeftIndex = left.count - itemCount / 2
         self.displayRightIndex = self.displayLeftIndex + itemCount
-        self.adjustDeltaForRange()
     }
 
     fileprivate func getItem(at index: Int) -> String {
@@ -60,34 +46,32 @@ class MoveCursorBarState: ObservableObject {
         return line[index]
     }
 
-    fileprivate func originalPosition(index: Int) -> CGFloat {
-        return CGFloat(index) * self.itemWidth - self.itemWidth / 2
+    fileprivate func move(_ count: Int) {
+        displayLeftIndex += count
+        displayRightIndex += count
+        VariableStates.shared.action.registerAction(.moveCursor(count))
     }
 
-    fileprivate func adjustDeltaForRange() {
-        self.delta = -itemWidth * CGFloat(self.centerIndex - 1)
+    fileprivate func originalPosition(index: Int) -> CGFloat {
+        return CGFloat(index) * self.itemWidth
     }
 
     fileprivate func tap(at index: Int) {
-        if index < validRange.left {
-            VariableStates.shared.action.registerAction(.moveCursor(-1))
+        let diff: Int
+        if index < 0 {
+            diff = -1
             return
-        } else if validRange.right <= index {
-            VariableStates.shared.action.registerAction(.moveCursor(1))
-            return
+        } else if line.count <= index {
+            diff = 1
+        } else {
+            diff = index - centerIndex
         }
-        let diff = index - centerIndex
-        displayLeftIndex += diff
-        displayRightIndex += diff
-        adjustDeltaForRange()
-        VariableStates.shared.action.registerAction(.moveCursor(diff))
+        move(diff)
     }
 
     func clear() {
         self.displayLeftIndex = 0
         self.displayRightIndex = 0
-        self.delta = 0
-        self.viewWidth = 3000
         self.line = []
     }
 }
@@ -99,7 +83,7 @@ struct MoveCursorBar: View {
     enum SwipeGestureState {
         case unactive
         case tap(l1: CGPoint, l2: CGPoint, l3: CGPoint)
-        case moving(l1: CGPoint, l2: CGPoint, l3: CGPoint, count: Int)
+        case moving(l1: CGPoint, l2: CGPoint, l3: CGPoint, count: Double)
     }
     @State private var swipeGestureState: SwipeGestureState = .unactive
 
@@ -136,25 +120,19 @@ struct MoveCursorBar: View {
                         direction += 1
                     }
                     // countの更新
-                    if direction > 0 {
-                        count += 1
-                    } else if direction < 0 {
-                        count -= 1
+                    if direction > 0 && value.location.x < l3.x {
+                        count += (Double(direction) / 3) * (l3.x - value.location.x) / 3
+                    } else if direction < 0 && value.location.x > l3.x {
+                        count -= (Double(direction) / 3) * (l3.x - value.location.x) / 3
                     }
                     withAnimation(.linear(duration: 0.1)) {
-                        if count > 2 {
-                            state.displayLeftIndex += 1
-                            state.displayRightIndex += 1
-                            state.adjustDeltaForRange()
-                            VariableStates.shared.action.registerAction(.moveCursor(1))
-                            count = 0
+                        if count >= 15 {
+                            state.move(1)
+                            count -= 15
                         }
-                        if count < -2 {
-                            state.displayLeftIndex -= 1
-                            state.displayRightIndex -= 1
-                            state.adjustDeltaForRange()
-                            VariableStates.shared.action.registerAction(.moveCursor(-1))
-                            count = 0
+                        if count <= -15 {
+                            state.move(-1)
+                            count += 15
                         }
                         swipeGestureState = .moving(l1: value.location, l2: l1, l3: l2, count: count)
                     }
@@ -183,7 +161,7 @@ struct MoveCursorBar: View {
                     }
                 case .moving:
                     // 位置を揃える
-                    state.adjustDeltaForRange()
+                    break
                 }
                 swipeGestureState = .unactive
             }
@@ -206,9 +184,6 @@ struct MoveCursorBar: View {
         theme.resultTextColor.color
     }
 
-    private var characterFont: Font {
-        .system(size: Design.fonts.resultViewFontSize)
-    }
     private var background: some View {
         RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: state.viewWidth / 2)
             .frame(height: Design.resultViewHeight())
@@ -220,35 +195,27 @@ struct MoveCursorBar: View {
         return .system(size: size, weight: symbolsFontWeight, design: .default)
     }
 
+    private var textView: some View {
+        HStack(spacing: .zero) {
+            ForEach(state.displayLeftIndex ..< state.displayRightIndex, id: \.self) { i in
+                Text(verbatim: state.getItem(at: i))
+                    .font(.system(size: Design.fonts.resultViewFontSize).bold())
+                    .frame(width: state.itemWidth, height: Design.resultViewHeight())
+            }
+        }
+        .allowsHitTesting(false)
+        .foregroundColor(theme.resultTextColor.color.opacity(0.4))
+        .drawingGroup()
+    }
+
     private var foregroundButtons: some View {
         ZStack(alignment: .center) {
-            HStack(spacing: .zero) {
-                GeometryReader { geometry in
-                    ForEach(state.displayLeftIndex ..< state.displayRightIndex, id: \.self) { i in
-                        Text(verbatim: state.getItem(at: i))
-                            .bold()
-                            .font(characterFont)
-                            .position(x: state.originalPosition(index: i))
-                            .frame(width: state.itemWidth)
-                    }
-                    .onAppear {
-                        state.viewWidth = geometry.size.width * 0.85
-                    }
-                    .opacity(0.4)
-                    .foregroundColor(theme.resultTextColor.color)
-                    .frame(height: Design.resultViewHeight())
-                    .offset(x: state.delta + geometry.size.width / 2, y: geometry.size.height / 2)
-                }
-            }
-            .drawingGroup()
+            textView
             HStack(spacing: .zero) {
                 Button {
-                    withAnimation(.easeOut(duration: 0.15)) {
-                        state.displayLeftIndex -= 1
-                        state.displayRightIndex -= 1
-                        state.adjustDeltaForRange()
+                    withAnimation(.linear(duration: 0.15)) {
+                        state.move(-1)
                     }
-                    VariableStates.shared.action.registerAction(.moveCursor(-1))
                 } label: {
                     Image(systemName: "chevron.left.2")
                         .font(symbolFont(size: 18))
@@ -257,16 +224,13 @@ struct MoveCursorBar: View {
                 }
                 Spacer()
                 Text(verbatim: "│")
-                    .font(characterFont)
+                    .font(.system(size: Design.fonts.resultViewFontSize + 4))
                     .foregroundColor(symbolsColor)
                 Spacer()
                 Button {
-                    withAnimation(.easeOut(duration: 0.15)) {
-                        state.displayLeftIndex += 1
-                        state.displayRightIndex += 1
-                        state.adjustDeltaForRange()
+                    withAnimation(.linear(duration: 0.15)) {
+                        state.move(1)
                     }
-                    VariableStates.shared.action.registerAction(.moveCursor(1))
                 } label: {
                     Image(systemName: "chevron.right.2")
                         .font(symbolFont(size: 18))
