@@ -28,7 +28,7 @@ struct ResultData<Candidate: ResultViewItemData>: Identifiable {
 struct ResultView<Candidate: ResultViewItemData>: View {
     private let model: ResultModel<Candidate>
     @ObservedObject private var modelVariableSection: ResultModelVariableSection<Candidate>
-    @ObservedObject private var sharedResultData: SharedResultData<Candidate>
+    private weak var sharedResultData: SharedResultData<Candidate>?
     @ObservedObject private var variableStates = VariableStates.shared
 
     @Binding private var isResultViewExpanded: Bool
@@ -150,7 +150,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     private func expand() {
         self.isResultViewExpanded = true
-        self.sharedResultData.results = self.modelVariableSection.results
+        self.sharedResultData?.results = self.modelVariableSection.results
     }
 }
 

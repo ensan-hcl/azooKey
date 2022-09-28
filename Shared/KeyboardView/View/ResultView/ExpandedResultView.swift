@@ -14,7 +14,6 @@ final class SharedResultData<Candidate: ResultViewItemData>: ObservableObject {
 }
 
 struct ExpandedResultView<Candidate: ResultViewItemData>: View {
-    @ObservedObject private var sharedResultData: SharedResultData<Candidate>
     @Binding private var isResultViewExpanded: Bool
 
     @State private var splitedResults: [SplitedResultData<Candidate>]
@@ -27,10 +26,9 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
     @Environment(\.themeEnvironment) private var theme
 
-    init(isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>) {
-        self.sharedResultData = sharedResultData
+    init(isResultViewExpanded: Binding<Bool>, resultData: [ResultData<Candidate>]) {
         self._isResultViewExpanded = isResultViewExpanded
-        self._splitedResults = State(initialValue: Self.registerResults(results: sharedResultData.results))
+        self._splitedResults = State(initialValue: Self.registerResults(results: resultData))
     }
 
     var body: some View {

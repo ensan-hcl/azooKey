@@ -45,6 +45,8 @@ extension EnvironmentValues {
 
 struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
+    @StateObject private var sharedResultData = SharedResultData<Candidate>()
+
     private let resultModel: ResultModel<Candidate>
 
     @State private var messageManager: MessageManager = MessageManager()
@@ -53,13 +55,13 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.showMessage) private var showMessage
 
-    private var sharedResultData = SharedResultData<Candidate>()
     private let defaultTab: Tab.ExistentialTab?
 
     init(resultModel: ResultModel<Candidate>, defaultTab: Tab.ExistentialTab? = nil) {
         self.resultModel = resultModel
         self.defaultTab = defaultTab
     }
+
     var body: some View {
         ZStack {
             theme.backgroundColor.color
@@ -77,7 +79,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 )
             Group {
                 if isResultViewExpanded {
-                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, resultData: sharedResultData.results)
                 } else {
                     VStack(spacing: 0) {
                         ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
