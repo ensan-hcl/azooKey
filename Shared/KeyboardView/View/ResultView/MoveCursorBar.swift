@@ -125,7 +125,7 @@ struct MoveCursorBar: View {
                     } else if direction < 0 && value.location.x > l3.x {
                         count -= (Double(direction) / 3) * (l3.x - value.location.x) / 3
                     }
-                    withAnimation(.linear(duration: 0.1)) {
+                    withAnimation(.linear(duration: 0.05)) {
                         if count >= 15 {
                             state.move(1)
                             count -= 15
