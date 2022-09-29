@@ -233,6 +233,7 @@ final class KeyboardActionDepartment: ActionDepartment {
     /// 押した場合に行われる。
     /// - Parameters:
     ///   - action: 行われた動作。
+    // TODO: この関数はdoActionを呼び出すだけになっているので、doActionの中身をここに移動させる。registerActionsも同様。
     override func registerAction(_ action: ActionType) {
         self.doAction(action)
     }
