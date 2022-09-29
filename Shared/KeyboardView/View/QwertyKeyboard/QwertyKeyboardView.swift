@@ -10,12 +10,10 @@ import Foundation
 import SwiftUI
 
 struct QwertyKeyboardView: View {
-    @Environment(\.themeEnvironment) private var theme
-    @ObservedObject private var variableStates = VariableStates.shared
     private let tabDesign: TabDependentDesign
-    private let keyModels: [[QwertyKeyModelProtocol]]
+    private let keyModels: [[any QwertyKeyModelProtocol]]
 
-    init(keyModels: [[QwertyKeyModelProtocol]]) {
+    init(keyModels: [[any QwertyKeyModelProtocol]]) {
         self.keyModels = keyModels
         self.tabDesign = TabDependentDesign(width: 10, height: 4, layout: .qwerty, orientation: VariableStates.shared.keyboardOrientation)
     }

@@ -8,30 +8,27 @@
 
 import Foundation
 import SwiftUI
-final class VariationsModelVariableSection: ObservableObject {
-    @Published var selection: Int = 0
-}
 
 struct VariationsModel {
     let variations: [(label: KeyLabelType, actions: [ActionType])]
     var direction: VariationsViewDirection
 
-    var variableSection = VariationsModelVariableSection()
     init(_ variations: [(label: KeyLabelType, actions: [ActionType])], direction: VariationsViewDirection = .center) {
         self.variations = variations
         self.direction = direction
     }
 
-    func performSelected() {
+    func performSelected(selection: Int?) {
         if self.variations.isEmpty {
             return
         }
-
-        let selected = self.variableSection.selection
-        VariableStates.shared.action.registerActions(self.variations[selected].actions)
+        guard let selection else {
+            return
+        }
+        VariableStates.shared.action.registerActions(self.variations[selection].actions)
     }
 
-    func registerLocation(dx: CGFloat, tabDesign: TabDependentDesign) {
+    func getSelection(dx: CGFloat, tabDesign: TabDependentDesign) -> Int {
         let count = CGFloat(self.variations.count)
         let width = tabDesign.keyViewWidth
         let spacing = tabDesign.horizontalSpacing
@@ -45,6 +42,6 @@ struct VariationsModel {
             start = -(width * count + spacing * (count-1))
         }
         let selection = (dx - start) / width
-        self.variableSection.selection = min(max(Int(selection), 0), Int(count)-1)
+        return min(max(Int(selection), 0), Int(count)-1)
     }
 }

@@ -11,13 +11,13 @@ import SwiftUI
 
 struct QwertyVariationsView: View {
     private let model: VariationsModel
-    @ObservedObject private var modelVariableSection: VariationsModelVariableSection
+    private let selection: Int?
     @Environment(\.themeEnvironment) private var theme
     private let tabDesign: TabDependentDesign
-    init(model: VariationsModel, tabDesign: TabDependentDesign) {
-        self.model = model
-        self.modelVariableSection = model.variableSection
+    init(model: VariationsModel, selection: Int?, tabDesign: TabDependentDesign) {
         self.tabDesign = tabDesign
+        self.model = model
+        self.selection = selection
     }
 
     private var suggestColor: Color {
@@ -29,7 +29,7 @@ struct QwertyVariationsView: View {
             ForEach(model.variations.indices, id: \.self) {(index: Int) in
                 ZStack {
                     Rectangle()
-                        .foregroundColor(index == self.modelVariableSection.selection ? Color.blue : suggestColor)
+                        .foregroundColor(index == selection ? Color.blue : suggestColor)
                         .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight*0.9, alignment: .center)
                         .cornerRadius(10.0)
                     getLabel(model.variations[index].label)

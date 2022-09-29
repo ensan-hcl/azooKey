@@ -26,19 +26,17 @@ struct ResultData<Candidate: ResultViewItemData>: Identifiable {
 }
 
 struct ResultView<Candidate: ResultViewItemData>: View {
-    private let model: ResultModel<Candidate>
     @ObservedObject private var modelVariableSection: ResultModelVariableSection<Candidate>
-    private weak var sharedResultData: SharedResultData<Candidate>?
     @ObservedObject private var variableStates = VariableStates.shared
-
+    @Binding private var resultData: [ResultData<Candidate>]
     @Binding private var isResultViewExpanded: Bool
+    
     @Environment(\.themeEnvironment) private var theme
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
-    init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, sharedResultData: SharedResultData<Candidate>) {
-        self.model = model
+    init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, resultData: Binding<[ResultData<Candidate>]>) {
         self.modelVariableSection = model.variableSection
-        self.sharedResultData = sharedResultData
+        self._resultData = resultData
         self._isResultViewExpanded = isResultViewExpanded
     }
 
@@ -60,15 +58,15 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 
     var body: some View {
-        Group {
+        Group { [unowned variableStates] in
             if variableStates.showMoveCursorBar {
                 MoveCursorBar()
             } else if variableStates.showTabBar {
                 let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
                 TabBarView(data: tabBarData)
             } else {
-                Group { [weak modelVariableSection] in
-                    let results: [ResultData<Candidate>] = modelVariableSection?.results ?? []
+                Group { [unowned modelVariableSection] in
+                    let results: [ResultData<Candidate>] = modelVariableSection.results
                     if results.isEmpty {
                         HStack {
                             Spacer()
@@ -117,7 +115,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                             }
                                         }
                                     }.onAppear {
-                                        modelVariableSection?.scrollViewProxy = scrollViewProxy
+                                        modelVariableSection.scrollViewProxy = scrollViewProxy
                                     }
                                 }
                                 .padding(.horizontal, 5)
@@ -150,7 +148,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     private func expand() {
         self.isResultViewExpanded = true
-        self.sharedResultData?.results = self.modelVariableSection.results
+        self.resultData = self.modelVariableSection.results
     }
 }
 
@@ -187,10 +185,6 @@ struct ResultModel<Candidate: ResultViewItemData> {
 
     func setResults(_ results: [Candidate]) {
         self.variableSection.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
-        self.scrollTop()
-    }
-
-    func scrollTop() {
         if let proxy = self.variableSection.scrollViewProxy {
             proxy.scrollTo(0, anchor: .trailing)
         }

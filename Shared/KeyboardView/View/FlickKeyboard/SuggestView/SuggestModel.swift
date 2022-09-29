@@ -17,8 +17,10 @@ enum SuggestModelKeyType {
 }
 
 struct SuggestModel {
-    var variableSection = SuggestModelVariableSection()
-    let _flickModels: [FlickDirection: FlickedKeyModel]
+    private(set) var variableSection = SuggestModelVariableSection()
+
+    private let keyType: SuggestModelKeyType
+    private let _flickModels: [FlickDirection: FlickedKeyModel]
     var flickModels: [FlickDirection: FlickedKeyModel] {
         switch self.keyType {
         case .normal, .enter:
@@ -29,8 +31,6 @@ struct SuggestModel {
             return FlickAaKeyModel.shared.flickKeys
         }
     }
-
-    let keyType: SuggestModelKeyType
 
     init(_ flickModels: [FlickDirection: FlickedKeyModel] = [:], keyType: SuggestModelKeyType = .normal) {
         self._flickModels = flickModels

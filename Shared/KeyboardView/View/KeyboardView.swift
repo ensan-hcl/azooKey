@@ -45,7 +45,7 @@ extension EnvironmentValues {
 
 struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
-    @StateObject private var sharedResultData = SharedResultData<Candidate>()
+    @State private var resultData: [ResultData<Candidate>] = []
 
     private let resultModel: ResultModel<Candidate>
 
@@ -63,7 +63,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack { [unowned variableStates] in
             theme.backgroundColor.color
                 .frame(maxWidth: .infinity)
                 .overlay(
@@ -79,10 +79,10 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 )
             Group {
                 if isResultViewExpanded {
-                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, resultData: sharedResultData.results)
+                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, resultData: resultData)
                 } else {
                     VStack(spacing: 0) {
-                        ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                        ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, resultData: $resultData)
                             .padding(.vertical, 6)
                         if variableStates.refreshing {
                             keyboardView(tab: variableStates.tabManager.currentTab.existential)

@@ -9,10 +9,6 @@
 import Foundation
 import SwiftUI
 
-final class SharedResultData<Candidate: ResultViewItemData>: ObservableObject {
-    @Published var results: [ResultData<Candidate>] = []
-}
-
 struct ExpandedResultView<Candidate: ResultViewItemData>: View {
     @Binding private var isResultViewExpanded: Bool
 

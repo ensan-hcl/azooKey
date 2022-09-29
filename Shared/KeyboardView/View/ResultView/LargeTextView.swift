@@ -16,7 +16,7 @@ struct LargeTextView: View {
         Font.system(size: Design.largeTextViewFontSize(variableStates.magnifyingText), weight: .regular, design: .serif)
     }
     var body: some View {
-        VStack {
+        VStack { [unowned variableStates] in
             ScrollView(.horizontal, showsIndicators: true, content: {
                 Text(variableStates.magnifyingText)
                     .font(font)

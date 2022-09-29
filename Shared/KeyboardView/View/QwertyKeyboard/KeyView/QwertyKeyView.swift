@@ -13,7 +13,7 @@ enum QwertyKeyPressState {
     case unpressed
     case started(Date)
     case longPressed
-    case variations
+    case variations(selection: Int?)
 
     var isActive: Bool {
         switch self {
@@ -68,14 +68,15 @@ struct QwertyKeyView: View {
                         if self.model.variationsModel.variations.isEmpty {
                             self.pressState = .longPressed
                         } else {
-                            self.pressState = .variations
+                            self.pressState = .variations(selection: nil)
                         }
                     }
                 case .longPressed:
                     break
                 case .variations:
                     let dx = value.location.x - value.startLocation.x
-                    self.model.variationsModel.registerLocation(dx: dx, tabDesign: tabDesign)
+                    let selection = self.model.variationsModel.getSelection(dx: dx, tabDesign: tabDesign)
+                    self.pressState = .variations(selection: selection)
                 }
             })
             // タップの終了時
@@ -93,8 +94,8 @@ struct QwertyKeyView: View {
                     }
                 case .longPressed:
                     break
-                case .variations:
-                    self.model.variationsModel.performSelected()
+                case let .variations(selection):
+                    self.model.variationsModel.performSelected(selection: selection)
                 }
                 self.pressState = .unpressed
             })
@@ -122,6 +123,13 @@ struct QwertyKeyView: View {
 
     private var suggestTextColor: Color? {
         theme != .default ? .black : nil
+    }
+
+    private var selection: Int? {
+        if case let .variations(selection) = pressState {
+            return selection
+        }
+        return nil
     }
 
     var body: some View {
@@ -152,7 +160,7 @@ struct QwertyKeyView: View {
                             tabDesign: tabDesign
                         )
                         .overlay(
-                            QwertyVariationsView(model: self.model.variationsModel, tabDesign: tabDesign)
+                            QwertyVariationsView(model: self.model.variationsModel, selection: selection, tabDesign: tabDesign)
                                 .padding(.bottom, height)
                                 .padding(self.model.variationsModel.direction.edge, 15),
                             alignment: self.model.variationsModel.direction.alignment

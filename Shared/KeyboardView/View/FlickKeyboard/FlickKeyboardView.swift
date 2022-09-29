@@ -10,12 +10,9 @@ import Foundation
 import SwiftUI
 
 struct FlickKeyboardView: View {
-    @ObservedObject private var variableStates = VariableStates.shared
-    @Environment(\.themeEnvironment) private var theme
-
     private let tabDesign: TabDependentDesign
-    private let keyModels: [[FlickKeyModelProtocol]]
-    init(keyModels: [[FlickKeyModelProtocol]]) {
+    private let keyModels: [[any FlickKeyModelProtocol]]
+    init(keyModels: [[any FlickKeyModelProtocol]]) {
         self.keyModels = keyModels
         self.tabDesign = TabDependentDesign(width: 5, height: 4, layout: .flick, orientation: VariableStates.shared.keyboardOrientation)
     }
@@ -28,21 +25,35 @@ struct FlickKeyboardView: View {
         keyModels[h].indices
     }
 
+    private func keyView(h: Int, v: Int) -> FlickKeyView {
+        let model = self.keyModels[h][v]
+        let size: CGSize
+        if model is FlickEnterKeyModel {
+            size = CGSize(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight(heightCount: 2))
+        } else {
+            size = tabDesign.keyViewSize
+        }
+        return FlickKeyView(model: model, size: size)
+    }
+
+    private func suggestView(h: Int, v: Int) -> SuggestView {
+        let model = self.keyModels[h][v]
+        let size: CGSize
+        if model is FlickEnterKeyModel {
+            size = CGSize(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight(heightCount: 2))
+        } else {
+            size = tabDesign.keyViewSize
+        }
+        return SuggestView(model: model.suggestModel, tabDesign: tabDesign, size: size)
+    }
+
     var body: some View {
         ZStack {
             HStack(spacing: tabDesign.horizontalSpacing) {
                 ForEach(self.horizontalIndices, id: \.self) {h in
                     VStack(spacing: tabDesign.verticalSpacing) {
                         ForEach(self.verticalIndices(h: h), id: \.self) {(v: Int) -> FlickKeyView in
-                            let model = self.keyModels[h][v]
-                            let size: CGSize = {
-                                if model is FlickEnterKeyModel {
-                                    return CGSize(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight(heightCount: 2))
-                                } else {
-                                    return tabDesign.keyViewSize
-                                }
-                            }()
-                            FlickKeyView(model: model, size: size)
+                            self.keyView(h: h, v: v)
                         }
                     }
                 }
@@ -51,15 +62,7 @@ struct FlickKeyboardView: View {
                 ForEach(self.horizontalIndices, id: \.self) {h in
                     VStack(spacing: tabDesign.verticalSpacing) {
                         ForEach(self.verticalIndices(h: h), id: \.self) {(v: Int) -> SuggestView in
-                            let model = self.keyModels[h][v]
-                            let size: CGSize = {
-                                if model is FlickEnterKeyModel {
-                                    return CGSize(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight(heightCount: 2))
-                                } else {
-                                    return tabDesign.keyViewSize
-                                }
-                            }()
-                            SuggestView(model: model.suggestModel, tabDesign: tabDesign, size: size)
+                            self.suggestView(h: h, v: v)
                         }
                     }
                 }
