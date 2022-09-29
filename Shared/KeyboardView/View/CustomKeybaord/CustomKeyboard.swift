@@ -43,16 +43,16 @@ fileprivate extension CustardInterfaceStyle {
 }
 
 fileprivate extension CustardInterface {
-    var tabDesign: TabDependentDesign {
+    func tabDesign(keyboardOrientation: KeyboardOrientation) -> TabDependentDesign {
         switch self.keyLayout {
         case let .gridFit(value):
-            return TabDependentDesign(width: value.rowCount, height: value.columnCount, layout: keyStyle.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
+            return TabDependentDesign(width: value.rowCount, height: value.columnCount, layout: keyStyle.keyboardLayout, orientation: keyboardOrientation)
         case let .gridScroll(value):
             switch value.direction {
             case .vertical:
-                return TabDependentDesign(width: CGFloat(Int(value.rowCount)), height: CGFloat(value.columnCount), layout: .flick, orientation: VariableStates.shared.keyboardOrientation)
+                return TabDependentDesign(width: CGFloat(Int(value.rowCount)), height: CGFloat(value.columnCount), layout: .flick, orientation: keyboardOrientation)
             case .horizontal:
-                return TabDependentDesign(width: CGFloat(value.rowCount), height: CGFloat(Int(value.columnCount)), layout: .flick, orientation: VariableStates.shared.keyboardOrientation)
+                return TabDependentDesign(width: CGFloat(value.rowCount), height: CGFloat(Int(value.columnCount)), layout: .flick, orientation: keyboardOrientation)
             }
         }
     }
@@ -248,11 +248,13 @@ extension CustardInterfaceKey {
 
 struct CustomKeyboardView: View {
     private let custard: Custard
-    private let tabDesign: TabDependentDesign
+    private var tabDesign: TabDependentDesign {
+        custard.interface.tabDesign(keyboardOrientation: variableStates.keyboardOrientation)
+    }
+    @ObservedObject private var variableStates = VariableStates.shared
 
     init(custard: Custard) {
         self.custard = custard
-        self.tabDesign = custard.interface.tabDesign
     }
 
     private func qwertyKeyData(x: Int, y: Int, size: QwertyKeySizeType) -> (position: CGPoint, size: CGSize) {
