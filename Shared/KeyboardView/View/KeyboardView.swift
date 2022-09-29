@@ -47,7 +47,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
     @State private var resultData: [ResultData<Candidate>] = []
 
-    private let resultModel: ResultModel<Candidate>
+    private unowned let resultModelVariableSection: ResultModelVariableSection<Candidate>
 
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
@@ -57,8 +57,8 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
 
     private let defaultTab: Tab.ExistentialTab?
 
-    init(resultModel: ResultModel<Candidate>, defaultTab: Tab.ExistentialTab? = nil) {
-        self.resultModel = resultModel
+    init(resultModelVariableSection: ResultModelVariableSection<Candidate>, defaultTab: Tab.ExistentialTab? = nil) {
+        self.resultModelVariableSection = resultModelVariableSection
         self.defaultTab = defaultTab
     }
 
@@ -82,7 +82,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                     ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, resultData: resultData)
                 } else {
                     VStack(spacing: 0) {
-                        ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, resultData: $resultData)
+                        ResultView(model: resultModelVariableSection, isResultViewExpanded: $isResultViewExpanded, resultData: $resultData)
                             .padding(.vertical, 6)
                         if variableStates.refreshing {
                             keyboardView(tab: variableStates.tabManager.currentTab.existential)

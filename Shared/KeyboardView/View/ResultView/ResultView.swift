@@ -9,15 +9,24 @@
 import Foundation
 import SwiftUI
 
+// TODO: Candidateを直接やりとりするのをやめて、(ID, text, inputtable, debugInfo)あたりを持った構造体として扱うようにする。
+// TODO: こうすることでCandidateをジェネリックにしないで済むので、ResultModelVariableSectionをやめてVariableStatesに統合できる。
 protocol ResultViewItemData {
     var text: String {get}
     var inputable: Bool {get}
     func getDebugInformation() -> String
 }
 
-private final class ResultModelVariableSection<Candidate: ResultViewItemData>: ObservableObject {
+final class ResultModelVariableSection<Candidate: ResultViewItemData>: ObservableObject {
     @Published fileprivate var results: [ResultData<Candidate>] = []
     @Published fileprivate var scrollViewProxy: ScrollViewProxy?
+
+    func setResults(_ results: [Candidate]) {
+        self.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
+        if let proxy = self.scrollViewProxy {
+            proxy.scrollTo(0, anchor: .trailing)
+        }
+    }
 }
 
 struct ResultData<Candidate: ResultViewItemData>: Identifiable {
@@ -26,7 +35,7 @@ struct ResultData<Candidate: ResultViewItemData>: Identifiable {
 }
 
 struct ResultView<Candidate: ResultViewItemData>: View {
-    @ObservedObject private var modelVariableSection: ResultModelVariableSection<Candidate>
+    @ObservedObject private var model: ResultModelVariableSection<Candidate>
     @ObservedObject private var variableStates = VariableStates.shared
     @Binding private var resultData: [ResultData<Candidate>]
     @Binding private var isResultViewExpanded: Bool
@@ -34,8 +43,8 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     @Environment(\.themeEnvironment) private var theme
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
-    init(model: ResultModel<Candidate>, isResultViewExpanded: Binding<Bool>, resultData: Binding<[ResultData<Candidate>]>) {
-        self.modelVariableSection = model.variableSection
+    init(model: ResultModelVariableSection<Candidate>, isResultViewExpanded: Binding<Bool>, resultData: Binding<[ResultData<Candidate>]>) {
+        self.model = model
         self._resultData = resultData
         self._isResultViewExpanded = isResultViewExpanded
     }
@@ -65,13 +74,13 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                 let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
                 TabBarView(data: tabBarData)
             } else {
-                Group { [unowned modelVariableSection] in
-                    let results: [ResultData<Candidate>] = modelVariableSection.results
+                Group { [unowned model] in
+                    let results: [ResultData<Candidate>] = model.results
                     if results.isEmpty {
                         HStack {
                             Spacer()
                             Button {
-                                variableStates.action.registerAction(.toggleTabBar)
+                                VariableStates.shared.action.registerAction(.toggleTabBar)
                             } label: {
                                 ZStack {
                                     if displayTabBarButton {
@@ -90,7 +99,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                         }
                         .background(Color(.sRGB, white: 1, opacity: 0.001))
                         .onLongPressGesture {
-                            variableStates.action.registerAction(.toggleTabBar)
+                            VariableStates.shared.action.registerAction(.toggleTabBar)
                         }
                     } else {
                         HStack {
@@ -115,7 +124,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                             }
                                         }
                                     }.onAppear {
-                                        modelVariableSection.scrollViewProxy = scrollViewProxy
+                                        model.scrollViewProxy = scrollViewProxy
                                     }
                                 }
                                 .padding(.horizontal, 5)
@@ -143,12 +152,12 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 
     private func pressed(candidate: Candidate) {
-        variableStates.action.notifyComplete(candidate)
+        VariableStates.shared.action.notifyComplete(candidate)
     }
 
     private func expand() {
         self.isResultViewExpanded = true
-        self.resultData = self.modelVariableSection.results
+        self.resultData = self.model.results
     }
 }
 
@@ -176,17 +185,6 @@ struct ResultContextMenuView<Candidate: ResultViewItemData>: View {
                 Image(systemName: "ladybug.fill")
             }
             #endif
-        }
-    }
-}
-
-struct ResultModel<Candidate: ResultViewItemData> {
-    fileprivate var variableSection = ResultModelVariableSection<Candidate>()
-
-    func setResults(_ results: [Candidate]) {
-        self.variableSection.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
-        if let proxy = self.variableSection.scrollViewProxy {
-            proxy.scrollTo(0, anchor: .trailing)
         }
     }
 }

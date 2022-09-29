@@ -27,7 +27,7 @@ final class KeyboardViewController: UIInputViewController {
     struct Keyboard: View {
         let theme: ThemeData
         var body: some View {
-            KeyboardView<Candidate>(resultModel: Store.shared.resultModel)
+            KeyboardView<Candidate>(resultModelVariableSection: Store.shared.resultModelVariableSection)
                 .environment(\.themeEnvironment, theme)
         }
     }

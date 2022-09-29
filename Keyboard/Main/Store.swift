@@ -12,7 +12,7 @@ import DequeModule
 
 final class Store {
     static let shared = Store()
-    private(set) var resultModel = ResultModel<Candidate>()
+    private(set) var resultModelVariableSection = ResultModelVariableSection<Candidate>()
     /// Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     var action: KeyboardActionDepartment {
         VariableStates.shared.action as! KeyboardActionDepartment
@@ -39,12 +39,10 @@ final class Store {
         VariableStates.shared.initialize()
         // 設定の更新を確認
         self.settingCheck()
-        // 変数の初期化
-        self.resultModel = ResultModel<Candidate>()
     }
 
     fileprivate func registerResult(_ result: [Candidate]) {
-        self.resultModel.setResults(result)
+        self.resultModelVariableSection.setResults(result)
     }
 
     func closeKeyboard() {
