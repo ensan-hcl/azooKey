@@ -29,6 +29,12 @@ extension StringProtocol {
     var isEnglishSentence: Bool {
         return !isEmpty && range(of: "[^0-9a-zA-Z\n !'_<>\\[\\]{}*@`\\^|~=\"#$%&+(),-./:;?’]", options: .regularExpression) == nil
     }
+
+    /// 仮名か
+    @inlinable
+    var isKana: Bool {
+        return !isEmpty && range(of: "[^ぁ-ゖァ-ヶ]", options: .regularExpression) == nil
+    }
 }
 
 extension StringProtocol {

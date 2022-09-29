@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-import DequeModule
+import OrderedCollections
 
 final class Store {
     static let shared = Store()
@@ -466,21 +466,73 @@ private final class InputManager {
     private var afterAdjusted: Bool = false
 
     // 再変換機能の提供のために用いる辞書
-    private var candidatesLog: Deque<DicdataElement> = []
+    private var rubyLog: OrderedDictionary<String, String> = [:]
 
     private var liveConversionEnabled: Bool {
         return liveConversionManager.enabled && !self.isSelected
     }
 
     private func updateLog(candidate: Candidate) {
-        candidatesLog.append(contentsOf: candidate.data)
-        while candidatesLog.count > 100 {  // 最大100個までログを取る
-            candidatesLog.removeFirst()
+        for data in candidate.data {
+            // 「感謝する: カンシャスル」→を「感謝: カンシャ」に置き換える
+            var word = data.word.toHiragana()
+            var ruby = data.ruby.toHiragana()
+
+            // wordのlastがrubyのlastである時、この文字は仮名なので
+            while !word.isEmpty && word.last == ruby.last {
+                word.removeLast()
+                ruby.removeLast()
+            }
+            while !word.isEmpty && word.first == ruby.first {
+                word.removeFirst()
+                ruby.removeFirst()
+            }
+            if word.isEmpty {
+                continue
+            }
+            // 一度消してから入れる(reorder)
+            rubyLog.removeValue(forKey: word)
+            rubyLog[word] = ruby
         }
+        while rubyLog.count > 100 {  // 最大100個までログを取る
+            rubyLog.removeFirst()
+        }
+        debug(rubyLog)
     }
 
-    private func getMatch(word: String) -> DicdataElement? {
-        return candidatesLog.last(where: {$0.word == word})
+    /// ルビ(ひらがな)を返す
+    private func getRubyIfPossible(text: String) -> String? {
+        // TODO: もう少しやりようがありそう、例えばログを見てひたすら置換し、最後にkanaだったらヨシ、とか？
+        // ユーザがテキストを選択した場合、というやや強い条件が入っているので、パフォーマンスをあまり気にしなくても大丈夫
+        // 長い文章を再変換しない、みたいな仮定も入れられる
+        if let ruby = rubyLog[text] {
+            return ruby.toHiragana()
+        }
+        // 長い文章は諦めてもらう
+        if text.count > 20 {
+            return nil
+        }
+        // {hiragana}*{known word}のパターンを救う
+        do {
+            for (word, ruby) in rubyLog {
+                if text.hasSuffix(word) {
+                    if text.dropLast(word.count).isKana {
+                        return (text.dropLast(word.count) + ruby).toHiragana()
+                    }
+                }
+            }
+        }
+        // {known word}{hiragana}*のパターンを救う
+        do {
+            for (word, ruby) in rubyLog {
+                if text.hasPrefix(word) {
+                    if text.dropFirst(word.count).isKana {
+                        return (ruby + text.dropFirst(word.count)).toHiragana()
+                    }
+                }
+            }
+        }
+        return nil
     }
 
     /// かな漢字変換を受け持つ変換器。
@@ -1036,10 +1088,10 @@ private final class InputManager {
             return
         }
         // 過去のログを見て、再変換に利用する
-        // 再変換処理をもっと上手くやりたい
         composingText.clear()
-        if let element = self.getMatch(word: text) {
-            _ = self.composingText.insertAtCursorPosition(element.ruby.toHiragana(), inputStyle: .direct)
+        if let ruby = self.getRubyIfPossible(text: text) {
+            // rubyはひらがなである
+            _ = self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
         } else {
             _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
         }
