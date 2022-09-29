@@ -67,6 +67,9 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         self.registerScreenActualSize()
+        Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
+        Store.shared.action.setDelegateViewController(self)
+
         super.viewDidAppear(animated)
         let window = self.view.window!
         let gr0 = window.gestureRecognizers![0] as UIGestureRecognizer
@@ -87,8 +90,6 @@ final class KeyboardViewController: UIInputViewController {
             }
             Store.shared.action.sendToDicdataStore(.importOSUserDict(osuserdict))
         }
-
-        Store.shared.appearedAgain()
     }
 
     func registerScreenActualSize() {

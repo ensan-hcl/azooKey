@@ -14,10 +14,12 @@ final class Store {
     static let shared = Store()
     private(set) var resultModel = ResultModel<Candidate>()
     /// Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
-    private(set) var action = KeyboardActionDepartment()
+    var action: KeyboardActionDepartment {
+        VariableStates.shared.action as! KeyboardActionDepartment
+    }
 
     private init() {
-        VariableStates.shared.action = action
+        VariableStates.shared.action = KeyboardActionDepartment()
     }
 
     func settingCheck() {
@@ -28,19 +30,17 @@ final class Store {
         self.action.sendToDicdataStore(.notifyLearningType(learningType))
     }
 
-    /// Call this method after initialize
+    /// キーボードが表示された際に実行する
     func initialize() {
         debug("Storeを初期化します")
-        self.settingCheck()
+        // まずActionDepartmentを上書きする
+        VariableStates.shared.action = KeyboardActionDepartment()
+        // ついで初期化
         VariableStates.shared.initialize()
-        self.action.initialize()
-    }
-
-    func appearedAgain() {
-        debug("再び表示されました")
+        // 設定の更新を確認
         self.settingCheck()
-        VariableStates.shared.initialize()
-        self.action.appearedAgain()
+        // 変数の初期化
+        self.resultModel = ResultModel<Candidate>()
     }
 
     fileprivate func registerResult(_ result: [Candidate]) {
@@ -65,18 +65,14 @@ final class KeyboardActionDepartment: ActionDepartment {
     private var tempTextData: (left: String, center: String, right: String)!
     private var tempSavedSelectedText: String!
 
-    fileprivate func initialize() {
-        self.inputManager.closeKeyboard()
-        self.timers.forEach {$0.timer.invalidate()}
-        self.timers = []
-    }
-
+    // キーボードを閉じる際に呼び出す
+    // inputManagerはキーボードを閉じる際にある種の操作を行う
     fileprivate func closeKeyboard() {
-        self.initialize()
-    }
-
-    fileprivate func appearedAgain() {
-        self.sendToDicdataStore(.reloadUserDict)
+        self.inputManager.closeKeyboard()
+        for (_, timer) in self.timers {
+            timer.invalidate()
+        }
+        self.timers = []
     }
 
     func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
