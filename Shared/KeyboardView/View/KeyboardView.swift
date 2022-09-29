@@ -99,7 +99,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
             )
             .padding(.bottom, 2)
             if variableStates.isTextMagnifying {
-                LargeTextView()
+                LargeTextView(text: variableStates.magnifyingText, isViewOpen: $variableStates.isTextMagnifying)
             }
             if showMessage {
                 ForEach(messageManager.necessaryMessages, id: \.id) {data in

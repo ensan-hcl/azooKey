@@ -10,19 +10,25 @@ import Foundation
 import SwiftUI
 
 struct LargeTextView: View {
-    @ObservedObject private var variableStates = VariableStates.shared
+    private let text: String
+    @Binding private var isViewOpen: Bool
+
+    init(text: String, isViewOpen: Binding<Bool>) {
+        self.text = text
+        self._isViewOpen = isViewOpen
+    }
 
     private var font: Font {
-        Font.system(size: Design.largeTextViewFontSize(variableStates.magnifyingText), weight: .regular, design: .serif)
+        Font.system(size: Design.largeTextViewFontSize(text), weight: .regular, design: .serif)
     }
     var body: some View {
-        VStack { [unowned variableStates] in
+        VStack {
             ScrollView(.horizontal, showsIndicators: true, content: {
-                Text(variableStates.magnifyingText)
+                Text(text)
                     .font(font)
             })
             Button(action: {
-                variableStates.isTextMagnifying = false
+                isViewOpen = false
             }) {
                 Image(systemName: "xmark")
                 Text("閉じる")
