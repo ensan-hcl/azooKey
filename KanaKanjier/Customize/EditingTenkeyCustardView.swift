@@ -162,6 +162,8 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                     .border(Color.primary)
                             }
                             .contextMenu {
+                                // TODO: これ、OSのクリップボード使ったほうがいいのかも
+                                // TODO: Swap、DuplicateみたいなAPIも追加したい
                                 Button {
                                     copiedKey = editingItem.keys[.gridFit(x: x, y: y)]
                                 } label: {
