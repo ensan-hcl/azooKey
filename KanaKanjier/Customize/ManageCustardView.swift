@@ -215,31 +215,35 @@ struct ManageCustardView: View {
 
             } else {
                 Section(header: Text("読み込む")) {
-
-                    if let text = data.processState.description {
-                        ProgressView(text)
+                    Button("iCloudから読み込む") {
+                        showDocumentPicker = true
                     }
-                    if let failure = data.failureData {
-                        HStack {
-                            Image(systemName: "exclamationmark.triangle")
-                            Text(failure.description).foregroundColor(.red)
-                        }
-                    }
-                    DisclosureGroup("iCloudから読み込む") {
-                        Button("読み込む") {
-                            showDocumentPicker = true
-                        }
-                    }
-                    DisclosureGroup("URLから読み込む") {
+                }
+                Section(header: Text("URLから読み込む"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")) {
+                    HStack {
                         TextField("URLを入力", text: $urlString)
                             .submitLabel(.go)
                             .onSubmit {
                                 data.download(from: urlString)
                             }
-                        Button("読み込む") {
-                            data.download(from: urlString)
-                        }
+                        Divider()
+                        PasteLongPressButton($urlString)
+                            .padding(.horizontal, 5)
                     }
+                    Button("読み込む") {
+                        data.download(from: urlString)
+                    }
+                }
+                if let text = data.processState.description {
+                    ProgressView(text)
+                }
+                if let failure = data.failureData {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle")
+                        Text(failure.description).foregroundColor(.red)
+                    }
+                }
+                Section {
                     Text("カスタムタブをファイルとして外部で作成し、azooKeyに読み込むことができます。より高機能なタブの作成が可能です。詳しくは以下をご覧ください。")
                     FallbackLink("カスタムタブファイルの作り方", destination: "https://github.com/ensan-hcl/CustardKit")
                 }
