@@ -22,7 +22,7 @@ extension UIInputView: UIInputViewAudioFeedback {
 }
 
 final class KeyboardViewController: UIInputViewController {
-    private var keyboardViewHost: KeyboardHostingController<Keyboard>? = nil
+    private weak var keyboardViewHost: KeyboardHostingController<Keyboard>? = nil
 
     struct Keyboard: View {
         let theme: ThemeData
@@ -108,6 +108,8 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.view.subviews.forEach {$0.removeFromSuperview()}
+
         self.keyboardViewHost = nil
         Store.shared.closeKeyboard()
         debug("キーボードが閉じられました")
