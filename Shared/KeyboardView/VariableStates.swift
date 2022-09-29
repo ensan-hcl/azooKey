@@ -40,7 +40,7 @@ final class VariableStates: ObservableObject {
 
     @Published private(set) var resizingState: ResizingState = .fullwidth
 
-    var moveCursorBarState = MoveCursorBarState()
+    var moveCursorBarState = BetaMoveCursorBarState()
 
     func setResizingMode(_ state: ResizingState) {
         switch state {

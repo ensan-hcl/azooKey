@@ -30,8 +30,10 @@ struct SettingTabView: View {
                     Section(header: Text("カスタムキー")) {
                         CustomKeysSettingView()
                     }
-                    Section(header: Text("タブバー")) {
+                    // TODO: Localize
+                    Section(header: Text("バーの操作")) {
                         BoolSettingView(.displayTabBarButton)
+                        BoolSettingView(.useBetaMoveCursorBar)
                     }
                     Section(header: Text("サウンド")) {
                         BoolSettingView(.enableKeySound)

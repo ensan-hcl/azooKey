@@ -142,6 +142,18 @@ extension KeyboardSettingKey where Self == DisplayTabBarButton {
     static var displayTabBarButton: Self { .init() }
 }
 
+struct UseBetaMoveCursorBar: BoolKeyboardSettingKey {
+    // TODO: Localize
+    static let title: LocalizedStringKey = "新しいカーソルバーを使う (ベータ版)"
+    static let explanation: LocalizedStringKey = "新しいカーソルバーを有効化します。\n実験的機能のため、仕様の変更、不具合などが発生する可能性があります。"
+    static let defaultValue = false
+    static let key: String = "use_move_cursor_bar_beta"
+}
+
+extension KeyboardSettingKey where Self == UseBetaMoveCursorBar {
+    static var useBetaMoveCursorBar: Self { .init() }
+}
+
 struct StopLearningWhenSearch: BoolKeyboardSettingKey {
     static let title: LocalizedStringKey = "検索時は学習を停止"
     static let explanation: LocalizedStringKey = "web検索などで入力した単語を学習しません。"
