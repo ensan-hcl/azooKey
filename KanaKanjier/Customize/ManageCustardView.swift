@@ -149,12 +149,22 @@ private final class ImportedCustardData: ObservableObject {
     }
 }
 
+struct WebCustardList: Codable {
+    struct Item: Codable {
+        var name: String
+        var file: String
+    }
+    var last_update: String
+    var custards: [Item]
+}
+
 struct ManageCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var urlString: String = ""
     @State private var showAlert = false
     @State private var alertType = AlertType.none
     @Binding private var manager: CustardManager
+    @State private var webCustards: WebCustardList = .init(last_update: "", custards: [])
     @State private var showDocumentPicker = false
     @State private var selectedDocument: Data = Data()
     @State private var addTabBar = true
@@ -178,6 +188,7 @@ struct ManageCustardView: View {
                     }
                 }
             }
+            .onAppear(perform: loadWebCustard)
 
             Section(header: Text("作る")) {
                 Text("登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
@@ -214,6 +225,21 @@ struct ManageCustardView: View {
                 .foregroundColor(.red)
 
             } else {
+                Section(header: Text("おすすめ")) {
+                    ForEach(webCustards.custards, id: \.file) {item in
+                        HStack {
+                            Button {
+                                data.download(from: "https://azookey.netlify.app/static/custard/\(item.file)")
+                            } label: {
+                                Image(systemName: "square.and.arrow.down")
+                                    .foregroundColor(.accentColor)
+                                    .padding(.horizontal, 5)
+                            }
+                            Text(verbatim: item.name)
+                        }
+                    }
+                }
+
                 Section(header: Text("読み込む")) {
                     Button("iCloudから読み込む") {
                         showDocumentPicker = true
@@ -308,6 +334,29 @@ struct ManageCustardView: View {
         return true
     }
 
+    private func loadWebCustard() {
+        guard let url = URL(string: "https://azooKey.netlify.com/static/custard/all") else {
+            return
+        }
+        let request = URLRequest(url: url)
+
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            if let data {
+                let decoder = JSONDecoder()
+                guard let decodedResponse = try? decoder.decode(WebCustardList.self, from: data) else {
+                    debug("Failed to load https://azooKey.netlify.com/static/custard/all")
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    self.webCustards = decodedResponse
+                }
+            } else {
+                debug("Fetch failed", error)
+            }
+
+        }.resume()
+    }
 }
 
 // FIXME: ファイルを保存もキャンセルもしない状態で2つ目のファイルを読み込むとエラーになる
