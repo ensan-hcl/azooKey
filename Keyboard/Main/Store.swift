@@ -108,40 +108,12 @@ final class KeyboardActionDepartment: ActionDepartment {
             return
         }
         self.inputManager.complete(candidate: candidate)
-        self.doActions(candidate.actions)
+        self.registerActions(candidate.actions)
     }
 
     private func showResultView() {
         VariableStates.shared.showTabBar = false
         VariableStates.shared.showMoveCursorBar = false
-    }
-
-    /// 複数のアクションを実行する
-    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
-    ///  サポートされている最適化
-    /// - `setResult`を一度のみ実施する
-    private func doActions(_ actions: [ActionType]) {
-        let isSetActionTrigger = actions.map { action in
-            switch action {
-            case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
-                return true
-            default:
-                return false
-            }
-        }
-        if let lastIndex = isSetActionTrigger.lastIndex(where: { $0 }) {
-            for (i, action) in actions.enumerated() {
-                if i == lastIndex {
-                    self.doAction(action, requireSetResult: true)
-                } else {
-                    self.doAction(action, requireSetResult: false)
-                }
-            }
-        } else {
-            for action in actions {
-                self.doAction(action)
-            }
-        }
     }
 
     private func doAction(_ action: ActionType, requireSetResult: Bool = true) {
@@ -208,7 +180,7 @@ final class KeyboardActionDepartment: ActionDepartment {
         case .enter:
             self.showResultView()
             let actions = self.inputManager.enter()
-            self.doActions(actions)
+            self.registerActions(actions)
 
         case .changeCharacterType:
             self.showResultView()
@@ -253,16 +225,36 @@ final class KeyboardActionDepartment: ActionDepartment {
     /// 押した場合に行われる。
     /// - Parameters:
     ///   - action: 行われた動作。
-    // TODO: この関数はdoActionを呼び出すだけになっているので、doActionの中身をここに移動させる。registerActionsも同様。
     override func registerAction(_ action: ActionType) {
         self.doAction(action)
     }
 
-    /// 押した場合に行われる。
-    /// - Parameters:
-    ///   - action: 行われた複数の動作。
+    /// 複数のアクションを実行する
+    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
+    ///  サポートされている最適化
+    /// - `setResult`を一度のみ実施する
     override func registerActions(_ actions: [ActionType]) {
-        self.doActions(actions)
+        let isSetActionTrigger = actions.map { action in
+            switch action {
+            case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
+                return true
+            default:
+                return false
+            }
+        }
+        if let lastIndex = isSetActionTrigger.lastIndex(where: { $0 }) {
+            for (i, action) in actions.enumerated() {
+                if i == lastIndex {
+                    self.doAction(action, requireSetResult: true)
+                } else {
+                    self.doAction(action, requireSetResult: false)
+                }
+            }
+        } else {
+            for action in actions {
+                self.doAction(action)
+            }
+        }
     }
 
     /// 長押しを予約する関数。
@@ -278,14 +270,14 @@ final class KeyboardActionDepartment: ActionDepartment {
             let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
             if span > 0.4 {
                 action.repeat.first?.sound()
-                self?.doActions(action.repeat)
+                self?.registerActions(action.repeat)
             }
         })
         self.timers.append((type: action, timer: startTimer))
 
         let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
             action.start.first?.sound()
-            self?.doActions(action.start)
+            self?.registerActions(action.start)
         })
         self.timers.append((type: action, timer: repeatTimer))
     }
