@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct FlickEnterKeyModel: FlickKeyModelProtocol {
-    static var shared = FlickEnterKeyModel()
+    static let shared = FlickEnterKeyModel()
     let suggestModel = SuggestModel([:])
     let needSuggestView = false
 
