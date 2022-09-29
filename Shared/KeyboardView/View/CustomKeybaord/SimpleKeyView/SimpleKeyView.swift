@@ -14,7 +14,6 @@ struct SimpleKeyView: View {
     @ObservedObject private var variableStates = VariableStates.shared
     @Environment(\.themeEnvironment) private var theme
 
-    @State private var longpressing = false
     private let tabDesign: TabDependentDesign
 
     init(model: SimpleKeyModelProtocol, tabDesign: TabDependentDesign) {

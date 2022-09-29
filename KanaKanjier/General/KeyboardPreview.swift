@@ -18,7 +18,7 @@ private struct CandidateMock: ResultViewItemData {
 }
 
 struct KeyboardPreview: View {
-    private let resultModel = ResultModel<CandidateMock>()
+    private let resultModel = ResultModelVariableSection<CandidateMock>()
     private let theme: ThemeData
 
     private let scale: CGFloat
@@ -43,7 +43,7 @@ struct KeyboardPreview: View {
     }
 
     var body: some View {
-        KeyboardView<CandidateMock>(resultModel: resultModel, defaultTab: defaultTab)
+        KeyboardView<CandidateMock>(resultModelVariableSection: resultModel, defaultTab: defaultTab)
             .environment(\.themeEnvironment, theme)
             .environment(\.showMessage, false)
             .scaleEffect(scale)

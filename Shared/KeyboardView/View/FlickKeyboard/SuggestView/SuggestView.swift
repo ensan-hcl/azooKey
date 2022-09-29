@@ -56,8 +56,8 @@ struct SuggestView: View {
     }
 
     var body: some View {
-        VStack(spacing: tabDesign.verticalSpacing) {
-            if self.modelVariableSection.suggestState.isActive {
+        VStack(spacing: tabDesign.verticalSpacing) { [unowned modelVariableSection] in
+            if modelVariableSection.suggestState.isActive {
                 self.neededApeearView(direction: .top)
                 HStack(spacing: tabDesign.horizontalSpacing) {
                     self.neededApeearView(direction: .left)

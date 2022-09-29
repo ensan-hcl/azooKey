@@ -45,7 +45,9 @@ extension EnvironmentValues {
 
 struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
-    private let resultModel: ResultModel<Candidate>
+    @State private var resultData: [ResultData<Candidate>] = []
+
+    private unowned let resultModelVariableSection: ResultModelVariableSection<Candidate>
 
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
@@ -53,15 +55,15 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.showMessage) private var showMessage
 
-    private var sharedResultData = SharedResultData<Candidate>()
     private let defaultTab: Tab.ExistentialTab?
 
-    init(resultModel: ResultModel<Candidate>, defaultTab: Tab.ExistentialTab? = nil) {
-        self.resultModel = resultModel
+    init(resultModelVariableSection: ResultModelVariableSection<Candidate>, defaultTab: Tab.ExistentialTab? = nil) {
+        self.resultModelVariableSection = resultModelVariableSection
         self.defaultTab = defaultTab
     }
+
     var body: some View {
-        ZStack {
+        ZStack { [unowned variableStates] in
             theme.backgroundColor.color
                 .frame(maxWidth: .infinity)
                 .overlay(
@@ -77,10 +79,10 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 )
             Group {
                 if isResultViewExpanded {
-                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, resultData: resultData)
                 } else {
                     VStack(spacing: 0) {
-                        ResultView(model: resultModel, isResultViewExpanded: $isResultViewExpanded, sharedResultData: sharedResultData)
+                        ResultView(model: resultModelVariableSection, isResultViewExpanded: $isResultViewExpanded, resultData: $resultData)
                             .padding(.vertical, 6)
                         if variableStates.refreshing {
                             keyboardView(tab: variableStates.tabManager.currentTab.existential)
@@ -97,7 +99,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
             )
             .padding(.bottom, 2)
             if variableStates.isTextMagnifying {
-                LargeTextView()
+                LargeTextView(text: variableStates.magnifyingText, isViewOpen: $variableStates.isTextMagnifying)
             }
             if showMessage {
                 ForEach(messageManager.necessaryMessages, id: \.id) {data in

@@ -10,8 +10,6 @@ import Foundation
 import SwiftUI
 
 struct TabBarView: View {
-    @ObservedObject private var variableStates = VariableStates.shared
-
     private let data: TabBarData
 
     init(data: TabBarData) {
@@ -25,7 +23,7 @@ struct TabBarView: View {
                     ForEach(data.items.indices, id: \.self) {i in
                         let item = data.items[i]
                         Button {
-                            variableStates.action.registerActions(item.actions.map {$0.actionType})
+                            VariableStates.shared.action.registerActions(item.actions.map {$0.actionType})
                         } label: {
                             switch item.label {
                             case let .text(text):

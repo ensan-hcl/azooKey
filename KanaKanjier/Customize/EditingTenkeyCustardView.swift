@@ -39,6 +39,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     @State private var editingItem: UserMadeTenKeyCustard
     @Binding private var manager: CustardManager
     @State private var showPreview = false
+    @State private var copiedKey: UserMadeTenKeyCustard.KeyData?
     private var models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
         return (0..<layout.rowCount).reduce(into: [:]) {dict, x in
             (0..<layout.columnCount).forEach {y in
@@ -161,11 +162,36 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                     .border(Color.primary)
                             }
                             .contextMenu {
+                                // TODO: これ、OSのクリップボード使ったほうがいいのかも
+                                // TODO: Swap、DuplicateみたいなAPIも追加したい
                                 Button {
-                                    editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
+                                    copiedKey = editingItem.keys[.gridFit(x: x, y: y)]
                                 } label: {
-                                    Image(systemName: "trash")
-                                    Text("削除する")
+                                    // TODO: Localize
+                                    Label("コピーする", systemImage: "doc.on.doc")
+                                }
+                                Button {
+                                    if let copiedKey {
+                                        editingItem.keys[.gridFit(x: x, y: y)] = copiedKey
+                                    }
+                                } label: {
+                                    // TODO: Localize
+                                    Label("ペーストする", systemImage: "doc.on.clipboard")
+                                }
+                                .disabled(copiedKey == nil)
+                                if #available(iOS 15.0, *) {
+                                    Button(role: .destructive) {
+                                        editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
+                                    } label: {
+                                        Label("削除する", systemImage: "trash")
+                                    }
+                                } else {
+                                    Button {
+                                        editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
+                                    } label: {
+                                        Label("削除する", systemImage: "trash")
+                                    }
+                                    .foregroundColor(.red)
                                 }
                             }
                         }

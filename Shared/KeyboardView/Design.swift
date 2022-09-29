@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-/// タブに依存するデザイン上の数値を計算するクラス
-final class TabDependentDesign {
+/// タブに依存するデザイン上の数値を計算する構造体
+struct TabDependentDesign {
     private let horizontalKeyCount: CGFloat
     private let verticalKeyCount: CGFloat
     private let layout: KeyboardLayout

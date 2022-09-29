@@ -247,9 +247,6 @@ extension CustardInterfaceKey {
 }
 
 struct CustomKeyboardView: View {
-    @ObservedObject private var variableStates = VariableStates.shared
-    @Environment(\.themeEnvironment) private var theme
-    @State private var allowHitTesting = true
     private let custard: Custard
     private let tabDesign: TabDependentDesign
 

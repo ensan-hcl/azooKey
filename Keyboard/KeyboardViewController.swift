@@ -22,12 +22,12 @@ extension UIInputView: UIInputViewAudioFeedback {
 }
 
 final class KeyboardViewController: UIInputViewController {
-    private var keyboardViewHost: KeyboardHostingController<Keyboard>! = nil
+    private weak var keyboardViewHost: KeyboardHostingController<Keyboard>? = nil
 
     struct Keyboard: View {
         let theme: ThemeData
         var body: some View {
-            KeyboardView<Candidate>(resultModel: Store.shared.resultModel)
+            KeyboardView<Candidate>(resultModelVariableSection: Store.shared.resultModelVariableSection)
                 .environment(\.themeEnvironment, theme)
         }
     }
@@ -38,20 +38,22 @@ final class KeyboardViewController: UIInputViewController {
         Store.shared.initialize()
         let indexManager = ThemeIndexManager.load()
         let theme = (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
-        self.keyboardViewHost = KeyboardHostingController(rootView: Keyboard(theme: theme))
+        let host = KeyboardHostingController(rootView: Keyboard(theme: theme))
         // コントロールセンターを出しにくくする。
-        keyboardViewHost.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
+        host.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
-        keyboardViewHost.view.translatesAutoresizingMaskIntoConstraints = false
-        self.addChild(keyboardViewHost)
-        self.view.addSubview(keyboardViewHost.view)
-        keyboardViewHost.didMove(toParent: self)
+        host.view.translatesAutoresizingMaskIntoConstraints = false
+        self.addChild(host)
+        self.view.addSubview(host.view)
+        host.didMove(toParent: self)
 
-        keyboardViewHost.view.translatesAutoresizingMaskIntoConstraints = false
-        keyboardViewHost.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        keyboardViewHost.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        keyboardViewHost.view.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        keyboardViewHost.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        host.view.translatesAutoresizingMaskIntoConstraints = false
+        host.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        host.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        host.view.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        host.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+
+        self.keyboardViewHost = host
 
         Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
         Store.shared.action.setDelegateViewController(self)
@@ -65,6 +67,9 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         self.registerScreenActualSize()
+        Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
+        Store.shared.action.setDelegateViewController(self)
+
         super.viewDidAppear(animated)
         let window = self.view.window!
         let gr0 = window.gestureRecognizers![0] as UIGestureRecognizer
@@ -85,12 +90,10 @@ final class KeyboardViewController: UIInputViewController {
             }
             Store.shared.action.sendToDicdataStore(.importOSUserDict(osuserdict))
         }
-
-        Store.shared.appearedAgain()
     }
 
     func registerScreenActualSize() {
-        if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
+        if let bounds = keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
             debug("registerScreenActualSize", size)
             SemiStaticStates.shared.setScreenSize(size: size)
@@ -105,6 +108,9 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.view.subviews.forEach {$0.removeFromSuperview()}
+
+        self.keyboardViewHost = nil
         Store.shared.closeKeyboard()
         debug("キーボードが閉じられました")
     }
@@ -119,7 +125,7 @@ final class KeyboardViewController: UIInputViewController {
             SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical)
         } else if #available(iOS 15, *) {
             SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal)
-        } else if let bounds = keyboardViewHost.view.safeAreaLayoutGuide.owningView?.bounds {
+        } else if let bounds = keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
             SemiStaticStates.shared.setScreenSize(size: size)
         }
@@ -134,7 +140,7 @@ final class KeyboardViewController: UIInputViewController {
         } else {
             self.registerScreenActualSize()
         }
-        debug("viewDidLayoutSubviews", UIScreen.main.bounds, SemiStaticStates.shared.screenHeight, self.view.frame.size, keyboardViewHost.view.frame.size, self.view.window?.bounds, self.keyboardViewHost.view.window?.bounds, keyboardViewHost.view.window?.window?.bounds)
+        debug("viewDidLayoutSubviews", UIScreen.main.bounds, SemiStaticStates.shared.screenHeight, self.view.frame.size, keyboardViewHost?.view.frame.size, self.view.window?.bounds, self.keyboardViewHost?.view.window?.bounds, keyboardViewHost?.view.window?.window?.bounds)
     }
 
     /*

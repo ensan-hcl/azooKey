@@ -29,6 +29,7 @@ struct FlickKeyView: View {
 
     @State private var suggestState: SuggestState = .nothing
     @State private var pressState: KeyPressState = .inactive
+    // TODO: 消せるはず
     @State private var startLocation: CGPoint?
 
     @ObservedObject private var variableStates = VariableStates.shared
