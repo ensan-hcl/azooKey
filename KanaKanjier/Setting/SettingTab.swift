@@ -34,6 +34,7 @@ struct SettingTabView: View {
                     Section(header: Text("バーの操作")) {
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.useBetaMoveCursorBar)
+                        FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
                     Section(header: Text("サウンド")) {
                         BoolSettingView(.enableKeySound)
