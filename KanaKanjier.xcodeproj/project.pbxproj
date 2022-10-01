@@ -5368,12 +5368,12 @@
 			children = (
 				1A3DC22E2500D6EE002CAA93 /* Dictionary */,
 				1A4623E32524616F00EF5B02 /* LOUDS */,
-				1AE4DB7A25163C5700A24158 /* InputData */,
 				1A64C8C7251372AB00ACD537 /* DicdataStore */,
 				1A8A8400250F64FC0093A701 /* Kana2Kanji */,
 				1A9218E9255238D5005F45C4 /* Converter */,
 				1ADDE8652545D48900E524E1 /* Candidate.swift */,
 				1A65C00A250B800E00F297BF /* LatticeNode.swift */,
+				1A2C2FE028DA11D00001A0BB /* ComposingText.swift */,
 				1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */,
 				1A3DC2FE2500F837002CAA93 /* extension Character.swift */,
 				1A86F4B72539356100B92B49 /* extension String.swift */,
@@ -5795,14 +5795,6 @@
 				1ACE00732567521200899DA2 /* QwertyCustomKeys */,
 			);
 			path = CustomKeys;
-			sourceTree = "<group>";
-		};
-		1AE4DB7A25163C5700A24158 /* InputData */ = {
-			isa = PBXGroup;
-			children = (
-				1A2C2FE028DA11D00001A0BB /* ComposingText.swift */,
-			);
-			path = InputData;
 			sourceTree = "<group>";
 		};
 		1AE70BDF258DB4A0009B9B8B /* Template */ = {
