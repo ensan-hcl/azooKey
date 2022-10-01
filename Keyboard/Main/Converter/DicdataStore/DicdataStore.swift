@@ -256,13 +256,13 @@ final class DicdataStore {
 
         if index == .zero {
             let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: 0]], rubyCount: nil)
+                let node = LatticeNode(data: $0, input: segments[string2segment[$0.ruby, default: 0]])
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, romanString: segments[string2segment[$0.ruby, default: .zero]], rubyCount: nil)}
+            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, input: segments[string2segment[$0.ruby, default: 0]])}
             return result
         }
     }
@@ -315,13 +315,13 @@ final class DicdataStore {
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, romanString: segment, rubyCount: nil)
+                let node = LatticeNode(data: $0, input: segment)
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, romanString: segment, rubyCount: nil)}
+            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, input: segment)}
             return result
         }
     }
@@ -686,7 +686,7 @@ final class DicdataStore {
         "cy": ["チャ", "チィ", "チュ", "チェ", "チョ"],
         "ch": ["チ"],
         "d": ["ダ", "ヂ", "ヅ", "デ", "ド"],
-        "dy": ["ヂ"],
+        "dy": ["ヂャ", "ヂィ", "ヂュ", "ヂェ", "ヂョ"],
         "dh": ["デャ", "ディ", "デュ", "デェ", "デョ"],
         "dw": ["ドァ", "ドィ", "ドゥ", "ドェ", "ドォ"],
         "n": ["ナ", "ニ", "ヌ", "ネ", "ノ", "ン"],

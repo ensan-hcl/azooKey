@@ -20,22 +20,23 @@ struct RegisteredNode: RegisteredNodeProtocol {
     let data: DicdataElement
     let prev: (any RegisteredNodeProtocol)?
     let totalValue: PValue
-    let convertTargetLength: Int
     // 入力に対応する文字列
     // ダイレクト入力中であれば「今日は」に対して「キョウハ」
     // ローマ字入力中であれば「今日は」に対してkyouhaになる
     let input: String
+    var convertTargetLength: Int {
+        input.count
+    }
 
-    init(data: DicdataElement, registered: RegisteredNode?, totalValue: PValue, convertTargetLength: Int, input: String) {
+    init(data: DicdataElement, registered: RegisteredNode?, totalValue: PValue, input: String) {
         self.data = data
         self.prev = registered
         self.totalValue = totalValue
         self.input = input
-        self.convertTargetLength = convertTargetLength
     }
 
     static func BOSNode() -> RegisteredNode {
-        RegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, convertTargetLength: 0, input: "")
+        RegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, input: "")
     }
 
     static func fromLastCandidate(_ candidate: Candidate) -> RegisteredNode {
@@ -43,7 +44,6 @@ struct RegisteredNode: RegisteredNodeProtocol {
             data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid , rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
             registered: nil,
             totalValue: 0,
-            convertTargetLength: 0,
             input: ""
         )
     }
@@ -55,6 +55,7 @@ extension RegisteredNodeProtocol {
         guard let prev else {
             let unit = ClauseDataUnit()
             unit.mid = self.data.mid
+            // ここが誤り
             unit.convertTarget = self.input
             unit.convertTargetLength = self.convertTargetLength
             return CandidateData(clauses: [(clause: unit, value: .zero)], data: [])
@@ -72,6 +73,7 @@ extension RegisteredNodeProtocol {
         if lastClause.text.isEmpty || !DicdataStore.isClause(prev.data.rcid, self.data.lcid) {
             // 文節ではないので、最後に追加する。
             lastClause.text.append(self.data.word)
+            // ここが誤り
             lastClause.convertTarget.append(self.input)
             lastClause.convertTargetLength += self.convertTargetLength
             // 最初だった場合を想定している

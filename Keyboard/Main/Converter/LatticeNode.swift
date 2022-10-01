@@ -19,25 +19,22 @@ final class LatticeNode {
     // ディスプレイされたテキストで対応する文字数
     // korega -> これが -> 3
     // koれga -> これが -> 3
-    let convertTargetLength: Int
-
-    convenience init(data: DicdataElement, romanString: String, rubyCount: Int? = nil) {
-        self.init(data: data, input: romanString, convertTargetLength: rubyCount ?? romanString.count)
+    var convertTargetLength: Int {
+        return input.count
     }
 
     static var EOSNode: LatticeNode {
-        return LatticeNode(data: DicdataElement.EOSData, romanString: "")
+        return LatticeNode(data: DicdataElement.EOSData, input: "")
     }
 
-    init(data: DicdataElement, input: String, convertTargetLength: Int) {
+    init(data: DicdataElement, input: String) {
         self.data = data
         self.values = [data.value()]
         self.input = input
-        self.convertTargetLength = convertTargetLength
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {
-        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, convertTargetLength: convertTargetLength, input: self.input)
+        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, input: self.input)
     }
 
     func getCandidateData() -> [CandidateData] {
