@@ -32,19 +32,56 @@ struct ThemeTabView: View {
                     KeyboardPreview(theme: theme, scale: 0.6)
                         .disabled(true)
                     GeometryReader {geometry in
-                        CenterAlignedView {
-                            VStack {
-                                Spacer()
-                                Circle()
-                                    .fill(manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                                    .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
-                                    .overlay(
-                                        Image(systemName: "checkmark")
-                                            .font(Font.system(size: geometry.size.width / 3).weight(.bold))
-                                            .foregroundColor(.white)
-                                    )
-                                Spacer()
+                        if manager.selectedIndex == manager.selectedIndexInDarkMode {
+                            CenterAlignedView {
+                                VStack {
+                                    Spacer()
+                                    Circle()
+                                        .fill(manager.selectedIndex == index ? Color.blue : Color.systemGray4)
+                                        .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
+                                        .overlay(
+                                            Image(systemName: "checkmark")
+                                                .font(Font.system(size: geometry.size.width / 3).weight(.bold))
+                                                .foregroundColor(.white)
+                                        )
+                                    Spacer()
+                                }
+                                .onTapGesture {
+                                    manager.select(at: index)
+                                }
                             }
+                        } else {
+                            CenterAlignedView {
+                                VStack {
+                                    Spacer()
+                                    Circle()
+                                        .fill(manager.selectedIndex == index ? Color.blue : Color.systemGray4)
+                                        .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
+                                        .overlay(
+                                            Image(systemName: "sun.max.fill")
+                                                .font(Font.system(size: geometry.size.width / 3).weight(.bold))
+                                                .foregroundColor(.white)
+                                        )
+                                        .padding()
+                                        .onTapGesture {
+                                            manager.selectForLightMode(at: index)
+                                        }
+                                    Circle()
+                                        .fill(manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
+                                        .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
+                                        .overlay(
+                                            Image(systemName: "moon.fill")
+                                                .font(Font.system(size: geometry.size.width / 3).weight(.bold))
+                                                .foregroundColor(.white)
+                                        )
+                                        .padding()
+                                        .onTapGesture {
+                                            manager.selectForDarkMode(at: index)
+                                        }
+                                    Spacer()
+                                }
+                            }
+
                         }
                     }
                     if editViewIndex == index {
@@ -53,24 +90,37 @@ struct ThemeTabView: View {
                         }.frame(maxWidth: 1)
                     }
                 }
-                .onTapGesture {
-                    manager.select(at: index)
-                }
                 .contextMenu {
+                    if self.manager.selectedIndex == self.manager.selectedIndexInDarkMode {
+                        Button {
+                            manager.selectForLightMode(at: index)
+                        } label: {
+                            Image(systemName: "sun.max.fill")
+                            // TODO: Localize
+                            Text("ライトモードで使用")
+                        }
+                        Button {
+                            manager.selectForDarkMode(at: index)
+                        } label: {
+                            Image(systemName: "moon.fill")
+                            // TODO: Localize
+                            Text("ダークモードで使用")
+                        }
+                    }
                     Button {
                         editViewIndex = index
                         editViewEnabled = true
-                    }label: {
+                    } label: {
                         Image(systemName: "pencil")
                         Text("編集する")
                     }.disabled(index == 0)
-
                     Button {
                         manager.remove(index: index)
-                    }label: {
-                        Image(systemName: "trash")
-                        Text("削除する")
-                    }.disabled(index == 0)
+                    } label: {
+                        Label("削除する", systemImage: "trash")
+                            .foregroundColor(.red)
+                    }
+                    .disabled(index == 0)
                 }
             }
         }

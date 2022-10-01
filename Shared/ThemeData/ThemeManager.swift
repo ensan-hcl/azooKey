@@ -138,6 +138,17 @@ struct ThemeIndexManager: Equatable {
 
     mutating func select(at index: Int) {
         self.index.selectedIndex = index
+        self.index.selectedIndex_dark = index
+        self.save()
+    }
+
+    mutating func selectForLightMode(at index: Int) {
+        self.index.selectedIndex = index
+        self.save()
+    }
+
+    mutating func selectForDarkMode(at index: Int) {
+        self.index.selectedIndex_dark = index
         self.save()
     }
 
