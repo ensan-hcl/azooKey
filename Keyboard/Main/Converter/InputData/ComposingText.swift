@@ -207,8 +207,8 @@ struct ComposingText {
     /// 現在のカーソル位置に文字を追加する関数
     mutating func insertAtCursorPosition(_ string: String, inputStyle: InputStyle) -> ViewOperation {
         let inputCursorPosition = self.forceGetInputCursorPosition(target: self.convertTarget.prefix(convertTargetCursorPosition))
-        // originalInput, convertTarget, convertTargetCursorPositionの3つを更新する
-        // originalInputを更新
+        // input, convertTarget, convertTargetCursorPositionの3つを更新する
+        // inputを更新
         self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
         let oldConvertTarget = self.convertTarget.prefix(self.convertTargetCursorPosition)
         let newConvertTarget = Self.getConvertTarget(for: self.input.prefix(inputCursorPosition + string.count))
@@ -647,10 +647,18 @@ extension ComposingText {
 
 // MARK: 差分計算用のAPI
 extension ComposingText {
-    func differenceSuffix(to previousData: ComposingText) -> (deleted: Int, added: [InputElement]) {
+    /// 2つの`ComposingText`のデータを比較し、差分を計算する。
+    /// `convertTarget`との整合性をとるため、`convertTarget`に合わせた上で比較する
+    func differenceSuffix(to previousData: ComposingText) -> (deleted: Int, addedCount: Int) {
+        // k→か、sh→しゃ、のような場合、差分は全てx ... lastの範囲に現れるので、差分計算が問題なく動作する
+        // かn → かんs、のような場合、「かんs、んs、s」のようなものは現れるが、「かん」が生成できない
+        // 本質的にこれはポリシーの問題であり、「は|しゃ」の変換で「はし」が部分変換として現れないことと同根の問題である。
+        // 解決のためには、inputの段階で「ん」をdirectで扱うべきである。
+
+        // 差分を計算する
         let common = self.input.commonPrefix(with: previousData.input)
         let deleted = previousData.input.count - common.count
-        let added = Array(self.input.dropFirst(common.count))
+        let added = self.input.dropFirst(common.count).count
         return (deleted, added)
     }
 
