@@ -61,6 +61,7 @@ final class KanaKanjiConverter {
         // toWareki/toSeirekiCandidatesは以前は設定可能にしていたが、特にoffにする需要がなさそうなので常時有効化した
         result.append(contentsOf: self.toWareki(inputData))
         result.append(contentsOf: self.toSeirekiCandidates(inputData))
+        result.append(contentsOf: self.toEmailAddress(inputData))
 
         @KeyboardSetting(.typographyLetter) var typographyLetter
         if typographyLetter {
