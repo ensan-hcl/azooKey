@@ -43,7 +43,7 @@ extension MutableCollection {
 }
 
 extension Collection {
-    func suffix(where condition: (Element) -> Bool) -> SubSequence {
+    func suffix(while condition: (Element) -> Bool) -> SubSequence {
         var left = self.endIndex
         while left != self.startIndex, condition(self[self.index(left, offsetBy: -1)]) {
             left = self.index(left, offsetBy: -1)

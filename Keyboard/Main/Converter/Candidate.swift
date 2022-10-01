@@ -14,13 +14,11 @@ final class ClauseDataUnit {
     // 次の文節のlcid
     var nextLcid = CIDData.EOS.cid
     var text: String = ""
-    var convertTarget: String = ""
-    var convertTargetLength: Int = 0
+    var inputRange: Range<Int> = 0 ..< 0
 
     func merge(with unit: ClauseDataUnit) {
         self.text.append(unit.text)
-        self.convertTarget.append(unit.convertTarget)
-        self.convertTargetLength += unit.convertTargetLength
+        self.inputRange = self.inputRange.startIndex ..< unit.inputRange.endIndex
         self.nextLcid = unit.nextLcid
     }
 }
@@ -28,7 +26,7 @@ final class ClauseDataUnit {
 #if DEBUG
 extension ClauseDataUnit: CustomDebugStringConvertible {
     var debugDescription: String {
-        return "ClauseDataUnit(mid: \(mid), nextLcid: \(nextLcid), text: \(text), convertTarget: \(convertTarget), convertTargetLength: \(convertTargetLength))"
+        return "ClauseDataUnit(mid: \(mid), nextLcid: \(nextLcid), text: \(text), inputRange: \(inputRange))"
     }
 }
 #endif

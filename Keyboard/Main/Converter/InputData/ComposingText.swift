@@ -213,14 +213,14 @@ struct ComposingText {
         }
         let prev = self.input[inputCursorPosition - 1]
         if inputStyle == .roman2kana && prev.inputStyle == inputStyle, let first = string.first, String(first).onlyRomanAlphabet {
-            let prefix = String(prev.character) + String(first)
-            if prev.character == "n" && !["n", "a", "i", "u", "e", "o", "y"].contains(first) {
-                self.input[inputCursorPosition - 1] = InputElement(character: "ん", inputStyle: .direct)
+            if prev.character == first && !["a", "i", "u", "e", "n"].contains(first) {
+                self.input[inputCursorPosition - 1] = InputElement(character: "っ", inputStyle: .direct)
                 self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
                 return
-
-            } else if prev.character == first && first != "n" {
-                self.input[inputCursorPosition - 1] = InputElement(character: "っ", inputStyle: .direct)
+            }
+            let n_prefix = self.input[0 ..< inputCursorPosition].suffix {$0.character == "n" && $0.inputStyle == .roman2kana}
+            if n_prefix.count % 2 == 1 && !["n", "a", "i", "u", "e", "o", "y"].contains(first) {
+                self.input[inputCursorPosition - 1] = InputElement(character: "ん", inputStyle: .direct)
                 self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
                 return
             }
@@ -476,7 +476,7 @@ extension ComposingText {
                 part.append(InputElement(character: "っ", inputStyle: .direct))
                 break checkIsEndValid
             }
-            let n_suffix = partialElements.suffix(where: {$0.inputStyle == .roman2kana && $0.character == "n"})
+            let n_suffix = partialElements.suffix {$0.inputStyle == .roman2kana && $0.character == "n"}
             // nnが偶数個なら許す
             if n_suffix.count > 0 && n_suffix.count % 2 == 0 {
                 break checkIsEndValid

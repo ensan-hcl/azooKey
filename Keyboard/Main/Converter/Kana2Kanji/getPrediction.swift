@@ -19,8 +19,11 @@ extension Kana2Kanji {
     ///    「これはき」から「これは今日」に対応する候補などを作って返す。
     /// - note:
     ///     この関数の役割は意味連接の考慮にある。
-    func getPredicitonCandidates(prepart: CandidateData, lastRuby: String, lastRubyCount: Int, N_best: Int) -> [Candidate] {
+    func getPredicitonCandidates(composingText: ComposingText, prepart: CandidateData, lastClause: ClauseDataUnit, N_best: Int) -> [Candidate] {
         let datas: [DicdataElement]
+        debug("getPredicitonCandidates", composingText, lastClause.inputRange, lastClause.text)
+        let lastRuby = ComposingText.getConvertTarget(for: composingText.input[lastClause.inputRange]).toKatakana()
+        let lastRubyCount = lastClause.inputRange.count
         let lastData: DicdataElement?
         do {
             var _str = ""
@@ -56,15 +59,19 @@ extension Kana2Kanji {
         case .direct:
             dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: lastRuby)
         case .roman2kana:
-            let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
-            let roman: Substring = lastRuby.suffix(lastRuby.count - ruby.count)
+            let roman = lastRuby.suffix(while: {String($0).onlyRomanAlphabet})
             if !roman.isEmpty {
-                let ruby: Substring = lastRuby.prefix(while: {!String($0).onlyRomanAlphabet})
+                let ruby: Substring = lastRuby.dropLast(roman.count)
+                if ruby.isEmpty {
+                    dicdata = []
+                    break
+                }
                 let possibleNexts: [Substring] = DicdataStore.possibleNexts[String(roman), default: []].map {ruby + $0}
-                let _dicdata: DicdataStore.Dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: ruby)
-                dicdata = _dicdata.filter {data in !possibleNexts.allSatisfy {!$0.hasPrefix(data.ruby)}}
+                debug("getPredicitonCandidates", lastRuby, ruby, roman, possibleNexts, prepart, lastRubyCount)
+                dicdata = possibleNexts.flatMap { self.dicdataStore.getPredictionLOUDSDicdata(head: $0) }
             } else {
-                dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: ruby)
+                debug("getPredicitonCandidates", lastRuby, roman)
+                dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: lastRuby)
             }
         }
 

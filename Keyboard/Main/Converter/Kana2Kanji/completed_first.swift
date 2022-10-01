@@ -23,10 +23,14 @@ extension Kana2Kanji {
             if i == .zero {
                 for node in nodeArray {
                     node.prevs = [start]
+                    // inputRangeを確定した部分のカウント分ずらす
+                    node.inputRange = node.inputRange.startIndex - completedData.correspondingCount ..< node.inputRange.endIndex - completedData.correspondingCount
                 }
             } else {
                 for node in nodeArray {
                     node.prevs = []
+                    // inputRangeを確定した部分のカウント分ずらす
+                    node.inputRange = node.inputRange.startIndex - completedData.correspondingCount ..< node.inputRange.endIndex - completedData.correspondingCount
                 }
             }
         }

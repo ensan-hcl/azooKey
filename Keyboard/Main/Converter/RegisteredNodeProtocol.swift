@@ -52,14 +52,10 @@ struct RegisteredNode: RegisteredNodeProtocol {
 
 extension RegisteredNodeProtocol {
     func getCandidateData(for composingText: ComposingText) -> CandidateData {
-        // TODO: ここが誤り (ルビになっていない)
-        let inputString = composingText.input[self.inputRange].reduce(into: "") {$0.append($1.character)}
         guard let prev else {
             let unit = ClauseDataUnit()
             unit.mid = self.data.mid
-            // TODO: ここが誤り (ルビになっていない)
-            unit.convertTarget = inputString
-            unit.convertTargetLength = self.convertTargetLength
+            unit.inputRange = self.inputRange
             return CandidateData(clauses: [(clause: unit, value: .zero)], data: [])
         }
         var lastcandidate = prev.getCandidateData(for: composingText)    // 自分に至るregisterdそれぞれのデータに処理
@@ -75,9 +71,7 @@ extension RegisteredNodeProtocol {
         if lastClause.text.isEmpty || !DicdataStore.isClause(prev.data.rcid, self.data.lcid) {
             // 文節ではないので、最後に追加する。
             lastClause.text.append(self.data.word)
-            // TODO: ここが誤り (ルビになっていない)
-            lastClause.convertTarget.append(inputString)
-            lastClause.convertTargetLength += self.convertTargetLength
+            lastClause.inputRange = lastClause.inputRange.startIndex ..< self.inputRange.endIndex
             // 最初だった場合を想定している
             if (lastClause.mid == 500 && self.data.mid != 500) || DicdataStore.includeMMValueCalculation(self.data) {
                 lastClause.mid = self.data.mid
@@ -90,9 +84,7 @@ extension RegisteredNodeProtocol {
         else {
             let unit = ClauseDataUnit()
             unit.text = self.data.word
-            // TODO: ここが誤り (ルビになっていない)
-            unit.convertTarget = inputString
-            unit.convertTargetLength = self.convertTargetLength
+            unit.inputRange = self.inputRange
             if DicdataStore.includeMMValueCalculation(self.data) {
                 unit.mid = self.data.mid
             }
