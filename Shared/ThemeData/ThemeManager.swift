@@ -12,6 +12,32 @@ import UIKit
 struct ThemeIndices: Codable, Equatable {
     var currentIndices: [Int] = [0]
     var selectedIndex: Int = 0
+    var selectedIndex_dark: Int = 0
+
+    internal init(currentIndices: [Int] = [0], selectedIndex: Int = 0, selectedIndex_dark: Int = 0) {
+        self.currentIndices = currentIndices
+        self.selectedIndex = selectedIndex
+        self.selectedIndex_dark = selectedIndex_dark
+    }
+
+    enum CodingKeys: CodingKey {
+        case currentIndices
+        case selectedIndex
+        case selectedIndex_dark
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.currentIndices = try container.decode([Int].self, forKey: .currentIndices)
+        self.selectedIndex = try container.decode(Int.self, forKey: .selectedIndex)
+        let selectedIndex_dark = try? container.decode(Int.self, forKey: .selectedIndex_dark)
+
+        if let selectedIndex_dark {
+            self.selectedIndex_dark = selectedIndex_dark
+        } else {
+            self.selectedIndex_dark = selectedIndex
+        }
+    }
 }
 
 struct ThemeIndexManager: Equatable {
@@ -141,6 +167,10 @@ struct ThemeIndexManager: Equatable {
 
     var selectedIndex: Int {
         return index.selectedIndex
+    }
+
+    var selectedIndexInDarkMode: Int {
+        return index.selectedIndex_dark
     }
 
     var nextIndex: Int {
