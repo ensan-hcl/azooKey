@@ -47,9 +47,9 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
                 self.touchDownCallback()
             case .changed:
                 self.touchMovedCallBack(GestureState(distance: gesture.distance, time: Date().timeIntervalSince(self.touchStart)))
-            case .cancelled, .ended:
+            case .ended:
                 self.touchUpCallback(GestureState(distance: gesture.distance, time: Date().timeIntervalSince(self.touchStart)))
-            case .possible, .failed:
+            case .possible, .cancelled, .failed:
                 break
             @unknown default:
                 debug("未知のケース", gesture.state)
