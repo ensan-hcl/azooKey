@@ -395,7 +395,7 @@ extension ComposingText {
             if ["zl", "zk", "zj", "zh"].contains(last_2.reduce(into: "") {$0.append($1.character)}) {
                 break checkIsStartValid
             }
-            let n_suffix = originalElements[0 ..< leftIndex].suffix(where: {$0.inputStyle == .roman2kana && $0.character == "n"})
+            let n_suffix = originalElements[0 ..< leftIndex].suffix(while: {$0.inputStyle == .roman2kana && $0.character == "n"})
             if n_suffix.count % 2 == 0 && n_suffix.count > 0 {
                 break checkIsStartValid
             }
@@ -506,17 +506,6 @@ extension ComposingText {
         }
     }
 
-}
-
-extension ComposingText.InputElement: CustomDebugStringConvertible {
-    var debugDescription: String {
-        switch self.inputStyle {
-        case .direct:
-            return "direct(\(character))"
-        case .roman2kana:
-            return "roman2kana(\(character))"
-        }
-    }
 }
 
 extension ComposingText.InputElement: Equatable {}
@@ -669,3 +658,28 @@ extension ComposingText {
         return self.input.hasSuffix(suffix.input)
     }
 }
+
+
+#if DEBUG
+extension ComposingText.InputElement: CustomDebugStringConvertible {
+    var debugDescription: String {
+        switch self.inputStyle {
+        case .direct:
+            return "direct(\(character))"
+        case .roman2kana:
+            return "roman2kana(\(character))"
+        }
+    }
+}
+
+extension ComposingText.ConvertTargetElement: CustomDebugStringConvertible {
+    var debugDescription: String {
+        return "ConvertTargetElement(string: \"\(string)\", inputStyle: \(inputStyle)"
+    }
+}
+extension InputStyle: CustomDebugStringConvertible {
+    var debugDescription: String {
+        return "." + self.rawValue
+    }
+}
+#endif
