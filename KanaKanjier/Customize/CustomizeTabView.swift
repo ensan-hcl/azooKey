@@ -53,10 +53,10 @@ struct CustomizeTabView: View {
                         .listRowSeparator(.hidden, edges: .bottom)
                         Text("カスタムタブを使うにはタブバーを利用します。")
                         DisclosureGroup("使い方") {
-                            Text("変換候補欄に何も表示されていない状態で、変換候補欄を長押しすると表示されます。")
+                            // TODO: Localize
+                            Text("あずきのマークを押すと表示されます。")
                             Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
                         }
-                        BoolSettingView(.displayTabBarButton)
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager))
                             .foregroundColor(.accentColor)
                     }

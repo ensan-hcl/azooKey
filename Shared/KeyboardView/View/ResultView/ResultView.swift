@@ -41,7 +41,6 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     @Binding private var isResultViewExpanded: Bool
     
     @Environment(\.themeEnvironment) private var theme
-    @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
     init(model: ResultModelVariableSection<Candidate>, isResultViewExpanded: Binding<Bool>, resultData: Binding<[ResultData<Candidate>]>) {
         self.model = model
@@ -83,14 +82,10 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                 VariableStates.shared.action.registerAction(.toggleTabBar)
                             } label: {
                                 ZStack {
-                                    if displayTabBarButton {
-                                        Circle()
-                                            .strokeAndFill(fillContent: tabBarButtonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
-                                            .frame(width: Design.resultViewHeight()*0.8, height: Design.resultViewHeight()*0.8)
-                                        AzooKeyIcon(fixedSize: Design.resultViewHeight()*0.6, color: .color(tabBarButtonLabelColor))
-                                    } else {
-                                        EmptyView()
-                                    }
+                                    Circle()
+                                        .strokeAndFill(fillContent: tabBarButtonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
+                                        .frame(width: Design.resultViewHeight()*0.8, height: Design.resultViewHeight()*0.8)
+                                    AzooKeyIcon(fixedSize: Design.resultViewHeight()*0.6, color: .color(tabBarButtonLabelColor))
                                 }
                             }
                             .frame(height: buttonHeight)

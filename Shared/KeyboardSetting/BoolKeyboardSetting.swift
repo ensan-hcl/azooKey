@@ -131,17 +131,6 @@ extension KeyboardSettingKey where Self == UseOSUserDict {
     static var useOSUserDict: Self { .init() }
 }
 
-struct DisplayTabBarButton: BoolKeyboardSettingKey {
-    static let title: LocalizedStringKey = "タブバーボタン"
-    static let explanation: LocalizedStringKey = "変換候補欄が空のときにタブバーボタンを表示します"
-    static let defaultValue = true
-    static let key: String = "display_tab_bar_button"
-}
-
-extension KeyboardSettingKey where Self == DisplayTabBarButton {
-    static var displayTabBarButton: Self { .init() }
-}
-
 struct UseBetaMoveCursorBar: BoolKeyboardSettingKey {
     // TODO: Localize
     static let title: LocalizedStringKey = "新しいカーソルバーを使う (ベータ版)"
