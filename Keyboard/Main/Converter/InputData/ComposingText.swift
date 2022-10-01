@@ -204,12 +204,40 @@ struct ComposingText {
         return (oldString.count - common.count, String(newString.dropFirst(common.count)))
     }
 
+    /// inputの更新における特殊処理を扱う
+    /// アドホックな対処なのでどうにか一般化したい所存。
+    private mutating func updateInput(_ string: String, at inputCursorPosition: Int, inputStyle: InputStyle) {
+        if inputCursorPosition == 0 {
+            self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
+            return
+        }
+        let prev = self.input[inputCursorPosition - 1]
+        if inputStyle == .roman2kana && prev.inputStyle == inputStyle, let first = string.first, String(first).onlyRomanAlphabet {
+            let prefix = String(prev.character) + String(first)
+            if prev.character == "n" && !["n", "a", "i", "u", "e", "o", "y"].contains(first) {
+                self.input[inputCursorPosition - 1] = InputElement(character: "ん", inputStyle: .direct)
+                self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
+                return
+
+            } else if prev.character == first && first != "n" {
+                self.input[inputCursorPosition - 1] = InputElement(character: "っ", inputStyle: .direct)
+                self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
+                return
+            }
+        }
+        self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
+    }
+
     /// 現在のカーソル位置に文字を追加する関数
     mutating func insertAtCursorPosition(_ string: String, inputStyle: InputStyle) -> ViewOperation {
+        if string.isEmpty {
+            return ViewOperation(delete: 0, input: "")
+        }
         let inputCursorPosition = self.forceGetInputCursorPosition(target: self.convertTarget.prefix(convertTargetCursorPosition))
         // input, convertTarget, convertTargetCursorPositionの3つを更新する
         // inputを更新
-        self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
+        self.updateInput(string, at: inputCursorPosition, inputStyle: inputStyle)
+
         let oldConvertTarget = self.convertTarget.prefix(self.convertTargetCursorPosition)
         let newConvertTarget = Self.getConvertTarget(for: self.input.prefix(inputCursorPosition + string.count))
         let diff = self.diff(from: oldConvertTarget, to: newConvertTarget)
@@ -230,8 +258,9 @@ struct ComposingText {
             return ViewOperation(delete: 0, input: "")
         }
         self.convertTargetCursorPosition += count
-        self.deleteBackwardFromCursorPosition(count: count)
-        return ViewOperation(delete: -count, input: "")
+        let result = self.deleteBackwardFromCursorPosition(count: count)
+        // 進行方向のデリートなので負の値を返す
+        return ViewOperation(delete: -result.delete, input: result.input)
     }
 
     /// 現在のカーソル位置から文字を削除する関数
@@ -435,7 +464,7 @@ extension ComposingText {
             }
 
             let nextFirstElement = originalElements[rightIndex]
-            if nextFirstElement.inputStyle != .roman2kana  || !nextFirstElement.character.isRomanLetter {
+            if nextFirstElement.inputStyle != .roman2kana || !nextFirstElement.character.isRomanLetter {
                 break checkIsEndValid
             }
             if ["a", "i", "u", "e", "o"].contains(lastElement.character) {
@@ -569,7 +598,7 @@ extension ComposingText {
             }
             return nil
         }
-        debug("getRangeWithTypos", filtered)
+        debug("getRangeWithTypos", filtered, result)
         return filtered
     }
 
