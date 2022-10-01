@@ -343,7 +343,7 @@ final class KanaKanjiConverter {
     private func processResult(inputData: InputData, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         self.previousInputData = inputData
         self.nodes = result.nodes
-        let clauseResult = result.result.getCandidateData()
+        let clauseResult = result.result.getCandidateData(for: inputData)
         if clauseResult.isEmpty {
             let candidates = self.getUniqueCandidate(self.getAdditionalCandidate(inputData))
             return (candidates, candidates)   // アーリーリターン

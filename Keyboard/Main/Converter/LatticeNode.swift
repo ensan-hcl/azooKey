@@ -13,31 +13,30 @@ final class LatticeNode {
     let data: DicdataElement
     var prevs: [RegisteredNode] = []
     var values: [PValue] = []
-    // ユーザの行った入力に対応する文字列
-    // 本来[ComposingText.InputElement]的なものであるべき。
-    let input: String
+    // inputData.input内のrange
+    var inputRange: Range<Int>
     // ディスプレイされたテキストで対応する文字数
     // korega -> これが -> 3
     // koれga -> これが -> 3
     var convertTargetLength: Int {
-        return input.count
+        return inputRange.count
     }
 
     static var EOSNode: LatticeNode {
-        return LatticeNode(data: DicdataElement.EOSData, input: "")
+        return LatticeNode(data: DicdataElement.EOSData, inputRange: 0..<0)
     }
 
-    init(data: DicdataElement, input: String) {
+    init(data: DicdataElement, inputRange: Range<Int>) {
         self.data = data
         self.values = [data.value()]
-        self.input = input
+        self.inputRange = inputRange
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {
-        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, input: self.input)
+        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, inputRange: self.inputRange)
     }
 
-    func getCandidateData() -> [CandidateData] {
-        return self.prevs.map {$0.getCandidateData()}
+    func getCandidateData(for composingText: ComposingText) -> [CandidateData] {
+        return self.prevs.map {$0.getCandidateData(for: composingText)}
     }
 }

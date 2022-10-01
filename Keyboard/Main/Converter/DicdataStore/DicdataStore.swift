@@ -192,9 +192,10 @@ final class DicdataStore {
         var string2segment = [String: Int].init()
         // indicesをreverseすることで、stringWithTypoは長さの長い順に並ぶ=removeでヒットしやすくなる
         let stringWithTypoData: [(string: String, penalty: PValue)] = (index ..< toIndex).reversed().flatMap {(end) -> [(string: String, penalty: PValue)] in
+            // ここはclosedRange
             let result = inputData.getRangeWithTypos(index, end)
             for item in result {
-                string2segment[item.string] = end-index
+                string2segment[item.string] = end
             }
             return result
         }
@@ -256,13 +257,13 @@ final class DicdataStore {
 
         if index == .zero {
             let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, input: segments[string2segment[$0.ruby, default: 0]])
+                let node = LatticeNode(data: $0, inputRange: index ..< string2segment[$0.ruby, default: 0] + 1)
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, input: segments[string2segment[$0.ruby, default: 0]])}
+            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: index ..< string2segment[$0.ruby, default: 0] + 1)}
             return result
         }
     }
@@ -315,13 +316,13 @@ final class DicdataStore {
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, input: segment)
+                let node = LatticeNode(data: $0, inputRange: fromIndex ..< toIndex+1)
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, input: segment)}
+            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: fromIndex ..< toIndex+1)}
             return result
         }
     }
