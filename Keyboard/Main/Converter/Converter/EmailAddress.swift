@@ -32,12 +32,12 @@ extension KanaKanjiConverter {
         "@ybb.ne.jp",
         "@ymobile.ne.jp",
     ]
-    /// unicode文字列`"uxxxx, Uxxxx, u+xxxx, U+xxxx"`を対応する記号に変換する関数
+    /// 入力が@で終わる場合に、メアドのような候補を追加する関数
     /// - parameters:
     func toEmailAddress(_ inputData: InputData) -> [Candidate] {
         let baseValue: PValue = -13
         let string = inputData.convertTarget.toKatakana()
-        if inputData.convertTarget.last != "@" {
+        if inputData.convertTarget.last != "@" || !inputData.convertTarget.dropLast(1).isEnglishSentence {
             return []
         }
         var results: [Candidate] = []
