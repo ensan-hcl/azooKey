@@ -185,7 +185,8 @@ struct ResizingRect: View {
                     path.move(to: CGPoint(x: x, y: size.height / 2 - size.height * edgeRatio * ratio))
                     path.addLine(to: CGPoint(x: x, y: size.height / 2 + size.height * edgeRatio * ratio))
                 }
-            }.stroke(Color.white, lineWidth: 3)
+            }
+            .stroke(Color.white, lineWidth: 3)
             .gesture(xGesture(target: \.$top_left_edge))
             /*
              Path{path in
@@ -205,7 +206,8 @@ struct ResizingRect: View {
                     path.move(to: CGPoint(x: x, y: size.height / 2 - size.height * edgeRatio * ratio))
                     path.addLine(to: CGPoint(x: x, y: size.height / 2 + size.height * edgeRatio * ratio))
                 }
-            }.stroke(Color.white, lineWidth: 3)
+            }
+            .stroke(Color.white, lineWidth: 3)
             .gesture(xGesture(target: \.$bottom_right_edge))
             /*
              Path{path in
