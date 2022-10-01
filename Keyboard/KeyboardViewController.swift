@@ -37,7 +37,15 @@ final class KeyboardViewController: UIInputViewController {
         // 初期化の順序としてこの位置に置くこと
         Store.shared.initialize()
         let indexManager = ThemeIndexManager.load()
-        let theme = (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
+        let theme: ThemeData
+        switch traitCollection.userInterfaceStyle {
+        case .unspecified, .light:
+            theme = (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
+        case .dark:
+            theme = (try? indexManager.theme(at: indexManager.selectedIndexInDarkMode)) ?? .default
+        @unknown default:
+            theme = (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
+        }
         let host = KeyboardHostingController(rootView: Keyboard(theme: theme))
         // コントロールセンターを出しにくくする。
         host.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
