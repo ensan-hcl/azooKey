@@ -13,6 +13,9 @@ struct UpdateInfomationView: View {
             // version 1.9系
             Group {
                 VersionView("1.9", releaseDate: "2022年xx月xx日") {
+                    ParagraphView("ライトモードとダークモードで異なる着せ替えを設定できるようになりました。") {
+                        "ダークモードに設定したい着せ替えを長押しし、「ダークモードで使用」を選択することで設定できます"
+                    }
                     ParagraphView("「入力中のテキストを保護」する機能を追加しました。") {
                         "この機能を有効化すると、一部のWebアプリでazooKeyの挙動が安定します"
                         "実験的な機能であり、不具合があったり挙動に変更があったりする可能性があります"
