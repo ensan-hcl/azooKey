@@ -92,7 +92,7 @@ struct TabDependentDesign {
         case .vertical:
             coefficient = (5+horizontalKeyCount)/(7.5+horizontalKeyCount)
         case .horizontal:
-            coefficient = (8+horizontalKeyCount)/(10+horizontalKeyCount)
+            coefficient = (8+horizontalKeyCount)/(10+horizontalKeyCount*1.3)
         }
         return (interfaceWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1) * coefficient
     }
