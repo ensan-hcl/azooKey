@@ -25,6 +25,17 @@ struct ThemeTabView: View {
         }
     }
 
+    @ViewBuilder private func circle(geometry: GeometryProxy, systemName: String, color: Color) -> some View {
+        Circle()
+            .fill(color)
+            .frame(idealWidth: geometry.size.width / 1.5, maxWidth: 180, idealHeight: geometry.size.width / 1.5, maxHeight: 180)
+            .overlay(
+                Image(systemName: systemName)
+                    .font(Font.system(size: min(geometry.size.width / 3, 90)).weight(.bold))
+                    .foregroundColor(.white)
+            )
+    }
+
     private var listSection: some View {
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
@@ -36,14 +47,7 @@ struct ThemeTabView: View {
                             CenterAlignedView {
                                 VStack {
                                     Spacer()
-                                    Circle()
-                                        .fill(manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                                        .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
-                                        .overlay(
-                                            Image(systemName: "checkmark")
-                                                .font(Font.system(size: geometry.size.width / 3).weight(.bold))
-                                                .foregroundColor(.white)
-                                        )
+                                    circle(geometry: geometry, systemName: "checkmark", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
                                     Spacer()
                                 }
                                 .onTapGesture {
@@ -54,26 +58,12 @@ struct ThemeTabView: View {
                             CenterAlignedView {
                                 VStack {
                                     Spacer()
-                                    Circle()
-                                        .fill(manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                                        .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
-                                        .overlay(
-                                            Image(systemName: "sun.max.fill")
-                                                .font(Font.system(size: geometry.size.width / 3).weight(.bold))
-                                                .foregroundColor(.white)
-                                        )
+                                    circle(geometry: geometry, systemName: "sun.max.fill", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
                                         .padding()
                                         .onTapGesture {
                                             manager.selectForLightMode(at: index)
                                         }
-                                    Circle()
-                                        .fill(manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
-                                        .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
-                                        .overlay(
-                                            Image(systemName: "moon.fill")
-                                                .font(Font.system(size: geometry.size.width / 3).weight(.bold))
-                                                .foregroundColor(.white)
-                                        )
+                                    circle(geometry: geometry, systemName: "moon.fill", color: manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
                                         .padding()
                                         .onTapGesture {
                                             manager.selectForDarkMode(at: index)
