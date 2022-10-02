@@ -250,20 +250,38 @@ final class DicdataStore {
         }
 
         for i in index ..< toIndex {
-            dicdata.append(contentsOf: self.getWiseDicdata(head: segments[i-index], allowRomanLetter: i+1 == toIndex))
-            dicdata.append(contentsOf: self.getMatch(segments[i-index]))
-            dicdata.append(contentsOf: self.getMatchOSUserDict(segments[i-index]))
+            do {
+                let result = self.getWiseDicdata(head: segments[i-index], allowRomanLetter: i+1 == toIndex)
+                for item in result {
+                    string2segment[item.ruby] = i
+                }
+                dicdata.append(contentsOf: result)
+            }
+            do {
+                let result = self.getMatch(segments[i-index])
+                for item in result {
+                    string2segment[item.ruby] = i
+                }
+                dicdata.append(contentsOf: result)
+            }
+            do {
+                let result = self.getMatchOSUserDict(segments[i-index])
+                for item in result {
+                    string2segment[item.ruby] = i
+                }
+                dicdata.append(contentsOf: result)
+            }
         }
 
         if index == .zero {
             let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, inputRange: index ..< string2segment[$0.ruby, default: 0] + 1)
+                let node = LatticeNode(data: $0, inputRange: index ..< string2segment[$0.ruby, default: index] + 1)
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: index ..< string2segment[$0.ruby, default: 0] + 1)}
+            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: index ..< string2segment[$0.ruby, default: index] + 1)}
             return result
         }
     }
