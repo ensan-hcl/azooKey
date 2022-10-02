@@ -25,13 +25,14 @@ struct ThemeTabView: View {
         }
     }
 
-    @ViewBuilder private func circle(geometry: GeometryProxy, systemName: String, color: Color) -> some View {
-        Circle()
+    private func circle(geometry: GeometryProxy, systemName: String, color: Color) -> some View {
+        let width = min(min(geometry.size.width / 1.5, 180), geometry.size.height / 2.5) // 高さに2つ入るサイズを超えないように設定
+        return Circle()
             .fill(color)
-            .frame(idealWidth: geometry.size.width / 1.5, maxWidth: 180, idealHeight: geometry.size.width / 1.5, maxHeight: 180)
+            .frame(width: width, height: width)
             .overlay(
                 Image(systemName: systemName)
-                    .font(Font.system(size: min(geometry.size.width / 3, 90)).weight(.bold))
+                    .font(Font.system(size: width / 2).weight(.bold))
                     .foregroundColor(.white)
             )
     }
@@ -59,12 +60,11 @@ struct ThemeTabView: View {
                                 VStack {
                                     Spacer()
                                     circle(geometry: geometry, systemName: "sun.max.fill", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                                        .padding()
                                         .onTapGesture {
                                             manager.selectForLightMode(at: index)
                                         }
+                                    Spacer(minLength: 10)
                                     circle(geometry: geometry, systemName: "moon.fill", color: manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
-                                        .padding()
                                         .onTapGesture {
                                             manager.selectForDarkMode(at: index)
                                         }
