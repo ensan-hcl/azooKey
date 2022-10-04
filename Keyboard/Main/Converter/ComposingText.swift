@@ -552,13 +552,11 @@ extension ComposingText {
     }
 
     func getRangeWithTypos(_ left: Int, _ right: Int) -> [(string: String, penalty: PValue)] {
-        let count = right - left + 1
-        let unit: PValue = 3.5
-        let triple = unit*3
         // 各iから始まる候補を列挙する
         // 例えばinput = [d(あ), r(s), r(i), r(t), r(s), d(は), d(は), d(れ)]の場合
         // nodes =      [[d(あ)], [r(s)], [r(i)], [r(t), [r(t), r(a)]], [r(s)], [d(は), d(ば), d(ぱ)], [d(れ)]]
         // となる
+        let count = right - left + 1
         let nodes = (0..<count).map {(i: Int) in
             Self.lengths.flatMap {(k: Int) -> [[InputElement]] in
                 let j = i + k
@@ -569,6 +567,8 @@ extension ComposingText {
             }
         }
 
+        let unit: PValue = 3.5
+        let triple = unit*3
         var result: [(elements: [InputElement], penalty: PValue)] = []
         for (i, nodeArray) in nodes.enumerated() {
             let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}

@@ -38,13 +38,7 @@ extension Kana2Kanji {
 
         // (1)
         let addedNodes: [[LatticeNode]] = (0..<count).map {(i: Int) in
-            (commonCount ..< count).flatMap {j -> [LatticeNode] in
-                if j-i >= self.dicdataStore.maxlength || j<i {
-                    return []
-                }
-                let result: [LatticeNode] = self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: j)
-                return result
-            }
+            return self.dicdataStore.getLOUDSDataInRange(inputData: inputData, from: i, toIndexRange: commonCount ..< count)
         }
 
         // (2)
