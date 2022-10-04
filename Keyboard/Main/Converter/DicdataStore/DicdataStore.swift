@@ -193,18 +193,7 @@ final class DicdataStore {
             segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character.toKatakana()))
         }
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
-        // ⏱0.125108 : 辞書読み込み_誤り訂正候補列挙
-        var string2segment = [String: Int].init()
-        // indicesをreverseすることで、stringWithTypoは長さの長い順に並ぶ=removeでヒットしやすくなる
-        let stringWithTypoData: [(string: String, penalty: PValue)] = (toIndexLeft ..< toIndexRight).reversed().flatMap {(end) -> [(string: String, penalty: PValue)] in
-            // ここはclosedRange
-            let result = inputData.getRangeWithTypos(fromIndex, end)
-            for item in result {
-                string2segment[item.string] = end
-            }
-            return result
-        }
-
+        var (stringWithTypoData, string2segment) = inputData.getRangesWithTypos(fromIndex, rightIndexRange: (toIndexLeft ..< toIndexRight))
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
 
         // MARK: 検索対象を列挙していく。prefixの共通するものを削除して検索をなるべく減らすことが目的。
