@@ -543,11 +543,12 @@ extension ComposingText.InputElement: Equatable {}
 // MARK: 誤り訂正用のAPI
 extension ComposingText {
     private func shouldBeRemovedForDicdataStore(components: [InputElement]) -> Bool {
-        let input = ComposingText.getConvertTarget(for: components).toKatakana()
-        if input.isEmpty {
+        // 判定に使うのは最初の4文字で十分
+        let input = ComposingText.getConvertTarget(for: components.prefix(4))
+        guard let first = input.first?.toKatakana() else {
             return false
         }
-        return !String(input.first!).containsRomanAlphabet && !DicdataStore.existFile(identifier: String(input.first!))
+        return !first.isRomanLetter && !DicdataStore.existLOUDS(for: first)
     }
 
     func getRangeWithTypos(_ left: Int, _ right: Int) -> [(string: String, penalty: PValue)] {
@@ -570,7 +571,7 @@ extension ComposingText {
 
         var result: [(elements: [InputElement], penalty: PValue)] = []
         for (i, nodeArray) in nodes.enumerated() {
-            let correct = [self.input[left + i]].map {InputElement(character: Character(String($0.character).toKatakana()), inputStyle: $0.inputStyle)}
+            let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
             if i == .zero {
                 result = nodeArray.map {($0, $0 == correct ? .zero:unit)}
                 continue

@@ -185,7 +185,7 @@ final class DicdataStore {
         // ⏱0.426499 : 辞書読み込み_全体
         let toIndex = min(inputData.input.count, index + self.maxlength)
         let segments = (index ..< toIndex).reduce(into: []) { (segments: inout [String], rightIndex: Int) in
-            segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character).toKatakana())
+            segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character.toKatakana()))
         }
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
         // ⏱0.125108 : 辞書読み込み_誤り訂正候補列挙
@@ -538,11 +538,13 @@ final class DicdataStore {
         return self.mmValue[former * self.midCount + latter]
     }
 
+    private static let possibleLOUDS: Set<Character> = [
+        "　", "￣", "‐", "―", "〜", "・", "、", "…", "‥", "。", "‘", "’", "“", "”", "〈", "〉", "《", "》", "「", "」", "『", "』", "【", "】", "〔", "〕", "‖", "*", "′", "〃", "※", "´", "¨", "゛", "゜", "←", "→", "↑", "↓", "─", "■", "□", "▲", "△", "▼", "▽", "◆", "◇", "○", "◎", "●", "★", "☆", "々", "ゝ", "ヽ", "ゞ", "ヾ", "ー", "〇", "ァ", "ア", "ィ", "イ", "ゥ", "ウ", "ヴ", "ェ", "エ", "ォ", "オ", "ヵ", "カ", "ガ", "キ", "ギ", "ク", "グ", "ヶ", "ケ", "ゲ", "コ", "ゴ", "サ", "ザ", "シ", "ジ", "〆", "ス", "ズ", "セ", "ゼ", "ソ", "ゾ", "タ", "ダ", "チ", "ヂ", "ッ", "ツ", "ヅ", "テ", "デ", "ト", "ド", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "バ", "パ", "ヒ", "ビ", "ピ", "フ", "ブ", "プ", "ヘ", "ベ", "ペ", "ホ", "ボ", "ポ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ョ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ヮ", "ワ", "ヰ", "ヱ", "ヲ", "ン", "仝", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "！", "？", "(", ")", "#", "%", "&", "^", "_", "'", "\""
+    ]
+
     // 誤り訂正候補の構築の際、ファイルが存在しているか事前にチェックし、存在していなければ以後の計算を打ち切ることで、計算を減らす。
-    internal static func existFile(identifier: some StringProtocol) -> Bool {
-        let fileName = identifier.prefix(1)
-        let path = Bundle.main.bundlePath + "/" + fileName + ".louds"
-        return FileManager.default.fileExists(atPath: path)
+    internal static func existLOUDS(for character: Character) -> Bool {
+        return Self.possibleLOUDS.contains(character)
     }
 
     /*
