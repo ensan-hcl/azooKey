@@ -37,12 +37,11 @@ extension Kana2Kanji {
 
         // (1)
         let addedNodes: [[LatticeNode]] = ( .zero ..< count).map {(i: Int) in
-            (previousResult.inputData.input.count ..< max(previousResult.inputData.input.count, min(count, i+self.dicdataStore.maxlength+1))).flatMap {j -> [LatticeNode] in
-                if j<i {
-                    return []
-                }
-                return self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: j)
-            }
+            return self.dicdataStore.getLOUDSDataInRange(
+                inputData: inputData,
+                from: i,
+                toIndexRange: (previousResult.inputData.input.count ..< max(previousResult.inputData.input.count, min(count, i+self.dicdataStore.maxlength+1)))
+            )
         }
 
         // (2)

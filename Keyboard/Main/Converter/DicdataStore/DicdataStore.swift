@@ -181,19 +181,24 @@ final class DicdataStore {
     /// - Parameters:
     ///   - inputData: 入力データ
     ///   - from: 起点
-    internal func getLOUDSData(inputData: ComposingText, from index: Int) -> [LatticeNode] {
+    ///   - toIndexRange: `from ..< (toIndexRange)`の範囲で辞書ルックアップを行う。
+    internal func getLOUDSDataInRange(inputData: ComposingText, from fromIndex: Int, toIndexRange: Range<Int>? = nil) -> [LatticeNode] {
         // ⏱0.426499 : 辞書読み込み_全体
-        let toIndex = min(inputData.input.count, index + self.maxlength)
-        let segments = (index ..< toIndex).reduce(into: []) { (segments: inout [String], rightIndex: Int) in
+        let toIndexLeft = toIndexRange?.startIndex ?? fromIndex
+        let toIndexRight = toIndexRange?.endIndex ?? (min(inputData.input.count, fromIndex + self.maxlength))
+        if fromIndex > toIndexLeft || toIndexLeft >= toIndexRight {
+            return []
+        }
+        let segments = (fromIndex ..< toIndexRight).reduce(into: []) { (segments: inout [String], rightIndex: Int) in
             segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character.toKatakana()))
         }
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
         // ⏱0.125108 : 辞書読み込み_誤り訂正候補列挙
         var string2segment = [String: Int].init()
         // indicesをreverseすることで、stringWithTypoは長さの長い順に並ぶ=removeでヒットしやすくなる
-        let stringWithTypoData: [(string: String, penalty: PValue)] = (index ..< toIndex).reversed().flatMap {(end) -> [(string: String, penalty: PValue)] in
+        let stringWithTypoData: [(string: String, penalty: PValue)] = (toIndexLeft ..< toIndexRight).reversed().flatMap {(end) -> [(string: String, penalty: PValue)] in
             // ここはclosedRange
-            let result = inputData.getRangeWithTypos(index, end)
+            let result = inputData.getRangeWithTypos(fromIndex, end)
             for item in result {
                 string2segment[item.string] = end
             }
@@ -249,23 +254,23 @@ final class DicdataStore {
             }
         }
 
-        for i in index ..< toIndex {
+        for i in toIndexLeft ..< toIndexRight {
             do {
-                let result = self.getWiseDicdata(head: segments[i-index], allowRomanLetter: i+1 == toIndex)
+                let result = self.getWiseDicdata(head: segments[i-fromIndex], allowRomanLetter: i+1 == toIndexRight)
                 for item in result {
                     string2segment[item.ruby] = i
                 }
                 dicdata.append(contentsOf: result)
             }
             do {
-                let result = self.getMatch(segments[i-index])
+                let result = self.getMatch(segments[i-fromIndex])
                 for item in result {
                     string2segment[item.ruby] = i
                 }
                 dicdata.append(contentsOf: result)
             }
             do {
-                let result = self.getMatchOSUserDict(segments[i-index])
+                let result = self.getMatchOSUserDict(segments[i-fromIndex])
                 for item in result {
                     string2segment[item.ruby] = i
                 }
@@ -273,15 +278,15 @@ final class DicdataStore {
             }
         }
 
-        if index == .zero {
+        if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, inputRange: index ..< string2segment[$0.ruby, default: index] + 1)
+                let node = LatticeNode(data: $0, inputRange: fromIndex ..< string2segment[$0.ruby, default: fromIndex] + 1)
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: index ..< string2segment[$0.ruby, default: index] + 1)}
+            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: fromIndex ..< string2segment[$0.ruby, default: fromIndex] + 1)}
             return result
         }
     }
@@ -289,8 +294,12 @@ final class DicdataStore {
     /// kana2latticeから参照する。louds版。
     /// - Parameters:
     ///   - inputData: 入力データ
+    ///   - from: 始点
     ///   - to: 終点
     internal func getLOUDSData(inputData: ComposingText, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
+        if toIndex - fromIndex > self.maxlength || fromIndex > toIndex {
+            return []
+        }
         let segment = inputData.input[fromIndex...toIndex].reduce(into: ""){$0.append($1.character)}.toKatakana()
 
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)

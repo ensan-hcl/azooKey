@@ -31,7 +31,7 @@ extension Kana2Kanji {
         debug("新規に計算を行います。inputされた文字列は\(inputData.input.count)文字分の\(inputData.convertTarget)")
         let count: Int = inputData.input.count
         let result: LatticeNode = LatticeNode.EOSNode
-        let nodes: [[LatticeNode]] = (.zero ..< count).map {dicdataStore.getLOUDSData(inputData: inputData, from: $0)}
+        let nodes: [[LatticeNode]] = (.zero ..< count).map {dicdataStore.getLOUDSDataInRange(inputData: inputData, from: $0)}
         // 「i文字目から始まるnodes」に対して
         for (i, nodeArray) in nodes.enumerated() {
             // それぞれのnodeに対して
