@@ -551,6 +551,64 @@ extension ComposingText {
         return !first.isRomanLetter && !DicdataStore.existLOUDS(for: first)
     }
 
+    /// closedRangeでもらう
+    /// getRangeWithTyposの複数版にあたる。`result`の計算が一回で済む分、高速になる。
+    func getRangesWithTypos(_ left: Int, rightIndexRange: Range<Int>) -> (typos: [(string: String, penalty: PValue)], stringToEndIndex: [String: Int]) {
+        let count = rightIndexRange.endIndex - left
+        let nodes = (0..<count).map {(i: Int) in
+            Self.lengths.flatMap {(k: Int) -> [[InputElement]] in
+                let j = i + k
+                if count <= j {
+                    return []
+                }
+                return Self.getTypo(self.input[left + i ... left + j])
+            }
+        }
+
+        let unit: PValue = 3.5
+        let triple = unit*3
+        var result: [(elements: [InputElement], penalty: PValue)] = []
+        var typos: [(string: String, penalty: PValue)] = []
+        var stringToEndIndex: [String: Int] = [:]
+
+        for (i, nodeArray) in nodes.enumerated() {
+            defer {
+                // i + 1 + leftがrightIndexRangeの中に入っている場合、typosに追加する
+                if rightIndexRange.contains(i + left) {
+                    for typo in result {
+                        if let convertTarget = ComposingText.getConvertTargetForValidPart(part: typo.elements, of: self.input, from: left, to: i + left)?.toKatakana() {
+                            stringToEndIndex[convertTarget] = i + left
+                            typos.append( (convertTarget, typo.penalty) )
+                        }
+                    }
+                }
+            }
+            let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
+            if i == .zero {
+                result = nodeArray.map {($0, $0 == correct ? .zero:unit)}
+                continue
+            }
+            result = result.flatMap {(elements: [InputElement], penalty: PValue) -> [(elements: [InputElement], penalty: PValue)] in
+                if elements.count != i {
+                    return [(elements, penalty)]
+                }
+                // 訂正数上限(3個)
+                if penalty == triple {
+                    return [(elements + correct, penalty)]
+                }
+                return nodes[i].compactMap {
+                    let _elements = elements + $0
+                    if shouldBeRemovedForDicdataStore(components: _elements) {
+                        return nil
+                    }
+                    return (elements: _elements, penalty: penalty + ($0 == correct ? .zero : unit))
+                }
+            }
+        }
+        debug("getRangeWithTypos", typos)
+        return (typos, stringToEndIndex)
+    }
+
     func getRangeWithTypos(_ left: Int, _ right: Int) -> [(string: String, penalty: PValue)] {
         // 各iから始まる候補を列挙する
         // 例えばinput = [d(あ), r(s), r(i), r(t), r(s), d(は), d(は), d(れ)]の場合
