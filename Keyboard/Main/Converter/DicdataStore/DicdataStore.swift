@@ -239,7 +239,7 @@ final class DicdataStore {
                     dicdata.append(data)
                     continue
                 }
-                let ratio = Self.getTypoPenaltyRatio(data.lcid)
+                let ratio = Self.penaltyRatio[data.lcid]
                 let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
                 let adjust = pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
@@ -318,7 +318,7 @@ final class DicdataStore {
                 if penalty.isZero {
                     return data
                 }
-                let ratio = Self.getTypoPenaltyRatio(data.lcid)
+                let ratio = Self.penaltyRatio[data.lcid]
                 let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
                 let adjust = pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
@@ -569,11 +569,11 @@ final class DicdataStore {
     ///   そこが文節であるかどうか。
     internal static func isClause(_ former: Int, _ latter: Int) -> Bool {
         // EOSが基本多いので、この順の方がヒット率が上がると思われる。
-        let latter_wordtype = Self.judgeWordType(cid: latter)
+        let latter_wordtype = Self.wordTypes[latter]
         if latter_wordtype == 3 {
             return false
         }
-        let former_wordtype = Self.judgeWordType(cid: former)
+        let former_wordtype = Self.wordTypes[former]
         if former_wordtype == 3 {
             return false
         }
@@ -586,8 +586,11 @@ final class DicdataStore {
         return false
     }
 
+    /// wordTypesの初期化時に使うのみ。
     private static let BOS_EOS_wordIDs: Set<Int> = [CIDData.BOS.cid, CIDData.EOS.cid]
+    /// wordTypesの初期化時に使うのみ。
     private static let PREPOSITION_wordIDs: Set<Int> = [1315, 6, 557, 558, 559, 560]
+    /// wordTypesの初期化時に使うのみ。
     private static let INPOSITION_wordIDs: Set<Int> = Set<Int>((561..<868).map {$0}
                                                                 + (1283..<1297).map {$0}
                                                                 + (1306..<1310).map {$0}
@@ -595,6 +598,7 @@ final class DicdataStore {
                                                                 + (555..<557).map {$0}
                                                                 + (1281..<1283).map {$0}
     ).union([1314, 3, 2, 4, 5, 1, 9])
+
     /*
      private static let POSTPOSITION_wordIDs: Set<Int> = Set<Int>((7...8).map{$0}
      + (54..<555).map{$0}
@@ -603,6 +607,29 @@ final class DicdataStore {
      + (1310..<1314).map{$0}
      ).union([10])
      */
+
+    /// - Returns:
+    ///   - 3 when BOS/EOS
+    ///   - 0 when preposition
+    ///   - 1 when core
+    ///   - 2 when postposition
+    /// - データ1つあたり1Bなので、1.3KBくらいのメモリを利用する。
+    static let wordTypes = (0...1319).map(_judgeWordType)
+
+    /// wordTypesの初期化時に使うのみ。
+    private static func _judgeWordType(cid: Int) -> UInt8 {
+        if Self.BOS_EOS_wordIDs.contains(cid) {
+            return 3    // BOS/EOS
+        }
+        if Self.PREPOSITION_wordIDs.contains(cid) {
+            return 0    // 前置
+        }
+        if Self.INPOSITION_wordIDs.contains(cid) {
+            return 1 // 内容
+        }
+        return 2   // 後置
+    }
+
     internal static func includeMMValueCalculation(_ data: DicdataElement) -> Bool {
         // LREでない場合はfalseを返す。
         if !data.isLRE {
@@ -612,15 +639,19 @@ final class DicdataStore {
         if 895...1280 ~= data.lcid {
             return true
         }
-        // 非自立名刺
+        // 非自立名詞
         if 1297...1305 ~= data.lcid {
             return true
         }
         // 内容語かどうか
-        return Self.INPOSITION_wordIDs.contains(data.lcid)
+        return wordTypes[data.lcid] == 1
     }
 
-    internal static func getTypoPenaltyRatio(_ lcid: Int) -> PValue {
+    /// - データ1つあたり2Bなので、2.6KBくらいのメモリを利用する。
+    static let penaltyRatio = (0...1319).map(_getTypoPenaltyRatio)
+
+    /// penaltyRatioの初期化時に使うのみ。
+    internal static func _getTypoPenaltyRatio(_ lcid: Int) -> PValue {
         // 助詞147...368, 助動詞369...554
         if 147...554 ~= lcid {
             return 2.5
@@ -651,25 +682,6 @@ final class DicdataStore {
         }
 
         return true
-    }
-
-    ///
-    /// - Returns:
-    ///   - 3 when BOS/EOS
-    ///   - 0 when preposition
-    ///   - 1 when core
-    ///   - 2 when postposition
-    internal static func judgeWordType(cid: Int) -> Int {
-        if Self.BOS_EOS_wordIDs.contains(cid) {
-            return 3    // BOS/EOS
-        }
-        if Self.PREPOSITION_wordIDs.contains(cid) {
-            return 0    // 前置
-        }
-        if Self.INPOSITION_wordIDs.contains(cid) {
-            return 1 // 内容
-        }
-        return 2   // 後置
     }
 
     internal static let possibleNexts: [String: [String]] = [
