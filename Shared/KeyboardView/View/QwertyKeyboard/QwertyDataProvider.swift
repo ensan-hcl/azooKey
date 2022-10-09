@@ -219,7 +219,14 @@ struct QwertyDataProvider {
                     (label: .text("¤"), actions: [.input("¤")] )
                 ], direction: .left)
             ),
-            QwertyKeyModel(labelType: .text("&"), pressActions: [.input("&")])
+            QwertyKeyModel(
+                labelType: .text("&"),
+                pressActions: [.input("&")],
+                variationsModel: VariationsModel([
+                    (label: .text("&"), actions: [.input("&")]),
+                    (label: .text("＆"), actions: [.input("＆")]),
+                ], direction: .left)
+            )
         ],
 
         [
@@ -242,43 +249,87 @@ struct QwertyDataProvider {
         [
             QwertyKeyModel(
                 labelType: .text("["),
-                pressActions: [.input("[")]
+                pressActions: [.input("[")],
+                variationsModel: VariationsModel([
+                    (label: .text("["), actions: [.input("[")]),
+                    (label: .text("［"), actions: [.input("［")]),
+                ], direction: .right)
             ),
             QwertyKeyModel(
                 labelType: .text("]"),
-                pressActions: [.input("]")]
+                pressActions: [.input("]")],
+                variationsModel: VariationsModel([
+                    (label: .text("]"), actions: [.input("]")]),
+                    (label: .text("］"), actions: [.input("］")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("{"),
-                pressActions: [.input("{")]
+                pressActions: [.input("{")],
+                variationsModel: VariationsModel([
+                    (label: .text("{"), actions: [.input("{")]),
+                    (label: .text("｛"), actions: [.input("｛")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("}"),
-                pressActions: [.input("}")]
+                pressActions: [.input("}")],
+                variationsModel: VariationsModel([
+                    (label: .text("}"), actions: [.input("}")]),
+                    (label: .text("｝"), actions: [.input("｝")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("#"),
-                pressActions: [.input("#")]
+                pressActions: [.input("#")],
+                variationsModel: VariationsModel([
+                    (label: .text("#"), actions: [.input("#")]),
+                    (label: .text("＃"), actions: [.input("＃")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("%"),
-                pressActions: [.input("%")]
+                pressActions: [.input("%")],
+                variationsModel: VariationsModel([
+                    (label: .text("%"), actions: [.input("%")]),
+                    (label: .text("％"), actions: [.input("％")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("^"),
-                pressActions: [.input("^")]
+                pressActions: [.input("^")],
+                variationsModel: VariationsModel([
+                    (label: .text("^"), actions: [.input("^")]),
+                    (label: .text("＾"), actions: [.input("＾")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("*"),
-                pressActions: [.input("*")]
+                pressActions: [.input("*")],
+                variationsModel: VariationsModel([
+                    (label: .text("*"), actions: [.input("*")]),
+                    (label: .text("＊"), actions: [.input("＊")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("+"),
-                pressActions: [.input("+")]
+                pressActions: [.input("+")],
+                variationsModel: VariationsModel([
+                    (label: .text("+"), actions: [.input("+")]),
+                    (label: .text("＋"), actions: [.input("＋")]),
+                    (label: .text("±"), actions: [.input("±")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("="),
-                pressActions: [.input("=")]
+                pressActions: [.input("=")],
+                variationsModel: VariationsModel([
+                    (label: .text("="), actions: [.input("=")]),
+                    (label: .text("＝"), actions: [.input("＝")]),
+                    (label: .text("≡"), actions: [.input("≡")]),
+                    (label: .text("≒"), actions: [.input("≒")]),
+                    (label: .text("≠"), actions: [.input("≠")]),
+                ], direction: .left)
             )
         ],
         [
@@ -305,24 +356,52 @@ struct QwertyDataProvider {
                 labelType: .text("|"),
                 pressActions: [.input("|")],
                 variationsModel: VariationsModel([
-                    (label: .text("@"), actions: [.input("@")] ),
-                    (label: .text("＠"), actions: [.input("＠")] )
+                    (label: .text("|"), actions: [.input("|")] ),
+                    (label: .text("｜"), actions: [.input("｜")] )
                 ])
             ),
-            QwertyKeyModel(labelType: .text("<"), pressActions: [.input("<")]),
-            QwertyKeyModel(labelType: .text(">"), pressActions: [.input(">")]),
+            QwertyKeyModel(
+                labelType: .text("<"),
+                pressActions: [.input("<")],
+                variationsModel: VariationsModel([
+                    (label: .text("<"), actions: [.input("<")]),
+                    (label: .text("＜"), actions: [.input("＜")]),
+                ])
+            ),
+            QwertyKeyModel(
+                labelType: .text(">"),
+                pressActions: [.input(">")],
+                variationsModel: VariationsModel([
+                    (label: .text(">"), actions: [.input(">")]),
+                    (label: .text("＞"), actions: [.input("＞")]),
+                ])
+            ),
             QwertyKeyModel(
                 labelType: .text("\""),
-                pressActions: [.input("\"")]
+                pressActions: [.input("\"")],
+                variationsModel: VariationsModel([
+                    (label: .text("\""), actions: [.input("\"")]),
+                    (label: .text("＂"), actions: [.input("＂")]),
+                    (label: .text("“"), actions: [.input("“")]),
+                    (label: .text("”"), actions: [.input("”")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("'"),
-                pressActions: [.input("'")]
+                pressActions: [.input("'")],
+                variationsModel: VariationsModel([
+                    (label: .text("'"), actions: [.input("'")]),
+                    (label: .text("`"), actions: [.input("`")]),
+                ])
             ),
 
             QwertyKeyModel(
                 labelType: .text("$"),
-                pressActions: [.input("$")]
+                pressActions: [.input("$")],
+                variationsModel: VariationsModel([
+                    (label: .text("$"), actions: [.input("$")]),
+                    (label: .text("＄"), actions: [.input("＄")]),
+                ])
             ),
             QwertyKeyModel(
                 labelType: .text("€"),
