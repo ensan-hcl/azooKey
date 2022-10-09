@@ -576,7 +576,7 @@ extension ComposingText {
                 // i + 1 + leftがrightIndexRangeの中に入っている場合、typosに追加する
                 if rightIndexRange.contains(i + left) {
                     for typo in result {
-                        if let convertTarget = ComposingText.getConvertTargetForValidPart(part: typo.elements, of: self.input, from: left, to: i + left)?.toKatakana() {
+                        if let convertTarget = ComposingText.getConvertTargetForValidPart(part: typo.elements, of: self.input, from: left, to: i + left + 1)?.toKatakana() {
                             stringToEndIndex[convertTarget] = i + left
                             typos.append( (convertTarget, typo.penalty) )
                         }
@@ -605,7 +605,7 @@ extension ComposingText {
                 }
             }
         }
-        debug("getRangeWithTypos", typos)
+        debug("getRangesWithTypos", typos)
         return (typos, stringToEndIndex)
     }
 
