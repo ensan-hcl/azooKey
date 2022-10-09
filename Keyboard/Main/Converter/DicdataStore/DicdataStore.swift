@@ -245,7 +245,7 @@ final class DicdataStore {
 
         for i in toIndexLeft ..< toIndexRight {
             do {
-                let result = self.getWiseDicdata(head: segments[i-fromIndex], allowRomanLetter: i+1 == toIndexRight)
+                let result = self.getWiseDicdata(convertTarget: segments[i-fromIndex], allowRomanLetter: i+1 == toIndexRight, inputData: inputData, inputRange: fromIndex ..< i)
                 for item in result {
                     string2segment[item.ruby] = i
                 }
@@ -327,7 +327,7 @@ final class DicdataStore {
             dicdata.append(contentsOf: result)
         }
 
-        dicdata.append(contentsOf: self.getWiseDicdata(head: segment, allowRomanLetter: toIndex == inputData.input.count - 1))
+        dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, allowRomanLetter: toIndex == inputData.input.count - 1, inputData: inputData, inputRange: fromIndex ..< toIndex+1))
         dicdata.append(contentsOf: self.getMatch(segment))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
@@ -409,68 +409,68 @@ final class DicdataStore {
 
     /// 補足的な辞書情報を得る。
     ///  - parameters:
-    ///     - head: 先頭の単語の文字列
+    ///     - convertTarget: カタカナ変換済みの文字列
     /// - note
     ///     - 入力全体をカタカナとかひらがなに変換するやつは、Converter側でやっているので注意。
-    private func getWiseDicdata(head: String, allowRomanLetter: Bool) -> Dicdata {
+    private func getWiseDicdata(convertTarget: String, allowRomanLetter: Bool, inputData: ComposingText, inputRange: Range<Int>) -> Dicdata {
         var result: Dicdata = []
-        result.append(contentsOf: self.getJapaneseNumberDicdata(head: head))
-        if let number = Float(head) {
-            result.append(DicdataElement(ruby: head, cid: CIDData.数.cid, mid: 361, value: -14))
+        result.append(contentsOf: self.getJapaneseNumberDicdata(head: convertTarget))
+        if inputData.input[..<inputRange.startIndex].last?.character.isNumber != true && inputData.input[inputRange.endIndex...].first?.character.isNumber != true, let number = Float(convertTarget) {
+            result.append(DicdataElement(ruby: convertTarget, cid: CIDData.数.cid, mid: 361, value: -14))
             if number.truncatingRemainder(dividingBy: 1) == 0 {
                 let int = Int(number)
                 if int < Int(1E18) && -Int(1E18) < int, let kansuji = self.numberFormatter.string(from: NSNumber(value: int)) {
-                    result.append(DicdataElement(word: kansuji, ruby: head, cid: CIDData.数.cid, mid: 361, value: -16))
+                    result.append(DicdataElement(word: kansuji, ruby: convertTarget, cid: CIDData.数.cid, mid: 361, value: -16))
                 }
             }
         }
 
         // headを英単語として候補に追加する
-        if VariableStates.shared.keyboardLanguage == .en_US && head.onlyRomanAlphabet {
-            result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 40, value: -14))
+        if VariableStates.shared.keyboardLanguage == .en_US && convertTarget.onlyRomanAlphabet {
+            result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: 40, value: -14))
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
         if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
-            if let katakana = Roman2Kana.katakanaChanges[head], let hiragana = Roman2Kana.hiraganaChanges[head] {
+            if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[convertTarget] {
                 result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
                 result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             }
         }
 
-        if head.count == 1, allowRomanLetter || !head.onlyRomanAlphabet {
-            let hira = head.toKatakana()
-            if head == hira {
-                result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
+        if convertTarget.count == 1, allowRomanLetter || !convertTarget.onlyRomanAlphabet {
+            let hira = convertTarget.toKatakana()
+            if convertTarget == hira {
+                result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             } else {
-                result.append(DicdataElement(word: hira, ruby: head, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
-                result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
+                result.append(DicdataElement(word: hira, ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
+                result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             }
         }
 
         // 記号変換
-        if head.count == 1, let first = head.first {
+        if convertTarget.count == 1, let first = convertTarget.first {
             var value: PValue = -14
             let hs = Self.fullwidthToHalfwidth[first, default: first]
 
             if hs != first {
-                result.append(DicdataElement(word: head, ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                result.append(DicdataElement(word: convertTarget, ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
                 value -= 0.1
-                result.append(DicdataElement(word: String(hs), ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                result.append(DicdataElement(word: String(hs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
                 value -= 0.1
             }
             if let fs = Self.halfwidthToFullwidth[first], fs != first {
-                result.append(DicdataElement(word: head, ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                result.append(DicdataElement(word: convertTarget, ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
                 value -= 0.1
-                result.append(DicdataElement(word: String(fs), ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                result.append(DicdataElement(word: String(fs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
                 value -= 0.1
             }
             for group in Self.weakRelatingSymbolGroups where group.contains(hs) {
                 for symbol in group where symbol != hs {
-                    result.append(DicdataElement(word: String(symbol), ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                    result.append(DicdataElement(word: String(symbol), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
                     value -= 0.1
                     if let fs = Self.halfwidthToFullwidth[symbol] {
-                        result.append(DicdataElement(word: String(fs), ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                        result.append(DicdataElement(word: String(fs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
                         value -= 0.1
                     }
                 }
