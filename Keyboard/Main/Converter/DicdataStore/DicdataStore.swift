@@ -447,8 +447,89 @@ final class DicdataStore {
                 result.append(DicdataElement(ruby: head, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
             }
         }
+
+        // 記号変換
+        if head.count == 1, let first = head.first {
+            var value: PValue = -14
+            let hs = Self.fullwidthToHalfwidth[first, default: first]
+
+            if hs != first {
+                result.append(DicdataElement(word: head, ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                value -= 0.1
+                result.append(DicdataElement(word: String(hs), ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                value -= 0.1
+            }
+            if let fs = Self.halfwidthToFullwidth[first], fs != first {
+                result.append(DicdataElement(word: head, ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                value -= 0.1
+                result.append(DicdataElement(word: String(fs), ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                value -= 0.1
+            }
+            for group in Self.weakRelatingSymbolGroups where group.contains(hs) {
+                for symbol in group where symbol != hs {
+                    result.append(DicdataElement(word: String(symbol), ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                    value -= 0.1
+                    if let fs = Self.halfwidthToFullwidth[symbol] {
+                        result.append(DicdataElement(word: String(fs), ruby: head, cid: CIDData.記号.cid, mid: 501, value: value))
+                        value -= 0.1
+                    }
+                }
+            }
+        }
         return result
     }
+
+    // 記号に対する半角・全角変換
+    private static let (fullwidthToHalfwidth, halfwidthToFullwidth) = zip(
+        "＋ー＊＝・！＃％＆＇＂〜｜￡＄￥＠｀；：＜＞，．＼／＿￣－",
+        "＋ー＊＝・！＃％＆＇＂〜｜￡＄￥＠｀；：＜＞，．＼／＿￣－".applyingTransform(.fullwidthToHalfwidth, reverse: false)!
+    )
+    .reduce(into: ([Character: Character](), [Character: Character]())) { (results: inout ([Character: Character], [Character: Character]), values: (Character, Character)) in
+        results.0[values.0] = values.1
+        results.1[values.1] = values.0
+    }
+
+    // 弱い類似(矢印同士のような関係)にある記号をグループにしたもの
+    // 例えば→に対して⇒のような記号はより類似度が強いため、上位に出したい。これを実現する必要が生じた場合はstrongRelatingSymbolGroupsを新設する。
+    // 宣言順不同
+    // 1つを入れると他が出る、というイメージ
+    // 半角と全角がある場合は半角のみ
+    private static let weakRelatingSymbolGroups: [[Character]] = [
+        // 異体字セレクト用 (試験実装)
+        ["高", "髙"],
+        ["斎", "斉", "齋", "齊"],
+        ["澤", "沢"],
+        ["気", "氣"],
+        ["澁", "渋"],
+        ["対", "對"],
+        ["辻󠄀", "辻󠄀"],
+
+        // 記号変換
+        ["☆", "★", "♡", "☾", "☽"],  // 星
+        ["^", "＾"],  // ハット
+        ["¥", "$", "¢", "€", "£", "₿"], // 通貨
+        ["%", "‰"], // パーセント
+        ["°", "℃", "℉"],
+        ["◯"], // 図形
+        ["*", "※", "✳︎", "✴︎"],   // こめ
+        ["・", "…", "‥", "•"],
+        ["+", "±", "⊕"],
+        ["×", "❌", "✖️"],
+        ["÷", "➗",],
+        ["<", "≦", "≪", "〈", "《", "‹", "«"],
+        [">", "≧", "≫", "〉", "》", "›", "»"],
+        ["=", "≒", "≠", "≡"],
+        [":", ";"],
+        ["!", "❗️", "❣️", "‼︎", "⁉︎", "❕", "‼️", "⁉️", "¡"],
+        ["?", "❓", "⁉︎", "⁇", "❔", "⁉️", "¿"],
+        ["〒", "〠", "℡", "☎︎"],
+        ["々", "ヾ", "ヽ", "ゝ", "ゞ", "〃", "仝", "〻"],
+        ["〆", "〼", "ゟ", "ヿ"], // 特殊仮名
+        ["♂", "♀", "⚢", "⚣", "⚤", "⚥", "⚦", "⚧", "⚨", "⚩", "⚪︎", "⚲"], // ジェンダー記号
+        ["→", "↑", "←", "↓", "↙︎", "↖︎", "↘︎", "↗︎", "↔︎", "↕︎", "↪︎", "↩︎", "⇆"], // 矢印
+        ["♯", "♭", "♪", "♮", "♫", "♬", "♩", "𝄞", "𝄞"],  // 音符
+        ["√", "∛", "∜"],  // 根号
+    ]
 
     private func loadCCBinary(url: URL) -> [(Int32, Float)] {
         do {
