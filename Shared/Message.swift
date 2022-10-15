@@ -91,7 +91,7 @@ struct MessageManager {
             precondition: {
                 // ユーザ辞書に登録があるのが条件。
                 let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-                let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
+                let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
                 return FileManager.default.fileExists(atPath: binaryFilePath)
             },
             silentDoneCondition: {
@@ -104,7 +104,7 @@ struct MessageManager {
             containerAppShouldMakeItDone: {
                 // ユーザ辞書に登録がない場合はDoneにして良い。
                 let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-                let binaryFilePath = directoryPath.appendingPathComponent("user.louds").path
+                let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
                 return !FileManager.default.fileExists(atPath: binaryFilePath)
             }
         ),

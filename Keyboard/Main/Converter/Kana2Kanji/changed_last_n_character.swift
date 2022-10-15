@@ -23,25 +23,24 @@ extension Kana2Kanji {
     /// (5)ノードをアップデートした上で返却する。
 
     func kana2lattice_changed(_ inputData: InputData, N_best: Int, counts: (deleted: Int, added: Int), previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
-        debug("kana2lattice_changed", inputData, counts, previousResult.inputData)
         // (0)
         let count = inputData.input.count
         let commonCount = previousResult.inputData.input.count - counts.deleted
+        debug("kana2lattice_changed", inputData, counts, previousResult.inputData, count, commonCount)
 
         // (1)
-        var nodes = previousResult.nodes.enumerated().map {(i: Int, nodes: [LatticeNode]) in
+        var nodes = previousResult.nodes.prefix(commonCount).enumerated().map {(i: Int, nodes: [LatticeNode]) in
             return nodes.filter {i + $0.convertTargetLength <= commonCount}
         }
         while nodes.last?.isEmpty ?? false {
             nodes.removeLast()
         }
-
-        // (1)
+        // (2)
         let addedNodes: [[LatticeNode]] = (0..<count).map {(i: Int) in
-            return self.dicdataStore.getLOUDSDataInRange(inputData: inputData, from: i, toIndexRange: commonCount ..< count)
+            return self.dicdataStore.getLOUDSDataInRange(inputData: inputData, from: i, toIndexRange: max(commonCount, i) ..< count)
         }
 
-        // (2)
+        // (3)
         for (i, nodeArray) in nodes.enumerated() {
             for node in nodeArray {
                 if node.prevs.isEmpty {

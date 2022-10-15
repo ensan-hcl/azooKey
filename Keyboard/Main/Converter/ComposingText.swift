@@ -213,7 +213,7 @@ struct ComposingText {
         }
         let prev = self.input[inputCursorPosition - 1]
         if inputStyle == .roman2kana && prev.inputStyle == inputStyle, let first = string.first, String(first).onlyRomanAlphabet {
-            if prev.character == first && !["a", "i", "u", "e", "n"].contains(first) {
+            if prev.character == first && !["a", "i", "u", "e", "o", "n"].contains(first) {
                 self.input[inputCursorPosition - 1] = InputElement(character: "っ", inputStyle: .direct)
                 self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
                 return
@@ -368,21 +368,19 @@ extension ComposingText {
         return convertTargetElements.reduce(into: "") {$0 += $1.string}
     }
 
-    /// 「正当な」部分領域を返す関数
-    /// `elements[leftIndex ..< rightIndex]が正当であればこれをConvertTargetに変換して返す。
-    ///  - examples
-    ///  `elements = [r(k, a, n, s, h, a)]`のとき、`k,a,n,s,h,a`や`k, a`は正当だが`a, n`や`s, h`は正当ではない。`k, a, n`は特に正当であるとみなす。
-    ///
-    static func getConvertTargetForValidPart(part partialElements: [InputElement], of originalElements: [InputElement], from leftIndex: Int, to rightIndex: Int) -> String? {
-        debug("getConvertTargetForValidPart", partialElements, originalElements, leftIndex, rightIndex)
-        if leftIndex < originalElements.startIndex || originalElements.endIndex < rightIndex {
-            return nil
+    static func shouldEscapeOtherValidation(convertTargetElement: [ConvertTargetElement], of originalElements: [InputElement]) -> Bool {
+        let string = convertTargetElement.reduce(into: "") {$0 += $1.string}
+        // 句読点や矢印のエスケープ
+        if !string.containsRomanAlphabet {
+            return true
         }
-        if leftIndex == rightIndex {
-            return nil
+        if ["→", "↓", "↑", "←"].contains(string) {
+            return true
         }
-        // 正当性のチェックを行う
-        // 基本的に、convertTargetと正しく対応する部分のみを取り出したい。
+        return false
+    }
+
+    static func isLeftSideValid(first firstElement: InputElement, of originalElements: [InputElement], from leftIndex: Int) -> Bool {
         // leftIndexの位置にある`el`のチェック
         // 許されるパターンは以下の通り
         // * leftIndex == startIndex
@@ -391,48 +389,41 @@ extension ComposingText {
         // * (a|i|u|e|o:roman2kana) -> el                  // aka、のような場合、ka部分を正当とみなす
         // * (e-1:roman2kana and not n) && e-1 == es       // tta、のような場合、ta部分を正当とみなすが、nnaはだめ。
         // * (n:roman2kana) -> el && el not a|i|u|e|o|y|n  // nka、のような場合、ka部分を正当とみなすが、nnaはだめ。
-        guard let firstElement = partialElements.first else {
-            return nil
+
+        if leftIndex < originalElements.startIndex {
+            return false
         }
-        let string = partialElements.reduce(into: "") {$0.append($1.character)}
-        checkIsStartValid: do {
-            // 左端か、directなElementである場合
-            guard leftIndex != originalElements.startIndex && firstElement.inputStyle == .roman2kana else {
-                break checkIsStartValid
-            }
-
-            // 句読点や矢印のエスケープ
-            if !string.containsRomanAlphabet {
-                break checkIsStartValid
-            }
-            if ["zl", "zk", "zj", "zh"].contains(string) {
-                break checkIsStartValid
-            }
-
-            let prevLastElement = originalElements[leftIndex - 1]
-            if prevLastElement.inputStyle != .roman2kana || !prevLastElement.character.isRomanLetter {
-                break checkIsStartValid
-            }
-
-            if ["a", "i", "u", "e", "o"].contains(prevLastElement.character) {
-                break checkIsStartValid
-            }
-            if prevLastElement.character != "n" && prevLastElement.character == firstElement.character {
-                break checkIsStartValid
-            }
-            let last_2 = originalElements[0 ..< leftIndex].suffix(2)
-            if ["zl", "zk", "zj", "zh"].contains(last_2.reduce(into: "") {$0.append($1.character)}) {
-                break checkIsStartValid
-            }
-            let n_suffix = originalElements[0 ..< leftIndex].suffix(while: {$0.inputStyle == .roman2kana && $0.character == "n"})
-            if n_suffix.count % 2 == 0 && n_suffix.count > 0 {
-                break checkIsStartValid
-            }
-            if n_suffix.count % 2 == 1 && !["a", "i", "u", "e", "o", "y", "n"].contains(firstElement.character) {
-                break checkIsStartValid
-            }
-            return nil
+        // 左端か、directなElementである場合
+        guard leftIndex != originalElements.startIndex && firstElement.inputStyle == .roman2kana else {
+            return true
         }
+
+        let prevLastElement = originalElements[leftIndex - 1]
+        if prevLastElement.inputStyle != .roman2kana || !prevLastElement.character.isRomanLetter {
+            return true
+        }
+
+        if ["a", "i", "u", "e", "o"].contains(prevLastElement.character) {
+            return true
+        }
+        if prevLastElement.character != "n" && prevLastElement.character == firstElement.character {
+            return true
+        }
+        let last_2 = originalElements[0 ..< leftIndex].suffix(2)
+        if ["zl", "zk", "zj", "zh"].contains(last_2.reduce(into: "") {$0.append($1.character)}) {
+            return true
+        }
+        let n_suffix = originalElements[0 ..< leftIndex].suffix(while: {$0.inputStyle == .roman2kana && $0.character == "n"})
+        if n_suffix.count % 2 == 0 && n_suffix.count > 0 {
+            return true
+        }
+        if n_suffix.count % 2 == 1 && !["a", "i", "u", "e", "o", "y", "n"].contains(firstElement.character) {
+            return true
+        }
+        return false
+    }
+
+    static func isRightSideValid(lastElement: InputElement, convertTargetElements: [ConvertTargetElement], of originalElements: [InputElement], to rightIndex: Int) -> Bool {
         // rightIndexの位置にあるerのチェック
         // 許されるパターンは以下の通り
         // * rightIndex == endIndex
@@ -442,58 +433,69 @@ extension ComposingText {
         // * er != n && er -> er == e+1                               // kka、のような場合、k部分を正当とみなす
         // * er == n && er -> (e+1:roman2kana and not a|i|u|e|o|n|y)  // (nn)*nka、のような場合、(nn)*n部分を正当とみなす
         // * er == n && er -> (e+1:roman2kana)  // (nn)*a、のような場合、nn部分を正当とみなす
-        guard let lastElement = partialElements.last else {
+        // 左端か、directなElementである場合
+        guard rightIndex != originalElements.endIndex && lastElement.inputStyle == .roman2kana else {
+            return true
+        }
+        if lastElement.inputStyle != .roman2kana {
+            return true
+        }
+        let nextFirstElement = originalElements[rightIndex]
+        if nextFirstElement.inputStyle != .roman2kana || !nextFirstElement.character.isRomanLetter {
+            return true
+        }
+        if ["a", "i", "u", "e", "o"].contains(lastElement.character) {
+            return true
+        }
+        if lastElement.character != "n" && lastElement.character == nextFirstElement.character {
+            return true
+        }
+        guard let lastConvertTargetElements = convertTargetElements.last else {
+            return false
+        }
+        // nnが偶数個なら許す
+        if lastElement.character == "n" && lastConvertTargetElements.string.last != "n" {
+            return true
+        }
+        // nが最後に1つ余っていて、characterが条件を満たせば許す
+        if lastElement.character == "n" && lastConvertTargetElements.inputStyle == .roman2kana && lastConvertTargetElements.string.last == "n"  && !["a", "i", "u", "e", "o", "y", "n"].contains(nextFirstElement.character) {
+            return true
+        }
+        return false
+    }
+
+    /// 「正当な」部分領域を返す関数
+    /// `elements[leftIndex ..< rightIndex]が正当であればこれをConvertTargetに変換して返す。
+    ///  - examples
+    ///  `elements = [r(k, a, n, s, h, a)]`のとき、`k,a,n,s,h,a`や`k, a`は正当だが`a, n`や`s, h`は正当ではない。`k, a, n`は特に正当であるとみなす。
+    ///
+    static func getConvertTargetIfRightSideIsValid(lastElement: InputElement, of originalElements: [InputElement], to rightIndex: Int, convertTargetElements: [ConvertTargetElement]) -> String? {
+        debug("getConvertTargetIfRightSideIsValid", lastElement, rightIndex)
+        if originalElements.endIndex < rightIndex {
             return nil
         }
-        var part = partialElements
-        checkIsEndValid: do {
-            // 左端か、directなElementである場合
-            guard rightIndex != originalElements.endIndex && lastElement.inputStyle == .roman2kana else {
-                break checkIsEndValid
-            }
-            if lastElement.inputStyle != .roman2kana {
-                break checkIsEndValid
-            }
-
-            // 句読点や矢印のエスケープ
-            if !string.containsRomanAlphabet {
-                break checkIsEndValid
-            }
-            if ["zl", "zk", "zj", "zh"].contains(string) {
-                break checkIsEndValid
-            }
-
-            let nextFirstElement = originalElements[rightIndex]
-            if nextFirstElement.inputStyle != .roman2kana || !nextFirstElement.character.isRomanLetter {
-                break checkIsEndValid
-            }
-            if ["a", "i", "u", "e", "o"].contains(lastElement.character) {
-                break checkIsEndValid
-            }
-            if lastElement.character != "n" && lastElement.character == nextFirstElement.character {
-                // partを書き換える
-                part.removeLast()
-                part.append(InputElement(character: "っ", inputStyle: .direct))
-                break checkIsEndValid
-            }
-            let n_suffix = partialElements.suffix {$0.inputStyle == .roman2kana && $0.character == "n"}
-            // nnが偶数個なら許す
-            if n_suffix.count > 0 && n_suffix.count % 2 == 0 {
-                break checkIsEndValid
-            }
-            // nが最後に1つ余っていて、characterが条件を満たせば許す
-            if n_suffix.count % 2 == 1 && !["a", "i", "u", "e", "o", "y", "n"].contains(nextFirstElement.character) {
-                // partを書き換える
-                part.removeLast()
-                part.append(InputElement(character: "ん", inputStyle: .direct))
-                break checkIsEndValid
-            }
+        // 正当性のチェックを行う
+        // 基本的に、convertTargetと正しく対応する部分のみを取り出したい。
+        let shouldEscapeValidation = Self.shouldEscapeOtherValidation(convertTargetElement: convertTargetElements, of: originalElements)
+        if !shouldEscapeValidation && !Self.isRightSideValid(lastElement: lastElement, convertTargetElements: convertTargetElements, of: originalElements, to: rightIndex) {
             return nil
         }
         // ここまで来たらvalid
-        var convertTargetElements: [ConvertTargetElement] = []
-        for element in part {
-            updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+        var convertTargetElements = convertTargetElements
+        if let lastElement = convertTargetElements.last, lastElement.inputStyle == .roman2kana, rightIndex < originalElements.endIndex {
+            let nextFirstElement = originalElements[rightIndex]
+
+            if !lastElement.string.hasSuffix("n") && lastElement.string.last == nextFirstElement.character {
+                // 書き換える
+                convertTargetElements[convertTargetElements.endIndex - 1].string.removeLast()
+                convertTargetElements.append(ConvertTargetElement(string: "っ", inputStyle: .direct))
+            }
+
+            if lastElement.string.hasSuffix("n") && !["a", "i", "u", "e", "o", "y", "n"].contains(nextFirstElement.character) {
+                // 書き換える
+                convertTargetElements[convertTargetElements.endIndex - 1].string.removeLast()
+                convertTargetElements.append(ConvertTargetElement(string: "ん", inputStyle: .direct))
+            }
         }
         return convertTargetElements.reduce(into: "") {$0 += $1.string}
     }
@@ -542,10 +544,9 @@ extension ComposingText.InputElement: Equatable {}
 
 // MARK: 誤り訂正用のAPI
 extension ComposingText {
-    private func shouldBeRemovedForDicdataStore(components: [InputElement]) -> Bool {
-        // 判定に使うのは最初の4文字で十分
-        let input = ComposingText.getConvertTarget(for: components.prefix(4))
-        guard let first = input.first?.toKatakana() else {
+    private func shouldBeRemovedForDicdataStore(components: [ConvertTargetElement]) -> Bool {
+        // 判定に使うのは最初の1エレメントの最初の文字で十分
+        guard let first = components.first?.string.first?.toKatakana() else {
             return false
         }
         return !first.isRomanLetter && !DicdataStore.existLOUDS(for: first)
@@ -555,6 +556,7 @@ extension ComposingText {
     /// getRangeWithTyposの複数版にあたる。`result`の計算が一回で済む分、高速になる。
     func getRangesWithTypos(_ left: Int, rightIndexRange: Range<Int>) -> (typos: [(string: String, penalty: PValue)], stringToEndIndex: [String: Int]) {
         let count = rightIndexRange.endIndex - left
+        debug("getRangesWithTypos", left, rightIndexRange, count)
         let nodes = (0..<count).map {(i: Int) in
             Self.lengths.flatMap {(k: Int) -> [[InputElement]] in
                 let j = i + k
@@ -567,7 +569,7 @@ extension ComposingText {
 
         let unit: PValue = 3.5
         let triple = unit*3
-        var result: [(elements: [InputElement], penalty: PValue)] = []
+        var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
         var typos: [(string: String, penalty: PValue)] = []
         var stringToEndIndex: [String: Int] = [:]
 
@@ -576,7 +578,7 @@ extension ComposingText {
                 // i + 1 + leftがrightIndexRangeの中に入っている場合、typosに追加する
                 if rightIndexRange.contains(i + left) {
                     for typo in result {
-                        if let convertTarget = ComposingText.getConvertTargetForValidPart(part: typo.elements, of: self.input, from: left, to: i + left + 1)?.toKatakana() {
+                        if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: typo.lastElement, of: self.input, to: i + left + 1, convertTargetElements: typo.convertTargetElements)?.toKatakana() {
                             stringToEndIndex[convertTarget] = i + left
                             typos.append( (convertTarget, typo.penalty) )
                         }
@@ -585,23 +587,48 @@ extension ComposingText {
             }
             let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
             if i == .zero {
-                result = nodeArray.map {($0, $0 == correct ? .zero:unit)}
+                // 最初の値による枝刈りを実施する
+                result = nodeArray.compactMap { inputElements in
+                    guard let firstElement = inputElements.first else {
+                        return nil
+                    }
+                    if Self.isLeftSideValid(first: firstElement, of: self.input, from: left) {
+                        var convertTargetElements = [ConvertTargetElement]()
+                        for element in inputElements {
+                            ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                        }
+                        return (convertTargetElements, inputElements.last!, inputElements.count, inputElements == correct ? .zero:unit)
+                    }
+                    return nil
+                }
                 continue
             }
-            result = result.flatMap {(elements: [InputElement], penalty: PValue) -> [(elements: [InputElement], penalty: PValue)] in
-                if elements.count != i {
-                    return [(elements, penalty)]
+            result = result.flatMap {(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue) -> [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] in
+                if count != i {
+                    return [(convertTargetElements, lastElement, count, penalty)]
                 }
                 // 訂正数上限(3個)
                 if penalty == triple {
-                    return [(elements + correct, penalty)]
+                    var convertTargetElements = convertTargetElements
+                    for element in correct {
+                        ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                    }
+                    return [(convertTargetElements, correct.last!, count + correct.count, penalty)]
                 }
                 return nodes[i].compactMap {
-                    let _elements = elements + $0
-                    if shouldBeRemovedForDicdataStore(components: _elements) {
+                    var convertTargetElements = convertTargetElements
+                    for element in $0 {
+                        ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                    }
+                    if shouldBeRemovedForDicdataStore(components: convertTargetElements) {
                         return nil
                     }
-                    return (elements: _elements, penalty: penalty + ($0 == correct ? .zero : unit))
+                    return (
+                        convertTargetElements: convertTargetElements,
+                        lastElement: $0.last!,
+                        count: count + $0.count,
+                        penalty: penalty + ($0 == correct ? .zero : unit)
+                    )
                 }
             }
         }
@@ -627,32 +654,57 @@ extension ComposingText {
 
         let unit: PValue = 3.5
         let triple = unit*3
-        var result: [(elements: [InputElement], penalty: PValue)] = []
+        var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
         for (i, nodeArray) in nodes.enumerated() {
             let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
             if i == .zero {
-                result = nodeArray.map {($0, $0 == correct ? .zero:unit)}
+                // 最初の値による枝刈りを実施する
+                result = nodeArray.compactMap {
+                    guard let firstElement = $0.first else {
+                        return nil
+                    }
+                    if Self.isLeftSideValid(first: firstElement, of: self.input, from: left) {
+                        var convertTargetElements = [ConvertTargetElement]()
+                        for element in $0 {
+                            ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                        }
+                        return (convertTargetElements, $0.last!, $0.count, $0 == correct ? .zero:unit)
+                    }
+                    return nil
+                }
                 continue
             }
-            result = result.flatMap {(elements: [InputElement], penalty: PValue) -> [(elements: [InputElement], penalty: PValue)] in
-                if elements.count != i {
-                    return [(elements, penalty)]
+            result = result.flatMap {(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue) -> [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] in
+                if count != i {
+                    return [(convertTargetElements, lastElement, count, penalty)]
                 }
                 // 訂正数上限(3個)
                 if penalty == triple {
-                    return [(elements + correct, penalty)]
+                    var convertTargetElements = convertTargetElements
+                    for element in correct {
+                        ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                    }
+                    return [(convertTargetElements, correct.last!, count + correct.count, penalty)]
                 }
                 return nodes[i].compactMap {
-                    let _elements = elements + $0
-                    if shouldBeRemovedForDicdataStore(components: _elements) {
+                    var convertTargetElements = convertTargetElements
+                    for element in $0 {
+                        ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                    }
+                    if shouldBeRemovedForDicdataStore(components: convertTargetElements) {
                         return nil
                     }
-                    return (elements: _elements, penalty: penalty + ($0 == correct ? .zero : unit))
+                    return (
+                        convertTargetElements: convertTargetElements,
+                        lastElement: $0.last!,
+                        count: count + $0.count,
+                        penalty: penalty + ($0 == correct ? .zero : unit)
+                    )
                 }
             }
         }
         let filtered: [(string: String, penalty: PValue)] = result.compactMap {
-            if let convertTarget = ComposingText.getConvertTargetForValidPart(part: $0.elements, of: self.input, from: left, to: right + 1) {
+            if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: $0.lastElement, of: self.input, to: right + 1, convertTargetElements: $0.convertTargetElements) {
                 return (convertTarget.toKatakana(), $0.penalty)
             }
             return nil
