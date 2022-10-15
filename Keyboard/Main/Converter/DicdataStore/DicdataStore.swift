@@ -50,7 +50,7 @@ final class DicdataStore {
             debug("ファイルが存在しません: \(error)")
         }
         do {
-            let url = Bundle.main.bundleURL.appendingPathComponent("mm.binary")
+            let url = Bundle.main.bundleURL.appendingPathComponent("mm.binary", isDirectory: false)
             do {
                 let binaryData = try Data(contentsOf: url, options: [.uncached])
                 let ui64array = binaryData.withUnsafeBytes {pointer -> [Float] in
@@ -144,11 +144,12 @@ final class DicdataStore {
         return [louds.searchNodeIndex(chars: key.map {self.charsID[$0, default: .max]})].compactMap {$0}
     }
 
-    private func throughMatchLOUDS(identifier: String, key: String) -> [Int] {
+    private func throughMatchLOUDS(identifier: String, key: String, depth: Range<Int>) -> [Int] {
         guard let louds = self.loadLOUDS(identifier: identifier) else {
             return []
         }
-        return louds.byfixNodeIndices(chars: key.map {self.charsID[$0, default: .max]})
+        let result = louds.byfixNodeIndices(chars: key.map {self.charsID[$0, default: .max]})
+        return Array(result[min(max(result.startIndex, depth.startIndex + 1), result.endIndex) ..< min(result.endIndex, depth.endIndex + 1)])
     }
 
     private func prefixMatchLOUDS(identifier: String, key: String, depth: Int = .max) -> [Int] {
@@ -158,12 +159,12 @@ final class DicdataStore {
         return louds.prefixNodeIndices(chars: key.map {self.charsID[$0, default: .max]}, maxDepth: depth)
     }
 
-    private func getDicdata(identifier: String, indices: Set<Int>) -> Dicdata {
+    private func getDicdataFromLoudstxt2(identifier: String, indices: Set<Int>) -> Dicdata {
         // split = 2048
         let dict = [Int: [Int]].init(grouping: indices, by: {$0 >> 11})
         var data: Dicdata = []
         for (key, value) in dict {
-            let strings = LOUDS.getData(identifier + "\(key)", indices: value.map {$0 & 2047})
+            let strings = LOUDS.getDataForLoudstxt2(identifier + "\(key)", indices: value.map {$0 & 2047})
                 .flatMap {$0.split(separator: ",", omittingEmptySubsequences: false)}
             data.reserveCapacity(data.count + strings.count)
             for string in strings {
@@ -171,8 +172,19 @@ final class DicdataStore {
                 if splited.count <= 5 {
                     continue
                 }
-                data.append(self.convertDicdata(from: splited))
+                data.append(self.parseLoudstxt2FormattedEntry(from: splited))
             }
+        }
+        return data
+    }
+
+    private func getDicdataFromLoudstxt3(identifier: String, indices: Set<Int>) -> Dicdata {
+        debug("getDicdataFromLoudstxt3", identifier, indices)
+        // split = 2048
+        let dict = [Int: [Int]].init(grouping: indices, by: {$0 >> 11})
+        var data: Dicdata = []
+        for (key, value) in dict {
+            data.append(contentsOf: LOUDS.getDataForLoudstxt3(identifier + "\(key)", indices: value.map {$0 & 2047}))
         }
         return data
     }
@@ -185,27 +197,30 @@ final class DicdataStore {
     internal func getLOUDSDataInRange(inputData: ComposingText, from fromIndex: Int, toIndexRange: Range<Int>? = nil) -> [LatticeNode] {
         // ⏱0.426499 : 辞書読み込み_全体
         let toIndexLeft = toIndexRange?.startIndex ?? fromIndex
-        let toIndexRight = toIndexRange?.endIndex ?? (min(inputData.input.count, fromIndex + self.maxlength))
+        let toIndexRight = min(toIndexRange?.endIndex ?? inputData.input.count, fromIndex + self.maxlength)
+        debug("getLOUDSDataInRange", fromIndex, toIndexRange?.description ?? "nil", toIndexLeft, toIndexRight)
         if fromIndex > toIndexLeft || toIndexLeft >= toIndexRight {
+            debug("getLOUDSDataInRange: index is wrong")
             return []
         }
+
         let segments = (fromIndex ..< toIndexRight).reduce(into: []) { (segments: inout [String], rightIndex: Int) in
             segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character.toKatakana()))
         }
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
-        var (stringWithTypoData, string2segment) = inputData.getRangesWithTypos(fromIndex, rightIndexRange: (toIndexLeft ..< toIndexRight))
-        let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
+        var (stringWithTypoData, string2segment) = inputData.getRangesWithTypos(fromIndex, rightIndexRange: toIndexLeft ..< toIndexRight)
+        let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: max)
 
         // MARK: 検索対象を列挙していく。prefixの共通するものを削除して検索をなるべく減らすことが目的。
         // ⏱0.021212 : 辞書読み込み_検索対象列挙
         // prefixの共通するものを削除して検索をなるべく減らす
-        let strings = stringWithTypoData.map { $0.string }
-        let stringSet = strings.reduce(into: Set(strings)) { (`set`, string) in
-            if string.count > 4 {
+
+        let stringSet = stringWithTypoData.reduce(into: stringWithTypoData.mapSet{ $0.string }) { (`set`, item) in
+            if item.string.count > 4 {
                 return
             }
-            if set.contains(where: {$0.hasPrefix(string) && $0 != string}) {
-                set.remove(string)
+            if set.contains(where: {$0.hasPrefix(item.string) && $0.count != item.string.count}) {
+                set.remove(item.string)
             }
         }
 
@@ -216,31 +231,29 @@ final class DicdataStore {
 
         var indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
-            let set = dic.value.flatMapSet {string in self.throughMatchLOUDS(identifier: key, key: string)}
+            let set = dic.value.flatMapSet {string in self.throughMatchLOUDS(identifier: key, key: string, depth: toIndexLeft - fromIndex ..< toIndexRight - fromIndex)}
             return (key, set)
         }
-        indices.append(("user", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "user", key: $0)}))
-
+        indices.append(("user", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "user", key: $0, depth: toIndexLeft - fromIndex ..< toIndexRight - fromIndex)}))
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
         // ⏱0.077118 : 辞書読み込み_辞書データ生成
         var dicdata: Dicdata = []
         for (identifier, value) in indices {
-            let result = self.getDicdata(identifier: identifier, indices: value)
-            dicdata.reserveCapacity(dicdata.count + result.count)
-            for data in result {
+            let result: Dicdata = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
+                let memory: PValue = PValue(self.getSingleMemory(data) * 3)
                 let penalty = string2penalty[data.ruby, default: .zero]
                 if penalty.isZero {
-                    dicdata.append(data)
-                    continue
+                    return data.adjustedData(memory)
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
                 let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
-                let adjust = pUnit * penalty * ratio
+                let adjust = memory + pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
-                    continue
+                    return nil
                 }
-                dicdata.append(data.adjustedData(adjust))
+                return data.adjustedData(adjust)
             }
+            dicdata.append(contentsOf: result)
         }
 
         for i in toIndexLeft ..< toIndexRight {
@@ -311,14 +324,15 @@ final class DicdataStore {
         indices.append(("user", set))
         var dicdata: Dicdata = []
         for (identifier, value) in indices {
-            let result: Dicdata = self.getDicdata(identifier: identifier, indices: value).compactMap {(data: Dicdata.Element) in
+            let result: Dicdata = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
+                let memory: PValue = PValue(self.getSingleMemory(data) * 3)
                 let penalty = string2penalty[data.ruby, default: .zero]
                 if penalty.isZero {
-                    return data
+                    return data.adjustedData(memory)
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
                 let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
-                let adjust = pUnit * penalty * ratio
+                let adjust = memory + pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
                 }
@@ -351,7 +365,7 @@ final class DicdataStore {
             let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/p_null.csv", encoding: String.Encoding.utf8)
             let csvLines = csvString.split(separator: "\n")
             let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
-            let dicdata: Dicdata = csvData.map {convertDicdata(from: $0)}
+            let dicdata: Dicdata = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
             self.zeroHintPredictionDicdata = dicdata
             return dicdata
         } catch {
@@ -376,7 +390,7 @@ final class DicdataStore {
                 let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/p_\(head).csv", encoding: String.Encoding.utf8)
                 let csvLines = csvString.split(separator: "\n")
                 let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
-                let dicdata: Dicdata = csvData.map {self.convertDicdata(from: $0)}
+                let dicdata: Dicdata = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
                 return dicdata
             } catch {
                 debug("ファイルが存在しません: \(error)")
@@ -387,15 +401,21 @@ final class DicdataStore {
             // 最大700件に絞ることによって低速化を回避する。
             // FIXME: 場当たり的な対処。改善が求められる。
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head), depth: 5).prefix(700)
-            return self.getDicdata(identifier: first, indices: Set(prefixIndices))
+            return self.getDicdataFromLoudstxt3(identifier: first, indices: Set(prefixIndices)).map { data in
+                let memory: PValue = PValue(self.getSingleMemory(data) * 3)
+                return data.adjustedData(memory)
+            }
         } else {
             let first = String(head.first!)
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head)).prefix(700)
-            return self.getDicdata(identifier: first, indices: Set(prefixIndices))
+            return self.getDicdataFromLoudstxt3(identifier: first, indices: Set(prefixIndices)).map { data in
+                let memory: PValue = PValue(self.getSingleMemory(data) * 3)
+                return data.adjustedData(memory)
+            }
         }
     }
 
-    private func convertDicdata(from dataString: [some StringProtocol]) -> DicdataElement {
+    private func parseLoudstxt2FormattedEntry(from dataString: [some StringProtocol]) -> DicdataElement {
         let ruby = String(dataString[0])
         let word = dataString[1].isEmpty ? ruby:String(dataString[1])
         let lcid = Int(dataString[2]) ?? .zero
@@ -596,7 +616,7 @@ final class DicdataStore {
     /// 速度: ⏱0.115224 : 変換_処理_連接コスト計算_CCValue
     internal func getCCValue(_ former: Int, _ latter: Int) -> PValue {
         if !ccParsed[former] {
-            let url = Bundle.main.bundleURL.appendingPathComponent("\(former).binary")
+            let url = Bundle.main.bundleURL.appendingPathComponent("\(former).binary", isDirectory: false)
             let values = loadCCBinary(url: url)
             ccLines[former] = [Int: PValue].init(uniqueKeysWithValues: values.map {(Int($0.0), PValue($0.1))})
             ccParsed[former] = true

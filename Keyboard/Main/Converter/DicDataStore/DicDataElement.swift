@@ -46,8 +46,8 @@ struct DicdataElement: Equatable, Hashable {
         return .init(word: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: baseValue, adjust: adjustValue + self.adjust)
     }
 
-    let word: String
-    let ruby: String
+    var word: String
+    var ruby: String
     let lcid: Int
     let rcid: Int
     let mid: Int

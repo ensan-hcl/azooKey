@@ -17,7 +17,7 @@ struct FileTools {
             let library = try fileManager.url(for: .libraryDirectory,
                                               in: .userDomainMask,
                                               appropriateFor: nil, create: false)
-            let path = library.appendingPathComponent("\(fileName).\(ex)")
+            let path = library.appendingPathComponent("\(fileName).\(ex)", isDirectory: false)
             guard let data = contents.data(using: .utf8) else {
                 debug("ファイルをutf8で保存できません")
                 return
@@ -34,7 +34,7 @@ struct FileTools {
             let library = try fileManager.url(for: .libraryDirectory,
                                               in: .userDomainMask,
                                               appropriateFor: nil, create: false)
-            let path = library.appendingPathComponent("\(fileName).\(ex)")
+            let path = library.appendingPathComponent("\(fileName).\(ex)", isDirectory: false)
             let contents = try String.init(contentsOfFile: path.path)
             return contents
         } catch {
@@ -49,7 +49,7 @@ struct FileTools {
             let library = try fileManager.url(for: .libraryDirectory,
                                               in: .userDomainMask,
                                               appropriateFor: nil, create: false)
-            let path = library.appendingPathComponent("\(fileName).\(ex)")
+            let path = library.appendingPathComponent("\(fileName).\(ex)", isDirectory: false)
             try fileManager.removeItem(atPath: path.path)
         } catch {
             debug(error)
