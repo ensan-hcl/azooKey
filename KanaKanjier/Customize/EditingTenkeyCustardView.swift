@@ -179,17 +179,134 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                     Label("ペーストする", systemImage: "doc.on.clipboard")
                                 }
                                 .disabled(copiedKey == nil)
+                                Button {
+                                    editingItem.columnCount = Int(editingItem.columnCount)?.advanced(by: 1).description ?? editingItem.columnCount
+                                    for px in 0 ..< Int(layout.rowCount) {
+                                        for py in (y + 1 ..< Int(layout.columnCount)).reversed() {
+                                            editingItem.keys[.gridFit(x: px, y: py + 1)] = editingItem.keys[.gridFit(x: px, y: py)]
+                                        }
+                                    }
+                                    for px in 0 ..< Int(layout.rowCount) {
+                                        editingItem.keys[.gridFit(x: px, y: y + 1)] = nil
+                                    }
+                                    editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
+                                        switch item {
+                                        case .gridFit(x: let px, y: let py) where y + 1 <= py:
+                                            return .gridFit(x: px, y: py + 1)
+                                        default:
+                                            return item
+                                        }
+                                    }
+                                } label: {
+                                    // TODO: Localize
+                                    Label("下に行を追加", systemImage: "plus")
+                                }
+                                Button {
+                                    editingItem.columnCount = Int(editingItem.columnCount)?.advanced(by: 1).description ?? editingItem.columnCount
+                                    for px in 0 ..< Int(layout.rowCount) {
+                                        for py in (y ..< Int(layout.columnCount)).reversed() {
+                                            editingItem.keys[.gridFit(x: px, y: py + 1)] = editingItem.keys[.gridFit(x: px, y: py)]
+                                        }
+                                    }
+                                    for px in 0 ..< Int(layout.rowCount) {
+                                        editingItem.keys[.gridFit(x: px, y: y)] = nil
+                                    }
+                                    editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
+                                        switch item {
+                                        case .gridFit(x: let px, y: let py) where y <= py:
+                                            return .gridFit(x: px, y: py + 1)
+                                        default:
+                                            return item
+                                        }
+                                    }
+                                } label: {
+                                    // TODO: Localize
+                                    Label("上に行を追加", systemImage: "plus")
+                                }
+                                Button {
+                                    editingItem.rowCount = Int(editingItem.rowCount)?.advanced(by: 1).description ?? editingItem.rowCount
+                                    for px in (x + 1 ..< Int(layout.rowCount)).reversed() {
+                                        for py in 0 ..< Int(layout.columnCount) {
+                                            editingItem.keys[.gridFit(x: px + 1, y: py)] = editingItem.keys[.gridFit(x: px, y: py)]
+                                        }
+                                    }
+                                    for py in 0 ..< Int(layout.columnCount) {
+                                        editingItem.keys[.gridFit(x: x + 1, y: py)] = nil
+                                    }
+                                    editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
+                                        switch item {
+                                        case .gridFit(x: let px, y: let py) where x + 1 <= px:
+                                            return .gridFit(x: px + 1, y: py)
+                                        default:
+                                            return item
+                                        }
+                                    }
+                                } label: {
+                                    // TODO: Localize
+                                    Label("右に列を追加", systemImage: "plus")
+                                }
+                                Button {
+                                    editingItem.rowCount = Int(editingItem.rowCount)?.advanced(by: 1).description ?? editingItem.rowCount
+                                    for px in (x ..< Int(layout.rowCount)).reversed() {
+                                        for py in 0 ..< Int(layout.columnCount) {
+                                            editingItem.keys[.gridFit(x: px + 1, y: py)] = editingItem.keys[.gridFit(x: px, y: py)]
+                                        }
+                                    }
+                                    for py in 0 ..< Int(layout.columnCount) {
+                                        editingItem.keys[.gridFit(x: x, y: py)] = nil
+                                    }
+                                    editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
+                                        switch item {
+                                        case .gridFit(x: let px, y: let py) where x <= px:
+                                            return .gridFit(x: px + 1, y: py)
+                                        default:
+                                            return item
+                                        }
+                                    }
+                                } label: {
+                                    // TODO: Localize
+                                    Label("左に列を追加", systemImage: "plus")
+
+                                }
+                                Divider()
                                 if #available(iOS 15.0, *) {
                                     Button(role: .destructive) {
                                         editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
                                     } label: {
                                         Label("削除する", systemImage: "trash")
                                     }
+                                    Button(role: .destructive) {
+                                        removeRow(y: y)
+                                    } label: {
+                                        // TODO: Localize
+                                        Label("この行を削除", systemImage: "trash")
+                                    }
+                                    Button(role: .destructive) {
+                                        removeColumn(x: x)
+                                    } label: {
+                                        // TODO: Localize
+                                        Label("この列を削除", systemImage: "trash")
+                                    }
+
                                 } else {
                                     Button {
                                         editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
                                     } label: {
                                         Label("削除する", systemImage: "trash")
+                                    }
+                                    .foregroundColor(.red)
+                                    Button {
+                                        removeRow(y: y)
+                                    } label: {
+                                        // TODO: Localize
+                                        Label("この行を削除", systemImage: "trash")
+                                    }
+                                    .foregroundColor(.red)
+                                    Button {
+                                        removeColumn(x: x)
+                                    } label: {
+                                        // TODO: Localize
+                                        Label("この列を削除", systemImage: "trash")
                                     }
                                     .foregroundColor(.red)
                                 }
@@ -225,6 +342,44 @@ struct EditingTenkeyCustardView: CancelableEditor {
                     presentationMode.wrappedValue.dismiss()
                 }
             )
+        }
+    }
+
+    private func removeColumn(x: Int) {
+        for px in x + 1 ..< Int(layout.rowCount) {
+            for py in 0 ..< Int(layout.columnCount) {
+                editingItem.keys[.gridFit(x: px - 1, y: py)] = editingItem.keys[.gridFit(x: px, y: py)]
+            }
+        }
+        editingItem.rowCount = Int(editingItem.rowCount)?.advanced(by: -1).description ?? editingItem.rowCount
+        editingItem.emptyKeys = editingItem.emptyKeys.compactMapSet { item in
+            switch item {
+            case .gridFit(x: let px, y: _) where px == x:
+                return nil
+            case .gridFit(x: let px, y: let py) where x + 1 <= px:
+                return .gridFit(x: px - 1, y: py)
+            default:
+                return item
+            }
+        }
+    }
+
+    private func removeRow(y: Int) {
+        for px in 0 ..< Int(layout.rowCount) {
+            for py in y + 1 ..< Int(layout.columnCount) {
+                editingItem.keys[.gridFit(x: px, y: py - 1)] = editingItem.keys[.gridFit(x: px, y: py)]
+            }
+        }
+        editingItem.columnCount = Int(editingItem.columnCount)?.advanced(by: -1).description ?? editingItem.columnCount
+        editingItem.emptyKeys = editingItem.emptyKeys.compactMapSet { item in
+            switch item {
+            case .gridFit(x: _, y: let py) where y == py:
+                return nil
+            case .gridFit(x: let px, y: let py) where y + 1 <= py:
+                return .gridFit(x: px, y: py - 1)
+            default:
+                return item
+            }
         }
     }
 
