@@ -22,8 +22,11 @@ struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
             target = languages.1
         } else if languages.1 == currentTabLanguage {
             target = languages.0
-        } else {
+        } else if SemiStaticStates.shared.needsInputModeSwitchKey {
             target = VariableStates.shared.keyboardLanguage
+        } else {
+            @KeyboardSetting(.preferredLanguage) var preferredLanguage;
+            target = preferredLanguage.first
         }
         switch target {
         case .ja_JP:
@@ -32,9 +35,9 @@ struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
             return [.moveTab(.user_dependent(.english))]
         case .none, .el_GR:
             return []
-
         }
     }
+
     let longPressActions: LongpressActionType = .none
     /// 暫定
     let variationsModel = VariationsModel([])
