@@ -72,7 +72,7 @@ struct QwertyKeyView: View {
                             }
                         }
                     }
-                case let .started(date):
+                case .started:
                     break
                 case .longPressed:
                     break
