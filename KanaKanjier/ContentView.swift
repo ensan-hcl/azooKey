@@ -64,14 +64,14 @@ struct ContentView: View {
                     switch data.id {
                     case .mock, .liveconversion_introduction, .ver1_8_autocomplete_introduction:
                         EmptyView()
-                    case .ver1_5_update_loudstxt:
+                    case .ver1_9_user_dictionary_update:
                         // ユーザ辞書を更新する
                         DataUpdateView(id: data.id, manager: $messageManager) {
                             let builder = LOUDSBuilder(txtFileSplit: 2048)
                             builder.process()
                             Store.shared.noticeReloadUserDict()
                         }
-                    case .iOS14_5_new_emoji, .iOS15_4_new_emoji:
+                    case .iOS15_4_new_emoji:
                         // 絵文字を更新する
                         DataUpdateView(id: data.id, manager: $messageManager) {
                             AdditionalDictManager().userDictUpdate()

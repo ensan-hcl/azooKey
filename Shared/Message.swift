@@ -10,11 +10,17 @@ import Foundation
 
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert_2022_09_16_03"
-    case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"           // MARK: frozen
-    case iOS14_5_new_emoji = "iOS_14_5_new_emoji_fixed_ver_1_6_1"    // MARK: frozen
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
-    case liveconversion_introduction = "liveconversion_introduction" // MARK: frozen
-    case ver1_8_autocomplete_introduction = "ver1_8_autocomplete_introduction" // MARK: frozen
+    case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_debug_10_21_00"
+
+    // MARK: 過去にプロダクションで用いていたメッセージID
+    // ver1_9_user_dictionary_updateが実行されれば不要になるので、この宣言は削除
+    // case ver1_5_update_loudstxt = "ver1_5_update_loudstxt"           // MARK: frozen
+    // iOS15_4_new_emojiが実行されれば不要になるので、この宣言は削除
+    // case iOS14_5_new_emoji = "iOS_14_5_new_emoji_fixed_ver_1_6_1"    // MARK: frozen
+    // 新機能の紹介も削除
+    // case liveconversion_introduction = "liveconversion_introduction" // MARK: frozen
+    // case ver1_8_autocomplete_introduction = "ver1_8_autocomplete_introduction" // MARK: frozen
 
     var key: String {
         return self.rawValue + "_status"
@@ -22,9 +28,9 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
 
     var needUsingContainerApp: Bool {
         switch self {
-        case .ver1_5_update_loudstxt:
+        case .ver1_9_user_dictionary_update:
             return true
-        case .iOS14_5_new_emoji, .iOS15_4_new_emoji, .liveconversion_introduction, .ver1_8_autocomplete_introduction, .mock:
+        case .iOS15_4_new_emoji, .mock:
             return false
         }
     }
@@ -83,56 +89,6 @@ struct MessageManager {
 
     let necessaryMessages: [MessageData] = [
         MessageData(
-            id: .ver1_5_update_loudstxt,
-            title: "お願い",
-            description: "内部データの更新のため本体アプリを開く必要があります。よろしいですか？",
-            leftsideButton: .details(url: "https://azookey.netlify.app/messages/ver1_5"),
-            rightsideButton: .openContainer(text: "更新"),
-            precondition: {
-                // ユーザ辞書に登録があるのが条件。
-                let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-                let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
-                return FileManager.default.fileExists(atPath: binaryFilePath)
-            },
-            silentDoneCondition: {
-                // ダウンロードがv1.8以降の場合はDone
-                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
-                    return true
-                }
-                return false
-            },
-            containerAppShouldMakeItDone: {
-                // ユーザ辞書に登録がない場合はDoneにして良い。
-                let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-                let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
-                return !FileManager.default.fileExists(atPath: binaryFilePath)
-            }
-        ),
-
-        MessageData(
-            id: .iOS14_5_new_emoji,
-            title: "お知らせ",
-            description: "iOS14.5で新しい絵文字が追加されました。本体アプリを開き、データを更新しますか？",
-            leftsideButton: .later,
-            rightsideButton: .openContainer(text: "更新"),
-            precondition: {
-                if #available(iOS 14.5, *) {
-                    return true
-                } else {
-                    return false
-                }
-            },
-            silentDoneCondition: {
-                // ダウンロードがv1.8以降の場合はDone
-                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
-                    return true
-                }
-                return false
-            },
-            containerAppShouldMakeItDone: { false }
-        ),
-
-        MessageData(
             id: .iOS15_4_new_emoji,
             title: "お知らせ",
             description: "iOS15.4で新しい絵文字が追加されました。本体アプリを開き、データを更新しますか？",
@@ -154,67 +110,32 @@ struct MessageManager {
             },
             containerAppShouldMakeItDone: { false }
         ),
-
         MessageData(
-            id: .liveconversion_introduction,
-            title: "お知らせ",
-            description: "「ライブ変換」機能がサポートされました！「設定」から有効化できます。",
+            id: .ver1_9_user_dictionary_update,
+            title: "お願い",
+            description: "内部データの更新のため本体アプリを開いてください。本体アプリを開くまで、一部の機能が制限されます。",
             leftsideButton: .later,
-            rightsideButton: .openContainer(text: "設定する"),
+            rightsideButton: .openContainer(text: "更新"),
             precondition: {
-                @KeyboardSetting(.liveConversion) var enabled
-                return enabled == false
+                // ユーザ辞書に登録があるのが条件。
+                let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
+                let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
+                return FileManager.default.fileExists(atPath: binaryFilePath)
             },
             silentDoneCondition: {
-                // ライブ変換が有効になっている場合はDone
-                @KeyboardSetting(.liveConversion) var enabled
-                if enabled {
-                    return true
-                }
-                // ダウンロードがv1.8以降の場合はDone
-                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
+                // ダウンロードがv1.9以降の場合はDone
+                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_9 {
                     return true
                 }
                 return false
             },
-            containerAppShouldMakeItDone: { false }
+            containerAppShouldMakeItDone: {
+                // ユーザ辞書に登録がない場合はDoneにして良い。
+                let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
+                let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
+                return !FileManager.default.fileExists(atPath: binaryFilePath)
+            }
         ),
-
-        MessageData(
-            id: .ver1_8_autocomplete_introduction,
-            title: "お知らせ",
-            description: "「ライブ変換」機能の利用中、自動で文頭の文節を確定するようになりました！「設定」で挙動を調整できます。",
-            leftsideButton: .OK,
-            rightsideButton: .openContainer(text: "設定する"),
-            precondition: {
-                // ライブ変換を使っていない場合は表示しない
-                @KeyboardSetting(.liveConversion) var enabled
-                if !enabled {
-                    return false
-                }
-                // ライブ変換を使っていても、ダウンロードがv1.8以降の場合は表示しない
-                // なぜならv1.8以降ではデフォルトでこの挙動がオンだから。
-                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
-                    return false
-                }
-                // initialAppVersionは1.7.1以降で追加されたAPIなので、これがnilの場合は1.7以前であることを期待して表示してしまって良い。
-                // それ以外の場合は表示する。
-                return true
-            },
-            silentDoneCondition: {
-                // ダウンロードがv1.8以降の場合はDone
-                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
-                    return true
-                }
-                // ライブ変換が無効の場合、今後有効化する際にはこの機能を発見できるので、Done
-                @KeyboardSetting(.liveConversion) var enabled
-                if !enabled {
-                    return true
-                }
-                return false
-            },
-            containerAppShouldMakeItDone: { false }
-        )
     ]
 
     private var needShow: [MessageIdentifier: Bool]
