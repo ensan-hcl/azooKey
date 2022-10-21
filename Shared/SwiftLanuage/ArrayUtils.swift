@@ -32,6 +32,17 @@ extension Collection {
         }
         return set
     }
+
+    func compactMapSet<T>(transform closure: (Element) throws -> T?) rethrows -> Set<T> {
+        var set = Set<T>()
+        set.reserveCapacity(self.count)
+        for item in self {
+            if let value = try closure(item) {
+                set.update(with: value)
+            }
+        }
+        return set
+    }
 }
 
 extension MutableCollection {
