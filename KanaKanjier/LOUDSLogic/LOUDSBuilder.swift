@@ -12,12 +12,12 @@ extension LOUDSBuilder {
 
     static func loadCharID() {
         do {
-            let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
+            let chidURL = Bundle.main.bundleURL.appendingPathComponent("charID.chid", isDirectory: false)
+            let string = try String(contentsOf: chidURL, encoding: .utf8)
             Self.char2UInt8 = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
             debug("ファイルが存在しません: \(error)")
         }
-
     }
 
     static func getID(from char: Character) -> UInt8? {
@@ -53,6 +53,66 @@ struct LOUDSBuilder {
             result.append(value)
         }
         return result
+    }
+
+    struct DataBlock {
+        var count: Int {
+            data.count
+        }
+        var ruby: String
+        var data: [(word: String, lcid: Int, rcid: Int, mid: Int, score: Float)]
+
+        init(entries: [String]) {
+            self.ruby = ""
+            self.data = []
+
+            for entry in entries {
+                let items = entry.utf8.split(separator: UInt8(ascii: "\t"), omittingEmptySubsequences: false).map {String($0)!}
+                assert(items.count == 6)
+                let ruby = String(items[0])
+                let word = items[1].isEmpty ? self.ruby:String(items[1])
+                let lcid = Int(items[2]) ?? .zero
+                let rcid = Int(items[3]) ?? lcid
+                let mid = Int(items[4]) ?? .zero
+                let score = Float(items[5]) ?? -30.0
+
+                if self.ruby.isEmpty {
+                    self.ruby = ruby
+                } else {
+                    assert(self.ruby == ruby)
+                }
+                self.data.append((word, lcid, rcid, mid, score))
+            }
+        }
+
+        func makeLoudstxt3Entry() -> Data {
+            var data = Data()
+            // エントリのカウントを2byteでエンコード
+            var count = UInt16(self.count)
+            data.append(contentsOf: Data(bytes: &count, count: MemoryLayout<UInt16>.size))
+
+            // 数値データ部をエンコード
+            // 10byteが1つのエントリに対応するので、10*count byte
+            for (_, lcid, rcid, mid, score) in self.data {
+                assert(0 <= lcid && lcid <= UInt16.max)
+                assert(0 <= rcid && rcid <= UInt16.max)
+                assert(0 <= mid && mid <= UInt16.max)
+                var lcid = UInt16(lcid)
+                var rcid = UInt16(rcid)
+                var mid = UInt16(mid)
+                data.append(contentsOf: Data(bytes: &lcid, count: MemoryLayout<UInt16>.size))
+                data.append(contentsOf: Data(bytes: &rcid, count: MemoryLayout<UInt16>.size))
+                data.append(contentsOf: Data(bytes: &mid, count: MemoryLayout<UInt16>.size))
+                var score = Float32(score)
+                data.append(contentsOf: Data(bytes: &score, count: MemoryLayout<Float32>.size))
+            }
+
+            // wordをエンコード
+            // 最先頭の要素はrubyになる
+            let text = ([self.ruby] + self.data.map { $0.word == self.ruby ? "" : $0.word }).joined(separator: "\t")
+            data.append(contentsOf: text.data(using: .utf8, allowLossyConversion: false)!)
+            return data
+        }
     }
 
     func loadUserDictInfo() -> (paths: [String], blocks: [String], useradds: [UserDictionaryData]) {
@@ -117,11 +177,11 @@ struct LOUDSBuilder {
         return ["\(katakanaRuby)\t\(parseTemplate(data.word))\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
     }
 
-    func make_loudstxt2(lines: [String]) -> Data {
+    func make_loudstxt3(lines: [DataBlock]) -> Data {
         let lc = lines.count    // データ数
         let count = Data(bytes: [UInt16(lc)], count: 2) // データ数をUInt16でマップ
 
-        let data = lines.map {$0.data(using: .utf8) ?? Data()}
+        let data = lines.map { $0.makeLoudstxt3Entry() }
         let body = data.reduce(Data(), +)   // データ
 
         let header_endIndex: UInt32 = 2 + UInt32(lc) * UInt32(MemoryLayout<UInt32>.size)
@@ -159,16 +219,17 @@ struct LOUDSBuilder {
             return
         }
 
-        let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
+        let directoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
 
-        let binaryFilePath = directoryPath.appendingPathComponent("\(identifier).louds").path
-        let loudsCharsFilePath = directoryPath.appendingPathComponent("\(identifier).loudschars2").path
-        let loudsTxtFilePath: (String) -> String = {directoryPath.appendingPathComponent("\(identifier + $0).loudstxt").path}
-        let loudsTxt2FilePath: (String) -> String = {directoryPath.appendingPathComponent("\(identifier + $0).loudstxt2").path}
+        let binaryFileURL = directoryURL.appendingPathComponent("\(identifier).louds", isDirectory: false)
+        let loudsCharsFileURL = directoryURL.appendingPathComponent("\(identifier).loudschars2", isDirectory: false)
+        let loudsTxtFileURL: (String) -> URL = {directoryURL.appendingPathComponent("\(identifier + $0).loudstxt", isDirectory: false)}
+        let loudsTxt2FileURL: (String) -> URL = {directoryURL.appendingPathComponent("\(identifier + $0).loudstxt2", isDirectory: false)}
+        let loudsTxt3FileURL: (String) -> URL = {directoryURL.appendingPathComponent("\(identifier + $0).loudstxt3", isDirectory: false)}
 
         var currentID = 0
         var nodes2Characters: [Character] = ["\0", "\0"]
-        var data: [String] = ["\0", "\0"]
+        var data: [DataBlock] = [.init(entries: []), .init(entries: [])]
         var bits: [Bool] = [true, false]
         trieroot.id = currentID
         currentID += 1
@@ -178,9 +239,8 @@ struct LOUDSBuilder {
             currentNodes.forEach {char, node in
                 node.id = currentID
                 nodes2Characters.append(char)
-                let stringData: String = Array(node.value).sorted().map {csvLines[$0]}.joined(separator: ",")
-
-                data.append(stringData)
+                let loudstxt3Entry = DataBlock(entries: Array(node.value).sorted().map {String(csvLines[$0])})
+                data.append(loudstxt3Entry)
                 bits += [Bool].init(repeating: true, count: node.children.count) + [false]
                 currentID += 1
             }
@@ -191,7 +251,7 @@ struct LOUDSBuilder {
 
         do {
             let binary = Data(bytes: bytes, count: bytes.count * 8)
-            try binary.write(to: URL(fileURLWithPath: binaryFilePath))
+            try binary.write(to: binaryFileURL)
         } catch {
             debug(error)
         }
@@ -199,7 +259,7 @@ struct LOUDSBuilder {
         do {
             let uint8s = nodes2Characters.map {Self.getID(from: $0) ?? 0}    // エラー回避。0は"\0"に対応し、呼ばれることはない。
             let binary = Data(bytes: uint8s, count: uint8s.count)
-            try binary.write(to: URL(fileURLWithPath: loudsCharsFilePath))
+            try binary.write(to: loudsCharsFileURL)
         } catch {
             debug(error)
         }
@@ -216,11 +276,13 @@ struct LOUDSBuilder {
             for indices in indiceses {
                 do {
                     let start = indices.startIndex / txtFileSplit
-                    let binary = make_loudstxt2(lines: Array(data[indices]))
-                    try binary.write(to: URL(fileURLWithPath: loudsTxt2FilePath("\(start)")), options: .atomic)
-                    try FileManager.default.removeItem(atPath: loudsTxtFilePath("\(start)"))
+                    let binary = make_loudstxt3(lines: Array(data[indices]))
+                    try binary.write(to: loudsTxt3FileURL("\(start)"), options: .atomic)
+                    // 存在しなければしないで良いのでtry?としている
+                    try? FileManager.default.removeItem(at: loudsTxtFileURL("\(start)"))
+                    try? FileManager.default.removeItem(at: loudsTxt2FileURL("\(start)"))
                 } catch {
-                    debug(error)
+                    debug("LOUDSBuilder.process", error)
                 }
             }
 
