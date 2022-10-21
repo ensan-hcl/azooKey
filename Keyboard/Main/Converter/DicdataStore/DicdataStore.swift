@@ -456,23 +456,23 @@ final class DicdataStore {
 
             if hs != first {
                 result.append(DicdataElement(word: convertTarget, ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
-                value -= 0.1
+                value -= 5.0
                 result.append(DicdataElement(word: String(hs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
-                value -= 0.1
+                value -= 5.0
             }
             if let fs = Self.halfwidthToFullwidth[first], fs != first {
                 result.append(DicdataElement(word: convertTarget, ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
-                value -= 0.1
+                value -= 5.0
                 result.append(DicdataElement(word: String(fs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
-                value -= 0.1
+                value -= 5.0
             }
             for group in Self.weakRelatingSymbolGroups where group.contains(hs) {
                 for symbol in group where symbol != hs {
                     result.append(DicdataElement(word: String(symbol), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
-                    value -= 0.1
+                    value -= 5.0
                     if let fs = Self.halfwidthToFullwidth[symbol] {
                         result.append(DicdataElement(word: String(fs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
-                        value -= 0.1
+                        value -= 5.0
                     }
                 }
             }
