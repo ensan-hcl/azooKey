@@ -286,7 +286,7 @@ struct LOUDSBuilder {
                 }
             }
 
-            Store.shared.messageManager.done(.ver1_5_update_loudstxt)
+            Store.shared.messageManager.done(.ver1_9_user_dictionary_update)
         }
     }
 
