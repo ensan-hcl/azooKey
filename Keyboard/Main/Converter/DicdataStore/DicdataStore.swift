@@ -159,25 +159,6 @@ final class DicdataStore {
         return louds.prefixNodeIndices(chars: key.map {self.charsID[$0, default: .max]}, maxDepth: depth)
     }
 
-    private func getDicdataFromLoudstxt2(identifier: String, indices: Set<Int>) -> Dicdata {
-        // split = 2048
-        let dict = [Int: [Int]].init(grouping: indices, by: {$0 >> 11})
-        var data: Dicdata = []
-        for (key, value) in dict {
-            let strings = LOUDS.getDataForLoudstxt2(identifier + "\(key)", indices: value.map {$0 & 2047})
-                .flatMap {$0.split(separator: ",", omittingEmptySubsequences: false)}
-            data.reserveCapacity(data.count + strings.count)
-            for string in strings {
-                let splited = string.split(separator: "\t", omittingEmptySubsequences: false)
-                if splited.count <= 5 {
-                    continue
-                }
-                data.append(self.parseLoudstxt2FormattedEntry(from: splited))
-            }
-        }
-        return data
-    }
-
     private func getDicdataFromLoudstxt3(identifier: String, indices: Set<Int>) -> Dicdata {
         debug("getDicdataFromLoudstxt3", identifier, indices)
         // split = 2048
