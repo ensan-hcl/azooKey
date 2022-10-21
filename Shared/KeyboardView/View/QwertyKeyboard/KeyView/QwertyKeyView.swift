@@ -61,16 +61,19 @@ struct QwertyKeyView: View {
                     self.model.sound()
                     self.pressState = .started(Date())
                     self.model.longPressReserve()
-                case let .started(date):
-                    // もし0.4秒以上押していたら
-                    if Date().timeIntervalSince(date) >= 0.4 {
-                        // 長押し状態に設定する。
-                        if self.model.variationsModel.variations.isEmpty {
-                            self.pressState = .longPressed
-                        } else {
-                            self.pressState = .variations(selection: nil)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        // すでに処理が終了済みでなければ
+                        if self.pressState.isActive {
+                            // 長押し状態に設定する。
+                            if self.model.variationsModel.variations.isEmpty {
+                                self.pressState = .longPressed
+                            } else {
+                                self.pressState = .variations(selection: nil)
+                            }
                         }
                     }
+                case let .started(date):
+                    break
                 case .longPressed:
                     break
                 case .variations:
@@ -88,7 +91,7 @@ struct QwertyKeyView: View {
                 case .unpressed:
                     break
                 case let .started(date):
-                    // もし0.4秒以上押していたら
+                    // もし0.4秒未満押していたら
                     if Date().timeIntervalSince(date) < 0.4 {
                         self.model.press()
                     }
