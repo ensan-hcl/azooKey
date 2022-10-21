@@ -44,13 +44,6 @@ extension LOUDS {
         )
     }
 
-    private static func getLoudstxt2URL(_ identifier: String) -> URL {
-        if identifier.hasPrefix("user") {
-            return containerURL.appendingPathComponent("\(identifier).loudstxt2", isDirectory: false)
-        }
-        return bundleURL.appendingPathComponent("\(identifier).loudstxt2", isDirectory: false)
-    }
-
     private static func getLoudstxt3URL(_ identifier: String) -> URL {
         if identifier.hasPrefix("user") {
             return containerURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
@@ -73,45 +66,6 @@ extension LOUDS {
             return louds
         }
         return nil
-    }
-
-    internal static func getDataForLoudstxt2(_ identifier: String, indices: [Int]) -> [String] {
-        // この処理は大きなボトルネックにはなっていない
-
-        let binary: Data
-        do {
-            let url = getLoudstxt2URL(identifier)
-            binary = try Data(contentsOf: url)
-        } catch {
-            debug("ファイルが存在しません: \(error)")
-            return []
-        }
-
-        let lc = binary[0..<2].withUnsafeBytes {pointer -> [UInt16] in
-            return Array(
-                UnsafeBufferPointer(
-                    start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
-                    count: pointer.count / MemoryLayout<UInt16>.size
-                )
-            )
-        }[0]
-
-        let header_endIndex: UInt32 = 2 + UInt32(lc) * UInt32(MemoryLayout<UInt32>.size)
-        let i32array = binary[2..<header_endIndex].withUnsafeBytes {(pointer: UnsafeRawBufferPointer) -> [UInt32] in
-            return Array(
-                UnsafeBufferPointer(
-                    start: pointer.baseAddress!.assumingMemoryBound(to: UInt32.self),
-                    count: pointer.count / MemoryLayout<UInt32>.size
-                )
-            )
-        }
-
-        let result: [String] = indices.compactMap {(index: Int) -> String? in
-            let startIndex = Int(i32array[index])
-            let endIndex = index == (lc-1) ? binary.endIndex : Int(i32array[index + 1])
-            return String(bytes: binary[startIndex ..< endIndex], encoding: .utf8)
-        }
-        return result
     }
 
     internal static func getDataForLoudstxt3(_ identifier: String, indices: [Int]) -> [DicdataElement] {
