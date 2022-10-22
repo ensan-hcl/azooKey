@@ -239,10 +239,11 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                 let sIndex = selection.selectIndex
                                 let lpsIndex = selection.longpressSelectIndex
                                 if lpsIndex == -1 && sIndex != -1 {
-                                    DispatchQueue.main.async {
+                                    selection.selectIndex = -1
+                                    // FIXME: 場当たり的な対処。`selection.selectIndex = -1`がViewに反映されてから削除を行う。
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                                         value.keys.remove(at: sIndex)
                                     }
-                                    selection.selectIndex = -1
                                 } else {
                                     selection.longpressSelectIndex = -1
                                     value.keys[sIndex].longpresses.remove(at: lpsIndex)
