@@ -582,11 +582,10 @@ private final class InputManager {
         debug("complete:", candidate, composingText)
         self.kanaKanjiConverter.updateLearningData(candidate)
         self.composingText.complete(correspondingCount: candidate.correspondingCount)
-        self.displayedTextManager.insertText(candidate.text, isComposing: false)
+        self.displayedTextManager.insertText(candidate.text, shouldSimplyInsert: true)
         self.displayedTextManager.insertText(String(self.composingText.convertTargetBeforeCursor))
         guard !self.composingText.isEmpty else {
             self.clear()
-            VariableStates.shared.setEnterKeyState(.return)
             return
         }
         self.kanaKanjiConverter.setCompletedData(candidate)
@@ -641,6 +640,8 @@ private final class InputManager {
         _candidate.withActions(actions)
         _candidate.parseTemplate()
         self.kanaKanjiConverter.updateLearningData(_candidate)
+        self.composingText.complete(correspondingCount: _candidate.correspondingCount)
+        self.displayedTextManager.enter()
         self.clear()
         return actions
     }
@@ -664,20 +665,20 @@ private final class InputManager {
         }
 
         if text == "\n"{
-            self.clear()
-            self.displayedTextManager.insertText(text, isComposing: false)
+            _ = self.enter()
+            self.displayedTextManager.insertText(text, shouldSimplyInsert: true)
             return
         }
         // スペースだった場合
         if text == " " || text == "　" || text == "\t" || text == "\0"{
-            self.clear()
-            self.displayedTextManager.insertText(text, isComposing: false)
+            _ = self.enter()
+            self.displayedTextManager.insertText(text, shouldSimplyInsert: true)
             return
         }
 
         if VariableStates.shared.keyboardLanguage == .none {
-            self.clear()
-            self.displayedTextManager.insertText(text, isComposing: false)
+            _ = self.enter()
+            self.displayedTextManager.insertText(text, shouldSimplyInsert: true)
             return
         }
 
@@ -1412,9 +1413,7 @@ final class DisplayedTextManager {
     func clear() {
         // unmarkText()だけではSafariの検索Viewなどで破綻する。
         if isMarkedTextEnabled {
-            self.proxy?.setMarkedText("", selectedRange: NSRange(location: 0, length: 0))
             self.proxy?.unmarkText()
-            self.proxy?.insertText(self.displayedText)
         }
         @KeyboardSetting(.liveConversion) var enabled
         self.isLiveConversionEnabled = enabled
@@ -1423,6 +1422,16 @@ final class DisplayedTextManager {
 
         self.displayedText = ""
         self.displayedTextCursorPosition = 0
+    }
+
+    func enter() {
+        if isMarkedTextEnabled {
+            self.proxy?.unmarkText()
+            self.insertText(self.displayedText, shouldSimplyInsert: true)
+        } else {
+            // do nothing
+        }
+        self.clear()
     }
 
     private func getActualOffset(count: Int) -> Int {
@@ -1459,15 +1468,19 @@ final class DisplayedTextManager {
         self.proxy.setMarkedText(self.displayedText, selectedRange: NSRange(location: self.displayedTextCursorPosition, length: 0))
     }
 
-    func insertText(_ text: String, isComposing: Bool = true) {
-        if isComposing {
-            self.displayedText.insert(
-                contentsOf: text,
-                at: self.displayedText.indexFromStart(displayedTextCursorPosition)
-            )
-            self.displayedTextCursorPosition += text.count
+    func insertText(_ text: String, shouldSimplyInsert: Bool = false) {
+        if shouldSimplyInsert {
+            self.proxy.insertText(text)
+            return
         }
-        if isMarkedTextEnabled && isComposing {
+
+        self.displayedText.insert(
+            contentsOf: text,
+            at: self.displayedText.indexFromStart(displayedTextCursorPosition)
+        )
+        self.displayedTextCursorPosition += text.count
+
+        if isMarkedTextEnabled {
             self.updateMarkedText()
         } else {
             self.proxy.insertText(text)
