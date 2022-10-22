@@ -269,46 +269,25 @@ struct EditingTenkeyCustardView: CancelableEditor {
 
                                 }
                                 Divider()
-                                if #available(iOS 15.0, *) {
-                                    Button(role: .destructive) {
-                                        editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
-                                    } label: {
-                                        Label("削除する", systemImage: "trash")
-                                    }
-                                    Button(role: .destructive) {
-                                        removeRow(y: y)
-                                    } label: {
-                                        // TODO: Localize
-                                        Label("この行を削除", systemImage: "trash")
-                                    }
-                                    Button(role: .destructive) {
-                                        removeColumn(x: x)
-                                    } label: {
-                                        // TODO: Localize
-                                        Label("この列を削除", systemImage: "trash")
-                                    }
-
-                                } else {
-                                    Button {
-                                        editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
-                                    } label: {
-                                        Label("削除する", systemImage: "trash")
-                                    }
-                                    .foregroundColor(.red)
-                                    Button {
-                                        removeRow(y: y)
-                                    } label: {
-                                        // TODO: Localize
-                                        Label("この行を削除", systemImage: "trash")
-                                    }
-                                    .foregroundColor(.red)
-                                    Button {
-                                        removeColumn(x: x)
-                                    } label: {
-                                        // TODO: Localize
-                                        Label("この列を削除", systemImage: "trash")
-                                    }
-                                    .foregroundColor(.red)
+                                Button(role: .destructive) {
+                                    editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
+                                } label: {
+                                    Label("削除する", systemImage: "trash")
+                                        .foregroundColor(.red)
+                                }
+                                Button(role: .destructive) {
+                                    removeRow(y: y)
+                                } label: {
+                                    // TODO: Localize
+                                    Label("この行を削除", systemImage: "trash")
+                                        .foregroundColor(.red)
+                                }
+                                Button(role: .destructive) {
+                                    removeColumn(x: x)
+                                } label: {
+                                    // TODO: Localize
+                                    Label("この列を削除", systemImage: "trash")
+                                        .foregroundColor(.red)
                                 }
                             }
                         }
