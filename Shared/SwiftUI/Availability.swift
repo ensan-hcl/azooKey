@@ -109,6 +109,18 @@ enum _Available_Visibility {
     }
 }
 
+// Visibility
+enum _Available_ButtonRole {
+    case destructive, cancel
+    @available(iOS 15, *)
+    var role: ButtonRole {
+        switch self {
+        case .destructive: return .destructive
+        case .cancel: return .cancel
+        }
+    }
+}
+
 extension View {
     @ViewBuilder
     func submitLabel(_ label: _Available_SubmitLabel) -> some View {
@@ -156,6 +168,16 @@ extension View {
             self.listRowSeparator(visibility.visibility, edges: edges.set)
         } else {
             self
+        }
+    }
+}
+
+extension Button {
+    init(role: _Available_ButtonRole, action: @escaping () -> (), @ViewBuilder label: () -> Label) {
+        if #available(iOS 15, *) {
+            self.init(role: role.role, action: action, label: label)
+        } else {
+            self.init(action: action, label: label)
         }
     }
 }

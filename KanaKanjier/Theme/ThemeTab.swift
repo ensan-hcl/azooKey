@@ -104,7 +104,7 @@ struct ThemeTabView: View {
                         Image(systemName: "pencil")
                         Text("編集する")
                     }.disabled(index == 0)
-                    Button {
+                    Button(role: .destructive) {
                         manager.remove(index: index)
                     } label: {
                         Label("削除する", systemImage: "trash")
