@@ -57,12 +57,9 @@ extension Kana2Kanji {
                     }
                     // クラスの連続確率を計算する。
                     let ccValue: PValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
-                    let ccBonus: PValue = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
-
-                    let ccSum: PValue = ccValue + ccBonus
                     // nodeの持っている全てのprevnodeに対して
                     for (index, value) in node.values.enumerated() {
-                        let newValue: PValue = ccSum + value
+                        let newValue: PValue = ccValue + value
                         // 追加すべきindexを取得する
                         let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                         if lastindex == N_best {
@@ -116,11 +113,9 @@ extension Kana2Kanji {
                         }
                         // クラスの連続確率を計算する。
                         let ccValue = self.dicdataStore.getCCValue(node.data.rcid, nextnode.data.lcid)
-                        let ccBonus = PValue(self.dicdataStore.getMatch(node.data, next: nextnode.data) * self.ccBonusUnit)
-                        let ccSum: PValue = ccValue + ccBonus
                         // nodeの持っている全てのprevnodeに対して
                         for (index, value) in node.values.enumerated() {
-                            let newValue = ccSum + value
+                            let newValue = ccValue + value
                             // 追加すべきindexを取得する
                             let lastindex: Int = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                             if lastindex == N_best {

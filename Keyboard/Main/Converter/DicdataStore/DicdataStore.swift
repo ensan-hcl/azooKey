@@ -27,7 +27,7 @@ final class DicdataStore {
     private var loudses: [String: LOUDS] = [:]
     private var importedLoudses: Set<String> = []
     private var charsID: [Character: UInt8] = [:]
-    private var memory: LearningMemorys = LearningMemorys()
+    private var learningManager = LearningManager()
     private var zeroHintPredictionDicdata: Dicdata?
 
     private var osUserDict = OSUserDict()
@@ -68,6 +68,7 @@ final class DicdataStore {
             }
         }
         _ = self.loadLOUDS(identifier: "user")
+        _ = self.loadLOUDS(identifier: "memory")
     }
 
     func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
@@ -77,18 +78,18 @@ final class DicdataStore {
         case .reloadUserDict:
             self.reloadUserDict()
         case let .notifyLearningType(type):
-            self.memory.notifyChangeLearningType(type)
+            self.learningManager.notifyChangeLearningType(type)
         case .closeKeyboard:
             self.closeKeyboard()
         case .resetMemory:
-            self.memory.reset()
+            self.learningManager.reset()
         case let .importOSUserDict(osUserDict):
             self.osUserDict = osUserDict
         }
     }
 
     private func closeKeyboard() {
-        self.memory.save()
+        self.learningManager.save()
     }
 
     private func reloadUserDict() {
@@ -210,25 +211,28 @@ final class DicdataStore {
         // 先頭の文字: そこで検索したい文字列の集合
         let group = [Character: [String]].init(grouping: stringSet, by: {$0.first!})
 
+        let depth = toIndexLeft - fromIndex ..< toIndexRight - fromIndex
         var indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
-            let set = dic.value.flatMapSet {string in self.throughMatchLOUDS(identifier: key, key: string, depth: toIndexLeft - fromIndex ..< toIndexRight - fromIndex)}
+            let set = dic.value.flatMapSet {string in self.throughMatchLOUDS(identifier: key, key: string, depth: depth)}
             return (key, set)
         }
-        indices.append(("user", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "user", key: $0, depth: toIndexLeft - fromIndex ..< toIndexRight - fromIndex)}))
+        indices.append(("user", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "user", key: $0, depth: depth)}))
+        if learningManager.enabled {
+            indices.append(("memory", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "memory", key: $0, depth: depth)}))
+        }
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
         // ⏱0.077118 : 辞書読み込み_辞書データ生成
         var dicdata: Dicdata = []
         for (identifier, value) in indices {
             let result: Dicdata = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
-                let memory: PValue = PValue(self.getSingleMemory(data) * 3)
                 let penalty = string2penalty[data.ruby, default: .zero]
                 if penalty.isZero {
-                    return data.adjustedData(memory)
+                    return data
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
                 let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
-                let adjust = memory + pUnit * penalty * ratio
+                let adjust = pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
                 }
@@ -236,17 +240,11 @@ final class DicdataStore {
             }
             dicdata.append(contentsOf: result)
         }
+        dicdata.append(contentsOf: stringSet.flatMap {self.learningManager.temporaryThroughMatch(key: $0, depth: depth)})
 
         for i in toIndexLeft ..< toIndexRight {
             do {
                 let result = self.getWiseDicdata(convertTarget: segments[i-fromIndex], allowRomanLetter: i+1 == toIndexRight, inputData: inputData, inputRange: fromIndex ..< i)
-                for item in result {
-                    string2segment[item.ruby] = i
-                }
-                dicdata.append(contentsOf: result)
-            }
-            do {
-                let result = self.getMatch(segments[i-fromIndex])
                 for item in result {
                     string2segment[item.ruby] = i
                 }
@@ -290,7 +288,8 @@ final class DicdataStore {
 
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
         // 先頭の文字: そこで検索したい文字列の集合
-        let group = [Character: [String]].init(grouping: stringWithTypoData.map {$0.string}, by: {$0.first!})
+        let stringSet = stringWithTypoData.mapSet {$0.string}
+        let group = [Character: [String]].init(grouping: stringSet, by: {$0.first!})
 
         var indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
@@ -299,21 +298,28 @@ final class DicdataStore {
             }
             return (key, set)
         }
-        let set = stringWithTypoData.flatMapSet { (string, _) in
-            self.perfectMatchLOUDS(identifier: "user", key: string)
+        do {
+            let set = stringWithTypoData.flatMapSet { (string, _) in
+                self.perfectMatchLOUDS(identifier: "user", key: string)
+            }
+            indices.append(("user", set))
         }
-        indices.append(("user", set))
+        if learningManager.enabled {
+            let set = stringWithTypoData.flatMapSet { (string, _) in
+                self.perfectMatchLOUDS(identifier: "memory", key: string)
+            }
+            indices.append(("memory", set))
+        }
         var dicdata: Dicdata = []
         for (identifier, value) in indices {
             let result: Dicdata = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
-                let memory: PValue = PValue(self.getSingleMemory(data) * 3)
                 let penalty = string2penalty[data.ruby, default: .zero]
                 if penalty.isZero {
-                    return data.adjustedData(memory)
+                    return data
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
                 let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
-                let adjust = memory + pUnit * penalty * ratio
+                let adjust = pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
                 }
@@ -321,9 +327,9 @@ final class DicdataStore {
             }
             dicdata.append(contentsOf: result)
         }
+        dicdata.append(contentsOf: stringSet.flatMap {self.learningManager.temporaryPerfectMatch(key: $0)})
 
         dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, allowRomanLetter: toIndex == inputData.input.count - 1, inputData: inputData, inputRange: fromIndex ..< toIndex+1))
-        dicdata.append(contentsOf: self.getMatch(segment))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
@@ -378,21 +384,33 @@ final class DicdataStore {
                 return []
             }
         } else if count == 2 {
+            var result: [DicdataElement] = []
             let first = String(head.first!)
             // 最大700件に絞ることによって低速化を回避する。
-            // FIXME: 場当たり的な対処。改善が求められる。
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head), depth: 5).prefix(700)
-            return self.getDicdataFromLoudstxt3(identifier: first, indices: Set(prefixIndices)).map { data in
-                let memory: PValue = PValue(self.getSingleMemory(data) * 3)
-                return data.adjustedData(memory)
+            result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: first, indices: Set(prefixIndices)))
+            let userDictIndices = self.prefixMatchLOUDS(identifier: "user", key: String(head), depth: 5).prefix(700)
+            result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: "user", indices: Set(userDictIndices)))
+            if learningManager.enabled {
+                let memoryDictIndices = self.prefixMatchLOUDS(identifier: "memory", key: String(head), depth: 5).prefix(700)
+                result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: "memory", indices: Set(memoryDictIndices)))
+                result.append(contentsOf: self.learningManager.temporaryPrefixMatch(key: head))
             }
+            return result
         } else {
+            var result: [DicdataElement] = []
             let first = String(head.first!)
+            // 最大700件に絞ることによって低速化を回避する。
             let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head)).prefix(700)
-            return self.getDicdataFromLoudstxt3(identifier: first, indices: Set(prefixIndices)).map { data in
-                let memory: PValue = PValue(self.getSingleMemory(data) * 3)
-                return data.adjustedData(memory)
+            result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: first, indices: Set(prefixIndices)))
+            let userDictIndices = self.prefixMatchLOUDS(identifier: "user", key: String(head)).prefix(700)
+            result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: "user", indices: Set(userDictIndices)))
+            if learningManager.enabled {
+                let memoryDictIndices = self.prefixMatchLOUDS(identifier: "memory", key: String(head)).prefix(700)
+                result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: "memory", indices: Set(memoryDictIndices)))
+                result.append(contentsOf: self.learningManager.temporaryPrefixMatch(key: head))
             }
+            return result
         }
     }
 
@@ -403,9 +421,7 @@ final class DicdataStore {
         let rcid = Int(dataString[3]) ?? lcid
         let mid = Int(dataString[4]) ?? .zero
         let value: PValue = PValue(dataString[5]) ?? -30.0
-        let element = DicdataElement(word: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value)
-        let adjust: PValue = PValue(self.getSingleMemory(element) * 3)
-        return element.adjustedData(adjust)
+        return DicdataElement(word: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: value)
     }
 
     /// 補足的な辞書情報を得る。
@@ -562,30 +578,14 @@ final class DicdataStore {
         return self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
     }
 
-    /// rubyに等しい語を返す。
-    private func getMatch(_ ruby: some StringProtocol) -> Dicdata {
-        return self.memory.match(ruby)
-    }
-    /// rubyに等しい語の回数を返す。
-    internal func getSingleMemory(_ data: DicdataElement) -> Int {
-        return self.memory.getSingle(data)
-    }
-    /// rubyを先頭にもつ語を返す。
-    internal func getPrefixMemory(_ prefix: some StringProtocol) -> Dicdata {
-        return self.memory.getPrefixDicdata(prefix)
-    }
-    /// 二つの語の並び回数を返す。
-    internal func getMatch(_ previous: DicdataElement, next: DicdataElement) -> Int {
-        return self.memory.matchNext(previous, next: next)
-    }
-    /// 一つの後から連結する次の語を返す。
-    internal func getNextMemory(_ data: DicdataElement) -> [(next: DicdataElement, count: Int)] {
-        return self.memory.getNextData(data)
-    }
-
     // 学習を反映する
+    // TODO: previousの扱いを改善したい
     internal func updateLearningData(_ candidate: Candidate, with previous: DicdataElement?) {
-        self.memory.update(candidate.data, lastData: previous)
+        if let previous {
+            self.learningManager.update(data: [previous] + candidate.data)
+        } else {
+            self.learningManager.update(data: candidate.data)
+        }
     }
     /// class idから連接確率を得る関数
     /// - Parameters:
@@ -650,7 +650,7 @@ final class DicdataStore {
     ///   - c_former: 左側の語のid
     ///   - c_latter: 右側の語のid
     /// - Returns:
-    ///   そこが文節であるかどうか。
+    ///   そこが文節の境界であるかどうか。
     internal static func isClause(_ former: Int, _ latter: Int) -> Bool {
         // EOSが基本多いので、この順の方がヒット率が上がると思われる。
         let latter_wordtype = Self.wordTypes[latter]
@@ -743,7 +743,7 @@ final class DicdataStore {
         return 1
     }
 
-    // カウントをゼロにすべき語の種類
+    // 学習を有効にする語彙を決める。
     internal static func needWValueMemory(_ data: DicdataElement) -> Bool {
         // 助詞、助動詞
         if 147...554 ~= data.lcid {

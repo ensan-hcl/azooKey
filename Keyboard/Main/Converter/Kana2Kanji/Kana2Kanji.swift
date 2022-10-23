@@ -81,7 +81,7 @@ struct Kana2Kanji {
          */
         for candidate in preparts {
             if let last = candidate.data.last {
-                let nexts = self.dicdataStore.getNextMemory(last)
+                let nexts = [(DicdataElement, Int)]()
                 for (data, count) in nexts where count > 1 {
                     let ccValue = self.dicdataStore.getCCValue(last.rcid, data.lcid)
                     let includeMMValueCalculation = DicdataStore.includeMMValueCalculation(data)
