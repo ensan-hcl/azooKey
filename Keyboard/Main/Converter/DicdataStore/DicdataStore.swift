@@ -52,15 +52,7 @@ final class DicdataStore {
             let url = Bundle.main.bundleURL.appendingPathComponent("mm.binary", isDirectory: false)
             do {
                 let binaryData = try Data(contentsOf: url, options: [.uncached])
-                let ui64array = binaryData.withUnsafeBytes {pointer -> [Float] in
-                    return Array(
-                        UnsafeBufferPointer(
-                            start: pointer.baseAddress!.assumingMemoryBound(to: Float.self),
-                            count: pointer.count / MemoryLayout<Float>.size
-                        )
-                    )
-                }
-                self.mmValue = ui64array.map {PValue($0)}
+                self.mmValue = binaryData.toArray(of: Float.self).map {PValue($0)}
             } catch {
                 debug("Failed to read the file.")
                 self.mmValue = [PValue].init(repeating: .zero, count: self.midCount*self.midCount)
@@ -563,15 +555,7 @@ final class DicdataStore {
     private func loadCCBinary(url: URL) -> [(Int32, Float)] {
         do {
             let binaryData = try Data(contentsOf: url, options: [.uncached])
-            let ui64array = binaryData.withUnsafeBytes {pointer -> [(Int32, Float)] in
-                return Array(
-                    UnsafeBufferPointer(
-                        start: pointer.baseAddress!.assumingMemoryBound(to: (Int32, Float).self),
-                        count: pointer.count / MemoryLayout<(Int32, Float)>.size
-                    )
-                )
-            }
-            return ui64array
+            return binaryData.toArray(of: (Int32, Float).self)
         } catch {
             debug("Failed to read the file.", error)
             return []
