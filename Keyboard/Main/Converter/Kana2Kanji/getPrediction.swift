@@ -40,7 +40,6 @@ extension Kana2Kanji {
             datas = Array(prepart.data.prefix(count))
         }
 
-        let memory: [DicdataElement] = dicdataStore.getPrefixMemory(lastRuby)
         let osuserdict: [DicdataElement] = dicdataStore.getPrefixMatchOSUserDict(lastRuby)
 
         let lastCandidate: Candidate = prepart.isEmpty ? Candidate(text: "", value: .zero, correspondingCount: 0, lastMid: 500, data: []) : self.processClauseCandidate(prepart)
@@ -48,12 +47,8 @@ extension Kana2Kanji {
         let nextLcid: Int = prepart.lastClause?.nextLcid ?? CIDData.EOS.cid
         let lastMid: Int = lastCandidate.lastMid
         let correspoindingCount: Int = lastCandidate.correspondingCount + lastRubyCount
-        var ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
+        let ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
 
-        if lastCandidate.data.count > 1, let lastNext = lastData {
-            let lastPrev: DicdataElement = lastCandidate.data[lastCandidate.data.endIndex - 2]
-            ignoreCCValue += PValue(self.ccBonusUnit*self.dicdataStore.getMatch(lastPrev, next: lastNext))
-        }
         let dicdata: DicdataStore.Dicdata
         switch VariableStates.shared.inputStyle {
         case .direct:
@@ -78,7 +73,7 @@ extension Kana2Kanji {
         var result: [Candidate] = []
 
         result.reserveCapacity(N_best &+ 1)
-        for data in (dicdata + memory + osuserdict) {
+        for data in (dicdata + osuserdict) {
             let includeMMValueCalculation = DicdataStore.includeMMValueCalculation(data)
             let mmValue: PValue = includeMMValueCalculation ? self.dicdataStore.getMMValue(lastMid, data.mid):.zero
             let ccValue: PValue = self.dicdataStore.getCCValue(lastRcid, data.lcid)

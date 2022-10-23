@@ -48,11 +48,11 @@ struct DicdataElement: Equatable, Hashable {
 
     var word: String
     var ruby: String
-    let lcid: Int
-    let rcid: Int
-    let mid: Int
-    let baseValue: PValue
-    let adjust: PValue
+    var lcid: Int
+    var rcid: Int
+    var mid: Int
+    var baseValue: PValue
+    var adjust: PValue
 
     func value() -> PValue {
         return min(.zero, self.baseValue + self.adjust)

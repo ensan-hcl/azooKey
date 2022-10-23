@@ -38,6 +38,12 @@ extension LOUDS {
                 containerURL.appendingPathComponent("user.louds", isDirectory: false)
             )
         }
+        if identifier == "memory"{
+            return (
+                LongTermLearningMemory.directoryURL.appendingPathComponent("memory.loudschars2", isDirectory: false),
+                LongTermLearningMemory.directoryURL.appendingPathComponent("memory.louds", isDirectory: false)
+            )
+        }
         return (
             bundleURL.appendingPathComponent("\(identifier).loudschars2", isDirectory: false),
             bundleURL.appendingPathComponent("\(identifier).louds", isDirectory: false)
@@ -47,6 +53,9 @@ extension LOUDS {
     private static func getLoudstxt3URL(_ identifier: String) -> URL {
         if identifier.hasPrefix("user") {
             return containerURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
+        }
+        if identifier.hasPrefix("memory") {
+            return LongTermLearningMemory.directoryURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
         }
         return bundleURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
     }
@@ -66,6 +75,60 @@ extension LOUDS {
             return louds
         }
         return nil
+    }
+
+    @inlinable
+    static func parseBinary(binary: Data) -> [DicdataElement] {
+        // 最初の2byteがカウント
+        let count = binary[binary.startIndex ..< binary.startIndex + 2].withUnsafeBytes {pointer -> [UInt16] in
+            return Array(
+                UnsafeBufferPointer(
+                    start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
+                    count: pointer.count / MemoryLayout<UInt16>.size
+                )
+            )
+        }[0]
+        var index = binary.startIndex + 2
+        var dicdata: [DicdataElement] = []
+        dicdata.reserveCapacity(Int(count))
+        for _ in 0 ..< count {
+            let ids = binary[index ..< index + 6].withUnsafeBytes {pointer -> [UInt16] in
+                return Array(
+                    UnsafeBufferPointer(
+                        start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
+                        count: pointer.count / MemoryLayout<UInt16>.size
+                    )
+                )
+            }
+            let value = binary[index + 6 ..< index + 10].withUnsafeBytes {pointer -> [Float32] in
+                return Array(
+                    UnsafeBufferPointer(
+                        start: pointer.baseAddress!.assumingMemoryBound(to: Float32.self),
+                        count: pointer.count / MemoryLayout<Float32>.size
+                    )
+                )
+            }[0]
+            dicdata.append(DicdataElement(word: "", ruby: "", lcid: Int(ids[0]), rcid: Int(ids[1]), mid: Int(ids[2]), value: PValue(value)))
+            index += 10
+        }
+
+        let substrings = binary[index...].split(separator: UInt8(ascii: "\t"), omittingEmptySubsequences: false)
+        guard let ruby = String(data: substrings[0], encoding: .utf8) else {
+            debug("getDataForLoudstxt3: failed to parse", dicdata)
+            return []
+        }
+        for (index, substring) in substrings[1...].enumerated() {
+            guard let word = String(data: substring, encoding: .utf8) else {
+                debug("getDataForLoudstxt3: failed to parse", ruby)
+                continue
+            }
+            withMutableValue(&dicdata[index]) {
+                $0.ruby = ruby
+                $0.word = word.isEmpty ? ruby : word
+            }
+        }
+        return dicdata
+
     }
 
     internal static func getDataForLoudstxt3(_ identifier: String, indices: [Int]) -> [DicdataElement] {
@@ -101,58 +164,7 @@ extension LOUDS {
         let result: [DicdataElement] = indices.flatMap {(index: Int) -> [DicdataElement] in
             let startIndex = Int(i32array[index])
             let endIndex = index == (lc-1) ? binary.endIndex : Int(i32array[index + 1])
-            do {
-                let binary = binary[startIndex ..< endIndex]
-                // 最初の2byteがカウント
-                let count = binary[binary.startIndex ..< binary.startIndex + 2].withUnsafeBytes {pointer -> [UInt16] in
-                    return Array(
-                        UnsafeBufferPointer(
-                            start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
-                            count: pointer.count / MemoryLayout<UInt16>.size
-                        )
-                    )
-                }[0]
-                var index = binary.startIndex + 2
-                var dicdata: [DicdataElement] = []
-                dicdata.reserveCapacity(Int(count))
-                for _ in 0 ..< count {
-                    let ids = binary[index ..< index + 6].withUnsafeBytes {pointer -> [UInt16] in
-                        return Array(
-                            UnsafeBufferPointer(
-                                start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
-                                count: pointer.count / MemoryLayout<UInt16>.size
-                            )
-                        )
-                    }
-                    let value = binary[index + 6 ..< index + 10].withUnsafeBytes {pointer -> [Float32] in
-                        return Array(
-                            UnsafeBufferPointer(
-                                start: pointer.baseAddress!.assumingMemoryBound(to: Float32.self),
-                                count: pointer.count / MemoryLayout<Float32>.size
-                            )
-                        )
-                    }[0]
-                    dicdata.append(DicdataElement(word: "", ruby: "", lcid: Int(ids[0]), rcid: Int(ids[1]), mid: Int(ids[2]), value: PValue(value)))
-                    index += 10
-                }
-
-                let substrings = binary[index...].split(separator: UInt8(ascii: "\t"), omittingEmptySubsequences: false)
-                guard let ruby = String(data: substrings[0], encoding: .utf8) else {
-                    debug("getDataForLoudstxt3: failed to parse", dicdata)
-                    return []
-                }
-                for (index, substring) in substrings[1...].enumerated() {
-                    guard let word = String(data: substring, encoding: .utf8) else {
-                        debug("getDataForLoudstxt3: failed to parse", ruby)
-                        continue
-                    }
-                    withMutableValue(&dicdata[index]) {
-                        $0.ruby = ruby
-                        $0.word = word.isEmpty ? ruby : word
-                    }
-                }
-                return dicdata
-            }
+            return parseBinary(binary: binary[startIndex ..< endIndex])
         }
         return result
     }
