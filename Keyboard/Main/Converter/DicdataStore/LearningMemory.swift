@@ -142,7 +142,6 @@ struct LongTermLearningMemory {
     static func merge(tempTrie: TemporalLearningMemoryTrie) {
         let startTime = Date()
         let today = LearningManager.today
-        // debug("LongTermLearningMemory merge originalTrie", tempTrie)
         var newTrie = tempTrie
         // 構造:
         // dataCount(UInt32), count, data*count, count, data*count, ...
@@ -209,11 +208,6 @@ struct LongTermLearningMemory {
         }
         // newTrieのデータからLOUDSを作り書き出す
         self.process(trie: newTrie)
-        /*
-        for item in zip(newTrie.dicdata, newTrie.metadata) {
-            debug("LongTermLearningMemory merge", item)
-        }
-         */
         debug("LongTermLearningMemory merge ⏰", Date().timeIntervalSince(startTime), newTrie.dicdata.count)
     }
 
