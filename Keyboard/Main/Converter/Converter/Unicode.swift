@@ -11,7 +11,7 @@ import Foundation
 extension KanaKanjiConverter {
     /// unicode文字列`"uxxxx, Uxxxx, u+xxxx, U+xxxx"`を対応する記号に変換する関数
     /// - parameters:
-    func unicode(_ inputData: InputData) -> [Candidate] {
+    func unicode(_ inputData: ComposingText) -> [Candidate] {
         let value0: PValue = -10
         let string = inputData.convertTarget.toKatakana()
         if string.count < 5 {

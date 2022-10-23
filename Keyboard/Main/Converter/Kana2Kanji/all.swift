@@ -27,7 +27,7 @@ extension Kana2Kanji {
     /// (3)(1)のregisterされた結果をresultノードに追加していく。この際EOSとの連接計算を行っておく。
     ///
     /// (4)ノードをアップデートした上で返却する。
-    func kana2lattice_all(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: Nodes) {
+    func kana2lattice_all(_ inputData: ComposingText, N_best: Int) -> (result: LatticeNode, nodes: Nodes) {
         debug("新規に計算を行います。inputされた文字列は\(inputData.input.count)文字分の\(inputData.convertTarget)")
         let count: Int = inputData.input.count
         let result: LatticeNode = LatticeNode.EOSNode

@@ -11,7 +11,6 @@ import UIKit
 typealias PValue = Float16
 
 struct Kana2Kanji {
-    typealias InputData = ComposingText
     let ccBonusUnit = 5
     var dicdataStore = DicdataStore()
 

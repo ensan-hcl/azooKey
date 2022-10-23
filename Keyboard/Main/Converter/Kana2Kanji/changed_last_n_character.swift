@@ -22,7 +22,7 @@ extension Kana2Kanji {
     ///
     /// (5)ノードをアップデートした上で返却する。
 
-    func kana2lattice_changed(_ inputData: InputData, N_best: Int, counts: (deleted: Int, added: Int), previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
+    func kana2lattice_changed(_ inputData: ComposingText, N_best: Int, counts: (deleted: Int, added: Int), previousResult: (inputData: ComposingText, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
         // (0)
         let count = inputData.input.count
         let commonCount = previousResult.inputData.input.count - counts.deleted
