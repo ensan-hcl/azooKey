@@ -25,7 +25,7 @@ extension Kana2Kanji {
     /// (3)(1)のregisterされた結果をresultノードに追加していく。この際EOSとの連接コストを計算しておく。
     ///
     /// (4)ノードをアップデートした上で返却する。
-    func kana2lattice_addedLast(_ inputData: InputData, N_best: Int, previousResult: (inputData: InputData, nodes: Nodes) ) -> (result: LatticeNode, nodes: Nodes) {
+    func kana2lattice_addedLast(_ inputData: ComposingText, N_best: Int, previousResult: (inputData: ComposingText, nodes: Nodes) ) -> (result: LatticeNode, nodes: Nodes) {
         debug("一文字追加。内部文字列は\(inputData.input).\(previousResult.nodes.map {($0.first?.data.ruby, $0.first?.convertTargetLength)})")
         // (0)
         var nodes = previousResult.nodes

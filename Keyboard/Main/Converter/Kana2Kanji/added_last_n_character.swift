@@ -26,7 +26,7 @@ extension Kana2Kanji {
     /// (3)(1)のregisterされた結果をresultノードに追加していく。この際EOSとの連接コストを計算しておく。
     ///
     /// (4)ノードをアップデートした上で返却する。
-    func kana2lattice_added(_ inputData: InputData, N_best: Int, addedCount: Int, previousResult: (inputData: InputData, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
+    func kana2lattice_added(_ inputData: ComposingText, N_best: Int, addedCount: Int, previousResult: (inputData: ComposingText, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
         debug("\(addedCount)文字追加。追加されたのは「\(inputData.input.suffix(addedCount))」")
         if addedCount == 1 {
             return kana2lattice_addedLast(inputData, N_best: N_best, previousResult: previousResult)

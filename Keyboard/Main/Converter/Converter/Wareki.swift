@@ -13,7 +13,7 @@ extension KanaKanjiConverter {
     /// Mozcは「バージョン」で言語モデルのバージョンが表示されるらしいので、azooKeyもこれをつけて「azooKey 1.7.2」とか表示させよう。
     /// - parameters:
     ///  - inputData: 入力情報。
-    func toVersionCandidate(_ inputData: InputData) -> [Candidate] {
+    func toVersionCandidate(_ inputData: ComposingText) -> [Candidate] {
         if inputData.convertTarget.toKatakana() == "バージョン", let version = SharedStore.currentAppVersion?.description {
             let versionString = "azooKey Verion \(version)"
             return [Candidate(
@@ -32,7 +32,7 @@ extension KanaKanjiConverter {
     ///   - inputData: 入力情報。
     /// - note:
     ///    現在英字のみ。ギリシャ文字や数字に対応する必要あり。
-    func toSeirekiCandidates(_ inputData: InputData) -> [Candidate] {
+    func toSeirekiCandidates(_ inputData: ComposingText) -> [Candidate] {
         let string = inputData.convertTarget.toKatakana()
         let result = self.toSeireki(string)
         return result.map {[Candidate(
@@ -112,7 +112,7 @@ extension KanaKanjiConverter {
     /// 西暦で書かれた入力を和暦に変換する関数
     /// - parameters:
     ///   - string: 入力
-    func toWareki(_ inputData: InputData) -> [Candidate] {
+    func toWareki(_ inputData: ComposingText) -> [Candidate] {
         let string = inputData.convertTarget.toKatakana()
 
         let makeResult0: (String) -> Candidate = {

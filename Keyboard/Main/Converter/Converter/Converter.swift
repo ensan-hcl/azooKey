@@ -11,12 +11,11 @@ import UIKit
 
 /// かな漢字変換の管理を受け持つクラス
 final class KanaKanjiConverter {
-    typealias InputData = ComposingText
     private var converter = Kana2Kanji()
     private var checker = UITextChecker()
 
     // 前回の変換や確定の情報を取っておく部分。
-    private var previousInputData: InputData?
+    private var previousInputData: ComposingText?
     private var nodes: [[LatticeNode]] = []
     private var completedData: Candidate?
     private var lastData: DicdataElement?
@@ -55,7 +54,7 @@ final class KanaKanjiConverter {
     ///   - string: 入力されたString
     /// - Returns:
     ///   `賢い変換候補
-    private func getWiseCandidate(_ inputData: InputData) -> [Candidate] {
+    private func getWiseCandidate(_ inputData: ComposingText) -> [Candidate] {
         var result = [Candidate]()
 
         // toWareki/toSeirekiCandidatesは以前は設定可能にしていたが、特にoffにする需要がなさそうなので常時有効化した
@@ -99,7 +98,7 @@ final class KanaKanjiConverter {
     ///   - language: 言語コード。現在は`en-US`と`el(ギリシャ語)`のみ対応している。
     /// - Returns:
     ///   予測変換候補
-    private func getForeignPredictionCandidate(inputData: InputData, language: String, penalty: PValue = -5) -> [Candidate] {
+    private func getForeignPredictionCandidate(inputData: ComposingText, language: String, penalty: PValue = -5) -> [Candidate] {
         switch language {
         case "en-US":
             var result: [Candidate] = []
@@ -229,7 +228,7 @@ final class KanaKanjiConverter {
     ///   - inputData: 変換対象のInputData。
     /// - Returns:
     ///   付加的な変換候補
-    private func getTopLevelAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
+    private func getTopLevelAdditionalCandidate(_ inputData: ComposingText) -> [Candidate] {
         @KeyboardSetting(.englishCandidate) var englishCandidate
         var candidates: [Candidate] = []
         if englishCandidate {
@@ -263,7 +262,7 @@ final class KanaKanjiConverter {
     ///   - inputData: 変換対象のInputData。
     /// - Returns:
     ///   付加的な変換候補
-    private func getAdditionalCandidate(_ inputData: InputData) -> [Candidate] {
+    private func getAdditionalCandidate(_ inputData: ComposingText) -> [Candidate] {
         var candidates: [Candidate] = []
         let string = inputData.convertTarget.toKatakana()
         let correspondingCount = inputData.input.count
@@ -347,7 +346,7 @@ final class KanaKanjiConverter {
     ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
     /// - Returns:
     ///   重複のない変換候補。
-    private func processResult(inputData: InputData, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
+    private func processResult(inputData: ComposingText, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         self.previousInputData = inputData
         self.nodes = result.nodes
         let clauseResult = result.result.getCandidateData(for: inputData)
@@ -468,7 +467,7 @@ final class KanaKanjiConverter {
     ///   - N_best: 計算途中で保存する候補数。実際に得られる候補数とは異なる。
     /// - Returns:
     ///   結果のラティスノードと、計算済みノードの全体
-    private func convertToLattice(_ inputData: InputData, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]])? {
+    private func convertToLattice(_ inputData: ComposingText, N_best: Int) -> (result: LatticeNode, nodes: [[LatticeNode]])? {
         if inputData.convertTarget.isEmpty {
             return nil
         }
@@ -546,7 +545,7 @@ final class KanaKanjiConverter {
     ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
     /// - Returns:
     ///   重複のない変換候補。
-    func requestCandidates(_ inputData: InputData, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
+    func requestCandidates(_ inputData: ComposingText, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         debug("requestCandidates 入力は", inputData)
         // 変換対象が無の場合
         if inputData.convertTarget.isEmpty {

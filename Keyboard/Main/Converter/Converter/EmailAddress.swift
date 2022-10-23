@@ -34,7 +34,7 @@ extension KanaKanjiConverter {
     ]
     /// 入力が@で終わる場合に、メアドのような候補を追加する関数
     /// - parameters:
-    func toEmailAddress(_ inputData: InputData) -> [Candidate] {
+    func toEmailAddress(_ inputData: ComposingText) -> [Candidate] {
         let baseValue: PValue = -13
         let string = inputData.convertTarget.toKatakana()
         if inputData.convertTarget.last != "@" || !inputData.convertTarget.dropLast(1).isEnglishSentence {
