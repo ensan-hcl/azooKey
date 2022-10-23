@@ -399,7 +399,7 @@ extension DicdataStore {
 
     }
 
-    func getJapaneseNumberDicdata(head: String) -> Dicdata {
+    func getJapaneseNumberDicdata(head: String) -> [DicdataElement] {
 
         let tokens = parseLiteral(input: head)
 

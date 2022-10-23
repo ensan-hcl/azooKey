@@ -9,7 +9,7 @@
 import Foundation
 
 final class OSUserDict {
-    var dict: DicdataStore.Dicdata = []
+    var dict: [DicdataElement] = []
 }
 
 final class DicdataStore {
@@ -18,7 +18,6 @@ final class DicdataStore {
         self.setup()
     }
 
-    typealias Dicdata = [DicdataElement]
     private var ccParsed: [Bool] = .init(repeating: false, count: 1319)
     private var ccLines: [[Int: PValue]] = []
     private var mmValue: [PValue] = []
@@ -28,7 +27,7 @@ final class DicdataStore {
     private var importedLoudses: Set<String> = []
     private var charsID: [Character: UInt8] = [:]
     private var learningManager = LearningManager()
-    private var zeroHintPredictionDicdata: Dicdata?
+    private var zeroHintPredictionDicdata: [DicdataElement]?
 
     private var osUserDict = OSUserDict()
 
@@ -160,11 +159,11 @@ final class DicdataStore {
         return louds.prefixNodeIndices(chars: key.map {self.charsID[$0, default: .max]}, maxDepth: depth)
     }
 
-    private func getDicdataFromLoudstxt3(identifier: String, indices: Set<Int>) -> Dicdata {
+    private func getDicdataFromLoudstxt3(identifier: String, indices: Set<Int>) -> [DicdataElement] {
         debug("getDicdataFromLoudstxt3", identifier, indices)
         // split = 2048
         let dict = [Int: [Int]].init(grouping: indices, by: {$0 >> 11})
-        var data: Dicdata = []
+        var data: [DicdataElement] = []
         for (key, value) in dict {
             data.append(contentsOf: LOUDS.getDataForLoudstxt3(identifier + "\(key)", indices: value.map {$0 & 2047}))
         }
@@ -223,9 +222,9 @@ final class DicdataStore {
         }
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
         // ⏱0.077118 : 辞書読み込み_辞書データ生成
-        var dicdata: Dicdata = []
+        var dicdata: [DicdataElement] = []
         for (identifier, value) in indices {
-            let result: Dicdata = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
+            let result: [DicdataElement] = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
                 let penalty = string2penalty[data.ruby, default: .zero]
                 if penalty.isZero {
                     return data
@@ -310,9 +309,9 @@ final class DicdataStore {
             }
             indices.append(("memory", set))
         }
-        var dicdata: Dicdata = []
+        var dicdata: [DicdataElement] = []
         for (identifier, value) in indices {
-            let result: Dicdata = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
+            let result: [DicdataElement] = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
                 let penalty = string2penalty[data.ruby, default: .zero]
                 if penalty.isZero {
                     return data
@@ -344,7 +343,7 @@ final class DicdataStore {
         }
     }
 
-    internal func getZeroHintPredictionDicdata() -> Dicdata {
+    internal func getZeroHintPredictionDicdata() -> [DicdataElement] {
         if let dicdata = self.zeroHintPredictionDicdata {
             return dicdata
         }
@@ -352,7 +351,7 @@ final class DicdataStore {
             let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/p_null.csv", encoding: String.Encoding.utf8)
             let csvLines = csvString.split(separator: "\n")
             let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
-            let dicdata: Dicdata = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
+            let dicdata: [DicdataElement] = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
             self.zeroHintPredictionDicdata = dicdata
             return dicdata
         } catch {
@@ -367,7 +366,7 @@ final class DicdataStore {
     ///   - head: 辞書を引く文字列
     /// - Returns:
     ///   発見されたデータのリスト。
-    internal func getPredictionLOUDSDicdata(head: some StringProtocol) -> Dicdata {
+    internal func getPredictionLOUDSDicdata(head: some StringProtocol) -> [DicdataElement] {
         let count = head.count
         if count == .zero {
             return []
@@ -377,7 +376,7 @@ final class DicdataStore {
                 let csvString = try String(contentsOfFile: Bundle.main.bundlePath + "/p_\(head).csv", encoding: String.Encoding.utf8)
                 let csvLines = csvString.split(separator: "\n")
                 let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
-                let dicdata: Dicdata = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
+                let dicdata: [DicdataElement] = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
                 return dicdata
             } catch {
                 debug("ファイルが存在しません: \(error)")
@@ -429,8 +428,8 @@ final class DicdataStore {
     ///     - convertTarget: カタカナ変換済みの文字列
     /// - note
     ///     - 入力全体をカタカナとかひらがなに変換するやつは、Converter側でやっているので注意。
-    private func getWiseDicdata(convertTarget: String, allowRomanLetter: Bool, inputData: ComposingText, inputRange: Range<Int>) -> Dicdata {
-        var result: Dicdata = []
+    private func getWiseDicdata(convertTarget: String, allowRomanLetter: Bool, inputData: ComposingText, inputRange: Range<Int>) -> [DicdataElement] {
+        var result: [DicdataElement] = []
         result.append(contentsOf: self.getJapaneseNumberDicdata(head: convertTarget))
         if inputData.input[..<inputRange.startIndex].last?.character.isNumber != true && inputData.input[inputRange.endIndex...].first?.character.isNumber != true, let number = Float(convertTarget) {
             result.append(DicdataElement(ruby: convertTarget, cid: CIDData.数.cid, mid: 361, value: -14))
@@ -569,12 +568,12 @@ final class DicdataStore {
     }
 
     /// OSのユーザ辞書からrubyに等しい語を返す。
-    private func getMatchOSUserDict(_ ruby: some StringProtocol) -> Dicdata {
+    private func getMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
         return self.osUserDict.dict.filter {$0.ruby == ruby}
     }
 
     /// OSのユーザ辞書からrubyに先頭一致する語を返す。
-    internal func getPrefixMatchOSUserDict(_ ruby: some StringProtocol) -> Dicdata {
+    internal func getPrefixMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
         return self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
     }
 

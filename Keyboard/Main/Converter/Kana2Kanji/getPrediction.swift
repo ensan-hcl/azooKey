@@ -49,7 +49,7 @@ extension Kana2Kanji {
         let correspoindingCount: Int = lastCandidate.correspondingCount + lastRubyCount
         let ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
 
-        let dicdata: DicdataStore.Dicdata
+        let dicdata: [DicdataElement]
         switch VariableStates.shared.inputStyle {
         case .direct:
             dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: lastRuby)
