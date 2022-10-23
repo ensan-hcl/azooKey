@@ -15,14 +15,7 @@ extension LOUDS {
     private static func loadLOUDSBinary(from url: URL) -> [UInt64]? {
         do {
             let binaryData = try Data(contentsOf: url, options: [.uncached]) // 2度読み込むことはないのでキャッシュ不要
-            let ui64array = binaryData.withUnsafeBytes {pointer -> [UInt64] in
-                return Array(
-                    UnsafeBufferPointer(
-                        start: pointer.baseAddress!.assumingMemoryBound(to: UInt64.self),
-                        count: pointer.count / MemoryLayout<UInt64>.size
-                    )
-                )
-            }
+            let ui64array = binaryData.toArray(of: UInt64.self)
             return ui64array
         } catch {
             debug(error)
@@ -80,34 +73,13 @@ extension LOUDS {
     @inlinable
     static func parseBinary(binary: Data) -> [DicdataElement] {
         // 最初の2byteがカウント
-        let count = binary[binary.startIndex ..< binary.startIndex + 2].withUnsafeBytes {pointer -> [UInt16] in
-            return Array(
-                UnsafeBufferPointer(
-                    start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
-                    count: pointer.count / MemoryLayout<UInt16>.size
-                )
-            )
-        }[0]
+        let count = binary[binary.startIndex ..< binary.startIndex + 2].toArray(of: UInt16.self)[0]
         var index = binary.startIndex + 2
         var dicdata: [DicdataElement] = []
         dicdata.reserveCapacity(Int(count))
         for _ in 0 ..< count {
-            let ids = binary[index ..< index + 6].withUnsafeBytes {pointer -> [UInt16] in
-                return Array(
-                    UnsafeBufferPointer(
-                        start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
-                        count: pointer.count / MemoryLayout<UInt16>.size
-                    )
-                )
-            }
-            let value = binary[index + 6 ..< index + 10].withUnsafeBytes {pointer -> [Float32] in
-                return Array(
-                    UnsafeBufferPointer(
-                        start: pointer.baseAddress!.assumingMemoryBound(to: Float32.self),
-                        count: pointer.count / MemoryLayout<Float32>.size
-                    )
-                )
-            }[0]
+            let ids = binary[index ..< index + 6].toArray(of: UInt16.self)
+            let value = binary[index + 6 ..< index + 10].toArray(of: Float32.self)[0]
             dicdata.append(DicdataElement(word: "", ruby: "", lcid: Int(ids[0]), rcid: Int(ids[1]), mid: Int(ids[2]), value: PValue(value)))
             index += 10
         }
@@ -132,7 +104,6 @@ extension LOUDS {
     }
 
     internal static func getDataForLoudstxt3(_ identifier: String, indices: [Int]) -> [DicdataElement] {
-
         let binary: Data
         do {
             let url = getLoudstxt3URL(identifier)
@@ -142,28 +113,13 @@ extension LOUDS {
             return []
         }
 
-        let lc = binary[0..<2].withUnsafeBytes {pointer -> [UInt16] in
-            return Array(
-                UnsafeBufferPointer(
-                    start: pointer.baseAddress!.assumingMemoryBound(to: UInt16.self),
-                    count: pointer.count / MemoryLayout<UInt16>.size
-                )
-            )
-        }[0]
-
+        let lc = binary[0..<2].toArray(of: UInt16.self)[0]
         let header_endIndex: UInt32 = 2 + UInt32(lc) * UInt32(MemoryLayout<UInt32>.size)
-        let i32array = binary[2..<header_endIndex].withUnsafeBytes {(pointer: UnsafeRawBufferPointer) -> [UInt32] in
-            return Array(
-                UnsafeBufferPointer(
-                    start: pointer.baseAddress!.assumingMemoryBound(to: UInt32.self),
-                    count: pointer.count / MemoryLayout<UInt32>.size
-                )
-            )
-        }
+        let ui32array = binary[2..<header_endIndex].toArray(of: UInt32.self)
 
         let result: [DicdataElement] = indices.flatMap {(index: Int) -> [DicdataElement] in
-            let startIndex = Int(i32array[index])
-            let endIndex = index == (lc-1) ? binary.endIndex : Int(i32array[index + 1])
+            let startIndex = Int(ui32array[index])
+            let endIndex = index == (lc-1) ? binary.endIndex : Int(ui32array[index + 1])
             return parseBinary(binary: binary[startIndex ..< endIndex])
         }
         return result
