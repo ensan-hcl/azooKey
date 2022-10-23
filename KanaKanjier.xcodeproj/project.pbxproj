@@ -1090,7 +1090,6 @@
 		1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */; };
 		1AF678AF25CE3B4A00F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
 		1AF678B425CE3B7000F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
-		1AF678D825CEA5F800F3987B /* FileTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678D725CEA5F800F3987B /* FileTools.swift */; };
 		1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678DE25CED86500F3987B /* VariableStates.swift */; };
 		1AF678E825CED88100F3987B /* VariableStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678DE25CED86500F3987B /* VariableStates.swift */; };
 		1AF678F625CED91900F3987B /* ActionDepartment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678F525CED91900F3987B /* ActionDepartment.swift */; };
@@ -3659,7 +3658,6 @@
 		1AF6785525CC4FF500F3987B /* ThemeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeData.swift; sourceTree = "<group>"; };
 		1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderedRectangle.swift; sourceTree = "<group>"; };
 		1AF678AE25CE3B4A00F3987B /* States.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = States.swift; sourceTree = "<group>"; };
-		1AF678D725CEA5F800F3987B /* FileTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTools.swift; sourceTree = "<group>"; };
 		1AF678DE25CED86500F3987B /* VariableStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableStates.swift; sourceTree = "<group>"; };
 		1AF678F525CED91900F3987B /* ActionDepartment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionDepartment.swift; sourceTree = "<group>"; };
 		1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeKeyboardButtonView.swift; sourceTree = "<group>"; };
@@ -5337,7 +5335,6 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC2062500D4FF002CAA93 /* Store.swift */,
-				1A677375256F7ADD0037AF22 /* General */,
 				1A3DC22B2500D6B8002CAA93 /* Converter */,
 			);
 			path = Main;
@@ -5489,14 +5486,6 @@
 				1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */,
 			);
 			path = DicdataStore;
-			sourceTree = "<group>";
-		};
-		1A677375256F7ADD0037AF22 /* General */ = {
-			isa = PBXGroup;
-			children = (
-				1AF678D725CEA5F800F3987B /* FileTools.swift */,
-			);
-			path = General;
 			sourceTree = "<group>";
 		};
 		1A6F958425144419007399AC /* View */ = {
@@ -10766,7 +10755,6 @@
 				1A3DC2FB2500D72D002CAA93 /* Kana2Kanji.swift in Sources */,
 				1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */,
 				1AD2B8D926C272F80053CE4A /* BoolKeyboardSetting.swift in Sources */,
-				1AF678D825CEA5F800F3987B /* FileTools.swift in Sources */,
 				1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */,
 				1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */,
 				1AE1023E25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
