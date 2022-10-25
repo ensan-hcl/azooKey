@@ -83,7 +83,7 @@ final class KanaKanjiConverter {
         var result = [Candidate]()
         for candidate in candidates where !candidate.text.isEmpty {
             if let index = result.firstIndex(where: {$0.text == candidate.text}) {
-                if result[index].value < candidate.value {
+                if result[index].value < candidate.value || result[index].correspondingCount < candidate.correspondingCount {
                     result[index] = candidate
                 }
             } else {
