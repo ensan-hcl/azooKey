@@ -30,7 +30,7 @@ extension KanaKanjiConverter {
         "@softbank.ne.jp",
         "@yahoo.ne.jp",
         "@ybb.ne.jp",
-        "@ymobile.ne.jp",
+        "@ymobile.ne.jp"
     ]
     /// 入力が@で終わる場合に、メアドのような候補を追加する関数
     /// - parameters:

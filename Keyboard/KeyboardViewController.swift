@@ -22,7 +22,7 @@ extension UIInputView: UIInputViewAudioFeedback {
 }
 
 final class KeyboardViewController: UIInputViewController {
-    private weak var keyboardViewHost: KeyboardHostingController<Keyboard>? = nil
+    private weak var keyboardViewHost: KeyboardHostingController<Keyboard>?
 
     struct Keyboard: View {
         let theme: ThemeData

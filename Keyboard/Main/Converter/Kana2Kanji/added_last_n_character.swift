@@ -40,7 +40,7 @@ extension Kana2Kanji {
             self.dicdataStore.getLOUDSDataInRange(
                 inputData: inputData,
                 from: i,
-                toIndexRange: (max(previousResult.inputData.input.count, i) ..< max(previousResult.inputData.input.count, min(count, i+self.dicdataStore.maxlength+1)))
+                toIndexRange: (max(previousResult.inputData.input.count, i) ..< max(previousResult.inputData.input.count, min(count, i + self.dicdataStore.maxlength + 1)))
             )
         }
 
@@ -81,7 +81,6 @@ extension Kana2Kanji {
                 }
             }
         }
-
 
         // (3)
         let result = LatticeNode.EOSNode

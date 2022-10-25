@@ -41,7 +41,7 @@ extension StringProtocol {
     @inlinable func toKatakana() -> String {
         let result = self.unicodeScalars.map { scalar -> UnicodeScalar in
             if 0x3041 <= scalar.value && scalar.value <= 0x3096 {
-                return UnicodeScalar(scalar.value+96)!
+                return UnicodeScalar(scalar.value + 96)!
             } else {
                 return scalar
             }
@@ -52,7 +52,7 @@ extension StringProtocol {
     @inlinable func toHiragana() -> String {
         let result = self.unicodeScalars.map { scalar -> UnicodeScalar in
             if 0x30A1 <= scalar.value && scalar.value <= 0x30F6 {
-                return UnicodeScalar(scalar.value-96)!
+                return UnicodeScalar(scalar.value - 96)!
             } else {
                 return scalar
             }

@@ -41,14 +41,13 @@ struct RegisteredNode: RegisteredNodeProtocol {
 
     static func fromLastCandidate(_ candidate: Candidate) -> RegisteredNode {
         RegisteredNode(
-            data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid , rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
+            data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid, rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
             registered: nil,
             totalValue: 0,
             inputRange: 0 ..< 0
         )
     }
 }
-
 
 extension RegisteredNodeProtocol {
     func getCandidateData(for composingText: ComposingText) -> CandidateData {
@@ -76,7 +75,7 @@ extension RegisteredNodeProtocol {
             if (lastClause.mid == 500 && self.data.mid != 500) || DicdataStore.includeMMValueCalculation(self.data) {
                 lastClause.mid = self.data.mid
             }
-            lastcandidate.clauses[lastcandidate.clauses.count-1].value = self.totalValue
+            lastcandidate.clauses[lastcandidate.clauses.count - 1].value = self.totalValue
             lastcandidate.data.append(self.data)
             return lastcandidate
         }

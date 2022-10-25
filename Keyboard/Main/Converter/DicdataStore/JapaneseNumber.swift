@@ -383,7 +383,7 @@ extension DicdataStore {
                     if maxDigit <= token.maxDigit! {
                         return []
                     }
-                    result[maxDigit-token.maxDigit!] = stack
+                    result[maxDigit - token.maxDigit!] = stack
                 } else {
                     maxDigits = token.maxDigit!
                     result = [(Number, Number, Number, Number)].init(repeating: (.Zero, .Zero, .Zero, .Zero), count: maxDigits!)
@@ -437,8 +437,8 @@ extension DicdataStore {
             roman = String(chars)
         }
         return [
-            DicdataElement(word: kanji, ruby: head, cid: CIDData.数.cid, mid: MIDData.数.mid, value: -17+PValue(head.count)/3),
-            DicdataElement(word: roman, ruby: head, cid: CIDData.数.cid, mid: MIDData.数.mid, value: -16+4/PValue(roman.count))
+            DicdataElement(word: kanji, ruby: head, cid: CIDData.数.cid, mid: MIDData.数.mid, value: -17 + PValue(head.count) / 3),
+            DicdataElement(word: roman, ruby: head, cid: CIDData.数.cid, mid: MIDData.数.mid, value: -16 + 4 / PValue(roman.count))
         ]
     }
 

@@ -119,7 +119,7 @@ extension LOUDS {
 
         let result: [DicdataElement] = indices.flatMap {(index: Int) -> [DicdataElement] in
             let startIndex = Int(ui32array[index])
-            let endIndex = index == (lc-1) ? binary.endIndex : Int(ui32array[index + 1])
+            let endIndex = index == (lc - 1) ? binary.endIndex : Int(ui32array[index + 1])
             return parseBinary(binary: binary[startIndex ..< endIndex])
         }
         return result

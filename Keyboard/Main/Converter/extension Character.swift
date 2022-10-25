@@ -290,7 +290,7 @@ extension Character {
         }
         let scalar = self.unicodeScalars.first!
         if 0x3041 <= scalar.value && scalar.value <= 0x3096 {
-            return Character(UnicodeScalar(scalar.value+96)!)
+            return Character(UnicodeScalar(scalar.value + 96)!)
         } else {
             return self
         }
@@ -302,7 +302,7 @@ extension Character {
         }
         let scalar = self.unicodeScalars.first!
         if 0x30A1 <= scalar.value && scalar.value <= 0x30F6 {
-            return Character(UnicodeScalar(scalar.value-96)!)
+            return Character(UnicodeScalar(scalar.value - 96)!)
         } else {
             return self
         }

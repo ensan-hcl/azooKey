@@ -172,31 +172,31 @@ extension KanaKanjiConverter {
 
         }
         if (1990...2018).contains(seireki) {
-            let i = seireki-1988
+            let i = seireki - 1988
             return [
                 makeResult0("平成\(i)年")
             ]
         }
         if (1927...1988).contains(seireki) {
-            let i = seireki-1925
+            let i = seireki - 1925
             return [
                 makeResult0("昭和\(i)年")
             ]
         }
         if (1869...1911).contains(seireki) {
-            let i = seireki-1967
+            let i = seireki - 1967
             return [
                 makeResult0("明治\(i)年")
             ]
         }
         if (1912...1926).contains(seireki) {
-            let i = seireki-1911
+            let i = seireki - 1911
             return [
                 makeResult0("大正\(i)年")
             ]
         }
-        if 2020<=seireki {
-            let i = seireki-2018
+        if 2020 <= seireki {
+            let i = seireki - 2018
             return [
                 makeResult0("令和\(i)年")
             ]

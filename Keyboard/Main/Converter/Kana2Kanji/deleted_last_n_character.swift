@@ -26,7 +26,7 @@ extension Kana2Kanji {
 
     func kana2lattice_deletedLast(deletedCount: Int, N_best: Int, previousResult: (inputData: ComposingText, nodes: Nodes)) -> (result: LatticeNode, nodes: Nodes) {
         debug("削除の連続性を利用した変換、元の文字は：", previousResult.inputData.convertTarget)
-        let count = previousResult.inputData.input.count-deletedCount
+        let count = previousResult.inputData.input.count - deletedCount
         // (1)
         let result = LatticeNode.EOSNode
 
