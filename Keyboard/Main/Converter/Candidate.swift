@@ -10,7 +10,7 @@ import Foundation
 
 // 一文節を担う
 final class ClauseDataUnit {
-    var mid: Int = 500
+    var mid: Int = MIDData.EOS.mid
     // 次の文節のlcid
     var nextLcid = CIDData.EOS.cid
     var text: String = ""

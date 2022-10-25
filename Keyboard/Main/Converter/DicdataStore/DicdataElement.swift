@@ -9,8 +9,8 @@
 import Foundation
 
 struct DicdataElement: Equatable, Hashable {
-    static let BOSData = Self.init(word: "", ruby: "", cid: CIDData.BOS.cid, mid: 500, value: 0, adjust: 0)
-    static let EOSData = Self.init(word: "", ruby: "", cid: CIDData.EOS.cid, mid: 500, value: 0, adjust: 0)
+    static let BOSData = Self.init(word: "", ruby: "", cid: CIDData.BOS.cid, mid: MIDData.BOS.mid, value: 0, adjust: 0)
+    static let EOSData = Self.init(word: "", ruby: "", cid: CIDData.EOS.cid, mid: MIDData.EOS.mid, value: 0, adjust: 0)
 
     init(word: String, ruby: String, lcid: Int, rcid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.word = word

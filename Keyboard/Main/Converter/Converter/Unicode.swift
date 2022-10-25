@@ -25,8 +25,8 @@ extension KanaKanjiConverter {
                         text: char,
                         value: value0,
                         correspondingCount: inputData.input.count,
-                        lastMid: 500,
-                        data: [DicdataElement(word: char, ruby: string, cid: .zero, mid: 500, value: value0)]
+                        lastMid: MIDData.一般.mid,
+                        data: [DicdataElement(word: char, ruby: string, cid: .zero, mid: MIDData.一般.mid, value: value0)]
                     )
                 ]
             }

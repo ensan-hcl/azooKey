@@ -109,12 +109,12 @@ final class KanaKanjiConverter {
             }
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language) {
                 if !completions.isEmpty {
-                    let data = [DicdataElement(ruby: ruby, cid: CIDData.固有名詞.cid, mid: 501, value: penalty)]
+                    let data = [DicdataElement(ruby: ruby, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: penalty)]
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
                         correspondingCount: ruby.count,
-                        lastMid: 501,
+                        lastMid: MIDData.一般.mid,
                         data: data
                     )
                     result.append(candidate)
@@ -122,12 +122,12 @@ final class KanaKanjiConverter {
                 var value: PValue = -5 + penalty
                 let delta: PValue = -10/PValue(completions.count)
                 for word in completions {
-                    let data = [DicdataElement(ruby: word, cid: CIDData.固有名詞.cid, mid: 501, value: value)]
+                    let data = [DicdataElement(ruby: word, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: value)]
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
                         correspondingCount: ruby.count,
-                        lastMid: 501,
+                        lastMid: MIDData.一般.mid,
                         data: data
                     )
                     result.append(candidate)
@@ -141,12 +141,12 @@ final class KanaKanjiConverter {
             let range = NSRange(location: 0, length: ruby.utf16.count)
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language) {
                 if !completions.isEmpty {
-                    let data = [DicdataElement(ruby: ruby, cid: CIDData.固有名詞.cid, mid: 501, value: penalty)]
+                    let data = [DicdataElement(ruby: ruby, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: penalty)]
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
                         correspondingCount: ruby.count,
-                        lastMid: 501,
+                        lastMid: MIDData.一般.mid,
                         data: data
                     )
                     result.append(candidate)
@@ -154,12 +154,12 @@ final class KanaKanjiConverter {
                 var value: PValue = -5 + penalty
                 let delta: PValue = -10/PValue(completions.count)
                 for word in completions {
-                    let data = [DicdataElement(ruby: word, cid: CIDData.固有名詞.cid, mid: 501, value: value)]
+                    let data = [DicdataElement(ruby: word, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: value)]
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
                         correspondingCount: ruby.count,
-                        lastMid: 501,
+                        lastMid: MIDData.一般.mid,
                         data: data
                     )
                     result.append(candidate)
@@ -269,12 +269,12 @@ final class KanaKanjiConverter {
         do {
             // カタカナ
             let value = -14 * getKatakanaScore(string)
-            let data = DicdataElement(ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: value)
+            let data = DicdataElement(ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: value)
             let katakana = Candidate(
                 text: string,
                 value: value,
                 correspondingCount: correspondingCount,
-                lastMid: 501,
+                lastMid: MIDData.一般.mid,
                 data: [data]
             )
             candidates.append(katakana)
@@ -282,13 +282,13 @@ final class KanaKanjiConverter {
         let hiraganaString = string.toHiragana()
         do {
             // ひらがな
-            let data = DicdataElement(word: hiraganaString, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -14.5)
+            let data = DicdataElement(word: hiraganaString, ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14.5)
 
             let hiragana = Candidate(
                 text: hiraganaString,
                 value: -14.5,
                 correspondingCount: correspondingCount,
-                lastMid: 501,
+                lastMid: MIDData.一般.mid,
                 data: [data]
             )
             candidates.append(hiragana)
@@ -296,12 +296,12 @@ final class KanaKanjiConverter {
         do {
             // 大文字
             let word = string.uppercased()
-            let data = DicdataElement(word: word, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)
+            let data = DicdataElement(word: word, ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -15)
             let uppercasedLetter = Candidate(
                 text: word,
                 value: -14.6,
                 correspondingCount: correspondingCount,
-                lastMid: 501,
+                lastMid: MIDData.一般.mid,
                 data: [data]
             )
             candidates.append(uppercasedLetter)
@@ -310,12 +310,12 @@ final class KanaKanjiConverter {
         if fullRomanCandidate {
             // 全角英数字
             let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: true) ?? ""
-            let data = DicdataElement(word: word, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)
+            let data = DicdataElement(word: word, ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -15)
             let fullWidthLetter = Candidate(
                 text: word,
                 value: -14.7,
                 correspondingCount: correspondingCount,
-                lastMid: 501,
+                lastMid: MIDData.一般.mid,
                 data: [data]
             )
             candidates.append(fullWidthLetter)
@@ -324,12 +324,12 @@ final class KanaKanjiConverter {
         if halfKanaCandidate {
             // 半角カタカナ
             let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
-            let data = DicdataElement(word: word, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)
+            let data = DicdataElement(word: word, ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -15)
             let halfWidthKatakana = Candidate(
                 text: word,
                 value: -15,
                 correspondingCount: correspondingCount,
-                lastMid: 501,
+                lastMid: MIDData.一般.mid,
                 data: [data]
             )
             candidates.append(halfWidthKatakana)

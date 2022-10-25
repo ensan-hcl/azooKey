@@ -94,7 +94,7 @@ final class KeyboardViewController: UIInputViewController {
         if useOSUserDict {
             let osuserdict = OSUserDict()
             self.requestSupplementaryLexicon {[unowned osuserdict] in
-                osuserdict.dict = $0.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: 501, value: -6)}
+                osuserdict.dict = $0.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -6)}
             }
             Store.shared.action.sendToDicdataStore(.importOSUserDict(osuserdict))
         }
