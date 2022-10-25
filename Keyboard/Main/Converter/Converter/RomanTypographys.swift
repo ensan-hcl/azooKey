@@ -37,8 +37,8 @@ extension KanaKanjiConverter {
                 text: $0,
                 value: -15,
                 correspondingCount: inputData.input.count,
-                lastMid: 501,
-                data: [DicdataElement(word: $0, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)]
+                lastMid: MIDData.一般.mid,
+                data: [DicdataElement(word: $0, ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -15)]
             )
         }
     }

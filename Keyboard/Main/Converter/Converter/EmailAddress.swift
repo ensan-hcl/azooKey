@@ -48,8 +48,8 @@ extension KanaKanjiConverter {
                     text: String(address),
                     value: baseValue - PValue(i),
                     correspondingCount: inputData.input.count,
-                    lastMid: 500,
-                    data: [DicdataElement(word: address, ruby: string, cid: .zero, mid: 500, value: baseValue - PValue(i))]
+                    lastMid: MIDData.一般.mid,
+                    data: [DicdataElement(word: address, ruby: string, cid: .zero, mid: MIDData.一般.mid, value: baseValue - PValue(i))]
                 )
             )
         }

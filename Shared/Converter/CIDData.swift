@@ -1,5 +1,5 @@
 //
-//  CidData.swift
+//  CIDData.swift
 //  KanaKanjier
 //
 //  Created by β α on 2022/05/05.
@@ -9,6 +9,9 @@
 import Foundation
 
 enum CIDData {
+    static var totalCount: Int {
+        1319
+    }
     case BOS
     case 記号
     case 一般名詞

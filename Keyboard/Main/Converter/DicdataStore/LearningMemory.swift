@@ -574,7 +574,7 @@ final class LearningManager {
             ruby: data.reduce(into: "") {$0.append(contentsOf: $1.ruby)},
             lcid: data.first?.lcid ?? CIDData.一般名詞.cid,
             rcid: data.last?.rcid ?? CIDData.一般名詞.cid,
-            mid: data.last?.mid ?? 501,
+            mid: data.last?.mid ?? MIDData.一般.mid,
             value: data.reduce(into: 0) {$0 += $1.baseValue}
         )
         debug("LearningManager update all", element)

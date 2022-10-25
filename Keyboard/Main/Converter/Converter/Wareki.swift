@@ -20,8 +20,8 @@ extension KanaKanjiConverter {
                 text: versionString,
                 value: -30,
                 correspondingCount: inputData.input.count,
-                lastMid: 501,
-                data: [DicdataElement(word: versionString, ruby: inputData.convertTarget.toKatakana(), cid: CIDData.固有名詞.cid, mid: 501, value: -30)]
+                lastMid: MIDData.一般.mid,
+                data: [DicdataElement(word: versionString, ruby: inputData.convertTarget.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -30)]
             )]
         }
         return []
@@ -39,8 +39,8 @@ extension KanaKanjiConverter {
             text: $0,
             value: -15,
             correspondingCount: inputData.input.count,
-            lastMid: 501,
-            data: [DicdataElement(word: $0, ruby: string, cid: CIDData.固有名詞.cid, mid: 501, value: -15)]
+            lastMid: MIDData.一般.mid,
+            data: [DicdataElement(word: $0, ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -15)]
         )]} ?? []
     }
 
@@ -120,8 +120,8 @@ extension KanaKanjiConverter {
                 text: $0,
                 value: -18,
                 correspondingCount: inputData.input.count,
-                lastMid: 237,
-                data: [DicdataElement(word: $0, ruby: string, cid: CIDData.一般名詞.cid, mid: 237, value: -18)]
+                lastMid: MIDData.年.mid,
+                data: [DicdataElement(word: $0, ruby: string, cid: CIDData.一般名詞.cid, mid: MIDData.年.mid, value: -18)]
             )
         }
         let makeResult1: (String) -> Candidate = {
@@ -129,8 +129,8 @@ extension KanaKanjiConverter {
                 text: $0,
                 value: -19,
                 correspondingCount: inputData.input.count,
-                lastMid: 237,
-                data: [DicdataElement(word: $0, ruby: string, cid: CIDData.一般名詞.cid, mid: 237, value: -19)]
+                lastMid: MIDData.年.mid,
+                data: [DicdataElement(word: $0, ruby: string, cid: CIDData.一般名詞.cid, mid: MIDData.年.mid, value: -19)]
             )
         }
 

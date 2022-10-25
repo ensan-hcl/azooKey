@@ -627,9 +627,9 @@ private final class InputManager {
             text: self.composingText.convertTarget,
             value: -18,
             correspondingCount: self.composingText.input.count,
-            lastMid: 501,
+            lastMid: MIDData.一般.mid,
             data: [
-                DicdataElement(ruby: self.composingText.convertTarget.toKatakana(), cid: CIDData.固有名詞.cid, mid: 501, value: -18)
+                DicdataElement(ruby: self.composingText.convertTarget.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -18)
             ]
         )
         if liveConversionEnabled, let candidate = liveConversionManager.lastUsedCandidate {
@@ -1312,7 +1312,7 @@ private final class InputManager {
             if self.composingText.convertTargetCursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map {$0.ruby}.joined().count == inputData.convertTarget.count}) {
                 candidate = firstCandidate
             } else {
-                candidate = .init(text: inputData.convertTarget, value: 0, correspondingCount: inputData.convertTarget.count, lastMid: 0, data: [.init(ruby: inputData.convertTarget.toKatakana(), cid: 0, mid: 0, value: 0)])
+                candidate = .init(text: inputData.convertTarget, value: 0, correspondingCount: inputData.convertTarget.count, lastMid: MIDData.一般.mid, data: [.init(ruby: inputData.convertTarget.toKatakana(), cid: CIDData.一般名詞.cid, mid: MIDData.一般.mid, value: 0)])
             }
             self.liveConversionManager.adjustCandidate(candidate: &candidate)
             debug("Live Conversion:", candidate)
@@ -1366,7 +1366,7 @@ private final class InputManager {
         }
         let text = "left:\(Array(left.unicodeScalars))/center:\(Array(center.unicodeScalars))/right:\(Array(right.unicodeScalars))"
 
-        Store.shared.registerResult([Candidate(text: text, value: .zero, correspondingCount: 0, lastMid: 500, data: [])])
+        Store.shared.registerResult([Candidate(text: text, value: .zero, correspondingCount: 0, lastMid: MIDData.EOS.mid, data: [])])
         isDebugMode = true
     }
     #endif

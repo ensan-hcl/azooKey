@@ -437,8 +437,8 @@ extension DicdataStore {
             roman = String(chars)
         }
         return [
-            DicdataElement(word: kanji, ruby: head, cid: CIDData.数.cid, mid: 452, value: -17+PValue(head.count)/3),
-            DicdataElement(word: roman, ruby: head, cid: CIDData.数.cid, mid: 452, value: -16+4/PValue(roman.count))
+            DicdataElement(word: kanji, ruby: head, cid: CIDData.数.cid, mid: MIDData.数.mid, value: -17+PValue(head.count)/3),
+            DicdataElement(word: roman, ruby: head, cid: CIDData.数.cid, mid: MIDData.数.mid, value: -16+4/PValue(roman.count))
         ]
     }
 

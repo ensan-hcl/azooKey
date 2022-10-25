@@ -40,7 +40,7 @@ final class DicdataStore {
     private func setup() {
         numberFormatter.numberStyle = .spellOut
         numberFormatter.locale = .init(identifier: "ja-JP")
-        self.ccLines = [[Int: PValue]].init(repeating: [:], count: cidCount)
+        self.ccLines = [[Int: PValue]].init(repeating: [:], count: CIDData.totalCount)
 
         do {
             let string = try String(contentsOfFile: Bundle.main.bundlePath + "/charID.chid", encoding: String.Encoding.utf8)
@@ -424,35 +424,35 @@ final class DicdataStore {
         var result: [DicdataElement] = []
         result.append(contentsOf: self.getJapaneseNumberDicdata(head: convertTarget))
         if inputData.input[..<inputRange.startIndex].last?.character.isNumber != true && inputData.input[inputRange.endIndex...].first?.character.isNumber != true, let number = Float(convertTarget) {
-            result.append(DicdataElement(ruby: convertTarget, cid: CIDData.数.cid, mid: 361, value: -14))
+            result.append(DicdataElement(ruby: convertTarget, cid: CIDData.数.cid, mid: MIDData.小さい数字.mid, value: -14))
             if number.truncatingRemainder(dividingBy: 1) == 0 {
                 let int = Int(number)
                 if int < Int(1E18) && -Int(1E18) < int, let kansuji = self.numberFormatter.string(from: NSNumber(value: int)) {
-                    result.append(DicdataElement(word: kansuji, ruby: convertTarget, cid: CIDData.数.cid, mid: 361, value: -16))
+                    result.append(DicdataElement(word: kansuji, ruby: convertTarget, cid: CIDData.数.cid, mid: MIDData.小さい数字.mid, value: -16))
                 }
             }
         }
 
         // headを英単語として候補に追加する
         if VariableStates.shared.keyboardLanguage == .en_US && convertTarget.onlyRomanAlphabet {
-            result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: 40, value: -14))
+            result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.英単語.mid, value: -14))
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
         if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
             if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[convertTarget] {
-                result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
-                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
+                result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
+                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
             }
         }
 
         if convertTarget.count == 1, allowRomanLetter || !convertTarget.onlyRomanAlphabet {
             let hira = convertTarget.toKatakana()
             if convertTarget == hira {
-                result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
+                result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
             } else {
-                result.append(DicdataElement(word: hira, ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: 501, value: -13))
-                result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: 501, value: -14))
+                result.append(DicdataElement(word: hira, ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
+                result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
             }
         }
 
@@ -462,23 +462,23 @@ final class DicdataStore {
             let hs = Self.fullwidthToHalfwidth[first, default: first]
 
             if hs != first {
-                result.append(DicdataElement(word: convertTarget, ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
+                result.append(DicdataElement(word: convertTarget, ruby: convertTarget, cid: CIDData.記号.cid, mid: MIDData.一般.mid, value: value))
                 value -= 5.0
-                result.append(DicdataElement(word: String(hs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
+                result.append(DicdataElement(word: String(hs), ruby: convertTarget, cid: CIDData.記号.cid, mid: MIDData.一般.mid, value: value))
                 value -= 5.0
             }
             if let fs = Self.halfwidthToFullwidth[first], fs != first {
-                result.append(DicdataElement(word: convertTarget, ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
+                result.append(DicdataElement(word: convertTarget, ruby: convertTarget, cid: CIDData.記号.cid, mid: MIDData.一般.mid, value: value))
                 value -= 5.0
-                result.append(DicdataElement(word: String(fs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
+                result.append(DicdataElement(word: String(fs), ruby: convertTarget, cid: CIDData.記号.cid, mid: MIDData.一般.mid, value: value))
                 value -= 5.0
             }
             for group in Self.weakRelatingSymbolGroups where group.contains(hs) {
                 for symbol in group where symbol != hs {
-                    result.append(DicdataElement(word: String(symbol), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
+                    result.append(DicdataElement(word: String(symbol), ruby: convertTarget, cid: CIDData.記号.cid, mid: MIDData.一般.mid, value: value))
                     value -= 5.0
                     if let fs = Self.halfwidthToFullwidth[symbol] {
-                        result.append(DicdataElement(word: String(fs), ruby: convertTarget, cid: CIDData.記号.cid, mid: 501, value: value))
+                        result.append(DicdataElement(word: String(fs), ruby: convertTarget, cid: CIDData.記号.cid, mid: MIDData.一般.mid, value: value))
                         value -= 5.0
                     }
                 }
