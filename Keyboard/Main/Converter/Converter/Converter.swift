@@ -409,7 +409,6 @@ final class KanaKanjiConverter {
 
         // 最初の辞書データ
         let dicCandidates: [Candidate] = result.nodes[0]
-            // .filter {!($0.data is GeneratedDicdataElement)}
             .map {
                 Candidate(
                     text: $0.data.word,
