@@ -55,7 +55,7 @@ final class DicdataStore {
                 self.mmValue = binaryData.toArray(of: Float.self).map {PValue($0)}
             } catch {
                 debug("Failed to read the file.")
-                self.mmValue = [PValue].init(repeating: .zero, count: self.midCount*self.midCount)
+                self.mmValue = [PValue].init(repeating: .zero, count: self.midCount * self.midCount)
             }
         }
         _ = self.loadLOUDS(identifier: "user")
@@ -89,7 +89,7 @@ final class DicdataStore {
 
     /// ペナルティ関数。文字数で決める。
     private func getPenalty(data: DicdataElement) -> PValue {
-        return -2.0/PValue(data.word.count)
+        return -2.0 / PValue(data.word.count)
     }
 
     /// 計算時に利用。無視すべきデータかどうか。
@@ -98,7 +98,7 @@ final class DicdataStore {
         if d < 0 {
             return true
         }
-        return 2.0/PValue(wordCount) < -d
+        return 2.0 / PValue(wordCount) < -d
     }
 
     /// 計算時に利用。無視すべきデータかどうか。
@@ -188,7 +188,7 @@ final class DicdataStore {
         // ⏱0.021212 : 辞書読み込み_検索対象列挙
         // prefixの共通するものを削除して検索をなるべく減らす
 
-        let stringSet = stringWithTypoData.reduce(into: stringWithTypoData.mapSet{ $0.string }) { (`set`, item) in
+        let stringSet = stringWithTypoData.reduce(into: stringWithTypoData.mapSet { $0.string }) { (`set`, item) in
             if item.string.count > 4 {
                 return
             }
@@ -222,7 +222,7 @@ final class DicdataStore {
                     return data
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
-                let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
+                let pUnit: PValue = self.getPenalty(data: data) / 2   // 負の値
                 let adjust = pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
@@ -235,14 +235,14 @@ final class DicdataStore {
 
         for i in toIndexLeft ..< toIndexRight {
             do {
-                let result = self.getWiseDicdata(convertTarget: segments[i-fromIndex], allowRomanLetter: i+1 == toIndexRight, inputData: inputData, inputRange: fromIndex ..< i)
+                let result = self.getWiseDicdata(convertTarget: segments[i - fromIndex], allowRomanLetter: i + 1 == toIndexRight, inputData: inputData, inputRange: fromIndex ..< i)
                 for item in result {
                     string2segment[item.ruby] = i
                 }
                 dicdata.append(contentsOf: result)
             }
             do {
-                let result = self.getMatchOSUserDict(segments[i-fromIndex])
+                let result = self.getMatchOSUserDict(segments[i - fromIndex])
                 for item in result {
                     string2segment[item.ruby] = i
                 }
@@ -272,7 +272,7 @@ final class DicdataStore {
         if toIndex - fromIndex > self.maxlength || fromIndex > toIndex {
             return []
         }
-        let segment = inputData.input[fromIndex...toIndex].reduce(into: ""){$0.append($1.character)}.toKatakana()
+        let segment = inputData.input[fromIndex...toIndex].reduce(into: "") {$0.append($1.character)}.toKatakana()
 
         let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
         let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
@@ -309,7 +309,7 @@ final class DicdataStore {
                     return data
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
-                let pUnit: PValue = self.getPenalty(data: data)/2   // 負の値
+                let pUnit: PValue = self.getPenalty(data: data) / 2   // 負の値
                 let adjust = pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
@@ -320,17 +320,17 @@ final class DicdataStore {
         }
         dicdata.append(contentsOf: stringSet.flatMap {self.learningManager.temporaryPerfectMatch(key: $0)})
 
-        dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, allowRomanLetter: toIndex == inputData.input.count - 1, inputData: inputData, inputRange: fromIndex ..< toIndex+1))
+        dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, allowRomanLetter: toIndex == inputData.input.count - 1, inputData: inputData, inputRange: fromIndex ..< toIndex + 1))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, inputRange: fromIndex ..< toIndex+1)
+                let node = LatticeNode(data: $0, inputRange: fromIndex ..< toIndex + 1)
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: fromIndex ..< toIndex+1)}
+            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: fromIndex ..< toIndex + 1)}
             return result
         }
     }
@@ -536,7 +536,7 @@ final class DicdataStore {
         ["・", "…", "‥", "•"],
         ["+", "±", "⊕"],
         ["×", "❌", "✖️"],
-        ["÷", "➗",],
+        ["÷", "➗" ],
         ["<", "≦", "≪", "〈", "《", "‹", "«"],
         [">", "≧", "≫", "〉", "》", "›", "»"],
         ["=", "≒", "≠", "≡"],
@@ -549,7 +549,7 @@ final class DicdataStore {
         ["♂", "♀", "⚢", "⚣", "⚤", "⚥", "⚦", "⚧", "⚨", "⚩", "⚪︎", "⚲"], // ジェンダー記号
         ["→", "↑", "←", "↓", "↙︎", "↖︎", "↘︎", "↗︎", "↔︎", "↕︎", "↪︎", "↩︎", "⇆"], // 矢印
         ["♯", "♭", "♪", "♮", "♫", "♬", "♩", "𝄞", "𝄞"],  // 音符
-        ["√", "∛", "∜"],  // 根号
+        ["√", "∛", "∜"]  // 根号
     ]
 
     private func loadCCBinary(url: URL) -> [(Int32, Float)] {

@@ -251,7 +251,6 @@ struct ComposingText {
         return ViewOperation(delete: diff.delete, input: diff.input)
     }
 
-
     mutating func deleteForwardFromCursorPosition(count: Int) -> ViewOperation {
         let count = min(convertTarget.count - convertTargetCursorPosition, count)
         if count == 0 {
@@ -541,7 +540,6 @@ extension ComposingText {
 
 extension ComposingText.InputElement: Equatable {}
 
-
 // MARK: 誤り訂正用のAPI
 extension ComposingText {
     private func shouldBeRemovedForDicdataStore(components: [ConvertTargetElement]) -> Bool {
@@ -568,7 +566,7 @@ extension ComposingText {
         }
 
         let unit: PValue = 3.5
-        let triple = unit*3
+        let triple = unit * 3
         var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
         var typos: [(string: String, penalty: PValue)] = []
         var stringToEndIndex: [String: Int] = [:]
@@ -653,7 +651,7 @@ extension ComposingText {
         }
 
         let unit: PValue = 3.5
-        let triple = unit*3
+        let triple = unit * 3
         var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
         for (i, nodeArray) in nodes.enumerated() {
             let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
@@ -716,21 +714,21 @@ extension ComposingText {
     private static func getTypo(_ elements: some Collection<InputElement>) -> [[InputElement]] {
         let key = elements.reduce(into: "") {$0.append($1.character)}.toKatakana()
 
-        if (elements.allSatisfy{$0.inputStyle == .direct}) {
+        if (elements.allSatisfy {$0.inputStyle == .direct}) {
             if key.count > 1 {
-                return Self.directPossibleTypo[key, default: []].map {$0.map{InputElement(character: $0, inputStyle: .direct)}}
+                return Self.directPossibleTypo[key, default: []].map {$0.map {InputElement(character: $0, inputStyle: .direct)}}
             } else if key.count == 1 {
-                var result = Self.directPossibleTypo[key, default: []].map {$0.map{InputElement(character: $0, inputStyle: .direct)}}
-                result.append(key.map{InputElement(character: $0, inputStyle: .direct)})
+                var result = Self.directPossibleTypo[key, default: []].map {$0.map {InputElement(character: $0, inputStyle: .direct)}}
+                result.append(key.map {InputElement(character: $0, inputStyle: .direct)})
                 return result
             }
         }
-        if (elements.allSatisfy{$0.inputStyle == .roman2kana}) {
+        if (elements.allSatisfy {$0.inputStyle == .roman2kana}) {
             if key.count > 1 {
-                return Self.roman2KanaPossibleTypo[key, default: []].map {$0.map{InputElement(character: $0, inputStyle: .roman2kana)}}
+                return Self.roman2KanaPossibleTypo[key, default: []].map {$0.map {InputElement(character: $0, inputStyle: .roman2kana)}}
             } else if key.count == 1 {
-                var result = Self.roman2KanaPossibleTypo[key, default: []].map {$0.map{InputElement(character: $0, inputStyle: .roman2kana)}}
-                result.append(key.map{InputElement(character: $0, inputStyle: .roman2kana)})
+                var result = Self.roman2KanaPossibleTypo[key, default: []].map {$0.map {InputElement(character: $0, inputStyle: .roman2kana)}}
+                result.append(key.map {InputElement(character: $0, inputStyle: .roman2kana)})
                 return result
             }
         }
@@ -806,7 +804,6 @@ extension ComposingText {
         return self.input.hasSuffix(suffix.input)
     }
 }
-
 
 #if DEBUG
 extension ComposingText.InputElement: CustomDebugStringConvertible {

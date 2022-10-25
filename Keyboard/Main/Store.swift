@@ -654,7 +654,7 @@ private final class InputManager {
             // composingTextをクリアする
             self.composingText.clear()
             // キーボードの状態と無関係にdirectに設定し、入力をそのまま持たせる
-            let _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
+            _ = self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
 
             // 実際に入力する
             self.displayedTextManager.insertText(text)
@@ -819,7 +819,7 @@ private final class InputManager {
         // 入力中の場合
         if !self.composingText.isEmpty {
             // 消し過ぎの可能性は考えなくて大丈夫な状況
-            try? self.displayedTextManager.deleteForward(count: self.displayedTextManager.displayedText.count -  self.displayedTextManager.displayedTextCursorPosition)
+            try? self.displayedTextManager.deleteForward(count: self.displayedTextManager.displayedText.count - self.displayedTextManager.displayedTextCursorPosition)
             // count文字消せるのは自明なので、返り値は無視できる
             _ = self.composingText.deleteForwardFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
             // 文字がもうなかった場合
@@ -1179,7 +1179,7 @@ private final class InputManager {
             while data.count > 0 {
                 var clause = Candidate.makePrefixClauseCandidate(data: data)
                 // ローマ字向けに補正処理を入れる
-                if count == 0, let first = firstClauseCandidates.first(where: {$0.text == clause.text}){
+                if count == 0, let first = firstClauseCandidates.first(where: {$0.text == clause.text}) {
                     clause.correspondingCount = first.correspondingCount
                 }
                 if self.headClauseCandidateHistories.count <= count {
@@ -1276,7 +1276,7 @@ private final class InputManager {
 
             // 過去十分な回数変動がなければ、prefixを確定して良い
             debug("History", history)
-            let texts = history.suffix(strength.treshold).mapSet{ $0.text }
+            let texts = history.suffix(strength.treshold).mapSet { $0.text }
             if texts.count == 1 {
                 self.isFirstClauseCompletion = true
                 return history.last!
@@ -1437,7 +1437,7 @@ final class DisplayedTextManager {
     private func getActualOffset(count: Int) -> Int {
         if count == 0 {
             return 0
-        } else if count>0 {
+        } else if count > 0 {
             if let after = self.proxy.documentContextAfterInput {
                 // 改行があって右端の場合ここに来る。
                 if after.isEmpty {

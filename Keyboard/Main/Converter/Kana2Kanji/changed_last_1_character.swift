@@ -33,7 +33,7 @@ extension Kana2Kanji {
 
         // (2)
         let addedNodes: [[LatticeNode]] = (0..<count).map {(i: Int) in
-            return self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: count-1)
+            return self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: count - 1)
         }
 
         // (3)
@@ -58,7 +58,7 @@ extension Kana2Kanji {
                     for (index, value) in node.values.enumerated() {
                         let newValue = ccValue + value
                         // 追加すべきindexを取得する
-                        let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
+                        let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                         if lastindex == N_best {
                             continue
                         }

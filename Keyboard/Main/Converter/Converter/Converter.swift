@@ -102,7 +102,7 @@ final class KanaKanjiConverter {
         switch language {
         case "en-US":
             var result: [Candidate] = []
-            let ruby = String(inputData.input.map{$0.character})
+            let ruby = String(inputData.input.map {$0.character})
             let range = NSRange(location: 0, length: ruby.utf16.count)
             if !ruby.onlyRomanAlphabet {
                 return result
@@ -120,7 +120,7 @@ final class KanaKanjiConverter {
                     result.append(candidate)
                 }
                 var value: PValue = -5 + penalty
-                let delta: PValue = -10/PValue(completions.count)
+                let delta: PValue = -10 / PValue(completions.count)
                 for word in completions {
                     let data = [DicdataElement(ruby: word, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: value)]
                     let candidate: Candidate = Candidate(
@@ -137,7 +137,7 @@ final class KanaKanjiConverter {
             return result
         case "el":
             var result: [Candidate] = []
-            let ruby = String(inputData.input.map{$0.character})
+            let ruby = String(inputData.input.map {$0.character})
             let range = NSRange(location: 0, length: ruby.utf16.count)
             if let completions = checker.completions(forPartialWordRange: range, in: ruby, language: language) {
                 if !completions.isEmpty {
@@ -152,7 +152,7 @@ final class KanaKanjiConverter {
                     result.append(candidate)
                 }
                 var value: PValue = -5 + penalty
-                let delta: PValue = -10/PValue(completions.count)
+                let delta: PValue = -10 / PValue(completions.count)
                 for word in completions {
                     let data = [DicdataElement(ruby: word, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: value)]
                     let candidate: Candidate = Candidate(
@@ -184,7 +184,7 @@ final class KanaKanjiConverter {
 
         var candidates: [Candidate] = []
         var prepart: CandidateData = sums.max {$0.1.value < $1.1.value}!.0
-        var lastpart: CandidateData.ClausesUnit? = nil
+        var lastpart: CandidateData.ClausesUnit?
         var count = 0
         while true {
             if count == 2 {
@@ -426,7 +426,7 @@ final class KanaKanjiConverter {
          */
 
         let word_candidates: [Candidate] = self.getUniqueCandidate(
-            (dicCandidates+additionalCandidates)
+            (dicCandidates + additionalCandidates)
                 .filter {
                     !seenCandidate.contains($0.text)
                 }

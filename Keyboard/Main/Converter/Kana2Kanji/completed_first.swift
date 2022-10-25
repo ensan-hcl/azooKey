@@ -68,7 +68,7 @@ extension Kana2Kanji {
                         for (index, value) in node.values.enumerated() {
                             let newValue = ccValue + value
                             // 追加すべきindexを取得する
-                            let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue>=newValue}) ?? -1) + 1
+                            let lastindex = (nextnode.prevs.lastIndex(where: {$0.totalValue >= newValue}) ?? -1) + 1
                             if lastindex == N_best {
                                 continue
                             }

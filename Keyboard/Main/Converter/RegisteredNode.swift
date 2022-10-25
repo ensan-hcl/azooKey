@@ -60,7 +60,7 @@ extension RegisteredNodeProtocol {
         }
         if lastcandidate.last!.clause.text.isEmpty || !DicDataStore.isClause(registered.data.rcid, self.data.lcid) {
             var candidate = lastcandidate
-            let lastindex = candidate.count-1
+            let lastindex = candidate.count - 1
             // 文節ではないので、最後に追加する。
             let clause = candidate[lastindex].clause    // ClauseDataUnitは参照型であることに留意
             clause.text.append(self.data.string)
@@ -85,7 +85,7 @@ extension RegisteredNodeProtocol {
                 unit.mid = self.data.mid
             }
             let candidate = lastcandidate
-            let clause = candidate[candidate.count-1].clause
+            let clause = candidate[candidate.count - 1].clause
             clause.nextLcid = self.data.lcid
             switch Store.shared.keyboardType {
             case .flick:

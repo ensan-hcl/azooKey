@@ -8,7 +8,7 @@
 
 import Foundation
 
-fileprivate struct MetadataElement: CustomDebugStringConvertible {
+private struct MetadataElement: CustomDebugStringConvertible {
     init(day: UInt16, count: UInt8) {
         self.lastUsedDay = day
         self.lastUpdatedDay = day
@@ -59,7 +59,7 @@ struct LongTermLearningMemory {
     }
 
     fileprivate static func valueForMetadata(metadata: MetadataElement) -> PValue {
-        return PValue(-1.0 - 3 * (1 - Double(metadata.count)/255) * (1 - Double(metadata.count)/255))
+        return PValue(-1.0 - 3 * (1 - Double(metadata.count) / 255) * (1 - Double(metadata.count) / 255))
     }
 
     fileprivate struct MetadataBlock {
@@ -70,7 +70,7 @@ struct LongTermLearningMemory {
             // エントリのカウントを1byteでエンコード
             var count = UInt8(self.metadata.count)
             data.append(contentsOf: Data(bytes: &count, count: MemoryLayout<UInt8>.size))
-            var metadata = self.metadata.map{MetadataElement(day: $0.lastUsedDay, count: $0.count)}
+            var metadata = self.metadata.map {MetadataElement(day: $0.lastUsedDay, count: $0.count)}
             data.append(contentsOf: Data(bytes: &metadata, count: MemoryLayout<MetadataElement>.size * metadata.count))
             return data
         }
@@ -124,7 +124,6 @@ struct LongTermLearningMemory {
         }
     }
 
-
     static func reset() throws {
         // 全削除する
         if let ltMetadata = try? Data(contentsOf: metadataFileURL) {
@@ -160,7 +159,7 @@ struct LongTermLearningMemory {
                 continue
             }
             let count = Int(loudstxtData[0 ..< 2].toArray(of: UInt16.self)[0])
-            let indices = loudstxtData[2 ..< 2 + 4*count].toArray(of: UInt32.self)
+            let indices = loudstxtData[2 ..< 2 + 4 * count].toArray(of: UInt32.self)
             for i in 0 ..< count {
                 // メタデータの読み取り
                 // 1byteで項目数
@@ -171,7 +170,7 @@ struct LongTermLearningMemory {
 
                 // バイナリ内部でのindex
                 let startIndex = Int(indices[i])
-                let endIndex = i == (indices.endIndex-1) ? loudstxtData.endIndex : Int(indices[i + 1])
+                let endIndex = i == (indices.endIndex - 1) ? loudstxtData.endIndex : Int(indices[i + 1])
                 let elements = LOUDS.parseBinary(binary: loudstxtData[startIndex ..< endIndex])
                 // 該当部分を取り出してメタデータに従ってフィルター、trieに追加
                 guard let ruby = elements.first?.ruby else {
@@ -297,7 +296,6 @@ struct LongTermLearningMemory {
     }
 }
 
-
 /// 一時記憶用のデータなので、複雑な形状にしない。
 struct TemporalLearningMemoryTrie {
     struct Node {
@@ -391,7 +389,7 @@ struct TemporalLearningMemoryTrie {
                 return []
             }
         }
-        return nodes[index].dataIndices.map{self.dicdata[$0]}
+        return nodes[index].dataIndices.map {self.dicdata[$0]}
     }
 
     func throughMatch(chars: [UInt8], depth: Range<Int>) -> [DicdataElement] {
@@ -404,10 +402,10 @@ struct TemporalLearningMemoryTrie {
                     indices.append(contentsOf: nodes[index].dataIndices)
                 }
             } else {
-                return indices.map{self.dicdata[$0]}
+                return indices.map {self.dicdata[$0]}
             }
         }
-        return indices.map{self.dicdata[$0]}
+        return indices.map {self.dicdata[$0]}
     }
 
     func prefixMatch(chars: [UInt8]) -> [DicdataElement] {
@@ -425,7 +423,7 @@ struct TemporalLearningMemoryTrie {
             nodeIndices.append(contentsOf: nodes[index].children.values)
             indices.append(contentsOf: nodes[index].dataIndices)
         }
-        return indices.map{self.dicdata[$0]}
+        return indices.map {self.dicdata[$0]}
     }
 }
 
@@ -446,7 +444,7 @@ final class LearningManager {
     }
 
     static func keyToChars(_ key: some StringProtocol) -> [UInt8] {
-        return key.map{char2UInt8[$0, default: 0]}
+        return key.map {char2UInt8[$0, default: 0]}
     }
 
     private var temporaryMemory: TemporalLearningMemoryTrie = .init()
@@ -504,8 +502,8 @@ final class LearningManager {
         }
         // 文節単位bigram
         do {
-            var firstClause: DicdataElement? = nil
-            var secondClause: DicdataElement? = nil
+            var firstClause: DicdataElement?
+            var secondClause: DicdataElement?
             for datum in data {
                 if var newFirstClause = firstClause {
                     if var newSecondClause = secondClause {
