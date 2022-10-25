@@ -50,11 +50,16 @@ private final class ImportedCustardData: ObservableObject {
     }
 
     @Published var processState: ProcessState = .none
-
-    @Published var downloadedData: Data?
     @Published var failureData: ImportError?
+    @Published var custards: [Custard]?
 
-    private(set) var custards: [Custard]?
+    private var downloadedData: Data? {
+        didSet {
+            if let downloadedData {
+                self.custards = self.process(data: downloadedData)
+            }
+        }
+    }
 
     func reset() {
         self.processState = .none
@@ -67,23 +72,21 @@ private final class ImportedCustardData: ObservableObject {
         self.custards?.removeAll(where: {$0.identifier == custard.identifier})
     }
 
-    func process(data: Data) -> [Custard]? {
+    private func process(data: Data) -> [Custard]? {
         self.processState = .processFile
         do {
             let custard = try JSONDecoder().decode(Custard.self, from: data)
             self.processState = .none
-            self.custards = [custard]
             return [custard]
         } catch {
-            debug(error)
+            debug("ImportedCustardData process", error)
         }
         do {
             let custards = try JSONDecoder().decode([Custard].self, from: data)
             self.processState = .none
-            self.custards = custards
             return custards
         } catch {
-            debug(error)
+            debug("ImportedCustardData process", error)
         }
         self.failureData = .invalidFile
         self.downloadedData = nil
@@ -92,25 +95,27 @@ private final class ImportedCustardData: ObservableObject {
     }
 
     func download(from urlString: String) {
+        self.processState = .getURL
+        guard let url = URL(string: urlString) else {
+            self.failureData = .invalidURL
+            self.processState = .none
+            return
+        }
+        self.download(from: url)
+    }
+
+    func download(from url: URL) {
         if #available(iOS 15, *) {
             Task {
-                await self.downloadAsync(from: URL(string: urlString))
+                await self.downloadAsync(from: url)
             }
         } else {
-            self.download(from: URL(string: urlString))
+            self.downloadDispatchAsync(from: url)
         }
     }
 
-    func download(from url: URL?) {
-        self.processState = .getURL
+    private func downloadDispatchAsync(from url: URL) {
         debug("ダウンロード開始")
-        guard let url = url else {
-            DispatchQueue.main.async {
-                self.failureData = .invalidURL
-                self.processState = .none
-            }
-            return
-        }
         self.processState = .getFile
         let task: URLSessionTask = URLSession.shared.dataTask(with: url, completionHandler: {(data, _, _) in
             guard let data = data else {
@@ -131,18 +136,14 @@ private final class ImportedCustardData: ObservableObject {
 
     @available(iOS 15, *)
     @MainActor
-    func downloadAsync(from url: URL?) async {
-        self.processState = .getURL
-        guard let url = url else {
-            self.failureData = .invalidURL
-            self.processState = .none
-            return
-        }
+    private func downloadAsync(from url: URL) async {
         do {
             self.processState = .getFile
             let (data, _) = try await URLSession.shared.data(from: url)
             self.downloadedData = data
+            debug("downloadAsync succeed", data.count)
         } catch {
+            debug("downloadAsync error", error)
             self.failureData = .invalidData
             self.processState = .none
         }
@@ -198,8 +199,7 @@ struct ManageCustardView: View {
                 NavigationLink("フリック式のカスタムタブを作る", destination: EditingTenkeyCustardView(manager: $manager))
                     .foregroundColor(.accentColor)
             }
-            if let value = data.downloadedData,
-               let custards = (data.custards ?? data.process(data: value)) {
+            if let custards = data.custards {
                 ForEach(custards, id: \.identifier) {custard in
                     Section(header: Text("読み込んだタブ")) {
                         Text("「\(custard.metadata.display_name)(\(custard.identifier))」の読み込みに成功しました")
@@ -294,8 +294,8 @@ struct ManageCustardView: View {
         .fileImporter(isPresented: $showDocumentPicker, allowedContentTypes: ["txt", "custard", "json"].compactMap {UTType(filenameExtension: $0, conformingTo: .text)}) {result in
             switch result {
             case let .success(url):
-                if url.startAccessingSecurityScopedResource(), let importedData = try? Data.init(contentsOf: url) {
-                    data.downloadedData = importedData
+                if url.startAccessingSecurityScopedResource() {
+                    data.download(from: url)
                 } else {
                     debug("error: 不正なURL)")
                 }
@@ -374,8 +374,7 @@ struct URLImportCustardView: View {
 
     var body: some View {
         Form {
-            if let value = data.downloadedData,
-               let custards = (data.custards ?? data.process(data: value)) {
+            if let custards = data.custards {
                 ForEach(custards, id: \.identifier) {custard in
                     Section(header: Text("読み込んだタブ")) {
                         Text("「\(custard.metadata.display_name)(\(custard.identifier))」の読み込みに成功しました")
@@ -425,6 +424,7 @@ struct URLImportCustardView: View {
         }
         .onAppear {
             if let url = storeVariableSection.importFile {
+                debug("URLImportCustardView", url)
                 data.reset()
                 data.download(from: url)
             }
