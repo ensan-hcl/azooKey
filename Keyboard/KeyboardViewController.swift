@@ -21,6 +21,15 @@ extension UIInputView: UIInputViewAudioFeedback {
     }
 }
 
+extension UIView {
+    func clearAllView() {
+        self.subviews.forEach {
+            $0.clearAllView()
+        }
+        self.removeFromSuperview()
+    }
+}
+
 final class KeyboardViewController: UIInputViewController {
     private weak var keyboardViewHost: KeyboardHostingController<Keyboard>?
 
@@ -116,8 +125,7 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.view.subviews.forEach {$0.removeFromSuperview()}
-
+        self.view.clearAllView()
         self.keyboardViewHost = nil
         Store.shared.closeKeyboard()
         debug("キーボードが閉じられました")
