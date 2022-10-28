@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftUI
-import ObjectiveC
+
 final private class KeyboardHostingController<Content: View>: UIHostingController<Content> {
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         return .bottom
@@ -31,7 +31,14 @@ extension UIView {
 }
 
 final class KeyboardViewController: UIInputViewController {
-    private weak var keyboardViewHost: KeyboardHostingController<Keyboard>?
+    private static var keyboardViewHost: KeyboardHostingController<Keyboard>?
+    private static var loadedInstanceCount: Int = 0
+
+    deinit {
+        KeyboardViewController.keyboardViewHost = nil
+        self.view.clearAllView()
+        self.removeFromParent()
+    }
 
     struct Keyboard: View {
         let theme: ThemeData
@@ -43,6 +50,9 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        debug("viewDidLoad, loadedInstanceCount:", KeyboardViewController.loadedInstanceCount)
+        KeyboardViewController.loadedInstanceCount += 1
+
         // 初期化の順序としてこの位置に置くこと
         Store.shared.initialize()
         let indexManager = ThemeIndexManager.load()
@@ -55,7 +65,7 @@ final class KeyboardViewController: UIInputViewController {
         @unknown default:
             theme = (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
         }
-        let host = KeyboardHostingController(rootView: Keyboard(theme: theme))
+        let host = KeyboardViewController.keyboardViewHost ?? KeyboardHostingController(rootView: Keyboard(theme: theme))
         // コントロールセンターを出しにくくする。
         host.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
@@ -70,11 +80,11 @@ final class KeyboardViewController: UIInputViewController {
         host.view.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         host.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
-        self.keyboardViewHost = host
+        KeyboardViewController.keyboardViewHost = host
 
         Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
         Store.shared.action.setDelegateViewController(self)
-        debug("viewDidLoad", UIScreen.main.bounds.size, UIScreen.main.currentMode?.size, self.view.window?.bounds)
+        debug("viewDidLoad", self.isViewLoaded, UIScreen.main.bounds.size, UIScreen.main.currentMode?.size, self.view.window?.bounds)
         if #available(iOS 15, *) {
             // Do nothing
         } else {
@@ -83,6 +93,13 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        debug("viewDidAppear")
+        // ロード済みのインスタンスの数が増えすぎるとパフォーマンスに悪影響があるので、適当なところで強制終了する
+        // viewDidAppearで強制終了すると再ロードが自然な形で実行される
+        if KeyboardViewController.loadedInstanceCount > 15 {
+            fatalError("Too many instance of KeyboardViewController was created")
+        }
+
         self.registerScreenActualSize()
         Store.shared.action.setTextDocumentProxy(self.textDocumentProxy)
         Store.shared.action.setDelegateViewController(self)
@@ -110,7 +127,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     func registerScreenActualSize() {
-        if let bounds = keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
+        if let bounds = KeyboardViewController.keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
             debug("registerScreenActualSize", size)
             SemiStaticStates.shared.setScreenSize(size: size)
@@ -126,9 +143,11 @@ final class KeyboardViewController: UIInputViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.clearAllView()
-        self.keyboardViewHost = nil
+        self.removeFromParent()
+        KeyboardViewController.keyboardViewHost = nil
+        KeyboardViewController.loadedInstanceCount -= 1
         Store.shared.closeKeyboard()
-        debug("キーボードが閉じられました")
+        debug("viewWillDisappear: キーボードが閉じられます")
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -141,7 +160,7 @@ final class KeyboardViewController: UIInputViewController {
             SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical)
         } else if #available(iOS 15, *) {
             SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal)
-        } else if let bounds = keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
+        } else if let bounds = KeyboardViewController.keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
             let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
             SemiStaticStates.shared.setScreenSize(size: size)
         }
@@ -156,7 +175,7 @@ final class KeyboardViewController: UIInputViewController {
         } else {
             self.registerScreenActualSize()
         }
-        debug("viewDidLayoutSubviews", UIScreen.main.bounds, SemiStaticStates.shared.screenHeight, self.view.frame.size, keyboardViewHost?.view.frame.size, self.view.window?.bounds, self.keyboardViewHost?.view.window?.bounds, keyboardViewHost?.view.window?.window?.bounds)
+        debug("viewDidLayoutSubviews", UIScreen.main.bounds, SemiStaticStates.shared.screenHeight, self.view.frame.size, KeyboardViewController.keyboardViewHost?.view.frame.size, self.view.window?.bounds, KeyboardViewController.keyboardViewHost?.view.window?.bounds, KeyboardViewController.keyboardViewHost?.view.window?.window?.bounds)
     }
 
     /*
