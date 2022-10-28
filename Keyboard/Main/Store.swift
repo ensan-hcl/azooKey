@@ -56,7 +56,7 @@ final class KeyboardActionDepartment: ActionDepartment {
     fileprivate override init() {}
 
     private var inputManager = InputManager()
-    private weak var delegate: KeyboardViewController!
+    private unowned var delegate: KeyboardViewController!
 
     // 即時変数
     private var timers: [(type: LongpressActionType, timer: Timer)] = []
