@@ -20,14 +20,13 @@ extension Kana2Kanji {
     /// - note:
     ///     この関数の役割は意味連接の考慮にある。
     func getPredicitonCandidates(composingText: ComposingText, prepart: CandidateData, lastClause: ClauseDataUnit, N_best: Int) -> [Candidate] {
-        let datas: [DicdataElement]
         debug("getPredicitonCandidates", composingText, lastClause.inputRange, lastClause.text)
         let lastRuby = ComposingText.getConvertTarget(for: composingText.input[lastClause.inputRange]).toKatakana()
         let lastRubyCount = lastClause.inputRange.count
-        let lastData: DicdataElement?
+        let datas: [DicdataElement]
         do {
             var _str = ""
-            let prestring: String = prepart.clauses.map {$0.clause.text}.joined()
+            let prestring: String = prepart.clauses.reduce(into: "") {$0.append(contentsOf: $1.clause.text)}
             var count: Int = .zero
             while true {
                 if prestring == _str {
@@ -36,7 +35,6 @@ extension Kana2Kanji {
                 _str += prepart.data[count].word
                 count += 1
             }
-            lastData = prepart.data.count > count ? prepart.data[count] : nil
             datas = Array(prepart.data.prefix(count))
         }
 
