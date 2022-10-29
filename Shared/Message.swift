@@ -11,7 +11,7 @@ import Foundation
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert_2022_09_16_03"
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
-    case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_debug_10_21_00"
+    case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_debug_10_29_01"
 
     // MARK: 過去にプロダクションで用いていたメッセージID
     // ver1_9_user_dictionary_updateが実行されれば不要になるので、この宣言は削除
@@ -46,11 +46,8 @@ struct MessageData: Identifiable {
     /// 説明
     let description: String
 
-    /// 左側のボタン
-    let leftsideButton: MessageLeftButtonStyle
-
-    /// 右側のボタン
-    let rightsideButton: MessageRightButtonStyle
+    /// ボタン
+    let button: MessageButtonStyle
 
     /// メッセージを表示する前提条件
     let precondition: () -> Bool
@@ -61,7 +58,12 @@ struct MessageData: Identifiable {
     /// 収容アプリがDoneにすべき条件
     let containerAppShouldMakeItDone: () -> Bool
 
-    enum MessageLeftButtonStyle {
+    enum MessageButtonStyle {
+        case one(MessagePrimaryButtonStyle)
+        case two(primary: MessagePrimaryButtonStyle, secondary: MessageSecondaryButtonStyle)
+    }
+
+    enum MessageSecondaryButtonStyle {
         /// 「詳細」と表示し、押した場合リンクにする
         case details(url: String)
 
@@ -72,7 +74,7 @@ struct MessageData: Identifiable {
         case OK
     }
 
-    enum MessageRightButtonStyle {
+    enum MessagePrimaryButtonStyle {
         /// 指定した単語を表示し、押した場合収容アプリを開く
         case openContainer(text: String)
 
@@ -92,8 +94,7 @@ struct MessageManager {
             id: .iOS15_4_new_emoji,
             title: "お知らせ",
             description: "iOS15.4で新しい絵文字が追加されました。本体アプリを開き、データを更新しますか？",
-            leftsideButton: .later,
-            rightsideButton: .openContainer(text: "更新"),
+            button: .two(primary: .openContainer(text: "更新"), secondary: .later),
             precondition: {
                 if #available(iOS 15.4, *) {
                     return true
@@ -113,9 +114,8 @@ struct MessageManager {
         MessageData(
             id: .ver1_9_user_dictionary_update,
             title: "お願い",
-            description: "内部データの更新のため本体アプリを開いてください。本体アプリを開くまで、一部の機能が制限されます。",
-            leftsideButton: .later,
-            rightsideButton: .openContainer(text: "更新"),
+            description: "内部データの更新のため本体アプリを開いてください。\n更新は数秒で終わります。",
+            button: .one(.openContainer(text: "更新")),
             precondition: {
                 // ユーザ辞書に登録があるのが条件。
                 let directoryPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
