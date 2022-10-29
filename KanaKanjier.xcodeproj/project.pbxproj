@@ -153,7 +153,6 @@
 		1A86F4B82539356100B92B49 /* extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4B72539356100B92B49 /* extension String.swift */; };
 		1A8A8402250F65110093A701 /* all.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8401250F65110093A701 /* all.swift */; };
 		1A8A8404250F65410093A701 /* added_last_1_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8403250F65410093A701 /* added_last_1_character.swift */; };
-		1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8405250F65770093A701 /* changed_last_1_character.swift */; };
 		1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8407250F65B40093A701 /* deleted_last_n_character.swift */; };
 		1A8A840A250F65DA0093A701 /* completed_first.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8409250F65DA0093A701 /* completed_first.swift */; };
 		1A8E454328E1379C00133D3B /* MarkedTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */; };
@@ -2752,7 +2751,6 @@
 		1A86F4B72539356100B92B49 /* extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension String.swift"; sourceTree = "<group>"; };
 		1A8A8401250F65110093A701 /* all.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = all.swift; sourceTree = "<group>"; };
 		1A8A8403250F65410093A701 /* added_last_1_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = added_last_1_character.swift; sourceTree = "<group>"; };
-		1A8A8405250F65770093A701 /* changed_last_1_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changed_last_1_character.swift; sourceTree = "<group>"; };
 		1A8A8407250F65B40093A701 /* deleted_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deleted_last_n_character.swift; sourceTree = "<group>"; };
 		1A8A8409250F65DA0093A701 /* completed_first.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = completed_first.swift; sourceTree = "<group>"; };
 		1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedTextSetting.swift; sourceTree = "<group>"; };
@@ -5527,7 +5525,6 @@
 				1A8A8407250F65B40093A701 /* deleted_last_n_character.swift */,
 				1A8A8409250F65DA0093A701 /* completed_first.swift */,
 				1A86F4A92536033900B92B49 /* changed_last_n_character.swift */,
-				1A8A8405250F65770093A701 /* changed_last_1_character.swift */,
 			);
 			path = Kana2Kanji;
 			sourceTree = "<group>";
@@ -10770,7 +10767,6 @@
 				1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */,
 				1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */,
 				1AD2B8DF26C29FD10053CE4A /* FlickCustomKeyKeyboardSetting.swift in Sources */,
-				1A8A8406250F65770093A701 /* changed_last_1_character.swift in Sources */,
 				1A3DC22D2500D6C6002CAA93 /* Converter.swift in Sources */,
 				1AB8C3C725E24D0B00D39BC5 /* CustardManager.swift in Sources */,
 				1AF6791025CED99800F3987B /* ChangeKeyboardButtonView.swift in Sources */,
