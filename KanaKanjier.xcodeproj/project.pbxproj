@@ -57,6 +57,8 @@
 		1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A364E3125C8361A00A56583 /* LearningMemory.swift */; };
 		1A370E552907B5CD0053D6D4 /* MIDData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A370E542907B5CD0053D6D4 /* MIDData.swift */; };
 		1A370E562907B5D70053D6D4 /* MIDData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A370E542907B5CD0053D6D4 /* MIDData.swift */; };
+		1A370E59290CF35B0053D6D4 /* NumberCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A370E58290CF35B0053D6D4 /* NumberCustard.swift */; };
+		1A370E5A290CF35B0053D6D4 /* NumberCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A370E58290CF35B0053D6D4 /* NumberCustard.swift */; };
 		1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
 		1A39A1A2259325D7008DDCFE /* AzooKeyUserDictionaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */; };
 		1A3A07D8259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */; };
@@ -2655,6 +2657,7 @@
 		1A347FE728D22FA2007D7852 /* LiveConversionSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConversionSettingView.swift; sourceTree = "<group>"; };
 		1A364E3125C8361A00A56583 /* LearningMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningMemory.swift; sourceTree = "<group>"; };
 		1A370E542907B5CD0053D6D4 /* MIDData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDData.swift; sourceTree = "<group>"; };
+		1A370E58290CF35B0053D6D4 /* NumberCustard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberCustard.swift; sourceTree = "<group>"; };
 		1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionaryData.swift; sourceTree = "<group>"; };
 		1A3A07D7259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayoutTypeDetailsView.swift; sourceTree = "<group>"; };
 		1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelctInputStyle.swift; sourceTree = "<group>"; };
@@ -5142,6 +5145,7 @@
 				1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */,
 				1A18425425DE6163003985AB /* CustardData.swift */,
 				1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */,
+				1A370E58290CF35B0053D6D4 /* NumberCustard.swift */,
 				1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */,
 				1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */,
 				1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */,
@@ -10582,6 +10586,7 @@
 				1A3A162C2529671300A5BA4F /* FlickCustomKeySetting.swift in Sources */,
 				1ACC0F0E25CFE7FF00FC1B8A /* ThemeEditView.swift in Sources */,
 				1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */,
+				1A370E59290CF35B0053D6D4 /* NumberCustard.swift in Sources */,
 				1AB8C38D25E1190900D39BC5 /* TabManager.swift in Sources */,
 				1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */,
 				1A30CE8B26023B52007C1A2D /* CodableSupport.swift in Sources */,
@@ -10873,6 +10878,7 @@
 				1A9476B128240928006E22A9 /* CIDData.swift in Sources */,
 				1AB8C38E25E1190900D39BC5 /* TabManager.swift in Sources */,
 				1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */,
+				1A370E5A290CF35B0053D6D4 /* NumberCustard.swift in Sources */,
 				1AFB685128D56E8200B5C717 /* AppVersion.swift in Sources */,
 				1A9C277928F4243600EBFFF9 /* Modify.swift in Sources */,
 				1A6F959725144481007399AC /* QwertyKeyboardView.swift in Sources */,

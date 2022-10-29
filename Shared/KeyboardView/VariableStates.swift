@@ -33,6 +33,8 @@ final class VariableStates: ObservableObject {
     @Published var isTextMagnifying = false
     @Published var magnifyingText = ""
 
+    @Published var keyboardType: UIKeyboardType = .default
+
     @Published var showMoveCursorBar = false
     @Published var showTabBar = false
 
@@ -80,6 +82,39 @@ final class VariableStates: ObservableObject {
         case complete
     }
 
+    func setKeyboardType(_ type: UIKeyboardType?) {
+        debug("setKeyboardType:", type.debugDescription)
+        guard let type else {
+            return
+        }
+        switch type {
+        case .default, .asciiCapable:
+            return
+        case .numbersAndPunctuation:
+            return
+        case .URL:
+            self.setTab(.user_dependent(.english), temporary: true)
+        case .numberPad:
+            self.setTab(.existential(.custard(.numberPad)), temporary: true)
+        case .phonePad:
+            self.setTab(.existential(.custard(.phonePad)), temporary: true)
+        case .namePhonePad:
+            return
+        case .emailAddress:
+            self.setTab(.user_dependent(.english), temporary: true)
+        case .decimalPad:
+            self.setTab(.existential(.custard(.decimalPad)), temporary: true)
+        case .twitter:
+            return
+        case .webSearch:
+            return
+        case .asciiCapableNumberPad:
+            return
+        @unknown default:
+            return
+        }
+    }
+
     func setEnterKeyState(_ state: RoughEnterKeyState) {
         switch state {
         case .return:
@@ -91,8 +126,12 @@ final class VariableStates: ObservableObject {
         }
     }
 
-    func setTab(_ tab: Tab) {
-        self.tabManager.moveTab(to: tab)
+    func setTab(_ tab: Tab, temporary: Bool = false) {
+        if temporary {
+            self.tabManager.setTemporalTab(tab)
+        } else {
+            self.tabManager.moveTab(to: tab)
+        }
         self.refreshView()
     }
 

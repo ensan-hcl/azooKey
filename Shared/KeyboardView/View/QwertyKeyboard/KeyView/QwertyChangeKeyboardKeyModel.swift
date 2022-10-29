@@ -32,7 +32,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
                     return .user_dependent(.japanese)
                 }
             }()
-            switch VariableStates.shared.tabManager.currentTab.existential {
+            switch VariableStates.shared.tabManager.tab.existential {
             case .qwerty_hira:
                 return [.moveTab(.existential(.qwerty_symbols))]
             case .qwerty_abc:
@@ -70,7 +70,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
         }
         switch self.fallBackType {
         case let .secondTab(secondLanguage: language):
-            switch states.tabManager.currentTab.existential {
+            switch states.tabManager.tab.existential {
             case .qwerty_hira:
                 return KeyLabel(.text("#+="), width: width, textColor: color)
             case .qwerty_abc:

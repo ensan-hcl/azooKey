@@ -85,9 +85,9 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                         ResultView(model: resultModelVariableSection, isResultViewExpanded: $isResultViewExpanded, resultData: $resultData)
                             .padding(.vertical, 6)
                         if variableStates.refreshing {
-                            keyboardView(tab: variableStates.tabManager.currentTab.existential)
+                            keyboardView(tab: variableStates.tabManager.tab.existential)
                         } else {
-                            keyboardView(tab: variableStates.tabManager.currentTab.existential)
+                            keyboardView(tab: variableStates.tabManager.tab.existential)
                         }
                     }
                 }

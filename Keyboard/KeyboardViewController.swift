@@ -21,6 +21,27 @@ extension UIInputView: UIInputViewAudioFeedback {
     }
 }
 
+extension UIKeyboardType: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch self {
+        case .URL: return ".URL"
+        case .asciiCapable: return ".asciiCapable"
+        case .asciiCapableNumberPad: return ".asciiCapableNumberPad"
+        case .decimalPad: return ".decimalPad"
+        case .default: return ".default"
+        case .emailAddress: return ".emailAddress"
+        case .namePhonePad: return ".namePhonePad"
+        case .numberPad: return ".numberPad"
+        case .numbersAndPunctuation: return ".numbersAndPunctuation"
+        case .phonePad: return ".phonePad"
+        case .twitter: return ".twitter"
+        case .webSearch: return ".webSearch"
+        @unknown default:
+            return "unknown value: \(self.rawValue)"
+        }
+    }
+}
+
 extension UIView {
     func clearAllView() {
         self.subviews.forEach {
@@ -94,6 +115,8 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         debug("viewDidAppear")
+        // キーボードタイプはviewDidAppearのタイミングで取得できる
+        VariableStates.shared.setKeyboardType(self.textDocumentProxy.keyboardType)
         // ロード済みのインスタンスの数が増えすぎるとパフォーマンスに悪影響があるので、適当なところで強制終了する
         // viewDidAppearで強制終了すると再ロードが自然な形で実行される
         if KeyboardViewController.loadedInstanceCount > 15 {
