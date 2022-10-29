@@ -16,8 +16,9 @@ struct MessageView: View {
         self._manager = manager
     }
 
-    @ViewBuilder private var leftSideButton: some View {
-        switch data.leftsideButton {
+    @ViewBuilder
+    private func secondaryButton(_ style: MessageData.MessageSecondaryButtonStyle) -> some View {
+        switch style {
         case let .details(urlString):
             HStack {
                 Spacer()
@@ -48,8 +49,9 @@ struct MessageView: View {
         }
     }
 
-    @ViewBuilder private var rightSideButton: some View {
-        switch data.rightsideButton {
+    @ViewBuilder
+    private func primaryButton(_ style: MessageData.MessagePrimaryButtonStyle) -> some View {
+        switch style {
         case let .openContainer(text):
             HStack {
                 Spacer()
@@ -72,31 +74,41 @@ struct MessageView: View {
             }
         }
     }
-
+    
     var body: some View {
         ZStack {
-            Color.black.opacity(0.5)
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white)
-                .frame(width: SemiStaticStates.shared.screenWidth*0.8, height: Design.keyboardScreenHeight*0.8)
-                .overlay(VStack {
-                    Text(data.title)
-                        .font(.title.bold())
-                        .padding(.top)
-                        .foregroundColor(.black)
-                    ScrollView {
-                        Text(data.description)
-                            .padding(.horizontal)
+            GeometryReader { reader in
+                Color.black.opacity(0.5)
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.white)
+                    .frame(width: reader.size.width*0.8, height: reader.size.height*0.8)
+                    .overlay(VStack {
+                        Text(data.title)
+                            .font(.title.bold())
+                            .padding(.top)
                             .foregroundColor(.black)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    Divider()
-                    HStack {
-                        leftSideButton
-                        rightSideButton
-                    }.padding(.bottom)
-                })
+                        ScrollView {
+                            Text(data.description)
+                                .padding(.horizontal)
+                                .foregroundColor(.black)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        Divider()
+                        switch data.button {
+                        case .one(let style):
+                            primaryButton(style)
+                                .padding(.bottom)
+                        case .two(primary: let primaryStyle, secondary: let secondaryStyle):
+                            HStack {
+                                secondaryButton(secondaryStyle)
+                                primaryButton(primaryStyle)
+                            }
+                            .padding(.bottom)
+                        }
+                    })
+                    .offset(x: reader.size.width*0.1, y: reader.size.height*0.1)
+            }
         }
     }
 
