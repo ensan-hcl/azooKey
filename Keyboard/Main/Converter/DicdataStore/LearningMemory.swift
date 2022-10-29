@@ -202,7 +202,9 @@ struct LongTermLearningMemory {
                     newDicdata.append(dicdataElement)
                     newMetadata.append(metadataElement)
                 }
-                let chars = LearningManager.keyToChars(ruby)
+                guard let chars = LearningManager.keyToChars(ruby) else {
+                    continue
+                }
                 newTrie.append(dicdata: newDicdata, chars: chars, metadata: newMetadata)
             }
             // メモリ数上限を超過した場合、長いものから捨てる
@@ -448,8 +450,17 @@ final class LearningManager {
         UInt16(Int(Date().timeIntervalSince1970) / 86400) - 19000
     }
 
-    static func keyToChars(_ key: some StringProtocol) -> [UInt8] {
-        return key.map {char2UInt8[$0, default: 0]}
+    static func keyToChars(_ key: some StringProtocol) -> [UInt8]? {
+        var chars: [UInt8] = []
+        chars.reserveCapacity(key.count)
+        for character in key {
+            if let char = char2UInt8[character] {
+                chars.append(char)
+            } else {
+                return nil
+            }
+        }
+        return chars
     }
 
     private var temporaryMemory: TemporalLearningMemoryTrie = .init()
@@ -473,7 +484,9 @@ final class LearningManager {
         if !learningType.needUsingMemory {
             return []
         }
-        let chars = Self.keyToChars(key)
+        guard let chars = Self.keyToChars(key) else {
+            return []
+        }
         return self.temporaryMemory.perfectMatch(chars: chars)
     }
 
@@ -481,7 +494,9 @@ final class LearningManager {
         if !learningType.needUsingMemory {
             return []
         }
-        let chars = Self.keyToChars(key)
+        guard let chars = Self.keyToChars(key) else {
+            return []
+        }
         return self.temporaryMemory.throughMatch(chars: chars, depth: depth)
     }
 
@@ -489,7 +504,9 @@ final class LearningManager {
         if !learningType.needUsingMemory {
             return []
         }
-        let chars = Self.keyToChars(key)
+        guard let chars = Self.keyToChars(key) else {
+            return []
+        }
         return self.temporaryMemory.prefixMatch(chars: chars)
     }
 
@@ -499,7 +516,10 @@ final class LearningManager {
         }
         // 単語単位
         for datum in data where DicdataStore.needWValueMemory(datum) {
-            self.temporaryMemory.memorize(dicdataElement: datum, chars: Self.keyToChars(datum.ruby))
+            guard let chars = Self.keyToChars(datum.ruby) else {
+                continue
+            }
+            self.temporaryMemory.memorize(dicdataElement: datum, chars: chars)
         }
 
         if data.count == 1 {
@@ -522,11 +542,14 @@ final class LearningManager {
                                 mid: newSecondClause.mid,
                                 value: newFirstClause.baseValue + newSecondClause.baseValue
                             )
-                            debug("LearningManager update first/second", element)
-                            self.temporaryMemory.memorize(dicdataElement: element, chars: LearningManager.keyToChars(element.ruby))
                             // firstClauseを押し出す
                             firstClause = secondClause
                             secondClause = datum
+                            guard let chars = Self.keyToChars(element.ruby) else {
+                                continue
+                            }
+                            debug("LearningManager update first/second", element)
+                            self.temporaryMemory.memorize(dicdataElement: element, chars: chars)
                         } else {
                             // firstClauseとsecondClauseがあって文節境界でない場合, secondClauseをアップデート
                             newSecondClause.word.append(contentsOf: datum.word)
@@ -567,8 +590,10 @@ final class LearningManager {
                     mid: secondClause.mid,
                     value: firstClause.baseValue + secondClause.baseValue
                 )
-                self.temporaryMemory.memorize(dicdataElement: element, chars: LearningManager.keyToChars(element.ruby))
-                debug("LearningManager update first/second rest", element)
+                if let chars = Self.keyToChars(element.ruby) {
+                    debug("LearningManager update first/second rest", element)
+                    self.temporaryMemory.memorize(dicdataElement: element, chars: chars)
+                }
             }
         }
         // 全体
@@ -580,9 +605,11 @@ final class LearningManager {
             mid: data.last?.mid ?? MIDData.一般.mid,
             value: data.reduce(into: 0) {$0 += $1.baseValue}
         )
+        guard let chars = Self.keyToChars(element.ruby) else {
+            return
+        }
         debug("LearningManager update all", element)
-        self.temporaryMemory.memorize(dicdataElement: element, chars: LearningManager.keyToChars(element.ruby))
-
+        self.temporaryMemory.memorize(dicdataElement: element, chars: chars)
     }
 
     func notifyChangeLearningType(_ type: LearningType) {

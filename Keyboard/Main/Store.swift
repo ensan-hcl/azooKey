@@ -512,7 +512,7 @@ private final class InputManager {
         while rubyLog.count > 100 {  // 最大100個までログを取る
             rubyLog.removeFirst()
         }
-        debug(rubyLog)
+        debug("rubyLog", rubyLog)
     }
 
     /// ルビ(ひらがな)を返す
@@ -1127,6 +1127,7 @@ private final class InputManager {
         // 過去のログを見て、再変換に利用する
         composingText.clear()
         if let ruby = self.getRubyIfPossible(text: text) {
+            debug("Evaluated ruby:", ruby)
             // rubyはひらがなである
             _ = self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
         } else {
