@@ -92,11 +92,12 @@ extension Kana2Kanji {
                 lastMid: includeMMValueCalculation ? data.mid:lastMid,
                 data: nodedata
             )
-            result.insert(candidate, at: lastindex)
-            // カウントがオーバーしている場合は除去する
-            if result.count == N_best &+ 1 {
+            // カウントがオーバーしそうな場合は除去する
+            if result.count >= N_best {
                 result.removeLast()
             }
+            // removeしてからinsertした方が速い (insertはO(N)なので)
+            result.insert(candidate, at: lastindex)
         }
 
         return result
