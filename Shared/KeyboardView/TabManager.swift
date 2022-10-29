@@ -192,8 +192,18 @@ extension TabData {
 }
 
 struct TabManager {
-    private(set) var currentTab: ManagerTab = .user_dependent(.japanese)
-    private(set) var lastTab: ManagerTab?
+    var tab: ManagerTab {
+        if let temporalTab {
+            return temporalTab
+        } else {
+            return currentTab
+        }
+    }
+    /// メインのタブ。
+    private var currentTab: ManagerTab = .user_dependent(.japanese)
+    /// 一時的に表示を切り替えるタブ。lastTabに反映されない。
+    private var temporalTab: ManagerTab?
+    private var lastTab: ManagerTab?
 
     enum ManagerTab {
         case existential(Tab.ExistentialTab)
@@ -212,9 +222,9 @@ struct TabManager {
     func isCurrentTab(tab: Tab) -> Bool {
         switch tab {
         case let .existential(actualTab):
-            return currentTab.existential == actualTab
+            return self.tab.existential == actualTab
         case let .user_dependent(type):
-            return type.actualTab == currentTab.existential
+            return type.actualTab == self.tab.existential
         case .last_tab:
             return false
         }
@@ -255,8 +265,44 @@ struct TabManager {
         }
 
         // selfの状態を更新する
+        self.temporalTab = nil
         self.lastTab = self.currentTab
         self.currentTab = .existential(destination)
+    }
+
+    mutating func setTemporalTab(_ destination: Tab) {
+        // 適切なタブを取得する
+        let actualTab: Tab.ExistentialTab
+        switch destination {
+        case let .existential(tab):
+            actualTab = tab
+        case let .user_dependent(tab):
+            actualTab = tab.actualTab
+        case .last_tab:
+            guard let lastTab = self.lastTab else {
+                return
+            }
+            actualTab = lastTab.existential
+        }
+
+        // VariableStateの状態を遷移先のタブに合わせて適切に変更する
+        VariableStates.shared.setKeyboardLayout(actualTab.layout)
+        VariableStates.shared.setInputStyle(actualTab.inputStyle)
+        if let language = actualTab.language {
+            VariableStates.shared.keyboardLanguage = language
+        }
+
+        // selfの状態を更新する
+        switch destination {
+        case let .existential(tab):
+            self.temporalTab = .existential(tab)
+        case let .user_dependent(tab):
+            self.temporalTab = .user_dependent(tab)
+        case .last_tab:
+            if let lasttab = self.lastTab {
+                self.temporalTab = lasttab
+            }
+        }
     }
 
     mutating func moveTab(to destination: Tab) {
@@ -282,6 +328,7 @@ struct TabManager {
         }
 
         // selfの状態を更新する
+        self.temporalTab = nil
         switch destination {
         case let .existential(tab):
             self.lastTab = self.currentTab

@@ -13,7 +13,7 @@ import SwiftUI
 struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
     let languages: (KeyboardLanguage, KeyboardLanguage)
     var currentTabLanguage: KeyboardLanguage? {
-        VariableStates.shared.tabManager.currentTab.existential.language
+        VariableStates.shared.tabManager.tab.existential.language
     }
 
     var pressActions: [ActionType] {
