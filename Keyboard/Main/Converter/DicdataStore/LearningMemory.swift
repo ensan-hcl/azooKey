@@ -184,6 +184,11 @@ struct LongTermLearningMemory {
                     }
                     var dicdataElement = dicdataElement
                     var metadataElement = metadataElement
+                    guard today >= metadataElement.lastUpdatedDay else {
+                        // 異常対応
+                        // 変なデータが入っているとオーバーフローが起こるのでフェイルセーフにする
+                        continue
+                    }
                     // 16日ごとにカウントを半減させる
                     while today - metadataElement.lastUpdatedDay > 16 {
                         metadataElement.count >>= 1
