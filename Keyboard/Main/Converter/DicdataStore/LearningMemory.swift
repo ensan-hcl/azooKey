@@ -41,7 +41,14 @@ struct LongTermLearningMemory {
     }
 
     static var txtFileSplit: Int { 2048 }
-    static let maxMemoryCount = 65536
+    static var maxMemoryCount: Int {
+        @KeyboardSetting(.useBetaStrongerLearning) var useStrongerLearning
+        if useStrongerLearning {
+            return 65536
+        } else {
+            return 8192
+        }
+    }
 
     private static func BoolToUInt64(_ bools: [Bool]) -> [UInt64] {
         let unit = 64
