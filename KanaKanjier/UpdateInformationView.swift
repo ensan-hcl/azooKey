@@ -47,7 +47,7 @@ struct UpdateInfomationView: View {
                         "より多くのケースで再変換が可能に"
                         "数値を入力するテキストフィールドで数字専用キーボードが表示されるように変更"
                     }
-                    ParagraphView("その他デザインの軽微な改善を行いました。")
+                    ParagraphView("その他デザイン・辞書の軽微な改善を行いました。")
                 }
             }
             // version 1.8系
