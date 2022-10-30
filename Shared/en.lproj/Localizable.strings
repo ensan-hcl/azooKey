@@ -15,6 +15,7 @@
 "この設定をしないとキーボードが使えません" = "Without this operation you cannot use azooKey";
 "最初の設定" = "First settings";
 "キーボードの種類をお選びください" = "Select input style";
+"ライブ変換を使用しますか？" = "Enable live conversion?";
 "絵文字と顔文字を設定しましょう" = "Let's use emoji and kaomoji";
 "設定は「設定タブ」でいつでも変えられます" = "You can change settings on Settings tab anytime";
 "azooKeyが使えます！" = "You can use azooKey now!";
@@ -34,6 +35,10 @@
 "選ぶ" = "Select";
 "着せ替えを作成" = "Make your theme";
 "着せ替えを編集" = "Edit theme";
+
+"ライトモードで使用" = "Use in light mode";
+"ダークモードで使用" = "Use in dark mode";
+
 
 "キャンセル" = "Cancel";
 "完了" = "Done";
@@ -261,6 +266,8 @@
 "サンプル" = "Sample";
 "自動" = "Auto";
 
+"カーソルバー" = "Cursor bar";
+"フィードバックを募集します" = "Feedback wanted";
 
 "変換" = "Candidates";
 "ライブ変換" = "Live Conversion";
@@ -376,8 +383,7 @@
 "カスタムタブの管理" = "Manage custom tabs";
 "タブバー" = "Tab bar";
 "カスタムタブを使うにはタブバーを利用します。" = "You can use Tab Bar to move custom tabs.";
-"カスタムタブを使うにはタブバーを利用します。" = "You can use Tab Bar to move custom tabs.";
-"変換候補欄に何も表示されていない状態で、変換候補欄を長押しすると表示されます。" = "You can display tab bar longpressing empty candidates area.";
+"あずきのマークを押すと表示されます。" = "Tab bar will appear when you press azooKey's icon on the keyboard.";
 "フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。" = "Using flick input style, you can also show it by longpressing ☆123 key at the left top edge of the keyboard. Using qwerty input style, you can show it by longpressing #+= key or 123 key at the left bottom edge of the keyboard.";
 "もっと便利にする" = "More useful";
 "タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。" = "You can edit the tab bar. You can rearrange, delete, append tabs and also add features like inputting, moving the cursor, and so on.";
@@ -394,6 +400,15 @@
 "スクロール式のカスタムタブを作る" = "Make scroll style custom tabs";
 "フリック式のカスタムタブを作成することができます。" = "You can make tenkey style custom tabs.";
 "フリック式のカスタムタブを作る" = "Make tenkey style custom tabs";
+
+"コピーする" = "Copy";
+"ペーストする" = "Paste";
+"下に行を追加" = "Insert a row below";
+"上に行を追加" = "Insert a row above";
+"左に列を追加" = "Insert a column to left";
+"右に列を追加" = "Insert a column to right";
+"この行を削除" = "Delete this row";
+"この列を削除" = "Delete this column";
 
 "「%@(%@)」の読み込みに成功しました" = "Successfuly imported '%1$@'(%2$@)";
 "保存" = "Save";
@@ -501,6 +516,16 @@
 "このキーに長押しキーを追加する" = "Add a new alternative key which appears when longpressed";
 "タブバーボタン" = "Tab bar button";
 "変換候補欄が空のときにタブバーボタンを表示します" = "Display tab bar button when there is no candidates";
+
+"新しいカーソルバーを使う (試験版)" = "Use new cursor bar (experimental)";
+"新しいカーソルバーを有効化します。\n試験的機能のため、予告なく提供を終了する可能性があります。" = "Enable new cursor bar. \nSince this is an experimental feature, this feature may be discontinued without notice.";
+
+"より強力な学習を有効化 (試験版)" = "Enable more strong learning (experimental)";
+"より長い期間学習が保持されます。\n試験的機能のため、予告なく提供を終了する可能性があります。" = "Histories can be remembered much longer. \nSince this is an experimental feature, this feature may be discontinued without notice.";
+
+"入力中のテキストを保護 (試験版)" = "Protect composing text (experimental)";
+"入力中のテキストを保護し、Webアプリなどでの入力において挙動を安定させます。\n試験的機能のため、仕様の変更、不具合などが発生する可能性があります。" = "By protecting composing text, azooKey will behave more stably in some web apps. \nSince this is an experimental feature, this feature may be discontinued without notice.";
+
 /*
 "" = "";
 "" = "";

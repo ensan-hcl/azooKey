@@ -86,14 +86,12 @@ struct ThemeTabView: View {
                             manager.selectForLightMode(at: index)
                         } label: {
                             Image(systemName: "sun.max.fill")
-                            // TODO: Localize
                             Text("ライトモードで使用")
                         }
                         Button {
                             manager.selectForDarkMode(at: index)
                         } label: {
                             Image(systemName: "moon.fill")
-                            // TODO: Localize
                             Text("ダークモードで使用")
                         }
                     }

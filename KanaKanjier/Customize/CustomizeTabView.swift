@@ -53,7 +53,6 @@ struct CustomizeTabView: View {
                         .listRowSeparator(.hidden, edges: .bottom)
                         Text("カスタムタブを使うにはタブバーを利用します。")
                         DisclosureGroup("使い方") {
-                            // TODO: Localize
                             Text("あずきのマークを押すと表示されます。")
                             Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
                         }
