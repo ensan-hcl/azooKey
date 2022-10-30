@@ -242,7 +242,7 @@ final class KanaKanjiConverter {
     }
     /// 部分がカタカナである可能性を調べる
     /// 小さいほどよい。
-    private func getKatakanaScore<S: StringProtocol>(_ katakana: __shared S) -> PValue {
+    private func getKatakanaScore<S: StringProtocol>(_ katakana: S) -> PValue {
         var score: PValue = 1
         // テキスト分析によってこれらのカタカナが入っている場合カタカナ語である可能性が高いと分かった。
         for c in katakana {
