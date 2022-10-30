@@ -19,6 +19,7 @@ opt_in_rules:
 included:
   - KanaKanjier
   - Keyboard
+  - Shared
 excluded:
   - LOUDSBuilder
   - ValuesBinary
