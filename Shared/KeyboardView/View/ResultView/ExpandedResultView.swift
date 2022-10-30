@@ -14,10 +14,10 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
     @State private var splitedResults: [SplitedResultData<Candidate>]
     private var buttonWidth: CGFloat {
-        Design.resultViewHeight()*0.5
+        Design.resultViewHeight() * 0.5
     }
     private var buttonHeight: CGFloat {
-        Design.resultViewHeight()*0.6
+        Design.resultViewHeight() * 0.6
     }
 
     @Environment(\.themeEnvironment) private var theme
@@ -87,7 +87,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         var curSum: CGFloat = .zero
         var splited: [SplitedResultData<Candidate>] = []
         var curResult: [ResultData<Candidate>] = []
-        let font = UIFont.systemFont(ofSize: Design.fonts.resultViewFontSize+1)
+        let font = UIFont.systemFont(ofSize: Design.fonts.resultViewFontSize + 1)
         results.forEach {[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
             if (curSum + width) < VariableStates.shared.interfaceSize.width {

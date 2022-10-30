@@ -40,7 +40,7 @@ private struct _QwertyCustomKey: Codable {
         self.name = name
         self.longpress = []
         self.input = (try? values.decode(String.self, forKey: .input)) ?? name
-        self.longpresses =  (try? values.decode([_QwertyVariationKey].self, forKey: .longpresses)) ?? longpress.map {_QwertyVariationKey(name: $0, input: $0)}
+        self.longpresses = (try? values.decode([_QwertyVariationKey].self, forKey: .longpresses)) ?? longpress.map {_QwertyVariationKey(name: $0, input: $0)}
     }
 }
 

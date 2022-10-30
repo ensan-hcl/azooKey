@@ -14,7 +14,7 @@ struct ResizingRect: View {
     @State private var bottom_right_edge: Position
 
     private let lineWidth: CGFloat = 6
-    private let edgeRatio: CGFloat = 1/5
+    private let edgeRatio: CGFloat = 1 / 5
     private let edgeColor: Color = .blue
 
     @State private var initialPosition: CGPoint
@@ -30,13 +30,13 @@ struct ResizingRect: View {
         self._position = position
         self._initialPosition = .init(initialValue: position.wrappedValue)
         let tl = CGPoint(
-            x: (2*position.x.wrappedValue - size.width.wrappedValue + initialSize.width)/2,
-            y: (2*position.y.wrappedValue - size.height.wrappedValue + initialSize.height)/2
+            x: (2 * position.x.wrappedValue - size.width.wrappedValue + initialSize.width) / 2,
+            y: (2 * position.y.wrappedValue - size.height.wrappedValue + initialSize.height) / 2
         )
         self._top_left_edge = .init(initialValue: (tl, tl))
         let br = CGPoint(
-            x: (2*position.x.wrappedValue + size.width.wrappedValue + initialSize.width)/2,
-            y: (2*position.y.wrappedValue + size.height.wrappedValue + initialSize.height)/2
+            x: (2 * position.x.wrappedValue + size.width.wrappedValue + initialSize.width) / 2,
+            y: (2 * position.y.wrappedValue + size.height.wrappedValue + initialSize.height) / 2
         )
         self._bottom_right_edge = .init(initialValue: (br, br))
         self.initialSize = initialSize
@@ -90,7 +90,7 @@ struct ResizingRect: View {
                 self[keyPath: target].wrappedValue.current.x = self[keyPath: target].wrappedValue.initial.x + dx
                 let width = abs(bottom_right_edge.current.x - top_left_edge.current.x)
                 let px = (top_left_edge.current.x + bottom_right_edge.current.x - initialSize.width) / 2
-                if width < minimumWidth || px < -initialSize.width/2 || px > initialSize.width/2 {
+                if width < minimumWidth || px < -initialSize.width/2 || px > initialSize.width / 2 {
                     self[keyPath: target].wrappedValue.current.x = before
                 } else {
                     self.size.width = width
@@ -111,7 +111,7 @@ struct ResizingRect: View {
                 self[keyPath: target].wrappedValue.current.y = self[keyPath: target].wrappedValue.initial.y + dy
                 let height = abs(bottom_right_edge.current.y - top_left_edge.current.y)
                 let py = (top_left_edge.current.y + bottom_right_edge.current.y - initialSize.height) / 2
-                if py < -initialSize.height/2 || py > initialSize.height/2 {
+                if py < -initialSize.height/2 || py > initialSize.height / 2 {
                     self[keyPath: target].wrappedValue.current.y = before
                 } else {
                     self.size.height = height
@@ -132,8 +132,8 @@ struct ResizingRect: View {
                 let dy = value.location.y - value.startLocation.y
                 let px = self.initialPosition.x + dx
                 let py = self.initialPosition.y + dy
-                if  -initialSize.width/2 < px && px < initialSize.width/2 &&
-                        -initialSize.height/2 < py && py < initialSize.height/2 {
+                if  -initialSize.width / 2 < px && px < initialSize.width / 2 &&
+                        -initialSize.height / 2 < py && py < initialSize.height / 2 {
                     withAnimation(.interactiveSpring()) {
                         self.position.x = px
                         self.position.y = py
@@ -230,7 +230,7 @@ struct ResizingRect: View {
                     .overlay(
                         Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
                             .foregroundColor(.white)
-                            .font(Font.system(size: r*0.5))
+                            .font(Font.system(size: r * 0.5))
                     )
                     .gesture(moveGesture)
                 Button {
@@ -251,7 +251,7 @@ struct ResizingRect: View {
                         .overlay(
                             Image(systemName: "arrow.triangle.2.circlepath")
                                 .foregroundColor(.white)
-                                .font(Font.system(size: r*0.5))
+                                .font(Font.system(size: r * 0.5))
                         )
                 }
                 Button {
@@ -263,7 +263,7 @@ struct ResizingRect: View {
                         .overlay(
                             Image(systemName: "checkmark")
                                 .foregroundColor(.white)
-                                .font(Font.system(size: r*0.5))
+                                .font(Font.system(size: r * 0.5))
                         )
                 }
             }
@@ -294,16 +294,16 @@ struct ResizingBindingFrame: ViewModifier {
         let position: CGPoint
         let stack: HV
         if leftMargin == maxMargin {
-            position = .init(x: maxMargin/2, y: initialSize.height/2)
+            position = .init(x: maxMargin / 2, y: initialSize.height / 2)
             stack = .V
         } else if rightMargin == maxMargin {
-            position = .init(x: initialSize.width - maxMargin/2, y: initialSize.height/2)
+            position = .init(x: initialSize.width - maxMargin / 2, y: initialSize.height / 2)
             stack = .V
         } else if topMargin == maxMargin {
-            position = .init(x: initialSize.width/2, y: maxMargin/2)
+            position = .init(x: initialSize.width / 2, y: maxMargin / 2)
             stack = .H
         } else {
-            position = .init(x: initialSize.width/2, y: initialSize.height - maxMargin/2)
+            position = .init(x: initialSize.width / 2, y: initialSize.height - maxMargin / 2)
             stack = .H
         }
         return (maxMargin, position, stack)
@@ -323,7 +323,7 @@ struct ResizingBindingFrame: ViewModifier {
                     .overlay(
                         Image(systemName: "aspectratio")
                             .foregroundColor(.white)
-                            .font(Font.system(size: r*0.5))
+                            .font(Font.system(size: r * 0.5))
                     )
             }
             .frame(width: r, height: r)
@@ -337,7 +337,7 @@ struct ResizingBindingFrame: ViewModifier {
                     .overlay(
                         Image(systemName: "arrow.up.backward.and.arrow.down.forward")
                             .foregroundColor(.white)
-                            .font(Font.system(size: r*0.5))
+                            .font(Font.system(size: r * 0.5))
                     )
             }
             .frame(width: r, height: r)
@@ -359,7 +359,7 @@ struct ResizingBindingFrame: ViewModifier {
                     .overlay(
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .foregroundColor(.white)
-                            .font(Font.system(size: r*0.5))
+                            .font(Font.system(size: r * 0.5))
                     )
             }
 

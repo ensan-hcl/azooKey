@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 
-
 class BetaMoveCursorBarState: ObservableObject {
     @Published private(set) var displayLeftIndex = 0
     @Published private(set) var displayRightIndex = 0
@@ -167,7 +166,6 @@ struct MoveCursorBarBeta: View {
             }
     }
 
-
     private var centerColor: Color {
         theme.pushedKeyFillColor.color
     }
@@ -215,7 +213,6 @@ struct MoveCursorBarBeta: View {
         ZStack(alignment: .center) {
             textView
             HStack(spacing: .zero) {
-
 
                 Image(systemName: "chevron.left.2")
                     .font(symbolFont(size: 18))
@@ -274,7 +271,6 @@ struct MoveCursorBarBeta: View {
     }
 }
 
-
 private enum MoveCursorBarGestureState {
     case unactive
     case moving(CGPoint, Int)   // 右だったら+1、左だったら-1
@@ -295,7 +291,7 @@ struct MoveCursorBar: View {
                     if dx.isZero {
                         break
                     }
-                    let newCount = count + Int(dx/abs(dx))
+                    let newCount = count + Int(dx / abs(dx))
                     if newCount > 1 {
                         self.gestureState = .moving(value.location, 0)
                         VariableStates.shared.action.registerAction(.moveCursor(1))

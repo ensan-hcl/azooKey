@@ -123,7 +123,7 @@ struct FlickKeyView: View {
                     }
                 case .longPressed:
                     // もし距離が25px以上離れていて、サジェストが必要な設定だったら
-                    if self.model.isFlickAble(to: d) && startLocation.distance(to: value.location) > self.model.flickSensitivity(to: d) &&  self.model.needSuggestView {
+                    if self.model.isFlickAble(to: d) && startLocation.distance(to: value.location) > self.model.flickSensitivity(to: d) && self.model.needSuggestView {
                         // 状態がoneDirectionでなかったら
                         if case .oneDirection = suggestState {} else {
                             // サジェストの方向を登録する。

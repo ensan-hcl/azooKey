@@ -97,8 +97,8 @@ struct KeyLabel: View {
                     .foregroundColor(mainKeyColor)
 
             case let .selectable(primary, secondery):
-                let font = Design.fonts.keyLabelFont(text: primary+primary, width: width, scale: self.textSize.scale, theme: theme)
-                let subFont = Design.fonts.keyLabelFont(text: secondery+secondery, width: width, scale: TextSize.small.scale, theme: theme)
+                let font = Design.fonts.keyLabelFont(text: primary + primary, width: width, scale: self.textSize.scale, theme: theme)
+                let subFont = Design.fonts.keyLabelFont(text: secondery + secondery, width: width, scale: TextSize.small.scale, theme: theme)
 
                 HStack(alignment: .bottom) {
                     Text(primary)

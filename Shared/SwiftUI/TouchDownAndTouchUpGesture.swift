@@ -99,7 +99,7 @@ final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
         let location = touches.first?.location(in: nil) ?? .zero
         let dx = startLocation.x - location.x
         let dy = startLocation.y - location.y
-        self.distance = sqrt(dx*dx + dy*dy)
+        self.distance = sqrt(dx * dx + dy * dy)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -107,7 +107,7 @@ final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
         let location = touches.first?.location(in: nil) ?? .zero
         let dx = startLocation.x - location.x
         let dy = startLocation.y - location.y
-        self.distance = sqrt(dx*dx + dy*dy)
+        self.distance = sqrt(dx * dx + dy * dy)
         self.startLocation = .zero
     }
 }

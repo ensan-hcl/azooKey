@@ -33,7 +33,7 @@ struct LargeTextView: View {
                 Image(systemName: "xmark")
                 Text("閉じる")
                     .font(.body)
-            }.frame(width: nil, height: Design.keyboardScreenHeight*0.15)
+            }.frame(width: nil, height: Design.keyboardScreenHeight * 0.15)
         }
         .background(Color.background)
         .frame(height: Design.keyboardScreenHeight, alignment: .bottom)

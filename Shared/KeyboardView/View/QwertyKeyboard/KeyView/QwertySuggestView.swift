@@ -46,29 +46,29 @@ struct QwertySuggestView {
                 control1: CGPoint(x: 33, y: 164),
                 control2: CGPoint(x: 32, y: 157)
             )
-            path.addLine(to: CGPoint(x: 7-ldw, y: 121))
+            path.addLine(to: CGPoint(x: 7 - ldw, y: 121))
             path.addCurve(
-                to: CGPoint(x: 0-ldw, y: 96),
-                control1: CGPoint(x: 1-ldw, y: 113),
-                control2: CGPoint(x: 0-ldw, y: 106)
+                to: CGPoint(x: 0 - ldw, y: 96),
+                control1: CGPoint(x: 1 - ldw, y: 113),
+                control2: CGPoint(x: 0 - ldw, y: 106)
             )
-            path.addLine(to: CGPoint(x: 0-ldw, y: 20))
+            path.addLine(to: CGPoint(x: 0 - ldw, y: 20))
             path.addCurve(
-                to: CGPoint(x: 20-ldw, y: 0),
-                control1: CGPoint(x: 0-ldw, y: 7),
-                control2: CGPoint(x: 7-ldw, y: 0)
+                to: CGPoint(x: 20 - ldw, y: 0),
+                control1: CGPoint(x: 0 - ldw, y: 7),
+                control2: CGPoint(x: 7 - ldw, y: 0)
             )
-            path.addLine(to: CGPoint(x: 155+rdw, y: 0))
+            path.addLine(to: CGPoint(x: 155 + rdw, y: 0))
             path.addCurve(
-                to: CGPoint(x: 175+rdw, y: 20),
-                control1: CGPoint(x: 168+rdw, y: 0),
-                control2: CGPoint(x: 175+rdw, y: 7)
+                to: CGPoint(x: 175 + rdw, y: 20),
+                control1: CGPoint(x: 168 + rdw, y: 0),
+                control2: CGPoint(x: 175 + rdw, y: 7)
             )
-            path.addLine(to: CGPoint(x: 175+rdw, y: 96))
+            path.addLine(to: CGPoint(x: 175 + rdw, y: 96))
             path.addCurve(
-                to: CGPoint(x: 168+rdw, y: 121),
-                control1: CGPoint(x: 175+rdw, y: 106),
-                control2: CGPoint(x: 174+rdw, y: 113)
+                to: CGPoint(x: 168 + rdw, y: 121),
+                control1: CGPoint(x: 175 + rdw, y: 106),
+                control2: CGPoint(x: 174 + rdw, y: 113)
             )
             path.addLine(to: CGPoint(x: 149, y: 148))
             path.addCurve(
@@ -83,12 +83,12 @@ struct QwertySuggestView {
                 control2: CGPoint(x: 135, y: 281)
             )
         }
-        .offsetBy(dx: -175/2 + width/2, dy: 0 )
-        .scale(x: width/109, y: (tabDesign.keyViewHeight*2+tabDesign.verticalSpacing)/281, anchor: .top)
+        .offsetBy(dx: -175 / 2 + width / 2, dy: 0 )
+        .scale(x: width / 109, y: (tabDesign.keyViewHeight * 2 + tabDesign.verticalSpacing) / 281, anchor: .top)
     }
 
     static func scaleToFrameSize(keyWidth: CGFloat, scale_y: CGFloat, color: Color, borderColor: Color, borderWidth: CGFloat, tabDesign: TabDependentDesign) -> some View {
-        let height = (tabDesign.keyViewHeight*2 + tabDesign.verticalSpacing) * scale_y
+        let height = (tabDesign.keyViewHeight * 2 + tabDesign.verticalSpacing) * scale_y
         return expandedPath(rdw: 0, ldw: 0, width: keyWidth, tabDesign: tabDesign)
             .strokeAndFill(fillContent: color, strokeContent: borderColor, lineWidth: borderWidth)
             .frame(width: keyWidth, height: height)
@@ -96,11 +96,11 @@ struct QwertySuggestView {
 
     static func scaleToVariationsSize(keyWidth: CGFloat, scale_y: CGFloat, variationsCount: Int, color: Color, borderColor: Color, borderWidth: CGFloat, direction: VariationsViewDirection, tabDesign: TabDependentDesign) -> some View {
         let keyViewSize = tabDesign.keyViewSize
-        let height = (keyViewSize.height*2 + tabDesign.verticalSpacing) * scale_y
-        let dw = (keyViewSize.width * CGFloat(variationsCount - 1) + tabDesign.horizontalSpacing * CGFloat(variationsCount-1))*109/keyViewSize.width
+        let height = (keyViewSize.height * 2 + tabDesign.verticalSpacing) * scale_y
+        let dw = (keyViewSize.width * CGFloat(variationsCount - 1) + tabDesign.horizontalSpacing * CGFloat(variationsCount - 1)) * 109 / keyViewSize.width
         switch direction {
         case .center:
-            return expandedPath(rdw: dw/2, ldw: dw/2, width: keyWidth, tabDesign: tabDesign)
+            return expandedPath(rdw: dw / 2, ldw: dw / 2, width: keyWidth, tabDesign: tabDesign)
                 .strokeAndFill(fillContent: color, strokeContent: borderColor, lineWidth: borderWidth)
                 .frame(width: keyWidth, height: height)
         case .right:

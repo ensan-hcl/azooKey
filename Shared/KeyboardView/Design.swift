@@ -42,21 +42,21 @@ struct TabDependentDesign {
         let coefficient: CGFloat
         switch (layout, orientation) {
         case (_, .vertical):
-            coefficient = 5/(5.1 + horizontalKeyCount/10)
+            coefficient = 5 / (5.1 + horizontalKeyCount / 10)
         case (_, .horizontal):
-            coefficient = 10/(10.2 + horizontalKeyCount * 0.28)
+            coefficient = 10 / (10.2 + horizontalKeyCount * 0.28)
         }
         return interfaceWidth / horizontalKeyCount * coefficient
     }
 
     /// This property calculate suitable height for normal keyView.
     var keyViewHeight: CGFloat {
-        let keyHeight = (keysHeight - (verticalKeyCount-1) * verticalSpacing)/verticalKeyCount
+        let keyHeight = (keysHeight - (verticalKeyCount - 1) * verticalSpacing) / verticalKeyCount
         return keyHeight
     }
 
     var keysWidth: CGFloat {
-        keyViewWidth * horizontalKeyCount + horizontalSpacing * (horizontalKeyCount-1)
+        keyViewWidth * horizontalKeyCount + horizontalSpacing * (horizontalKeyCount - 1)
     }
 
     // resultViewの幅を全体から引いたもの。キーを配置して良い部分の高さ。
@@ -72,13 +72,13 @@ struct TabDependentDesign {
     var verticalSpacing: CGFloat {
         switch (layout, orientation) {
         case (.flick, .vertical):
-            return interfaceWidth*3/140
+            return interfaceWidth * 3 / 140
         case (.flick, .horizontal):
-            return interfaceWidth/107
+            return interfaceWidth / 107
         case (.qwerty, .vertical):
-            return interfaceWidth/36.6
+            return interfaceWidth / 36.6
         case (.qwerty, .horizontal):
-            return interfaceWidth/65
+            return interfaceWidth / 65
         }
     }
 
@@ -90,11 +90,11 @@ struct TabDependentDesign {
         let coefficient: CGFloat
         switch orientation {
         case .vertical:
-            coefficient = (5+horizontalKeyCount)/(7.5+horizontalKeyCount)
+            coefficient = (5 + horizontalKeyCount) / (7.5 + horizontalKeyCount)
         case .horizontal:
-            coefficient = (8+horizontalKeyCount)/(10+horizontalKeyCount*1.3)
+            coefficient = (8 + horizontalKeyCount) / (10 + horizontalKeyCount * 1.3)
         }
-        return (interfaceWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount-1) * coefficient
+        return (interfaceWidth - keyViewWidth * horizontalKeyCount) / (horizontalKeyCount - 1) * coefficient
     }
 
     func keyViewWidth(widthCount: Int) -> CGFloat {
@@ -156,13 +156,13 @@ enum Design {
         let width = min(screenWidth, SemiStaticStates.shared.screenWidth)
         switch (orientation, UIDevice.current.userInterfaceIdiom == .pad) {
         case (.vertical, false):
-            return 51/74 * width + 12
+            return 51 / 74 * width + 12
         case (.vertical, true):
-            return 15/31 * width + 12
+            return 15 / 31 * width + 12
         case (.horizontal, false):
-            return 17/56 * width + 12
+            return 17 / 56 * width + 12
         case (.horizontal, true):
-            return 5/18 * width + 12
+            return 5 / 18 * width + 12
         }
     }
 
