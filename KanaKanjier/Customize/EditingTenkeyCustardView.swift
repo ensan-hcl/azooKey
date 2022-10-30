@@ -167,7 +167,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                 Button {
                                     copiedKey = editingItem.keys[.gridFit(x: x, y: y)]
                                 } label: {
-                                    // TODO: Localize
                                     Label("コピーする", systemImage: "doc.on.doc")
                                 }
                                 Button {
@@ -175,7 +174,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                         editingItem.keys[.gridFit(x: x, y: y)] = copiedKey
                                     }
                                 } label: {
-                                    // TODO: Localize
                                     Label("ペーストする", systemImage: "doc.on.clipboard")
                                 }
                                 .disabled(copiedKey == nil)
@@ -198,7 +196,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                         }
                                     }
                                 } label: {
-                                    // TODO: Localize
                                     Label("下に行を追加", systemImage: "plus")
                                 }
                                 Button {
@@ -220,7 +217,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                         }
                                     }
                                 } label: {
-                                    // TODO: Localize
                                     Label("上に行を追加", systemImage: "plus")
                                 }
                                 Button {
@@ -242,7 +238,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                         }
                                     }
                                 } label: {
-                                    // TODO: Localize
                                     Label("右に列を追加", systemImage: "plus")
                                 }
                                 Button {
@@ -264,7 +259,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                         }
                                     }
                                 } label: {
-                                    // TODO: Localize
                                     Label("左に列を追加", systemImage: "plus")
 
                                 }
@@ -278,14 +272,12 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                 Button(role: .destructive) {
                                     removeRow(y: y)
                                 } label: {
-                                    // TODO: Localize
                                     Label("この行を削除", systemImage: "trash")
                                         .foregroundColor(.red)
                                 }
                                 Button(role: .destructive) {
                                     removeColumn(x: x)
                                 } label: {
-                                    // TODO: Localize
                                     Label("この列を削除", systemImage: "trash")
                                         .foregroundColor(.red)
                                 }

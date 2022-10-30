@@ -27,8 +27,9 @@ struct MarkedTextSettingKey: KeyboardSettingKey {
         case enabled
         case auto
     }
-    static let title: LocalizedStringKey = "入力中のテキストを保護 (ベータ版)"
-    static let explanation: LocalizedStringKey = "入力中のテキストを保護し、Webアプリなどでの入力において挙動を安定させます。\n実験的機能のため、仕様の変更、不具合などが発生する可能性があります。"
+
+    static let title: LocalizedStringKey = "入力中のテキストを保護 (試験版)"
+    static let explanation: LocalizedStringKey = "入力中のテキストを保護し、Webアプリなどでの入力において挙動を安定させます。\n試験的機能のため、仕様の変更、不具合などが発生する可能性があります。"
     static let defaultValue: Value = .disabled
     static let key: String = "marked_text_setting_beta"
 }

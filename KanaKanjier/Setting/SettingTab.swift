@@ -30,9 +30,10 @@ struct SettingTabView: View {
                     Section(header: Text("カスタムキー")) {
                         CustomKeysSettingView()
                     }
-                    // TODO: Localize
-                    Section(header: Text("バーの操作")) {
+                    Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
+                    }
+                    Section(header: Text("カーソルバー")) {
                         BoolSettingView(.useBetaMoveCursorBar)
                         FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }

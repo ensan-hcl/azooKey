@@ -78,7 +78,6 @@ struct EnableAzooKeyView: View {
                             }
                             Group {
                                 Divider()
-                                // TODO: Localize
                                 EnableAzooKeyViewText("ライブ変換を使用しますか？", with: "character.cursor.ibeam")
                                 BoolSettingView(.liveConversion)
                             }
