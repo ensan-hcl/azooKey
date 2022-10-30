@@ -148,7 +148,7 @@ extension Custard {
                 .gridFit(.init(x: 2, y: 2)): .custom(nine_key),
                 .gridFit(.init(x: 0, y: 3)): .system(.changeKeyboard),
                 .gridFit(.init(x: 1, y: 3)): .custom(zero_key),
-                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete),
+                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete)
             ]
         )
     )
@@ -174,7 +174,7 @@ extension Custard {
                 .gridFit(.init(x: 2, y: 2)): .custom(nine_key),
                 .gridFit(.init(x: 0, y: 3)): .custom(point_key),
                 .gridFit(.init(x: 1, y: 3)): .custom(zero_key),
-                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete),
+                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete)
             ]
         )
     )
@@ -200,7 +200,7 @@ extension Custard {
                 .gridFit(.init(x: 2, y: 2)): .custom(nine_key),
                 .gridFit(.init(x: 0, y: 3)): .custom(phone_symbols_key),
                 .gridFit(.init(x: 1, y: 3)): .custom(zero_key),
-                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete),
+                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete)
             ]
         )
     )

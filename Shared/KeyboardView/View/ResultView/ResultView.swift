@@ -39,7 +39,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
     @Binding private var resultData: [ResultData<Candidate>]
     @Binding private var isResultViewExpanded: Bool
-    
+
     @Environment(\.themeEnvironment) private var theme
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
@@ -50,10 +50,10 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 
     private var buttonWidth: CGFloat {
-        Design.resultViewHeight()*0.5
+        Design.resultViewHeight() * 0.5
     }
     private var buttonHeight: CGFloat {
-        Design.resultViewHeight()*0.6
+        Design.resultViewHeight() * 0.6
     }
 
     private var tabBarButtonBackgroundColor: Color {

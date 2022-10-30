@@ -35,13 +35,13 @@ struct VariationsModel {
         let start: CGFloat
         switch self.direction {
         case .center:
-            start = -(width * count + spacing * (count-1)) / 2
+            start = -(width * count + spacing * (count - 1)) / 2
         case .right:
             start = 0
         case .left:
-            start = -(width * count + spacing * (count-1))
+            start = -(width * count + spacing * (count - 1))
         }
         let selection = (dx - start) / width
-        return min(max(Int(selection), 0), Int(count)-1)
+        return min(max(Int(selection), 0), Int(count) - 1)
     }
 }

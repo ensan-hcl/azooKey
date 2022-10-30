@@ -135,7 +135,7 @@ struct MessageManager {
                 let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
                 return !FileManager.default.fileExists(atPath: binaryFilePath)
             }
-        ),
+        )
     ]
 
     private var needShow: [MessageIdentifier: Bool]

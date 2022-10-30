@@ -292,18 +292,18 @@ struct CustomKeyboardView: View {
             let models = (0..<custard.interface.keys.count).compactMap {custard.interface.keys[.gridScroll(GridScrollPositionSpecifier($0))]}
             switch value.direction {
             case .vertical:
-                let gridItem = GridItem(.fixed(tabDesign.keyViewWidth), spacing: tabDesign.horizontalSpacing/2)
+                let gridItem = GridItem(.fixed(tabDesign.keyViewWidth), spacing: tabDesign.horizontalSpacing / 2)
                 ScrollView(.vertical) {
-                    LazyVGrid(columns: Array(repeating: gridItem, count: Int(value.rowCount)), spacing: tabDesign.verticalSpacing/2) {
+                    LazyVGrid(columns: Array(repeating: gridItem, count: Int(value.rowCount)), spacing: tabDesign.verticalSpacing / 2) {
                         ForEach(0..<models.count, id: \.self) {i in
                             SimpleKeyView(model: models[i].simpleKeyModel, tabDesign: tabDesign)
                         }
                     }
                 }.frame(height: height)
             case .horizontal:
-                let gridItem = GridItem(.fixed(tabDesign.keyViewHeight), spacing: tabDesign.verticalSpacing/2)
+                let gridItem = GridItem(.fixed(tabDesign.keyViewHeight), spacing: tabDesign.verticalSpacing / 2)
                 ScrollView(.horizontal) {
-                    LazyHGrid(rows: Array(repeating: gridItem, count: Int(value.columnCount)), spacing: tabDesign.horizontalSpacing/2) {
+                    LazyHGrid(rows: Array(repeating: gridItem, count: Int(value.columnCount)), spacing: tabDesign.horizontalSpacing / 2) {
                         ForEach(0..<models.count, id: \.self) {i in
                             SimpleKeyView(model: models[i].simpleKeyModel, tabDesign: tabDesign)
                         }

@@ -8,6 +8,6 @@
 
 import Foundation
 
-func withMutableValue<T>(_ value: inout T, process: (inout T) -> ()) {
+func withMutableValue<T>(_ value: inout T, process: (inout T) -> Void) {
     process(&value)
 }

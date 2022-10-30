@@ -58,7 +58,7 @@ struct FlickKeyView: View {
                 // 押し始めた後の変化である場合。
                 case let .started(date):
                     // 押したところから25px以上離れてて、サジェストが必要な設定だったら
-                    if value.startLocation.distance(to: value.location) > 25 &&  self.model.needSuggestView {
+                    if value.startLocation.distance(to: value.location) > 25 && self.model.needSuggestView {
                         // 方向を取得する。
                         let d = value.startLocation.direction(to: value.location)
                         // フリックできるか判定する。
@@ -89,7 +89,7 @@ struct FlickKeyView: View {
                         self.modelVariableSection.pressState = .longFlicked(direction)
                     }
                     // もし距離が25px以上離れていて、サジェストが必要な設定だったら
-                    if value.startLocation.distance(to: value.location) > 25 &&  self.model.needSuggestView {
+                    if value.startLocation.distance(to: value.location) > 25 && self.model.needSuggestView {
                         // 方向を取得する
                         let d = value.startLocation.direction(to: value.location)
                         // 状態がoneDirectionでなかったら
@@ -120,7 +120,7 @@ struct FlickKeyView: View {
 
                 case .longPressed:
                     // もし距離が25px以上離れていて、サジェストが必要な設定だったら
-                    if value.startLocation.distance(to: value.location) > 25 &&  self.model.needSuggestView {
+                    if value.startLocation.distance(to: value.location) > 25 && self.model.needSuggestView {
                         // 方向を取得する
                         let d = value.startLocation.direction(to: value.location)
                         // 状態がoneDirectionでなかったら

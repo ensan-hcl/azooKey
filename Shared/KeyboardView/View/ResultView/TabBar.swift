@@ -37,7 +37,7 @@ struct TabBarView: View {
                                 Image(systemName: image)
                             }
                         }
-                        .buttonStyle(ResultButtonStyle(height: Design.resultViewHeight()*0.6))
+                        .buttonStyle(ResultButtonStyle(height: Design.resultViewHeight() * 0.6))
                     }
                 }
             }

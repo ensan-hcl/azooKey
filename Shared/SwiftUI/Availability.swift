@@ -173,7 +173,7 @@ extension View {
 }
 
 extension Button {
-    init(role: _Available_ButtonRole, action: @escaping () -> (), @ViewBuilder label: () -> Label) {
+    init(role: _Available_ButtonRole, action: @escaping () -> Void, @ViewBuilder label: () -> Label) {
         if #available(iOS 15, *) {
             self.init(role: role.role, action: action, label: label)
         } else {

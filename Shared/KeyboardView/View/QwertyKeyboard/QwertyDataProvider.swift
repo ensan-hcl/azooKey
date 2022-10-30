@@ -224,7 +224,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("&")],
                 variationsModel: VariationsModel([
                     (label: .text("&"), actions: [.input("&")]),
-                    (label: .text("＆"), actions: [.input("＆")]),
+                    (label: .text("＆"), actions: [.input("＆")])
                 ], direction: .left)
             )
         ],
@@ -252,7 +252,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("[")],
                 variationsModel: VariationsModel([
                     (label: .text("["), actions: [.input("[")]),
-                    (label: .text("［"), actions: [.input("［")]),
+                    (label: .text("［"), actions: [.input("［")])
                 ], direction: .right)
             ),
             QwertyKeyModel(
@@ -260,7 +260,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("]")],
                 variationsModel: VariationsModel([
                     (label: .text("]"), actions: [.input("]")]),
-                    (label: .text("］"), actions: [.input("］")]),
+                    (label: .text("］"), actions: [.input("］")])
                 ])
             ),
             QwertyKeyModel(
@@ -268,7 +268,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("{")],
                 variationsModel: VariationsModel([
                     (label: .text("{"), actions: [.input("{")]),
-                    (label: .text("｛"), actions: [.input("｛")]),
+                    (label: .text("｛"), actions: [.input("｛")])
                 ])
             ),
             QwertyKeyModel(
@@ -276,7 +276,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("}")],
                 variationsModel: VariationsModel([
                     (label: .text("}"), actions: [.input("}")]),
-                    (label: .text("｝"), actions: [.input("｝")]),
+                    (label: .text("｝"), actions: [.input("｝")])
                 ])
             ),
             QwertyKeyModel(
@@ -284,7 +284,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("#")],
                 variationsModel: VariationsModel([
                     (label: .text("#"), actions: [.input("#")]),
-                    (label: .text("＃"), actions: [.input("＃")]),
+                    (label: .text("＃"), actions: [.input("＃")])
                 ])
             ),
             QwertyKeyModel(
@@ -292,7 +292,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("%")],
                 variationsModel: VariationsModel([
                     (label: .text("%"), actions: [.input("%")]),
-                    (label: .text("％"), actions: [.input("％")]),
+                    (label: .text("％"), actions: [.input("％")])
                 ])
             ),
             QwertyKeyModel(
@@ -300,7 +300,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("^")],
                 variationsModel: VariationsModel([
                     (label: .text("^"), actions: [.input("^")]),
-                    (label: .text("＾"), actions: [.input("＾")]),
+                    (label: .text("＾"), actions: [.input("＾")])
                 ])
             ),
             QwertyKeyModel(
@@ -308,7 +308,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("*")],
                 variationsModel: VariationsModel([
                     (label: .text("*"), actions: [.input("*")]),
-                    (label: .text("＊"), actions: [.input("＊")]),
+                    (label: .text("＊"), actions: [.input("＊")])
                 ])
             ),
             QwertyKeyModel(
@@ -317,7 +317,7 @@ struct QwertyDataProvider {
                 variationsModel: VariationsModel([
                     (label: .text("+"), actions: [.input("+")]),
                     (label: .text("＋"), actions: [.input("＋")]),
-                    (label: .text("±"), actions: [.input("±")]),
+                    (label: .text("±"), actions: [.input("±")])
                 ])
             ),
             QwertyKeyModel(
@@ -328,7 +328,7 @@ struct QwertyDataProvider {
                     (label: .text("＝"), actions: [.input("＝")]),
                     (label: .text("≡"), actions: [.input("≡")]),
                     (label: .text("≒"), actions: [.input("≒")]),
-                    (label: .text("≠"), actions: [.input("≠")]),
+                    (label: .text("≠"), actions: [.input("≠")])
                 ], direction: .left)
             )
         ],
@@ -365,7 +365,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("<")],
                 variationsModel: VariationsModel([
                     (label: .text("<"), actions: [.input("<")]),
-                    (label: .text("＜"), actions: [.input("＜")]),
+                    (label: .text("＜"), actions: [.input("＜")])
                 ])
             ),
             QwertyKeyModel(
@@ -373,7 +373,7 @@ struct QwertyDataProvider {
                 pressActions: [.input(">")],
                 variationsModel: VariationsModel([
                     (label: .text(">"), actions: [.input(">")]),
-                    (label: .text("＞"), actions: [.input("＞")]),
+                    (label: .text("＞"), actions: [.input("＞")])
                 ])
             ),
             QwertyKeyModel(
@@ -383,7 +383,7 @@ struct QwertyDataProvider {
                     (label: .text("\""), actions: [.input("\"")]),
                     (label: .text("＂"), actions: [.input("＂")]),
                     (label: .text("“"), actions: [.input("“")]),
-                    (label: .text("”"), actions: [.input("”")]),
+                    (label: .text("”"), actions: [.input("”")])
                 ])
             ),
             QwertyKeyModel(
@@ -391,7 +391,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("'")],
                 variationsModel: VariationsModel([
                     (label: .text("'"), actions: [.input("'")]),
-                    (label: .text("`"), actions: [.input("`")]),
+                    (label: .text("`"), actions: [.input("`")])
                 ])
             ),
 
@@ -400,7 +400,7 @@ struct QwertyDataProvider {
                 pressActions: [.input("$")],
                 variationsModel: VariationsModel([
                     (label: .text("$"), actions: [.input("$")]),
-                    (label: .text("＄"), actions: [.input("＄")]),
+                    (label: .text("＄"), actions: [.input("＄")])
                 ])
             ),
             QwertyKeyModel(

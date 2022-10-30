@@ -46,7 +46,7 @@ extension Collection {
 }
 
 extension MutableCollection {
-    mutating func mutatingForeach(transform closure: (inout Element) throws -> ()) rethrows {
+    mutating func mutatingForeach(transform closure: (inout Element) throws -> Void) rethrows {
         for index in self.indices {
             try closure(&self[index])
         }

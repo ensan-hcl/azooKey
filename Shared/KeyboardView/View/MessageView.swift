@@ -74,14 +74,14 @@ struct MessageView: View {
             }
         }
     }
-    
+
     var body: some View {
         ZStack {
             GeometryReader { reader in
                 Color.black.opacity(0.5)
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.white)
-                    .frame(width: reader.size.width*0.8, height: reader.size.height*0.8)
+                    .frame(width: reader.size.width * 0.8, height: reader.size.height * 0.8)
                     .overlay(VStack {
                         Text(data.title)
                             .font(.title.bold())
@@ -107,7 +107,7 @@ struct MessageView: View {
                             .padding(.bottom)
                         }
                     })
-                    .offset(x: reader.size.width*0.1, y: reader.size.height*0.1)
+                    .offset(x: reader.size.width * 0.1, y: reader.size.height * 0.1)
             }
         }
     }

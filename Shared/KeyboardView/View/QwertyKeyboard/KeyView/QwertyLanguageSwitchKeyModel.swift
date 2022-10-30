@@ -25,7 +25,7 @@ struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
         } else if SemiStaticStates.shared.needsInputModeSwitchKey {
             target = VariableStates.shared.keyboardLanguage
         } else {
-            @KeyboardSetting(.preferredLanguage) var preferredLanguage;
+            @KeyboardSetting(.preferredLanguage) var preferredLanguage: PreferredLanguage
             target = preferredLanguage.first
         }
         switch target {
