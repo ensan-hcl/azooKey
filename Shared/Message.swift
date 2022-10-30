@@ -11,7 +11,7 @@ import Foundation
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert_2022_09_16_03"
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
-    case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_debug_10_29_01"
+    case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_release" // MARK: frozen
 
     // MARK: 過去にプロダクションで用いていたメッセージID
     // ver1_9_user_dictionary_updateが実行されれば不要になるので、この宣言は削除
