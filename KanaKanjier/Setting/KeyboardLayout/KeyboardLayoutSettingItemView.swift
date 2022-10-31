@@ -91,15 +91,31 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
         Group {
             // ラベルの数でUIを出し分ける
             if types.count > 3 {
-                Picker(selection: $selection, label: Text(labelText)) {
-                    ForEach(0 ..< types.count, id: \.self) { i in
-                        Text(types[i].label).tag(types[i])
+                if #available(iOS 16, *) {
+                    Picker(selection: $selection, label: Text(labelText)) {
+                        ForEach(0 ..< types.count, id: \.self) { i in
+                            Text(types[i].label).tag(types[i])
+                        }
                     }
-                }
-                CenterAlignedView {
-                    KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
-                        .allowsHitTesting(false)
-                        .disabled(true)
+                    CenterAlignedView {
+                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                            .allowsHitTesting(false)
+                            .disabled(true)
+                    }
+                } else {
+                    Text(labelText)
+                    CenterAlignedView {
+                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                            .allowsHitTesting(false)
+                            .disabled(true)
+                    }
+                    Picker(selection: $selection, label: Text(labelText)) {
+                        ForEach(0 ..< types.count, id: \.self) { i in
+                            Text(types[i].label).tag(types[i])
+                        }
+                    }
+                    .labelsHidden()
+                    .pickerStyle(.segmented)
                 }
             } else {
                 VStack {
