@@ -14,6 +14,18 @@ struct LearningTypeSettingView: View {
         self._selection = .init(initialValue: LearningTypeSetting.value)
     }
 
+    private var learningType: Binding<LearningType> {
+        Binding(
+            get: {
+                return selection
+            },
+            set: { newValue in
+                selection = newValue
+                LearningTypeSetting.value = newValue
+            }
+        )
+    }
+
     var body: some View {
         HStack {
             Text(LearningTypeSetting.title)
@@ -24,9 +36,6 @@ struct LearningTypeSettingView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .onChange(of: selection) { value in
-                LearningTypeSetting.value = value
-            }
         }
     }
 }
