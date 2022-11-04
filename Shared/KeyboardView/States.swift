@@ -37,7 +37,7 @@ enum InputStyle: String {
     case roman2kana = "roman"
 }
 
-enum KeyboardLanguage: String, Codable {
+enum KeyboardLanguage: String, Codable, Equatable {
     case en_US
     case ja_JP
     case el_GR

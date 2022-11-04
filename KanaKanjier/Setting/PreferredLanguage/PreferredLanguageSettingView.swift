@@ -9,43 +9,73 @@
 import Foundation
 import SwiftUI
 
-private struct OptionalTranslator: Intertranslator {
-    typealias First = KeyboardLanguage?
-    typealias Second = KeyboardLanguage
-
-    static func convert(_ first: First) -> Second {
-        return first ?? .none
-    }
-
-    static func convert(_ second: KeyboardLanguage) -> KeyboardLanguage? {
-        switch second {
-        case .none:
-            return nil
-        default:
-            return second
-        }
-    }
-}
-
 struct PreferredLanguageSettingView: View {
+    // Viewを動的に更新するためには設定を`@State`としておく必要がある。
     @State private var selection: PreferredLanguage
     init() {
         self._selection = .init(initialValue: PreferredLanguageSetting.value)
     }
 
+    private var firstLanguage: Binding<KeyboardLanguage> {
+        Binding(
+            get: {
+                return selection.first
+            },
+            set: { newValue in
+                selection.first = newValue
+                PreferredLanguageSetting.value.first = newValue
+                if selection.second == newValue {
+                    switch newValue {
+                    case .ja_JP:
+                        selection.second = .en_US
+                        PreferredLanguageSetting.value.second = .en_US
+                    case .en_US, .el_GR:
+                        selection.second = .ja_JP
+                        PreferredLanguageSetting.value.second = .ja_JP
+                    case .none:
+                        selection.second = nil
+                        PreferredLanguageSetting.value.second = nil
+                    }
+                }
+            }
+        )
+    }
+
+    private var secondLanguage: Binding<KeyboardLanguage> {
+        Binding(
+            get: {
+                return selection.second ?? .none
+            },
+            set: { newValue in
+                let language: KeyboardLanguage?
+                switch newValue {
+                case .none:
+                    language = nil
+                default:
+                    language = newValue
+                }
+
+                selection.second = language
+                PreferredLanguageSetting.value.second = language
+            }
+        )
+    }
+
     var body: some View {
         Group {
-            Picker("第1言語", selection: $selection.first) {
+            Picker("第1言語", selection: firstLanguage) {
                 Text("日本語").tag(KeyboardLanguage.ja_JP)
                 Text("英語").tag(KeyboardLanguage.en_US)
             }
-            Picker("第2言語", selection: $selection.second.converted(OptionalTranslator.self)) {
-                Text("日本語").tag(KeyboardLanguage.ja_JP)
-                Text("英語").tag(KeyboardLanguage.en_US)
+            Picker("第2言語", selection: secondLanguage) {
+                if selection.first != .ja_JP {
+                    Text("日本語").tag(KeyboardLanguage.ja_JP)
+                }
+                if selection.first != .en_US {
+                    Text("英語").tag(KeyboardLanguage.en_US)
+                }
                 Text("指定しない").tag(KeyboardLanguage.none)
             }
-        }.onChange(of: selection) { value in
-            PreferredLanguageSetting.value = value
         }
     }
 }
