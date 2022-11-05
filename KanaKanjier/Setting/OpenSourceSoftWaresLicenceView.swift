@@ -156,6 +156,16 @@ struct OpenSourceSoftWaresLicenceView: View {
                     FallbackLink("Kaomojic", destination: "https://github.com/mika-f/kaomojic")
                 }
 
+                Section {
+                    Text("YMTGetDeviceName").font(.title).padding()
+                    Text("本アプリケーションはデバイスが地球儀ボタンを表示すべき端末であるか判定するために。YMTGetDeviceNameを使用しています。")
+                    FallbackLink("Licence", destination: "https://github.com/MasamiYamate/YMTGetDeviceName/blob/master/LICENSE")
+                    FallbackLink(
+                        "YMTGetDeviceName",
+                        destination: "https://github.com/MasamiYamate/YMTGetDeviceName"
+                    )
+                }
+
             }
             Section {
                 HStack {
