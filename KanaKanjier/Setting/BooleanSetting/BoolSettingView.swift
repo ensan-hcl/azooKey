@@ -11,14 +11,15 @@ import SwiftUI
 struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
     init(_ key: SettingKey) {}
     @State private var isOn = false
+    @State private var setting = SettingUpdater<SettingKey>()
 
     var body: some View {
-        Toggle(isOn: .init(get: {SettingKey.value}, set: {SettingKey.value = $0})) {
+        Toggle(isOn: $setting.value) {
             HStack {
                 Text(SettingKey.title)
                 Button {
                     isOn = true
-                }label: {
+                } label: {
                     Image(systemName: "questionmark.circle")
                 }
             }
