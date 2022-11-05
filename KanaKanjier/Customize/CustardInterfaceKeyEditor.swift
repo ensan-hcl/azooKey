@@ -354,12 +354,14 @@ struct CustardInterfaceKeyEditor: View {
         HStack {
             Text("縦")
             TextField("縦", text: $height.converted(intStringConverter))
+                .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .submitLabel(.done)
         }
         HStack {
             Text("横")
             TextField("横", text: $width.converted(intStringConverter))
+                .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .submitLabel(.done)
         }
