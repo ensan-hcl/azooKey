@@ -100,7 +100,7 @@ private struct Selection: Hashable {
 
 struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: View {
     @StateObject private var editState = EditState()
-    @State private var value: QwertyCustomKeysValue
+    @State private var setting = SettingUpdater<SettingKey>()
     @State private var selection = Selection()
     @State private var bottomSheetShown = false
 
@@ -122,15 +122,13 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
         return (width - necessarySpacing) / CGFloat(count)
     }
     private var width: CGFloat {
-        return romanScaledKeyWidth(normal: 7, for: value.keys.count)
+        return romanScaledKeyWidth(normal: 7, for: setting.value.keys.count)
     }
     private var variationWidth: CGFloat {
         return romanScaledKeyWidth(normal: 7, for: 7)
     }
 
-    init(_ key: SettingKey) {
-        self._value = .init(initialValue: SettingKey.value)
-    }
+    init(_ key: SettingKey) {}
 
     var body: some View {
         GeometryReader { geometry in
@@ -144,13 +142,13 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                     Text("編集したいキーを選択してください。")
                         .padding(.vertical)
                 }
-                if value.keys.isEmpty {
+                if setting.value.keys.isEmpty {
                     Button("デフォルトに戻す") {
-                        value.keys = QwertyCustomKeysValue.defaultValue.keys
+                        setting.value.keys = QwertyCustomKeysValue.defaultValue.keys
                         selection.longpressSelectIndex = -1
                     }
                 }
-                DraggableView(items: $value.keys, selection: $selection.selectIndex, enabled: selection.enabled && editState.allowDrag, width: width, height: keySize.height, padding: padding) {item, isSelected in
+                DraggableView(items: $setting.value.keys, selection: $selection.selectIndex, enabled: selection.enabled && editState.allowDrag, width: width, height: keySize.height, padding: padding) {item, isSelected in
                     let strokeColor: Color = {
                         if !isSelected {
                             return .primary
@@ -168,12 +166,12 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         .overlay(Text(item.name))
                 }
 
-                if value.keys.indices ~= selection.selectIndex {
+                if setting.value.keys.indices ~= selection.selectIndex {
                     Spacer(minLength: 50)
                         .fixedSize()
                     Text("長押しした時の候補")
                         .padding(.vertical)
-                    DraggableView(items: $value.keys[selection.selectIndex].longpresses, selection: $selection.longpressSelectIndex, enabled: selection.longpressEnabled && editState.allowDrag, width: variationWidth, height: keySize.height, padding: padding) {item, isSelected in
+                    DraggableView(items: $setting.value.keys[selection.selectIndex].longpresses, selection: $selection.longpressSelectIndex, enabled: selection.longpressEnabled && editState.allowDrag, width: variationWidth, height: keySize.height, padding: padding) {item, isSelected in
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(isSelected ? Color.accentColor : .primary)
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
@@ -191,11 +189,11 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                 maxHeight: geometry.size.height * 0.7
             ) {
                 Form {
-                    if value.keys.indices ~= selection.selectIndex {
+                    if setting.value.keys.indices ~= selection.selectIndex {
                         let binded = {
                             Binding.init(
-                                get: { value },
-                                set: { value = $0 }
+                                get: { setting.value },
+                                set: { setting.value = $0 }
                             )
                         }()
                         Section(header: Text("移動・追加")) {
@@ -217,7 +215,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                             } else {
                                 Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
                                 Button("入力を設定する") {
-                                    value[.input, selection] = ""
+                                    setting.value[.input, selection] = ""
                                 }
                                 .foregroundColor(.accentColor)
                             }
@@ -242,11 +240,11 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                     selection.selectIndex = -1
                                     // FIXME: 場当たり的な対処。`selection.selectIndex = -1`がViewに反映されてから削除を行う。
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                                        value.keys.remove(at: sIndex)
+                                        setting.value.keys.remove(at: sIndex)
                                     }
                                 } else {
                                     selection.longpressSelectIndex = -1
-                                    value.keys[sIndex].longpresses.remove(at: lpsIndex)
+                                    setting.value.keys[sIndex].longpresses.remove(at: lpsIndex)
                                 }
                             }
                         }
@@ -259,19 +257,16 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
         }
         .background(Color.secondarySystemBackground)
         .onAppear {
-            self.value = SettingKey.value   // Stateの状態が元に戻ってしまう問題への応急処置
-        }
-        .onChange(of: value) { newValue in
-            SettingKey.value = newValue
+            self.setting.value = SettingKey.value   // Stateの状態が元に戻ってしまう問題への応急処置
         }
         .onChange(of: selection) { newValue in
-            bottomSheetShown = value.keys.indices ~= newValue.selectIndex
+            bottomSheetShown = setting.value.keys.indices ~= newValue.selectIndex
             editState.state = .none
         }
     }
 
     private var isInputTextEditable: Bool {
-        let actions = value[selection].actions
+        let actions = setting.value[selection].actions
         if actions.count == 1, case .input = actions.first {
             return true
         }
@@ -282,12 +277,12 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
     }
 
     private func addPressKey() {
-        value.keys.append(QwertyCustomKey(name: "", actions: [.input("")], longpresses: []))
-        selection.selectIndex = value.keys.endIndex - 1
+        setting.value.keys.append(QwertyCustomKey(name: "", actions: [.input("")], longpresses: []))
+        selection.selectIndex = setting.value.keys.endIndex - 1
     }
 
     private func addLongpressKey(sIndex: Int) {
-        value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", actions: [.input("")]))
-        selection.longpressSelectIndex = value.keys[sIndex].longpresses.endIndex - 1
+        setting.value.keys[sIndex].longpresses.append(QwertyVariationKey(name: "", actions: [.input("")]))
+        selection.longpressSelectIndex = setting.value.keys[sIndex].longpresses.endIndex - 1
     }
 }

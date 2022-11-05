@@ -28,6 +28,19 @@ struct KeyboardSetting<T: KeyboardSettingKey> {
     }
 }
 
+/// 生の`SettingKey`の値を`@State`で宣言した場合、更新の反映ができない。
+/// `SettingUpdater`で包むことで、設定の更新を行いつつUIの更新も行われるようにできる。
+struct SettingUpdater<Wrapped: KeyboardSettingKey> {
+    var value: Wrapped.Value {
+        didSet {
+            Wrapped.value = value
+        }
+    }
+    init() {
+        self.value = Wrapped.value
+    }
+}
+
 protocol KeyboardSettingKey {
     associatedtype Value
     static var defaultValue: Value { get }

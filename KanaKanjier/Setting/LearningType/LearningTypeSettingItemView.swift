@@ -9,28 +9,13 @@
 import SwiftUI
 
 struct LearningTypeSettingView: View {
-    @State private var selection: LearningType
-    init() {
-        self._selection = .init(initialValue: LearningTypeSetting.value)
-    }
-
-    private var learningType: Binding<LearningType> {
-        Binding(
-            get: {
-                return selection
-            },
-            set: { newValue in
-                selection = newValue
-                LearningTypeSetting.value = newValue
-            }
-        )
-    }
+    @State private var selection = SettingUpdater<LearningTypeSetting>()
 
     var body: some View {
         HStack {
             Text(LearningTypeSetting.title)
             Spacer()
-            Picker(selection: $selection, label: Text("")) {
+            Picker(selection: $selection.value, label: Text("")) {
                 ForEach(0 ..< LearningType.allCases.count, id: \.self) { i in
                     Text(LearningType.allCases[i].string).tag(LearningType.allCases[i])
                 }
