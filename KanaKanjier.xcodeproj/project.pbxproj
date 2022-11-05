@@ -2548,7 +2548,6 @@
 		1AFA57662584815B00477DC2 /* QwertyCustomKeysItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */; };
 		1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68372518A40D00C649C4 /* LargeTextView.swift */; };
 		1AFB68422518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenceView.swift */; };
-		1AFB684E28D56E8200B5C717 /* DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */; };
 		1AFB684F28D56E8200B5C717 /* extension CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */; };
 		1AFB68502518F18A00C649C4 /* MoveCursorBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB684F2518F18A00C649C4 /* MoveCursorBar.swift */; };
 		1AFB685028D56E8200B5C717 /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
@@ -10783,7 +10782,6 @@
 				1A7F547426A96A870032E91E /* AzooKeyIcon.swift in Sources */,
 				1A26F34C25E8ACFD003CDA0D /* Color.swift in Sources */,
 				1A3DC2212500D600002CAA93 /* FlickTabKeyModel.swift in Sources */,
-				1AFB684E28D56E8200B5C717 /* DeviceName.swift in Sources */,
 				1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */,
 				1ABF7DA6263B08710045D6B2 /* IdentifiableItems.swift in Sources */,
 				1AD1003728E87C23005D6DDB /* EmailAddress.swift in Sources */,
