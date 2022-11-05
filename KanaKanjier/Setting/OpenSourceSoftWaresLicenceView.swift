@@ -123,7 +123,7 @@ struct OpenSourceSoftWaresLicenceView: View {
                     Text("MJ文字情報一覧表").font(.title).padding()
                     Text("本アプリケーションは音読みから漢字への変換を行うためMJ文字情報一覧表を使用しています。")
                     Text("本アプリケーションの持つ辞書のうち、MJ文字情報一覧表から派生した部分はクリエイティブ・コモンズ 表示 – 継承 2.1 日本 ライセンスを継承し、その著作権は独立行政法人情報処理推進機構(IPA)に帰属します。")
-                    FallbackLink("MJ文字情報一覧表 | 文字情報基盤整備事業", destination: "https://mojikiban.ipa.go.jp/1311.html#")
+                    FallbackLink("MJ文字情報一覧表 | 文字情報基盤整備事業", destination: "https://moji.or.jp/mojikiban/mjlist/#")
                 }
                 Section {
                     Text("japanese-word2vec-model-builder").font(.title).padding()
