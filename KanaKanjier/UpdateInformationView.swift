@@ -12,8 +12,19 @@ struct UpdateInfomationView: View {
         Form {
             // version 1.9系
             Group {
+                VersionView("1.9.2", releaseDate: "2022年11月xx日") {
+                    ParagraphView("仕様を変更しました。") {
+                        "ご要望があったため、タブバーボタンの表示・非表示の切り替えを再び可能にしました"
+                    }
+                    ParagraphView("不具合を修正しました。") {
+                        "設定を変更した後、表示が更新されないことがある不具合を修正"
+                    }
+                    ParagraphView("お知らせ") {
+                        "バージョン1.10以降でiOS14のサポートを終了します。iOS15以上で引き続きご利用いただけます。ご不便をおかけしますが、よろしくお願いいたします。"
+                    }
+                }
                 VersionView("1.9.1", releaseDate: "2022年11月01日") {
-                    ParagraphView("不具合を修正しました") {
+                    ParagraphView("不具合を修正しました。") {
                         "iPadOS 15で複数の日本語タブが存在する場合にキーボードの種類の選択ができなくなる問題を修正"
                     }
                 }
