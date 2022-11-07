@@ -12,25 +12,26 @@ struct MarkedTextSettingView: View {
     typealias SettingKey = MarkedTextSettingKey
     init(_ key: SettingKey) {}
     @State private var isOn = false
+    @State private var setting = SettingUpdater<SettingKey>()
 
-    var bindedValue: Binding<Bool> {
-        return .init(get: {
-            if SettingKey.value == .disabled {
-                return false
-            } else {
-                return true
-            }
-        }, set: { newValue in
-            if newValue {
-                SettingKey.value = .enabled
-            } else {
-                SettingKey.value = .disabled
-            }
-        })
+    func forward(_ settingValue: MarkedTextSettingKey.Value) -> Bool {
+        if settingValue == .disabled {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    func backward(_ boolValue: Bool) -> MarkedTextSettingKey.Value {
+        if boolValue {
+            return .enabled
+        } else {
+            return .disabled
+        }
     }
 
     var body: some View {
-        Toggle(isOn: bindedValue) {
+        Toggle(isOn: $setting.value.converted(forward: forward, backward: backward)) {
             HStack {
                 Text(SettingKey.title)
                 Button {
@@ -41,6 +42,9 @@ struct MarkedTextSettingView: View {
             }
         }
         .toggleStyle(.switch)
+        .onAppear {
+            setting.reload()
+        }
         .alert(isPresented: $isOn) {
             Alert(
                 title: Text(SettingKey.explanation),

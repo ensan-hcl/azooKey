@@ -36,7 +36,12 @@ struct SettingUpdater<Wrapped: KeyboardSettingKey> {
             Wrapped.value = value
         }
     }
+
     init() {
+        self.value = Wrapped.value
+    }
+
+    mutating func reload() {
         self.value = Wrapped.value
     }
 }

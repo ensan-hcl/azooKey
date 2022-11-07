@@ -26,7 +26,7 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
         }
         .toggleStyle(.switch)
         .onAppear {
-            setting.value = SettingKey.value
+            setting.reload()
         }
         .alert(isPresented: $isOn) {
             Alert(
