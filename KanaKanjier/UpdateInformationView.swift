@@ -12,6 +12,11 @@ struct UpdateInfomationView: View {
         Form {
             // version 1.9系
             Group {
+                VersionView("1.9.3", releaseDate: "2022年11月xx日") {
+                    ParagraphView("不具合を修正しました。") {
+                        "ライブ変換を使っていない場合に確定ボタンで確定した際、ひらがながカタカナとして学習されてしまう不具合を修正"
+                    }
+                }
                 VersionView("1.9.2", releaseDate: "2022年11月10日") {
                     ParagraphView("仕様を変更しました。") {
                         "ご要望があったため、タブバーボタンの表示・非表示の切り替えを再び可能にしました"
