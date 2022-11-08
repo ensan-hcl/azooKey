@@ -624,7 +624,7 @@ private final class InputManager {
     // MARK: 単純に確定した場合はひらがな列に対して候補を作成する
     fileprivate func enter() -> [ActionType] {
         var _candidate = Candidate(
-            text: self.composingText.convertTarget,
+            text: self.displayedTextManager.displayedText,
             value: -18,
             correspondingCount: self.composingText.input.count,
             lastMid: MIDData.一般.mid,
