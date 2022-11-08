@@ -311,6 +311,12 @@
 "azooKeyユーザ辞書" = "azooKey's Text replacement";
 "変換候補に単語を追加することができます。iOSの標準のユーザ辞書とは異なります。" = "You can add text replacements. It is different from thee device's text replacements.";
 
+"iOS14のサポートを終了します" = "Support for iOS14 is ending";
+"バージョン1.10(公開時期未定)以降のazooKeyではiOS14のサポートを終了する予定です。" = "It is planned that azooKey after version 1.10 does not support iOS14.";
+"iOS15以降では引き続き最新バージョンのazooKeyをご利用いただけます。" = "In iOS15 and later, you can still use latest version of azooKey.";
+"iOS14に対応する端末は全てiOS15にも対応しています。" = "All devices supporting iOS14 support iOS15 too.";
+"ぜひiOSをアップデートしてazooKeyをご利用ください。" = "Please update iOS and continue to use azooKey.";
+
 "追加する" = "Add";
 "詳細設定" = "Details";
 "詳しい設定" = "Details";
