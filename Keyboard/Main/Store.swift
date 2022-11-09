@@ -629,7 +629,13 @@ private final class InputManager {
             correspondingCount: self.composingText.input.count,
             lastMid: MIDData.一般.mid,
             data: [
-                DicdataElement(ruby: self.composingText.convertTarget.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -18)
+                DicdataElement(
+                    word: self.displayedTextManager.displayedText,
+                    ruby: self.composingText.convertTarget.toKatakana(),
+                    cid: CIDData.固有名詞.cid,
+                    mid: MIDData.一般.mid,
+                    value: -18
+                )
             ]
         )
         if liveConversionEnabled, let candidate = liveConversionManager.lastUsedCandidate {
