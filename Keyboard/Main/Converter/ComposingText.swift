@@ -538,6 +538,7 @@ extension ComposingText {
 
 }
 
+extension ComposingText: Equatable {}
 extension ComposingText.InputElement: Equatable {}
 
 // MARK: 誤り訂正用のAPI

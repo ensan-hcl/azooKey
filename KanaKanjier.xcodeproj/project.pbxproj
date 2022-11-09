@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A0E8D6825EDD74000A9BAE5 /* DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */; };
+		1A0FDF10291BED4F0088C5AA /* no_change.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0FDF0F291BED4F0088C5AA /* no_change.swift */; };
 		1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */; };
 		1A10D80225E4F56D0095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
 		1A10D80725E4F5710095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
@@ -2655,6 +2656,7 @@
 
 /* Begin PBXFileReference section */
 		1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceName.swift; sourceTree = "<group>"; };
+		1A0FDF0F291BED4F0088C5AA /* no_change.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = no_change.swift; sourceTree = "<group>"; };
 		1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInformationView.swift; sourceTree = "<group>"; };
 		1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCustard.swift; sourceTree = "<group>"; };
 		1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMadeCustard.swift; sourceTree = "<group>"; };
@@ -6434,6 +6436,7 @@
 				1A8A8403250F65410093A701 /* added_last_1_character.swift */,
 				1A8A8407250F65B40093A701 /* deleted_last_n_character.swift */,
 				1A8A8409250F65DA0093A701 /* completed_first.swift */,
+				1A0FDF0F291BED4F0088C5AA /* no_change.swift */,
 				1A86F4A92536033900B92B49 /* changed_last_n_character.swift */,
 			);
 			path = Kana2Kanji;
@@ -11006,6 +11009,7 @@
 				1A2602F42514FB6E00EAD647 /* VariationsModel.swift in Sources */,
 				1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */,
 				1AF678F625CED91900F3987B /* ActionDepartment.swift in Sources */,
+				1A0FDF10291BED4F0088C5AA /* no_change.swift in Sources */,
 				1A2602AE251489C700EAD647 /* QwertyKeyModelProtocol.swift in Sources */,
 				1AE1025025D1265A00CA7277 /* ColorTools.swift in Sources */,
 				1AA346AF2567F15C00B41A16 /* SharedStore.swift in Sources */,

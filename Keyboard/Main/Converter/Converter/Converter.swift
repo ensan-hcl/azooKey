@@ -478,8 +478,13 @@ final class KanaKanjiConverter {
             return result
         }
 
-        // TODO: 完全に同一のデータの場合のケースを追加する
         debug("convertToLattice: before \(previousInputData) after \(inputData)")
+
+        // 完全一致の場合
+        if previousInputData == inputData {
+            let result = converter.kana2lattice_no_change(N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
+            self.previousInputData = inputData
+        }
 
         // 文節確定の後の場合
         if let completedData, previousInputData.inputHasSuffix(inputOf: inputData) {
