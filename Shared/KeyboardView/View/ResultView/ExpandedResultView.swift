@@ -12,7 +12,7 @@ import SwiftUI
 struct ExpandedResultView<Candidate: ResultViewItemData>: View {
     @Binding private var isResultViewExpanded: Bool
 
-    @State private var splitedResults: [SplitedResultData<Candidate>]
+    private var splitedResults: [SplitedResultData<Candidate>]
     private var buttonWidth: CGFloat {
         Design.resultViewHeight() * 0.5
     }
@@ -24,7 +24,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
     init(isResultViewExpanded: Binding<Bool>, resultData: [ResultData<Candidate>]) {
         self._isResultViewExpanded = isResultViewExpanded
-        self._splitedResults = State(initialValue: Self.registerResults(results: resultData))
+        self.splitedResults = Self.registerResults(results: resultData)
     }
 
     var body: some View {
