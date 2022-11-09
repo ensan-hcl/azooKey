@@ -495,6 +495,9 @@ final class KanaKanjiConverter {
             return result
         }
 
+        // TODO: 元々はsuffixになっていないが、文節確定の後であるケースで、確定された文節を考慮できるようにする
+        // へんかん|する → 変換 する|　のようなパターンで、previousInputData: へんかん, inputData: する, となることがある
+
         let diff = inputData.differenceSuffix(to: previousInputData)
 
         // 一文字消した場合
