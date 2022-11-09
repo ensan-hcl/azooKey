@@ -12,9 +12,12 @@ struct UpdateInfomationView: View {
         Form {
             // version 1.9系
             Group {
-                VersionView("1.9.3", releaseDate: "2022年11月xx日") {
+                VersionView("1.9.3", releaseDate: "2022年11月12日") {
                     ParagraphView("不具合を修正しました。") {
                         "ライブ変換を使っていない場合に確定ボタンで確定した際、ひらがながカタカナとして学習されてしまう不具合を修正"
+                        "カーソルの手動移動に関する不具合を修正"
+                        "変換候補リストの更新が遅れる問題を修正"
+                        "特定の手順で変換とカーソル移動を行うとキーボードがクラッシュする不具合を修正"
                     }
                 }
                 VersionView("1.9.2", releaseDate: "2022年11月10日") {
