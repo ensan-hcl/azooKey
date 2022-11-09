@@ -1076,11 +1076,8 @@ private final class InputManager {
             return
         }
         let operation = composingText.moveCursorFromCursorPosition(count: count)
-        let delta = operation.cursor - count
-        if delta != 0 {
-            try? self.displayedTextManager.moveCursor(count: delta, isComposing: false)
-            afterAdjusted = true
-        }
+        let afterAdjusted = self.displayedTextManager.setMovedCursor(movedCount: count, composingTextOperation: operation)
+        self.afterAdjusted = afterAdjusted
         setResult()
     }
 
@@ -1504,6 +1501,19 @@ final class DisplayedTextManager {
     enum OperationError: Error {
         case liveConversion
         case deleteTooMuch
+    }
+
+    // すでにカーソルが動かされた場合に処理を行う
+    // 戻り値はカーソルを補正したか否か
+    func setMovedCursor(movedCount: Int, composingTextOperation: ComposingText.ViewOperation) -> Bool {
+        let delta = composingTextOperation.cursor - movedCount
+        self.displayedTextCursorPosition += composingTextOperation.cursor
+        if delta != 0 {
+            let offset = self.getActualOffset(count: delta)
+            self.proxy.adjustTextPosition(byCharacterOffset: offset)
+            return true
+        }
+        return false
     }
 
     func moveCursor(count: Int, isComposing: Bool = true) throws {
