@@ -127,6 +127,7 @@ private struct UserDictionaryDataListView: View {
 private struct UserDictionaryDataEditor: CancelableEditor {
     @ObservedObject private var item: EditableUserDictionaryData
     @ObservedObject private var variables: UserDictManagerVariables
+    @State private var wordEditMode: Bool = false
     typealias EditTarget = EditableUserDictionaryData
     fileprivate let base: EditableUserDictionaryData
 
@@ -136,16 +137,84 @@ private struct UserDictionaryDataEditor: CancelableEditor {
         self.base = item.copy()
     }
 
+    @available(iOS 16.0, *)
+    private func hasTemplate(word: String) -> Bool {
+        return word.contains(/{{.+}}/)
+    }
+
+    @available(iOS 16.0, *)
+    private func parsedWord(word: String) -> [String] {
+        var result: [String] = []
+        var startIndex = word.startIndex
+        while let range = word[startIndex...].firstMatch(of: /{{.+}}/)?.range {
+            result.append(String(word[startIndex ..< range.lowerBound]))
+            result.append(String(word[range]))
+            startIndex = range.upperBound
+        }
+        result.append(String(word[startIndex ..< word.endIndex]))
+
+        return result
+    }
+
+    @ViewBuilder
+    @available(iOS 16.0, *)
+    private func templateWordView(word: String) -> some View {
+        let parsedWords = parsedWord(word: word)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(alignment: .center, spacing: 0) {
+                ForEach(parsedWords.indices, id: \.self) { i in
+                    let isTemplate = parsedWords[i].wholeMatch(of: /{{.+}}/) != nil
+                    if isTemplate {
+                        Button {
+                            print("Template:", parsedWords[i])
+                        } label: {
+                            Text(parsedWords[i])
+                                .bold()
+                                .padding(0)
+                                .foregroundColor(.blue)
+                        }
+                    } else {
+                        Text(parsedWords[i])
+                            .padding(0)
+                    }
+                }
+            }
+        }
+    }
+
     var body: some View {
         Form {
             Section(header: Text("読みと単語"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")) {
                 HStack {
-                    TextField("単語", text: $item.data.word)
-                        .padding(.vertical, 2)
-                        .submitLabel(.done)
-                    Divider()
-                    PasteLongPressButton($item.data.word)
-                        .padding(.horizontal, 5)
+                    if #available(iOS 16.0, *), hasTemplate(word: item.data.word) {
+                        if wordEditMode {
+                            TextField("単語", text: $item.data.word)
+                                .padding(.vertical, 2)
+                                .submitLabel(SubmitLabel.done)
+                                .onSubmit(of: SubmitTriggers.text) {
+                                    wordEditMode = false
+                                }
+                        } else {
+                            templateWordView(word: item.data.word)
+                            Spacer()
+                            Divider()
+                            Button {
+                                wordEditMode = true
+                            } label: {
+                                Image(systemName: "rectangle.and.pencil.and.ellipsis")
+                            }
+                        }
+                        Divider()
+                        PasteLongPressButton($item.data.word)
+                            .padding(.horizontal, 5)
+                    } else {
+                        TextField("単語", text: $item.data.word)
+                            .padding(.vertical, 2)
+                            .submitLabel(.done)
+                        Divider()
+                        PasteLongPressButton($item.data.word)
+                            .padding(.horizontal, 5)
+                    }
                 }
                 HStack {
                     TextField("読み", text: $item.data.ruby)
