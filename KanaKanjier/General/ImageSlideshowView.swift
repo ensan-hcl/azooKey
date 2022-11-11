@@ -18,28 +18,12 @@ struct ImageSlideshowView: View {
 
     var body: some View {
         CenterAlignedView {
-            if #available(iOS 15, *) {
-                TimelineView(.periodic(from: .now, by: 2.5)) { context in
-                    let selection = Int(context.date.timeIntervalSince1970 / 2.5) % pictures.count
-                    Image(pictures[selection])
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: Store.shared.imageMaximumWidth)
-                }
-            } else {
-                HStack {
-                    ForEach(pictures.indices, id: \.self) {i in
-                        if i == selection {
-                            Image(pictures[selection])
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxWidth: Store.shared.imageMaximumWidth)
-                        }
-                    }
-                }
-                .onReceive(timer) {_ in
-                    self.update()
-                }
+            TimelineView(.periodic(from: .now, by: 2.5)) { context in
+                let selection = Int(context.date.timeIntervalSince1970 / 2.5) % pictures.count
+                Image(pictures[selection])
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: Store.shared.imageMaximumWidth)
             }
         }
     }
