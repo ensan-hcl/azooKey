@@ -37,43 +37,46 @@ struct ThemeTabView: View {
             )
     }
 
+    private func selectButton(_ index: Int) -> some View {
+        GeometryReader {geometry in
+            if manager.selectedIndex == manager.selectedIndexInDarkMode {
+                CenterAlignedView {
+                    VStack {
+                        Spacer()
+                        circle(geometry: geometry, systemName: "checkmark", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
+                        Spacer()
+                    }
+                    .onTapGesture {
+                        manager.select(at: index)
+                    }
+                }
+            } else {
+                CenterAlignedView {
+                    VStack {
+                        Spacer()
+                        circle(geometry: geometry, systemName: "sun.max.fill", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
+                            .onTapGesture {
+                                manager.selectForLightMode(at: index)
+                            }
+                        Spacer(minLength: 10)
+                        circle(geometry: geometry, systemName: "moon.fill", color: manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
+                            .onTapGesture {
+                                manager.selectForDarkMode(at: index)
+                            }
+                        Spacer()
+                    }
+                }
+            }
+        }
+    }
+
     private var listSection: some View {
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
                 HStack {
                     KeyboardPreview(theme: theme, scale: 0.6)
                         .disabled(true)
-                    GeometryReader {geometry in
-                        if manager.selectedIndex == manager.selectedIndexInDarkMode {
-                            CenterAlignedView {
-                                VStack {
-                                    Spacer()
-                                    circle(geometry: geometry, systemName: "checkmark", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                                    Spacer()
-                                }
-                                .onTapGesture {
-                                    manager.select(at: index)
-                                }
-                            }
-                        } else {
-                            CenterAlignedView {
-                                VStack {
-                                    Spacer()
-                                    circle(geometry: geometry, systemName: "sun.max.fill", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                                        .onTapGesture {
-                                            manager.selectForLightMode(at: index)
-                                        }
-                                    Spacer(minLength: 10)
-                                    circle(geometry: geometry, systemName: "moon.fill", color: manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
-                                        .onTapGesture {
-                                            manager.selectForDarkMode(at: index)
-                                        }
-                                    Spacer()
-                                }
-                            }
-
-                        }
-                    }
+                    selectButton(index)
                     if editViewIndex == index {
                         NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled) {
                             EmptyView()

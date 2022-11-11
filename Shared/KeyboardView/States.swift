@@ -103,10 +103,8 @@ final class SemiStaticStates {
         }
         if let orientation {
             VariableStates.shared.setOrientation(orientation)
-        } else if #available(iOS 15, *) {
-            VariableStates.shared.setOrientation(UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height ? .vertical : .horizontal)
         } else {
-            VariableStates.shared.setOrientation(size.width < size.height ? .vertical : .horizontal)
+            VariableStates.shared.setOrientation(UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height ? .vertical : .horizontal)
         }
         let width = size.width
         self.screenWidth = width

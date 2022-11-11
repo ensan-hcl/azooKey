@@ -105,36 +105,11 @@ private final class ImportedCustardData: ObservableObject {
     }
 
     func download(from url: URL) {
-        if #available(iOS 15, *) {
-            Task {
-                await self.downloadAsync(from: url)
-            }
-        } else {
-            self.downloadDispatchAsync(from: url)
+        Task {
+            await self.downloadAsync(from: url)
         }
     }
 
-    private func downloadDispatchAsync(from url: URL) {
-        debug("ダウンロード開始")
-        self.processState = .getFile
-        let task: URLSessionTask = URLSession.shared.dataTask(with: url, completionHandler: {(data, _, _) in
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    self.failureData = .invalidData
-                    self.processState = .none
-                }
-                return
-            }
-            DispatchQueue.main.async {
-                debug("ダウンロード終了")
-                self.downloadedData = data
-            }
-        })
-
-        task.resume()
-    }
-
-    @available(iOS 15, *)
     @MainActor
     private func downloadAsync(from url: URL) async {
         do {
