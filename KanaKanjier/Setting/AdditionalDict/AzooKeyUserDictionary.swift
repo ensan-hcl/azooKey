@@ -176,8 +176,8 @@ private struct UserDictionaryTemplateWordEditor: View {
             TextField("単語", text: $editingWord)
                 .padding(.vertical, 2)
                 .focused($focusOnWordField, equals: true)
-                .submitLabel(SubmitLabel.done)
-                .onSubmit(of: SubmitTriggers.text) {
+                .submitLabel(.done)
+                .onSubmit {
                     wordEditMode = false
                 }
         } else {
