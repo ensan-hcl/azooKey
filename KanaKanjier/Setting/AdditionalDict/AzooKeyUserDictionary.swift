@@ -124,23 +124,12 @@ private struct UserDictionaryDataListView: View {
     }
 }
 
-private struct UserDictionaryDataEditor: CancelableEditor {
-    @ObservedObject private var item: EditableUserDictionaryData
-    @ObservedObject private var variables: UserDictManagerVariables
+/// テンプレートを含むwordを編集するテキストフィールド
+@available(iOS 16, *)
+private struct UserDictionaryTemplateWordEditor: View {
+    @Binding var editingWord: String
     @State private var wordEditMode: Bool = false
-    typealias EditTarget = EditableUserDictionaryData
-    fileprivate let base: EditableUserDictionaryData
-
-    init(_ item: EditableUserDictionaryData, variables: UserDictManagerVariables) {
-        self.item = item
-        self.variables = variables
-        self.base = item.copy()
-    }
-
-    @available(iOS 16.0, *)
-    private func hasTemplate(word: String) -> Bool {
-        return word.contains(/{{.+}}/)
-    }
+    @FocusState private var focusOnWordField: Bool?
 
     @available(iOS 16.0, *)
     private func parsedWord(word: String) -> [String] {
@@ -183,30 +172,55 @@ private struct UserDictionaryDataEditor: CancelableEditor {
     }
 
     var body: some View {
+        if wordEditMode {
+            TextField("単語", text: $editingWord)
+                .padding(.vertical, 2)
+                .focused($focusOnWordField, equals: true)
+                .submitLabel(SubmitLabel.done)
+                .onSubmit(of: SubmitTriggers.text) {
+                    wordEditMode = false
+                }
+        } else {
+            templateWordView(word: editingWord)
+            Spacer()
+            Divider()
+            Button {
+                wordEditMode = true
+                focusOnWordField = true
+            } label: {
+                Image(systemName: "rectangle.and.pencil.and.ellipsis")
+            }
+        }
+        Divider()
+        PasteLongPressButton($editingWord)
+            .padding(.horizontal, 5)
+    }
+}
+
+private struct UserDictionaryDataEditor: CancelableEditor {
+    @ObservedObject private var item: EditableUserDictionaryData
+    @ObservedObject private var variables: UserDictManagerVariables
+
+    typealias EditTarget = EditableUserDictionaryData
+    fileprivate let base: EditableUserDictionaryData
+
+    init(_ item: EditableUserDictionaryData, variables: UserDictManagerVariables) {
+        self.item = item
+        self.variables = variables
+        self.base = item.copy()
+    }
+
+    @available(iOS 16.0, *)
+    private func hasTemplate(word: String) -> Bool {
+        return word.contains(/{{.+}}/)
+    }
+
+    var body: some View {
         Form {
             Section(header: Text("読みと単語"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")) {
                 HStack {
                     if #available(iOS 16.0, *), hasTemplate(word: item.data.word) {
-                        if wordEditMode {
-                            TextField("単語", text: $item.data.word)
-                                .padding(.vertical, 2)
-                                .submitLabel(SubmitLabel.done)
-                                .onSubmit(of: SubmitTriggers.text) {
-                                    wordEditMode = false
-                                }
-                        } else {
-                            templateWordView(word: item.data.word)
-                            Spacer()
-                            Divider()
-                            Button {
-                                wordEditMode = true
-                            } label: {
-                                Image(systemName: "rectangle.and.pencil.and.ellipsis")
-                            }
-                        }
-                        Divider()
-                        PasteLongPressButton($item.data.word)
-                            .padding(.horizontal, 5)
+                        UserDictionaryTemplateWordEditor(editingWord: $item.data.word)
                     } else {
                         TextField("単語", text: $item.data.word)
                             .padding(.vertical, 2)
