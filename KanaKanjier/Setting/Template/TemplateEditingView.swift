@@ -99,14 +99,11 @@ struct RandomTemplateLiteralSettingView: View {
         case nan
         case stringIsNil
     }
-    private let timer = Timer.publish(every: 0.8, on: .main, in: .common).autoconnect()
     // リテラル
     @Binding private var template: TemplateData
 
     @State private var literal = RandomTemplateLiteral(value: .int(from: 1, to: 6))
     @State private var type: RandomTemplateLiteral.ValueType = .int
-    // 表示用
-    @State private var previewString: String = ""
 
     @State private var intStringRange = (left: "1", right: "6")
     @State private var doubleStringRange = (left: "0", right: "1")
@@ -126,7 +123,6 @@ struct RandomTemplateLiteralSettingView: View {
                 self._stringsString = State(initialValue: strings.joined(separator: ","))
             }
         }
-        self._previewString = State(initialValue: self.literal.previewString())
     }
 
     private func update() {
@@ -150,7 +146,6 @@ struct RandomTemplateLiteralSettingView: View {
             let strings = stringsString.components(separatedBy: ",")
             self.literal.value = .string(strings)
         }
-        self.previewString = self.literal.previewString()
         self.template.literal = self.literal
     }
 
@@ -174,9 +169,9 @@ struct RandomTemplateLiteralSettingView: View {
                 }
             }
             Section(header: Text("プレビュー")) {
-                Text(previewString)
-            }.onReceive(timer) {_ in
-                self.update()
+                TimelineView(.periodic(from: Date(), by: 0.8)) { _ in
+                    Text(self.literal.previewString())
+                }
             }
 
             switch type {
@@ -186,6 +181,7 @@ struct RandomTemplateLiteralSettingView: View {
                         TextField("左端の値", text: $intStringRange.left)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
+                            .onSubmit(update)
                         Text("から")
                     }
                     if Int(intStringRange.left) == nil {
@@ -197,6 +193,7 @@ struct RandomTemplateLiteralSettingView: View {
                         TextField("右端の値", text: $intStringRange.right)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
+                            .onSubmit(update)
                         Text("まで")
                     }
                     if Int(intStringRange.right) == nil {
@@ -209,6 +206,7 @@ struct RandomTemplateLiteralSettingView: View {
                         TextField("左端の値", text: $doubleStringRange.left)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
+                            .onSubmit(update)
                         Text("から")
                     }
                     if Double(doubleStringRange.left) == nil {
@@ -220,6 +218,7 @@ struct RandomTemplateLiteralSettingView: View {
                         TextField("右端の値", text: $doubleStringRange.right)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
+                            .onSubmit(update)
                         Text("まで")
                     }
                     if Double(doubleStringRange.right) == nil {
@@ -232,6 +231,7 @@ struct RandomTemplateLiteralSettingView: View {
                         TextField("表示する値(カンマ区切り)", text: $stringsString)
                             .textFieldStyle(.roundedBorder)
                             .submitLabel(.done)
+                            .onSubmit(update)
                     }
                     if stringsString.isEmpty {
                         warning(.stringIsNil)
@@ -344,14 +344,10 @@ struct DateTemplateLiteralSettingView: View {
                     }
                 }
             }
+
             Section(header: Text("プレビュー")) {
-                HStack {
-                    Text(formatter.string(from: date))
-                    Spacer()
-                    Button(action: update) {
-                        Image(systemName: "arrow.clockwise")
-                        Text("更新")
-                    }
+                TimelineView(.periodic(from: Date(), by: 0.5)) { _ in
+                    Text(formatter.string(from: Date()))
                 }
             }
             if formatSelection == "カスタム"{

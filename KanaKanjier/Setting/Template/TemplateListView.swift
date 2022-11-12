@@ -20,12 +20,7 @@ extension TemplateData: Identifiable {
 
 // このモデルがNavigation状態を管理し、プレビューが遷移後も更新し続けるのを防ぐ
 private final class NavigationModel: ObservableObject {
-    @Published var linkSelection: Int? {
-        didSet {
-            self.shouldUpdate = linkSelection == nil
-        }
-    }
-    @Published var shouldUpdate = true
+    @Published var linkSelection: Int?
 }
 
 // Listが大元のtemplatesを持ち、各EditingViewにBindingで渡して編集させる。
@@ -38,22 +33,14 @@ struct TemplateListView: View {
         TemplateData(template: "<date format=\"yyyy年MM月dd日\" type=\"western\" language=\"ja_JP\" delta=\"1\" deltaunit=\"86400\">", name: "明日"),
         TemplateData(template: "<date format=\"Gy年MM月dd日\" type=\"japanese\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "和暦")
     ]
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     private static let dataFileName = "user_templates.json"
     @ObservedObject private var data = TemplateDataList()
-    @State private var previewStrings: [String]
-
     @ObservedObject private var navigationModel = NavigationModel()
 
     init() {
         let templates = TemplateData.load() ?? Self.defaultData
-        self._previewStrings = State(initialValue: templates.map {$0.previewString})
         self.data.templates = templates
-    }
-
-    private func update() {
-        self.previewStrings = data.templates.map {$0.previewString}
     }
 
     var body: some View {
@@ -61,12 +48,14 @@ struct TemplateListView: View {
             List {
                 let validationInfo = data.templates.map {$0.name}
                 ForEach($data.templates.identifiableItems) {value in
-                    NavigationLink(destination: TemplateEditingView(value.$item, validationInfo: validationInfo), tag: value.index, selection: $navigationModel.linkSelection) {
-                        HStack {
-                            Text(value.item.name)
-                            Spacer()
-                            Text(previewStrings[value.index])
-                                .foregroundColor(.gray)
+                    TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
+                        NavigationLink(destination: TemplateEditingView(value.$item, validationInfo: validationInfo), tag: value.index, selection: $navigationModel.linkSelection) {
+                            HStack {
+                                Text(value.item.name)
+                                Spacer()
+                                Text(value.item.previewString)
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
                 }
@@ -74,19 +63,11 @@ struct TemplateListView: View {
             }
         }.navigationBarTitle(Text("テンプレートの管理"), displayMode: .inline)
         .navigationBarItems(trailing: addButton)
-        .onAppear {
-            self.previewStrings = data.templates.map {$0.previewString}
-        }
         .onEnterBackground {_ in
             self.save()
         }
         .onDisappear {
             self.save()
-        }
-        .onReceive(timer) {_ in
-            if navigationModel.shouldUpdate {
-                self.update()
-            }
         }
     }
 
@@ -101,7 +82,6 @@ struct TemplateListView: View {
             }
             let newData = TemplateData(template: DateTemplateLiteral.example.export(), name: name)
             data.templates.append(newData)
-            self.previewStrings = data.templates.map {$0.previewString}
         }label: {
             Image(systemName: "plus")
         }
@@ -109,7 +89,6 @@ struct TemplateListView: View {
 
     private func delete(at offsets: IndexSet) {
         data.templates.remove(atOffsets: offsets)
-        previewStrings.remove(atOffsets: offsets)
     }
 
     private func save() {
