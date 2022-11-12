@@ -80,7 +80,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                         HStack {
                             Spacer()
                             Button {
-                                VariableStates.shared.action.registerAction(.toggleTabBar)
+                                VariableStates.shared.action.registerAction(.setTabBar(.toggle))
                             } label: {
                                 ZStack {
                                     if displayTabBarButton {
@@ -99,7 +99,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                         }
                         .background(Color(.sRGB, white: 1, opacity: 0.001))
                         .onLongPressGesture {
-                            VariableStates.shared.action.registerAction(.toggleTabBar)
+                            VariableStates.shared.action.registerAction(.setTabBar(.toggle))
                         }
                     } else {
                         HStack {
