@@ -47,6 +47,7 @@ enum QwertyUnpressedKeyColorType {
     case special
     case enter
     case selected
+    case unimportant
 
     func color(states: VariableStates, theme: ThemeData) -> Color {
         switch self {
@@ -56,6 +57,8 @@ enum QwertyUnpressedKeyColorType {
             return theme.specialKeyFillColor.color
         case .selected:
             return theme.pushedKeyFillColor.color
+        case .unimportant:
+            return Color.init(white: 0, opacity: 0.001)
         case .enter:
             switch states.enterKeyState {
             case .complete, .edit:

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 struct FlickTabKeyModel: FlickKeyModelProtocol {
     private let key: CustomizableFlickKey

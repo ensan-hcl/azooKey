@@ -8,6 +8,7 @@
 
 import Foundation
 import CryptoKit
+import CustardKit
 
 struct CustardInternalMetaData: Codable {
     var origin: Origin

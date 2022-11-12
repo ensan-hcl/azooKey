@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 extension Custard: Equatable {
     public static func == (lhs: Custard, rhs: Custard) -> Bool {

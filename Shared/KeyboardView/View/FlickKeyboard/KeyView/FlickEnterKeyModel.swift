@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 struct FlickEnterKeyModel: FlickKeyModelProtocol {
     static let shared = FlickEnterKeyModel()

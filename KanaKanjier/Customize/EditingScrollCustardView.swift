@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
     var label: LocalizedStringKey {

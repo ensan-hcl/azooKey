@@ -22,8 +22,6 @@
 		1A146FBD28C8AAA400AE6CCE /* emoji...12_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A146FBC28C8AAA300AE6CCE /* emoji...12_dict.tsv */; };
 		1A146FBF28C8AAAF00AE6CCE /* emoji13_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A146FBE28C8AAAE00AE6CCE /* emoji13_dict.tsv */; };
 		1A18424325DD6857003985AB /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18424225DD6857003985AB /* FontPicker.swift */; };
-		1A18425525DE6163003985AB /* CustardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425425DE6163003985AB /* CustardData.swift */; };
-		1A18425625DE6163003985AB /* CustardData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425425DE6163003985AB /* CustardData.swift */; };
 		1A18425D25DE6678003985AB /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425C25DE6678003985AB /* CustomKeyboard.swift */; };
 		1A18425E25DE6678003985AB /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425C25DE6678003985AB /* CustomKeyboard.swift */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
@@ -974,6 +972,8 @@
 		1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A673609250AFBCB003FC654 /* Wareki.swift */; };
 		1A677370256F7AC30037AF22 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* Sound.swift */; };
 		1A6F959725144481007399AC /* QwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* QwertyKeyboardView.swift */; };
+		1A70DFFD291F2D1E00A83849 /* CustardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A70DFFC291F2D1E00A83849 /* CustardKit */; };
+		1A70DFFF291F2D3B00A83849 /* CustardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A70DFFE291F2D3B00A83849 /* CustardKit */; };
 		1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */; };
 		1A7F546F26A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
 		1A7F547026A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
@@ -2428,8 +2428,6 @@
 		1AB8C3CE25E2509300D39BC5 /* CustomizeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */; };
 		1AB8C3D825E256EE00D39BC5 /* EditingTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */; };
 		1AB8C3DE25E2854C00D39BC5 /* CodableActionDataEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3DD25E2854C00D39BC5 /* CodableActionDataEditor.swift */; };
-		1AB8C3E825E2A1F000D39BC5 /* CodableActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */; };
-		1AB8C3E925E2A1F000D39BC5 /* CodableActionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */; };
 		1AB8C3EF25E2A27C00D39BC5 /* TabBarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */; };
 		1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */; };
 		1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */; };
@@ -2668,7 +2666,6 @@
 		1A146FBC28C8AAA300AE6CCE /* emoji...12_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji...12_dict.tsv; sourceTree = "<group>"; };
 		1A146FBE28C8AAAE00AE6CCE /* emoji13_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji13_dict.tsv; sourceTree = "<group>"; };
 		1A18424225DD6857003985AB /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
-		1A18425425DE6163003985AB /* CustardData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardData.swift; sourceTree = "<group>"; };
 		1A18425C25DE6678003985AB /* CustomKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboard.swift; sourceTree = "<group>"; };
 		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
@@ -5050,7 +5047,6 @@
 		1AB8C3CD25E2509300D39BC5 /* CustomizeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabView.swift; sourceTree = "<group>"; };
 		1AB8C3D725E256EE00D39BC5 /* EditingTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTabBarView.swift; sourceTree = "<group>"; };
 		1AB8C3DD25E2854C00D39BC5 /* CodableActionDataEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableActionDataEditor.swift; sourceTree = "<group>"; };
-		1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableActionData.swift; sourceTree = "<group>"; };
 		1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarData.swift; sourceTree = "<group>"; };
 		1AB8C3FD25E35B3C00D39BC5 /* ManageCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCustardView.swift; sourceTree = "<group>"; };
 		1AB8C40325E3884200D39BC5 /* BottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetView.swift; sourceTree = "<group>"; };
@@ -5157,6 +5153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A70DFFD291F2D1E00A83849 /* CustardKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5180,6 +5177,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A70DFFF291F2D3B00A83849 /* CustardKit in Frameworks */,
 				1A8E454A28E5711800133D3B /* OrderedCollections in Frameworks */,
 				1A9E908F2822CEC100E73846 /* DequeModule in Frameworks */,
 			);
@@ -5216,12 +5214,10 @@
 			isa = PBXGroup;
 			children = (
 				1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */,
-				1A18425425DE6163003985AB /* CustardData.swift */,
 				1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */,
 				1A370E58290CF35B0053D6D4 /* NumberCustard.swift */,
 				1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */,
 				1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */,
-				1AB8C3E725E2A1F000D39BC5 /* CodableActionData.swift */,
 			);
 			path = Custard;
 			sourceTree = "<group>";
@@ -8211,6 +8207,7 @@
 			);
 			name = KanaKanjier;
 			packageProductDependencies = (
+				1A70DFFC291F2D1E00A83849 /* CustardKit */,
 			);
 			productName = KanaKanjier;
 			productReference = 1A3DC1C22500D44A002CAA93 /* azooKey.app */;
@@ -8273,6 +8270,7 @@
 			packageProductDependencies = (
 				1A9E908E2822CEC100E73846 /* DequeModule */,
 				1A8E454928E5711800133D3B /* OrderedCollections */,
+				1A70DFFE291F2D3B00A83849 /* CustardKit */,
 			);
 			productName = Keyboard;
 			productReference = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */;
@@ -8340,6 +8338,7 @@
 				1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				1AFB685828D5CCB300B5C717 /* XCRemoteSwiftPackageReference "FNV" */,
 				1AFB685B28D5DA4600B5C717 /* XCRemoteSwiftPackageReference "MurmurHash-Swift" */,
+				1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */,
 			);
 			productRefGroup = 1A3DC1C32500D44A002CAA93 /* Products */;
 			projectDirPath = "";
@@ -10768,7 +10767,6 @@
 				1AF6797B25CEDB9B00F3987B /* QwertyKeyView.swift in Sources */,
 				1A9B0A6E2565797E004203BB /* ContactView.swift in Sources */,
 				1AF6797425CEDB9B00F3987B /* QwertyVariationsView.swift in Sources */,
-				1AB8C3E825E2A1F000D39BC5 /* CodableActionData.swift in Sources */,
 				1AF6799625CEDBB500F3987B /* FlickEnterKeyModel.swift in Sources */,
 				1AF6798725CEDBAE00F3987B /* FlickedKeyModel.swift in Sources */,
 				1A5B1CE026D1E495007D4E1C /* MainApp.swift in Sources */,
@@ -10780,7 +10778,6 @@
 				1AF6798625CEDBAE00F3987B /* SuggestModel.swift in Sources */,
 				1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
-				1A18425525DE6163003985AB /* CustardData.swift in Sources */,
 				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
 				1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */,
 				1AF678FB25CED91C00F3987B /* ActionDepartment.swift in Sources */,
@@ -10961,7 +10958,6 @@
 				1A3DC2232500D60F002CAA93 /* FlickedKeyModel.swift in Sources */,
 				1A3ACF1825FB78BF007E9938 /* InternalSetting.swift in Sources */,
 				1AFB68502518F18A00C649C4 /* MoveCursorBar.swift in Sources */,
-				1AB8C3E925E2A1F000D39BC5 /* CodableActionData.swift in Sources */,
 				1A9218F7255238E9005F45C4 /* Unicode.swift in Sources */,
 				1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */,
 				1AFB68382518A40D00C649C4 /* LargeTextView.swift in Sources */,
@@ -11033,7 +11029,6 @@
 				1AD2B8D526C270610053CE4A /* KeyboardSetting.swift in Sources */,
 				1ADE98782903F0A700C318C3 /* extension Data.swift in Sources */,
 				1AF1C55F252DD10F002FCC66 /* added_last_n_character.swift in Sources */,
-				1A18425625DE6163003985AB /* CustardData.swift in Sources */,
 				1A3DC20C2500D53B002CAA93 /* FlickKeyboardView.swift in Sources */,
 				1AE3DF02258A20A2007C7C4A /* FlickCustomKeySetting.swift in Sources */,
 				1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */,
@@ -11554,6 +11549,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ensan-hcl/CustardKit";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
 		1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-collections.git";
@@ -11581,6 +11584,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A70DFFC291F2D1E00A83849 /* CustardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */;
+			productName = CustardKit;
+		};
+		1A70DFFE291F2D3B00A83849 /* CustardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */;
+			productName = CustardKit;
+		};
 		1A8E454928E5711800133D3B /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */;
