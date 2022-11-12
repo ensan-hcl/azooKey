@@ -12,7 +12,7 @@ import SwiftUI
 struct QwertySpaceKeyModel: QwertyKeyModelProtocol {
 
     let pressActions: [ActionType] = [.input(" ")]
-    var longPressActions: LongpressActionType = .init(start: [.toggleMoveCursorBar])
+    var longPressActions: LongpressActionType = .init(start: [.setCursorBar(.toggle)])
 
     let needSuggestView: Bool = false
     let variationsModel = VariationsModel([])

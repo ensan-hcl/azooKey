@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = false
@@ -19,7 +20,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
         case true:
             return []
         case false:
-            return [.toggleMoveCursorBar]
+            return [.setCursorBar(.toggle)]
         }
     }
     var longPressActions: LongpressActionType = .none

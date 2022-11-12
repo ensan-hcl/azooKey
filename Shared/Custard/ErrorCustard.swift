@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 extension Custard {
     static let errorMessage = Custard(
@@ -29,7 +30,7 @@ extension Custard {
                 .gridFit(.init(x: 0, y: 2)): .custom(
                     .init(
                         design: .init(label: .text("アプリで確認する"), color: .special),
-                        press_actions: [.openURL("azooKey://")],
+                        press_actions: [.launchApplication(.init(scheme: .azooKey, target: ""))],
                         longpress_actions: .none,
                         variations: [])
                 ),

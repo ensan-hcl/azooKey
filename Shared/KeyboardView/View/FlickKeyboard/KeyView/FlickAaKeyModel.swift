@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import CustardKit
 
 struct FlickAaKeyModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = true
@@ -18,7 +19,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
         case .normal:
             return [.changeCharacterType]
         case .capsLock:
-            return [.changeCapsLockState(state: .normal)]
+            return [.setCapsLockState(.off)]
         }
     }
 
@@ -27,7 +28,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
         switch VariableStates.shared.aAKeyState {
         case .normal:
             return [
-                .top: FlickedKeyModel(labelType: .image("capslock"), pressActions: [.changeCapsLockState(state: .capsLock)])
+                .top: FlickedKeyModel(labelType: .image("capslock"), pressActions: [.setCapsLockState(.on)])
             ]
         case .capsLock:
             return [

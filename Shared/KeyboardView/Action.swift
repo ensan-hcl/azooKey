@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CustardKit
 
 enum ActionType: Equatable {
     // テキスト関係
@@ -23,17 +24,17 @@ enum ActionType: Equatable {
     case moveCursor(Int)
     case smartMoveCursor(ScanItem)
 
-    case toggleMoveCursorBar
+    case setCursorBar(BoolOperation)
     case enableResizingMode
     // 変換関連
     case enter
     case changeCharacterType    // 濁点、半濁点、小さい文字
     case replaceLastCharacters([String: String])
-    case changeCapsLockState(state: AaKeyState)
+    case setCapsLockState(BoolOperation)
     case hideLearningMemory
     // タブの変更
     case moveTab(Tab)
-    case toggleTabBar
+    case setTabBar(BoolOperation)
 
     // キーボードを閉じる
     case dismissKeyboard
@@ -98,20 +99,26 @@ extension CodableActionData {
         case .enableResizingMode:
             return .enableResizingMode
         case .toggleCursorBar:
-            return .toggleMoveCursorBar
+            return .setCursorBar(.toggle)
         case .toggleCapsLockState:
-            switch VariableStates.shared.aAKeyState {
-            case .normal:
-                return .changeCapsLockState(state: .capsLock)
-            case .capsLock:
-                return .changeCapsLockState(state: .normal)
-            }
+            return .setCapsLockState(.toggle)
         case .toggleTabBar:
-            return .toggleTabBar
-        case let .openURL(value):
-            return .openApp(value)
+            return .setTabBar(.toggle)
+        case let .launchApplication(value):
+            switch value.scheme {
+            case .azooKey:
+                return .openApp("azooKey://" + value.target)
+            case .shortcuts:
+                return .openApp("shortcuts://" + value.target)
+            }
         case .dismissKeyboard:
             return .dismissKeyboard
+        case let .setCursorBar(value):
+            return .setCursorBar(value)
+        case let .setCapsLockState(value):
+            return .setCapsLockState(value)
+        case let .setTabBar(value):
+            return .setTabBar(value)
         }
     }
 }
@@ -131,7 +138,7 @@ extension ActionType {
             Sound.delete()
         case .smoothDelete, .smartDelete, .smartMoveCursor:
             Sound.smoothDelete()
-        case .moveTab, .enter, .changeCharacterType, .toggleMoveCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .changeCapsLockState, .toggleTabBar:
+        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setCapsLockState, .setTabBar:
             Sound.tabOrOtherKey()
         case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return

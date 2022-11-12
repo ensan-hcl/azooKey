@@ -8,6 +8,8 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
+
 struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = true
 

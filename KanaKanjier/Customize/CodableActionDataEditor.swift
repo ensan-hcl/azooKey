@@ -9,11 +9,12 @@
 import Foundation
 import SwiftUI
 import Combine
+import CustardKit
 
 extension CodableActionData {
     var hasAssociatedValue: Bool {
         switch self {
-        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .openURL: return true
+        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication, .setTabBar, .setCursorBar, .setCapsLockState: return true
         case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
@@ -35,7 +36,28 @@ extension CodableActionData {
         case .toggleTabBar: return "タブバーの切り替え"
         case .dismissKeyboard: return "キーボードを閉じる"
         case .enableResizingMode: return "片手モードをオンにする"
-        case .openURL: return "アプリを開く"
+        case .launchApplication: return "アプリを開く"
+        case let .setCursorBar(value):
+            // TODO: LOCALIZE
+            switch value {
+            case .on: return "カーソルバーを表示する"
+            case .off: return "カーソルバーを消す"
+            case .toggle: return "カーソルバーの切り替え"
+            }
+        case let .setCapsLockState(value):
+            // TODO: LOCALIZE
+            switch value {
+            case .on: return "Caps lockのモードのオン"
+            case .off: return "Caps lockのモードのオフ"
+            case .toggle: return "Caps lockのモードの切り替え"
+            }
+        case let .setTabBar(value):
+            // TODO: LOCALIZE
+            switch value {
+            case .on: return "タブバーを表示する"
+            case .off: return "タブバーを消す"
+            case .toggle: return "タブバーの切り替え"
+            }
         }
     }
 }
@@ -434,7 +456,7 @@ private struct ActionPicker: View {
                     process(.moveTab(.system(.user_japanese)))
                 }
                 Button("タブバーの表示") {
-                    process(.toggleTabBar)
+                    process(.setTabBar(.toggle))
                 }
                 Button("カーソル移動") {
                     process(.moveCursor(-1))
@@ -457,10 +479,10 @@ private struct ActionPicker: View {
                     process(.complete)
                 }
                 Button("Caps lock") {
-                    process(.toggleCapsLockState)
+                    process(.setCapsLockState(.toggle))
                 }
                 Button("カーソルバーの表示") {
-                    process(.toggleCursorBar)
+                    process(.setCursorBar(.toggle))
                 }
                 Button("キーボードを閉じる") {
                     process(.dismissKeyboard)

@@ -29,8 +29,8 @@ struct QwertyDataProvider {
             languageKey = QwertyFunctionalKeyModel(labelType: .text(first.symbol), rowInfo: rowInfo, pressActions: [.moveTab(targetTab)], longPressActions: .none, needSuggestView: false)
         }
 
-        let numbersKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.toggleTabBar]))
-        let symbolsKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.toggleTabBar]))
+        let numbersKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.setTabBar(.toggle)]))
+        let symbolsKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.setTabBar(.toggle)]))
 
         let changeKeyboardKey: QwertyKeyModelProtocol
         if let second = preferredLanguage.second {

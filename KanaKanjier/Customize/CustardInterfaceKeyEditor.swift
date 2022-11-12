@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 private enum LabelType {
     case text, systemImage
@@ -333,14 +334,14 @@ struct CustardInterfaceKeyEditor: View {
 
     private var keyPicker: some View {
         Picker("キーの種類", selection: $key) {
-            if [CustardInterfaceKey.system(.enter), .custom(.flickSpace), .custom(.flickDelete), .system(.changeKeyboard), .system(.flickKogaki), .system(.flickKutoten), .system(.flickHiraTab), .system(.flickAbcTab), .system(.flickStar123Tab)].contains(key) {
+            if [CustardInterfaceKey.system(.enter), .custom(.flickSpace()), .custom(.flickDelete()), .system(.changeKeyboard), .system(.flickKogaki), .system(.flickKutoten), .system(.flickHiraTab), .system(.flickAbcTab), .system(.flickStar123Tab)].contains(key) {
                 Text("カスタム").tag(CustardInterfaceKey.custom(.empty))
             } else {
                 Text("カスタム").tag(key)
             }
             Text("改行キー").tag(CustardInterfaceKey.system(.enter))
-            Text("削除キー").tag(CustardInterfaceKey.custom(.flickDelete))
-            Text("空白キー").tag(CustardInterfaceKey.custom(.flickSpace))
+            Text("削除キー").tag(CustardInterfaceKey.custom(.flickDelete()))
+            Text("空白キー").tag(CustardInterfaceKey.custom(.flickSpace()))
             Text("地球儀キー").tag(CustardInterfaceKey.system(.changeKeyboard))
             Text("小書き・濁点化キー").tag(CustardInterfaceKey.system(.flickKogaki))
             Text("句読点キー").tag(CustardInterfaceKey.system(.flickKutoten))

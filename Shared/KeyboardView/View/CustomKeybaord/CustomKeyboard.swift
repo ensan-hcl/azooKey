@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 fileprivate extension CustardKeyLabelStyle {
     var keyLabelType: KeyLabelType {
@@ -89,6 +90,8 @@ fileprivate extension CustardKeyDesign.ColorType {
             return .tabkey
         case .selected:
             return .selected
+        case .unimportant:
+            return .unimportant
         }
     }
 
@@ -100,6 +103,8 @@ fileprivate extension CustardKeyDesign.ColorType {
             return .special
         case .selected:
             return .selected
+        case .unimportant:
+            return .unimportant
         }
     }
 
@@ -111,6 +116,8 @@ fileprivate extension CustardKeyDesign.ColorType {
             return .special
         case .selected:
             return .selected
+        case .unimportant:
+            return .unimportant
         }
     }
 

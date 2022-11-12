@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
     var label: LocalizedStringKey {
@@ -23,7 +24,7 @@ fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
 struct EditingScrollCustardView: CancelableEditor {
     private static let `default`: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
         .gridScroll(0): .system(.changeKeyboard),
-        .gridScroll(1): .custom(.init(design: .init(label: .systemImage("list.bullet"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
+        .gridScroll(1): .custom(.init(design: .init(label: .systemImage("list.bullet"), color: .special), press_actions: [.setTabBar(.toggle)], longpress_actions: .none, variations: [])),
         .gridScroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
         .gridScroll(3): .system(.enter)
     ]

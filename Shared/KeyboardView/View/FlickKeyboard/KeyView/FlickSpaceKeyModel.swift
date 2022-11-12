@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 struct FlickSpaceKeyModel: FlickKeyModelProtocol {
     static let shared = FlickSpaceKeyModel()
@@ -20,7 +21,7 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol {
 
     let pressActions: [ActionType] = [.input(" ")]
 
-    let longPressActions: LongpressActionType = .init(start: [.toggleMoveCursorBar])
+    let longPressActions: LongpressActionType = .init(start: [.setCursorBar(.toggle)])
 
     let flickKeys: [FlickDirection: FlickedKeyModel] = [
         .left: FlickedKeyModel(

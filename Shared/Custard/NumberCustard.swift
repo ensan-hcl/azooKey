@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CustardKit
 
 extension Custard {
     private static var one_key: CustardInterfaceCustomKey {
@@ -101,11 +102,17 @@ extension Custard {
 
     private static var point_key: CustardInterfaceCustomKey {
         CustardInterfaceCustomKey(
-            design: CustardKeyDesign(label: .text("."), color: .normal),
+            design: CustardKeyDesign(label: .text("."), color: .unimportant),
             press_actions: [.input(".")],
             longpress_actions: .none,
             variations: []
         )
+    }
+
+    private static var delete_key: CustardInterfaceCustomKey {
+        var delete = CustardInterfaceCustomKey.flickDelete()
+        delete.design.color = .unimportant
+        return delete
     }
 
     private static var phone_symbols_key: CustardInterfaceCustomKey {
@@ -132,7 +139,7 @@ extension Custard {
         identifier: "azooKey_internal_number_pad",
         language: .none,
         input_style: .direct,
-        metadata: CustardMetaData(custard_version: .v1_0, display_name: "数字"),
+        metadata: CustardMetadata(custard_version: .v1_0, display_name: "数字"),
         interface: CustardInterface(
             keyStyle: .tenkeyStyle,
             keyLayout: .gridFit(.init(rowCount: 3, columnCount: 4)),
@@ -148,7 +155,7 @@ extension Custard {
                 .gridFit(.init(x: 2, y: 2)): .custom(nine_key),
                 .gridFit(.init(x: 0, y: 3)): .system(.changeKeyboard),
                 .gridFit(.init(x: 1, y: 3)): .custom(zero_key),
-                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete)
+                .gridFit(.init(x: 2, y: 3)): .custom(delete_key)
             ]
         )
     )
@@ -158,7 +165,7 @@ extension Custard {
         identifier: "azooKey_internal_decimal_pad",
         language: .none,
         input_style: .direct,
-        metadata: CustardMetaData(custard_version: .v1_0, display_name: "数字"),
+        metadata: CustardMetadata(custard_version: .v1_0, display_name: "数字"),
         interface: CustardInterface(
             keyStyle: .tenkeyStyle,
             keyLayout: .gridFit(.init(rowCount: 3, columnCount: 4)),
@@ -174,7 +181,7 @@ extension Custard {
                 .gridFit(.init(x: 2, y: 2)): .custom(nine_key),
                 .gridFit(.init(x: 0, y: 3)): .custom(point_key),
                 .gridFit(.init(x: 1, y: 3)): .custom(zero_key),
-                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete)
+                .gridFit(.init(x: 2, y: 3)): .custom(delete_key)
             ]
         )
     )
@@ -184,7 +191,7 @@ extension Custard {
         identifier: "azooKey_internal_phone_pad",
         language: .none,
         input_style: .direct,
-        metadata: CustardMetaData(custard_version: .v1_0, display_name: "数字"),
+        metadata: CustardMetadata(custard_version: .v1_0, display_name: "数字"),
         interface: CustardInterface(
             keyStyle: .tenkeyStyle,
             keyLayout: .gridFit(.init(rowCount: 3, columnCount: 4)),
@@ -200,7 +207,7 @@ extension Custard {
                 .gridFit(.init(x: 2, y: 2)): .custom(nine_key),
                 .gridFit(.init(x: 0, y: 3)): .custom(phone_symbols_key),
                 .gridFit(.init(x: 1, y: 3)): .custom(zero_key),
-                .gridFit(.init(x: 2, y: 3)): .custom(.flickDelete)
+                .gridFit(.init(x: 2, y: 3)): .custom(delete_key)
             ]
         )
     )

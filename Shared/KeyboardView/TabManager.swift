@@ -8,12 +8,7 @@
 
 import Foundation
 import SwiftUI
-
-extension Custard: Equatable {
-    public static func == (lhs: Custard, rhs: Custard) -> Bool {
-        return lhs.identifier == rhs.identifier
-    }
-}
+import CustardKit
 
 enum Tab: Equatable {
     case existential(ExistentialTab)
@@ -29,6 +24,15 @@ enum Tab: Equatable {
         case qwerty_number
         case qwerty_symbols
         case custard(Custard)
+
+        public static func == (lhs: ExistentialTab, rhs: ExistentialTab) -> Bool {
+            switch (lhs, rhs) {
+            case (.flick_hira, .flick_hira), (.flick_abc, .flick_abc), (.flick_numbersymbols, .flick_numbersymbols), (.qwerty_hira, .qwerty_hira), (.qwerty_abc, .qwerty_abc), (.qwerty_number, .qwerty_number), (.qwerty_symbols, .qwerty_symbols): return true
+            case (.custard(let l), .custard(let r)):
+                return l.identifier == r.identifier
+            default: return false
+            }
+        }
 
         var inputStyle: InputStyle {
             switch self {

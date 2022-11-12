@@ -42,10 +42,10 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
             case .qwerty_symbols:
                 return [.moveTab(targetTab)]
             default:
-                return [.toggleMoveCursorBar]
+                return [.setCursorBar(.toggle)]
             }
         case .tabBar:
-            return [.toggleTabBar]
+            return [.setTabBar(.toggle)]
         }
     }
     let fallBackType: FallBackType

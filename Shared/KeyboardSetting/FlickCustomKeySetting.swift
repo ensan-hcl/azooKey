@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CustardKit
 
 enum CustomizableFlickKey: String, Codable {
     case kogana = "kogana"
@@ -60,7 +61,7 @@ enum CustomizableFlickKey: String, Codable {
         case .symbolsTab:
             return KeyFlickSetting(
                 identifier: self,
-                center: FlickCustomKey(label: "☆123", actions: [.moveTab(.system(.flick_numbersymbols))], longpressActions: .init(start: [.toggleTabBar])),
+                center: FlickCustomKey(label: "☆123", actions: [.moveTab(.system(.flick_numbersymbols))], longpressActions: .init(start: [.setTabBar(.toggle)])),
                 left: FlickCustomKey(label: "", actions: []),
                 top: FlickCustomKey(label: "", actions: []),
                 right: FlickCustomKey(label: "", actions: []),
