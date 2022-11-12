@@ -8,13 +8,9 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
-public enum FlickDirection: String, CustomStringConvertible, Codable {
-    case left
-    case top
-    case right
-    case bottom
-
+extension FlickDirection: CustomStringConvertible {
     public var description: String {
         switch self {
         case .left:

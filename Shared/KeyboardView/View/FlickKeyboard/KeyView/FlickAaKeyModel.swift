@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import CustardKit
 
 struct FlickAaKeyModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = true

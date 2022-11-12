@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CustardKit
 
 enum UserMadeCustard: Codable {
     case gridScroll(UserMadeGridScrollCustard)

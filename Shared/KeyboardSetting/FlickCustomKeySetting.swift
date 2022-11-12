@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CustardKit
 
 enum CustomizableFlickKey: String, Codable {
     case kogana = "kogana"

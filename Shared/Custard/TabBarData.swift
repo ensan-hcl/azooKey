@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CustardKit
+
 enum TabBarItemLabelType: Codable, Equatable {
     case text(String)
     case imageAndText(ImageAndText)

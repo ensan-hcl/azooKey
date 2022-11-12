@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 // M：基本は変わらない
 struct FlickKeyModel: FlickKeyModelProtocol {

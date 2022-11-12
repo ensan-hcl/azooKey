@@ -8,11 +8,13 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 enum FlickKeyColorType {
     case normal
     case tabkey
     case selected
+    case unimportant
 
     func color(theme: ThemeData) -> Color {
         switch self {
@@ -22,6 +24,8 @@ enum FlickKeyColorType {
             return theme.specialKeyFillColor.color
         case .selected:
             return theme.pushedKeyFillColor.color
+        case .unimportant:
+            return Color.init(white: 0, opacity: 0.001)
         }
     }
 }

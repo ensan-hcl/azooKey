@@ -132,28 +132,40 @@ struct OpenSourceSoftWaresLicenceView: View {
                     FallbackLink("Japanese Word2Vec Model Builder", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder")
                 }
 
-                Section {
-                    Text("Emoji-IME-Dictionary").font(.title).padding()
-                    Text("本アプリケーションは絵文字への変換候補を表示するためにEmoji-IME-Dictionaryのデータを使用しています。")
-                    FallbackLink("Licence", destination: "https://github.com/peaceiris/emoji-ime-dictionary/blob/main/LICENSE")
-                    FallbackLink("Emoji-IME-Dictionary", destination: "https://github.com/peaceiris/emoji-ime-dictionary")
+                Group {
+                    Section {
+                        Text("Emoji-IME-Dictionary").font(.title).padding()
+                        Text("本アプリケーションは絵文字への変換候補を表示するためにEmoji-IME-Dictionaryのデータを使用しています。")
+                        FallbackLink("Licence", destination: "https://github.com/peaceiris/emoji-ime-dictionary/blob/main/LICENSE")
+                        FallbackLink("Emoji-IME-Dictionary", destination: "https://github.com/peaceiris/emoji-ime-dictionary")
+                    }
+
+                    Section {
+                        Text("Kaomojitoka to Google IME Dictionary").font(.title).padding()
+                        Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojitoka to Google IME Dictionaryのデータを使用しています。")
+                        FallbackLink("Licence", destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary/blob/master/LICENSE")
+                        FallbackLink(
+                            "Kaomojitoka to Google IME Dictionary",
+                            destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary"
+                        )
+                    }
+
+                    Section {
+                        Text("Kaomojic").font(.title).padding()
+                        Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojicのデータを使用しています。")
+                        FallbackLink("Licence", destination: "https://github.com/mika-f/kaomojic/blob/develop/LICENSE")
+                        FallbackLink("Kaomojic", destination: "https://github.com/mika-f/kaomojic")
+                    }
                 }
 
                 Section {
-                    Text("Kaomojitoka to Google IME Dictionary").font(.title).padding()
-                    Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojitoka to Google IME Dictionaryのデータを使用しています。")
-                    FallbackLink("Licence", destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary/blob/master/LICENSE")
+                    Text("CustardKit").font(.title).padding()
+                    Text("本アプリケーションで利用可能なカスタムタブのデータ構造の記述をCustardKitとしてオープンソースで公開し、アプリ内でも使用しています。")
+                    FallbackLink("Licence", destination: "https://github.com/ensan-hcl/CustardKit/blob/main/LICENSE")
                     FallbackLink(
-                        "Kaomojitoka to Google IME Dictionary",
-                        destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary"
+                        "CustardKit",
+                        destination: "https://github.com/ensan-hcl/CustardKit"
                     )
-                }
-
-                Section {
-                    Text("Kaomojic").font(.title).padding()
-                    Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojicのデータを使用しています。")
-                    FallbackLink("Licence", destination: "https://github.com/mika-f/kaomojic/blob/develop/LICENSE")
-                    FallbackLink("Kaomojic", destination: "https://github.com/mika-f/kaomojic")
                 }
 
                 Section {

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = false

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CustardKit
 
 enum ActionType: Equatable {
     // テキスト関係
@@ -108,8 +109,13 @@ extension CodableActionData {
             }
         case .toggleTabBar:
             return .toggleTabBar
-        case let .openURL(value):
-            return .openApp(value)
+        case let .launchApplication(value):
+            switch value.scheme {
+            case .azooKey:
+                return .openApp("azooKey://" + value.target)
+            case .shortcuts:
+                return .openApp("shortcuts://" + value.target)
+            }
         case .dismissKeyboard:
             return .dismissKeyboard
         }
