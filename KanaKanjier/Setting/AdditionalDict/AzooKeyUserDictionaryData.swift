@@ -95,7 +95,7 @@ struct UserDictionary: Codable {
     init(items: [UserDictionaryData]) {
         self.items = items.indices.map {i in
             let item = items[i]
-            return UserDictionaryData(ruby: item.ruby, word: item.word, isVerb: item.isVerb, isPersonName: item.isPersonName, isPlaceName: item.isPlaceName, id: i)
+            return UserDictionaryData(ruby: item.ruby.toHiragana(), word: item.word, isVerb: item.isVerb, isPersonName: item.isPersonName, isPlaceName: item.isPlaceName, id: i)
         }
     }
 

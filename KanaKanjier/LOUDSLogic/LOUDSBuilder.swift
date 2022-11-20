@@ -158,7 +158,7 @@ struct LOUDSBuilder {
     }
 
     func makeDictionaryForm(_ data: UserDictionaryData) -> [String] {
-        let katakanaRuby = data.ruby.applyingTransform(.hiraganaToKatakana, reverse: false)!
+        let katakanaRuby = data.ruby.toKatakana()
         if data.isVerb {
             let cid = 772
             let conjuctions = ConjuctionBuilder.getConjugations(data: (word: data.word, ruby: katakanaRuby, cid: cid), addStandardForm: true)
