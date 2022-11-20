@@ -25,22 +25,12 @@ private final class NavigationModel: ObservableObject {
 
 // Listが大元のtemplatesを持ち、各EditingViewにBindingで渡して編集させる。
 struct TemplateListView: View {
-    private static let defaultData = [
-        TemplateData(template: "<random type=\"int\" value=\"1,6\">", name: "サイコロ"),
-        TemplateData(template: "<random type=\"double\" value=\"0,1\">", name: "乱数"),
-        TemplateData(template: "<random type=\"string\" value=\"大吉,吉,凶\">", name: "おみくじ"),
-        TemplateData(template: "<date format=\"yyyy年MM月dd日\" type=\"western\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "今日"),
-        TemplateData(template: "<date format=\"yyyy年MM月dd日\" type=\"western\" language=\"ja_JP\" delta=\"1\" deltaunit=\"86400\">", name: "明日"),
-        TemplateData(template: "<date format=\"Gy年MM月dd日\" type=\"japanese\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "和暦")
-    ]
-
     private static let dataFileName = "user_templates.json"
     @ObservedObject private var data = TemplateDataList()
     @ObservedObject private var navigationModel = NavigationModel()
 
     init() {
-        let templates = TemplateData.load() ?? Self.defaultData
-        self.data.templates = templates
+        self.data.templates = TemplateData.load()
     }
 
     var body: some View {
@@ -48,8 +38,8 @@ struct TemplateListView: View {
             List {
                 let validationInfo = data.templates.map {$0.name}
                 ForEach($data.templates.identifiableItems) {value in
-                    TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
-                        NavigationLink(destination: TemplateEditingView(value.$item, validationInfo: validationInfo), tag: value.index, selection: $navigationModel.linkSelection) {
+                    NavigationLink(destination: TemplateEditingView(value.$item, validationInfo: validationInfo), tag: value.index, selection: $navigationModel.linkSelection) {
+                        TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
                             HStack {
                                 Text(value.item.name)
                                 Spacer()
@@ -67,6 +57,7 @@ struct TemplateListView: View {
             self.save()
         }
         .onDisappear {
+            // save処理
             self.save()
         }
     }
@@ -92,15 +83,6 @@ struct TemplateListView: View {
     }
 
     private func save() {
-        if let json = try? JSONEncoder().encode(self.data.templates) {
-            guard let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(TemplateData.dataFileName) else {
-                return
-            }
-            do {
-                try json.write(to: url)
-            } catch {
-                debug(error)
-            }
-        }
+        TemplateData.save(self.data.templates)
     }
 }

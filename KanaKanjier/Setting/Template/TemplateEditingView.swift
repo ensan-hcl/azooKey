@@ -10,22 +10,36 @@ import Foundation
 import SwiftUI
 
 struct TemplateEditingView: CancelableEditor {
+    enum Appearance {
+        case form
+        case embed(saveProcess: (TemplateData) -> Void)
+    }
+
+    struct Options {
+        var nameEdit: Bool = true
+        var appearance: Appearance = .form
+    }
+
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
-    let base: TemplateData
+    internal let base: TemplateData
+    private let options: Options
     @Binding private var template: TemplateData
     @State private var editingTemplate: TemplateData
     // 名前の一覧
     private let validationInfo: [String]
 
-    init(_ template: Binding<TemplateData>, validationInfo: [String]) {
+    init(_ template: Binding<TemplateData>, validationInfo: [String], options: Options = Options()) {
+        debug("TemplateEditingView.init", template.wrappedValue)
         self._template = template
         self.base = template.wrappedValue
         self._editingTemplate = State(initialValue: template.wrappedValue)
         self.validationInfo = validationInfo
+        self.options = options
     }
 
-    var body: some View {
-        Form {
+    @ViewBuilder
+    private var editorCore: some View {
+        if options.nameEdit {
             VStack {
                 HStack {
                     Text("名前")
@@ -38,25 +52,39 @@ struct TemplateEditingView: CancelableEditor {
                         .foregroundColor(.primary)
                 }
             }
-            Picker(selection: $editingTemplate.type, label: Text("")) {
-                Text("時刻").tag(TemplateLiteralType.date)
-                Text("ランダム").tag(TemplateLiteralType.random)
-            }
-            .labelsHidden()
-            .pickerStyle(.segmented)
-            switch editingTemplate.type {
-            case .date:
-                DateTemplateLiteralSettingView($editingTemplate)
-            case .random:
-                RandomTemplateLiteralSettingView($editingTemplate)
-            }
         }
-        .navigationBarTitle(Text("テンプレートを編集"), displayMode: .inline)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-            leading: Button("キャンセル", action: cancel),
-            trailing: Button("完了", action: save)
-        )
+        Picker(selection: $editingTemplate.type, label: Text("")) {
+            Text("時刻").tag(TemplateLiteralType.date)
+            Text("ランダム").tag(TemplateLiteralType.random)
+        }
+        .labelsHidden()
+        .pickerStyle(.segmented)
+        switch editingTemplate.type {
+        case .date:
+            DateTemplateLiteralSettingView($editingTemplate)
+        case .random:
+            RandomTemplateLiteralSettingView($editingTemplate)
+        }
+    }
+
+    var body: some View {
+        switch options.appearance {
+        case .form:
+            Form {
+                editorCore
+            }
+            .navigationBarTitle(Text("テンプレートを編集"), displayMode: .inline)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(
+                leading: Button("キャンセル", action: cancel),
+                trailing: Button("完了", action: save)
+            )
+        case .embed(let save):
+            editorCore
+                .onDisappear {
+                    save(editingTemplate)
+                }
+        }
     }
 
     private enum ValidationResult {
@@ -180,6 +208,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("左端の値", text: $intStringRange.left)
                             .textFieldStyle(.roundedBorder)
+                            .keyboardType(.numberPad)
                             .submitLabel(.done)
                             .onSubmit(update)
                         Text("から")
@@ -192,6 +221,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("右端の値", text: $intStringRange.right)
                             .textFieldStyle(.roundedBorder)
+                            .keyboardType(.numberPad)
                             .submitLabel(.done)
                             .onSubmit(update)
                         Text("まで")
@@ -205,6 +235,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("左端の値", text: $doubleStringRange.left)
                             .textFieldStyle(.roundedBorder)
+                            .keyboardType(.decimalPad)
                             .submitLabel(.done)
                             .onSubmit(update)
                         Text("から")
@@ -217,6 +248,7 @@ struct RandomTemplateLiteralSettingView: View {
                     HStack {
                         TextField("右端の値", text: $doubleStringRange.right)
                             .textFieldStyle(.roundedBorder)
+                            .keyboardType(.decimalPad)
                             .submitLabel(.done)
                             .onSubmit(update)
                         Text("まで")
@@ -366,6 +398,7 @@ struct DateTemplateLiteralSettingView: View {
                             TextField("ズレ", text: $literal.delta)
                                 .multilineTextAlignment(.trailing)
                                 .textFieldStyle(.roundedBorder)
+                                .keyboardType(.decimalPad)
                                 .submitLabel(.done)
                             Picker(selection: $literal.deltaUnit, label: Text("")) {
                                 Text("日").tag(60 * 60 * 24)
