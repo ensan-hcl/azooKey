@@ -457,6 +457,8 @@ struct CustardInterfaceKeyEditor: View {
                         Text("通常のキー").tag(CustardKeyDesign.ColorType.normal)
                         Text("特別なキー").tag(CustardKeyDesign.ColorType.special)
                         Text("押されているキー").tag(CustardKeyDesign.ColorType.selected)
+                        // TODO: Localize
+                        Text("目立たないキー").tag(CustardKeyDesign.ColorType.unimportant)
                     }
                 }
             }
