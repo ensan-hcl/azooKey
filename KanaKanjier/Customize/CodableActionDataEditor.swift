@@ -199,6 +199,16 @@ private struct CodableActionEditor: View {
             ActionMoveTabEditView($action, availableCustards: availableCustards)
         case .replaceLastCharacters:
             EmptyView()
+        case let .launchApplication(item):
+            // TODO: Localize
+            if item.target.hasPrefix("run-shortcut?") {
+                ActionEditTextField("オプション", action: $action) {String(item.target.dropFirst("run-shortcut?".count))} convert: {value in
+                    return .launchApplication(LaunchItem(scheme: .shortcuts, target: "run-shortcut?" + value))
+                }
+                FallbackLink("オプションの設定方法", destination: URL(string: "https://support.apple.com/ja-jp/guide/shortcuts/apd624386f42/ios")!)
+            } else {
+                Text("このアプリでは編集できないアクションです")
+            }
         default:
             EmptyView()
         }
@@ -483,6 +493,10 @@ private struct ActionPicker: View {
                 }
                 Button("カーソルバーの表示") {
                     process(.setCursorBar(.toggle))
+                }
+                // TODO: Localize
+                Button("ショートカットを実行") {
+                    process(.launchApplication(.init(scheme: .shortcuts, target: "run-shortcut?name=[名前]&input=[入力]&text=[テキスト]")))
                 }
                 Button("キーボードを閉じる") {
                     process(.dismissKeyboard)
