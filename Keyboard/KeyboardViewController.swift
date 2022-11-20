@@ -248,8 +248,10 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     func openApp(scheme: String) {
-        guard let url = URL(string: scheme) else {
-            debug("無効なschemeです")
+        // 日本語のURLは使えないので、パーセントエンコーディングを適用する
+        guard let encoded = scheme.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encoded) else {
+            debug("無効なschemeです", scheme, scheme.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? scheme)
             return
         }
         self.openUrl(url: url)
