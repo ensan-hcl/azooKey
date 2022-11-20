@@ -57,16 +57,37 @@ struct TemplateData: Codable {
     }
 
     static let dataFileName = "user_templates.json"
-    static func load() -> [TemplateData]? {
+
+    static func save(_ data: [TemplateData]) {
+        if let json = try? JSONEncoder().encode(data) {
+            guard let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(TemplateData.dataFileName) else {
+                return
+            }
+            do {
+                try json.write(to: url)
+            } catch {
+                debug("TemplateData.save", error)
+            }
+        }
+    }
+
+    static func load() -> [TemplateData] {
         do {
             let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(Self.dataFileName)
             let json = try Data(contentsOf: url)
             let saveData = try JSONDecoder().decode([TemplateData].self, from: json)
             return saveData
         } catch {
-            return nil
+            debug("TemplateData.load", error)
+            return [
+                TemplateData(template: "<random type=\"int\" value=\"1,6\">", name: "サイコロ"),
+                TemplateData(template: "<random type=\"double\" value=\"0,1\">", name: "乱数"),
+                TemplateData(template: "<random type=\"string\" value=\"大吉,吉,凶\">", name: "おみくじ"),
+                TemplateData(template: "<date format=\"yyyy年MM月dd日\" type=\"western\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "今日"),
+                TemplateData(template: "<date format=\"yyyy年MM月dd日\" type=\"western\" language=\"ja_JP\" delta=\"1\" deltaunit=\"86400\">", name: "明日"),
+                TemplateData(template: "<date format=\"Gy年MM月dd日\" type=\"japanese\" language=\"ja_JP\" delta=\"0\" deltaunit=\"1\">", name: "和暦")
+            ]
         }
-
     }
 }
 

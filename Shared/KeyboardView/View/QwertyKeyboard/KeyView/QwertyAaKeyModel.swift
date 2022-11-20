@@ -21,17 +21,12 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
         case .normal:
             return [.changeCharacterType]
         case .capsLock:
-            return [.changeCapsLockState(state: .normal)]
+            return [.setCapsLockState(.off)]
         }
     }
 
     var longPressActions: LongpressActionType {
-        switch VariableStates.shared.aAKeyState {
-        case .normal:
-            return .init(start: [.changeCapsLockState(state: .capsLock)])
-        case .capsLock:
-            return .init(start: [.changeCapsLockState(state: .normal)])
-        }
+        return .init(start: [.setCapsLockState(.toggle)])
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {

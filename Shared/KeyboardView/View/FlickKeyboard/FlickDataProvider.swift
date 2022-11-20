@@ -45,7 +45,7 @@ struct FlickDataProvider {
             return [
                 FlickKeyModel(
                     labelType: .image("list.bullet"),
-                    pressActions: [.toggleTabBar], longPressActions: .init(start: [.toggleTabBar]),
+                    pressActions: [.setTabBar(.toggle)], longPressActions: .init(start: [.setTabBar(.toggle)]),
                     flickKeys: [:],
                     needSuggestView: false,
                     keycolorType: .tabkey

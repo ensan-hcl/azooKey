@@ -169,13 +169,33 @@ final class KeyboardActionDepartment: ActionDepartment {
                 self.inputManager.smartMoveCursorBackward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
 
-        case let .changeCapsLockState(state):
-            VariableStates.shared.aAKeyState = state
+        case let .setCapsLockState(operation):
+            switch operation {
+            case .on:
+                VariableStates.shared.aAKeyState = .capsLock
+            case .off:
+                VariableStates.shared.aAKeyState = .normal
+            case .toggle:
+                switch VariableStates.shared.aAKeyState {
+                case .normal:
+                    VariableStates.shared.aAKeyState = .capsLock
+                case .capsLock:
+                    VariableStates.shared.aAKeyState = .normal
+                }
+            }
 
-        case .toggleMoveCursorBar:
+        case let .setCursorBar(operation):
             self.inputManager.updateSurroundingText()
-            VariableStates.shared.showTabBar = false
-            VariableStates.shared.showMoveCursorBar.toggle()
+            switch operation {
+            case .on:
+                VariableStates.shared.showTabBar = false
+                VariableStates.shared.showMoveCursorBar = true
+            case .off:
+                VariableStates.shared.showMoveCursorBar = false
+            case .toggle:
+                VariableStates.shared.showTabBar = false
+                VariableStates.shared.showMoveCursorBar.toggle()
+            }
 
         case .enter:
             self.showResultView()
@@ -193,9 +213,17 @@ final class KeyboardActionDepartment: ActionDepartment {
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
 
-        case .toggleTabBar:
-            VariableStates.shared.showMoveCursorBar = false
-            VariableStates.shared.showTabBar.toggle()
+        case let .setTabBar(operation):
+            switch operation {
+            case .on:
+                VariableStates.shared.showMoveCursorBar = false
+                VariableStates.shared.showTabBar = true
+            case .off:
+                VariableStates.shared.showTabBar = false
+            case .toggle:
+                VariableStates.shared.showMoveCursorBar = false
+                VariableStates.shared.showTabBar.toggle()
+            }
 
         case .enableResizingMode:
             VariableStates.shared.setResizingMode(.resizing)

@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct ImageSlideshowView: View {
-    @State private var selection = 0
-    private let timer = Timer.publish(every: 2.5, on: .main, in: .common).autoconnect()
     private let pictures: [String]
     init(pictures: [String]) {
         self.pictures = pictures
@@ -26,9 +24,5 @@ struct ImageSlideshowView: View {
                     .frame(maxWidth: Store.shared.imageMaximumWidth)
             }
         }
-    }
-
-    private func update() {
-        self.selection = (selection + 1) % pictures.count
     }
 }

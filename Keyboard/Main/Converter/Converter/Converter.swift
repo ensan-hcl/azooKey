@@ -484,6 +484,7 @@ final class KanaKanjiConverter {
         if previousInputData == inputData {
             let result = converter.kana2lattice_no_change(N_best: N_best, previousResult: (inputData: previousInputData, nodes: nodes))
             self.previousInputData = inputData
+            return result
         }
 
         // 文節確定の後の場合

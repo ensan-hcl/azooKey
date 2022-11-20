@@ -15,6 +15,7 @@ private final class UserDictManagerVariables: ObservableObject {
     ]
     @Published var mode: Mode = .list
     @Published var selectedItem: EditableUserDictionaryData?
+    @Published var templates = TemplateData.load()
 
     enum Mode {
         case list, details
@@ -27,6 +28,8 @@ private final class UserDictManagerVariables: ObservableObject {
     }
 
     func save() {
+        TemplateData.save(templates)
+
         let userDictionary = UserDictionary(items: self.items)
         userDictionary.save()
 
@@ -49,7 +52,8 @@ struct AzooKeyUserDictionaryView: View {
                     UserDictionaryDataEditor(item, variables: variables)
                 }
             }
-        }.onDisappear {
+        }
+        .onDisappear {
             Store.shared.shouldTryRequestReview = true
         }
     }
@@ -104,6 +108,9 @@ private struct UserDictionaryDataListView: View {
                 }
             }
         }
+        .onAppear {
+            variables.templates = TemplateData.load()
+        }
         .navigationBarTitle(Text("ユーザ辞書"), displayMode: .inline)
     }
 
@@ -127,25 +134,144 @@ private struct UserDictionaryDataListView: View {
 private struct UserDictionaryDataEditor: CancelableEditor {
     @ObservedObject private var item: EditableUserDictionaryData
     @ObservedObject private var variables: UserDictManagerVariables
-    typealias EditTarget = EditableUserDictionaryData
-    fileprivate let base: EditableUserDictionaryData
+    @State private var selectedTemplate: (name: String, index: Int)? = nil
+
+    // CancelableEditor Conformance
+    typealias EditTarget = (EditableUserDictionaryData, [TemplateData])
+    fileprivate let base: EditTarget
 
     init(_ item: EditableUserDictionaryData, variables: UserDictManagerVariables) {
         self.item = item
         self.variables = variables
-        self.base = item.copy()
+        self.base = (item.copy(), variables.templates)
+    }
+
+    @available(iOS 16.0, *)
+    private func hasTemplate(word: String) -> Bool {
+        return word.contains(templateRegex)
+    }
+
+    private func templateIndex(name: String) -> Int? {
+        return variables.templates.firstIndex(where: {$0.name == name})
+    }
+
+    // こちらは「今まで同名のテンプレートがなかった」場合にのみテンプレートを追加する
+    private func addNewTemplate(name: String) {
+        if !variables.templates.contains(where: {$0.name == name}) {
+            variables.templates.append(TemplateData(template: DateTemplateLiteral.example.export(), name: name))
+        }
+    }
+
+    @State private var wordEditMode: Bool = false
+    @State private var pickerTemplateName: String? = nil
+    @FocusState private var focusOnWordField: Bool?
+
+    @available(iOS 16.0, *)
+    private var templateRegex: some RegexComponent {
+        /{{.+?}}/
+    }
+
+    @available(iOS 16.0, *)
+    private func parsedWord(word: String) -> [String] {
+        var result: [String] = []
+        var startIndex = word.startIndex
+        while let range = word[startIndex...].firstMatch(of: templateRegex)?.range {
+            result.append(String(word[startIndex ..< range.lowerBound]))
+            result.append(String(word[range]))
+            startIndex = range.upperBound
+        }
+        result.append(String(word[startIndex ..< word.endIndex]))
+
+        return result
+    }
+
+    @available(iOS 16.0, *)
+    private func replaceTemplate(selectedTemplate: (name: String, index: Int), newName: String) {
+        var parsedWords = parsedWord(word: item.data.word)
+        if parsedWords.indices.contains(selectedTemplate.index) && parsedWords[selectedTemplate.index] == "{{\(selectedTemplate.name)}}" {
+            parsedWords[selectedTemplate.index] = "{{\(newName)}}"
+            item.data.word = parsedWords.joined()
+        }
+    }
+
+    @ViewBuilder
+    @available(iOS 16.0, *)
+    private func templateWordView(word: String) -> some View {
+        let parsedWords = parsedWord(word: word)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(alignment: .center, spacing: 0) {
+                ForEach(parsedWords.indices, id: \.self) { i in
+                    let isTemplate = parsedWords[i].wholeMatch(of: templateRegex) != nil
+                    if isTemplate {
+                        Button {
+                            debug("Template:", parsedWords[i])
+                            selectedTemplate = (String(parsedWords[i].dropFirst(2).dropLast(2)), i)
+                        } label: {
+                            Text(parsedWords[i])
+                                .foregroundColor(.primary)
+                                .padding(0)
+                                .background(Color.orange.opacity(0.7).cornerRadius(5))
+                        }
+                    } else {
+                        Text(parsedWords[i])
+                            .padding(0)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var wordField: some View {
+        TextField("単語", text: $item.data.word)
+            .padding(.vertical, 2)
+            .focused($focusOnWordField, equals: true)
+            .submitLabel(.done)
+            .onSubmit {
+                selectedTemplate = nil
+                wordEditMode = false
+            }
+    }
+
+    @available(iOS 16.0, *)
+    @ViewBuilder
+    private func templateEditor(index: Int, selectedTemplate: (name: String, index: Int)) -> some View {
+        if variables.templates[index].name == selectedTemplate.name {
+            TemplateEditingView($variables.templates[index], validationInfo: variables.templates.map{$0.name}, options: .init(nameEdit: false, appearance: .embed { template in
+                if template.name == selectedTemplate.name && index < variables.templates.endIndex  {
+                    variables.templates[index] = template
+                } else {
+                    debug("templateEditor: Unknown situation:", template, selectedTemplate, variables.templates[index])
+                }
+            }))
+        }
     }
 
     var body: some View {
         Form {
             Section(header: Text("読みと単語"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")) {
                 HStack {
-                    TextField("単語", text: $item.data.word)
-                        .padding(.vertical, 2)
-                        .submitLabel(.done)
-                    Divider()
-                    PasteLongPressButton($item.data.word)
-                        .padding(.horizontal, 5)
+                    if wordEditMode {
+                        wordField
+                    } else {
+                        if #available(iOS 16.0, *), hasTemplate(word: item.data.word) {
+                            templateWordView(word: item.data.word)
+                            Spacer()
+                            Divider()
+                            Button {
+                                wordEditMode = true
+                                focusOnWordField = true
+                                selectedTemplate = nil
+                            } label: {
+                                Image(systemName: "rectangle.and.pencil.and.ellipsis")
+                            }
+                        } else  {
+                            wordField
+                        }
+                        Divider()
+                        PasteLongPressButton($item.data.word)
+                            .padding(.horizontal, 5)
+                    }
                 }
                 HStack {
                     TextField("読み", text: $item.data.ruby)
@@ -170,6 +296,39 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                 Toggle("人・動物・会社などの名前である", isOn: $item.data.isPersonName)
                 Toggle("場所・建物などの名前である", isOn: $item.data.isPlaceName)
             }
+            if #available(iOS 16.0, *), let selectedTemplate {
+                // TODO: Localize
+                if let index = templateIndex(name: selectedTemplate.name) {
+                    Section(header: Text("テンプレートを編集する")) {
+                        Text("{{\(selectedTemplate.name)}}を編集できます")
+                    }
+                    templateEditor(index: index, selectedTemplate: selectedTemplate)
+                } else {
+                    Section(header: Text("テンプレートを編集する")) {
+                        Text("{{\(selectedTemplate.name)}}というテンプレートが見つかりません。")
+                        Button {
+                            self.addNewTemplate(name: selectedTemplate.name)
+                        } label: {
+                            Text("{{\(selectedTemplate.name)}}を新規作成")
+                        }
+                        if !variables.templates.isEmpty {
+                            Picker("テンプレートを選ぶ", selection: $pickerTemplateName) {
+                                Text("なし").tag(String?.none)
+                                ForEach(variables.templates, id: \.name) {
+                                    Text($0.name).tag(String?.some($0.name))
+                                }
+                            }
+                            .onChange(of: pickerTemplateName) { newValue in
+                                if let newValue {
+                                    self.replaceTemplate(selectedTemplate: selectedTemplate, newName: newValue)
+                                    self.selectedTemplate?.name = newValue
+                                    self.pickerTemplateName = nil
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         .navigationTitle(Text("設定"))
         .navigationBarBackButtonHidden(true)
@@ -192,7 +351,8 @@ private struct UserDictionaryDataEditor: CancelableEditor {
     }
 
     fileprivate func cancel() {
-        item.reset(from: base)
+        item.reset(from: base.0)
+        variables.templates = base.1
         variables.mode = .list
     }
 
