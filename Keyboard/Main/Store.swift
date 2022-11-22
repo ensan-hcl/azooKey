@@ -235,6 +235,14 @@ final class KeyboardActionDepartment: ActionDepartment {
                 VariableStates.shared.boolStates[key]?.toggle()
             }
 
+        case let .boolSwitch(state, trueAction, falseAction):
+            if let condition = VariableStates.shared.boolStates[state] {
+                if condition {
+                    self.registerActions(trueAction)
+                } else {
+                    self.registerActions(falseAction)
+                }
+            }
         #if DEBUG
         // MARK: デバッグ用
         case .DEBUG_DATA_INPUT:

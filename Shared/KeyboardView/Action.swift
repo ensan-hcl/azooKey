@@ -9,7 +9,7 @@
 import Foundation
 import CustardKit
 
-enum ActionType: Equatable {
+indirect enum ActionType: Equatable {
     // テキスト関係
     case input(String)          // テキストの入力
     case delete(Int)            // テキストの削除
@@ -42,26 +42,14 @@ enum ActionType: Equatable {
 
     // ステート変更
     case setBoolState(String, BoolOperation)
+
+    // 条件分岐アクション
+    case boolSwitch(String, trueAction: [ActionType], falseAction: [ActionType])
+
     #if DEBUG
     // デバッグ用
     case DEBUG_DATA_INPUT
     #endif
-}
-
-extension ActionType {
-    static func makeFunctionInputActionSet(name: String, argumentCount: Int = 1) -> [ActionType] {
-        /*
-         sqrt()
-         ↑.saveSelectedTextIfNeeded, .input("sqrt()"), .moveCursor(-1), .restoreSelectedTextIfNeeded
-         のようにする。ただしこの返り値を利用する場合には.flatmap{$0}が必須。
-         */
-        return [
-            .saveSelectedTextIfNeeded,
-            .input("\(name)()"),
-            .moveCursor(-1),
-            .restoreSelectedTextIfNeeded
-        ]
-    }
 }
 
 struct LongpressActionType: Equatable {
@@ -144,6 +132,14 @@ extension ActionType {
             Sound.tabOrOtherKey()
         case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
+        case let .boolSwitch(state, trueAction, falseAction):
+            if let condition = VariableStates.shared.boolStates[state] {
+                if condition {
+                    trueAction.first?.sound()
+                } else {
+                    falseAction.first?.sound()
+                }
+            }
         #if DEBUG
         case .DEBUG_DATA_INPUT:
             return
