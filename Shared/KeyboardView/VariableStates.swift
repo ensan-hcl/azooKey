@@ -26,8 +26,6 @@ final class VariableStates: ObservableObject {
     struct BoolStates {
         var isTextMagnifying = false
         var isCapsLocked = false
-        var showMoveCursorBar = false
-        var showTabBar = false
 
         static let isCapsLockedKey = "isCapsLocked"
         // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
@@ -37,10 +35,6 @@ final class VariableStates: ObservableObject {
             get {
                 if key == "isTextMagnifying" {
                     return self.isTextMagnifying
-                } else if key == "showMoveCursorBar" {
-                    return self.showMoveCursorBar
-                } else if key == "showTabbar" {
-                    return self.showTabBar
                 } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
                 }
@@ -50,10 +44,6 @@ final class VariableStates: ObservableObject {
                 if let newValue {
                     if key == "isTextMagnifying" {
                         self.isTextMagnifying = newValue
-                    } else if key == "showMoveCursorBar" {
-                        self.showMoveCursorBar = newValue
-                    } else if key == "showTabbar" {
-                        self.showTabBar = newValue
                     } else if key == Self.isCapsLockedKey {
                         self.isCapsLocked = newValue
                     }
@@ -73,6 +63,8 @@ final class VariableStates: ObservableObject {
 
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
+
+    @Published var barState: BarState = .none
 
     @Published var magnifyingText = ""
 

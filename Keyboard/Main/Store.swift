@@ -112,8 +112,7 @@ final class KeyboardActionDepartment: ActionDepartment {
     }
 
     private func showResultView() {
-        VariableStates.shared.boolStates.showTabBar = false
-        VariableStates.shared.boolStates.showMoveCursorBar = false
+        VariableStates.shared.barState = .none
     }
 
     private func doAction(_ action: ActionType, requireSetResult: Bool = true) {
@@ -173,13 +172,15 @@ final class KeyboardActionDepartment: ActionDepartment {
             self.inputManager.updateSurroundingText()
             switch operation {
             case .on:
-                VariableStates.shared.boolStates.showTabBar = false
-                VariableStates.shared.boolStates.showMoveCursorBar = true
+                VariableStates.shared.barState = .cursor
             case .off:
-                VariableStates.shared.boolStates.showMoveCursorBar = false
+                VariableStates.shared.barState = .none
             case .toggle:
-                VariableStates.shared.boolStates.showTabBar = false
-                VariableStates.shared.boolStates.showMoveCursorBar.toggle()
+                if VariableStates.shared.barState == .cursor {
+                    VariableStates.shared.barState = .none
+                } else {
+                    VariableStates.shared.barState = .cursor
+                }
             }
 
         case .enter:
@@ -201,13 +202,15 @@ final class KeyboardActionDepartment: ActionDepartment {
         case let .setTabBar(operation):
             switch operation {
             case .on:
-                VariableStates.shared.boolStates.showMoveCursorBar = false
-                VariableStates.shared.boolStates.showTabBar = true
+                VariableStates.shared.barState = .tab
             case .off:
-                VariableStates.shared.boolStates.showTabBar = false
+                VariableStates.shared.barState = .none
             case .toggle:
-                VariableStates.shared.boolStates.showMoveCursorBar = false
-                VariableStates.shared.boolStates.showTabBar.toggle()
+                if VariableStates.shared.barState == .tab {
+                    VariableStates.shared.barState = .none
+                } else {
+                    VariableStates.shared.barState = .tab
+                }
             }
 
         case .enableResizingMode:

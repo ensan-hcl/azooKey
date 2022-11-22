@@ -68,12 +68,13 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     var body: some View {
         Group { [unowned variableStates] in
-            if variableStates.boolStates.showMoveCursorBar {
+            switch variableStates.barState {
+            case .cursor:
                 MoveCursorBar()
-            } else if variableStates.boolStates.showTabBar {
+            case .tab:
                 let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
                 TabBarView(data: tabBarData)
-            } else {
+            case .none:
                 Group { [unowned model] in
                     let results: [ResultData<Candidate>] = model.results
                     if results.isEmpty {
@@ -147,6 +148,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                     }
                 }
                 .frame(height: Design.resultViewHeight())
+
             }
         }
     }
