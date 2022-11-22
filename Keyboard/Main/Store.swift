@@ -169,16 +169,6 @@ final class KeyboardActionDepartment: ActionDepartment {
                 self.inputManager.smartMoveCursorBackward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
 
-        case let .setCapsLockState(operation):
-            switch operation {
-            case .on:
-                VariableStates.shared.boolStates.isCapsLocked = true
-            case .off:
-                VariableStates.shared.boolStates.isCapsLocked = false
-            case .toggle:
-                VariableStates.shared.boolStates.isCapsLocked.toggle()
-            }
-
         case let .setCursorBar(operation):
             self.inputManager.updateSurroundingText()
             switch operation {
@@ -231,6 +221,16 @@ final class KeyboardActionDepartment: ActionDepartment {
 
         case let .openApp(scheme):
             delegate.openApp(scheme: scheme)
+
+        case let .setBoolState(key, operation):
+            switch operation {
+            case .on:
+                VariableStates.shared.boolStates[key] = true
+            case .off:
+                VariableStates.shared.boolStates[key] = false
+            case .toggle:
+                VariableStates.shared.boolStates[key]?.toggle()
+            }
 
         #if DEBUG
         // MARK: デバッグ用

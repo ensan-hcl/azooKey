@@ -28,6 +28,8 @@ final class VariableStates: ObservableObject {
         var isCapsLocked = false
         var showMoveCursorBar = false
         var showTabBar = false
+
+        static let isCapsLockedKey = "isCapsLocked"
         // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
         fileprivate var custardStates: [String: Bool] = [:]
 
@@ -39,7 +41,7 @@ final class VariableStates: ObservableObject {
                     return self.showMoveCursorBar
                 } else if key == "showTabbar" {
                     return self.showTabBar
-                } else if key == "isCapsLocked" {
+                } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
                 }
                 return custardStates[key]
@@ -52,7 +54,7 @@ final class VariableStates: ObservableObject {
                         self.showMoveCursorBar = newValue
                     } else if key == "showTabbar" {
                         self.showTabBar = newValue
-                    } else if key == "isCapsLocked" {
+                    } else if key == Self.isCapsLockedKey {
                         self.isCapsLocked = newValue
                     }
                 } else {

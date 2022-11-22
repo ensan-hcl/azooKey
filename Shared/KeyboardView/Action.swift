@@ -30,7 +30,6 @@ enum ActionType: Equatable {
     case enter
     case changeCharacterType    // 濁点、半濁点、小さい文字
     case replaceLastCharacters([String: String])
-    case setCapsLockState(BoolOperation)
     case hideLearningMemory
     // タブの変更
     case moveTab(Tab)
@@ -40,6 +39,9 @@ enum ActionType: Equatable {
     case dismissKeyboard
     // アプリを開く
     case openApp(String)    // アプリを開く
+
+    // ステート変更
+    case setBoolState(String, BoolOperation)
     #if DEBUG
     // デバッグ用
     case DEBUG_DATA_INPUT
@@ -101,7 +103,7 @@ extension CodableActionData {
         case .toggleCursorBar:
             return .setCursorBar(.toggle)
         case .toggleCapsLockState:
-            return .setCapsLockState(.toggle)
+            return .setBoolState(VariableStates.BoolStates.isCapsLockedKey, .toggle)
         case .toggleTabBar:
             return .setTabBar(.toggle)
         case let .launchApplication(value):
@@ -116,7 +118,7 @@ extension CodableActionData {
         case let .setCursorBar(value):
             return .setCursorBar(value)
         case let .setCapsLockState(value):
-            return .setCapsLockState(value)
+            return .setBoolState(VariableStates.BoolStates.isCapsLockedKey, value)
         case let .setTabBar(value):
             return .setTabBar(value)
         }
@@ -138,7 +140,7 @@ extension ActionType {
             Sound.delete()
         case .smoothDelete, .smartDelete, .smartMoveCursor:
             Sound.smoothDelete()
-        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setCapsLockState, .setTabBar:
+        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState:
             Sound.tabOrOtherKey()
         case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return

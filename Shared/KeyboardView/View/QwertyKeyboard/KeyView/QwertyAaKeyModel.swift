@@ -18,14 +18,14 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
 
     var pressActions: [ActionType] {
         if VariableStates.shared.boolStates.isCapsLocked {
-            return [.setCapsLockState(.off)]
+            return [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .off)]
         } else {
             return [.changeCharacterType]
         }
     }
 
     var longPressActions: LongpressActionType {
-        return .init(start: [.setCapsLockState(.toggle)])
+        return .init(start: [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .toggle)])
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {

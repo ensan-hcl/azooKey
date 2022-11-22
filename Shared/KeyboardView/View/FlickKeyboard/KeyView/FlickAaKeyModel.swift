@@ -16,7 +16,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
 
     var pressActions: [ActionType] {
         if VariableStates.shared.boolStates.isCapsLocked {
-            return [.setCapsLockState(.off)]
+            return [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .off)]
         } else {
             return [.changeCharacterType]
         }
@@ -28,7 +28,10 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
             return [:]
         } else {
             return [
-                .top: FlickedKeyModel(labelType: .image("capslock"), pressActions: [.setCapsLockState(.on)])
+                .top: FlickedKeyModel(
+                    labelType: .image("capslock"),
+                    pressActions: [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .on)]
+                )
             ]
         }
     }
