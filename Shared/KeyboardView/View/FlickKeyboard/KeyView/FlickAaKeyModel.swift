@@ -15,24 +15,20 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
     static let shared = FlickAaKeyModel()
 
     var pressActions: [ActionType] {
-        switch VariableStates.shared.aAKeyState {
-        case .normal:
-            return [.changeCharacterType]
-        case .capsLock:
+        if VariableStates.shared.boolStates.isCapsLocked {
             return [.setCapsLockState(.off)]
+        } else {
+            return [.changeCharacterType]
         }
     }
 
     let longPressActions: LongpressActionType = .none
     var flickKeys: [FlickDirection: FlickedKeyModel] {
-        switch VariableStates.shared.aAKeyState {
-        case .normal:
+        if VariableStates.shared.boolStates.isCapsLocked {
+            return [:]
+        } else {
             return [
                 .top: FlickedKeyModel(labelType: .image("capslock"), pressActions: [.setCapsLockState(.on)])
-            ]
-        case .capsLock:
-            return [
-                :
             ]
         }
     }
@@ -40,11 +36,10 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
     var suggestModel: SuggestModel = SuggestModel([:], keyType: .aA)
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
-        switch states.aAKeyState {
-        case .normal:
-            return KeyLabel(.text("a/A"), width: width)
-        case .capsLock:
+        if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width)
+        } else {
+            return KeyLabel(.text("a/A"), width: width)
         }
     }
 
@@ -53,11 +48,10 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
-        switch states.aAKeyState {
-        case .normal:
-            return theme.normalKeyFillColor.color
-        case .capsLock:
+        if states.boolStates.isCapsLocked {
             return theme.specialKeyFillColor.color
+        } else {
+            return theme.normalKeyFillColor.color
         }
     }
 }

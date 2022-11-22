@@ -98,8 +98,8 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight)
             )
             .padding(.bottom, 2)
-            if variableStates.isTextMagnifying {
-                LargeTextView(text: variableStates.magnifyingText, isViewOpen: $variableStates.isTextMagnifying)
+            if variableStates.boolStates.isTextMagnifying {
+                LargeTextView(text: variableStates.magnifyingText, isViewOpen: $variableStates.boolStates.isTextMagnifying)
             }
             if showMessage {
                 ForEach(messageManager.necessaryMessages, id: \.id) {data in

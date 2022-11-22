@@ -68,9 +68,9 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     var body: some View {
         Group { [unowned variableStates] in
-            if variableStates.showMoveCursorBar {
+            if variableStates.boolStates.showMoveCursorBar {
                 MoveCursorBar()
-            } else if variableStates.showTabBar {
+            } else if variableStates.boolStates.showTabBar {
                 let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
                 TabBarView(data: tabBarData)
             } else {
@@ -172,7 +172,7 @@ struct ResultContextMenuView<Candidate: ResultViewItemData>: View {
         Group {
             Button(action: {
                 VariableStates.shared.magnifyingText = candidate.text
-                VariableStates.shared.isTextMagnifying = true
+                VariableStates.shared.boolStates.isTextMagnifying = true
             }) {
                 Text("大きな文字で表示する")
                 Image(systemName: "plus.magnifyingglass")

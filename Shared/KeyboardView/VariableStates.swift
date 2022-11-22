@@ -23,21 +23,58 @@ final class VariableStates: ObservableObject {
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published private(set) var keyboardLayout: KeyboardLayout = .flick
 
+    struct BoolStates {
+        var isTextMagnifying = false
+        var isCapsLocked = false
+        var showMoveCursorBar = false
+        var showTabBar = false
+        // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
+        fileprivate var custardStates: [String: Bool] = [:]
+
+        subscript(_ key: String) -> Bool? {
+            get {
+                if key == "isTextMagnifying" {
+                    return self.isTextMagnifying
+                } else if key == "showMoveCursorBar" {
+                    return self.showMoveCursorBar
+                } else if key == "showTabbar" {
+                    return self.showTabBar
+                } else if key == "isCapsLocked" {
+                    return self.isCapsLocked
+                }
+                return custardStates[key]
+            }
+            set {
+                if let newValue {
+                    if key == "isTextMagnifying" {
+                        self.isTextMagnifying = newValue
+                    } else if key == "showMoveCursorBar" {
+                        self.showMoveCursorBar = newValue
+                    } else if key == "showTabbar" {
+                        self.showTabBar = newValue
+                    } else if key == "isCapsLocked" {
+                        self.isCapsLocked = newValue
+                    }
+                } else {
+                    custardStates[key] = newValue
+                }
+            }
+        }
+    }
+
+    // Bool値の変数はここにまとめる
+    @Published var boolStates = BoolStates()
+
     // 片手モードの実行時、キーボードの幅はinterfaceSizeによって決定できる。
     @Published var interfaceSize: CGSize = .zero
     @Published var interfacePosition: CGPoint = .zero
 
-    @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
 
-    @Published var isTextMagnifying = false
     @Published var magnifyingText = ""
 
     @Published var keyboardType: UIKeyboardType = .default
-
-    @Published var showMoveCursorBar = false
-    @Published var showTabBar = false
 
     @Published var refreshing = true
 

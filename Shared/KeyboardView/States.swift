@@ -74,11 +74,6 @@ enum EnterKeyState {
     case edit       // 編集
 }
 
-enum AaKeyState {
-    case normal
-    case capsLock
-}
-
 /// 実行しないと値が確定しないが、実行されれば全く変更されない値。収容アプリでも共有できる形にすること。
 final class SemiStaticStates {
     static let shared = SemiStaticStates()

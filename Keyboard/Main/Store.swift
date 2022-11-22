@@ -112,15 +112,15 @@ final class KeyboardActionDepartment: ActionDepartment {
     }
 
     private func showResultView() {
-        VariableStates.shared.showTabBar = false
-        VariableStates.shared.showMoveCursorBar = false
+        VariableStates.shared.boolStates.showTabBar = false
+        VariableStates.shared.boolStates.showMoveCursorBar = false
     }
 
     private func doAction(_ action: ActionType, requireSetResult: Bool = true) {
         switch action {
         case let .input(text):
             self.showResultView()
-            if VariableStates.shared.aAKeyState == .capsLock && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage) {
+            if VariableStates.shared.boolStates.isCapsLocked && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage) {
                 let input = text.uppercased()
                 self.inputManager.input(text: input, requireSetResult: requireSetResult)
             } else {
@@ -172,29 +172,24 @@ final class KeyboardActionDepartment: ActionDepartment {
         case let .setCapsLockState(operation):
             switch operation {
             case .on:
-                VariableStates.shared.aAKeyState = .capsLock
+                VariableStates.shared.boolStates.isCapsLocked = true
             case .off:
-                VariableStates.shared.aAKeyState = .normal
+                VariableStates.shared.boolStates.isCapsLocked = false
             case .toggle:
-                switch VariableStates.shared.aAKeyState {
-                case .normal:
-                    VariableStates.shared.aAKeyState = .capsLock
-                case .capsLock:
-                    VariableStates.shared.aAKeyState = .normal
-                }
+                VariableStates.shared.boolStates.isCapsLocked.toggle()
             }
 
         case let .setCursorBar(operation):
             self.inputManager.updateSurroundingText()
             switch operation {
             case .on:
-                VariableStates.shared.showTabBar = false
-                VariableStates.shared.showMoveCursorBar = true
+                VariableStates.shared.boolStates.showTabBar = false
+                VariableStates.shared.boolStates.showMoveCursorBar = true
             case .off:
-                VariableStates.shared.showMoveCursorBar = false
+                VariableStates.shared.boolStates.showMoveCursorBar = false
             case .toggle:
-                VariableStates.shared.showTabBar = false
-                VariableStates.shared.showMoveCursorBar.toggle()
+                VariableStates.shared.boolStates.showTabBar = false
+                VariableStates.shared.boolStates.showMoveCursorBar.toggle()
             }
 
         case .enter:
@@ -216,13 +211,13 @@ final class KeyboardActionDepartment: ActionDepartment {
         case let .setTabBar(operation):
             switch operation {
             case .on:
-                VariableStates.shared.showMoveCursorBar = false
-                VariableStates.shared.showTabBar = true
+                VariableStates.shared.boolStates.showMoveCursorBar = false
+                VariableStates.shared.boolStates.showTabBar = true
             case .off:
-                VariableStates.shared.showTabBar = false
+                VariableStates.shared.boolStates.showTabBar = false
             case .toggle:
-                VariableStates.shared.showMoveCursorBar = false
-                VariableStates.shared.showTabBar.toggle()
+                VariableStates.shared.boolStates.showMoveCursorBar = false
+                VariableStates.shared.boolStates.showTabBar.toggle()
             }
 
         case .enableResizingMode:

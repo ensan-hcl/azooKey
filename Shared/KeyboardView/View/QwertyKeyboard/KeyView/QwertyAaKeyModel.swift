@@ -17,11 +17,10 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
     let needSuggestView: Bool = false
 
     var pressActions: [ActionType] {
-        switch VariableStates.shared.aAKeyState {
-        case .normal:
-            return [.changeCharacterType]
-        case .capsLock:
+        if VariableStates.shared.boolStates.isCapsLocked {
             return [.setCapsLockState(.off)]
+        } else {
+            return [.changeCharacterType]
         }
     }
 
@@ -30,11 +29,10 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        switch states.aAKeyState {
-        case .normal:
-            return KeyLabel(.image("textformat.alt"), width: width, textColor: color)
-        case .capsLock:
+        if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width, textColor: color)
+        } else {
+            return KeyLabel(.image("textformat.alt"), width: width, textColor: color)
         }
     }
 
