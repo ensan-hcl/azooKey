@@ -14,7 +14,7 @@ import CustardKit
 extension CodableActionData {
     var hasAssociatedValue: Bool {
         switch self {
-        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication, .setTabBar, .setCursorBar, .setCapsLockState: return true
+        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication, .setTabBar, .setCursorBar, .setCapsLockState, .setBoolState, .boolSwitch: return true
         case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
@@ -37,6 +37,8 @@ extension CodableActionData {
         case .dismissKeyboard: return "キーボードを閉じる"
         case .enableResizingMode: return "片手モードをオンにする"
         case .launchApplication: return "アプリを開く"
+        case .setBoolState: return "Bool変数を設定"
+        case .boolSwitch: return "条件分岐"
         case let .setCursorBar(value):
             // TODO: LOCALIZE
             switch value {

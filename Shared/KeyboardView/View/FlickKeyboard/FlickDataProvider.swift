@@ -8,9 +8,86 @@
 
 import Foundation
 import SwiftUI
+import CustardKit
 
 // M：基本は変わらない
 struct FlickDataProvider {
+    private static let boolStateTest = Custard(
+        identifier: "bool_state_test",
+        language: .undefined,
+        input_style: .direct,
+        metadata: .init(custard_version: .v1_0, display_name: "BoolStateTest"),
+        interface: .init(
+            keyStyle: .tenkeyStyle,
+            keyLayout: .gridFit(.init(rowCount: 1, columnCount: 5)),
+            keys: [
+                .gridFit(.init(x: 0, y: 0)): .custom(
+                    .init(
+                        design: .init(label: .text("Toggle1"), color: .normal),
+                        press_actions: [
+                            .setBoolState(state: "toggle1", value: "not(toggle1)")
+                        ],
+                        longpress_actions: .none,
+                        variations: [])
+                ),
+                .gridFit(.init(x: 0, y: 1)): .custom(
+                    .init(
+                        design: .init(label: .text("Toggle2"), color: .normal),
+                        press_actions: [
+                            .setBoolState(state: "toggle2", value: "not(toggle2)")
+                        ],
+                        longpress_actions: .none,
+                        variations: [])
+                ),
+                .gridFit(.init(x: 0, y: 2)): .custom(
+                    .init(
+                        design: .init(label: .text("state"), color: .special),
+                        press_actions: [.boolSwitch(
+                            condition: "toggle1",
+                            trueActions: [.boolSwitch(
+                                condition: "toggle2",
+                                trueActions: [.input("true_true")],
+                                falseActions: [.input("true_false")]
+                            )],
+                            falseActions: [.boolSwitch(
+                                condition: "toggle2",
+                                trueActions: [.input("false_true")],
+                                falseActions: [.input("false_false")]
+                            )]
+                        )],
+                        longpress_actions: .none,
+                        variations: [])
+                ),
+                .gridFit(.init(x: 0, y: 3)): .custom(
+                    .init(
+                        design: .init(label: .text("and"), color: .normal),
+                        press_actions: [.boolSwitch(
+                            condition: "toggle1 and toggle2",
+                            trueActions: [.input("and")],
+                            falseActions: [.input("nand")]
+                        )],
+                        longpress_actions: .none,
+                        variations: [])
+                ),
+                .gridFit(.init(x: 0, y: 4)): .custom(
+                    .init(
+                        design: .init(label: .text("xor"), color: .normal),
+                        press_actions: [.boolSwitch(
+                            condition: "(not(toggle1) and toggle2) or (toggle1 and not(toggle2))",
+                            trueActions: [.input("xor")],
+                            falseActions: [.input("nxor")]
+                        )],
+                        longpress_actions: .none,
+                        variations: [])
+                )
+            ]
+        ),
+        logics: .init(initialValues: [
+            .init(name: "toggle1", value: .bool(false)),
+            .init(name: "toggle2", value: .bool(false))
+        ])
+    )
+
     @KeyboardSetting(.preferredLanguage) private static var preferredLanguage
     static func TabKeys() -> [FlickKeyModelProtocol] {
         let first: FlickKeyModelProtocol = {
@@ -518,6 +595,10 @@ struct FlickDataProvider {
                 .right: FlickedKeyModel(
                     labelType: .text("÷"),
                     pressActions: [.input("÷")]
+                ),
+                .bottom: FlickedKeyModel(
+                    labelType: .text("DEBUG"),
+                    pressActions: [.moveTab(.existential(.custard(Self.boolStateTest)))]
                 )
                 /*
                  .bottom: FlickedKeyModel(

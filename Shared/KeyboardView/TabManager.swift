@@ -337,6 +337,14 @@ struct TabManager {
         case let .existential(tab):
             self.lastTab = self.currentTab
             self.currentTab = .existential(tab)
+            // Custard内の変数の初期化を実行
+            if case let .custard(custard) = tab {
+                for value in custard.logics.initialValues {
+                    if case let .bool(bool) = value.value {
+                        VariableStates.shared.boolStates.initializeState(value.name, with: bool)
+                    }
+                }
+            }
         case let .user_dependent(tab):
             self.lastTab = self.currentTab
             self.currentTab = .user_dependent(tab)

@@ -235,8 +235,13 @@ final class KeyboardActionDepartment: ActionDepartment {
                 VariableStates.shared.boolStates[key]?.toggle()
             }
 
-        case let .boolSwitch(state, trueAction, falseAction):
-            if let condition = VariableStates.shared.boolStates[state] {
+        case let ._setBoolState(key, compiledExpression):
+            if let value = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
+                VariableStates.shared.boolStates[key] = value
+            }
+
+        case let .boolSwitch(compiledExpression, trueAction, falseAction):
+            if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
                 if condition {
                     self.registerActions(trueAction)
                 } else {

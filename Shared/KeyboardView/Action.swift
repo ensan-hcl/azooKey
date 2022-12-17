@@ -8,6 +8,7 @@
 
 import Foundation
 import CustardKit
+import CustardExpressionEvaluator
 
 indirect enum ActionType: Equatable {
     // テキスト関係
@@ -42,9 +43,10 @@ indirect enum ActionType: Equatable {
 
     // ステート変更
     case setBoolState(String, BoolOperation)
+    case _setBoolState(String, CompiledExpression)
 
     // 条件分岐アクション
-    case boolSwitch(String, trueAction: [ActionType], falseAction: [ActionType])
+    case boolSwitch(CompiledExpression, trueAction: [ActionType], falseAction: [ActionType])
 
     #if DEBUG
     // デバッグ用
@@ -109,6 +111,24 @@ extension CodableActionData {
             return .setBoolState(VariableStates.BoolStates.isCapsLockedKey, value)
         case let .setTabBar(value):
             return .setTabBar(value)
+        case let .setBoolState(state, value):
+            let tokenizer = CustardExpressionTokenizer()
+            let compiler = CustardExpressionCompiler()
+            let tokens = tokenizer.tokenize(expression: value)
+            if let compiledExpression = try? compiler.compile(tokens: tokens) {
+                return ._setBoolState(state, compiledExpression)
+            }
+            // TODO: implement empty action and enable actual do-nothing
+            return .input("")
+        case let .boolSwitch(expression, trueActions, falseActions):
+            let tokenizer = CustardExpressionTokenizer()
+            let compiler = CustardExpressionCompiler()
+            let tokens = tokenizer.tokenize(expression: expression)
+            if let compiledExpression = try? compiler.compile(tokens: tokens) {
+                return .boolSwitch(compiledExpression, trueAction: trueActions.map {$0.actionType}, falseAction: falseActions.map {$0.actionType})
+            }
+            // TODO: implement empty action and enable actual do-nothing
+            return .input("")
         }
     }
 }
@@ -128,12 +148,12 @@ extension ActionType {
             Sound.delete()
         case .smoothDelete, .smartDelete, .smartMoveCursor:
             Sound.smoothDelete()
-        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState:
+        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState, ._setBoolState:
             Sound.tabOrOtherKey()
         case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
-        case let .boolSwitch(state, trueAction, falseAction):
-            if let condition = VariableStates.shared.boolStates[state] {
+        case let .boolSwitch(compiledExpression, trueAction, falseAction):
+            if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
                 if condition {
                     trueAction.first?.sound()
                 } else {
