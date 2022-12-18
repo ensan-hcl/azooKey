@@ -888,6 +888,7 @@
 		1A2E581E294F28C2004F959B /* LoggingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E581C294F28C2004F959B /* LoggingUtils.swift */; };
 		1A2E581F294F28C2004F959B /* LoggingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E581C294F28C2004F959B /* LoggingUtils.swift */; };
 		1A2E5822294F4357004F959B /* TypoCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5820294F4357004F959B /* TypoCorrection.swift */; };
+		1A2E5824294F452A004F959B /* ComposingTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5823294F452A004F959B /* ComposingTextTests.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -3528,6 +3529,7 @@
 		1A2E5814294F25DE004F959B /* SemiStaticStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemiStaticStates.swift; sourceTree = "<group>"; };
 		1A2E581C294F28C2004F959B /* LoggingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingUtils.swift; sourceTree = "<group>"; };
 		1A2E5820294F4357004F959B /* TypoCorrection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypoCorrection.swift; sourceTree = "<group>"; };
+		1A2E5823294F452A004F959B /* ComposingTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingTextTests.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -6121,6 +6123,7 @@
 			children = (
 				1A2E580A294ED02C004F959B /* StringUtilsTests.swift */,
 				1A2E580F294F1F1C004F959B /* CharacterUtilsTests.swift */,
+				1A2E5823294F452A004F959B /* ComposingTextTests.swift */,
 			);
 			path = KeyboardTests;
 			sourceTree = "<group>";
@@ -10869,6 +10872,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2E5824294F452A004F959B /* ComposingTextTests.swift in Sources */,
 				1AF1CB38253011E8002FCC66 /* Combinations.swift in Sources */,
 				1A2E580B294ED02C004F959B /* StringUtilsTests.swift in Sources */,
 				1AFB685728D5769700B5C717 /* HashPerformance.swift in Sources */,

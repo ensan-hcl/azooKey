@@ -538,8 +538,10 @@ extension ComposingText {
 
 }
 
+// Equatableにしておく
 extension ComposingText: Equatable {}
 extension ComposingText.InputElement: Equatable {}
+extension ComposingText.ViewOperation: Equatable {}
 
 // MARK: 差分計算用のAPI
 extension ComposingText {
