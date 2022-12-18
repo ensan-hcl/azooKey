@@ -152,7 +152,7 @@ class GeneralPerformance: XCTestCase {
     func testPerformanceIsLessZero() throws {
         let values = (0..<1000000).map {_ in UInt64.random(in: 0...UInt64.max)}
         self.measure {
-            let sum = values.map {$0 < UInt64.prefixOne ? 1:0}
+            let sum = values.map {$0 < UInt64.prefix_one ? 1:0}
             print(sum.count)
         }
     }

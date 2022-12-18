@@ -68,7 +68,7 @@ extension String {
 
 protocol LOUDSUnit: UnsignedInteger, FixedWidthInteger {
     var popCount: Int {get}
-    static var prefixOne: Self {get}
+    static var prefix_one: Self {get}
     var binaryString: String {get}
 }
 extension LOUDSUnit {
@@ -78,7 +78,7 @@ extension LOUDSUnit {
 }
 
 extension UInt8: LOUDSUnit {
-    static let prefixOne: UInt8 = 0b10000000
+    static let prefix_one: UInt8 = 0b10000000
     var popCount: Int {
         return self.nonzeroBitCount
         var x = self
@@ -96,7 +96,7 @@ extension UInt64: LOUDSUnit {
         self.nonzeroBitCount
     }
 
-    static let prefixOne: UInt64 = 0b1000000000000000000000000000000000000000000000000000000000000000
+    static let prefix_one: UInt64 = 0b1000000000000000000000000000000000000000000000000000000000000000
 
     var uint8Array: [UInt8] {
         var bigEndian: UInt64 = self.bigEndian
@@ -503,11 +503,11 @@ struct FastLOUDSUIntTrie {
             }
             let byte2 = (pbits+j).pointee
             // 最初の0を探す作業
-            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefix_one})
             return start ..< (j << Self.uExp) &+ (a ?? 0)
         } else {
             // 反転させたビットで最初の1を探す作業(次の0を探す作業)
-            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefix_one})
             return start ..< (i << Self.uExp) &+ (a ?? 0)
         }
     }
@@ -551,11 +551,11 @@ struct FastLOUDSUIntTrie {
             }
             let byte2 = (pbits+j).pointee
             // 最初の0を探す作業
-            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefix_one})
             return start ..< (j << Self.uExp) &+ (a ?? 0)
         } else {
             // 反転させたビットで最初の1を探す作業(次の0を探す作業)
-            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefix_one})
             return start ..< (i << Self.uExp) &+ (a ?? 0)
         }
     }
@@ -596,11 +596,11 @@ struct FastLOUDSUIntTrie {
             }
             let byte2 = (pbits+j).pointee
             // 最初の0を探す作業
-            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefix_one})
             return start ..< (j << Self.uExp) &+ (a ?? 0)
         } else {
             // 反転させたビットで最初の1を探す作業(次の0を探す作業)
-            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefix_one})
             return start ..< (i << Self.uExp) &+ (a ?? 0)
         }
     }
@@ -649,11 +649,11 @@ struct FastLOUDSUIntTrie {
             }
             let byte2 = (pbits+j).pointee
             // 最初の0を探す作業
-            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+            let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefix_one})
             return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
         } else {
             // 反転させたビットで最初の1を探す作業(次の0を探す作業)
-            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+            let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefix_one})
             return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
         }
     }
@@ -684,7 +684,7 @@ struct FastLOUDSUIntTrie {
                     break
                 }
                 // byteの上からc桁めが0なら == (byte << 0)が100………00より小さければ == 最初の1桁を一番下に持ってきた値そのもの
-                count &-= (byte << c) < Unit.prefixOne ? 1:0
+                count &-= (byte << c) < Unit.prefix_one ? 1:0
             }
 
             let start = (i << Self.uExp) &+ k &- parentNodeIndex &+ 1
@@ -695,11 +695,11 @@ struct FastLOUDSUIntTrie {
                 }
                 let byte2 = buffer[j]
                 // 最初の0を探す作業
-                let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+                let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefix_one})
                 return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
             } else {
                 // 次の0を探す作業
-                let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+                let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefix_one})
                 return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
             }
         }
@@ -733,7 +733,7 @@ struct FastLOUDSUIntTrie {
                     break
                 }
                 // byteの上からc桁めが0なら == (byte << 0)が100………00より小さければ == 最初の1桁を一番下に持ってきた値そのもの
-                count &-= (byte << c) < Unit.prefixOne ? 1:0
+                count &-= (byte << c) < Unit.prefix_one ? 1:0
             }
 
             let start = (i << Self.uExp) &+ k &- parentNodeIndex &+ 1
@@ -744,11 +744,11 @@ struct FastLOUDSUIntTrie {
                 }
                 let byte2 = buffer[j]
                 // 最初の0を探す作業
-                let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefixOne})
+                let a = (0..<Self.unit).first(where: {(byte2 << $0) < Unit.prefix_one})
                 return start ..< (j << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
             } else {
                 // 次の0を探す作業
-                let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefixOne})
+                let a = (k..<Self.unit).first(where: {(byte << $0) < Unit.prefix_one})
                 return start ..< (i << Self.uExp) &+ (a ?? 0) &- parentNodeIndex &+ 1
             }
         }
@@ -819,7 +819,7 @@ struct FastLOUDSUIntTrie {
                     if count == dif {
                         break
                     }
-                    count -= (((byte & Unit.prefixOne) == Unit.prefixOne) ? 1:0)
+                    count -= (((byte & Unit.prefix_one) == Unit.prefix_one) ? 1:0)
                     byte = byte << 1
 
                     k += 1
@@ -836,7 +836,7 @@ struct FastLOUDSUIntTrie {
                     var a = 0
                     var byte2 = (pbits+j).pointee
                     for _ in 0..<Self.unit {
-                        if (byte2 & Unit.prefixOne) == 0 {
+                        if (byte2 & Unit.prefix_one) == 0 {
                             break
                         }
                         byte2 = byte2 << 1
