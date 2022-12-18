@@ -11,7 +11,6 @@ import UIKit
 typealias PValue = Float16
 
 struct Kana2Kanji {
-    let ccBonusUnit = 5
     var dicdataStore = DicdataStore()
 
     /// CandidateDataの状態からCandidateに変更する関数
