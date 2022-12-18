@@ -893,6 +893,8 @@
 		1A2E5827294F4EAE004F959B /* DicdataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67360525092C1E003FC654 /* DicdataElement.swift */; };
 		1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A370E542907B5CD0053D6D4 /* MIDData.swift */; };
 		1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9476AF28240928006E22A9 /* CIDData.swift */; };
+		1A2E582E294F5E6A004F959B /* ActionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E582D294F5E69004F959B /* ActionUtils.swift */; };
+		1A2E582F294F5E6A004F959B /* ActionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E582D294F5E69004F959B /* ActionUtils.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -3534,6 +3536,7 @@
 		1A2E581C294F28C2004F959B /* LoggingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingUtils.swift; sourceTree = "<group>"; };
 		1A2E5820294F4357004F959B /* TypoCorrection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypoCorrection.swift; sourceTree = "<group>"; };
 		1A2E5823294F452A004F959B /* ComposingTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingTextTests.swift; sourceTree = "<group>"; };
+		1A2E582D294F5E69004F959B /* ActionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionUtils.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -8194,6 +8197,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC2162500D5AB002CAA93 /* Action.swift */,
+				1A2E582D294F5E69004F959B /* ActionUtils.swift */,
 				1AF678AE25CE3B4A00F3987B /* States.swift */,
 				1A2E5814294F25DE004F959B /* SemiStaticStates.swift */,
 				1AF678DE25CED86500F3987B /* VariableStates.swift */,
@@ -10709,6 +10713,7 @@
 				1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */,
 				1A18425D25DE6678003985AB /* CustomKeyboard.swift in Sources */,
 				1AF28CE0253C9FFC0012CF94 /* CursorMoveTips.swift in Sources */,
+				1A2E582E294F5E6A004F959B /* ActionUtils.swift in Sources */,
 				1ACC0F0725CF9A7700FC1B8A /* FlickSpaceKeyModel.swift in Sources */,
 				1AF6797A25CEDB9B00F3987B /* QwertyTabKeyModel.swift in Sources */,
 				1AE1024B25D118ED00CA7277 /* ColorTools.swift in Sources */,
@@ -10984,6 +10989,7 @@
 				1AD2B8EB26C2CC8C0053CE4A /* LearningTypeSetting.swift in Sources */,
 				1A4623E52524617B00EF5B02 /* LOUDS.swift in Sources */,
 				1A3DC21F2500D5F2002CAA93 /* FlickEnterKeyModel.swift in Sources */,
+				1A2E582F294F5E6A004F959B /* ActionUtils.swift in Sources */,
 				1AD2B8E826C2C74D0053CE4A /* DoubleKeyboardSetting.swift in Sources */,
 				1A3ACEFA25F9F9AA007E9938 /* ResizingRect.swift in Sources */,
 				1ABF7D992639869B0045D6B2 /* Intertranslator.swift in Sources */,
