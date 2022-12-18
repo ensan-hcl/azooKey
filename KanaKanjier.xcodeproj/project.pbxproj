@@ -871,6 +871,8 @@
 		1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C293826273E9900DFE465 /* DraggableView.swift */; };
 		1A2C2FDF28D710170001A0BB /* BloomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C2FDE28D710170001A0BB /* BloomFilter.swift */; };
 		1A2C2FE128DA11D00001A0BB /* ComposingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C2FE028DA11D00001A0BB /* ComposingText.swift */; };
+		1A2E580B294ED02C004F959B /* StringUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E580A294ED02C004F959B /* StringUtilsTests.swift */; };
+		1A2E580D294ED0DA004F959B /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4B72539356100B92B49 /* StringUtils.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -2510,7 +2512,6 @@
 		1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
 		1AEB864A251CE730000A8379 /* roman2kana.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEB8649251CE730000A8379 /* roman2kana.swift */; };
 		1AF1C55F252DD10F002FCC66 /* added_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1C55E252DD10F002FCC66 /* added_last_n_character.swift */; };
-		1AF1CAF4252F2228002FCC66 /* azooKeyKeyboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1CAF3252F2228002FCC66 /* azooKeyKeyboardTests.swift */; };
 		1AF1CB38253011E8002FCC66 /* Combinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1CB37253011E8002FCC66 /* Combinations.swift */; };
 		1AF1D0D62530B666002FCC66 /* TextFileLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1D0D52530B665002FCC66 /* TextFileLines.swift */; };
 		1AF1D65F253146B7002FCC66 /* TopNing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1D65E253146B7002FCC66 /* TopNing.swift */; };
@@ -2617,13 +2618,6 @@
 			remoteInfo = KanaKanjier;
 		};
 		1A3DC1FE2500D488002CAA93 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1A3DC1BA2500D44A002CAA93 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1A3DC1F82500D488002CAA93;
-			remoteInfo = Keyboard;
-		};
-		1AFB684628D56E0300B5C717 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1A3DC1BA2500D44A002CAA93 /* Project object */;
 			proxyType = 1;
@@ -3514,6 +3508,7 @@
 		1A2C293826273E9900DFE465 /* DraggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
 		1A2C2FDE28D710170001A0BB /* BloomFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomFilter.swift; sourceTree = "<group>"; };
 		1A2C2FE028DA11D00001A0BB /* ComposingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingText.swift; sourceTree = "<group>"; };
+		1A2E580A294ED02C004F959B /* StringUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtilsTests.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -5114,9 +5109,6 @@
 		1AE70BF0258E5798009B9B8B /* TemplateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateData.swift; sourceTree = "<group>"; };
 		1AEB8649251CE730000A8379 /* roman2kana.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = roman2kana.swift; sourceTree = "<group>"; };
 		1AF1C55E252DD10F002FCC66 /* added_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = added_last_n_character.swift; sourceTree = "<group>"; };
-		1AF1CAF1252F2227002FCC66 /* azooKeyKeyboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = azooKeyKeyboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1AF1CAF3252F2228002FCC66 /* azooKeyKeyboardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = azooKeyKeyboardTests.swift; sourceTree = "<group>"; };
-		1AF1CAF5252F2228002FCC66 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AF1CB37253011E8002FCC66 /* Combinations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combinations.swift; sourceTree = "<group>"; };
 		1AF1D0D52530B665002FCC66 /* TextFileLines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFileLines.swift; sourceTree = "<group>"; };
 		1AF1D65E253146B7002FCC66 /* TopNing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopNing.swift; sourceTree = "<group>"; };
@@ -5187,13 +5179,6 @@
 				1A8E454A28E5711800133D3B /* OrderedCollections in Frameworks */,
 				1A9E908F2822CEC100E73846 /* DequeModule in Frameworks */,
 				1A606B08292E53C500CEDB15 /* CustardExpressionEvaluator in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1AF1CAEE252F2227002FCC66 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6112,6 +6097,14 @@
 			path = louds;
 			sourceTree = "<group>";
 		};
+		1A2E580E294ED1E3004F959B /* KeyboardTests */ = {
+			isa = PBXGroup;
+			children = (
+				1A2E580A294ED02C004F959B /* StringUtilsTests.swift */,
+			);
+			path = KeyboardTests;
+			sourceTree = "<group>";
+		};
 		1A347FE628D22F8E007D7852 /* LiveConversionSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -6148,7 +6141,6 @@
 				1A3DC1DB2500D44E002CAA93 /* KanaKanjierTests */,
 				1A3DC1E62500D44E002CAA93 /* KanaKanjierUITests */,
 				1A3DC1FA2500D488002CAA93 /* Keyboard */,
-				1AF1CAF2252F2228002FCC66 /* azooKeyKeyboardTests */,
 				1A3DC1C32500D44A002CAA93 /* Products */,
 				1A9E908D2822CEC100E73846 /* Frameworks */,
 			);
@@ -6161,7 +6153,6 @@
 				1A3DC1D82500D44E002CAA93 /* KanaKanjierTests.xctest */,
 				1A3DC1E32500D44E002CAA93 /* KanaKanjierUITests.xctest */,
 				1A3DC1F92500D488002CAA93 /* Keyboard.appex */,
-				1AF1CAF1252F2227002FCC66 /* azooKeyKeyboardTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6220,6 +6211,7 @@
 				1AB4E45C251C80CA00A58F3F /* LOUDS.swift */,
 				1A2C2FDE28D710170001A0BB /* BloomFilter.swift */,
 				1AFB685628D5769700B5C717 /* HashPerformance.swift */,
+				1A2E580E294ED1E3004F959B /* KeyboardTests */,
 				1A4623C12524159300EF5B02 /* aozora.csv */,
 				1A46245C2524D06800EF5B02 /* data */,
 				1A3DC1DE2500D44E002CAA93 /* Info.plist */,
@@ -8138,15 +8130,6 @@
 			path = Template;
 			sourceTree = "<group>";
 		};
-		1AF1CAF2252F2228002FCC66 /* azooKeyKeyboardTests */ = {
-			isa = PBXGroup;
-			children = (
-				1AF1CAF3252F2228002FCC66 /* azooKeyKeyboardTests.swift */,
-				1AF1CAF5252F2228002FCC66 /* Info.plist */,
-			);
-			path = azooKeyKeyboardTests;
-			sourceTree = "<group>";
-		};
 		1AF616B9256D40A5001A0B32 /* MemoryResetSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -8286,24 +8269,6 @@
 			productReference = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		1AF1CAF0252F2227002FCC66 /* azooKeyKeyboardTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1AF1CAF6252F2228002FCC66 /* Build configuration list for PBXNativeTarget "azooKeyKeyboardTests" */;
-			buildPhases = (
-				1AF1CAED252F2227002FCC66 /* Sources */,
-				1AF1CAEE252F2227002FCC66 /* Frameworks */,
-				1AF1CAEF252F2227002FCC66 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				1AFB684728D56E0300B5C717 /* PBXTargetDependency */,
-			);
-			name = azooKeyKeyboardTests;
-			productName = azooKeyKeyboardTests;
-			productReference = 1AF1CAF1252F2227002FCC66 /* azooKeyKeyboardTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -8327,10 +8292,6 @@
 					};
 					1A3DC1F82500D488002CAA93 = {
 						CreatedOnToolsVersion = 11.6;
-					};
-					1AF1CAF0252F2227002FCC66 = {
-						CreatedOnToolsVersion = 12.0.1;
-						TestTargetID = 1A3DC1C12500D44A002CAA93;
 					};
 				};
 			};
@@ -8358,7 +8319,6 @@
 				1A3DC1C12500D44A002CAA93 /* KanaKanjier */,
 				1A3DC1D72500D44E002CAA93 /* KanaKanjierTests */,
 				1A3DC1E22500D44E002CAA93 /* KanaKanjierUITests */,
-				1AF1CAF0252F2227002FCC66 /* azooKeyKeyboardTests */,
 				1A3DC1F82500D488002CAA93 /* Keyboard */,
 			);
 		};
@@ -10654,13 +10614,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1AF1CAEF252F2227002FCC66 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -10892,6 +10845,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AF1CB38253011E8002FCC66 /* Combinations.swift in Sources */,
+				1A2E580B294ED02C004F959B /* StringUtilsTests.swift in Sources */,
 				1AFB685728D5769700B5C717 /* HashPerformance.swift in Sources */,
 				1A3DC1DD2500D44E002CAA93 /* KanaKanjierTests.swift in Sources */,
 				1AF1D65F253146B7002FCC66 /* TopNing.swift in Sources */,
@@ -10899,6 +10853,7 @@
 				1AC19AF22531AA800077BF8D /* Set.swift in Sources */,
 				1A86F47A25352AF200B92B49 /* swift-algorithm-topN.swift in Sources */,
 				1A4624802524D0A200EF5B02 /* LOUDSTest.swift in Sources */,
+				1A2E580D294ED0DA004F959B /* StringUtils.swift in Sources */,
 				1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */,
 				1AB4E45D251C80CA00A58F3F /* LOUDS.swift in Sources */,
 				1A4624DA2525FAE000EF5B02 /* ForEach.swift in Sources */,
@@ -11052,14 +11007,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1AF1CAED252F2227002FCC66 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1AF1CAF4252F2228002FCC66 /* azooKeyKeyboardTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -11077,11 +11024,6 @@
 			isa = PBXTargetDependency;
 			target = 1A3DC1F82500D488002CAA93 /* Keyboard */;
 			targetProxy = 1A3DC1FE2500D488002CAA93 /* PBXContainerItemProxy */;
-		};
-		1AFB684728D56E0300B5C717 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1A3DC1F82500D488002CAA93 /* Keyboard */;
-			targetProxy = 1AFB684628D56E0300B5C717 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -11460,48 +11402,6 @@
 			};
 			name = Release;
 		};
-		1AF1CAF7252F2228002FCC66 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9S3UXHYP65;
-				INFOPLIST_FILE = azooKeyKeyboardTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKeyKeyboardTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/azooKey.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/azooKey";
-			};
-			name = Debug;
-		};
-		1AF1CAF8252F2228002FCC66 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9S3UXHYP65;
-				INFOPLIST_FILE = azooKeyKeyboardTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKeyKeyboardTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/azooKey.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/azooKey";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -11546,15 +11446,6 @@
 			buildConfigurations = (
 				1A3DC2022500D488002CAA93 /* Debug */,
 				1A3DC2032500D488002CAA93 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1AF1CAF6252F2228002FCC66 /* Build configuration list for PBXNativeTarget "azooKeyKeyboardTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1AF1CAF7252F2228002FCC66 /* Debug */,
-				1AF1CAF8252F2228002FCC66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
