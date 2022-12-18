@@ -51,6 +51,8 @@ final class Store {
     }
 }
 
+extension Candidate: ResultViewItemData {}
+
 // MARK: Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
 final class KeyboardActionDepartment: ActionDepartment {
     fileprivate override init() {}

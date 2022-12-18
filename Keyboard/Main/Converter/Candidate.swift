@@ -51,7 +51,7 @@ struct CandidateData {
 }
 
 /// 変換候補のデータ
-struct Candidate: ResultViewItemData {
+struct Candidate {
     /// 入力となるテキスト
     var text: String
     /// 評価値
