@@ -35,6 +35,8 @@ final class DicdataStore {
     private let midCount = 502
     private let cidCount = 1319
 
+    private var requestOptions: KanaKanjiConverter.RequestOptions = .init()
+
     private let numberFormatter = NumberFormatter()
     /// 初期化時のセットアップ用の関数。プロパティリストを読み込み、連接確率リストを読み込んで行分割し保存しておく。
     private func setup() {
@@ -76,6 +78,8 @@ final class DicdataStore {
             self.learningManager.reset()
         case let .importOSUserDict(osUserDict):
             self.osUserDict = osUserDict
+        case let .setRequestOptions(value):
+            self.requestOptions = value
         }
     }
 
@@ -434,12 +438,12 @@ final class DicdataStore {
         }
 
         // headを英単語として候補に追加する
-        if VariableStates.shared.keyboardLanguage == .en_US && convertTarget.onlyRomanAlphabet {
+        if requestOptions.keyboardLanguage == .en_US && convertTarget.onlyRomanAlphabet {
             result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.英単語.mid, value: -14))
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
-        if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
+        if requestOptions.keyboardLanguage != .en_US && requestOptions.mainInputStyle == .roman2kana {
             if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[convertTarget] {
                 result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
                 result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))

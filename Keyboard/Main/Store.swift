@@ -82,6 +82,7 @@ final class KeyboardActionDepartment: ActionDepartment {
     enum DicdataStoreNotification {
         case notifyLearningType(LearningType)
         case importOSUserDict(OSUserDict)
+        case setRequestOptions(KanaKanjiConverter.RequestOptions)
         case notifyAppearAgain
         case reloadUserDict
         case closeKeyboard
@@ -1346,9 +1347,18 @@ private final class InputManager {
             requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
             requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
         }
+
+        let options = KanaKanjiConverter.RequestOptions(
+            N_best: 10,
+            requireJapanesePrediction: requireJapanesePrediction,
+            requireEnglishPrediction: requireEnglishPrediction,
+            keyboardLanguage: VariableStates.shared.keyboardLanguage,
+            mainInputStyle: VariableStates.shared.inputStyle
+        )
+
         let inputData = composingText.prefixToCursorPosition()
-        debug("setResult value to be input", inputData)
-        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
+        debug("setResult value to be input", inputData, options)
+        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
         results.append(contentsOf: result)
         // TODO: 最後の1単語のライブ変換を抑制したい
         // TODO: ローマ字入力中に最後の単語が優先される問題

@@ -177,7 +177,7 @@ final class KanaKanjiConverter {
     ///   - sums: 変換対象のデータ。
     /// - Returns:
     ///   予測変換候補
-    private func getPredictionCandidate(_ sums: [(CandidateData, Candidate)], composingText: ComposingText) -> [Candidate] {
+    private func getPredictionCandidate(_ sums: [(CandidateData, Candidate)], composingText: ComposingText, options: RequestOptions) -> [Candidate] {
         // 予測変換は次の方針で行う。
         // prepart: 前半文節 lastPart: 最終文節とする。
         // まず、lastPartがnilであるところから始める
@@ -200,7 +200,7 @@ final class KanaKanjiConverter {
                 newUnit.merge(with: oldlastPart.clause)     // マージする。(最終文節の範囲を広げたことになる)
                 let newValue = lastUnit.value + oldlastPart.value
                 let newlastPart: CandidateData.ClausesUnit = (clause: newUnit, value: newValue)
-                let predictions = converter.getPredicitonCandidates(composingText: composingText, prepart: prepart, lastClause: newlastPart.clause, N_best: 5)
+                let predictions = converter.getPredicitonCandidates(composingText: composingText, prepart: prepart, lastClause: newlastPart.clause, N_best: 5, mainInputStyle: options.mainInputStyle)
                 lastpart = newlastPart
                 // 結果がemptyでなければ
                 if !predictions.isEmpty {
@@ -211,7 +211,7 @@ final class KanaKanjiConverter {
                 // 最終分節を取得
                 lastpart = prepart.clauses.popLast()
                 // 予測変換を受け取る
-                let predictions = converter.getPredicitonCandidates(composingText: composingText, prepart: prepart, lastClause: lastpart!.clause, N_best: 5)
+                let predictions = converter.getPredicitonCandidates(composingText: composingText, prepart: prepart, lastClause: lastpart!.clause, N_best: 5, mainInputStyle: options.mainInputStyle)
                 // 結果がemptyでなければ
                 if !predictions.isEmpty {
                     // 結果に追加
@@ -228,13 +228,13 @@ final class KanaKanjiConverter {
     ///   - inputData: 変換対象のInputData。
     /// - Returns:
     ///   付加的な変換候補
-    private func getTopLevelAdditionalCandidate(_ inputData: ComposingText) -> [Candidate] {
-        @KeyboardSetting(.englishCandidate) var englishCandidate
+    private func getTopLevelAdditionalCandidate(_ inputData: ComposingText, options: RequestOptions) -> [Candidate] {
         var candidates: [Candidate] = []
-        if englishCandidate {
-            switch VariableStates.shared.inputStyle {
-            case .direct: break
-            case .roman2kana:
+        switch options.mainInputStyle {
+        case .direct: break
+        case .roman2kana:
+            @KeyboardSetting(.englishCandidate) var englishCandidate
+            if englishCandidate {
                 candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US", penalty: -10))
             }
         }
@@ -342,11 +342,10 @@ final class KanaKanjiConverter {
     /// - Parameters:
     ///   - inputData: 変換対象のInputData。
     ///   - result: convertToLatticeによって得られた結果。
-    ///   - requirePrediction: 予測変換を必要とするか否か。
-    ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
+    ///   - options: リクエストにかかるオプション。
     /// - Returns:
     ///   重複のない変換候補。
-    private func processResult(inputData: ComposingText, result: (result: LatticeNode, nodes: [[LatticeNode]]), requirePrediction: Bool, requireEnglishPrediction: Bool) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
+    private func processResult(inputData: ComposingText, result: (result: LatticeNode, nodes: [[LatticeNode]]), options: RequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         self.previousInputData = inputData
         self.nodes = result.nodes
         let clauseResult = result.result.getCandidateData(for: inputData)
@@ -380,22 +379,22 @@ final class KanaKanjiConverter {
         let whole_sentence_unique_candidates = self.getUniqueCandidate(sums.map {$0.1})
         let sentence_candidates = whole_sentence_unique_candidates.sorted {$0.value>$1.value}.prefix(5)
         // 予測変換
-        let prediction_candidates: [Candidate] = requirePrediction ? Array(self.getUniqueCandidate(self.getPredictionCandidate(sums, composingText: inputData)).sorted {$0.value>$1.value}.prefix(4)) : []
+        let prediction_candidates: [Candidate] = options.requireJapanesePrediction ? Array(self.getUniqueCandidate(self.getPredictionCandidate(sums, composingText: inputData, options: options)).sorted {$0.value>$1.value}.prefix(4)) : []
 
         // 英単語の予測変換。appleのapiを使うため、処理が異なる。
         var foreign_candidates: [Candidate] = []
 
-        if requireEnglishPrediction {
+        if options.requireEnglishPrediction {
             foreign_candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US"))
         }
-        if VariableStates.shared.keyboardLanguage == .el_GR {
+        if options.keyboardLanguage == .el_GR {
             foreign_candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "el"))
         }
 
         // ゼロヒント予測変換
         let best10 = getUniqueCandidate(sentence_candidates + prediction_candidates).sorted {$0.value > $1.value}.prefix(10)
         let zeroHintPrediction_candidates = converter.getZeroHintPredictionCandidates(preparts: best10, N_best: 3)
-        let toplevel_additional_candidate = self.getTopLevelAdditionalCandidate(inputData)
+        let toplevel_additional_candidate = self.getTopLevelAdditionalCandidate(inputData, options: options)
         // 文全体を変換するパターン
         let full_candidate = getUniqueCandidate(best10 + foreign_candidates + (zeroHintPrediction_candidates + toplevel_additional_candidate)).sorted {$0.value>$1.value}.prefix(5)
         // 重複のない変換候補を作成するための集合
@@ -545,15 +544,21 @@ final class KanaKanjiConverter {
 
     }
 
+    struct RequestOptions {
+        var N_best: Int = 10
+        var requireJapanesePrediction: Bool = true
+        var requireEnglishPrediction: Bool = true
+        var keyboardLanguage: KeyboardLanguage = .ja_JP
+        var mainInputStyle: InputStyle = .direct
+    }
+
     /// 外部から呼ばれる変換候補を要求する関数。
     /// - Parameters:
     ///   - inputData: 変換対象のInputData。
-    ///   - N_best: 計算途中で保存する候補数。実際に得られる候補数とは異なる。
-    ///   - requirePrediction: 予測変換を必要とするか否か。-
-    ///   - requireEnglishPrediction: 英語の予測変換を必要とするか否か。
+    ///   - options: リクエストにかかるパラメータ。
     /// - Returns:
     ///   重複のない変換候補。
-    func requestCandidates(_ inputData: ComposingText, N_best: Int, requirePrediction: Bool = true, requireEnglishPrediction: Bool = true) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
+    func requestCandidates(_ inputData: ComposingText, options: RequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         debug("requestCandidates 入力は", inputData)
         // 変換対象が無の場合
         if inputData.convertTarget.isEmpty {
@@ -561,13 +566,16 @@ final class KanaKanjiConverter {
         }
         let start1 = Date()
 
-        guard let result = self.convertToLattice(inputData, N_best: N_best) else {
+        // DicdataStoreにRequestOptionを通知する
+        self.sendToDicdataStore(.setRequestOptions(options))
+
+        guard let result = self.convertToLattice(inputData, N_best: options.N_best) else {
             return (.init(), .init())
         }
 
         debug("ラティス構築", -start1.timeIntervalSinceNow)
         let start2 = Date()
-        let candidates = self.processResult(inputData: inputData, result: result, requirePrediction: requirePrediction, requireEnglishPrediction: requireEnglishPrediction)
+        let candidates = self.processResult(inputData: inputData, result: result, options: options)
         debug("ラティス処理", -start2.timeIntervalSinceNow)
         debug("全体", -start1.timeIntervalSinceNow)
 
