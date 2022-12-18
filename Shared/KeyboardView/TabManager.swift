@@ -339,7 +339,7 @@ struct TabManager {
             self.currentTab = .existential(tab)
             // Custard内の変数の初期化を実行
             if case let .custard(custard) = tab {
-                for value in custard.logics.initialValues {
+                for value in custard.logics.initial_values {
                     if case let .bool(bool) = value.value {
                         VariableStates.shared.boolStates.initializeState(value.name, with: bool)
                     }

@@ -17,7 +17,10 @@ struct FlickDataProvider {
         language: .undefined,
         input_style: .direct,
         metadata: .init(custard_version: .v1_0, display_name: "BoolStateTest"),
-        interface: .init(
+        logics: .init(initialValues: [
+            .init(name: "toggle1", value: .bool(false)),
+            .init(name: "toggle2", value: .bool(false))
+        ]), interface: .init(
             keyStyle: .tenkeyStyle,
             keyLayout: .gridFit(.init(rowCount: 1, columnCount: 5)),
             keys: [
@@ -81,11 +84,7 @@ struct FlickDataProvider {
                         variations: [])
                 )
             ]
-        ),
-        logics: .init(initialValues: [
-            .init(name: "toggle1", value: .bool(false)),
-            .init(name: "toggle2", value: .bool(false))
-        ])
+        )
     )
 
     @KeyboardSetting(.preferredLanguage) private static var preferredLanguage
