@@ -890,6 +890,9 @@
 		1A2E5822294F4357004F959B /* TypoCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5820294F4357004F959B /* TypoCorrection.swift */; };
 		1A2E5824294F452A004F959B /* ComposingTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5823294F452A004F959B /* ComposingTextTests.swift */; };
 		1A2E5825294F4A72004F959B /* LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623E42524617B00EF5B02 /* LOUDS.swift */; };
+		1A2E5827294F4EAE004F959B /* DicdataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67360525092C1E003FC654 /* DicdataElement.swift */; };
+		1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A370E542907B5CD0053D6D4 /* MIDData.swift */; };
+		1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9476AF28240928006E22A9 /* CIDData.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -10881,6 +10884,7 @@
 				1AF1D65F253146B7002FCC66 /* TopNing.swift in Sources */,
 				1A2E5812294F2561004F959B /* roman2kana.swift in Sources */,
 				1A2E581A294F2884004F959B /* extension Data.swift in Sources */,
+				1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */,
 				1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */,
 				1A2E5819294F2880004F959B /* Modify.swift in Sources */,
 				1AC19AF22531AA800077BF8D /* Set.swift in Sources */,
@@ -10889,6 +10893,7 @@
 				1A2E5810294F1F1C004F959B /* CharacterUtilsTests.swift in Sources */,
 				1A86F47A25352AF200B92B49 /* swift-algorithm-topN.swift in Sources */,
 				1A4624802524D0A200EF5B02 /* LOUDSTest.swift in Sources */,
+				1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */,
 				1A2E580D294ED0DA004F959B /* StringUtils.swift in Sources */,
 				1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */,
 				1AB4E45D251C80CA00A58F3F /* LOUDSTests.swift in Sources */,
@@ -10901,6 +10906,7 @@
 				1A2E5818294F286D004F959B /* ArrayUtils.swift in Sources */,
 				1A2E5813294F2568004F959B /* ComposingText.swift in Sources */,
 				1A4623BC25240D2700EF5B02 /* TxtFileSpliting.swift in Sources */,
+				1A2E5827294F4EAE004F959B /* DicdataElement.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
