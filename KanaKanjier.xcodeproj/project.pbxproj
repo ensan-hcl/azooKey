@@ -875,6 +875,19 @@
 		1A2E580D294ED0DA004F959B /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4B72539356100B92B49 /* StringUtils.swift */; };
 		1A2E5810294F1F1C004F959B /* CharacterUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E580F294F1F1C004F959B /* CharacterUtilsTests.swift */; };
 		1A2E5811294F1F2F004F959B /* CharacterUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2FE2500F837002CAA93 /* CharacterUtils.swift */; };
+		1A2E5812294F2561004F959B /* roman2kana.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEB8649251CE730000A8379 /* roman2kana.swift */; };
+		1A2E5813294F2568004F959B /* ComposingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C2FE028DA11D00001A0BB /* ComposingText.swift */; };
+		1A2E5815294F25DE004F959B /* SemiStaticStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5814294F25DE004F959B /* SemiStaticStates.swift */; };
+		1A2E5816294F25DE004F959B /* SemiStaticStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5814294F25DE004F959B /* SemiStaticStates.swift */; };
+		1A2E5817294F25F8004F959B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
+		1A2E5818294F286D004F959B /* ArrayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayUtils.swift */; };
+		1A2E5819294F2880004F959B /* Modify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9C277728F4243600EBFFF9 /* Modify.swift */; };
+		1A2E581A294F2884004F959B /* extension Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE98762903F0A700C318C3 /* extension Data.swift */; };
+		1A2E581B294F2887004F959B /* extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7D00D2292A34EB00F06B35 /* extension String.swift */; };
+		1A2E581D294F28C2004F959B /* LoggingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E581C294F28C2004F959B /* LoggingUtils.swift */; };
+		1A2E581E294F28C2004F959B /* LoggingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E581C294F28C2004F959B /* LoggingUtils.swift */; };
+		1A2E581F294F28C2004F959B /* LoggingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E581C294F28C2004F959B /* LoggingUtils.swift */; };
+		1A2E5822294F4357004F959B /* TypoCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5820294F4357004F959B /* TypoCorrection.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -3512,6 +3525,9 @@
 		1A2C2FE028DA11D00001A0BB /* ComposingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingText.swift; sourceTree = "<group>"; };
 		1A2E580A294ED02C004F959B /* StringUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtilsTests.swift; sourceTree = "<group>"; };
 		1A2E580F294F1F1C004F959B /* CharacterUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterUtilsTests.swift; sourceTree = "<group>"; };
+		1A2E5814294F25DE004F959B /* SemiStaticStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemiStaticStates.swift; sourceTree = "<group>"; };
+		1A2E581C294F28C2004F959B /* LoggingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingUtils.swift; sourceTree = "<group>"; };
+		1A2E5820294F4357004F959B /* TypoCorrection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypoCorrection.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -6394,6 +6410,7 @@
 			children = (
 				1A64C8BD251315AD00ACD537 /* DicdataStore.swift */,
 				1A67360525092C1E003FC654 /* DicdataElement.swift */,
+				1A2E5820294F4357004F959B /* TypoCorrection.swift */,
 				1A364E3125C8361A00A56583 /* LearningMemory.swift */,
 				1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */,
 			);
@@ -8002,6 +8019,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC8A5A92595934C00B71E5A /* ArrayUtils.swift */,
+				1A2E581C294F28C2004F959B /* LoggingUtils.swift */,
 				1A9C277728F4243600EBFFF9 /* Modify.swift */,
 				1ADE98762903F0A700C318C3 /* extension Data.swift */,
 				1A7D00D2292A34EB00F06B35 /* extension String.swift */,
@@ -8170,6 +8188,7 @@
 			children = (
 				1A3DC2162500D5AB002CAA93 /* Action.swift */,
 				1AF678AE25CE3B4A00F3987B /* States.swift */,
+				1A2E5814294F25DE004F959B /* SemiStaticStates.swift */,
 				1AF678DE25CED86500F3987B /* VariableStates.swift */,
 				1AB8C38C25E1190900D39BC5 /* TabManager.swift */,
 				1AF678F525CED91900F3987B /* ActionDepartment.swift */,
@@ -10676,7 +10695,9 @@
 				1A10D80D25E501C80095CB67 /* UserMadeCustard.swift in Sources */,
 				1AF6790A25CED97500F3987B /* Action.swift in Sources */,
 				1AF6798125CEDBA400F3987B /* FlickKeyboardView.swift in Sources */,
+				1A2E581D294F28C2004F959B /* LoggingUtils.swift in Sources */,
 				1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */,
+				1A2E5815294F25DE004F959B /* SemiStaticStates.swift in Sources */,
 				1AB8C3D825E256EE00D39BC5 /* EditingTabBarView.swift in Sources */,
 				1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */,
 				1A18425D25DE6678003985AB /* CustomKeyboard.swift in Sources */,
@@ -10853,9 +10874,13 @@
 				1AFB685728D5769700B5C717 /* HashPerformance.swift in Sources */,
 				1A3DC1DD2500D44E002CAA93 /* KanaKanjierTests.swift in Sources */,
 				1AF1D65F253146B7002FCC66 /* TopNing.swift in Sources */,
+				1A2E5812294F2561004F959B /* roman2kana.swift in Sources */,
+				1A2E581A294F2884004F959B /* extension Data.swift in Sources */,
 				1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */,
+				1A2E5819294F2880004F959B /* Modify.swift in Sources */,
 				1AC19AF22531AA800077BF8D /* Set.swift in Sources */,
 				1A2E5811294F1F2F004F959B /* CharacterUtils.swift in Sources */,
+				1A2E5817294F25F8004F959B /* States.swift in Sources */,
 				1A2E5810294F1F1C004F959B /* CharacterUtilsTests.swift in Sources */,
 				1A86F47A25352AF200B92B49 /* swift-algorithm-topN.swift in Sources */,
 				1A4624802524D0A200EF5B02 /* LOUDSTest.swift in Sources */,
@@ -10863,8 +10888,12 @@
 				1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */,
 				1AB4E45D251C80CA00A58F3F /* LOUDS.swift in Sources */,
 				1A4624DA2525FAE000EF5B02 /* ForEach.swift in Sources */,
+				1A2E581E294F28C2004F959B /* LoggingUtils.swift in Sources */,
+				1A2E581B294F2887004F959B /* extension String.swift in Sources */,
 				1A2C2FDF28D710170001A0BB /* BloomFilter.swift in Sources */,
 				1AF1D0D62530B666002FCC66 /* TextFileLines.swift in Sources */,
+				1A2E5818294F286D004F959B /* ArrayUtils.swift in Sources */,
+				1A2E5813294F2568004F959B /* ComposingText.swift in Sources */,
 				1A4623BC25240D2700EF5B02 /* TxtFileSpliting.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10896,6 +10925,7 @@
 				1A12E24225C3E1CB00316009 /* MessageView.swift in Sources */,
 				1AFB684F28D56E8200B5C717 /* extension CGPoint.swift in Sources */,
 				1A3DC2FB2500D72D002CAA93 /* Kana2Kanji.swift in Sources */,
+				1A2E5816294F25DE004F959B /* SemiStaticStates.swift in Sources */,
 				1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */,
 				1AD2B8D926C272F80053CE4A /* BoolKeyboardSetting.swift in Sources */,
 				1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */,
@@ -10949,6 +10979,7 @@
 				1A64C8BE251315AD00ACD537 /* DicdataStore.swift in Sources */,
 				1AD2B8F126C2D4ED0053CE4A /* QwertyCustomKeyKeyboardSetting.swift in Sources */,
 				1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */,
+				1A2E581F294F28C2004F959B /* LoggingUtils.swift in Sources */,
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,
 				1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */,
 				1A2C2FE128DA11D00001A0BB /* ComposingText.swift in Sources */,
@@ -10962,6 +10993,7 @@
 				1A3ACF2325FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */,
 				1A3DC2262500D63F002CAA93 /* SuggestView.swift in Sources */,
 				1A3DC20A2500D51F002CAA93 /* KeyboardView.swift in Sources */,
+				1A2E5822294F4357004F959B /* TypoCorrection.swift in Sources */,
 				1A58AB0D25037E9E00EB1864 /* ExpandedResultView.swift in Sources */,
 				1A3DC2152500D59F002CAA93 /* FlickKeyView.swift in Sources */,
 				1A67360625092C1E003FC654 /* DicdataElement.swift in Sources */,
