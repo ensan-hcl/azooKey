@@ -54,7 +54,7 @@ final class KanaKanjiConverter {
     ///   - string: 入力されたString
     /// - Returns:
     ///   `賢い変換候補
-    private func getWiseCandidate(_ inputData: ComposingText) -> [Candidate] {
+    private func getWiseCandidate(_ inputData: ComposingText, options: RequestOptions) -> [Candidate] {
         var result = [Candidate]()
 
         // toWareki/toSeirekiCandidatesは以前は設定可能にしていたが、特にoffにする需要がなさそうなので常時有効化した
@@ -62,12 +62,10 @@ final class KanaKanjiConverter {
         result.append(contentsOf: self.toSeirekiCandidates(inputData))
         result.append(contentsOf: self.toEmailAddress(inputData))
 
-        @KeyboardSetting(.typographyLetter) var typographyLetter
-        if typographyLetter {
+        if options.typographyLetterCandidate {
             result.append(contentsOf: self.typographicalCandidates(inputData))
         }
-        @KeyboardSetting(.unicodeCandidate) var unicodeCandidate
-        if unicodeCandidate {
+        if options.unicodeCandidate {
             result.append(contentsOf: self.unicode(inputData))
         }
         result.append(contentsOf: self.toVersionCandidate(inputData))
@@ -233,8 +231,7 @@ final class KanaKanjiConverter {
         switch options.mainInputStyle {
         case .direct: break
         case .roman2kana:
-            @KeyboardSetting(.englishCandidate) var englishCandidate
-            if englishCandidate {
+            if options.englishCandidateInRoman2KanaInput {
                 candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US", penalty: -10))
             }
         }
@@ -262,7 +259,7 @@ final class KanaKanjiConverter {
     ///   - inputData: 変換対象のInputData。
     /// - Returns:
     ///   付加的な変換候補
-    private func getAdditionalCandidate(_ inputData: ComposingText) -> [Candidate] {
+    private func getAdditionalCandidate(_ inputData: ComposingText, options: RequestOptions) -> [Candidate] {
         var candidates: [Candidate] = []
         let string = inputData.convertTarget.toKatakana()
         let correspondingCount = inputData.input.count
@@ -306,8 +303,7 @@ final class KanaKanjiConverter {
             )
             candidates.append(uppercasedLetter)
         }
-        @KeyboardSetting(.fullRomanCandidate) var fullRomanCandidate
-        if fullRomanCandidate {
+        if options.fullWidthRomanCandidate {
             // 全角英数字
             let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: true) ?? ""
             let data = DicdataElement(word: word, ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -15)
@@ -320,8 +316,7 @@ final class KanaKanjiConverter {
             )
             candidates.append(fullWidthLetter)
         }
-        @KeyboardSetting(.halfKanaCandidate) var halfKanaCandidate
-        if halfKanaCandidate {
+        if options.halfWidthKanaCandidate {
             // 半角カタカナ
             let word = string.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? ""
             let data = DicdataElement(word: word, ruby: string, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -15)
@@ -350,7 +345,7 @@ final class KanaKanjiConverter {
         self.nodes = result.nodes
         let clauseResult = result.result.getCandidateData(for: inputData)
         if clauseResult.isEmpty {
-            let candidates = self.getUniqueCandidate(self.getAdditionalCandidate(inputData))
+            let candidates = self.getUniqueCandidate(self.getAdditionalCandidate(inputData, options: options))
             return (candidates, candidates)   // アーリーリターン
         }
         let clauseCandidates: [Candidate] = clauseResult.map {(candidateData: CandidateData) -> Candidate in
@@ -403,7 +398,7 @@ final class KanaKanjiConverter {
         let clause_candidates = self.getUniqueCandidate(clauseCandidates.filter {!seenCandidate.contains($0.text)}).sorted {$0.value>$1.value}.prefix(5)
         seenCandidate.formUnion(clause_candidates.map {$0.text})
         // 賢く変換するパターン
-        let wise_candidates: [Candidate] = self.getWiseCandidate(inputData)
+        let wise_candidates: [Candidate] = self.getWiseCandidate(inputData, options: options)
         seenCandidate.formUnion(wise_candidates.map {$0.text})
 
         // 最初の辞書データ
@@ -418,7 +413,7 @@ final class KanaKanjiConverter {
                 )
             }
         // 追加する部分
-        let additionalCandidates: [Candidate] = self.getAdditionalCandidate(inputData)
+        let additionalCandidates: [Candidate] = self.getAdditionalCandidate(inputData, options: options)
 
         /*
          文字列の長さごとに並べ、かつその中で評価の高いものから順に並べる。
@@ -550,6 +545,14 @@ final class KanaKanjiConverter {
         var requireEnglishPrediction: Bool = true
         var keyboardLanguage: KeyboardLanguage = .ja_JP
         var mainInputStyle: InputStyle = .direct
+        // KeyboardSettingのinjection用途
+        var typographyLetterCandidate: Bool = TypographyLetter.defaultValue
+        var unicodeCandidate: Bool = UnicodeCandidate.defaultValue
+        var englishCandidateInRoman2KanaInput: Bool = EnglishCandidate.defaultValue
+        var fullWidthRomanCandidate: Bool = FullRomanCandidate.defaultValue
+        var halfWidthKanaCandidate: Bool = HalfKanaCandidate.defaultValue
+        var learningType: LearningType = LearningTypeSetting.defaultValue
+        var maxMemoryCount: Int = 8192
     }
 
     /// 外部から呼ばれる変換候補を要求する関数。

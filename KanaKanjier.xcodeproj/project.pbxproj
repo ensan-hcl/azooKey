@@ -900,6 +900,7 @@
 		1A2E58332950ABD8004F959B /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346A92567F15700B41A16 /* SharedStore.swift */; };
 		1A2E58362950AC57004F959B /* AppVersionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E58352950AC57004F959B /* AppVersionTests.swift */; };
 		1A2E58372950B077004F959B /* BoolKeyboardSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD2B8D726C272F80053CE4A /* BoolKeyboardSetting.swift */; };
+		1A2E58382950B151004F959B /* LearningTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD2B8E926C2CC8C0053CE4A /* LearningTypeSetting.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -10916,6 +10917,7 @@
 				1A4624802524D0A200EF5B02 /* LOUDSTest.swift in Sources */,
 				1A2E58362950AC57004F959B /* AppVersionTests.swift in Sources */,
 				1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */,
+				1A2E58382950B151004F959B /* LearningTypeSetting.swift in Sources */,
 				1A2E580D294ED0DA004F959B /* StringUtils.swift in Sources */,
 				1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */,
 				1AB4E45D251C80CA00A58F3F /* LOUDSTests.swift in Sources */,

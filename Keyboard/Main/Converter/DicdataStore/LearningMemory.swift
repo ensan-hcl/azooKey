@@ -41,14 +41,7 @@ struct LongTermLearningMemory {
     }
 
     static var txtFileSplit: Int { 2048 }
-    static var maxMemoryCount: Int {
-        @KeyboardSetting(.useBetaStrongerLearning) var useStrongerLearning
-        if useStrongerLearning {
-            return 65536
-        } else {
-            return 8192
-        }
-    }
+    static var maxMemoryCount: Int = 8192
 
     private static func BoolToUInt64(_ bools: [Bool]) -> [UInt64] {
         let unit = 64
@@ -471,24 +464,28 @@ final class LearningManager {
     }
 
     private var temporaryMemory: TemporalLearningMemoryTrie = .init()
-    @KeyboardSetting(.learningType) private var learningType
+    private var options: KanaKanjiConverter.RequestOptions = .init()
 
     var enabled: Bool {
-        return self.learningType.needUsingMemory
+        return self.options.learningType.needUsingMemory
     }
 
     init() {
         if MemoryResetCondition.shouldReset() {
             try? LongTermLearningMemory.reset()
         }
-        @KeyboardSetting(.learningType) var learningType
-        if !learningType.needUsingMemory {
+        if !options.learningType.needUsingMemory {
             return
         }
     }
 
+    func setRequestOptions(options: KanaKanjiConverter.RequestOptions) {
+        self.options = options
+        LongTermLearningMemory.maxMemoryCount = options.maxMemoryCount
+    }
+
     func temporaryPerfectMatch(key: some StringProtocol) -> [DicdataElement] {
-        if !learningType.needUsingMemory {
+        if !options.learningType.needUsingMemory {
             return []
         }
         guard let chars = Self.keyToChars(key) else {
@@ -498,7 +495,7 @@ final class LearningManager {
     }
 
     func temporaryThroughMatch(key: some StringProtocol, depth: Range<Int>) -> [DicdataElement] {
-        if !learningType.needUsingMemory {
+        if !options.learningType.needUsingMemory {
             return []
         }
         guard let chars = Self.keyToChars(key) else {
@@ -508,7 +505,7 @@ final class LearningManager {
     }
 
     func temporaryPrefixMatch(key: some StringProtocol) -> [DicdataElement] {
-        if !learningType.needUsingMemory {
+        if !options.learningType.needUsingMemory {
             return []
         }
         guard let chars = Self.keyToChars(key) else {
@@ -518,7 +515,7 @@ final class LearningManager {
     }
 
     func update(data: [DicdataElement]) {
-        if !learningType.needUpdateMemory {
+        if !options.learningType.needUpdateMemory {
             return
         }
         // 単語単位
@@ -628,7 +625,7 @@ final class LearningManager {
     }
 
     func save() {
-        if !learningType.needUpdateMemory {
+        if !options.learningType.needUpdateMemory {
             return
         }
         LongTermLearningMemory.merge(tempTrie: self.temporaryMemory)
@@ -637,7 +634,5 @@ final class LearningManager {
     func reset() {
         self.temporaryMemory = TemporalLearningMemoryTrie()
         try? LongTermLearningMemory.reset()
-        @KeyboardSetting(.learningType) var learningType
-        self._learningType = _learningType
     }
 }

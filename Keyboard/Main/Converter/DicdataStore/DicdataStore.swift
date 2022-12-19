@@ -80,6 +80,7 @@ final class DicdataStore {
             self.osUserDict = osUserDict
         case let .setRequestOptions(value):
             self.requestOptions = value
+            self.learningManager.setRequestOptions(options: value)
         }
     }
 

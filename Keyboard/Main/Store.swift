@@ -1347,13 +1347,29 @@ private final class InputManager {
             requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
             requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
         }
+        @KeyboardSetting(.typographyLetter) var typographyLetterCandidate
+        @KeyboardSetting(.unicodeCandidate) var unicodeCandidate
+        @KeyboardSetting(.englishCandidate) var englishCandidateInRoman2KanaInput
+        @KeyboardSetting(.fullRomanCandidate) var fullWidthRomanCandidate
+        @KeyboardSetting(.halfKanaCandidate) var halfWidthKanaCandidate
+        @KeyboardSetting(.learningType) var learningType
+        @KeyboardSetting(.useBetaStrongerLearning) var useStrongerLearning
 
         let options = KanaKanjiConverter.RequestOptions(
             N_best: 10,
             requireJapanesePrediction: requireJapanesePrediction,
             requireEnglishPrediction: requireEnglishPrediction,
+            // VariableStatesを注入
             keyboardLanguage: VariableStates.shared.keyboardLanguage,
-            mainInputStyle: VariableStates.shared.inputStyle
+            mainInputStyle: VariableStates.shared.inputStyle,
+            // KeyboardSettingsを注入
+            typographyLetterCandidate: typographyLetterCandidate,
+            unicodeCandidate: unicodeCandidate,
+            englishCandidateInRoman2KanaInput: englishCandidateInRoman2KanaInput,
+            fullWidthRomanCandidate: fullWidthRomanCandidate,
+            halfWidthKanaCandidate: halfWidthKanaCandidate,
+            learningType: learningType,
+            maxMemoryCount: useStrongerLearning ? 65536 : 8192
         )
 
         let inputData = composingText.prefixToCursorPosition()
