@@ -29,7 +29,6 @@ final class StringTests: XCTestCase {
         XCTAssertTrue("vmaoNFIU".onlyRomanAlphabetOrNumber)
         XCTAssertTrue("1332".onlyRomanAlphabetOrNumber)
 
-
         // 文字がない場合はfalse
         XCTAssertFalse("".onlyRomanAlphabetOrNumber)
         XCTAssertFalse("and 13".onlyRomanAlphabetOrNumber)

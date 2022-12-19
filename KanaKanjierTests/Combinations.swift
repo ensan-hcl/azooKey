@@ -155,7 +155,7 @@ class CombinatoricsTest: XCTestCase {
                         return string + node
                     }
                     result1.append(contentsOf: addTypo)
-                    return string+correct
+                    return string + correct
                 }
                 return string
             }
@@ -270,7 +270,7 @@ class CombinatoricsTest: XCTestCase {
         let text = "シンフンシキエイノタンシヨウヒノハンツウ"
         self.measure {
             for _ in 0..<10 {
-                let typos = getRangeWithTypos(text: text)
+                _ = getRangeWithTypos(text: text)
             }
         }
         print(getRangeWithTypos(text: text).count)
@@ -280,7 +280,7 @@ class CombinatoricsTest: XCTestCase {
         let text = "シンフンシキエイノタンシヨウヒノハンツウ"
         self.measure {
             for _ in 0..<10 {
-                let typos = getRangeWithTypos4(text: text)
+                _ = getRangeWithTypos4(text: text)
             }
         }
         print(getRangeWithTypos4(text: text).count)

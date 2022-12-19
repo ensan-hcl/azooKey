@@ -44,19 +44,19 @@ struct HashMaker<T: Hashable>: Hashable {
 
 class HashTest: XCTestCase {
 
-    @inlinable func cidToUIntSequence(cid: Int) -> Array<UInt8> {
+    @inlinable func cidToUIntSequence(cid: Int) -> [UInt8] {
         return [
             UInt8(cid & 0x00_00_00_FF),
-            UInt8((cid & 0x00_00_FF_00) >> 8),
+            UInt8((cid & 0x00_00_FF_00) >> 8)
         ]
     }
 
-    @inlinable func cidToUIntSequence(lcid: Int, rcid: Int) -> Array<UInt8> {
+    @inlinable func cidToUIntSequence(lcid: Int, rcid: Int) -> [UInt8] {
         return [
             UInt8(lcid & 0x00_00_00_FF),
             UInt8((lcid & 0x00_00_FF_00) >> 8),
             UInt8(rcid & 0x00_00_00_FF),
-            UInt8((rcid & 0x00_00_FF_00) >> 8),
+            UInt8((rcid & 0x00_00_FF_00) >> 8)
         ]
     }
 
@@ -71,15 +71,15 @@ class HashTest: XCTestCase {
                 do {
                     let h = fnv.copy()
                     h.update(cidToUIntSequence(cid: element.lcid))
-                    let hash0 = h.digest()
+                    _ = h.digest()
                 }
                 do {
                     let h = fnv.copy()
                     h.update(element.word)
-                    let hash1 = h.digest()
+                    _ = h.digest()
                 }
                 do {
-                    let hash2 = fnv.digest()
+                    _ = fnv.digest()
                 }
             }
 
@@ -96,11 +96,11 @@ class HashTest: XCTestCase {
                 mmh.update(element.ruby)
                 mmh.update(cidToUIntSequence(lcid: element.lcid, rcid: element.rcid))
                 do {
-                    let hash0 = mmh.digest()
+                    _ = mmh.digest()
                 }
                 do {
                     mmh.update(element.word)
-                    let hash1 = mmh.digest()
+                    _ = mmh.digest()
                 }
             }
         }
@@ -132,15 +132,15 @@ class HashTest: XCTestCase {
                 fnv1a_update(hash: &hash, value: element.lcid)
                 fnv1a_update(hash: &hash, value: element.rcid)
                 do {
-                    let hash1 = hash
+                    _ = hash
                 }
                 do {
                     hash = element.word.utf8.reduce(into: hash, fnv1a_update)
-                    let hash2 = hash
+                    _ = hash
                 }
                 do {
                     fnv1a_update(hash: &hash, value: element.lcid)
-                    let hash3 = hash
+                    _ = hash
                 }
             }
         }
@@ -160,15 +160,15 @@ class HashTest: XCTestCase {
                 do {
                     var h = hasher
                     h.combine(element.word)
-                    let hash0 = h.finalize()
+                    _ = h.finalize()
                 }
                 do {
                     var h = hasher
                     h.combine(element.lcid)
-                    let hash1 = h.finalize()
+                    _ = h.finalize()
                 }
                 do {
-                    let hash2 = hasher.finalize()
+                    _ = hasher.finalize()
                 }
             }
         }

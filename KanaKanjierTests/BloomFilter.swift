@@ -8,7 +8,6 @@
 
 import XCTest
 
-
 struct BloomFilter {
     var byteCount: Int  // bitCount must be multiple of 8
     var bytes: [UInt8]
@@ -63,7 +62,6 @@ struct BloomFilter {
         return true
     }
 }
-
 
 @inlinable func fnv1a_init(hash: inout UInt64) {
     hash = 14695981039346656037
@@ -181,14 +179,13 @@ class BloomFilterTest: XCTestCase {
         return hashes
     }
 
-
     // insert40000件くらいなら難なく対処できる
     func testInsertPerformance() throws {
         var filter = BloomFilter(byteCount: 262144) // 2^18byte (256KB)のBloom Filter, hashは21bitとなる
-        var randomElement0 = DicdataMock.random()
-        var randomElement1 = DicdataMock.random()
-        var randomElement2 = DicdataMock.random()
-        var randomElement3 = DicdataMock.random()
+        let randomElement0 = DicdataMock.random()
+        let randomElement1 = DicdataMock.random()
+        let randomElement2 = DicdataMock.random()
+        let randomElement3 = DicdataMock.random()
 
         measure {
             for _ in 0 ... 10000 {
@@ -204,18 +201,18 @@ class BloomFilterTest: XCTestCase {
     func testContains10000Performance() throws {
         var filter = BloomFilter(byteCount: 262144) // 2^18byte (256KB)のBloom Filter, hashは21bitとなる
         for _ in 0 ... 10000 {
-            var randomElement = DicdataMock.random()
+            let randomElement = DicdataMock.random()
             filter.insert(fnv1aHashes: hashForDicdataMock(randomElement))
         }
 
-        var randomElement0 = DicdataMock.random()
-        var randomElement1 = DicdataMock.random()
-        var randomElement2 = DicdataMock.random()
-        var randomElement3 = DicdataMock.random()
-        var randomElement4 = DicdataMock.random()
-        var randomElement5 = DicdataMock.random()
-        var randomElement6 = DicdataMock.random()
-        var randomElement7 = DicdataMock.random()
+        let randomElement0 = DicdataMock.random()
+        let randomElement1 = DicdataMock.random()
+        let randomElement2 = DicdataMock.random()
+        let randomElement3 = DicdataMock.random()
+        let randomElement4 = DicdataMock.random()
+        let randomElement5 = DicdataMock.random()
+        let randomElement6 = DicdataMock.random()
+        let randomElement7 = DicdataMock.random()
 
         measure {
             for _ in 0 ... 10000 {
@@ -235,18 +232,18 @@ class BloomFilterTest: XCTestCase {
     func testContains30000Performance() throws {
         var filter = BloomFilter(byteCount: 262144) // 2^18byte (256KB)のBloom Filter, hashは21bitとなる
         for _ in 0 ... 30000 {
-            var randomElement = DicdataMock.random()
+            let randomElement = DicdataMock.random()
             filter.insert(fnv1aHashes: hashForDicdataMock(randomElement))
         }
 
-        var randomElement0 = DicdataMock.random()
-        var randomElement1 = DicdataMock.random()
-        var randomElement2 = DicdataMock.random()
-        var randomElement3 = DicdataMock.random()
-        var randomElement4 = DicdataMock.random()
-        var randomElement5 = DicdataMock.random()
-        var randomElement6 = DicdataMock.random()
-        var randomElement7 = DicdataMock.random()
+        let randomElement0 = DicdataMock.random()
+        let randomElement1 = DicdataMock.random()
+        let randomElement2 = DicdataMock.random()
+        let randomElement3 = DicdataMock.random()
+        let randomElement4 = DicdataMock.random()
+        let randomElement5 = DicdataMock.random()
+        let randomElement6 = DicdataMock.random()
+        let randomElement7 = DicdataMock.random()
 
         measure {
             for _ in 0 ... 10000 {
@@ -261,7 +258,6 @@ class BloomFilterTest: XCTestCase {
             }
         }
     }
-
 
     // contains80000件に対して0.02秒
     func testFalsePositive() throws {
@@ -291,4 +287,3 @@ class BloomFilterTest: XCTestCase {
     }
 
 }
-

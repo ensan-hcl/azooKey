@@ -20,12 +20,12 @@ included:
   - KanaKanjier
   - Keyboard
   - Shared
+  - KanaKanjierTests
 excluded:
   - LOUDSBuilder
   - ValuesBinary
   - deprecated
   - KanaKanjierUITests
-  - KanaKanjierTests
 type_name:
   excluded: 
     - ID

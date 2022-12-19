@@ -124,11 +124,11 @@ class TextFileLines: XCTestCase {
     func testPerformanceComponents() throws {
         let shuffled = (0..<2048).shuffled()
         let c1 = Array(shuffled.prefix(1))
-        let c10 = Array(shuffled.prefix(10))
-        let c100 = Array(shuffled.prefix(100))
-        let c1000 = Array(shuffled.prefix(1000))
-        let c2000 = Array(shuffled.prefix(2000))
-        let c2048 = Array(shuffled.prefix(2048))
+        //        let c10 = Array(shuffled.prefix(10))
+        //        let c100 = Array(shuffled.prefix(100))
+        //        let c1000 = Array(shuffled.prefix(1000))
+        //        let c2000 = Array(shuffled.prefix(2000))
+        //        let c2048 = Array(shuffled.prefix(2048))
 
         self.measure {
             components(indices: c1)
@@ -138,11 +138,11 @@ class TextFileLines: XCTestCase {
     func testPerformanceScan() throws {
         let shuffled = (0..<2048).shuffled()
         let c1 = Array(shuffled.prefix(1))
-        let c10 = Array(shuffled.prefix(10))
-        let c100 = Array(shuffled.prefix(100))
-        let c1000 = Array(shuffled.prefix(1000))
-        let c2000 = Array(shuffled.prefix(10))
-        let c2048 = Array(shuffled.prefix(2048))
+        //        let c10 = Array(shuffled.prefix(10))
+        //        let c100 = Array(shuffled.prefix(100))
+        //        let c1000 = Array(shuffled.prefix(1000))
+        //        let c2000 = Array(shuffled.prefix(10))
+        //        let c2048 = Array(shuffled.prefix(2048))
 
         self.measure {
             scans(indices: c1)
@@ -152,11 +152,11 @@ class TextFileLines: XCTestCase {
     func testPerformanceBinary() throws {
         let shuffled = (0..<2048).shuffled()
         let c1 = Array(shuffled.prefix(1))
-        let c10 = Array(shuffled.prefix(10))
-        let c100 = Array(shuffled.prefix(100))
-        let c1000 = Array(shuffled.prefix(1000))
-        let c2000 = Array(shuffled.prefix(10))
-        let c2048 = Array(shuffled.prefix(2048))
+        //        let c10 = Array(shuffled.prefix(10))
+        //        let c100 = Array(shuffled.prefix(100))
+        //        let c1000 = Array(shuffled.prefix(1000))
+        //        let c2000 = Array(shuffled.prefix(10))
+        //        let c2048 = Array(shuffled.prefix(2048))
 
         self.measure {
             binary(indices: c1)

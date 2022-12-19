@@ -84,7 +84,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -95,7 +95,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -106,7 +106,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -117,7 +117,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -128,7 +128,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -139,7 +139,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -155,7 +155,7 @@ class OnlyRomanTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.isOnlyRoman
+                    _ = string.isOnlyRoman
                 }
             }
         }
@@ -167,7 +167,7 @@ class OnlyRomanTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.only2(self.characterSet)
+                    _ = string.only2(self.characterSet)
                 }
             }
         }
@@ -191,7 +191,7 @@ class OnlyRomanTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.only(self.characterSet)
+                    _ = string.only(self.characterSet)
                 }
             }
         }
@@ -207,7 +207,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -218,7 +218,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -229,7 +229,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -240,7 +240,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -251,7 +251,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -262,7 +262,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -275,7 +275,7 @@ class SetTest: XCTestCase {
         let strings = (0..<100000).map {_ in String((0..<100).map { _ in "tあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも".randomElement()!})}
         self.measure {
             strings.forEach {
-                let bool = $0.contains(String.romanAlphabetCharacterSet)
+                _ = $0.contains(String.romanAlphabetCharacterSet)
             }
         }
     }
@@ -284,7 +284,7 @@ class SetTest: XCTestCase {
         let strings = (0..<100000).map {_ in String((0..<100).map { _ in "tあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも".randomElement()!})}
         self.measure {
             strings.forEach {
-                let bool = $0.contains2(String.romanAlphabetCharacterSet)
+                _ = $0.contains2(String.romanAlphabetCharacterSet)
             }
         }
     }
@@ -293,7 +293,7 @@ class SetTest: XCTestCase {
         let strings = (0..<100000).map {_ in String((0..<100).map { _ in "tあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも".randomElement()!})}
         self.measure {
             strings.forEach {
-                let bool = $0.contains(String.romanAlphabetCharacter)
+                _ = $0.contains(String.romanAlphabetCharacter)
             }
         }
     }
@@ -302,7 +302,7 @@ class SetTest: XCTestCase {
         let strings = (0..<100000).map {_ in String((0..<100).map { _ in "tあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも".randomElement()!})}
         self.measure {
             strings.forEach {
-                let bool = $0.isRomanByInterSect
+                _ = $0.isRomanByInterSect
             }
         }
     }

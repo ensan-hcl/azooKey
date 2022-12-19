@@ -964,7 +964,6 @@
 		1A4623C22524159400EF5B02 /* aozora.csv in Resources */ = {isa = PBXBuildFile; fileRef = 1A4623C12524159300EF5B02 /* aozora.csv */; };
 		1A4623E52524617B00EF5B02 /* LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623E42524617B00EF5B02 /* LOUDS.swift */; };
 		1A4623F52524621F00EF5B02 /* extension LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623F42524621F00EF5B02 /* extension LOUDS.swift */; };
-		1A4624802524D0A200EF5B02 /* LOUDSTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A46247F2524D0A200EF5B02 /* LOUDSTest.swift */; };
 		1A4624C32524DCE900EF5B02 /* キ20000.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1A4624B52524DCDF00EF5B02 /* キ20000.loudstxt */; };
 		1A4624C42524DCE900EF5B02 /* キ10000.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1A4624B62524DCE000EF5B02 /* キ10000.loudstxt */; };
 		1A4624C52524DCE900EF5B02 /* キ0.loudstxt in Resources */ = {isa = PBXBuildFile; fileRef = 1A4624B72524DCE000EF5B02 /* キ0.loudstxt */; };
@@ -2443,7 +2442,6 @@
 		1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */; };
 		1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */; };
 		1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */; };
-		1AB4E45D251C80CA00A58F3F /* LOUDSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB4E45C251C80CA00A58F3F /* LOUDSTests.swift */; };
 		1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */; };
 		1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5076A255ECC3C003C0BF2 /* Trie.swift */; };
 		1AB50779255ECC6C003C0BF2 /* LOUDSBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB50778255ECC6C003C0BF2 /* LOUDSBuilder.swift */; };
@@ -3606,7 +3604,6 @@
 		1A4623C12524159300EF5B02 /* aozora.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = aozora.csv; sourceTree = "<group>"; };
 		1A4623E42524617B00EF5B02 /* LOUDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDS.swift; sourceTree = "<group>"; };
 		1A4623F42524621F00EF5B02 /* extension LOUDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension LOUDS.swift"; sourceTree = "<group>"; };
-		1A46247F2524D0A200EF5B02 /* LOUDSTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDSTest.swift; sourceTree = "<group>"; };
 		1A4624B52524DCDF00EF5B02 /* キ20000.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "キ20000.loudstxt"; sourceTree = "<group>"; };
 		1A4624B62524DCE000EF5B02 /* キ10000.loudstxt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "キ10000.loudstxt"; sourceTree = "<group>"; };
 		1A4624B72524DCE000EF5B02 /* キ0.loudstxt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "キ0.loudstxt"; sourceTree = "<group>"; };
@@ -5069,7 +5066,6 @@
 		1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSlideshowView.swift; sourceTree = "<group>"; };
 		1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyTipsView.swift; sourceTree = "<group>"; };
 		1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji14.0_dict.tsv; sourceTree = "<group>"; };
-		1AB4E45C251C80CA00A58F3F /* LOUDSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDSTests.swift; sourceTree = "<group>"; };
 		1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalDictManageView.swift; sourceTree = "<group>"; };
 		1AB5076A255ECC3C003C0BF2 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
 		1AB50778255ECC6C003C0BF2 /* LOUDSBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDSBuilder.swift; sourceTree = "<group>"; };
@@ -6245,7 +6241,6 @@
 				1A3DC1DC2500D44E002CAA93 /* KanaKanjierTests.swift */,
 				1A4623BB25240D2700EF5B02 /* TxtFileSpliting.swift */,
 				1AF1D0D52530B665002FCC66 /* TextFileLines.swift */,
-				1A46247F2524D0A200EF5B02 /* LOUDSTest.swift */,
 				1A4624D92525FAE000EF5B02 /* ForEach.swift */,
 				1A4624E92526384F00EF5B02 /* GeneralPerformance.swift */,
 				1AF1CB37253011E8002FCC66 /* Combinations.swift */,
@@ -6253,7 +6248,6 @@
 				1ABD077725479B6500DD0F7C /* Dictionary.swift */,
 				1A86F47925352AF200B92B49 /* swift-algorithm-topN.swift */,
 				1AC19AF12531AA800077BF8D /* Set.swift */,
-				1AB4E45C251C80CA00A58F3F /* LOUDSTests.swift */,
 				1A2C2FDE28D710170001A0BB /* BloomFilter.swift */,
 				1AFB685628D5769700B5C717 /* HashPerformance.swift */,
 				1A2E58342950AC3E004F959B /* SharedTests */,
@@ -10914,13 +10908,11 @@
 				1A2E5810294F1F1C004F959B /* CharacterUtilsTests.swift in Sources */,
 				1A2E58372950B077004F959B /* BoolKeyboardSetting.swift in Sources */,
 				1A86F47A25352AF200B92B49 /* swift-algorithm-topN.swift in Sources */,
-				1A4624802524D0A200EF5B02 /* LOUDSTest.swift in Sources */,
 				1A2E58362950AC57004F959B /* AppVersionTests.swift in Sources */,
 				1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */,
 				1A2E58382950B151004F959B /* LearningTypeSetting.swift in Sources */,
 				1A2E580D294ED0DA004F959B /* StringUtils.swift in Sources */,
 				1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */,
-				1AB4E45D251C80CA00A58F3F /* LOUDSTests.swift in Sources */,
 				1A2E58322950ABD2004F959B /* AppVersion.swift in Sources */,
 				1A4624DA2525FAE000EF5B02 /* ForEach.swift in Sources */,
 				1A2E581E294F28C2004F959B /* LoggingUtils.swift in Sources */,
