@@ -895,6 +895,8 @@
 		1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9476AF28240928006E22A9 /* CIDData.swift */; };
 		1A2E582E294F5E6A004F959B /* ActionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E582D294F5E69004F959B /* ActionUtils.swift */; };
 		1A2E582F294F5E6A004F959B /* ActionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E582D294F5E69004F959B /* ActionUtils.swift */; };
+		1A2E58322950ABD2004F959B /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */; };
+		1A2E58362950AC57004F959B /* AppVersionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E58352950AC57004F959B /* AppVersionTests.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -3537,6 +3539,7 @@
 		1A2E5820294F4357004F959B /* TypoCorrection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypoCorrection.swift; sourceTree = "<group>"; };
 		1A2E5823294F452A004F959B /* ComposingTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingTextTests.swift; sourceTree = "<group>"; };
 		1A2E582D294F5E69004F959B /* ActionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionUtils.swift; sourceTree = "<group>"; };
+		1A2E58352950AC57004F959B /* AppVersionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionTests.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -6135,6 +6138,14 @@
 			path = KeyboardTests;
 			sourceTree = "<group>";
 		};
+		1A2E58342950AC3E004F959B /* SharedTests */ = {
+			isa = PBXGroup;
+			children = (
+				1A2E58352950AC57004F959B /* AppVersionTests.swift */,
+			);
+			path = SharedTests;
+			sourceTree = "<group>";
+		};
 		1A347FE628D22F8E007D7852 /* LiveConversionSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -6241,6 +6252,7 @@
 				1AB4E45C251C80CA00A58F3F /* LOUDSTests.swift */,
 				1A2C2FDE28D710170001A0BB /* BloomFilter.swift */,
 				1AFB685628D5769700B5C717 /* HashPerformance.swift */,
+				1A2E58342950AC3E004F959B /* SharedTests */,
 				1A2E580E294ED1E3004F959B /* KeyboardTests */,
 				1A4623C12524159300EF5B02 /* aozora.csv */,
 				1A46245C2524D06800EF5B02 /* data */,
@@ -10898,10 +10910,12 @@
 				1A2E5810294F1F1C004F959B /* CharacterUtilsTests.swift in Sources */,
 				1A86F47A25352AF200B92B49 /* swift-algorithm-topN.swift in Sources */,
 				1A4624802524D0A200EF5B02 /* LOUDSTest.swift in Sources */,
+				1A2E58362950AC57004F959B /* AppVersionTests.swift in Sources */,
 				1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */,
 				1A2E580D294ED0DA004F959B /* StringUtils.swift in Sources */,
 				1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */,
 				1AB4E45D251C80CA00A58F3F /* LOUDSTests.swift in Sources */,
+				1A2E58322950ABD2004F959B /* AppVersion.swift in Sources */,
 				1A4624DA2525FAE000EF5B02 /* ForEach.swift in Sources */,
 				1A2E581E294F28C2004F959B /* LoggingUtils.swift in Sources */,
 				1A2E5825294F4A72004F959B /* LOUDS.swift in Sources */,
