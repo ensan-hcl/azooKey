@@ -82,7 +82,7 @@ final class KeyboardActionDepartment: ActionDepartment {
     enum DicdataStoreNotification {
         case notifyLearningType(LearningType)
         case importOSUserDict(OSUserDict)
-        case setRequestOptions(KanaKanjiConverter.RequestOptions)
+        case setRequestOptions(ConvertRequestOptions)
         case notifyAppearAgain
         case reloadUserDict
         case closeKeyboard
@@ -1355,7 +1355,7 @@ private final class InputManager {
         @KeyboardSetting(.learningType) var learningType
         @KeyboardSetting(.useBetaStrongerLearning) var useStrongerLearning
 
-        let options = KanaKanjiConverter.RequestOptions(
+        let options = ConvertRequestOptions(
             N_best: 10,
             requireJapanesePrediction: requireJapanesePrediction,
             requireEnglishPrediction: requireEnglishPrediction,

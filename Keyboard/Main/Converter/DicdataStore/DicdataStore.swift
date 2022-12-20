@@ -35,7 +35,7 @@ final class DicdataStore {
     private let midCount = 502
     private let cidCount = 1319
 
-    private var requestOptions: KanaKanjiConverter.RequestOptions = .init()
+    private var requestOptions: ConvertRequestOptions = .init()
 
     private let numberFormatter = NumberFormatter()
     /// 初期化時のセットアップ用の関数。プロパティリストを読み込み、連接確率リストを読み込んで行分割し保存しておく。

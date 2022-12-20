@@ -54,7 +54,7 @@ final class KanaKanjiConverter {
     ///   - string: 入力されたString
     /// - Returns:
     ///   `賢い変換候補
-    private func getWiseCandidate(_ inputData: ComposingText, options: RequestOptions) -> [Candidate] {
+    private func getWiseCandidate(_ inputData: ComposingText, options: ConvertRequestOptions) -> [Candidate] {
         var result = [Candidate]()
 
         // toWareki/toSeirekiCandidatesは以前は設定可能にしていたが、特にoffにする需要がなさそうなので常時有効化した
@@ -175,7 +175,7 @@ final class KanaKanjiConverter {
     ///   - sums: 変換対象のデータ。
     /// - Returns:
     ///   予測変換候補
-    private func getPredictionCandidate(_ sums: [(CandidateData, Candidate)], composingText: ComposingText, options: RequestOptions) -> [Candidate] {
+    private func getPredictionCandidate(_ sums: [(CandidateData, Candidate)], composingText: ComposingText, options: ConvertRequestOptions) -> [Candidate] {
         // 予測変換は次の方針で行う。
         // prepart: 前半文節 lastPart: 最終文節とする。
         // まず、lastPartがnilであるところから始める
@@ -226,7 +226,7 @@ final class KanaKanjiConverter {
     ///   - inputData: 変換対象のInputData。
     /// - Returns:
     ///   付加的な変換候補
-    private func getTopLevelAdditionalCandidate(_ inputData: ComposingText, options: RequestOptions) -> [Candidate] {
+    private func getTopLevelAdditionalCandidate(_ inputData: ComposingText, options: ConvertRequestOptions) -> [Candidate] {
         var candidates: [Candidate] = []
         switch options.mainInputStyle {
         case .direct: break
@@ -259,7 +259,7 @@ final class KanaKanjiConverter {
     ///   - inputData: 変換対象のInputData。
     /// - Returns:
     ///   付加的な変換候補
-    private func getAdditionalCandidate(_ inputData: ComposingText, options: RequestOptions) -> [Candidate] {
+    private func getAdditionalCandidate(_ inputData: ComposingText, options: ConvertRequestOptions) -> [Candidate] {
         var candidates: [Candidate] = []
         let string = inputData.convertTarget.toKatakana()
         let correspondingCount = inputData.input.count
@@ -340,7 +340,7 @@ final class KanaKanjiConverter {
     ///   - options: リクエストにかかるオプション。
     /// - Returns:
     ///   重複のない変換候補。
-    private func processResult(inputData: ComposingText, result: (result: LatticeNode, nodes: [[LatticeNode]]), options: RequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
+    private func processResult(inputData: ComposingText, result: (result: LatticeNode, nodes: [[LatticeNode]]), options: ConvertRequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         self.previousInputData = inputData
         self.nodes = result.nodes
         let clauseResult = result.result.getCandidateData(for: inputData)
@@ -539,29 +539,13 @@ final class KanaKanjiConverter {
 
     }
 
-    struct RequestOptions {
-        var N_best: Int = 10
-        var requireJapanesePrediction: Bool = true
-        var requireEnglishPrediction: Bool = true
-        var keyboardLanguage: KeyboardLanguage = .ja_JP
-        var mainInputStyle: InputStyle = .direct
-        // KeyboardSettingのinjection用途
-        var typographyLetterCandidate: Bool = TypographyLetter.defaultValue
-        var unicodeCandidate: Bool = UnicodeCandidate.defaultValue
-        var englishCandidateInRoman2KanaInput: Bool = EnglishCandidate.defaultValue
-        var fullWidthRomanCandidate: Bool = FullRomanCandidate.defaultValue
-        var halfWidthKanaCandidate: Bool = HalfKanaCandidate.defaultValue
-        var learningType: LearningType = LearningTypeSetting.defaultValue
-        var maxMemoryCount: Int = 8192
-    }
-
     /// 外部から呼ばれる変換候補を要求する関数。
     /// - Parameters:
     ///   - inputData: 変換対象のInputData。
     ///   - options: リクエストにかかるパラメータ。
     /// - Returns:
     ///   重複のない変換候補。
-    func requestCandidates(_ inputData: ComposingText, options: RequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
+    func requestCandidates(_ inputData: ComposingText, options: ConvertRequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         debug("requestCandidates 入力は", inputData)
         // 変換対象が無の場合
         if inputData.convertTarget.isEmpty {

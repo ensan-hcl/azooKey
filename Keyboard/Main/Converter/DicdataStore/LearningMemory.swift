@@ -464,7 +464,7 @@ final class LearningManager {
     }
 
     private var temporaryMemory: TemporalLearningMemoryTrie = .init()
-    private var options: KanaKanjiConverter.RequestOptions = .init()
+    private var options: ConvertRequestOptions = .init()
 
     var enabled: Bool {
         return self.options.learningType.needUsingMemory
@@ -479,7 +479,7 @@ final class LearningManager {
         }
     }
 
-    func setRequestOptions(options: KanaKanjiConverter.RequestOptions) {
+    func setRequestOptions(options: ConvertRequestOptions) {
         self.options = options
         LongTermLearningMemory.maxMemoryCount = options.maxMemoryCount
     }
