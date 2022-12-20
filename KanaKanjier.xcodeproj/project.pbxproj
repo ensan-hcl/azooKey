@@ -933,6 +933,11 @@
 		1A2E58592951EC87004F959B /* Kana2Kanji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2FA2500D72D002CAA93 /* Kana2Kanji.swift */; };
 		1A2E585A2951EC87004F959B /* changed_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4A92536033900B92B49 /* changed_last_n_character.swift */; };
 		1A2E585B2951EC87004F959B /* getPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA574325811B4500477DC2 /* getPrediction.swift */; };
+		1A2E585C2951ED56004F959B /* Unicode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9218F6255238E9005F45C4 /* Unicode.swift */; };
+		1A2E585D2951ED56004F959B /* EmailAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD1003628E87C23005D6DDB /* EmailAddress.swift */; };
+		1A2E585E2951ED56004F959B /* Wareki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A673609250AFBCB003FC654 /* Wareki.swift */; };
+		1A2E585F2951ED56004F959B /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC22C2500D6C6002CAA93 /* Converter.swift */; };
+		1A2E58602951ED56004F959B /* RomanTypographys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9218E3255238CD005F45C4 /* RomanTypographys.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -10931,12 +10936,14 @@
 				1A2E58572951EC87004F959B /* completed_first.swift in Sources */,
 				1A2E58512951EB2B004F959B /* CodableSupport.swift in Sources */,
 				1A2E58502951EAF6004F959B /* KeyPosition.swift in Sources */,
+				1A2E585C2951ED56004F959B /* Unicode.swift in Sources */,
 				1A2E58472951E75D004F959B /* LatticeNode.swift in Sources */,
 				1A2E58582951EC87004F959B /* no_change.swift in Sources */,
 				1A2E5824294F452A004F959B /* ComposingTextTests.swift in Sources */,
 				1AF1CB38253011E8002FCC66 /* Combinations.swift in Sources */,
 				1A2E58492951E88F004F959B /* RegisteredNodeProtocol.swift in Sources */,
 				1A2E580B294ED02C004F959B /* StringUtilsTests.swift in Sources */,
+				1A2E58602951ED56004F959B /* RomanTypographys.swift in Sources */,
 				1A2E583F2951C5B4004F959B /* MemoryResetCondition.swift in Sources */,
 				1AFB685728D5769700B5C717 /* HashPerformance.swift in Sources */,
 				1A3DC1DD2500D44E002CAA93 /* KanaKanjierTests.swift in Sources */,
@@ -10947,7 +10954,9 @@
 				1A2E583E2951C575004F959B /* extension LOUDS.swift in Sources */,
 				1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */,
 				1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */,
+				1A2E585E2951ED56004F959B /* Wareki.swift in Sources */,
 				1A2E58592951EC87004F959B /* Kana2Kanji.swift in Sources */,
+				1A2E585F2951ED56004F959B /* Converter.swift in Sources */,
 				1A2E5819294F2880004F959B /* Modify.swift in Sources */,
 				1AC19AF22531AA800077BF8D /* Set.swift in Sources */,
 				1A2E5811294F1F2F004F959B /* CharacterUtils.swift in Sources */,
@@ -10984,6 +10993,7 @@
 				1A2C2FDF28D710170001A0BB /* BloomFilter.swift in Sources */,
 				1A2E583D2951C405004F959B /* LearningMemory.swift in Sources */,
 				1A2E58452951E5E7004F959B /* Tab.swift in Sources */,
+				1A2E585D2951ED56004F959B /* EmailAddress.swift in Sources */,
 				1AF1D0D62530B666002FCC66 /* TextFileLines.swift in Sources */,
 				1A2E5818294F286D004F959B /* ArrayUtils.swift in Sources */,
 				1A2E58552951EC87004F959B /* all.swift in Sources */,
