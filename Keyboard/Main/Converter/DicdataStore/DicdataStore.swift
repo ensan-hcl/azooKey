@@ -64,7 +64,17 @@ final class DicdataStore {
         _ = self.loadLOUDS(identifier: "memory")
     }
 
-    func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
+    enum Notification {
+        case notifyLearningType(LearningType)
+        case importOSUserDict(OSUserDict)
+        case setRequestOptions(ConvertRequestOptions)
+        case notifyAppearAgain
+        case reloadUserDict
+        case closeKeyboard
+        case resetMemory
+    }
+
+    func sendToDicdataStore(_ data: Notification) {
         switch data {
         case .notifyAppearAgain:
             break

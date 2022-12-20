@@ -79,17 +79,7 @@ final class KeyboardActionDepartment: ActionDepartment {
         self.inputManager.setTextDocumentProxy(proxy)
     }
 
-    enum DicdataStoreNotification {
-        case notifyLearningType(LearningType)
-        case importOSUserDict(OSUserDict)
-        case setRequestOptions(ConvertRequestOptions)
-        case notifyAppearAgain
-        case reloadUserDict
-        case closeKeyboard
-        case resetMemory
-    }
-
-    func sendToDicdataStore(_ data: DicdataStoreNotification) {
+    func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.inputManager.sendToDicdataStore(data)
     }
 
@@ -595,7 +585,7 @@ private final class InputManager {
     /// かな漢字変換を受け持つ変換器。
     private var kanaKanjiConverter = KanaKanjiConverter()
 
-    func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
+    func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.kanaKanjiConverter.sendToDicdataStore(data)
     }
 

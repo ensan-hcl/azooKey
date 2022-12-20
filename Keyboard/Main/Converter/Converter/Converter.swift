@@ -31,7 +31,7 @@ final class KanaKanjiConverter {
     /// 上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
     /// - Parameters:
     ///   - data: 行うべき操作。
-    func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
+    func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.converter.dicdataStore.sendToDicdataStore(data)
     }
     /// 確定操作後、内部状態のキャッシュを変更する関数。

@@ -902,6 +902,28 @@
 		1A2E58372950B077004F959B /* BoolKeyboardSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD2B8D726C272F80053CE4A /* BoolKeyboardSetting.swift */; };
 		1A2E58382950B151004F959B /* LearningTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD2B8E926C2CC8C0053CE4A /* LearningTypeSetting.swift */; };
 		1A2E583B2951C2CF004F959B /* ConvertRequestOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E583A2951C2CF004F959B /* ConvertRequestOptions.swift */; };
+		1A2E583C2951C3FD004F959B /* ConvertRequestOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E583A2951C2CF004F959B /* ConvertRequestOptions.swift */; };
+		1A2E583D2951C405004F959B /* LearningMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A364E3125C8361A00A56583 /* LearningMemory.swift */; };
+		1A2E583E2951C575004F959B /* extension LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623F42524621F00EF5B02 /* extension LOUDS.swift */; };
+		1A2E583F2951C5B4004F959B /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
+		1A2E58402951C73D004F959B /* DicdataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicdataStore.swift */; };
+		1A2E58412951CA0D004F959B /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
+		1A2E58422951E370004F959B /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2162500D5AB002CAA93 /* Action.swift */; };
+		1A2E58442951E5E7004F959B /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E58432951E5E7004F959B /* Tab.swift */; };
+		1A2E58452951E5E7004F959B /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E58432951E5E7004F959B /* Tab.swift */; };
+		1A2E58462951E5E7004F959B /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E58432951E5E7004F959B /* Tab.swift */; };
+		1A2E58472951E75D004F959B /* LatticeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65C00A250B800E00F297BF /* LatticeNode.swift */; };
+		1A2E58482951E76A004F959B /* Candidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDE8652545D48900E524E1 /* Candidate.swift */; };
+		1A2E58492951E88F004F959B /* RegisteredNodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC0315A2511C291004CA505 /* RegisteredNodeProtocol.swift */; };
+		1A2E584A2951E937004F959B /* TypoCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5820294F4357004F959B /* TypoCorrection.swift */; };
+		1A2E584B2951E945004F959B /* JapaneseNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */; };
+		1A2E584C2951EA0E004F959B /* LanguageLayoutKeyboardSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD2B8E026C2B0880053CE4A /* LanguageLayoutKeyboardSetting.swift */; };
+		1A2E584D2951EA2D004F959B /* CustardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3C525E24D0B00D39BC5 /* CustardManager.swift */; };
+		1A2E584E2951EA44004F959B /* UserMadeCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80C25E501C80095CB67 /* UserMadeCustard.swift */; };
+		1A2E584F2951EA56004F959B /* TabBarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB8C3EE25E2A27C00D39BC5 /* TabBarData.swift */; };
+		1A2E58502951EAF6004F959B /* KeyPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B62633966E00E4495C /* KeyPosition.swift */; };
+		1A2E58512951EB2B004F959B /* CodableSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A30CE8A26023B52007C1A2D /* CodableSupport.swift */; };
+		1A2E58522951EB72004F959B /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -3544,6 +3566,7 @@
 		1A2E582D294F5E69004F959B /* ActionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionUtils.swift; sourceTree = "<group>"; };
 		1A2E58352950AC57004F959B /* AppVersionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionTests.swift; sourceTree = "<group>"; };
 		1A2E583A2951C2CF004F959B /* ConvertRequestOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertRequestOptions.swift; sourceTree = "<group>"; };
+		1A2E58432951E5E7004F959B /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -6506,6 +6529,7 @@
 			children = (
 				1A9476AF28240928006E22A9 /* CIDData.swift */,
 				1A370E542907B5CD0053D6D4 /* MIDData.swift */,
+				1AE70BF0258E5798009B9B8B /* TemplateData.swift */,
 			);
 			path = Converter;
 			sourceTree = "<group>";
@@ -8168,7 +8192,6 @@
 		1AE70BDF258DB4A0009B9B8B /* Template */ = {
 			isa = PBXGroup;
 			children = (
-				1AE70BF0258E5798009B9B8B /* TemplateData.swift */,
 				1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */,
 				1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */,
 			);
@@ -8214,6 +8237,7 @@
 				1AF678AE25CE3B4A00F3987B /* States.swift */,
 				1A2E5814294F25DE004F959B /* SemiStaticStates.swift */,
 				1AF678DE25CED86500F3987B /* VariableStates.swift */,
+				1A2E58432951E5E7004F959B /* Tab.swift */,
 				1AB8C38C25E1190900D39BC5 /* TabManager.swift */,
 				1AF678F525CED91900F3987B /* ActionDepartment.swift */,
 				1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */,
@@ -10887,6 +10911,7 @@
 				1AF6798D25CEDBB500F3987B /* FlickTabKeyModel.swift in Sources */,
 				1AF679A125CEDC3A00F3987B /* FlickDataProvider.swift in Sources */,
 				1ACEEFD025665E3600899DA2 /* FallbackLink.swift in Sources */,
+				1A2E58442951E5E7004F959B /* Tab.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10894,14 +10919,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2E58512951EB2B004F959B /* CodableSupport.swift in Sources */,
+				1A2E58502951EAF6004F959B /* KeyPosition.swift in Sources */,
+				1A2E58472951E75D004F959B /* LatticeNode.swift in Sources */,
 				1A2E5824294F452A004F959B /* ComposingTextTests.swift in Sources */,
 				1AF1CB38253011E8002FCC66 /* Combinations.swift in Sources */,
+				1A2E58492951E88F004F959B /* RegisteredNodeProtocol.swift in Sources */,
 				1A2E580B294ED02C004F959B /* StringUtilsTests.swift in Sources */,
+				1A2E583F2951C5B4004F959B /* MemoryResetCondition.swift in Sources */,
 				1AFB685728D5769700B5C717 /* HashPerformance.swift in Sources */,
 				1A3DC1DD2500D44E002CAA93 /* KanaKanjierTests.swift in Sources */,
 				1AF1D65F253146B7002FCC66 /* TopNing.swift in Sources */,
 				1A2E5812294F2561004F959B /* roman2kana.swift in Sources */,
 				1A2E581A294F2884004F959B /* extension Data.swift in Sources */,
+				1A2E583E2951C575004F959B /* extension LOUDS.swift in Sources */,
 				1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */,
 				1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */,
 				1A2E5819294F2880004F959B /* Modify.swift in Sources */,
@@ -10912,17 +10943,31 @@
 				1A2E58372950B077004F959B /* BoolKeyboardSetting.swift in Sources */,
 				1A86F47A25352AF200B92B49 /* swift-algorithm-topN.swift in Sources */,
 				1A2E58362950AC57004F959B /* AppVersionTests.swift in Sources */,
+				1A2E58412951CA0D004F959B /* TemplateData.swift in Sources */,
 				1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */,
+				1A2E584A2951E937004F959B /* TypoCorrection.swift in Sources */,
+				1A2E584F2951EA56004F959B /* TabBarData.swift in Sources */,
 				1A2E58382950B151004F959B /* LearningTypeSetting.swift in Sources */,
 				1A2E580D294ED0DA004F959B /* StringUtils.swift in Sources */,
 				1A4624EA2526384F00EF5B02 /* GeneralPerformance.swift in Sources */,
+				1A2E58522951EB72004F959B /* ErrorCustard.swift in Sources */,
+				1A2E58422951E370004F959B /* Action.swift in Sources */,
+				1A2E584C2951EA0E004F959B /* LanguageLayoutKeyboardSetting.swift in Sources */,
 				1A2E58322950ABD2004F959B /* AppVersion.swift in Sources */,
 				1A4624DA2525FAE000EF5B02 /* ForEach.swift in Sources */,
+				1A2E584B2951E945004F959B /* JapaneseNumber.swift in Sources */,
 				1A2E581E294F28C2004F959B /* LoggingUtils.swift in Sources */,
 				1A2E58332950ABD8004F959B /* SharedStore.swift in Sources */,
+				1A2E58402951C73D004F959B /* DicdataStore.swift in Sources */,
+				1A2E584E2951EA44004F959B /* UserMadeCustard.swift in Sources */,
+				1A2E584D2951EA2D004F959B /* CustardManager.swift in Sources */,
 				1A2E5825294F4A72004F959B /* LOUDS.swift in Sources */,
+				1A2E58482951E76A004F959B /* Candidate.swift in Sources */,
 				1A2E581B294F2887004F959B /* extension String.swift in Sources */,
+				1A2E583C2951C3FD004F959B /* ConvertRequestOptions.swift in Sources */,
 				1A2C2FDF28D710170001A0BB /* BloomFilter.swift in Sources */,
+				1A2E583D2951C405004F959B /* LearningMemory.swift in Sources */,
+				1A2E58452951E5E7004F959B /* Tab.swift in Sources */,
 				1AF1D0D62530B666002FCC66 /* TextFileLines.swift in Sources */,
 				1A2E5818294F286D004F959B /* ArrayUtils.swift in Sources */,
 				1A2E5813294F2568004F959B /* ComposingText.swift in Sources */,
@@ -11076,6 +11121,7 @@
 				1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */,
 				1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */,
 				1A3A16322529712300A5BA4F /* FlickKogakiKeyModel.swift in Sources */,
+				1A2E58462951E5E7004F959B /* Tab.swift in Sources */,
 				1AE1023025D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1AC8A594259587A200B71E5A /* Design.swift in Sources */,
 			);

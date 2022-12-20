@@ -9,7 +9,7 @@
 import Foundation
 // import Combinatorics
 import XCTest
-typealias PValue = Float
+typealias PValue = Float16
 
 class CombinatoricsTest: XCTestCase {
     let possibleMaxLength = 1
