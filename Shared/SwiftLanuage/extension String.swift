@@ -35,11 +35,4 @@ extension StringProtocol {
     public func indexFromStart(_ offset: Int) -> Index {
         return self.index(self.startIndex, offsetBy: offset)
     }
-
-    @inlinable
-    subscript(_ range: ClosedRange<Int>) -> SubSequence {
-        get {
-            return self[self.indexFromStart(range.lowerBound) ... self.indexFromStart(range.upperBound)]
-        }
-    }
 }
