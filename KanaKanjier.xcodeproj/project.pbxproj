@@ -939,6 +939,7 @@
 		1A2E585F2951ED56004F959B /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC22C2500D6C6002CAA93 /* Converter.swift */; };
 		1A2E58602951ED56004F959B /* RomanTypographys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9218E3255238CD005F45C4 /* RomanTypographys.swift */; };
 		1A2E586229549CF9004F959B /* WithMutableValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E586129549CF9004F959B /* WithMutableValueTests.swift */; };
+		1A2E58642954A361004F959B /* WarekiConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E58632954A361004F959B /* WarekiConversionTests.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -3583,6 +3584,7 @@
 		1A2E583A2951C2CF004F959B /* ConvertRequestOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertRequestOptions.swift; sourceTree = "<group>"; };
 		1A2E58432951E5E7004F959B /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		1A2E586129549CF9004F959B /* WithMutableValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithMutableValueTests.swift; sourceTree = "<group>"; };
+		1A2E58632954A361004F959B /* WarekiConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarekiConversionTests.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -6175,6 +6177,7 @@
 				1A2E580A294ED02C004F959B /* StringUtilsTests.swift */,
 				1A2E580F294F1F1C004F959B /* CharacterUtilsTests.swift */,
 				1A2E5823294F452A004F959B /* ComposingTextTests.swift */,
+				1A2E58632954A361004F959B /* WarekiConversionTests.swift */,
 			);
 			path = KeyboardTests;
 			sourceTree = "<group>";
@@ -10992,6 +10995,7 @@
 				1A2E5825294F4A72004F959B /* LOUDS.swift in Sources */,
 				1A2E58482951E76A004F959B /* Candidate.swift in Sources */,
 				1A2E581B294F2887004F959B /* extension String.swift in Sources */,
+				1A2E58642954A361004F959B /* WarekiConversionTests.swift in Sources */,
 				1A2E583C2951C3FD004F959B /* ConvertRequestOptions.swift in Sources */,
 				1A2C2FDF28D710170001A0BB /* BloomFilter.swift in Sources */,
 				1A2E583D2951C405004F959B /* LearningMemory.swift in Sources */,
