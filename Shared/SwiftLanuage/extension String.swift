@@ -37,23 +37,9 @@ extension StringProtocol {
     }
 
     @inlinable
-    subscript(_ index: Int) -> Character {
-        get {
-            return self[self.indexFromStart(index)]
-        }
-    }
-
-    @inlinable
     subscript(_ range: ClosedRange<Int>) -> SubSequence {
         get {
             return self[self.indexFromStart(range.lowerBound) ... self.indexFromStart(range.upperBound)]
-        }
-    }
-
-    @inlinable
-    subscript(_ range: Range<Int>) -> SubSequence {
-        get {
-            return self[self.indexFromStart(range.lowerBound) ..< self.indexFromStart(range.upperBound)]
         }
     }
 }
