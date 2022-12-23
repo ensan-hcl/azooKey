@@ -263,7 +263,7 @@ enum Design {
         }
 
         var backGroundColor: Color {
-            return Color("BackGroundColor_iOS15")
+            Color("BackGroundColor_iOS15")
         }
 
         var specialEnterKeyColor: Color {
@@ -280,7 +280,7 @@ enum Design {
         }
 
         var specialKeyColor: Color {
-            return Color("TabKeyColor_iOS15")
+            Color("TabKeyColor_iOS15")
         }
 
         var highlightedKeyColor: Color {
