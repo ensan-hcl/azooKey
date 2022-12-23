@@ -21,7 +21,7 @@ extension LOUDSBuilder {
     }
 
     static func getID(from char: Character) -> UInt8? {
-        return Self.char2UInt8[char]
+        Self.char2UInt8[char]
     }
 }
 
@@ -118,14 +118,14 @@ struct LOUDSBuilder {
     func loadUserDictInfo() -> (paths: [String], blocks: [String], useradds: [UserDictionaryData]) {
         let paths: [String]
         if let list = UserDefaults.standard.array(forKey: "additional_dict") as? [String] {
-            paths = list.compactMap {AdditionalSystemDictManager.Target.init(rawValue: $0)}.flatMap {$0.dictFileIdentifiers}
+            paths = list.compactMap {AdditionalSystemDictManager.Target(rawValue: $0)}.flatMap {$0.dictFileIdentifiers}
         } else {
             paths = []
         }
 
         let blocks: [String]
         if let list = UserDefaults.standard.array(forKey: "additional_dict_blocks") as? [String] {
-            blocks = list.compactMap {AdditionalDictBlockManager.Target.init(rawValue: $0)}.flatMap {$0.characters}
+            blocks = list.compactMap {AdditionalDictBlockManager.Target(rawValue: $0)}.flatMap {$0.characters}
         } else {
             blocks = []
         }

@@ -24,22 +24,22 @@ struct ComposingText {
 
     /// 変換しなくて良いか
     var isEmpty: Bool {
-        return self.convertTarget.isEmpty
+        self.convertTarget.isEmpty
     }
 
     /// カーソルが右端に存在するか
     var isAtEndIndex: Bool {
-        return self.convertTarget.count == self.convertTargetCursorPosition
+        self.convertTarget.count == self.convertTargetCursorPosition
     }
 
     /// カーソルが左端に存在するか
     var isAtStartIndex: Bool {
-        return 0 == self.convertTargetCursorPosition
+        0 == self.convertTargetCursorPosition
     }
 
     /// カーソルより前の変換対象
     var convertTargetBeforeCursor: some StringProtocol {
-        return self.convertTarget.prefix(self.convertTargetCursorPosition)
+        self.convertTarget.prefix(self.convertTargetCursorPosition)
     }
 
     /// `input`でのカーソル位置を無理やり作り出す関数
@@ -561,7 +561,7 @@ extension ComposingText {
     }
 
     func inputHasSuffix(inputOf suffix: ComposingText) -> Bool {
-        return self.input.hasSuffix(suffix.input)
+        self.input.hasSuffix(suffix.input)
     }
 }
 
@@ -579,12 +579,12 @@ extension ComposingText.InputElement: CustomDebugStringConvertible {
 
 extension ComposingText.ConvertTargetElement: CustomDebugStringConvertible {
     var debugDescription: String {
-        return "ConvertTargetElement(string: \"\(string)\", inputStyle: \(inputStyle)"
+        "ConvertTargetElement(string: \"\(string)\", inputStyle: \(inputStyle)"
     }
 }
 extension InputStyle: CustomDebugStringConvertible {
     var debugDescription: String {
-        return "." + self.rawValue
+        "." + self.rawValue
     }
 }
 #endif

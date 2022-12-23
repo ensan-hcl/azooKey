@@ -27,18 +27,18 @@ enum LearningType: Int, CaseIterable {
     }
 
     var needUpdateMemory: Bool {
-        return self == .inputAndOutput
+        self == .inputAndOutput
     }
 
     var needUsingMemory: Bool {
-        return self != .nothing
+        self != .nothing
     }
 }
 
 extension LearningType: Savable {
     typealias SaveValue = Int
     var saveValue: Int {
-        return self.id
+        self.id
     }
 
     static func get(_ value: Any) -> LearningType? {

@@ -11,7 +11,7 @@ import Foundation
 @resultBuilder
 struct ArrayBuilder {
     public static func buildBlock<T>(_ values: T...) -> [T] {
-        return values
+        values
     }
 }
 

@@ -22,7 +22,7 @@ struct Kana2Kanji {
     ///     この関数の役割は意味連接の考慮にある。
     func processClauseCandidate(_ data: CandidateData) -> Candidate {
         let mmValue: (value: PValue, mid: Int) = data.clauses.reduce((value: .zero, mid: MIDData.EOS.mid)) { result, data in
-            return (
+            (
                 value: result.value + self.dicdataStore.getMMValue(result.mid, data.clause.mid),
                 mid: data.clause.mid
             )

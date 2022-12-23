@@ -6,8 +6,8 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
-import Foundation
 import CustardKit
+import Foundation
 
 enum UserMadeCustard: Codable {
     case gridScroll(UserMadeGridScrollCustard)

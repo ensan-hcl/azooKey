@@ -93,7 +93,7 @@ extension Collection where Element: Comparable {
     ///
     /// - Complexity: O(k log k + nk)
     public func sortedPrefix(_ count: Int) -> [Element] {
-        return sortedPrefix(count, by: <)
+        sortedPrefix(count, by: <)
     }
 }
 // ===----------------------------------------------------------------------===//

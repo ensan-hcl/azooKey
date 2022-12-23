@@ -6,9 +6,9 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
+import CustardKit
 import Foundation
 import SwiftUI
-import CustardKit
 
 fileprivate extension CustardLanguage {
     var label: LocalizedStringKey {
@@ -76,7 +76,7 @@ struct CustardInformationView: View {
     }
 
     private var custard: Custard {
-        return (try? manager.custard(identifier: initialCustard.identifier)) ?? initialCustard
+        (try? manager.custard(identifier: initialCustard.identifier)) ?? initialCustard
     }
 
     var body: some View {

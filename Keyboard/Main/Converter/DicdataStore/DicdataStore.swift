@@ -104,7 +104,7 @@ final class DicdataStore {
 
     /// ペナルティ関数。文字数で決める。
     private func getPenalty(data: DicdataElement) -> PValue {
-        return -2.0 / PValue(data.word.count)
+        -2.0 / PValue(data.word.count)
     }
 
     /// 計算時に利用。無視すべきデータかどうか。
@@ -579,12 +579,12 @@ final class DicdataStore {
 
     /// OSのユーザ辞書からrubyに等しい語を返す。
     private func getMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
-        return self.osUserDict.dict.filter {$0.ruby == ruby}
+        self.osUserDict.dict.filter {$0.ruby == ruby}
     }
 
     /// OSのユーザ辞書からrubyに先頭一致する語を返す。
     internal func getPrefixMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
-        return self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
+        self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
     }
 
     // 学習を反映する
@@ -635,7 +635,7 @@ final class DicdataStore {
 
     // 誤り訂正候補の構築の際、ファイルが存在しているか事前にチェックし、存在していなければ以後の計算を打ち切ることで、計算を減らす。
     internal static func existLOUDS(for character: Character) -> Bool {
-        return Self.possibleLOUDS.contains(character)
+        Self.possibleLOUDS.contains(character)
     }
 
     /*

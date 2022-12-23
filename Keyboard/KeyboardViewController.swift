@@ -6,18 +6,18 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 final private class KeyboardHostingController<Content: View>: UIHostingController<Content> {
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
-        return .bottom
+        .bottom
     }
 }
 
 extension UIInputView: UIInputViewAudioFeedback {
     open var enableInputClicksWhenVisible: Bool {
-        return true
+        true
     }
 }
 

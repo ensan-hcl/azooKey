@@ -11,7 +11,7 @@ import Foundation
 extension Data {
     func toArray<T>(of type: T.Type) -> [T] {
         self.withUnsafeBytes {pointer -> [T] in
-            return Array(
+            Array(
                 UnsafeBufferPointer(
                     start: pointer.baseAddress!.assumingMemoryBound(to: type),
                     count: pointer.count / MemoryLayout<T>.size

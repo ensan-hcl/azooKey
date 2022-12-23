@@ -23,7 +23,7 @@ struct HeaderLogoView: View {
     }
 
     private var iconColor: Color {
-        return Color("IconColor")
+        Color("IconColor")
     }
 
     private var iconSize: CGFloat {

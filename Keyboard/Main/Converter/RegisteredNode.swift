@@ -19,7 +19,7 @@ struct FlickRegisteredNode: RegisteredNodeProtocol {
     let registered: RegisteredNodeProtocol?
     let totalValue: PValue
     var ruby: String {
-        return self.data.ruby
+        self.data.ruby
     }
 
     init(data: LatticeNodeDataProtocol, registered: RegisteredNodeProtocol?, totalValue: PValue) {

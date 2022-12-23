@@ -6,8 +6,8 @@
 //  Copyright © 2022 DevEn3. All rights reserved.
 //
 
-import XCTest
 @testable import Keyboard
+import XCTest
 
 final class StringTests: XCTestCase {
 

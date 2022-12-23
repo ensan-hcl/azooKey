@@ -22,12 +22,12 @@ extension Character {
 
     /// 小書きかなか否か
     var isKogana: Bool {
-        return Character.kogakiKana.contains(self)
+        Character.kogakiKana.contains(self)
     }
 
     /// ローマ字(a-z, A-Zか否か)
     var isRomanLetter: Bool {
-        return self.isASCII && self.isCased
+        self.isASCII && self.isCased
     }
 
     /// 自分が小書きであれば該当する文字を返す。
@@ -94,7 +94,7 @@ extension Character {
 
     /// 濁点付きか否か
     var isDakuten: Bool {
-        return Character.dakutenKana.contains(self)
+        Character.dakutenKana.contains(self)
     }
     /// 濁点をつけて返す
     var dakuten: Character {
@@ -194,7 +194,7 @@ extension Character {
     }
     /// 半濁点かどうか
     var isHandakuten: Bool {
-        return [
+        [
             "ぱ", "ぴ", "ぷ", "ぺ", "ぽ",
             "パ", "ピ", "プ", "ペ", "ポ"
         ].contains(self)

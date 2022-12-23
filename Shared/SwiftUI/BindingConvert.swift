@@ -13,7 +13,7 @@ public extension Binding {
     func converted<T>(forward forwardConverter: @escaping (Value) -> T, backward backwardConverter: @escaping (T) -> Value) -> Binding<T> {
         .init(
             get: {
-                return forwardConverter(self.wrappedValue)
+                forwardConverter(self.wrappedValue)
             },
             set: {newValue in
                 self.wrappedValue = backwardConverter(newValue)
@@ -23,7 +23,7 @@ public extension Binding {
     func converted<Translator: Intertranslator>(_ translator: Translator.Type) -> Binding<Translator.Second> where Translator.First == Value {
         .init(
             get: {
-                return Translator.convert(self.wrappedValue)
+                Translator.convert(self.wrappedValue)
             },
             set: {newValue in
                 self.wrappedValue = Translator.convert(newValue)

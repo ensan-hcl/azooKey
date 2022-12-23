@@ -6,9 +6,9 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
+import CustardKit
 import Foundation
 import SwiftUI
-import CustardKit
 
 fileprivate extension CustardKeyLabelStyle {
     var keyLabelType: KeyLabelType {
@@ -59,7 +59,7 @@ fileprivate extension CustardInterface {
     }
 
     var flickKeyModels: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
-        return self.keys.reduce(into: [:]) {dictionary, value in
+        self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
                 dictionary[.gridFit(x: data.x, y: data.y)] = (value.value.flickKeyModel, data.width, data.height)
@@ -70,7 +70,7 @@ fileprivate extension CustardInterface {
     }
 
     var qwertyKeyModels: [KeyPosition: (model: QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
-        return self.keys.reduce(into: [:]) {dictionary, value in
+        self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
                 dictionary[.gridFit(x: data.x, y: data.y)] = (value.value.qwertyKeyModel(layout: self.keyLayout), .unit(width: data.width, height: data.height))

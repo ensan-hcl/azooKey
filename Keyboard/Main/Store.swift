@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
 import OrderedCollections
+import SwiftUI
 
 final class Store {
     static let shared = Store()
@@ -516,7 +516,7 @@ private final class InputManager {
     private var rubyLog: OrderedDictionary<String, String> = [:]
 
     private var liveConversionEnabled: Bool {
-        return liveConversionManager.enabled && !self.isSelected
+        liveConversionManager.enabled && !self.isSelected
     }
 
     private func updateLog(candidate: Candidate) {
@@ -1460,15 +1460,15 @@ final class DisplayedTextManager {
     }
 
     var documentContextAfterInput: String? {
-        return self.proxy.documentContextAfterInput
+        self.proxy.documentContextAfterInput
     }
 
     var selectedText: String? {
-        return self.proxy.selectedText
+        self.proxy.selectedText
     }
 
     var documentContextBeforeInput: String? {
-        return self.proxy.documentContextBeforeInput
+        self.proxy.documentContextBeforeInput
     }
 
     func clear() {

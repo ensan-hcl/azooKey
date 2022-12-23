@@ -13,7 +13,7 @@ private struct CandidateMock: ResultViewItemData {
     let inputable: Bool = true
     var text: String
     func getDebugInformation() -> String {
-        return "CandidateMock: \(text)"
+        "CandidateMock: \(text)"
     }
 }
 

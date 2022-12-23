@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import SwiftUI
 import CustardKit
+import SwiftUI
 
 struct FlickAaKeyModel: FlickKeyModelProtocol {
     let needSuggestView: Bool = true

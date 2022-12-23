@@ -25,7 +25,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
     }
 
     var longPressActions: LongpressActionType {
-        return .init(start: [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .toggle)])
+        .init(start: [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .toggle)])
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {

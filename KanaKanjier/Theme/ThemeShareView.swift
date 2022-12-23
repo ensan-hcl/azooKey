@@ -107,7 +107,7 @@ struct ActivityView: UIViewControllerRepresentable {
     let applicationActivities: [UIActivity]?
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityView>) -> UIActivityViewController {
-        return UIActivityViewController(
+        UIActivityViewController(
             activityItems: activityItems,
             applicationActivities: applicationActivities
         )
@@ -130,7 +130,7 @@ private final class TextActivityItem: NSObject, UIActivityItemSource {
     }
 
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return NSObject()
+        NSObject()
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
@@ -150,12 +150,12 @@ private final class ImageActivityItem: NSObject, UIActivityItemSource {
 
     // 実際に渡す
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        return image
+        image
     }
 
     // 仮に渡す
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return image ?? UIImage()
+        image ?? UIImage()
     }
 }
 

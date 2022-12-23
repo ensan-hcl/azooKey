@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
 import AudioToolbox
+import Foundation
 
 /// 音を鳴らすためのツールセット
 enum Sound {

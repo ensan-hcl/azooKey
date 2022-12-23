@@ -58,7 +58,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     private var tabBarButtonBackgroundColor: Color {
         ColorTools.hsv(theme.resultBackgroundColor.color) { h, s, v, a in
-            return Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
+            Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
         } ?? theme.normalKeyFillColor.color
     }
 

@@ -6,10 +6,10 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
-import Foundation
-import SwiftUI
 import Combine
 import CustardKit
+import Foundation
+import SwiftUI
 
 extension CodableActionData {
     var hasAssociatedValue: Bool {
@@ -205,7 +205,7 @@ private struct CodableActionEditor: View {
             // TODO: Localize
             if item.target.hasPrefix("run-shortcut?") {
                 ActionEditTextField("オプション", action: $action) {String(item.target.dropFirst("run-shortcut?".count))} convert: {value in
-                    return .launchApplication(LaunchItem(scheme: .shortcuts, target: "run-shortcut?" + value))
+                    .launchApplication(LaunchItem(scheme: .shortcuts, target: "run-shortcut?" + value))
                 }
                 FallbackLink("オプションの設定方法", destination: URL(string: "https://support.apple.com/ja-jp/guide/shortcuts/apd624386f42/ios")!)
             } else {

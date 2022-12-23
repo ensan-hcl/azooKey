@@ -13,10 +13,10 @@ private enum JapaneseNumber {
     case おわり
     case エラー
     var isNumber: Bool {
-        return [.いち, .に, .さん, .よん, .ご, .ろく, .なな, .はち, .きゅう, .れい, .おわり].contains(self)
+        [.いち, .に, .さん, .よん, .ご, .ろく, .なな, .はち, .きゅう, .れい, .おわり].contains(self)
     }
     var isNotNumber: Bool {
-        return [.じゅう, .ひゃく, .せん, .まん, .おく, .ちょう, .エラー, .おわり].contains(self)
+        [.じゅう, .ひゃく, .せん, .まん, .おく, .ちょう, .エラー, .おわり].contains(self)
     }
 
     var toRoman: String {

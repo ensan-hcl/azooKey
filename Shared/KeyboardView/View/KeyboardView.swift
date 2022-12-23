@@ -18,7 +18,7 @@ struct ThemeEnvironmentKey: EnvironmentKey {
 extension EnvironmentValues {
     var themeEnvironment: ThemeData {
         get {
-            return self[ThemeEnvironmentKey.self]
+            self[ThemeEnvironmentKey.self]
         }
         set {
             self[ThemeEnvironmentKey.self] = newValue
@@ -35,7 +35,7 @@ struct MessageEnvironmentKey: EnvironmentKey {
 extension EnvironmentValues {
     var showMessage: Bool {
         get {
-            return self[MessageEnvironmentKey.self]
+            self[MessageEnvironmentKey.self]
         }
         set {
             self[MessageEnvironmentKey.self] = newValue

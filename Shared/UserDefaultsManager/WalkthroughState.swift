@@ -39,6 +39,6 @@ private enum VersionIdentifier: String, Codable {
     static let upToDate: Self = .v1_6
     // もっとも新しいバージョンか否か
     var isUpToDate: Bool {
-        return self == Self.upToDate
+        self == Self.upToDate
     }
 }

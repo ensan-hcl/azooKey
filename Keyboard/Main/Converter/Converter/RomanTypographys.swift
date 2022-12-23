@@ -11,15 +11,15 @@ import Foundation
 private extension UnicodeScalar {
     /// ローマ字の大文字かどうか
     var isRomanUppercased: Bool {
-        return ("A"..."Z").contains(self)
+        ("A"..."Z").contains(self)
     }
     /// ローマ字の小文字かどうか
     var isRomanLowercased: Bool {
-        return ("a"..."z").contains(self)
+        ("a"..."z").contains(self)
     }
     /// ローマ字の数字かどうか
     var isRomanNumber: Bool {
-        return ("0"..."9").contains(self)
+        ("0"..."9").contains(self)
     }
 }
 

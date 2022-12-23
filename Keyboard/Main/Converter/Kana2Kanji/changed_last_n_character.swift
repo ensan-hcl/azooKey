@@ -30,14 +30,14 @@ extension Kana2Kanji {
 
         // (1)
         var nodes = previousResult.nodes.prefix(commonCount).enumerated().map {(i: Int, nodes: [LatticeNode]) in
-            return nodes.filter {i + $0.convertTargetLength <= commonCount}
+            nodes.filter {i + $0.convertTargetLength <= commonCount}
         }
         while nodes.last?.isEmpty ?? false {
             nodes.removeLast()
         }
         // (2)
         let addedNodes: [[LatticeNode]] = (0..<count).map {(i: Int) in
-            return self.dicdataStore.getLOUDSDataInRange(inputData: inputData, from: i, toIndexRange: max(commonCount, i) ..< count)
+            self.dicdataStore.getLOUDSDataInRange(inputData: inputData, from: i, toIndexRange: max(commonCount, i) ..< count)
         }
 
         // (3)

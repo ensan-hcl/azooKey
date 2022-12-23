@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import XCTest
 import azooKey
+import XCTest
 
 class KanaKanjierTests: XCTestCase {
     func ReadBinaryFile_UInt64(path: String) -> [UInt64] {

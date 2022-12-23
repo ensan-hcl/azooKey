@@ -105,7 +105,7 @@ class TextFileLines: XCTestCase {
         }
         let header = data[0 ..< 8192]
         let i32array = header.withUnsafeBytes {pointer -> [Int32] in
-            return Array(
+            Array(
                 UnsafeBufferPointer(
                     start: pointer.baseAddress!.assumingMemoryBound(to: Int32.self),
                     count: pointer.count / MemoryLayout<Int32>.size

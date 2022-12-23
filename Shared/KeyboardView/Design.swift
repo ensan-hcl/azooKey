@@ -200,11 +200,11 @@ enum Design {
         }
 
         func azooKeyIconFont(fixedSize: CGFloat) -> Font {
-            return Font.custom("AzooKeyIcon-Regular", fixedSize: fixedSize)
+            Font.custom("AzooKeyIcon-Regular", fixedSize: fixedSize)
         }
 
         func azooKeyIconFont(_ size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font {
-            return Font.custom("AzooKeyIcon-Regular", size: size, relativeTo: style)
+            Font.custom("AzooKeyIcon-Regular", size: size, relativeTo: style)
         }
 
         var iconFontSize: CGFloat {
@@ -216,7 +216,7 @@ enum Design {
         }
 
         func iconImageFont(theme: ThemeData) -> Font {
-            return Font.system(size: self.iconFontSize, weight: theme.textFont.weight)
+            Font.system(size: self.iconFontSize, weight: theme.textFont.weight)
         }
 
         var resultViewFontSize: CGFloat {

@@ -58,7 +58,7 @@ enum QwertyUnpressedKeyColorType {
         case .selected:
             return theme.pushedKeyFillColor.color
         case .unimportant:
-            return Color.init(white: 0, opacity: 0.001)
+            return Color(white: 0, opacity: 0.001)
         case .enter:
             switch states.enterKeyState {
             case .complete, .edit:

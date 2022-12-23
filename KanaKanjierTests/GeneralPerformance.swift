@@ -6,9 +6,9 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
+import azooKey
 import Foundation
 import XCTest
-import azooKey
 
 class GeneralPerformance: XCTestCase {
 
@@ -180,7 +180,7 @@ class GeneralPerformance: XCTestCase {
         let array = Array(0..<1000000)
         self.measure {
             _ = array.map { i in
-                return i - i % 777
+                i - i % 777
             }
         }
     }
@@ -190,7 +190,7 @@ class GeneralPerformance: XCTestCase {
         let array = Array(0..<1000000)
         self.measure {
             _ = array.withUnsafeBufferPointer {
-                return $0.map { i in i - i % 777}
+                $0.map { i in i - i % 777}
             }
         }
     }

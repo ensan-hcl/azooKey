@@ -173,19 +173,19 @@ struct ThemeIndexManager: Equatable {
     }
 
     var indices: [Int] {
-        return index.currentIndices
+        index.currentIndices
     }
 
     var selectedIndex: Int {
-        return index.selectedIndex
+        index.selectedIndex
     }
 
     var selectedIndexInDarkMode: Int {
-        return index.selectedIndex_dark
+        index.selectedIndex_dark
     }
 
     var nextIndex: Int {
-        return (index.currentIndices.last ?? 0) + 1
+        (index.currentIndices.last ?? 0) + 1
     }
 
 }

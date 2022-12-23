@@ -33,6 +33,6 @@ extension StringProtocol {
 
     @inlinable
     public func indexFromStart(_ offset: Int) -> Index {
-        return self.index(self.startIndex, offsetBy: offset)
+        self.index(self.startIndex, offsetBy: offset)
     }
 }

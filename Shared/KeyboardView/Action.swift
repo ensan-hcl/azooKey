@@ -6,9 +6,9 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
-import CustardKit
 import CustardExpressionEvaluator
+import CustardKit
+import Foundation
 
 indirect enum ActionType: Equatable {
     // テキスト関係

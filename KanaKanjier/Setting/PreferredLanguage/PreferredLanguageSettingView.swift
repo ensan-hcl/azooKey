@@ -19,7 +19,7 @@ struct PreferredLanguageSettingView: View {
     private var firstLanguage: Binding<KeyboardLanguage> {
         Binding(
             get: {
-                return selection.first
+                selection.first
             },
             set: { newValue in
                 selection.first = newValue
@@ -44,7 +44,7 @@ struct PreferredLanguageSettingView: View {
     private var secondLanguage: Binding<KeyboardLanguage> {
         Binding(
             get: {
-                return selection.second ?? .none
+                selection.second ?? .none
             },
             set: { newValue in
                 let language: KeyboardLanguage?

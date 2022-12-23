@@ -11,16 +11,16 @@ import XCTest
 
 extension String {
     func contains(_ characterSet: CharacterSet) -> Bool {
-        return self.trimmingCharacters(in: characterSet).count < self.count
+        self.trimmingCharacters(in: characterSet).count < self.count
     }
 
     func only2(_ characterSet: CharacterSet) -> Bool {
-        return self.trimmingCharacters(in: characterSet).isEmpty
+        self.trimmingCharacters(in: characterSet).isEmpty
     }
 
     // 最速(2020-11-31)
     func isRomanReg() -> Bool {
-        return !isEmpty && range(of: "[^a-zA-Z]", options: .regularExpression) == nil
+        !isEmpty && range(of: "[^a-zA-Z]", options: .regularExpression) == nil
     }
 
     // めっちゃ速い
@@ -40,17 +40,17 @@ extension String {
     }
 
     var isOnlyRoman: Bool {
-        return self.allSatisfy {$0.isASCII && ($0.isLowercase || $0.isUppercase)}
+        self.allSatisfy {$0.isASCII && ($0.isLowercase || $0.isUppercase)}
     }
 
     // めっちゃ遅い
     var isRoman: Bool {
-        return NSPredicate(format: "SELF MATCHES %@", "[a-zA-Z]+").evaluate(with: self)
+        NSPredicate(format: "SELF MATCHES %@", "[a-zA-Z]+").evaluate(with: self)
     }
 
     // 最悪
     var isRomanByInterSect: Bool {
-        return !Self.romanAlphabetCharacter.intersection(self).isEmpty
+        !Self.romanAlphabetCharacter.intersection(self).isEmpty
     }
 
     func contains(_ characterSet: Set<Character>) -> Bool {
@@ -150,7 +150,7 @@ class OnlyRomanTest: XCTestCase {
     let characterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
     let times = 1
     func testPerformance100000ASCII() throws {
-        let string = String.init(repeating: "abc", count: 100000)
+        let string = String(repeating: "abc", count: 100000)
         let strings = [String].init(repeating: string, count: 100)
         self.measure {
             strings.forEach {string in
@@ -162,7 +162,7 @@ class OnlyRomanTest: XCTestCase {
     }
 
     func testPerformance100000Trim() throws {
-        let string = String.init(repeating: "abc", count: 100000)
+        let string = String(repeating: "abc", count: 100000)
         let strings = [String].init(repeating: string, count: 100)
         self.measure {
             strings.forEach {string in
@@ -174,7 +174,7 @@ class OnlyRomanTest: XCTestCase {
     }
 
     func testPerformance100000Reg() throws {
-        let string = String.init(repeating: "abc", count: 100000)
+        let string = String(repeating: "abc", count: 100000)
         let strings = [String].init(repeating: string, count: 100)
         self.measure {
             strings.forEach {string in
@@ -186,7 +186,7 @@ class OnlyRomanTest: XCTestCase {
     }
 
     func testPerformance100000Only() throws {
-        let string = String.init(repeating: "abc", count: 100000)
+        let string = String(repeating: "abc", count: 100000)
         let strings = [String].init(repeating: string, count: 100)
         self.measure {
             strings.forEach {string in

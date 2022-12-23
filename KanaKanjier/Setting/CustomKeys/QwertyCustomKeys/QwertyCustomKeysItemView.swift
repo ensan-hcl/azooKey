@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import SwiftUI
 import CustardKit
+import SwiftUI
 
 private final class EditState: ObservableObject {
     enum State {
@@ -18,7 +18,7 @@ private final class EditState: ObservableObject {
     @Published var details = false
 
     var allowDrag: Bool {
-        return state == .drag
+        state == .drag
     }
     func toggle(_ state: State) {
         if self.state == state {
@@ -106,13 +106,13 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
     @State private var bottomSheetShown = false
 
     private var padding: CGFloat {
-        return spacing / 2
+        spacing / 2
     }
 
     private let screenWidth = UIScreen.main.bounds.width
 
     private var keySize: CGSize {
-        return CGSize(width: screenWidth / 12.2, height: screenWidth / 9)
+        CGSize(width: screenWidth / 12.2, height: screenWidth / 9)
     }
     private var spacing: CGFloat {
         (screenWidth - keySize.width * 10) / (9 + 0.5)
@@ -123,10 +123,10 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
         return (width - necessarySpacing) / CGFloat(count)
     }
     private var width: CGFloat {
-        return romanScaledKeyWidth(normal: 7, for: setting.value.keys.count)
+        romanScaledKeyWidth(normal: 7, for: setting.value.keys.count)
     }
     private var variationWidth: CGFloat {
-        return romanScaledKeyWidth(normal: 7, for: 7)
+        romanScaledKeyWidth(normal: 7, for: 7)
     }
 
     init(_ key: SettingKey) {}
@@ -192,7 +192,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                 Form {
                     if setting.value.keys.indices ~= selection.selectIndex {
                         let binded = {
-                            Binding.init(
+                            Binding(
                                 get: { setting.value },
                                 set: { setting.value = $0 }
                             )

@@ -6,9 +6,9 @@
 //  Copyright © 2022 DevEn3. All rights reserved.
 //
 
-import XCTest
 import FNV
 import MurmurHash_Swift
+import XCTest
 
 struct DicdataMock: Hashable {
     var word: String
@@ -19,9 +19,9 @@ struct DicdataMock: Hashable {
     var value: Float16
 
     static func random() -> Self {
-        return Self.init(
-            word: String.init(repeating: "文", count: Int.random(in: 1...10)),
-            ruby: String.init(repeating: "文", count: Int.random(in: 1...10)),
+        Self(
+            word: String(repeating: "文", count: Int.random(in: 1...10)),
+            ruby: String(repeating: "文", count: Int.random(in: 1...10)),
             lcid: Int.random(in: 0...2000),
             rcid: Int.random(in: 0...2000),
             mid: Int.random(in: 0...500),
@@ -45,14 +45,14 @@ struct HashMaker<T: Hashable>: Hashable {
 class HashTest: XCTestCase {
 
     @inlinable func cidToUIntSequence(cid: Int) -> [UInt8] {
-        return [
+        [
             UInt8(cid & 0x00_00_00_FF),
             UInt8((cid & 0x00_00_FF_00) >> 8)
         ]
     }
 
     @inlinable func cidToUIntSequence(lcid: Int, rcid: Int) -> [UInt8] {
-        return [
+        [
             UInt8(lcid & 0x00_00_00_FF),
             UInt8((lcid & 0x00_00_FF_00) >> 8),
             UInt8(rcid & 0x00_00_00_FF),

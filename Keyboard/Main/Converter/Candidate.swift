@@ -26,7 +26,7 @@ final class ClauseDataUnit {
 #if DEBUG
 extension ClauseDataUnit: CustomDebugStringConvertible {
     var debugDescription: String {
-        return "ClauseDataUnit(mid: \(mid), nextLcid: \(nextLcid), text: \(text), inputRange: \(inputRange))"
+        "ClauseDataUnit(mid: \(mid), nextLcid: \(nextLcid), text: \(text), inputRange: \(inputRange))"
     }
 }
 #endif
@@ -42,11 +42,11 @@ struct CandidateData {
     }
 
     var lastClause: ClauseDataUnit? {
-        return self.clauses.last?.clause
+        self.clauses.last?.clause
     }
 
     var isEmpty: Bool {
-        return clauses.isEmpty
+        clauses.isEmpty
     }
 }
 
@@ -112,7 +112,7 @@ struct Candidate {
     }
 
     func getDebugInformation() -> String {
-        return self.data.debugDescription
+        self.data.debugDescription
     }
 
     /// 入力を文としたとき、prefixになる文節に対応するCandidateを作る

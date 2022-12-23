@@ -423,19 +423,19 @@ private enum 行 {
 
 private extension String {
     static var い: String {
-        return "い"
+        "い"
     }
     static var 小書きつ: String {
-        return "っ"
+        "っ"
     }
     static var よ: String {
-        return "よ"
+        "よ"
     }
     static var ろ: String {
-        return "ろ"
+        "ろ"
     }
     static var ん: String {
-        return "ん"
+        "ん"
     }
 }
 

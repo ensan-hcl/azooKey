@@ -135,7 +135,7 @@ class BloomFilterTest: XCTestCase {
         var value: Float16
 
         static func random() -> Self {
-            return Self.init(
+            Self(
                 word: String((1...Int.random(in: 1...10)).map {_ in "アイウエオ漢字😇✋🇰🇷花鳥風月春夏秋冬1234567890ABC".randomElement()!}),
                 ruby: String((1...Int.random(in: 1...10)).map {_ in "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ".randomElement()!}) ,
                 lcid: Int.random(in: 0...2000),

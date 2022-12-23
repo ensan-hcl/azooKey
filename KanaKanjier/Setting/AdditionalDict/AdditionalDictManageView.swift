@@ -17,7 +17,7 @@ protocol OnOffSettingSet {
 extension OnOffSettingSet {
     subscript(_ key: Target) -> Bool {
         get {
-            return state[key, default: false]
+            state[key, default: false]
         }
         set {
             state[key] = newValue

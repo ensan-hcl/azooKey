@@ -131,7 +131,7 @@ extension KeyboardSettingKey where Self == EnglishKeyboardLayout {
 extension KeyboardLayout: Savable {
     typealias SaveValue = String
     var saveValue: String {
-        return self.rawValue
+        self.rawValue
     }
 
     static func get(_ value: Any) -> KeyboardLayout? {

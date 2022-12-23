@@ -130,7 +130,7 @@ extension KanaKanjiConverter {
         let string = inputData.convertTarget.toKatakana()
 
         let makeResult0: (String) -> Candidate = {
-            return Candidate(
+            Candidate(
                 text: $0,
                 value: -18,
                 correspondingCount: inputData.input.count,
@@ -139,7 +139,7 @@ extension KanaKanjiConverter {
             )
         }
         let makeResult1: (String) -> Candidate = {
-            return Candidate(
+            Candidate(
                 text: $0,
                 value: -19,
                 correspondingCount: inputData.input.count,

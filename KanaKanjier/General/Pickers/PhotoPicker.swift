@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
 import PhotosUI
+import SwiftUI
 
 struct PhotoPicker: UIViewControllerRepresentable {
     internal init(configuration: PHPickerConfiguration, pickerResult: Binding<UIImage?>, isPresented: Binding<Bool>) {

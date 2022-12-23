@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
 import azooKey
+import Foundation
 import XCTest
 
 class ForEachTest: XCTestCase {

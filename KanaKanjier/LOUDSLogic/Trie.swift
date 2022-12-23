@@ -78,17 +78,17 @@ final class TrieNode<Key: Hashable, Value: Hashable> {
     }
 
     func flatChildren() -> [Value] {
-        return self.children.flatMap {$0.value.flatChildren()} + self.value
+        self.children.flatMap {$0.value.flatChildren()} + self.value
     }
 }
 
 extension TrieNode where Key == Character {
     func findNode(for keys: some StringProtocol) -> TrieNode<Key, Value>? {
-        return self.findNode(for: keys.map {$0})
+        self.findNode(for: keys.map {$0})
     }
 
     func find(for keys: some StringProtocol) -> Set<Value> {
-        return self.find(for: keys.map {$0})
+        self.find(for: keys.map {$0})
     }
 
     func insertValue(for keys: some StringProtocol, value: Value) {
@@ -100,6 +100,6 @@ extension TrieNode where Key == Character {
     }
 
     func prefix(for keys: some StringProtocol) -> [Value] {
-        return self.prefix(for: keys.map {$0})
+        self.prefix(for: keys.map {$0})
     }
 }

@@ -358,7 +358,7 @@ struct TemporalLearningMemoryTrie {
 
     /// ルビが同じだとわかっている場合に2つのDicdataElementが同じものか判定する関数
     private static func sameDicdataIfRubyIsEqual(left: DicdataElement, right: DicdataElement) -> Bool {
-        return left.lcid == right.lcid && left.rcid == right.rcid && left.word == right.word
+        left.lcid == right.lcid && left.rcid == right.rcid && left.word == right.word
     }
 
     mutating func memorize(dicdataElement: DicdataElement, chars: [UInt8]) {
@@ -472,7 +472,7 @@ final class LearningManager {
     private var options: ConvertRequestOptions = .init()
 
     var enabled: Bool {
-        return self.options.learningType.needUsingMemory
+        self.options.learningType.needUsingMemory
     }
 
     init() {
