@@ -18,7 +18,7 @@ struct ThemeEnvironmentKey: EnvironmentKey {
 extension EnvironmentValues {
     var themeEnvironment: ThemeData {
         get {
-            return self[ThemeEnvironmentKey.self]
+            self[ThemeEnvironmentKey.self]
         }
         set {
             self[ThemeEnvironmentKey.self] = newValue
@@ -35,7 +35,7 @@ struct MessageEnvironmentKey: EnvironmentKey {
 extension EnvironmentValues {
     var showMessage: Bool {
         get {
-            return self[MessageEnvironmentKey.self]
+            self[MessageEnvironmentKey.self]
         }
         set {
             self[MessageEnvironmentKey.self] = newValue
@@ -98,8 +98,8 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight)
             )
             .padding(.bottom, 2)
-            if variableStates.isTextMagnifying {
-                LargeTextView(text: variableStates.magnifyingText, isViewOpen: $variableStates.isTextMagnifying)
+            if variableStates.boolStates.isTextMagnifying {
+                LargeTextView(text: variableStates.magnifyingText, isViewOpen: $variableStates.boolStates.isTextMagnifying)
             }
             if showMessage {
                 ForEach(messageManager.necessaryMessages, id: \.id) {data in

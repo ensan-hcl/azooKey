@@ -64,46 +64,60 @@ extension KanaKanjiConverter {
         if string == "レイワガンネン"{
             return "2019年"
         }
-        if !string.hasSuffix("ネン") {
+        var string = string[...]
+        // ネンをdropする
+        guard "ネン" == string.suffix(2) else {
             return nil
         }
+        string = string.dropLast(2)
         if string.hasPrefix("ショウワ") {
-            if katakanaStringCount == 8, let year = Int(string[4...5]) {
+            // ショウワをdropする
+            string = string.dropFirst(4)
+            // 残るは数値部分のみ
+            if katakanaStringCount == 8, let year = Int(string) {
                 return "\(year + 1925)年"
             }
-            if katakanaStringCount == 7, let year = Int(string[4...4]) {
+            if katakanaStringCount == 7, let year = Int(string) {
                 return "\(year + 1925)年"
             }
-        }
-        if string.hasPrefix("ヘイセイ") {
-            if katakanaStringCount == 8, let year = Int(string[4...5]) {
+        } else if string.hasPrefix("ヘイセイ") {
+            // ヘイセイをdropする
+            string = string.dropFirst(4)
+            // 残るは数値部分のみ
+            if katakanaStringCount == 8, let year = Int(string) {
                 return "\(year + 1988)年"
             }
-            if katakanaStringCount == 7, let year = Int(string[4...4]) {
+            if katakanaStringCount == 7, let year = Int(string) {
                 return "\(year + 1988)年"
             }
-        }
-        if string.hasPrefix("レイワ") {
-            if katakanaStringCount == 7, let year = Int(string[3...4]) {
+        } else if string.hasPrefix("レイワ") {
+            // レイワをdropする
+            string = string.dropFirst(3)
+            // 残るは数値部分のみ
+            if katakanaStringCount == 7, let year = Int(string) {
                 return "\(year + 2018)年"
             }
-            if katakanaStringCount == 6, let year = Int(string[3...3]) {
+            if katakanaStringCount == 6, let year = Int(string) {
                 return "\(year + 2018)年"
             }
-        }
-        if string.hasPrefix("メイジ") {
-            if katakanaStringCount == 7, let year = Int(string[3...4]) {
+        } else if string.hasPrefix("メイジ") {
+            // メイジをdropする
+            string = string.dropFirst(3)
+            // 残るは数値部分のみ
+            if katakanaStringCount == 7, let year = Int(string) {
                 return "\(year + 1867)年"
             }
-            if katakanaStringCount == 6, let year = Int(string[3...3]) {
+            if katakanaStringCount == 6, let year = Int(string) {
                 return "\(year + 1867)年"
             }
-        }
-        if string.hasPrefix("タイショウ") {
-            if katakanaStringCount == 9, let year = Int(string[5...6]) {
+        } else if string.hasPrefix("タイショウ") {
+            // タイショウをdropする
+            string = string.dropFirst(5)
+            // 残るは数値部分のみ
+            if katakanaStringCount == 9, let year = Int(string) {
                 return "\(year + 1911)年"
             }
-            if katakanaStringCount == 8, let year = Int(string[5...5]) {
+            if katakanaStringCount == 8, let year = Int(string) {
                 return "\(year + 1911)年"
             }
         }
@@ -116,7 +130,7 @@ extension KanaKanjiConverter {
         let string = inputData.convertTarget.toKatakana()
 
         let makeResult0: (String) -> Candidate = {
-            return Candidate(
+            Candidate(
                 text: $0,
                 value: -18,
                 correspondingCount: inputData.input.count,
@@ -125,7 +139,7 @@ extension KanaKanjiConverter {
             )
         }
         let makeResult1: (String) -> Candidate = {
-            return Candidate(
+            Candidate(
                 text: $0,
                 value: -19,
                 correspondingCount: inputData.input.count,

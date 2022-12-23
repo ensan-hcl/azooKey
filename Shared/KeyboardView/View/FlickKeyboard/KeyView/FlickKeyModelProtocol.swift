@@ -6,9 +6,9 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
+import CustardKit
 import Foundation
 import SwiftUI
-import CustardKit
 
 enum FlickKeyColorType {
     case normal
@@ -25,7 +25,7 @@ enum FlickKeyColorType {
         case .selected:
             return theme.pushedKeyFillColor.color
         case .unimportant:
-            return Color.init(white: 0, opacity: 0.001)
+            return Color(white: 0, opacity: 0.001)
         }
     }
 }
@@ -56,7 +56,7 @@ protocol FlickKeyModelProtocol {
 
 extension FlickKeyModelProtocol {
     func isFlickAble(to direction: FlickDirection) -> Bool {
-        return flickKeys.keys.contains(direction)
+        flickKeys.keys.contains(direction)
     }
 
     func press() {

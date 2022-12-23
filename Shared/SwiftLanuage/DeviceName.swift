@@ -553,7 +553,7 @@ final class DeviceName {
     }
 
     private func getDecviceCode() -> DeviceCode? {
-        return DeviceCode(rawValue: gedDeviceCodeString())
+        DeviceCode(rawValue: gedDeviceCodeString())
     }
 
     func needsInputSwitchKey() -> Bool {

@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
 import azooKey
+import Foundation
 import XCTest
 
 class ForEachTest: XCTestCase {
@@ -42,7 +42,7 @@ class ForEachTest: XCTestCase {
         print()
         measure {
             var count = 0
-            for i in stride(from: 0, to: 10000000, by: 2) {
+            for _ in stride(from: 0, to: 10000000, by: 2) {
                 count += 1
             }
         }
@@ -53,7 +53,7 @@ class ForEachTest: XCTestCase {
         let values = (0..<1000000).map {_ in Int.random(in: 0..<1000000)}
         self.measure {
             values.indices.forEach {(i: Int) in
-                array.append(values[i]+i)
+                array.append(values[i] + i)
             }
         }
 
@@ -64,7 +64,7 @@ class ForEachTest: XCTestCase {
         let values = (0..<1000000).map {_ in Int.random(in: 0..<1000000)}
         self.measure {
             for i in values.indices {
-                array.append(values[i]+i)
+                array.append(values[i] + i)
             }
         }
 
@@ -75,10 +75,10 @@ class ForEachTest: XCTestCase {
         let values = (0..<100000000).map {_ in Int.random(in: 0..<1000000)}
         var x = 0
         self.measure {
-                for index in values.indices {
-                    x += values[index] + values[index] + values[index] + values[index] + index + index + index + index
-                    x -= values[index] + values[index] + values[index] + values[index] + index + index + index + index
-                }
+            for index in values.indices {
+                x += values[index] + values[index] + values[index] + values[index] + index + index + index + index
+                x -= values[index] + values[index] + values[index] + values[index] + index + index + index + index
+            }
         }
     }
 
@@ -88,10 +88,10 @@ class ForEachTest: XCTestCase {
         let values = (0..<100000000).map {_ in Int.random(in: 0..<1000000)}
         var x = 0
         self.measure {
-                for (index, value) in values.enumerated() {
-                    x += value + value + value + value + index + index + index + index
-                    x -= value + value + value + value + index + index + index + index
-                }
+            for (index, value) in values.enumerated() {
+                x += value + value + value + value + index + index + index + index
+                x -= value + value + value + value + index + index + index + index
+            }
         }
     }
 

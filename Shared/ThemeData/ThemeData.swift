@@ -41,7 +41,7 @@ struct ThemeData: Codable, Equatable {
         self.suggestKeyFillColor = suggestKeyFillColor
     }
 
-    static let `default`: Self = Self.init(
+    static let `default`: Self = Self(
         backgroundColor: .system(.backgroundColor),
         picture: .none,
         textColor: .dynamic(.primary),
@@ -56,7 +56,7 @@ struct ThemeData: Codable, Equatable {
         suggestKeyFillColor: nil
     )
 
-    static let base: Self = Self.init(
+    static let base: Self = Self(
         backgroundColor: .color(Color(.displayP3, red: 0.839, green: 0.843, blue: 0.862)),
         picture: .none,
         textColor: .color(Color(.displayP3, white: 0, opacity: 1)),

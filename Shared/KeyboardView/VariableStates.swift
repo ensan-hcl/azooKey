@@ -6,9 +6,10 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
+import CustardExpressionEvaluator
+import CustardKit
 import Foundation
 import SwiftUI
-import CustardKit
 
 /// 実行中変更され、かつViewが変更を検知できるべき値。
 final class VariableStates: ObservableObject {
@@ -23,21 +24,79 @@ final class VariableStates: ObservableObject {
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published private(set) var keyboardLayout: KeyboardLayout = .flick
 
+    struct BoolStates: CustardExpressionEvaluatorContext {
+        func getValue(for key: String) -> ExpressionValue? {
+            if let boolValue = self[key] {
+                return .bool(boolValue)
+            }
+            return nil
+        }
+
+        var isTextMagnifying = false
+        var isCapsLocked = false
+
+        static let isCapsLockedKey = "isCapsLocked"
+        // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
+        fileprivate var custardStates: [String: Bool] = [:]
+
+        func evaluateExpression(_ compiledExpression: CompiledExpression) -> Bool? {
+            debug(self.custardStates)
+            do {
+                let condition = try CustardExpressionEvaluator(context: VariableStates.shared.boolStates).evaluate(compiledExpression: compiledExpression)
+                if case let .bool(value) = condition {
+                    return value
+                }
+                return nil
+            } catch {
+                debug("evaluateExpression", error)
+                return nil
+            }
+        }
+
+        mutating func initializeState(_ key: String, with value: Bool) {
+            if !self.custardStates.keys.contains(key) {
+                self.custardStates[key] = value
+            }
+        }
+
+        subscript(_ key: String) -> Bool? {
+            get {
+                if key == "isTextMagnifying" {
+                    return self.isTextMagnifying
+                } else if key == Self.isCapsLockedKey {
+                    return self.isCapsLocked
+                }
+                return custardStates[key]
+            }
+            set {
+                if let newValue {
+                    if key == "isTextMagnifying" {
+                        self.isTextMagnifying = newValue
+                    } else if key == Self.isCapsLockedKey {
+                        self.isCapsLocked = newValue
+                    } else {
+                        custardStates[key] = newValue
+                    }
+                }
+            }
+        }
+    }
+
+    // Bool値の変数はここにまとめる
+    @Published var boolStates = BoolStates()
+
     // 片手モードの実行時、キーボードの幅はinterfaceSizeによって決定できる。
     @Published var interfaceSize: CGSize = .zero
     @Published var interfacePosition: CGPoint = .zero
 
-    @Published var aAKeyState: AaKeyState = .normal
     @Published var enterKeyType: UIReturnKeyType = .default
     @Published var enterKeyState: EnterKeyState = .return(.default)
 
-    @Published var isTextMagnifying = false
+    @Published var barState: BarState = .none
+
     @Published var magnifyingText = ""
 
     @Published var keyboardType: UIKeyboardType = .default
-
-    @Published var showMoveCursorBar = false
-    @Published var showTabBar = false
 
     @Published var refreshing = true
 

@@ -27,7 +27,7 @@ struct OneHandedModeSetting: Codable, KeyboardInternalSettingValue {
     }
 
     func item(layout: KeyboardLayout, orientation: KeyboardOrientation) -> OneHandedModeSettingItem {
-        return self[keyPath: keyPath(layout: layout, orientation: orientation)]
+        self[keyPath: keyPath(layout: layout, orientation: orientation)]
     }
 
     mutating func update(layout: KeyboardLayout, orientation: KeyboardOrientation, process: (inout OneHandedModeSettingItem) -> Void) {

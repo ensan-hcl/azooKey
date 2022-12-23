@@ -51,7 +51,7 @@ extension Kana2Kanji {
 
         // (2)
         let updatedNodes = previousResult.nodes.prefix(count).enumerated().map {(i: Int, nodeArray: [LatticeNode]) in
-            return nodeArray.filter {i + $0.convertTargetLength <= count}
+            nodeArray.filter {i + $0.convertTargetLength <= count}
         }
         return (result: result, nodes: updatedNodes)
     }

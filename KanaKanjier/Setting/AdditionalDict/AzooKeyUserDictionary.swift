@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import SwiftUI
 import Foundation
+import SwiftUI
 
 private final class UserDictManagerVariables: ObservableObject {
     @Published var items: [UserDictionaryData] = [
@@ -115,7 +115,7 @@ private struct UserDictionaryDataListView: View {
     }
 
     private func delete(section: String) -> (IndexSet) -> Void {
-        return {(offsets: IndexSet) in
+        {(offsets: IndexSet) in
             let indices: [Int]
             if section == exceptionKey {
                 indices = variables.items.indices.filter {variables.items[$0].ruby.first == nil}

@@ -6,9 +6,9 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
+import CustardKit
 import Foundation
 import SwiftUI
-import CustardKit
 
 private enum LabelType {
     case text, systemImage
@@ -244,7 +244,7 @@ fileprivate extension CustardInterfaceVariationKey {
 
     subscript(pressAction: PressActionKey) -> [CodableActionData] {
         get {
-            return self.press_actions
+            self.press_actions
         }
         set {
             self.press_actions = newValue
@@ -265,7 +265,7 @@ fileprivate extension CustardInterfaceVariationKey {
 
     subscript(longpressAction: LongpressActionKey) -> CodableLongpressActionData {
         get {
-            return self.longpress_actions
+            self.longpress_actions
         }
         set {
             self.longpress_actions = newValue
@@ -278,10 +278,10 @@ private struct IntStringConversion: Intertranslator {
     typealias Second = String
 
     static func convert(_ first: Int) -> String {
-        return String(first)
+        String(first)
     }
     static func convert(_ second: String) -> Int {
-        return max(Int(second) ?? 1, 1)
+        max(Int(second) ?? 1, 1)
     }
 }
 
@@ -457,6 +457,8 @@ struct CustardInterfaceKeyEditor: View {
                         Text("通常のキー").tag(CustardKeyDesign.ColorType.normal)
                         Text("特別なキー").tag(CustardKeyDesign.ColorType.special)
                         Text("押されているキー").tag(CustardKeyDesign.ColorType.selected)
+                        // TODO: Localize
+                        Text("目立たないキー").tag(CustardKeyDesign.ColorType.unimportant)
                     }
                 }
             }

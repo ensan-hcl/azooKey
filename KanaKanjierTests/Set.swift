@@ -11,16 +11,16 @@ import XCTest
 
 extension String {
     func contains(_ characterSet: CharacterSet) -> Bool {
-        return self.trimmingCharacters(in: characterSet).count < self.count
+        self.trimmingCharacters(in: characterSet).count < self.count
     }
 
     func only2(_ characterSet: CharacterSet) -> Bool {
-        return self.trimmingCharacters(in: characterSet).isEmpty
+        self.trimmingCharacters(in: characterSet).isEmpty
     }
 
     // 最速(2020-11-31)
     func isRomanReg() -> Bool {
-        return !isEmpty && range(of: "[^a-zA-Z]", options: .regularExpression) == nil
+        !isEmpty && range(of: "[^a-zA-Z]", options: .regularExpression) == nil
     }
 
     // めっちゃ速い
@@ -40,17 +40,17 @@ extension String {
     }
 
     var isOnlyRoman: Bool {
-        return self.allSatisfy {$0.isASCII && ($0.isLowercase || $0.isUppercase)}
+        self.allSatisfy {$0.isASCII && ($0.isLowercase || $0.isUppercase)}
     }
 
     // めっちゃ遅い
     var isRoman: Bool {
-        return NSPredicate(format: "SELF MATCHES %@", "[a-zA-Z]+").evaluate(with: self)
+        NSPredicate(format: "SELF MATCHES %@", "[a-zA-Z]+").evaluate(with: self)
     }
 
     // 最悪
     var isRomanByInterSect: Bool {
-        return !Self.romanAlphabetCharacter.intersection(self).isEmpty
+        !Self.romanAlphabetCharacter.intersection(self).isEmpty
     }
 
     func contains(_ characterSet: Set<Character>) -> Bool {
@@ -84,7 +84,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -95,7 +95,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -106,7 +106,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -117,7 +117,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -128,7 +128,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -139,7 +139,7 @@ class ContainTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -150,31 +150,31 @@ class OnlyRomanTest: XCTestCase {
     let characterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
     let times = 1
     func testPerformance100000ASCII() throws {
-        let string = String.init(repeating: "abc", count: 100000)
+        let string = String(repeating: "abc", count: 100000)
         let strings = [String].init(repeating: string, count: 100)
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.isOnlyRoman
+                    _ = string.isOnlyRoman
                 }
             }
         }
     }
 
     func testPerformance100000Trim() throws {
-        let string = String.init(repeating: "abc", count: 100000)
+        let string = String(repeating: "abc", count: 100000)
         let strings = [String].init(repeating: string, count: 100)
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.only2(self.characterSet)
+                    _ = string.only2(self.characterSet)
                 }
             }
         }
     }
 
     func testPerformance100000Reg() throws {
-        let string = String.init(repeating: "abc", count: 100000)
+        let string = String(repeating: "abc", count: 100000)
         let strings = [String].init(repeating: string, count: 100)
         self.measure {
             strings.forEach {string in
@@ -186,12 +186,12 @@ class OnlyRomanTest: XCTestCase {
     }
 
     func testPerformance100000Only() throws {
-        let string = String.init(repeating: "abc", count: 100000)
+        let string = String(repeating: "abc", count: 100000)
         let strings = [String].init(repeating: string, count: 100)
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.only(self.characterSet)
+                    _ = string.only(self.characterSet)
                 }
             }
         }
@@ -207,7 +207,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -218,7 +218,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -229,7 +229,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -240,7 +240,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -251,7 +251,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -262,7 +262,7 @@ class OnlyTest: XCTestCase {
         self.measure {
             strings.forEach {string in
                 (0..<times).forEach {_ in
-                    let bool = string.contains2(characterSet)
+                    _ = string.contains2(characterSet)
                 }
             }
         }
@@ -275,7 +275,7 @@ class SetTest: XCTestCase {
         let strings = (0..<100000).map {_ in String((0..<100).map { _ in "tあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも".randomElement()!})}
         self.measure {
             strings.forEach {
-                let bool = $0.contains(String.romanAlphabetCharacterSet)
+                _ = $0.contains(String.romanAlphabetCharacterSet)
             }
         }
     }
@@ -284,7 +284,7 @@ class SetTest: XCTestCase {
         let strings = (0..<100000).map {_ in String((0..<100).map { _ in "tあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも".randomElement()!})}
         self.measure {
             strings.forEach {
-                let bool = $0.contains2(String.romanAlphabetCharacterSet)
+                _ = $0.contains2(String.romanAlphabetCharacterSet)
             }
         }
     }
@@ -293,7 +293,7 @@ class SetTest: XCTestCase {
         let strings = (0..<100000).map {_ in String((0..<100).map { _ in "tあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも".randomElement()!})}
         self.measure {
             strings.forEach {
-                let bool = $0.contains(String.romanAlphabetCharacter)
+                _ = $0.contains(String.romanAlphabetCharacter)
             }
         }
     }
@@ -302,7 +302,7 @@ class SetTest: XCTestCase {
         let strings = (0..<100000).map {_ in String((0..<100).map { _ in "tあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめも".randomElement()!})}
         self.measure {
             strings.forEach {
-                let bool = $0.isRomanByInterSect
+                _ = $0.isRomanByInterSect
             }
         }
     }

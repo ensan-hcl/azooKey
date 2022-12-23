@@ -6,9 +6,9 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
+import azooKey
 import Foundation
 import XCTest
-import azooKey
 
 class GeneralPerformance: XCTestCase {
 
@@ -63,7 +63,7 @@ class GeneralPerformance: XCTestCase {
                 if string.count > 4 {
                     return
                 }
-                if strings.contains {$0.hasPrefix(string) && $0 != string} {
+                if strings.contains(where: {$0.hasPrefix(string) && $0 != string}) {
                     stringSet.remove(string)
                 }
             }
@@ -81,7 +81,7 @@ class GeneralPerformance: XCTestCase {
                 if removed.contains(string) {
                     return
                 }
-                (0..<string.count-1).forEach {i in
+                (0..<string.count - 1).forEach {i in
                     if let r = stringSet.remove(String(string.prefix(i))) {
                         removed.update(with: r)
                     }
@@ -149,15 +149,6 @@ class GeneralPerformance: XCTestCase {
     }
 
     // 先頭が0か判定する
-    func testPerformanceIsLessZero() throws {
-        let values = (0..<1000000).map {_ in UInt64.random(in: 0...UInt64.max)}
-        self.measure {
-            let sum = values.map {$0 < UInt64.prefixOne ? 1:0}
-            print(sum.count)
-        }
-    }
-
-    // 先頭が0か判定する
     func testPerformanceLeadingZero() throws {
         let values = (0..<1000000).map {_ in UInt64.random(in: 0...UInt64.max)}
         self.measure {
@@ -170,7 +161,7 @@ class GeneralPerformance: XCTestCase {
     func testPerformancePopCount() throws {
         let values = (0..<1000000).map {_ in UInt64.random(in: 0...UInt64.max)}
         self.measure {
-            let sum = values.map {$0.popCount}.reduce(0, +)
+            let sum = values.map {$0.nonzeroBitCount}.reduce(0, +)
             print(sum)
         }
     }
@@ -188,8 +179,8 @@ class GeneralPerformance: XCTestCase {
     func testPerformanceSimpleMap() throws {
         let array = Array(0..<1000000)
         self.measure {
-            let result = array.map { i in
-                return i-i%777
+            _ = array.map { i in
+                i - i % 777
             }
         }
     }
@@ -198,8 +189,8 @@ class GeneralPerformance: XCTestCase {
     func testPerformanceByteMap() throws {
         let array = Array(0..<1000000)
         self.measure {
-            let result = array.withUnsafeBufferPointer {
-                return $0.map { i in i-i%777}
+            _ = array.withUnsafeBufferPointer {
+                $0.map { i in i - i % 777}
             }
         }
     }
@@ -210,7 +201,7 @@ class GeneralPerformance: XCTestCase {
         var values = Array(0..<1000000)
         self.measure {
             (0..<1000000).forEach {_ in
-                values.popLast()
+                _ = values.popLast()
             }
         }
     }
@@ -218,7 +209,7 @@ class GeneralPerformance: XCTestCase {
     func testPerformanceArrayRemove() throws {
         var values = Array(0..<1000000)
         self.measure {
-            (0..<1000000-1).forEach {_ in
+            (0..<1000000 - 1).forEach {_ in
                 values.removeLast()
             }
         }
@@ -239,7 +230,7 @@ class GeneralPerformance: XCTestCase {
         print()
         self.measure {
             (0..<10000).forEach {_ in
-                let ints: [Int] = (0..<100000).map {$0}
+                let _: [Int] = (0..<100000).map {$0}
             }
         }
     }
@@ -249,7 +240,7 @@ class GeneralPerformance: XCTestCase {
         print()
         self.measure {
             (0..<10000).forEach {_ in
-                let ints: [Int] = Array(0..<100000)
+                let _: [Int] = Array(0..<100000)
             }
         }
     }
@@ -260,7 +251,7 @@ class GeneralPerformance: XCTestCase {
         let array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
         self.measure {
             array.forEach {value in
-                let chars: [Character] = value.map {$0}
+                let _: [Character] = value.map {$0}
             }
         }
     }
@@ -270,7 +261,7 @@ class GeneralPerformance: XCTestCase {
         let array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
         self.measure {
             array.forEach {value in
-                let chars: [Character] = Array(value)
+                let _: [Character] = Array(value)
             }
         }
     }
@@ -281,11 +272,11 @@ class GeneralPerformance: XCTestCase {
         var dict: [Int: [Int]] = [:]
         values.forEach {value in
             let rq = value.quotientAndRemainder(dividingBy: 1000)
-            dict[rq.quotient*1000, default: []].append(rq.remainder)
+            dict[rq.quotient * 1000, default: []].append(rq.remainder)
         }
         self.measure {
             (0..<100000).forEach {i in
-                let value: [Int] = dict[i * 100] ?? []
+                let _: [Int] = dict[i * 100] ?? []
             }
         }
     }
@@ -295,11 +286,11 @@ class GeneralPerformance: XCTestCase {
         var dict: [Int: [Int]] = [:]
         values.forEach {value in
             let rq = value.quotientAndRemainder(dividingBy: 1000)
-            dict[rq.quotient*1000, default: []].append(rq.remainder)
+            dict[rq.quotient * 1000, default: []].append(rq.remainder)
         }
         self.measure {
             (0..<100000).forEach {i in
-                let value: [Int] = dict[i * 100, default: []]
+                let _: [Int] = dict[i * 100, default: []]
             }
         }
     }
@@ -309,8 +300,8 @@ class GeneralPerformance: XCTestCase {
     func testPerformanceDictInit() throws {
         let values = (0..<100000).map {_ in (0..<100000).randomElement()!}
         self.measure {
-            let _dict = [Int: [Int]].init(grouping: values, by: {$0/1000})
-            let dict = [Int: [Int]].init(uniqueKeysWithValues: _dict.map {($0.key*1000, $0.value.map {$0%1000})})
+            let _dict = [Int: [Int]].init(grouping: values, by: {$0 / 1000})
+            _ = [Int: [Int]].init(uniqueKeysWithValues: _dict.map {($0.key * 1000, $0.value.map {$0 % 1000})})
         }
     }
 
@@ -320,9 +311,9 @@ class GeneralPerformance: XCTestCase {
         self.measure {
             values.forEach {value in
                 let rq = value.quotientAndRemainder(dividingBy: 1000)
-                let key = rq.quotient*1000
+                let key = rq.quotient * 1000
                 if let dic = dict[key] {
-                    dict[key] = dic+[rq.remainder]
+                    dict[key] = dic + [rq.remainder]
                 } else {
                     dict[key] = [rq.remainder]
                 }
@@ -336,7 +327,7 @@ class GeneralPerformance: XCTestCase {
         self.measure {
             values.forEach {value in
                 let rq = value.quotientAndRemainder(dividingBy: 1000)
-                let key = rq.quotient*1000
+                let key = rq.quotient * 1000
                 if dict.keys.contains(key) {
                     dict[key]?.append(rq.remainder)
                 } else {
@@ -352,7 +343,7 @@ class GeneralPerformance: XCTestCase {
         self.measure {
             values.forEach {value in
                 let rq = value.quotientAndRemainder(dividingBy: 1000)
-                let key = rq.quotient*1000
+                let key = rq.quotient * 1000
                 if let _ = dict[key] {
                     dict[key]?.append(rq.remainder)
                 } else {
@@ -369,7 +360,7 @@ class GeneralPerformance: XCTestCase {
         self.measure {
             values.forEach {value in
                 let rq = value.quotientAndRemainder(dividingBy: 1000)
-                dict[rq.quotient*1000, default: []].append(rq.remainder)
+                dict[rq.quotient * 1000, default: []].append(rq.remainder)
             }
         }
     }
@@ -419,7 +410,7 @@ class GeneralPerformance: XCTestCase {
         array.shuffle()
         self.measure {
             array.forEach {value in
-                let bool = value.isEmpty
+                _ = value.isEmpty
             }
         }
     }
@@ -430,7 +421,7 @@ class GeneralPerformance: XCTestCase {
         array.shuffle()
         self.measure {
             array.forEach {value in
-                let bool = value == ""
+                _ = value == ""
             }
         }
     }
@@ -439,12 +430,12 @@ class GeneralPerformance: XCTestCase {
     // これが早い
     func testPerformanceHasPrefix() throws {
         print()
-        var array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
+        let array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
         let check_a = "qrstuvwxyz"
         let check_b = "qrstnvwxyz"
         self.measure {
             array.forEach {value in
-                let bool = value.hasPrefix(check_a) && value.hasPrefix(check_b)
+                _ = value.hasPrefix(check_a) && value.hasPrefix(check_b)
             }
         }
     }
@@ -452,12 +443,12 @@ class GeneralPerformance: XCTestCase {
     // これが遅い
     func testPerformanceStart() throws {
         print()
-        var array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
+        let array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
         let check_a = "qrstuvwxyz"
         let check_b = "qrstnvwxyz"
         self.measure {
             array.forEach {value in
-                let bool = value.starts(with: check_a) && value.starts(with: check_b)
+                _ = value.starts(with: check_a) && value.starts(with: check_b)
             }
         }
     }
@@ -465,12 +456,12 @@ class GeneralPerformance: XCTestCase {
     // これが遅い
     func testPerformancePrefixEqual() throws {
         print()
-        var array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
+        let array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
         let check_a = "qrstuvwxyz"
         let check_b = "qrstnvwxyz"
         self.measure {
             array.forEach {value in
-                let bool = (value.prefix(check_a.count) == check_a) && (value.prefix(check_b.count) == check_b)
+                _ = (value.prefix(check_a.count) == check_a) && (value.prefix(check_b.count) == check_b)
             }
         }
     }
@@ -526,7 +517,7 @@ class GeneralPerformance: XCTestCase {
         print()
         let array = [String].init(repeating: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", count: 1000000)
         self.measure {
-            let result = array.map {value in
+            _ = array.map {value in
                 value.appending("1234567890")
             }
         }

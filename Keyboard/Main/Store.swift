@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
 import OrderedCollections
+import SwiftUI
 
 final class Store {
     static let shared = Store()
@@ -51,6 +51,8 @@ final class Store {
     }
 }
 
+extension Candidate: ResultViewItemData {}
+
 // MARK: Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
 final class KeyboardActionDepartment: ActionDepartment {
     fileprivate override init() {}
@@ -77,16 +79,7 @@ final class KeyboardActionDepartment: ActionDepartment {
         self.inputManager.setTextDocumentProxy(proxy)
     }
 
-    enum DicdataStoreNotification {
-        case notifyLearningType(LearningType)
-        case importOSUserDict(OSUserDict)
-        case notifyAppearAgain
-        case reloadUserDict
-        case closeKeyboard
-        case resetMemory
-    }
-
-    func sendToDicdataStore(_ data: DicdataStoreNotification) {
+    func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.inputManager.sendToDicdataStore(data)
     }
 
@@ -112,15 +105,14 @@ final class KeyboardActionDepartment: ActionDepartment {
     }
 
     private func showResultView() {
-        VariableStates.shared.showTabBar = false
-        VariableStates.shared.showMoveCursorBar = false
+        VariableStates.shared.barState = .none
     }
 
     private func doAction(_ action: ActionType, requireSetResult: Bool = true) {
         switch action {
         case let .input(text):
             self.showResultView()
-            if VariableStates.shared.aAKeyState == .capsLock && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage) {
+            if VariableStates.shared.boolStates.isCapsLocked && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage) {
                 let input = text.uppercased()
                 self.inputManager.input(text: input, requireSetResult: requireSetResult)
             } else {
@@ -169,32 +161,19 @@ final class KeyboardActionDepartment: ActionDepartment {
                 self.inputManager.smartMoveCursorBackward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
 
-        case let .setCapsLockState(operation):
-            switch operation {
-            case .on:
-                VariableStates.shared.aAKeyState = .capsLock
-            case .off:
-                VariableStates.shared.aAKeyState = .normal
-            case .toggle:
-                switch VariableStates.shared.aAKeyState {
-                case .normal:
-                    VariableStates.shared.aAKeyState = .capsLock
-                case .capsLock:
-                    VariableStates.shared.aAKeyState = .normal
-                }
-            }
-
         case let .setCursorBar(operation):
             self.inputManager.updateSurroundingText()
             switch operation {
             case .on:
-                VariableStates.shared.showTabBar = false
-                VariableStates.shared.showMoveCursorBar = true
+                VariableStates.shared.barState = .cursor
             case .off:
-                VariableStates.shared.showMoveCursorBar = false
+                VariableStates.shared.barState = .none
             case .toggle:
-                VariableStates.shared.showTabBar = false
-                VariableStates.shared.showMoveCursorBar.toggle()
+                if VariableStates.shared.barState == .cursor {
+                    VariableStates.shared.barState = .none
+                } else {
+                    VariableStates.shared.barState = .cursor
+                }
             }
 
         case .enter:
@@ -216,13 +195,15 @@ final class KeyboardActionDepartment: ActionDepartment {
         case let .setTabBar(operation):
             switch operation {
             case .on:
-                VariableStates.shared.showMoveCursorBar = false
-                VariableStates.shared.showTabBar = true
+                VariableStates.shared.barState = .tab
             case .off:
-                VariableStates.shared.showTabBar = false
+                VariableStates.shared.barState = .none
             case .toggle:
-                VariableStates.shared.showMoveCursorBar = false
-                VariableStates.shared.showTabBar.toggle()
+                if VariableStates.shared.barState == .tab {
+                    VariableStates.shared.barState = .none
+                } else {
+                    VariableStates.shared.barState = .tab
+                }
             }
 
         case .enableResizingMode:
@@ -237,6 +218,29 @@ final class KeyboardActionDepartment: ActionDepartment {
         case let .openApp(scheme):
             delegate.openApp(scheme: scheme)
 
+        case let .setBoolState(key, operation):
+            switch operation {
+            case .on:
+                VariableStates.shared.boolStates[key] = true
+            case .off:
+                VariableStates.shared.boolStates[key] = false
+            case .toggle:
+                VariableStates.shared.boolStates[key]?.toggle()
+            }
+
+        case let ._setBoolState(key, compiledExpression):
+            if let value = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
+                VariableStates.shared.boolStates[key] = value
+            }
+
+        case let .boolSwitch(compiledExpression, trueAction, falseAction):
+            if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
+                if condition {
+                    self.registerActions(trueAction)
+                } else {
+                    self.registerActions(falseAction)
+                }
+            }
         #if DEBUG
         // MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
@@ -512,7 +516,7 @@ private final class InputManager {
     private var rubyLog: OrderedDictionary<String, String> = [:]
 
     private var liveConversionEnabled: Bool {
-        return liveConversionManager.enabled && !self.isSelected
+        liveConversionManager.enabled && !self.isSelected
     }
 
     private func updateLog(candidate: Candidate) {
@@ -581,7 +585,7 @@ private final class InputManager {
     /// かな漢字変換を受け持つ変換器。
     private var kanaKanjiConverter = KanaKanjiConverter()
 
-    func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
+    func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.kanaKanjiConverter.sendToDicdataStore(data)
     }
 
@@ -1333,9 +1337,34 @@ private final class InputManager {
             requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
             requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
         }
+        @KeyboardSetting(.typographyLetter) var typographyLetterCandidate
+        @KeyboardSetting(.unicodeCandidate) var unicodeCandidate
+        @KeyboardSetting(.englishCandidate) var englishCandidateInRoman2KanaInput
+        @KeyboardSetting(.fullRomanCandidate) var fullWidthRomanCandidate
+        @KeyboardSetting(.halfKanaCandidate) var halfWidthKanaCandidate
+        @KeyboardSetting(.learningType) var learningType
+        @KeyboardSetting(.useBetaStrongerLearning) var useStrongerLearning
+
+        let options = ConvertRequestOptions(
+            N_best: 10,
+            requireJapanesePrediction: requireJapanesePrediction,
+            requireEnglishPrediction: requireEnglishPrediction,
+            // VariableStatesを注入
+            keyboardLanguage: VariableStates.shared.keyboardLanguage,
+            mainInputStyle: VariableStates.shared.inputStyle,
+            // KeyboardSettingsを注入
+            typographyLetterCandidate: typographyLetterCandidate,
+            unicodeCandidate: unicodeCandidate,
+            englishCandidateInRoman2KanaInput: englishCandidateInRoman2KanaInput,
+            fullWidthRomanCandidate: fullWidthRomanCandidate,
+            halfWidthKanaCandidate: halfWidthKanaCandidate,
+            learningType: learningType,
+            maxMemoryCount: useStrongerLearning ? 65536 : 8192
+        )
+
         let inputData = composingText.prefixToCursorPosition()
-        debug("setResult value to be input", inputData)
-        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, N_best: 10, requirePrediction: requireJapanesePrediction, requireEnglishPrediction: requireEnglishPrediction)
+        debug("setResult value to be input", inputData, options)
+        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
         results.append(contentsOf: result)
         // TODO: 最後の1単語のライブ変換を抑制したい
         // TODO: ローマ字入力中に最後の単語が優先される問題
@@ -1431,15 +1460,15 @@ final class DisplayedTextManager {
     }
 
     var documentContextAfterInput: String? {
-        return self.proxy.documentContextAfterInput
+        self.proxy.documentContextAfterInput
     }
 
     var selectedText: String? {
-        return self.proxy.selectedText
+        self.proxy.selectedText
     }
 
     var documentContextBeforeInput: String? {
-        return self.proxy.documentContextBeforeInput
+        self.proxy.documentContextBeforeInput
     }
 
     func clear() {

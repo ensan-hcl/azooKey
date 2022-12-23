@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
 import azooKey
+import Foundation
 import XCTest
 
 class TextFileSpliting: XCTestCase {
@@ -25,7 +25,7 @@ class TextFileSpliting: XCTestCase {
                 print("ファイルが存在しました")
 
                 string = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
-                let chars = string.components(separatedBy: "\n").map {Character($0)}
+                _ = string.components(separatedBy: "\n").map {Character($0)}
             } catch let error {
                 print("ファイルが存在しません: \(error)")
                 string = ""
@@ -47,7 +47,7 @@ class TextFileSpliting: XCTestCase {
                 print("ファイルが存在しました")
 
                 string = try String(contentsOfFile: path, encoding: String.Encoding.utf8)
-                let chars: [Character] = Array(string)
+                let _: [Character] = Array(string)
             } catch let error {
                 print("ファイルが存在しません: \(error)")
                 string = ""
@@ -241,7 +241,7 @@ class TextFileSpliting: XCTestCase {
                 print("ファイルが存在しました")
 
                 let strings = try String(contentsOfFile: path, encoding: .utf8).split(separator: "\n", omittingEmptySubsequences: false)
-                let result = (0..<1700).map {strings[$0]}
+                _ = (0..<1700).map {strings[$0]}
 
             } catch let error {
                 print("ファイルが存在しません: \(error)")
@@ -356,7 +356,7 @@ class TextFileSpliting: XCTestCase {
                 return
             }
             let newLineNumber = UInt8(ascii: "\n")
-            let bytes: [String] = data.withUnsafeBytes {
+            let _: [String] = data.withUnsafeBytes {
                 var results: [String] = []
                 results.reserveCapacity(indices.count)
                 var result: [UInt8] = []
@@ -418,7 +418,7 @@ class TextFileSpliting: XCTestCase {
             }
             let newLineNumber = UInt8(ascii: "\n")
 
-            let bytes: [String] = data.withUnsafeBytes {
+            let _: [String] = data.withUnsafeBytes {
                 var results: [String] = []
                 results.reserveCapacity(indices.count)
                 var result: [UInt8] = []
@@ -477,7 +477,7 @@ class TextFileSpliting: XCTestCase {
             }
             let newLineNumber = UInt8(ascii: "\n")
 
-            let bytes: [String] = data.withUTF8 {
+            let _: [String] = data.withUTF8 {
                 var results: [String] = []
                 results.reserveCapacity(indices.count)
                 var result: [UInt8] = []

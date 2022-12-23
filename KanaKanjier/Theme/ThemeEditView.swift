@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
 import PhotosUI
+import SwiftUI
 
 private struct ThemeColorTranslator: Intertranslator {
     typealias First = ThemeColor
@@ -33,7 +33,7 @@ private struct ThemeSpecialKeyColorTranslator: Intertranslator {
 
     static func convert(_ second: Color) -> ThemeColor {
         if let keyColor = ColorTools.rgba(second, process: {r, g, b, opacity in
-            return Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
+            Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
         }) {
             return .color(keyColor)
         }
@@ -51,7 +51,7 @@ private struct ThemeNormalKeyColorTranslator: Intertranslator {
 
     static func convert(_ second: Color) -> ThemeColor {
         if let keyColor = ColorTools.rgba(second, process: {r, g, b, opacity in
-            return Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
+            Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
         }) {
             return .color(keyColor)
         }
@@ -64,11 +64,11 @@ private struct ThemeFontDoubleTranslator: Intertranslator {
     typealias Second = Double
 
     static func convert(_ first: First) -> Second {
-        return Double(first.rawValue)
+        Double(first.rawValue)
     }
 
     static func convert(_ second: Second) -> First {
-        return ThemeFontWeight.init(rawValue: Int(second)) ?? .regular
+        ThemeFontWeight(rawValue: Int(second)) ?? .regular
     }
 }
 

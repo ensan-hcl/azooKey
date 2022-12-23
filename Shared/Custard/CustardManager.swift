@@ -6,9 +6,9 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
-import Foundation
 import CryptoKit
 import CustardKit
+import Foundation
 
 struct CustardInternalMetaData: Codable {
     var origin: Origin
@@ -57,7 +57,7 @@ struct CustardManager {
 
     private static func fileName(_ identifier: String) -> String {
         let hash = SHA256.hash(data: identifier.data(using: .utf8) ?? Data())
-        let value16 = hash.map {String.init($0, radix: 16, uppercase: true)}.joined()
+        let value16 = hash.map {String($0, radix: 16, uppercase: true)}.joined()
         return value16
     }
 
@@ -138,7 +138,7 @@ struct CustardManager {
 
     mutating func addTabBar(identifier: Int = 0, item: TabBarItem) throws {
         let tabbar = try self.tabbar(identifier: identifier)
-        let newTabBar = TabBarData.init(
+        let newTabBar = TabBarData(
             identifier: tabbar.identifier,
             items: tabbar.items + [item]
         )
@@ -241,15 +241,15 @@ struct CustardManager {
     }
 
     var availableCustards: [String] {
-        return index.availableCustards
+        index.availableCustards
     }
 
     var availableTabBars: [Int] {
-        return index.availableTabBars
+        index.availableTabBars
     }
 
     var metadata: [String: CustardInternalMetaData] {
-        return index.metadata
+        index.metadata
     }
 
 }

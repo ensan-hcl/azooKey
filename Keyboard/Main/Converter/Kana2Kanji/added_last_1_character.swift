@@ -33,7 +33,7 @@ extension Kana2Kanji {
 
         // (1)
         let addedNodes: [[LatticeNode]] = (0...count).map {(i: Int) in
-            return self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: count)
+            self.dicdataStore.getLOUDSData(inputData: inputData, from: i, to: count)
         }
 
         // ココが一番時間がかかっていた。

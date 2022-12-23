@@ -13,7 +13,7 @@ class BetaMoveCursorBarState: ObservableObject {
     @Published private(set) var displayLeftIndex = 0
     @Published private(set) var displayRightIndex = 0
     fileprivate var centerIndex: Int {
-        return displayLeftIndex + itemCount / 2
+        displayLeftIndex + itemCount / 2
     }
 
     fileprivate var itemCount: Int {
@@ -21,10 +21,10 @@ class BetaMoveCursorBarState: ObservableObject {
         return (Int(self.viewWidth / self.itemWidth) >> 1) << 1
     }
     fileprivate var itemWidth: CGFloat {
-        return Design.fonts.resultViewFontSize * 1.3
+        Design.fonts.resultViewFontSize * 1.3
     }
     fileprivate var viewWidth: CGFloat {
-        return VariableStates.shared.interfaceSize.width * 0.85
+        VariableStates.shared.interfaceSize.width * 0.85
     }
     @Published fileprivate var line: [String] = []
 
@@ -53,7 +53,7 @@ class BetaMoveCursorBarState: ObservableObject {
     }
 
     fileprivate func originalPosition(index: Int) -> CGFloat {
-        return CGFloat(index) * self.itemWidth
+        CGFloat(index) * self.itemWidth
     }
 
     fileprivate func tap(at index: Int) {
@@ -190,7 +190,7 @@ struct MoveCursorBarBeta: View {
     }
 
     private func symbolFont(size: CGFloat) -> Font {
-        return .system(size: size, weight: symbolsFontWeight, design: .default)
+        .system(size: size, weight: symbolsFontWeight, design: .default)
     }
 
     private var textView: some View {

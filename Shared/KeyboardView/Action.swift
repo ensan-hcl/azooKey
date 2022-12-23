@@ -6,10 +6,11 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
+import CustardExpressionEvaluator
 import CustardKit
+import Foundation
 
-enum ActionType: Equatable {
+indirect enum ActionType: Equatable {
     // テキスト関係
     case input(String)          // テキストの入力
     case delete(Int)            // テキストの削除
@@ -30,7 +31,6 @@ enum ActionType: Equatable {
     case enter
     case changeCharacterType    // 濁点、半濁点、小さい文字
     case replaceLastCharacters([String: String])
-    case setCapsLockState(BoolOperation)
     case hideLearningMemory
     // タブの変更
     case moveTab(Tab)
@@ -40,26 +40,18 @@ enum ActionType: Equatable {
     case dismissKeyboard
     // アプリを開く
     case openApp(String)    // アプリを開く
+
+    // ステート変更
+    case setBoolState(String, BoolOperation)
+    case _setBoolState(String, CompiledExpression)
+
+    // 条件分岐アクション
+    case boolSwitch(CompiledExpression, trueAction: [ActionType], falseAction: [ActionType])
+
     #if DEBUG
     // デバッグ用
     case DEBUG_DATA_INPUT
     #endif
-}
-
-extension ActionType {
-    static func makeFunctionInputActionSet(name: String, argumentCount: Int = 1) -> [ActionType] {
-        /*
-         sqrt()
-         ↑.saveSelectedTextIfNeeded, .input("sqrt()"), .moveCursor(-1), .restoreSelectedTextIfNeeded
-         のようにする。ただしこの返り値を利用する場合には.flatmap{$0}が必須。
-         */
-        return [
-            .saveSelectedTextIfNeeded,
-            .input("\(name)()"),
-            .moveCursor(-1),
-            .restoreSelectedTextIfNeeded
-        ]
-    }
 }
 
 struct LongpressActionType: Equatable {
@@ -71,81 +63,4 @@ struct LongpressActionType: Equatable {
 
     let start: [ActionType]
     let `repeat`: [ActionType]
-}
-
-extension CodableActionData {
-    var actionType: ActionType {
-        switch self {
-        case let .input(value):
-            return .input(value)
-        case .replaceDefault:
-            return .changeCharacterType
-        case let .replaceLastCharacters(value):
-            return .replaceLastCharacters(value)
-        case let .delete(value):
-            return .delete(value)
-        case .smartDeleteDefault:
-            return .smoothDelete
-        case let .smartDelete(value):
-            return .smartDelete(value)
-        case .complete:
-            return .enter
-        case let .moveCursor(value):
-            return .moveCursor(value)
-        case let .smartMoveCursor(value):
-            return .smartMoveCursor(value)
-        case let .moveTab(value):
-            return .moveTab(value.tab)
-        case .enableResizingMode:
-            return .enableResizingMode
-        case .toggleCursorBar:
-            return .setCursorBar(.toggle)
-        case .toggleCapsLockState:
-            return .setCapsLockState(.toggle)
-        case .toggleTabBar:
-            return .setTabBar(.toggle)
-        case let .launchApplication(value):
-            switch value.scheme {
-            case .azooKey:
-                return .openApp("azooKey://" + value.target)
-            case .shortcuts:
-                return .openApp("shortcuts://" + value.target)
-            }
-        case .dismissKeyboard:
-            return .dismissKeyboard
-        case let .setCursorBar(value):
-            return .setCursorBar(value)
-        case let .setCapsLockState(value):
-            return .setCapsLockState(value)
-        case let .setTabBar(value):
-            return .setTabBar(value)
-        }
-    }
-}
-
-extension CodableLongpressActionData {
-    var longpressActionType: LongpressActionType {
-        .init(start: self.start.map {$0.actionType}, repeat: self.repeat.map {$0.actionType})
-    }
-}
-
-extension ActionType {
-    func sound() {
-        switch self {
-        case .input:
-            Sound.click()
-        case .delete:
-            Sound.delete()
-        case .smoothDelete, .smartDelete, .smartMoveCursor:
-            Sound.smoothDelete()
-        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setCapsLockState, .setTabBar:
-            Sound.tabOrOtherKey()
-        case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
-            return
-        #if DEBUG
-        case .DEBUG_DATA_INPUT:
-            return
-        #endif
-        }
-    }
 }

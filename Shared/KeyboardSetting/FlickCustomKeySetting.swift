@@ -6,8 +6,8 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import Foundation
 import CustardKit
+import Foundation
 
 enum CustomizableFlickKey: String, Codable {
     case kogana = "kogana"
@@ -17,7 +17,7 @@ enum CustomizableFlickKey: String, Codable {
     case symbolsTab = "symbols_tab"
 
     var identifier: String {
-        return self.rawValue
+        self.rawValue
     }
 
     var defaultSetting: KeyFlickSetting {

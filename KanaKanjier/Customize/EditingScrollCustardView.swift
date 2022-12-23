@@ -6,9 +6,9 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
+import CustardKit
 import Foundation
 import SwiftUI
-import CustardKit
 
 fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
     var label: LocalizedStringKey {

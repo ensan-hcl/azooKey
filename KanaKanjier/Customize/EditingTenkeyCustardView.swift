@@ -6,9 +6,9 @@
 //  Copyright © 2021 DevEn3. All rights reserved.
 //
 
+import CustardKit
 import Foundation
 import SwiftUI
-import CustardKit
 
 extension CustardInterfaceCustomKey {
     static let empty: Self = .init(design: .init(label: .text(""), color: .normal), press_actions: [], longpress_actions: .none, variations: [])
@@ -17,7 +17,7 @@ extension CustardInterfaceCustomKey {
 fileprivate extension Dictionary where Key == KeyPosition, Value == UserMadeTenKeyCustard.KeyData {
     subscript(key: Key) -> Value {
         get {
-            return self[key, default: .init(model: .custom(.empty), width: 1, height: 1)]
+            self[key, default: .init(model: .custom(.empty), width: 1, height: 1)]
         }
         set {
             self[key] = newValue
@@ -42,7 +42,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     @State private var showPreview = false
     @State private var copiedKey: UserMadeTenKeyCustard.KeyData?
     private var models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
-        return (0..<layout.rowCount).reduce(into: [:]) {dict, x in
+        (0..<layout.rowCount).reduce(into: [:]) {dict, x in
             (0..<layout.columnCount).forEach {y in
                 if let value = editingItem.keys[.gridFit(x: x, y: y)] {
                     dict[.gridFit(x: x, y: y)] = (value.model.flickKeyModel, value.width, value.height)
@@ -58,7 +58,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     }
 
     private var custard: Custard {
-        return Custard.init(
+        Custard(
             identifier: editingItem.tabName,
             language: editingItem.language,
             input_style: editingItem.inputStyle,

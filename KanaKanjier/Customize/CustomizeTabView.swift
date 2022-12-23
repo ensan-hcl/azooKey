@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
 import StoreKit
+import SwiftUI
 
 struct CustomizeTabView: View {
     @State private var tabBarData: TabBarData

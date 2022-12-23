@@ -115,7 +115,7 @@ class TopNTest: XCTestCase {
                     return
                 }
 
-                if let minElement = topN.enumerated().min {$0.element < $1.element} {
+                if let minElement = topN.enumerated().min(by: {$0.element < $1.element}) {
                     if minElement.element < value {
                         topN[minElement.offset] = value
                         return
@@ -144,7 +144,7 @@ class TopNTest: XCTestCase {
                     return
                 }
 
-                if let minElement = topN.enumerated().min {$0.element < $1.element} {
+                if let minElement = topN.enumerated().min(by: {$0.element < $1.element}) {
                     if minElement.element < value {
                         topN[minElement.offset] = value
                         return
@@ -204,7 +204,7 @@ class TopNTest: XCTestCase {
     func testperformanceMyMax2() throws {
         let values = (0..<n).map {_ in Int.random(in: 0..<max)}
         measure {
-            let topN = values.max(count: N_best, by: >=)
+            _ = values.max(count: N_best, by: >=)
         }
     }
 
@@ -212,7 +212,7 @@ class TopNTest: XCTestCase {
     func testperformancePartialSort() throws {
         let values = (0..<n).map {_ in Int.random(in: 0..<max)}
         measure {
-            let topN: [Int] = Array(values.sortedPrefix(N_best, by: >=).prefix(N_best))
+            let _: [Int] = Array(values.sortedPrefix(N_best, by: >=).prefix(N_best))
         }
     }
 
@@ -220,7 +220,7 @@ class TopNTest: XCTestCase {
     func testperformanceSorted() throws {
         let values = (0..<n).map {_ in Int.random(in: 0..<max)}
         measure {
-            let topN: [Int] = Array(values.sorted(by: >=).prefix(N_best))
+            let _: [Int] = Array(values.sorted(by: >=).prefix(N_best))
         }
     }
 

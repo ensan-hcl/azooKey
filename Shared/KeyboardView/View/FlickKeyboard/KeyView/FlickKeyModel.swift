@@ -6,9 +6,9 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
+import CustardKit
 import Foundation
 import SwiftUI
-import CustardKit
 
 // M：基本は変わらない
 struct FlickKeyModel: FlickKeyModelProtocol {

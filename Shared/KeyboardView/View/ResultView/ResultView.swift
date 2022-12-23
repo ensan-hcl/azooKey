@@ -58,7 +58,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     private var tabBarButtonBackgroundColor: Color {
         ColorTools.hsv(theme.resultBackgroundColor.color) { h, s, v, a in
-            return Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
+            Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
         } ?? theme.normalKeyFillColor.color
     }
 
@@ -68,12 +68,13 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     var body: some View {
         Group { [unowned variableStates] in
-            if variableStates.showMoveCursorBar {
+            switch variableStates.barState {
+            case .cursor:
                 MoveCursorBar()
-            } else if variableStates.showTabBar {
+            case .tab:
                 let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
                 TabBarView(data: tabBarData)
-            } else {
+            case .none:
                 Group { [unowned model] in
                     let results: [ResultData<Candidate>] = model.results
                     if results.isEmpty {
@@ -147,6 +148,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                     }
                 }
                 .frame(height: Design.resultViewHeight())
+
             }
         }
     }
@@ -172,7 +174,7 @@ struct ResultContextMenuView<Candidate: ResultViewItemData>: View {
         Group {
             Button(action: {
                 VariableStates.shared.magnifyingText = candidate.text
-                VariableStates.shared.isTextMagnifying = true
+                VariableStates.shared.boolStates.isTextMagnifying = true
             }) {
                 Text("大きな文字で表示する")
                 Image(systemName: "plus.magnifyingglass")

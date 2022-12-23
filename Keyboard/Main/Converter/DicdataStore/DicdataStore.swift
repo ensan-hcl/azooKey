@@ -35,6 +35,8 @@ final class DicdataStore {
     private let midCount = 502
     private let cidCount = 1319
 
+    private var requestOptions: ConvertRequestOptions = .init()
+
     private let numberFormatter = NumberFormatter()
     /// 初期化時のセットアップ用の関数。プロパティリストを読み込み、連接確率リストを読み込んで行分割し保存しておく。
     private func setup() {
@@ -62,7 +64,17 @@ final class DicdataStore {
         _ = self.loadLOUDS(identifier: "memory")
     }
 
-    func sendToDicdataStore(_ data: KeyboardActionDepartment.DicdataStoreNotification) {
+    enum Notification {
+        case notifyLearningType(LearningType)
+        case importOSUserDict(OSUserDict)
+        case setRequestOptions(ConvertRequestOptions)
+        case notifyAppearAgain
+        case reloadUserDict
+        case closeKeyboard
+        case resetMemory
+    }
+
+    func sendToDicdataStore(_ data: Notification) {
         switch data {
         case .notifyAppearAgain:
             break
@@ -76,6 +88,9 @@ final class DicdataStore {
             self.learningManager.reset()
         case let .importOSUserDict(osUserDict):
             self.osUserDict = osUserDict
+        case let .setRequestOptions(value):
+            self.requestOptions = value
+            self.learningManager.setRequestOptions(options: value)
         }
     }
 
@@ -89,7 +104,7 @@ final class DicdataStore {
 
     /// ペナルティ関数。文字数で決める。
     private func getPenalty(data: DicdataElement) -> PValue {
-        return -2.0 / PValue(data.word.count)
+        -2.0 / PValue(data.word.count)
     }
 
     /// 計算時に利用。無視すべきデータかどうか。
@@ -434,12 +449,12 @@ final class DicdataStore {
         }
 
         // headを英単語として候補に追加する
-        if VariableStates.shared.keyboardLanguage == .en_US && convertTarget.onlyRomanAlphabet {
+        if requestOptions.keyboardLanguage == .en_US && convertTarget.onlyRomanAlphabet {
             result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.英単語.mid, value: -14))
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
-        if VariableStates.shared.keyboardLanguage != .en_US && VariableStates.shared.inputStyle == .roman2kana {
+        if requestOptions.keyboardLanguage != .en_US && requestOptions.mainInputStyle == .roman2kana {
             if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[convertTarget] {
                 result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
                 result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
@@ -564,12 +579,12 @@ final class DicdataStore {
 
     /// OSのユーザ辞書からrubyに等しい語を返す。
     private func getMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
-        return self.osUserDict.dict.filter {$0.ruby == ruby}
+        self.osUserDict.dict.filter {$0.ruby == ruby}
     }
 
     /// OSのユーザ辞書からrubyに先頭一致する語を返す。
     internal func getPrefixMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
-        return self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
+        self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
     }
 
     // 学習を反映する
@@ -620,7 +635,7 @@ final class DicdataStore {
 
     // 誤り訂正候補の構築の際、ファイルが存在しているか事前にチェックし、存在していなければ以後の計算を打ち切ることで、計算を減らす。
     internal static func existLOUDS(for character: Character) -> Bool {
-        return Self.possibleLOUDS.contains(character)
+        Self.possibleLOUDS.contains(character)
     }
 
     /*

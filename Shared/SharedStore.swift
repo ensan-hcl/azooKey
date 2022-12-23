@@ -38,12 +38,6 @@ enum SharedStore {
     }
 }
 
-@inlinable func debug(_ items: Any...) {
-    #if DEBUG
-    print(items.map {"\($0)"}.joined(separator: " "))
-    #endif
-}
-
 extension StringProtocol {
     // エスケープが必要なのは次の文字:
     /*

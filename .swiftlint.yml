@@ -10,22 +10,31 @@ disabled_rules:
 opt_in_rules:
   - unused_import
   - unused_declaration
+  - unused_capture_list
+  - implicit_return # implicit returnを推奨
+  - sorted_imports # importをsortする
+  - anyobject_protocol # AnyObjectをclassよりも推奨
+  - array_init # Array()を推奨
   - conditional_returns_on_newline
-  - empty_count #要素が何もないことを確認する際はcount == 0よりもisEmptyを用いてチェックする．
-  - first_where #.filter { }.firstよりも.first(where:)を用いる．
-  - operator_usage_whitespace #演算子の左右に空白を
-  - redundant_nil_coalescing #?? nilを禁止
+  - empty_count # 要素が何もないことを確認する際はcount == 0よりもisEmptyを用いてチェックする．
+  - empty_string # 同上
+  - explicit_init # explicitに.initを書かない
+  - first_where # .filter { }.firstよりも.first(where:)を用いる．
+  - operator_usage_whitespace # 演算子の左右に空白を
+  - redundant_nil_coalescing # ?? nilを禁止
+  - reduce_into # reduce(into:)を推奨
+  - toggle_bool # .toggleを推奨
 
 included:
   - KanaKanjier
   - Keyboard
   - Shared
+  - KanaKanjierTests
 excluded:
   - LOUDSBuilder
   - ValuesBinary
   - deprecated
   - KanaKanjierUITests
-  - KanaKanjierTests
 type_name:
   excluded: 
     - ID

@@ -6,18 +6,18 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 final private class KeyboardHostingController<Content: View>: UIHostingController<Content> {
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
-        return .bottom
+        .bottom
     }
 }
 
 extension UIInputView: UIInputViewAudioFeedback {
     open var enableInputClicksWhenVisible: Bool {
-        return true
+        true
     }
 }
 
@@ -236,8 +236,10 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     func openApp(scheme: String) {
-        guard let url = URL(string: scheme) else {
-            debug("無効なschemeです")
+        // 日本語のURLは使えないので、パーセントエンコーディングを適用する
+        guard let encoded = scheme.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encoded) else {
+            debug("無効なschemeです", scheme, scheme.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? scheme)
             return
         }
         self.openUrl(url: url)

@@ -41,14 +41,7 @@ struct LongTermLearningMemory {
     }
 
     static var txtFileSplit: Int { 2048 }
-    static var maxMemoryCount: Int {
-        @KeyboardSetting(.useBetaStrongerLearning) var useStrongerLearning
-        if useStrongerLearning {
-            return 65536
-        } else {
-            return 8192
-        }
-    }
+    static var maxMemoryCount: Int = 8192
 
     private static func BoolToUInt64(_ bools: [Bool]) -> [UInt64] {
         let unit = 64
@@ -65,8 +58,13 @@ struct LongTermLearningMemory {
         return result
     }
 
-    fileprivate static func valueForMetadata(metadata: MetadataElement) -> PValue {
-        return PValue(-1.0 - 3 * (1 - Double(metadata.count) / 255) * (1 - Double(metadata.count) / 255))
+    /// - note:
+    ///   この関数は出現数(`metadata.count`)と単語の長さ(`dicdata.ruby.count`)に基づいてvalueを決める。
+    ///   出現数が大きいほどvalueは大きくなり、単語が長いほどvalueは大きくなる。
+    ///   特に、単語の長さが1のとき、値域は`[-5, -8]`となる。一方単語の長さが2であれば値域は`[-3, -6]`であり、長さ4ならば`[-2, -5]`となる。
+    fileprivate static func valueForData(metadata: MetadataElement, dicdata: DicdataElement) -> PValue {
+        let d = 1 - Double(metadata.count) / 255
+        return PValue(-1 - 4 / Double(dicdata.ruby.count) - 3 * pow(d, 3))
     }
 
     fileprivate struct MetadataBlock {
@@ -205,7 +203,7 @@ struct LongTermLearningMemory {
                     if metadataElement.count == 0 || today - metadataElement.lastUsedDay >= 128 {
                         continue
                     }
-                    dicdataElement.baseValue = valueForMetadata(metadata: metadataElement)
+                    dicdataElement.baseValue = valueForData(metadata: metadataElement, dicdata: dicdataElement)
                     newDicdata.append(dicdataElement)
                     newMetadata.append(metadataElement)
                 }
@@ -360,7 +358,7 @@ struct TemporalLearningMemoryTrie {
 
     /// ルビが同じだとわかっている場合に2つのDicdataElementが同じものか判定する関数
     private static func sameDicdataIfRubyIsEqual(left: DicdataElement, right: DicdataElement) -> Bool {
-        return left.lcid == right.lcid && left.rcid == right.rcid && left.word == right.word
+        left.lcid == right.lcid && left.rcid == right.rcid && left.word == right.word
     }
 
     mutating func memorize(dicdataElement: DicdataElement, chars: [UInt8]) {
@@ -387,7 +385,7 @@ struct TemporalLearningMemoryTrie {
             let dataIndex = self.dicdata.endIndex
             var dicdataElement = dicdataElement
             let metadataElement = MetadataElement(day: day, count: 1)
-            dicdataElement.baseValue = LongTermLearningMemory.valueForMetadata(metadata: metadataElement)
+            dicdataElement.baseValue = LongTermLearningMemory.valueForData(metadata: metadataElement, dicdata: dicdataElement)
             self.dicdata.append(dicdataElement)
             self.metadata.append(metadataElement)
             nodes[index].dataIndices.append(dataIndex)
@@ -471,24 +469,28 @@ final class LearningManager {
     }
 
     private var temporaryMemory: TemporalLearningMemoryTrie = .init()
-    @KeyboardSetting(.learningType) private var learningType
+    private var options: ConvertRequestOptions = .init()
 
     var enabled: Bool {
-        return self.learningType.needUsingMemory
+        self.options.learningType.needUsingMemory
     }
 
     init() {
         if MemoryResetCondition.shouldReset() {
             try? LongTermLearningMemory.reset()
         }
-        @KeyboardSetting(.learningType) var learningType
-        if !learningType.needUsingMemory {
+        if !options.learningType.needUsingMemory {
             return
         }
     }
 
+    func setRequestOptions(options: ConvertRequestOptions) {
+        self.options = options
+        LongTermLearningMemory.maxMemoryCount = options.maxMemoryCount
+    }
+
     func temporaryPerfectMatch(key: some StringProtocol) -> [DicdataElement] {
-        if !learningType.needUsingMemory {
+        if !options.learningType.needUsingMemory {
             return []
         }
         guard let chars = Self.keyToChars(key) else {
@@ -498,7 +500,7 @@ final class LearningManager {
     }
 
     func temporaryThroughMatch(key: some StringProtocol, depth: Range<Int>) -> [DicdataElement] {
-        if !learningType.needUsingMemory {
+        if !options.learningType.needUsingMemory {
             return []
         }
         guard let chars = Self.keyToChars(key) else {
@@ -508,7 +510,7 @@ final class LearningManager {
     }
 
     func temporaryPrefixMatch(key: some StringProtocol) -> [DicdataElement] {
-        if !learningType.needUsingMemory {
+        if !options.learningType.needUsingMemory {
             return []
         }
         guard let chars = Self.keyToChars(key) else {
@@ -518,7 +520,7 @@ final class LearningManager {
     }
 
     func update(data: [DicdataElement]) {
-        if !learningType.needUpdateMemory {
+        if !options.learningType.needUpdateMemory {
             return
         }
         // 単語単位
@@ -628,7 +630,7 @@ final class LearningManager {
     }
 
     func save() {
-        if !learningType.needUpdateMemory {
+        if !options.learningType.needUpdateMemory {
             return
         }
         LongTermLearningMemory.merge(tempTrie: self.temporaryMemory)
@@ -637,7 +639,5 @@ final class LearningManager {
     func reset() {
         self.temporaryMemory = TemporalLearningMemoryTrie()
         try? LongTermLearningMemory.reset()
-        @KeyboardSetting(.learningType) var learningType
-        self._learningType = _learningType
     }
 }

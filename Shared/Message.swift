@@ -23,7 +23,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
     // case ver1_8_autocomplete_introduction = "ver1_8_autocomplete_introduction" // MARK: frozen
 
     var key: String {
-        return self.rawValue + "_status"
+        self.rawValue + "_status"
     }
 
     var needUsingContainerApp: Bool {
@@ -159,7 +159,7 @@ struct MessageManager {
     }
 
     func requireShow(_ id: MessageIdentifier) -> Bool {
-        return needShow[id, default: false]
+        needShow[id, default: false]
     }
 
     mutating func done(_ id: MessageIdentifier) {

@@ -1,5 +1,33 @@
-Keyboard/Main/Converter/Dictionary/
+/Keyboard/Main/Converter/Dictionary/*.binary
+/Keyboard/Main/Converter/Dictionary/cb/*.binary
+/Keyboard/Main/Converter/Dictionary/p/*.csv
+/Keyboard/Main/Converter/Dictionary/louds/*.louds
+/Keyboard/Main/Converter/Dictionary/louds/*.loudschars2
+/Keyboard/Main/Converter/Dictionary/louds/*.loudstxt3
+Keyboard/Main/Converter/Dictionary/louds/*.chid
 AzooKey-dict
-xcshareddata/
 deprecated/
 KanaKanjiConverterKit/
+
+# Xcode settings
+# Created by https://www.toptal.com/developers/gitignore/api/xcode
+# Edit at https://www.toptal.com/developers/gitignore?templates=xcode
+
+### Xcode ###
+## User settings
+xcuserdata/
+
+## Xcode 8 and earlier
+*.xcscmblueprint
+*.xccheckout
+
+### Xcode Patch ###
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# End of https://www.toptal.com/developers/gitignore/api/xcode

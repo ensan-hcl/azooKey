@@ -9,7 +9,6 @@
 import Foundation
 // import Combinatorics
 import XCTest
-typealias PValue = Float
 
 class CombinatoricsTest: XCTestCase {
     let possibleMaxLength = 1
@@ -61,7 +60,7 @@ class CombinatoricsTest: XCTestCase {
 
         let nodes = (0..<count).map {(i: Int) in
             (i..<min(count, i + self.possibleMaxLength)).flatMap {(j: Int) -> [String] in
-                return self.getTypo(String(characters[i...j]))
+                self.getTypo(String(characters[i...j]))
             }
         }
 
@@ -73,7 +72,7 @@ class CombinatoricsTest: XCTestCase {
                     return [(rstring, penalty)]
                 }
                 return nodes[i].map {node -> (String, PValue) in
-                    return (rstring + node, penalty + (node == correct ? 0:3))
+                    (rstring + node, penalty + (node == correct ? 0:3))
                 }
             }
 
@@ -87,7 +86,7 @@ class CombinatoricsTest: XCTestCase {
 
         let typos = (0..<count).map {(i: Int) in
             (i..<min(count, i + self.possibleMaxLength)).flatMap {(j: Int) -> [String] in
-                return self.possibleTypo[String(characters[i...j]), default: []]
+                self.possibleTypo[String(characters[i...j]), default: []]
             }
         }
 
@@ -99,7 +98,7 @@ class CombinatoricsTest: XCTestCase {
                     return [(rstring, penalty)]
                 }
                 return [(rstring + correct, penalty)] + typos[i].map {typo -> (String, PValue) in
-                    return (rstring + typo, penalty + 3)
+                    (rstring + typo, penalty + 3)
                 }
             }
 
@@ -113,7 +112,7 @@ class CombinatoricsTest: XCTestCase {
 
         let nodes = (0..<count).map {(i: Int) in
             (i..<min(count, i + self.possibleMaxLength)).flatMap {(j: Int) -> [String] in
-                return self.possibleTypo[String(characters[i...j]), default: []]
+                self.possibleTypo[String(characters[i...j]), default: []]
             }
         }
         var result0: [String] = [String(characters[0])]
@@ -124,13 +123,13 @@ class CombinatoricsTest: XCTestCase {
         nodes.indices.dropFirst().forEach {i in
             let correct = [characters[i]]
             result3 = result3.map {
-                return $0.count == i ? $0 + correct : $0
+                $0.count == i ? $0 + correct : $0
             }
 
             result2 = result2.map {string in
                 if string.count == i {
                     let addTypo = nodes[i].map {node in
-                        return string + node
+                        string + node
                     }
                     result3.append(contentsOf: addTypo)
                     return string + correct
@@ -141,7 +140,7 @@ class CombinatoricsTest: XCTestCase {
             result1 = result1.map {string in
                 if string.count == i {
                     let addTypo = nodes[i].map {node in
-                        return string + node
+                        string + node
                     }
                     result2.append(contentsOf: addTypo)
                     return string + correct
@@ -152,10 +151,10 @@ class CombinatoricsTest: XCTestCase {
             result0 = result0.map {string in
                 if string.count == i {
                     let addTypo = nodes[i].map {node in
-                        return string + node
+                        string + node
                     }
                     result1.append(contentsOf: addTypo)
-                    return string+correct
+                    return string + correct
                 }
                 return string
             }
@@ -185,7 +184,7 @@ class CombinatoricsTest: XCTestCase {
         }
 
         let combinations2 = typoRanges.indices.flatMap {i -> [[Int]] in
-            return typoRanges.indices.compactMap {
+            typoRanges.indices.compactMap {
                 if i >= $0 {
                     return nil
                 }
@@ -194,7 +193,7 @@ class CombinatoricsTest: XCTestCase {
         }
 
         let combinations3 = combinations2.flatMap {values -> [[Int]] in
-            return typoRanges.indices.compactMap {
+            typoRanges.indices.compactMap {
                 if let max = values.max(), max >= $0 {
                     return nil
                 }
@@ -223,7 +222,7 @@ class CombinatoricsTest: XCTestCase {
             combs.forEach {i in
                 let replaceCandidates = typos[i]
                 replaced = replaced.flatMap {(chars: [Character]) -> [[Character]] in
-                    return replaceCandidates.map {
+                    replaceCandidates.map {
                         var _chars = chars
                         _chars.replaceSubrange(typoRanges[i], with: $0)
                         return _chars
@@ -238,7 +237,7 @@ class CombinatoricsTest: XCTestCase {
             combs.forEach {i in
                 let replaceCandidates = typos[i]
                 replaced = replaced.flatMap {(chars: [Character]) -> [[Character]] in
-                    return replaceCandidates.map {
+                    replaceCandidates.map {
                         var _chars = chars
                         _chars.replaceSubrange(typoRanges[i], with: $0)
                         return _chars
@@ -270,7 +269,7 @@ class CombinatoricsTest: XCTestCase {
         let text = "シンフンシキエイノタンシヨウヒノハンツウ"
         self.measure {
             for _ in 0..<10 {
-                let typos = getRangeWithTypos(text: text)
+                _ = getRangeWithTypos(text: text)
             }
         }
         print(getRangeWithTypos(text: text).count)
@@ -280,7 +279,7 @@ class CombinatoricsTest: XCTestCase {
         let text = "シンフンシキエイノタンシヨウヒノハンツウ"
         self.measure {
             for _ in 0..<10 {
-                let typos = getRangeWithTypos4(text: text)
+                _ = getRangeWithTypos4(text: text)
             }
         }
         print(getRangeWithTypos4(text: text).count)

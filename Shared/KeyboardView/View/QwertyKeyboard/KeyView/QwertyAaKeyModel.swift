@@ -17,24 +17,22 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
     let needSuggestView: Bool = false
 
     var pressActions: [ActionType] {
-        switch VariableStates.shared.aAKeyState {
-        case .normal:
+        if VariableStates.shared.boolStates.isCapsLocked {
+            return [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .off)]
+        } else {
             return [.changeCharacterType]
-        case .capsLock:
-            return [.setCapsLockState(.off)]
         }
     }
 
     var longPressActions: LongpressActionType {
-        return .init(start: [.setCapsLockState(.toggle)])
+        .init(start: [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .toggle)])
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        switch states.aAKeyState {
-        case .normal:
-            return KeyLabel(.image("textformat.alt"), width: width, textColor: color)
-        case .capsLock:
+        if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width, textColor: color)
+        } else {
+            return KeyLabel(.image("textformat.alt"), width: width, textColor: color)
         }
     }
 

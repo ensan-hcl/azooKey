@@ -127,3 +127,17 @@ struct EnglishKeyboardLayout: LanguageLayoutKeyboardSetting {
 extension KeyboardSettingKey where Self == EnglishKeyboardLayout {
     static var englishKeyboardLayout: Self { .init() }
 }
+
+extension KeyboardLayout: Savable {
+    typealias SaveValue = String
+    var saveValue: String {
+        self.rawValue
+    }
+
+    static func get(_ value: Any) -> KeyboardLayout? {
+        if let string = value as? String {
+            return self.init(rawValue: string)
+        }
+        return nil
+    }
+}

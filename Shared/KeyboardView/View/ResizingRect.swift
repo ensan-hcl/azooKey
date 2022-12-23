@@ -64,7 +64,7 @@ struct ResizingRect: View {
     }
 
     func gesture(x: KeyPath<Self, Binding<Position>>, y: KeyPath<Self, Binding<Position>>, top: Bool = true, left: Bool = true) -> some Gesture {
-        return DragGesture(minimumDistance: .zero, coordinateSpace: .global)
+        DragGesture(minimumDistance: .zero, coordinateSpace: .global)
             .onChanged {value in
                 let dx = value.location.x - value.startLocation.x
                 let dy = value.location.y - value.startLocation.y
@@ -83,7 +83,7 @@ struct ResizingRect: View {
     }
 
     func xGesture(target: KeyPath<Self, Binding<Position>>) -> some Gesture {
-        return DragGesture(minimumDistance: .zero, coordinateSpace: .global)
+        DragGesture(minimumDistance: .zero, coordinateSpace: .global)
             .onChanged {value in
                 let dx = value.location.x - value.startLocation.x
                 let before = self[keyPath: target].wrappedValue.current.x
@@ -104,7 +104,7 @@ struct ResizingRect: View {
     }
 
     func yGesture(target: KeyPath<Self, Binding<Position>>) -> some Gesture {
-        return DragGesture(minimumDistance: .zero, coordinateSpace: .global)
+        DragGesture(minimumDistance: .zero, coordinateSpace: .global)
             .onChanged {value in
                 let dy = value.location.y - value.startLocation.y
                 let before = self[keyPath: target].wrappedValue.current.y
@@ -126,7 +126,7 @@ struct ResizingRect: View {
     }
 
     var moveGesture: some Gesture {
-        return DragGesture(minimumDistance: .zero, coordinateSpace: .global)
+        DragGesture(minimumDistance: .zero, coordinateSpace: .global)
             .onChanged {value in
                 let dx = value.location.x - value.startLocation.x
                 let dy = value.location.y - value.startLocation.y

@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "custardkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ensan-hcl/CustardKit",
+      "state" : {
+        "branch" : "develop",
+        "revision" : "2f623cee0f4891d7a0bc1d5ee52e446cc1b33bb2"
+      }
+    },
+    {
+      "identity" : "fnv",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ensan-hcl/FNV",
+      "state" : {
+        "branch" : "develop",
+        "revision" : "911be79db2afadb2d89fa3fb69dc32fa8444d2d7"
+      }
+    },
+    {
+      "identity" : "murmurhash-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/daisuke-t-jp/MurmurHash-Swift",
+      "state" : {
+        "revision" : "7e69bedaaaea09673524d83de12dac6e09d5b74a",
+        "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections.git",
+      "state" : {
+        "revision" : "f504716c27d2e5d4144fa4794b12129301d17729",
+        "version" : "1.0.3"
+      }
+    }
+  ],
+  "version" : 2
+}

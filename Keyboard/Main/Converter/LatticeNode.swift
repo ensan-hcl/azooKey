@@ -19,11 +19,11 @@ final class LatticeNode {
     // korega -> これが -> 3
     // koれga -> これが -> 3
     var convertTargetLength: Int {
-        return inputRange.count
+        inputRange.count
     }
 
     static var EOSNode: LatticeNode {
-        return LatticeNode(data: DicdataElement.EOSData, inputRange: 0..<0)
+        LatticeNode(data: DicdataElement.EOSData, inputRange: 0..<0)
     }
 
     init(data: DicdataElement, inputRange: Range<Int>) {
@@ -33,10 +33,10 @@ final class LatticeNode {
     }
 
     func getSqueezedNode(_ index: Int, value: PValue) -> RegisteredNode {
-        return RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, inputRange: self.inputRange)
+        RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, inputRange: self.inputRange)
     }
 
     func getCandidateData(for composingText: ComposingText) -> [CandidateData] {
-        return self.prevs.map {$0.getCandidateData(for: composingText)}
+        self.prevs.map {$0.getCandidateData(for: composingText)}
     }
 }
