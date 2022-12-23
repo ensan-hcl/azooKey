@@ -940,6 +940,7 @@
 		1A2E58602951ED56004F959B /* RomanTypographys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9218E3255238CD005F45C4 /* RomanTypographys.swift */; };
 		1A2E586229549CF9004F959B /* WithMutableValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E586129549CF9004F959B /* WithMutableValueTests.swift */; };
 		1A2E58642954A361004F959B /* WarekiConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E58632954A361004F959B /* WarekiConversionTests.swift */; };
+		1A2E58662955A6FF004F959B /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E58652955A6FF004F959B /* StringExtensionTests.swift */; };
 		1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022AE2631663200E4495C /* OnEnterBackground.swift */; };
 		1A3022B12631719600E4495C /* EditingTenkeyCustardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */; };
 		1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */; };
@@ -3585,6 +3586,7 @@
 		1A2E58432951E5E7004F959B /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		1A2E586129549CF9004F959B /* WithMutableValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithMutableValueTests.swift; sourceTree = "<group>"; };
 		1A2E58632954A361004F959B /* WarekiConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarekiConversionTests.swift; sourceTree = "<group>"; };
+		1A2E58652955A6FF004F959B /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		1A3022AE2631663200E4495C /* OnEnterBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnEnterBackground.swift; sourceTree = "<group>"; };
 		1A3022B02631719600E4495C /* EditingTenkeyCustardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingTenkeyCustardView.swift; sourceTree = "<group>"; };
 		1A3022B226329B7B00E4495C /* CustardInterfaceKeyEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInterfaceKeyEditor.swift; sourceTree = "<group>"; };
@@ -6186,6 +6188,7 @@
 			isa = PBXGroup;
 			children = (
 				1A2E58352950AC57004F959B /* AppVersionTests.swift */,
+				1A2E58652955A6FF004F959B /* StringExtensionTests.swift */,
 				1A2E586129549CF9004F959B /* WithMutableValueTests.swift */,
 			);
 			path = SharedTests;
@@ -10959,6 +10962,7 @@
 				1A2E581A294F2884004F959B /* extension Data.swift in Sources */,
 				1A2E583E2951C575004F959B /* extension LOUDS.swift in Sources */,
 				1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */,
+				1A2E58662955A6FF004F959B /* StringExtensionTests.swift in Sources */,
 				1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */,
 				1A2E585E2951ED56004F959B /* Wareki.swift in Sources */,
 				1A2E58592951EC87004F959B /* Kana2Kanji.swift in Sources */,
