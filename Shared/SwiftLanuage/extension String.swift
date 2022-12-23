@@ -10,25 +10,27 @@ import Foundation
 
 extension StringProtocol {
     @inlinable func toKatakana() -> String {
-        let result = self.unicodeScalars.map { scalar -> UnicodeScalar in
-            if 0x3041 <= scalar.value && scalar.value <= 0x3096 {
-                return UnicodeScalar(scalar.value + 96)!
+        // カタカナはutf16で常に2バイトなので、utf16単位で処理して良い
+        let result = self.utf16.map { scalar -> UInt16 in
+            if 0x3041 <= scalar && scalar <= 0x3096 {
+                return scalar + 96
             } else {
                 return scalar
             }
         }
-        return String(String.UnicodeScalarView(result))
+        return String(utf16CodeUnits: result, count: self.count)
     }
 
     @inlinable func toHiragana() -> String {
-        let result = self.unicodeScalars.map { scalar -> UnicodeScalar in
-            if 0x30A1 <= scalar.value && scalar.value <= 0x30F6 {
-                return UnicodeScalar(scalar.value - 96)!
+        // ひらがなはutf16で常に2バイトなので、utf16単位で処理して良い
+        let result = self.utf16.map { scalar -> UInt16 in
+            if 0x30A1 <= scalar && scalar <= 0x30F6 {
+                return scalar - 96
             } else {
                 return scalar
             }
         }
-        return String(String.UnicodeScalarView(result))
+        return String(utf16CodeUnits: result, count: self.count)
     }
 
     @inlinable
