@@ -1,12 +1,21 @@
 {
   "pins" : [
     {
+      "identity" : "boolexpressionevaluator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ensan-hcl/BoolExpressionEvaluator",
+      "state" : {
+        "branch" : "main",
+        "revision" : "cad2da328ad33821aa7e2922fc79f4e967f2adff"
+      }
+    },
+    {
       "identity" : "custardkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ensan-hcl/CustardKit",
       "state" : {
-        "branch" : "develop",
-        "revision" : "2f623cee0f4891d7a0bc1d5ee52e446cc1b33bb2"
+        "branch" : "add/bool_state_api",
+        "revision" : "4d3687ba102d7c721179df1b83b89a4798e901c0"
       }
     },
     {
