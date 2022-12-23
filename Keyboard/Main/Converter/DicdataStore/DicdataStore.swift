@@ -684,12 +684,12 @@ final class DicdataStore {
     /// wordTypesの初期化時に使うのみ。
     private static let PREPOSITION_wordIDs: Set<Int> = [1315, 6, 557, 558, 559, 560]
     /// wordTypesの初期化時に使うのみ。
-    private static let INPOSITION_wordIDs: Set<Int> = Set<Int>((561..<868).map {$0}
-                                                                + (1283..<1297).map {$0}
-                                                                + (1306..<1310).map {$0}
-                                                                + (11..<53).map {$0}
-                                                                + (555..<557).map {$0}
-                                                                + (1281..<1283).map {$0}
+    private static let INPOSITION_wordIDs: Set<Int> = Set<Int>(Array(561..<868)
+                                                                + Array(1283..<1297)
+                                                                + Array(1306..<1310)
+                                                                + Array(11..<53)
+                                                                + Array(555..<557)
+                                                                + Array(1281..<1283)
     ).union([1314, 3, 2, 4, 5, 1, 9])
 
     /*

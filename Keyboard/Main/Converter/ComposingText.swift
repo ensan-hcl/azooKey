@@ -413,7 +413,7 @@ extension ComposingText {
             return true
         }
         let n_suffix = originalElements[0 ..< leftIndex].suffix(while: {$0.inputStyle == .roman2kana && $0.character == "n"})
-        if n_suffix.count % 2 == 0 && n_suffix.count > 0 {
+        if n_suffix.count % 2 == 0 && !n_suffix.isEmpty {
             return true
         }
         if n_suffix.count % 2 == 1 && !["a", "i", "u", "e", "o", "y", "n"].contains(firstElement.character) {

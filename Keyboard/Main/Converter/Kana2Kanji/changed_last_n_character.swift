@@ -134,10 +134,8 @@ extension Kana2Kanji {
             }
         }
 
-        for (index, nodeArray) in addedNodes.enumerated() {
-            if index < nodes.endIndex {
-                nodes[index].append(contentsOf: nodeArray)
-            }
+        for (index, nodeArray) in addedNodes.enumerated() where index < nodes.endIndex {
+            nodes[index].append(contentsOf: nodeArray)
         }
         for nodeArray in addedNodes.suffix(counts.added) {
             nodes.append(nodeArray)

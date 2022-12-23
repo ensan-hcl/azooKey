@@ -434,7 +434,7 @@ final class KanaKanjiConverter {
         var result = Array(full_candidate)
 
         // 最低でも1つ、入力に完全一致する候補が入るようにする
-        let checkRuby: (Candidate) -> Bool = {$0.data.reduce("") {$0 + $1.ruby} == inputData.convertTarget.toKatakana()}
+        let checkRuby: (Candidate) -> Bool = {$0.data.reduce(into: "") {$0 += $1.ruby} == inputData.convertTarget.toKatakana()}
         if !result.contains(where: checkRuby) {
             if let candidate = sentence_candidates.first(where: checkRuby) {
                 result.append(candidate)
