@@ -103,7 +103,7 @@ final class DicdataStore {
     }
 
     /// ペナルティ関数。文字数で決める。
-    private func getPenalty(data: DicdataElement) -> PValue {
+    private static func getPenalty(data: DicdataElement) -> PValue {
         -2.0 / PValue(data.word.count)
     }
 
@@ -113,20 +113,17 @@ final class DicdataStore {
         if d < 0 {
             return true
         }
-        return 2.0 / PValue(wordCount) < -d
+        // dは正
+        return -2.0 / PValue(wordCount) < -d
     }
 
     /// 計算時に利用。無視すべきデータかどうか。
     internal func shouldBeRemoved(data: DicdataElement) -> Bool {
-        let value = data.value()
-        if value <= -30 {
-            return true
-        }
-        let d = value - self.treshold
+        let d = data.value() - self.treshold
         if d < 0 {
             return true
         }
-        return self.getPenalty(data: data) < -d
+        return Self.getPenalty(data: data) < -d
     }
 
     private func loadLOUDS(identifier: String) -> LOUDS? {
@@ -237,7 +234,7 @@ final class DicdataStore {
                     return data
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
-                let pUnit: PValue = self.getPenalty(data: data) / 2   // 負の値
+                let pUnit: PValue = Self.getPenalty(data: data) / 2   // 負の値
                 let adjust = pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
@@ -324,7 +321,7 @@ final class DicdataStore {
                     return data
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
-                let pUnit: PValue = self.getPenalty(data: data) / 2   // 負の値
+                let pUnit: PValue = Self.getPenalty(data: data) / 2   // 負の値
                 let adjust = pUnit * penalty * ratio
                 if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
                     return nil
