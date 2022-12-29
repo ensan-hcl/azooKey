@@ -14,9 +14,6 @@ extension KanaKanjiConverter {
     func unicode(_ inputData: ComposingText) -> [Candidate] {
         let value0: PValue = -10
         let string = inputData.convertTarget.toKatakana()
-        if string.count < 5 {
-            return []
-        }
         for prefix in ["u", "U", "u+", "U+"] where string.hasPrefix(prefix) {
             if let number = Int(string.dropFirst(prefix.count), radix: 16), let unicodeScalar = UnicodeScalar(number) {
                 let char = String(unicodeScalar)

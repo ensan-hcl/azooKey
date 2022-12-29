@@ -24,6 +24,7 @@
 		1A18424325DD6857003985AB /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18424225DD6857003985AB /* FontPicker.swift */; };
 		1A18425D25DE6678003985AB /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425C25DE6678003985AB /* CustomKeyboard.swift */; };
 		1A18425E25DE6678003985AB /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425C25DE6678003985AB /* CustomKeyboard.swift */; };
+		1A1ECC9A295D3A64001AD7E0 /* UnicodeConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
@@ -2732,6 +2733,7 @@
 		1A146FBE28C8AAAE00AE6CCE /* emoji13_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji13_dict.tsv; sourceTree = "<group>"; };
 		1A18424225DD6857003985AB /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		1A18425C25DE6678003985AB /* CustomKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboard.swift; sourceTree = "<group>"; };
+		1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnicodeConversionTests.swift; sourceTree = "<group>"; };
 		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
 		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
@@ -6182,6 +6184,7 @@
 				1A2E580F294F1F1C004F959B /* CharacterUtilsTests.swift */,
 				1A2E5823294F452A004F959B /* ComposingTextTests.swift */,
 				1A96E49D2958A05700A1EB0C /* EmailAddressConversionTests.swift */,
+				1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */,
 				1A2E58632954A361004F959B /* WarekiConversionTests.swift */,
 			);
 			path = KeyboardTests;
@@ -10964,6 +10967,7 @@
 				1A2E58532951EC87004F959B /* deleted_last_n_character.swift in Sources */,
 				1A2E581A294F2884004F959B /* extension Data.swift in Sources */,
 				1A2E583E2951C575004F959B /* extension LOUDS.swift in Sources */,
+				1A1ECC9A295D3A64001AD7E0 /* UnicodeConversionTests.swift in Sources */,
 				1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */,
 				1A2E58662955A6FF004F959B /* StringExtensionTests.swift in Sources */,
 				1ABD077825479B6500DD0F7C /* Dictionary.swift in Sources */,
