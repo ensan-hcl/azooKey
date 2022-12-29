@@ -77,9 +77,9 @@ final class KanaKanjiConverter {
     ///   - candidates: uniqueを実行する候補列。
     /// - Returns:
     ///   `candidates`から重複を削除したもの。
-    private func getUniqueCandidate(_ candidates: [Candidate]) -> [Candidate] {
+    private func getUniqueCandidate(_ candidates: [Candidate], seenCandidates: Set<String> = []) -> [Candidate] {
         var result = [Candidate]()
-        for candidate in candidates where !candidate.text.isEmpty {
+        for candidate in candidates where !candidate.text.isEmpty && !seenCandidates.contains(candidate.text) {
             if let index = result.firstIndex(where: {$0.text == candidate.text}) {
                 if result[index].value < candidate.value || result[index].correspondingCount < candidate.correspondingCount {
                     result[index] = candidate
@@ -395,7 +395,7 @@ final class KanaKanjiConverter {
         // 重複のない変換候補を作成するための集合
         var seenCandidate: Set<String> = full_candidate.mapSet {$0.text}
         // 文節のみ変換するパターン
-        let clause_candidates = self.getUniqueCandidate(clauseCandidates.filter {!seenCandidate.contains($0.text)}).sorted {$0.value>$1.value}.prefix(5)
+        let clause_candidates = self.getUniqueCandidate(clauseCandidates, seenCandidates: seenCandidate).sorted {$0.value>$1.value}.prefix(5)
         seenCandidate.formUnion(clause_candidates.map {$0.text})
         // 賢く変換するパターン
         let wise_candidates: [Candidate] = self.getWiseCandidate(inputData, options: options)
@@ -419,12 +419,7 @@ final class KanaKanjiConverter {
          文字列の長さごとに並べ、かつその中で評価の高いものから順に並べる。
          */
 
-        let word_candidates: [Candidate] = self.getUniqueCandidate(
-            (dicCandidates + additionalCandidates)
-                .filter {
-                    !seenCandidate.contains($0.text)
-                }
-        )
+        let word_candidates: [Candidate] = self.getUniqueCandidate(dicCandidates + additionalCandidates, seenCandidates: seenCandidate)
         .sorted {
             let count0 = $0.correspondingCount
             let count1 = $1.correspondingCount
