@@ -27,6 +27,7 @@
 		1A1ECC9F295DA962001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9E295DA962001AD7E0 /* Algorithms */; };
 		1A1ECCA2295DF8DE001AD7E0 /* DisplayedTextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */; };
 		1A1ECCA4295DF9D4001AD7E0 /* LiveConversionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */; };
+		1A1ECCA6295DFADF001AD7E0 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
@@ -2706,6 +2707,7 @@
 		1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnicodeConversionTests.swift; sourceTree = "<group>"; };
 		1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayedTextManager.swift; sourceTree = "<group>"; };
 		1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConversionManager.swift; sourceTree = "<group>"; };
+		1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
 		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
@@ -5254,6 +5256,7 @@
 			children = (
 				1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */,
 				1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */,
+				1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */,
 			);
 			path = Display;
 			sourceTree = "<group>";
@@ -10958,6 +10961,7 @@
 				1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */,
 				1AB8C36325DFE80A00D39BC5 /* SimpleKeyModel.swift in Sources */,
 				1A2E583B2951C2CF004F959B /* ConvertRequestOptions.swift in Sources */,
+				1A1ECCA6295DFADF001AD7E0 /* InputManager.swift in Sources */,
 				1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */,
 				1AFB685028D56E8200B5C717 /* CodableSupport.swift in Sources */,
 				1A3DC2FF2500F837002CAA93 /* CharacterUtils.swift in Sources */,
