@@ -11,14 +11,12 @@ import OrderedCollections
 import SwiftUI
 
 final class Store {
-    static let shared = Store()
-    private(set) var resultModelVariableSection = ResultModelVariableSection<Candidate>()
     /// Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
     var action: KeyboardActionDepartment {
         VariableStates.shared.action as! KeyboardActionDepartment
     }
 
-    private init() {
+    init() {
         VariableStates.shared.action = KeyboardActionDepartment()
     }
 
@@ -39,10 +37,6 @@ final class Store {
         VariableStates.shared.initialize()
         // 設定の更新を確認
         self.settingCheck()
-    }
-
-    fileprivate func registerResult(_ result: [Candidate]) {
-        self.resultModelVariableSection.setResults(result)
     }
 
     func closeKeyboard() {
@@ -75,16 +69,14 @@ final class KeyboardActionDepartment: ActionDepartment {
         self.timers = []
     }
 
-    func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
-        self.inputManager.setTextDocumentProxy(proxy)
-    }
-
     func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.inputManager.sendToDicdataStore(data)
     }
 
     func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
+        self.inputManager.setTextDocumentProxy(controller.textDocumentProxy)
+        self.inputManager.setUpdateResult(controller.updateResultView)
     }
 
     override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
@@ -515,6 +507,9 @@ private final class InputManager {
     // 再変換機能の提供のために用いる辞書
     private var rubyLog: OrderedDictionary<String, String> = [:]
 
+    // 変換結果の通知用関数
+    private var updateResult: (([Candidate]) -> Void)?
+
     private var liveConversionEnabled: Bool {
         liveConversionManager.enabled && !self.isSelected
     }
@@ -591,6 +586,10 @@ private final class InputManager {
 
     fileprivate func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
         self.displayedTextManager.setTextDocumentProxy(proxy)
+    }
+
+    fileprivate func setUpdateResult(_ updateResult: @escaping ([Candidate]) -> Void) {
+        self.updateResult = updateResult
     }
 
     func isAfterAdjusted() -> Bool {
@@ -1388,13 +1387,15 @@ private final class InputManager {
         }
 
         debug("results to be registered:", results)
-        Store.shared.registerResult(results)
+        if let updateResult {
+            updateResult(results)
 
-        if liveConversionEnabled {
-            // 自動確定の実施
-            if let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
-                debug("Complete first clause", firstClause)
-                self.complete(candidate: firstClause)
+            if liveConversionEnabled {
+                // 自動確定の実施
+                if let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
+                    debug("Complete first clause", firstClause)
+                    self.complete(candidate: firstClause)
+                }
             }
         }
     }
@@ -1427,7 +1428,9 @@ private final class InputManager {
         }
         let text = "left:\(Array(left.unicodeScalars))/center:\(Array(center.unicodeScalars))/right:\(Array(right.unicodeScalars))"
 
-        Store.shared.registerResult([Candidate(text: text, value: .zero, correspondingCount: 0, lastMid: MIDData.EOS.mid, data: [])])
+        if let updateResult {
+            updateResult([Candidate(text: text, value: .zero, correspondingCount: 0, lastMid: MIDData.EOS.mid, data: [])])
+        }
         isDebugMode = true
     }
     #endif
