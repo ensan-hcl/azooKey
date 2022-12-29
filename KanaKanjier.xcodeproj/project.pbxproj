@@ -2566,7 +2566,6 @@
 		1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6784925CC20B400F3987B /* ThemeTab.swift */; };
 		1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
 		1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
-		1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */; };
 		1AF678AF25CE3B4A00F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
 		1AF678B425CE3B7000F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
 		1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678DE25CED86500F3987B /* VariableStates.swift */; };
@@ -2579,7 +2578,6 @@
 		1AF6792325CEDB6800F3987B /* extension CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */; };
 		1AF6792825CEDB6B00F3987B /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1AF6792D25CEDB7000F3987B /* KeyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28D05253DE4B60012CF94 /* KeyLabel.swift */; };
-		1AF6793825CEDB7800F3987B /* RoundedBorderedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */; };
 		1AF6793D25CEDB7A00F3987B /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24125C3E1CA00316009 /* MessageView.swift */; };
 		1AF6794225CEDB7E00F3987B /* MoveCursorBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB684F2518F18A00C649C4 /* MoveCursorBar.swift */; };
 		1AF6794725CEDB8200F3987B /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2272500D64D002CAA93 /* ResultView.swift */; };
@@ -5144,7 +5142,6 @@
 		1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetCondition.swift; sourceTree = "<group>"; };
 		1AF6784925CC20B400F3987B /* ThemeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTab.swift; sourceTree = "<group>"; };
 		1AF6785525CC4FF500F3987B /* ThemeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeData.swift; sourceTree = "<group>"; };
-		1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderedRectangle.swift; sourceTree = "<group>"; };
 		1AF678AE25CE3B4A00F3987B /* States.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = States.swift; sourceTree = "<group>"; };
 		1AF678DE25CED86500F3987B /* VariableStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableStates.swift; sourceTree = "<group>"; };
 		1AF678F525CED91900F3987B /* ActionDepartment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionDepartment.swift; sourceTree = "<group>"; };
@@ -5272,7 +5269,6 @@
 				1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */,
 				1ACE61C2257286E5008078D3 /* Color.swift */,
 				1AE1024A25D118ED00CA7277 /* ColorTools.swift */,
-				1AF6787C25CCEEEC00F3987B /* RoundedBorderedRectangle.swift */,
 				1ABF7D9426395DEC0045D6B2 /* BindingConvert.swift */,
 				1ABF7DA4263B08710045D6B2 /* IdentifiableItems.swift */,
 				1ABF7D972639869B0045D6B2 /* Intertranslator.swift */,
@@ -10789,7 +10785,6 @@
 				1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */,
 				1ABF7D9526395DEC0045D6B2 /* BindingConvert.swift in Sources */,
 				1AD4454326AA8E93003CF854 /* LargeButtonStyle.swift in Sources */,
-				1AF6793825CEDB7800F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1AD2B8F026C2D4ED0053CE4A /* QwertyCustomKeyKeyboardSetting.swift in Sources */,
 				1AF6799B25CEDBC000F3987B /* Design.swift in Sources */,
 				1ACE00752567525000899DA2 /* QwertyCustomKeySetting.swift in Sources */,
@@ -10979,7 +10974,6 @@
 				1ABF7D9626395DEC0045D6B2 /* BindingConvert.swift in Sources */,
 				1A64C8BE251315AD00ACD537 /* DicdataStore.swift in Sources */,
 				1AD2B8F126C2D4ED0053CE4A /* QwertyCustomKeyKeyboardSetting.swift in Sources */,
-				1AF6787D25CCEEEC00F3987B /* RoundedBorderedRectangle.swift in Sources */,
 				1A2E581F294F28C2004F959B /* LoggingUtils.swift in Sources */,
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,
 				1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */,
