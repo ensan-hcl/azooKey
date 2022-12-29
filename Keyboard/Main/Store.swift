@@ -12,12 +12,12 @@ import SwiftUI
 
 final class Store {
     /// Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
-    var action: KeyboardActionDepartment {
-        VariableStates.shared.action as! KeyboardActionDepartment
+    var action: KeyboardActionManager {
+        VariableStates.shared.action as! KeyboardActionManager
     }
 
     init() {
-        VariableStates.shared.action = KeyboardActionDepartment()
+        VariableStates.shared.action = KeyboardActionManager()
     }
 
     func settingCheck() {
@@ -31,8 +31,8 @@ final class Store {
     /// キーボードが表示された際に実行する
     func initialize() {
         debug("Storeを初期化します")
-        // まずActionDepartmentを上書きする
-        VariableStates.shared.action = KeyboardActionDepartment()
+        // まずUserActionManagerを上書きする
+        VariableStates.shared.action = KeyboardActionManager()
         // ついで初期化
         VariableStates.shared.initialize()
         // 設定の更新を確認
@@ -48,7 +48,7 @@ final class Store {
 extension Candidate: ResultViewItemData {}
 
 // MARK: Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
-final class KeyboardActionDepartment: ActionDepartment {
+final class KeyboardActionManager: UserActionManager {
     fileprivate override init() {}
 
     private var inputManager = InputManager()
@@ -489,7 +489,7 @@ final class KeyboardActionDepartment: ActionDepartment {
     }
 }
 
-// ActionDepartmentの状態を保存する部分
+// UserActionManagerの状態を保存する部分
 private final class InputManager {
     // 入力中の文字列を管理する構造体
     private(set) var composingText = ComposingText()

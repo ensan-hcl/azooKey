@@ -1,5 +1,5 @@
 //
-//  ActionDepartment.swift
+//  UserActionManager.swift
 //  Keyboard
 //
 //  Created by β α on 2021/02/06.
@@ -11,7 +11,7 @@ import SwiftUI
 
 /// キーボードの操作を管理するためのクラス
 /// - finalにはできない
-class ActionDepartment {
+class UserActionManager {
     init() {}
     func registerAction(_ action: ActionType) {}
     func registerActions(_ actions: [ActionType]) {}

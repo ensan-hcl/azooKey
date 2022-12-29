@@ -2572,8 +2572,8 @@
 		1AF678B425CE3B7000F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
 		1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678DE25CED86500F3987B /* VariableStates.swift */; };
 		1AF678E825CED88100F3987B /* VariableStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678DE25CED86500F3987B /* VariableStates.swift */; };
-		1AF678F625CED91900F3987B /* ActionDepartment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678F525CED91900F3987B /* ActionDepartment.swift */; };
-		1AF678FB25CED91C00F3987B /* ActionDepartment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678F525CED91900F3987B /* ActionDepartment.swift */; };
+		1AF678F625CED91900F3987B /* UserActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678F525CED91900F3987B /* UserActionManager.swift */; };
+		1AF678FB25CED91C00F3987B /* UserActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678F525CED91900F3987B /* UserActionManager.swift */; };
 		1AF6790A25CED97500F3987B /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2162500D5AB002CAA93 /* Action.swift */; };
 		1AF6791025CED99800F3987B /* ChangeKeyboardButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */; };
 		1AF6791525CED9A200F3987B /* ChangeKeyboardButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */; };
@@ -5146,7 +5146,7 @@
 		1AF6785525CC4FF500F3987B /* ThemeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeData.swift; sourceTree = "<group>"; };
 		1AF678AE25CE3B4A00F3987B /* States.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = States.swift; sourceTree = "<group>"; };
 		1AF678DE25CED86500F3987B /* VariableStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableStates.swift; sourceTree = "<group>"; };
-		1AF678F525CED91900F3987B /* ActionDepartment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionDepartment.swift; sourceTree = "<group>"; };
+		1AF678F525CED91900F3987B /* UserActionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionManager.swift; sourceTree = "<group>"; };
 		1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeKeyboardButtonView.swift; sourceTree = "<group>"; };
 		1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPreview.swift; sourceTree = "<group>"; };
 		1AF6A54625FCF1240037D5ED /* OneHandedModeTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedModeTips.swift; sourceTree = "<group>"; };
@@ -8170,7 +8170,7 @@
 				1AF678DE25CED86500F3987B /* VariableStates.swift */,
 				1A2E58432951E5E7004F959B /* Tab.swift */,
 				1AB8C38C25E1190900D39BC5 /* TabManager.swift */,
-				1AF678F525CED91900F3987B /* ActionDepartment.swift */,
+				1AF678F525CED91900F3987B /* UserActionManager.swift */,
 				1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */,
 				1A67736F256F7AC30037AF22 /* Sound.swift */,
 				1AC8A593259587A200B71E5A /* Design.swift */,
@@ -10735,7 +10735,7 @@
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
 				1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */,
-				1AF678FB25CED91C00F3987B /* ActionDepartment.swift in Sources */,
+				1AF678FB25CED91C00F3987B /* UserActionManager.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
 				1AF6A54725FCF1240037D5ED /* OneHandedModeTips.swift in Sources */,
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
@@ -11012,7 +11012,7 @@
 				1A2602C825148CDF00EAD647 /* QwertyFunctionalKeyModel.swift in Sources */,
 				1A2602F42514FB6E00EAD647 /* VariationsModel.swift in Sources */,
 				1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */,
-				1AF678F625CED91900F3987B /* ActionDepartment.swift in Sources */,
+				1AF678F625CED91900F3987B /* UserActionManager.swift in Sources */,
 				1A0FDF10291BED4F0088C5AA /* no_change.swift in Sources */,
 				1A2602AE251489C700EAD647 /* QwertyKeyModelProtocol.swift in Sources */,
 				1AE1025025D1265A00CA7277 /* ColorTools.swift in Sources */,

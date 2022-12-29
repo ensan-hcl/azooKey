@@ -13,7 +13,7 @@ import SwiftUI
 
 /// 実行中変更され、かつViewが変更を検知できるべき値。
 final class VariableStates: ObservableObject {
-    var action: ActionDepartment = ActionDepartment()
+    var action: UserActionManager = UserActionManager()
     static let shared = VariableStates()
     private(set) var inputStyle: InputStyle = .direct
     private(set) var tabManager = TabManager()
