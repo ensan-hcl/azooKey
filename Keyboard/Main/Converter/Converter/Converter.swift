@@ -77,7 +77,7 @@ final class KanaKanjiConverter {
     ///   - candidates: uniqueを実行する候補列。
     /// - Returns:
     ///   `candidates`から重複を削除したもの。
-    private func getUniqueCandidate(_ candidates: [Candidate], seenCandidates: Set<String> = []) -> [Candidate] {
+    private func getUniqueCandidate(_ candidates: some Sequence<Candidate>, seenCandidates: Set<String> = []) -> [Candidate] {
         var result = [Candidate]()
         for candidate in candidates where !candidate.text.isEmpty && !seenCandidates.contains(candidate.text) {
             if let index = result.firstIndex(where: {$0.text == candidate.text}) {
@@ -372,9 +372,9 @@ final class KanaKanjiConverter {
         let sums: [(CandidateData, Candidate)] = clauseResult.map {($0, converter.processClauseCandidate($0))}
         // 文章全体を変換した場合の候補上位五件を作る
         let whole_sentence_unique_candidates = self.getUniqueCandidate(sums.map {$0.1})
-        let sentence_candidates = whole_sentence_unique_candidates.sorted {$0.value>$1.value}.prefix(5)
+        let sentence_candidates = whole_sentence_unique_candidates.min(count: 5, sortedBy: {$0.value > $1.value})
         // 予測変換
-        let prediction_candidates: [Candidate] = options.requireJapanesePrediction ? Array(self.getUniqueCandidate(self.getPredictionCandidate(sums, composingText: inputData, options: options)).sorted {$0.value>$1.value}.prefix(4)) : []
+        let prediction_candidates: [Candidate] = options.requireJapanesePrediction ? Array(self.getUniqueCandidate(self.getPredictionCandidate(sums, composingText: inputData, options: options)).min(count: 4, sortedBy: {$0.value > $1.value})) : []
 
         // 英単語の予測変換。appleのapiを使うため、処理が異なる。
         var foreign_candidates: [Candidate] = []
@@ -387,15 +387,20 @@ final class KanaKanjiConverter {
         }
 
         // ゼロヒント予測変換
-        let best10 = getUniqueCandidate(sentence_candidates + prediction_candidates).sorted {$0.value > $1.value}.prefix(10)
+        let best10 = getUniqueCandidate(sentence_candidates.chained(prediction_candidates)).min(count: 10, sortedBy: {$0.value > $1.value})
         let zeroHintPrediction_candidates = converter.getZeroHintPredictionCandidates(preparts: best10, N_best: 3)
         let toplevel_additional_candidate = self.getTopLevelAdditionalCandidate(inputData, options: options)
         // 文全体を変換するパターン
-        let full_candidate = getUniqueCandidate(best10 + foreign_candidates + (zeroHintPrediction_candidates + toplevel_additional_candidate)).sorted {$0.value>$1.value}.prefix(5)
+        let full_candidate = getUniqueCandidate(
+            best10
+                .chained(foreign_candidates)
+                .chained(zeroHintPrediction_candidates)
+                .chained(toplevel_additional_candidate)
+        ).min(count: 5, sortedBy: {$0.value > $1.value})
         // 重複のない変換候補を作成するための集合
         var seenCandidate: Set<String> = full_candidate.mapSet {$0.text}
         // 文節のみ変換するパターン
-        let clause_candidates = self.getUniqueCandidate(clauseCandidates, seenCandidates: seenCandidate).sorted {$0.value>$1.value}.prefix(5)
+        let clause_candidates = self.getUniqueCandidate(clauseCandidates, seenCandidates: seenCandidate).min(count: 5, sortedBy: {$0.value > $1.value})
         seenCandidate.formUnion(clause_candidates.map {$0.text})
         // 賢く変換するパターン
         let wise_candidates: [Candidate] = self.getWiseCandidate(inputData, options: options)
@@ -419,12 +424,12 @@ final class KanaKanjiConverter {
          文字列の長さごとに並べ、かつその中で評価の高いものから順に並べる。
          */
 
-        let word_candidates: [Candidate] = self.getUniqueCandidate(dicCandidates + additionalCandidates, seenCandidates: seenCandidate)
-        .sorted {
-            let count0 = $0.correspondingCount
-            let count1 = $1.correspondingCount
-            return count0 == count1 ? $0.value>$1.value : count0 > count1
-        }
+        let word_candidates: [Candidate] = self.getUniqueCandidate(dicCandidates.chained(additionalCandidates), seenCandidates: seenCandidate)
+            .sorted {
+                let count0 = $0.correspondingCount
+                let count1 = $1.correspondingCount
+                return count0 == count1 ? $0.value > $1.value : count0 > count1
+            }
 
         var result = Array(full_candidate)
 

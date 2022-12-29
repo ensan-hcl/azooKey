@@ -23,6 +23,8 @@
 		1A18425D25DE6678003985AB /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425C25DE6678003985AB /* CustomKeyboard.swift */; };
 		1A18425E25DE6678003985AB /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425C25DE6678003985AB /* CustomKeyboard.swift */; };
 		1A1ECC9A295D3A64001AD7E0 /* UnicodeConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */; };
+		1A1ECC9D295DA93D001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9C295DA93D001AD7E0 /* Algorithms */; };
+		1A1ECC9F295DA962001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9E295DA962001AD7E0 /* Algorithms */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
@@ -5167,6 +5169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A1ECC9D295DA93D001AD7E0 /* Algorithms in Frameworks */,
 				1A70DFFD291F2D1E00A83849 /* CustardKit in Frameworks */,
 				1A606B06292E53BA00CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
@@ -5195,6 +5198,7 @@
 				1A70DFFF291F2D3B00A83849 /* CustardKit in Frameworks */,
 				1A8E454A28E5711800133D3B /* OrderedCollections in Frameworks */,
 				1A9E908F2822CEC100E73846 /* DequeModule in Frameworks */,
+				1A1ECC9F295DA962001AD7E0 /* Algorithms in Frameworks */,
 				1A606B08292E53C500CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8198,6 +8202,7 @@
 			packageProductDependencies = (
 				1A70DFFC291F2D1E00A83849 /* CustardKit */,
 				1A606B05292E53BA00CEDB15 /* CustardExpressionEvaluator */,
+				1A1ECC9C295DA93D001AD7E0 /* Algorithms */,
 			);
 			productName = KanaKanjier;
 			productReference = 1A3DC1C22500D44A002CAA93 /* azooKey.app */;
@@ -8262,6 +8267,7 @@
 				1A8E454928E5711800133D3B /* OrderedCollections */,
 				1A70DFFE291F2D3B00A83849 /* CustardKit */,
 				1A606B07292E53C500CEDB15 /* CustardExpressionEvaluator */,
+				1A1ECC9E295DA962001AD7E0 /* Algorithms */,
 			);
 			productName = Keyboard;
 			productReference = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */;
@@ -8309,6 +8315,7 @@
 				1AFB685B28D5DA4600B5C717 /* XCRemoteSwiftPackageReference "MurmurHash-Swift" */,
 				1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */,
 				1A606B00292E506200CEDB15 /* XCRemoteSwiftPackageReference "BoolExpressionEvaluator" */,
+				1A1ECC9B295DA93D001AD7E0 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = 1A3DC1C32500D44A002CAA93 /* Products */;
 			projectDirPath = "";
@@ -11487,6 +11494,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1A1ECC9B295DA93D001AD7E0 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		1A606B00292E506200CEDB15 /* XCRemoteSwiftPackageReference "BoolExpressionEvaluator" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ensan-hcl/BoolExpressionEvaluator";
@@ -11530,6 +11545,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A1ECC9C295DA93D001AD7E0 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A1ECC9B295DA93D001AD7E0 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		1A1ECC9E295DA962001AD7E0 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A1ECC9B295DA93D001AD7E0 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
 		1A606B05292E53BA00CEDB15 /* CustardExpressionEvaluator */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1A606B00292E506200CEDB15 /* XCRemoteSwiftPackageReference "BoolExpressionEvaluator" */;

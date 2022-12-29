@@ -6,12 +6,19 @@
 //  Copyright © 2020 DevEn3. All rights reserved.
 //
 
+import Algorithms
 import Foundation
 
 @resultBuilder
 struct ArrayBuilder {
     public static func buildBlock<T>(_ values: T...) -> [T] {
         values
+    }
+}
+
+extension Sequence {
+    func chained<S: Sequence<Element>>(_ sequence: S) -> Chain2Sequence<Self, S> {
+        chain(self, sequence)
     }
 }
 
