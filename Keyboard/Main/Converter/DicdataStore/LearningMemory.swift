@@ -194,10 +194,10 @@ struct LongTermLearningMemory {
                         // 変なデータが入っているとオーバーフローが起こるのでフェイルセーフにする
                         continue
                     }
-                    // 16日ごとにカウントを半減させる
-                    while today - metadataElement.lastUpdatedDay > 16 {
+                    // 32日ごとにカウントを半減させる
+                    while today - metadataElement.lastUpdatedDay > 32 {
                         metadataElement.count >>= 1
-                        metadataElement.lastUpdatedDay += 16
+                        metadataElement.lastUpdatedDay += 32
                     }
                     // カウントがゼロになるか128日以上使っていない単語は除外
                     if metadataElement.count == 0 || today - metadataElement.lastUsedDay >= 128 {
