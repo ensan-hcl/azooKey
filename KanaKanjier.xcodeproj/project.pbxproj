@@ -25,6 +25,7 @@
 		1A1ECC9A295D3A64001AD7E0 /* UnicodeConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */; };
 		1A1ECC9D295DA93D001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9C295DA93D001AD7E0 /* Algorithms */; };
 		1A1ECC9F295DA962001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9E295DA962001AD7E0 /* Algorithms */; };
+		1A1ECCA2295DF8DE001AD7E0 /* DisplayedTextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */; };
 		1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26028A251476A800EAD647 /* QwertySuggestView.swift */; };
 		1A26029125147FEC00EAD647 /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602962514801F00EAD647 /* QwertyKeyModel.swift */; };
@@ -2702,6 +2703,7 @@
 		1A18424225DD6857003985AB /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		1A18425C25DE6678003985AB /* CustomKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboard.swift; sourceTree = "<group>"; };
 		1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnicodeConversionTests.swift; sourceTree = "<group>"; };
+		1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayedTextManager.swift; sourceTree = "<group>"; };
 		1A26028A251476A800EAD647 /* QwertySuggestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertySuggestView.swift; sourceTree = "<group>"; };
 		1A26029025147FEC00EAD647 /* QwertyKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyView.swift; sourceTree = "<group>"; };
 		1A2602962514801F00EAD647 /* QwertyKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyModel.swift; sourceTree = "<group>"; };
@@ -5245,6 +5247,14 @@
 			path = CustomKeybaord;
 			sourceTree = "<group>";
 		};
+		1A1ECCA0295DF8A2001AD7E0 /* Display */ = {
+			isa = PBXGroup;
+			children = (
+				1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */,
+			);
+			path = Display;
+			sourceTree = "<group>";
+		};
 		1A2602A2251481E600EAD647 /* KeyView */ = {
 			isa = PBXGroup;
 			children = (
@@ -6263,6 +6273,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC2062500D4FF002CAA93 /* Store.swift */,
+				1A1ECCA0295DF8A2001AD7E0 /* Display */,
 				1A3DC22B2500D6B8002CAA93 /* Converter */,
 			);
 			path = Main;
@@ -10927,6 +10938,7 @@
 				1AFB684F28D56E8200B5C717 /* extension CGPoint.swift in Sources */,
 				1A3DC2FB2500D72D002CAA93 /* Kana2Kanji.swift in Sources */,
 				1A2E5816294F25DE004F959B /* SemiStaticStates.swift in Sources */,
+				1A1ECCA2295DF8DE001AD7E0 /* DisplayedTextManager.swift in Sources */,
 				1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */,
 				1AD2B8D926C272F80053CE4A /* BoolKeyboardSetting.swift in Sources */,
 				1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */,
