@@ -654,30 +654,33 @@ private final class InputManager {
 
     // MARK: 単純に確定した場合はひらがな列に対して候補を作成する
     fileprivate func enter() -> [ActionType] {
-        var _candidate = Candidate(
-            text: self.displayedTextManager.displayedText,
-            value: -18,
-            correspondingCount: self.composingText.input.count,
-            lastMid: MIDData.一般.mid,
-            data: [
-                DicdataElement(
-                    word: self.displayedTextManager.displayedText,
-                    ruby: self.composingText.convertTarget.toKatakana(),
-                    cid: CIDData.固有名詞.cid,
-                    mid: MIDData.一般.mid,
-                    value: -18
-                )
-            ]
-        )
-        if liveConversionEnabled, let candidate = liveConversionManager.lastUsedCandidate {
-            _candidate = candidate
+        var candidate: Candidate
+        // ライブ変換中に確定する場合、現在表示されているテキストそのものが候補となる。
+        if liveConversionEnabled, let _candidate = liveConversionManager.lastUsedCandidate {
+            candidate = _candidate
+        } else {
+            candidate = Candidate(
+                text: self.displayedTextManager.displayedText,
+                value: -18,
+                correspondingCount: self.composingText.input.count,
+                lastMid: MIDData.一般.mid,
+                data: [
+                    DicdataElement(
+                        word: self.displayedTextManager.displayedText,
+                        ruby: self.composingText.convertTarget.toKatakana(),
+                        cid: CIDData.固有名詞.cid,
+                        mid: MIDData.一般.mid,
+                        value: -18
+                    )
+                ]
+            )
         }
-        self.updateLog(candidate: _candidate)
-        let actions = self.kanaKanjiConverter.getApporopriateActions(_candidate)
-        _candidate.withActions(actions)
-        _candidate.parseTemplate()
-        self.kanaKanjiConverter.updateLearningData(_candidate)
-        self.composingText.complete(correspondingCount: _candidate.correspondingCount)
+        self.updateLog(candidate: candidate)
+        let actions = self.kanaKanjiConverter.getApporopriateActions(candidate)
+        candidate.withActions(actions)
+        candidate.parseTemplate()
+        self.kanaKanjiConverter.updateLearningData(candidate)
+        self.composingText.complete(correspondingCount: candidate.correspondingCount)
         self.displayedTextManager.enter()
         self.clear()
         return actions
@@ -1227,6 +1230,28 @@ private final class InputManager {
             }
         }
 
+        /// かな漢字変換結果を受け取ってライブ変換状態の更新を行う関数
+        func updateWithNewResults(_ candidates: [Candidate], firstClauseResults: [Candidate], convertTargetCursorPosition: Int, convertTarget: String) -> ComposingText.ViewOperation {
+            // TODO: 最後の1単語のライブ変換を抑制したい
+            // TODO: ローマ字入力中に最後の単語が優先される問題
+            var candidate: Candidate
+            if convertTargetCursorPosition > 1, let firstCandidate = candidates.first(where: {$0.data.map {$0.ruby}.joined().count == convertTarget.count}) {
+                candidate = firstCandidate
+            } else {
+                candidate = .init(text: convertTarget, value: 0, correspondingCount: convertTarget.count, lastMid: MIDData.一般.mid, data: [.init(ruby: convertTarget.toKatakana(), cid: CIDData.一般名詞.cid, mid: MIDData.一般.mid, value: 0)])
+            }
+            self.adjustCandidate(candidate: &candidate)
+            debug("Live Conversion:", candidate)
+
+            // カーソルなどを調整する
+            if convertTargetCursorPosition > 0 {
+                let deleteCount = self.calculateNecessaryBackspaceCount(rubyCursorPosition: convertTargetCursorPosition)
+                self.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
+                return .init(delete: deleteCount, input: candidate.text)
+            }
+            return .init(delete: 0, input: "")
+        }
+
         /// `lastUsedCandidate`を更新する関数
         func setLastUsedCandidate(_ candidate: Candidate?, firstClauseCandidates: [Candidate] = []) {
             if let candidate {
@@ -1323,9 +1348,6 @@ private final class InputManager {
 
     // 変換リクエストを送信し、結果を反映する関数
     fileprivate func setResult() {
-        var results = [Candidate]()
-        var firstClauseResults = [Candidate]()
-        let result: [Candidate]
         let requireJapanesePrediction: Bool
         let requireEnglishPrediction: Bool
         switch VariableStates.shared.inputStyle {
@@ -1363,39 +1385,23 @@ private final class InputManager {
 
         let inputData = composingText.prefixToCursorPosition()
         debug("setResult value to be input", inputData, options)
-        (result, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
-        results.append(contentsOf: result)
-        // TODO: 最後の1単語のライブ変換を抑制したい
-        // TODO: ローマ字入力中に最後の単語が優先される問題
-        if liveConversionEnabled {
-            var candidate: Candidate
-            if self.composingText.convertTargetCursorPosition > 1, let firstCandidate = result.first(where: {$0.data.map {$0.ruby}.joined().count == inputData.convertTarget.count}) {
-                candidate = firstCandidate
-            } else {
-                candidate = .init(text: inputData.convertTarget, value: 0, correspondingCount: inputData.convertTarget.count, lastMid: MIDData.一般.mid, data: [.init(ruby: inputData.convertTarget.toKatakana(), cid: CIDData.一般名詞.cid, mid: MIDData.一般.mid, value: 0)])
-            }
-            self.liveConversionManager.adjustCandidate(candidate: &candidate)
-            debug("Live Conversion:", candidate)
 
-            // カーソルなどを調整する
-            if self.composingText.convertTargetCursorPosition > 0 {
-                let deleteCount = self.liveConversionManager.calculateNecessaryBackspaceCount(rubyCursorPosition: self.composingText.convertTargetCursorPosition)
-                self.displayedTextManager.replace(count: deleteCount, with: candidate.text)
-                debug("Live Conversion View Update: delete \(deleteCount) letters, insert \(candidate.text)")
-                self.liveConversionManager.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
-            }
+        let results: [Candidate]
+        let firstClauseResults: [Candidate]
+        (results, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
+        if liveConversionEnabled {
+            let operation = self.liveConversionManager.updateWithNewResults(results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
+            debug("Live Conversion View Update: delete \(operation.delete) letters, insert \(operation.input)")
+            self.displayedTextManager.replace(count: operation.delete, with: operation.input)
         }
 
         debug("results to be registered:", results)
         if let updateResult {
             updateResult(results)
-
-            if liveConversionEnabled {
-                // 自動確定の実施
-                if let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
-                    debug("Complete first clause", firstClause)
-                    self.complete(candidate: firstClause)
-                }
+            // 自動確定の実施
+            if liveConversionEnabled, let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
+                debug("Complete first clause", firstClause)
+                self.complete(candidate: firstClause)
             }
         }
     }
