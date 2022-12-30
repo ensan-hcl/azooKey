@@ -6140,12 +6140,10 @@
 		1A2E580E294ED1E3004F959B /* KeyboardTests */ = {
 			isa = PBXGroup;
 			children = (
+				1AD8D74D295E941D00112B80 /* ConverterTests */,
 				1A2E580A294ED02C004F959B /* StringUtilsTests.swift */,
 				1A2E580F294F1F1C004F959B /* CharacterUtilsTests.swift */,
 				1A2E5823294F452A004F959B /* ComposingTextTests.swift */,
-				1A96E49D2958A05700A1EB0C /* EmailAddressConversionTests.swift */,
-				1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */,
-				1A2E58632954A361004F959B /* WarekiConversionTests.swift */,
 			);
 			path = KeyboardTests;
 			sourceTree = "<group>";
@@ -8139,6 +8137,16 @@
 				1ACE00732567521200899DA2 /* QwertyCustomKeys */,
 			);
 			path = CustomKeys;
+			sourceTree = "<group>";
+		};
+		1AD8D74D295E941D00112B80 /* ConverterTests */ = {
+			isa = PBXGroup;
+			children = (
+				1A96E49D2958A05700A1EB0C /* EmailAddressConversionTests.swift */,
+				1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */,
+				1A2E58632954A361004F959B /* WarekiConversionTests.swift */,
+			);
+			path = ConverterTests;
 			sourceTree = "<group>";
 		};
 		1AE70BDF258DB4A0009B9B8B /* Template */ = {
