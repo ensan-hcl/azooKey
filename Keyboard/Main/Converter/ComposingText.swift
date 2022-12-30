@@ -523,7 +523,7 @@ extension ComposingText {
         case .direct:
             return current + String(newCharacter)
         case .roman2kana:
-            return String.roman2hiragana(currentText: current, added: String(newCharacter)).result
+            return Roman2Kana.toHiragana(currentText: current, added: String(newCharacter)).result
         }
     }
 
@@ -532,7 +532,7 @@ extension ComposingText {
         case .direct:
             convertTarget.append(newCharacter)
         case .roman2kana:
-            convertTarget = String.roman2hiragana(currentText: convertTarget, added: String(newCharacter)).result
+            convertTarget = Roman2Kana.toHiragana(currentText: convertTarget, added: String(newCharacter)).result
         }
     }
 
