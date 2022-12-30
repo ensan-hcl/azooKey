@@ -36,6 +36,7 @@ struct FlickKeyView: View {
     @ObservedObject private var variableStates = VariableStates.shared
 
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
     private let size: CGSize
 
     init(model: FlickKeyModelProtocol, size: CGSize) {
@@ -69,7 +70,7 @@ struct FlickKeyView: View {
                             self.model.suggestStateChanged(.all)
                         }
                         // 長押しの予約をする。
-                        self.model.longPressReserve()
+                        self.action.reserveLongPressAction(self.model.longPressActions)
                     }
                 // 押し始めた後の変化である場合。
                 case let .started(date):
@@ -82,9 +83,9 @@ struct FlickKeyView: View {
                         // 一つの方向でサジェストされた状態を登録する。
                         pressState = .oneDirectionSuggested(d, Date())
                         // 長押しされなかったと判断して終了する。
-                        self.model.longPressEnd()
+                        self.action.registerLongPressActionEnd(self.model.longPressActions)
                         // 長フリックを予約する
-                        self.model.flickKeys[d]?.longFlickReserve()
+                        self.longFlickReserve(d)
                     }
                     // もしstartedのまま0.4秒以上押していたら
                     if Date().timeIntervalSince(date) >= 0.4 {
@@ -111,9 +112,9 @@ struct FlickKeyView: View {
                         // 指す方向が変わっていた場合
                         if  d != direction && self.model.isFlickAble(to: d) {
                             // 長フリックの予約は停止する。
-                            self.model.flickKeys[direction]?.longFlickEnd()
+                            self.longFlickEnd(direction)
                             // 新しい方向の長フリックを予約する。
-                            self.model.flickKeys[d]?.longFlickReserve()
+                            self.longFlickReserve(d)
                             // 新しい方向へのサジェストを登録する。
                             suggestState = .oneDirection(d)
                             // 通告する
@@ -134,18 +135,18 @@ struct FlickKeyView: View {
                             // 一つの方向でサジェストされた状態を登録する。
                             pressState = .oneDirectionSuggested(d, Date())
                             // 長押しは終わりと判断して終了する。
-                            self.model.longPressEnd()
+                            self.action.registerLongPressActionEnd(self.model.longPressActions)
                             // 長フリックを予約する
-                            self.model.flickKeys[d]?.longFlickReserve()
+                            self.longFlickReserve(d)
                         }
                     }
                 case let .longFlicked(direction):
                     // 指す方向が変わっていた場合
                     if  d != direction && self.model.isFlickAble(to: d) {
                         // 実行中の長フリックを停止する。
-                        self.model.flickKeys[direction]?.longFlickEnd()
+                        self.longFlickEnd(direction)
                         // 新しい方向の長フリックを予約する。
-                        self.model.flickKeys[d]?.longFlickReserve()
+                        self.longFlickReserve(d)
                         // 新しい方向へのサジェストを登録する。
                         suggestState = .oneDirection(d)
                         // 通告する
@@ -180,23 +181,25 @@ struct FlickKeyView: View {
                     }
                 }
                 // 有無を言わさず終わらせる
-                self.model.longPressEnd()
+                self.action.registerLongPressActionEnd(self.model.longPressActions)
                 self.model.flickKeys.forEach {_, flickKey in
-                    flickKey.longFlickEnd()
+                    self.action.registerLongPressActionEnd(flickKey.longPressActions)
                 }
                 // 状態に基づいて、必要な変更を加える
                 switch pressState {
                 case .inactive:
                     break
                 case .started:
-                    self.model.press()
+                    self.action.registerActions(self.model.pressActions)
                 case let .oneDirectionSuggested(direction, _):
-                    self.model.flick(to: direction)
+                    if let flickKey = self.model.flickKeys[direction] {
+                        self.action.registerActions(flickKey.pressActions)
+                    }
                 case .longPressed:
                     break
                 case let .longFlicked(direction):
                     if let flickKey = self.model.flickKeys[direction], flickKey.longPressActions == .none {
-                        self.model.flick(to: direction)
+                        self.action.registerActions(flickKey.pressActions)
                     }
                 }
                 pressState = .inactive
@@ -222,5 +225,17 @@ struct FlickKeyView: View {
             .frame(width: keySize.width, height: keySize.height)
             .gesture(gesture)
             .overlay(model.label(width: keySize.width, states: variableStates))
+    }
+
+    func longFlickReserve(_ direction: FlickDirection) {
+        if let flickKey = self.model.flickKeys[direction] {
+            self.action.reserveLongPressAction(flickKey.longPressActions)
+        }
+    }
+
+    func longFlickEnd(_ direction: FlickDirection) {
+        if let flickKey = self.model.flickKeys[direction] {
+            self.action.registerLongPressActionEnd(flickKey.longPressActions)
+        }
     }
 }

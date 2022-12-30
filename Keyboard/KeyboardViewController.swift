@@ -68,6 +68,7 @@ final class KeyboardViewController: UIInputViewController {
         var body: some View {
             KeyboardView<Candidate>(resultModelVariableSection: KeyboardViewController.resultModelVariableSection)
                 .environment(\.themeEnvironment, theme)
+                .environment(\.userActionManager, KeyboardViewController.store.action)
         }
     }
 

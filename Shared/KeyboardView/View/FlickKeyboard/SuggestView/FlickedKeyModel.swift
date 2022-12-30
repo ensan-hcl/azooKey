@@ -60,17 +60,4 @@ struct FlickedKeyModel {
         }
         return KeyLabel(self.labelType, width: width)
     }
-
-    func flick() {
-        VariableStates.shared.action.registerActions(self.pressActions)
-    }
-
-    func longFlickReserve() {
-        VariableStates.shared.action.reserveLongPressAction(longPressActions)
-    }
-
-    func longFlickEnd() {
-        VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
-    }
-
 }

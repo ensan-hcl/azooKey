@@ -18,14 +18,14 @@ struct VariationsModel {
         self.direction = direction
     }
 
-    func performSelected(selection: Int?) {
+    func performSelected(selection: Int?, actionManager: some UserActionManager) {
         if self.variations.isEmpty {
             return
         }
         guard let selection else {
             return
         }
-        VariableStates.shared.action.registerActions(self.variations[selection].actions)
+        actionManager.registerActions(self.variations[selection].actions)
     }
 
     func getSelection(dx: CGFloat, tabDesign: TabDependentDesign) -> Int {

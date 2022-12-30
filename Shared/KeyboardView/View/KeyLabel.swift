@@ -44,6 +44,7 @@ struct KeyLabel: View {
     private let textColor: Color?
     private let textSize: TextSize
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
 
     private var mainKeyColor: Color {
         textColor ?? theme.textColor.color
@@ -93,7 +94,7 @@ struct KeyLabel: View {
                     .allowsHitTesting(false)
 
             case .changeKeyboard:
-                VariableStates.shared.action.makeChangeKeyboardButtonView()
+                self.action.makeChangeKeyboardButtonView()
                     .foregroundColor(mainKeyColor)
 
             case let .selectable(primary, secondery):

@@ -43,6 +43,7 @@ struct QwertyKeyView: View {
     @State private var suggest = false
 
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
     private let tabDesign: TabDependentDesign
     private let size: CGSize
 
@@ -60,7 +61,7 @@ struct QwertyKeyView: View {
                 case .unpressed:
                     self.model.sound()
                     self.pressState = .started(Date())
-                    self.model.longPressReserve()
+                    self.action.reserveLongPressAction(self.model.longPressActions)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                         // すでに処理が終了済みでなければ
                         if self.pressState.isActive {
@@ -84,7 +85,7 @@ struct QwertyKeyView: View {
             })
             // タップの終了時
             .onEnded({_ in
-                self.model.longPressEnd()   // 何もなければ何も起こらない。
+                self.action.registerLongPressActionEnd(self.model.longPressActions)
                 self.suggest = false
                 // 状態に基づいて、必要な変更を加える
                 switch self.pressState {
@@ -93,12 +94,12 @@ struct QwertyKeyView: View {
                 case let .started(date):
                     // もし0.4秒未満押していたら
                     if Date().timeIntervalSince(date) < 0.4 {
-                        self.model.press()
+                        self.action.registerActions(self.model.pressActions)
                     }
                 case .longPressed:
                     break
                 case let .variations(selection):
-                    self.model.variationsModel.performSelected(selection: selection)
+                    self.model.variationsModel.performSelected(selection: selection, actionManager: action)
                 }
                 self.pressState = .unpressed
             })

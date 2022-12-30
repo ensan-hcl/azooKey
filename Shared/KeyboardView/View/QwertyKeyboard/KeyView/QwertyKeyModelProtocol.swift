@@ -91,26 +91,10 @@ protocol QwertyKeyModelProtocol {
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
 
-    func press()
-    func longPressReserve()
-    func longPressEnd()
-
     func sound()
 }
 
 extension QwertyKeyModelProtocol {
-    func press() {
-        VariableStates.shared.action.registerActions(self.pressActions)
-    }
-
-    func longPressReserve() {
-        VariableStates.shared.action.reserveLongPressAction(longPressActions)
-    }
-
-    func longPressEnd() {
-        VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
-    }
-
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
         theme.pushedKeyFillColor.color
     }

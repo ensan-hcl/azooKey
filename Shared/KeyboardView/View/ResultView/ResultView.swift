@@ -41,6 +41,8 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     @Binding private var isResultViewExpanded: Bool
 
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
+
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
     init(model: ResultModelVariableSection<Candidate>, isResultViewExpanded: Binding<Bool>, resultData: Binding<[ResultData<Candidate>]>) {
@@ -81,7 +83,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                         HStack {
                             Spacer()
                             Button {
-                                VariableStates.shared.action.registerAction(.setTabBar(.toggle))
+                                self.action.registerAction(.setTabBar(.toggle))
                             } label: {
                                 ZStack {
                                     if displayTabBarButton {
@@ -100,7 +102,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                         }
                         .background(Color(.sRGB, white: 1, opacity: 0.001))
                         .onLongPressGesture {
-                            VariableStates.shared.action.registerAction(.setTabBar(.toggle))
+                            self.action.registerAction(.setTabBar(.toggle))
                         }
                     } else {
                         HStack {
@@ -154,7 +156,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
     }
 
     private func pressed(candidate: Candidate) {
-        VariableStates.shared.action.notifyComplete(candidate)
+        self.action.notifyComplete(candidate)
     }
 
     private func expand() {

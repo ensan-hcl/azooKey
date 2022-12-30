@@ -10,13 +10,7 @@ import SwiftUI
 
 final class Store {
     /// Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
-    var action: KeyboardActionManager {
-        VariableStates.shared.action as! KeyboardActionManager
-    }
-
-    init() {
-        VariableStates.shared.action = KeyboardActionManager()
-    }
+    var action = KeyboardActionManager()
 
     func settingCheck() {
         if MemoryResetCondition.shouldReset() {
@@ -29,9 +23,8 @@ final class Store {
     /// キーボードが表示された際に実行する
     func initialize() {
         debug("Storeを初期化します")
-        // まずUserActionManagerを上書きする
-        VariableStates.shared.action = KeyboardActionManager()
-        // ついで初期化
+        self.action = KeyboardActionManager()
+        // 初期化
         VariableStates.shared.initialize()
         // 設定の更新を確認
         self.settingCheck()

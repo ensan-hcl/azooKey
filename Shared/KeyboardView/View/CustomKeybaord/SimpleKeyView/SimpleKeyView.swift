@@ -13,6 +13,7 @@ struct SimpleKeyView: View {
     private let model: SimpleKeyModelProtocol
     @ObservedObject private var variableStates = VariableStates.shared
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
 
     private let tabDesign: TabDependentDesign
 
@@ -43,18 +44,18 @@ struct SimpleKeyView: View {
                             isPressed = true
                             pressStartDate = Date()
                             model.sound()
-                            model.longPressReserve()
+                            action.reserveLongPressAction(self.model.longPressActions)
                         } touchMovedCallBack: {state in
                             if state.distance > 15 {
                                 isPressed = false
                                 pressStartDate = Date()
-                                model.longPressEnd()
+                                action.registerLongPressActionEnd(self.model.longPressActions)
                             }
                         } touchUpCallBack: {state in
                             isPressed = false
-                            model.longPressEnd()
+                            action.registerLongPressActionEnd(self.model.longPressActions)
                             if Date().timeIntervalSince(pressStartDate) < 0.4 && state.distance < 30 {
-                                model.press()
+                                action.registerActions(self.model.pressActions)
                             }
                         }
                     }

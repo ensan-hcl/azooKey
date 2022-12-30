@@ -43,6 +43,23 @@ extension EnvironmentValues {
     }
 }
 
+struct UserActionManagerEnvironmentKey: EnvironmentKey {
+    typealias Value = UserActionManager
+
+    static var defaultValue = UserActionManager()
+}
+
+extension EnvironmentValues {
+    var userActionManager: UserActionManager {
+        get {
+            self[UserActionManagerEnvironmentKey.self]
+        }
+        set {
+            self[UserActionManagerEnvironmentKey.self] = newValue
+        }
+    }
+}
+
 struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
     @State private var resultData: [ResultData<Candidate>] = []
