@@ -177,7 +177,26 @@ struct OpenSourceSoftWaresLicenceView: View {
                         destination: "https://github.com/MasamiYamate/YMTGetDeviceName"
                     )
                 }
-
+                Group {
+                    Section {
+                        Text("Swift Algorithms").font(.title).padding()
+                        Text("本アプリケーションはSwift Algorithmsを使用しています。")
+                        FallbackLink("Apache License 2.0", destination: "https://github.com/apple/swift-algorithms/blob/main/LICENSE.txt")
+                        FallbackLink(
+                            "Swift Algorithms",
+                            destination: "https://github.com/apple/swift-algorithms"
+                        )
+                    }
+                    Section {
+                        Text("Swift Collections").font(.title).padding()
+                        Text("本アプリケーションはSwift Collectionsを使用しています。")
+                        FallbackLink("Apache License 2.0", destination: "https://github.com/apple/swift-collections/blob/main/LICENSE.txt")
+                        FallbackLink(
+                            "Swift Collections",
+                            destination: "https://github.com/apple/swift-collections"
+                        )
+                    }
+                }
             }
             Section {
                 HStack {
