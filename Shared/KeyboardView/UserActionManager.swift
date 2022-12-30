@@ -17,8 +17,6 @@ class UserActionManager {
     func registerActions(_ actions: [ActionType]) {}
     func reserveLongPressAction(_ action: LongpressActionType) {}
     func registerLongPressActionEnd(_ action: LongpressActionType) {}
-    func notifySomethingWillChange(left: String, center: String, right: String) {}
-    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {}
     func notifyComplete(_ candidate: any ResultViewItemData) {}
 
     func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {

@@ -318,7 +318,7 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化する前に状態の保存を行う関数。
-    override func notifySomethingWillChange(left: String, center: String, right: String) {
+    func notifySomethingWillChange(left: String, center: String, right: String) {
         self.tempTextData = (left: left, center: center, right: right)
     }
     // MARK: iOS16以降
@@ -391,7 +391,7 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
+    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
         let a_left = adjustLeftString(a_left)
         let b_left = adjustLeftString(self.tempTextData.left)
         // moveCursorBarStateの更新

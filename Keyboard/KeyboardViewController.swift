@@ -225,7 +225,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        VariableStates.shared.action.notifySomethingWillChange(left: left, center: center, right: right)
+        Self.store.action.notifySomethingWillChange(left: left, center: center, right: right)
     }
 
     override func textDidChange(_ textInput: UITextInput?) {
@@ -236,7 +236,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        VariableStates.shared.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
+        Self.store.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
     }
 
     @objc func openURL(_ url: URL) {}
