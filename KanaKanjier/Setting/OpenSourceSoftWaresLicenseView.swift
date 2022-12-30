@@ -1,5 +1,5 @@
 //
-//  OpenSourceSoftWaresLicenceView.swift
+//  OpenSourceSoftWaresLicenseView.swift
 //  KanaKanjier
 //
 //  Created by β α on 2020/09/21.
@@ -9,15 +9,15 @@
 import Foundation
 import SwiftUI
 
-struct OpenSourceSoftWaresLicenceView: View {
-    private let licence_mecab = """
+struct OpenSourceSoftWaresLicenseView: View {
+    private let license_mecab = """
     MeCab is copyrighted free software by Taku Kudo <taku@chasen.org> and
     Nippon Telegraph and Telephone Corporation, and is released under
     any of the GPL (see the file GPL), the LGPL (see the file LGPL), or the
     BSD License (see the file BSD).
     """
 
-    private let licence_ipadic = """
+    private let license_ipadic = """
     Copyright 2000, 2001, 2002, 2003 Nara Institute of Science
     and Technology.  All Rights Reserved.
 
@@ -99,24 +99,25 @@ struct OpenSourceSoftWaresLicenceView: View {
                 Section {
                     Text("JMdict/EDICT").font(.title).padding()
                     Text("本アプリケーションは基礎的な語彙の基盤としてJMdict/EDICTを使用しています。これらのファイルはElectronic Dictionary Research and Development Groupの所有物であり、ライセンスに基づいて使用されています。")
-                    FallbackLink("Licence", destination: "https://www.edrdg.org/edrdg/licence.html")
+
+                    FallbackLink("License", destination: "https://www.edrdg.org/edrdg/license.html")
                     FallbackLink("JMdict-EDICT Dictionary Project", destination: "https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project")
                 }
                 Section {
                     Text("IPAdic").font(.title).padding()
                     Text("本アプリケーションは基礎的な語彙の基盤としてIPAdicを使用しています。")
-                    Text(licence_ipadic)
+                    Text(license_ipadic)
                 }
                 Section {
                     Text("MeCab").font(.title).padding()
                     Text("本アプリケーションは形態素解析器としてMeCabを使用しています。")
                     FallbackLink("MeCab: Yet Another Part-of-Speech and Morphological Analyzer", destination: "https://taku910.github.io/mecab/")
-                    Text(licence_mecab)
+                    Text(license_mecab)
                 }
                 Section {
                     Text("mecab-ipadic-NEologd").font(.title).padding()
                     Text("本アプリケーションは固有名詞などの解析のためmecab-ipadic-NEologdを使用しています。")
-                    FallbackLink("Licence", destination: "https://github.com/neologd/mecab-ipadic-neologd/blob/master/COPYING")
+                    FallbackLink("License", destination: "https://github.com/neologd/mecab-ipadic-neologd/blob/master/COPYING")
                     FallbackLink("mecab-ipadic-NEologd : Neologism dictionary for MeCab", destination: "https://github.com/neologd/mecab-ipadic-neologd")
                 }
                 Section {
@@ -128,7 +129,7 @@ struct OpenSourceSoftWaresLicenceView: View {
                 Section {
                     Text("japanese-word2vec-model-builder").font(.title).padding()
                     Text("本アプリケーションは変換精度の向上のためjapanese-word2vec-model-builderを使用しています。")
-                    FallbackLink("Licence", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder/blob/master/LICENSE")
+                    FallbackLink("License", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder/blob/master/LICENSE")
                     FallbackLink("Japanese Word2Vec Model Builder", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder")
                 }
 
@@ -136,14 +137,14 @@ struct OpenSourceSoftWaresLicenceView: View {
                     Section {
                         Text("Emoji-IME-Dictionary").font(.title).padding()
                         Text("本アプリケーションは絵文字への変換候補を表示するためにEmoji-IME-Dictionaryのデータを使用しています。")
-                        FallbackLink("Licence", destination: "https://github.com/peaceiris/emoji-ime-dictionary/blob/main/LICENSE")
+                        FallbackLink("License", destination: "https://github.com/peaceiris/emoji-ime-dictionary/blob/main/LICENSE")
                         FallbackLink("Emoji-IME-Dictionary", destination: "https://github.com/peaceiris/emoji-ime-dictionary")
                     }
 
                     Section {
                         Text("Kaomojitoka to Google IME Dictionary").font(.title).padding()
                         Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojitoka to Google IME Dictionaryのデータを使用しています。")
-                        FallbackLink("Licence", destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary/blob/master/LICENSE")
+                        FallbackLink("License", destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary/blob/master/LICENSE")
                         FallbackLink(
                             "Kaomojitoka to Google IME Dictionary",
                             destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary"
@@ -153,7 +154,7 @@ struct OpenSourceSoftWaresLicenceView: View {
                     Section {
                         Text("Kaomojic").font(.title).padding()
                         Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojicのデータを使用しています。")
-                        FallbackLink("Licence", destination: "https://github.com/mika-f/kaomojic/blob/develop/LICENSE")
+                        FallbackLink("License", destination: "https://github.com/mika-f/kaomojic/blob/develop/LICENSE")
                         FallbackLink("Kaomojic", destination: "https://github.com/mika-f/kaomojic")
                     }
                 }
@@ -161,7 +162,7 @@ struct OpenSourceSoftWaresLicenceView: View {
                 Section {
                     Text("CustardKit").font(.title).padding()
                     Text("本アプリケーションで利用可能なカスタムタブのデータ構造の記述をCustardKitとしてオープンソースで公開し、アプリ内でも使用しています。")
-                    FallbackLink("Licence", destination: "https://github.com/ensan-hcl/CustardKit/blob/main/LICENSE")
+                    FallbackLink("License", destination: "https://github.com/ensan-hcl/CustardKit/blob/main/LICENSE")
                     FallbackLink(
                         "CustardKit",
                         destination: "https://github.com/ensan-hcl/CustardKit"
@@ -171,7 +172,7 @@ struct OpenSourceSoftWaresLicenceView: View {
                 Section {
                     Text("YMTGetDeviceName").font(.title).padding()
                     Text("本アプリケーションはデバイスが地球儀ボタンを表示すべき端末であるか判定するために。YMTGetDeviceNameを使用しています。")
-                    FallbackLink("Licence", destination: "https://github.com/MasamiYamate/YMTGetDeviceName/blob/master/LICENSE")
+                    FallbackLink("License", destination: "https://github.com/MasamiYamate/YMTGetDeviceName/blob/master/LICENSE")
                     FallbackLink(
                         "YMTGetDeviceName",
                         destination: "https://github.com/MasamiYamate/YMTGetDeviceName"
