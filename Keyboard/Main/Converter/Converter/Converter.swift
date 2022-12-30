@@ -340,6 +340,8 @@ final class KanaKanjiConverter {
     ///   - options: リクエストにかかるオプション。
     /// - Returns:
     ///   重複のない変換候補。
+    /// - Note:
+    ///   現在の実装は非常に複雑な方法で候補の順序を決定している。
     private func processResult(inputData: ComposingText, result: (result: LatticeNode, nodes: [[LatticeNode]]), options: ConvertRequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         self.previousInputData = inputData
         self.nodes = result.nodes
