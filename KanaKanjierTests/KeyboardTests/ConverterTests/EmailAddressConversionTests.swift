@@ -37,7 +37,7 @@ final class EmailAddressConversionTests: XCTestCase {
             XCTAssertTrue(result.contains(where: {$0.text == "my.dev_az@gmail.com"}))
             XCTAssertTrue(result.contains(where: {$0.text == "my.dev_az@icloud.com"}))
             XCTAssertTrue(result.contains(where: {$0.text == "my.dev_az@yahoo.co.jp"}))
-            XCTAssertTrue(result.contains(where: {$0.text == "my.dev_azc@i.softbank.jp"}))
+            XCTAssertTrue(result.contains(where: {$0.text == "my.dev_az@i.softbank.jp"}))
         }
 
         do {
