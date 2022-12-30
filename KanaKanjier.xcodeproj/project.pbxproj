@@ -2537,6 +2537,8 @@
 		1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4454526AAB8E4003CF854 /* DisclosuringList.swift */; };
 		1AD4DDD1258718F600A6FA18 /* QwertyTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD4DDD0258718F600A6FA18 /* QwertyTabKeyModel.swift */; };
 		1AD5E17826AB230F001B4FF7 /* CustomKeysSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD5E17726AB230F001B4FF7 /* CustomKeysSettingView.swift */; };
+		1AD8D749295E8A8E00112B80 /* LiveConversionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */; };
+		1AD8D74A295E8AFD00112B80 /* AutoCompletionStrengthSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A347FE328D22E7F007D7852 /* AutoCompletionStrengthSetting.swift */; };
 		1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDE8652545D48900E524E1 /* Candidate.swift */; };
 		1ADE98772903F0A700C318C3 /* extension Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE98762903F0A700C318C3 /* extension Data.swift */; };
 		1ADE98782903F0A700C318C3 /* extension Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE98762903F0A700C318C3 /* extension Data.swift */; };
@@ -10865,6 +10867,7 @@
 				1A2E5812294F2561004F959B /* roman2kana.swift in Sources */,
 				1A2E58532951EC87004F959B /* deleted_last_n_character.swift in Sources */,
 				1A2E581A294F2884004F959B /* extension Data.swift in Sources */,
+				1AD8D74A295E8AFD00112B80 /* AutoCompletionStrengthSetting.swift in Sources */,
 				1A2E583E2951C575004F959B /* extension LOUDS.swift in Sources */,
 				1A1ECC9A295D3A64001AD7E0 /* UnicodeConversionTests.swift in Sources */,
 				1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */,
@@ -10878,6 +10881,7 @@
 				1A2E5817294F25F8004F959B /* States.swift in Sources */,
 				1A2E5810294F1F1C004F959B /* CharacterUtilsTests.swift in Sources */,
 				1A2E58372950B077004F959B /* BoolKeyboardSetting.swift in Sources */,
+				1AD8D749295E8A8E00112B80 /* LiveConversionManager.swift in Sources */,
 				1A2E58362950AC57004F959B /* AppVersionTests.swift in Sources */,
 				1A2E58412951CA0D004F959B /* TemplateData.swift in Sources */,
 				1A2E5829294F4EDF004F959B /* CIDData.swift in Sources */,
