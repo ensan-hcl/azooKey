@@ -55,7 +55,7 @@ final class KeyboardViewController: UIInputViewController {
     private static var keyboardViewHost: KeyboardHostingController<Keyboard>?
     private static var loadedInstanceCount: Int = 0
     private static var resultModelVariableSection = ResultModelVariableSection<Candidate>()
-    private static var store = Store()
+    private static var action = KeyboardActionManager()
 
     deinit {
         KeyboardViewController.keyboardViewHost = nil
@@ -68,7 +68,7 @@ final class KeyboardViewController: UIInputViewController {
         var body: some View {
             KeyboardView<Candidate>(resultModelVariableSection: KeyboardViewController.resultModelVariableSection)
                 .environment(\.themeEnvironment, theme)
-                .environment(\.userActionManager, KeyboardViewController.store.action)
+                .environment(\.userActionManager, KeyboardViewController.action)
         }
     }
 
@@ -79,7 +79,7 @@ final class KeyboardViewController: UIInputViewController {
 
         // 初期化の順序としてこの位置に置くこと
         VariableStates.shared.initialize()
-        KeyboardViewController.store.settingCheck()
+        self.settingCheck()
 
         let indexManager = ThemeIndexManager.load()
         let theme: ThemeData
@@ -107,7 +107,7 @@ final class KeyboardViewController: UIInputViewController {
         host.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
 
         KeyboardViewController.keyboardViewHost = host
-        KeyboardViewController.store.action.setDelegateViewController(self)
+        KeyboardViewController.action.setDelegateViewController(self)
 
         debug("viewDidLoad", self.isViewLoaded, UIScreen.main.bounds.size, UIScreen.main.currentMode?.size, self.view.window?.bounds)
         if #available(iOS 15, *) {
@@ -128,7 +128,7 @@ final class KeyboardViewController: UIInputViewController {
         }
 
         self.registerScreenActualSize()
-        KeyboardViewController.store.action.setDelegateViewController(self)
+        KeyboardViewController.action.setDelegateViewController(self)
 
         super.viewDidAppear(animated)
         let window = self.view.window!
@@ -148,8 +148,16 @@ final class KeyboardViewController: UIInputViewController {
             self.requestSupplementaryLexicon {[unowned osuserdict] in
                 osuserdict.dict = $0.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -6)}
             }
-            KeyboardViewController.store.action.sendToDicdataStore(.importOSUserDict(osuserdict))
+            KeyboardViewController.action.sendToDicdataStore(.importOSUserDict(osuserdict))
         }
+    }
+
+    func settingCheck() {
+        if MemoryResetCondition.shouldReset() {
+            KeyboardViewController.action.sendToDicdataStore(.resetMemory)
+        }
+        @KeyboardSetting(.learningType) var learningType: LearningType
+        KeyboardViewController.action.sendToDicdataStore(.notifyLearningType(learningType))
     }
 
     func registerScreenActualSize() {
@@ -177,7 +185,7 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardViewController.keyboardViewHost = nil
         KeyboardViewController.loadedInstanceCount -= 1
         VariableStates.shared.closeKeybaord()
-        KeyboardViewController.store.action.closeKeyboard()
+        KeyboardViewController.action.closeKeyboard()
         debug("viewWillDisappear: キーボードが閉じられます")
     }
 
@@ -229,7 +237,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        Self.store.action.notifySomethingWillChange(left: left, center: center, right: right)
+        Self.action.notifySomethingWillChange(left: left, center: center, right: right)
     }
 
     override func textDidChange(_ textInput: UITextInput?) {
@@ -240,7 +248,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
 
         debug(left, center, right)
-        Self.store.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
+        Self.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
     }
 
     @objc func openURL(_ url: URL) {}

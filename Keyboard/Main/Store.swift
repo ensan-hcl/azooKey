@@ -8,19 +8,6 @@
 
 import SwiftUI
 
-final class Store {
-    /// Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。
-    var action = KeyboardActionManager()
-
-    func settingCheck() {
-        if MemoryResetCondition.shouldReset() {
-            self.action.sendToDicdataStore(.resetMemory)
-        }
-        @KeyboardSetting(.learningType) var learningType
-        self.action.sendToDicdataStore(.notifyLearningType(learningType))
-    }
-}
-
 extension Candidate: ResultViewItemData {}
 
 // MARK: Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
