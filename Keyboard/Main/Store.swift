@@ -20,16 +20,6 @@ final class Store {
         self.action.sendToDicdataStore(.notifyLearningType(learningType))
     }
 
-    /// キーボードが表示された際に実行する
-    func initialize() {
-        debug("Storeを初期化します")
-        self.action = KeyboardActionManager()
-        // 初期化
-        VariableStates.shared.initialize()
-        // 設定の更新を確認
-        self.settingCheck()
-    }
-
     func closeKeyboard() {
         VariableStates.shared.closeKeybaord()
         self.action.closeKeyboard()

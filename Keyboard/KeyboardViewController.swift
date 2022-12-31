@@ -78,7 +78,9 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardViewController.loadedInstanceCount += 1
 
         // 初期化の順序としてこの位置に置くこと
-        KeyboardViewController.store.initialize()
+        VariableStates.shared.initialize()
+        KeyboardViewController.store.settingCheck()
+
         let indexManager = ThemeIndexManager.load()
         let theme: ThemeData
         switch traitCollection.userInterfaceStyle {
