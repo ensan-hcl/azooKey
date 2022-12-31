@@ -19,11 +19,6 @@ final class Store {
         @KeyboardSetting(.learningType) var learningType
         self.action.sendToDicdataStore(.notifyLearningType(learningType))
     }
-
-    func closeKeyboard() {
-        VariableStates.shared.closeKeybaord()
-        self.action.closeKeyboard()
-    }
 }
 
 extension Candidate: ResultViewItemData {}
