@@ -982,7 +982,7 @@
 		1A3DC1E82500D44E002CAA93 /* KanaKanjierUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1E72500D44E002CAA93 /* KanaKanjierUITests.swift */; };
 		1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */; };
 		1A3DC2002500D488002CAA93 /* Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2062500D4FF002CAA93 /* Store.swift */; };
+		1A3DC2072500D4FF002CAA93 /* KeyboardActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2062500D4FF002CAA93 /* KeyboardActionManager.swift */; };
 		1A3DC20A2500D51F002CAA93 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2092500D51F002CAA93 /* KeyboardView.swift */; };
 		1A3DC20C2500D53B002CAA93 /* FlickKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20B2500D53B002CAA93 /* FlickKeyboardView.swift */; };
 		1A3DC20E2500D55F002CAA93 /* FlickDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20D2500D55F002CAA93 /* FlickDataProvider.swift */; };
@@ -3604,7 +3604,7 @@
 		1A3DC1F92500D488002CAA93 /* Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Keyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		1A3DC1FD2500D488002CAA93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1A3DC2062500D4FF002CAA93 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		1A3DC2062500D4FF002CAA93 /* KeyboardActionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardActionManager.swift; sourceTree = "<group>"; };
 		1A3DC2092500D51F002CAA93 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		1A3DC20B2500D53B002CAA93 /* FlickKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickKeyboardView.swift; sourceTree = "<group>"; };
 		1A3DC20D2500D55F002CAA93 /* FlickDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickDataProvider.swift; sourceTree = "<group>"; };
@@ -5162,7 +5162,7 @@
 		1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeKeyboardButtonView.swift; sourceTree = "<group>"; };
 		1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPreview.swift; sourceTree = "<group>"; };
 		1AF6A54625FCF1240037D5ED /* OneHandedModeTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedModeTips.swift; sourceTree = "<group>"; };
-		1AF6A55825FE0DA70037D5ED /* charID.chid */ = {isa = PBXFileReference; lastKnownFileType = file; name = charID.chid; path = ../../Keyboard/Main/Converter/Dictionary/louds/charID.chid; sourceTree = "<group>"; };
+		1AF6A55825FE0DA70037D5ED /* charID.chid */ = {isa = PBXFileReference; lastKnownFileType = file; name = charID.chid; path = ../../Keyboard/Converter/Dictionary/louds/charID.chid; sourceTree = "<group>"; };
 		1AFA4BB2257E169100477DC2 /* PasteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteButton.swift; sourceTree = "<group>"; };
 		1AFA574325811B4500477DC2 /* getPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getPrediction.swift; sourceTree = "<group>"; };
 		1AFA574D25827C7700477DC2 /* FlickAaKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickAaKeyModel.swift; sourceTree = "<group>"; };
@@ -5263,6 +5263,8 @@
 				1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */,
 				1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */,
 				1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */,
+				1A3DC2062500D4FF002CAA93 /* KeyboardActionManager.swift */,
+				1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */,
 			);
 			path = Display;
 			sourceTree = "<group>";
@@ -6273,21 +6275,11 @@
 			isa = PBXGroup;
 			children = (
 				1AC0315F25120B3B004CA505 /* Keyboard.entitlements */,
-				1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */,
 				1A3DC1FD2500D488002CAA93 /* Info.plist */,
-				1A3DC2052500D4F3002CAA93 /* Main */,
-			);
-			path = Keyboard;
-			sourceTree = "<group>";
-		};
-		1A3DC2052500D4F3002CAA93 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				1A3DC2062500D4FF002CAA93 /* Store.swift */,
 				1A1ECCA0295DF8A2001AD7E0 /* Display */,
 				1A3DC22B2500D6B8002CAA93 /* Converter */,
 			);
-			path = Main;
+			path = Keyboard;
 			sourceTree = "<group>";
 		};
 		1A3DC2082500D514002CAA93 /* FlickKeyboard */ = {
@@ -11080,7 +11072,7 @@
 				1A3DC20C2500D53B002CAA93 /* FlickKeyboardView.swift in Sources */,
 				1AE3DF02258A20A2007C7C4A /* FlickCustomKeySetting.swift in Sources */,
 				1AF28D06253DE4B60012CF94 /* KeyLabel.swift in Sources */,
-				1A3DC2072500D4FF002CAA93 /* Store.swift in Sources */,
+				1A3DC2072500D4FF002CAA93 /* KeyboardActionManager.swift in Sources */,
 				1A3A16322529712300A5BA4F /* FlickKogakiKeyModel.swift in Sources */,
 				1A2E58462951E5E7004F959B /* Tab.swift in Sources */,
 				1AE1023025D0C86500CA7277 /* ThemePicture.swift in Sources */,

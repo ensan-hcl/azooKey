@@ -9,6 +9,8 @@
 import SwiftUI
 import UIKit
 
+extension Candidate: ResultViewItemData {}
+
 final private class KeyboardHostingController<Content: View>: UIHostingController<Content> {
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         .bottom

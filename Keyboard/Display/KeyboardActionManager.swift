@@ -1,5 +1,5 @@
 //
-//  Store.swift
+//  KeyboardActionManager.swift
 //  Calculator-Keyboard
 //
 //  Created by β α on 2020/04/10.
@@ -7,8 +7,6 @@
 //
 
 import SwiftUI
-
-extension Candidate: ResultViewItemData {}
 
 // MARK: Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
 final class KeyboardActionManager: UserActionManager {
