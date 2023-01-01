@@ -67,17 +67,11 @@ final class DicdataStore {
     enum Notification {
         case importOSUserDict(OSUserDict)
         case setRequestOptions(ConvertRequestOptions)
-        case notifyAppearAgain
-        case reloadUserDict
         case closeKeyboard
     }
 
     func sendToDicdataStore(_ data: Notification) {
         switch data {
-        case .notifyAppearAgain:
-            break
-        case .reloadUserDict:
-            self.reloadUserDict()
         case .closeKeyboard:
             self.closeKeyboard()
         case let .importOSUserDict(osUserDict):
@@ -95,10 +89,6 @@ final class DicdataStore {
         self.importedLoudses.remove("memory")
         self.loudses.removeValue(forKey: "user")
         self.importedLoudses.remove("user")
-    }
-
-    private func reloadUserDict() {
-        _ = self.loadLOUDS(identifier: "user")
     }
 
     /// ペナルティ関数。文字数で決める。
