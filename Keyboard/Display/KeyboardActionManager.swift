@@ -445,7 +445,6 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     private func hideLearningMemory() {
-        LearningTypeSetting.value = .nothing
-        self.sendToDicdataStore(.notifyLearningType(.nothing))
+        // TODO: Provide up-to-date implementation
     }
 }

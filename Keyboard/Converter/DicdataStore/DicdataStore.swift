@@ -65,13 +65,11 @@ final class DicdataStore {
     }
 
     enum Notification {
-        case notifyLearningType(LearningType)
         case importOSUserDict(OSUserDict)
         case setRequestOptions(ConvertRequestOptions)
         case notifyAppearAgain
         case reloadUserDict
         case closeKeyboard
-        case resetMemory
     }
 
     func sendToDicdataStore(_ data: Notification) {
@@ -80,12 +78,8 @@ final class DicdataStore {
             break
         case .reloadUserDict:
             self.reloadUserDict()
-        case let .notifyLearningType(type):
-            self.learningManager.notifyChangeLearningType(type)
         case .closeKeyboard:
             self.closeKeyboard()
-        case .resetMemory:
-            self.learningManager.reset()
         case let .importOSUserDict(osUserDict):
             self.osUserDict = osUserDict
         case let .setRequestOptions(value):

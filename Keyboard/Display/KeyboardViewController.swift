@@ -81,7 +81,6 @@ final class KeyboardViewController: UIInputViewController {
 
         // 初期化の順序としてこの位置に置くこと
         VariableStates.shared.initialize()
-        self.settingCheck()
 
         let indexManager = ThemeIndexManager.load()
         let theme: ThemeData
@@ -152,14 +151,6 @@ final class KeyboardViewController: UIInputViewController {
             }
             KeyboardViewController.action.sendToDicdataStore(.importOSUserDict(osuserdict))
         }
-    }
-
-    func settingCheck() {
-        if MemoryResetCondition.shouldReset() {
-            KeyboardViewController.action.sendToDicdataStore(.resetMemory)
-        }
-        @KeyboardSetting(.learningType) var learningType: LearningType
-        KeyboardViewController.action.sendToDicdataStore(.notifyLearningType(learningType))
     }
 
     func registerScreenActualSize() {

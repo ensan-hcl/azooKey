@@ -487,6 +487,17 @@ final class LearningManager {
     func setRequestOptions(options: ConvertRequestOptions) {
         self.options = options
         LongTermLearningMemory.maxMemoryCount = options.maxMemoryCount
+
+        switch options.learningType {
+        case .inputAndOutput, .onlyOutput: break
+        case .nothing:
+            self.temporaryMemory = TemporalLearningMemoryTrie()
+        }
+
+        // リセットチェックも実施
+        if MemoryResetCondition.shouldReset() {
+            try? LongTermLearningMemory.reset()
+        }
     }
 
     func temporaryPerfectMatch(key: some StringProtocol) -> [DicdataElement] {
@@ -619,14 +630,6 @@ final class LearningManager {
         }
         debug("LearningManager update all", element)
         self.temporaryMemory.memorize(dicdataElement: element, chars: chars)
-    }
-
-    func notifyChangeLearningType(_ type: LearningType) {
-        switch type {
-        case .inputAndOutput, .onlyOutput: break
-        case .nothing:
-            self.temporaryMemory = TemporalLearningMemoryTrie()
-        }
     }
 
     func save() {
