@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum MessageIdentifier: String, Hashable, CaseIterable {
+enum MessageIdentifier: String, Hashable, CaseIterable, Sendable {
     case mock = "mock_alert_2022_09_16_03"
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
     case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_release" // MARK: frozen

@@ -8,21 +8,21 @@
 
 import enum UIKit.UIReturnKeyType
 
-enum KeyboardLayout: String, CaseIterable {
+enum KeyboardLayout: String, CaseIterable, Sendable {
     /// フリック入力式のレイアウトで表示するスタイル
     case flick = "flick"
     /// qwerty入力式のレイアウトで表示するスタイル
     case qwerty = "roman"
 }
 
-enum InputStyle: String {
+enum InputStyle: String, Sendable {
     /// 入力された文字を直接入力するスタイル
     case direct = "direct"
     /// ローマ字日本語入力とするスタイル
     case roman2kana = "roman"
 }
 
-enum KeyboardLanguage: String, Codable, Equatable {
+enum KeyboardLanguage: String, Codable, Equatable, Sendable {
     case en_US
     case ja_JP
     case el_GR
@@ -42,24 +42,24 @@ enum KeyboardLanguage: String, Codable, Equatable {
     }
 }
 
-enum ResizingState {
+enum ResizingState: Sendable {
     case fullwidth // 両手モードの利用
     case onehanded // 片手モードの利用
     case resizing  // 編集モード
 }
 
-enum KeyboardOrientation {
+enum KeyboardOrientation: Sendable {
     case vertical       // width<height
     case horizontal     // height<width
 }
 
-enum EnterKeyState {
+enum EnterKeyState: Sendable {
     case complete   // 決定
     case `return`(UIReturnKeyType)   // 改行
     case edit       // 編集
 }
 
-enum BarState {
+enum BarState: Sendable {
     case none   // なし
     case tab    // タブバー
     case cursor // カーソルバー

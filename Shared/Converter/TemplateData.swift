@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct TemplateData: Codable {
+struct TemplateData: Codable, Sendable {
     var name: String
-    var literal: TemplateLiteralProtocol
+    var literal: any TemplateLiteralProtocol
     var type: TemplateLiteralType
 
     private enum CodingKeys: String, CodingKey {
@@ -70,13 +70,13 @@ struct TemplateData: Codable {
     }
 }
 
-protocol TemplateLiteralProtocol {
+protocol TemplateLiteralProtocol: Sendable {
     func export() -> String
 
     func previewString() -> String
 }
 
-enum TemplateLiteralType {
+enum TemplateLiteralType: Sendable {
     case date
     case random
 }
@@ -158,12 +158,13 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable {
         lhs.value == rhs.value
     }
 
-    enum ValueType: String {
+    enum ValueType: String, Sendable {
         case int
         case double
         case string
     }
-    enum Value: Equatable {
+
+    enum Value: Equatable, Sendable {
         case int(from: Int, to: Int)
         case double(from: Double, to: Double)
         case string([String])

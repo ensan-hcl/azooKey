@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct AppVersion: Codable, Equatable, Comparable, Hashable, LosslessStringConvertible, CustomStringConvertible {
+struct AppVersion: Codable, Equatable, Comparable, Hashable, LosslessStringConvertible, CustomStringConvertible, Sendable {
 
     private enum ParseError: Error {
         case nonIntegerValue

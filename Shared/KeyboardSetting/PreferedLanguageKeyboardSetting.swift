@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct PreferredLanguage: Codable, Hashable {
+struct PreferredLanguage: Codable, Hashable, Sendable {
     var first: KeyboardLanguage
     var second: KeyboardLanguage?
 }

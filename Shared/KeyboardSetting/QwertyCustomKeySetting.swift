@@ -9,12 +9,12 @@
 import CustardKit
 import SwiftUI
 
-private struct _QwertyVariationKey: Codable {
+private struct _QwertyVariationKey: Codable, Sendable {
     var name: String
     var input: String
 }
 
-private struct _QwertyCustomKey: Codable {
+private struct _QwertyCustomKey: Codable, Sendable {
     var name: String
     var longpress: [String]
     var input: String
@@ -45,6 +45,7 @@ private struct _QwertyCustomKey: Codable {
     }
 }
 
+// TODO: Adding `Sendable` Conformance to this type after CustardKit supports `Sendable`.
 struct QwertyVariationKey: Codable, Equatable {
     internal init(name: String, actions: [CodableActionData]) {
         self.name = name
@@ -55,12 +56,14 @@ struct QwertyVariationKey: Codable, Equatable {
     var actions: [CodableActionData]
 }
 
+// TODO: Adding `Sendable` Conformance to this type after CustardKit supports `Sendable`.
 struct QwertyCustomKey: Codable, Equatable {
     var name: String
     var actions: [CodableActionData]
     var longpresses: [QwertyVariationKey]
 }
 
+// TODO: Adding `Sendable` Conformance to this type after CustardKit supports `Sendable`.
 private struct QwertyCustomKeysArray: Codable {
     // let list: [_QwertyCustomKey]
     let keys: [QwertyCustomKey]
@@ -93,6 +96,7 @@ private struct QwertyCustomKeysArray: Codable {
     }
 }
 
+// TODO: Adding `Sendable` Conformance to this type after CustardKit supports `Sendable`.
 struct QwertyCustomKeysValue: Savable, Equatable {
     typealias SaveValue = Data
     static let defaultValue = QwertyCustomKeysValue(keys: [

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-enum LearningType: Int, CaseIterable {
+enum LearningType: Int, CaseIterable: Sendable {
     case inputAndOutput = 0
     case onlyOutput = 1
     case nothing = 2

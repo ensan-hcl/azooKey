@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-enum LanguageLayout {
+enum LanguageLayout: Sendable {
     case flick
     case qwerty
     case custard(String)

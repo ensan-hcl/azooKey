@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol RegisteredNodeProtocol {
+protocol RegisteredNodeProtocol: Sendable {
     var data: DicdataElement {get}
     var prev: (any RegisteredNodeProtocol)? {get}
     var totalValue: PValue {get}
@@ -16,7 +16,7 @@ protocol RegisteredNodeProtocol {
     var convertTargetLength: Int {get}
 }
 
-struct RegisteredNode: RegisteredNodeProtocol {
+struct RegisteredNode: RegisteredNodeProtocol, Sendable {
     let data: DicdataElement
     let prev: (any RegisteredNodeProtocol)?
     let totalValue: PValue

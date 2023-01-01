@@ -12,12 +12,12 @@
 /// のようになる。`
 /// カーソルのポジションもこのクラスが管理する。
 /// 設計方針として、inputStyleに関わる実装の違いは全てアップデート方法の違いとして吸収し、`input` / `delete` / `moveCursor` / `complete`時の違いとしては露出させないようにすることを目指した。
-struct ComposingText {
+struct ComposingText: Sendable {
     private(set) var convertTargetCursorPosition: Int = 0
     private(set) var input: [InputElement] = []
     private(set) var convertTarget: String = ""
 
-    struct InputElement {
+    struct InputElement: Sendable {
         var character: Character
         var inputStyle: InputStyle
     }

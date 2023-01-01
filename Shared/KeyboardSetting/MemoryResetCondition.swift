@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum MemoryResetCondition: Int, Savable {
+enum MemoryResetCondition: Int, Savable, Sendable {
     typealias SaveValue = String
     case none = 0
     case need = 1

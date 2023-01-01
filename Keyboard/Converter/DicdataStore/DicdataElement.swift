@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct DicdataElement: Equatable, Hashable {
+struct DicdataElement: Equatable, Hashable, Sendable {
     static let BOSData = Self(word: "", ruby: "", cid: CIDData.BOS.cid, mid: MIDData.BOS.mid, value: 0, adjust: 0)
     static let EOSData = Self(word: "", ruby: "", cid: CIDData.EOS.cid, mid: MIDData.EOS.mid, value: 0, adjust: 0)
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-private struct MetadataElement: CustomDebugStringConvertible {
+private struct MetadataElement: CustomDebugStringConvertible, Sendable {
     init(day: UInt16, count: UInt8) {
         self.lastUsedDay = day
         self.lastUpdatedDay = day
@@ -25,7 +25,7 @@ private struct MetadataElement: CustomDebugStringConvertible {
 }
 
 /// 長期記憶用の構造体
-struct LongTermLearningMemory {
+struct LongTermLearningMemory: Sendable {
     static let directoryURL = (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
     private static var loudsFileURL: URL {
         directoryURL.appendingPathComponent("memory.louds", isDirectory: false)
@@ -309,8 +309,8 @@ struct LongTermLearningMemory {
 }
 
 /// 一時記憶用のデータなので、複雑な形状にしない。
-struct TemporalLearningMemoryTrie {
-    struct Node {
+struct TemporalLearningMemoryTrie: Sendable {
+    struct Node: Sendable {
         var dataIndices: [Int] = []      // loudstxt3の中のデータのインデックスリスト
         var children: [UInt8: Int] = [:] // characterのIDからインデックスへのマッピング
     }
