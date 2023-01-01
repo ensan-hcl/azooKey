@@ -96,6 +96,11 @@ final class DicdataStore {
 
     private func closeKeyboard() {
         self.learningManager.save()
+        // saveしたあとにmemoryのキャッシュされたLOUDSを使い続けないよう、キャッシュから削除する。
+        self.loudses.removeValue(forKey: "memory")
+        self.importedLoudses.remove("memory")
+        self.loudses.removeValue(forKey: "user")
+        self.importedLoudses.remove("user")
     }
 
     private func reloadUserDict() {
