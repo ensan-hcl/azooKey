@@ -54,7 +54,7 @@ final class DicdataStore {
             let url = Bundle.main.bundleURL.appendingPathComponent("mm.binary", isDirectory: false)
             do {
                 let binaryData = try Data(contentsOf: url, options: [.uncached])
-                self.mmValue = binaryData.toArray(of: Float.self).map {PValue($0)}
+                self.mmValue = binaryData.toArray(of: Float.self).map(PValue.init)
             } catch {
                 debug("Failed to read the file.")
                 self.mmValue = [PValue].init(repeating: .zero, count: self.midCount * self.midCount)
