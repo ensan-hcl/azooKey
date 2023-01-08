@@ -56,8 +56,8 @@ extension UIView {
 final class KeyboardViewController: UIInputViewController {
     private static var keyboardViewHost: KeyboardHostingController<Keyboard>?
     private static var loadedInstanceCount: Int = 0
-    private static var resultModelVariableSection = ResultModelVariableSection<Candidate>()
-    private static var action = KeyboardActionManager()
+    private static let resultModelVariableSection = ResultModelVariableSection<Candidate>()
+    private static let action = KeyboardActionManager()
 
     deinit {
         KeyboardViewController.keyboardViewHost = nil

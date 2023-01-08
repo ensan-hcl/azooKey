@@ -37,7 +37,9 @@ final class KeyboardActionManager: UserActionManager {
     func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
         self.inputManager.setTextDocumentProxy(controller.textDocumentProxy)
-        self.inputManager.setUpdateResult(controller.updateResultView)
+        self.inputManager.setUpdateResult { [weak controller] in
+            controller?.updateResultView($0)
+        }
     }
 
     override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
