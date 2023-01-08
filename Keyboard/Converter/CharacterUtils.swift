@@ -284,6 +284,7 @@ extension Character {
         return String(self)
     }
 
+    /// Returns the Katakanized version of the character.
     @inlinable func toKatakana() -> Character {
         if self.unicodeScalars.count != 1 {
             return self
@@ -296,6 +297,7 @@ extension Character {
         }
     }
 
+    /// Returns the Hiraganized version of the character.
     @inlinable func toHiragana() -> Character {
         if self.unicodeScalars.count != 1 {
             return self

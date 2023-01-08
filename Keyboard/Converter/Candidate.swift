@@ -8,14 +8,20 @@
 
 import Foundation
 
-// 一文節を担う
+/// Data of clause.
 final class ClauseDataUnit {
+    /// The MID of the clause.
     var mid: Int = MIDData.EOS.mid
-    // 次の文節のlcid
+    /// The LCID in the next clause.
     var nextLcid = CIDData.EOS.cid
+    /// The text of the unit.
     var text: String = ""
+    /// The range of the unit in input text.
     var inputRange: Range<Int> = 0 ..< 0
 
+    /// Merge the given unit to this unit.
+    /// - Parameter:
+    ///   - unit: The unit to merge.
     func merge(with unit: ClauseDataUnit) {
         self.text.append(unit.text)
         self.inputRange = self.inputRange.startIndex ..< unit.inputRange.endIndex
@@ -88,6 +94,7 @@ struct Candidate {
     private static let dateExpression = "<date format=\".*?\" type=\".*?\" language=\".*?\" delta=\".*?\" deltaunit=\".*?\">"
     private static let randomExpression = "<random type=\".*?\" value=\".*?\">"
 
+    /// テンプレートをパースして、変換候補のテキストを生成する。
     static func parseTemplate(_ text: String) -> String {
         var newText = text
         while let range = newText.range(of: Self.dateExpression, options: .regularExpression) {
@@ -105,6 +112,7 @@ struct Candidate {
         return newText.unescaped()
     }
 
+    /// テンプレートをパースして、変換候補のテキストを生成し、反映する。
     @inlinable mutating func parseTemplate() {
         // ここでCandidate.textとdata.map(\.word).join("")の整合性が壊れることに注意
         // ただし、dataの方を加工するのは望ましい挙動ではない。
