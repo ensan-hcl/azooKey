@@ -11,6 +11,10 @@ import Foundation
 import SwiftUI
 
 extension CGPoint {
+    /// Calculate the distance between two points.
+    /// - Parameter:
+    ///   - point: The point to calculate the distance from.
+    /// - Returns: The distance between the two points.
     @inlinable
     func distance(to point: CGPoint) -> CGFloat {
         let dx: CGFloat = x - point.x
@@ -19,6 +23,10 @@ extension CGPoint {
         return sqrt(d2)
     }
 
+    /// Calculate the direction from this point to the given point.
+    /// - Parameter:
+    ///   - point: The point to calculate the direction to.
+    /// - Returns: The direction from this point to the given point.
     func direction(to point: CGPoint) -> FlickDirection {
         let x: CGFloat = point.x - self.x
         let y: CGFloat = point.y - self.y
