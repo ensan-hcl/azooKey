@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1A3DC1C12500D44A002CAA93"
                BuildableName = "azooKey.app"
-               BlueprintName = "KanaKanjier"
-               ReferencedContainer = "container:KanaKanjier.xcodeproj">
+               BlueprintName = "azooKey"
+               ReferencedContainer = "container:azooKey.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1A3DC1D72500D44E002CAA93"
-               BuildableName = "KanaKanjierTests.xctest"
-               BlueprintName = "KanaKanjierTests"
-               ReferencedContainer = "container:KanaKanjier.xcodeproj">
+               BuildableName = "azooKeyTests.xctest"
+               BlueprintName = "azooKeyTests"
+               ReferencedContainer = "container:azooKey.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1A3DC1E22500D44E002CAA93"
-               BuildableName = "KanaKanjierUITests.xctest"
-               BlueprintName = "KanaKanjierUITests"
-               ReferencedContainer = "container:KanaKanjier.xcodeproj">
+               BuildableName = "azooKeyUITests.xctest"
+               BlueprintName = "azooKeyUITests"
+               ReferencedContainer = "container:azooKey.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -66,8 +66,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1A3DC1C12500D44A002CAA93"
             BuildableName = "azooKey.app"
-            BlueprintName = "KanaKanjier"
-            ReferencedContainer = "container:KanaKanjier.xcodeproj">
+            BlueprintName = "azooKey"
+            ReferencedContainer = "container:azooKey.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -83,8 +83,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1A3DC1C12500D44A002CAA93"
             BuildableName = "azooKey.app"
-            BlueprintName = "KanaKanjier"
-            ReferencedContainer = "container:KanaKanjier.xcodeproj">
+            BlueprintName = "azooKey"
+            ReferencedContainer = "container:azooKey.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

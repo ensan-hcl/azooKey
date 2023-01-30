@@ -18,7 +18,7 @@
                BlueprintIdentifier = "1A3DC1F82500D488002CAA93"
                BuildableName = "Keyboard.appex"
                BlueprintName = "Keyboard"
-               ReferencedContainer = "container:KanaKanjier.xcodeproj">
+               ReferencedContainer = "container:azooKey.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,8 +31,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1A3DC1C12500D44A002CAA93"
                BuildableName = "azooKey.app"
-               BlueprintName = "KanaKanjier"
-               ReferencedContainer = "container:KanaKanjier.xcodeproj">
+               BlueprintName = "azooKey"
+               ReferencedContainer = "container:azooKey.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -65,8 +65,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1A3DC1C12500D44A002CAA93"
             BuildableName = "azooKey.app"
-            BlueprintName = "KanaKanjier"
-            ReferencedContainer = "container:KanaKanjier.xcodeproj">
+            BlueprintName = "azooKey"
+            ReferencedContainer = "container:azooKey.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </LaunchAction>
@@ -88,7 +88,7 @@
             BlueprintIdentifier = "1A3DC1F82500D488002CAA93"
             BuildableName = "Keyboard.appex"
             BlueprintName = "Keyboard"
-            ReferencedContainer = "container:KanaKanjier.xcodeproj">
+            ReferencedContainer = "container:azooKey.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -151,7 +151,7 @@
 		1A3DC1CC2500D44E002CAA93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */; };
 		1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1CE2500D44E002CAA93 /* Preview Assets.xcassets */; };
 		1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1D02500D44E002CAA93 /* LaunchScreen.storyboard */; };
-		1A3DC1E82500D44E002CAA93 /* KanaKanjierUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1E72500D44E002CAA93 /* KanaKanjierUITests.swift */; };
+		1A3DC1E82500D44E002CAA93 /* MainAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1E72500D44E002CAA93 /* MainAppUITests.swift */; };
 		1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */; };
 		1A3DC2002500D488002CAA93 /* Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1A3DC2072500D4FF002CAA93 /* KeyboardActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2062500D4FF002CAA93 /* KeyboardActionManager.swift */; };
@@ -416,7 +416,7 @@
 		1AFB685128D56E8200B5C717 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */; };
 		1AFB685228D56E8200B5C717 /* ArrayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayUtils.swift */; };
 		1AFB685328D56F1800B5C717 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
-		1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
+		1AFE773026077E0E0041D74D /* WalktMainApphroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
 		1AFE773126077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
 /* End PBXBuildFile section */
 
@@ -426,14 +426,14 @@
 			containerPortal = 1A3DC1BA2500D44A002CAA93 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 1A3DC1C12500D44A002CAA93;
-			remoteInfo = KanaKanjier;
+			remoteInfo = MainApp;
 		};
 		1A3DC1E42500D44E002CAA93 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1A3DC1BA2500D44A002CAA93 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 1A3DC1C12500D44A002CAA93;
-			remoteInfo = KanaKanjier;
+			remoteInfo = MainApp;
 		};
 		1A3DC1FE2500D488002CAA93 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -540,10 +540,10 @@
 		1A3DC1CE2500D44E002CAA93 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1A3DC1D12500D44E002CAA93 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A3DC1D32500D44E002CAA93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1A3DC1D82500D44E002CAA93 /* KanaKanjierTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KanaKanjierTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A3DC1D82500D44E002CAA93 /* azooKeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = azooKeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A3DC1DE2500D44E002CAA93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1A3DC1E32500D44E002CAA93 /* KanaKanjierUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KanaKanjierUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A3DC1E72500D44E002CAA93 /* KanaKanjierUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanaKanjierUITests.swift; sourceTree = "<group>"; };
+		1A3DC1E32500D44E002CAA93 /* azooKeyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = azooKeyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A3DC1E72500D44E002CAA93 /* MainAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppUITests.swift; sourceTree = "<group>"; };
 		1A3DC1E92500D44E002CAA93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A3DC1F92500D488002CAA93 /* Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Keyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
@@ -904,9 +904,9 @@
 			isa = PBXGroup;
 			children = (
 				1AA346B42567F26000B41A16 /* Shared */,
-				1A3DC1C42500D44A002CAA93 /* KanaKanjier */,
-				1A3DC1DB2500D44E002CAA93 /* KanaKanjierTests */,
-				1A3DC1E62500D44E002CAA93 /* KanaKanjierUITests */,
+				1A3DC1C42500D44A002CAA93 /* MainApp */,
+				1A3DC1DB2500D44E002CAA93 /* azooKeyTests */,
+				1A3DC1E62500D44E002CAA93 /* MainAppUITests */,
 				1A3DC1FA2500D488002CAA93 /* Keyboard */,
 				1A3DC1C32500D44A002CAA93 /* Products */,
 				1A9E908D2822CEC100E73846 /* Frameworks */,
@@ -917,14 +917,14 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC1C22500D44A002CAA93 /* azooKey.app */,
-				1A3DC1D82500D44E002CAA93 /* KanaKanjierTests.xctest */,
-				1A3DC1E32500D44E002CAA93 /* KanaKanjierUITests.xctest */,
+				1A3DC1D82500D44E002CAA93 /* azooKeyTests.xctest */,
+				1A3DC1E32500D44E002CAA93 /* azooKeyUITests.xctest */,
 				1A3DC1F92500D488002CAA93 /* Keyboard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1A3DC1C42500D44A002CAA93 /* KanaKanjier */ = {
+		1A3DC1C42500D44A002CAA93 /* MainApp */ = {
 			isa = PBXGroup;
 			children = (
 				1AC0315E25120AA2004CA505 /* azooKey.entitlements */,
@@ -950,7 +950,7 @@
 				1A3DC1D32500D44E002CAA93 /* Info.plist */,
 				1A3DC1CD2500D44E002CAA93 /* Preview Content */,
 			);
-			path = KanaKanjier;
+			path = MainApp;
 			sourceTree = "<group>";
 		};
 		1A3DC1CD2500D44E002CAA93 /* Preview Content */ = {
@@ -961,23 +961,23 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		1A3DC1DB2500D44E002CAA93 /* KanaKanjierTests */ = {
+		1A3DC1DB2500D44E002CAA93 /* azooKeyTests */ = {
 			isa = PBXGroup;
 			children = (
 				1A2E58342950AC3E004F959B /* SharedTests */,
 				1A2E580E294ED1E3004F959B /* KeyboardTests */,
 				1A3DC1DE2500D44E002CAA93 /* Info.plist */,
 			);
-			path = KanaKanjierTests;
+			path = azooKeyTests;
 			sourceTree = "<group>";
 		};
-		1A3DC1E62500D44E002CAA93 /* KanaKanjierUITests */ = {
+		1A3DC1E62500D44E002CAA93 /* MainAppUITests */ = {
 			isa = PBXGroup;
 			children = (
-				1A3DC1E72500D44E002CAA93 /* KanaKanjierUITests.swift */,
+				1A3DC1E72500D44E002CAA93 /* MainAppUITests.swift */,
 				1A3DC1E92500D44E002CAA93 /* Info.plist */,
 			);
-			path = KanaKanjierUITests;
+			path = MainAppUITests;
 			sourceTree = "<group>";
 		};
 		1A3DC1FA2500D488002CAA93 /* Keyboard */ = {
@@ -1492,9 +1492,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1A3DC1C12500D44A002CAA93 /* KanaKanjier */ = {
+		1A3DC1C12500D44A002CAA93 /* azooKey */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1A3DC1EC2500D44E002CAA93 /* Build configuration list for PBXNativeTarget "KanaKanjier" */;
+			buildConfigurationList = 1A3DC1EC2500D44E002CAA93 /* Build configuration list for PBXNativeTarget "azooKey" */;
 			buildPhases = (
 				1A3DC1BE2500D44A002CAA93 /* Sources */,
 				1A3DC1BF2500D44A002CAA93 /* Frameworks */,
@@ -1508,19 +1508,19 @@
 			dependencies = (
 				1A3DC1FF2500D488002CAA93 /* PBXTargetDependency */,
 			);
-			name = KanaKanjier;
+			name = azooKey;
 			packageProductDependencies = (
 				1A70DFFC291F2D1E00A83849 /* CustardKit */,
 				1A606B05292E53BA00CEDB15 /* CustardExpressionEvaluator */,
 				1A1ECC9C295DA93D001AD7E0 /* Algorithms */,
 			);
-			productName = KanaKanjier;
+			productName = MainApp;
 			productReference = 1A3DC1C22500D44A002CAA93 /* azooKey.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1A3DC1D72500D44E002CAA93 /* KanaKanjierTests */ = {
+		1A3DC1D72500D44E002CAA93 /* azooKeyTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1A3DC1EF2500D44E002CAA93 /* Build configuration list for PBXNativeTarget "KanaKanjierTests" */;
+			buildConfigurationList = 1A3DC1EF2500D44E002CAA93 /* Build configuration list for PBXNativeTarget "azooKeyTests" */;
 			buildPhases = (
 				1A3DC1D42500D44E002CAA93 /* Sources */,
 				1A3DC1D52500D44E002CAA93 /* Frameworks */,
@@ -1531,16 +1531,16 @@
 			dependencies = (
 				1A3DC1DA2500D44E002CAA93 /* PBXTargetDependency */,
 			);
-			name = KanaKanjierTests;
+			name = azooKeyTests;
 			packageProductDependencies = (
 			);
-			productName = KanaKanjierTests;
-			productReference = 1A3DC1D82500D44E002CAA93 /* KanaKanjierTests.xctest */;
+			productName = azooKeyTests;
+			productReference = 1A3DC1D82500D44E002CAA93 /* azooKeyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		1A3DC1E22500D44E002CAA93 /* KanaKanjierUITests */ = {
+		1A3DC1E22500D44E002CAA93 /* azooKeyUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1A3DC1F22500D44E002CAA93 /* Build configuration list for PBXNativeTarget "KanaKanjierUITests" */;
+			buildConfigurationList = 1A3DC1F22500D44E002CAA93 /* Build configuration list for PBXNativeTarget "azooKeyUITests" */;
 			buildPhases = (
 				1A3DC1DF2500D44E002CAA93 /* Sources */,
 				1A3DC1E02500D44E002CAA93 /* Frameworks */,
@@ -1551,9 +1551,9 @@
 			dependencies = (
 				1A3DC1E52500D44E002CAA93 /* PBXTargetDependency */,
 			);
-			name = KanaKanjierUITests;
-			productName = KanaKanjierUITests;
-			productReference = 1A3DC1E32500D44E002CAA93 /* KanaKanjierUITests.xctest */;
+			name = azooKeyUITests;
+			productName = MainAppUITests;
+			productReference = 1A3DC1E32500D44E002CAA93 /* azooKeyUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		1A3DC1F82500D488002CAA93 /* Keyboard */ = {
@@ -1607,7 +1607,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1A3DC1BD2500D44A002CAA93 /* Build configuration list for PBXProject "KanaKanjier" */;
+			buildConfigurationList = 1A3DC1BD2500D44A002CAA93 /* Build configuration list for PBXProject "azooKey" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -1627,9 +1627,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1A3DC1C12500D44A002CAA93 /* KanaKanjier */,
-				1A3DC1D72500D44E002CAA93 /* KanaKanjierTests */,
-				1A3DC1E22500D44E002CAA93 /* KanaKanjierUITests */,
+				1A3DC1C12500D44A002CAA93 /* azooKey */,
+				1A3DC1D72500D44E002CAA93 /* azooKeyTests */,
+				1A3DC1E22500D44E002CAA93 /* azooKeyUITests */,
 				1A3DC1F82500D488002CAA93 /* Keyboard */,
 			);
 		};
@@ -1988,7 +1988,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A3DC1E82500D44E002CAA93 /* KanaKanjierUITests.swift in Sources */,
+				1A3DC1E82500D44E002CAA93 /* MainAppUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2141,12 +2141,12 @@
 /* Begin PBXTargetDependency section */
 		1A3DC1DA2500D44E002CAA93 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1A3DC1C12500D44A002CAA93 /* KanaKanjier */;
+			target = 1A3DC1C12500D44A002CAA93 /* azooKey */;
 			targetProxy = 1A3DC1D92500D44E002CAA93 /* PBXContainerItemProxy */;
 		};
 		1A3DC1E52500D44E002CAA93 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1A3DC1C12500D44A002CAA93 /* KanaKanjier */;
+			target = 1A3DC1C12500D44A002CAA93 /* azooKey */;
 			targetProxy = 1A3DC1E42500D44E002CAA93 /* PBXContainerItemProxy */;
 		};
 		1A3DC1FF2500D488002CAA93 /* PBXTargetDependency */ = {
@@ -2311,14 +2311,14 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
-				CODE_SIGN_ENTITLEMENTS = KanaKanjier/azooKey.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MainApp/azooKey.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"KanaKanjier/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MainApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = KanaKanjier/Info.plist;
+				INFOPLIST_FILE = MainApp/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2343,15 +2343,15 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
-				CODE_SIGN_ENTITLEMENTS = KanaKanjier/azooKey.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MainApp/azooKey.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"KanaKanjier/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MainApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				ENABLE_PREVIEWS = YES;
 				"GCC_OPTIMIZATION_LEVEL[arch=*]" = s;
-				INFOPLIST_FILE = KanaKanjier/Info.plist;
+				INFOPLIST_FILE = MainApp/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2377,14 +2377,14 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
-				INFOPLIST_FILE = KanaKanjierTests/Info.plist;
+				INFOPLIST_FILE = azooKeyTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.KanaKanjierTests;
+				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKeyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -2400,14 +2400,14 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
-				INFOPLIST_FILE = KanaKanjierTests/Info.plist;
+				INFOPLIST_FILE = azooKeyTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.KanaKanjierTests;
+				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKeyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_VERSION = 5.0;
@@ -2424,19 +2424,19 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
-				INFOPLIST_FILE = KanaKanjierUITests/Info.plist;
+				INFOPLIST_FILE = MainAppUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.KanaKanjierUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.MainAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = KanaKanjier;
+				TEST_TARGET_NAME = MainApp;
 			};
 			name = Debug;
 		};
@@ -2448,19 +2448,19 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
-				INFOPLIST_FILE = KanaKanjierUITests/Info.plist;
+				INFOPLIST_FILE = MainAppUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.KanaKanjierUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.MainAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = KanaKanjier;
+				TEST_TARGET_NAME = MainApp;
 			};
 			name = Release;
 		};
@@ -2534,7 +2534,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1A3DC1BD2500D44A002CAA93 /* Build configuration list for PBXProject "KanaKanjier" */ = {
+		1A3DC1BD2500D44A002CAA93 /* Build configuration list for PBXProject "azooKey" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A3DC1EA2500D44E002CAA93 /* Debug */,
@@ -2543,7 +2543,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A3DC1EC2500D44E002CAA93 /* Build configuration list for PBXNativeTarget "KanaKanjier" */ = {
+		1A3DC1EC2500D44E002CAA93 /* Build configuration list for PBXNativeTarget "azooKey" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A3DC1ED2500D44E002CAA93 /* Debug */,
@@ -2552,7 +2552,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A3DC1EF2500D44E002CAA93 /* Build configuration list for PBXNativeTarget "KanaKanjierTests" */ = {
+		1A3DC1EF2500D44E002CAA93 /* Build configuration list for PBXNativeTarget "azooKeyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A3DC1F02500D44E002CAA93 /* Debug */,
@@ -2561,7 +2561,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A3DC1F22500D44E002CAA93 /* Build configuration list for PBXNativeTarget "KanaKanjierUITests" */ = {
+		1A3DC1F22500D44E002CAA93 /* Build configuration list for PBXNativeTarget "azooKeyUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1A3DC1F32500D44E002CAA93 /* Debug */,
