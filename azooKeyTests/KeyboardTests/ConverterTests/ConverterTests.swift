@@ -19,9 +19,30 @@ final class ConverterTests: XCTestCase {
         XCTAssertEqual(results.mainResults.first?.text, "azooKeyは新時代のキーボードアプリです")
     }
 
+    // 1文字ずつ変換する
+    // memo: 内部実装としては別のモジュールが呼ばれるのだが、それをテストする方法があまりないかもしれない
+    func testGradualConversion() throws {
+        // データリソースの場所を指定する
+        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
+        let converter = KanaKanjiConverter()
+        var c = ComposingText()
+        let text = "あずーきーはしんじだいのきーぼーどあぷりです"
+        for char in text {
+            _ = c.insertAtCursorPosition(String(char), inputStyle: .direct)
+            let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+            if c.convertTarget == text {
+                XCTAssertEqual(results.mainResults.first?.text, "azooKeyは新時代のキーボードアプリです")
+            }
+        }
+    }
+
+
     // 変換結果が比較的一意なテストケースを無数に持ち、一定の割合を正解することを要求する
     // 辞書を更新した結果性能が悪化したら気付ける
     func testAccuracy() throws {
+        // データリソースの場所を指定する
+        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
+
         let cases: [(input: String, expect: String)] = [
             ("3がつ8にち", "3月8日"),
             ("いっていのわりあい", "一定の割合"),
