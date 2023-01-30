@@ -564,6 +564,7 @@ extension ComposingText {
 extension ComposingText: Equatable {}
 extension ComposingText.InputElement: Equatable {}
 extension ComposingText.ViewOperation: Equatable {}
+extension ComposingText.ConvertTargetElement: Equatable {}
 
 // MARK: 差分計算用のAPI
 extension ComposingText {
