@@ -19,24 +19,6 @@
       }
     },
     {
-      "identity" : "fnv",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ensan-hcl/FNV",
-      "state" : {
-        "branch" : "develop",
-        "revision" : "911be79db2afadb2d89fa3fb69dc32fa8444d2d7"
-      }
-    },
-    {
-      "identity" : "murmurhash-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/daisuke-t-jp/MurmurHash-Swift",
-      "state" : {
-        "revision" : "7e69bedaaaea09673524d83de12dac6e09d5b74a",
-        "version" : "1.1.1"
-      }
-    },
-    {
       "identity" : "swift-algorithms",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-algorithms.git",

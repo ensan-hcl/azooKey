@@ -2642,8 +2642,6 @@
 		1AFB685128D56E8200B5C717 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */; };
 		1AFB685228D56E8200B5C717 /* ArrayUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5A92595934C00B71E5A /* ArrayUtils.swift */; };
 		1AFB685328D56F1800B5C717 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
-		1AFB685A28D5CCB300B5C717 /* FNV in Frameworks */ = {isa = PBXBuildFile; productRef = 1AFB685928D5CCB300B5C717 /* FNV */; };
-		1AFB685D28D5DA4600B5C717 /* MurmurHash-Swift in Frameworks */ = {isa = PBXBuildFile; productRef = 1AFB685C28D5DA4600B5C717 /* MurmurHash-Swift */; };
 		1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
 		1AFE773126077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
 /* End PBXBuildFile section */
@@ -5191,8 +5189,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AFB685D28D5DA4600B5C717 /* MurmurHash-Swift in Frameworks */,
-				1AFB685A28D5CCB300B5C717 /* FNV in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8247,8 +8243,6 @@
 			);
 			name = KanaKanjierTests;
 			packageProductDependencies = (
-				1AFB685928D5CCB300B5C717 /* FNV */,
-				1AFB685C28D5DA4600B5C717 /* MurmurHash-Swift */,
 			);
 			productName = KanaKanjierTests;
 			productReference = 1A3DC1D82500D44E002CAA93 /* KanaKanjierTests.xctest */;
@@ -8335,8 +8329,6 @@
 			mainGroup = 1A3DC1B92500D44A002CAA93;
 			packageReferences = (
 				1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				1AFB685828D5CCB300B5C717 /* XCRemoteSwiftPackageReference "FNV" */,
-				1AFB685B28D5DA4600B5C717 /* XCRemoteSwiftPackageReference "MurmurHash-Swift" */,
 				1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */,
 				1A606B00292E506200CEDB15 /* XCRemoteSwiftPackageReference "BoolExpressionEvaluator" */,
 				1A1ECC9B295DA93D001AD7E0 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
@@ -11558,22 +11550,6 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		1AFB685828D5CCB300B5C717 /* XCRemoteSwiftPackageReference "FNV" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ensan-hcl/FNV";
-			requirement = {
-				branch = develop;
-				kind = branch;
-			};
-		};
-		1AFB685B28D5DA4600B5C717 /* XCRemoteSwiftPackageReference "MurmurHash-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/daisuke-t-jp/MurmurHash-Swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -11616,16 +11592,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = DequeModule;
-		};
-		1AFB685928D5CCB300B5C717 /* FNV */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1AFB685828D5CCB300B5C717 /* XCRemoteSwiftPackageReference "FNV" */;
-			productName = FNV;
-		};
-		1AFB685C28D5DA4600B5C717 /* MurmurHash-Swift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1AFB685B28D5DA4600B5C717 /* XCRemoteSwiftPackageReference "MurmurHash-Swift" */;
-			productName = "MurmurHash-Swift";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
