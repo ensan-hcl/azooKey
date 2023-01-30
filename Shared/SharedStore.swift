@@ -38,41 +38,6 @@ enum SharedStore {
     }
 }
 
-extension StringProtocol {
-    // エスケープが必要なのは次の文字:
-    /*
-     \ -> \\
-     \0 -> \0
-     \n -> \n
-     \t -> \t
-     , -> \c
-     " -> \d
-     */
-    // please use these letters in order to avoid user-inputting text crash
-    func escaped() -> String {
-        var result = self.replacingOccurrences(of: "\\", with: "\\b")
-        result = result.replacingOccurrences(of: "\0", with: "\\0")
-        result = result.replacingOccurrences(of: "\n", with: "\\n")
-        result = result.replacingOccurrences(of: "\t", with: "\\t")
-        result = result.replacingOccurrences(of: ",", with: "\\c")
-        result = result.replacingOccurrences(of: " ", with: "\\s")
-        result = result.replacingOccurrences(of: "\"", with: "\\d")
-        return result
-    }
-
-    func unescaped() -> String {
-        var result = self.replacingOccurrences(of: "\\d", with: "\"")
-        result = result.replacingOccurrences(of: "\\s", with: " ")
-        result = result.replacingOccurrences(of: "\\c", with: ",")
-        result = result.replacingOccurrences(of: "\\t", with: "\t")
-        result = result.replacingOccurrences(of: "\\n", with: "\n")
-        result = result.replacingOccurrences(of: "\\0", with: "\0")
-        result = result.replacingOccurrences(of: "\\b", with: "\\")
-        return result
-    }
-
-}
-
 extension AppVersion {
     static let azooKey_v1_9 = AppVersion("1.9")!
     static let azooKey_v1_8_1 = AppVersion("1.8.1")!
