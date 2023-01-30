@@ -38,8 +38,8 @@ extension LOUDS {
             )
         }
         return (
-            bundleURL.appendingPathComponent("\(identifier).loudschars2", isDirectory: false),
-            bundleURL.appendingPathComponent("\(identifier).louds", isDirectory: false)
+            bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudschars2", isDirectory: false),
+            bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).louds", isDirectory: false)
         )
     }
 
@@ -50,7 +50,7 @@ extension LOUDS {
         if identifier.hasPrefix("memory") {
             return LongTermLearningMemory.directoryURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
         }
-        return bundleURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
+        return bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudstxt3", isDirectory: false)
     }
 
     internal static func build(_ identifier: String) -> LOUDS? {

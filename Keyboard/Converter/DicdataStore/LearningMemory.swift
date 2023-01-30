@@ -442,7 +442,7 @@ struct TemporalLearningMemoryTrie {
 final class LearningManager {
     private static var char2UInt8: [Character: UInt8] = {
         do {
-            let chidURL = Bundle.main.bundleURL.appendingPathComponent("charID.chid", isDirectory: false)
+            let chidURL = Bundle.main.bundleURL.appendingPathComponent("Dictionary/louds/charID.chid", isDirectory: false)
             let string = try String(contentsOf: chidURL, encoding: .utf8)
             return [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
