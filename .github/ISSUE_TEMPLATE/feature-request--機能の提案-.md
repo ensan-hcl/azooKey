@@ -16,7 +16,7 @@ A clear and concise description of what you want to happen.
 **Describe alternatives you've considered (他の解決方法があれば記述してください)**
 A clear and concise description of any alternative solutions or features you've considered.
 
-**If we were to implement this feature, will you help implement it? (もし提案する機能を実装する場合、実装を手伝う余裕はありますか？) **
+**If we were to implement this feature, will you help implement it? (もし提案する機能を実装する場合、実装を手伝う余裕はありますか？)**
 
 **Additional context (その他共有したい事項があれば記述してください)**
 Add any other context or screenshots about the feature request here.
