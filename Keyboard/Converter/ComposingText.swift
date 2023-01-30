@@ -366,6 +366,9 @@ struct ComposingText {
     }
 }
 
+// MARK: 部分領域の計算のためのAPI
+// 例えば、「akafa」という入力があるとき、「aka」はvalidな部分領域だが、「kaf」はinvalidである。
+// 難しいケースとして「itta」の「it」を「いっ」としてvalidな部分領域と見做したいというモチベーションがある。
 extension ComposingText {
     static func getConvertTarget(for elements: some Sequence<InputElement>) -> String {
         var convertTargetElements: [ConvertTargetElement] = []
@@ -387,6 +390,7 @@ extension ComposingText {
         return false
     }
 
+    // MARK: 利用されていないAPI
     static func isLeftSideValid(first firstElement: InputElement, of originalElements: [InputElement], from leftIndex: Int) -> Bool {
         // leftIndexの位置にある`el`のチェック
         // 許されるパターンは以下の通り
@@ -430,6 +434,13 @@ extension ComposingText {
         return false
     }
 
+    /// 右側がvalidか調べる
+    /// - Parameters:
+    ///   - lastElement: 領域の最後の要素
+    ///   - convertTargetElements: 領域内まで読んで作成した`convertTarget`
+    ///   - originalElements: 領域を取り出した元の`input`
+    ///   - rightIndex: 領域の右隣の要素のインデックス
+    /// - Returns: 正当か否か
     static func isRightSideValid(lastElement: InputElement, convertTargetElements: [ConvertTargetElement], of originalElements: [InputElement], to rightIndex: Int) -> Bool {
         // rightIndexの位置にあるerのチェック
         // 許されるパターンは以下の通り
@@ -472,10 +483,13 @@ extension ComposingText {
     }
 
     /// 「正当な」部分領域を返す関数
-    /// `elements[leftIndex ..< rightIndex]が正当であればこれをConvertTargetに変換して返す。
-    ///  - examples
-    ///  `elements = [r(k, a, n, s, h, a)]`のとき、`k,a,n,s,h,a`や`k, a`は正当だが`a, n`や`s, h`は正当ではない。`k, a, n`は特に正当であるとみなす。
-    ///
+    /// - Parameters:
+    ///   - lastElement: 領域の最後の要素
+    ///   - originalElements: 領域を取り出した元の`input`
+    ///   - rightIndex: 領域の右隣の要素のインデックス
+    ///   - convertTargetElements: 領域内まで読んで作成した`convertTarget`
+    /// - Returns: 領域がvalidであれば`convertTarget`を返し、invalidなら`nil`を返す。
+    /// - Note: `elements = [r(k, a, n, s, h, a)]`のとき、`k,a,n,s,h,a`や`k, a`は正当だが`a, n`や`s, h`は正当ではない。`k, a, n`は特に正当であるとみなす。
     static func getConvertTargetIfRightSideIsValid(lastElement: InputElement, of originalElements: [InputElement], to rightIndex: Int, convertTargetElements: [ConvertTargetElement]) -> String? {
         debug("getConvertTargetIfRightSideIsValid", lastElement, rightIndex)
         if originalElements.endIndex < rightIndex {

@@ -55,7 +55,7 @@ final class ComposingTextTests: XCTestCase {
         do {
             let inputStyle = InputStyle.roman2kana
             var c = ComposingText()
-            var v = c.insertAtCursorPosition("akafa", inputStyle: inputStyle)
+            let v = c.insertAtCursorPosition("akafa", inputStyle: inputStyle)
             XCTAssertEqual(c.input, [
                 ComposingText.InputElement(character: "a", inputStyle: inputStyle),
                 ComposingText.InputElement(character: "k", inputStyle: inputStyle),
@@ -124,5 +124,51 @@ final class ComposingTextTests: XCTestCase {
             XCTAssertEqual(v, ComposingText.ViewOperation(delete: -1, input: ""))
         }
 
+    }
+
+    func testIsRightSideValid() throws {
+        do {
+            var c = ComposingText()
+            _ = c.insertAtCursorPosition("akafatta", inputStyle: .roman2kana) // あかふぁった|
+            XCTAssertTrue(ComposingText.isRightSideValid(lastElement: ComposingText.InputElement(character: "a", inputStyle: .roman2kana), convertTargetElements: [ComposingText.ConvertTargetElement(string: "あ", inputStyle: .roman2kana)], of: c.input, to: 1))
+            XCTAssertFalse(ComposingText.isRightSideValid(lastElement: ComposingText.InputElement(character: "k", inputStyle: .roman2kana), convertTargetElements: [ComposingText.ConvertTargetElement(string: "あk", inputStyle: .roman2kana)], of: c.input, to: 2))
+            XCTAssertTrue(ComposingText.isRightSideValid(lastElement: ComposingText.InputElement(character: "a", inputStyle: .roman2kana), convertTargetElements: [ComposingText.ConvertTargetElement(string: "あか", inputStyle: .roman2kana)], of: c.input, to: 3))
+            XCTAssertFalse(ComposingText.isRightSideValid(lastElement: ComposingText.InputElement(character: "f", inputStyle: .roman2kana), convertTargetElements: [ComposingText.ConvertTargetElement(string: "あかf", inputStyle: .roman2kana)], of: c.input, to: 4))
+            XCTAssertTrue(ComposingText.isRightSideValid(lastElement: ComposingText.InputElement(character: "a", inputStyle: .roman2kana), convertTargetElements: [ComposingText.ConvertTargetElement(string: "あかふぁ", inputStyle: .roman2kana)], of: c.input, to: 5))
+            // これはtrueにしている
+            XCTAssertTrue(ComposingText.isRightSideValid(lastElement: ComposingText.InputElement(character: "t", inputStyle: .roman2kana), convertTargetElements: [ComposingText.ConvertTargetElement(string: "あかふぁt", inputStyle: .roman2kana)], of: c.input, to: 6))
+            // これはfalse
+            XCTAssertFalse(ComposingText.isRightSideValid(lastElement: ComposingText.InputElement(character: "t", inputStyle: .roman2kana), convertTargetElements: [ComposingText.ConvertTargetElement(string: "あかふぁtt", inputStyle: .roman2kana)], of: c.input, to: 7))
+            XCTAssertTrue(ComposingText.isRightSideValid(lastElement: ComposingText.InputElement(character: "a", inputStyle: .roman2kana), convertTargetElements: [ComposingText.ConvertTargetElement(string: "あかふぁった", inputStyle: .roman2kana)], of: c.input, to: 8))
+        }
+    }
+
+    func testGetConvertTargetIfRightSideIsValid() throws {
+        do {
+            var c = ComposingText()
+            _ = c.insertAtCursorPosition("akafatta", inputStyle: .roman2kana) // あかふぁった|
+            XCTAssertEqual(
+                ComposingText.getConvertTargetIfRightSideIsValid(
+                    lastElement: ComposingText.InputElement(character: "t", inputStyle: .roman2kana),
+                    of: c.input,
+                    to: 6,
+                    convertTargetElements: [ComposingText.ConvertTargetElement(string: "あかふぁt", inputStyle: .roman2kana)]
+                ),
+                "あかふぁっ"
+            )
+        }
+        do {
+            var c = ComposingText()
+            _ = c.insertAtCursorPosition("kintarou", inputStyle: .roman2kana) // きんたろう|
+            XCTAssertEqual(
+                ComposingText.getConvertTargetIfRightSideIsValid(
+                    lastElement: ComposingText.InputElement(character: "n", inputStyle: .roman2kana),
+                    of: c.input,
+                    to: 3,
+                    convertTargetElements: [ComposingText.ConvertTargetElement(string: "きn", inputStyle: .roman2kana)]
+                ),
+                "きん"
+            )
+        }
     }
 }
