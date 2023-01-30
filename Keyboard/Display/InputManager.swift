@@ -614,7 +614,7 @@ final class InputManager {
         do {
             try self.displayedTextManager.moveCursor(count: operation.cursor)
         } catch {
-            self.clear()
+            _ = self.enter()
         }
         if count != 0 && requireSetResult {
             setResult()
