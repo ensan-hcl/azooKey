@@ -13,16 +13,22 @@
 /// カーソルのポジションもこのクラスが管理する。
 /// 設計方針として、inputStyleに関わる実装の違いは全てアップデート方法の違いとして吸収し、`input` / `delete` / `moveCursor` / `complete`時の違いとしては露出させないようにすることを目指した。
 struct ComposingText {
+    /// カーソルの位置。0は左端（左から右に書く言語の場合）に対応する。
     private(set) var convertTargetCursorPosition: Int = 0
+    /// ユーザの入力シーケンス。historyとは異なり、変換対象文字列に対応するものを保持する。また、deleteやmove cursor等の操作履歴は保持しない。
     private(set) var input: [InputElement] = []
+    /// 変換対象文字列。
     private(set) var convertTarget: String = ""
 
+    /// ユーザ入力の単位
     struct InputElement {
+        /// 入力された文字
         var character: Character
+        /// そのときの入力方式(ローマ字入力 / ダイレクト入力)
         var inputStyle: InputStyle
     }
 
-    /// 変換しなくて良いか
+    /// 変換対象文字列が存在するか否か
     var isEmpty: Bool {
         self.convertTarget.isEmpty
     }
@@ -46,7 +52,7 @@ struct ComposingText {
     /// `target`が左側に来るようなカーソルの位置を返す。
     /// 例えば`input`が`[k, y, o, u]`で`target`が`き|`の場合を考える。
     /// この状態では`input`に対応するカーソル位置が存在しない。
-    /// この場合、`input`を`[き, ょ, u]`と置き換えた上で`1`を返す。
+    /// この場合、`input`を`[き, ょ, u]`と置き換えた上で、`き|`と考えて、`1`を返す。
     private mutating func forceGetInputCursorPosition(target: some StringProtocol) -> Int {
         debug("ComposingText forceGetInputCursorPosition", self, target)
         if target.isEmpty {
@@ -205,7 +211,7 @@ struct ComposingText {
     }
 
     /// inputの更新における特殊処理を扱う
-    /// アドホックな対処なのでどうにか一般化したい所存。
+    /// TODO: アドホックな対処なのでどうにか一般化したい。
     private mutating func updateInput(_ string: String, at inputCursorPosition: Int, inputStyle: InputStyle) {
         if inputCursorPosition == 0 {
             self.input.insert(contentsOf: string.map {InputElement(character: $0, inputStyle: inputStyle)}, at: inputCursorPosition)
@@ -251,6 +257,7 @@ struct ComposingText {
         return ViewOperation(delete: diff.delete, input: diff.input)
     }
 
+    /// 現在のカーソル位置から（左から右に書く言語では）右側の文字を削除する関数
     mutating func deleteForwardFromCursorPosition(count: Int) -> ViewOperation {
         let count = min(convertTarget.count - convertTargetCursorPosition, count)
         if count == 0 {
@@ -262,8 +269,8 @@ struct ComposingText {
         return ViewOperation(delete: -result.delete, input: result.input)
     }
 
-    /// 現在のカーソル位置から文字を削除する関数
-    /// エッジケースとして、`sha: しゃ|`の状態で1文字消すような場合がある。
+    /// 現在のカーソル位置から（左から右に書く言語では）左側の文字を削除する関数
+    /// エッジケースとして、`sha: しゃ|`の状態で1文字消すような場合がある。この場合、`[s, h, a]`を`[し, ゃ]`に変換した上で「ゃ」を削除する。
     mutating func deleteBackwardFromCursorPosition(count: Int) -> ViewOperation {
         let count = min(convertTargetCursorPosition, count)
 
@@ -343,6 +350,7 @@ struct ComposingText {
         self.convertTargetCursorPosition -= cursorDelta
     }
 
+    /// 現在のカーソル位置までの文字でComposingTextを作成し、返す
     func prefixToCursorPosition() -> ComposingText {
         var text = self
         let index = text.forceGetInputCursorPosition(target: text.convertTarget.prefix(text.convertTargetCursorPosition))

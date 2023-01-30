@@ -51,6 +51,23 @@ final class ComposingTextTests: XCTestCase {
             XCTAssertEqual(c, ComposingText(convertTargetCursorPosition: 2, input: [.init(character: "a", inputStyle: inputStyle), .init(character: "k", inputStyle: inputStyle), .init(character: "i", inputStyle: inputStyle)], convertTarget: "あき"))
             XCTAssertEqual(v, ComposingText.ViewOperation(delete: 1, input: "き"))
         }
+        // ローマ字で一気に入力
+        do {
+            let inputStyle = InputStyle.roman2kana
+            var c = ComposingText()
+            var v = c.insertAtCursorPosition("akafa", inputStyle: inputStyle)
+            XCTAssertEqual(c.input, [
+                ComposingText.InputElement(character: "a", inputStyle: inputStyle),
+                ComposingText.InputElement(character: "k", inputStyle: inputStyle),
+                ComposingText.InputElement(character: "a", inputStyle: inputStyle),
+                ComposingText.InputElement(character: "f", inputStyle: inputStyle),
+                ComposingText.InputElement(character: "a", inputStyle: inputStyle),
+            ])
+            XCTAssertEqual(c.convertTarget, "あかふぁ")
+            XCTAssertEqual(c.convertTargetCursorPosition, 4)
+            XCTAssertEqual(v, ComposingText.ViewOperation(delete: 0, input: "あかふぁ"))
+
+        }
         // ミックス
         do {
             var c = ComposingText()
@@ -68,5 +85,44 @@ final class ComposingTextTests: XCTestCase {
             XCTAssertEqual(c, ComposingText(convertTargetCursorPosition: 2, input: [.init(character: "a", inputStyle: .direct), .init(character: "k", inputStyle: .roman2kana), .init(character: "i", inputStyle: .roman2kana)], convertTarget: "aき"))
             XCTAssertEqual(v, ComposingText.ViewOperation(delete: 1, input: "き"))
         }
+    }
+
+    func testDeleteForward() throws {
+        // ダイレクト
+        do {
+            var c = ComposingText()
+            _ = c.insertAtCursorPosition("あいうえお", inputStyle: .direct) // あいうえお|
+            _ = c.moveCursorFromCursorPosition(count: -3)  // あい|うえお
+            // 「う」を消す
+            let v = c.deleteForwardFromCursorPosition(count: 1)   // あい|えお
+            XCTAssertEqual(c.input, [
+                ComposingText.InputElement(character: "あ", inputStyle: .direct),
+                ComposingText.InputElement(character: "い", inputStyle: .direct),
+                ComposingText.InputElement(character: "え", inputStyle: .direct),
+                ComposingText.InputElement(character: "お", inputStyle: .direct),
+            ])
+            XCTAssertEqual(c.convertTarget, "あいえお")
+            XCTAssertEqual(c.convertTargetCursorPosition, 2)
+            XCTAssertEqual(v, ComposingText.ViewOperation(delete: -1, input: ""))
+        }
+
+        // ローマ字（危険なケース）
+        do {
+            var c = ComposingText()
+            _ = c.insertAtCursorPosition("akafa", inputStyle: .roman2kana) // あかふぁ|
+            _ = c.moveCursorFromCursorPosition(count: -1)  // あかふ|ぁ
+            // 「ぁ」を消す
+            let v = c.deleteForwardFromCursorPosition(count: 1)   // あかふ
+            XCTAssertEqual(c.input, [
+                ComposingText.InputElement(character: "a", inputStyle: .roman2kana),
+                ComposingText.InputElement(character: "k", inputStyle: .roman2kana),
+                ComposingText.InputElement(character: "a", inputStyle: .roman2kana),
+                ComposingText.InputElement(character: "ふ", inputStyle: .direct),
+            ])
+            XCTAssertEqual(c.convertTarget, "あかふ")
+            XCTAssertEqual(c.convertTargetCursorPosition, 3)
+            XCTAssertEqual(v, ComposingText.ViewOperation(delete: -1, input: ""))
+        }
+
     }
 }
