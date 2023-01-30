@@ -70,7 +70,7 @@ extension Collection {
 
 extension MutableCollection {
     /// Calls the given closure with a pointer to the array's mutable contiguous storage.
-    /// - Parameter 
+    /// - Parameter
     ///   - transform: A closure that takes a pointer to the array's mutable contiguous storage.
     mutating func mutatingForeach(transform closure: (inout Element) throws -> Void) rethrows {
         for index in self.indices {

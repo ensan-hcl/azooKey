@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 /// Note: This class is based on the following code: [https://github.com/MasamiYamate/YMTGetDeviceName/blob/master/YMTGetDeviceName/YMTGetDeviceName.swift]
 /// The code is on The MIT License (MIT).
 final class DeviceName {
