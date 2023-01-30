@@ -97,11 +97,11 @@ struct OpenSourceSoftWaresLicenseView: View {
             }
             Group {
                 Section {
-                    Text("JMdict/EDICT").font(.title).padding()
-                    Text("本アプリケーションは基礎的な語彙の基盤としてJMdict/EDICTを使用しています。これらのファイルはElectronic Dictionary Research and Development Groupの所有物であり、ライセンスに基づいて使用されています。")
+                    Text("SudachiDict").font(.title).padding()
+                    Text("本アプリケーションは基礎的な語彙の基盤としてSudachiDictを使用しています。")
 
-                    FallbackLink("License", destination: "https://www.edrdg.org/edrdg/license.html")
-                    FallbackLink("JMdict-EDICT Dictionary Project", destination: "https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project")
+                    FallbackLink("License", destination: "https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt")
+                    FallbackLink("SudachiDict", destination: "https://github.com/WorksApplications/SudachiDict")
                 }
                 Section {
                     Text("IPAdic").font(.title).padding()
