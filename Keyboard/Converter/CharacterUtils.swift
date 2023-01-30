@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Character {
+enum CharacterUtils {
     /// 小書きのかなカナ集合
     private static let kogakiKana: Set<Character> = [
         "ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "ゕ", "ゖ", "っ", "ゃ", "ゅ", "ょ", "ゎ",
@@ -21,18 +21,18 @@ extension Character {
     ]
 
     /// 小書きかなか否か
-    var isKogana: Bool {
-        Character.kogakiKana.contains(self)
+    static func isKogana(_ character: Character) -> Bool {
+        kogakiKana.contains(character)
     }
 
     /// ローマ字(a-z, A-Zか否か)
-    var isRomanLetter: Bool {
-        self.isASCII && self.isCased
+    static func isRomanLetter(_ character: Character) -> Bool {
+        character.isASCII && character.isCased
     }
 
     /// 自分が小書きであれば該当する文字を返す。
-    var kogaki: Character {
-        switch self {
+    static func kogaki(_ character: Character) -> Character {
+        switch character {
         case "あ":return "ぁ"
         case "い":return "ぃ"
         case "う":return "ぅ"
@@ -57,13 +57,13 @@ extension Character {
         case "ユ":return "ュ"
         case "ヨ":return "ョ"
         case "ワ":return "ヮ"
-        default: return self
+        default: return character
         }
     }
 
     /// 小書きから大書きを返す
-    var ogaki: Character {
-        switch self {
+    static func ogaki(_ character: Character) -> Character {
+        switch character {
         case "ぁ":return "あ"
         case "ぃ":return "い"
         case "ぅ":return "う"
@@ -88,17 +88,17 @@ extension Character {
         case "ュ":return "ユ"
         case "ョ":return "ヨ"
         case "ヮ":return "ワ"
-        default: return self
+        default: return character
         }
     }
 
     /// 濁点付きか否か
-    var isDakuten: Bool {
-        Character.dakutenKana.contains(self)
+    static func isDakuten(_ character: Character) -> Bool {
+        dakutenKana.contains(character)
     }
     /// 濁点をつけて返す
-    var dakuten: Character {
-        switch self {
+    static func dakuten(_ character: Character) -> Character {
+        switch character {
         case"う":return "ゔ"
         case"か":return "が"
         case"き":return "ぎ"
@@ -141,12 +141,12 @@ extension Character {
         case"フ":return "ブ"
         case"ヘ":return "ベ"
         case"ホ":return "ボ"
-        default: return self
+        default: return character
         }
     }
     /// 濁点を外して返す
-    var mudakuten: Character {
-        switch self {
+    static func mudakuten(_ character: Character) -> Character {
+        switch character {
         case"ゔ":return "う"
         case"が":return "か"
         case"ぎ":return "き"
@@ -189,19 +189,19 @@ extension Character {
         case"ブ":return "フ"
         case"ベ":return "ヘ"
         case"ボ":return "ホ"
-        default: return self
+        default: return character
         }
     }
     /// 半濁点かどうか
-    var isHandakuten: Bool {
+    static func isHandakuten(_ character: Character) -> Bool {
         [
             "ぱ", "ぴ", "ぷ", "ぺ", "ぽ",
             "パ", "ピ", "プ", "ペ", "ポ"
-        ].contains(self)
+        ].contains(character)
     }
     /// 半濁点をつけて返す
-    var handakuten: Character {
-        switch self {
+    static func handakuten(_ character: Character) -> Character {
+        switch character {
         case"は":return "ぱ"
         case"ひ":return "ぴ"
         case"ふ":return "ぷ"
@@ -212,12 +212,12 @@ extension Character {
         case"フ":return "プ"
         case"ヘ":return "ペ"
         case"ホ":return "ポ"
-        default: return self
+        default: return character
         }
     }
     /// 半濁点を外して返す
-    var muhandakuten: Character {
-        switch self {
+    static func muhandakuten(_ character: Character) -> Character {
+        switch character {
         case"ぱ":return "は"
         case"ぴ":return "ひ"
         case"ぷ":return "ふ"
@@ -228,62 +228,64 @@ extension Character {
         case"プ":return "フ"
         case"ペ":return "ヘ"
         case"ポ":return "ホ"
-        default: return self
+        default: return character
         }
     }
 
     /// 濁点、小書き、半濁点などを相互に変換する関数。
-    func requestChange() -> String {
-        if self.isLowercase {
-            return self.uppercased()
+    static func requestChange(_ character: Character) -> String {
+        if character.isLowercase {
+            return character.uppercased()
         }
-        if self.isUppercase {
-            return self.lowercased()
-        }
-
-        if Set(["あ", "い", "え", "お", "や", "ゆ", "よ", "わ"]).contains(self) {
-            return String(self.kogaki)
+        if character.isUppercase {
+            return character.lowercased()
         }
 
-        if Set(["ぁ", "ぃ", "ぇ", "ぉ", "ゃ", "ゅ", "ょ", "ゎ"]).contains(self) {
-            return String(self.ogaki)
+        if Set(["あ", "い", "え", "お", "や", "ゆ", "よ", "わ"]).contains(character) {
+            return String(kogaki(character))
         }
 
-        if Set(["か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "て", "と"]).contains(self) {
-            return String(self.dakuten)
+        if Set(["ぁ", "ぃ", "ぇ", "ぉ", "ゃ", "ゅ", "ょ", "ゎ"]).contains(character) {
+            return String(ogaki(character))
         }
 
-        if Set(["が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "で", "ど"]).contains(self) {
-            return String(self.mudakuten)
+        if Set(["か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "て", "と"]).contains(character) {
+            return String(dakuten(character))
         }
 
-        if Set(["つ", "う"]).contains(self) {
-            return String(self.kogaki)
+        if Set(["が", "ぎ", "ぐ", "げ", "ご", "ざ", "じ", "ず", "ぜ", "ぞ", "だ", "ぢ", "で", "ど"]).contains(character) {
+            return String(mudakuten(character))
         }
 
-        if Set(["っ", "ぅ"]).contains(self) {
-            return String(self.ogaki.dakuten)
+        if Set(["つ", "う"]).contains(character) {
+            return String(kogaki(character))
         }
 
-        if Set(["づ", "ゔ"]).contains(self) {
-            return String(self.mudakuten)
+        if Set(["っ", "ぅ"]).contains(character) {
+            return String(dakuten(ogaki(character)))
         }
 
-        if Set(["は", "ひ", "ふ", "へ", "ほ"]).contains(self) {
-            return String(self.dakuten)
+        if Set(["づ", "ゔ"]).contains(character) {
+            return String(mudakuten(character))
         }
 
-        if Set(["ば", "び", "ぶ", "べ", "ぼ"]).contains(self) {
-            return String(self.mudakuten.handakuten)
+        if Set(["は", "ひ", "ふ", "へ", "ほ"]).contains(character) {
+            return String(dakuten(character))
         }
 
-        if Set(["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"]).contains(self) {
-            return String(self.muhandakuten)
+        if Set(["ば", "び", "ぶ", "べ", "ぼ"]).contains(character) {
+            return String(handakuten(mudakuten(character)))
         }
 
-        return String(self)
+        if Set(["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"]).contains(character) {
+            return String(muhandakuten(character))
+        }
+
+        return String(character)
     }
+}
 
+extension Character {
     /// Returns the Katakanized version of the character.
     @inlinable func toKatakana() -> Character {
         if self.unicodeScalars.count != 1 {

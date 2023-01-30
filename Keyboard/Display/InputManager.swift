@@ -584,7 +584,7 @@ final class InputManager {
         guard let char = self.composingText.convertTargetBeforeCursor.last else {
             return
         }
-        let changed = char.requestChange()
+        let changed = CharacterUtils.requestChange(char)
         // 同じ文字の場合は無視する
         if Character(changed) == char {
             return

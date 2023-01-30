@@ -13,7 +13,7 @@ extension ComposingText {
         guard let first = components.first?.string.first?.toKatakana() else {
             return false
         }
-        return !first.isRomanLetter && !DicdataStore.existLOUDS(for: first)
+        return !CharacterUtils.isRomanLetter(first) && !DicdataStore.existLOUDS(for: first)
     }
 
     /// closedRangeでもらう

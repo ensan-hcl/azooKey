@@ -12,132 +12,132 @@ import XCTest
 final class CharacterUtilsTests: XCTestCase {
 
     func testIsKogana() throws {
-        XCTAssertTrue(("ぁ" as Character).isKogana)
-        XCTAssertTrue(("ヵ" as Character).isKogana)
-        XCTAssertTrue(("ッ" as Character).isKogana)
-        XCTAssertTrue(("ヮ" as Character).isKogana)
-        XCTAssertTrue(("ゎ" as Character).isKogana)
+        XCTAssertTrue(CharacterUtils.isKogana("ぁ"))
+        XCTAssertTrue(CharacterUtils.isKogana("ヵ"))
+        XCTAssertTrue(CharacterUtils.isKogana("ッ"))
+        XCTAssertTrue(CharacterUtils.isKogana("ヮ"))
+        XCTAssertTrue(CharacterUtils.isKogana("ゎ"))
 
-        XCTAssertFalse(("あ" as Character).isKogana)
-        XCTAssertFalse(("カ" as Character).isKogana)
-        XCTAssertFalse(("a" as Character).isKogana)
-        XCTAssertFalse(("!" as Character).isKogana)
+        XCTAssertFalse(CharacterUtils.isKogana("あ"))
+        XCTAssertFalse(CharacterUtils.isKogana("カ"))
+        XCTAssertFalse(CharacterUtils.isKogana("a"))
+        XCTAssertFalse(CharacterUtils.isKogana("!"))
     }
 
     func testIsRomanLetter() throws {
-        XCTAssertTrue(("a" as Character).isRomanLetter)
-        XCTAssertTrue(("A" as Character).isRomanLetter)
-        XCTAssertTrue(("b" as Character).isRomanLetter)
+        XCTAssertTrue(CharacterUtils.isRomanLetter("a"))
+        XCTAssertTrue(CharacterUtils.isRomanLetter("A"))
+        XCTAssertTrue(CharacterUtils.isRomanLetter("b"))
 
-        XCTAssertFalse(("ぁ" as Character).isRomanLetter)
-        XCTAssertFalse(("'" as Character).isRomanLetter)
-        XCTAssertFalse(("あ" as Character).isRomanLetter)
-        XCTAssertFalse(("カ" as Character).isRomanLetter)
-        XCTAssertFalse(("!" as Character).isRomanLetter)
+        XCTAssertFalse(CharacterUtils.isRomanLetter("ぁ"))
+        XCTAssertFalse(CharacterUtils.isRomanLetter("'"))
+        XCTAssertFalse(CharacterUtils.isRomanLetter("あ"))
+        XCTAssertFalse(CharacterUtils.isRomanLetter("カ"))
+        XCTAssertFalse(CharacterUtils.isRomanLetter("!"))
     }
 
     func testIsDakuten() throws {
-        XCTAssertTrue(("が" as Character).isDakuten)
-        XCTAssertTrue(("ば" as Character).isDakuten)
-        XCTAssertTrue(("ダ" as Character).isDakuten)
-        XCTAssertTrue(("ヴ" as Character).isDakuten)
-        XCTAssertTrue(("ゔ" as Character).isDakuten)
+        XCTAssertTrue(CharacterUtils.isDakuten("が"))
+        XCTAssertTrue(CharacterUtils.isDakuten("ば"))
+        XCTAssertTrue(CharacterUtils.isDakuten("ダ"))
+        XCTAssertTrue(CharacterUtils.isDakuten("ヴ"))
+        XCTAssertTrue(CharacterUtils.isDakuten("ゔ"))
 
-        XCTAssertFalse(("ぱ" as Character).isDakuten)
-        XCTAssertFalse(("あ" as Character).isDakuten)
-        XCTAssertFalse(("a" as Character).isDakuten)
-        XCTAssertFalse(("!" as Character).isDakuten)
-        XCTAssertFalse(("ん" as Character).isDakuten)
+        XCTAssertFalse(CharacterUtils.isDakuten("ぱ"))
+        XCTAssertFalse(CharacterUtils.isDakuten("あ"))
+        XCTAssertFalse(CharacterUtils.isDakuten("a"))
+        XCTAssertFalse(CharacterUtils.isDakuten("!"))
+        XCTAssertFalse(CharacterUtils.isDakuten("ん"))
     }
 
     func testIsHandakuten() throws {
-        XCTAssertTrue(("ぱ" as Character).isHandakuten)
-        XCTAssertTrue(("パ" as Character).isHandakuten)
-        XCTAssertTrue(("プ" as Character).isHandakuten)
-        XCTAssertTrue(("ぽ" as Character).isHandakuten)
-        XCTAssertTrue(("ペ" as Character).isHandakuten)
+        XCTAssertTrue(CharacterUtils.isHandakuten("ぱ"))
+        XCTAssertTrue(CharacterUtils.isHandakuten("パ"))
+        XCTAssertTrue(CharacterUtils.isHandakuten("プ"))
+        XCTAssertTrue(CharacterUtils.isHandakuten("ぽ"))
+        XCTAssertTrue(CharacterUtils.isHandakuten("ペ"))
 
-        XCTAssertFalse(("ば" as Character).isHandakuten)
-        XCTAssertFalse(("が" as Character).isHandakuten)
-        XCTAssertFalse(("a" as Character).isHandakuten)
-        XCTAssertFalse(("!" as Character).isHandakuten)
-        XCTAssertFalse(("ん" as Character).isHandakuten)
+        XCTAssertFalse(CharacterUtils.isHandakuten("ば"))
+        XCTAssertFalse(CharacterUtils.isHandakuten("が"))
+        XCTAssertFalse(CharacterUtils.isHandakuten("a"))
+        XCTAssertFalse(CharacterUtils.isHandakuten("!"))
+        XCTAssertFalse(CharacterUtils.isHandakuten("ん"))
     }
 
     func testKogaki() throws {
-        XCTAssertEqual(("あ" as Character).kogaki, "ぁ")
-        XCTAssertEqual(("カ" as Character).kogaki, "ヵ")
-        XCTAssertEqual(("ワ" as Character).kogaki, "ヮ")
+        XCTAssertEqual(CharacterUtils.kogaki("あ"), "ぁ")
+        XCTAssertEqual(CharacterUtils.kogaki("カ"), "ヵ")
+        XCTAssertEqual(CharacterUtils.kogaki("ワ"), "ヮ")
 
         // そのままの場合もある
-        XCTAssertEqual(("ん" as Character).kogaki, "ん")
-        XCTAssertEqual(("漢" as Character).kogaki, "漢")
-        XCTAssertEqual(("A" as Character).kogaki, "A")
+        XCTAssertEqual(CharacterUtils.kogaki("ん"), "ん")
+        XCTAssertEqual(CharacterUtils.kogaki("漢"), "漢")
+        XCTAssertEqual(CharacterUtils.kogaki("A"), "A")
     }
 
     func testOgaki() throws {
-        XCTAssertEqual(("ぁ" as Character).ogaki, "あ")
-        XCTAssertEqual(("ヵ" as Character).ogaki, "カ")
-        XCTAssertEqual(("ヮ" as Character).ogaki, "ワ")
+        XCTAssertEqual(CharacterUtils.ogaki("ぁ"), "あ")
+        XCTAssertEqual(CharacterUtils.ogaki("ヵ"), "カ")
+        XCTAssertEqual(CharacterUtils.ogaki("ヮ"), "ワ")
 
         // そのままの場合もある
-        XCTAssertEqual(("ん" as Character).ogaki, "ん")
-        XCTAssertEqual(("漢" as Character).ogaki, "漢")
-        XCTAssertEqual(("A" as Character).ogaki, "A")
+        XCTAssertEqual(CharacterUtils.ogaki("ん"), "ん")
+        XCTAssertEqual(CharacterUtils.ogaki("漢"), "漢")
+        XCTAssertEqual(CharacterUtils.ogaki("A"), "A")
     }
 
     func testDakuten() throws {
-        XCTAssertEqual(("か" as Character).dakuten, "が")
-        XCTAssertEqual(("う" as Character).dakuten, "ゔ")
-        XCTAssertEqual(("ホ" as Character).dakuten, "ボ")
+        XCTAssertEqual(CharacterUtils.dakuten("か"), "が")
+        XCTAssertEqual(CharacterUtils.dakuten("う"), "ゔ")
+        XCTAssertEqual(CharacterUtils.dakuten("ホ"), "ボ")
         // 「へ」はひらがな、カタカナの判別が難しいので、厳密にやる
-        XCTAssertEqual(("へ" as Character).toHiragana().dakuten, ("べ" as Character).toHiragana())
-        XCTAssertEqual(("へ" as Character).toKatakana().dakuten, ("べ" as Character).toKatakana())
+        XCTAssertEqual(CharacterUtils.dakuten(("へ" as Character).toHiragana()), ("べ" as Character).toHiragana())
+        XCTAssertEqual(CharacterUtils.dakuten(("へ" as Character).toKatakana()), ("べ" as Character).toKatakana())
 
         // そのままの場合もある
-        XCTAssertEqual(("パ" as Character).dakuten, "パ")
-        XCTAssertEqual(("漢" as Character).dakuten, "漢")
-        XCTAssertEqual(("A" as Character).dakuten, "A")
+        XCTAssertEqual(CharacterUtils.dakuten("パ"), "パ")
+        XCTAssertEqual(CharacterUtils.dakuten("漢"), "漢")
+        XCTAssertEqual(CharacterUtils.dakuten("A"), "A")
     }
 
     func testMudakuten() throws {
-        XCTAssertEqual(("が" as Character).mudakuten, "か")
-        XCTAssertEqual(("ゔ" as Character).mudakuten, "う")
-        XCTAssertEqual(("ボ" as Character).mudakuten, "ホ")
+        XCTAssertEqual(CharacterUtils.mudakuten("が"), "か")
+        XCTAssertEqual(CharacterUtils.mudakuten("ゔ"), "う")
+        XCTAssertEqual(CharacterUtils.mudakuten("ボ"), "ホ")
         // 「へ」はひらがな、カタカナの判別が難しいので、厳密にやる
-        XCTAssertEqual(("べ" as Character).toHiragana().mudakuten, ("へ" as Character).toHiragana())
-        XCTAssertEqual(("べ" as Character).toKatakana().mudakuten, ("へ" as Character).toKatakana())
+        XCTAssertEqual(CharacterUtils.mudakuten(("べ" as Character).toHiragana()), ("へ" as Character).toHiragana())
+        XCTAssertEqual(CharacterUtils.mudakuten(("べ" as Character).toKatakana()), ("へ" as Character).toKatakana())
 
         // そのままの場合もある
-        XCTAssertEqual(("パ" as Character).mudakuten, "パ")
-        XCTAssertEqual(("漢" as Character).mudakuten, "漢")
-        XCTAssertEqual(("A" as Character).mudakuten, "A")
+        XCTAssertEqual(CharacterUtils.mudakuten("パ"), "パ")
+        XCTAssertEqual(CharacterUtils.mudakuten("漢"), "漢")
+        XCTAssertEqual(CharacterUtils.mudakuten("A"), "A")
     }
 
     func testHandakuten() throws {
-        XCTAssertEqual(("は" as Character).handakuten, "ぱ")
-        XCTAssertEqual(("ホ" as Character).handakuten, "ポ")
+        XCTAssertEqual(CharacterUtils.handakuten("は"), "ぱ")
+        XCTAssertEqual(CharacterUtils.handakuten("ホ"), "ポ")
         // 「へ」はひらがな、カタカナの判別が難しいので、厳密にやる
-        XCTAssertEqual(("へ" as Character).toHiragana().handakuten, ("ぺ" as Character).toHiragana())
-        XCTAssertEqual(("へ" as Character).toKatakana().handakuten, ("ぺ" as Character).toKatakana())
+        XCTAssertEqual(CharacterUtils.handakuten(("へ" as Character).toHiragana()), ("ぺ" as Character).toHiragana())
+        XCTAssertEqual(CharacterUtils.handakuten(("へ" as Character).toKatakana()), ("ぺ" as Character).toKatakana())
 
         // そのままの場合もある
-        XCTAssertEqual(("バ" as Character).handakuten, "バ")
-        XCTAssertEqual(("漢" as Character).handakuten, "漢")
-        XCTAssertEqual(("A" as Character).handakuten, "A")
+        XCTAssertEqual(CharacterUtils.handakuten("バ"), "バ")
+        XCTAssertEqual(CharacterUtils.handakuten("漢"), "漢")
+        XCTAssertEqual(CharacterUtils.handakuten("A"), "A")
     }
 
     func testMuhandakuten() throws {
-        XCTAssertEqual(("ぱ" as Character).muhandakuten, "は")
-        XCTAssertEqual(("ポ" as Character).muhandakuten, "ホ")
+        XCTAssertEqual(CharacterUtils.muhandakuten("ぱ"), "は")
+        XCTAssertEqual(CharacterUtils.muhandakuten("ポ"), "ホ")
         // 「へ」はひらがな、カタカナの判別が難しいので、厳密にやる
-        XCTAssertEqual(("ぺ" as Character).toHiragana().muhandakuten, ("へ" as Character).toHiragana())
-        XCTAssertEqual(("ぺ" as Character).toKatakana().muhandakuten, ("へ" as Character).toKatakana())
+        XCTAssertEqual(CharacterUtils.muhandakuten(("ぺ" as Character).toHiragana()), ("へ" as Character).toHiragana())
+        XCTAssertEqual(CharacterUtils.muhandakuten(("ぺ" as Character).toKatakana()), ("へ" as Character).toKatakana())
 
         // そのままの場合もある
-        XCTAssertEqual(("バ" as Character).muhandakuten, "バ")
-        XCTAssertEqual(("漢" as Character).muhandakuten, "漢")
-        XCTAssertEqual(("A" as Character).muhandakuten, "A")
+        XCTAssertEqual(CharacterUtils.muhandakuten("バ"), "バ")
+        XCTAssertEqual(CharacterUtils.muhandakuten("漢"), "漢")
+        XCTAssertEqual(CharacterUtils.muhandakuten("A"), "A")
     }
 
     func testToHiragana() throws {
@@ -165,27 +165,27 @@ final class CharacterUtilsTests: XCTestCase {
     }
 
     func testRequestChange() throws {
-        XCTAssertEqual(("あ" as Character).requestChange(), "ぁ")
-        XCTAssertEqual(("ぁ" as Character).requestChange(), "あ")
-        XCTAssertEqual(("か" as Character).requestChange(), "が")
-        XCTAssertEqual(("が" as Character).requestChange(), "か")
-        XCTAssertEqual(("つ" as Character).requestChange(), "っ")
-        XCTAssertEqual(("っ" as Character).requestChange(), "づ")
-        XCTAssertEqual(("づ" as Character).requestChange(), "つ")
-        XCTAssertEqual(("は" as Character).requestChange(), "ば")
-        XCTAssertEqual(("ば" as Character).requestChange(), "ぱ")
-        XCTAssertEqual(("ぱ" as Character).requestChange(), "は")
+        XCTAssertEqual(CharacterUtils.requestChange("あ"), "ぁ")
+        XCTAssertEqual(CharacterUtils.requestChange("ぁ"), "あ")
+        XCTAssertEqual(CharacterUtils.requestChange("か"), "が")
+        XCTAssertEqual(CharacterUtils.requestChange("が"), "か")
+        XCTAssertEqual(CharacterUtils.requestChange("つ"), "っ")
+        XCTAssertEqual(CharacterUtils.requestChange("っ"), "づ")
+        XCTAssertEqual(CharacterUtils.requestChange("づ"), "つ")
+        XCTAssertEqual(CharacterUtils.requestChange("は"), "ば")
+        XCTAssertEqual(CharacterUtils.requestChange("ば"), "ぱ")
+        XCTAssertEqual(CharacterUtils.requestChange("ぱ"), "は")
 
-        XCTAssertEqual(("a" as Character).requestChange(), "A")
-        XCTAssertEqual(("A" as Character).requestChange(), "a")
+        XCTAssertEqual(CharacterUtils.requestChange("a"), "A")
+        XCTAssertEqual(CharacterUtils.requestChange("A"), "a")
 
-        XCTAssertEqual(("Π" as Character).requestChange(), "π")
-        XCTAssertEqual(("π" as Character).requestChange(), "Π")
+        XCTAssertEqual(CharacterUtils.requestChange("Π"), "π")
+        XCTAssertEqual(CharacterUtils.requestChange("π"), "Π")
 
         // そのままの場合もある
-        XCTAssertEqual(("バ" as Character).requestChange(), "バ")
-        XCTAssertEqual(("漢" as Character).requestChange(), "漢")
-        XCTAssertEqual(("。" as Character).requestChange(), "。")
+        XCTAssertEqual(CharacterUtils.requestChange("バ"), "バ")
+        XCTAssertEqual(CharacterUtils.requestChange("漢"), "漢")
+        XCTAssertEqual(CharacterUtils.requestChange("。"), "。")
     }
 
 }

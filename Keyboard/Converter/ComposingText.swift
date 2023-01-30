@@ -179,7 +179,7 @@ struct ComposingText {
                 let replaceCount = count - lastPrefixIndex
                 let suffix = converted.suffix(converted.count - lastPrefix.count)
                 self.input.removeSubrange(count - replaceCount ..< count)
-                self.input.insert(contentsOf: suffix.map {InputElement(character: $0, inputStyle: $0.isRomanLetter ? .roman2kana : .direct)}, at: count - replaceCount)
+                self.input.insert(contentsOf: suffix.map {InputElement(character: $0, inputStyle: CharacterUtils.isRomanLetter($0) ? .roman2kana : .direct)}, at: count - replaceCount)
 
                 count -= replaceCount
                 count += suffix.count
@@ -410,7 +410,7 @@ extension ComposingText {
         }
 
         let prevLastElement = originalElements[leftIndex - 1]
-        if prevLastElement.inputStyle != .roman2kana || !prevLastElement.character.isRomanLetter {
+        if prevLastElement.inputStyle != .roman2kana || !CharacterUtils.isRomanLetter(prevLastElement.character) {
             return true
         }
 
@@ -459,7 +459,7 @@ extension ComposingText {
             return true
         }
         let nextFirstElement = originalElements[rightIndex]
-        if nextFirstElement.inputStyle != .roman2kana || !nextFirstElement.character.isRomanLetter {
+        if nextFirstElement.inputStyle != .roman2kana || !CharacterUtils.isRomanLetter(nextFirstElement.character) {
             return true
         }
         if ["a", "i", "u", "e", "o"].contains(lastElement.character) {
