@@ -12,11 +12,21 @@ final class ConverterTests: XCTestCase {
     func testFullConversion() throws {
         // データリソースの場所を指定する
         DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
-        let converter = KanaKanjiConverter()
-        var c = ComposingText()
-        _ = c.insertAtCursorPosition("あずーきーはしんじだいのきーぼーどあぷりです", inputStyle: .direct)
-        let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
-        XCTAssertEqual(results.mainResults.first?.text, "azooKeyは新時代のキーボードアプリです")
+        do {
+            let converter = KanaKanjiConverter()
+            var c = ComposingText()
+            _ = c.insertAtCursorPosition("あずーきーはしんじだいのきーぼーどあぷりです", inputStyle: .direct)
+            let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+            XCTAssertEqual(results.mainResults.first?.text, "azooKeyは新時代のキーボードアプリです")
+        }
+        do {
+            let converter = KanaKanjiConverter()
+            var c = ComposingText()
+            _ = c.insertAtCursorPosition("ようしょうきからてにすすいえいやきゅうしょうりんじけんぽうなどさまざまなすぽーつをけいけんしながらそだちしょうがっこうじだいはろさんぜるすきんこうにたいざいしておりごるふやてにすをならっていた", inputStyle: .direct)
+            let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+            XCTAssertEqual(results.mainResults.first?.text, "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた")
+
+        }
     }
 
     // 1文字ずつ変換する

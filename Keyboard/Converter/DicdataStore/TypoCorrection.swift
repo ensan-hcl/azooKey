@@ -96,7 +96,6 @@ extension ComposingText {
                 }
             }
         }
-        debug("getRangesWithTypos", typos)
         return (typos, stringToEndIndex)
     }
 
@@ -173,7 +172,6 @@ extension ComposingText {
             }
             return nil
         }
-        debug("getRangeWithTypos", filtered, result)
         return filtered
     }
 
