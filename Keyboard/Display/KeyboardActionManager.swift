@@ -401,8 +401,16 @@ final class KeyboardActionManager: UserActionManager {
                 self.inputManager.userMovedCursor(count: offset)
                 return
             }
+
+            // MarkedTextを有効化している場合、テキストの送信等でここに来ることがある
+            // そのほかのイベントは発生しないので、クリアして問題ない
+            if self.inputManager.displayedTextManager.isMarkedTextEnabled {
+                self.inputManager.clear()
+                return
+            }
             // ただタップしただけ、などの場合ここにくる事がある。
             debug("user operation id: 3")
+
             return
         }
         // 以降isWholeTextChangedは常にtrue

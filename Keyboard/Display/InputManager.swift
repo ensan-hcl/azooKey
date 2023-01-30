@@ -13,7 +13,7 @@ final class InputManager {
     // 入力中の文字列を管理する構造体
     private(set) var composingText = ComposingText()
     // 表示される文字列を管理するクラス
-    private var displayedTextManager = DisplayedTextManager()
+    private(set) var displayedTextManager = DisplayedTextManager()
     // TODO: displayedTextManagerとliveConversionManagerを何らかの形で統合したい
     // ライブ変換を管理するクラス
     var liveConversionManager = LiveConversionManager()
