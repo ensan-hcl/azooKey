@@ -12,9 +12,11 @@ import SwiftUI
 private struct CandidateMock: ResultViewItemData {
     let inputable: Bool = true
     var text: String
+    #if DEBUG
     func getDebugInformation() -> String {
         "CandidateMock: \(text)"
     }
+    #endif
 }
 
 struct KeyboardPreview: View {

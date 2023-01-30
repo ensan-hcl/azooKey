@@ -14,7 +14,9 @@ import SwiftUI
 protocol ResultViewItemData {
     var text: String {get}
     var inputable: Bool {get}
+    #if DEBUG
     func getDebugInformation() -> String
+    #endif
 }
 
 final class ResultModelVariableSection<Candidate: ResultViewItemData>: ObservableObject {
