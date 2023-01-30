@@ -10,7 +10,9 @@ import Foundation
 
 extension LOUDS {
     private static let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-    private static let bundleURL = Bundle.main.bundleURL
+    private static var bundleURL: URL {
+        DicdataStore.bundleURL
+    }
 
     private static func loadLOUDSBinary(from url: URL) -> [UInt64]? {
         do {

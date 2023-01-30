@@ -18,6 +18,9 @@ final class DicdataStore {
         self.setup()
     }
 
+    /// in unit tests, the URL is replaced for their bundleURL
+    static var bundleURL = Bundle.main.bundleURL
+
     private var ccParsed: [Bool] = .init(repeating: false, count: 1319)
     private var ccLines: [[Int: PValue]] = []
     private var mmValue: [PValue] = []
@@ -45,13 +48,13 @@ final class DicdataStore {
         self.ccLines = [[Int: PValue]].init(repeating: [:], count: CIDData.totalCount)
 
         do {
-            let string = try String(contentsOf: Bundle.main.bundleURL.appendingPathComponent("Dictionary/louds/charID.chid", isDirectory: false), encoding: String.Encoding.utf8)
+            let string = try String(contentsOf: Self.bundleURL.appendingPathComponent("Dictionary/louds/charID.chid", isDirectory: false), encoding: String.Encoding.utf8)
             charsID = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
             debug("ファイルが存在しません: \(error)")
         }
         do {
-            let url = Bundle.main.bundleURL.appendingPathComponent("Dictionary/mm.binary", isDirectory: false)
+            let url = Self.bundleURL.appendingPathComponent("Dictionary/mm.binary", isDirectory: false)
             do {
                 let binaryData = try Data(contentsOf: url, options: [.uncached])
                 self.mmValue = binaryData.toArray(of: Float.self).map(PValue.init)
@@ -341,7 +344,7 @@ final class DicdataStore {
             return dicdata
         }
         do {
-            let csvString = try String(contentsOf: Bundle.main.bundleURL.appendingPathComponent("Dictionary/p/p_null.csv", isDirectory: false), encoding: String.Encoding.utf8)
+            let csvString = try String(contentsOf: Self.bundleURL.appendingPathComponent("Dictionary/p/p_null.csv", isDirectory: false), encoding: String.Encoding.utf8)
             let csvLines = csvString.split(separator: "\n")
             let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
             let dicdata: [DicdataElement] = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
@@ -366,7 +369,7 @@ final class DicdataStore {
         }
         if count == 1 {
             do {
-                let csvString = try String(contentsOf: Bundle.main.bundleURL.appendingPathComponent("Dictionary/p/p_\(head).csv", isDirectory: false), encoding: String.Encoding.utf8)
+                let csvString = try String(contentsOf: Self.bundleURL.appendingPathComponent("Dictionary/p/p_\(head).csv", isDirectory: false), encoding: String.Encoding.utf8)
                 let csvLines = csvString.split(separator: "\n")
                 let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
                 let dicdata: [DicdataElement] = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
@@ -592,7 +595,7 @@ final class DicdataStore {
     /// 速度: ⏱0.115224 : 変換_処理_連接コスト計算_CCValue
     internal func getCCValue(_ former: Int, _ latter: Int) -> PValue {
         if !ccParsed[former] {
-            let url = Bundle.main.bundleURL.appendingPathComponent("Dictionary/cb/\(former).binary", isDirectory: false)
+            let url = Self.bundleURL.appendingPathComponent("Dictionary/cb/\(former).binary", isDirectory: false)
             let values = loadCCBinary(url: url)
             ccLines[former] = [Int: PValue].init(uniqueKeysWithValues: values.map {(Int($0.0), PValue($0.1))})
             ccParsed[former] = true
