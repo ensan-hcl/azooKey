@@ -43,10 +43,6 @@ protocol FlickKeyModelProtocol {
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 
     func isFlickAble(to direction: FlickDirection) -> Bool
-    func press()
-    func longPressReserve()
-    func longPressEnd()
-    func flick(to direction: FlickDirection)
     func suggestStateChanged(_ type: SuggestState)
 
     func flickSensitivity(to direction: FlickDirection) -> CGFloat
@@ -57,22 +53,6 @@ protocol FlickKeyModelProtocol {
 extension FlickKeyModelProtocol {
     func isFlickAble(to direction: FlickDirection) -> Bool {
         flickKeys.keys.contains(direction)
-    }
-
-    func press() {
-        VariableStates.shared.action.registerActions(self.pressActions)
-    }
-
-    func longPressReserve() {
-        VariableStates.shared.action.reserveLongPressAction(longPressActions)
-    }
-
-    func longPressEnd() {
-        VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
-    }
-
-    func flick(to direction: FlickDirection) {
-        self.flickKeys[direction]?.flick()
     }
 
     func suggestStateChanged(_ type: SuggestState) {

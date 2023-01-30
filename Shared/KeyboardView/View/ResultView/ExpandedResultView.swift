@@ -21,6 +21,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
     }
 
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
 
     init(isResultViewExpanded: Binding<Bool>, resultData: [ResultData<Candidate>]) {
         self._isResultViewExpanded = isResultViewExpanded
@@ -75,7 +76,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
     }
 
     private func pressed(data: ResultData<Candidate>) {
-        VariableStates.shared.action.notifyComplete(data.candidate)
+        self.action.notifyComplete(data.candidate)
         self.collapse()
     }
 

@@ -9,28 +9,38 @@
 import Foundation
 
 extension StringProtocol {
+    /// Returns a String value in which Hiraganas are all converted to Katakana.
+    /// - Returns: A String value in which Hiraganas are all converted to Katakana.
     @inlinable func toKatakana() -> String {
-        let result = self.unicodeScalars.map { scalar -> UnicodeScalar in
-            if 0x3041 <= scalar.value && scalar.value <= 0x3096 {
-                return UnicodeScalar(scalar.value + 96)!
+        // カタカナはutf16で常に2バイトなので、utf16単位で処理して良い
+        let result = self.utf16.map { scalar -> UInt16 in
+            if 0x3041 <= scalar && scalar <= 0x3096 {
+                return scalar + 96
             } else {
                 return scalar
             }
         }
-        return String(String.UnicodeScalarView(result))
+        return String(utf16CodeUnits: result, count: self.count)
     }
 
+    /// Returns a String value in which Katakana are all converted to Hiragana.
+    /// - Returns: A String value in which Katakana are all converted to Hiragana.
     @inlinable func toHiragana() -> String {
-        let result = self.unicodeScalars.map { scalar -> UnicodeScalar in
-            if 0x30A1 <= scalar.value && scalar.value <= 0x30F6 {
-                return UnicodeScalar(scalar.value - 96)!
+        // ひらがなはutf16で常に2バイトなので、utf16単位で処理して良い
+        let result = self.utf16.map { scalar -> UInt16 in
+            if 0x30A1 <= scalar && scalar <= 0x30F6 {
+                return scalar - 96
             } else {
                 return scalar
             }
         }
-        return String(String.UnicodeScalarView(result))
+        return String(utf16CodeUnits: result, count: self.count)
     }
 
+    /// Returns an Index value that is the specified distance from the start index.
+    /// - Parameter:
+    ///   - offset: The distance to offset from the start index.
+    /// - Returns: An Index value that is the specified distance from the start index.
     @inlinable
     public func indexFromStart(_ offset: Int) -> Index {
         self.index(self.startIndex, offsetBy: offset)

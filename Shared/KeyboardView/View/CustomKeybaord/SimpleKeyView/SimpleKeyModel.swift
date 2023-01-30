@@ -50,27 +50,12 @@ protocol SimpleKeyModelProtocol {
     var pressActions: [ActionType] {get}
     var longPressActions: LongpressActionType {get}
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
-    func press()
-    func longPressReserve()
-    func longPressEnd()
     func sound()
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
 }
 
 extension SimpleKeyModelProtocol {
-    func press() {
-        VariableStates.shared.action.registerActions(self.pressActions)
-    }
-
-    func longPressReserve() {
-        VariableStates.shared.action.reserveLongPressAction(longPressActions)
-    }
-
-    func longPressEnd() {
-        VariableStates.shared.action.registerLongPressActionEnd(longPressActions)
-    }
-
     func sound() {
         self.pressActions.first?.sound()
     }

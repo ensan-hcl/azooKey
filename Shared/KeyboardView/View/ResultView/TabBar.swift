@@ -11,6 +11,7 @@ import SwiftUI
 
 struct TabBarView: View {
     private let data: TabBarData
+    @Environment(\.userActionManager) private var action
 
     init(data: TabBarData) {
         self.data = data
@@ -23,7 +24,7 @@ struct TabBarView: View {
                     ForEach(data.items.indices, id: \.self) {i in
                         let item = data.items[i]
                         Button {
-                            VariableStates.shared.action.registerActions(item.actions.map {$0.actionType})
+                            self.action.registerActions(item.actions.map {$0.actionType})
                         } label: {
                             switch item.label {
                             case let .text(text):

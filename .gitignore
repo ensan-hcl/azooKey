@@ -1,10 +1,10 @@
-/Keyboard/Main/Converter/Dictionary/*.binary
-/Keyboard/Main/Converter/Dictionary/cb/*.binary
-/Keyboard/Main/Converter/Dictionary/p/*.csv
-/Keyboard/Main/Converter/Dictionary/louds/*.louds
-/Keyboard/Main/Converter/Dictionary/louds/*.loudschars2
-/Keyboard/Main/Converter/Dictionary/louds/*.loudstxt3
-Keyboard/Main/Converter/Dictionary/louds/*.chid
+/Keyboard/Converter/Dictionary/*.binary
+/Keyboard/Converter/Dictionary/cb/*.binary
+/Keyboard/Converter/Dictionary/p/*.csv
+/Keyboard/Converter/Dictionary/louds/*.louds
+/Keyboard/Converter/Dictionary/louds/*.loudschars2
+/Keyboard/Converter/Dictionary/louds/*.loudstxt3
+/Keyboard/Converter/Dictionary/louds/*.chid
 AzooKey-dict
 deprecated/
 KanaKanjiConverterKit/

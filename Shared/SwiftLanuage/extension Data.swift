@@ -9,6 +9,10 @@
 import Foundation
 
 extension Data {
+    /// Converts this data to an array of the given type.
+    /// - Parameter:
+    ///   - type: The type to convert this data to.
+    /// - Returns: An array of the given type.
     func toArray<T>(of type: T.Type) -> [T] {
         self.withUnsafeBytes {pointer -> [T] in
             Array(

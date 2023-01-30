@@ -131,7 +131,6 @@ struct TabDependentDesign {
 
 /// タブに依存せず、キーボード全体で共通するデザイン上の数値を切り出した構造体。
 enum Design {
-    typealias shared = Self
     static let colors = Colors.default
     static let fonts = Fonts.default
     static let language = Language.default

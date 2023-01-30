@@ -8,7 +8,8 @@
 
 import Foundation
 
-//https://github.com/MasamiYamate/YMTGetDeviceName/blob/master/YMTGetDeviceName/YMTGetDeviceName.swift
+/// Note: This class is based on the following code: [https://github.com/MasamiYamate/YMTGetDeviceName/blob/master/YMTGetDeviceName/YMTGetDeviceName.swift]
+/// The code is on The MIT License (MIT).
 final class DeviceName {
     public static let shared: DeviceName = DeviceName()
 
@@ -556,6 +557,8 @@ final class DeviceName {
         DeviceCode(rawValue: gedDeviceCodeString())
     }
 
+    /// Returns true if the device needs to have 'InputSwitchKey' (often, globe key) on the Keyboard.
+    /// - Returns: true if the device needs to have 'InputSwitchKey' on the Keyboard.
     func needsInputSwitchKey() -> Bool {
         guard let deviceCode = getDecviceCode() else {
             return true

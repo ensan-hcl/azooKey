@@ -46,17 +46,17 @@ class BetaMoveCursorBarState: ObservableObject {
         return line[index]
     }
 
-    fileprivate func move(_ count: Int) {
+    fileprivate func move(_ count: Int, actionManager: some UserActionManager) {
         displayLeftIndex += count
         displayRightIndex += count
-        VariableStates.shared.action.registerAction(.moveCursor(count))
+        actionManager.registerAction(.moveCursor(count))
     }
 
     fileprivate func originalPosition(index: Int) -> CGFloat {
         CGFloat(index) * self.itemWidth
     }
 
-    fileprivate func tap(at index: Int) {
+    fileprivate func tap(at index: Int, actionManager: some UserActionManager) {
         let diff: Int
         if index < 0 {
             diff = -1
@@ -65,7 +65,7 @@ class BetaMoveCursorBarState: ObservableObject {
         } else {
             diff = index - centerIndex
         }
-        move(diff)
+        move(diff, actionManager: actionManager)
     }
 
     func clear() {
@@ -78,6 +78,7 @@ class BetaMoveCursorBarState: ObservableObject {
 struct MoveCursorBarBeta: View {
     @ObservedObject private var state = VariableStates.shared.moveCursorBarState
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
 
     enum SwipeGestureState {
         case unactive
@@ -126,11 +127,11 @@ struct MoveCursorBarBeta: View {
                     }
                     withAnimation(.linear(duration: 0.05)) {
                         if count >= 15 {
-                            state.move(1)
+                            state.move(1, actionManager: self.action)
                             count -= 15
                         }
                         if count <= -15 {
-                            state.move(-1)
+                            state.move(-1, actionManager: self.action)
                             count += 15
                         }
                         swipeGestureState = .moving(l1: value.location, l2: l1, l3: l2, count: count)
@@ -156,7 +157,7 @@ struct MoveCursorBarBeta: View {
                     let offset = Int(offset_double.rounded(.toNearestOrAwayFromZero))
                     let index = state.centerIndex + offset
                     withAnimation(.easeOut(duration: 0.1)) {
-                        state.tap(at: index)
+                        state.tap(at: index, actionManager: self.action)
                     }
                 case .moving:
                     // 位置を揃える
@@ -220,16 +221,16 @@ struct MoveCursorBarBeta: View {
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            VariableStates.shared.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]))
+                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]))
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
                                 debug("touch failed")
                             }
                         } touchUpCallBack: { gestureState in
-                            VariableStates.shared.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
+                            self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
-                                    state.move(-1)
+                                    state.move(-1, actionManager: self.action)
                                 }
                             }
                         }
@@ -246,16 +247,16 @@ struct MoveCursorBarBeta: View {
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            VariableStates.shared.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]))
+                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]))
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
                                 debug("touch failed")
                             }
                         } touchUpCallBack: { gestureState in
-                            VariableStates.shared.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(1)]))
+                            self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(1)]))
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
-                                    state.move(1)
+                                    state.move(1, actionManager: self.action)
                                 }
                             }
                         }
@@ -279,6 +280,7 @@ private enum MoveCursorBarGestureState {
 struct MoveCursorBar: View {
     @State private var gestureState: MoveCursorBarGestureState = .unactive
     @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
 
     private var gesture: some Gesture {
         DragGesture(minimumDistance: 0)
@@ -294,10 +296,10 @@ struct MoveCursorBar: View {
                     let newCount = count + Int(dx / abs(dx))
                     if newCount > 1 {
                         self.gestureState = .moving(value.location, 0)
-                        VariableStates.shared.action.registerAction(.moveCursor(1))
+                        self.action.registerAction(.moveCursor(1))
                     } else if newCount < -1 {
                         self.gestureState = .moving(value.location, 0)
-                        VariableStates.shared.action.registerAction(.moveCursor(-1))
+                        self.action.registerAction(.moveCursor(-1))
                     } else {
                         self.gestureState = .moving(value.location, newCount)
                     }
@@ -341,7 +343,7 @@ struct MoveCursorBar: View {
                     .overlay(HStack {
                         Spacer()
                         Button(action: {
-                            VariableStates.shared.action.registerAction(.moveCursor(-1))
+                            self.action.registerAction(.moveCursor(-1))
                         }, label: {
                             Image(systemName: "chevron.left.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                                 .padding()
@@ -350,7 +352,7 @@ struct MoveCursorBar: View {
                         Image(systemName: "circle.fill").font(.system(size: 22, weight: symbolsFontWeight, design: .default))
                         Spacer()
                         Button(action: {
-                            VariableStates.shared.action.registerAction(.moveCursor(1))
+                            self.action.registerAction(.moveCursor(1))
                         }, label: {
                             Image(systemName: "chevron.right.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                                 .padding()
