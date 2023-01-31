@@ -26,7 +26,7 @@ extension Kana2Kanji {
     ///
     /// (4)ノードをアップデートした上で返却する。
     func kana2lattice_addedLast(_ inputData: ComposingText, N_best: Int, previousResult: (inputData: ComposingText, nodes: Nodes) ) -> (result: LatticeNode, nodes: Nodes) {
-        debug("一文字追加。内部文字列は\(inputData.input).\(previousResult.nodes.map {($0.first?.data.ruby, $0.first?.convertTargetLength)})")
+        debug("一文字追加。内部文字列は\(inputData.input).\(previousResult.nodes.map {($0.first?.data.ruby, $0.first?.inputRange)})")
         // (0)
         var nodes = previousResult.nodes
         let count = previousResult.inputData.input.count
@@ -38,7 +38,7 @@ extension Kana2Kanji {
 
         // ココが一番時間がかかっていた。
         // (2)
-        for (i, nodeArray) in nodes.enumerated() {
+        for nodeArray in nodes {
             for node in nodeArray {
                 if node.prevs.isEmpty {
                     continue
@@ -47,7 +47,7 @@ extension Kana2Kanji {
                     continue
                 }
                 // 変換した文字数
-                let nextIndex = node.convertTargetLength + i
+                let nextIndex = node.inputRange.endIndex
                 for nextnode in addedNodes[nextIndex] {
                     // この関数はこの時点で呼び出して、後のnode.registered.isEmptyで最終的に弾くのが良い。
                     if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
@@ -63,7 +63,7 @@ extension Kana2Kanji {
                         if lastindex == N_best {
                             continue
                         }
-                        let newnode: RegisteredNode = node.getSqueezedNode(index, value: newValue)
+                        let newnode: RegisteredNode = node.getRegisteredNode(index, value: newValue)
                         // カウントがオーバーしている場合は除去する
                         if nextnode.prevs.count >= N_best {
                             nextnode.prevs.removeLast()
@@ -93,7 +93,7 @@ extension Kana2Kanji {
                 }
                 // 最後に至るので
                 for index in node.prevs.indices {
-                    let newnode = node.getSqueezedNode(index, value: node.values[index])
+                    let newnode = node.getRegisteredNode(index, value: node.values[index])
                     result.prevs.append(newnode)
                 }
             }

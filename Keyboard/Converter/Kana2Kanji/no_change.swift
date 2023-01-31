@@ -29,7 +29,7 @@ extension Kana2Kanji {
         // (1)
         let result = LatticeNode.EOSNode
 
-        for (i, nodeArray) in previousResult.nodes.enumerated() {
+        for nodeArray in previousResult.nodes {
             for node in nodeArray {
                 if node.prevs.isEmpty {
                     continue
@@ -37,11 +37,11 @@ extension Kana2Kanji {
                 if self.dicdataStore.shouldBeRemoved(data: node.data) {
                     continue
                 }
-                let nextIndex = node.convertTargetLength + i
+                let nextIndex = node.inputRange.endIndex
                 if nextIndex == count {
                     // 変換した文字数
                     for (index, value) in node.values.enumerated() {
-                        let newnode = node.getSqueezedNode(index, value: value)
+                        let newnode = node.getRegisteredNode(index, value: value)
                         result.prevs.append(newnode)
                     }
                 }

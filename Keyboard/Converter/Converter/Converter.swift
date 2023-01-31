@@ -414,7 +414,7 @@ final class KanaKanjiConverter {
                 Candidate(
                     text: $0.data.word,
                     value: $0.data.value(),
-                    correspondingCount: $0.convertTargetLength,
+                    correspondingCount: $0.inputRange.count,
                     lastMid: $0.data.mid,
                     data: [$0.data]
                 )

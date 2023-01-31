@@ -55,7 +55,7 @@ extension Kana2Kanji {
                     node.values = node.prevs.map {$0.totalValue + wValue}
                 }
                 // 変換した文字数
-                let nextIndex = node.convertTargetLength + i
+                let nextIndex = node.inputRange.endIndex
                 // 文字数がcountと等しくない場合は先に進む
                 if nextIndex != count {
                     for nextnode in nodes[nextIndex] {
@@ -72,7 +72,7 @@ extension Kana2Kanji {
                             if lastindex == N_best {
                                 continue
                             }
-                            let newnode = node.getSqueezedNode(index, value: newValue)
+                            let newnode = node.getRegisteredNode(index, value: newValue)
                             // カウントがオーバーしている場合は除去する
                             if nextnode.prevs.count >= N_best {
                                 nextnode.prevs.removeLast()
@@ -84,7 +84,7 @@ extension Kana2Kanji {
                     // countと等しければ変換が完成したので終了する
                 } else {
                     for index in node.prevs.indices {
-                        let newnode = node.getSqueezedNode(index, value: node.values[index])
+                        let newnode = node.getRegisteredNode(index, value: node.values[index])
                         result.prevs.append(newnode)
                     }
                 }

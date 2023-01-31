@@ -29,8 +29,8 @@ extension Kana2Kanji {
         debug("kana2lattice_changed", inputData, counts, previousResult.inputData, count, commonCount)
 
         // (1)
-        var nodes = previousResult.nodes.prefix(commonCount).enumerated().map {(i: Int, nodes: [LatticeNode]) in
-            nodes.filter {i + $0.convertTargetLength <= commonCount}
+        var nodes = previousResult.nodes.prefix(commonCount).map {(nodes: [LatticeNode]) in
+            nodes.filter {$0.inputRange.endIndex <= commonCount}
         }
         while nodes.last?.isEmpty ?? false {
             nodes.removeLast()
@@ -41,7 +41,7 @@ extension Kana2Kanji {
         }
 
         // (3)
-        for (i, nodeArray) in nodes.enumerated() {
+        for nodeArray in nodes {
             for node in nodeArray {
                 if node.prevs.isEmpty {
                     continue
@@ -50,7 +50,7 @@ extension Kana2Kanji {
                     continue
                 }
                 // 変換した文字数
-                let nextIndex = node.convertTargetLength + i
+                let nextIndex = node.inputRange.endIndex
                 for nextnode in addedNodes[nextIndex] {
                     if self.dicdataStore.shouldBeRemoved(data: nextnode.data) {
                         continue
@@ -65,7 +65,7 @@ extension Kana2Kanji {
                         if lastindex == N_best {
                             continue
                         }
-                        let newnode: RegisteredNode = node.getSqueezedNode(index, value: newValue)
+                        let newnode: RegisteredNode = node.getRegisteredNode(index, value: newValue)
                         // カウントがオーバーしている場合は除去する
                         if nextnode.prevs.count >= N_best {
                             nextnode.prevs.removeLast()
@@ -98,11 +98,11 @@ extension Kana2Kanji {
                     // valuesを更新する
                     node.values = node.prevs.map {$0.totalValue + wValue}
                 }
-                let nextIndex = node.convertTargetLength + i
+                let nextIndex = node.inputRange.endIndex
                 if count == nextIndex {
                     // 最後に至るので
                     for index in node.prevs.indices {
-                        let newnode = node.getSqueezedNode(index, value: node.values[index])
+                        let newnode = node.getRegisteredNode(index, value: node.values[index])
                         result.prevs.append(newnode)
                     }
                 } else {
@@ -121,7 +121,7 @@ extension Kana2Kanji {
                             if lastindex == N_best {
                                 continue
                             }
-                            let newnode: RegisteredNode = node.getSqueezedNode(index, value: newValue)
+                            let newnode: RegisteredNode = node.getRegisteredNode(index, value: newValue)
                             // カウントがオーバーしている場合は除去する
                             if nextnode.prevs.count >= N_best {
                                 nextnode.prevs.removeLast()
