@@ -23,9 +23,15 @@ extension StringProtocol {
     }
     /// ローマ字を含むかどうか
     ///  - note: 空文字列の場合`false`を返す。
+    /// 以前は正規表現ベースで実装していたが、パフォーマンス上良くなかったので以下のような実装にしたところ40倍程度高速化した。
     @inlinable
     var containsRomanAlphabet: Bool {
-        !isEmpty && range(of: "[a-zA-Z]", options: .regularExpression) != nil
+        for value in self.utf8 {
+            if (UInt8(ascii: "a") <= value && value <= UInt8(ascii: "z")) || (UInt8(ascii: "A") <= value && value <= UInt8(ascii: "Z")) {
+                return true
+            }
+        }
+        return false
     }
     /// 英語として許容可能な文字のみで構成されているか。
     ///  - note: 空文字列の場合`false`を返す。
