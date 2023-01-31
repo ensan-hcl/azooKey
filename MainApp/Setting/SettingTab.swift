@@ -71,7 +71,6 @@ struct SettingTabView: View {
 
                     Section(header: Text("学習機能")) {
                         LearningTypeSettingView()
-                        BoolSettingView(.useBetaStrongerLearning)
                         MemoryResetSettingItemView()
                     }
                 }

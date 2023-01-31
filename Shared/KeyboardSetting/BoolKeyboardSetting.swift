@@ -153,17 +153,6 @@ extension KeyboardSettingKey where Self == UseBetaMoveCursorBar {
     static var useBetaMoveCursorBar: Self { .init() }
 }
 
-struct UseBetaStrongerLearning: BoolKeyboardSettingKey {
-    static let title: LocalizedStringKey = "より強力な学習を有効化 (試験版)"
-    static let explanation: LocalizedStringKey = "より長い期間学習が保持されます。\n試験的機能のため、予告なく提供を終了する可能性があります。"
-    static let defaultValue = false
-    static let key: String = "use_stronger_learning_beta"
-}
-
-extension KeyboardSettingKey where Self == UseBetaStrongerLearning {
-    static var useBetaStrongerLearning: Self { .init() }
-}
-
 struct StopLearningWhenSearch: BoolKeyboardSettingKey {
     static let title: LocalizedStringKey = "検索時は学習を停止"
     static let explanation: LocalizedStringKey = "web検索などで入力した単語を学習しません。"

@@ -719,7 +719,6 @@ final class InputManager {
         @KeyboardSetting(.fullRomanCandidate) var fullWidthRomanCandidate
         @KeyboardSetting(.halfKanaCandidate) var halfWidthKanaCandidate
         @KeyboardSetting(.learningType) var learningType
-        @KeyboardSetting(.useBetaStrongerLearning) var useStrongerLearning
 
         let options = ConvertRequestOptions(
             N_best: 10,
@@ -735,7 +734,7 @@ final class InputManager {
             fullWidthRomanCandidate: fullWidthRomanCandidate,
             halfWidthKanaCandidate: halfWidthKanaCandidate,
             learningType: learningType,
-            maxMemoryCount: useStrongerLearning ? 65536 : 8192
+            maxMemoryCount: 65536
         )
 
         let inputData = composingText.prefixToCursorPosition()
