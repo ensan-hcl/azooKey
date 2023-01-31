@@ -18,7 +18,7 @@ extension ComposingText {
 
     /// closedRangeでもらう
     /// getRangeWithTyposの複数版にあたる。`result`の計算が一回で済む分、高速になる。
-    func getRangesWithTypos(_ left: Int, rightIndexRange: Range<Int>) -> (typos: [(string: String, penalty: PValue)], stringToEndIndex: [String: Int]) {
+    func getRangesWithTypos(_ left: Int, rightIndexRange: Range<Int>) -> [String: (endIndex: Int, penalty: PValue)] {
         let count = rightIndexRange.endIndex - left
         debug("getRangesWithTypos", left, rightIndexRange, count)
         let nodes = (0..<count).map {(i: Int) in
@@ -33,8 +33,7 @@ extension ComposingText {
 
         let maxPenalty: PValue = 3.5 * 3
         var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
-        var typos: [(string: String, penalty: PValue)] = []
-        var stringToEndIndex: [String: Int] = [:]
+        var stringToInfo: [String: (endIndex: Int, penalty: PValue)] = [:]
 
         for (i, nodeArray) in nodes.enumerated() {
             defer {
@@ -42,8 +41,7 @@ extension ComposingText {
                 if rightIndexRange.contains(i + left) {
                     for typo in result {
                         if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: typo.lastElement, of: self.input, to: i + left + 1, convertTargetElements: typo.convertTargetElements)?.toKatakana() {
-                            stringToEndIndex[convertTarget] = i + left
-                            typos.append( (convertTarget, typo.penalty) )
+                            stringToInfo[convertTarget] = (i + left, typo.penalty)
                         }
                     }
                 }
@@ -96,10 +94,10 @@ extension ComposingText {
                 }
             }
         }
-        return (typos, stringToEndIndex)
+        return (stringToInfo)
     }
 
-    func getRangeWithTypos(_ left: Int, _ right: Int) -> [(string: String, penalty: PValue)] {
+    func getRangeWithTypos(_ left: Int, _ right: Int) -> [String: PValue] {
         // 各iから始まる候補を列挙する
         // 例えばinput = [d(あ), r(s), r(i), r(t), r(s), d(は), d(は), d(れ)]の場合
         // nodes =      [[d(あ)], [r(s)], [r(i)], [r(t), [r(t), r(a)]], [r(s)], [d(は), d(ば), d(ぱ)], [d(れ)]]
@@ -171,7 +169,8 @@ extension ComposingText {
             }
             return nil
         }
-        return filtered
+        let string2penalty = [String: PValue].init(filtered, uniquingKeysWith: max)
+        return string2penalty
     }
 
     private static func getTypo(_ elements: some Collection<InputElement>) -> [TypoCandidate] {

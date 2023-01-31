@@ -185,19 +185,18 @@ final class DicdataStore {
             segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character.toKatakana()))
         }
         // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
-        var (stringWithTypoData, string2segment) = inputData.getRangesWithTypos(fromIndex, rightIndexRange: toIndexLeft ..< toIndexRight)
-        let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: max)
+        var stringToInfo = inputData.getRangesWithTypos(fromIndex, rightIndexRange: toIndexLeft ..< toIndexRight)
 
         // MARK: 検索対象を列挙していく。prefixの共通するものを削除して検索をなるべく減らすことが目的。
         // ⏱0.021212 : 辞書読み込み_検索対象列挙
         // prefixの共通するものを削除して検索をなるべく減らす
 
-        let stringSet = stringWithTypoData.reduce(into: stringWithTypoData.mapSet { $0.string }) { (`set`, item) in
-            if item.string.count > 4 {
+        let stringSet = stringToInfo.keys.reduce(into: Set(stringToInfo.keys)) { (`set`, key) in
+            if key.count > 4 {
                 return
             }
-            if set.contains(where: {$0.hasPrefix(item.string) && $0.count != item.string.count}) {
-                set.remove(item.string)
+            if set.contains(where: {$0.hasPrefix(key) && $0.count != key.count}) {
+                set.remove(key)
             }
         }
 
@@ -221,7 +220,7 @@ final class DicdataStore {
         var dicdata: [DicdataElement] = []
         for (identifier, value) in indices {
             let result: [DicdataElement] = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
-                let penalty = string2penalty[data.ruby, default: .zero]
+                let penalty = stringToInfo[data.ruby, default: (0, .zero)].penalty
                 if penalty.isZero {
                     return data
                 }
@@ -241,14 +240,14 @@ final class DicdataStore {
             do {
                 let result = self.getWiseDicdata(convertTarget: segments[i - fromIndex], allowRomanLetter: i + 1 == toIndexRight, inputData: inputData, inputRange: fromIndex ..< i)
                 for item in result {
-                    string2segment[item.ruby] = i
+                    stringToInfo[item.ruby] = (i, 0)
                 }
                 dicdata.append(contentsOf: result)
             }
             do {
                 let result = self.getMatchOSUserDict(segments[i - fromIndex])
                 for item in result {
-                    string2segment[item.ruby] = i
+                    stringToInfo[item.ruby] = (i, 0)
                 }
                 dicdata.append(contentsOf: result)
             }
@@ -256,13 +255,13 @@ final class DicdataStore {
 
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, inputRange: fromIndex ..< string2segment[$0.ruby, default: fromIndex] + 1)
+                let node = LatticeNode(data: $0, inputRange: fromIndex ..< stringToInfo[$0.ruby, default: (fromIndex, 0)].endIndex + 1)
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: fromIndex ..< string2segment[$0.ruby, default: fromIndex] + 1)}
+            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: fromIndex ..< stringToInfo[$0.ruby, default: (fromIndex, 0)].endIndex + 1)}
             return result
         }
     }
@@ -278,13 +277,11 @@ final class DicdataStore {
         }
         let segment = inputData.input[fromIndex...toIndex].reduce(into: "") {$0.append($1.character)}.toKatakana()
 
-        let stringWithTypoData = inputData.getRangeWithTypos(fromIndex, toIndex)
-        let string2penalty = [String: PValue].init(stringWithTypoData, uniquingKeysWith: {max($0, $1)})
+        let string2penalty = inputData.getRangeWithTypos(fromIndex, toIndex)
 
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
         // 先頭の文字: そこで検索したい文字列の集合
-        let stringSet = stringWithTypoData.mapSet {$0.string}
-        let group = [Character: [String]].init(grouping: stringSet, by: {$0.first!})
+        let group = [Character: [String]].init(grouping: string2penalty.keys, by: {$0.first!})
 
         var indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
@@ -294,13 +291,13 @@ final class DicdataStore {
             return (key, set)
         }
         do {
-            let set = stringWithTypoData.flatMapSet { (string, _) in
+            let set = string2penalty.keys.flatMapSet { string in
                 self.perfectMatchLOUDS(identifier: "user", key: string)
             }
             indices.append(("user", set))
         }
         if learningManager.enabled {
-            let set = stringWithTypoData.flatMapSet { (string, _) in
+            let set = string2penalty.keys.flatMapSet { string in
                 self.perfectMatchLOUDS(identifier: "memory", key: string)
             }
             indices.append(("memory", set))
@@ -322,8 +319,7 @@ final class DicdataStore {
             }
             dicdata.append(contentsOf: result)
         }
-        dicdata.append(contentsOf: stringSet.flatMap {self.learningManager.temporaryPerfectMatch(key: $0)})
-
+        dicdata.append(contentsOf: string2penalty.keys.flatMap {self.learningManager.temporaryPerfectMatch(key: $0)})
         dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, allowRomanLetter: toIndex == inputData.input.count - 1, inputData: inputData, inputRange: fromIndex ..< toIndex + 1))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
