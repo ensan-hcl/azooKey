@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A0CC45A2988FE1A00B49A93 /* RegisteredNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0CC4592988FE1A00B49A93 /* RegisteredNodeTests.swift */; };
 		1A0E8D6825EDD74000A9BAE5 /* DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */; };
 		1A0FDF10291BED4F0088C5AA /* no_change.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0FDF0F291BED4F0088C5AA /* no_change.swift */; };
 		1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */; };
@@ -471,6 +472,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1A0CC4592988FE1A00B49A93 /* RegisteredNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteredNodeTests.swift; sourceTree = "<group>"; };
 		1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceName.swift; sourceTree = "<group>"; };
 		1A0FDF0F291BED4F0088C5AA /* no_change.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = no_change.swift; sourceTree = "<group>"; };
 		1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInformationView.swift; sourceTree = "<group>"; };
@@ -858,6 +860,7 @@
 			children = (
 				1AD8D74D295E941D00112B80 /* ConverterTests */,
 				1A2E580A294ED02C004F959B /* StringUtilsTests.swift */,
+				1A0CC4592988FE1A00B49A93 /* RegisteredNodeTests.swift */,
 				1AD8D74E295E946A00112B80 /* ClauseDataUnitTests.swift */,
 				1A2E580F294F1F1C004F959B /* CharacterUtilsTests.swift */,
 				1A2E5823294F452A004F959B /* ComposingTextTests.swift */,
@@ -1979,6 +1982,7 @@
 				1A2E583D2951C405004F959B /* LearningMemory.swift in Sources */,
 				1A2E58452951E5E7004F959B /* Tab.swift in Sources */,
 				1A2E585D2951ED56004F959B /* EmailAddress.swift in Sources */,
+				1A0CC45A2988FE1A00B49A93 /* RegisteredNodeTests.swift in Sources */,
 				1A2E5818294F286D004F959B /* ArrayUtils.swift in Sources */,
 				1A2E58552951EC87004F959B /* all.swift in Sources */,
 				1A2E5813294F2568004F959B /* ComposingText.swift in Sources */,

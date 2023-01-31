@@ -14,6 +14,8 @@ enum CIDData {
     }
     case BOS
     case 記号
+    case 係助詞ハ
+    case 助動詞デス基本形
     case 一般名詞
     case 固有名詞
     case 人名一般
@@ -24,6 +26,8 @@ enum CIDData {
         switch self {
         case .BOS: return 0
         case .記号: return 5
+        case .係助詞ハ: return 261
+        case .助動詞デス基本形: return 460
         case .一般名詞: return 1285
         case .固有名詞: return 1288
         case .人名一般: return 1289

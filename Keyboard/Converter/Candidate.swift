@@ -29,6 +29,12 @@ final class ClauseDataUnit {
     }
 }
 
+extension ClauseDataUnit: Equatable {
+    static func == (lhs: ClauseDataUnit, rhs: ClauseDataUnit) -> Bool {
+        lhs.mid == rhs.mid && lhs.nextLcid == rhs.nextLcid && lhs.text == rhs.text && lhs.inputRange == rhs.inputRange
+    }
+}
+
 #if DEBUG
 extension ClauseDataUnit: CustomDebugStringConvertible {
     var debugDescription: String {
