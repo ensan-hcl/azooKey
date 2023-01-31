@@ -4,7 +4,36 @@ azooKeyの辞書データは次のようなフォーマットになっていま�
 
 NOTE: LOUDSそのものに関する解説は行いません。
 
-## 辞書データ
+## DicdataElement型
+
+```swift
+struct DicdataElement {
+    // 単語の表記
+    var word: String
+    // 単語のルビ（カタカナ）
+    var ruby: String
+    // 単語の左連接ID
+    var lcid: Int
+    // 単語の右連接ID
+    var rcid: Int
+    // 単語のMID
+    var mid: Int
+    // 単語の基礎コスト (PValue = Float16)
+    var baseValue: PValue
+    // コストの動的調整
+    var adjust: PValue
+}
+```
+
+注意すべき点は次のとおりです。
+
+* 連語などの場合、`lcid`と`rcid`が異なる値を取ることがあります。
+* 単語の基礎コストは、歴史的な事情によって負の小数です。大きいほど頻出する単語でus。
+* コストの動的調整は、誤り訂正などのためにコストを調整したい場合に使います。例えば「大学生」の基礎コストを「-10」としたとき、「たいがくせい」と入力した誤り訂正の結果として「大学生」が得られている場合は、`adjust`を-3のような値として、合計コストが-13であるかのように振る舞わせます。
+
+`DicdataElement`は`DicdataStore`で辞書データファイルから生成されます。
+
+## 辞書データファイル
 
 辞書データは次の4つの種類のファイルからなります。
 
@@ -28,7 +57,7 @@ azooKeyの辞書ルックアップは次のように進みます。
 
 ### `.louds`の構造
 
-TBW
+`.louds`ファイルはLOUDSのbit列を保存したものです。
 
 ### `.loudschars2`の構造
 
