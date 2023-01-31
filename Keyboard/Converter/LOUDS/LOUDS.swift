@@ -36,7 +36,6 @@ struct LOUDS {
     }
 
     /// parentNodeIndex個の0を探索し、その次から1個増えるまでのIndexを返す。
-    /// ⏱0.087694 : LOUDS_検索_childNodeIndices
     private func childNodeIndices(from parentNodeIndex: Int) -> Range<Int> {
         // 求めるのは、
         // startIndex == 自身の左側にparentNodeIndex個の0があるような最小のindex
@@ -99,7 +98,6 @@ struct LOUDS {
 
     /// charIndexを取得する
     /// `childNodeIndices`と差し引きして、二分探索部分の速度への影響は高々0.02秒ほど
-    /// ⏱0.105213 : LOUDS_検索_searchCharNodeIndex
     private func searchCharNodeIndex(from parentNodeIndex: Int, char: UInt8) -> Int? {
         // char2nodeIndicesには単調増加性があるので二分探索が成立する
         let childNodeIndices = self.childNodeIndices(from: parentNodeIndex)
@@ -154,7 +152,6 @@ struct LOUDS {
     /// charsの前方に一致するエントリのindexを全て集める
     /// 例えばcharsが「しんせいしゃ」だったら「し」や「しん」や「しんせ」に対応するエントリのindexも含む
     /// 以前はreduceで実装していたが、速度的に変わらないので読みやすさのためにforとfirstで書き換えた
-    /// ⏱0.043821 : `LOUDS_byfix検索`
     internal func byfixNodeIndices(chars: [UInt8]) -> [Int] {
         var indices = [1]
         for char in chars {

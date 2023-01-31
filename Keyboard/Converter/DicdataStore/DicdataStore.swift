@@ -172,7 +172,6 @@ final class DicdataStore {
     ///   - from: 起点
     ///   - toIndexRange: `from ..< (toIndexRange)`の範囲で辞書ルックアップを行う。
     internal func getLOUDSDataInRange(inputData: ComposingText, from fromIndex: Int, toIndexRange: Range<Int>? = nil) -> [LatticeNode] {
-        // ⏱0.426499 : 辞書読み込み_全体
         let toIndexLeft = toIndexRange?.startIndex ?? fromIndex
         let toIndexRight = min(toIndexRange?.endIndex ?? inputData.input.count, fromIndex + self.maxlength)
         debug("getLOUDSDataInRange", fromIndex, toIndexRange?.description ?? "nil", toIndexLeft, toIndexRight)
@@ -184,13 +183,11 @@ final class DicdataStore {
         let segments = (fromIndex ..< toIndexRight).reduce(into: []) { (segments: inout [String], rightIndex: Int) in
             segments.append((segments.last ?? "") + String(inputData.input[rightIndex].character.toKatakana()))
         }
-        // MARK: 誤り訂正の対象を列挙する。比較的重い処理。
+        // MARK: 誤り訂正の対象を列挙する。非常に重い処理。
         var stringToInfo = inputData.getRangesWithTypos(fromIndex, rightIndexRange: toIndexLeft ..< toIndexRight)
 
         // MARK: 検索対象を列挙していく。prefixの共通するものを削除して検索をなるべく減らすことが目的。
-        // ⏱0.021212 : 辞書読み込み_検索対象列挙
         // prefixの共通するものを削除して検索をなるべく減らす
-
         let stringSet = stringToInfo.keys.reduce(into: Set(stringToInfo.keys)) { (`set`, key) in
             if key.count > 4 {
                 return
@@ -201,7 +198,6 @@ final class DicdataStore {
         }
 
         // MARK: 列挙した検索対象から、順に検索を行う。この時点ではindicesを取得するのみ。
-        // ⏱0.222327 : 辞書読み込み_検索
         // 先頭の文字: そこで検索したい文字列の集合
         let group = [Character: [String]].init(grouping: stringSet, by: {$0.first!})
 
@@ -216,7 +212,6 @@ final class DicdataStore {
             indices.append(("memory", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "memory", key: $0, depth: depth)}))
         }
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
-        // ⏱0.077118 : 辞書読み込み_辞書データ生成
         var dicdata: [DicdataElement] = []
         for (identifier, value) in indices {
             let result: [DicdataElement] = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
