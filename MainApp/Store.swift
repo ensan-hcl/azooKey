@@ -17,28 +17,12 @@ final class Store {
 
     init() {
         SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(DeviceName.shared.needsInputSwitchKey())
-        // ユーザ辞書に登録がない場合
+        // ユーザ辞書に登録がない場合など
         self.messageManager.getMessagesContainerAppShouldMakeWhichDone().forEach {
             messageManager.done($0.id)
         }
         SharedStore.setInitialAppVersion()
-        /*
-         iPad pro 11 inch, with expanded space
-         2.0
-         Optional((1940.0, 2778.0))
-         (0.0, 0.0, 1389.0, 970.0)
-
-
-         2.0
-         Optional((1668.0, 2388.0))
-         (0.0, 0.0, 834.0, 1194.0)
-
-         */
-        debug(UIScreen.main.scale)
-        debug(UIScreen.main.currentMode?.size)
-        debug(UIScreen.main.bounds)
-        debug(UIScreen.main.nativeScale)
-        debug(UIScreen.main.nativeBounds)
+        SharedStore.setLastAppVersion()
     }
 
     func noticeReloadUserDict() {

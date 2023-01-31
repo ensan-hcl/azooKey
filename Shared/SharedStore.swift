@@ -17,6 +17,7 @@ enum SharedStore {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
     }
     private static let initialAppVersionKey = "InitialAppVersion"
+    private static let lastAppVersionKey = "LastAppVersion"
     static var currentAppVersion: AppVersion? {
         if let appVersionString = appVersionString {
             return AppVersion(appVersionString)
@@ -31,9 +32,23 @@ enum SharedStore {
         return nil
     }
 
+    // this value will be 2.0.0 at minimum
+    static var lastAppVersion: AppVersion? {
+        if let appVersionString = userDefaults.string(forKey: lastAppVersionKey) {
+            return AppVersion(appVersionString)
+        }
+        return nil
+    }
+
     static func setInitialAppVersion() {
         if initialAppVersion == nil, let appVersionString = appVersionString {
             SharedStore.userDefaults.set(appVersionString, forKey: initialAppVersionKey)
+        }
+    }
+
+    static func setLastAppVersion() {
+        if let appVersionString = appVersionString {
+            SharedStore.userDefaults.set(appVersionString, forKey: lastAppVersionKey)
         }
     }
 }
