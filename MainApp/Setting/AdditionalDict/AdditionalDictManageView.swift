@@ -41,13 +41,11 @@ struct AdditionalSystemDictManager: OnOffSettingSet {
         var dictFileIdentifiers: [String] {
             switch self {
             case .emoji:
-                var targets = ["emoji...12_dict.tsv"]
-                if #available(iOS 14.2, *) {
-                    targets.append("emoji13_dict.tsv")
-                }
-                if #available(iOS 14.5, *) {
-                    targets.append("emoji13.1_dict.tsv")
-                }
+                var targets = [
+                    "emoji...12_dict.tsv",
+                    "emoji13_dict.tsv",
+                    "emoji13.1_dict.tsv"
+                ]
                 if #available(iOS 15.4, *) {
                     targets.append("emoji14.0_dict.tsv")
                 }
@@ -158,9 +156,7 @@ struct AdditionalDictManageViewMain: View {
         }
         if self.style == .all {
             Section(header: Text("不快な絵文字を表示しない")) {
-                if #available(iOS 14.2, *) {
-                    Toggle("ゴキブリの絵文字を非表示", isOn: $viewModel.blockTargets[.gokiburi])
-                }
+                Toggle("ゴキブリの絵文字を非表示", isOn: $viewModel.blockTargets[.gokiburi])
                 Toggle("クモの絵文字を非表示", isOn: $viewModel.blockTargets[.spiders])
             }
         }

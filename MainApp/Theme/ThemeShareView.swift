@@ -35,12 +35,7 @@ struct ThemeShareView: View {
     private var shareImage: ShareImage
 
     @ViewBuilder private var keyboardPreview: some View {
-        if #available(iOS 15, *) {
-            KeyboardPreview(theme: theme, scale: 0.9)
-        } else {
-            KeyboardPreview(theme: theme, scale: 0.9)
-                .background(RectangleGetter(rect: $captureRect))
-        }
+        KeyboardPreview(theme: theme, scale: 0.9)
     }
     var body: some View {
         VStack {
@@ -56,10 +51,8 @@ struct ThemeShareView: View {
                     if let image = renderer.uiImage {
                         shareImage.setImage(image)
                     }
-                } else if #available(iOS 15, *) {
-                    shareImage.setImage(keyboardPreview.snapshot())
                 } else {
-                    shareImage.setImage(UIApplication.shared.windows[0].rootViewController?.view!.getImage(rect: self.captureRect))
+                    shareImage.setImage(keyboardPreview.snapshot())
                 }
                 showActivityView = true
             } label: {

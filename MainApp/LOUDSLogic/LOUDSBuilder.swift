@@ -32,12 +32,7 @@ struct LOUDSBuilder {
     init(txtFileSplit: Int) {
         self.txtFileSplit = txtFileSplit
         Self.loadCharID()
-
-        if let data = TemplateData.load() {
-            self.templateData = data
-        } else {
-            self.templateData = []
-        }
+        self.templateData = TemplateData.load()
     }
 
     private func BoolToUInt64(_ bools: [Bool]) -> [UInt64] {

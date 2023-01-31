@@ -111,11 +111,6 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardViewController.action.setDelegateViewController(self)
 
         debug("viewDidLoad", self.isViewLoaded, UIScreen.main.bounds.size, UIScreen.main.currentMode?.size, self.view.window?.bounds)
-        if #available(iOS 15, *) {
-            // Do nothing
-        } else {
-            SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size)
-        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -190,23 +185,16 @@ final class KeyboardViewController: UIInputViewController {
         debug("viewWillTransition", size, UIScreen.main.bounds.size)
         if #available(iOS 16, *) {
             SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical)
-        } else if #available(iOS 15, *) {
+        } else {
             SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal)
-        } else if let bounds = KeyboardViewController.keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
-            let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
-            SemiStaticStates.shared.setScreenSize(size: size)
         }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if #available(iOS 15, *) {
-            debug("viewDidLayoutSubviews", Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth), SemiStaticStates.shared.screenWidth, SemiStaticStates.shared.screenHeight)
-            self.view.frame.size.height = Design.keyboardScreenHeight
-            self.updateViewConstraints()
-        } else {
-            self.registerScreenActualSize()
-        }
+        debug("viewDidLayoutSubviews", Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth), SemiStaticStates.shared.screenWidth, SemiStaticStates.shared.screenHeight)
+        self.view.frame.size.height = Design.keyboardScreenHeight
+        self.updateViewConstraints()
         debug("viewDidLayoutSubviews", UIScreen.main.bounds, SemiStaticStates.shared.screenHeight, self.view.frame.size, KeyboardViewController.keyboardViewHost?.view.frame.size, self.view.window?.bounds, KeyboardViewController.keyboardViewHost?.view.window?.bounds, KeyboardViewController.keyboardViewHost?.view.window?.window?.bounds)
     }
 
