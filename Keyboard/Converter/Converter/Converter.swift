@@ -345,7 +345,7 @@ final class KanaKanjiConverter {
     private func processResult(inputData: ComposingText, result: (result: LatticeNode, nodes: [[LatticeNode]]), options: ConvertRequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         self.previousInputData = inputData
         self.nodes = result.nodes
-        let clauseResult = result.result.getCandidateData(for: inputData)
+        let clauseResult = result.result.getCandidateData()
         if clauseResult.isEmpty {
             let candidates = self.getUniqueCandidate(self.getAdditionalCandidate(inputData, options: options))
             return (candidates, candidates)   // アーリーリターン

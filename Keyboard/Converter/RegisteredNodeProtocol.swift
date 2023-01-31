@@ -8,25 +8,24 @@
 
 import Foundation
 
+/// `struct`の`RegisteredNode`を再帰的に所持できるようにするため、Existential Typeで抽象化する。
+/// - Note: `indirect enum`との比較はまだやっていない。
 protocol RegisteredNodeProtocol {
     var data: DicdataElement {get}
     var prev: (any RegisteredNodeProtocol)? {get}
     var totalValue: PValue {get}
     var inputRange: Range<Int> {get}
-    var convertTargetLength: Int {get}
 }
 
 struct RegisteredNode: RegisteredNodeProtocol {
+    /// このノードが保持する辞書データ
     let data: DicdataElement
+    /// 1つ前のノードのデータ
     let prev: (any RegisteredNodeProtocol)?
+    /// 始点からこのノードまでのコスト
     let totalValue: PValue
-    // 入力に対応する文字列
-    // ダイレクト入力中であれば「今日は」に対して「キョウハ」
-    // ローマ字入力中であれば「今日は」に対してkyouhaになる
+    /// `composingText`の`input`で対応する範囲
     let inputRange: Range<Int>
-    var convertTargetLength: Int {
-        inputRange.count
-    }
 
     init(data: DicdataElement, registered: RegisteredNode?, totalValue: PValue, inputRange: Range<Int>) {
         self.data = data
@@ -35,10 +34,14 @@ struct RegisteredNode: RegisteredNodeProtocol {
         self.inputRange = inputRange
     }
 
+    /// 始点ノードを生成する関数
+    /// - Returns: 始点ノードのデータ
     static func BOSNode() -> RegisteredNode {
         RegisteredNode(data: DicdataElement.BOSData, registered: nil, totalValue: 0, inputRange: 0 ..< 0)
     }
 
+    /// 入力中、確定した部分を考慮した始点ノードを生成する関数
+    /// - Returns: 始点ノードのデータ
     static func fromLastCandidate(_ candidate: Candidate) -> RegisteredNode {
         RegisteredNode(
             data: DicdataElement(word: "", ruby: "", lcid: CIDData.BOS.cid, rcid: candidate.data.last?.rcid ?? CIDData.BOS.cid, mid: candidate.lastMid, value: 0),
@@ -50,14 +53,16 @@ struct RegisteredNode: RegisteredNodeProtocol {
 }
 
 extension RegisteredNodeProtocol {
-    func getCandidateData(for composingText: ComposingText) -> CandidateData {
+    /// 再帰的にノードを遡り、`CandidateData`を構築する関数
+    /// - Returns: 文節単位の区切り情報を持った変換候補データ
+    func getCandidateData() -> CandidateData {
         guard let prev else {
             let unit = ClauseDataUnit()
             unit.mid = self.data.mid
             unit.inputRange = self.inputRange
             return CandidateData(clauses: [(clause: unit, value: .zero)], data: [])
         }
-        var lastcandidate = prev.getCandidateData(for: composingText)    // 自分に至るregisterdそれぞれのデータに処理
+        var lastcandidate = prev.getCandidateData()    // 自分に至るregisterdそれぞれのデータに処理
 
         if self.data.word.isEmpty {
             return lastcandidate

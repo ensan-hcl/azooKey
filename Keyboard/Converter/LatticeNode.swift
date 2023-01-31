@@ -36,7 +36,7 @@ final class LatticeNode {
         RegisteredNode(data: self.data, registered: self.prevs[index], totalValue: value, inputRange: self.inputRange)
     }
 
-    func getCandidateData(for composingText: ComposingText) -> [CandidateData] {
-        self.prevs.map {$0.getCandidateData(for: composingText)}
+    func getCandidateData() -> [CandidateData] {
+        self.prevs.map {$0.getCandidateData()}
     }
 }
