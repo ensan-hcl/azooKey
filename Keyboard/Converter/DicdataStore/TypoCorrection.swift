@@ -22,7 +22,7 @@ extension ComposingText {
         let count = rightIndexRange.endIndex - left
         debug("getRangesWithTypos", left, rightIndexRange, count)
         let nodes = (0..<count).map {(i: Int) in
-            Self.lengths.flatMap {(k: Int) -> [[InputElement]] in
+            Self.lengths.flatMap {(k: Int) -> [TypoCandidate] in
                 let j = i + k
                 if count <= j {
                     return []
@@ -31,8 +31,7 @@ extension ComposingText {
             }
         }
 
-        let unit: PValue = 3.5
-        let triple = unit * 3
+        let maxPenalty: PValue = 3.5 * 3
         var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
         var typos: [(string: String, penalty: PValue)] = []
         var stringToEndIndex: [String: Int] = [:]
@@ -49,30 +48,31 @@ extension ComposingText {
                     }
                 }
             }
-            let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
             if i == .zero {
                 // 最初の値による枝刈りを実施する
-                result = nodeArray.compactMap { inputElements in
-                    guard let firstElement = inputElements.first else {
+                result = nodeArray.compactMap { typoCandidate in
+                    guard let firstElement = typoCandidate.inputElements.first else {
                         return nil
                     }
                     if Self.isLeftSideValid(first: firstElement, of: self.input, from: left) {
                         var convertTargetElements = [ConvertTargetElement]()
-                        for element in inputElements {
+                        for element in typoCandidate.inputElements {
                             ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
                         }
-                        return (convertTargetElements, inputElements.last!, inputElements.count, inputElements == correct ? .zero:unit)
+                        return (convertTargetElements, typoCandidate.inputElements.last!, typoCandidate.inputElements.count, typoCandidate.weight)
                     }
                     return nil
                 }
                 continue
             }
+
+            let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
             result = result.flatMap {(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue) -> [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] in
                 if count != i {
                     return [(convertTargetElements, lastElement, count, penalty)]
                 }
                 // 訂正数上限(3個)
-                if penalty == triple {
+                if penalty >= maxPenalty {
                     var convertTargetElements = convertTargetElements
                     for element in correct {
                         ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
@@ -81,7 +81,7 @@ extension ComposingText {
                 }
                 return nodes[i].compactMap {
                     var convertTargetElements = convertTargetElements
-                    for element in $0 {
+                    for element in $0.inputElements {
                         ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
                     }
                     if shouldBeRemovedForDicdataStore(components: convertTargetElements) {
@@ -89,9 +89,9 @@ extension ComposingText {
                     }
                     return (
                         convertTargetElements: convertTargetElements,
-                        lastElement: $0.last!,
-                        count: count + $0.count,
-                        penalty: penalty + ($0 == correct ? .zero : unit)
+                        lastElement: $0.inputElements.last!,
+                        count: count + $0.inputElements.count,
+                        penalty: penalty + $0.weight
                     )
                 }
             }
@@ -106,7 +106,7 @@ extension ComposingText {
         // となる
         let count = right - left + 1
         let nodes = (0..<count).map {(i: Int) in
-            Self.lengths.flatMap {(k: Int) -> [[InputElement]] in
+            Self.lengths.flatMap {(k: Int) -> [TypoCandidate] in
                 let j = i + k
                 if count <= j {
                     return []
@@ -115,34 +115,33 @@ extension ComposingText {
             }
         }
 
-        let unit: PValue = 3.5
-        let triple = unit * 3
+        let maxPenalty: PValue = 3.5 * 3
         var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
         for (i, nodeArray) in nodes.enumerated() {
-            let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
             if i == .zero {
                 // 最初の値による枝刈りを実施する
                 result = nodeArray.compactMap {
-                    guard let firstElement = $0.first else {
+                    guard let firstElement = $0.inputElements.first else {
                         return nil
                     }
                     if Self.isLeftSideValid(first: firstElement, of: self.input, from: left) {
                         var convertTargetElements = [ConvertTargetElement]()
-                        for element in $0 {
+                        for element in $0.inputElements {
                             ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
                         }
-                        return (convertTargetElements, $0.last!, $0.count, $0 == correct ? .zero:unit)
+                        return (convertTargetElements, $0.inputElements.last!, $0.inputElements.count, $0.weight)
                     }
                     return nil
                 }
                 continue
             }
+            let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
             result = result.flatMap {(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue) -> [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] in
                 if count != i {
                     return [(convertTargetElements, lastElement, count, penalty)]
                 }
                 // 訂正数上限(3個)
-                if penalty == triple {
+                if penalty >= maxPenalty {
                     var convertTargetElements = convertTargetElements
                     for element in correct {
                         ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
@@ -151,7 +150,7 @@ extension ComposingText {
                 }
                 return nodes[i].compactMap {
                     var convertTargetElements = convertTargetElements
-                    for element in $0 {
+                    for element in $0.inputElements {
                         ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
                     }
                     if shouldBeRemovedForDicdataStore(components: convertTargetElements) {
@@ -159,9 +158,9 @@ extension ComposingText {
                     }
                     return (
                         convertTargetElements: convertTargetElements,
-                        lastElement: $0.last!,
-                        count: count + $0.count,
-                        penalty: penalty + ($0 == correct ? .zero : unit)
+                        lastElement: $0.inputElements.last!,
+                        count: count + $0.inputElements.count,
+                        penalty: penalty + $0.weight
                     )
                 }
             }
@@ -175,24 +174,48 @@ extension ComposingText {
         return filtered
     }
 
-    private static func getTypo(_ elements: some Collection<InputElement>) -> [[InputElement]] {
+    private static func getTypo(_ elements: some Collection<InputElement>) -> [TypoCandidate] {
         let key = elements.reduce(into: "") {$0.append($1.character)}.toKatakana()
 
         if (elements.allSatisfy {$0.inputStyle == .direct}) {
             if key.count > 1 {
-                return Self.directPossibleTypo[key, default: []].map {$0.map {InputElement(character: $0, inputStyle: .direct)}}
+                return Self.directPossibleTypo[key, default: []].map {
+                    TypoCandidate(
+                        inputElements: $0.value.map {InputElement(character: $0, inputStyle: .direct)},
+                        weight: $0.weight
+                    )
+                }
             } else if key.count == 1 {
-                var result = Self.directPossibleTypo[key, default: []].map {$0.map {InputElement(character: $0, inputStyle: .direct)}}
-                result.append(key.map {InputElement(character: $0, inputStyle: .direct)})
+                var result = Self.directPossibleTypo[key, default: []].map {
+                    TypoCandidate(
+                        inputElements: $0.value.map {InputElement(character: $0, inputStyle: .direct)},
+                        weight: $0.weight
+                    )
+                }
+                // そのまま
+                result.append(TypoCandidate(inputElements: key.map {InputElement(character: $0, inputStyle: .direct)}, weight: 0))
                 return result
             }
         }
         if (elements.allSatisfy {$0.inputStyle == .roman2kana}) {
             if key.count > 1 {
-                return Self.roman2KanaPossibleTypo[key, default: []].map {$0.map {InputElement(character: $0, inputStyle: .roman2kana)}}
+                return Self.roman2KanaPossibleTypo[key, default: []].map {
+                    TypoCandidate(
+                        inputElements: $0.map {InputElement(character: $0, inputStyle: .roman2kana)},
+                        weight: 3.5
+                    )
+                }
             } else if key.count == 1 {
-                var result = Self.roman2KanaPossibleTypo[key, default: []].map {$0.map {InputElement(character: $0, inputStyle: .roman2kana)}}
-                result.append(key.map {InputElement(character: $0, inputStyle: .roman2kana)})
+                var result = Self.roman2KanaPossibleTypo[key, default: []].map {
+                    TypoCandidate(
+                        inputElements: $0.map {InputElement(character: $0, inputStyle: .roman2kana)},
+                        weight: 3.5
+                    )
+                }
+                // そのまま
+                result.append(
+                    TypoCandidate(inputElements: key.map {InputElement(character: $0, inputStyle: .roman2kana)}, weight: 0)
+                )
                 return result
             }
         }
@@ -201,36 +224,51 @@ extension ComposingText {
 
     private static let lengths = [0, 1]
 
+    private struct TypoUnit: Equatable {
+        var value: String
+        var weight: PValue
+
+        init(_ value: String, weight: PValue = 3.5) {
+            self.value = value
+            self.weight = weight
+        }
+    }
+
+    struct TypoCandidate: Equatable {
+        var inputElements: [InputElement]
+        var weight: PValue
+    }
+
     /// ダイレクト入力用
-    private static let directPossibleTypo: [String: [String]] = [
-        "カ": ["ガ"],
-        "キ": ["ギ"],
-        "ク": ["グ"],
-        "ケ": ["ゲ"],
-        "コ": ["ゴ"],
-        "サ": ["ザ"],
-        "シ": ["ジ"],
-        "ス": ["ズ"],
-        "セ": ["ゼ"],
-        "ソ": ["ゾ"],
-        "タ": ["ダ"],
-        "チ": ["ヂ"],
-        "ツ": ["ヅ", "ッ"],
-        "テ": ["デ"],
-        "ト": ["ド"],
-        "ハ": ["バ", "パ"],
-        "ヒ": ["ビ", "ピ"],
-        "フ": ["ブ", "プ"],
-        "ヘ": ["ベ", "ペ"],
-        "ホ": ["ボ", "ポ"],
-        "バ": ["パ"],
-        "ビ": ["ピ"],
-        "ブ": ["プ"],
-        "ベ": ["ペ"],
-        "ボ": ["ポ"],
-        "ヤ": ["ャ"],
-        "ユ": ["ュ"],
-        "ヨ": ["ョ"]
+    private static let directPossibleTypo: [String: [TypoUnit]] = [
+        "カ": [TypoUnit("ガ", weight: 7.0)],
+        "キ": [TypoUnit("ギ")],
+        "ク": [TypoUnit("グ")],
+        "ケ": [TypoUnit("ゲ")],
+        "コ": [TypoUnit("ゴ")],
+        "サ": [TypoUnit("ザ")],
+        "シ": [TypoUnit("ジ")],
+        "ス": [TypoUnit("ズ")],
+        "セ": [TypoUnit("ゼ")],
+        "ソ": [TypoUnit("ゾ")],
+        "タ": [TypoUnit("ダ", weight: 6.0)],
+        "チ": [TypoUnit("ヂ")],
+        "ツ": [TypoUnit("ッ", weight: 6.0), TypoUnit("ヅ", weight: 4.5)],
+        "テ": [TypoUnit("デ", weight: 6.0)],
+        "ト": [TypoUnit("ド", weight: 4.5)],
+        "ハ": [TypoUnit("バ", weight: 4.5), TypoUnit("パ", weight: 6.0)],
+        "ヒ": [TypoUnit("ビ"), TypoUnit("ピ", weight: 4.5)],
+        "フ": [TypoUnit("ブ"), TypoUnit("プ", weight: 4.5)],
+        "ヘ": [TypoUnit("ベ"), TypoUnit("ペ", weight: 4.5)],
+        "ホ": [TypoUnit("ボ"), TypoUnit("ポ", weight: 4.5)],
+        "バ": [TypoUnit("パ")],
+        "ビ": [TypoUnit("ピ")],
+        "ブ": [TypoUnit("プ")],
+        "ベ": [TypoUnit("ペ")],
+        "ボ": [TypoUnit("ポ")],
+        "ヤ": [TypoUnit("ャ")],
+        "ユ": [TypoUnit("ュ")],
+        "ヨ": [TypoUnit("ョ")]
     ]
 
     private static let roman2KanaPossibleTypo: [String: [String]] = [
