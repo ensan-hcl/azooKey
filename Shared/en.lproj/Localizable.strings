@@ -1,9 +1,9 @@
 /* 
   Localizable.strings
-  KanaKanjier
+  azooKey
 
-  Created by β α on 2021/02/14.
-  Copyright © 2021 DevEn3. All rights reserved.
+  Created by ensan on 2021/02/14.
+  Copyright © 2021 ensan. All rights reserved.
 */
 "azooKeyを使う前に、iPhoneのキーボードのリストにazooKeyを追加する必要があります" = "Before using azooKey, you need to add azooKey into the list of device keyboards";
 "手順を見る" = "Check steps";

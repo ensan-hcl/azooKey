@@ -2,7 +2,7 @@
 //  ResizingRect.swift
 //  SwiftUI-Playground
 //
-//  Created by β α on 2021/03/11.
+//  Created by ensan on 2021/03/11.
 //
 
 import Foundation

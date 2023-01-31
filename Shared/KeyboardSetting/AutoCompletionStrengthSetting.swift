@@ -1,9 +1,9 @@
 //
 //  IntKeyboardSetting.swift
-//  KanaKanjier
+//  azooKey
 //
-//  Created by β α on 2022/09/15.
-//  Copyright © 2022 DevEn3. All rights reserved.
+//  Created by ensan on 2022/09/15.
+//  Copyright © 2022 ensan. All rights reserved.
 //
 
 import Foundation

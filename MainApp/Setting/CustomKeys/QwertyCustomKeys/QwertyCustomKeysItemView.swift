@@ -1,9 +1,9 @@
 //
 //  QwertyCustomKeysSettingView.swift
-//  KanaKanjier
+//  MainApp
 //
-//  Created by β α on 2020/12/12.
-//  Copyright © 2020 DevEn3. All rights reserved.
+//  Created by ensan on 2020/12/12.
+//  Copyright © 2020 ensan. All rights reserved.
 //
 
 import CustardKit

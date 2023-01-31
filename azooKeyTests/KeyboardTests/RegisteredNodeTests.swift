@@ -2,8 +2,8 @@
 //  RegisteredNodeTests.swift
 //  azooKeyTests
 //
-//  Created by β α on 2023/01/31.
-//  Copyright © 2023 DevEn3. All rights reserved.
+//  Created by ensan on 2023/01/31.
+//  Copyright © 2023 ensan. All rights reserved.
 //
 
 import XCTest

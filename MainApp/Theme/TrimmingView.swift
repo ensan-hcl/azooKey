@@ -1,9 +1,9 @@
 //
 //  TrimmingView.swift
-//  KanaKanjier
+//  MainApp
 //
-//  Created by β α on 2021/02/10.
-//  Copyright © 2021 DevEn3. All rights reserved.
+//  Created by ensan on 2021/02/10.
+//  Copyright © 2021 ensan. All rights reserved.
 //
 
 import Foundation

@@ -2,8 +2,8 @@
 //  changed_last_n_character.swift
 //  Keyboard
 //
-//  Created by β α on 2020/10/14.
-//  Copyright © 2020 DevEn3. All rights reserved.
+//  Created by ensan on 2020/10/14.
+//  Copyright © 2020 ensan. All rights reserved.
 //
 
 import Foundation
