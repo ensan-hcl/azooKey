@@ -17,6 +17,7 @@ struct UpdateInfomationView: View {
                     VersionView("2.0", releaseDate: "2023年xx月xx日") {
                         ParagraphView("機能を改善しました。") {
                             "辞書データを大幅にアップデートしました"
+                            "テンプレートをユーザ辞書上で編集できるようになりました"
                         }
                         ParagraphView("不具合を修正しました。") {
                             "ライブ変換を使っていない場合に、一部のアプリケーションで入力がおかしくなる問題を修正"
