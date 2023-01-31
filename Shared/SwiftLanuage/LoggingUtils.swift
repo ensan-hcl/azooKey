@@ -14,6 +14,6 @@ import Foundation
 /// - Note: This function is always preferred over `print` in the codebase.
 @inlinable func debug(_ items: Any...) {
     #if DEBUG
-    print(items.map {"\($0)"}.joined(separator: " "))
+    print(items.reduce(into: "") {$0.append(contentsOf: " \($1)")})
     #endif
 }
