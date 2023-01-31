@@ -126,7 +126,7 @@ extension KanaKanjiConverter {
     /// 西暦で書かれた入力を和暦に変換する関数
     /// - parameters:
     ///   - string: 入力
-    func toWareki(_ inputData: ComposingText) -> [Candidate] {
+    func toWarekiCandidates(_ inputData: ComposingText) -> [Candidate] {
         let string = inputData.convertTarget.toKatakana()
 
         let makeResult0: (String) -> Candidate = {

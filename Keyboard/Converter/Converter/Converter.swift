@@ -57,16 +57,16 @@ final class KanaKanjiConverter {
     private func getWiseCandidate(_ inputData: ComposingText, options: ConvertRequestOptions) -> [Candidate] {
         var result = [Candidate]()
 
-        // toWareki/toSeirekiCandidatesは以前は設定可能にしていたが、特にoffにする需要がなさそうなので常時有効化した
-        result.append(contentsOf: self.toWareki(inputData))
+        // toWarekiCandidates/toSeirekiCandidatesは以前は設定可能にしていたが、特にoffにする需要がなさそうなので常時有効化した
+        result.append(contentsOf: self.toWarekiCandidates(inputData))
         result.append(contentsOf: self.toSeirekiCandidates(inputData))
-        result.append(contentsOf: self.toEmailAddress(inputData))
+        result.append(contentsOf: self.toEmailAddressCandidates(inputData))
 
         if options.typographyLetterCandidate {
             result.append(contentsOf: self.typographicalCandidates(inputData))
         }
         if options.unicodeCandidate {
-            result.append(contentsOf: self.unicode(inputData))
+            result.append(contentsOf: self.unicodeCandidates(inputData))
         }
         result.append(contentsOf: self.toVersionCandidate(inputData))
         return result
