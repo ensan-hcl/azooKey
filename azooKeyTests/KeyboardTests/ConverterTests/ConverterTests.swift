@@ -36,12 +36,29 @@ final class ConverterTests: XCTestCase {
         DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
         let converter = KanaKanjiConverter()
         var c = ComposingText()
-        let text = "あずーきーはしんじだいのきーぼーどあぷりです"
+        let text = "ようしょうきからてにすすいえいやきゅうしょうりんじけんぽうなどさまざまなすぽーつをけいけんしながらそだちしょうがっこうじだいはろさんぜるすきんこうにたいざいしておりごるふやてにすをならっていた"
         for char in text {
             _ = c.insertAtCursorPosition(String(char), inputStyle: .direct)
             let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
             if c.convertTarget == text {
-                XCTAssertEqual(results.mainResults.first?.text, "azooKeyは新時代のキーボードアプリです")
+                XCTAssertEqual(results.mainResults.first?.text, "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた")
+            }
+        }
+    }
+
+    // 1文字ずつ変換する
+    // memo: 内部実装としては別のモジュールが呼ばれるのだが、それをテストする方法があまりないかもしれない
+    func testRoman2KanaGradualConversion() throws {
+        // データリソースの場所を指定する
+        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
+        let converter = KanaKanjiConverter()
+        var c = ComposingText()
+        let text = "youshoukikaratenisusuieiyakyuushourinjikenpounadosamazamanasupoーtuwokeikennsinagarasodatishougakkouzidaiharosanzerusukinkounitaizaisiteorigoruhuyatenisuwonaratteita"
+        for char in text {
+            _ = c.insertAtCursorPosition(String(char), inputStyle: .roman2kana)
+            let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+            if c.convertTarget == text {
+                XCTAssertEqual(results.mainResults.first?.text, "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた")
             }
         }
     }
