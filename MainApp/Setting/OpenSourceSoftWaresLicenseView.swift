@@ -121,10 +121,11 @@ struct OpenSourceSoftWaresLicenseView: View {
                     FallbackLink("mecab-ipadic-NEologd : Neologism dictionary for MeCab", destination: "https://github.com/neologd/mecab-ipadic-neologd")
                 }
                 Section {
-                    Text("MJ文字情報一覧表").font(.title).padding()
-                    Text("本アプリケーションは音読みから漢字への変換を行うためMJ文字情報一覧表を使用しています。")
-                    Text("本アプリケーションの持つ辞書のうち、MJ文字情報一覧表から派生した部分はクリエイティブ・コモンズ 表示 – 継承 2.1 日本 ライセンスを継承し、その著作権は独立行政法人情報処理推進機構(IPA)に帰属します。")
-                    FallbackLink("MJ文字情報一覧表 | 文字情報基盤整備事業", destination: "https://moji.or.jp/mojikiban/mjlist/#")
+                    Text("Mozc").font(.title).padding()
+                    Text("本アプリケーションはMozcの一部のデータを利用しています。")
+                    FallbackLink("BSD 3-Clause \"New\" or \"Revised\" License", destination: "https://github.com/google/mozc/blob/master/LICENSE")
+                    FallbackLink("Mozc", destination: "https://github.com/google/mozc")
+                    Text("Copyright 2010-2022, Google Inc.")
                 }
                 Section {
                     Text("japanese-word2vec-model-builder").font(.title).padding()
