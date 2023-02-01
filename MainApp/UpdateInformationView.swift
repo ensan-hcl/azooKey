@@ -26,10 +26,11 @@ struct UpdateInfomationView: View {
                             "入力中の誤り訂正で濁点がつきすぎる問題を改善"
                         }
                         ParagraphView("お知らせ。") {
-                            "azooKey 2.0はオープンソースソフトウェアになりました。ソースコードを誰でも閲覧し、利用することができます。"
+                            "azooKey 2.0はオープンソースソフトウェアになりました。ソースコードを誰でも閲覧し、利用することができます。ソースコードはGitHubで公開しています。"
                         }
                         ParagraphView("その他デザインの軽微な改善を行いました。")
                     }
+                    FallbackLink("View azooKey on GitHub", destination: URL(string: "https://github.com/ensan-hcl/azooKey")!)
                 }
             }
             // version 1系
