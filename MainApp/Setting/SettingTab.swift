@@ -75,6 +75,8 @@ struct SettingTabView: View {
                     }
                 }
                 Section(header: Text("このアプリについて")) {
+                    Text("azooKeyはオープンソースソフトウェアであり、GitHubでソースコードを公開しています。")
+                    FallbackLink("View **azooKey** on GitHub", destination: URL(string: "https://github.com/ensan-hcl/azooKey")!)
                     NavigationLink("お問い合わせ", destination: ContactView())
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
                         .foregroundColor(.primary)
