@@ -36,7 +36,14 @@ extension CodableActionData {
         case .toggleTabBar: return "タブバーの切り替え"
         case .dismissKeyboard: return "キーボードを閉じる"
         case .enableResizingMode: return "片手モードをオンにする"
-        case .launchApplication: return "アプリを開く"
+        case let .launchApplication(value):
+            // TODO: Localize
+            switch value.scheme {
+            case .azooKey:
+                return "azooKey本体アプリを開く"
+            case .shortcuts:
+                return "ショートカットを実行する"
+            }
 //        case .setBoolState: return "Bool変数を設定"
 //        case .boolSwitch: return "条件分岐"
 //        case let .setCursorBar(value):
