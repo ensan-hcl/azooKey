@@ -74,7 +74,7 @@ struct TabBarData: Codable {
     let items: [TabBarItem]
 
     static let `default` = TabBarData(identifier: 0, items: [
-        TabBarItem(label: .text("片手"), actions: [.enableResizingMode, .setTabBar(.toggle)]),
+        TabBarItem(label: .text("片手"), actions: [.enableResizingMode, .toggleTabBar]),
         TabBarItem(label: .text("あいう"), actions: [.moveTab(.system(.user_japanese))]),
         TabBarItem(label: .text("ABC"), actions: [.moveTab(.system(.user_english))]),
         TabBarItem(label: .text("閉じる"), actions: [.dismissKeyboard])

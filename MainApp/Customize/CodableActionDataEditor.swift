@@ -14,7 +14,7 @@ import SwiftUI
 extension CodableActionData {
     var hasAssociatedValue: Bool {
         switch self {
-        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication, .setTabBar, .setCursorBar, .setCapsLockState, .setBoolState, .boolSwitch: return true
+        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication: return true
         case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
         }
     }
@@ -37,29 +37,29 @@ extension CodableActionData {
         case .dismissKeyboard: return "キーボードを閉じる"
         case .enableResizingMode: return "片手モードをオンにする"
         case .launchApplication: return "アプリを開く"
-        case .setBoolState: return "Bool変数を設定"
-        case .boolSwitch: return "条件分岐"
-        case let .setCursorBar(value):
-            // TODO: LOCALIZE
-            switch value {
-            case .on: return "カーソルバーを表示する"
-            case .off: return "カーソルバーを消す"
-            case .toggle: return "カーソルバーの切り替え"
-            }
-        case let .setCapsLockState(value):
-            // TODO: LOCALIZE
-            switch value {
-            case .on: return "Caps lockのモードのオン"
-            case .off: return "Caps lockのモードのオフ"
-            case .toggle: return "Caps lockのモードの切り替え"
-            }
-        case let .setTabBar(value):
-            // TODO: LOCALIZE
-            switch value {
-            case .on: return "タブバーを表示する"
-            case .off: return "タブバーを消す"
-            case .toggle: return "タブバーの切り替え"
-            }
+//        case .setBoolState: return "Bool変数を設定"
+//        case .boolSwitch: return "条件分岐"
+//        case let .setCursorBar(value):
+//            // TODO: LOCALIZE
+//            switch value {
+//            case .on: return "カーソルバーを表示する"
+//            case .off: return "カーソルバーを消す"
+//            case .toggle: return "カーソルバーの切り替え"
+//            }
+//        case let .setCapsLockState(value):
+//            // TODO: LOCALIZE
+//            switch value {
+//            case .on: return "Caps lockのモードのオン"
+//            case .off: return "Caps lockのモードのオフ"
+//            case .toggle: return "Caps lockのモードの切り替え"
+//            }
+//        case let .setTabBar(value):
+//            // TODO: LOCALIZE
+//            switch value {
+//            case .on: return "タブバーを表示する"
+//            case .off: return "タブバーを消す"
+//            case .toggle: return "タブバーの切り替え"
+//            }
         }
     }
 }
@@ -468,7 +468,7 @@ private struct ActionPicker: View {
                     process(.moveTab(.system(.user_japanese)))
                 }
                 Button("タブバーの表示") {
-                    process(.setTabBar(.toggle))
+                    process(.toggleTabBar)
                 }
                 Button("カーソル移動") {
                     process(.moveCursor(-1))
@@ -491,10 +491,10 @@ private struct ActionPicker: View {
                     process(.complete)
                 }
                 Button("Caps lock") {
-                    process(.setCapsLockState(.toggle))
+                    process(.toggleCapsLockState)
                 }
                 Button("カーソルバーの表示") {
-                    process(.setCursorBar(.toggle))
+                    process(.toggleCursorBar)
                 }
                 // TODO: Localize
                 Button("ショートカットを実行") {

@@ -183,11 +183,11 @@ final class KeyboardActionManager: UserActionManager {
                 VariableStates.shared.boolStates[key]?.toggle()
             }
 
-        case let ._setBoolState(key, compiledExpression):
-            if let value = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
-                VariableStates.shared.boolStates[key] = value
-            }
-
+        //        case let ._setBoolState(key, compiledExpression):
+        //            if let value = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
+        //                VariableStates.shared.boolStates[key] = value
+        //            }
+        //
         case let .boolSwitch(compiledExpression, trueAction, falseAction):
             if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
                 if condition {

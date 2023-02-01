@@ -61,7 +61,7 @@ enum CustomizableFlickKey: String, Codable {
         case .symbolsTab:
             return KeyFlickSetting(
                 identifier: self,
-                center: FlickCustomKey(label: "☆123", actions: [.moveTab(.system(.flick_numbersymbols))], longpressActions: .init(start: [.setTabBar(.toggle)])),
+                center: FlickCustomKey(label: "☆123", actions: [.moveTab(.system(.flick_numbersymbols))], longpressActions: .init(start: [.toggleTabBar])),
                 left: FlickCustomKey(label: "", actions: []),
                 top: FlickCustomKey(label: "", actions: []),
                 right: FlickCustomKey(label: "", actions: []),

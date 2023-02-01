@@ -10,6 +10,10 @@ import CustardExpressionEvaluator
 import CustardKit
 import Foundation
 
+enum BoolOperation: Equatable {
+    case on, off, toggle
+}
+
 indirect enum ActionType: Equatable {
     // テキスト関係
     case input(String)          // テキストの入力
@@ -43,7 +47,7 @@ indirect enum ActionType: Equatable {
 
     // ステート変更
     case setBoolState(String, BoolOperation)
-    case _setBoolState(String, CompiledExpression)
+    // case _setBoolState(String, CompiledExpression)
 
     // 条件分岐アクション
     case boolSwitch(CompiledExpression, trueAction: [ActionType], falseAction: [ActionType])

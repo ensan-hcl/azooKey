@@ -50,30 +50,30 @@ extension CodableActionData {
             }
         case .dismissKeyboard:
             return .dismissKeyboard
-        case let .setCursorBar(value):
-            return .setCursorBar(value)
-        case let .setCapsLockState(value):
-            return .setBoolState(VariableStates.BoolStates.isCapsLockedKey, value)
-        case let .setTabBar(value):
-            return .setTabBar(value)
-        case let .setBoolState(state, value):
-            let tokenizer = CustardExpressionTokenizer()
-            let compiler = CustardExpressionCompiler()
-            let tokens = tokenizer.tokenize(expression: value)
-            if let compiledExpression = try? compiler.compile(tokens: tokens) {
-                return ._setBoolState(state, compiledExpression)
-            }
-            // TODO: implement empty action and enable actual do-nothing
-            return .input("")
-        case let .boolSwitch(expression, trueActions, falseActions):
-            let tokenizer = CustardExpressionTokenizer()
-            let compiler = CustardExpressionCompiler()
-            let tokens = tokenizer.tokenize(expression: expression)
-            if let compiledExpression = try? compiler.compile(tokens: tokens) {
-                return .boolSwitch(compiledExpression, trueAction: trueActions.map {$0.actionType}, falseAction: falseActions.map {$0.actionType})
-            }
-            // TODO: implement empty action and enable actual do-nothing
-            return .input("")
+        //        case let .setCursorBar(value):
+        //            return .setCursorBar(value)
+        //        case let .setCapsLockState(value):
+        //            return .setBoolState(VariableStates.BoolStates.isCapsLockedKey, value)
+        //        case let .setTabBar(value):
+        //            return .setTabBar(value)
+        //        case let .setBoolState(state, value):
+        //            let tokenizer = CustardExpressionTokenizer()
+        //            let compiler = CustardExpressionCompiler()
+        //            let tokens = tokenizer.tokenize(expression: value)
+        //            if let compiledExpression = try? compiler.compile(tokens: tokens) {
+        //                return ._setBoolState(state, compiledExpression)
+        //            }
+        //            // TODO: implement empty action and enable actual do-nothing
+        //            return .input("")
+        //        case let .boolSwitch(expression, trueActions, falseActions):
+        //            let tokenizer = CustardExpressionTokenizer()
+        //            let compiler = CustardExpressionCompiler()
+        //            let tokens = tokenizer.tokenize(expression: expression)
+        //            if let compiledExpression = try? compiler.compile(tokens: tokens) {
+        //                return .boolSwitch(compiledExpression, trueAction: trueActions.map {$0.actionType}, falseAction: falseActions.map {$0.actionType})
+        //            }
+        //            // TODO: implement empty action and enable actual do-nothing
+        //            return .input("")
         }
     }
 }
@@ -93,7 +93,7 @@ extension ActionType {
             Sound.delete()
         case .smoothDelete, .smartDelete, .smartMoveCursor:
             Sound.smoothDelete()
-        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState, ._setBoolState:
+        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState/*, ._setBoolState*/:
             Sound.tabOrOtherKey()
         case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
