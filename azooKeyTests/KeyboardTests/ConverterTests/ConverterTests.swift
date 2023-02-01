@@ -40,7 +40,7 @@ final class ConverterTests: XCTestCase {
         for char in text {
             _ = c.insertAtCursorPosition(String(char), inputStyle: .direct)
             let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
-            if c.convertTarget == text {
+            if c.input.count == text.count {
                 XCTAssertEqual(results.mainResults.first?.text, "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた")
             }
         }
@@ -57,7 +57,31 @@ final class ConverterTests: XCTestCase {
         for char in text {
             _ = c.insertAtCursorPosition(String(char), inputStyle: .roman2kana)
             let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
-            if c.convertTarget == text {
+            if c.input.count == text.count {
+                XCTAssertEqual(results.mainResults.first?.text, "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた")
+            }
+        }
+    }
+
+    // 2,3文字ずつ変換する
+    // memo: 内部実装としては別のモジュールが呼ばれるのだが、それをテストする方法があまりないかもしれない
+    func testSemiGradualConversion() throws {
+        // データリソースの場所を指定する
+        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
+        let converter = KanaKanjiConverter()
+        var c = ComposingText()
+        let text = "ようしょうきからてにすすいえいやきゅうしょうりんじけんぽうなどさまざまなすぽーつをけいけんしながらそだちしょうがっこうじだいはろさんぜるすきんこうにたいざいしておりごるふやてにすをならっていた"
+        var leftIndex = text.startIndex
+
+        // ランダムに1~5文字ずつ追加していく
+        while leftIndex != text.endIndex {
+            let count = Int.random(in: 1 ... 5)
+            let rightIndex = text.index(leftIndex, offsetBy: count, limitedBy: text.endIndex) ?? text.endIndex
+            let prefix = String(text[leftIndex ..< rightIndex])
+            _ = c.insertAtCursorPosition(prefix, inputStyle: .direct)
+            let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+            leftIndex = rightIndex
+            if rightIndex == text.endIndex {
                 XCTAssertEqual(results.mainResults.first?.text, "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた")
             }
         }
