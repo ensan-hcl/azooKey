@@ -55,7 +55,10 @@ extension LOUDS {
         return bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudstxt3", isDirectory: false)
     }
 
-    internal static func build(_ identifier: String) -> LOUDS? {
+    /// LOUDSをファイルから読み込む関数
+    /// - Parameter identifier: ファイル名
+    /// - Returns: 存在すればLOUDSデータを返し、存在しなければ`nil`を返す。
+    internal static func load(_ identifier: String) -> LOUDS? {
         let (charsURL, loudsURL) = getLOUDSURL(identifier)
         let nodeIndex2ID: [UInt8]
         do {

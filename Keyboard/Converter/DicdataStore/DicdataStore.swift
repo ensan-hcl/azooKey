@@ -124,7 +124,7 @@ final class DicdataStore {
         }
 
         importedLoudses.insert(identifier)
-        if let louds = LOUDS.build(identifier) {
+        if let louds = LOUDS.load(identifier) {
             self.loudses[identifier] = louds
             return louds
         } else {

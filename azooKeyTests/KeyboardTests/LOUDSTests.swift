@@ -23,7 +23,7 @@ final class LOUDSTests: XCTestCase {
     func testSearchNodeIndex() throws {
         // データリソースの場所を指定する
         DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
-        let louds = LOUDS.build("シ")
+        let louds = LOUDS.load("シ")
         XCTAssertNotNil(louds)
         guard let louds else { return }
         let charIDs = loadCharIDs()

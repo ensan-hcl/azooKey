@@ -119,6 +119,9 @@ struct LOUDS {
         }
     }
 
+    /// 完全一致検索を実行する
+    /// - Parameter chars: CharIDに変換した文字列
+    /// - Returns: 対応するloudstxt3ファイル内のインデックス
     internal func searchNodeIndex(chars: [UInt8]) -> Int? {
         var index = 1
         for char in chars {
@@ -142,6 +145,12 @@ struct LOUDS {
         return childNodeIndices
     }
 
+    /// 前方一致検索を実行する
+    ///
+    /// 「しかい」を入力した場合、そこから先の「しかいし」「しかいしゃ」「しかいいん」なども探す。
+    /// - Parameter chars: CharIDに変換した文字列
+    /// - Parameter maxDepth: 先に進む深さの最大値
+    /// - Returns: 対応するloudstxt3ファイル内のインデックスのリスト
     internal func prefixNodeIndices(chars: [UInt8], maxDepth: Int) -> [Int] {
         guard let nodeIndex = self.searchNodeIndex(chars: chars) else {
             return []
@@ -149,9 +158,12 @@ struct LOUDS {
         return self.prefixNodeIndices(nodeIndex: nodeIndex, maxDepth: maxDepth)
     }
 
-    /// charsの前方に一致するエントリのindexを全て集める
-    /// 例えばcharsが「しんせいしゃ」だったら「し」や「しん」や「しんせ」に対応するエントリのindexも含む
-    /// 以前はreduceで実装していたが、速度的に変わらないので読みやすさのためにforとfirstで書き換えた
+    /// 部分前方一致検索を実行する
+    ///
+    /// 「しかい」を入力した場合、「しかい」だけでなく「し」「しか」の検索も行う。
+    /// - Parameter chars: CharIDに変換した文字列
+    /// - Returns: 対応するloudstxt3ファイル内のインデックスのリスト
+    /// - Note: より適切な名前に変更したい
     internal func byfixNodeIndices(chars: [UInt8]) -> [Int] {
         var indices = [1]
         for char in chars {
