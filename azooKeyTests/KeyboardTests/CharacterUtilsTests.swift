@@ -162,6 +162,7 @@ final class CharacterUtilsTests: XCTestCase {
         XCTAssertEqual(("漢" as Character).toKatakana(), "漢")
         XCTAssertEqual(("ア" as Character).toKatakana(), "ア")
         XCTAssertEqual(("A" as Character).toKatakana(), "A")
+        XCTAssertEqual(("😇" as Character).toKatakana(), "😇")
     }
 
     func testRequestChange() throws {

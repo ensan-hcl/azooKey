@@ -74,6 +74,19 @@ final class StringTests: XCTestCase {
         XCTAssertFalse("これは完全に日本語の文章です".isEnglishSentence)
     }
 
+    func testToKatakana() throws {
+        XCTAssertEqual("あいうえお".toKatakana(), "アイウエオ")
+        XCTAssertEqual("これは日本語の文章です".toKatakana(), "コレハ日本語ノ文章デス")
+        XCTAssertEqual("えモじ😇".toKatakana(), "エモジ😇")
+    }
+
+    func testToHiragana() throws {
+        XCTAssertEqual("アイウエオ".toHiragana(), "あいうえお")
+        XCTAssertEqual("僕はロボットです".toHiragana(), "僕はろぼっとです")
+        XCTAssertEqual("えモじ😇".toHiragana(), "えもじ😇")
+    }
+
+
     func testPerformanceExample() throws {
     }
 }
