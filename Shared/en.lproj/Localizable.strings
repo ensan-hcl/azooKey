@@ -388,6 +388,7 @@
 "この操作は取り消せません。" = "This operation cannot be canceled.";
 
 "このアプリについて" = "About azooKey";
+"azooKeyはオープンソースソフトウェアであり、GitHubでソースコードを公開しています。" = "azooKey is open source software and its source code is available on GitHub.";
 "プライバシーポリシー" = "Privacy Policy (Japanese)";
 "利用規約" = "Terms of use (Japanese)";
 "更新履歴" = "Update histories (Japanese)";
