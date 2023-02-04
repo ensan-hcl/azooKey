@@ -14,7 +14,7 @@ struct UpdateInfomationView: View {
             Group {
                 // version 2.0系
                 Group {
-                    VersionView("2.0", releaseDate: "2023年xx月xx日") {
+                    VersionView("2.0", releaseDate: "2023年02月04日") {
                         ParagraphView("機能を改善しました。") {
                             "辞書データを大幅にアップデートしました"
                             "テンプレートをユーザ辞書上で編集できるようになりました"
