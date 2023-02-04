@@ -209,7 +209,6 @@ private struct CodableActionEditor: View {
         case .replaceLastCharacters:
             EmptyView()
         case let .launchApplication(item):
-            // TODO: Localize
             if item.target.hasPrefix("run-shortcut?") {
                 ActionEditTextField("オプション", action: $action) {String(item.target.dropFirst("run-shortcut?".count))} convert: {value in
                     .launchApplication(LaunchItem(scheme: .shortcuts, target: "run-shortcut?" + value))
@@ -503,7 +502,6 @@ private struct ActionPicker: View {
                 Button("カーソルバーの表示") {
                     process(.toggleCursorBar)
                 }
-                // TODO: Localize
                 Button("ショートカットを実行") {
                     process(.launchApplication(.init(scheme: .shortcuts, target: "run-shortcut?name=[名前]&input=[入力]&text=[テキスト]")))
                 }

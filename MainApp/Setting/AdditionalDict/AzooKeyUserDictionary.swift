@@ -297,7 +297,6 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                 Toggle("場所・建物などの名前である", isOn: $item.data.isPlaceName)
             }
             if #available(iOS 16.0, *), let selectedTemplate {
-                // TODO: Localize
                 if let index = templateIndex(name: selectedTemplate.name) {
                     Section(header: Text("テンプレートを編集する")) {
                         Text("{{\(selectedTemplate.name)}}を編集できます")

@@ -228,6 +228,7 @@
 "通常のキー" = "Color of normal keys";
 "特別なキー" = "Color of special keys";
 "押されているキー" = "Color of selected keys";
+"目立たないキー" = "Color of unimportant keys";
 
 "キーのサイズ" = "Size of this key";
 "キーの種類" = "Type of this key";
@@ -342,6 +343,11 @@
 "テンプレート" = "Templates";
 "テンプレートの管理" = "Manage templates";
 "テンプレートを編集" = "Edit template";
+"テンプレートを編集する" = "Edit template";
+"テンプレートを選ぶ" = "Select template";
+"%@を編集できます" = "%@ can be edited";
+"%@というテンプレートが見つかりません。" = "Template '%@' cannot be found";
+"%を新規作成" = "Create new template %@"; 
 "時刻" = "Dates";
 "ランダム" = "Random";
 "書式の設定" = "Format";
@@ -367,6 +373,10 @@
 "から" = "starts";
 "まで" = "ends";
 "名前" = "Name";
+
+"ショートカットを実行" = "Run shortcut";
+"オプション" = "Options";
+"オプションの設定方法" = "How to specify options";
 
 "学習機能" = "Memories";
 "学習の使用" = "Use memorizing";
@@ -461,6 +471,7 @@
 "動作の編集" = "Edit actions";
 "上から順に実行されます" = "Actions are executed in order";
 "アクションを追加" = "Add new action";
+"このアプリでは編集できないアクションです" = "An action which cannot be edited in this app";
 
 "基本" = "Basic";
 "高度" = "Advanced";
