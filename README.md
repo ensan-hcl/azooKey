@@ -39,6 +39,6 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 TODO: 次のリリース以降、リリースフローを変更する予定です。
 
 ## ライセンス
-Copyright (c) 2022-2023 Keita Miwa (ensan).
+Copyright (c) 2020-2023 Keita Miwa (ensan).
 
 azooKeyはMIT LICENSEでライセンスされています。詳しくは[LICENSE](./LICENSE)をご覧ください。
