@@ -41,4 +41,4 @@ TODO: 次のリリース以降、リリースフローを変更する予定で�
 ## ライセンス
 Copyright (c) 2020-2023 Keita Miwa (ensan).
 
-azooKeyはMIT LICENSEでライセンスされています。詳しくは[LICENSE](./LICENSE)をご覧ください。
+azooKeyはMIT Licenseでライセンスされています。詳しくは[LICENSE](./LICENSE)をご覧ください。
