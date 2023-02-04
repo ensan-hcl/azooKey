@@ -20,7 +20,7 @@ extension StringProtocol {
                 return scalar
             }
         }
-        return String(utf16CodeUnits: result, count: self.count)
+        return String(utf16CodeUnits: result, count: result.count)
     }
 
     /// Returns a String value in which Katakana are all converted to Hiragana.
@@ -34,7 +34,7 @@ extension StringProtocol {
                 return scalar
             }
         }
-        return String(utf16CodeUnits: result, count: self.count)
+        return String(utf16CodeUnits: result, count: result.count)
     }
 
     /// Returns an Index value that is the specified distance from the start index.

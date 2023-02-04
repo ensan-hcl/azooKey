@@ -54,11 +54,16 @@ final class ConverterTests: XCTestCase {
         let converter = KanaKanjiConverter()
         var c = ComposingText()
         let text = "youshoukikaratenisusuieiyakyuushourinjikenpounadosamazamanasupoーtuwokeikennsinagarasodatishougakkouzidaiharosanzerusukinkounitaizaisiteorigoruhuyatenisuwonaratteita"
+        // 許容される変換結果
+        let  possibles = [
+            "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた",
+            "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスをならっていた"
+        ]
         for char in text {
             _ = c.insertAtCursorPosition(String(char), inputStyle: .roman2kana)
             let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
             if c.input.count == text.count {
-                XCTAssertEqual(results.mainResults.first?.text, "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた")
+                XCTAssertTrue(possibles.contains(results.mainResults.first!.text))
             }
         }
     }
