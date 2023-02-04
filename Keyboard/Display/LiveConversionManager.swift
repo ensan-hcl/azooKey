@@ -40,7 +40,7 @@ final class LiveConversionManager {
     private func updateHistories(newCandidate: Candidate, firstClauseCandidates: [Candidate]) {
         var data = newCandidate.data[...]
         var count = 0
-        while data.count > 0 {
+        while !data.isEmpty {
             var clause = Candidate.makePrefixClauseCandidate(data: data)
             // ローマ字向けに補正処理を入れる
             if count == 0, let first = firstClauseCandidates.first(where: {$0.text == clause.text}) {

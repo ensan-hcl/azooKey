@@ -16,7 +16,6 @@ opt_in_rules:
   - anyobject_protocol # AnyObjectをclassよりも推奨
   - array_init # Array()を推奨
   - conditional_returns_on_newline
-  - empty_count # 要素が何もないことを確認する際はcount == 0よりもisEmptyを用いてチェックする．
   - empty_string # 同上
   - explicit_init # explicitに.initを書かない
   - first_where # .filter { }.firstよりも.first(where:)を用いる．
