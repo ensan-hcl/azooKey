@@ -157,8 +157,14 @@ struct ManageCustardView: View {
                 } else {
                     List {
                         ForEach(manager.availableCustards, id: \.self) {identifier in
-                            if let custard = try? manager.custard(identifier: identifier) {
+                            if let custard = self.getCustard(identifier: identifier) {
                                 NavigationLink(identifier, destination: CustardInformationView(custard: custard, manager: $manager))
+                            } else if let custardFileURL = self.getCustardFile(identifier: identifier) {
+                                if #available(iOS 16, *) {
+                                    ShareLink(item: custardFileURL) {
+                                        Label("読み込みに失敗したカスタムタブ「\(identifier)」を書き出す", systemImage: "square.and.arrow.up")
+                                    }
+                                }
                             }
                         }
                         .onDelete(perform: delete)
@@ -293,6 +299,26 @@ struct ManageCustardView: View {
             }
         } catch {
             debug("saveCustard", error)
+        }
+    }
+
+    private func getCustard(identifier: String) -> Custard? {
+        do {
+            let custard = try manager.custard(identifier: identifier)
+            return custard
+        } catch {
+            debug(error)
+            return nil
+        }
+    }
+
+    private func getCustardFile(identifier: String) -> URL? {
+        do {
+            let url = try manager.custardFileIfExist(identifier: identifier)
+            return url
+        } catch {
+            debug(error)
+            return nil
         }
     }
 

@@ -409,6 +409,7 @@
 "URLが間違っている可能性があります" = "Wrong URL";
 "データが取得できませんでした" = "Failed to get data from URL";
 "正しくない形式のファイルです" = "Incorrectly formatted file";
+"読み込みに失敗したカスタムタブ「%@」を書き出す" = "Export custom tab '%@' that failed to load";
 "ファイルを取得中" = "Getting file";
 "URLを取得中" = "Getting URL";
 "ファイルを処理中" = "Processing file";

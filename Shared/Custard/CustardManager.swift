@@ -122,6 +122,13 @@ struct CustardManager {
         return custard
     }
 
+    func custardFileIfExist(identifier: String) throws -> URL {
+        let fileName = Self.fileName(identifier)
+        let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
+        _ = try Data(contentsOf: fileURL)
+        return fileURL
+    }
+
     func tabbar(identifier: Int) throws -> TabBarData {
         let fileURL = Self.fileURL(name: "tabbar_\(identifier).tabbar")
         let data = try Data(contentsOf: fileURL)
@@ -210,28 +217,37 @@ struct CustardManager {
         switch language {
         case .ja_JP:
             return self.availableCustards.compactMap {
-                if let custard = try? self.custard(identifier: $0) {
+                do {
+                    let custard = try self.custard(identifier: $0)
                     if custard.language == .ja_JP {
                         return custard.identifier
                     }
+                } catch {
+                    debug(error)
                 }
                 return nil
             }
         case .el_GR:
             return self.availableCustards.compactMap {
-                if let custard = try? self.custard(identifier: $0) {
+                do {
+                    let custard = try self.custard(identifier: $0)
                     if custard.language == .el_GR {
                         return custard.identifier
                     }
+                } catch {
+                    debug(error)
                 }
                 return nil
             }
         case .en_US:
             return self.availableCustards.compactMap {
-                if let custard = try? self.custard(identifier: $0) {
+                do {
+                    let custard = try self.custard(identifier: $0)
                     if custard.language == .en_US {
                         return custard.identifier
                     }
+                } catch {
+                    debug(error)
                 }
                 return nil
             }
