@@ -23,7 +23,7 @@ A clear and concise description of what you expected to happen.
 **Screenshots (スクリーンショットがあれば添付してください)**
 If applicable, add screenshots to help explain your problem.
 
-**Environment (環境を詳しく押してください):**
+**Environment (環境を詳しく教えてください):**
  - Device: [e.g. iPhone12]
  - iOS / iPadOS and its version: [e.g. iOS 16.2]
  - App Running Keyboard [e.g. LINE, notes, Slack]
