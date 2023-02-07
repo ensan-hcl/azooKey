@@ -142,6 +142,35 @@ enum Design {
         VariableStates.shared.keyboardLayout
     }
 
+    /// レイアウトのモード
+    enum LayoutMode {
+        case phoneVertical
+        case phoneHorizontal
+        case padVertical
+        case padHorizontal
+    }
+
+    /// レイアウトモードを決定する
+    /// 特に、iPadでフローティングキーボードを利用する場合は`phoneVertical`になる。
+    private static var layoutMode: LayoutMode {
+        // TODO: この実装は検証される必要がある
+        var usePadMode = UIDevice.current.userInterfaceIdiom == .pad
+        // floating keyboardの場合
+        if usePadMode, SemiStaticStates.shared.screenWidth < 400 {
+            return .phoneVertical
+        }
+        switch (orientation, usePadMode) {
+        case (.vertical, false):
+            return .phoneVertical
+        case (.vertical, true):
+            return .padVertical
+        case (.horizontal, false):
+            return .phoneHorizontal
+        case (.horizontal, true):
+            return .padHorizontal
+        }
+    }
+
     /// This property calculate suitable width for normal keyView.
     /// キーボードの高さはスクリーンの幅から決定するため、キーボードスクリーンの高さはこのように書いて良い。
     static var keyboardScreenHeight: CGFloat {
@@ -153,14 +182,14 @@ enum Design {
     static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width) -> CGFloat {
         // 安全装置として、widthが本来のscreenWidthを超えないようにする。
         let width = min(screenWidth, SemiStaticStates.shared.screenWidth)
-        switch (orientation, UIDevice.current.userInterfaceIdiom == .pad) {
-        case (.vertical, false):
+        switch layoutMode {
+        case .phoneVertical:
             return 51 / 74 * width + 12
-        case (.vertical, true):
+        case .padVertical:
             return 15 / 31 * width + 12
-        case (.horizontal, false):
+        case .phoneHorizontal:
             return 17 / 56 * width + 12
-        case (.horizontal, true):
+        case .padHorizontal:
             return 5 / 18 * width + 12
         }
     }
@@ -168,17 +197,17 @@ enum Design {
     /// keyboardHeightに依存して決定する
     static func resultViewHeight(keyboardHeight: CGFloat = VariableStates.shared.interfaceSize.height) -> CGFloat {
         // let keyboardHeight = self.keyboardHeight(screenWidth: screenWidth)
-        switch (orientation, UIDevice.current.userInterfaceIdiom == .pad) {
-        case (.vertical, false):
+        switch layoutMode {
+        case .phoneVertical:
             return (keyboardHeight - 12) * 37 / 204
         // return screenWidth / 8
-        case (.vertical, true):
+        case .padVertical:
             return (keyboardHeight - 12) * 31 / 180
         // return screenWidth / 12
-        case (.horizontal, false):
+        case .phoneHorizontal:
             return (keyboardHeight - 12) * 28 / 153
         // return screenWidth / 18
-        case (.horizontal, true):
+        case .padHorizontal:
             return (keyboardHeight - 12) * 9 / 55
         // return screenWidth / 22
         }
