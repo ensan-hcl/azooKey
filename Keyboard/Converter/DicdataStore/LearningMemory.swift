@@ -500,34 +500,25 @@ final class LearningManager {
         }
     }
 
-    func temporaryPerfectMatch(key: some StringProtocol) -> [DicdataElement] {
+    func temporaryPerfectMatch(charIDs: [UInt8]) -> [DicdataElement] {
         if !options.learningType.needUsingMemory {
             return []
         }
-        guard let chars = Self.keyToChars(key) else {
-            return []
-        }
-        return self.temporaryMemory.perfectMatch(chars: chars)
+        return self.temporaryMemory.perfectMatch(chars: charIDs)
     }
 
-    func temporaryThroughMatch(key: some StringProtocol, depth: Range<Int>) -> [DicdataElement] {
+    func temporaryThroughMatch(charIDs: [UInt8], depth: Range<Int>) -> [DicdataElement] {
         if !options.learningType.needUsingMemory {
             return []
         }
-        guard let chars = Self.keyToChars(key) else {
-            return []
-        }
-        return self.temporaryMemory.throughMatch(chars: chars, depth: depth)
+        return self.temporaryMemory.throughMatch(chars: charIDs, depth: depth)
     }
 
-    func temporaryPrefixMatch(key: some StringProtocol) -> [DicdataElement] {
+    func temporaryPrefixMatch(charIDs: [UInt8]) -> [DicdataElement] {
         if !options.learningType.needUsingMemory {
             return []
         }
-        guard let chars = Self.keyToChars(key) else {
-            return []
-        }
-        return self.temporaryMemory.prefixMatch(chars: chars)
+        return self.temporaryMemory.prefixMatch(chars: charIDs)
     }
 
     func update(data: [DicdataElement]) {

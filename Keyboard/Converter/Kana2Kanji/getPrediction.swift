@@ -50,7 +50,7 @@ extension Kana2Kanji {
         let dicdata: [DicdataElement]
         switch mainInputStyle {
         case .direct:
-            dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: lastRuby)
+            dicdata = self.dicdataStore.getPredictionLOUDSDicdata(key: lastRuby)
         case .roman2kana:
             let roman = lastRuby.suffix(while: {String($0).onlyRomanAlphabet})
             if !roman.isEmpty {
@@ -61,10 +61,10 @@ extension Kana2Kanji {
                 }
                 let possibleNexts: [Substring] = DicdataStore.possibleNexts[String(roman), default: []].map {ruby + $0}
                 debug("getPredicitonCandidates", lastRuby, ruby, roman, possibleNexts, prepart, lastRubyCount)
-                dicdata = possibleNexts.flatMap { self.dicdataStore.getPredictionLOUDSDicdata(head: $0) }
+                dicdata = possibleNexts.flatMap { self.dicdataStore.getPredictionLOUDSDicdata(key: $0) }
             } else {
                 debug("getPredicitonCandidates", lastRuby, roman)
-                dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: lastRuby)
+                dicdata = self.dicdataStore.getPredictionLOUDSDicdata(key: lastRuby)
             }
         }
 
