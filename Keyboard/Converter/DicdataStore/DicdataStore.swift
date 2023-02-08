@@ -24,7 +24,7 @@ final class DicdataStore {
     private var ccParsed: [Bool] = .init(repeating: false, count: 1319)
     private var ccLines: [[Int: PValue]] = []
     private var mmValue: [PValue] = []
-    private let treshold: PValue = -17
+    private let threshold: PValue = -17
 
     private var loudses: [String: LOUDS] = [:]
     private var importedLoudses: Set<String> = []
@@ -101,7 +101,7 @@ final class DicdataStore {
 
     /// 計算時に利用。無視すべきデータかどうか。
     private func shouldBeRemoved(value: PValue, wordCount: Int) -> Bool {
-        let d = value - self.treshold
+        let d = value - self.threshold
         if d < 0 {
             return true
         }
@@ -111,7 +111,7 @@ final class DicdataStore {
 
     /// 計算時に利用。無視すべきデータかどうか。
     internal func shouldBeRemoved(data: DicdataElement) -> Bool {
-        let d = data.value() - self.treshold
+        let d = data.value() - self.threshold
         if d < 0 {
             return true
         }

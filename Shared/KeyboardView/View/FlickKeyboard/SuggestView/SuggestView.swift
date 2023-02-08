@@ -38,7 +38,7 @@ struct SuggestView: View {
         self.size = size
     }
 
-    private func neededApeearView(direction: FlickDirection) -> some View {
+    private func neededAppearView(direction: FlickDirection) -> some View {
         if case .oneDirection(direction) = self.modelVariableSection.suggestState {
             if let model = self.model.flickModels[direction] {
                 return model.getSuggestView(size: size, isHidden: false, isPointed: true, theme: theme)
@@ -59,9 +59,9 @@ struct SuggestView: View {
     var body: some View {
         VStack(spacing: tabDesign.verticalSpacing) { [unowned modelVariableSection] in
             if modelVariableSection.suggestState.isActive {
-                self.neededApeearView(direction: .top)
+                self.neededAppearView(direction: .top)
                 HStack(spacing: tabDesign.horizontalSpacing) {
-                    self.neededApeearView(direction: .left)
+                    self.neededAppearView(direction: .left)
                     RoundedRectangle(cornerRadius: 5.0)
                         .strokeAndFill(
                             fillContent: theme.specialKeyFillColor.color,
@@ -69,9 +69,9 @@ struct SuggestView: View {
                             lineWidth: theme.borderWidth
                         )
                         .frame(width: size.width, height: size.height)
-                    self.neededApeearView(direction: .right)
+                    self.neededAppearView(direction: .right)
                 }
-                self.neededApeearView(direction: .bottom)
+                self.neededAppearView(direction: .bottom)
             }
         }
         .frame(width: size.width, height: size.height)

@@ -156,13 +156,13 @@ final class LiveConversionManager {
         guard let history = headClauseCandidateHistories.first else {
             return nil
         }
-        if history.count < strength.treshold {
+        if history.count < strength.threshold {
             return nil
         }
 
         // 過去十分な回数変動がなければ、prefixを確定して良い
         debug("History", history)
-        let texts = history.suffix(strength.treshold).mapSet { $0.text }
+        let texts = history.suffix(strength.threshold).mapSet { $0.text }
         if texts.count == 1 {
             self.isFirstClauseCompletion = true
             return history.last!

@@ -10,9 +10,7 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 
 ### ビルド・利用方法
 
-1. 以下のリンクからzipファイルをダウンロードし、`Keyboard/Converter/`配下に`Dictionary`ファイルを配置してください。
-
-   WIP: 現在、辞書部分のOSS化作業を行っており、終了次第この手順を簡素化します。
+1. [Google DriveからazooKey_dictionaryをダウンロード](https://drive.google.com/drive/folders/1Kh7fgMFIzkpg7YwP3GhWTxFkXI-yzT9E?usp=sharing)し、`Keyboard/Converter/`配下に`Dictionary`ファイルを配置してください。
 
 1. `azooKey.xcodeproj`を開き、Xcodeの指示に従って「Run (Command+R)」を実行してください。
 
@@ -37,3 +35,8 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 現状、区切りの良いタイミングでリリースをおこなっています。
 
 TODO: 次のリリース以降、リリースフローを変更する予定です。
+
+## ライセンス
+Copyright (c) 2020-2023 Keita Miwa (ensan).
+
+azooKeyはMIT Licenseでライセンスされています。詳しくは[LICENSE](./LICENSE)をご覧ください。
