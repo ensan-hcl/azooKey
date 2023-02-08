@@ -92,6 +92,31 @@ final class ConverterTests: XCTestCase {
         }
     }
 
+    // 1文字ずつ入力するが、時折削除を行う
+    // memo: 内部実装としてはdeleted_last_nのテストを意図している
+    func testGradualConversionWithDelete() throws {
+        // データリソースの場所を指定する
+        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
+        let converter = KanaKanjiConverter()
+        var c = ComposingText()
+        let text = Array("ようしょうきからてにすすいえいやきゅうしょうりんじけんぽうなどさまざまなすぽーつをけいけんしながらそだちしょうがっこうじだいはろさんぜるすきんこうにたいざいしておりごるふやてにすをならっていた")
+        let deleteIndices = [1, 4, 8, 10, 15, 18, 20, 21, 23, 25, 26, 28, 29, 33, 34, 37, 39, 40, 42, 44, 45, 49, 51, 54, 58, 60, 62, 64, 67, 69, 70, 75, 80]
+        for (i, char) in text.enumerated() {
+            _ = c.insertAtCursorPosition(String(char), inputStyle: .direct)
+            let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+            if deleteIndices.contains(i) {
+                let count = i % 3 + 1
+                _ = c.deleteBackwardFromCursorPosition(count: count)
+                _ = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+
+                _ = c.insertAtCursorPosition(String(text[i-count+1 ... i]), inputStyle: .direct)
+                _ = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+            }
+            if c.input.count == text.count {
+                XCTAssertEqual(results.mainResults.first?.text, "幼少期からテニス水泳野球少林寺拳法など様々なスポーツを経験しながら育ち小学校時代はロサンゼルス近郊に滞在しておりゴルフやテニスを習っていた")
+            }
+        }
+    }
 
     // 変換結果が比較的一意なテストケースを無数に持ち、一定の割合を正解することを要求する
     // 辞書を更新した結果性能が悪化したら気付ける
