@@ -172,7 +172,7 @@ final class KeyboardViewController: UIInputViewController {
         self.removeFromParent()
         KeyboardViewController.keyboardViewHost = nil
         KeyboardViewController.loadedInstanceCount -= 1
-        VariableStates.shared.closeKeybaord()
+        VariableStates.shared.closeKeyboard()
         KeyboardViewController.action.closeKeyboard()
         debug("viewWillDisappear: キーボードが閉じられます")
     }

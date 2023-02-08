@@ -81,17 +81,17 @@ struct MoveCursorBarBeta: View {
     @Environment(\.userActionManager) private var action
 
     enum SwipeGestureState {
-        case unactive
+        case inactive
         case tap(l1: CGPoint, l2: CGPoint, l3: CGPoint)
         case moving(l1: CGPoint, l2: CGPoint, l3: CGPoint, count: Double)
     }
-    @State private var swipeGestureState: SwipeGestureState = .unactive
+    @State private var swipeGestureState: SwipeGestureState = .inactive
 
     var swipeGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged {value in
                 switch swipeGestureState {
-                case .unactive:
+                case .inactive:
                     swipeGestureState = .tap(l1: value.location, l2: value.location, l3: value.location)
                 case let .tap(l1, l2, _):
                     let d = value.startLocation.distance(to: value.location)
@@ -140,7 +140,7 @@ struct MoveCursorBarBeta: View {
             }
             .onEnded {value in
                 switch swipeGestureState {
-                case .unactive:
+                case .inactive:
                     break
                 case .tap:
                     // offsetを計算する
@@ -163,7 +163,7 @@ struct MoveCursorBarBeta: View {
                     // 位置を揃える
                     break
                 }
-                swipeGestureState = .unactive
+                swipeGestureState = .inactive
             }
     }
 
@@ -273,12 +273,12 @@ struct MoveCursorBarBeta: View {
 }
 
 private enum MoveCursorBarGestureState {
-    case unactive
+    case inactive
     case moving(CGPoint, Int)   // 右だったら+1、左だったら-1
 }
 
 struct MoveCursorBar: View {
-    @State private var gestureState: MoveCursorBarGestureState = .unactive
+    @State private var gestureState: MoveCursorBarGestureState = .inactive
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
 
@@ -286,7 +286,7 @@ struct MoveCursorBar: View {
         DragGesture(minimumDistance: 0)
             .onChanged {value in
                 switch self.gestureState {
-                case .unactive:
+                case .inactive:
                     self.gestureState = .moving(value.location, 0)
                 case let .moving(previous, count):
                     let dx = (value.location.x - previous.x)
@@ -306,7 +306,7 @@ struct MoveCursorBar: View {
                 }
             }
             .onEnded {_ in
-                self.gestureState = .unactive
+                self.gestureState = .inactive
             }
     }
 

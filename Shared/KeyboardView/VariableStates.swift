@@ -127,7 +127,7 @@ final class VariableStates: ObservableObject {
         self.refreshView()
     }
 
-    func closeKeybaord() {
+    func closeKeyboard() {
         self.tabManager.closeKeyboard()
     }
 

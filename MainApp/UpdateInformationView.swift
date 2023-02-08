@@ -1,5 +1,5 @@
 //
-//  UpdateInfomationView.swift
+//  UpdateInformationView.swift
 //  MainApp
 //
 //  Created by ensan on 2020/12/03.
@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-struct UpdateInfomationView: View {
+struct UpdateInformationView: View {
     var body: some View {
         Form {
             // version 2系
