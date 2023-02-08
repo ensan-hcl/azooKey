@@ -19,8 +19,8 @@ extension Kana2Kanji {
     ///    「これはき」から「これは今日」に対応する候補などを作って返す。
     /// - note:
     ///     この関数の役割は意味連接の考慮にある。
-    func getPredicitonCandidates(composingText: ComposingText, prepart: CandidateData, lastClause: ClauseDataUnit, N_best: Int, mainInputStyle: InputStyle) -> [Candidate] {
-        debug("getPredicitonCandidates", composingText, lastClause.inputRange, lastClause.text)
+    func getPredictionCandidates(composingText: ComposingText, prepart: CandidateData, lastClause: ClauseDataUnit, N_best: Int, mainInputStyle: InputStyle) -> [Candidate] {
+        debug("getPredictionCandidates", composingText, lastClause.inputRange, lastClause.text)
         let lastRuby = ComposingText.getConvertTarget(for: composingText.input[lastClause.inputRange]).toKatakana()
         let lastRubyCount = lastClause.inputRange.count
         let datas: [DicdataElement]
@@ -60,10 +60,10 @@ extension Kana2Kanji {
                     break
                 }
                 let possibleNexts: [Substring] = DicdataStore.possibleNexts[String(roman), default: []].map {ruby + $0}
-                debug("getPredicitonCandidates", lastRuby, ruby, roman, possibleNexts, prepart, lastRubyCount)
+                debug("getPredictionCandidates", lastRuby, ruby, roman, possibleNexts, prepart, lastRubyCount)
                 dicdata = possibleNexts.flatMap { self.dicdataStore.getPredictionLOUDSDicdata(head: $0) }
             } else {
-                debug("getPredicitonCandidates", lastRuby, roman)
+                debug("getPredictionCandidates", lastRuby, roman)
                 dicdata = self.dicdataStore.getPredictionLOUDSDicdata(head: lastRuby)
             }
         }

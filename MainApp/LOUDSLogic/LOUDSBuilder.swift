@@ -156,8 +156,8 @@ struct LOUDSBuilder {
         let katakanaRuby = data.ruby.toKatakana()
         if data.isVerb {
             let cid = 772
-            let conjuctions = ConjuctionBuilder.getConjugations(data: (word: data.word, ruby: katakanaRuby, cid: cid), addStandardForm: true)
-            return conjuctions.map {
+            let conjunctions = ConjunctionBuilder.getConjugations(data: (word: data.word, ruby: katakanaRuby, cid: cid), addStandardForm: true)
+            return conjunctions.map {
                 "\($0.ruby)\t\(parseTemplate($0.word))\t\($0.cid)\t\($0.cid)\t\(501)\t-5.0000"
             }
         }

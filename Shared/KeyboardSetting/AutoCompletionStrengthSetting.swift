@@ -17,7 +17,7 @@ struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
         case strong    // 強い
         case ultrastrong  // 非常に強い
 
-        var treshold: Int {
+        var threshold: Int {
             switch self {
             case .disabled: return .max
             case .weak: return 16
