@@ -33,7 +33,7 @@ struct KeyboardPreview: View {
         } else {
             orientation = UIDevice.current.orientation == UIDeviceOrientation.unknown ? .vertical : (UIDevice.current.orientation == UIDeviceOrientation.portrait ? .vertical : .horizontal)
         }
-        SemiStaticStates.shared.setScreenSize(size: UIScreen.main.bounds.size, orientation: orientation)
+        SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width, orientation: orientation)
         resultModel.setResults([
             CandidateMock(text: "azooKey"),
             CandidateMock(text: "あずーきー"),

@@ -24,11 +24,11 @@ final class SemiStaticStates {
     private(set) var screenWidth: CGFloat = .zero
     private(set) var screenHeight: CGFloat = .zero
 
-    /// Function to set the size of keyboard
-    /// - Parameter size: only `size.width` used, and `size.height` has almost no needs, but using a bit.
+    /// Function to set the width of area of keyboard
+    /// - Parameter width: 使用可能な領域の幅.
     /// - 副作用として、この関数はデバイスの向きを決定し、UIのサイズを調整する。
-    func setScreenSize(size: CGSize, orientation: KeyboardOrientation? = nil) {
-        if self.screenWidth == size.width && orientation == VariableStates.shared.keyboardOrientation {
+    func setScreenWidth(_ width: CGFloat, orientation: KeyboardOrientation? = nil) {
+        if self.screenWidth == width && orientation == VariableStates.shared.keyboardOrientation {
             return
         }
         if let orientation {
@@ -36,13 +36,12 @@ final class SemiStaticStates {
         } else {
             VariableStates.shared.setOrientation(UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height ? .vertical : .horizontal)
         }
-        let width = size.width
         self.screenWidth = width
         // screenWidthを更新してからDesign.keyboardHeightを呼ぶ必要がある。
         // あまりいいデザインではない・・・。
         let height = Design.keyboardHeight(screenWidth: width)
         self.screenHeight = height
-        debug("SemiStaticStates setScreenSize", width, height)
+        debug("SemiStaticStates setScreenWidth", width, height)
         let (layout, orientation) = (layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
 
         // 片手モードの処理

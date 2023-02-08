@@ -18,6 +18,8 @@ extension ComposingText {
 
     /// closedRangeでもらう
     /// getRangeWithTyposの複数版にあたる。`result`の計算が一回で済む分、高速になる。
+    /// 例えば`left=4, rightIndexRange=6..<10`の場合、`4...6, 4...7, 4...8, 4...9`の範囲で計算する
+    /// `left <= rightIndexRange.startIndex`が常に成り立つ
     func getRangesWithTypos(_ left: Int, rightIndexRange: Range<Int>) -> [String: (endIndex: Int, penalty: PValue)] {
         let count = rightIndexRange.endIndex - left
         debug("getRangesWithTypos", left, rightIndexRange, count)
@@ -32,52 +34,49 @@ extension ComposingText {
         }
 
         let maxPenalty: PValue = 3.5 * 3
-        var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
-        var stringToInfo: [String: (endIndex: Int, penalty: PValue)] = [:]
+        // Performance Tuning Note：直接Dictionaryを作るのではなく、一度Arrayを作ってから最後にDictionaryに変換する方が、高速である
+        var stringToInfo: [(String, (endIndex: Int, penalty: PValue))] = []
 
-        for (i, nodeArray) in nodes.enumerated() {
-            defer {
-                // i + 1 + leftがrightIndexRangeの中に入っている場合、typosに追加する
-                if rightIndexRange.contains(i + left) {
-                    for typo in result {
-                        if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: typo.lastElement, of: self.input, to: i + left + 1, convertTargetElements: typo.convertTargetElements)?.toKatakana() {
-                            stringToInfo[convertTarget] = (i + left, typo.penalty)
-                        }
-                    }
+        // 深さ優先で列挙する
+        var stack: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = nodes[0].compactMap { typoCandidate in
+            guard let firstElement = typoCandidate.inputElements.first else {
+                return nil
+            }
+            if Self.isLeftSideValid(first: firstElement, of: self.input, from: left) {
+                var convertTargetElements = [ConvertTargetElement]()
+                for element in typoCandidate.inputElements {
+                    ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                }
+                return (convertTargetElements, typoCandidate.inputElements.last!, typoCandidate.inputElements.count, typoCandidate.weight)
+            }
+            return nil
+        }
+        while let (convertTargetElements, lastElement, count, penalty) = stack.popLast() {
+            if rightIndexRange.contains(count + left - 1) {
+                if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: lastElement, of: self.input, to: count + left, convertTargetElements: convertTargetElements)?.toKatakana() {
+                    stringToInfo.append((convertTarget, (count + left - 1, penalty)))
                 }
             }
-            if i == .zero {
-                // 最初の値による枝刈りを実施する
-                result = nodeArray.compactMap { typoCandidate in
-                    guard let firstElement = typoCandidate.inputElements.first else {
-                        return nil
-                    }
-                    if Self.isLeftSideValid(first: firstElement, of: self.input, from: left) {
-                        var convertTargetElements = [ConvertTargetElement]()
-                        for element in typoCandidate.inputElements {
-                            ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
-                        }
-                        return (convertTargetElements, typoCandidate.inputElements.last!, typoCandidate.inputElements.count, typoCandidate.weight)
-                    }
-                    return nil
-                }
+            // エスケープ
+            if nodes.endIndex <= count {
                 continue
             }
-
-            let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
-            result = result.flatMap {(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue) -> [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] in
-                if count != i {
-                    return [(convertTargetElements, lastElement, count, penalty)]
+            // 訂正数上限(3個)
+            if penalty >= maxPenalty {
+                var convertTargetElements = convertTargetElements
+                let correct = [self.input[left + count]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
+                if count + correct.count > nodes.endIndex {
+                    continue
                 }
-                // 訂正数上限(3個)
-                if penalty >= maxPenalty {
-                    var convertTargetElements = convertTargetElements
-                    for element in correct {
-                        ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                for element in correct {
+                    ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                }
+                stack.append((convertTargetElements, correct.last!, count + correct.count, penalty))
+            } else {
+                stack.append(contentsOf: nodes[count].compactMap {
+                    if count + $0.inputElements.count > nodes.endIndex {
+                        return nil
                     }
-                    return [(convertTargetElements, correct.last!, count + correct.count, penalty)]
-                }
-                return nodes[i].compactMap {
                     var convertTargetElements = convertTargetElements
                     for element in $0.inputElements {
                         ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
@@ -91,10 +90,10 @@ extension ComposingText {
                         count: count + $0.inputElements.count,
                         penalty: penalty + $0.weight
                     )
-                }
+                })
             }
         }
-        return (stringToInfo)
+        return Dictionary(stringToInfo, uniquingKeysWith: {$0.penalty < $1.penalty ? $1 : $0})
     }
 
     func getRangeWithTypos(_ left: Int, _ right: Int) -> [String: PValue] {
@@ -114,39 +113,51 @@ extension ComposingText {
         }
 
         let maxPenalty: PValue = 3.5 * 3
-        var result: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = []
-        for (i, nodeArray) in nodes.enumerated() {
-            if i == .zero {
-                // 最初の値による枝刈りを実施する
-                result = nodeArray.compactMap {
-                    guard let firstElement = $0.inputElements.first else {
-                        return nil
-                    }
-                    if Self.isLeftSideValid(first: firstElement, of: self.input, from: left) {
-                        var convertTargetElements = [ConvertTargetElement]()
-                        for element in $0.inputElements {
-                            ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
-                        }
-                        return (convertTargetElements, $0.inputElements.last!, $0.inputElements.count, $0.weight)
-                    }
-                    return nil
+
+        // 深さ優先で列挙する
+        var stack: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = nodes[0].compactMap { typoCandidate in
+            guard let firstElement = typoCandidate.inputElements.first else {
+                return nil
+            }
+            if Self.isLeftSideValid(first: firstElement, of: self.input, from: left) {
+                var convertTargetElements = [ConvertTargetElement]()
+                for element in typoCandidate.inputElements {
+                    ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                }
+                return (convertTargetElements, typoCandidate.inputElements.last!, typoCandidate.inputElements.count, typoCandidate.weight)
+            }
+            return nil
+        }
+
+        var stringToPenalty: [(String, PValue)] = []
+
+        while let (convertTargetElements, lastElement, count, penalty) = stack.popLast() {
+            if count + left - 1 == right {
+                if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: lastElement, of: self.input, to: count + left, convertTargetElements: convertTargetElements)?.toKatakana() {
+                    stringToPenalty.append((convertTarget, penalty))
                 }
                 continue
             }
-            let correct = [self.input[left + i]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
-            result = result.flatMap {(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue) -> [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] in
-                if count != i {
-                    return [(convertTargetElements, lastElement, count, penalty)]
+            // エスケープ
+            if nodes.endIndex <= count {
+                continue
+            }
+            // 訂正数上限(3個)
+            if penalty >= maxPenalty {
+                var convertTargetElements = convertTargetElements
+                let correct = [self.input[left + count]].map {InputElement(character: $0.character.toKatakana(), inputStyle: $0.inputStyle)}
+                if count + correct.count > nodes.endIndex {
+                    continue
                 }
-                // 訂正数上限(3個)
-                if penalty >= maxPenalty {
-                    var convertTargetElements = convertTargetElements
-                    for element in correct {
-                        ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                for element in correct {
+                    ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
+                }
+                stack.append((convertTargetElements, correct.last!, count + correct.count, penalty))
+            } else {
+                stack.append(contentsOf: nodes[count].compactMap {
+                    if count + $0.inputElements.count > nodes.endIndex {
+                        return nil
                     }
-                    return [(convertTargetElements, correct.last!, count + correct.count, penalty)]
-                }
-                return nodes[i].compactMap {
                     var convertTargetElements = convertTargetElements
                     for element in $0.inputElements {
                         ComposingText.updateConvertTargetElements(currentElements: &convertTargetElements, newElement: element)
@@ -160,17 +171,10 @@ extension ComposingText {
                         count: count + $0.inputElements.count,
                         penalty: penalty + $0.weight
                     )
-                }
+                })
             }
         }
-        let filtered: [(string: String, penalty: PValue)] = result.compactMap {
-            if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: $0.lastElement, of: self.input, to: right + 1, convertTargetElements: $0.convertTargetElements) {
-                return (convertTarget.toKatakana(), $0.penalty)
-            }
-            return nil
-        }
-        let string2penalty = [String: PValue].init(filtered, uniquingKeysWith: max)
-        return string2penalty
+        return Dictionary(stringToPenalty, uniquingKeysWith: max)
     }
 
     private static func getTypo(_ elements: some Collection<InputElement>) -> [TypoCandidate] {

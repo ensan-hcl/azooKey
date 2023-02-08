@@ -150,9 +150,8 @@ final class KeyboardViewController: UIInputViewController {
 
     func registerScreenActualSize() {
         if let bounds = KeyboardViewController.keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
-            let size = CGSize(width: bounds.width, height: UIScreen.main.bounds.height)
-            debug("registerScreenActualSize", size)
-            SemiStaticStates.shared.setScreenSize(size: size)
+            debug("registerScreenActualSize width: ", bounds.width)
+            SemiStaticStates.shared.setScreenWidth(bounds.width)
         }
     }
 
@@ -184,9 +183,9 @@ final class KeyboardViewController: UIInputViewController {
         // なお、UIScreen.mainは非推奨である。これからデバイスの向きどうやってとったらええねん。
         debug("viewWillTransition", size, UIScreen.main.bounds.size)
         if #available(iOS 16, *) {
-            SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical)
+            SemiStaticStates.shared.setScreenWidth(size.width, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical)
         } else {
-            SemiStaticStates.shared.setScreenSize(size: size, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal)
+            SemiStaticStates.shared.setScreenWidth(size.width, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal)
         }
     }
 

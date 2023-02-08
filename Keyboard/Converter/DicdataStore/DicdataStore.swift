@@ -133,26 +133,26 @@ final class DicdataStore {
         }
     }
 
-    private func perfectMatchLOUDS(identifier: String, key: String) -> [Int] {
+    private func perfectMatchLOUDS(identifier: String, charIDs: [UInt8]) -> [Int] {
         guard let louds = self.loadLOUDS(identifier: identifier) else {
             return []
         }
-        return [louds.searchNodeIndex(chars: key.map {self.charsID[$0, default: .max]})].compactMap {$0}
+        return [louds.searchNodeIndex(chars: charIDs)].compactMap {$0}
     }
 
-    private func throughMatchLOUDS(identifier: String, key: String, depth: Range<Int>) -> [Int] {
+    private func throughMatchLOUDS(identifier: String, charIDs: [UInt8], depth: Range<Int>) -> [Int] {
         guard let louds = self.loadLOUDS(identifier: identifier) else {
             return []
         }
-        let result = louds.byfixNodeIndices(chars: key.map {self.charsID[$0, default: .max]})
+        let result = louds.byfixNodeIndices(chars: charIDs)
         return Array(result[min(max(result.startIndex, depth.startIndex + 1), result.endIndex) ..< min(result.endIndex, depth.endIndex + 1)])
     }
 
-    private func prefixMatchLOUDS(identifier: String, key: String, depth: Int = .max) -> [Int] {
+    private func prefixMatchLOUDS(identifier: String, charIDs: [UInt8], depth: Int = .max) -> [Int] {
         guard let louds = self.loadLOUDS(identifier: identifier) else {
             return []
         }
-        return louds.prefixNodeIndices(chars: key.map {self.charsID[$0, default: .max]}, maxDepth: depth)
+        return louds.prefixNodeIndices(chars: charIDs, maxDepth: depth)
     }
 
     private func getDicdataFromLoudstxt3(identifier: String, indices: Set<Int>) -> [DicdataElement] {
@@ -195,21 +195,21 @@ final class DicdataStore {
             if set.contains(where: {$0.hasPrefix(key) && $0.count != key.count}) {
                 set.remove(key)
             }
-        }
+        }.map {($0, $0.map {self.charsID[$0, default: .max]})}
 
         // MARK: 列挙した検索対象から、順に検索を行う。この時点ではindicesを取得するのみ。
         // 先頭の文字: そこで検索したい文字列の集合
-        let group = [Character: [String]].init(grouping: stringSet, by: {$0.first!})
+        let group = [Character: [(String, [UInt8])]].init(grouping: stringSet, by: {$0.0.first!})
 
         let depth = toIndexLeft - fromIndex ..< toIndexRight - fromIndex
         var indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
-            let set = dic.value.flatMapSet {string in self.throughMatchLOUDS(identifier: key, key: string, depth: depth)}
+            let set = dic.value.flatMapSet {(_, charIDs) in self.throughMatchLOUDS(identifier: key, charIDs: charIDs, depth: depth)}
             return (key, set)
         }
-        indices.append(("user", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "user", key: $0, depth: depth)}))
+        indices.append(("user", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "user", charIDs: $0.1, depth: depth)}))
         if learningManager.enabled {
-            indices.append(("memory", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "memory", key: $0, depth: depth)}))
+            indices.append(("memory", stringSet.flatMapSet {self.throughMatchLOUDS(identifier: "memory", charIDs: $0.1, depth: depth)}))
         }
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
         var dicdata: [DicdataElement] = []
@@ -229,7 +229,7 @@ final class DicdataStore {
             }
             dicdata.append(contentsOf: result)
         }
-        dicdata.append(contentsOf: stringSet.flatMap {self.learningManager.temporaryThroughMatch(key: $0, depth: depth)})
+        dicdata.append(contentsOf: stringSet.flatMap {self.learningManager.temporaryThroughMatch(charIDs: $0.1, depth: depth)})
 
         for i in toIndexLeft ..< toIndexRight {
             do {
@@ -276,24 +276,27 @@ final class DicdataStore {
 
         // MARK: 検索によって得たindicesから辞書データを実際に取り出していく
         // 先頭の文字: そこで検索したい文字列の集合
-        let group = [Character: [String]].init(grouping: string2penalty.keys, by: {$0.first!})
+        let strings = string2penalty.keys.map {
+            (key: $0, charIDs: $0.map {self.charsID[$0, default: .max]})
+        }
+        let group = [Character: [(key: String, charIDs: [UInt8])]].init(grouping: strings, by: {$0.key.first!})
 
         var indices: [(String, Set<Int>)] = group.map {dic in
-            let key = String(dic.key)
-            let set = dic.value.flatMapSet { string in
-                self.perfectMatchLOUDS(identifier: key, key: string)
+            let head = String(dic.key)
+            let set = dic.value.flatMapSet { (_, charIDs) in
+                self.perfectMatchLOUDS(identifier: head, charIDs: charIDs)
             }
-            return (key, set)
+            return (head, set)
         }
         do {
-            let set = string2penalty.keys.flatMapSet { string in
-                self.perfectMatchLOUDS(identifier: "user", key: string)
+            let set = strings.flatMapSet { (_, charIDs) in
+                self.perfectMatchLOUDS(identifier: "user", charIDs: charIDs)
             }
             indices.append(("user", set))
         }
         if learningManager.enabled {
-            let set = string2penalty.keys.flatMapSet { string in
-                self.perfectMatchLOUDS(identifier: "memory", key: string)
+            let set = strings.flatMapSet { (_, charIDs) in
+                self.perfectMatchLOUDS(identifier: "memory", charIDs: charIDs)
             }
             indices.append(("memory", set))
         }
@@ -314,7 +317,7 @@ final class DicdataStore {
             }
             dicdata.append(contentsOf: result)
         }
-        dicdata.append(contentsOf: string2penalty.keys.flatMap {self.learningManager.temporaryPerfectMatch(key: $0)})
+        dicdata.append(contentsOf: strings.flatMap {self.learningManager.temporaryPerfectMatch(charIDs: $0.charIDs)})
         dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, allowRomanLetter: toIndex == inputData.input.count - 1, inputData: inputData, inputRange: fromIndex ..< toIndex + 1))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
         if fromIndex == .zero {
@@ -353,14 +356,15 @@ final class DicdataStore {
     ///   - head: 辞書を引く文字列
     /// - Returns:
     ///   発見されたデータのリスト。
-    internal func getPredictionLOUDSDicdata(head: some StringProtocol) -> [DicdataElement] {
-        let count = head.count
+    internal func getPredictionLOUDSDicdata(key: some StringProtocol) -> [DicdataElement] {
+        let count = key.count
         if count == .zero {
             return []
         }
+        // 1文字に対する予測変換は検索が難しいので、特別に用意した辞書を用いて実施する
         if count == 1 {
             do {
-                let csvString = try String(contentsOf: Self.bundleURL.appendingPathComponent("Dictionary/p/p_\(head).csv", isDirectory: false), encoding: String.Encoding.utf8)
+                let csvString = try String(contentsOf: Self.bundleURL.appendingPathComponent("Dictionary/p/p_\(key).csv", isDirectory: false), encoding: String.Encoding.utf8)
                 let csvLines = csvString.split(separator: "\n")
                 let csvData = csvLines.map {$0.split(separator: ",", omittingEmptySubsequences: false)}
                 let dicdata: [DicdataElement] = csvData.map {self.parseLoudstxt2FormattedEntry(from: $0)}
@@ -371,30 +375,32 @@ final class DicdataStore {
             }
         } else if count == 2 {
             var result: [DicdataElement] = []
-            let first = String(head.first!)
+            let first = String(key.first!)
+            let charIDs = key.map {self.charsID[$0, default: .max]}
             // 最大700件に絞ることによって低速化を回避する。
-            let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head), depth: 5).prefix(700)
+            let prefixIndices = self.prefixMatchLOUDS(identifier: first, charIDs: charIDs, depth: 5).prefix(700)
             result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: first, indices: Set(prefixIndices)))
-            let userDictIndices = self.prefixMatchLOUDS(identifier: "user", key: String(head), depth: 5).prefix(700)
+            let userDictIndices = self.prefixMatchLOUDS(identifier: "user", charIDs: charIDs, depth: 5).prefix(700)
             result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: "user", indices: Set(userDictIndices)))
             if learningManager.enabled {
-                let memoryDictIndices = self.prefixMatchLOUDS(identifier: "memory", key: String(head), depth: 5).prefix(700)
+                let memoryDictIndices = self.prefixMatchLOUDS(identifier: "memory", charIDs: charIDs, depth: 5).prefix(700)
                 result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: "memory", indices: Set(memoryDictIndices)))
-                result.append(contentsOf: self.learningManager.temporaryPrefixMatch(key: head))
+                result.append(contentsOf: self.learningManager.temporaryPrefixMatch(charIDs: charIDs))
             }
             return result
         } else {
             var result: [DicdataElement] = []
-            let first = String(head.first!)
+            let first = String(key.first!)
+            let charIDs = key.map {self.charsID[$0, default: .max]}
             // 最大700件に絞ることによって低速化を回避する。
-            let prefixIndices = self.prefixMatchLOUDS(identifier: first, key: String(head)).prefix(700)
+            let prefixIndices = self.prefixMatchLOUDS(identifier: first, charIDs: charIDs).prefix(700)
             result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: first, indices: Set(prefixIndices)))
-            let userDictIndices = self.prefixMatchLOUDS(identifier: "user", key: String(head)).prefix(700)
+            let userDictIndices = self.prefixMatchLOUDS(identifier: "user", charIDs: charIDs).prefix(700)
             result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: "user", indices: Set(userDictIndices)))
             if learningManager.enabled {
-                let memoryDictIndices = self.prefixMatchLOUDS(identifier: "memory", key: String(head)).prefix(700)
+                let memoryDictIndices = self.prefixMatchLOUDS(identifier: "memory", charIDs: charIDs).prefix(700)
                 result.append(contentsOf: self.getDicdataFromLoudstxt3(identifier: "memory", indices: Set(memoryDictIndices)))
-                result.append(contentsOf: self.learningManager.temporaryPrefixMatch(key: head))
+                result.append(contentsOf: self.learningManager.temporaryPrefixMatch(charIDs: charIDs))
             }
             return result
         }
