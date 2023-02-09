@@ -163,6 +163,10 @@
 "バグの報告や機能のリクエストをしたい" = "Report bugs or request new features";
 "お問い合わせ" = "Contact";
 
+"特定のアプリケーションで入力がおかしくなる" = "Input fails in certain applications";
+"azooKeyとアプリの相性の問題で、入力がうまくいかないケースがあります。" = "There are some cases where input fails in certain application, because they are incompatible.";
+"「入力中のテキストを保護」の設定をオンにすることで解決する場合があります。" = "Turn on the setting to 'Protect composing text' may resolve the issue.";
+
 "日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。" = "You can select Qwerty and Flick input styles for each of Japanese and English.";
 "現在は携帯電話式の入力については対応していません。" = "Currently, azooKey doesn't support the Japanese flip phone input style.";
 

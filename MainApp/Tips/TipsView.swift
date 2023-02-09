@@ -52,6 +52,7 @@ struct TipsTabView: View {
                     }
 
                     Section(header: Text("困ったときは")) {
+                        NavigationLink("特定のアプリケーションで入力がおかしくなる", destination: UseMarkedTextTipsView())
                         NavigationLink("端末の文字サイズ設定が反映されない", destination: DynamicTypeSettingFailureTipsView())
                         NavigationLink("絵文字や顔文字の変換候補を表示したい", destination: EmojiKaomojiTipsView())
                         NavigationLink("バグの報告や機能のリクエストをしたい", destination: ContactView())
