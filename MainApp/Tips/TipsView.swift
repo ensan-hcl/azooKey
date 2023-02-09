@@ -52,6 +52,7 @@ struct TipsTabView: View {
                     }
 
                     Section(header: Text("困ったときは")) {
+                        NavigationLink("インストール直後、特定のアプリでキーボードが開かない", destination: KeyboardBehaviorIssueAfterInstallTipsView())
                         NavigationLink("特定のアプリケーションで入力がおかしくなる", destination: UseMarkedTextTipsView())
                         NavigationLink("端末の文字サイズ設定が反映されない", destination: DynamicTypeSettingFailureTipsView())
                         NavigationLink("絵文字や顔文字の変換候補を表示したい", destination: EmojiKaomojiTipsView())
