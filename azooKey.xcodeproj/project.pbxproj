@@ -44,6 +44,8 @@
 		1A26F34C25E8ACFD003CDA0D /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACE61C2257286E5008078D3 /* Color.swift */; };
 		1A26F35925E8C147003CDA0D /* StringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A5B82595C10A00B71E5A /* StringInterpolation.swift */; };
 		1A273F97291A6B8B001E1B02 /* iOS14TerminationNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A273F96291A6B8B001E1B02 /* iOS14TerminationNews.swift */; };
+		1A2B2B5F299480B40048332A /* UseMarkedTextTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B2B5E299480B40048332A /* UseMarkedTextTipsView.swift */; };
+		1A2B2B612994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */; };
 		1A2B8EA6256D475000E30E35 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
 		1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C293826273E9900DFE465 /* DraggableView.swift */; };
 		1A2C2FE128DA11D00001A0BB /* ComposingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C2FE028DA11D00001A0BB /* ComposingText.swift */; };
@@ -191,7 +193,7 @@
 		1A61E8F028CCD93000C5107A /* FlickSensitivitySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A61E8EF28CCD93000C5107A /* FlickSensitivitySettingView.swift */; };
 		1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */; };
 		1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */; };
-		1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */; };
+		1A64A8CF257C7F760022C081 /* ConjunctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8CE257C7F760022C081 /* ConjunctionBuilder.swift */; };
 		1A64A8E0257C925E0022C081 /* FontSizeSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8DF257C925E0022C081 /* FontSizeSettingItemView.swift */; };
 		1A64C8BE251315AD00ACD537 /* DicdataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8BD251315AD00ACD537 /* DicdataStore.swift */; };
 		1A64C8C9251372BD00ACD537 /* JapaneseNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */; };
@@ -502,6 +504,8 @@
 		1A2602F32514FB6E00EAD647 /* VariationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariationsModel.swift; sourceTree = "<group>"; };
 		1A26F34125E8AACA003CDA0D /* StrokeAndFill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeAndFill.swift; sourceTree = "<group>"; };
 		1A273F96291A6B8B001E1B02 /* iOS14TerminationNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS14TerminationNews.swift; sourceTree = "<group>"; };
+		1A2B2B5E299480B40048332A /* UseMarkedTextTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseMarkedTextTipsView.swift; sourceTree = "<group>"; };
+		1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardBehaviorIssueAfterInstallTipsView.swift; sourceTree = "<group>"; };
 		1A2C293826273E9900DFE465 /* DraggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
 		1A2C2FE028DA11D00001A0BB /* ComposingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposingText.swift; sourceTree = "<group>"; };
 		1A2E580A294ED02C004F959B /* StringUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtilsTests.swift; sourceTree = "<group>"; };
@@ -587,7 +591,7 @@
 		1A61E8EF28CCD93000C5107A /* FlickSensitivitySettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickSensitivitySettingView.swift; sourceTree = "<group>"; };
 		1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateInformationView.swift; sourceTree = "<group>"; };
 		1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyUserDictionary.swift; sourceTree = "<group>"; };
-		1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjuctionBuilder.swift; sourceTree = "<group>"; };
+		1A64A8CE257C7F760022C081 /* ConjunctionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjunctionBuilder.swift; sourceTree = "<group>"; };
 		1A64A8DF257C925E0022C081 /* FontSizeSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSizeSettingItemView.swift; sourceTree = "<group>"; };
 		1A64C8BD251315AD00ACD537 /* DicdataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicdataStore.swift; sourceTree = "<group>"; };
 		1A64C8C8251372BD00ACD537 /* JapaneseNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseNumber.swift; sourceTree = "<group>"; };
@@ -1239,7 +1243,7 @@
 			children = (
 				1A39A1A1259325D7008DDCFE /* AzooKeyUserDictionaryData.swift */,
 				1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */,
-				1A64A8CE257C7F760022C081 /* ConjuctionBuilder.swift */,
+				1A64A8CE257C7F760022C081 /* ConjunctionBuilder.swift */,
 				1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */,
 			);
 			path = AdditionalDict;
@@ -1395,6 +1399,8 @@
 				1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */,
 				1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */,
 				1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */,
+				1A2B2B5E299480B40048332A /* UseMarkedTextTipsView.swift */,
+				1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */,
 				1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */,
 			);
 			path = Articles;
@@ -1824,6 +1830,7 @@
 				1AF6798625CEDBAE00F3987B /* SuggestModel.swift in Sources */,
 				1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
+				1A2B2B612994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift in Sources */,
 				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
 				1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */,
 				1AF678FB25CED91C00F3987B /* UserActionManager.swift in Sources */,
@@ -1886,7 +1893,8 @@
 				1AD2B8F026C2D4ED0053CE4A /* QwertyCustomKeyKeyboardSetting.swift in Sources */,
 				1AF6799B25CEDBC000F3987B /* Design.swift in Sources */,
 				1ACE00752567525000899DA2 /* QwertyCustomKeySetting.swift in Sources */,
-				1A64A8CF257C7F760022C081 /* ConjuctionBuilder.swift in Sources */,
+				1A64A8CF257C7F760022C081 /* ConjunctionBuilder.swift in Sources */,
+				1A2B2B5F299480B40048332A /* UseMarkedTextTipsView.swift in Sources */,
 				1AF6797125CEDB9B00F3987B /* QwertyFunctionalKeyModel.swift in Sources */,
 				1AF6793D25CEDB7A00F3987B /* MessageView.swift in Sources */,
 				1AD2B8E126C2B0880053CE4A /* LanguageLayoutKeyboardSetting.swift in Sources */,
@@ -2339,7 +2347,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2372,7 +2380,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2499,7 +2507,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=300";
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
@@ -2533,7 +2541,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
 				PROVISIONING_PROFILE_SPECIFIER = "";

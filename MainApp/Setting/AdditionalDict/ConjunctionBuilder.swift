@@ -1,5 +1,5 @@
 //
-//  ConjuctionBuilder.swift
+//  ConjunctionBuilder.swift
 //  Keyboard
 //
 //  Created by ensan on 2020/09/10.
@@ -439,7 +439,7 @@ private extension String {
     }
 }
 
-struct ConjuctionBuilder {
+struct ConjunctionBuilder {
     static private func 動詞情報照会(cid: Int) -> (活用: 活用の種類, 行の名前: 行)? {
         if cid == 583 {
             return (活用: .サ変, 行の名前: .unknown)

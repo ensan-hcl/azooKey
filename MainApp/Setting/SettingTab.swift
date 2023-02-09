@@ -82,7 +82,7 @@ struct SettingTabView: View {
                         .foregroundColor(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
                         .foregroundColor(.primary)
-                    NavigationLink("更新履歴", destination: UpdateInfomationView())
+                    NavigationLink("更新履歴", destination: UpdateInformationView())
                     NavigationLink("オープンソースソフトウェア", destination: OpenSourceSoftWaresLicenseView())
                     HStack {
                         Text("URL Scheme")
