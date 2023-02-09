@@ -732,20 +732,16 @@ final class DicdataStore {
     }
 
     internal static func includeMMValueCalculation(_ data: DicdataElement) -> Bool {
-        // LREでない場合はfalseを返す。
-        if !data.isLRE {
-            return false
-        }
         // 非自立動詞
-        if 895...1280 ~= data.lcid {
+        if 895...1280 ~= data.lcid || 895...1280 ~= data.rcid {
             return true
         }
         // 非自立名詞
-        if 1297...1305 ~= data.lcid {
+        if 1297...1305 ~= data.lcid || 1297...1305 ~= data.rcid {
             return true
         }
         // 内容語かどうか
-        return wordTypes[data.lcid] == 1
+        return wordTypes[data.lcid] == 1 || wordTypes[data.rcid] == 1
     }
 
     /// - データ1つあたり2Bなので、2.6KBくらいのメモリを利用する。
