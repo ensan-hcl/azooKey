@@ -163,6 +163,16 @@
 "バグの報告や機能のリクエストをしたい" = "Report bugs or request new features";
 "お問い合わせ" = "Contact";
 
+"特定のアプリケーションで入力がおかしくなる" = "Input fails in certain applications";
+"azooKeyとアプリの相性の問題で、入力がうまくいかないケースがあります。" = "There are some cases where input fails in certain application, because they are incompatible.";
+"「入力中のテキストを保護」の設定をオンにすることで解決する場合があります。" = "Turn on the setting to 'Protect composing text' may resolve the issue.";
+
+"インストール直後、特定のアプリでキーボードが開かない" = "Keyboard does not open in certain applications immediately after installation";
+"azooKeyをインストールした直後、特定のアプリでキーボードが開かないことがあります。" = "Immediately after installing azooKey, the keyboard may not open in certain applications.";
+"これはazooKeyの問題ではなく、OS側のデータの更新が遅れている可能性があります。" = "This may not be an azooKey issue, but a delay in updating the data on the OS side.";
+"一度端末を再起動していただくとデータが更新され、キーボードが使えるようになることがあります。" = "Once you restart your device, the data will be updated and you may be able to use the keyboard.";
+"なお、アプリケーション側でカスタムキーボードの利用を禁止する設定がなされている場合もあります。再起動で治らない場合はそちらもご確認ください。" = "In another case, the application may be set to prohibit the use of the custom keyboard. If this is not fixed by restarting the application, please check there as well.";
+
 "日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。" = "You can select Qwerty and Flick input styles for each of Japanese and English.";
 "現在は携帯電話式の入力については対応していません。" = "Currently, azooKey doesn't support the Japanese flip phone input style.";
 
