@@ -10,6 +10,12 @@ import XCTest
 
 final class ComposingTextTests: XCTestCase {
 
+    func sequentialInput(_ composingText: inout ComposingText, sequence: String, inputStyle: InputStyle) {
+        for char in sequence {
+            _ = composingText.insertAtCursorPosition(String(char), inputStyle: inputStyle)
+        }
+    }
+
     func testIsEmpty() throws {
         var c = ComposingText()
         XCTAssertTrue(c.isEmpty)
@@ -67,6 +73,34 @@ final class ComposingTextTests: XCTestCase {
             XCTAssertEqual(c.convertTargetCursorPosition, 4)
             XCTAssertEqual(v, ComposingText.ViewOperation(delete: 0, input: "あかふぁ"))
 
+        }
+        // ローマ字の特殊ケース(促音)
+        do {
+            let inputStyle = InputStyle.roman2kana
+            var c = ComposingText()
+            sequentialInput(&c, sequence: "itte", inputStyle: .roman2kana)
+            XCTAssertEqual(c.input, [
+                ComposingText.InputElement(character: "i", inputStyle: .roman2kana),
+                ComposingText.InputElement(character: "っ", inputStyle: .direct),
+                ComposingText.InputElement(character: "t", inputStyle: .roman2kana),
+                ComposingText.InputElement(character: "e", inputStyle: .roman2kana),
+            ])
+            XCTAssertEqual(c.convertTarget, "いって")
+            XCTAssertEqual(c.convertTargetCursorPosition, 3)
+        }
+        // ローマ字の特殊ケース(撥音)
+        do {
+            let inputStyle = InputStyle.roman2kana
+            var c = ComposingText()
+            sequentialInput(&c, sequence: "anta", inputStyle: .roman2kana)
+            XCTAssertEqual(c.input, [
+                ComposingText.InputElement(character: "a", inputStyle: .roman2kana),
+                ComposingText.InputElement(character: "ん", inputStyle: .direct),
+                ComposingText.InputElement(character: "t", inputStyle: .roman2kana),
+                ComposingText.InputElement(character: "a", inputStyle: .roman2kana),
+            ])
+            XCTAssertEqual(c.convertTarget, "あんた")
+            XCTAssertEqual(c.convertTargetCursorPosition, 3)
         }
         // ミックス
         do {
@@ -169,6 +203,29 @@ final class ComposingTextTests: XCTestCase {
                 ),
                 "きん"
             )
+        }
+    }
+
+    func testDifferenceSuffix() throws {
+        do {
+            var c1 = ComposingText()
+            _ = c1.insertAtCursorPosition("hasir", inputStyle: .roman2kana)
+
+            var c2 = ComposingText()
+            _ = c2.insertAtCursorPosition("hasiru", inputStyle: .roman2kana)
+
+            XCTAssertEqual(c2.differenceSuffix(to: c1).deleted, 0)
+            XCTAssertEqual(c2.differenceSuffix(to: c1).addedCount, 1)
+        }
+        do {
+            var c1 = ComposingText()
+            _ = c1.insertAtCursorPosition("tukatt", inputStyle: .roman2kana)
+
+            var c2 = ComposingText()
+            _ = c2.insertAtCursorPosition("tukatte", inputStyle: .roman2kana)
+
+            XCTAssertEqual(c2.differenceSuffix(to: c1).deleted, 0)
+            XCTAssertEqual(c2.differenceSuffix(to: c1).addedCount, 1)
         }
     }
 }
