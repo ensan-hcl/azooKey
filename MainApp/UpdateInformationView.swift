@@ -14,6 +14,13 @@ struct UpdateInformationView: View {
             Group {
                 // version 2.0系
                 Group {
+                    VersionView("2.0.1", releaseDate: "2023年02月10日") {
+                        ParagraphView("不具合を修正しました。") {
+                            "辞書データの不具合を修正し、変換が自然になりました"
+                            "iPadのフローティングキーボードでazooKeyが使いやすくなりました"
+                        }
+                        ParagraphView("その他パフォーマンスの改善を行いました。")
+                    }
                     VersionView("2.0", releaseDate: "2023年02月04日") {
                         ParagraphView("機能を改善しました。") {
                             "辞書データを大幅にアップデートしました"
