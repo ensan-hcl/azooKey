@@ -166,9 +166,9 @@ final class InputManager {
     }
 
     func closeKeyboard() {
-        debug("キーボードを閉じます")
+        debug("closeKeyboard: キーボードが閉じます")
         self.sendToDicdataStore(.closeKeyboard)
-        self.clear()
+        _ = self.enter()
     }
 
     // MARK: 単純に確定した場合はひらがな列に対して候補を作成する
