@@ -140,7 +140,8 @@ final class ConverterTests: XCTestCase {
                 let converter = KanaKanjiConverter()
                 var c = ComposingText()
                 sequentialInput(&c, sequence: input, inputStyle: .direct)
-                let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+                // predictionは実施しない
+                let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: false))
                 XCTAssertEqual(results.mainResults.first?.text, expect)
             }
         }
@@ -156,7 +157,8 @@ final class ConverterTests: XCTestCase {
                 let converter = KanaKanjiConverter()
                 var c = ComposingText()
                 sequentialInput(&c, sequence: input, inputStyle: .roman2kana)
-                let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+                // predictionは実施しない
+                let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: false))
                 XCTAssertEqual(results.mainResults.first?.text, expect)
             }
         }
