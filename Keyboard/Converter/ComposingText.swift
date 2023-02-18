@@ -235,9 +235,9 @@ struct ComposingText {
     }
 
     /// 現在のカーソル位置に文字を追加する関数
-    mutating func insertAtCursorPosition(_ string: String, inputStyle: InputStyle) -> ViewOperation {
+    mutating func insertAtCursorPosition(_ string: String, inputStyle: InputStyle) {
         if string.isEmpty {
-            return ViewOperation(delete: 0, input: "")
+            return
         }
         let inputCursorPosition = self.forceGetInputCursorPosition(target: self.convertTarget.prefix(convertTargetCursorPosition))
         // input, convertTarget, convertTargetCursorPositionの3つを更新する
@@ -253,29 +253,25 @@ struct ComposingText {
         // convertTargetCursorPositionを更新
         self.convertTargetCursorPosition -= diff.delete
         self.convertTargetCursorPosition += diff.input.count
-
-        return ViewOperation(delete: diff.delete, input: diff.input)
     }
 
     /// 現在のカーソル位置から（左から右に書く言語では）右側の文字を削除する関数
-    mutating func deleteForwardFromCursorPosition(count: Int) -> ViewOperation {
+    mutating func deleteForwardFromCursorPosition(count: Int) {
         let count = min(convertTarget.count - convertTargetCursorPosition, count)
         if count == 0 {
-            return ViewOperation(delete: 0, input: "")
+            return
         }
         self.convertTargetCursorPosition += count
-        let result = self.deleteBackwardFromCursorPosition(count: count)
-        // 進行方向のデリートなので負の値を返す
-        return ViewOperation(delete: -result.delete, input: result.input)
+        self.deleteBackwardFromCursorPosition(count: count)
     }
 
     /// 現在のカーソル位置から（左から右に書く言語では）左側の文字を削除する関数
     /// エッジケースとして、`sha: しゃ|`の状態で1文字消すような場合がある。この場合、`[s, h, a]`を`[し, ゃ]`に変換した上で「ゃ」を削除する。
-    mutating func deleteBackwardFromCursorPosition(count: Int) -> ViewOperation {
+    mutating func deleteBackwardFromCursorPosition(count: Int) {
         let count = min(convertTargetCursorPosition, count)
 
         if count == 0 {
-            return ViewOperation(delete: 0, input: "")
+            return
         }
         // 動作例1
         // convertTarget: かんしゃ|
@@ -325,8 +321,6 @@ struct ComposingText {
 
         // convetTargetを更新する
         self.convertTarget = Self.getConvertTarget(for: self.input)
-
-        return ViewOperation(delete: count, input: "")
     }
 
     /// 現在のカーソル位置からカーソルを動かす関数
@@ -339,7 +333,7 @@ struct ComposingText {
     /// 文頭の方を確定させる関数
     ///  - parameters:
     ///   - correspondingCount: `converTarget`において対応する文字数
-    mutating func complete(correspondingCount: Int) {
+    mutating func prefixComplete(correspondingCount: Int) {
         let correspondingCount = min(correspondingCount, self.input.count)
         self.input.removeFirst(correspondingCount)
         // convetTargetを更新する
@@ -348,6 +342,10 @@ struct ComposingText {
         let cursorDelta = self.convertTarget.count - newConvertTarget.count
         self.convertTarget = newConvertTarget
         self.convertTargetCursorPosition -= cursorDelta
+        // もしも左端にカーソルが位置していたら、文頭に移動させる
+        if self.convertTargetCursorPosition == 0 {
+            self.convertTargetCursorPosition = self.convertTarget.count
+        }
     }
 
     /// 現在のカーソル位置までの文字でComposingTextを作成し、返す
