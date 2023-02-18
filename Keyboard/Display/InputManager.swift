@@ -122,10 +122,11 @@ final class InputManager {
     /// 変換を選択した場合に呼ばれる
     func complete(candidate: Candidate) {
         self.updateLog(candidate: candidate)
-        // カーソルから左の入力部分を削除し、変換後の文字列+残りの文字列を後で入力し直す
-        if !self.isSelected {
-            // 消しすぎることはないのでエラーは無視できる
-            try? self.displayedTextManager.deleteBackward(count: self.displayedTextManager.displayedTextCursorPosition)
+        if candidate.isPredictionCandidate, let data = candidate.data.first {
+            self.composingText.suffixPredict(correspondingCount: candidate.correspondingCount, with: data.ruby.toHiragana())
+            self.displayedTextManager.updateComposingText(composingText: composingText)
+            self.setResult()
+            return
         }
 
         self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)

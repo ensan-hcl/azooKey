@@ -348,6 +348,23 @@ struct ComposingText {
         }
     }
 
+    /// 文末の方を確定させる関数
+    ///  - parameters:
+    ///   - correspondingCount: `converTarget`において対応する文字数
+    ///  - todo: テストを追加する
+    mutating func suffixPredict(correspondingCount: Int, with predictedSuffix: String) {
+        // 現在の位置
+        let inputCursorPosition = self.forceGetInputCursorPosition(target: self.convertTargetBeforeCursor)
+        let removedInput = self.input[inputCursorPosition - correspondingCount ..< inputCursorPosition]
+        self.input.removeSubrange(inputCursorPosition - correspondingCount ..< inputCursorPosition)
+        let count = Self.getConvertTarget(for: removedInput).count
+        self.convertTargetCursorPosition -= count
+        // FIXME: ここのinputStyleは.directよりも「.freezed」のようなものの方が望ましい
+        self.insertAtCursorPosition(predictedSuffix, inputStyle: .direct)
+        // convetTargetを更新する
+        self.convertTarget = Self.getConvertTarget(for: self.input)
+    }
+
     /// 現在のカーソル位置までの文字でComposingTextを作成し、返す
     func prefixToCursorPosition() -> ComposingText {
         var text = self
