@@ -17,15 +17,15 @@ final class DisplayedTextManager {
         @KeyboardSetting(.markedTextSetting) var markedTextEnabled
         self.isMarkedTextEnabled = markedTextEnabled != .disabled
     }
-    // Viewに表示されているテキスト全体
-    // ライブ変換が有効になっている場合、convertedTextが「きょうは」のときに「今日は」が入る
-    // 無効になっている場合はconvertedTextと一致する
+    /// `convertTarget`に対応する文字列
     private(set) var displayedText: String = ""
-    // その中でのカーソルポジション
+    /// その中でのカーソルポジション
     private(set) var displayedTextCursorPosition = 0
-    // ライブ変換の有効化状態
+    /// ライブ変換の有効化状態
     private(set) var isLiveConversionEnabled: Bool
-    // marked textの有効化状態
+    /// ライブ変換結果として表示されるべきテキスト
+    private(set) var displayedLiveConversionText: String?
+    /// marked textの有効化状態
     private(set) var isMarkedTextEnabled: Bool
     private var proxy: UITextDocumentProxy! {
         if let inKeyboardProxy {
@@ -71,6 +71,7 @@ final class DisplayedTextManager {
         self.isMarkedTextEnabled = markedTextEnabled != .disabled
 
         self.displayedText = ""
+        self.displayedLiveConversionText = nil
         self.displayedTextCursorPosition = 0
     }
 
@@ -78,6 +79,7 @@ final class DisplayedTextManager {
         if isMarkedTextEnabled {
             self.insertText(self.displayedText, shouldSimplyInsert: true)
             self.proxy?.unmarkText()
+            self.insertText(self.displayedLiveConversionText ?? self.displayedText, shouldSimplyInsert: true)
         } else {
             // do nothing
         }
@@ -115,10 +117,9 @@ final class DisplayedTextManager {
     /// MarkedTextを更新する関数
     /// この関数自体はisMarkedTextEnabledのチェックを行わない。
     func updateMarkedText() {
-        self.proxy.setMarkedText(
-            self.displayedText,
-            selectedRange: NSRange(location: self.displayedText.prefix(self.displayedTextCursorPosition).utf16.count, length: 0)
-        )
+        let text = self.displayedLiveConversionText ?? self.displayedText
+        let cursorPosition = self.displayedLiveConversionText.map(NSString.init(string:))?.length ?? NSString(string: String(self.displayedText.prefix(self.displayedTextCursorPosition))).length
+        self.proxy.setMarkedText(text, selectedRange: NSRange(location: cursorPosition, length: 0))
     }
 
     func insertText(_ text: String, shouldSimplyInsert: Bool = false) {
@@ -225,13 +226,14 @@ final class DisplayedTextManager {
             self.rawDeleteBackward(count: count)
             return
         }
-
+        // ライブ変換と両立しない操作なので、一旦ライブ変換を停止する
+        self.dismissLiveConversionText()
+        // displayedTextを操作する
         let adjustedCount = min(self.displayedTextCursorPosition, count)
         let leftIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition - adjustedCount)
         let rightIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition)
         self.displayedText.removeSubrange(leftIndex ..< rightIndex)
         self.displayedTextCursorPosition -= adjustedCount
-
         if isMarkedTextEnabled && isComposing {
             self.updateMarkedText()
         } else {
@@ -312,9 +314,48 @@ final class DisplayedTextManager {
         }
     }
 
+    /// ライブ変換結果の表示を止める
+    func dismissLiveConversionText() {
+        if isMarkedTextEnabled {
+            self.displayedLiveConversionText = nil
+            self.updateMarkedText()
+        } else {
+            let oldDisplayedText = self.displayedLiveConversionText ?? self.displayedText
+            let commonPrefix = oldDisplayedText.commonPrefix(with: self.displayedText)
+            let delete = oldDisplayedText.count - commonPrefix.count
+            let input = self.displayedText.suffix(self.displayedText.count - commonPrefix.count)
+            self.rawDeleteBackward(count: delete)
+            self.proxy.insertText(String(input))
+            self.displayedLiveConversionText = nil
+        }
+    }
+
+    /// ライブ変換結果を更新する
+    func updateLiveConversionText(liveConversionText: String) {
+        if liveConversionText.isEmpty {
+            self.dismissLiveConversionText()
+            return
+        }
+        let oldDisplayedText = self.displayedLiveConversionText ?? self.displayedText
+        self.displayedLiveConversionText = liveConversionText
+        if isMarkedTextEnabled {
+            self.updateMarkedText()
+        } else {
+            let commonPrefix = oldDisplayedText.commonPrefix(with: liveConversionText)
+            let delete = oldDisplayedText.count - commonPrefix.count
+            let input = liveConversionText.suffix(liveConversionText.count - commonPrefix.count)
+            self.rawDeleteBackward(count: delete)
+            self.proxy.insertText(String(input))
+        }
+    }
+
     // カーソルから前count文字をtextで置換する
     func replace(count: Int, with text: String, isComposing: Bool = true) {
         if isComposing {
+            // これは一般にライブ変換と両立しない操作なので、一旦ライブ変換を中止する
+            // 例えば、「今日は」の状態で2文字分replaceすると「日は」をreplaceすることになってしまうが、これは誤り
+            self.dismissLiveConversionText()
+            // displayedTextを操作する
             let leftIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition - count)
             let rightIndex = self.displayedText.indexFromStart(self.displayedTextCursorPosition)
             self.displayedText.removeSubrange(leftIndex ..< rightIndex)

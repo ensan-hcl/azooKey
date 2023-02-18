@@ -767,9 +767,8 @@ final class InputManager {
         let firstClauseResults: [Candidate]
         (results, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
         if liveConversionEnabled {
-            let operation = self.liveConversionManager.updateWithNewResults(results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
-            debug("Live Conversion View Update: delete \(operation.delete) letters, insert \(operation.input)")
-            self.displayedTextManager.replace(count: operation.delete, with: operation.input)
+            let liveConversionText = self.liveConversionManager.updateWithNewResults(results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
+            self.displayedTextManager.updateLiveConversionText(liveConversionText: liveConversionText)
         }
 
         debug("results to be registered:", results)
