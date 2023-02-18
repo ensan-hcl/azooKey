@@ -34,9 +34,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                 Spacer()
                     .frame(height: 18)
                 // 候補をしまうボタン
-                Button(action: {
-                    self.collapse()
-                }) {
+                Button(action: collapse) {
                     ZStack {
                         Color(white: 1, opacity: 0.001)
                             .frame(width: buttonWidth)
@@ -55,7 +53,8 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                         Divider()
                         HStack {
                             ForEach(results.results, id: \.id) {datum in
-                                ResultItemView(data: datum, buttonHeight: 18)
+                                ResultItemView(data: datum, buttonHeight: 18, action: pressed)
+                                    .font(Design.fonts.iconImageFont(theme: theme))
                             }
                         }
                     }

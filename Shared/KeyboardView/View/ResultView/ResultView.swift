@@ -123,7 +123,8 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                 ScrollViewReader {scrollViewProxy in
                                     LazyHStack(spacing: 10) {
                                         ForEach(results, id: \.id) {(data: Candidate) in
-                                            ResultItemView(data: data, buttonHeight: buttonHeight)
+                                            ResultItemView(data: data, buttonHeight: buttonHeight, action: pressed)
+                                                .font(Design.fonts.resultViewFont(theme: theme))
                                                 .id(data.id)
                                         }
                                     }.onAppear {
@@ -155,6 +156,10 @@ struct ResultView<Candidate: ResultViewItemData>: View {
         }
     }
 
+    private func pressed(candidate: Candidate) {
+        self.action.notifyComplete(candidate)
+    }
+
     private func expand() {
         self.isResultViewExpanded = true
         self.resultData = self.model.results
@@ -162,26 +167,22 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 }
 
 struct ResultItemView<Candidate: ResultViewItemData>: View {
-    init(data: Candidate, buttonHeight: CGFloat) {
+    init(data: Candidate, buttonHeight: CGFloat, action: @escaping (Candidate) -> Void) {
         self.data = data
         self.buttonHeight = buttonHeight
+        self.pressed = action
     }
 
-    private var data: Candidate
-    private var buttonHeight: CGFloat
-    @Environment(\.themeEnvironment) private var theme
-    @Environment(\.userActionManager) private var action
-
-    private func pressed(candidate: Candidate) {
-        self.action.notifyComplete(candidate)
-    }
+    private let data: Candidate
+    private let buttonHeight: CGFloat
+    private let pressed: (Candidate) -> Void
 
     var body: some View {
         switch data.dataType {
         case .candidate:
             Button(data.text) {
                 Sound.click()
-                self.pressed(candidate: data)
+                self.pressed(data)
             }
             .buttonStyle(ResultButtonStyle(height: buttonHeight))
             .contextMenu {
@@ -189,12 +190,11 @@ struct ResultItemView<Candidate: ResultViewItemData>: View {
             }
         case .information:
             Text(data.text)
-                .font(Design.fonts.resultViewFont(theme: theme))
                 .underline(true, color: .accentColor)
         case .predictionCandidate:
             Button {
                 Sound.click()
-                self.pressed(candidate: data)
+                self.pressed(data)
             } label: {
                 Label(data.text, systemImage: "lightbulb")
             }
