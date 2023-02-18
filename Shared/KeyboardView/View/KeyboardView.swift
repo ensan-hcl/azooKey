@@ -62,7 +62,7 @@ extension EnvironmentValues {
 
 struct KeyboardView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var variableStates = VariableStates.shared
-    @State private var resultData: [ResultData<Candidate>] = []
+    @State private var resultData: [Candidate] = []
 
     private unowned let resultModelVariableSection: ResultModelVariableSection<Candidate>
 

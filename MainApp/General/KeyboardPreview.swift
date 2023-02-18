@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 private struct CandidateMock: ResultViewItemData {
-    let inputable: Bool = true
+    let dataType: ResultViewItemDataType = .candidate
     var text: String
     #if DEBUG
     func getDebugInformation() -> String {

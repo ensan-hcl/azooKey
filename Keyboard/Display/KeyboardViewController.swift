@@ -9,7 +9,15 @@
 import SwiftUI
 import UIKit
 
-extension Candidate: ResultViewItemData {}
+extension Candidate: ResultViewItemData {
+    var dataType: ResultViewItemDataType {
+        if isPredictionCandidate {
+            return .predictionCandidate
+        } else {
+            return .candidate
+        }
+    }
+}
 
 final private class KeyboardHostingController<Content: View>: UIHostingController<Content> {
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {

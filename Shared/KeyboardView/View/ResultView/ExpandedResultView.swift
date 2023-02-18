@@ -23,7 +23,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
 
-    init(isResultViewExpanded: Binding<Bool>, resultData: [ResultData<Candidate>]) {
+    init(isResultViewExpanded: Binding<Bool>, resultData: [Candidate]) {
         self._isResultViewExpanded = isResultViewExpanded
         self.splitedResults = Self.registerResults(results: resultData)
     }
@@ -55,15 +55,7 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
                         Divider()
                         HStack {
                             ForEach(results.results, id: \.id) {datum in
-                                Button(action: {
-                                    self.pressed(data: datum)
-                                }) {
-                                    Text(datum.candidate.text)
-                                }
-                                .buttonStyle(ResultButtonStyle(height: 18))
-                                .contextMenu {
-                                    ResultContextMenuView(candidate: datum.candidate)
-                                }
+                                ResultItemView(data: datum, buttonHeight: 18)
                             }
                         }
                     }
@@ -75,8 +67,8 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         .frame(height: VariableStates.shared.interfaceSize.height, alignment: .bottom)
     }
 
-    private func pressed(data: ResultData<Candidate>) {
-        self.action.notifyComplete(data.candidate)
+    private func pressed(data: Candidate) {
+        self.action.notifyComplete(data)
         self.collapse()
     }
 
@@ -84,13 +76,14 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
         isResultViewExpanded = false
     }
 
-    private static func registerResults(results: [ResultData<Candidate>]) -> [SplitedResultData<Candidate>] {
+    private static func registerResults(results: [Candidate]) -> [SplitedResultData<Candidate>] {
         var curSum: CGFloat = .zero
         var splited: [SplitedResultData<Candidate>] = []
-        var curResult: [ResultData<Candidate>] = []
+        var curResult: [Candidate] = []
         let font = UIFont.systemFont(ofSize: Design.fonts.resultViewFontSize + 1)
         results.forEach {[unowned font] datum in
-            let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
+            let labelWidth = datum.dataType == .predictionCandidate ? 20.0 : 0.0
+            let width = datum.text.size(withAttributes: [.font: font]).width + labelWidth + 20
             if (curSum + width) < VariableStates.shared.interfaceSize.width {
                 curResult.append(datum)
                 curSum += width
@@ -108,5 +101,5 @@ struct ExpandedResultView<Candidate: ResultViewItemData>: View {
 
 private struct SplitedResultData<Candidate: ResultViewItemData>: Identifiable {
     let id: Int
-    let results: [ResultData<Candidate>]
+    let results: [Candidate]
 }

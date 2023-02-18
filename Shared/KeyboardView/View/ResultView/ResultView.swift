@@ -11,35 +11,46 @@ import SwiftUI
 
 // TODO: Candidateを直接やりとりするのをやめて、(ID, text, inputtable, debugInfo)あたりを持った構造体として扱うようにする。
 // TODO: こうすることでCandidateをジェネリックにしないで済むので、ResultModelVariableSectionをやめてVariableStatesに統合できる。
-protocol ResultViewItemData {
+enum ResultViewItemDataType: Hashable {
+    case candidate, information, predictionCandidate
+}
+protocol ResultViewItemData: Hashable, Identifiable<Int> {
     var text: String {get}
-    var inputable: Bool {get}
+    var dataType: ResultViewItemDataType {get}
     #if DEBUG
     func getDebugInformation() -> String
     #endif
 }
 
+extension ResultViewItemData {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(text)
+        hasher.combine(dataType)
+    }
+}
+
+extension ResultViewItemData {
+    var id: Int {
+        self.hashValue
+    }
+}
+
 final class ResultModelVariableSection<Candidate: ResultViewItemData>: ObservableObject {
-    @Published fileprivate var results: [ResultData<Candidate>] = []
+    @Published fileprivate var results: [Candidate] = []
     @Published fileprivate var scrollViewProxy: ScrollViewProxy?
 
     func setResults(_ results: [Candidate]) {
-        self.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
-        if let proxy = self.scrollViewProxy {
+        self.results = results
+        if let proxy = scrollViewProxy {
             proxy.scrollTo(0, anchor: .trailing)
         }
     }
 }
 
-struct ResultData<Candidate: ResultViewItemData>: Identifiable {
-    var id: Int
-    var candidate: Candidate
-}
-
 struct ResultView<Candidate: ResultViewItemData>: View {
     @ObservedObject private var model: ResultModelVariableSection<Candidate>
     @ObservedObject private var variableStates = VariableStates.shared
-    @Binding private var resultData: [ResultData<Candidate>]
+    @Binding private var resultData: [Candidate]
     @Binding private var isResultViewExpanded: Bool
 
     @Environment(\.themeEnvironment) private var theme
@@ -47,7 +58,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
 
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
-    init(model: ResultModelVariableSection<Candidate>, isResultViewExpanded: Binding<Bool>, resultData: Binding<[ResultData<Candidate>]>) {
+    init(model: ResultModelVariableSection<Candidate>, isResultViewExpanded: Binding<Bool>, resultData: Binding<[Candidate]>) {
         self.model = model
         self._resultData = resultData
         self._isResultViewExpanded = isResultViewExpanded
@@ -80,7 +91,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                 TabBarView(data: tabBarData)
             case .none:
                 Group { [unowned model] in
-                    let results: [ResultData<Candidate>] = model.results
+                    let results: [Candidate] = model.results
                     if results.isEmpty {
                         HStack {
                             Spacer()
@@ -111,22 +122,9 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 ScrollViewReader {scrollViewProxy in
                                     LazyHStack(spacing: 10) {
-                                        ForEach(results, id: \.id) {(data: ResultData<Candidate>) in
-                                            if data.candidate.inputable {
-                                                Button(data.candidate.text) {
-                                                    Sound.click()
-                                                    self.pressed(candidate: data.candidate)
-                                                }
-                                                .buttonStyle(ResultButtonStyle(height: buttonHeight))
-                                                .contextMenu {
-                                                    ResultContextMenuView(candidate: data.candidate)
-                                                }
+                                        ForEach(results, id: \.id) {(data: Candidate) in
+                                            ResultItemView(data: data, buttonHeight: buttonHeight)
                                                 .id(data.id)
-                                            } else {
-                                                Text(data.candidate.text)
-                                                    .font(Design.fonts.resultViewFont(theme: theme))
-                                                    .underline(true, color: .accentColor)
-                                            }
                                         }
                                     }.onAppear {
                                         model.scrollViewProxy = scrollViewProxy
@@ -157,13 +155,54 @@ struct ResultView<Candidate: ResultViewItemData>: View {
         }
     }
 
+    private func expand() {
+        self.isResultViewExpanded = true
+        self.resultData = self.model.results
+    }
+}
+
+struct ResultItemView<Candidate: ResultViewItemData>: View {
+    init(data: Candidate, buttonHeight: CGFloat) {
+        self.data = data
+        self.buttonHeight = buttonHeight
+    }
+
+    private var data: Candidate
+    private var buttonHeight: CGFloat
+    @Environment(\.themeEnvironment) private var theme
+    @Environment(\.userActionManager) private var action
+
     private func pressed(candidate: Candidate) {
         self.action.notifyComplete(candidate)
     }
 
-    private func expand() {
-        self.isResultViewExpanded = true
-        self.resultData = self.model.results
+    var body: some View {
+        switch data.dataType {
+        case .candidate:
+            Button(data.text) {
+                Sound.click()
+                self.pressed(candidate: data)
+            }
+            .buttonStyle(ResultButtonStyle(height: buttonHeight))
+            .contextMenu {
+                ResultContextMenuView(candidate: data)
+            }
+        case .information:
+            Text(data.text)
+                .font(Design.fonts.resultViewFont(theme: theme))
+                .underline(true, color: .accentColor)
+        case .predictionCandidate:
+            Button {
+                Sound.click()
+                self.pressed(candidate: data)
+            } label: {
+                Label(data.text, systemImage: "lightbulb")
+            }
+            .buttonStyle(ResultButtonStyle(height: buttonHeight))
+            .contextMenu {
+                ResultContextMenuView(candidate: data)
+            }
+        }
     }
 }
 
@@ -188,6 +227,12 @@ struct ResultContextMenuView<Candidate: ResultViewItemData>: View {
                 debug(self.candidate.getDebugInformation())
             }) {
                 Text("デバッグ情報を表示する")
+                Image(systemName: "ladybug.fill")
+            }
+            Button(action: {
+                debug(self.candidate)
+            }) {
+                Text("デバッグ情報を詳細に表示する")
                 Image(systemName: "ladybug.fill")
             }
             #endif

@@ -63,7 +63,7 @@ struct CandidateData {
 }
 
 /// 変換候補のデータ
-struct Candidate {
+struct Candidate: Equatable {
     /// 入力となるテキスト
     var text: String
     /// 評価値
@@ -77,18 +77,17 @@ struct Candidate {
     /// 変換として選択した際に実行する`action`。
     /// - note: 括弧を入力した際にカーソルを移動するために追加した変数
     var actions: [ActionType]
-    /// 入力できるものか
-    /// - note: 文字数表示のために追加したフラグ
-    let inputable: Bool
+    /// 予測変換候補かどうか
+    var isPredictionCandidate: Bool
 
-    init(text: String, value: PValue, correspondingCount: Int, lastMid: Int, data: [DicdataElement], actions: [ActionType] = [], inputable: Bool = true) {
+    init(text: String, value: PValue, correspondingCount: Int, lastMid: Int, data: [DicdataElement], actions: [ActionType] = [], isPredictionCandidate: Bool = false) {
         self.text = text
         self.value = value
         self.correspondingCount = correspondingCount
         self.lastMid = lastMid
         self.data = data
         self.actions = actions
-        self.inputable = inputable
+        self.isPredictionCandidate = isPredictionCandidate
     }
     /// 後から`action`を追加した形を生成する関数
     /// - parameters:
