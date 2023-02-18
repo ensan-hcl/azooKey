@@ -293,8 +293,11 @@ final class InputManager {
 
     /// テキストの進行方向と逆に削除する
     /// `ab|c → a|c`のイメージ
-    func deleteBackward(count: Int, requireSetResult: Bool = true) {
-        if count == 0 {
+    /// - Parameters:
+    ///   - convertTargetCount: `convertTarget`の文字数。`displayedText`の文字数ではない。
+    ///   - requireSetResult: `setResult()`の呼び出しを要求するか。
+    func deleteBackward(convertTargetCount: Int, requireSetResult: Bool = true) {
+        if convertTargetCount == 0 {
             return
         }
         // 選択状態ではオール削除になる
@@ -304,17 +307,17 @@ final class InputManager {
             return
         }
         // 条件
-        if count < 0 {
-            self.deleteForward(count: abs(count), requireSetResult: requireSetResult)
+        if convertTargetCount < 0 {
+            self.deleteForward(count: abs(convertTargetCount), requireSetResult: requireSetResult)
             return
         }
         guard !self.composingText.isEmpty else {
             // 消し過ぎの可能性は考えなくて大丈夫な状況
-            try? self.displayedTextManager.deleteBackward(count: count, isComposing: false)
+            try? self.displayedTextManager.deleteBackward(count: convertTargetCount, isComposing: false)
             return
         }
 
-        let operation = self.composingText.deleteBackwardFromCursorPosition(count: count)
+        let operation = self.composingText.deleteBackwardFromCursorPosition(count: convertTargetCount)
         debug("Input Manager deleteBackword: ", composingText)
 
         // 削除を実行する
@@ -561,7 +564,7 @@ final class InputManager {
             for count in (counts.min...counts.max).reversed() where count <= composingText.convertTargetCursorPosition {
                 if let replace = table[String(leftside.suffix(count))] {
                     // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
-                    self.deleteBackward(count: leftside.suffix(count).count, requireSetResult: false)
+                    self.deleteBackward(convertTargetCount: leftside.suffix(count).count, requireSetResult: false)
                     // ここで変換が行われる。内部的には差分管理システムによって「置換」の場合のキャッシュ変換が呼ばれる。
                     self.input(text: replace, requireSetResult: requireSetResult)
                     found = true
@@ -600,7 +603,7 @@ final class InputManager {
             return
         }
         // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
-        self.deleteBackward(count: 1, requireSetResult: false)
+        self.deleteBackward(convertTargetCount: 1, requireSetResult: false)
         // inputの内部でsetResultが発生する
         self.input(text: changed, requireSetResult: requireSetResult)
     }
