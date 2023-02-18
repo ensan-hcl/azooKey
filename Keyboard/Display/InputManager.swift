@@ -683,26 +683,36 @@ final class InputManager {
 
     // 変換リクエストを送信し、結果を反映する関数
     func setResult() {
-        let requireJapanesePrediction: Bool
         let requireEnglishPrediction: Bool
         switch VariableStates.shared.inputStyle {
         case .direct:
-            requireJapanesePrediction = true
             requireEnglishPrediction = true
         case .roman2kana:
-            requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
             requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
         }
-        @KeyboardSetting(.typographyLetter) var typographyLetterCandidate
-        @KeyboardSetting(.unicodeCandidate) var unicodeCandidate
-        @KeyboardSetting(.englishCandidate) var englishCandidateInRoman2KanaInput
-        @KeyboardSetting(.fullRomanCandidate) var fullWidthRomanCandidate
-        @KeyboardSetting(.halfKanaCandidate) var halfWidthKanaCandidate
-        @KeyboardSetting(.learningType) var learningType
+        @ReadOnlyKeyboardSetting(.typographyLetter) var typographyLetterCandidate
+        @ReadOnlyKeyboardSetting(.unicodeCandidate) var unicodeCandidate
+        @ReadOnlyKeyboardSetting(.englishCandidate) var englishCandidateInRoman2KanaInput
+        @ReadOnlyKeyboardSetting(.fullRomanCandidate) var fullWidthRomanCandidate
+        @ReadOnlyKeyboardSetting(.halfKanaCandidate) var halfWidthKanaCandidate
+        @ReadOnlyKeyboardSetting(.learningType) var learningType
+
+        @ReadOnlyKeyboardSetting(.japanesePredictionCandidate) var _japanesePredictionCandidate
+        var japanesePredictionCandidate = _japanesePredictionCandidate
+
+        // 以下の場合に変更
+        // 1. 日本語入力ではない場合
+        // 2. テキストが選択されている場合
+        // 3. カーソルが右端にない場合
+        if VariableStates.shared.keyboardLanguage != .ja_JP
+            || self.isSelected
+            || !composingText.isAtEndIndex {
+            japanesePredictionCandidate = .disabled
+        }
 
         let options = ConvertRequestOptions(
             N_best: 10,
-            requireJapanesePrediction: requireJapanesePrediction,
+            japanesePredictionCandidate: japanesePredictionCandidate,
             requireEnglishPrediction: requireEnglishPrediction,
             // VariableStatesを注入
             keyboardLanguage: VariableStates.shared.keyboardLanguage,

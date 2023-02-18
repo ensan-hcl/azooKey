@@ -207,6 +207,12 @@
 		1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */; };
 		1A7D00D3292A34EB00F06B35 /* extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7D00D2292A34EB00F06B35 /* extension String.swift */; };
 		1A7D00D4292A34EB00F06B35 /* extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7D00D2292A34EB00F06B35 /* extension String.swift */; };
+		1A7E6AEC29A0B7920009CEBC /* PredictionCandidateSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E6AEB29A0B7920009CEBC /* PredictionCandidateSetting.swift */; };
+		1A7E6AED29A0B7920009CEBC /* PredictionCandidateSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E6AEB29A0B7920009CEBC /* PredictionCandidateSetting.swift */; };
+		1A7E6AEE29A0B7920009CEBC /* PredictionCandidateSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E6AEB29A0B7920009CEBC /* PredictionCandidateSetting.swift */; };
+		1A7E6AF129A0BEEA0009CEBC /* PredictionCandidateSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E6AF029A0BEEA0009CEBC /* PredictionCandidateSettingView.swift */; };
+		1A7E6AF229A0BEEA0009CEBC /* PredictionCandidateSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E6AF029A0BEEA0009CEBC /* PredictionCandidateSettingView.swift */; };
+		1A7E6AF329A0BEEA0009CEBC /* PredictionCandidateSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7E6AF029A0BEEA0009CEBC /* PredictionCandidateSettingView.swift */; };
 		1A7F546F26A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
 		1A7F547026A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
 		1A7F547126A96A5F0032E91E /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
@@ -603,6 +609,8 @@
 		1A6F959625144481007399AC /* QwertyKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyboardView.swift; sourceTree = "<group>"; };
 		1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabWalkthrough.swift; sourceTree = "<group>"; };
 		1A7D00D2292A34EB00F06B35 /* extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension String.swift"; sourceTree = "<group>"; };
+		1A7E6AEB29A0B7920009CEBC /* PredictionCandidateSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionCandidateSetting.swift; sourceTree = "<group>"; };
+		1A7E6AF029A0BEEA0009CEBC /* PredictionCandidateSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionCandidateSettingView.swift; sourceTree = "<group>"; };
 		1A7F546E26A81F3B0032E91E /* Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Availability.swift; sourceTree = "<group>"; };
 		1A7F547226A96A870032E91E /* AzooKeyIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyIcon.swift; sourceTree = "<group>"; };
 		1A86F4A92536033900B92B49 /* changed_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changed_last_n_character.swift; sourceTree = "<group>"; };
@@ -1146,6 +1154,14 @@
 			path = QwertyKeyboard;
 			sourceTree = "<group>";
 		};
+		1A7E6AEF29A0BED00009CEBC /* PredictionCandidateSetting */ = {
+			isa = PBXGroup;
+			children = (
+				1A7E6AF029A0BEEA0009CEBC /* PredictionCandidateSettingView.swift */,
+			);
+			path = PredictionCandidateSetting;
+			sourceTree = "<group>";
+		};
 		1A8A8400250F64FC0093A701 /* Kana2Kanji */ = {
 			isa = PBXGroup;
 			children = (
@@ -1291,6 +1307,7 @@
 			children = (
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
 				1A8E454528E138F300133D3B /* MarkedTextSetting */,
+				1A7E6AEF29A0BED00009CEBC /* PredictionCandidateSetting */,
 				1A347FE628D22F8E007D7852 /* LiveConversionSetting */,
 				1A61E8EE28CCD91E00C5107A /* FlickSensitivitySetting */,
 				1A5C7EAA25F36A5E00A7CBA8 /* PreferredLanguage */,
@@ -1424,6 +1441,7 @@
 				1AD2B8D726C272F80053CE4A /* BoolKeyboardSetting.swift */,
 				1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */,
 				1A347FE328D22E7F007D7852 /* AutoCompletionStrengthSetting.swift */,
+				1A7E6AEB29A0B7920009CEBC /* PredictionCandidateSetting.swift */,
 				1AD2B8E626C2C74D0053CE4A /* DoubleKeyboardSetting.swift */,
 				1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */,
 				1AD2B8DD26C29FD10053CE4A /* FlickCustomKeyKeyboardSetting.swift */,
@@ -1909,9 +1927,11 @@
 				1AF6797125CEDB9B00F3987B /* QwertyFunctionalKeyModel.swift in Sources */,
 				1AF6793D25CEDB7A00F3987B /* MessageView.swift in Sources */,
 				1AD2B8E126C2B0880053CE4A /* LanguageLayoutKeyboardSetting.swift in Sources */,
+				1A7E6AEC29A0B7920009CEBC /* PredictionCandidateSetting.swift in Sources */,
 				1AF6797625CEDB9B00F3987B /* QwertyEnterKeyModel.swift in Sources */,
 				1AB50779255ECC6C003C0BF2 /* LOUDSBuilder.swift in Sources */,
 				1ADE98772903F0A700C318C3 /* extension Data.swift in Sources */,
+				1A7E6AF129A0BEEA0009CEBC /* PredictionCandidateSettingView.swift in Sources */,
 				1AF6795825CEDB8E00F3987B /* QwertyDataProvider.swift in Sources */,
 				1ACEEFE92566601700899DA2 /* TipsViewComponent.swift in Sources */,
 				1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */,
@@ -1966,6 +1986,7 @@
 				1A2E5828294F4ED9004F959B /* MIDData.swift in Sources */,
 				1A2E58662955A6FF004F959B /* StringExtensionTests.swift in Sources */,
 				1A2E585E2951ED56004F959B /* Wareki.swift in Sources */,
+				1A7E6AED29A0B7920009CEBC /* PredictionCandidateSetting.swift in Sources */,
 				1A2E58592951EC87004F959B /* Kana2Kanji.swift in Sources */,
 				1A2E585F2951ED56004F959B /* Converter.swift in Sources */,
 				1A96E49E2958A05700A1EB0C /* EmailAddressConversionTests.swift in Sources */,
@@ -1995,6 +2016,7 @@
 				1A2E581E294F28C2004F959B /* LoggingUtils.swift in Sources */,
 				1A2E58332950ABD8004F959B /* SharedStore.swift in Sources */,
 				1A2E58402951C73D004F959B /* DicdataStore.swift in Sources */,
+				1A7E6AF229A0BEEA0009CEBC /* PredictionCandidateSettingView.swift in Sources */,
 				1A2E58562951EC87004F959B /* added_last_1_character.swift in Sources */,
 				1A2E584E2951EA44004F959B /* UserMadeCustard.swift in Sources */,
 				1A2E584D2951EA2D004F959B /* CustardManager.swift in Sources */,
@@ -2070,6 +2092,7 @@
 				1A5C7ECA25F3792300A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */,
 				1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */,
 				1AE102E425D43E9700CA7277 /* ThemeManager.swift in Sources */,
+				1A7E6AEE29A0B7920009CEBC /* PredictionCandidateSetting.swift in Sources */,
 				1AD2B8E226C2B0880053CE4A /* LanguageLayoutKeyboardSetting.swift in Sources */,
 				1A26F34325E8AACA003CDA0D /* StrokeAndFill.swift in Sources */,
 				1A3022B8263396FF00E4495C /* UserMadeCustard.swift in Sources */,
@@ -2102,6 +2125,7 @@
 				1ABF7D992639869B0045D6B2 /* Intertranslator.swift in Sources */,
 				1ABF7D9626395DEC0045D6B2 /* BindingConvert.swift in Sources */,
 				1A64C8BE251315AD00ACD537 /* DicdataStore.swift in Sources */,
+				1A7E6AF329A0BEEA0009CEBC /* PredictionCandidateSettingView.swift in Sources */,
 				1AD2B8F126C2D4ED0053CE4A /* QwertyCustomKeyKeyboardSetting.swift in Sources */,
 				1A2E581F294F28C2004F959B /* LoggingUtils.swift in Sources */,
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,

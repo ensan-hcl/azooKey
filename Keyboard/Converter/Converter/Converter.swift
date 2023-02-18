@@ -176,6 +176,9 @@ final class KanaKanjiConverter {
     /// - Returns:
     ///   予測変換候補
     private func getPredictionCandidate(_ sums: [(CandidateData, Candidate)], composingText: ComposingText, options: ConvertRequestOptions) -> [Candidate] {
+        if case .disabled = options.japanesePredictionCandidate {
+            return []
+        }
         // 予測変換は次の方針で行う。
         // prepart: 前半文節 lastPart: 最終文節とする。
         // まず、lastPartがnilであるところから始める
@@ -198,7 +201,7 @@ final class KanaKanjiConverter {
                 newUnit.merge(with: oldlastPart.clause)     // マージする。(最終文節の範囲を広げたことになる)
                 let newValue = lastUnit.value + oldlastPart.value
                 let newlastPart: CandidateData.ClausesUnit = (clause: newUnit, value: newValue)
-                let predictions = converter.getPredictionCandidates(composingText: composingText, prepart: prepart, lastClause: newlastPart.clause, N_best: 5, mainInputStyle: options.mainInputStyle)
+                let predictions = converter.getPredictionCandidates(composingText: composingText, prepart: prepart, lastClause: newlastPart.clause, N_best: 5, mainInputStyle: options.mainInputStyle, style: options.japanesePredictionCandidate)
                 lastpart = newlastPart
                 // 結果がemptyでなければ
                 if !predictions.isEmpty {
@@ -209,7 +212,7 @@ final class KanaKanjiConverter {
                 // 最終分節を取得
                 lastpart = prepart.clauses.popLast()
                 // 予測変換を受け取る
-                let predictions = converter.getPredictionCandidates(composingText: composingText, prepart: prepart, lastClause: lastpart!.clause, N_best: 5, mainInputStyle: options.mainInputStyle)
+                let predictions = converter.getPredictionCandidates(composingText: composingText, prepart: prepart, lastClause: lastpart!.clause, N_best: 5, mainInputStyle: options.mainInputStyle, style: options.japanesePredictionCandidate)
                 // 結果がemptyでなければ
                 if !predictions.isEmpty {
                     // 結果に追加
@@ -376,7 +379,7 @@ final class KanaKanjiConverter {
         let whole_sentence_unique_candidates = self.getUniqueCandidate(sums.map {$0.1})
         let sentence_candidates = whole_sentence_unique_candidates.min(count: 5, sortedBy: {$0.value > $1.value})
         // 予測変換
-        let prediction_candidates: [Candidate] = options.requireJapanesePrediction ? Array(self.getUniqueCandidate(self.getPredictionCandidate(sums, composingText: inputData, options: options)).min(count: 4, sortedBy: {$0.value > $1.value})) : []
+        let prediction_candidates = self.getUniqueCandidate(self.getPredictionCandidate(sums, composingText: inputData, options: options)).min(count: 4, sortedBy: {$0.value > $1.value})
 
         // 英単語の予測変換。appleのapiを使うため、処理が異なる。
         var foreign_candidates: [Candidate] = []

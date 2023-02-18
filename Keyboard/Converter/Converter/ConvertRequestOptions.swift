@@ -10,7 +10,7 @@ import Foundation
 
 struct ConvertRequestOptions {
     var N_best: Int = 10
-    var requireJapanesePrediction: Bool = true
+    var japanesePredictionCandidate = PredictionCandidateSettingKey.defaultValue
     var requireEnglishPrediction: Bool = true
     var keyboardLanguage: KeyboardLanguage = .ja_JP
     var mainInputStyle: InputStyle = .direct

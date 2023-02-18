@@ -19,7 +19,10 @@ extension Kana2Kanji {
     ///    「これはき」から「これは今日」に対応する候補などを作って返す。
     /// - note:
     ///     この関数の役割は意味連接の考慮にある。
-    func getPredictionCandidates(composingText: ComposingText, prepart: CandidateData, lastClause: ClauseDataUnit, N_best: Int, mainInputStyle: InputStyle) -> [Candidate] {
+    func getPredictionCandidates(composingText: ComposingText, prepart: CandidateData, lastClause: ClauseDataUnit, N_best: Int, mainInputStyle: InputStyle, style: PredictionCandidateSettingKey.Value) -> [Candidate] {
+        if style == .disabled {
+            return []
+        }
         debug("getPredictionCandidates", composingText, lastClause.inputRange, lastClause.text)
         let lastRuby = ComposingText.getConvertTarget(for: composingText.input[lastClause.inputRange]).toKatakana()
         let lastRubyCount = lastClause.inputRange.count
@@ -85,13 +88,28 @@ extension Kana2Kanji {
             }
             var nodedata: [DicdataElement] = datas
             nodedata.append(data)
-            let candidate: Candidate = Candidate(
-                text: lastCandidate.text + data.word,
-                value: newValue,
-                correspondingCount: correspoindingCount,
-                lastMid: includeMMValueCalculation ? data.mid:lastMid,
-                data: nodedata
-            )
+            let candidate: Candidate
+            switch style {
+            case .disabled:
+                return []
+            case .short:
+                candidate = Candidate(
+                    text: data.word,
+                    value: newValue,
+                    correspondingCount: lastRubyCount,
+                    lastMid: includeMMValueCalculation ? data.mid:lastMid,
+                    data: [data],
+                    isPredictionCandidate: true
+                )
+            case .long:
+                candidate = Candidate(
+                    text: lastCandidate.text + data.word,
+                    value: newValue,
+                    correspondingCount: correspoindingCount,
+                    lastMid: includeMMValueCalculation ? data.mid:lastMid,
+                    data: nodedata
+                )
+            }
             // カウントがオーバーしそうな場合は除去する
             if result.count >= N_best {
                 result.removeLast()

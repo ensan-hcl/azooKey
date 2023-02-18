@@ -28,6 +28,16 @@ struct KeyboardSetting<T: KeyboardSettingKey> {
     }
 }
 
+@propertyWrapper
+struct ReadOnlyKeyboardSetting<T: KeyboardSettingKey> {
+    init(_ key: T) {}
+    var wrappedValue: T.Value {
+        get {
+            T.value
+        }
+    }
+}
+
 /// 生の`SettingKey`の値を`@State`で宣言した場合、更新の反映ができない。
 /// `SettingUpdater`で包むことで、設定の更新を行いつつUIの更新も行われるようにできる。
 struct SettingUpdater<Wrapped: KeyboardSettingKey> {

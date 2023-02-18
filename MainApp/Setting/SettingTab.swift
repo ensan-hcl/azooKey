@@ -50,7 +50,6 @@ struct SettingTabView: View {
                         BoolSettingView(.liveConversion)
                         NavigationLink("詳しい設定", destination: LiveConversionSettingView())
                     }
-
                     Section(header: Text("変換")) {
                         BoolSettingView(.englishCandidate)
                         BoolSettingView(.halfKanaCandidate)
@@ -58,6 +57,7 @@ struct SettingTabView: View {
                         BoolSettingView(.typographyLetter)
                         BoolSettingView(.unicodeCandidate)
                         MarkedTextSettingView(.markedTextSetting)
+                        PredictionCandidateSettingView(.japanesePredictionCandidate)
                         NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                     }
                     Section(header: Text("ユーザ辞書")) {
