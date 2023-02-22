@@ -11,6 +11,7 @@ import Foundation
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert_2022_09_16_03"
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
+    case iOS16_4_new_emoji = "iOS_16_4_new_emoji_commit"                    // MARK: frozen
     case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_release" // MARK: frozen
 
     // MARK: 過去にプロダクションで用いていたメッセージID
@@ -30,7 +31,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
         switch self {
         case .ver1_9_user_dictionary_update:
             return true
-        case .iOS15_4_new_emoji, .mock:
+        case .iOS15_4_new_emoji, .iOS16_4_new_emoji, .mock:
             return false
         }
     }
@@ -107,6 +108,31 @@ struct MessageManager {
                 if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v1_8 {
                     return true
                 }
+                // .iOS16_4の方が終わっていたらDone
+                if Self.checkDone(.iOS16_4_new_emoji) {
+                    return true
+                }
+                return false
+            },
+            containerAppShouldMakeItDone: { false }
+        ),
+        MessageData(
+            id: .iOS16_4_new_emoji,
+            title: "お知らせ",
+            description: "iOS16.4で「🫨 (震える顔)」「🩵 (水色のハート)」「🪽 (羽)」などの新しい絵文字が追加されました。本体アプリを開き、データを更新しますか？",
+            button: .two(primary: .openContainer(text: "更新"), secondary: .later),
+            precondition: {
+                if #available(iOS 16.4, *) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            silentDoneCondition: {
+                // ダウンロードがv2.0.2以降の場合はDone
+                if (SharedStore.initialAppVersion ?? .azooKey_v1_7_1) >= .azooKey_v2_0_2 {
+                    return true
+                }
                 return false
             },
             containerAppShouldMakeItDone: { false }
@@ -142,13 +168,7 @@ struct MessageManager {
 
     init() {
         self.needShow = necessaryMessages.reduce(into: [:]) {dict, value in
-            if value.id.needUsingContainerApp {
-                // 収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
-                dict[value.id] = value.precondition() && SharedStore.userDefaults.string(forKey: value.id.key) != Self.doneFlag
-            } else {
-                // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
-                dict[value.id] = value.precondition() && SharedStore.userDefaults.string(forKey: value.id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: value.id.key) != Self.doneFlag
-            }
+            dict[value.id] = value.precondition() && Self.checkDone(value.id)
         }
         // 勝手にDoneにしてしまって問題のないものについては、この段階でDoneにする。
         for item in necessaryMessages {
@@ -171,6 +191,17 @@ struct MessageManager {
             // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
             SharedStore.userDefaults.setValue(Self.doneFlag, forKey: id.key)
             UserDefaults.standard.setValue(Self.doneFlag, forKey: id.key)
+        }
+    }
+
+    /// `Done`か否かを判定する
+    static func checkDone(_ id: MessageIdentifier) -> Bool {
+        if id.needUsingContainerApp {
+            // 収容アプリでのみ完了にできる場合、共有のSelf.userDefaultsのみチェック
+            return SharedStore.userDefaults.string(forKey: id.key) != Self.doneFlag
+        } else {
+            // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
+            return SharedStore.userDefaults.string(forKey: id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: id.key) != Self.doneFlag
         }
     }
 }
