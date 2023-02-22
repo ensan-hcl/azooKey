@@ -28,7 +28,7 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 不明な点はIssue等でご質問ください。
 
 ## 今後のリリース
-* 現在、Version 2.0.1に向けた作業を行っています。
+* 現在、Version 2.0.3に向けた作業を行っています。
 * 大きな機能はVersion 2.1に向けて追加していきます。
 
 ## azooKeyを支援する
