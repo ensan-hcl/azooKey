@@ -140,11 +140,13 @@ final class KeyboardViewController: UIInputViewController {
 
         @KeyboardSetting(.useOSUserDict) var useOSUserDict
         if useOSUserDict {
-            let osuserdict = OSUserDict()
-            self.requestSupplementaryLexicon {[unowned osuserdict] in
-                osuserdict.dict = $0.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -6)}
+            Task {
+                let lexicon = await self.requestSupplementaryLexicon()
+                let dict = lexicon.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -6)}
+                KeyboardViewController.action.sendToDicdataStore(.importOSUserDict(dict))
             }
-            KeyboardViewController.action.sendToDicdataStore(.importOSUserDict(osuserdict))
+        } else {
+            KeyboardViewController.action.sendToDicdataStore(.importOSUserDict([]))
         }
     }
 

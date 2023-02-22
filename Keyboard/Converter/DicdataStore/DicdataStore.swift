@@ -8,10 +8,6 @@
 
 import Foundation
 
-final class OSUserDict {
-    var dict: [DicdataElement] = []
-}
-
 final class DicdataStore {
     init() {
         debug("DicdataStoreが初期化されました")
@@ -32,7 +28,7 @@ final class DicdataStore {
     private var learningManager = LearningManager()
     private var zeroHintPredictionDicdata: [DicdataElement]?
 
-    private var osUserDict = OSUserDict()
+    private var osUserDict: [DicdataElement] = []
 
     internal let maxlength: Int = 20
     private let midCount = 502
@@ -68,7 +64,7 @@ final class DicdataStore {
     }
 
     enum Notification {
-        case importOSUserDict(OSUserDict)
+        case importOSUserDict([DicdataElement])
         case setRequestOptions(ConvertRequestOptions)
         case closeKeyboard
     }
@@ -587,12 +583,12 @@ final class DicdataStore {
 
     /// OSのユーザ辞書からrubyに等しい語を返す。
     private func getMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
-        self.osUserDict.dict.filter {$0.ruby == ruby}
+        self.osUserDict.filter {$0.ruby == ruby}
     }
 
     /// OSのユーザ辞書からrubyに先頭一致する語を返す。
     internal func getPrefixMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
-        self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
+        self.osUserDict.filter {$0.ruby.hasPrefix(ruby)}
     }
 
     // 学習を反映する
