@@ -47,8 +47,10 @@ final class DisplayedTextManager {
     }
 
     func clear() {
+        debug("DisplayedTextManager.clear")
         // unmarkText()だけではSafariの検索Viewなどで破綻する。
         if isMarkedTextEnabled {
+            self.insertText("", shouldSimplyInsert: true)
             self.proxy?.unmarkText()
         }
         @KeyboardSetting(.liveConversion) var enabled
@@ -62,8 +64,8 @@ final class DisplayedTextManager {
 
     func enter() {
         if isMarkedTextEnabled {
-            self.proxy?.unmarkText()
             self.insertText(self.displayedText, shouldSimplyInsert: true)
+            self.proxy?.unmarkText()
         } else {
             // do nothing
         }

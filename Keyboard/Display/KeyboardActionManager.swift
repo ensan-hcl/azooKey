@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-// MARK: Storeのキーボードへのアクション部門の動作を全て切り出したオブジェクト。外部から参照されるのがこれ。
+/// キーボードへのアクション部門の動作を担う。
 final class KeyboardActionManager: UserActionManager {
     override init() {}
 
