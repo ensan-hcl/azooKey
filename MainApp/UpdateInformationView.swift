@@ -14,6 +14,17 @@ struct UpdateInformationView: View {
             Group {
                 // version 2.0系
                 Group {
+                    VersionView("2.0.2", releaseDate: "2023年02月22日") {
+                        ParagraphView("機能を改善しました。") {
+                            "iOS16.4以降で利用可能なUnicode15.0に対応した絵文字のデータを追加しました"
+                        }
+                        ParagraphView("不具合を修正しました。") {
+                            "辞書データの不具合を修正し、変換が自然になりました"
+                            "ローマ字入力の不具合を修正しました"
+                            "「入力中のテキストを保護」の不具合を複数修正しました"
+                            "OSのユーザ辞書を読み込んだあと、読み込みを解除できなくなる不具合を修正しました"
+                        }
+                    }
                     VersionView("2.0.1", releaseDate: "2023年02月10日") {
                         ParagraphView("不具合を修正しました。") {
                             "辞書データの不具合を修正し、変換が自然になりました"
