@@ -140,11 +140,13 @@ final class KeyboardViewController: UIInputViewController {
 
         @KeyboardSetting(.useOSUserDict) var useOSUserDict
         if useOSUserDict {
-            let osuserdict = OSUserDict()
-            self.requestSupplementaryLexicon {[unowned osuserdict] in
-                osuserdict.dict = $0.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -6)}
+            Task {
+                let lexicon = await self.requestSupplementaryLexicon()
+                let dict = lexicon.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -6)}
+                KeyboardViewController.action.sendToDicdataStore(.importOSUserDict(dict))
             }
-            KeyboardViewController.action.sendToDicdataStore(.importOSUserDict(osuserdict))
+        } else {
+            KeyboardViewController.action.sendToDicdataStore(.importOSUserDict([]))
         }
     }
 
@@ -166,14 +168,14 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        KeyboardViewController.action.closeKeyboard()
+        VariableStates.shared.closeKeyboard()
+        KeyboardViewController.keyboardViewHost = nil
+        KeyboardViewController.loadedInstanceCount -= 1
+        debug("viewWillDisappear: キーボードが閉じられます")
         super.viewWillDisappear(animated)
         self.view.clearAllView()
         self.removeFromParent()
-        KeyboardViewController.keyboardViewHost = nil
-        KeyboardViewController.loadedInstanceCount -= 1
-        VariableStates.shared.closeKeyboard()
-        KeyboardViewController.action.closeKeyboard()
-        debug("viewWillDisappear: キーボードが閉じられます")
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

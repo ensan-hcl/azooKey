@@ -8,10 +8,6 @@
 
 import Foundation
 
-final class OSUserDict {
-    var dict: [DicdataElement] = []
-}
-
 final class DicdataStore {
     init() {
         debug("DicdataStoreが初期化されました")
@@ -32,7 +28,7 @@ final class DicdataStore {
     private var learningManager = LearningManager()
     private var zeroHintPredictionDicdata: [DicdataElement]?
 
-    private var osUserDict = OSUserDict()
+    private var osUserDict: [DicdataElement] = []
 
     internal let maxlength: Int = 20
     private let midCount = 502
@@ -68,7 +64,7 @@ final class DicdataStore {
     }
 
     enum Notification {
-        case importOSUserDict(OSUserDict)
+        case importOSUserDict([DicdataElement])
         case setRequestOptions(ConvertRequestOptions)
         case closeKeyboard
     }
@@ -145,7 +141,8 @@ final class DicdataStore {
             return []
         }
         let result = louds.byfixNodeIndices(chars: charIDs)
-        return Array(result[min(max(result.startIndex, depth.startIndex + 1), result.endIndex) ..< min(result.endIndex, depth.endIndex + 1)])
+        // result[1]から始まるので、例えば3..<5 (3文字と4文字)の場合は1文字ずつずらして4..<6の範囲をもらう
+        return Array(result[min(depth.lowerBound + 1, result.endIndex) ..< min(depth.upperBound + 1, result.endIndex)])
     }
 
     private func prefixMatchLOUDS(identifier: String, charIDs: [UInt8], depth: Int = .max) -> [Int] {
@@ -188,20 +185,31 @@ final class DicdataStore {
 
         // MARK: 検索対象を列挙していく。prefixの共通するものを削除して検索をなるべく減らすことが目的。
         // prefixの共通するものを削除して検索をなるべく減らす
-        let stringSet = stringToInfo.keys.reduce(into: Set(stringToInfo.keys)) { (`set`, key) in
-            if key.count > 4 {
+        var (_stringSet, minCharIDsCount, maxCharIDsCount) = stringToInfo.keys.reduce(into: (set: Set(stringToInfo.keys), minCount: Int.max, maxCount: 0)) { (data, key) in
+            let keyCount = key.count
+            if keyCount < data.minCount {
+                data.minCount = keyCount
+            }
+            if data.maxCount < keyCount {
+                data.maxCount = keyCount
+            }
+            if keyCount > 4 {
                 return
             }
-            if set.contains(where: {$0.hasPrefix(key) && $0.count != key.count}) {
-                set.remove(key)
+            if data.set.contains(where: {$0.hasPrefix(key) && $0.count != key.count}) {
+                data.set.remove(key)
             }
-        }.map {($0, $0.map {self.charsID[$0, default: .max]})}
-
+        }
+        let stringSet = _stringSet.map {($0, $0.map {self.charsID[$0, default: .max]})}
+        if stringSet.isEmpty {
+            minCharIDsCount = 0
+            maxCharIDsCount = -1
+        }
         // MARK: 列挙した検索対象から、順に検索を行う。この時点ではindicesを取得するのみ。
         // 先頭の文字: そこで検索したい文字列の集合
         let group = [Character: [(String, [UInt8])]].init(grouping: stringSet, by: {$0.0.first!})
 
-        let depth = toIndexLeft - fromIndex ..< toIndexRight - fromIndex
+        let depth = minCharIDsCount - 1 ..< maxCharIDsCount
         var indices: [(String, Set<Int>)] = group.map {dic in
             let key = String(dic.key)
             let set = dic.value.flatMapSet {(_, charIDs) in self.throughMatchLOUDS(identifier: key, charIDs: charIDs, depth: depth)}
@@ -247,16 +255,23 @@ final class DicdataStore {
                 dicdata.append(contentsOf: result)
             }
         }
-
         if fromIndex == .zero {
-            let result: [LatticeNode] = dicdata.map {
-                let node = LatticeNode(data: $0, inputRange: fromIndex ..< stringToInfo[$0.ruby, default: (fromIndex, 0)].endIndex + 1)
+            let result: [LatticeNode] = dicdata.compactMap {
+                guard let endIndex = stringToInfo[$0.ruby]?.endIndex else {
+                    return nil
+                }
+                let node = LatticeNode(data: $0, inputRange: fromIndex ..< endIndex + 1)
                 node.prevs.append(RegisteredNode.BOSNode())
                 return node
             }
             return result
         } else {
-            let result: [LatticeNode] = dicdata.map {LatticeNode(data: $0, inputRange: fromIndex ..< stringToInfo[$0.ruby, default: (fromIndex, 0)].endIndex + 1)}
+            let result: [LatticeNode] = dicdata.compactMap {
+                guard let endIndex = stringToInfo[$0.ruby]?.endIndex else {
+                    return nil
+                }
+                return LatticeNode(data: $0, inputRange: fromIndex ..< endIndex + 1)
+            }
             return result
         }
     }
@@ -320,6 +335,9 @@ final class DicdataStore {
         dicdata.append(contentsOf: strings.flatMap {self.learningManager.temporaryPerfectMatch(charIDs: $0.charIDs)})
         dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, allowRomanLetter: toIndex == inputData.input.count - 1, inputData: inputData, inputRange: fromIndex ..< toIndex + 1))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
+
+        debug("getLOUDSData", "\(fromIndex) ..< \(toIndex + 1)", dicdata.contains {$0.word == "使っ"})
+
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
                 let node = LatticeNode(data: $0, inputRange: fromIndex ..< toIndex + 1)
@@ -565,12 +583,12 @@ final class DicdataStore {
 
     /// OSのユーザ辞書からrubyに等しい語を返す。
     private func getMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
-        self.osUserDict.dict.filter {$0.ruby == ruby}
+        self.osUserDict.filter {$0.ruby == ruby}
     }
 
     /// OSのユーザ辞書からrubyに先頭一致する語を返す。
     internal func getPrefixMatchOSUserDict(_ ruby: some StringProtocol) -> [DicdataElement] {
-        self.osUserDict.dict.filter {$0.ruby.hasPrefix(ruby)}
+        self.osUserDict.filter {$0.ruby.hasPrefix(ruby)}
     }
 
     // 学習を反映する
@@ -710,20 +728,16 @@ final class DicdataStore {
     }
 
     internal static func includeMMValueCalculation(_ data: DicdataElement) -> Bool {
-        // LREでない場合はfalseを返す。
-        if !data.isLRE {
-            return false
-        }
         // 非自立動詞
-        if 895...1280 ~= data.lcid {
+        if 895...1280 ~= data.lcid || 895...1280 ~= data.rcid {
             return true
         }
         // 非自立名詞
-        if 1297...1305 ~= data.lcid {
+        if 1297...1305 ~= data.lcid || 1297...1305 ~= data.rcid {
             return true
         }
         // 内容語かどうか
-        return wordTypes[data.lcid] == 1
+        return wordTypes[data.lcid] == 1 || wordTypes[data.rcid] == 1
     }
 
     /// - データ1つあたり2Bなので、2.6KBくらいのメモリを利用する。

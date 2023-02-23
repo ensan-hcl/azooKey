@@ -58,10 +58,6 @@ struct DicdataElement: Equatable, Hashable {
         min(.zero, self.baseValue + self.adjust)
     }
 
-    var isLRE: Bool {
-        self.lcid == self.rcid
-    }
-
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.word == rhs.word && lhs.ruby == rhs.ruby && lhs.lcid == rhs.lcid && lhs.mid == rhs.mid && lhs.rcid == rhs.rcid
     }

@@ -9,6 +9,12 @@
 import XCTest
 
 final class ConverterTests: XCTestCase {
+    func sequentialInput(_ composingText: inout ComposingText, sequence: String, inputStyle: InputStyle) {
+        for char in sequence {
+            _ = composingText.insertAtCursorPosition(String(char), inputStyle: inputStyle)
+        }
+    }
+
     func testFullConversion() throws {
         // データリソースの場所を指定する
         DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
@@ -117,6 +123,45 @@ final class ConverterTests: XCTestCase {
             }
         }
     }
+
+    // 必ず正解すべきテストケース
+    func testMustCases() throws {
+        // データリソースの場所を指定する
+        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
+        // ダイレクト入力
+        do {
+            let cases: [(input: String, expect: String)] = [
+                ("つかっている", "使っている"),
+                ("しんだどうぶつ", "死んだ動物"),
+                ("けいさん", "計算"),
+            ]
+
+            for (input, expect) in cases {
+                let converter = KanaKanjiConverter()
+                var c = ComposingText()
+                sequentialInput(&c, sequence: input, inputStyle: .direct)
+                let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+                XCTAssertEqual(results.mainResults.first?.text, expect)
+            }
+        }
+        // ローマ字入力
+        do {
+            let cases: [(input: String, expect: String)] = [
+                ("tukatteiru", "使っている"),
+                ("sindadoubutu", "死んだ動物"),
+                ("keisann", "計算"),
+            ]
+
+            for (input, expect) in cases {
+                let converter = KanaKanjiConverter()
+                var c = ComposingText()
+                sequentialInput(&c, sequence: input, inputStyle: .roman2kana)
+                let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+                XCTAssertEqual(results.mainResults.first?.text, expect)
+            }
+        }
+    }
+
 
     // 変換結果が比較的一意なテストケースを無数に持ち、一定の割合を正解することを要求する
     // 辞書を更新した結果性能が悪化したら気付ける
