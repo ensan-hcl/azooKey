@@ -429,28 +429,19 @@ final class KeyboardActionManager: UserActionManager {
             return
         }
 
-        // 全体としてテキストが変化しており、右側の文字列が不変であった場合→ペーストしたのではないか？
+        // 全体としてテキストが変化しており、右側の文字列が不変であった場合→ペーストしたと推測できる
         if b_right == a_right {
-            // もしクリップボードに文字列がコピーされており、かつ、前の左側文字列にその文字列を加えた文字列が後の左側の文字列に一致した場合→確実にペースト
-            if let pastedText = UIPasteboard.general.string, a_left.hasSuffix(pastedText) {
-                if wasSelected {
-                    debug("user operation id: 7")
-                    self.inputManager.userReplacedSelectedText(text: pastedText)
-                } else {
-                    debug("user operation id: 8")
-                    self.inputManager.userPastedText(text: pastedText)
-                }
-                return
-            }
+            debug("user operation id: 7")
+            return
         }
 
         if a_left == "\n" && b_left.isEmpty && a_right == b_right {
-            debug("user operation id: 9")
+            debug("user operation id: 8")
             return
         }
 
         // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
-        debug("user operation id: 10, \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
+        debug("user operation id: 9, \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
         self.inputManager.clear()
     }
 
