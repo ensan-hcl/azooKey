@@ -37,6 +37,11 @@ final class Store {
         return keyboards.contains(bundleName)
     }
 
+    /// - note:フルアクセスの状態は`UIInputViewController`のインスタンスを1つ作るとわかる。
+    var isFullAccessEnabled: Bool {
+        UIInputViewController().hasFullAccess
+    }
+
     let imageMaximumWidth: CGFloat = 500
 
     var shouldTryRequestReview: Bool = false
