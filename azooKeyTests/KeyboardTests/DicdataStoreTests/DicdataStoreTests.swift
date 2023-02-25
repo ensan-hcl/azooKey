@@ -16,6 +16,26 @@ final class DicdataStoreTests: XCTestCase {
         }
     }
 
+    /// 絶対に変換できるべき候補をここに記述する
+    ///  - 主に「変換できない」と報告のあった候補を追加する
+    func testMustWords() throws {
+        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
+        let dicdataStore = DicdataStore()
+        let mustWords = [
+            ("アサッテ", "明後日"),
+            ("ダイヒョウ", "代表"),
+            ("テキナ", "的な"),
+            ("ヤマダ", "山田"),
+        ]
+        for (key, word) in mustWords {
+            var c = ComposingText()
+            _ = c.insertAtCursorPosition(key, inputStyle: .direct)
+            let result = dicdataStore.getLOUDSData(inputData: c, from: 0, to: c.input.endIndex-1)
+            // 冗長な書き方だが、こうすることで「どの項目でエラーが発生したのか」がはっきりするため、こう書いている。
+            XCTAssertEqual(result.first(where: {$0.data.word == word})?.data.word, word)
+        }
+    }
+
     func testGetLOUDSDataInRange() throws {
         DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
         let dicdataStore = DicdataStore()
