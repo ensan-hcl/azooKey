@@ -423,9 +423,6 @@ struct LongTermLearningMemory {
             from: metadataFileTemp ?? metadataFileURL(asTemporaryFile: true),
             to: metadataFileURL(asTemporaryFile: false)
         )
-        if Int.random(in: 0..<4) == 0 {
-            throw UpdateError.pauseFileExist
-        }
         if let loudsTxt3FileCount {
             for i in  0 ..< loudsTxt3FileCount {
                 try overwrite(
