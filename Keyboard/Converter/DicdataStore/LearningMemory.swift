@@ -27,8 +27,8 @@ private struct MetadataElement: CustomDebugStringConvertible {
 /// 長期記憶用の構造体
 struct LongTermLearningMemory {
     static let directoryURL = (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-    private static var read2FileURL: URL {
-        directoryURL.appendingPathComponent(".read2", isDirectory: false)
+    private static var pauseFileURL: URL {
+        directoryURL.appendingPathComponent(".pause", isDirectory: false)
     }
     private static func loudsFileURL(asTemporaryFile: Bool) -> URL {
         if asTemporaryFile {
@@ -77,7 +77,7 @@ struct LongTermLearningMemory {
     /// 学習が壊れた状態にあるか判定する関数
     ///  - note: 壊れている場合、一時的に学習をオフにすると良い。
     static func memoryCollapsed() -> Bool {
-        fileExist(read2FileURL)
+        fileExist(pauseFileURL)
     }
 
     static var txtFileSplit: Int { 2048 }
@@ -185,8 +185,8 @@ struct LongTermLearningMemory {
                     || file.path.hasSuffix(".loudschars2.2")
                     || file.path.hasSuffix(".memorymetadata.2")
                     || file.path.hasSuffix(".louds.2")
-                    // .read2ファイル
-                    || file.path.hasSuffix(".read2")
+                    // .pauseファイル
+                    || file.path.hasSuffix(".pause")
                     // 古い学習機能のデータファイル
                     || file.path.hasSuffix("learningMemory.txt")
             ) {
@@ -197,8 +197,8 @@ struct LongTermLearningMemory {
 
     /// 一時記憶と長期記憶の学習データをマージする
     static func merge(tempTrie: TemporalLearningMemoryTrie) throws {
-        // MARK: `.read2`ファイルが存在する場合、`merge`を行う前に`.2`ファイルの復活を試み、失敗した場合は`merge`を諦める。
-        if fileExist(read2FileURL) {
+        // MARK: `.pause`ファイルが存在する場合、`merge`を行う前に`.2`ファイルの復活を試み、失敗した場合は`merge`を諦める。
+        if fileExist(pauseFileURL) {
             debug("LongTermLearningMemory merge collapsion detected, trying recovery...")
             try overwriteTempFiles(
                 loudsFileTemp: nil,
@@ -312,31 +312,31 @@ struct LongTermLearningMemory {
     }
 
     enum UpdateError: Error {
-        /// `.read2`が存在するため更新を停止する場合
-        case read2FileExist
+        /// `.pause`が存在するため更新を停止する場合
+        case pauseFileExist
     }
 
     /// ファイルを安全に書き出すため、以下の手順を取る
     ///
     /// 1. 各ファイルを`memory.louds.2`のように書き出す
-    /// 2. `.read2`を書き出す
+    /// 2. `.pause`を書き出す
     /// 3. それぞれの`.2`を元ファイルの位置にコピーする
-    /// 4. `.read2`を削除する
+    /// 4. `.pause`を削除する
     ///
     /// このとき、読み出し側では
-    /// * `.read2`がない場合、`.2`のつかないファイルを読み出す。
-    /// * `.read2`がある場合、適当なタイミングで上記ステップの`3`以降を再実行する。また、`.read2`がある場合、学習機能を停止する。
+    /// * `.pause`がない場合、`.2`のつかないファイルを読み出す。
+    /// * `.pause`がある場合、適当なタイミングで上記ステップの`3`以降を再実行する。また、`.pause`がある場合、学習機能を停止する。
     ///
-    /// 上記手順では`.read2`がない間は`.2`のつかないファイルが整合性を保っており、`.read2`がある場合は`.2`のつくファイルが整合性を保っているため、常に整合性を保ったファイルを維持することができる。
+    /// 上記手順では`.pause`がない間は`.2`のつかないファイルが整合性を保っており、`.pause`がある場合は`.2`のつくファイルが整合性を保っているため、常に整合性を保ったファイルを維持することができる。
     ///
     /// 例えば1のステップの実行中にエラーが生じた場合、次回キーボードを開いた際は単に更新前のファイルを読み込む。
     ///
     /// 3のステップの実行中にエラーが生じた場合、次回キーボードを開いた際は学習を停止状態にする。ついで閉じる際に再度ステップ3を実行することで、安全に全てのファイルを更新することができる。
     static func update(trie: TemporalLearningMemoryTrie) throws {
-        // MARK: `.read2`の存在を確認し、存在していれば失敗させる
+        // MARK: `.pause`の存在を確認し、存在していれば失敗させる
         // この場合、先に復活作業を実施すべきである
-        guard !fileExist(read2FileURL) else {
-            throw UpdateError.read2FileExist
+        guard !fileExist(pauseFileURL) else {
+            throw UpdateError.pauseFileExist
         }
 
         // MARK: 各ファイルを`.2`で書き出す
@@ -399,8 +399,8 @@ struct LongTermLearningMemory {
             }
         }
 
-        // MARK: `.read2`ファイルを書き出す
-        try Data().write(to: read2FileURL)
+        // MARK: `.pause`ファイルを書き出す
+        try Data().write(to: pauseFileURL)
 
         // MARK: 各`.2`のファイルで元のファイルを上書きする
         try overwriteTempFiles(
@@ -408,12 +408,12 @@ struct LongTermLearningMemory {
             loudsCharsFileTemp: loudsCharsFileTemp,
             metadataFileTemp: metadataFileTemp,
             loudsTxt3FileCount: loudsTxt3FileCount,
-            // MARK: 成功の場合、`.read2`ファイルも削除する
+            // MARK: 成功の場合、`.pause`ファイルも削除する
             removingRead2File: true
         )
     }
 
-    /// - note: 上書きが全て成功するまで、一時ファイルは削除してはいけない。安全のため、`.read2`を除きそもそも一時ファイルを一切削除しないようにする。
+    /// - note: 上書きが全て成功するまで、一時ファイルは削除してはいけない。安全のため、`.pause`を除きそもそも一時ファイルを一切削除しないようにする。
     private static func overwriteTempFiles(loudsFileTemp: URL?, loudsCharsFileTemp: URL?, metadataFileTemp: URL?, loudsTxt3FileCount: Int?, removingRead2File: Bool) throws {
         try overwrite(
             from: loudsCharsFileTemp ?? loudsCharsFileURL(asTemporaryFile: true),
@@ -424,7 +424,7 @@ struct LongTermLearningMemory {
             to: metadataFileURL(asTemporaryFile: false)
         )
         if Int.random(in: 0..<4) == 0 {
-            throw UpdateError.read2FileExist
+            throw UpdateError.pauseFileExist
         }
         if let loudsTxt3FileCount {
             for i in  0 ..< loudsTxt3FileCount {
@@ -447,7 +447,7 @@ struct LongTermLearningMemory {
             to: loudsFileURL(asTemporaryFile: false)
         )
         if removingRead2File {
-            try FileManager.default.removeItem(at: read2FileURL)
+            try FileManager.default.removeItem(at: pauseFileURL)
         }
     }
 }
