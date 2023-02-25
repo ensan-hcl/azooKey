@@ -117,6 +117,8 @@ final class KeyboardViewController: UIInputViewController {
         debug("viewDidAppear")
         // キーボードタイプはviewDidAppearのタイミングで取得できる
         VariableStates.shared.setKeyboardType(self.textDocumentProxy.keyboardType)
+        // フルアクセスの状態を反映する
+        VariableStates.shared.boolStates.hasFullAccess = self.hasFullAccess
         // ロード済みのインスタンスの数が増えすぎるとパフォーマンスに悪影響があるので、適当なところで強制終了する
         // viewDidAppearで強制終了すると再ロードが自然な形で実行される
         if KeyboardViewController.loadedInstanceCount > 15 {
