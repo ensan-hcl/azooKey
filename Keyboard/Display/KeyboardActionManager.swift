@@ -79,7 +79,7 @@ final class KeyboardActionManager: UserActionManager {
             self.inputManager.deleteBackward(count: count, requireSetResult: requireSetResult)
 
         case .smoothDelete:
-            Sound.smoothDelete()
+            KeyboardFeedback.smoothDelete()
             self.showResultView()
             self.inputManager.smoothDelete(requireSetResult: requireSetResult)
 

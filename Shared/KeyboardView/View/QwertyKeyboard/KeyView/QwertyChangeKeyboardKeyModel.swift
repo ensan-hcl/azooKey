@@ -88,6 +88,6 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
     }
 
     func sound() {
-        Sound.tabOrOtherKey()
+        KeyboardFeedback.tabOrOtherKey()
     }
 }

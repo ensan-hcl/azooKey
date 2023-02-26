@@ -200,7 +200,7 @@
 		1A65C00B250B800E00F297BF /* LatticeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A65C00A250B800E00F297BF /* LatticeNode.swift */; };
 		1A67360625092C1E003FC654 /* DicdataElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67360525092C1E003FC654 /* DicdataElement.swift */; };
 		1A67360A250AFBCB003FC654 /* Wareki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A673609250AFBCB003FC654 /* Wareki.swift */; };
-		1A677370256F7AC30037AF22 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* Sound.swift */; };
+		1A677370256F7AC30037AF22 /* KeyboardFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* KeyboardFeedback.swift */; };
 		1A6F959725144481007399AC /* QwertyKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6F959625144481007399AC /* QwertyKeyboardView.swift */; };
 		1A70DFFD291F2D1E00A83849 /* CustardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A70DFFC291F2D1E00A83849 /* CustardKit */; };
 		1A70DFFF291F2D3B00A83849 /* CustardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A70DFFE291F2D3B00A83849 /* CustardKit */; };
@@ -403,7 +403,7 @@
 		1AF6799525CEDBB500F3987B /* FlickKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21C2500D5E4002CAA93 /* FlickKeyModel.swift */; };
 		1AF6799625CEDBB500F3987B /* FlickEnterKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC21E2500D5F2002CAA93 /* FlickEnterKeyModel.swift */; };
 		1AF6799B25CEDBC000F3987B /* Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC8A593259587A200B71E5A /* Design.swift */; };
-		1AF6799C25CEDBC000F3987B /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* Sound.swift */; };
+		1AF6799C25CEDBC000F3987B /* KeyboardFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A67736F256F7AC30037AF22 /* KeyboardFeedback.swift */; };
 		1AF679A125CEDC3A00F3987B /* FlickDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20D2500D55F002CAA93 /* FlickDataProvider.swift */; };
 		1AF679AD25CEE66F00F3987B /* KeyboardPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF679AC25CEE66F00F3987B /* KeyboardPreview.swift */; };
 		1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AC03158251103EF004CA505 /* Designs.xcassets */; };
@@ -600,7 +600,7 @@
 		1A65C00A250B800E00F297BF /* LatticeNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatticeNode.swift; sourceTree = "<group>"; };
 		1A67360525092C1E003FC654 /* DicdataElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DicdataElement.swift; sourceTree = "<group>"; };
 		1A673609250AFBCB003FC654 /* Wareki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wareki.swift; sourceTree = "<group>"; };
-		1A67736F256F7AC30037AF22 /* Sound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
+		1A67736F256F7AC30037AF22 /* KeyboardFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardFeedback.swift; sourceTree = "<group>"; };
 		1A6F959625144481007399AC /* QwertyKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyKeyboardView.swift; sourceTree = "<group>"; };
 		1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabWalkthrough.swift; sourceTree = "<group>"; };
 		1A7D00D2292A34EB00F06B35 /* extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension String.swift"; sourceTree = "<group>"; };
@@ -1512,7 +1512,7 @@
 				1AB8C38C25E1190900D39BC5 /* TabManager.swift */,
 				1AF678F525CED91900F3987B /* UserActionManager.swift */,
 				1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */,
-				1A67736F256F7AC30037AF22 /* Sound.swift */,
+				1A67736F256F7AC30037AF22 /* KeyboardFeedback.swift */,
 				1AC8A593259587A200B71E5A /* Design.swift */,
 				1A6F958425144419007399AC /* View */,
 			);
@@ -1759,7 +1759,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AF6799C25CEDBC000F3987B /* Sound.swift in Sources */,
+				1AF6799C25CEDBC000F3987B /* KeyboardFeedback.swift in Sources */,
 				1AC031612512129A004CA505 /* Store.swift in Sources */,
 				1AF6798825CEDBAE00F3987B /* SuggestView.swift in Sources */,
 				1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */,
@@ -2111,7 +2111,7 @@
 				1AC0315B2511C291004CA505 /* RegisteredNodeProtocol.swift in Sources */,
 				1A3DC21D2500D5E4002CAA93 /* FlickKeyModel.swift in Sources */,
 				1A2C2FE128DA11D00001A0BB /* ComposingText.swift in Sources */,
-				1A677370256F7AC30037AF22 /* Sound.swift in Sources */,
+				1A677370256F7AC30037AF22 /* KeyboardFeedback.swift in Sources */,
 				1AFA57542582EFAE00477DC2 /* QwertyAaKeyModel.swift in Sources */,
 				1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */,
 				1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */,

@@ -54,6 +54,6 @@ struct QwertyTabKeyModel: QwertyKeyModelProtocol {
     }
 
     func sound() {
-        Sound.tabOrOtherKey()
+        KeyboardFeedback.tabOrOtherKey()
     }
 }

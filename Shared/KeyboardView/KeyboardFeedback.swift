@@ -1,17 +1,24 @@
 //
-//  Sound.swift
+//  KeyboardFeedback.swift
 //  Keyboard
 //
 //  Created by ensan on 2020/11/26.
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
-import AudioToolbox
+import func AudioToolbox.AudioServicesPlaySystemSound
 import Foundation
+import class UIKit.UIImpactFeedbackGenerator
 
-/// 音を鳴らすためのツールセット
-enum Sound {
+/// フィードバックを返すためのツールセット
+enum KeyboardFeedback {
     @KeyboardSetting(.enableKeySound) private static var enableSound
+    @KeyboardSetting(.enableKeyHaptics) private static var requestedHaptics
+    private static var enableHaptics: Bool {
+        VariableStates.shared.boolStates.hasFullAccess && requestedHaptics
+    }
+    private static let generator = UIImpactFeedbackGenerator(style: .light)
+
     // 使えそうな音
     /* i
      1103: 高いクリック音
@@ -27,19 +34,25 @@ enum Sound {
      1318まで試した
      */
 
-    /// 入力を伴う操作を行う際に音を鳴らします。
+    /// 入力を伴う操作を行う際にフィードバックを返します。
     /// - Note: 押しはじめに鳴らす方が反応が良く感じます。
     static func click() {
         if enableSound {
             AudioServicesPlaySystemSound(1104)
         }
+        if enableHaptics {
+            generator.impactOccurred(intensity: 0.7)
+        }
     }
 
-    /// タブの移動、入力の確定、小仮名濁点化、カーソル移動などを伴う操作を行う際に音を鳴らします。
+    /// タブの移動、入力の確定、小仮名濁点化、カーソル移動などを伴う操作を行う際にフィードバックを返します。
     /// - Note: 押しはじめに鳴らす方が反応が良く感じます。
     static func tabOrOtherKey() {
         if enableSound {
             AudioServicesPlaySystemSound(1156)
+        }
+        if enableHaptics {
+            generator.impactOccurred(intensity: 0.75)
         }
     }
 
@@ -49,19 +62,28 @@ enum Sound {
         if enableSound {
             AudioServicesPlaySystemSound(1155)
         }
+        if enableHaptics {
+            generator.impactOccurred(intensity: 0.75)
+        }
     }
 
-    /// 文字の一括削除の操作を行う際に音を鳴らします。
+    /// 文字の一括削除の操作を行う際にフィードバックを返します。
     static func smoothDelete() {
         if enableSound {
             AudioServicesPlaySystemSound(1105)
         }
+        if enableHaptics {
+            generator.impactOccurred(intensity: 0.8)
+        }
     }
 
-    /// 操作のリセットを行うときに音を鳴らします。
+    /// 操作のリセットを行うときにフィードバックを返します。
     static func reset() {
         if enableSound {
             AudioServicesPlaySystemSound(1533)
+        }
+        if enableHaptics {
+            generator.impactOccurred(intensity: 1)
         }
     }
 }

@@ -38,6 +38,6 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol {
     }
 
     func sound() {
-        Sound.click()
+        KeyboardFeedback.click()
     }
 }

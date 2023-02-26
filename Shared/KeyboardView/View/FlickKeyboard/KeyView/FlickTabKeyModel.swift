@@ -52,6 +52,6 @@ struct FlickTabKeyModel: FlickKeyModelProtocol {
     }
 
     func sound() {
-        Sound.tabOrOtherKey()
+        KeyboardFeedback.tabOrOtherKey()
     }
 }

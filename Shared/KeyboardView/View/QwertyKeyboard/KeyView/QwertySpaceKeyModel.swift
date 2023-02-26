@@ -33,6 +33,6 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol {
     }
 
     func sound() {
-        Sound.click()
+        KeyboardFeedback.click()
     }
 }

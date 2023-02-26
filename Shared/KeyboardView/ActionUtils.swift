@@ -88,13 +88,13 @@ extension ActionType {
     func sound() {
         switch self {
         case .input:
-            Sound.click()
+            KeyboardFeedback.click()
         case .delete:
-            Sound.delete()
+            KeyboardFeedback.delete()
         case .smoothDelete, .smartDelete, .smartMoveCursor:
-            Sound.smoothDelete()
+            KeyboardFeedback.smoothDelete()
         case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState/*, ._setBoolState*/:
-            Sound.tabOrOtherKey()
+            KeyboardFeedback.tabOrOtherKey()
         case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
         case let .boolSwitch(compiledExpression, trueAction, falseAction):

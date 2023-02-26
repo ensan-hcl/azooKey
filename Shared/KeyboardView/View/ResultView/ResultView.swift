@@ -114,7 +114,7 @@ struct ResultView<Candidate: ResultViewItemData>: View {
                                         ForEach(results, id: \.id) {(data: ResultData<Candidate>) in
                                             if data.candidate.inputable {
                                                 Button(data.candidate.text) {
-                                                    Sound.click()
+                                                    KeyboardFeedback.click()
                                                     self.pressed(candidate: data.candidate)
                                                 }
                                                 .buttonStyle(ResultButtonStyle(height: buttonHeight))
