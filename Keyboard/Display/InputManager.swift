@@ -644,7 +644,7 @@ final class InputManager {
         VariableStates.shared.setEnterKeyState(.complete)
     }
 
-    // ユーザがキーボードを経由せずカットした場合の処理
+    /// ユーザがキーボードを経由せずカットした場合の処理
     func userCutText(text: String) {
         self.clear()
     }
@@ -695,7 +695,7 @@ final class InputManager {
         VariableStates.shared.setEnterKeyState(.edit)
     }
 
-    // 選択を解除した場合、clearとみなす
+    /// 選択を解除した場合、clearを行う
     func userDeselectedText() {
         self.clear()
         VariableStates.shared.setEnterKeyState(.return)

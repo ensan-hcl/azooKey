@@ -16,6 +16,7 @@ final class VariableStates: ObservableObject {
     static let shared = VariableStates()
     private(set) var inputStyle: InputStyle = .direct
     private(set) var tabManager = TabManager()
+    private(set) var clipboardHistoryManager = ClipboardHistoryManager()
 
     private init() {}
 
@@ -136,6 +137,10 @@ final class VariableStates: ObservableObject {
 
     func closeKeyboard() {
         self.tabManager.closeKeyboard()
+        // このタイミングでクリップボードを確認する
+        self.clipboardHistoryManager.checkUpdate()
+        // 保存処理を行う
+        self.clipboardHistoryManager.save()
     }
 
     func refreshView() {

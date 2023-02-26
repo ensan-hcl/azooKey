@@ -155,6 +155,11 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard)
             case let .custard(custard):
                 CustomKeyboardView(custard: custard)
+            case let .special(tab):
+                switch tab {
+                case .clipboard_history_tab:
+                    ClipboardHistoryTab()
+                }
             }
         }
     }

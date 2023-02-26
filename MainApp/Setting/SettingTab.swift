@@ -32,6 +32,7 @@ struct SettingTabView: View {
                     }
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
+                        BoolSettingView(.enableClipboardHistoryManagerTab)
                     }
                     Section(header: Text("カーソルバー")) {
                         BoolSettingView(.useBetaMoveCursorBar)

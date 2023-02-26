@@ -35,6 +35,8 @@ extension TabData {
                 return .user_dependent(.english)
             case .last_tab:
                 return .last_tab
+            case .__clipboard_history_tab:
+                return .existential(.special(.clipboard_history_tab))
             }
         case let .custom(identifier):
             if let custard = try? CustardManager.load().custard(identifier: identifier) {

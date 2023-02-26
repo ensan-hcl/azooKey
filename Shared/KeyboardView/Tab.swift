@@ -23,6 +23,7 @@ enum Tab: Equatable {
         case qwerty_number
         case qwerty_symbols
         case custard(Custard)
+        case special(SpecialTab)
 
         public static func == (lhs: ExistentialTab, rhs: ExistentialTab) -> Bool {
             switch (lhs, rhs) {
@@ -62,6 +63,9 @@ enum Tab: Equatable {
                 case .pcStyle:
                     return .qwerty
                 }
+            case .special:
+                // FIXME: 仮置き
+                return .flick
             }
         }
 
@@ -86,8 +90,14 @@ enum Tab: Equatable {
                 }
             case .flick_numbersymbols, .qwerty_number, .qwerty_symbols:
                 return nil
+            case .special:
+                return nil
             }
         }
+    }
+
+    enum SpecialTab: Equatable {
+        case clipboard_history_tab
     }
 
     enum UserDependentTab: Equatable {
