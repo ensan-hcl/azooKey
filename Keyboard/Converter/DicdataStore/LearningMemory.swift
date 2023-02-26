@@ -624,14 +624,15 @@ final class LearningManager {
             debug("LearningManager init: Memory Collapsed")
         }
         if MemoryResetCondition.shouldReset() {
-            try? LongTermLearningMemory.reset()
+            self.reset()
         }
         if !options.learningType.needUsingMemory {
             return
         }
     }
 
-    func setRequestOptions(options: ConvertRequestOptions) {
+    /// - Returns: Whether cache should be reseted or not.
+    func setRequestOptions(options: ConvertRequestOptions) -> Bool {
         self.options = options
         LongTermLearningMemory.maxMemoryCount = options.maxMemoryCount
 
@@ -643,8 +644,10 @@ final class LearningManager {
 
         // リセットチェックも実施
         if MemoryResetCondition.shouldReset() {
-            try? LongTermLearningMemory.reset()
+            self.reset()
+            return true
         }
+        return false
     }
 
     func temporaryPerfectMatch(charIDs: [UInt8]) -> [DicdataElement] {
@@ -786,6 +789,10 @@ final class LearningManager {
 
     func reset() {
         self.temporaryMemory = TemporalLearningMemoryTrie()
-        try? LongTermLearningMemory.reset()
+        do {
+            try LongTermLearningMemory.reset()
+        } catch {
+            debug("LearningManager reset failed", error)
+        }
     }
 }
