@@ -32,7 +32,7 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol {
         }
     }
 
-    func sound() {
+    func feedback() {
         KeyboardFeedback.click()
     }
 }

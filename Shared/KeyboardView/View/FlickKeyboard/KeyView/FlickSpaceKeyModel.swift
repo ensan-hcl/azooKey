@@ -47,8 +47,8 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol {
         theme.specialKeyFillColor.color
     }
 
-    func sound() {
-        self.pressActions.first?.sound()
+    func feedback() {
+        self.pressActions.first?.feedback()
     }
 
 }

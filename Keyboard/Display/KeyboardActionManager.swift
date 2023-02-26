@@ -256,14 +256,14 @@ final class KeyboardActionManager: UserActionManager {
         let startTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
             let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
             if span > 0.4 {
-                action.repeat.first?.sound()
+                action.repeat.first?.feedback()
                 self?.registerActions(action.repeat)
             }
         })
         self.timers.append((type: action, timer: startTimer))
 
         let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
-            action.start.first?.sound()
+            action.start.first?.feedback()
             self?.registerActions(action.start)
         })
         self.timers.append((type: action, timer: repeatTimer))

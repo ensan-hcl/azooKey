@@ -50,14 +50,14 @@ protocol SimpleKeyModelProtocol {
     var pressActions: [ActionType] {get}
     var longPressActions: LongpressActionType {get}
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
-    func sound()
+    func feedback()
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
 }
 
 extension SimpleKeyModelProtocol {
-    func sound() {
-        self.pressActions.first?.sound()
+    func feedback() {
+        self.pressActions.first?.feedback()
     }
 
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {

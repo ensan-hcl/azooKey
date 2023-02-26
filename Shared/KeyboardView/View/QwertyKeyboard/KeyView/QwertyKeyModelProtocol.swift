@@ -91,7 +91,7 @@ protocol QwertyKeyModelProtocol {
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
 
-    func sound()
+    func feedback()
 }
 
 extension QwertyKeyModelProtocol {

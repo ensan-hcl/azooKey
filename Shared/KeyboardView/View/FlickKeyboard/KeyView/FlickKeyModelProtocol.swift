@@ -46,7 +46,7 @@ protocol FlickKeyModelProtocol {
     func suggestStateChanged(_ type: SuggestState)
 
     func flickSensitivity(to direction: FlickDirection) -> CGFloat
-    func sound()
+    func feedback()
 
 }
 

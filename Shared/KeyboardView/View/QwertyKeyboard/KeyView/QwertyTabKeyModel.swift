@@ -53,7 +53,7 @@ struct QwertyTabKeyModel: QwertyKeyModelProtocol {
         }
     }
 
-    func sound() {
+    func feedback() {
         KeyboardFeedback.tabOrOtherKey()
     }
 }

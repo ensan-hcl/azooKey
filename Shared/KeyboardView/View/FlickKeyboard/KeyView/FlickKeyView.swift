@@ -60,7 +60,7 @@ struct FlickKeyView: View {
                     // 押し始めの時間を記録する。
                     pressState = .started(Date())
                     self.startLocation = value.startLocation
-                    self.model.sound()
+                    self.model.feedback()
                     withAnimation(suggestAnimation) {
                         // サジェストが必要な設定なら
                         if self.model.needSuggestView && self.model.longPressActions == .none {

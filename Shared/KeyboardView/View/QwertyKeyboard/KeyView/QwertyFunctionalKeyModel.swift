@@ -34,8 +34,8 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol {
         KeyLabel(self.labelType, width: width, textColor: color)
     }
 
-    func sound() {
-        self.pressActions.first?.sound()
+    func feedback() {
+        self.pressActions.first?.feedback()
     }
 
 }

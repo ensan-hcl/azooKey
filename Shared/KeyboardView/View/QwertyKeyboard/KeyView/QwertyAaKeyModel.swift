@@ -38,7 +38,7 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
 
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
-    func sound() {
+    func feedback() {
         KeyboardFeedback.tabOrOtherKey()
     }
 
