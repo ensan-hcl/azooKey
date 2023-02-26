@@ -41,7 +41,7 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol {
 
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .enter
 
-    func sound() {
+    func feedback() {
         switch VariableStates.shared.enterKeyState {
         case .complete, .edit:
             KeyboardFeedback.tabOrOtherKey()

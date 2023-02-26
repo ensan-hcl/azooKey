@@ -43,7 +43,7 @@ struct SimpleKeyView: View {
                         TouchDownAndTouchUpGestureView {
                             isPressed = true
                             pressStartDate = Date()
-                            model.sound()
+                            model.feedback()
                             action.reserveLongPressAction(self.model.longPressActions)
                         } touchMovedCallBack: {state in
                             if state.distance > 15 {

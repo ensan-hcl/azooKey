@@ -53,7 +53,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol {
         }
     }
 
-    func sound() {
+    func feedback() {
         switch VariableStates.shared.enterKeyState {
         case .complete, .edit:
             KeyboardFeedback.tabOrOtherKey()

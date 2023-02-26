@@ -51,7 +51,7 @@ struct FlickTabKeyModel: FlickKeyModelProtocol {
         return theme.specialKeyFillColor.color
     }
 
-    func sound() {
+    func feedback() {
         KeyboardFeedback.tabOrOtherKey()
     }
 }

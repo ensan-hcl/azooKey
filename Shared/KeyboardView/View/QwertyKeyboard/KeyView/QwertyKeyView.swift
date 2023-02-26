@@ -59,7 +59,7 @@ struct QwertyKeyView: View {
                 self.suggest = true
                 switch self.pressState {
                 case .unpressed:
-                    self.model.sound()
+                    self.model.feedback()
                     self.pressState = .started(Date())
                     self.action.reserveLongPressAction(self.model.longPressActions)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {

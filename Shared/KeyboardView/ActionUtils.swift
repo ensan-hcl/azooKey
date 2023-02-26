@@ -85,7 +85,7 @@ extension CodableLongpressActionData {
 }
 
 extension ActionType {
-    func sound() {
+    func feedback() {
         switch self {
         case .input:
             KeyboardFeedback.click()
@@ -100,9 +100,9 @@ extension ActionType {
         case let .boolSwitch(compiledExpression, trueAction, falseAction):
             if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
                 if condition {
-                    trueAction.first?.sound()
+                    trueAction.first?.feedback()
                 } else {
-                    falseAction.first?.sound()
+                    falseAction.first?.feedback()
                 }
             }
         #if DEBUG
