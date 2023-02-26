@@ -37,10 +37,17 @@ struct SettingTabView: View {
                         BoolSettingView(.useBetaMoveCursorBar)
                         FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
-                    // TODO: Localize
-                    Section(header: Text("サウンドと触覚")) {
-                        BoolSettingView(.enableKeySound)
-                        BoolSettingView(.enableKeyHaptics)
+                    // デバイスが触覚フィードバックをサポートしている場合のみ表示する
+                    if Store.shared.hapticsEnabled {
+                        // TODO: Localize
+                        Section(header: Text("サウンドと振動")) {
+                            BoolSettingView(.enableKeySound)
+                            BoolSettingView(.enableKeyHaptics)
+                        }
+                    } else {
+                        Section(header: Text("サウンド")) {
+                            BoolSettingView(.enableKeySound)
+                        }
                     }
                     Section(header: Text("表示")) {
                         FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)

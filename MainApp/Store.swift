@@ -8,12 +8,14 @@
 
 import Foundation
 import SwiftUI
+import class CoreHaptics.CHHapticEngine
 
 final class Store {
     static let shared = Store()
     static var variableSection = StoreVariableSection()
     var feedbackGenerator = UINotificationFeedbackGenerator()
     var messageManager = MessageManager()
+    var hapticsEnabled = false
 
     init() {
         SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(DeviceName.shared.needsInputSwitchKey())
@@ -23,6 +25,7 @@ final class Store {
         }
         SharedStore.setInitialAppVersion()
         SharedStore.setLastAppVersion()
+        self.hapticsEnabled = CHHapticEngine.capabilitiesForHardware().supportsHaptics
     }
 
     func noticeReloadUserDict() {
