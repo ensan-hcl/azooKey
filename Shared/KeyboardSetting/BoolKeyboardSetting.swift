@@ -110,7 +110,8 @@ extension KeyboardSettingKey where Self == MemoryResetFlag {
 }
 
 struct EnableKeySound: BoolKeyboardSettingKey {
-    static let title: LocalizedStringKey = "キー音のON/OFF"
+    // TODO: Localize
+    static let title: LocalizedStringKey = "キーの音"
     static let explanation: LocalizedStringKey = "キーを押した際に音を鳴らします♪"
     static let defaultValue = false
     static let key: String = "sound_enable_setting"
@@ -118,6 +119,21 @@ struct EnableKeySound: BoolKeyboardSettingKey {
 
 extension KeyboardSettingKey where Self == EnableKeySound {
     static var enableKeySound: Self { .init() }
+}
+
+// TODO: Localize
+/// キーボードの触覚フィードバックを有効化する設定
+/// - note: この機能はフルアクセスがないと実現できない
+struct EnableKeyHaptics: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "振動フィードバック"
+    static let explanation: LocalizedStringKey = "キーを押した際に端末を振動させます。"
+    static let defaultValue = false
+    static let key: String = "enable_key_haptics"
+    static let requireFullAccess: Bool = true
+}
+
+extension KeyboardSettingKey where Self == EnableKeyHaptics {
+    static var enableKeyHaptics: Self { .init() }
 }
 
 struct UseOSUserDict: BoolKeyboardSettingKey {

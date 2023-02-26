@@ -52,9 +52,16 @@ protocol KeyboardSettingKey {
     static var title: LocalizedStringKey { get }
     static var explanation: LocalizedStringKey { get }
     static var value: Value { get set }
+    static var requireFullAccess: Bool { get }
 }
 
 protocol StoredInUserDefault {
     associatedtype Value
     static var key: String { get }
+}
+
+extension KeyboardSettingKey {
+    static var requireFullAccess: Bool {
+        false
+    }
 }

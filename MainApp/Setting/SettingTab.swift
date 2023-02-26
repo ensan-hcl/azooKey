@@ -37,8 +37,10 @@ struct SettingTabView: View {
                         BoolSettingView(.useBetaMoveCursorBar)
                         FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
-                    Section(header: Text("サウンド")) {
+                    // TODO: Localize
+                    Section(header: Text("サウンドと触覚")) {
                         BoolSettingView(.enableKeySound)
+                        BoolSettingView(.enableKeyHaptics)
                     }
                     Section(header: Text("表示")) {
                         FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)
