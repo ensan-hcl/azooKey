@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ensan-hcl/CustardKit",
       "state" : {
-        "branch" : "release/1.1",
-        "revision" : "f753ee2f79cca55f48f081a2fc6a37d365475795"
+        "branch" : "main",
+        "revision" : "3747b30b48e5b82855d1ebb68c6f6f47da32b4b4"
       }
     },
     {
