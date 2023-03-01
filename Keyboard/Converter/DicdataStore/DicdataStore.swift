@@ -77,7 +77,11 @@ final class DicdataStore {
             self.osUserDict = osUserDict
         case let .setRequestOptions(value):
             self.requestOptions = value
-            self.learningManager.setRequestOptions(options: value)
+            let shouldReset = self.learningManager.setRequestOptions(options: value)
+            if shouldReset {
+                self.loudses.removeValue(forKey: "memory")
+                self.importedLoudses.remove("memory")
+            }
         }
     }
 

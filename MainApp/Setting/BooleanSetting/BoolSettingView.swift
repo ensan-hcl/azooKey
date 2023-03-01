@@ -10,7 +10,12 @@ import SwiftUI
 
 struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
     init(_ key: SettingKey) {}
+    private enum AlertMessage {
+        case `default`
+        case message(LocalizedStringKey)
+    }
     @State private var isOn = false
+    @State private var alertMessage = AlertMessage.default
     @State private var setting = SettingUpdater<SettingKey>()
 
     private var toggle: some View {
@@ -46,24 +51,45 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
         .onAppear {
             setting.reload()
         }
-        .alert(isPresented: $isOn) {
-            // TODO: Localize
-            if disabled, let url = URL(string: UIApplication.openSettingsURLString) {
-                return Alert(
-                    title: Text(SettingKey.explanation),
-                    message: Text("この機能にはフルアクセスが必要です。この機能を使いたい場合は、「設定」>「キーボード」でフルアクセスを有効にしてください。"),
-                    primaryButton: .cancel {
-                        isOn = false
-                    },
-                    secondaryButton: .default(Text("「設定」アプリを開く")) {
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                        isOn = false
-                    }
-                )
+        .onChange(of: setting.value) { newValue in
+            if newValue {
+                if let message = SettingKey.onEnabled() {
+                    self.alertMessage = .message(message)
+                    self.isOn = true
+                }
             } else {
+                SettingKey.onDisabled()
+            }
+        }
+        .alert(isPresented: $isOn) {
+            switch self.alertMessage {
+            case .default:
+                // TODO: Localize
+                if disabled, let url = URL(string: UIApplication.openSettingsURLString) {
+                    return Alert(
+                        title: Text(SettingKey.explanation),
+                        message: Text("この機能にはフルアクセスが必要です。この機能を使いたい場合は、「設定」>「キーボード」でフルアクセスを有効にしてください。"),
+                        primaryButton: .cancel {
+                            isOn = false
+                        },
+                        secondaryButton: .default(Text("「設定」アプリを開く")) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            isOn = false
+                        }
+                    )
+                } else {
+                    return Alert(
+                        title: Text(SettingKey.explanation),
+                        dismissButton: .default(Text("OK")) {
+                            isOn = false
+                        }
+                    )
+                }
+            case let .message(message):
                 return Alert(
-                    title: Text(SettingKey.explanation),
+                    title: Text(message),
                     dismissButton: .default(Text("OK")) {
+                        self.alertMessage = .default
                         isOn = false
                     }
                 )

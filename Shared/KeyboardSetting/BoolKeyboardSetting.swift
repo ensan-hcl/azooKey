@@ -9,8 +9,12 @@
 import Foundation
 import SwiftUI
 
-protocol BoolKeyboardSettingKey: KeyboardSettingKey, StoredInUserDefault where Value == Bool {}
-
+protocol BoolKeyboardSettingKey: KeyboardSettingKey, StoredInUserDefault where Value == Bool {
+    /// 有効化時に実行される処理
+    static func onEnabled() -> LocalizedStringKey?
+    /// 無効化時に実行される処理
+    static func onDisabled()
+}
 extension StoredInUserDefault where Value == Bool {
     static func get() -> Value? {
         let object = SharedStore.userDefaults.object(forKey: key)
@@ -22,6 +26,9 @@ extension StoredInUserDefault where Value == Bool {
 }
 
 extension BoolKeyboardSettingKey {
+    static func onEnabled() -> LocalizedStringKey? { nil }
+    static func onDisabled() {}
+
     static var value: Value {
         get {
             get() ?? defaultValue
@@ -178,4 +185,45 @@ struct StopLearningWhenSearch: BoolKeyboardSettingKey {
 
 extension KeyboardSettingKey where Self == StopLearningWhenSearch {
     static var stopLearningWhenSearch: Self { .init() }
+}
+
+// TODO: Localize
+/// クリップボード履歴マネージャを有効化する設定
+/// - note: この機能はフルアクセスがないと実現できない
+struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "クリップボードの履歴を保存"
+    static let explanation: LocalizedStringKey = "コピーした文字列の履歴を保存し、専用のタブから入力できるようにします。"
+    static let defaultValue = false
+    static let key: String = "enable_clipboard_history_manager_tab"
+    static let requireFullAccess: Bool = true
+    static func onEnabled() -> LocalizedStringKey? {
+        do {
+            var manager = CustardManager.load()
+            var tabBarData = (try? manager.tabbar(identifier: 0)) ?? .default
+            if !tabBarData.items.contains(where: {$0.actions == [.moveTab(.system(.__clipboard_history_tab))]}) {
+                tabBarData.items.append(TabBarItem(label: .text("コピー履歴"), actions: [.moveTab(.system(.__clipboard_history_tab))]))
+            }
+            try manager.saveTabBarData(tabBarData: tabBarData)
+            return "タブバーに「コピー履歴」ボタンを追加しました。"
+        } catch {
+            debug("EnableClipboardHistoryManagerTab onEnabled", error)
+            return nil
+        }
+    }
+    static func onDisabled() {
+        do {
+            var manager = CustardManager.load()
+            var tabBarData = (try? manager.tabbar(identifier: 0)) ?? .default
+            tabBarData.items.removeAll {
+                $0.actions == [.moveTab(.system(.__clipboard_history_tab))]
+            }
+            try manager.saveTabBarData(tabBarData: tabBarData)
+        } catch {
+            debug("EnableClipboardHistoryManagerTab onEnabled", error)
+        }
+    }
+}
+
+extension KeyboardSettingKey where Self == EnableClipboardHistoryManagerTab {
+    static var enableClipboardHistoryManagerTab: Self { .init() }
 }
