@@ -169,16 +169,6 @@ struct OpenSourceSoftWaresLicenseView: View {
                         destination: "https://github.com/ensan-hcl/CustardKit"
                     )
                 }
-
-                Section {
-                    Text("YMTGetDeviceName").font(.title).padding()
-                    Text("本アプリケーションはデバイスが地球儀ボタンを表示すべき端末であるか判定するために。YMTGetDeviceNameを使用しています。")
-                    FallbackLink("License", destination: "https://github.com/MasamiYamate/YMTGetDeviceName/blob/master/LICENSE")
-                    FallbackLink(
-                        "YMTGetDeviceName",
-                        destination: "https://github.com/MasamiYamate/YMTGetDeviceName"
-                    )
-                }
                 Group {
                     Section {
                         Text("Swift Algorithms").font(.title).padding()
