@@ -91,7 +91,7 @@ enum Tab: Equatable {
             case .flick_numbersymbols, .qwerty_number, .qwerty_symbols:
                 return nil
             case .special:
-                return nil
+                return KeyboardLanguage.none
             }
         }
     }

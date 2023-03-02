@@ -80,7 +80,7 @@ struct ClipboardHistoryTab: View {
                             Label("入力する", systemImage: "text.badge.plus")
                         }
                         Button {
-                            UIPasteboard.general.setValue(string, forPasteboardType: "public.text")
+                            UIPasteboard.general.string = string
                         } label: {
                             Label("コピーする", systemImage: "doc.on.doc")
                         }
@@ -208,18 +208,23 @@ private struct RichLinkView: UIViewRepresentable {
     var options: [MetadataOption] = []
 
     func makeUIView(context: UIViewRepresentableContext<Self>) -> UIViewType {
-        UIViewType(url: url)
+        if let cachedData = MetadataCache.get(urlString: url.absoluteString) {
+            return UIViewType(metadata: cachedData)
+        }
+        return UIViewType(url: url)
     }
 
     func updateUIView(_ uiView: UIViewType, context: UIViewRepresentableContext<Self>) {
         if let cachedData = MetadataCache.get(urlString: url.absoluteString) {
             uiView.metadata = cachedData
+            uiView.sizeToFit()
         } else {
             let provider = LPMetadataProvider()
             Task {
                 let metadata = try await provider.startFetchingMetadata(for: url)
                 if !options.contains(.video) {
                     metadata.videoProvider = nil
+                    metadata.remoteVideoURL = nil
                 }
                 if !options.contains(.image) {
                     metadata.imageProvider = nil
@@ -230,33 +235,20 @@ private struct RichLinkView: UIViewRepresentable {
                 MetadataCache.cache(metadata: metadata)
                 Task.detached { @MainActor in
                     uiView.metadata = metadata
+                    uiView.sizeToFit()
                 }
             }
         }
     }
 
     struct MetadataCache {
-        private static var cache: [String: Data] = [:]
+        private static var cache: [String: LPLinkMetadata] = [:]
         static func cache(metadata: LPLinkMetadata) {
-            do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: metadata, requiringSecureCoding: true)
-                cache[metadata.url!.absoluteString] = data
-            } catch {
-                debug("MetadataCache.cache failed:", error)
-            }
+            cache[metadata.url!.absoluteString] = metadata
         }
 
         static func get(urlString: String) -> LPLinkMetadata? {
-            do {
-                guard let data = cache[urlString],
-                      let metadata = try NSKeyedUnarchiver.unarchivedObject(ofClass: LPLinkMetadata.self, from: data) else {
-                    return nil
-                }
-                return metadata
-            } catch {
-                debug("MetadataCache.get failed", error)
-                return nil
-            }
+            cache[urlString]
         }
     }
 
