@@ -565,7 +565,7 @@ final class DeviceName {
         }
         switch deviceCode {
         case .iPhone10_3, .iPhone10_6, .iPhone11_2, .iPhone11_4, .iPhone11_6, .iPhone11_8, .iPhone12_1, .iPhone12_3, .iPhone12_5, .iPhone13_1, .iPhone13_2, .iPhone13_3, .iPhone13_4, .iPhone14_2, .iPhone14_3, .iPhone14_4, .iPhone14_5, .iPhone14_7, .iPhone14_8, .iPhone15_2, .iPhone15_3:
-            return true
+            return false
         default:
             // iPadでは地球儀ボタンが表示されないので必要、そのほかでもfail-safeでtrueにしておく。
             return true

@@ -21,6 +21,10 @@ indirect enum ActionType: Equatable {
     case smoothDelete           // テキストの一括削除
     case smartDelete(ScanItem)
 
+    /// クリップボードからペーストする
+    ///  - note: フルアクセスがない場合動作しない
+    case paste
+
     case deselectAndUseAsInputting   // 選択を解除して編集中とみなす
     // 取り込み関係
     case saveSelectedTextIfNeeded           // 選択部分が存在していたら一時保存する。

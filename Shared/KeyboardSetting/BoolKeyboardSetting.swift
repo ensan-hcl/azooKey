@@ -188,6 +188,22 @@ extension KeyboardSettingKey where Self == StopLearningWhenSearch {
 }
 
 // TODO: Localize
+/// ペーストボタンを追加する設定
+/// - note: この機能はフリックのキーボードのみで提供する
+/// - note: この機能はフルアクセスがないと実現できない
+struct EnablePasteButton: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "ペーストボタン"
+    static let explanation: LocalizedStringKey = "左下のカーソル移動キーの上フリックにペーストボタンを追加します"
+    static let defaultValue = false
+    static let key: String = "enable_paste_button_on_flick_cursorbar_key"
+    static let requireFullAccess: Bool = true
+}
+
+extension KeyboardSettingKey where Self == EnablePasteButton {
+    static var enablePasteButton: Self { .init() }
+}
+
+// TODO: Localize
 /// クリップボード履歴マネージャを有効化する設定
 /// - note: この機能はフルアクセスがないと実現できない
 struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {

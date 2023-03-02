@@ -206,7 +206,13 @@ final class InputManager {
     }
 
     // MARK: キーボード経由でユーザがinputを行った場合に呼び出す
-    func input(text: String, requireSetResult: Bool = true) {
+    func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false) {
+        if simpleInsert {
+            // 必要に応じて確定する
+            _ = self.enter()
+            self.displayedTextManager.insertText(text, shouldSimplyInsert: true)
+            return
+        }
         if self.isSelected {
             // 選択は解除される
             self.isSelected = false

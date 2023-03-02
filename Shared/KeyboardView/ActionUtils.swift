@@ -51,7 +51,7 @@ extension CodableActionData {
         case .dismissKeyboard:
             return .dismissKeyboard
         case .__paste:
-            return .input("")
+            return .paste
         //        case let .setCursorBar(value):
         //            return .setCursorBar(value)
         //        case let .setCapsLockState(value):
@@ -89,7 +89,7 @@ extension CodableLongpressActionData {
 extension ActionType {
     func feedback() {
         switch self {
-        case .input:
+        case .input, .paste:
             KeyboardFeedback.click()
         case .delete:
             KeyboardFeedback.delete()

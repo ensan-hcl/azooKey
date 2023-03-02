@@ -91,6 +91,11 @@ final class KeyboardActionManager: UserActionManager {
                 self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
 
+        case .paste:
+            if VariableStates.shared.boolStates.hasFullAccess {
+                self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true)
+            }
+
         case .deselectAndUseAsInputting:
             self.inputManager.edit()
 

@@ -29,6 +29,9 @@ struct SettingTabView: View {
                 Group {
                     Section(header: Text("カスタムキー")) {
                         CustomKeysSettingView()
+                        if !SemiStaticStates.shared.needsInputModeSwitchKey, storeVariableSection.japaneseLayout == .flick {
+                            BoolSettingView(.enablePasteButton)
+                        }
                     }
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
