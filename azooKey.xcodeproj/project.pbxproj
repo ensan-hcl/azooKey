@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1A0CC45A2988FE1A00B49A93 /* RegisteredNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0CC4592988FE1A00B49A93 /* RegisteredNodeTests.swift */; };
-		1A0E8D6825EDD74000A9BAE5 /* DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */; };
 		1A0FDF10291BED4F0088C5AA /* no_change.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0FDF0F291BED4F0088C5AA /* no_change.swift */; };
 		1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */; };
 		1A10D80225E4F56D0095CB67 /* ErrorCustard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */; };
@@ -482,7 +481,6 @@
 
 /* Begin PBXFileReference section */
 		1A0CC4592988FE1A00B49A93 /* RegisteredNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteredNodeTests.swift; sourceTree = "<group>"; };
-		1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceName.swift; sourceTree = "<group>"; };
 		1A0FDF0F291BED4F0088C5AA /* no_change.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = no_change.swift; sourceTree = "<group>"; };
 		1A10D7F725E4E8D30095CB67 /* CustardInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustardInformationView.swift; sourceTree = "<group>"; };
 		1A10D80125E4F56D0095CB67 /* ErrorCustard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCustard.swift; sourceTree = "<group>"; };
@@ -1353,7 +1351,6 @@
 				1ADE98762903F0A700C318C3 /* extension Data.swift */,
 				1A7D00D2292A34EB00F06B35 /* extension String.swift */,
 				1A3DC2292500D65C002CAA93 /* extension CGPoint.swift */,
-				1A0E8D6725EDD74000A9BAE5 /* DeviceName.swift */,
 				1A30CE8A26023B52007C1A2D /* CodableSupport.swift */,
 				1A9E89FC286FFD7600CEFD94 /* AppVersion.swift */,
 			);
@@ -1880,7 +1877,6 @@
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
 				1A3022B326329B7B00E4495C /* CustardInterfaceKeyEditor.swift in Sources */,
 				1AB8C40425E3884200D39BC5 /* BottomSheetView.swift in Sources */,
-				1A0E8D6825EDD74000A9BAE5 /* DeviceName.swift in Sources */,
 				1A370E552907B5CD0053D6D4 /* MIDData.swift in Sources */,
 				1ABF7D982639869B0045D6B2 /* Intertranslator.swift in Sources */,
 				1AF6797C25CEDB9B00F3987B /* QwertyKeyModelProtocol.swift in Sources */,

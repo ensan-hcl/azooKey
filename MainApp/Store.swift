@@ -18,7 +18,7 @@ final class Store {
     var hapticsEnabled = false
 
     init() {
-        SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(DeviceName.shared.needsInputSwitchKey())
+        SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(UIInputViewController().needsInputModeSwitchKey)
         // ユーザ辞書に登録がない場合など
         self.messageManager.getMessagesContainerAppShouldMakeWhichDone().forEach {
             messageManager.done($0.id)
