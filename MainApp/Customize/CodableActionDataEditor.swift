@@ -489,6 +489,11 @@ private struct ActionPicker: View {
                 Button("文字の削除") {
                     process(.delete(1))
                 }
+                if Store.shared.isFullAccessEnabled {
+                    Button("ペースト") {
+                        process(.__paste)
+                    }
+                }
             }
             Section(header: Text("高度")) {
                 Button("文頭まで削除") {
