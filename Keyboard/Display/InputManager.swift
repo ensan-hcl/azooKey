@@ -630,6 +630,7 @@ final class InputManager {
     // MARK: userが勝手にカーソルを何かした場合の後処理
     func userMovedCursor(count: Int) {
         debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
+        VariableStates.shared.textChangedCount += 1
         if composingText.isEmpty {
             // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
@@ -648,11 +649,19 @@ final class InputManager {
         isSelected = false
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
+        VariableStates.shared.textChangedCount += 1
     }
 
     /// ユーザがキーボードを経由せずカットした場合の処理
     func userCutText(text: String) {
         self.clear()
+        VariableStates.shared.textChangedCount += 1
+    }
+
+    /// ユーザがキーボードを経由せずUndoした場合の処理
+    func userUndidText(text: String) {
+        self.clear()
+        VariableStates.shared.textChangedCount += 1
     }
 
     // ユーザが選択領域で文字を入力した場合
@@ -664,12 +673,16 @@ final class InputManager {
 
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
+        VariableStates.shared.textChangedCount += 1
     }
 
     // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
     func userSelectedText(text: String) {
         if text.isEmpty {
             return
+        }
+        defer {
+            VariableStates.shared.textChangedCount += 1
         }
         // 長すぎるのはダメ
         if text.count > 100 {

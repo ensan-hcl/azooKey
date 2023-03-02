@@ -26,6 +26,7 @@ struct ClipboardHistoryTab: View {
     @ObservedObject private var target = ClipboardHistory()
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
+    @State private var lastInsertedText: (text: String, changedCount: Int)?
 
     init() {
         for item in VariableStates.shared.clipboardHistoryManager.items {
@@ -70,6 +71,7 @@ struct ClipboardHistoryTab: View {
                     Spacer()
                     Button("入力") {
                         action.registerAction(.input(string))
+                        self.lastInsertedText = (string, variableStates.textChangedCount)
                         KeyboardFeedback.click()
                     }
                     .buttonStyle(.bordered)
@@ -177,6 +179,16 @@ struct ClipboardHistoryTab: View {
         .iOS16_scrollContentBackground(.hidden)
     }
 
+    private func enterKey(_ design: TabDependentDesign) -> SimpleKeyView {
+        SimpleKeyView(model: SimpleEnterKeyModel(), tabDesign: design)
+    }
+    private func deleteKey(_ design: TabDependentDesign) -> SimpleKeyView {
+        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: design)
+    }
+    private func undoKey(_ design: TabDependentDesign, text: String) -> SimpleKeyView {
+        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .text("取り消し"), unpressedKeyColorType: .special, pressActions: [.replaceLastCharacters([text: ""])]), tabDesign: design)
+    }
+
     var body: some View {
         Group {
             switch variableStates.keyboardOrientation {
@@ -184,18 +196,32 @@ struct ClipboardHistoryTab: View {
                 VStack {
                     listView
                     HStack {
-                        let design = TabDependentDesign(width: 2, height: 7, layout: .flick, orientation: .vertical)
-                        SimpleKeyView(model: SimpleEnterKeyModel(), tabDesign: design)
-                        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: design)
+                        if let (text, count) = lastInsertedText, count == variableStates.textChangedCount {
+                            let design = TabDependentDesign(width: 3, height: 7, layout: .flick, orientation: .vertical)
+                            enterKey(design)
+                            undoKey(design, text: text)
+                            deleteKey(design)
+                        } else {
+                            let design = TabDependentDesign(width: 2, height: 7, layout: .flick, orientation: .vertical)
+                            enterKey(design)
+                            deleteKey(design)
+                        }
                     }
                 }
             case .horizontal:
                 HStack {
                     listView
                     VStack {
-                        let design = TabDependentDesign(width: 8, height: 2, layout: .flick, orientation: .horizontal)
-                        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: design)
-                        SimpleKeyView(model: SimpleEnterKeyModel(), tabDesign: design)
+                        if let (text, count) = lastInsertedText, count == variableStates.textChangedCount {
+                            let design = TabDependentDesign(width: 8, height: 3, layout: .flick, orientation: .horizontal)
+                            deleteKey(design)
+                            undoKey(design, text: text)
+                            enterKey(design)
+                        } else {
+                            let design = TabDependentDesign(width: 8, height: 2, layout: .flick, orientation: .horizontal)
+                            deleteKey(design)
+                            enterKey(design)
+                        }
                     }
                 }
             }

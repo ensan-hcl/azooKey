@@ -110,6 +110,12 @@ final class DisplayedTextManager {
     }
 
     func insertText(_ text: String, shouldSimplyInsert: Bool = false) {
+        guard !text.isEmpty else {
+            return
+        }
+        defer {
+            VariableStates.shared.textChangedCount += 1
+        }
         if shouldSimplyInsert {
             self.proxy.insertText(text)
             return
@@ -132,7 +138,11 @@ final class DisplayedTextManager {
     // 正しい文字数移動できない可能性がある
     // DisplayedTextの位置は更新しない
     func unsafeMoveCursor(unsafeCount: Int) {
+        guard unsafeCount != 0 else {
+            return
+        }
         self.proxy.adjustTextPosition(byCharacterOffset: unsafeCount)
+        VariableStates.shared.textChangedCount += 1
     }
 
     enum OperationError: Error {
@@ -143,6 +153,7 @@ final class DisplayedTextManager {
     // すでにカーソルが動かされた場合に処理を行う
     // 戻り値はカーソルを補正したか否か
     func setMovedCursor(movedCount: Int, composingTextOperation: ComposingText.ViewOperation) -> Bool {
+        VariableStates.shared.textChangedCount += 1
         let delta = composingTextOperation.cursor - movedCount
         self.displayedTextCursorPosition += composingTextOperation.cursor
         if delta != 0 {
@@ -154,6 +165,10 @@ final class DisplayedTextManager {
     }
 
     func moveCursor(count: Int, isComposing: Bool = true) throws {
+        guard count != 0 else {
+            return
+        }
+        VariableStates.shared.textChangedCount += 1
         // ライブ変換中はカーソル移動の場合変換を停止したいので、動かすだけ動かしてエラーを投げる。
         if isComposing && isLiveConversionEnabled {
             let offset = self.getActualOffset(count: count)
@@ -175,9 +190,13 @@ final class DisplayedTextManager {
 
     // ただ与えられた回数の削除を実行する関数
     func rawDeleteBackward(count: Int = 1) {
+        guard count != 0 else {
+            return
+        }
         for _ in 0 ..< count {
             self.proxy.deleteBackward()
         }
+        VariableStates.shared.textChangedCount += 1
     }
 
     // isComposingの場合、countはadjust済みであることを期待する
@@ -225,6 +244,9 @@ final class DisplayedTextManager {
     // カーソルが動かせない場合を検知するために工夫を入れている
     // TODO: iOS16以降のテキストフィールドの仕様変更で動かなくなっている。直す必要があるが、どうしようもない気がしている。
     func rawDeleteForward(count: Int) {
+        guard count != 0 else {
+            return
+        }
         for _ in 0 ..< count {
             let before_b = self.proxy.documentContextBeforeInput
             let before_a = self.proxy.documentContextAfterInput
@@ -236,6 +258,7 @@ final class DisplayedTextManager {
                 return
             }
         }
+        VariableStates.shared.textChangedCount += 1
     }
 
     // isComposingの場合、countはadjust済みであることを期待する
