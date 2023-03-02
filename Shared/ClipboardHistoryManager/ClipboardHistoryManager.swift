@@ -10,7 +10,7 @@ import class UIKit.UIPasteboard
 import Foundation
 
 final class ClipboardHistoryManager {
-    static let maxCount = 100
+    static let maxCount = 50
     struct Item: Equatable, Comparable, Hashable, Codable, Identifiable {
         var content: Content
         var createdData: Date
@@ -104,14 +104,23 @@ final class ClipboardHistoryManager {
         self.previousChangedCount = UIPasteboard.general.changeCount
 
         if let string = UIPasteboard.general.string {
-            let item = Item(content: .text(string), createdData: .now)
+            var item = Item(content: .text(string), createdData: .now)
+            if let index = self.items.firstIndex(where: {item.content == $0.content}) {
+                let oldItem = self.items.remove(at: index)
+                if oldItem.pinnedDate != nil {
+                    item.pinnedDate = .now
+                }
+            }
             if self.items.isEmpty {
                 self.items.append(item)
-            } else if !self.items.contains(item), let index = self.items.firstIndex(where: {item > $0}) {
+            } else if let index = self.items.firstIndex(where: {item > $0}) {
                 self.items.insert(item, at: index)
             }
         }
-        // TODO: ピンしていないデータが最大の個数より大きくなったら削除する
+        // 増えすぎないように削除する
+        while self.items.count > Self.maxCount {
+            self.items.removeLast()
+        }
     }
 
     private static let directoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)
