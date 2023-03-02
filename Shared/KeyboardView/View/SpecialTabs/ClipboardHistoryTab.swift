@@ -22,6 +22,7 @@ private final class ClipboardHistory: ObservableObject {
 }
 
 struct ClipboardHistoryTab: View {
+    @ObservedObject private var variableStates = VariableStates.shared
     @ObservedObject private var target = ClipboardHistory()
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
@@ -177,13 +178,27 @@ struct ClipboardHistoryTab: View {
     }
 
     var body: some View {
-        VStack {
-            listView
-            HStack {
-                SimpleKeyView(model: SimpleEnterKeyModel(), tabDesign: .init(width: 2, height: 7, layout: .flick, orientation: .vertical))
-                SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: .init(width: 2, height: 7, layout: .flick, orientation: .vertical))
+        Group {
+            switch variableStates.keyboardOrientation {
+            case .vertical:
+                VStack {
+                    listView
+                    HStack {
+                        let design = TabDependentDesign(width: 2, height: 7, layout: .flick, orientation: .vertical)
+                        SimpleKeyView(model: SimpleEnterKeyModel(), tabDesign: design)
+                        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: design)
+                    }
+                }
+            case .horizontal:
+                HStack {
+                    listView
+                    VStack {
+                        let design = TabDependentDesign(width: 8, height: 2, layout: .flick, orientation: .horizontal)
+                        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: design)
+                        SimpleKeyView(model: SimpleEnterKeyModel(), tabDesign: design)
+                    }
+                }
             }
-            .buttonStyle(.bordered)
         }
         .font(Design.fonts.resultViewFont(theme: theme))
         .foregroundColor(theme.resultTextColor.color)
