@@ -206,7 +206,13 @@ final class InputManager {
     }
 
     // MARK: キーボード経由でユーザがinputを行った場合に呼び出す
-    func input(text: String, requireSetResult: Bool = true) {
+    func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false) {
+        if simpleInsert {
+            // 必要に応じて確定する
+            _ = self.enter()
+            self.displayedTextManager.insertText(text, shouldSimplyInsert: true)
+            return
+        }
         if self.isSelected {
             // 選択は解除される
             self.isSelected = false
@@ -624,6 +630,7 @@ final class InputManager {
     // MARK: userが勝手にカーソルを何かした場合の後処理
     func userMovedCursor(count: Int) {
         debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
+        VariableStates.shared.textChangedCount += 1
         if composingText.isEmpty {
             // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
@@ -642,11 +649,19 @@ final class InputManager {
         isSelected = false
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
+        VariableStates.shared.textChangedCount += 1
     }
 
-    // ユーザがキーボードを経由せずカットした場合の処理
+    /// ユーザがキーボードを経由せずカットした場合の処理
     func userCutText(text: String) {
         self.clear()
+        VariableStates.shared.textChangedCount += 1
+    }
+
+    /// ユーザがキーボードを経由せずUndoした場合の処理
+    func userUndidText(text: String) {
+        self.clear()
+        VariableStates.shared.textChangedCount += 1
     }
 
     // ユーザが選択領域で文字を入力した場合
@@ -658,12 +673,16 @@ final class InputManager {
 
         setResult()
         VariableStates.shared.setEnterKeyState(.complete)
+        VariableStates.shared.textChangedCount += 1
     }
 
     // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
     func userSelectedText(text: String) {
         if text.isEmpty {
             return
+        }
+        defer {
+            VariableStates.shared.textChangedCount += 1
         }
         // 長すぎるのはダメ
         if text.count > 100 {
@@ -695,7 +714,7 @@ final class InputManager {
         VariableStates.shared.setEnterKeyState(.edit)
     }
 
-    // 選択を解除した場合、clearとみなす
+    /// 選択を解除した場合、clearを行う
     func userDeselectedText() {
         self.clear()
         VariableStates.shared.setEnterKeyState(.return)

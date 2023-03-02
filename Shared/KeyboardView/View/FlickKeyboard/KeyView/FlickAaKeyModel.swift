@@ -46,8 +46,8 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
         }
     }
 
-    func sound() {
-        Sound.tabOrOtherKey()
+    func feedback() {
+        KeyboardFeedback.tabOrOtherKey()
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {

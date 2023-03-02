@@ -15,6 +15,7 @@ enum SuggestModelKeyType {
     case enter(Int)
     case custom(CustomizableFlickKey)
     case aA
+    case changeKeyboard
 }
 
 struct SuggestModel {
@@ -30,6 +31,8 @@ struct SuggestModel {
             return setting.get().flick
         case .aA:
             return FlickAaKeyModel.shared.flickKeys
+        case .changeKeyboard:
+            return FlickChangeKeyboardModel.shared.flickKeys
         }
     }
 

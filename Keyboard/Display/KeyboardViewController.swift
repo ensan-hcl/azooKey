@@ -58,6 +58,7 @@ final class KeyboardViewController: UIInputViewController {
     private static var loadedInstanceCount: Int = 0
     private static let resultModelVariableSection = ResultModelVariableSection<Candidate>()
     private static let action = KeyboardActionManager()
+    private static let notificationCenter = NotificationCenter.default
 
     deinit {
         KeyboardViewController.keyboardViewHost = nil
@@ -117,6 +118,11 @@ final class KeyboardViewController: UIInputViewController {
         debug("viewDidAppear")
         // キーボードタイプはviewDidAppearのタイミングで取得できる
         VariableStates.shared.setKeyboardType(self.textDocumentProxy.keyboardType)
+        // フルアクセスの状態を反映する
+        VariableStates.shared.boolStates.hasFullAccess = self.hasFullAccess
+        // クリップボード履歴を更新する
+        VariableStates.shared.clipboardHistoryManager.reload()
+        VariableStates.shared.clipboardHistoryManager.checkUpdate()
         // ロード済みのインスタンスの数が増えすぎるとパフォーマンスに悪影響があるので、適当なところで強制終了する
         // viewDidAppearで強制終了すると再ロードが自然な形で実行される
         if KeyboardViewController.loadedInstanceCount > 15 {
@@ -231,6 +237,9 @@ final class KeyboardViewController: UIInputViewController {
 
         debug(left, center, right)
         Self.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
+
+        // このタイミングでクリップボードを確認する
+        VariableStates.shared.clipboardHistoryManager.checkUpdate()
     }
 
     @objc func openURL(_ url: URL) {}

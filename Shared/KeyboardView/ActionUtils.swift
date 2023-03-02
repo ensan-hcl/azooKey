@@ -50,6 +50,8 @@ extension CodableActionData {
             }
         case .dismissKeyboard:
             return .dismissKeyboard
+        case .__paste:
+            return .paste
         //        case let .setCursorBar(value):
         //            return .setCursorBar(value)
         //        case let .setCapsLockState(value):
@@ -85,24 +87,24 @@ extension CodableLongpressActionData {
 }
 
 extension ActionType {
-    func sound() {
+    func feedback() {
         switch self {
-        case .input:
-            Sound.click()
+        case .input, .paste:
+            KeyboardFeedback.click()
         case .delete:
-            Sound.delete()
+            KeyboardFeedback.delete()
         case .smoothDelete, .smartDelete, .smartMoveCursor:
-            Sound.smoothDelete()
+            KeyboardFeedback.smoothDelete()
         case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState/*, ._setBoolState*/:
-            Sound.tabOrOtherKey()
+            KeyboardFeedback.tabOrOtherKey()
         case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
         case let .boolSwitch(compiledExpression, trueAction, falseAction):
             if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
                 if condition {
-                    trueAction.first?.sound()
+                    trueAction.first?.feedback()
                 } else {
-                    falseAction.first?.sound()
+                    falseAction.first?.feedback()
                 }
             }
         #if DEBUG

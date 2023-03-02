@@ -37,7 +37,7 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol {
         KeyLabel(self.labelType, width: width)
     }
 
-    func sound() {
-        Sound.click()
+    func feedback() {
+        KeyboardFeedback.click()
     }
 }

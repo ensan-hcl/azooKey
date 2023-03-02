@@ -29,16 +29,28 @@ struct SettingTabView: View {
                 Group {
                     Section(header: Text("カスタムキー")) {
                         CustomKeysSettingView()
+                        if !SemiStaticStates.shared.needsInputModeSwitchKey, storeVariableSection.japaneseLayout == .flick {
+                            BoolSettingView(.enablePasteButton)
+                        }
                     }
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
+                        BoolSettingView(.enableClipboardHistoryManagerTab)
                     }
                     Section(header: Text("カーソルバー")) {
                         BoolSettingView(.useBetaMoveCursorBar)
                         FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
-                    Section(header: Text("サウンド")) {
-                        BoolSettingView(.enableKeySound)
+                    // デバイスが触覚フィードバックをサポートしている場合のみ表示する
+                    if Store.shared.hapticsEnabled {
+                        Section(header: Text("サウンドと振動")) {
+                            BoolSettingView(.enableKeySound)
+                            BoolSettingView(.enableKeyHaptics)
+                        }
+                    } else {
+                        Section(header: Text("サウンド")) {
+                            BoolSettingView(.enableKeySound)
+                        }
                     }
                     Section(header: Text("表示")) {
                         FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)

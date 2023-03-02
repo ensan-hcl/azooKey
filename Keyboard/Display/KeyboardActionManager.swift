@@ -64,6 +64,7 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     private func doAction(_ action: ActionType, requireSetResult: Bool = true) {
+        debug("doAction", action)
         switch action {
         case let .input(text):
             self.showResultView()
@@ -79,7 +80,7 @@ final class KeyboardActionManager: UserActionManager {
             self.inputManager.deleteBackward(count: count, requireSetResult: requireSetResult)
 
         case .smoothDelete:
-            Sound.smoothDelete()
+            KeyboardFeedback.smoothDelete()
             self.showResultView()
             self.inputManager.smoothDelete(requireSetResult: requireSetResult)
 
@@ -89,6 +90,11 @@ final class KeyboardActionManager: UserActionManager {
                 self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             case .backward:
                 self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
+            }
+
+        case .paste:
+            if VariableStates.shared.boolStates.hasFullAccess {
+                self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true)
             }
 
         case .deselectAndUseAsInputting:
@@ -256,14 +262,14 @@ final class KeyboardActionManager: UserActionManager {
         let startTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
             let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
             if span > 0.4 {
-                action.repeat.first?.sound()
+                action.repeat.first?.feedback()
                 self?.registerActions(action.repeat)
             }
         })
         self.timers.append((type: action, timer: startTimer))
 
         let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
-            action.start.first?.sound()
+            action.start.first?.feedback()
             self?.registerActions(action.start)
         })
         self.timers.append((type: action, timer: repeatTimer))
@@ -429,19 +435,16 @@ final class KeyboardActionManager: UserActionManager {
             return
         }
 
-        // 全体としてテキストが変化しており、右側の文字列が不変であった場合→ペーストしたのではないか？
+        // 全体としてテキストが変化しており、右側の文字列が不変であった場合→Undoしたと推測できる
+        if b_left.hasPrefix(a_left) && b_right == a_right {
+            debug("user operation id: 7")
+            self.inputManager.clear()
+            return
+        }
+
         if b_right == a_right {
-            // もしクリップボードに文字列がコピーされており、かつ、前の左側文字列にその文字列を加えた文字列が後の左側の文字列に一致した場合→確実にペースト
-            if let pastedText = UIPasteboard.general.string, a_left.hasSuffix(pastedText) {
-                if wasSelected {
-                    debug("user operation id: 7")
-                    self.inputManager.userReplacedSelectedText(text: pastedText)
-                } else {
-                    debug("user operation id: 8")
-                    self.inputManager.userPastedText(text: pastedText)
-                }
-                return
-            }
+            debug("user operation id: 8")
+            return
         }
 
         if a_left == "\n" && b_left.isEmpty && a_right == b_right {

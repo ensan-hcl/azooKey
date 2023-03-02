@@ -15,7 +15,7 @@ extension CodableActionData {
     var hasAssociatedValue: Bool {
         switch self {
         case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication: return true
-        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
+        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard, .__paste: return false
         }
     }
 
@@ -26,6 +26,7 @@ extension CodableActionData {
         case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
         case let .smartDelete(value): return "\(value.targets.joined(separator: ","))の隣まで削除"
+        case .__paste: return "ペーストする"
         case .moveTab: return "タブの移動"
         case .replaceLastCharacters: return "文字を置換"
         case .complete: return "確定"
@@ -295,6 +296,8 @@ extension TabData {
                 return "記号(ローマ字入力)"
             case .last_tab:
                 return "最後に表示していたタブ"
+            case .__clipboard_history_tab:
+                return "クリップボードの履歴"
             }
         case let .custom(identifier):
             return LocalizedStringKey(identifier)
@@ -317,6 +320,7 @@ struct AvailableTabPicker: View {
             ("数字(ローマ字入力)", .system(.qwerty_numbers)),
             ("記号(ローマ字入力)", .system(.qwerty_symbols)),
             ("最後に表示していたタブ", .system(.last_tab)),
+            ("クリップボードの履歴", .system(.__clipboard_history_tab)),
             ("日本語(フリック入力)", .system(.flick_japanese)),
             ("日本語(ローマ字入力)", .system(.qwerty_japanese)),
             ("英語(フリック入力)", .system(.flick_english)),
@@ -484,6 +488,11 @@ private struct ActionPicker: View {
                 }
                 Button("文字の削除") {
                     process(.delete(1))
+                }
+                if Store.shared.isFullAccessEnabled {
+                    Button("ペースト") {
+                        process(.__paste)
+                    }
                 }
             }
             Section(header: Text("高度")) {

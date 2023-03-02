@@ -16,6 +16,7 @@ final class VariableStates: ObservableObject {
     static let shared = VariableStates()
     private(set) var inputStyle: InputStyle = .direct
     private(set) var tabManager = TabManager()
+    private(set) var clipboardHistoryManager = ClipboardHistoryManager()
 
     private init() {}
 
@@ -32,9 +33,11 @@ final class VariableStates: ObservableObject {
         }
 
         var isTextMagnifying = false
+        var hasFullAccess = false
         var isCapsLocked = false
 
         static let isCapsLockedKey = "isCapsLocked"
+        static let hasFullAccessKey = "has_full_access"
         // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
         fileprivate var custardStates: [String: Bool] = [:]
 
@@ -62,6 +65,8 @@ final class VariableStates: ObservableObject {
             get {
                 if key == "isTextMagnifying" {
                     return self.isTextMagnifying
+                } else if key == Self.hasFullAccessKey {
+                    return self.hasFullAccess
                 } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
                 }
@@ -69,7 +74,10 @@ final class VariableStates: ObservableObject {
             }
             set {
                 if let newValue {
-                    if key == "isTextMagnifying" {
+                    if key == Self.hasFullAccessKey {
+                        // subscript経由ではRead Onlyにする
+                        return
+                    } else if key == "isTextMagnifying" {
                         self.isTextMagnifying = newValue
                     } else if key == Self.isCapsLockedKey {
                         self.isCapsLocked = newValue
@@ -101,6 +109,10 @@ final class VariableStates: ObservableObject {
 
     @Published private(set) var resizingState: ResizingState = .fullwidth
 
+    /// 周囲のテキストが変化した場合にインクリメントする値。変化の検出に利用する。
+    /// - note: この値がどれだけ変化するかは実装によるので、変化量は意味をなさない。
+    @Published var textChangedCount: Int = 0
+
     var moveCursorBarState = BetaMoveCursorBarState()
 
     func setResizingMode(_ state: ResizingState) {
@@ -129,6 +141,10 @@ final class VariableStates: ObservableObject {
 
     func closeKeyboard() {
         self.tabManager.closeKeyboard()
+        // このタイミングでクリップボードを確認する
+        self.clipboardHistoryManager.checkUpdate()
+        // 保存処理を行う
+        self.clipboardHistoryManager.save()
     }
 
     func refreshView() {

@@ -234,7 +234,7 @@ struct ResizingRect: View {
                     )
                     .gesture(moveGesture)
                 Button {
-                    Sound.reset()
+                    KeyboardFeedback.reset()
                     withAnimation(.interactiveSpring()) {
                         self.position = .zero
                         self.size.width = initialSize.width
@@ -343,7 +343,7 @@ struct ResizingBindingFrame: ViewModifier {
             .frame(width: r, height: r)
 
             let button3 = Button {
-                Sound.reset()
+                KeyboardFeedback.reset()
                 withAnimation(.interactiveSpring()) {
                     self.position = .zero
                     self.size.width = initialSize.width
