@@ -43,7 +43,6 @@ struct SettingTabView: View {
                     }
                     // デバイスが触覚フィードバックをサポートしている場合のみ表示する
                     if Store.shared.hapticsEnabled {
-                        // TODO: Localize
                         Section(header: Text("サウンドと振動")) {
                             BoolSettingView(.enableKeySound)
                             BoolSettingView(.enableKeyHaptics)

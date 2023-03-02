@@ -26,7 +26,6 @@ extension CodableActionData {
         case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
         case let .smartDelete(value): return "\(value.targets.joined(separator: ","))の隣まで削除"
-        // TODO: Localize
         case .__paste: return "ペーストする"
         case .moveTab: return "タブの移動"
         case .replaceLastCharacters: return "文字を置換"

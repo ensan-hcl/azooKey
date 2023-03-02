@@ -117,7 +117,6 @@ extension KeyboardSettingKey where Self == MemoryResetFlag {
 }
 
 struct EnableKeySound: BoolKeyboardSettingKey {
-    // TODO: Localize
     static let title: LocalizedStringKey = "キーの音"
     static let explanation: LocalizedStringKey = "キーを押した際に音を鳴らします♪"
     static let defaultValue = false
@@ -128,7 +127,6 @@ extension KeyboardSettingKey where Self == EnableKeySound {
     static var enableKeySound: Self { .init() }
 }
 
-// TODO: Localize
 /// キーボードの触覚フィードバックを有効化する設定
 /// - note: この機能はフルアクセスがないと実現できない
 struct EnableKeyHaptics: BoolKeyboardSettingKey {
@@ -187,7 +185,6 @@ extension KeyboardSettingKey where Self == StopLearningWhenSearch {
     static var stopLearningWhenSearch: Self { .init() }
 }
 
-// TODO: Localize
 /// ペーストボタンを追加する設定
 /// - note: この機能はフリックのキーボードのみで提供する
 /// - note: この機能はフルアクセスがないと実現できない
@@ -203,7 +200,6 @@ extension KeyboardSettingKey where Self == EnablePasteButton {
     static var enablePasteButton: Self { .init() }
 }
 
-// TODO: Localize
 /// クリップボード履歴マネージャを有効化する設定
 /// - note: この機能はフルアクセスがないと実現できない
 struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {

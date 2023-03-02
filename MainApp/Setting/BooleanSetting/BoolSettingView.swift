@@ -64,7 +64,6 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
         .alert(isPresented: $isOn) {
             switch self.alertMessage {
             case .default:
-                // TODO: Localize
                 if disabled, let url = URL(string: UIApplication.openSettingsURLString) {
                     return Alert(
                         title: Text(SettingKey.explanation),
