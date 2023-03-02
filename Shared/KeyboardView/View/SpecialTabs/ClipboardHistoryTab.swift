@@ -69,6 +69,7 @@ struct ClipboardHistoryTab: View {
                     Spacer()
                     Button("入力") {
                         action.registerAction(.input(string))
+                        KeyboardFeedback.click()
                     }
                     .buttonStyle(.bordered)
                 }
@@ -179,12 +180,8 @@ struct ClipboardHistoryTab: View {
         VStack {
             listView
             HStack {
-                Button("改行") {
-                    action.registerAction(.input("\n"))
-                }
-                Button("削除") {
-                    action.registerAction(.delete(1))
-                }
+                SimpleKeyView(model: SimpleEnterKeyModel(), tabDesign: .init(width: 2, height: 7, layout: .flick, orientation: .vertical))
+                SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: .init(width: 2, height: 7, layout: .flick, orientation: .vertical))
             }
             .buttonStyle(.bordered)
         }
