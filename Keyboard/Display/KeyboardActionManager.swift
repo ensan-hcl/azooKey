@@ -64,6 +64,7 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     private func doAction(_ action: ActionType, requireSetResult: Bool = true) {
+        debug("doAction", action)
         switch action {
         case let .input(text):
             self.showResultView()

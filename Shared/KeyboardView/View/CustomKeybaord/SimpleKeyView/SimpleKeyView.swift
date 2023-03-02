@@ -60,6 +60,9 @@ struct SimpleKeyView: View {
                         }
                     }
                 }
+                .onDisappear {
+                    action.registerLongPressActionEnd(self.model.longPressActions)
+                }
             )
             .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
     }
