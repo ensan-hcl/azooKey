@@ -45,7 +45,7 @@ struct ClipboardHistoryTab: View {
     }
 
     @ViewBuilder
-    private func listItemView(_ item: ClipboardHistoryManager.Item, pinned: Bool = false) -> some View {
+    private func listItemView(_ item: ClipboardHistoryManager.Item, index: Int, pinned: Bool = false) -> some View {
         Group {
             switch item.content {
             case .text(let string):
@@ -72,6 +72,51 @@ struct ClipboardHistoryTab: View {
                     }
                     .buttonStyle(.bordered)
                 }
+                .contextMenu {
+                    Group {
+                        Button {
+                            action.registerAction(.input(string))
+                        } label: {
+                            Label("入力する", systemImage: "text.badge.plus")
+                        }
+                        Button {
+                            UIPasteboard.general.setValue(string, forPasteboardType: "public.text")
+                        } label: {
+                            Label("コピーする", systemImage: "doc.on.doc")
+                        }
+                        if pinned {
+                            Button {
+                                self.target.pinnedItems.remove(at: index)
+                                var item = item
+                                item.pinnedDate = nil
+                                self.target.notPinnedItems.append(item)
+                                self.target.notPinnedItems.sort(by: >)
+                            } label: {
+                                Label("固定を解除", systemImage: "pin.slash")
+                            }
+                        } else {
+                            Button {
+                                self.target.notPinnedItems.remove(at: index)
+                                var item = item
+                                item.pinnedDate = Date()
+                                self.target.pinnedItems.append(item)
+                                self.target.pinnedItems.sort(by: >)
+                            } label: {
+                                Label("ピンで固定する", systemImage: "pin")
+                            }
+                        }
+                        Button(role: .destructive) {
+                            if pinned {
+                                self.target.pinnedItems.remove(at: index)
+                            } else {
+                                self.target.notPinnedItems.remove(at: index)
+                            }
+                        } label: {
+                            Label("削除", systemImage: "trash")
+                        }
+                    }
+                }
+
             }
         }
         .listRowBackground(listRowBackgroundColor)
@@ -86,7 +131,7 @@ struct ClipboardHistoryTab: View {
                 Section {
                     ForEach(self.target.pinnedItems.indices, id: \.self) { index in
                         let item = self.target.pinnedItems[index]
-                        listItemView(item, pinned: true)
+                        listItemView(item, index: index, pinned: true)
                             .swipeActions(edge: .leading) {
                                 Button {
                                     self.target.pinnedItems.remove(at: index)
@@ -108,7 +153,7 @@ struct ClipboardHistoryTab: View {
             Section {
                 ForEach(self.target.notPinnedItems.indices, id: \.self) { index in
                     let item = self.target.notPinnedItems[index]
-                    listItemView(item)
+                    listItemView(item, index: index)
                         .swipeActions(edge: .leading) {
                             Button {
                                 self.target.notPinnedItems.remove(at: index)
