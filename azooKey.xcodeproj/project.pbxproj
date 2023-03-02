@@ -2671,7 +2671,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ensan-hcl/CustardKit";
 			requirement = {
-				branch = v2.1_sandbox;
+				branch = develop_v1.2;
 				kind = branch;
 			};
 		};
