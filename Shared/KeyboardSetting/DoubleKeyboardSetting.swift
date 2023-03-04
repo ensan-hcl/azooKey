@@ -62,6 +62,18 @@ struct FlickSensitivitySettingKey: DoubleKeyboardSettingKey {
     static let key: String = "flick_sensitivity_setting"
 }
 
-extension DoubleKeyboardSettingKey where Self == FlickSensitivitySettingKey {
+extension KeyboardSettingKey where Self == FlickSensitivitySettingKey {
     static var flickSensitivity: Self { .init() }
+}
+
+/// キーボードの高さを調整できます。
+struct KeyboardHeightScaleSettingKey: DoubleKeyboardSettingKey {
+    static let title: LocalizedStringKey = "キーボードの高さ"
+    static let explanation: LocalizedStringKey = "キーボードの高さを調整できます。"
+    static let defaultValue: Double = 1
+    static let key: String = "keyboard_height_scale"
+}
+
+extension KeyboardSettingKey where Self == KeyboardHeightScaleSettingKey {
+    static var keyboardHeightScale: Self { .init() }
 }

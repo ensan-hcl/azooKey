@@ -83,6 +83,10 @@ final class KeyboardViewController: UIInputViewController {
         // 初期化の順序としてこの位置に置くこと
         VariableStates.shared.initialize()
 
+        // 高さの設定を反映する
+        @KeyboardSetting(.keyboardHeightScale) var keyboardHeightScale: Double
+        SemiStaticStates.shared.setKeyboardHeightScale(keyboardHeightScale)
+
         let indexManager = ThemeIndexManager.load()
         let theme: ThemeData
         switch traitCollection.userInterfaceStyle {
@@ -199,10 +203,10 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        debug("viewDidLayoutSubviews", Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth), SemiStaticStates.shared.screenWidth, SemiStaticStates.shared.screenHeight)
+        debug("viewDidLayoutSubviews", Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth), SemiStaticStates.shared.screenWidth)
         self.view.frame.size.height = Design.keyboardScreenHeight
         self.updateViewConstraints()
-        debug("viewDidLayoutSubviews", UIScreen.main.bounds, SemiStaticStates.shared.screenHeight, self.view.frame.size, KeyboardViewController.keyboardViewHost?.view.frame.size, self.view.window?.bounds, KeyboardViewController.keyboardViewHost?.view.window?.bounds, KeyboardViewController.keyboardViewHost?.view.window?.window?.bounds)
+        debug("viewDidLayoutSubviews", UIScreen.main.bounds, self.view.frame.size, KeyboardViewController.keyboardViewHost?.view.frame.size, self.view.window?.bounds, KeyboardViewController.keyboardViewHost?.view.window?.bounds, KeyboardViewController.keyboardViewHost?.view.window?.window?.bounds)
     }
 
     /*

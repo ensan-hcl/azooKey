@@ -154,7 +154,7 @@ enum Design {
     /// 特に、iPadでフローティングキーボードを利用する場合は`phoneVertical`になる。
     private static var layoutMode: LayoutMode {
         // TODO: この実装は検証される必要がある
-        var usePadMode = UIDevice.current.userInterfaceIdiom == .pad
+        let usePadMode = UIDevice.current.userInterfaceIdiom == .pad
         // floating keyboardの場合
         if usePadMode, SemiStaticStates.shared.screenWidth < 400 {
             return .phoneVertical
@@ -184,13 +184,13 @@ enum Design {
         let width = min(screenWidth, SemiStaticStates.shared.screenWidth)
         switch layoutMode {
         case .phoneVertical:
-            return 51 / 74 * width + 12
+            return 51 / 74 * width * SemiStaticStates.shared.keyboardHeightScale + 12
         case .padVertical:
-            return 15 / 31 * width + 12
+            return 15 / 31 * width * SemiStaticStates.shared.keyboardHeightScale + 12
         case .phoneHorizontal:
-            return 17 / 56 * width + 12
+            return 17 / 56 * width * SemiStaticStates.shared.keyboardHeightScale + 12
         case .padHorizontal:
-            return 5 / 18 * width + 12
+            return 5 / 18 * width * SemiStaticStates.shared.keyboardHeightScale + 12
         }
     }
 

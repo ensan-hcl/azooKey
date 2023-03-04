@@ -22,7 +22,12 @@ final class SemiStaticStates {
     /// - do not  consider using screenHeight
     /// - スクリーンそのもののサイズ。キーボードビューの幅は片手モードなどによって変更が生じうるため、`screenWidth`は限定的な場面でのみ使うことが望まし。
     private(set) var screenWidth: CGFloat = .zero
-    private(set) var screenHeight: CGFloat = .zero
+    private(set) var keyboardHeightScale: CGFloat = 1
+
+    /// - note: キーボードが開かれたタイミングで一度呼ぶのが望ましい。
+    func setKeyboardHeightScale(_ scale: CGFloat) {
+        self.keyboardHeightScale = scale
+    }
 
     /// Function to set the width of area of keyboard
     /// - Parameter width: 使用可能な領域の幅.
@@ -40,7 +45,6 @@ final class SemiStaticStates {
         // screenWidthを更新してからDesign.keyboardHeightを呼ぶ必要がある。
         // あまりいいデザインではない・・・。
         let height = Design.keyboardHeight(screenWidth: width)
-        self.screenHeight = height
         debug("SemiStaticStates setScreenWidth", width, height)
         let (layout, orientation) = (layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
 

@@ -24,6 +24,7 @@ struct ResizingRect: View {
 
     private let initialSize: CGSize
     private let minimumWidth: CGFloat = 120
+    // private let minimumHeight: CGFloat = 120
 
     init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize) {
         self._size = size
@@ -100,7 +101,8 @@ struct ResizingRect: View {
             .onEnded {_ in
                 self.correctOrder()
                 self.setInitial()
-                self.updateUserDefaults()            }
+                self.updateUserDefaults()
+            }
     }
 
     func yGesture(target: KeyPath<Self, Binding<Position>>) -> some Gesture {
@@ -117,12 +119,12 @@ struct ResizingRect: View {
                     self.size.height = height
                     self.position.y = py
                 }
-
             }
             .onEnded {_ in
                 self.correctOrder()
                 self.setInitial()
-                self.updateUserDefaults()            }
+                self.updateUserDefaults()
+            }
     }
 
     var moveGesture: some Gesture {
@@ -189,15 +191,16 @@ struct ResizingRect: View {
             .stroke(Color.white, lineWidth: 3)
             .gesture(xGesture(target: \.$top_left_edge))
             /*
-             Path{path in
-             for i in 0..<4{
-             let y = height / 24 * CGFloat(i)
+             Path {path in
+             for i in 0..<4 {
+             let y = size.height / 24 * CGFloat(i)
              let ratio = (1 - CGFloat(i) / 4) * 0.8
-             path.move(to: CGPoint(x: width / 2 - width * edgeRatio * ratio, y: y))
-             path.addLine(to: CGPoint(x: width / 2 + width * edgeRatio * ratio, y: y))
+             path.move(to: CGPoint(x: size.width / 2 - size.width * edgeRatio * ratio, y: y))
+             path.addLine(to: CGPoint(x: size.width / 2 + size.width * edgeRatio * ratio, y: y))
              }
-             }.stroke(Color.white, lineWidth: 3)
-             .gesture(yGesture(y: \.$top_left_edge.y, top: true))
+             }
+             .stroke(Color.white, lineWidth: 3)
+             .gesture(yGesture(target: \.$top_left_edge))
              */
             Path {path in
                 for i in 0..<4 {

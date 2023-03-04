@@ -24,6 +24,7 @@ struct SettingTabView: View {
                     }
                     Section(header: Text("操作性")) {
                         FlickSensitivitySettingView(.flickSensitivity)
+                        KeyboardHeightSettingView(.keyboardHeightScale)
                     }
                 }
                 Group {
