@@ -10,28 +10,38 @@ import SwiftUI
 
 struct KeyboardHeightSettingView: View {
     typealias SettingKey = KeyboardHeightScaleSettingKey
-    @State private var auto: Bool
+    @State private var enabled: Bool
     @State private var showAlert = false
     @State private var setting = SettingUpdater<SettingKey>()
 
     init(_ key: SettingKey) {
         if SettingKey.value == 1 {
-            _auto = .init(initialValue: true)
+            _enabled = .init(initialValue: false)
         } else {
-            _auto = .init(initialValue: false)
+            _enabled = .init(initialValue: true)
         }
     }
 
     var body: some View {
-        Text("キーボードの高さ")
-        Toggle(isOn: $auto) {
-            Text("自動")
-        }.onChange(of: auto) { newValue in
-            if newValue {
+        Toggle(isOn: $enabled) {
+            HStack {
+                Text(SettingKey.title)
+                Button {
+                    showAlert = true
+                } label: {
+                    Image(systemName: "questionmark.circle")
+                }
+            }
+        }.onChange(of: enabled) { newValue in
+            if !newValue {
                 setting.value = 1
             }
         }
-        if !auto {
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK")))
+        }
+
+        if enabled {
             // 対数スケールでBindingすると編集がしやすい
             Slider(value: $setting.value.converted(forward: log2, backward: {pow(2, $0)}), in: -1.1 ... 1.1)
         }
