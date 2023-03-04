@@ -11,7 +11,14 @@ import SwiftUI
 struct AzooKeyIcon: View {
     @Environment(\.colorScheme) private var colorScheme
     private let color: Color
+    private let looks: Looks
     private let arguments: Arguments
+    enum Looks {
+        case normal
+        case king
+        case santaClaus
+        case strawHat
+    }
     enum Color {
         case auto
         case color(SwiftUI.Color)
@@ -20,14 +27,16 @@ struct AzooKeyIcon: View {
         case relative(size: CGFloat, textStyle: Font.TextStyle)
         case fixed(size: CGFloat)
     }
-    init(fontSize: CGFloat, relativeTo textStyle: Font.TextStyle = .body, color: Color = .auto) {
+    init(fontSize: CGFloat, relativeTo textStyle: Font.TextStyle = .body, color: Color = .auto, looks: Looks = .normal) {
         self.color = color
         self.arguments = .relative(size: fontSize, textStyle: textStyle)
+        self.looks = looks
     }
 
-    init(fixedSize: CGFloat, color: Color = .auto) {
+    init(fixedSize: CGFloat, color: Color = .auto, looks: Looks = .normal) {
         self.color = color
         self.arguments = .fixed(size: fixedSize)
+        self.looks = looks
     }
 
     private var foregroundColor: SwiftUI.Color {
@@ -46,16 +55,52 @@ struct AzooKeyIcon: View {
         }
     }
 
-    var body: some View {
+    @ViewBuilder
+    private var icon: some View {
+        switch looks {
+        case .normal:
+            Text("1")
+                .foregroundColor(foregroundColor)
+        case .king:
+            ZStack(alignment: .center) {
+                Text("α")
+                    .foregroundColor(foregroundColor)
+                Text("\u{EA00}")
+                    .foregroundColor(.orange)
+            }
+        case .strawHat:
+            ZStack(alignment: .center) {
+                Text("β")
+                    .foregroundColor(foregroundColor)
+                Text("\u{EA10}")
+                    .foregroundColor(SwiftUI.Color(red: 243 / 255, green: 210 / 255, blue: 82 / 255))
+                Text("\u{EA11}")
+                    .foregroundColor(.white)
+            }
+        case .santaClaus:
+            ZStack(alignment: .center) {
+                Text("γ")
+                    .foregroundColor(foregroundColor)
+                Text("\u{EA20}")
+                    .foregroundColor(.black)
+                Text("\u{EA21}")
+                    .foregroundColor(.white)
+                Text("\u{EA22}")
+                    .foregroundColor(.red)
+            }
+        }
+    }
+
+    private var font: Font {
         switch self.arguments {
         case let .relative(size: size, textStyle: textStyle):
-            Text("1")
-                .font(Design.fonts.azooKeyIconFont(size, relativeTo: textStyle))
-                .foregroundColor(foregroundColor)
+            return Design.fonts.azooKeyIconFont(size, relativeTo: textStyle)
         case let .fixed(size: size):
-            Text("1")
-                .font(Design.fonts.azooKeyIconFont(fixedSize: size))
-                .foregroundColor(foregroundColor)
+            return Design.fonts.azooKeyIconFont(fixedSize: size)
         }
+    }
+
+    var body: some View {
+        icon.font(font)
     }
 }
