@@ -242,6 +242,7 @@
 		1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */; };
 		1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */; };
 		1AAC102729B25D060020BDE9 /* KeyboardHeightSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */; };
+		1AAC102929B4EE4A0020BDE9 /* FullAccessTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */; };
 		1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */; };
 		1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */; };
 		1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5076A255ECC3C003C0BF2 /* Trie.swift */; };
@@ -633,6 +634,7 @@
 		1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSlideshowView.swift; sourceTree = "<group>"; };
 		1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyTipsView.swift; sourceTree = "<group>"; };
 		1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHeightSettingView.swift; sourceTree = "<group>"; };
+		1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAccessTipsView.swift; sourceTree = "<group>"; };
 		1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji14.0_dict.tsv; sourceTree = "<group>"; };
 		1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalDictManageView.swift; sourceTree = "<group>"; };
 		1AB5076A255ECC3C003C0BF2 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
@@ -1448,6 +1450,7 @@
 				1A2B2B5E299480B40048332A /* UseMarkedTextTipsView.swift */,
 				1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */,
 				1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */,
+				1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */,
 			);
 			path = Articles;
 			sourceTree = "<group>";
@@ -1835,6 +1838,7 @@
 				1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */,
 				1A30CE8B26023B52007C1A2D /* CodableSupport.swift in Sources */,
 				1AF678B425CE3B7000F3987B /* States.swift in Sources */,
+				1AAC102929B4EE4A0020BDE9 /* FullAccessTipsView.swift in Sources */,
 				1AB8C3BF25E2303200D39BC5 /* TabBar.swift in Sources */,
 				1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */,
 				1AAC102729B25D060020BDE9 /* KeyboardHeightSettingView.swift in Sources */,
