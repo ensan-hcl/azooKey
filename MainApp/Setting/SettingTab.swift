@@ -11,6 +11,15 @@ import SwiftUI
 
 struct SettingTabView: View {
     @ObservedObject private var storeVariableSection = Store.variableSection
+    private func canFlickLayout(_ layout: LanguageLayout) -> Bool {
+        if layout == .flick {
+            return true
+        }
+        if case .custard = layout {
+            return true
+        }
+        return false
+    }
 
     var body: some View {
         NavigationView {
@@ -22,14 +31,16 @@ struct SettingTabView: View {
                     Section(header: Text("言語")) {
                         PreferredLanguageSettingView()
                     }
-                    Section(header: Text("操作性")) {
-                        FlickSensitivitySettingView(.flickSensitivity)
+                    if self.canFlickLayout(storeVariableSection.japaneseLayout) {
+                        Section(header: Text("操作性")) {
+                            FlickSensitivitySettingView(.flickSensitivity)
+                        }
                     }
                 }
                 Group {
                     Section(header: Text("カスタムキー")) {
                         CustomKeysSettingView()
-                        if !SemiStaticStates.shared.needsInputModeSwitchKey, storeVariableSection.japaneseLayout == .flick {
+                        if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(storeVariableSection.japaneseLayout) {
                             BoolSettingView(.enablePasteButton)
                         }
                     }
@@ -53,6 +64,7 @@ struct SettingTabView: View {
                         }
                     }
                     Section(header: Text("表示")) {
+                        KeyboardHeightSettingView(.keyboardHeightScale)
                         FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)
                         FontSizeSettingView(.resultViewFontSize, .result, availableValueRange: 12...24)
                     }

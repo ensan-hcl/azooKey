@@ -112,7 +112,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
             .resizingFrame(
                 size: $variableStates.interfaceSize,
                 position: $variableStates.interfacePosition,
-                initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight)
+                initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth))
             )
             .padding(.bottom, 2)
             if variableStates.boolStates.isTextMagnifying {

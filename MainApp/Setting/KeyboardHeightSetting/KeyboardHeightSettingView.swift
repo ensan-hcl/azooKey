@@ -1,15 +1,15 @@
 //
-//  FlickSensitivitySettingView.swift
+//  KeyboardHeightSettingView.swift
 //  MainApp
 //
-//  Created by ensan on 2022/09/10.
-//  Copyright © 2022 ensan. All rights reserved.
+//  Created by ensan on 2023/03/04.
+//  Copyright © 2023 ensan. All rights reserved.
 //
 
 import SwiftUI
 
-struct FlickSensitivitySettingView: View {
-    typealias SettingKey = FlickSensitivitySettingKey
+struct KeyboardHeightSettingView: View {
+    typealias SettingKey = KeyboardHeightScaleSettingKey
     @State private var enabled: Bool
     @State private var showAlert = false
     @State private var setting = SettingUpdater<SettingKey>()
@@ -19,17 +19,6 @@ struct FlickSensitivitySettingView: View {
             _enabled = .init(initialValue: false)
         } else {
             _enabled = .init(initialValue: true)
-        }
-    }
-
-    private var explanation: LocalizedStringKey {
-        switch setting.value {
-        case 0.33 ... 0.5: return "とても反応しにくい"
-        case 0.5 ... 0.8: return "反応しにくい"
-        case 0.8 ... 1.2: return "普通"
-        case 1.2 ... 2: return "反応しやすい"
-        case 2 ... 4: return "とても反応しやすい"
-        default: return "普通"
         }
     }
 
@@ -51,12 +40,11 @@ struct FlickSensitivitySettingView: View {
         .alert(isPresented: $showAlert) {
             Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK")))
         }
+
         if enabled {
-            VStack {
-                // 対数スケールでBindingすると編集がしやすい
-                Slider(value: $setting.value.converted(forward: log2, backward: {pow(2, $0)}), in: -1.59 ... 2)
-                Text(explanation)
-            }
+            // 対数スケールでBindingすると編集がしやすい
+            Slider(value: $setting.value.converted(forward: log2, backward: {pow(2, $0)}), in: -1.1 ... 1.1)
         }
     }
 }
+

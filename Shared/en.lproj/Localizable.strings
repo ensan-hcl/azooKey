@@ -358,11 +358,14 @@
 "フリックの感度" = "Flicking sensitivity";
 "どれだけ指を動かしたらフリックと判定するか調整できます。" = "You can adjust how much you move your finger to determine a flick.";
 "操作性" = "Usability";
-"設定: とても反応しにくい" = "Setting: Very insensitive";
-"設定: 反応しにくい" = "Setting: Insensitive";
-"設定: 普通" = "Setting: Normal";
-"設定: 反応しやすい" = "Setting: Sensitive";
-"設定: とても反応しやすい" = "Setting: Very sensitive";
+"とても反応しにくい" = "Very insensitive";
+"反応しにくい" = "Insensitive";
+"普通" = "Normal";
+"反応しやすい" = "Sensitive";
+"とても反応しやすい" = "Very sensitive";
+
+"キーボードの高さ" = "Keyboard height";
+"キーボードの高さを調整できます。" = "You can edit keyboard height.";
 
 "テンプレート" = "Templates";
 "テンプレートの管理" = "Manage templates";
