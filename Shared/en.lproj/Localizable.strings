@@ -176,6 +176,21 @@
 "日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。" = "You can select Qwerty and Flick input styles for each of Japanese and English.";
 "現在は携帯電話式の入力については対応していません。" = "Currently, azooKey doesn't support the Japanese flip phone input style.";
 
+"フルアクセスが必要な機能を使う" = "Use features requiring full access";
+"フルアクセスについて" = "About full access";
+"azooKeyは、キーボードの振動フィードバックや、キーボードからのペーストを実現するために、フルアクセスの許可が必要です。フルアクセスを許可していただくことで、これらの機能が使用できます。" = "azooKey requires full access permission in order to enable features such as keyboard haptics and pasting from the keyboard. By granting full access, these features can be utilized.";
+"以下は、フルアクセスをオンにすることで利用できる設定項目です。フルアクセスを必要とする機能は、すべてデフォルトで無効になっているため、フルアクセスを許可しただけでキーボードの振る舞いが変わることはありません。" = "The following are the settings that can be used when full access is turned on. As all functions requiring full access are disabled by default, simply granting full access will not change the behavior of the keyboard.";
+"また、フルアクセスをオンにしたあとでも、いつでもフルアクセスをオフにすることができます。" = "Furthermore, even after turning on full access, it is possible to turn it off at any time.";
+"フルアクセスを許可しなくても、キーボードは完全に動作します。上記の機能を使わない場合は、オンにしないことを強くおすすめします。" = "The keyboard will function fully even without granting full access. It is strongly recommended not to turn on full access if you do not need to use the above features.";
+"なお、azooKeyはオープンソースであり、誰もが実装を確認することができます。" = "Additionally, azooKey is an open-source keyboard app, allowing anyone to review the implementation.";
+"フルアクセスを有効化する際、以下のような警告が表示されますが、すべてのキーボードアプリで共通して表示されている警告です。" = "The following warning appears when enabling full access, but it is a warning that is common to all keyboard apps.";
+"azooKeyは安全なキーボードアプリであり、ユーザの明示的な同意なく、個人情報を外部に送信したり、保存したりすることはありません。" = "azooKey is a safe keyboard app and does not transmit or store personal information without the explicit consent of the user.";
+"フルアクセスをオフにする（設定アプリが開きます）" = "Turn off full access (opens the Settings app)";
+"フルアクセスをオンにする（設定アプリが開きます）" = "Turn on full access (opens the Settings app)";
+"参考情報" = "References";
+"azooKeyのソースコードを閲覧する" = "Review the implementation of azooKey";
+"Configuring open access for a custom keyboard | Apple Developer Documentation (英語)" = "Configuring open access for a custom keyboard | Apple Developer Documentation";
+
 "日本語" = "Japanese";
 "英語" = "English";
 "ギリシャ語" = "Greek";

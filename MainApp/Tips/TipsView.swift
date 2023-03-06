@@ -49,6 +49,7 @@ struct TipsTabView: View {
                         NavigationLink("大文字に固定する", destination: CapsLockTipsView())
                         NavigationLink("タイムスタンプを使う", destination: TemplateSettingTipsView())
                         NavigationLink("キーをカスタマイズする", destination: CustomKeyTipsView())
+                        NavigationLink("フルアクセスが必要な機能を使う", destination: FullAccessTipsView())
                     }
 
                     Section(header: Text("困ったときは")) {
