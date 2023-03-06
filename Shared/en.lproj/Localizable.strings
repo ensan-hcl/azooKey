@@ -183,6 +183,7 @@
 "また、フルアクセスをオンにしたあとでも、いつでもフルアクセスをオフにすることができます。" = "Furthermore, even after turning on full access, it is possible to turn it off at any time.";
 "フルアクセスを許可しなくても、キーボードは完全に動作します。上記の機能を使わない場合は、オンにしないことを強くおすすめします。" = "The keyboard will function fully even without granting full access. It is strongly recommended not to turn on full access if you do not need to use the above features.";
 "なお、azooKeyはオープンソースであり、誰もが実装を確認することができます。" = "Additionally, azooKey is an open-source keyboard app, allowing anyone to review the implementation.";
+"フルアクセスを有効化する際、以下のような警告が表示されますが、すべてのキーボードアプリで共通して表示されている警告です。" = "The following warning appears when enabling full access, but it is a warning that is common to all keyboard apps.";
 "azooKeyは安全なキーボードアプリであり、ユーザの明示的な同意なく、個人情報を外部に送信したり、保存したりすることはありません。" = "azooKey is a safe keyboard app and does not transmit or store personal information without the explicit consent of the user.";
 "フルアクセスをオフにする（設定アプリが開きます）" = "Turn off full access (opens the Settings app)";
 "フルアクセスをオンにする（設定アプリが開きます）" = "Turn on full access (opens the Settings app)";

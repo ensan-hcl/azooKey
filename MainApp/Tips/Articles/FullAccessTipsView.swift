@@ -25,9 +25,12 @@ struct FullAccessTipsView: View {
             TipsContentParagraph {
                 Text("フルアクセスを許可しなくても、キーボードは完全に動作します。上記の機能を使わない場合は、オンにしないことを強くおすすめします。")
             }
+            
             TipsContentParagraph {
-                Text("なお、azooKeyはオープンソースであり、誰もが実装を確認することができます。")
+                Text("フルアクセスを有効化する際、以下のような警告が表示されますが、すべてのキーボードアプリで共通して表示されている警告です。")
+                TipsImage("fullAccessAlert")
                 Text("azooKeyは安全なキーボードアプリであり、ユーザの明示的な同意なく、個人情報を外部に送信したり、保存したりすることはありません。")
+                Text("なお、azooKeyはオープンソースであり、誰もが実装を確認することができます。")
             }
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 Button(Store.shared.isFullAccessEnabled
