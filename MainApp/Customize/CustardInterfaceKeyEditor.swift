@@ -11,7 +11,7 @@ import Foundation
 import SwiftUI
 
 private enum LabelType {
-    case text, systemImage
+    case text, systemImage, mainAndVariations
 }
 
 fileprivate extension CustardInterfaceKey {
@@ -75,6 +75,8 @@ fileprivate extension CustardInterfaceCustomKey {
     enum LabelTextKey { case labelText }
     enum LabelImageNameKey { case labelImageName }
     enum LabelTypeKey { case labelType }
+    enum LabelMainKey { case labelMain }
+    enum LabelVariationsKey { case labelVariations }
     enum PressActionKey { case pressAction }
     enum InputActionKey { case inputAction }
     enum LongpressActionKey { case longpressAction }
@@ -117,6 +119,48 @@ fileprivate extension CustardInterfaceCustomKey {
         }
     }
 
+    subscript(label: LabelMainKey, position: FlickKeyPosition) -> String {
+        get {
+            if let direction = position.flickDirection {
+                return self[direction][.labelMain]
+            }
+            if case let .mainAndVariations(value, _) = self.design.label {
+                return value
+            }
+            return ""
+        }
+        set {
+            if let direction = position.flickDirection {
+                self[direction][.labelMain] = newValue
+            } else if case let .mainAndVariations(_, variations) = self.design.label {
+                self.design.label = .mainAndVariations(newValue, variations)
+            } else {
+                self.design.label = .mainAndVariations(newValue, "")
+            }
+        }
+    }
+
+    subscript(label: LabelVariationsKey, position: FlickKeyPosition) -> String {
+        get {
+            if let direction = position.flickDirection {
+                return self[direction][.labelVariations]
+            }
+            if case let .mainAndVariations(_, value) = self.design.label {
+                return value
+            }
+            return ""
+        }
+        set {
+            if let direction = position.flickDirection {
+                self[direction][.labelVariations] = newValue
+            } else if case let .mainAndVariations(main, _) = self.design.label {
+                self.design.label = .mainAndVariations(main, newValue)
+            } else {
+                self.design.label = .mainAndVariations("", newValue)
+            }
+        }
+    }
+
     subscript(label: LabelTypeKey, position: FlickKeyPosition) -> LabelType {
         get {
             if let direction = position.flickDirection {
@@ -125,6 +169,7 @@ fileprivate extension CustardInterfaceCustomKey {
             switch self.design.label {
             case .systemImage: return .systemImage
             case .text: return .text
+            case .mainAndVariations: return .mainAndVariations
             }
         }
         set {
@@ -136,6 +181,8 @@ fileprivate extension CustardInterfaceCustomKey {
                     self.design.label = .text("")
                 case .systemImage:
                     self.design.label = .systemImage("circle.fill")
+                case .mainAndVariations:
+                    self.design.label = .mainAndVariations("A", "BC")
                 }
             }
         }
@@ -200,6 +247,8 @@ fileprivate extension CustardInterfaceVariationKey {
     enum LongpressActionKey { case longpressAction }
     enum LabelImageNameKey { case labelImageName }
     enum LabelTypeKey { case labelType }
+    enum LabelMainKey { case labelMain }
+    enum LabelVariationsKey { case labelVariations }
 
     subscript(label: LabelTextKey) -> String {
         get {
@@ -225,11 +274,44 @@ fileprivate extension CustardInterfaceVariationKey {
         }
     }
 
+    subscript(label: LabelMainKey) -> String {
+        get {
+            if case let .mainAndVariations(value, _) = self.design.label {
+                return value
+            }
+            return ""
+        }
+        set {
+            if case let .mainAndVariations(_, variations) = self.design.label {
+                self.design.label = .mainAndVariations(newValue, variations)
+            } else {
+                self.design.label = .mainAndVariations(newValue, "")
+            }
+        }
+    }
+
+    subscript(label: LabelVariationsKey) -> String {
+        get {
+            if case let .mainAndVariations(_, value) = self.design.label {
+                return value
+            }
+            return ""
+        }
+        set {
+            if case let .mainAndVariations(main, _) = self.design.label {
+                self.design.label = .mainAndVariations(main, newValue)
+            } else {
+                self.design.label = .mainAndVariations("", newValue)
+            }
+        }
+    }
+
     subscript(label: LabelTypeKey) -> LabelType {
         get {
             switch self.design.label {
             case .systemImage: return .systemImage
             case .text: return .text
+            case .mainAndVariations: return .mainAndVariations
             }
         }
         set {
@@ -238,6 +320,8 @@ fileprivate extension CustardInterfaceVariationKey {
                 self.design.label = .text("")
             case .systemImage:
                 self.design.label = .systemImage("circle.fill")
+            case .mainAndVariations:
+                self.design.label = .mainAndVariations("A", "BC")
             }
         }
     }
@@ -424,30 +508,53 @@ struct CustardInterfaceKeyEditor: View {
                 Picker("ラベルの種類", selection: $key[.custom][.labelType, position]) {
                     Text("テキスト").tag(LabelType.text)
                     Text("システムアイコン").tag(LabelType.systemImage)
+                    Text("メインとサブ").tag(LabelType.mainAndVariations)
                 }
                 switch key[.custom][.labelType, position] {
                 case .text:
                     TextField("ラベル", text: Binding(
-                                get: {
-                                    key[.custom][.labelText, position]
-                                },
-                                set: {
-                                    key[.custom][.labelText, position] = $0
-                                })
+                        get: {
+                            key[.custom][.labelText, position]
+                        },
+                        set: {
+                            key[.custom][.labelText, position] = $0
+                        })
                     )
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
                 case .systemImage:
                     TextField("アイコンの名前", text: Binding(
-                                get: {
-                                    key[.custom][.labelImageName, position]
-                                },
-                                set: {
-                                    key[.custom][.labelImageName, position] = $0
-                                })
+                        get: {
+                            key[.custom][.labelImageName, position]
+                        },
+                        set: {
+                            key[.custom][.labelImageName, position] = $0
+                        })
                     )
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
+                case .mainAndVariations:
+                    TextField("メインのラベル", text: Binding(
+                        get: {
+                            key[.custom][.labelMain, position]
+                        },
+                        set: {
+                            key[.custom][.labelMain, position] = $0
+                        })
+                    )
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+                    TextField("サブのラベル", text: Binding(
+                        get: {
+                            key[.custom][.labelVariations, position]
+                        },
+                        set: {
+                            key[.custom][.labelVariations, position] = $0
+                        })
+                    )
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+
                 }
             }
             if position == .center {
@@ -515,6 +622,14 @@ struct CustardInterfaceKeyEditor: View {
         case .systemImage:
             CustomKeySettingFlickKeyView(position, selectedPosition: $selectedPosition) {
                 Image(systemName: key[.labelImageName, position])
+            }
+            .frame(width: keySize.width, height: keySize.height)
+        case .mainAndVariations:
+            CustomKeySettingFlickKeyView(position, selectedPosition: $selectedPosition) {
+                VStack {
+                    Text(verbatim: key[.labelMain, position])
+                    Text(verbatim: key[.labelVariations, position]).font(.caption)
+                }
             }
             .frame(width: keySize.width, height: keySize.height)
         }
