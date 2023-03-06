@@ -175,7 +175,6 @@
 		1A4057DF255843330073C6F7 /* BoolSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057DE255843330073C6F7 /* BoolSettingView.swift */; };
 		1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057E8255843460073C6F7 /* KeyboardLayoutSettingItemView.swift */; };
 		1A4057F7255843850073C6F7 /* LearningTypeSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057F6255843850073C6F7 /* LearningTypeSettingItemView.swift */; };
-		1A4057FD2558472B0073C6F7 /* AboutFullAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057FC2558472B0073C6F7 /* AboutFullAccessView.swift */; };
 		1A4623E52524617B00EF5B02 /* LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623E42524617B00EF5B02 /* LOUDS.swift */; };
 		1A4623F52524621F00EF5B02 /* extension LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623F42524621F00EF5B02 /* extension LOUDS.swift */; };
 		1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */; };
@@ -583,7 +582,6 @@
 		1A4057DE255843330073C6F7 /* BoolSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolSettingView.swift; sourceTree = "<group>"; };
 		1A4057E8255843460073C6F7 /* KeyboardLayoutSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayoutSettingItemView.swift; sourceTree = "<group>"; };
 		1A4057F6255843850073C6F7 /* LearningTypeSettingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningTypeSettingItemView.swift; sourceTree = "<group>"; };
-		1A4057FC2558472B0073C6F7 /* AboutFullAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutFullAccessView.swift; sourceTree = "<group>"; };
 		1A4623E42524617B00EF5B02 /* LOUDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOUDS.swift; sourceTree = "<group>"; };
 		1A4623F42524621F00EF5B02 /* extension LOUDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension LOUDS.swift"; sourceTree = "<group>"; };
 		1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableEditor.swift; sourceTree = "<group>"; };
@@ -1326,7 +1324,6 @@
 				1AB5075E255EC21D003C0BF2 /* AdditionalDict */,
 				1AFB68412518C48100C649C4 /* OpenSourceSoftWaresLicenseView.swift */,
 				1A9B0A6D2565797E004203BB /* ContactView.swift */,
-				1A4057FC2558472B0073C6F7 /* AboutFullAccessView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -1973,7 +1970,6 @@
 				1AF679AD25CEE66F00F3987B /* KeyboardPreview.swift in Sources */,
 				1AF6797025CEDB9B00F3987B /* VariationsModel.swift in Sources */,
 				1AF6792325CEDB6800F3987B /* extension CGPoint.swift in Sources */,
-				1A4057FD2558472B0073C6F7 /* AboutFullAccessView.swift in Sources */,
 				1AC8A5D3259815C300B71E5A /* FlickCustomKeySettingView.swift in Sources */,
 				1AF6798D25CEDBB500F3987B /* FlickTabKeyModel.swift in Sources */,
 				1AF679A125CEDC3A00F3987B /* FlickDataProvider.swift in Sources */,
