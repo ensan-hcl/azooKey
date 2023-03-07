@@ -159,6 +159,13 @@ struct ManageCustardView: View {
                         ForEach(manager.availableCustards, id: \.self) {identifier in
                             if let custard = self.getCustard(identifier: identifier) {
                                 NavigationLink(identifier, destination: CustardInformationView(custard: custard, manager: $manager))
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            manager.removeCustard(identifier: identifier)
+                                        } label: {
+                                            Label("削除", systemImage: "trash")
+                                        }
+                                    }
                             } else if let custardFileURL = self.getCustardFile(identifier: identifier) {
                                 if #available(iOS 16, *) {
                                     ShareLink(item: custardFileURL) {
