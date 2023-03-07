@@ -227,6 +227,10 @@
 "ラベルの種類" = "Type of label";
 "テキスト" = "Text";
 "システムアイコン" = "System icon";
+"メインとサブ" = "Main and sub";
+"アイコンの名前" = "Name of icon";
+"メインのラベル" = "Main label";
+"サブのラベル" = "Sub label";
 "キーに表示される文字を設定します。" = "Set the label.";
 "入力される文字とは異なっていても構いません。" = "Not necessarily equal to input letter.";
 "キーを押して入力される文字を設定します。" = "Set letters inputted when you press this key.";
