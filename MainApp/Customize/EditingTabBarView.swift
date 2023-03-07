@@ -25,18 +25,19 @@ struct EditingTabBarItem: Identifiable, Equatable {
 
 struct EditingTabBarView: View {
     @Binding private var manager: CustardManager
-    @Binding private var tabBarData: TabBarData
+    @State private var tabBarData: TabBarData
     @State private var items: [EditingTabBarItem] = []
     @State private var editMode = EditMode.inactive
 
-    init(tabBarData: Binding<TabBarData>, manager: Binding<CustardManager>) {
-        self._items = State(initialValue: tabBarData.wrappedValue.items.indices.map {i in
+    init(manager: Binding<CustardManager>) {
+        let tabBarData = (try? manager.wrappedValue.tabbar(identifier: 0)) ?? .default
+        self._tabBarData = .init(initialValue: tabBarData)
+        self._items = State(initialValue: tabBarData.items.indices.map {i in
             EditingTabBarItem(
-                label: tabBarData.wrappedValue.items[i].label,
-                actions: tabBarData.wrappedValue.items[i].actions
+                label: tabBarData.items[i].label,
+                actions: tabBarData.items[i].actions
             )
         })
-        self._tabBarData = tabBarData
         self._manager = manager
     }
 
@@ -63,9 +64,27 @@ struct EditingTabBarView: View {
                     }
                 } label: { item in
                     label(labelType: item.label)
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                items.removeAll(where: {$0.id == item.id})
+                            } label: {
+                                Label("削除", systemImage: "trash")
+                            }
+                        }
                 }
                 .onDelete(perform: delete)
                 .onMove(perform: move)
+            }
+        }
+        .onAppear {
+            if let tabBarData = try? manager.tabbar(identifier: 0) {
+                self.tabBarData = tabBarData
+                self.items = tabBarData.items.indices.map {i in
+                    EditingTabBarItem(
+                        label: tabBarData.items[i].label,
+                        actions: tabBarData.items[i].actions
+                    )
+                }
             }
         }
         .onChange(of: items) {_ in

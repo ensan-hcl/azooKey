@@ -102,6 +102,13 @@ private struct UserDictionaryDataListView: View {
                                         .foregroundColor(.systemGray)
                                 }
                             }
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    variables.items.removeAll(where: {$0.id == data.id})
+                                } label: {
+                                    Label("削除", systemImage: "trash")
+                                }
+                            }
                         }
                         .onDelete(perform: self.delete(section: key))
                     }.environment(\.editMode, $editMode)

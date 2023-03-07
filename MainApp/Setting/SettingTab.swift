@@ -47,6 +47,7 @@ struct SettingTabView: View {
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.enableClipboardHistoryManagerTab)
+                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $storeVariableSection.custardManager))
                     }
                     Section(header: Text("カーソルバー")) {
                         BoolSettingView(.useBetaMoveCursorBar)
@@ -96,6 +97,10 @@ struct SettingTabView: View {
                     Section(header: Text("学習機能")) {
                         LearningTypeSettingView()
                         MemoryResetSettingItemView()
+                    }
+
+                    Section(header: Text("カスタムタブ")) {
+                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $storeVariableSection.custardManager))
                     }
                 }
                 Section(header: Text("このアプリについて")) {

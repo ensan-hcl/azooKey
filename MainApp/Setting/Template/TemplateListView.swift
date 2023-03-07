@@ -48,6 +48,13 @@ struct TemplateListView: View {
                             }
                         }
                     }
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            data.templates.remove(at: value.index)
+                        } label: {
+                            Label("削除", systemImage: "trash")
+                        }
+                    }
                 }
                 .onDelete(perform: delete)
             }

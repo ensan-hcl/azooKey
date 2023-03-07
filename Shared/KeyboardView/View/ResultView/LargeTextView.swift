@@ -27,12 +27,10 @@ struct LargeTextView: View {
                 Text(text)
                     .font(font)
             })
-            Button(action: {
+            Button {
                 isViewOpen = false
-            }) {
-                Image(systemName: "xmark")
-                Text("閉じる")
-                    .font(.body)
+            } label: {
+                Label("閉じる", systemImage: "xmark")
             }.frame(width: nil, height: Design.keyboardScreenHeight * 0.15)
         }
         .background(Color.background)
