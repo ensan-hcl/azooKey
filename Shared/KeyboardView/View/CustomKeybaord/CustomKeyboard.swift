@@ -17,6 +17,8 @@ fileprivate extension CustardKeyLabelStyle {
             return .text(value)
         case let .systemImage(value):
             return .image(value)
+        case let .mainAndSub(main, sub):
+            return .symbols([main, sub])
         }
     }
 }
