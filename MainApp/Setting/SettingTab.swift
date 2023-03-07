@@ -98,6 +98,10 @@ struct SettingTabView: View {
                         LearningTypeSettingView()
                         MemoryResetSettingItemView()
                     }
+
+                    Section(header: Text("カスタムタブ")) {
+                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $storeVariableSection.custardManager))
+                    }
                 }
                 Section(header: Text("このアプリについて")) {
                     Text("azooKeyはオープンソースソフトウェアであり、GitHubでソースコードを公開しています。")
