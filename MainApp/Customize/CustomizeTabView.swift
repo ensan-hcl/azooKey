@@ -11,25 +11,8 @@ import StoreKit
 import SwiftUI
 
 struct CustomizeTabView: View {
-    @State private var tabBarData: TabBarData
-    @State private var manager: CustardManager
     @State private var showImportView = false
     @ObservedObject private var storeVariableSection = Store.variableSection
-
-    init() {
-        var manager = CustardManager.load()
-        self._manager = State(initialValue: manager)
-        if let tabBarData = try? manager.tabbar(identifier: 0) {
-            self._tabBarData = State(initialValue: tabBarData)
-        } else {
-            self._tabBarData = State(initialValue: TabBarData.default)
-            do {
-                try manager.saveTabBarData(tabBarData: self.tabBarData)
-            } catch {
-                debug(error)
-            }
-        }
-    }
 
     var body: some View {
         ZStack {
@@ -39,7 +22,7 @@ struct CustomizeTabView: View {
                         ImageSlideshowView(pictures: ["custard_1", "custard_2", "custard_3" ])
                             .listRowSeparator(.hidden, edges: .bottom)
                         Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
-                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $manager))
+                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $storeVariableSection.custardManager))
                             .foregroundColor(.accentColor)
                     }
 
@@ -57,7 +40,7 @@ struct CustomizeTabView: View {
                             Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
                         }
                         BoolSettingView(.displayTabBarButton)
-                        NavigationLink("タブバーを編集", destination: EditingTabBarView(tabBarData: $tabBarData, manager: $manager))
+                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $storeVariableSection.custardManager))
                             .foregroundColor(.accentColor)
                     }
 
@@ -67,9 +50,6 @@ struct CustomizeTabView: View {
                 }
                 .navigationBarTitle(Text("拡張"), displayMode: .large)
                 .onAppear {
-                    if let tabBarData = try? manager.tabbar(identifier: 0) {
-                        self.tabBarData = tabBarData
-                    }
                     if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview() {
                         if let windowScene = UIApplication.shared.windows.first?.windowScene {
                             SKStoreReviewController.requestReview(in: windowScene)
@@ -82,7 +62,7 @@ struct CustomizeTabView: View {
                 showImportView = value != nil
             }
             if showImportView {
-                URLImportCustardView(manager: $manager)
+                URLImportCustardView(manager: $storeVariableSection.custardManager)
             }
         }
     }

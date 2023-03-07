@@ -47,6 +47,7 @@ struct SettingTabView: View {
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.enableClipboardHistoryManagerTab)
+                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $storeVariableSection.custardManager))
                     }
                     Section(header: Text("カーソルバー")) {
                         BoolSettingView(.useBetaMoveCursorBar)
