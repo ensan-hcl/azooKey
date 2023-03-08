@@ -706,7 +706,7 @@
 		1AE102CE25D3713C00CA7277 /* TrimmingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrimmingView.swift; sourceTree = "<group>"; };
 		1AE102D925D43E9100CA7277 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1AE1913525D4A3370044EE4B /* ThemeShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeShareView.swift; sourceTree = "<group>"; };
-		1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AzooKeyIcon-Regular.otf"; path = "Shared/AzooKeyIcon-Regular.otf"; sourceTree = "<group>"; };
+		1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AzooKeyIcon-Regular.otf"; sourceTree = "<group>"; };
 		1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListView.swift; sourceTree = "<group>"; };
 		1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateEditingView.swift; sourceTree = "<group>"; };
 		1AE70BF0258E5798009B9B8B /* TemplateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateData.swift; sourceTree = "<group>"; };
@@ -927,7 +927,6 @@
 			isa = PBXGroup;
 			children = (
 				1AA346B42567F26000B41A16 /* Shared */,
-				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
 				1A3DC1C42500D44A002CAA93 /* MainApp */,
 				1A3DC1DB2500D44E002CAA93 /* azooKeyTests */,
 				1A3DC1E62500D44E002CAA93 /* MainAppUITests */,
@@ -1247,6 +1246,7 @@
 				1AF6785B25CC4FF800F3987B /* ThemeData */,
 				1A18425325DE614D003985AB /* Custard */,
 				1AC5876825D930D000BB060E /* Localizable.strings */,
+				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
