@@ -33,10 +33,12 @@ final class VariableStates: ObservableObject {
         }
 
         var isTextMagnifying = false
+        var isScreenExpanded = false
         var hasFullAccess = false
         var isCapsLocked = false
 
         static let isCapsLockedKey = "isCapsLocked"
+        static let isScreenExpandedKey = "is_screen_expanded"
         static let hasFullAccessKey = "has_full_access"
         // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
         fileprivate var custardStates: [String: Bool] = [:]
@@ -69,12 +71,14 @@ final class VariableStates: ObservableObject {
                     return self.hasFullAccess
                 } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
+                } else if key == Self.isScreenExpandedKey {
+                    return self.isScreenExpanded
                 }
                 return custardStates[key]
             }
             set {
                 if let newValue {
-                    if key == Self.hasFullAccessKey {
+                    if key == Self.hasFullAccessKey || key == Self.isScreenExpandedKey {
                         // subscript経由ではRead Onlyにする
                         return
                     } else if key == "isTextMagnifying" {

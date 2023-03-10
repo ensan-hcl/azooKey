@@ -43,6 +43,7 @@ indirect enum ActionType: Equatable {
     // タブの変更
     case moveTab(Tab)
     case setTabBar(BoolOperation)
+    case setFullScreenKeyboard(BoolOperation)
 
     // キーボードを閉じる
     case dismissKeyboard

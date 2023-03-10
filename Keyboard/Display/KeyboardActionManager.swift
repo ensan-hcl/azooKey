@@ -202,6 +202,16 @@ final class KeyboardActionManager: UserActionManager {
                     self.registerActions(falseAction)
                 }
             }
+        case let .setFullScreenKeyboard(operation):
+            switch operation {
+            case .on:
+                VariableStates.shared.boolStates.isScreenExpanded = true
+            case .off:
+                VariableStates.shared.boolStates.isScreenExpanded = false
+            case .toggle:
+                VariableStates.shared.boolStates.isScreenExpanded.toggle()
+            }
+            self.delegate.reloadAllView()
         #if DEBUG
         // MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
