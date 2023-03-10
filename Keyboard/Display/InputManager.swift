@@ -126,12 +126,6 @@ final class InputManager {
     /// 変換を選択した場合に呼ばれる
     func complete(candidate: Candidate) {
         self.updateLog(candidate: candidate)
-        // カーソルから左の入力部分を削除し、変換後の文字列+残りの文字列を後で入力し直す
-        if !self.isSelected {
-            // 消しすぎることはないのでエラーは無視できる
-            try? self.displayedTextManager.deleteBackward(count: self.displayedTextManager.displayedTextCursorPosition)
-        }
-
         self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
         self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: &self.isSelected)
 
@@ -204,7 +198,7 @@ final class InputManager {
         if simpleInsert {
             // 必要に応じて確定する
             _ = self.enter()
-            self.displayedTextManager.insertText(text, shouldSimplyInsert: true)
+            self.displayedTextManager.insertText(text)
             return
         }
         if self.isSelected {

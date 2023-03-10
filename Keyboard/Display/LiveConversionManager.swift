@@ -62,7 +62,7 @@ final class LiveConversionManager {
         // TODO: 最後の1単語のライブ変換を抑制したい
         // TODO: ローマ字入力中に最後の単語が優先される問題
         var candidate: Candidate
-        if convertTargetCursorPosition > 1, let firstCandidate = candidates.first(where: {$0.data.map {$0.ruby}.joined().count == convertTarget.count && !$0.isPredictionCandidate}) {
+        if convertTargetCursorPosition > 1, let firstCandidate = candidates.first(where: {$0.data.map {$0.ruby}.joined().count == convertTarget.count}) {
             candidate = firstCandidate
         } else {
             candidate = .init(text: convertTarget, value: 0, correspondingCount: convertTarget.count, lastMid: MIDData.一般.mid, data: [.init(ruby: convertTarget.toKatakana(), cid: CIDData.一般名詞.cid, mid: MIDData.一般.mid, value: 0)])

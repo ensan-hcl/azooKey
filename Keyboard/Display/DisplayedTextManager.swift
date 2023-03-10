@@ -112,11 +112,11 @@ final class DisplayedTextManager {
     /// MarkedTextを更新する関数
     /// この関数自体はisMarkedTextEnabledのチェックを行わない。
     func updateMarkedText() {
-        let text = self.displayedLiveConversionText ?? self.displayedText
-        let cursorPosition = self.displayedLiveConversionText.map(NSString.init(string:))?.length ?? NSString(string: String(self.displayedText.prefix(self.displayedTextCursorPosition))).length
+        let text = self.displayedLiveConversionText ?? self.composingText.convertTarget
+        let cursorPosition = self.displayedLiveConversionText.map(NSString.init(string:))?.length ?? NSString(string: String(self.composingText.convertTarget.prefix(self.composingText.convertTargetCursorPosition))).length
         self.proxy.setMarkedText(text, selectedRange: NSRange(location: cursorPosition, length: 0))
     }
-    
+
     func insertText(_ text: String) {
         guard !text.isEmpty else {
             return
@@ -141,7 +141,7 @@ final class DisplayedTextManager {
         case deleteTooMuch
     }
 
-    func moveCursor(count: Int, isComposing: Bool = true) throws {
+    func moveCursor(count: Int, isComposing: Bool = true) {
         guard count != 0 else {
             return
         }
@@ -310,41 +310,6 @@ final class DisplayedTextManager {
             self.moveCursor(count: composingText.convertTargetCursorPosition - cursorPosition)
             self.composingText = composingText
             self.displayedLiveConversionText = nil
-        }
-    }
-
-    /// ライブ変換結果の表示を止める
-    func dismissLiveConversionText() {
-        if isMarkedTextEnabled {
-            self.displayedLiveConversionText = nil
-            self.updateMarkedText()
-        } else {
-            let oldDisplayedText = self.displayedLiveConversionText ?? self.displayedText
-            let commonPrefix = oldDisplayedText.commonPrefix(with: self.displayedText)
-            let delete = oldDisplayedText.count - commonPrefix.count
-            let input = self.displayedText.suffix(self.displayedText.count - commonPrefix.count)
-            self.rawDeleteBackward(count: delete)
-            self.proxy.insertText(String(input))
-            self.displayedLiveConversionText = nil
-        }
-    }
-
-    /// ライブ変換結果を更新する
-    func updateLiveConversionText(liveConversionText: String) {
-        if liveConversionText.isEmpty {
-            self.dismissLiveConversionText()
-            return
-        }
-        let oldDisplayedText = self.displayedLiveConversionText ?? self.displayedText
-        self.displayedLiveConversionText = liveConversionText
-        if isMarkedTextEnabled {
-            self.updateMarkedText()
-        } else {
-            let commonPrefix = oldDisplayedText.commonPrefix(with: liveConversionText)
-            let delete = oldDisplayedText.count - commonPrefix.count
-            let input = liveConversionText.suffix(liveConversionText.count - commonPrefix.count)
-            self.rawDeleteBackward(count: delete)
-            self.proxy.insertText(String(input))
         }
     }
 
