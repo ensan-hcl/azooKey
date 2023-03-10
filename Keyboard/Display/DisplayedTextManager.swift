@@ -26,22 +26,34 @@ final class DisplayedTextManager {
     /// marked textの有効化状態
     private(set) var isMarkedTextEnabled: Bool
     private var proxy: UITextDocumentProxy! {
-        if let inKeyboardProxy {
-            return inKeyboardProxy
+        switch preferredTextProxy {
+        case .main: return displayedTextProxy
+        case .ikTextField: return ikTextFieldProxy ?? displayedTextProxy
         }
-        return displayedTextProxy
     }
+
+    private var preferredTextProxy: AnyTextDocumentProxy.Preference = .main
     /// キーボード外のテキストを扱う`UITextDocumentProxy`
     private var displayedTextProxy: UITextDocumentProxy!
     /// キーボード内テキストフィールドの`UITextDocumentProxy`
-    private var inKeyboardProxy: UITextDocumentProxy?
+    private var ikTextFieldProxy: UITextDocumentProxy?
 
-    func setTextDocumentProxy(_ proxy: UITextDocumentProxy!) {
-        self.displayedTextProxy = proxy
+    func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
+        switch proxy {
+        case let .mainProxy(proxy):
+            self.displayedTextProxy = proxy
+        case let .ikTextFieldProxy(proxy):
+            self.ikTextFieldProxy = proxy
+            if proxy == nil {
+                self.preferredTextProxy = .main
+            }
+        case let .preference(preference):
+            self.preferredTextProxy = preference
+        }
     }
 
-    func setInKeyboardProxy(_ proxy: UITextDocumentProxy?) {
-        self.inKeyboardProxy = proxy
+    var shouldSkipMarkedTextChange: Bool {
+        self.isMarkedTextEnabled && preferredTextProxy == .ikTextField && ikTextFieldProxy != nil
     }
 
     var documentContextAfterInput: String? {
@@ -56,31 +68,28 @@ final class DisplayedTextManager {
         self.proxy.documentContextBeforeInput
     }
 
-    func clear() {
-        debug("DisplayedTextManager.clear")
-        // unmarkText()だけではSafariの検索Viewなどで破綻する。
-        if isMarkedTextEnabled {
-            self.proxy?.unmarkText()
+    /// 入力を停止する
+    func stopComposition() {
+        debug("DisplayedTextManager.stopComposition")
+        if self.isMarkedTextEnabled {
+            self.proxy.unmarkText()
+        } else {
+            // Do nothing
         }
+        self.composingText = .init()
+        self.displayedLiveConversionText = nil
+        self.reloadSetting()
+    }
+
+    /// 設定を更新する
+    private func reloadSetting() {
         @KeyboardSetting(.liveConversion) var enabled
         self.isLiveConversionEnabled = enabled
         @KeyboardSetting(.markedTextSetting) var markedTextEnabled
         self.isMarkedTextEnabled = markedTextEnabled != .disabled
-
-        self.composingText = .init()
-        self.displayedLiveConversionText = nil
     }
 
-    func enter() {
-        if isMarkedTextEnabled {
-            self.proxy?.unmarkText()
-            self.insertText(self.displayedLiveConversionText ?? self.composingText.convertTarget)
-        } else {
-            // do nothing
-        }
-        self.clear()
-    }
-
+    /// カーソルを何カウント分動かせばいいか計算する
     private func getActualOffset(count: Int) -> Int {
         if count == 0 {
             return 0
@@ -91,7 +100,6 @@ final class DisplayedTextManager {
                     return 1
                 }
                 let suf = after.prefix(count)
-                debug("あとの文字は、", suf, -suf.utf16.count)
                 return suf.utf16.count
             } else {
                 return 1
@@ -99,10 +107,7 @@ final class DisplayedTextManager {
         } else {
             if let before = self.proxy.documentContextBeforeInput {
                 let pre = before.suffix(-count)
-                debug("前の文字は、", pre, -pre.utf16.count)
-
                 return -pre.utf16.count
-
             } else {
                 return -1
             }
@@ -111,7 +116,7 @@ final class DisplayedTextManager {
 
     /// MarkedTextを更新する関数
     /// この関数自体はisMarkedTextEnabledのチェックを行わない。
-    func updateMarkedText() {
+    private func updateMarkedText() {
         let text = self.displayedLiveConversionText ?? self.composingText.convertTarget
         let cursorPosition = self.displayedLiveConversionText.map(NSString.init(string:))?.length ?? NSString(string: String(self.composingText.convertTarget.prefix(self.composingText.convertTargetCursorPosition))).length
         self.proxy.setMarkedText(text, selectedRange: NSRange(location: cursorPosition, length: 0))
@@ -125,23 +130,16 @@ final class DisplayedTextManager {
         VariableStates.shared.textChangedCount += 1
     }
 
-    // 与えられたカウントをそのまま使う
-    // 正しい文字数移動できない可能性がある
-    // DisplayedTextの位置は更新しない
-    func unsafeMoveCursor(unsafeCount: Int) {
-        guard unsafeCount != 0 else {
+    /// In-Keyboard TextFiledが用いられていても、そちらではない方に強制的に入力を行う関数
+    func insertMainDisplayText(_ text: String) {
+        guard !text.isEmpty else {
             return
         }
-        self.proxy.adjustTextPosition(byCharacterOffset: unsafeCount)
+        self.displayedTextProxy.insertText(text)
         VariableStates.shared.textChangedCount += 1
     }
 
-    enum OperationError: Error {
-        case liveConversion
-        case deleteTooMuch
-    }
-
-    func moveCursor(count: Int, isComposing: Bool = true) {
+    func moveCursor(count: Int) {
         guard count != 0 else {
             return
         }
@@ -151,7 +149,7 @@ final class DisplayedTextManager {
     }
 
     // ただ与えられた回数の削除を実行する関数
-    func rawDeleteBackward(count: Int = 1) {
+    private func rawDeleteBackward(count: Int = 1) {
         guard count != 0 else {
             return
         }
@@ -163,12 +161,12 @@ final class DisplayedTextManager {
 
     // isComposingの場合、countはadjust済みであることを期待する
     // されていなかった場合は例外を投げる
-    func deleteBackward(count: Int) throws {
+    func deleteBackward(count: Int) {
         if count == 0 {
             return
         }
         if count < 0 {
-            try self.deleteForward(count: abs(count))
+            self.deleteForward(count: abs(count))
             return
         }
         self.rawDeleteBackward(count: count)
@@ -177,7 +175,7 @@ final class DisplayedTextManager {
     // ただ与えられた回数の削除を入力方向に実行する関数
     // カーソルが動かせない場合を検知するために工夫を入れている
     // TODO: iOS16以降のテキストフィールドの仕様変更で動かなくなっている。直す必要があるが、どうしようもない気がしている。
-    func rawDeleteForward(count: Int) {
+    private func rawDeleteForward(count: Int) {
         guard count != 0 else {
             return
         }
@@ -196,68 +194,34 @@ final class DisplayedTextManager {
 
     // isComposingの場合、countはadjust済みであることを期待する
     // されていなかった場合は例外を投げる
-    func deleteForward(count: Int = 1) throws {
+    func deleteForward(count: Int = 1) {
         if count == 0 {
             return
         }
         if count < 0 {
-            try self.deleteBackward(count: abs(count))
+            self.deleteBackward(count: abs(count))
             return
         }
         self.rawDeleteForward(count: count)
     }
 
-    /// ライブ変換結果の表示を止める
-    func dismissLiveConversionText() {
-        if isMarkedTextEnabled {
-            self.displayedLiveConversionText = nil
-            self.updateMarkedText()
-        } else {
-            let oldDisplayedText = self.displayedLiveConversionText ?? self.composingText.convertTarget
-            let commonPrefix = oldDisplayedText.commonPrefix(with: self.composingText.convertTarget)
-            let delete = oldDisplayedText.count - commonPrefix.count
-            let input = self.composingText.convertTarget.suffix(self.composingText.convertTarget.count - commonPrefix.count)
-            self.rawDeleteBackward(count: delete)
-            self.proxy.insertText(String(input))
-            self.displayedLiveConversionText = nil
-        }
-    }
-
-    /// ライブ変換結果を更新する
-    func updateLiveConversionText(liveConversionText: String) {
-        if liveConversionText.isEmpty {
-            self.dismissLiveConversionText()
-            return
-        }
-        let oldDisplayedText = self.displayedLiveConversionText ?? self.composingText.convertTarget
-        self.displayedLiveConversionText = liveConversionText
-        if isMarkedTextEnabled {
-            self.updateMarkedText()
-        } else {
-            let commonPrefix = oldDisplayedText.commonPrefix(with: liveConversionText)
-            let delete = oldDisplayedText.count - commonPrefix.count
-            let input = liveConversionText.suffix(liveConversionText.count - commonPrefix.count)
-            self.rawDeleteBackward(count: delete)
-            self.proxy.insertText(String(input))
-        }
-    }
-
     /// `composingText`を更新する
-    func updateComposingText(composingText: ComposingText) {
+    func updateComposingText(composingText: ComposingText, newLiveConversionText: String?) {
         if isMarkedTextEnabled {
             self.composingText = composingText
+            self.displayedLiveConversionText = newLiveConversionText
             self.updateMarkedText()
         } else {
-            let oldDisplayedText = self.displayedLiveConversionText ?? self.composingText.convertTarget
-            let oldCursorPosition = self.displayedLiveConversionText?.count ?? self.composingText.convertTargetCursorPosition
-            let newDisplayedText = self.displayedLiveConversionText ?? composingText.convertTarget
-            let newCursorPosition = self.displayedLiveConversionText?.count ?? composingText.convertTargetCursorPosition
+            let oldDisplayedText = displayedLiveConversionText ?? self.composingText.convertTarget
+            let oldCursorPosition = displayedLiveConversionText?.count ?? self.composingText.convertTargetCursorPosition
+            let newDisplayedText = newLiveConversionText ?? composingText.convertTarget
+            let newCursorPosition = newLiveConversionText?.count ?? composingText.convertTargetCursorPosition
             self.composingText = composingText
+            self.displayedLiveConversionText = newLiveConversionText
             // アップデートのアルゴリズム
             // まず、カーソルをcomposingTextの右端に移動する
             // ついで差分を計算し、必要な分だけ削除して修正する
             // 最後にもう一度カーソルを動かす
-            // 例外は無視できる
             let commonPrefix = oldDisplayedText.commonPrefix(with: newDisplayedText)
             let delete = oldDisplayedText.count - commonPrefix.count
             let input = newDisplayedText.suffix(newDisplayedText.count - commonPrefix.count)
@@ -280,42 +244,35 @@ final class DisplayedTextManager {
         return false
     }
 
-    func updateComposingText(composingText: ComposingText, completedPrefix: String, isSelected: inout Bool) {
+    func updateComposingText(composingText: ComposingText, completedPrefix: String, isSelected: Bool) {
         if isMarkedTextEnabled {
             self.insertText(completedPrefix)
             self.composingText = composingText
-            self.updateMarkedText()
-            isSelected = false
             self.displayedLiveConversionText = nil
+            self.updateMarkedText()
         } else {
             // (例１): [あいし|てる] (「あい」を確定)
             // (削除): [|てる]
             // (挿入): 愛[|てる]
             // (挿入): 愛[し|てる]
             // (移動): 愛[し|てる]
+            //
             // (例２): [あい|してる] (「あい」を確定)
             // (削除): [|してる]
             // (挿入): 愛[|してる]
             // (挿入): 愛[|してる]
             // (移動): 愛[してる|]
+            // 選択中でない場合、削除する
             if !isSelected {
                 let count = self.displayedLiveConversionText?.count ?? self.composingText.convertTargetCursorPosition
-                try? self.deleteBackward(count: count)
-                isSelected = false
+                self.deleteBackward(count: count)
             }
-            self.insertText(completedPrefix)
             let delta = self.composingText.convertTarget.count - composingText.convertTarget.count
             let cursorPosition = self.composingText.convertTargetCursorPosition - delta
-            self.insertText(String(self.composingText.convertTargetBeforeCursor.suffix(cursorPosition)))
+            self.insertText(completedPrefix + String(self.composingText.convertTargetBeforeCursor.suffix(cursorPosition)))
             self.moveCursor(count: composingText.convertTargetCursorPosition - cursorPosition)
             self.composingText = composingText
             self.displayedLiveConversionText = nil
         }
-    }
-
-    // カーソルから前count文字をtextで置換する
-    func replace(count: Int, with text: String) {
-        self.rawDeleteBackward(count: count)
-        self.proxy.insertText(text)
     }
 }

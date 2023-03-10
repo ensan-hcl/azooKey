@@ -9,7 +9,7 @@
 import CustardKit
 import Foundation
 
-enum UpsideComponent {}
+enum UpsideComponent: Equatable {}
 
 enum Tab: Equatable {
     case existential(ExistentialTab)

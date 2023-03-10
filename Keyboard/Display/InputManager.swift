@@ -19,9 +19,15 @@ final class InputManager {
     var liveConversionManager = LiveConversionManager()
 
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
-    // TODO: isSelectedとafterAdjustedはdisplayedTextManagerが持っているべき
+    // TODO: isSelectedはdisplayedTextManagerが持っているべき
     var isSelected = false
-    private var afterAdjusted: Bool = false
+
+    /// システム側でproxyを操作した結果、`textDidChange`などがよばれてしまう場合に、その呼び出しをスキップするため、フラグを事前に立てる
+    private var previousSystemOperation: SystemOperationType?
+    enum SystemOperationType {
+        case moveCursor
+        case setMarkedText
+    }
 
     // 再変換機能の提供のために用いる辞書
     private var rubyLog: OrderedDictionary<String, String> = [:]
@@ -103,37 +109,37 @@ final class InputManager {
         self.kanaKanjiConverter.sendToDicdataStore(data)
     }
 
-    func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
+    func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
         self.displayedTextManager.setTextDocumentProxy(proxy)
-    }
-
-    func setInKeyboardProxy(_ proxy: UITextDocumentProxy?) {
-        self.displayedTextManager.setInKeyboardProxy(proxy)
     }
 
     func setUpdateResult(_ updateResult: @escaping ([Candidate]) -> Void) {
         self.updateResult = updateResult
     }
 
-    func isAfterAdjusted() -> Bool {
-        if self.afterAdjusted {
-            self.afterAdjusted = false
-            return true
+    func getPreviousSystemOperation() -> SystemOperationType? {
+        if let previousSystemOperation {
+            self.previousSystemOperation = nil
+            return previousSystemOperation
         }
-        return false
+        return nil
     }
 
     /// 変換を選択した場合に呼ばれる
     func complete(candidate: Candidate) {
         self.updateLog(candidate: candidate)
         self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
-        self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: &self.isSelected)
-
+        if self.displayedTextManager.shouldSkipMarkedTextChange {
+            self.previousSystemOperation = .setMarkedText
+        }
+        self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
         self.kanaKanjiConverter.updateLearningData(candidate)
         guard !self.composingText.isEmpty else {
-            self.clear()
+            // ここで入力を停止する
+            self.stopComposition()
             return
         }
+        self.isSelected = false
         self.kanaKanjiConverter.setCompletedData(candidate)
 
         if liveConversionEnabled {
@@ -142,15 +148,19 @@ final class InputManager {
         self.setResult()
     }
 
-    func clear() {
-        debug("クリアしました")
-        self.composingText.clear()
-        self.displayedTextManager.clear()
+    /// 入力を停止する。DisplayedTextには特に何もしない。
+    func stopComposition() {
+        self.composingText.stopComposition()
+        self.displayedTextManager.stopComposition()
+        self.liveConversionManager.stopComposition()
+        self.kanaKanjiConverter.stopComposition()
+
         self.isSelected = false
-        self.liveConversionManager.clear()
-        self.setResult()
-        self.kanaKanjiConverter.clear()
         VariableStates.shared.setEnterKeyState(.return)
+
+        if let updateResult {
+            updateResult([])
+        }
     }
 
     func closeKeyboard() {
@@ -159,8 +169,10 @@ final class InputManager {
         _ = self.enter()
     }
 
-    // MARK: 単純に確定した場合はひらがな列に対して候補を作成する
-    func enter() -> [ActionType] {
+    /// 「現在入力中として表示されている文字列で確定する」というセマンティクスを持った操作である。
+    /// - parameters:
+    ///  - shouldModifyDisplayedText: DisplayedTextを操作して良いか否か。`textDidChange`などの場合は操作してはいけない。
+    func enter(shouldModifyDisplayedText: Bool = true) -> [ActionType] {
         var candidate: Candidate
         // ライブ変換中に確定する場合、現在表示されているテキストそのものが候補となる。
         if liveConversionEnabled, let _candidate = liveConversionManager.lastUsedCandidate {
@@ -182,15 +194,23 @@ final class InputManager {
                 ]
             )
         }
-        self.updateLog(candidate: candidate)
         let actions = self.kanaKanjiConverter.getApporopriateActions(candidate)
         candidate.withActions(actions)
         candidate.parseTemplate()
-        self.kanaKanjiConverter.updateLearningData(candidate)
-        self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
-        self.displayedTextManager.enter()
-        self.clear()
+        self.updateLog(candidate: candidate)
+        if shouldModifyDisplayedText {
+            self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
+            if self.displayedTextManager.shouldSkipMarkedTextChange {
+                self.previousSystemOperation = .setMarkedText
+            }
+            self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
+        }
+        self.stopComposition()
         return actions
+    }
+
+    func insertMainDisplayText(_ text: String) {
+        self.displayedTextManager.insertMainDisplayText(text)
     }
 
     // MARK: キーボード経由でユーザがinputを行った場合に呼び出す
@@ -202,16 +222,14 @@ final class InputManager {
             return
         }
         if self.isSelected {
-            // 選択は解除される
-            self.isSelected = false
-            // composingTextをクリアする
-            self.composingText.clear()
-            // キーボードの状態と無関係にdirectに設定し、入力をそのまま持たせる
-            self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
-
-            // 実際に入力する
-            self.displayedTextManager.updateComposingText(composingText: self.composingText)
-            setResult()
+            // 選択部分を削除する
+            self.displayedTextManager.deleteBackward(count: 1)
+            // 変換をリセットする
+            self.stopComposition()
+            // 入力する
+            self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
+            // 変換を要求する
+            self.setResult()
 
             VariableStates.shared.setEnterKeyState(.complete)
             return
@@ -237,12 +255,11 @@ final class InputManager {
 
         self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
         debug("Input Manager input:", composingText)
-        self.displayedTextManager.updateComposingText(composingText: self.composingText)
-
-        VariableStates.shared.setEnterKeyState(.complete)
-
         if requireSetResult {
-            setResult()
+            // 変換を実施する
+            self.setResult()
+            // キーの種類を変更
+            VariableStates.shared.setEnterKeyState(.complete)
         }
     }
 
@@ -254,22 +271,19 @@ final class InputManager {
         }
 
         guard !self.composingText.isEmpty else {
-            // 消し過ぎの可能性は考えなくて大丈夫な状況
-            try? self.displayedTextManager.deleteForward(count: count)
+            self.displayedTextManager.deleteForward(count: count)
             return
         }
 
         self.composingText.deleteForwardFromCursorPosition(count: count)
         debug("Input Manager deleteForward: ", composingText)
-        // 削除を実行する
-        self.displayedTextManager.updateComposingText(composingText: self.composingText)
 
         if requireSetResult {
-            setResult()
-        }
-
-        if self.composingText.isEmpty {
-            VariableStates.shared.setEnterKeyState(.return)
+            // 変換を実施する
+            self.setResult()
+            if self.composingText.isEmpty {
+                VariableStates.shared.setEnterKeyState(.return)
+            }
         }
     }
 
@@ -284,8 +298,10 @@ final class InputManager {
         }
         // 選択状態ではオール削除になる
         if self.isSelected {
-            self.displayedTextManager.rawDeleteBackward()
-            self.clear()
+            // 選択部分を削除する
+            self.displayedTextManager.deleteBackward(count: 1)
+            // 変換をリセットする
+            self.stopComposition()
             return
         }
         // 条件
@@ -294,24 +310,19 @@ final class InputManager {
             return
         }
         guard !self.composingText.isEmpty else {
-            // 消し過ぎの可能性は考えなくて大丈夫な状況
-            try? self.displayedTextManager.deleteBackward(count: convertTargetCount)
+            self.displayedTextManager.deleteBackward(count: convertTargetCount)
             return
         }
 
         self.composingText.deleteBackwardFromCursorPosition(count: convertTargetCount)
         debug("Input Manager deleteBackword: ", composingText)
 
-        // 削除を実行する
-        // 消し過ぎの可能性は考えなくて大丈夫な状況
-        self.displayedTextManager.updateComposingText(composingText: self.composingText)
-
         if requireSetResult {
-            setResult()
-        }
-
-        if self.composingText.isEmpty {
-            VariableStates.shared.setEnterKeyState(.return)
+            // 変換を実施する
+            self.setResult()
+            if self.composingText.isEmpty {
+                VariableStates.shared.setEnterKeyState(.return)
+            }
         }
     }
 
@@ -319,22 +330,29 @@ final class InputManager {
     func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態ではオール削除になる
         if self.isSelected {
-            self.displayedTextManager.rawDeleteBackward()
-            self.clear()
+            // 選択部分を完全に削除する
+            self.displayedTextManager.deleteBackward(count: 1)
+            // Compositionをリセットする
+            self.stopComposition()
             return
         }
         // 入力中の場合
         if !self.composingText.isEmpty {
+            // TODO: Check implementation of `requireSetResult`
             // カーソルより前を全部消す
             self.composingText.deleteBackwardFromCursorPosition(count: self.composingText.convertTargetCursorPosition)
-            self.displayedTextManager.updateComposingText(composingText: composingText)
-            // カーソルを先頭に移動する
-            self.moveCursor(count: self.composingText.convertTarget.count)
-            // 文字がもうなかった場合
+            // 文字がもうなかった場合、ここで全て削除して終了
             if self.composingText.isEmpty {
-                self.clear()
+                // 全て削除する
+                if self.displayedTextManager.shouldSkipMarkedTextChange {
+                    self.previousSystemOperation = .setMarkedText
+                }
+                self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
+                self.stopComposition()
                 return
             }
+            // カーソルを先頭に移動する
+            self.moveCursor(count: self.composingText.convertTarget.count)
             if requireSetResult {
                 setResult()
             }
@@ -346,14 +364,12 @@ final class InputManager {
             if nexts.contains(last) {
                 break
             } else {
-                // 消し過ぎの可能性は考えなくて大丈夫な状況
-                try? self.displayedTextManager.deleteBackward(count: 1)
+                self.displayedTextManager.deleteBackward(count: 1)
                 deletedCount += 1
             }
         }
         if deletedCount == 0 {
-            // 消し過ぎの可能性は考えなくて大丈夫な状況
-            try? self.displayedTextManager.deleteBackward(count: 1)
+            self.displayedTextManager.deleteBackward(count: 1)
         }
     }
 
@@ -362,19 +378,25 @@ final class InputManager {
     func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態ではオール削除になる
         if self.isSelected {
-            self.displayedTextManager.rawDeleteBackward()
-            self.clear()
+            // 完全に削除する
+            self.displayedTextManager.deleteBackward(count: 1)
+            // Compositionをリセットする
+            self.stopComposition()
             return
         }
         // 入力中の場合
         if !self.composingText.isEmpty {
+            // TODO: Check implementation of `requireSetResult`
             // count文字消せるのは自明なので、返り値は無視できる
             self.composingText.deleteForwardFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
-            self.displayedTextManager.updateComposingText(composingText: self.composingText)
             // 文字がもうなかった場合
             if self.composingText.isEmpty {
-                clear()
-                setResult()
+                // 全て削除する
+                if self.displayedTextManager.shouldSkipMarkedTextChange {
+                    self.previousSystemOperation = .setMarkedText
+                }
+                self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
+                self.stopComposition()
             }
             return
         }
@@ -384,27 +406,22 @@ final class InputManager {
             if nexts.contains(first) {
                 break
             } else {
-                // 消し過ぎの可能性は考えなくて大丈夫な状況
-                try? self.displayedTextManager.deleteForward(count: 1)
+                self.displayedTextManager.deleteForward(count: 1)
                 deletedCount += 1
             }
         }
         if deletedCount == 0 {
-            // 消し過ぎの可能性は考えなくて大丈夫な状況
-            try? self.displayedTextManager.deleteForward(count: 1)
+            self.displayedTextManager.deleteForward(count: 1)
         }
     }
 
     /// テキストの進行方向と逆に、特定の文字までカーソルを動かす
     func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
-        // 選択状態では最も左にカーソルを移動
+        // 選択状態では左にカーソルを移動
         if isSelected {
-            let count = self.composingText.convertTarget.count
-            deselect()
-            self.displayedTextManager.moveCursor(count: count)
-            if requireSetResult {
-                setResult()
-            }
+            // 左にカーソルを動かす
+            self.displayedTextManager.moveCursor(count: -1)
+            self.stopComposition()
             return
         }
         // 入力中の場合
@@ -414,9 +431,8 @@ final class InputManager {
                 return
             }
             _ = self.composingText.moveCursorFromCursorPosition(count: -self.composingText.convertTargetCursorPosition)
-            self.displayedTextManager.updateComposingText(composingText: self.composingText)
             if requireSetResult {
-                setResult()
+                self.setResult()
             }
             return
         }
@@ -439,11 +455,8 @@ final class InputManager {
     func smartMoveCursorForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態では最も右にカーソルを移動
         if isSelected {
-            deselect()
             self.displayedTextManager.moveCursor(count: 1)
-            if requireSetResult {
-                setResult()
-            }
+            self.stopComposition()
             return
         }
         // 入力中の場合
@@ -453,7 +466,6 @@ final class InputManager {
                 return
             }
             _ = self.composingText.moveCursorFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
-            self.displayedTextManager.updateComposingText(composingText: self.composingText)
             if requireSetResult {
                 setResult()
             }
@@ -495,22 +507,13 @@ final class InputManager {
         VariableStates.shared.moveCursorBarState.updateLine(leftText: left + center, rightText: right)
     }
 
-    /// これから選択を解除するときに呼ぶ関数
-    /// ぶっちゃけ役割不明
-    func deselect() {
-        if isSelected {
-            clear()
-            VariableStates.shared.setEnterKeyState(.return)
-        }
-    }
-
     /// 選択状態にあるテキストを再度入力し、編集可能な状態にする
     func edit() {
         if isSelected {
             let selectedText = composingText.convertTarget
-            self.displayedTextManager.rawDeleteBackward()
+            self.displayedTextManager.deleteBackward(count: 1)
             self.isSelected = false
-            self.composingText.clear()
+            self.composingText.stopComposition()
             self.input(text: selectedText)
             VariableStates.shared.setEnterKeyState(.complete)
         }
@@ -552,7 +555,8 @@ final class InputManager {
             let leftside = displayedTextManager.documentContextBeforeInput ?? ""
             for count in (counts.min...counts.max).reversed() where count <= leftside.count {
                 if let replace = table[String(leftside.suffix(count))] {
-                    self.displayedTextManager.replace(count: count, with: replace)
+                    self.displayedTextManager.deleteBackward(count: count)
+                    self.displayedTextManager.insertText(replace)
                     break
                 }
             }
@@ -581,11 +585,18 @@ final class InputManager {
 
     /// キーボード経由でのカーソル移動
     func moveCursor(count: Int, requireSetResult: Bool = true) {
+        if self.isSelected {
+            // ただ横に動かす(選択解除)
+            self.displayedTextManager.moveCursor(count: 1)
+            // 解除する
+            self.stopComposition()
+            return
+        }
         if count == 0 {
             return
         }
-        // カーソルを移動した直後、挙動が不安定であるためにafterAdjustedを使う
-        afterAdjusted = true
+        // カーソルを移動した直後、挙動が不安定であるため、スキップを登録する
+        self.previousSystemOperation = .moveCursor
         // 入力中の文字が空の場合は普通に動かす
         if composingText.isEmpty {
             self.displayedTextManager.moveCursor(count: count)
@@ -599,13 +610,13 @@ final class InputManager {
         debug("Input Manager moveCursor:", composingText, count)
 
         _ = self.composingText.moveCursorFromCursorPosition(count: count)
-        self.displayedTextManager.updateComposingText(composingText: self.composingText)
         if count != 0 && requireSetResult {
             setResult()
         }
     }
 
-    // MARK: userが勝手にカーソルを何かした場合の後処理
+    /// ユーザがキーボードを経由せずにカーソルを何かした場合の後処理を行う関数。
+    ///  - note: この関数をユーティリティとして用いてはいけない。
     func userMovedCursor(count: Int) {
         debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
         VariableStates.shared.textChangedCount += 1
@@ -614,42 +625,13 @@ final class InputManager {
             return
         }
         let operation = composingText.moveCursorFromCursorPosition(count: count)
-        self.afterAdjusted = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, composingTextOperation: operation)
+        self.previousSystemOperation = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, composingTextOperation: operation) ? .moveCursor : nil
         setResult()
-    }
-
-    // ユーザがキーボードを経由せずペーストした場合の処理
-    func userPastedText(text: String) {
-        // 入力された分を反映する
-        self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
-
-        isSelected = false
-        setResult()
-        VariableStates.shared.setEnterKeyState(.complete)
-        VariableStates.shared.textChangedCount += 1
     }
 
     /// ユーザがキーボードを経由せずカットした場合の処理
     func userCutText(text: String) {
-        self.clear()
-        VariableStates.shared.textChangedCount += 1
-    }
-
-    /// ユーザがキーボードを経由せずUndoした場合の処理
-    func userUndidText(text: String) {
-        self.clear()
-        VariableStates.shared.textChangedCount += 1
-    }
-
-    // ユーザが選択領域で文字を入力した場合
-    func userReplacedSelectedText(text: String) {
-        // 新たな入力を反映
-        self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
-
-        isSelected = false
-
-        setResult()
-        VariableStates.shared.setEnterKeyState(.complete)
+        self.stopComposition()
         VariableStates.shared.textChangedCount += 1
     }
 
@@ -677,7 +659,7 @@ final class InputManager {
             return
         }
         // 過去のログを見て、再変換に利用する
-        composingText.clear()
+        self.composingText.stopComposition()
         if let ruby = self.getRubyIfPossible(text: text) {
             debug("Evaluated ruby:", ruby)
             // rubyはひらがなである
@@ -686,18 +668,17 @@ final class InputManager {
             self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
         }
 
-        isSelected = true
-        setResult()
+        self.isSelected = true
+        self.setResult()
         VariableStates.shared.setEnterKeyState(.edit)
     }
 
-    /// 選択を解除した場合、clearを行う
+    /// 選択を解除した場合、Compositionをリセットする
     func userDeselectedText() {
-        self.clear()
-        VariableStates.shared.setEnterKeyState(.return)
+        self.stopComposition()
     }
 
-    // 変換リクエストを送信し、結果を反映する関数
+    /// 変換リクエストを送信し、結果をDisplayed Textにも反映する関数
     func setResult() {
         let requireJapanesePrediction: Bool
         let requireEnglishPrediction: Bool
@@ -739,9 +720,18 @@ final class InputManager {
         let results: [Candidate]
         let firstClauseResults: [Candidate]
         (results, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
-        if liveConversionEnabled {
-            let liveConversionText = self.liveConversionManager.updateWithNewResults(results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
-            self.displayedTextManager.updateLiveConversionText(liveConversionText: liveConversionText)
+
+        // 表示を更新する
+        if !self.isSelected {
+            if self.displayedTextManager.shouldSkipMarkedTextChange {
+                self.previousSystemOperation = .setMarkedText
+            }
+            if liveConversionEnabled {
+                let liveConversionText = self.liveConversionManager.updateWithNewResults(results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
+                self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: liveConversionText)
+            } else {
+                self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
+            }
         }
 
         debug("results to be registered:", results)
@@ -754,39 +744,4 @@ final class InputManager {
             }
         }
     }
-
-    #if DEBUG
-    // debug中であることを示す。
-    var isDebugMode: Bool = false
-    #endif
-
-    #if DEBUG
-    func setDebugResult() {
-        if !isDebugMode {
-            return
-        }
-
-        var left = self.displayedTextManager.documentContextBeforeInput ?? "nil"
-        if left == "\n"{
-            left = "↩︎"
-        }
-
-        var center = self.displayedTextManager.selectedText ?? "nil"
-        center = center.replacingOccurrences(of: "\n", with: "↩︎")
-
-        var right = self.displayedTextManager.documentContextAfterInput ?? "nil"
-        if right == "\n"{
-            right = "↩︎"
-        }
-        if right.isEmpty {
-            right = "empty"
-        }
-        let text = "left:\(Array(left.unicodeScalars))/center:\(Array(center.unicodeScalars))/right:\(Array(right.unicodeScalars))"
-
-        if let updateResult {
-            updateResult([Candidate(text: text, value: .zero, correspondingCount: 0, lastMid: MIDData.EOS.mid, data: [])])
-        }
-        isDebugMode = true
-    }
-    #endif
 }

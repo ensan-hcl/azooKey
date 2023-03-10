@@ -357,7 +357,7 @@ struct ComposingText {
         return text
     }
 
-    mutating func clear() {
+    mutating func stopComposition() {
         self.input = []
         self.convertTarget = ""
         self.convertTargetCursorPosition = 0

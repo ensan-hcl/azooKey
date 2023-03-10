@@ -21,7 +21,7 @@ final class LiveConversionManager {
     private(set) var lastUsedCandidate: Candidate?
     private var headClauseCandidateHistories: [[Candidate]] = []
 
-    func clear() {
+    func stopComposition() {
         self.lastUsedCandidate = nil
         @KeyboardSetting(.liveConversion) var enabled
         self.enabled = enabled
@@ -34,7 +34,9 @@ final class LiveConversionManager {
         // フラグを戻す
         self.isFirstClauseCompletion = false
         // 最初を落とす
-        headClauseCandidateHistories.removeFirst()
+        if !headClauseCandidateHistories.isEmpty {
+            headClauseCandidateHistories.removeFirst()
+        }
     }
 
     private func updateHistories(newCandidate: Candidate, firstClauseCandidates: [Candidate]) {

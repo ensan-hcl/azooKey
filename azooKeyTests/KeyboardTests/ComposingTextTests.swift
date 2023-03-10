@@ -21,7 +21,7 @@ final class ComposingTextTests: XCTestCase {
         XCTAssertTrue(c.isEmpty)
         c.insertAtCursorPosition("あ", inputStyle: .direct)
         XCTAssertFalse(c.isEmpty)
-        c.clear()
+        c.stopComposition()
         XCTAssertTrue(c.isEmpty)
     }
 

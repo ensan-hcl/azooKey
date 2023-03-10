@@ -89,7 +89,7 @@ extension CodableLongpressActionData {
 extension ActionType {
     func feedback() {
         switch self {
-        case .input, .paste:
+        case .input, .paste, .insertMainDisplay:
             KeyboardFeedback.click()
         case .delete:
             KeyboardFeedback.delete()
@@ -97,7 +97,7 @@ extension ActionType {
             KeyboardFeedback.smoothDelete()
         case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState, .setUpsideComponent/*, ._setBoolState*/:
             KeyboardFeedback.tabOrOtherKey()
-        case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
+        case .deselectAndUseAsInputting, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
         case let .boolSwitch(compiledExpression, trueAction, falseAction):
             if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
@@ -107,10 +107,6 @@ extension ActionType {
                     falseAction.first?.feedback()
                 }
             }
-        #if DEBUG
-        case .DEBUG_DATA_INPUT:
-            return
-        #endif
         }
     }
 }
