@@ -237,12 +237,13 @@ final class InputManager {
 
         self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
         debug("Input Manager input:", composingText)
-        self.displayedTextManager.updateComposingText(composingText: self.composingText)
-
-        VariableStates.shared.setEnterKeyState(.complete)
-
         if requireSetResult {
+            // 入力を反映する
+            self.displayedTextManager.updateComposingText(composingText: self.composingText)
+            // 変換を実施する
             setResult()
+            // キーの種類を変更
+            VariableStates.shared.setEnterKeyState(.complete)
         }
     }
 
@@ -261,15 +262,15 @@ final class InputManager {
 
         self.composingText.deleteForwardFromCursorPosition(count: count)
         debug("Input Manager deleteForward: ", composingText)
-        // 削除を実行する
-        self.displayedTextManager.updateComposingText(composingText: self.composingText)
 
         if requireSetResult {
-            setResult()
-        }
-
-        if self.composingText.isEmpty {
-            VariableStates.shared.setEnterKeyState(.return)
+            // 削除を反映する
+            self.displayedTextManager.updateComposingText(composingText: self.composingText)
+            // 変換を実施する
+            self.setResult()
+            if self.composingText.isEmpty {
+                VariableStates.shared.setEnterKeyState(.return)
+            }
         }
     }
 
@@ -302,16 +303,14 @@ final class InputManager {
         self.composingText.deleteBackwardFromCursorPosition(count: convertTargetCount)
         debug("Input Manager deleteBackword: ", composingText)
 
-        // 削除を実行する
-        // 消し過ぎの可能性は考えなくて大丈夫な状況
-        self.displayedTextManager.updateComposingText(composingText: self.composingText)
-
         if requireSetResult {
-            setResult()
-        }
-
-        if self.composingText.isEmpty {
-            VariableStates.shared.setEnterKeyState(.return)
+            // 削除を反映する
+            self.displayedTextManager.updateComposingText(composingText: self.composingText)
+            // 変換を実施する
+            self.setResult()
+            if self.composingText.isEmpty {
+                VariableStates.shared.setEnterKeyState(.return)
+            }
         }
     }
 
@@ -325,6 +324,7 @@ final class InputManager {
         }
         // 入力中の場合
         if !self.composingText.isEmpty {
+            // TODO: Check implementation of `requireSetResult`
             // カーソルより前を全部消す
             self.composingText.deleteBackwardFromCursorPosition(count: self.composingText.convertTargetCursorPosition)
             self.displayedTextManager.updateComposingText(composingText: composingText)
@@ -368,6 +368,7 @@ final class InputManager {
         }
         // 入力中の場合
         if !self.composingText.isEmpty {
+            // TODO: Check implementation of `requireSetResult`
             // count文字消せるのは自明なので、返り値は無視できる
             self.composingText.deleteForwardFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
             self.displayedTextManager.updateComposingText(composingText: self.composingText)
