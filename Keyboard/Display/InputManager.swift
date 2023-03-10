@@ -107,6 +107,10 @@ final class InputManager {
         self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
+    func setInKeyboardProxy(_ proxy: UITextDocumentProxy?) {
+        self.displayedTextManager.setInKeyboardProxy(proxy)
+    }
+
     func setUpdateResult(_ updateResult: @escaping ([Candidate]) -> Void) {
         self.updateResult = updateResult
     }

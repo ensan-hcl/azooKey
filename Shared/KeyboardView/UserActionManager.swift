@@ -18,6 +18,7 @@ class UserActionManager {
     func reserveLongPressAction(_ action: LongpressActionType) {}
     func registerLongPressActionEnd(_ action: LongpressActionType) {}
     func notifyComplete(_ candidate: any ResultViewItemData) {}
+    func setInKeyboardProxy(_ proxy: (any UITextDocumentProxy)?) {}
 
     func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
         ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize)

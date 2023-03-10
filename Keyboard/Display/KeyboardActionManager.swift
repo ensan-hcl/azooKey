@@ -42,6 +42,10 @@ final class KeyboardActionManager: UserActionManager {
         }
     }
 
+    override func setInKeyboardProxy(_ proxy: UITextDocumentProxy?) {
+        self.inputManager.setInKeyboardProxy(proxy)
+    }
+
     override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
         delegate.makeChangeKeyboardButtonView(size: Design.fonts.iconFontSize)
     }

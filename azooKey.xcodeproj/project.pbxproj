@@ -242,6 +242,8 @@
 		1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */; };
 		1AAC102729B25D060020BDE9 /* KeyboardHeightSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */; };
 		1AAC102929B4EE4A0020BDE9 /* FullAccessTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */; };
+		1AAC102B29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */; };
+		1AAC102C29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */; };
 		1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */; };
 		1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */; };
 		1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5076A255ECC3C003C0BF2 /* Trie.swift */; };
@@ -632,6 +634,7 @@
 		1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyTipsView.swift; sourceTree = "<group>"; };
 		1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHeightSettingView.swift; sourceTree = "<group>"; };
 		1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAccessTipsView.swift; sourceTree = "<group>"; };
+		1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InKeyboardTextEditor.swift; sourceTree = "<group>"; };
 		1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji14.0_dict.tsv; sourceTree = "<group>"; };
 		1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalDictManageView.swift; sourceTree = "<group>"; };
 		1AB5076A255ECC3C003C0BF2 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
@@ -1087,6 +1090,7 @@
 				1A3DC2272500D64D002CAA93 /* ResultView.swift */,
 				1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */,
 				1AFB68372518A40D00C649C4 /* LargeTextView.swift */,
+				1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */,
 			);
 			path = ResultView;
 			sourceTree = "<group>";
@@ -1856,6 +1860,7 @@
 				1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */,
 				1A8E454728E1390100133D3B /* MarkedTextSettingView.swift in Sources */,
 				1AD2B8D426C270610053CE4A /* KeyboardSetting.swift in Sources */,
+				1AAC102B29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */,
 				1A3ACF2225FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */,
 				1AB8C3CE25E2509300D39BC5 /* CustomizeTabView.swift in Sources */,
 				1AF6798F25CEDBB500F3987B /* FlickKeyView.swift in Sources */,
@@ -2087,6 +2092,7 @@
 				1AD2B8D926C272F80053CE4A /* BoolKeyboardSetting.swift in Sources */,
 				1A39A19C2592D8D6008DDCFE /* TemplateData.swift in Sources */,
 				1AFA574425811B4500477DC2 /* getPrediction.swift in Sources */,
+				1AAC102C29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */,
 				1AE1023E25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
 				1A7F547426A96A870032E91E /* AzooKeyIcon.swift in Sources */,
 				1A26F34C25E8ACFD003CDA0D /* Color.swift in Sources */,

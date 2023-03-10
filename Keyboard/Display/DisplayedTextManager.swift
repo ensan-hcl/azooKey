@@ -27,11 +27,23 @@ final class DisplayedTextManager {
     private(set) var isLiveConversionEnabled: Bool
     // marked textの有効化状態
     private(set) var isMarkedTextEnabled: Bool
-    // proxy
-    private var proxy: UITextDocumentProxy!
+    private var proxy: UITextDocumentProxy! {
+        if let inKeyboardProxy {
+            return inKeyboardProxy
+        }
+        return displayedTextProxy
+    }
+    /// キーボード外のテキストを扱う`UITextDocumentProxy`
+    private var displayedTextProxy: UITextDocumentProxy!
+    /// キーボード内テキストフィールドの`UITextDocumentProxy`
+    private var inKeyboardProxy: UITextDocumentProxy?
 
     func setTextDocumentProxy(_ proxy: UITextDocumentProxy!) {
-        self.proxy = proxy
+        self.displayedTextProxy = proxy
+    }
+
+    func setInKeyboardProxy(_ proxy: UITextDocumentProxy?) {
+        self.inKeyboardProxy = proxy
     }
 
     var documentContextAfterInput: String? {
