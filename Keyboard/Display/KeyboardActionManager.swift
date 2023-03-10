@@ -157,6 +157,20 @@ final class KeyboardActionManager: UserActionManager {
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
 
+        case let .setUpsideComponent(type):
+            switch type {
+            case nil:
+                if VariableStates.shared.upsideComponent != nil {
+                    VariableStates.shared.upsideComponent = nil
+                    self.delegate.reloadAllView()
+                } else {
+                    VariableStates.shared.upsideComponent = nil
+                }
+            case .some:
+                VariableStates.shared.upsideComponent = type
+                self.delegate.reloadAllView()
+            }
+
         case let .setTabBar(operation):
             switch operation {
             case .on:
@@ -206,16 +220,6 @@ final class KeyboardActionManager: UserActionManager {
                     self.registerActions(falseAction)
                 }
             }
-        case let .setFullScreenKeyboard(operation):
-            switch operation {
-            case .on:
-                VariableStates.shared.boolStates.isScreenExpanded = true
-            case .off:
-                VariableStates.shared.boolStates.isScreenExpanded = false
-            case .toggle:
-                VariableStates.shared.boolStates.isScreenExpanded.toggle()
-            }
-            self.delegate.reloadAllView()
         #if DEBUG
         // MARK: デバッグ用
         case .DEBUG_DATA_INPUT:
