@@ -97,7 +97,7 @@ extension ActionType {
             KeyboardFeedback.smoothDelete()
         case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState, .setUpsideComponent/*, ._setBoolState*/:
             KeyboardFeedback.tabOrOtherKey()
-        case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
+        case .deselectAndUseAsInputting, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
         case let .boolSwitch(compiledExpression, trueAction, falseAction):
             if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {

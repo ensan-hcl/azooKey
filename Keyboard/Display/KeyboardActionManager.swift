@@ -18,7 +18,6 @@ final class KeyboardActionManager: UserActionManager {
     // 即時変数
     private var timers: [(type: LongpressActionType, timer: Timer)] = []
     private var tempTextData: (left: String, center: String, right: String)!
-    private var tempSavedSelectedText: String!
 
     // キーボードを閉じる際に呼び出す
     // inputManagerはキーボードを閉じる際にある種の操作を行う
@@ -103,17 +102,6 @@ final class KeyboardActionManager: UserActionManager {
 
         case .deselectAndUseAsInputting:
             self.inputManager.edit()
-
-        case .saveSelectedTextIfNeeded:
-            if self.inputManager.isSelected {
-                self.tempSavedSelectedText = self.inputManager.composingText.convertTarget
-            }
-
-        case .restoreSelectedTextIfNeeded:
-            if let tmp = self.tempSavedSelectedText {
-                self.inputManager.input(text: tmp)
-                self.tempSavedSelectedText = nil
-            }
 
         case let .moveCursor(count):
             self.inputManager.moveCursor(count: count, requireSetResult: requireSetResult)
