@@ -45,7 +45,7 @@ struct ChatGPTInteractionTab: View {
             .padding(.horizontal, 10)
             .contextMenu {
                 Button {
-                    self.textEditorFocused = false
+                    action.registerAction(.insertMainDisplay(message.content))
                 } label: {
                     Label("この文章を入力する", systemImage: "rectangle.and.pencil.and.ellipsis")
                 }
@@ -97,7 +97,7 @@ struct ChatGPTInteractionTab: View {
                     self.userPrompt = ""
                     Task {
                         do {
-                            let messages: [ChatMessage] = [.init(role: .system, content: "You are native Japanese speaker and you should answer in Japanese. Be positive and use emoji!")] + Array(self.messages.dropFirst().suffix(10))
+                            let messages: [ChatMessage] = [.init(role: .system, content: "You are native Japanese speaker and you should answer in Japanese. Be positive and friendly!")] + Array(self.messages.dropFirst().suffix(10))
                             debug("ChatGPTInteractionTab send messages", messages)
                             let response = try await openAI.sendChat(with: messages, model: .chat(.chatgpt))
                             let result = response.choices

@@ -77,7 +77,8 @@ final class KeyboardActionManager: UserActionManager {
             } else {
                 self.inputManager.input(text: text, requireSetResult: requireSetResult)
             }
-
+        case let .insertMainDisplay(text):
+            self.inputManager.insertMainDisplayText(text)
         case let .delete(count):
             self.showResultView()
             self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)
