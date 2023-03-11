@@ -34,7 +34,9 @@ final class LiveConversionManager {
         // フラグを戻す
         self.isFirstClauseCompletion = false
         // 最初を落とす
-        headClauseCandidateHistories.removeFirst()
+        if !headClauseCandidateHistories.isEmpty {
+            headClauseCandidateHistories.removeFirst()
+        }
     }
 
     private func updateHistories(newCandidate: Candidate, firstClauseCandidates: [Candidate]) {

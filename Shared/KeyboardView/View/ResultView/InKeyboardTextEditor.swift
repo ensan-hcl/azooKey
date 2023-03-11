@@ -107,7 +107,9 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
     }
 
     func unmarkText() {
-        self.input.unmarkText()
+        if self.input.markedTextRange != nil {
+            self.input.unmarkText()
+        }
     }
 
     var hasText: Bool {
@@ -115,6 +117,10 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
     }
 
     func insertText(_ text: String) {
+        if self.input.markedTextRange != nil {
+            self.setMarkedText("", selectedRange: .init())
+            self.input.unmarkText()
+        }
         self.input.insertText(text)
     }
 

@@ -280,33 +280,32 @@ final class DisplayedTextManager {
         return false
     }
 
-    func updateComposingText(composingText: ComposingText, completedPrefix: String, isSelected: inout Bool) {
+    func updateComposingText(composingText: ComposingText, completedPrefix: String, isSelected: Bool) {
         if isMarkedTextEnabled {
             self.insertText(completedPrefix)
             self.composingText = composingText
-            self.updateMarkedText()
-            isSelected = false
             self.displayedLiveConversionText = nil
+            self.updateMarkedText()
         } else {
             // (例１): [あいし|てる] (「あい」を確定)
             // (削除): [|てる]
             // (挿入): 愛[|てる]
             // (挿入): 愛[し|てる]
             // (移動): 愛[し|てる]
+            //
             // (例２): [あい|してる] (「あい」を確定)
             // (削除): [|してる]
             // (挿入): 愛[|してる]
             // (挿入): 愛[|してる]
             // (移動): 愛[してる|]
+            // 選択中でない場合、削除する
             if !isSelected {
                 let count = self.displayedLiveConversionText?.count ?? self.composingText.convertTargetCursorPosition
                 try? self.deleteBackward(count: count)
-                isSelected = false
             }
-            self.insertText(completedPrefix)
             let delta = self.composingText.convertTarget.count - composingText.convertTarget.count
             let cursorPosition = self.composingText.convertTargetCursorPosition - delta
-            self.insertText(String(self.composingText.convertTargetBeforeCursor.suffix(cursorPosition)))
+            self.insertText(completedPrefix + String(self.composingText.convertTargetBeforeCursor.suffix(cursorPosition)))
             self.moveCursor(count: composingText.convertTargetCursorPosition - cursorPosition)
             self.composingText = composingText
             self.displayedLiveConversionText = nil

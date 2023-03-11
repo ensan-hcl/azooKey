@@ -127,7 +127,8 @@ final class InputManager {
     func complete(candidate: Candidate) {
         self.updateLog(candidate: candidate)
         self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
-        self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: &self.isSelected)
+        self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
+        self.isSelected = false
 
         self.kanaKanjiConverter.updateLearningData(candidate)
         guard !self.composingText.isEmpty else {
