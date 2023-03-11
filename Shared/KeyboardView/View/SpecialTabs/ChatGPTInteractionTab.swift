@@ -13,6 +13,7 @@ import SwiftUI
 struct ChatGPTInteractionTab: View {
     @ObservedObject private var variableStates = VariableStates.shared
     @Environment(\.userActionManager) private var action
+    @State private var lastIndex = 0
     @State private var userPrompt = ""
     @State private var messages: [ChatMessage] = [.init(role: .assistant, content: "知りたいことや、やりたいことを教えてください！")]
     @FocusState private var textEditorFocused
@@ -63,23 +64,30 @@ struct ChatGPTInteractionTab: View {
                 }
             }
             ScrollView {
-                ForEach(messages.indices, id: \.self) { i in
-                    switch messages[i].role {
-                    case .user:
-                        HStack {
-                            Spacer()
-                            messageView(messages[i])
+                ScrollViewReader { proxy in
+                    ForEach(messages.indices, id: \.self) { i in
+                        switch messages[i].role {
+                        case .user:
+                            HStack {
+                                Spacer()
+                                messageView(messages[i])
+                            }
+                        case .system:
+                            HStack {
+                                Spacer()
+                                messageView(messages[i])
+                                Spacer()
+                            }
+                        case .assistant:
+                            HStack {
+                                messageView(messages[i])
+                                Spacer()
+                            }
                         }
-                    case .system:
-                        HStack {
-                            Spacer()
-                            messageView(messages[i])
-                            Spacer()
-                        }
-                    case .assistant:
-                        HStack {
-                            messageView(messages[i])
-                            Spacer()
+                    }
+                    .onChange(of: lastIndex) { newValue in
+                        withAnimation {
+                            proxy.scrollTo(newValue, anchor: .bottom)
                         }
                     }
                 }
@@ -93,7 +101,7 @@ struct ChatGPTInteractionTab: View {
                     guard !userPrompt.isEmpty else {
                         return
                     }
-                    self.messages.append(ChatMessage(role: .user, content: userPrompt))
+                    self.appendMessage(ChatMessage(role: .user, content: userPrompt))
                     self.userPrompt = ""
                     Task {
                         do {
@@ -102,14 +110,14 @@ struct ChatGPTInteractionTab: View {
                             let response = try await openAI.sendChat(with: messages, model: .chat(.chatgpt))
                             let result = response.choices
                             if let responseMessage = result.first?.message {
-                                self.messages.append(responseMessage)
+                                self.appendMessage(responseMessage)
                             }
                         } catch {
                             #if DEBUG
                             debug("ChatGPTInteractionTab error", error)
-                            self.messages.append(ChatMessage(role: .system, content: "エラーが発生しました。\(error.localizedDescription)"))
+                            self.appendMessage(ChatMessage(role: .system, content: "エラーが発生しました。\(error.localizedDescription)"))
                             #else
-                            self.messages.append(ChatMessage(role: .system, content: "エラーが発生しました。"))
+                            self.appendMessage(ChatMessage(role: .system, content: "エラーが発生しました。"))
                             #endif
                         }
                     }
@@ -123,5 +131,10 @@ struct ChatGPTInteractionTab: View {
         .onAppear {
             self.textEditorFocused = true
         }
+    }
+
+    private func appendMessage(_ message: ChatMessage) {
+        self.messages.append(message)
+        self.lastIndex = self.messages.endIndex - 1
     }
 }
