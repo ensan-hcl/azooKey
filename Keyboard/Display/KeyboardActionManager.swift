@@ -35,14 +35,14 @@ final class KeyboardActionManager: UserActionManager {
 
     func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
-        self.inputManager.setTextDocumentProxy(controller.textDocumentProxy)
+        self.inputManager.setTextDocumentProxy(.mainProxy(controller.textDocumentProxy))
         self.inputManager.setUpdateResult { [weak controller] in
             controller?.updateResultView($0)
         }
     }
 
-    override func setInKeyboardProxy(_ proxy: UITextDocumentProxy?) {
-        self.inputManager.setInKeyboardProxy(proxy)
+    override func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
+        self.inputManager.setTextDocumentProxy(proxy)
     }
 
     override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
@@ -296,7 +296,7 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化する前に状態の保存を行う関数。
-    func notifySomethingWillChange(left: String, center: String, right: String) {
+    override func notifySomethingWillChange(left: String, center: String, right: String) {
         self.tempTextData = (left: left, center: center, right: right)
     }
     // MARK: iOS16以降
@@ -369,14 +369,15 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
+    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
         let a_left = adjustLeftString(a_left)
         let b_left = adjustLeftString(self.tempTextData.left)
         // moveCursorBarStateの更新
         VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
         // カーソルを動かした直後に一度通知がくるので無視する
+        // TODO: Adjustの情報量を増やし、システムが行った操作と来ている通知が一致するか確かめられるようにする
         if self.inputManager.isAfterAdjusted() {
-            debug("non user operation: after cursor move", a_left, a_center, a_right)
+            debug("non user operation", a_left, a_center, a_right)
             return
         }
         if self.inputManager.liveConversionManager.enabled {

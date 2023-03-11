@@ -27,13 +27,16 @@ struct InKeyboardTextEditor: View {
     var body: some View {
         TextViewWrapper(proxyWrapper: $proxyWrapper, text: $text, configuration: configuration)
             .onAppear {
-                action.setInKeyboardProxy(proxyWrapper.proxy)
+                action.setTextDocumentProxy(.ikTextFieldProxy(proxyWrapper.proxy))
+                action.setTextDocumentProxy(.preference(.ikTextField))
             }
             .onDisappear {
-                action.setInKeyboardProxy(nil)
+                action.setTextDocumentProxy(.ikTextFieldProxy(nil))
+                action.setTextDocumentProxy(.preference(.main))
             }
             .onChange(of: proxyWrapper) { newValue in
-                action.setInKeyboardProxy(newValue.proxy)
+                action.setTextDocumentProxy(.ikTextFieldProxy(newValue.proxy))
+                action.setTextDocumentProxy(.preference(.ikTextField))
             }
     }
 }
@@ -129,15 +132,29 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
     }
 }
 
+protocol IKTextEditor {
+    var isInKeyboard: Bool { get }
+}
+
+final class IKTextView: UITextView, IKTextEditor {
+    var isInKeyboard: Bool {
+        true
+    }
+}
+
 private struct TextViewWrapper: UIViewRepresentable {
     @Binding var proxyWrapper: UITextDocumentProxyWrapper
     @Binding var text: String
+    @Environment(\.userActionManager) private var action
     var configuration: InKeyboardTextEditor.Configuration
 
-    func makeUIView(context: UIViewRepresentableContext<Self>) -> UITextView {
-        let view = UITextView(frame: .zero)
+    func makeUIView(context: UIViewRepresentableContext<Self>) -> IKTextView {
+        let view = IKTextView(frame: .zero)
 
         view.delegate = context.coordinator
+        // inputDelegateの調整
+        view.inputDelegate = context.coordinator
+
         view.backgroundColor = configuration.backgroundColor.map(UIColor.init)
         view.font = configuration.font
         view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -146,7 +163,7 @@ private struct TextViewWrapper: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ view: UITextView, context: UIViewRepresentableContext<Self>) {
+    func updateUIView(_ view: IKTextView, context: UIViewRepresentableContext<Self>) {
         if view.text != text {
             Task {
                 view.text = text
@@ -158,7 +175,7 @@ private struct TextViewWrapper: UIViewRepresentable {
         Coordinator(parent: self)
     }
 
-    class Coordinator: NSObject, UITextViewDelegate {
+    class Coordinator: NSObject, UITextViewDelegate, UITextInputDelegate {
         var parent: TextViewWrapper
 
         init(parent: TextViewWrapper) {
@@ -181,6 +198,59 @@ private struct TextViewWrapper: UIViewRepresentable {
         func textViewDidEndEditing(_ view: UITextView) {
             parent.text = view.text ?? ""
             parent.proxyWrapper.proxy = nil
+        }
+
+        func notifyWillChange(_ textInput: UITextInput) {
+            let proxy = CustomTextDocumentProxy(input: textInput)
+            self.parent.action.notifySomethingWillChange(
+                left: proxy.documentContextBeforeInput ?? "",
+                center: proxy.selectedText ?? "",
+                right: proxy.documentContextAfterInput ?? ""
+            )
+        }
+
+        func notifyDidChange(_ textInput: UITextInput) {
+            let proxy = CustomTextDocumentProxy(input: textInput)
+            self.parent.action.notifySomethingDidChange(
+                a_left: proxy.documentContextBeforeInput ?? "",
+                a_center: proxy.selectedText ?? "",
+                a_right: proxy.documentContextAfterInput ?? ""
+            )
+            self.parent.action.setTextDocumentProxy(.preference(.ikTextField))
+            VariableStates.shared.setUIReturnKeyType(type: .default)
+        }
+
+        // MARK: こちらで`textWillChange`などをハンドルすることで、`KeyboardViewController`では扱われなくなる
+        func selectionWillChange(_ textInput: UITextInput?) {
+            debug("TextViewWrapper.Coordinator.selectionWillChange")
+            guard let textInput else {
+                return
+            }
+            self.notifyWillChange(textInput)
+        }
+
+        func selectionDidChange(_ textInput: UITextInput?) {
+            debug("TextViewWrapper.Coordinator.selectionDidChange")
+            guard let textInput else {
+                return
+            }
+            self.notifyDidChange(textInput)
+        }
+
+        func textWillChange(_ textInput: UITextInput?) {
+            debug("TextViewWrapper.Coordinator.textWillChange")
+            guard let textInput else {
+                return
+            }
+            self.notifyWillChange(textInput)
+        }
+
+        func textDidChange(_ textInput: UITextInput?) {
+            debug("TextViewWrapper.Coordinator.textDidChange")
+            guard let textInput else {
+                return
+            }
+            self.notifyDidChange(textInput)
         }
     }
 }

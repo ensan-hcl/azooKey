@@ -103,12 +103,8 @@ final class InputManager {
         self.kanaKanjiConverter.sendToDicdataStore(data)
     }
 
-    func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
+    func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
         self.displayedTextManager.setTextDocumentProxy(proxy)
-    }
-
-    func setInKeyboardProxy(_ proxy: UITextDocumentProxy?) {
-        self.displayedTextManager.setInKeyboardProxy(proxy)
     }
 
     func setUpdateResult(_ updateResult: @escaping ([Candidate]) -> Void) {
@@ -127,7 +123,7 @@ final class InputManager {
     func complete(candidate: Candidate) {
         self.updateLog(candidate: candidate)
         self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
-        if self.displayedTextManager.isMarkedTextEnabled {
+        if self.displayedTextManager.shouldSkipMarkedTextChange {
             self.afterAdjusted = true
         }
         self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
@@ -729,6 +725,9 @@ final class InputManager {
 
         // 表示を更新する
         if !self.isSelected {
+            if self.displayedTextManager.shouldSkipMarkedTextChange {
+                self.afterAdjusted = true
+            }
             if liveConversionEnabled {
                 let liveConversionText = self.liveConversionManager.updateWithNewResults(results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: liveConversionText)

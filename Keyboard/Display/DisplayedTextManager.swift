@@ -26,22 +26,34 @@ final class DisplayedTextManager {
     /// marked textの有効化状態
     private(set) var isMarkedTextEnabled: Bool
     private var proxy: UITextDocumentProxy! {
-        if let inKeyboardProxy {
-            return inKeyboardProxy
+        switch preferredTextProxy {
+        case .main: return displayedTextProxy
+        case .ikTextField: return ikTextFieldProxy ?? displayedTextProxy
         }
-        return displayedTextProxy
     }
+
+    private var preferredTextProxy: AnyTextDocumentProxy.Preference = .main
     /// キーボード外のテキストを扱う`UITextDocumentProxy`
     private var displayedTextProxy: UITextDocumentProxy!
     /// キーボード内テキストフィールドの`UITextDocumentProxy`
-    private var inKeyboardProxy: UITextDocumentProxy?
+    private var ikTextFieldProxy: UITextDocumentProxy?
 
-    func setTextDocumentProxy(_ proxy: UITextDocumentProxy!) {
-        self.displayedTextProxy = proxy
+    func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
+        switch proxy {
+        case let .mainProxy(proxy):
+            self.displayedTextProxy = proxy
+        case let .ikTextFieldProxy(proxy):
+            self.ikTextFieldProxy = proxy
+            if proxy == nil {
+                self.preferredTextProxy = .main
+            }
+        case let .preference(preference):
+            self.preferredTextProxy = preference
+        }
     }
 
-    func setInKeyboardProxy(_ proxy: UITextDocumentProxy?) {
-        self.inKeyboardProxy = proxy
+    var shouldSkipMarkedTextChange: Bool {
+        self.isMarkedTextEnabled && preferredTextProxy == .ikTextField && ikTextFieldProxy != nil
     }
 
     var documentContextAfterInput: String? {
