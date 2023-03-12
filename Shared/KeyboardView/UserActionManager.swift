@@ -18,6 +18,8 @@ class UserActionManager {
     func reserveLongPressAction(_ action: LongpressActionType) {}
     func registerLongPressActionEnd(_ action: LongpressActionType) {}
     func notifyComplete(_ candidate: any ResultViewItemData) {}
+    func notifySomethingWillChange(left: String, center: String, right: String) {}
+    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {}
 
     func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
         ChangeKeyboardButtonView(selector: nil, size: Design.fonts.iconFontSize)

@@ -21,7 +21,7 @@ final class LiveConversionManager {
     private(set) var lastUsedCandidate: Candidate?
     private var headClauseCandidateHistories: [[Candidate]] = []
 
-    func clear() {
+    func stopComposition() {
         self.lastUsedCandidate = nil
         @KeyboardSetting(.liveConversion) var enabled
         self.enabled = enabled
@@ -34,7 +34,9 @@ final class LiveConversionManager {
         // フラグを戻す
         self.isFirstClauseCompletion = false
         // 最初を落とす
-        headClauseCandidateHistories.removeFirst()
+        if !headClauseCandidateHistories.isEmpty {
+            headClauseCandidateHistories.removeFirst()
+        }
     }
 
     private func updateHistories(newCandidate: Candidate, firstClauseCandidates: [Candidate]) {
@@ -57,7 +59,8 @@ final class LiveConversionManager {
     }
 
     /// かな漢字変換結果を受け取ってライブ変換状態の更新を行う関数
-    func updateWithNewResults(_ candidates: [Candidate], firstClauseResults: [Candidate], convertTargetCursorPosition: Int, convertTarget: String) -> ComposingText.ViewOperation {
+    ///  - Returns: ライブ変換で表示するテキスト
+    func updateWithNewResults(_ candidates: [Candidate], firstClauseResults: [Candidate], convertTargetCursorPosition: Int, convertTarget: String) -> String {
         // TODO: 最後の1単語のライブ変換を抑制したい
         // TODO: ローマ字入力中に最後の単語が優先される問題
         var candidate: Candidate
@@ -71,11 +74,12 @@ final class LiveConversionManager {
 
         // カーソルなどを調整する
         if convertTargetCursorPosition > 0 {
-            let deleteCount = self.calculateNecessaryBackspaceCount(rubyCursorPosition: convertTargetCursorPosition)
             self.setLastUsedCandidate(candidate, firstClauseCandidates: firstClauseResults)
-            return .init(delete: deleteCount, input: candidate.text)
+            return candidate.text
+        } else {
+            self.setLastUsedCandidate(nil)
+            return ""
         }
-        return .init(delete: 0, input: "")
     }
 
     /// `lastUsedCandidate`を更新する関数
@@ -121,30 +125,6 @@ final class LiveConversionManager {
             newCandidate.parseTemplate()
             debug(candidate, newCandidate)
             candidate = newCandidate
-        }
-    }
-
-    /// `insert`の前に削除すべき長さを返す関数。
-    func calculateNecessaryBackspaceCount(rubyCursorPosition: Int) -> Int {
-        if let lastUsedCandidate {
-            // 直前のCandidateでinsertされた長さ
-            // 通常、この文字数を消せば問題がない
-            let lastCount = lastUsedCandidate.text.count
-            // 直前に部分確定が行われた場合は話が異なる
-            // この場合、「本来の文字数 == ルビカウントの和」と「今のカーソルポジション」の差分をとり、その文字数がinsertされたのだと判定していた
-            // 「愛してる」において「愛し」を部分確定した場合を考える
-            // 本来のルビカウントは5である
-            // 一方、rubyCursorPositionとしては2が与えられる
-            // 故に3文字に対応する部分が確定されているので、
-            // 現在のカーソル位置から、直前のCandidateのルビとしての長さを引いている
-            // カーソル位置は「ルビとしての長さ」なので、「田中」に対するrubyCursorPositionは「タナカ|」の3であることが期待できる。
-            // 一方lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}はタナカの3文字なので3である。
-            // 従ってこの例ではdelta=0と言える。
-            debug("Live Conversion Delete Count Calc:", lastUsedCandidate, rubyCursorPosition)
-            let delta = rubyCursorPosition - lastUsedCandidate.data.reduce(0) {$0 + $1.ruby.count}
-            return lastCount + delta
-        } else {
-            return rubyCursorPosition
         }
     }
 
