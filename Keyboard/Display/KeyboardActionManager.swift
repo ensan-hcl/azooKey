@@ -147,6 +147,20 @@ final class KeyboardActionManager: UserActionManager {
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
 
+        case let .setUpsideComponent(type):
+            switch type {
+            case nil:
+                if VariableStates.shared.upsideComponent != nil {
+                    VariableStates.shared.upsideComponent = nil
+                    self.delegate.reloadAllView()
+                } else {
+                    VariableStates.shared.upsideComponent = nil
+                }
+            case .some:
+                VariableStates.shared.upsideComponent = type
+                self.delegate.reloadAllView()
+            }
+
         case let .setTabBar(operation):
             switch operation {
             case .on:
