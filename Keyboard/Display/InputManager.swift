@@ -109,7 +109,7 @@ final class InputManager {
         self.kanaKanjiConverter.sendToDicdataStore(data)
     }
 
-    func setTextDocumentProxy(_ proxy: UITextDocumentProxy) {
+    func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
         self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
@@ -207,6 +207,10 @@ final class InputManager {
         }
         self.stopComposition()
         return actions
+    }
+
+    func insertMainDisplayText(_ text: String) {
+        self.displayedTextManager.insertMainDisplayText(text)
     }
 
     // MARK: キーボード経由でユーザがinputを行った場合に呼び出す

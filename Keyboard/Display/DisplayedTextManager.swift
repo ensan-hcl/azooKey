@@ -25,11 +25,31 @@ final class DisplayedTextManager {
     private(set) var displayedLiveConversionText: String?
     /// marked textの有効化状態
     private(set) var isMarkedTextEnabled: Bool
-    // proxy
-    private var proxy: UITextDocumentProxy!
+    private var proxy: UITextDocumentProxy! {
+        switch preferredTextProxy {
+        case .main: return displayedTextProxy
+        case .ikTextField: return ikTextFieldProxy ?? displayedTextProxy
+        }
+    }
 
-    func setTextDocumentProxy(_ proxy: UITextDocumentProxy!) {
-        self.proxy = proxy
+    private var preferredTextProxy: AnyTextDocumentProxy.Preference = .main
+    /// キーボード外のテキストを扱う`UITextDocumentProxy`
+    private var displayedTextProxy: UITextDocumentProxy!
+    /// キーボード内テキストフィールドの`UITextDocumentProxy`
+    private var ikTextFieldProxy: UITextDocumentProxy?
+
+    func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
+        switch proxy {
+        case let .mainProxy(proxy):
+            self.displayedTextProxy = proxy
+        case let .ikTextFieldProxy(proxy):
+            self.ikTextFieldProxy = proxy
+            if proxy == nil {
+                self.preferredTextProxy = .main
+            }
+        case let .preference(preference):
+            self.preferredTextProxy = preference
+        }
     }
 
     var documentContextAfterInput: String? {
@@ -45,7 +65,7 @@ final class DisplayedTextManager {
     }
 
     var shouldSkipMarkedTextChange: Bool {
-        self.isMarkedTextEnabled // && preferredTextProxy == .ikTextField && ikTextFieldProxy != nil
+        self.isMarkedTextEnabled && preferredTextProxy == .ikTextField && ikTextFieldProxy != nil
     }
 
     /// 入力を停止する
@@ -107,6 +127,15 @@ final class DisplayedTextManager {
             return
         }
         self.proxy.insertText(text)
+        VariableStates.shared.textChangedCount += 1
+    }
+
+    /// In-Keyboard TextFiledが用いられていても、そちらではない方に強制的に入力を行う関数
+    func insertMainDisplayText(_ text: String) {
+        guard !text.isEmpty else {
+            return
+        }
+        self.displayedTextProxy.insertText(text)
         VariableStates.shared.textChangedCount += 1
     }
 
