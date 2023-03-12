@@ -33,12 +33,12 @@ final class VariableStates: ObservableObject {
         }
 
         var isTextMagnifying = false
-        var isScreenExpanded = false
+        var hasUpsideComponent = false
         var hasFullAccess = false
         var isCapsLocked = false
 
         static let isCapsLockedKey = "isCapsLocked"
-        static let isScreenExpandedKey = "is_screen_expanded"
+        static let hasUpsideComponentKey = "is_screen_expanded"
         static let hasFullAccessKey = "has_full_access"
         // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
         fileprivate var custardStates: [String: Bool] = [:]
@@ -71,14 +71,14 @@ final class VariableStates: ObservableObject {
                     return self.hasFullAccess
                 } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
-                } else if key == Self.isScreenExpandedKey {
-                    return self.isScreenExpanded
+                } else if key == Self.hasUpsideComponentKey {
+                    return self.hasUpsideComponent
                 }
                 return custardStates[key]
             }
             set {
                 if let newValue {
-                    if key == Self.hasFullAccessKey || key == Self.isScreenExpandedKey {
+                    if key == Self.hasFullAccessKey || key == Self.hasUpsideComponentKey {
                         // subscript経由ではRead Onlyにする
                         return
                     } else if key == "isTextMagnifying" {
@@ -109,6 +109,8 @@ final class VariableStates: ObservableObject {
 
     @Published var keyboardType: UIKeyboardType = .default
 
+    @Published var upsideComponent: UpsideComponent?
+
     @Published var refreshing = true
 
     @Published private(set) var resizingState: ResizingState = .fullwidth
@@ -122,7 +124,8 @@ final class VariableStates: ObservableObject {
     func setResizingMode(_ state: ResizingState) {
         switch state {
         case .fullwidth:
-            interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight)
+            // FIXME: おかしい
+            interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth) + 2)
         case .onehanded, .resizing:
             let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation)
             // キーボードスクリーンのサイズを超えないように設定

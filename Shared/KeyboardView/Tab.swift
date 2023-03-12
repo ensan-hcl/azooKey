@@ -9,6 +9,8 @@
 import CustardKit
 import Foundation
 
+enum UpsideComponent {}
+
 enum Tab: Equatable {
     case existential(ExistentialTab)
     case user_dependent(UserDependentTab)

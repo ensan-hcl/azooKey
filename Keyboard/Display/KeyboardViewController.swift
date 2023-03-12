@@ -86,7 +86,10 @@ final class KeyboardViewController: UIInputViewController {
         // 高さの設定を反映する
         @KeyboardSetting(.keyboardHeightScale) var keyboardHeightScale: Double
         SemiStaticStates.shared.setKeyboardHeightScale(keyboardHeightScale)
+        self.setupKeyboardView()
+    }
 
+    private func setupKeyboardView() {
         let host = KeyboardViewController.keyboardViewHost ?? KeyboardHostingController(rootView: Keyboard(theme: getCurrentTheme()))
         // コントロールセンターを出しにくくする。
         host.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
@@ -96,12 +99,9 @@ final class KeyboardViewController: UIInputViewController {
         self.view.addSubview(host.view)
         host.didMove(toParent: self)
 
-        host.view.translatesAutoresizingMaskIntoConstraints = false
-        host.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        host.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        host.view.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        host.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-
+        self.view.leftAnchor.constraint(equalTo: host.view.leftAnchor).isActive = true
+        self.view.rightAnchor.constraint(equalTo: host.view.rightAnchor).isActive = true
+        self.view.bottomAnchor.constraint(equalTo: host.view.bottomAnchor).isActive = true
         self.view.heightAnchor.constraint(equalTo: host.view.heightAnchor).isActive = true
 
         KeyboardViewController.keyboardViewHost = host
@@ -122,6 +122,21 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         debug("KeyboardViewController.viewDidAppear")
+        super.viewDidAppear(animated)
+        self.updateStates()
+        self.registerScreenActualSize()
+
+        let window = self.view.window!
+        let gr0 = window.gestureRecognizers![0] as UIGestureRecognizer
+        let gr1 = window.gestureRecognizers![1] as UIGestureRecognizer
+        gr0.delaysTouchesBegan = false
+        gr1.delaysTouchesBegan = false
+
+        self.view.becomeFirstResponder()
+        self.updateViewConstraints()
+    }
+
+    func updateStates() {
         // キーボードタイプはviewDidAppearのタイミングで取得できる
         VariableStates.shared.setKeyboardType(self.textDocumentProxy.keyboardType)
         // フルアクセスの状態を反映する
@@ -135,19 +150,7 @@ final class KeyboardViewController: UIInputViewController {
             fatalError("Too many instance of KeyboardViewController was created")
         }
 
-        self.registerScreenActualSize()
         KeyboardViewController.action.setDelegateViewController(self)
-
-        super.viewDidAppear(animated)
-        let window = self.view.window!
-        let gr0 = window.gestureRecognizers![0] as UIGestureRecognizer
-        let gr1 = window.gestureRecognizers![1] as UIGestureRecognizer
-        gr0.delaysTouchesBegan = false
-        gr1.delaysTouchesBegan = false
-
-        self.view.becomeFirstResponder()
-        self.updateViewConstraints()
-
         SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
 
         @KeyboardSetting(.useOSUserDict) var useOSUserDict
@@ -204,7 +207,7 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        debug("KeyboardViewController.viewDidLayoutSubviews", SemiStaticStates.shared.screenWidth,　Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth))
+        debug("KeyboardViewController.viewDidLayoutSubviews", SemiStaticStates.shared.screenWidth, Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth))
         if #available(iOS 16, *) {
             self.view.frame.size.height = Design.keyboardScreenHeight
         } else {
@@ -219,9 +222,7 @@ final class KeyboardViewController: UIInputViewController {
         self.view.subviews.forEach {$0.clearAllView()}
         self.children.forEach {$0.removeFromParent()}
         KeyboardViewController.keyboardViewHost = nil
-        self.loadViewIfNeeded()
-        self.viewDidLoad()
-        KeyboardViewController.loadedInstanceCount -= 1
+        self.setupKeyboardView()
     }
 
     /*

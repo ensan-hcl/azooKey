@@ -173,14 +173,14 @@ enum Design {
 
     /// This property calculate suitable width for normal keyView.
     static var keyboardScreenHeight: CGFloat {
-        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth) + 2
+        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: VariableStates.shared.upsideComponent != nil) + 2
     }
 
     /// screenWidthに依存して決定する
     /// 12はresultViewのpadding
-    static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width, isScreenExpanded: Bool? = nil) -> CGFloat {
+    static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width, hasUpsideComponent: Bool = false) -> CGFloat {
         let scale: CGFloat
-        if isScreenExpanded ?? VariableStates.shared.boolStates.isScreenExpanded {
+        if hasUpsideComponent {
             switch orientation {
             case .vertical:
                 scale = max(SemiStaticStates.shared.keyboardHeightScale, 2.2)
@@ -204,12 +204,12 @@ enum Design {
         }
     }
 
+    static func upsideComponentHeight() -> CGFloat {
+        Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: true) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: false)
+    }
     /// keyboardHeightに依存して決定する
     static func resultViewHeight() -> CGFloat {
-        // 拡大モードではResultViewの幅は変更しない
-        let keyboardHeight: CGFloat = VariableStates.shared.boolStates.isScreenExpanded
-            ? Design.keyboardHeight(isScreenExpanded: false)
-            : VariableStates.shared.interfaceSize.height
+        let keyboardHeight: CGFloat = VariableStates.shared.interfaceSize.height
 
         switch layoutMode {
         case .phoneVertical:

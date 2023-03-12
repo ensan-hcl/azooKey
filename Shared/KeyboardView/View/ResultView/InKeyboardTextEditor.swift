@@ -10,16 +10,22 @@ import Foundation
 import SwiftUI
 
 struct InKeyboardTextEditor: View {
-    init(text: Binding<String>) {
+    init(text: Binding<String>, configuration: Configuration) {
         self._text = text
+        self.configuration = configuration
+    }
+    struct Configuration {
+        var backgroundColor: Color?
+        var font: UIFont?
     }
 
+    private let configuration: Configuration
     @Binding private var text: String
     @State private var proxyWrapper = UITextDocumentProxyWrapper()
     @Environment(\.userActionManager) private var action
 
     var body: some View {
-        TextViewWrapper(proxyWrapper: $proxyWrapper, text: $text)
+        TextViewWrapper(proxyWrapper: $proxyWrapper, text: $text, configuration: configuration)
             .onAppear {
                 action.setInKeyboardProxy(proxyWrapper.proxy)
             }
@@ -29,7 +35,6 @@ struct InKeyboardTextEditor: View {
             .onChange(of: proxyWrapper) { newValue in
                 action.setInKeyboardProxy(newValue.proxy)
             }
-            .frame(width: 100)
     }
 }
 
@@ -97,6 +102,7 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
     }
 
     func setMarkedText(_ markedText: String, selectedRange: NSRange) {
+        debug("CustomTextDocumentProxy.setMarkedText", markedText)
         self.input.setMarkedText(markedText, selectedRange: selectedRange)
     }
 
@@ -118,13 +124,9 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
 }
 
 private struct TextViewWrapper: UIViewRepresentable {
-    struct Configuration {
-        var backgroundColor: Color?
-        var font: UIFont?
-    }
     @Binding var proxyWrapper: UITextDocumentProxyWrapper
     @Binding var text: String
-    var configuration = Configuration()
+    var configuration: InKeyboardTextEditor.Configuration
 
     func makeUIView(context: UIViewRepresentableContext<Self>) -> UITextView {
         let view = UITextView(frame: .zero)
@@ -132,12 +134,18 @@ private struct TextViewWrapper: UIViewRepresentable {
         view.delegate = context.coordinator
         view.backgroundColor = configuration.backgroundColor.map(UIColor.init)
         view.font = configuration.font
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        view.sizeToFit()
         proxyWrapper.proxy = CustomTextDocumentProxy(input: view)
         return view
     }
 
     func updateUIView(_ view: UITextView, context: UIViewRepresentableContext<Self>) {
-        view.text = text
+        if view.text != text {
+            Task {
+                view.text = text
+            }
+        }
     }
 
     func makeCoordinator() -> Self.Coordinator {
@@ -168,6 +176,5 @@ private struct TextViewWrapper: UIViewRepresentable {
             parent.text = view.text ?? ""
             parent.proxyWrapper.proxy = nil
         }
-
     }
 }
