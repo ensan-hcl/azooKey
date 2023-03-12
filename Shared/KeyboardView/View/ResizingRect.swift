@@ -258,7 +258,11 @@ struct ResizingRect: View {
                         )
                 }
                 Button {
-                    VariableStates.shared.setResizingMode(.onehanded)
+                    if self.position == .zero && self.size == self.initialSize {
+                        VariableStates.shared.setResizingMode(.fullwidth)
+                    } else {
+                        VariableStates.shared.setResizingMode(.onehanded)
+                    }
                 }label: {
                     Circle()
                         .fill(Color.blue)
@@ -351,11 +355,12 @@ struct ResizingBindingFrame: ViewModifier {
                     self.position = .zero
                     self.size.width = initialSize.width
                     self.size.height = initialSize.height
+                    VariableStates.shared.setResizingMode(.fullwidth)
                 }
                 KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
                     value.set(layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation, size: initialSize, position: .zero)
                 }
-            }label: {
+            } label: {
                 Circle()
                     .fill(Color.red)
                     .frame(width: r, height: r)

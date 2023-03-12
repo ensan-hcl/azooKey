@@ -12,7 +12,7 @@ final class DicdataStoreTests: XCTestCase {
 
     func sequentialInput(_ composingText: inout ComposingText, sequence: String, inputStyle: InputStyle) {
         for char in sequence {
-            _ = composingText.insertAtCursorPosition(String(char), inputStyle: inputStyle)
+            composingText.insertAtCursorPosition(String(char), inputStyle: inputStyle)
         }
     }
 
@@ -41,7 +41,7 @@ final class DicdataStoreTests: XCTestCase {
         let dicdataStore = DicdataStore()
         do {
             var c = ComposingText()
-            _ = c.insertAtCursorPosition("ヘンカン", inputStyle: .roman2kana)
+            c.insertAtCursorPosition("ヘンカン", inputStyle: .roman2kana)
             let result = dicdataStore.getLOUDSDataInRange(inputData: c, from: 0, toIndexRange: 2..<4)
             XCTAssertFalse(result.contains(where: {$0.data.word == "変"}))
             XCTAssertTrue(result.contains(where: {$0.data.word == "変化"}))
@@ -49,7 +49,7 @@ final class DicdataStoreTests: XCTestCase {
         }
         do {
             var c = ComposingText()
-            _ = c.insertAtCursorPosition("ヘンカン", inputStyle: .roman2kana)
+            c.insertAtCursorPosition("ヘンカン", inputStyle: .roman2kana)
             let result = dicdataStore.getLOUDSDataInRange(inputData: c, from: 0, toIndexRange: 0..<4)
             XCTAssertTrue(result.contains(where: {$0.data.word == "変"}))
             XCTAssertTrue(result.contains(where: {$0.data.word == "変化"}))
@@ -57,13 +57,13 @@ final class DicdataStoreTests: XCTestCase {
         }
         do {
             var c = ComposingText()
-            _ = c.insertAtCursorPosition("ツカッ", inputStyle: .roman2kana)
+            c.insertAtCursorPosition("ツカッ", inputStyle: .roman2kana)
             let result = dicdataStore.getLOUDSDataInRange(inputData: c, from: 0, toIndexRange: 2..<3)
             XCTAssertTrue(result.contains(where: {$0.data.word == "使っ"}))
         }
         do {
             var c = ComposingText()
-            _ = c.insertAtCursorPosition("ツカッt", inputStyle: .roman2kana)
+            c.insertAtCursorPosition("ツカッt", inputStyle: .roman2kana)
             let result = dicdataStore.getLOUDSDataInRange(inputData: c, from: 0, toIndexRange: 2..<4)
             XCTAssertTrue(result.contains(where: {$0.data.word == "使っ"}))
         }

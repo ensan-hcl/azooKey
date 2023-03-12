@@ -17,8 +17,7 @@ final class KeyboardActionManager: UserActionManager {
 
     // 即時変数
     private var timers: [(type: LongpressActionType, timer: Timer)] = []
-    private var tempTextData: (left: String, center: String, right: String)!
-    private var tempSavedSelectedText: String!
+    private var tempTextData: (left: String, center: String, right: String)?
 
     // キーボードを閉じる際に呼び出す
     // inputManagerはキーボードを閉じる際にある種の操作を行う
@@ -28,6 +27,7 @@ final class KeyboardActionManager: UserActionManager {
             timer.invalidate()
         }
         self.timers = []
+        self.tempTextData = nil
     }
 
     func sendToDicdataStore(_ data: DicdataStore.Notification) {
@@ -36,10 +36,14 @@ final class KeyboardActionManager: UserActionManager {
 
     func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
-        self.inputManager.setTextDocumentProxy(controller.textDocumentProxy)
+        self.inputManager.setTextDocumentProxy(.mainProxy(controller.textDocumentProxy))
         self.inputManager.setUpdateResult { [weak controller] in
             controller?.updateResultView($0)
         }
+    }
+
+    override func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
+        self.inputManager.setTextDocumentProxy(proxy)
     }
 
     override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
@@ -74,10 +78,11 @@ final class KeyboardActionManager: UserActionManager {
             } else {
                 self.inputManager.input(text: text, requireSetResult: requireSetResult)
             }
-
+        case let .insertMainDisplay(text):
+            self.inputManager.insertMainDisplayText(text)
         case let .delete(count):
             self.showResultView()
-            self.inputManager.deleteBackward(count: count, requireSetResult: requireSetResult)
+            self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)
 
         case .smoothDelete:
             KeyboardFeedback.smoothDelete()
@@ -99,17 +104,6 @@ final class KeyboardActionManager: UserActionManager {
 
         case .deselectAndUseAsInputting:
             self.inputManager.edit()
-
-        case .saveSelectedTextIfNeeded:
-            if self.inputManager.isSelected {
-                self.tempSavedSelectedText = self.inputManager.composingText.convertTarget
-            }
-
-        case .restoreSelectedTextIfNeeded:
-            if let tmp = self.tempSavedSelectedText {
-                self.inputManager.input(text: tmp)
-                self.tempSavedSelectedText = nil
-            }
 
         case let .moveCursor(count):
             self.inputManager.moveCursor(count: count, requireSetResult: requireSetResult)
@@ -152,6 +146,20 @@ final class KeyboardActionManager: UserActionManager {
 
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
+
+        case let .setUpsideComponent(type):
+            switch type {
+            case nil:
+                if VariableStates.shared.upsideComponent != nil {
+                    VariableStates.shared.upsideComponent = nil
+                    self.delegate.reloadAllView()
+                } else {
+                    VariableStates.shared.upsideComponent = nil
+                }
+            case .some:
+                VariableStates.shared.upsideComponent = type
+                self.delegate.reloadAllView()
+            }
 
         case let .setTabBar(operation):
             switch operation {
@@ -289,7 +297,11 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化する前に状態の保存を行う関数。
-    func notifySomethingWillChange(left: String, center: String, right: String) {
+    override func notifySomethingWillChange(left: String, center: String, right: String) {
+        guard self.tempTextData == nil else {
+            debug("notifySomethingWillChange: There is already `tempTextData`: \(tempTextData!)")
+            return
+        }
         self.tempTextData = (left: left, center: center, right: right)
     }
     // MARK: iOS16以降
@@ -362,21 +374,28 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
+    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
+        guard let (tempLeft, b_center, b_right) = self.tempTextData else {
+            debug("notifySomethingDidChange: Could not found `tempTextData`")
+            return
+        }
+        defer {
+            self.tempTextData = nil
+        }
         let a_left = adjustLeftString(a_left)
-        let b_left = adjustLeftString(self.tempTextData.left)
+        let b_left = adjustLeftString(tempLeft)
         // moveCursorBarStateの更新
         VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
         // カーソルを動かした直後に一度通知がくるので無視する
-        if self.inputManager.isAfterAdjusted() {
-            debug("non user operation: after cursor move", a_left, a_center, a_right)
+
+        if let operation = self.inputManager.getPreviousSystemOperation() {
+            debug("non user operation \(operation)", a_left, a_center, a_right)
             return
         }
         if self.inputManager.liveConversionManager.enabled {
-            self.inputManager.clear()
+            debug("in live conversion, user changed something: \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
+            _ = self.inputManager.enter()
         }
-        let b_center = self.tempTextData.center
-        let b_right = self.tempTextData.right
         debug("user operation happend: \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
 
         let a_wholeText = a_left + a_center + a_right
@@ -409,8 +428,8 @@ final class KeyboardActionManager: UserActionManager {
             }
 
             // MarkedTextを有効化している場合、テキストの送信等でここに来ることがある
-            // そのほかのイベントは発生しないので、クリアして問題ない
             if self.inputManager.displayedTextManager.isMarkedTextEnabled {
+                debug("user operation id: 2.5")
                 self.inputManager.clear()
                 return
             }

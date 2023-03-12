@@ -9,6 +9,10 @@
 import CustardKit
 import Foundation
 
+enum UpsideComponent {
+    case chatGPT
+}
+
 enum Tab: Equatable {
     case existential(ExistentialTab)
     case user_dependent(UserDependentTab)

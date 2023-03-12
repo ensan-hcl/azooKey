@@ -172,31 +172,45 @@ enum Design {
     }
 
     /// This property calculate suitable width for normal keyView.
-    /// キーボードの高さはスクリーンの幅から決定するため、キーボードスクリーンの高さはこのように書いて良い。
     static var keyboardScreenHeight: CGFloat {
-        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth) + 2
+        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: VariableStates.shared.upsideComponent != nil) + 2
     }
 
     /// screenWidthに依存して決定する
     /// 12はresultViewのpadding
-    static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width) -> CGFloat {
+    static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width, hasUpsideComponent: Bool = false) -> CGFloat {
+        let scale: CGFloat
+        if hasUpsideComponent {
+            switch orientation {
+            case .vertical:
+                scale = max(SemiStaticStates.shared.keyboardHeightScale, 2.2)
+            case .horizontal:
+                scale = max(SemiStaticStates.shared.keyboardHeightScale, 1.5)
+            }
+        } else {
+            scale = SemiStaticStates.shared.keyboardHeightScale
+        }
         // 安全装置として、widthが本来のscreenWidthを超えないようにする。
         let width = min(screenWidth, SemiStaticStates.shared.screenWidth)
         switch layoutMode {
         case .phoneVertical:
-            return 51 / 74 * width * SemiStaticStates.shared.keyboardHeightScale + 12
+            return 51 / 74 * width * scale + 12
         case .padVertical:
-            return 15 / 31 * width * SemiStaticStates.shared.keyboardHeightScale + 12
+            return 15 / 31 * width * scale + 12
         case .phoneHorizontal:
-            return 17 / 56 * width * SemiStaticStates.shared.keyboardHeightScale + 12
+            return 17 / 56 * width * scale + 12
         case .padHorizontal:
-            return 5 / 18 * width * SemiStaticStates.shared.keyboardHeightScale + 12
+            return 5 / 18 * width * scale + 12
         }
     }
 
+    static func upsideComponentHeight() -> CGFloat {
+        Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: true) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: false)
+    }
     /// keyboardHeightに依存して決定する
-    static func resultViewHeight(keyboardHeight: CGFloat = VariableStates.shared.interfaceSize.height) -> CGFloat {
-        // let keyboardHeight = self.keyboardHeight(screenWidth: screenWidth)
+    static func resultViewHeight() -> CGFloat {
+        let keyboardHeight: CGFloat = VariableStates.shared.interfaceSize.height
+
         switch layoutMode {
         case .phoneVertical:
             return (keyboardHeight - 12) * 37 / 204

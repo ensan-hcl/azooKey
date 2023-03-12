@@ -26,7 +26,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol {
         }
     }
 
-    var longPressActions: LongpressActionType = .none
+    var longPressActions: LongpressActionType = .init(start: [.setUpsideComponent(.chatGPT)])
 
     var flickKeys: [FlickDirection: FlickedKeyModel] = [:]
 
