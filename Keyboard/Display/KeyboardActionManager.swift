@@ -81,7 +81,7 @@ final class KeyboardActionManager: UserActionManager {
 
         case let .delete(count):
             self.showResultView()
-            self.inputManager.deleteBackward(count: count, requireSetResult: requireSetResult)
+            self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)
 
         case .smoothDelete:
             KeyboardFeedback.smoothDelete()
