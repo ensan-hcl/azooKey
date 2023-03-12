@@ -62,6 +62,9 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
     private var input: any UITextInput
 
     var documentContextBeforeInput: String? {
+        if self.input.markedTextRange != nil {
+            return nil
+        }
         // カーソル位置は`selectedTextRange`で取得できる。
         if let start = self.input.selectedTextRange?.start,
            let range = self.input.textRange(from: self.input.beginningOfDocument, to: start) {
@@ -71,6 +74,9 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
     }
 
     var documentContextAfterInput: String? {
+        if self.input.markedTextRange != nil {
+            return nil
+        }
         // カーソル位置は`selectedTextRange`で取得できる。
         if let end = self.input.selectedTextRange?.end,
            let range = self.input.textRange(from: end, to: self.input.endOfDocument) {
@@ -80,6 +86,9 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
     }
 
     var selectedText: String? {
+        if self.input.markedTextRange != nil {
+            return nil
+        }
         if let range = self.input.selectedTextRange {
             return self.input.text(in: range)
         }
@@ -120,10 +129,6 @@ private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
     }
 
     func insertText(_ text: String) {
-        if self.input.markedTextRange != nil {
-            self.setMarkedText("", selectedRange: .init())
-            self.input.unmarkText()
-        }
         self.input.insertText(text)
     }
 

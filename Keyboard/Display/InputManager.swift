@@ -19,9 +19,15 @@ final class InputManager {
     var liveConversionManager = LiveConversionManager()
 
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
-    // TODO: isSelectedとafterAdjustedはdisplayedTextManagerが持っているべき
+    // TODO: isSelectedはdisplayedTextManagerが持っているべき
     var isSelected = false
-    private var afterAdjusted: Bool = false
+
+    /// システム側でproxyを操作した結果、`textDidChange`などがよばれてしまう場合に、その呼び出しをスキップするため、フラグを事前に立てる
+    private var previousSystemOperation: SystemOperationType?
+    enum SystemOperationType {
+        case moveCursor
+        case setMarkedText
+    }
 
     // 再変換機能の提供のために用いる辞書
     private var rubyLog: OrderedDictionary<String, String> = [:]
@@ -111,12 +117,12 @@ final class InputManager {
         self.updateResult = updateResult
     }
 
-    func isAfterAdjusted() -> Bool {
-        if self.afterAdjusted {
-            self.afterAdjusted = false
-            return true
+    func getPreviousSystemOperation() -> SystemOperationType? {
+        if let previousSystemOperation {
+            self.previousSystemOperation = nil
+            return previousSystemOperation
         }
-        return false
+        return nil
     }
 
     /// 変換を選択した場合に呼ばれる
@@ -124,7 +130,7 @@ final class InputManager {
         self.updateLog(candidate: candidate)
         self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
         if self.displayedTextManager.shouldSkipMarkedTextChange {
-            self.afterAdjusted = true
+            self.previousSystemOperation = .setMarkedText
         }
         self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
         self.isSelected = false
@@ -142,10 +148,14 @@ final class InputManager {
         self.setResult()
     }
 
-    func clear() {
-        debug("クリアしました")
+    func clear(file: String = #file, line: Int = #line) {
+        debug("InputManager.clear", (file, line))
         self.composingText.clear()
+        if self.displayedTextManager.shouldSkipMarkedTextChange {
+            self.previousSystemOperation = .setMarkedText
+        }
         self.displayedTextManager.clear()
+
         self.isSelected = false
         self.liveConversionManager.clear()
         self.setResult()
@@ -567,8 +577,8 @@ final class InputManager {
         if count == 0 {
             return
         }
-        // カーソルを移動した直後、挙動が不安定であるためにafterAdjustedを使う
-        afterAdjusted = true
+        // カーソルを移動した直後、挙動が不安定であるため、スキップを登録する
+        self.previousSystemOperation = .moveCursor
         // 入力中の文字が空の場合は普通に動かす
         if composingText.isEmpty {
             self.displayedTextManager.moveCursor(count: count)
@@ -597,7 +607,7 @@ final class InputManager {
             return
         }
         let operation = composingText.moveCursorFromCursorPosition(count: count)
-        self.afterAdjusted = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, composingTextOperation: operation)
+        self.previousSystemOperation = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, composingTextOperation: operation) ? .moveCursor : nil
         setResult()
     }
 
@@ -726,7 +736,7 @@ final class InputManager {
         // 表示を更新する
         if !self.isSelected {
             if self.displayedTextManager.shouldSkipMarkedTextChange {
-                self.afterAdjusted = true
+                self.previousSystemOperation = .setMarkedText
             }
             if liveConversionEnabled {
                 let liveConversionText = self.liveConversionManager.updateWithNewResults(results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
