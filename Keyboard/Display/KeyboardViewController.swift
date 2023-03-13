@@ -220,30 +220,32 @@ final class KeyboardViewController: UIInputViewController {
      debug("selectionDidChange")
      }
      */
+    /// 引数の`textInput`は常に`nil`
     override func textWillChange(_ textInput: UITextInput?) {
         super.textWillChange(textInput)
 
-        VariableStates.shared.setUIReturnKeyType(type: self.textDocumentProxy.returnKeyType ?? .default)
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
+        debug("KeyboardViewController.textWillChange", left, center, right)
 
-        debug(left, center, right)
         Self.action.notifySomethingWillChange(left: left, center: center, right: right)
     }
 
+    /// 引数の`textInput`は常に`nil`
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
 
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""
         let center = self.textDocumentProxy.selectedText ?? ""
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
+        debug("KeyboardViewController.textDidChange", left, center, right)
 
-        debug(left, center, right)
         Self.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
-
+        Self.action.setTextDocumentProxy(.preference(.main))
         // このタイミングでクリップボードを確認する
         VariableStates.shared.clipboardHistoryManager.checkUpdate()
+        VariableStates.shared.setUIReturnKeyType(type: self.textDocumentProxy.returnKeyType ?? .default)
     }
 
     @objc func openURL(_ url: URL) {}

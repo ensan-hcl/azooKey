@@ -36,10 +36,14 @@ final class KeyboardActionManager: UserActionManager {
 
     func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
-        self.inputManager.setTextDocumentProxy(controller.textDocumentProxy)
+        self.inputManager.setTextDocumentProxy(.mainProxy(controller.textDocumentProxy))
         self.inputManager.setUpdateResult { [weak controller] in
             controller?.updateResultView($0)
         }
+    }
+
+    override func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
+        self.inputManager.setTextDocumentProxy(proxy)
     }
 
     override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
@@ -74,7 +78,8 @@ final class KeyboardActionManager: UserActionManager {
             } else {
                 self.inputManager.input(text: text, requireSetResult: requireSetResult)
             }
-
+        case let .insertMainDisplay(text):
+            self.inputManager.insertMainDisplayText(text)
         case let .delete(count):
             self.showResultView()
             self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)

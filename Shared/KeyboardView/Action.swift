@@ -21,6 +21,8 @@ indirect enum ActionType: Equatable {
     case smoothDelete           // テキストの一括削除
     case smartDelete(ScanItem)
 
+    case insertMainDisplay(String)   // displayのproxyにテキストをそのまま入力する
+
     /// クリップボードからペーストする
     ///  - note: フルアクセスがない場合動作しない
     case paste

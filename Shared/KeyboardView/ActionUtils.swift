@@ -89,7 +89,7 @@ extension CodableLongpressActionData {
 extension ActionType {
     func feedback() {
         switch self {
-        case .input, .paste:
+        case .input, .paste, .insertMainDisplay:
             KeyboardFeedback.click()
         case .delete:
             KeyboardFeedback.delete()
