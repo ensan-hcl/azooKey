@@ -26,9 +26,7 @@ indirect enum ActionType: Equatable {
     case paste
 
     case deselectAndUseAsInputting   // 選択を解除して編集中とみなす
-    // 取り込み関係
-    case saveSelectedTextIfNeeded           // 選択部分が存在していたら一時保存する。
-    case restoreSelectedTextIfNeeded        // 選択部分の一時保存したデータを取り出して代入する
+
     // カーソル関係
     case moveCursor(Int)
     case smartMoveCursor(ScanItem)
@@ -55,11 +53,6 @@ indirect enum ActionType: Equatable {
 
     // 条件分岐アクション
     case boolSwitch(CompiledExpression, trueAction: [ActionType], falseAction: [ActionType])
-
-    #if DEBUG
-    // デバッグ用
-    case DEBUG_DATA_INPUT
-    #endif
 }
 
 struct LongpressActionType: Equatable {

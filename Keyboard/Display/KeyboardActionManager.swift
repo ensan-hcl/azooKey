@@ -17,8 +17,7 @@ final class KeyboardActionManager: UserActionManager {
 
     // 即時変数
     private var timers: [(type: LongpressActionType, timer: Timer)] = []
-    private var tempTextData: (left: String, center: String, right: String)!
-    private var tempSavedSelectedText: String!
+    private var tempTextData: (left: String, center: String, right: String)?
 
     // キーボードを閉じる際に呼び出す
     // inputManagerはキーボードを閉じる際にある種の操作を行う
@@ -28,6 +27,7 @@ final class KeyboardActionManager: UserActionManager {
             timer.invalidate()
         }
         self.timers = []
+        self.tempTextData = nil
     }
 
     func sendToDicdataStore(_ data: DicdataStore.Notification) {
@@ -77,7 +77,7 @@ final class KeyboardActionManager: UserActionManager {
 
         case let .delete(count):
             self.showResultView()
-            self.inputManager.deleteBackward(count: count, requireSetResult: requireSetResult)
+            self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)
 
         case .smoothDelete:
             KeyboardFeedback.smoothDelete()
@@ -87,7 +87,7 @@ final class KeyboardActionManager: UserActionManager {
         case let .smartDelete(item):
             switch item.direction {
             case .forward:
-                self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
+                self.inputManager.smoothDeleteForward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             case .backward:
                 self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
@@ -99,17 +99,6 @@ final class KeyboardActionManager: UserActionManager {
 
         case .deselectAndUseAsInputting:
             self.inputManager.edit()
-
-        case .saveSelectedTextIfNeeded:
-            if self.inputManager.isSelected {
-                self.tempSavedSelectedText = self.inputManager.composingText.convertTarget
-            }
-
-        case .restoreSelectedTextIfNeeded:
-            if let tmp = self.tempSavedSelectedText {
-                self.inputManager.input(text: tmp)
-                self.tempSavedSelectedText = nil
-            }
 
         case let .moveCursor(count):
             self.inputManager.moveCursor(count: count, requireSetResult: requireSetResult)
@@ -202,11 +191,6 @@ final class KeyboardActionManager: UserActionManager {
                     self.registerActions(falseAction)
                 }
             }
-        #if DEBUG
-        // MARK: デバッグ用
-        case .DEBUG_DATA_INPUT:
-            self.inputManager.setDebugResult()
-        #endif
         }
 
         // VariableStateに操作の結果を反映する
@@ -289,7 +273,12 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化する前に状態の保存を行う関数。
-    func notifySomethingWillChange(left: String, center: String, right: String) {
+    override func notifySomethingWillChange(left: String, center: String, right: String) {
+        // self.tempTextDataが`nil`でない場合、上書きせず終了する
+        guard self.tempTextData == nil else {
+            debug("notifySomethingWillChange: There is already `tempTextData`: \(tempTextData!)")
+            return
+        }
         self.tempTextData = (left: left, center: center, right: right)
     }
     // MARK: iOS16以降
@@ -362,21 +351,36 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
-        let a_left = adjustLeftString(a_left)
-        let b_left = adjustLeftString(self.tempTextData.left)
+    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
         // moveCursorBarStateの更新
         VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
-        // カーソルを動かした直後に一度通知がくるので無視する
-        if self.inputManager.isAfterAdjusted() {
-            debug("non user operation: after cursor move", a_left, a_center, a_right)
+        // 前のデータが保存されていない場合は操作しない
+        guard let (tempLeft, b_center, b_right) = self.tempTextData else {
+            debug("notifySomethingDidChange: Could not found `tempTextData`")
             return
         }
-        if self.inputManager.liveConversionManager.enabled {
-            self.inputManager.clear()
+        // 終了時に必ずtempTextDataを`nil`にする
+        defer {
+            self.tempTextData = nil
         }
-        let b_center = self.tempTextData.center
-        let b_right = self.tempTextData.right
+
+        // iOS16以降左側の文字列の設計が変わったので、adjustする
+        let a_left = adjustLeftString(a_left)
+        let b_left = adjustLeftString(tempLeft)
+
+        // ライブ変換を行っていて入力中の場合、まずは確定してから話を進める
+        if !self.inputManager.composingText.isEmpty && !self.inputManager.isSelected && self.inputManager.liveConversionManager.enabled {
+            debug("in live conversion, user did change something: \((a_left, a_center, a_right)) \((b_left, b_center, b_right))")
+            _ = self.inputManager.enter(shouldModifyDisplayedText: false)
+        }
+
+        // システムによる操作でこの関数が呼ばれた場合はスルーする
+        if let operation = self.inputManager.getPreviousSystemOperation() {
+            debug("non user operation \(operation)", a_left, a_center, a_right)
+            return
+        }
+
+        // この場合はユーザによる操作であると考えられる
         debug("user operation happend: \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
 
         let a_wholeText = a_left + a_center + a_right
@@ -409,9 +413,9 @@ final class KeyboardActionManager: UserActionManager {
             }
 
             // MarkedTextを有効化している場合、テキストの送信等でここに来ることがある
-            // そのほかのイベントは発生しないので、クリアして問題ない
             if self.inputManager.displayedTextManager.isMarkedTextEnabled {
-                self.inputManager.clear()
+                debug("user operation id: 2.5")
+                self.inputManager.stopComposition()
                 return
             }
             // ただタップしただけ、などの場合ここにくる事がある。
@@ -438,23 +442,25 @@ final class KeyboardActionManager: UserActionManager {
         // 全体としてテキストが変化しており、右側の文字列が不変であった場合→Undoしたと推測できる
         if b_left.hasPrefix(a_left) && b_right == a_right {
             debug("user operation id: 7")
-            self.inputManager.clear()
+            self.inputManager.stopComposition()
             return
         }
 
         if b_right == a_right {
             debug("user operation id: 8")
+            self.inputManager.stopComposition()
             return
         }
 
         if a_left == "\n" && b_left.isEmpty && a_right == b_right {
             debug("user operation id: 9")
+            self.inputManager.stopComposition()
             return
         }
 
         // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
         debug("user operation id: 10, \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
-        self.inputManager.clear()
+        self.inputManager.stopComposition()
     }
 
     private func hideLearningMemory() {

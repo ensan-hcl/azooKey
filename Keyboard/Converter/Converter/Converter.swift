@@ -21,7 +21,7 @@ final class KanaKanjiConverter {
     private var lastData: DicdataElement?
 
     /// リセットする関数
-    func clear() {
+    func stopComposition() {
         self.previousInputData = nil
         self.nodes = []
         self.completedData = nil
