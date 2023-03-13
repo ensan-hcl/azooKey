@@ -199,12 +199,6 @@ struct ComposingText {
         return count
     }
 
-    struct ViewOperation {
-        var delete: Int
-        var input: String
-        var cursor: Int = 0
-    }
-
     private func diff(from oldString: some StringProtocol, to newString: String) -> (delete: Int, input: String) {
         let common = oldString.commonPrefix(with: newString)
         return (oldString.count - common.count, String(newString.dropFirst(common.count)))
@@ -324,10 +318,14 @@ struct ComposingText {
     }
 
     /// 現在のカーソル位置からカーソルを動かす関数
-    mutating func moveCursorFromCursorPosition(count: Int) -> ViewOperation {
+    /// - parameters:
+    ///   - count: `convertTarget`において対応する文字数
+    /// - returns: 実際に動かした文字数
+    /// - note: 動かすことのできない文字数を指定した場合、返り値が変化する。
+    mutating func moveCursorFromCursorPosition(count: Int) -> Int {
         let count = max(min(self.convertTarget.count - self.convertTargetCursorPosition, count), -self.convertTargetCursorPosition)
         self.convertTargetCursorPosition += count
-        return ViewOperation(delete: 0, input: "", cursor: count)
+        return count
     }
 
     /// 文頭の方を確定させる関数
@@ -561,7 +559,6 @@ extension ComposingText {
 // Equatableにしておく
 extension ComposingText: Equatable {}
 extension ComposingText.InputElement: Equatable {}
-extension ComposingText.ViewOperation: Equatable {}
 extension ComposingText.ConvertTargetElement: Equatable {}
 
 // MARK: 差分計算用のAPI

@@ -620,8 +620,8 @@ final class InputManager {
             // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
         }
-        let operation = composingText.moveCursorFromCursorPosition(count: count)
-        self.previousSystemOperation = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, composingTextOperation: operation) ? .moveCursor : nil
+        let actualCount = composingText.moveCursorFromCursorPosition(count: count)
+        self.previousSystemOperation = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, adjustedMovedCount: actualCount) ? .moveCursor : nil
         setResult()
     }
 

@@ -204,8 +204,8 @@ final class DisplayedTextManager {
         }
     }
 
-    func updateComposingText(composingText: ComposingText, userMovedCount: Int, composingTextOperation: ComposingText.ViewOperation) -> Bool {
-        let delta = composingTextOperation.cursor - userMovedCount
+    func updateComposingText(composingText: ComposingText, userMovedCount: Int, adjustedMovedCount: Int) -> Bool {
+        let delta = adjustedMovedCount - userMovedCount
         self.composingText = composingText
         if delta != 0 {
             let offset = self.getActualOffset(count: delta)
