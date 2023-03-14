@@ -54,7 +54,7 @@ struct SettingTabView: View {
                         FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
                     // デバイスが触覚フィードバックをサポートしている場合のみ表示する
-                    if Store.shared.hapticsEnabled {
+                    if SemiStaticStates.shared.hapticsAvailable {
                         Section(header: Text("サウンドと振動")) {
                             BoolSettingView(.enableKeySound)
                             BoolSettingView(.enableKeyHaptics)

@@ -30,7 +30,7 @@ struct CustomizeTabView: View {
                             Image("tabBar_1")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(maxWidth: Store.shared.imageMaximumWidth)
+                                .frame(maxWidth: Store.imageMaximumWidth)
                         }
                         .listRowSeparator(.hidden, edges: .bottom)
                         Text("カスタムタブを使うにはタブバーを利用します。")

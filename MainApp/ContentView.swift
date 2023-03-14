@@ -68,7 +68,6 @@ struct ContentView: View {
                         DataUpdateView(id: data.id, manager: $messageManager) {
                             let builder = LOUDSBuilder(txtFileSplit: 2048)
                             builder.process()
-                            Store.shared.noticeReloadUserDict()
                         }
                     case .iOS15_4_new_emoji, .iOS16_4_new_emoji:
                         // 絵文字を更新する

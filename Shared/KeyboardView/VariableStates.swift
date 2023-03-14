@@ -33,7 +33,6 @@ final class VariableStates: ObservableObject {
         }
 
         var isTextMagnifying = false
-        var hasFullAccess = false
         var isCapsLocked = false
 
         static let isCapsLockedKey = "isCapsLocked"
@@ -66,7 +65,7 @@ final class VariableStates: ObservableObject {
                 if key == "isTextMagnifying" {
                     return self.isTextMagnifying
                 } else if key == Self.hasFullAccessKey {
-                    return self.hasFullAccess
+                    return SemiStaticStates.shared.hasFullAccess
                 } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
                 }

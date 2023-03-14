@@ -8,43 +8,32 @@
 
 import Foundation
 import SwiftUI
-import class CoreHaptics.CHHapticEngine
 
 final class Store {
     static let shared = Store()
+    static let imageMaximumWidth: CGFloat = 500
     var feedbackGenerator = UINotificationFeedbackGenerator()
     var messageManager = MessageManager()
-    var hapticsEnabled = false
 
     init() {
-        SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(UIInputViewController().needsInputModeSwitchKey)
+        SemiStaticStates.shared.setNeedsInputModeSwitchKey()
+        SemiStaticStates.shared.setHapticsAvailable()
+        SemiStaticStates.shared.setHasFullAccess()
         // ユーザ辞書に登録がない場合など
         self.messageManager.getMessagesContainerAppShouldMakeWhichDone().forEach {
             messageManager.done($0.id)
         }
         SharedStore.setInitialAppVersion()
         SharedStore.setLastAppVersion()
-        self.hapticsEnabled = CHHapticEngine.capabilitiesForHardware().supportsHaptics
     }
 
-    func noticeReloadUserDict() {
-        SharedStore.userDefaults.set(true, forKey: "reloadUserDict")
-    }
-
-    var isKeyboardActivated: Bool {
+    static func checkKeyboardActivation() -> Bool {
         let bundleName = SharedStore.bundleName
         guard let keyboards = UserDefaults.standard.dictionaryRepresentation()["AppleKeyboards"] as? [String] else {
             return true
         }
         return keyboards.contains(bundleName)
     }
-
-    /// - note:フルアクセスの状態は`UIInputViewController`のインスタンスを1つ作るとわかる。
-    var isFullAccessEnabled: Bool {
-        UIInputViewController().hasFullAccess
-    }
-
-    let imageMaximumWidth: CGFloat = 500
 
     var shouldTryRequestReview: Bool = false
 
@@ -68,13 +57,16 @@ final class Store {
 }
 
 final class MainAppStates: ObservableObject {
-    @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
-    @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
+    @Published var isKeyboardActivated: Bool
+    @Published var requireFirstOpenView: Bool
     @Published var japaneseLayout: LanguageLayout = .flick
     @Published var englishLayout: LanguageLayout = .flick
     @Published var custardManager: CustardManager
 
     init() {
+        let keyboardActivation = Store.checkKeyboardActivation()
+        self.isKeyboardActivated = keyboardActivation
+        self.requireFirstOpenView = !keyboardActivation
         @KeyboardSetting(.japaneseKeyboardLayout) var japaneseKeyboardLayout
         self.japaneseLayout = japaneseKeyboardLayout
         @KeyboardSetting(.englishKeyboardLayout) var englishKeyboardLayout

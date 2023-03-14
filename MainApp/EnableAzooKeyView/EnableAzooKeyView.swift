@@ -156,7 +156,7 @@ struct EnableAzooKeyView: View {
         .animation(.interactiveSpring(), value: step)
         .animation(.spring(), value: showDoneMessage)
         .onEnterForeground { _ in
-            if Store.shared.isKeyboardActivated {
+            if Store.checkKeyboardActivation() {
                 self.step = .setting
                 appStates.isKeyboardActivated = true
             }

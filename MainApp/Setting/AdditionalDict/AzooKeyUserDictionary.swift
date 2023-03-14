@@ -35,7 +35,6 @@ private final class UserDictManagerVariables: ObservableObject {
 
         let builder = LOUDSBuilder(txtFileSplit: 2048)
         builder.process()
-        Store.shared.noticeReloadUserDict()
     }
 }
 
