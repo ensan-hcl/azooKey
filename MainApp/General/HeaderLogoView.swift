@@ -10,30 +10,10 @@ import SwiftUI
 
 struct HeaderLogoView: View {
     @Environment(\.colorScheme) private var colorScheme
-
-    enum Size {
-        case normal
-        case large
-    }
-
-    private let size: Size
-
-    init(size: Size = .normal) {
-        self.size = size
-    }
-
     private var iconColor: Color {
         Color("IconColor")
     }
-
-    private var iconSize: CGFloat {
-        switch self.size {
-        case .normal:
-            return 40
-        case .large:
-            return 60
-        }
-    }
+    private var iconSize: CGFloat = 40
 
     var body: some View {
         Group {
