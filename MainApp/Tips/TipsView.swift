@@ -10,14 +10,11 @@ import SwiftUI
 
 struct TipsTabView: View {
     @EnvironmentObject private var appStates: MainAppStates
-    @State private var isTop = true
     @AppStorage("read_article_iOS14_service_termination") private var readArticle_iOS14_service_termination = false
 
     var body: some View {
         VStack {
-            if isTop {
-                HeaderLogoView()
-            }
+            HeaderLogoView()
             NavigationView {
                 Form {
                     Section(header: Text("キーボードを使えるようにする")) {
