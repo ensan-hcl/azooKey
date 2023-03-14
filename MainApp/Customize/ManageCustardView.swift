@@ -115,6 +115,11 @@ private final class ImportedCustardData: ObservableObject {
     private func downloadAsync(from url: URL) async {
         do {
             self.processState = .getFile
+            guard !url.absoluteString.hasPrefix("file:///") || url.startAccessingSecurityScopedResource() else {
+                self.processState = .none
+                self.failureData = .invalidURL
+                return
+            }
             let (data, _) = try await URLSession.shared.data(from: url)
             self.downloadedData = data
             debug("downloadAsync succeed", data.count)
