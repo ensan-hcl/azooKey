@@ -462,7 +462,7 @@ final class DicdataStore {
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
-        if requestOptions.keyboardLanguage != .en_US && requestOptions.mainInputStyle == .roman2kana {
+        if requestOptions.keyboardLanguage != .en_US && inputData.input[inputRange].allSatisfy({$0.inputStyle == .roman2kana}) {
             if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[convertTarget] {
                 result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
                 result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))

@@ -19,7 +19,7 @@ extension Kana2Kanji {
     ///    「これはき」から「これは今日」に対応する候補などを作って返す。
     /// - note:
     ///     この関数の役割は意味連接の考慮にある。
-    func getPredictionCandidates(composingText: ComposingText, prepart: CandidateData, lastClause: ClauseDataUnit, N_best: Int, mainInputStyle: InputStyle) -> [Candidate] {
+    func getPredictionCandidates(composingText: ComposingText, prepart: CandidateData, lastClause: ClauseDataUnit, N_best: Int) -> [Candidate] {
         debug("getPredictionCandidates", composingText, lastClause.inputRange, lastClause.text)
         let lastRuby = ComposingText.getConvertTarget(for: composingText.input[lastClause.inputRange]).toKatakana()
         let lastRubyCount = lastClause.inputRange.count
@@ -47,8 +47,9 @@ extension Kana2Kanji {
         let correspoindingCount: Int = lastCandidate.correspondingCount + lastRubyCount
         let ignoreCCValue: PValue = self.dicdataStore.getCCValue(lastRcid, nextLcid)
 
+        let inputStyle = composingText.input.last?.inputStyle ?? .direct
         let dicdata: [DicdataElement]
-        switch mainInputStyle {
+        switch inputStyle {
         case .direct:
             dicdata = self.dicdataStore.getPredictionLOUDSDicdata(key: lastRuby)
         case .roman2kana:

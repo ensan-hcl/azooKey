@@ -705,7 +705,6 @@ final class InputManager {
             requireEnglishPrediction: requireEnglishPrediction,
             // VariableStatesを注入
             keyboardLanguage: keyboardLanguage,
-            mainInputStyle: keyboardInputStyle,
             // KeyboardSettingsを注入
             typographyLetterCandidate: typographyLetterCandidate,
             unicodeCandidate: unicodeCandidate,
