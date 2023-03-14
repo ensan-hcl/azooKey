@@ -74,9 +74,9 @@ final class KeyboardActionManager: UserActionManager {
             self.showResultView()
             if VariableStates.shared.boolStates.isCapsLocked && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage) {
                 let input = text.uppercased()
-                self.inputManager.input(text: input, requireSetResult: requireSetResult)
+                self.inputManager.input(text: input, requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
             } else {
-                self.inputManager.input(text: text, requireSetResult: requireSetResult)
+                self.inputManager.input(text: text, requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
             }
         case let .insertMainDisplay(text):
             self.inputManager.insertMainDisplayText(text)
@@ -98,8 +98,8 @@ final class KeyboardActionManager: UserActionManager {
             }
 
         case .paste:
-            if VariableStates.shared.boolStates.hasFullAccess {
-                self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true)
+            if SemiStaticStates.shared.hasFullAccess {
+                self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true, inputStyle: VariableStates.shared.inputStyle)
             }
 
         case .deselectAndUseAsInputting:
@@ -117,7 +117,8 @@ final class KeyboardActionManager: UserActionManager {
             }
 
         case let .setCursorBar(operation):
-            self.inputManager.updateSurroundingText()
+            let result = self.inputManager.getSurroundingText()
+            VariableStates.shared.moveCursorBarState.updateLine(leftText: result.leftText, rightText: result.rightText)
             switch operation {
             case .on:
                 VariableStates.shared.barState = .cursor
@@ -138,11 +139,11 @@ final class KeyboardActionManager: UserActionManager {
 
         case .changeCharacterType:
             self.showResultView()
-            self.inputManager.changeCharacter(requireSetResult: requireSetResult)
+            self.inputManager.changeCharacter(requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
 
         case let .replaceLastCharacters(table):
             self.showResultView()
-            self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult)
+            self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
 
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
@@ -212,9 +213,17 @@ final class KeyboardActionManager: UserActionManager {
             }
         }
 
-        // VariableStateに操作の結果を反映する
         if requireSetResult {
-            self.inputManager.updateSurroundingText()
+            // MARK: VariableStateに操作の結果を反映する
+            // 左右の文字列
+            let surroundingText = self.inputManager.getSurroundingText()
+            VariableStates.shared.moveCursorBarState.updateLine(leftText: surroundingText.leftText, rightText: surroundingText.rightText)
+            // エンターキーの状態
+            VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
+            // 文字列の変更を適用
+            VariableStates.shared.textChangedCount += self.inputManager.getTextChangedCountDelta()
+            // MARK: タブを更新する
+            self.inputManager.setKeyboardLanguage(VariableStates.shared.keyboardLanguage)
         }
     }
 
@@ -371,8 +380,12 @@ final class KeyboardActionManager: UserActionManager {
 
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
-        // moveCursorBarStateの更新
-        VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
+        defer {
+            // moveCursorBarStateの更新
+            VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
+            // エンターキーの状態の更新
+            VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
+        }
         // 前のデータが保存されていない場合は操作しない
         guard let (tempLeft, b_center, b_right) = self.tempTextData else {
             debug("notifySomethingDidChange: Could not found `tempTextData`")
@@ -445,6 +458,11 @@ final class KeyboardActionManager: UserActionManager {
         // 以降isWholeTextChangedは常にtrue
         // 全体としてテキストが変化しており、前は左は改行コードになっていて選択範囲が存在し、かつ前の選択範囲と後の全体が一致する場合→行全体の選択が解除された
         // 行全体を選択している場合は改行コードが含まれる。
+
+        defer {
+            VariableStates.shared.textChangedCount += 1
+        }
+
         if b_left == "\n" && b_center == a_wholeText {
             debug("user operation id: 5")
             self.inputManager.userDeselectedText()

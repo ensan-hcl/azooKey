@@ -10,7 +10,7 @@ import StoreKit
 import SwiftUI
 
 struct SettingTabView: View {
-    @ObservedObject private var storeVariableSection = Store.variableSection
+    @EnvironmentObject private var appStates: MainAppStates
     private func canFlickLayout(_ layout: LanguageLayout) -> Bool {
         if layout == .flick {
             return true
@@ -31,7 +31,7 @@ struct SettingTabView: View {
                     Section(header: Text("言語")) {
                         PreferredLanguageSettingView()
                     }
-                    if self.canFlickLayout(storeVariableSection.japaneseLayout) {
+                    if self.canFlickLayout(appStates.japaneseLayout) {
                         Section(header: Text("操作性")) {
                             FlickSensitivitySettingView(.flickSensitivity)
                         }
@@ -40,21 +40,21 @@ struct SettingTabView: View {
                 Group {
                     Section(header: Text("カスタムキー")) {
                         CustomKeysSettingView()
-                        if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(storeVariableSection.japaneseLayout) {
+                        if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(appStates.japaneseLayout) {
                             BoolSettingView(.enablePasteButton)
                         }
                     }
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.enableClipboardHistoryManagerTab)
-                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $storeVariableSection.custardManager))
+                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
                     }
                     Section(header: Text("カーソルバー")) {
                         BoolSettingView(.useBetaMoveCursorBar)
                         FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
                     // デバイスが触覚フィードバックをサポートしている場合のみ表示する
-                    if Store.shared.hapticsEnabled {
+                    if SemiStaticStates.shared.hapticsAvailable {
                         Section(header: Text("サウンドと振動")) {
                             BoolSettingView(.enableKeySound)
                             BoolSettingView(.enableKeyHaptics)
@@ -100,7 +100,7 @@ struct SettingTabView: View {
                     }
 
                     Section(header: Text("カスタムタブ")) {
-                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $storeVariableSection.custardManager))
+                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
                     }
                 }
                 Section(header: Text("このアプリについて")) {
@@ -127,9 +127,9 @@ struct SettingTabView: View {
             }
             .navigationBarTitle(Text("設定"), displayMode: .large)
             .onAppear {
-                if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview() {
-                    if let windowScene = UIApplication.shared.windows.first?.windowScene {
-                        SKStoreReviewController.requestReview(in: windowScene)
+                if RequestReviewManager.shared.shouldTryRequestReview, RequestReviewManager.shared.shouldRequestReview() {
+                    if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                        SKStoreReviewController.requestReview(in: scene)
                     }
                 }
             }

@@ -198,7 +198,7 @@ final class KanaKanjiConverter {
                 newUnit.merge(with: oldlastPart.clause)     // マージする。(最終文節の範囲を広げたことになる)
                 let newValue = lastUnit.value + oldlastPart.value
                 let newlastPart: CandidateData.ClausesUnit = (clause: newUnit, value: newValue)
-                let predictions = converter.getPredictionCandidates(composingText: composingText, prepart: prepart, lastClause: newlastPart.clause, N_best: 5, mainInputStyle: options.mainInputStyle)
+                let predictions = converter.getPredictionCandidates(composingText: composingText, prepart: prepart, lastClause: newlastPart.clause, N_best: 5)
                 lastpart = newlastPart
                 // 結果がemptyでなければ
                 if !predictions.isEmpty {
@@ -209,7 +209,7 @@ final class KanaKanjiConverter {
                 // 最終分節を取得
                 lastpart = prepart.clauses.popLast()
                 // 予測変換を受け取る
-                let predictions = converter.getPredictionCandidates(composingText: composingText, prepart: prepart, lastClause: lastpart!.clause, N_best: 5, mainInputStyle: options.mainInputStyle)
+                let predictions = converter.getPredictionCandidates(composingText: composingText, prepart: prepart, lastClause: lastpart!.clause, N_best: 5)
                 // 結果がemptyでなければ
                 if !predictions.isEmpty {
                     // 結果に追加
@@ -228,9 +228,7 @@ final class KanaKanjiConverter {
     ///   付加的な変換候補
     private func getTopLevelAdditionalCandidate(_ inputData: ComposingText, options: ConvertRequestOptions) -> [Candidate] {
         var candidates: [Candidate] = []
-        switch options.mainInputStyle {
-        case .direct: break
-        case .roman2kana:
+        if inputData.input.allSatisfy({$0.inputStyle == .roman2kana}) {
             if options.englishCandidateInRoman2KanaInput {
                 candidates.append(contentsOf: self.getForeignPredictionCandidate(inputData: inputData, language: "en-US", penalty: -10))
             }

@@ -13,7 +13,6 @@ struct ConvertRequestOptions {
     var requireJapanesePrediction: Bool = true
     var requireEnglishPrediction: Bool = true
     var keyboardLanguage: KeyboardLanguage = .ja_JP
-    var mainInputStyle: InputStyle = .direct
     // KeyboardSettingのinjection用途
     var typographyLetterCandidate: Bool = TypographyLetter.defaultValue
     var unicodeCandidate: Bool = UnicodeCandidate.defaultValue

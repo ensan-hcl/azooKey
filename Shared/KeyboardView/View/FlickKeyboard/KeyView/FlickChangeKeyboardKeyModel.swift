@@ -13,7 +13,7 @@ import SwiftUI
 struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
     @KeyboardSetting(.enablePasteButton) private var _enablePasteButton
     private var usePasteButton: Bool {
-        !SemiStaticStates.shared.needsInputModeSwitchKey && VariableStates.shared.boolStates.hasFullAccess && _enablePasteButton
+        !SemiStaticStates.shared.needsInputModeSwitchKey && SemiStaticStates.shared.hasFullAccess && _enablePasteButton
     }
     var needSuggestView: Bool {
         usePasteButton

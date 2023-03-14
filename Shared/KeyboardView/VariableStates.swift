@@ -34,7 +34,6 @@ final class VariableStates: ObservableObject {
 
         var isTextMagnifying = false
         var hasUpsideComponent = false
-        var hasFullAccess = false
         var isCapsLocked = false
 
         static let isCapsLockedKey = "isCapsLocked"
@@ -68,7 +67,7 @@ final class VariableStates: ObservableObject {
                 if key == "isTextMagnifying" {
                     return self.isTextMagnifying
                 } else if key == Self.hasFullAccessKey {
-                    return self.hasFullAccess
+                    return SemiStaticStates.shared.hasFullAccess
                 } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
                 } else if key == Self.hasUpsideComponentKey {
@@ -155,12 +154,6 @@ final class VariableStates: ObservableObject {
 
     func refreshView() {
         refreshing.toggle()
-    }
-
-    enum RoughEnterKeyState {
-        case `return`
-        case edit
-        case complete
     }
 
     func setKeyboardType(_ type: UIKeyboardType?) {

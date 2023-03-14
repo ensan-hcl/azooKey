@@ -11,8 +11,7 @@ import StoreKit
 import SwiftUI
 
 struct CustomizeTabView: View {
-    @State private var showImportView = false
-    @ObservedObject private var storeVariableSection = Store.variableSection
+    @EnvironmentObject private var appStates: MainAppStates
 
     var body: some View {
         ZStack {
@@ -22,7 +21,7 @@ struct CustomizeTabView: View {
                         ImageSlideshowView(pictures: ["custard_1", "custard_2", "custard_3" ])
                             .listRowSeparator(.hidden, edges: .bottom)
                         Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
-                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $storeVariableSection.custardManager))
+                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
                             .foregroundColor(.accentColor)
                     }
 
@@ -31,7 +30,7 @@ struct CustomizeTabView: View {
                             Image("tabBar_1")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(maxWidth: Store.shared.imageMaximumWidth)
+                                .frame(maxWidth: MainAppDesign.imageMaximumWidth)
                         }
                         .listRowSeparator(.hidden, edges: .bottom)
                         Text("カスタムタブを使うにはタブバーを利用します。")
@@ -40,7 +39,7 @@ struct CustomizeTabView: View {
                             Text("フリック入力では左上の「☆123」・ローマ字入力では左下の「123」「#+=」キーを長押ししても表示されます。")
                         }
                         BoolSettingView(.displayTabBarButton)
-                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $storeVariableSection.custardManager))
+                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
                             .foregroundColor(.accentColor)
                     }
 
@@ -50,20 +49,14 @@ struct CustomizeTabView: View {
                 }
                 .navigationBarTitle(Text("拡張"), displayMode: .large)
                 .onAppear {
-                    if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview() {
-                        if let windowScene = UIApplication.shared.windows.first?.windowScene {
-                            SKStoreReviewController.requestReview(in: windowScene)
+                    if RequestReviewManager.shared.shouldTryRequestReview, RequestReviewManager.shared.shouldRequestReview() {
+                        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                            SKStoreReviewController.requestReview(in: scene)
                         }
                     }
                 }
             }
             .navigationViewStyle(.stack)
-            .onChange(of: storeVariableSection.importFile) { value in
-                showImportView = value != nil
-            }
-            if showImportView {
-                URLImportCustardView(manager: $storeVariableSection.custardManager)
-            }
         }
     }
 }

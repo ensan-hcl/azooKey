@@ -59,7 +59,7 @@ struct TipsImage: View {
                 .resizable()
                 .scaledToFit()
                 .cornerRadius(2)
-                .frame(maxWidth: Store.shared.imageMaximumWidth)
+                .frame(maxWidth: MainAppDesign.imageMaximumWidth)
         }
     }
 }

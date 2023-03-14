@@ -9,17 +9,15 @@
 import func AudioToolbox.AudioServicesPlaySystemSound
 import Foundation
 import class UIKit.UIImpactFeedbackGenerator
-import class CoreHaptics.CHHapticEngine
 
 /// フィードバックを返すためのツールセット
 enum KeyboardFeedback {
     @KeyboardSetting(.enableKeySound) private static var enableSound
     @KeyboardSetting(.enableKeyHaptics) private static var requestedHaptics
     private static var enableHaptics: Bool {
-        hapticsAvailable && VariableStates.shared.boolStates.hasFullAccess && requestedHaptics
+        SemiStaticStates.shared.hapticsAvailable && SemiStaticStates.shared.hasFullAccess && requestedHaptics
     }
     private static let generator = UIImpactFeedbackGenerator(style: .light)
-    private static let hapticsAvailable = CHHapticEngine.capabilitiesForHardware().supportsHaptics
 
     // 使えそうな音
     /* i

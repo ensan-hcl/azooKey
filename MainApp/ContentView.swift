@@ -9,12 +9,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selection = 0
-    @ObservedObject private var storeVariableSection = Store.variableSection
-    @State private var isPresented = true
+    init() {}
 
+    @EnvironmentObject private var appStates: MainAppStates
+    @State private var selection = 0
     @State private var messageManager = MessageManager()
     @State private var showWalkthrough = false
+    @State private var importFileURL: URL? = nil
 
     var body: some View {
         ZStack {
@@ -40,7 +41,7 @@ struct ContentView: View {
                     }
                     .tag(3)
             }
-            .fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView) {
+            .fullScreenCover(isPresented: $appStates.requireFirstOpenView) {
                 EnableAzooKeyView()
             }
             .onChange(of: selection) {value in
@@ -50,10 +51,8 @@ struct ContentView: View {
                     }
                 }
             }
-            .onChange(of: storeVariableSection.importFile) { value in
-                if value != nil {
-                    selection = 2
-                }
+            .onOpenURL { url in
+                importFileURL = url
             }
             .sheet(isPresented: $showWalkthrough) {
                 CustomizeTabWalkthroughView(isShowing: $showWalkthrough)
@@ -69,7 +68,6 @@ struct ContentView: View {
                         DataUpdateView(id: data.id, manager: $messageManager) {
                             let builder = LOUDSBuilder(txtFileSplit: 2048)
                             builder.process()
-                            Store.shared.noticeReloadUserDict()
                         }
                     case .iOS15_4_new_emoji, .iOS16_4_new_emoji:
                         // 絵文字を更新する
@@ -78,6 +76,9 @@ struct ContentView: View {
                         }
                     }
                 }
+            }
+            if importFileURL != nil {
+                URLImportCustardView(manager: $appStates.custardManager, url: $importFileURL)
             }
         }
     }
