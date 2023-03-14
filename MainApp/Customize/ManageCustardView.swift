@@ -298,7 +298,7 @@ struct ManageCustardView: View {
         do {
             try manager.saveCustard(custard: custard, metadata: .init(origin: .imported), updateTabBar: addTabBar)
             data.finish(custard: custard)
-            Store.shared.feedbackGenerator.notificationOccurred(.success)
+            MainAppFeedback.success()
             if self.isFinished {
                 data.reset()
                 urlString = ""
@@ -374,11 +374,12 @@ struct URLImportCustardView: View {
     @State private var showAlert = false
     @State private var alertType = AlertType.none
     @Binding private var manager: CustardManager
+    @Binding private var url: URL?
     @State private var addTabBar = true
-    @ObservedObject private var storeVariableSection = Store.variableSection
 
-    init(manager: Binding<CustardManager>) {
+    init(manager: Binding<CustardManager>, url: Binding<URL?>) {
         self._manager = manager
+        self._url = url
     }
 
     var body: some View {
@@ -403,7 +404,7 @@ struct URLImportCustardView: View {
                 }
                 Button("キャンセル") {
                     data.reset()
-                    Store.variableSection.importFile = nil
+                    url = nil
                 }
                 .foregroundColor(.red)
             } else if let text = data.processState.description {
@@ -411,7 +412,7 @@ struct URLImportCustardView: View {
                     ProgressView(text)
                     Button("閉じる") {
                         data.reset()
-                        Store.variableSection.importFile = nil
+                        url = nil
                     }
                     .foregroundColor(.accentColor)
                 }
@@ -425,21 +426,15 @@ struct URLImportCustardView: View {
                     }
                     Button("閉じる") {
                         data.reset()
-                        Store.variableSection.importFile = nil
+                        url = nil
                     }
                     .foregroundColor(.accentColor)
                 }
             }
         }
         .onAppear {
-            if let url = storeVariableSection.importFile {
+            if let url {
                 debug("URLImportCustardView", url)
-                data.reset()
-                data.download(from: url)
-            }
-        }
-        .onEnterForeground { _ in
-            if let url = storeVariableSection.importFile {
                 data.reset()
                 data.download(from: url)
             }
@@ -465,10 +460,10 @@ struct URLImportCustardView: View {
         do {
             try manager.saveCustard(custard: custard, metadata: .init(origin: .imported), updateTabBar: addTabBar)
             data.finish(custard: custard)
-            Store.shared.feedbackGenerator.notificationOccurred(.success)
+            MainAppFeedback.success()
             if self.isFinished {
                 data.reset()
-                Store.variableSection.importFile = nil
+                url = nil
             }
         } catch {
             debug("saveCustard", error)

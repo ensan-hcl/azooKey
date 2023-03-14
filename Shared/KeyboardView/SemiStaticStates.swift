@@ -8,15 +8,34 @@
 
 import Foundation
 import SwiftUI
+import class CoreHaptics.CHHapticEngine
 
 /// 実行しないと値が確定しないが、実行されれば全く変更されない値。収容アプリでも共有できる形にすること。
 final class SemiStaticStates {
     static let shared = SemiStaticStates()
     private init() {}
 
-    private(set) var needsInputModeSwitchKey = true // 端末が変化しない限り変更が必要ない
-    func setNeedsInputModeSwitchKeyMode(_ bool: Bool) {
+    // MARK: 端末依存の値
+    private(set) lazy var needsInputModeSwitchKey = {
+        UIInputViewController().needsInputModeSwitchKey
+    }()
+    private(set) lazy var hapticsAvailable = false
+
+    func setNeedsInputModeSwitchKey(_ bool: Bool) {
         self.needsInputModeSwitchKey = bool
+    }
+
+    func setHapticsAvailable() {
+        self.hapticsAvailable = CHHapticEngine.capabilitiesForHardware().supportsHaptics
+    }
+
+    // MARK: 「キーボードを開く」—「キーボードを閉じる」の動作の間に変更しない値
+    private(set) var hasFullAccess = {
+        UIInputViewController().hasFullAccess
+    }()
+
+    func setHasFullAccess(_ bool: Bool) {
+        self.hasFullAccess = bool
     }
 
     /// - do not  consider using screenHeight

@@ -489,7 +489,7 @@ private struct ActionPicker: View {
                 Button("文字の削除") {
                     process(.delete(1))
                 }
-                if Store.shared.isFullAccessEnabled {
+                if SemiStaticStates.shared.hasFullAccess {
                     Button("ペースト") {
                         process(.__paste)
                     }

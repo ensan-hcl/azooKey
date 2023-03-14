@@ -97,6 +97,6 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
     }
 
     private var disabled: Bool {
-        SettingKey.requireFullAccess && !Store.shared.isFullAccessEnabled
+        SettingKey.requireFullAccess && !SemiStaticStates.shared.hasFullAccess
     }
 }

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TipsTabView: View {
-    @ObservedObject private var storeVariableSection = Store.variableSection
+    @EnvironmentObject private var appStates: MainAppStates
     @State private var isTop = true
     @AppStorage("read_article_iOS14_service_termination") private var readArticle_iOS14_service_termination = false
 
@@ -21,10 +21,10 @@ struct TipsTabView: View {
             NavigationView {
                 Form {
                     Section(header: Text("キーボードを使えるようにする")) {
-                        if !storeVariableSection.isKeyboardActivated {
+                        if !appStates.isKeyboardActivated {
                             Text("キーボードを有効化する")
                                 .onTapGesture {
-                                    Store.variableSection.requireFirstOpenView = true
+                                    appStates.requireFirstOpenView = true
                                 }
                         }
                         NavigationLink("入力方法を選ぶ", destination: SelctInputStyleTipsView())

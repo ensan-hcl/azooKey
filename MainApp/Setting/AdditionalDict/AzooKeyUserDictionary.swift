@@ -35,7 +35,6 @@ private final class UserDictManagerVariables: ObservableObject {
 
         let builder = LOUDSBuilder(txtFileSplit: 2048)
         builder.process()
-        Store.shared.noticeReloadUserDict()
     }
 }
 
@@ -54,7 +53,7 @@ struct AzooKeyUserDictionaryView: View {
             }
         }
         .onDisappear {
-            Store.shared.shouldTryRequestReview = true
+            RequestReviewManager.shared.shouldTryRequestReview = true
         }
     }
 }
@@ -344,7 +343,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                 if item.error == nil {
                     self.save()
                     variables.mode = .list
-                    Store.shared.feedbackGenerator.notificationOccurred(.success)
+                    MainAppFeedback.success()
                 }
             }
         )

@@ -122,8 +122,7 @@ final class KeyboardViewController: UIInputViewController {
         debug("viewDidAppear")
         // キーボードタイプはviewDidAppearのタイミングで取得できる
         VariableStates.shared.setKeyboardType(self.textDocumentProxy.keyboardType)
-        // フルアクセスの状態を反映する
-        VariableStates.shared.boolStates.hasFullAccess = self.hasFullAccess
+
         // クリップボード履歴を更新する
         VariableStates.shared.clipboardHistoryManager.reload()
         VariableStates.shared.clipboardHistoryManager.checkUpdate()
@@ -146,7 +145,9 @@ final class KeyboardViewController: UIInputViewController {
         self.view.becomeFirstResponder()
         self.updateViewConstraints()
 
-        SemiStaticStates.shared.setNeedsInputModeSwitchKeyMode(self.needsInputModeSwitchKey)
+        SemiStaticStates.shared.setNeedsInputModeSwitchKey(self.needsInputModeSwitchKey)
+        SemiStaticStates.shared.setHapticsAvailable()
+        SemiStaticStates.shared.setHasFullAccess(self.hasFullAccess)
 
         @KeyboardSetting(.useOSUserDict) var useOSUserDict
         if useOSUserDict {

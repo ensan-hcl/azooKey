@@ -98,7 +98,7 @@ final class KeyboardActionManager: UserActionManager {
             }
 
         case .paste:
-            if VariableStates.shared.boolStates.hasFullAccess {
+            if SemiStaticStates.shared.hasFullAccess {
                 self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true)
             }
 

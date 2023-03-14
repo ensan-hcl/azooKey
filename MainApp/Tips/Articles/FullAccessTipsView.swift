@@ -33,7 +33,7 @@ struct FullAccessTipsView: View {
                 Text("なお、azooKeyはオープンソースであり、誰もが実装を確認することができます。")
             }
             if let url = URL(string: UIApplication.openSettingsURLString) {
-                Button(Store.shared.isFullAccessEnabled
+                Button(SemiStaticStates.shared.hasFullAccess
                        ? "フルアクセスをオフにする（設定アプリが開きます）"
                        : "フルアクセスをオンにする（設定アプリが開きます）") {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)

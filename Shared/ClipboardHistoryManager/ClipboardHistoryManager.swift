@@ -44,7 +44,7 @@ final class ClipboardHistoryManager {
 
     private var enabled: Bool {
         @KeyboardSetting(.enableClipboardHistoryManagerTab) var required: Bool
-        return required && VariableStates.shared.boolStates.hasFullAccess
+        return required && SemiStaticStates.shared.hasFullAccess
     }
 
     init() {
@@ -156,7 +156,7 @@ final class ClipboardHistoryManager {
     static func save(_ items: [Item]) throws {
         // jsonファイルとして共有空間に保存する
         // FullAccessがない場合は不可能なので`fail`にする
-        guard VariableStates.shared.boolStates.hasFullAccess else {
+        guard SemiStaticStates.shared.hasFullAccess else {
             throw IOError.lackFullAccess
         }
         guard let historyFileURL else {
