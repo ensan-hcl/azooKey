@@ -150,12 +150,6 @@ final class VariableStates: ObservableObject {
         refreshing.toggle()
     }
 
-    enum RoughEnterKeyState {
-        case `return`
-        case edit
-        case complete
-    }
-
     func setKeyboardType(_ type: UIKeyboardType?) {
         debug("setKeyboardType:", type.debugDescription)
         guard let type else {

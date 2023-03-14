@@ -23,6 +23,17 @@ final class DisplayedTextManager {
     private(set) var isLiveConversionEnabled: Bool
     /// ライブ変換結果として表示されるべきテキスト
     private(set) var displayedLiveConversionText: String?
+    /// テキストを変更するたびに増やす値
+    private var textChangedCount = 0
+
+    /// `textChangedCount`のgetter。
+    func getTextChangedCountDelta() -> Int {
+        let result = self.textChangedCount
+        // リセットうする
+        self.textChangedCount = 0
+        return result
+    }
+
     /// marked textの有効化状態
     private(set) var isMarkedTextEnabled: Bool
     private var proxy: UITextDocumentProxy! {
@@ -127,7 +138,7 @@ final class DisplayedTextManager {
             return
         }
         self.proxy.insertText(text)
-        VariableStates.shared.textChangedCount += 1
+        self.textChangedCount += 1
     }
 
     /// In-Keyboard TextFiledが用いられていても、そちらではない方に強制的に入力を行う関数
@@ -136,7 +147,7 @@ final class DisplayedTextManager {
             return
         }
         self.displayedTextProxy.insertText(text)
-        VariableStates.shared.textChangedCount += 1
+        self.textChangedCount += 1
     }
 
     func moveCursor(count: Int) {
@@ -145,7 +156,7 @@ final class DisplayedTextManager {
         }
         let offset = self.getActualOffset(count: count)
         self.proxy.adjustTextPosition(byCharacterOffset: offset)
-        VariableStates.shared.textChangedCount += 1
+        self.textChangedCount += 1
     }
 
     // ただ与えられた回数の削除を実行する関数
@@ -156,7 +167,7 @@ final class DisplayedTextManager {
         for _ in 0 ..< count {
             self.proxy.deleteBackward()
         }
-        VariableStates.shared.textChangedCount += 1
+        self.textChangedCount += 1
     }
 
     // isComposingの場合、countはadjust済みであることを期待する
@@ -189,7 +200,7 @@ final class DisplayedTextManager {
                 return
             }
         }
-        VariableStates.shared.textChangedCount += 1
+        self.textChangedCount += 1
     }
 
     // isComposingの場合、countはadjust済みであることを期待する

@@ -139,11 +139,11 @@ final class KeyboardActionManager: UserActionManager {
 
         case .changeCharacterType:
             self.showResultView()
-            self.inputManager.changeCharacter(requireSetResult: requireSetResult)
+            self.inputManager.changeCharacter(requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
 
         case let .replaceLastCharacters(table):
             self.showResultView()
-            self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult)
+            self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
 
         case let .moveTab(type):
             VariableStates.shared.setTab(type)
@@ -199,13 +199,17 @@ final class KeyboardActionManager: UserActionManager {
             }
         }
 
-        // VariableStateに操作の結果を反映する
         if requireSetResult {
+            // MARK: VariableStateに操作の結果を反映する
             // 左右の文字列
             let surroundingText = self.inputManager.getSurroundingText()
             VariableStates.shared.moveCursorBarState.updateLine(leftText: surroundingText.leftText, rightText: surroundingText.rightText)
             // エンターキーの状態
             VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
+            // 文字列の変更を適用
+            VariableStates.shared.textChangedCount += self.inputManager.getTextChangedCountDelta()
+            // MARK: タブを更新する
+            self.inputManager.setKeyboardLanguage(VariableStates.shared.keyboardLanguage)
         }
     }
 

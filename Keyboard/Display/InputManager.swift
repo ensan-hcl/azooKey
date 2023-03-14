@@ -22,6 +22,12 @@ final class InputManager {
     // TODO: isSelectedはdisplayedTextManagerが持っているべき
     var isSelected = false
 
+    // キーボードの言語
+    private var keyboardLanguage: KeyboardLanguage = .ja_JP
+    func setKeyboardLanguage(_ value: KeyboardLanguage) {
+        self.keyboardLanguage = value
+    }
+
     /// システム側でproxyを操作した結果、`textDidChange`などがよばれてしまう場合に、その呼び出しをスキップするため、フラグを事前に立てる
     private var previousSystemOperation: SystemOperationType?
     enum SystemOperationType {
@@ -39,15 +45,7 @@ final class InputManager {
         liveConversionManager.enabled && !self.isSelected
     }
 
-    private var keyboardLanguage: KeyboardLanguage {
-        VariableStates.shared.keyboardLanguage
-    }
-
-    private var keyboardInputStyle: InputStyle {
-        VariableStates.shared.inputStyle
-    }
-
-    func getEnterKeyState() -> VariableStates.RoughEnterKeyState {
+    func getEnterKeyState() -> RoughEnterKeyState {
         if self.isSelected && !self.composingText.isEmpty {
             return .edit
         } else if !self.composingText.isEmpty {
@@ -63,6 +61,10 @@ final class InputManager {
         let right = self.displayedTextManager.documentContextAfterInput ?? ""
 
         return (left + center, right)
+    }
+
+    func getTextChangedCountDelta() -> Int {
+        self.displayedTextManager.getTextChangedCountDelta()
     }
 
     private func updateLog(candidate: Candidate) {
@@ -523,14 +525,14 @@ final class InputManager {
         if isSelected {
             let selectedText = composingText.convertTarget
             self.stopComposition()
-            self.input(text: selectedText, inputStyle: keyboardInputStyle)
+            self.input(text: selectedText, inputStyle: .direct)
         }
     }
 
     /// 文字のreplaceを実施する
     /// `changeCharacter`を`CustardKit`で扱うためのAPI。
     /// キーボード経由でのみ実行される。
-    func replaceLastCharacters(table: [String: String], requireSetResult: Bool = true) {
+    func replaceLastCharacters(table: [String: String], requireSetResult: Bool = true, inputStyle: InputStyle) {
         debug(table, composingText, isSelected)
         if isSelected {
             return
@@ -548,7 +550,7 @@ final class InputManager {
                     // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
                     self.deleteBackward(convertTargetCount: leftside.suffix(count).count, requireSetResult: false)
                     // ここで変換が行われる。内部的には差分管理システムによって「置換」の場合のキャッシュ変換が呼ばれる。
-                    self.input(text: replace, requireSetResult: requireSetResult, inputStyle: keyboardInputStyle)
+                    self.input(text: replace, requireSetResult: requireSetResult, inputStyle: inputStyle)
                     found = true
                     break
                 }
@@ -573,7 +575,7 @@ final class InputManager {
 
     /// カーソル左側の1文字を変更する関数
     /// ひらがなの場合は小書き・濁点・半濁点化し、英字・ギリシャ文字・キリル文字の場合は大文字・小文字化する
-    func changeCharacter(requireSetResult: Bool = true) {
+    func changeCharacter(requireSetResult: Bool = true, inputStyle: InputStyle) {
         if self.isSelected {
             return
         }
@@ -588,7 +590,7 @@ final class InputManager {
         // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
         self.deleteBackward(convertTargetCount: 1, requireSetResult: false)
         // inputの内部でsetResultが発生する
-        self.input(text: changed, requireSetResult: requireSetResult, inputStyle: keyboardInputStyle)
+        self.input(text: changed, requireSetResult: requireSetResult, inputStyle: inputStyle)
     }
 
     /// キーボード経由でのカーソル移動
@@ -682,9 +684,12 @@ final class InputManager {
 
     /// 変換リクエストを送信し、結果をDisplayed Textにも反映する関数
     func setResult() {
+        let inputData = composingText.prefixToCursorPosition()
+        debug("InputManager.setResult: value to be input", inputData)
+
         let requireJapanesePrediction: Bool
         let requireEnglishPrediction: Bool
-        switch keyboardInputStyle {
+        switch inputData.input.last?.inputStyle ?? .direct {
         case .direct:
             requireJapanesePrediction = true
             requireEnglishPrediction = true
@@ -703,7 +708,6 @@ final class InputManager {
             N_best: 10,
             requireJapanesePrediction: requireJapanesePrediction,
             requireEnglishPrediction: requireEnglishPrediction,
-            // VariableStatesを注入
             keyboardLanguage: keyboardLanguage,
             // KeyboardSettingsを注入
             typographyLetterCandidate: typographyLetterCandidate,
@@ -714,9 +718,7 @@ final class InputManager {
             learningType: learningType,
             maxMemoryCount: 65536
         )
-
-        let inputData = composingText.prefixToCursorPosition()
-        debug("setResult value to be input", inputData, options)
+        debug("InputManager.setResult: options", options)
 
         let results: [Candidate]
         let firstClauseResults: [Candidate]
@@ -735,12 +737,11 @@ final class InputManager {
             }
         }
 
-        debug("results to be registered:", results)
         if let updateResult {
             updateResult(results)
             // 自動確定の実施
             if liveConversionEnabled, let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
-                debug("Complete first clause", firstClause)
+                debug("InputManager.setResult: Complete first clause", firstClause)
                 self.complete(candidate: firstClause)
             }
         }
