@@ -53,6 +53,12 @@ enum KeyboardOrientation {
     case horizontal     // height<width
 }
 
+enum RoughEnterKeyState {
+    case `return`
+    case edit
+    case complete
+}
+
 enum EnterKeyState {
     case complete   // 決定
     case `return`(UIReturnKeyType)   // 改行

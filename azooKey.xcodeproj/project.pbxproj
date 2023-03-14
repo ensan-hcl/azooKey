@@ -205,6 +205,12 @@
 		1A73F20529C01B0F00833C11 /* RequestReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20429C01B0F00833C11 /* RequestReviewManager.swift */; };
 		1A73F20729C01B5700833C11 /* checkKeyboardActivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20629C01B5700833C11 /* checkKeyboardActivation.swift */; };
 		1A73F20929C01B7600833C11 /* closeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20829C01B7600833C11 /* closeKeyboard.swift */; };
+		1A73F20A29C0A6E000833C11 /* DisplayedTextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */; };
+		1A73F20B29C0B01C00833C11 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */; };
+		1A73F20E29C0B18800833C11 /* AnyTextDocumentProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20D29C0B18800833C11 /* AnyTextDocumentProxy.swift */; };
+		1A73F20F29C0B18800833C11 /* AnyTextDocumentProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20D29C0B18800833C11 /* AnyTextDocumentProxy.swift */; };
+		1A73F21029C0B18800833C11 /* AnyTextDocumentProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20D29C0B18800833C11 /* AnyTextDocumentProxy.swift */; };
+		1A73F21229C0B36D00833C11 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 1A73F21129C0B36D00833C11 /* OrderedCollections */; };
 		1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */; };
 		1A7D00D3292A34EB00F06B35 /* extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7D00D2292A34EB00F06B35 /* extension String.swift */; };
 		1A7D00D4292A34EB00F06B35 /* extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7D00D2292A34EB00F06B35 /* extension String.swift */; };
@@ -610,6 +616,7 @@
 		1A73F20429C01B0F00833C11 /* RequestReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestReviewManager.swift; sourceTree = "<group>"; };
 		1A73F20629C01B5700833C11 /* checkKeyboardActivation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = checkKeyboardActivation.swift; sourceTree = "<group>"; };
 		1A73F20829C01B7600833C11 /* closeKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = closeKeyboard.swift; sourceTree = "<group>"; };
+		1A73F20D29C0B18800833C11 /* AnyTextDocumentProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTextDocumentProxy.swift; sourceTree = "<group>"; };
 		1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabWalkthrough.swift; sourceTree = "<group>"; };
 		1A7D00D2292A34EB00F06B35 /* extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension String.swift"; sourceTree = "<group>"; };
 		1A7E6AE9299F435A0009CEBC /* emoji15.0_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji15.0_dict.tsv; sourceTree = "<group>"; };
@@ -756,6 +763,7 @@
 			files = (
 				1A1ECC9D295DA93D001AD7E0 /* Algorithms in Frameworks */,
 				1A70DFFD291F2D1E00A83849 /* CustardKit in Frameworks */,
+				1A73F21229C0B36D00833C11 /* OrderedCollections in Frameworks */,
 				1A606B06292E53BA00CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1556,6 +1564,7 @@
 				1A2E58432951E5E7004F959B /* Tab.swift */,
 				1AB8C38C25E1190900D39BC5 /* TabManager.swift */,
 				1AF678F525CED91900F3987B /* UserActionManager.swift */,
+				1A73F20D29C0B18800833C11 /* AnyTextDocumentProxy.swift */,
 				1AF6790F25CED99800F3987B /* ChangeKeyboardButtonView.swift */,
 				1A67736F256F7AC30037AF22 /* KeyboardFeedback.swift */,
 				1AC8A593259587A200B71E5A /* Design.swift */,
@@ -1600,6 +1609,7 @@
 				1A70DFFC291F2D1E00A83849 /* CustardKit */,
 				1A606B05292E53BA00CEDB15 /* CustardExpressionEvaluator */,
 				1A1ECC9C295DA93D001AD7E0 /* Algorithms */,
+				1A73F21129C0B36D00833C11 /* OrderedCollections */,
 			);
 			productName = MainApp;
 			productReference = 1A3DC1C22500D44A002CAA93 /* azooKey.app */;
@@ -1935,6 +1945,7 @@
 				1AF6797925CEDB9B00F3987B /* QwertyKeyModel.swift in Sources */,
 				1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
+				1A73F20E29C0B18800833C11 /* AnyTextDocumentProxy.swift in Sources */,
 				1AD5E17826AB230F001B4FF7 /* CustomKeysSettingView.swift in Sources */,
 				1A347FE828D22FA2007D7852 /* LiveConversionSettingView.swift in Sources */,
 				1ACB07CA25E552940077DE04 /* EditingScrollCustardView.swift in Sources */,
@@ -2034,6 +2045,7 @@
 				1A2E585E2951ED56004F959B /* Wareki.swift in Sources */,
 				1A2E58592951EC87004F959B /* Kana2Kanji.swift in Sources */,
 				1A2E585F2951ED56004F959B /* Converter.swift in Sources */,
+				1A73F20B29C0B01C00833C11 /* InputManager.swift in Sources */,
 				1A96E49E2958A05700A1EB0C /* EmailAddressConversionTests.swift in Sources */,
 				1A2E5819294F2880004F959B /* Modify.swift in Sources */,
 				1A2E5811294F1F2F004F959B /* CharacterUtils.swift in Sources */,
@@ -2070,8 +2082,10 @@
 				1A2E583C2951C3FD004F959B /* ConvertRequestOptions.swift in Sources */,
 				1A2E583D2951C405004F959B /* LearningMemory.swift in Sources */,
 				1A2E58452951E5E7004F959B /* Tab.swift in Sources */,
+				1A73F20F29C0B18800833C11 /* AnyTextDocumentProxy.swift in Sources */,
 				1A2E585D2951ED56004F959B /* EmailAddress.swift in Sources */,
 				1A0CC45A2988FE1A00B49A93 /* RegisteredNodeTests.swift in Sources */,
+				1A73F20A29C0A6E000833C11 /* DisplayedTextManager.swift in Sources */,
 				1A2E5818294F286D004F959B /* ArrayUtils.swift in Sources */,
 				1A2E58552951EC87004F959B /* all.swift in Sources */,
 				1A2E5813294F2568004F959B /* ComposingText.swift in Sources */,
@@ -2214,6 +2228,7 @@
 				1AF28CF6253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift in Sources */,
 				1A370E562907B5D70053D6D4 /* MIDData.swift in Sources */,
 				1AB8C37525E0067700D39BC5 /* SimpleKeyView.swift in Sources */,
+				1A73F21029C0B18800833C11 /* AnyTextDocumentProxy.swift in Sources */,
 				1A8A8402250F65110093A701 /* all.swift in Sources */,
 				1A9476B128240928006E22A9 /* CIDData.swift in Sources */,
 				1AB8C38E25E1190900D39BC5 /* TabManager.swift in Sources */,
@@ -2751,6 +2766,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */;
 			productName = CustardKit;
+		};
+		1A73F21129C0B36D00833C11 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
 		};
 		1A8E454928E5711800133D3B /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
