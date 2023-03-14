@@ -172,7 +172,7 @@ struct AdditionalDictManageView: View {
         }
         .navigationBarTitle(Text("絵文字と顔文字"), displayMode: .inline)
         .onDisappear {
-            Store.shared.shouldTryRequestReview = true
+            RequestReviewManager.shared.shouldTryRequestReview = true
         }
     }
 }

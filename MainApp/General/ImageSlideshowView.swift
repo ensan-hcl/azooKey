@@ -21,7 +21,7 @@ struct ImageSlideshowView: View {
                 Image(pictures[selection])
                     .resizable()
                     .scaledToFit()
-                    .frame(maxWidth: Store.imageMaximumWidth)
+                    .frame(maxWidth: MainAppDesign.imageMaximumWidth)
             }
         }
     }

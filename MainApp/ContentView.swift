@@ -9,10 +9,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    init() {}
+
     @EnvironmentObject private var appStates: MainAppStates
     @State private var selection = 0
-    @State private var isPresented = true
-
     @State private var messageManager = MessageManager()
     @State private var showWalkthrough = false
     @State private var importFileURL: URL? = nil

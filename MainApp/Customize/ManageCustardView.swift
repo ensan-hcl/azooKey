@@ -298,7 +298,7 @@ struct ManageCustardView: View {
         do {
             try manager.saveCustard(custard: custard, metadata: .init(origin: .imported), updateTabBar: addTabBar)
             data.finish(custard: custard)
-            Store.shared.feedbackGenerator.notificationOccurred(.success)
+            MainAppFeedback.success()
             if self.isFinished {
                 data.reset()
                 urlString = ""
@@ -460,7 +460,7 @@ struct URLImportCustardView: View {
         do {
             try manager.saveCustard(custard: custard, metadata: .init(origin: .imported), updateTabBar: addTabBar)
             data.finish(custard: custard)
-            Store.shared.feedbackGenerator.notificationOccurred(.success)
+            MainAppFeedback.success()
             if self.isFinished {
                 data.reset()
                 url = nil

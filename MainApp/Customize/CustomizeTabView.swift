@@ -30,7 +30,7 @@ struct CustomizeTabView: View {
                             Image("tabBar_1")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(maxWidth: Store.imageMaximumWidth)
+                                .frame(maxWidth: MainAppDesign.imageMaximumWidth)
                         }
                         .listRowSeparator(.hidden, edges: .bottom)
                         Text("カスタムタブを使うにはタブバーを利用します。")
@@ -49,7 +49,7 @@ struct CustomizeTabView: View {
                 }
                 .navigationBarTitle(Text("拡張"), displayMode: .large)
                 .onAppear {
-                    if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview() {
+                    if RequestReviewManager.shared.shouldTryRequestReview, RequestReviewManager.shared.shouldRequestReview() {
                         if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                             SKStoreReviewController.requestReview(in: scene)
                         }

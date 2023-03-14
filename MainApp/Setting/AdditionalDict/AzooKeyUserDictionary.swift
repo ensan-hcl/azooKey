@@ -53,7 +53,7 @@ struct AzooKeyUserDictionaryView: View {
             }
         }
         .onDisappear {
-            Store.shared.shouldTryRequestReview = true
+            RequestReviewManager.shared.shouldTryRequestReview = true
         }
     }
 }
@@ -343,7 +343,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                 if item.error == nil {
                     self.save()
                     variables.mode = .list
-                    Store.shared.feedbackGenerator.notificationOccurred(.success)
+                    MainAppFeedback.success()
                 }
             }
         )

@@ -16,15 +16,13 @@ final class SemiStaticStates {
     private init() {}
 
     // MARK: 端末依存の値
-    private(set) var needsInputModeSwitchKey = true
-    private(set) var hapticsAvailable = false
+    private(set) lazy var needsInputModeSwitchKey = {
+        UIInputViewController().needsInputModeSwitchKey
+    }()
+    private(set) lazy var hapticsAvailable = false
 
-    func setNeedsInputModeSwitchKey(_ bool: Bool? = nil) {
-        if let bool {
-            self.hasFullAccess = bool
-        } else {
-            self.hasFullAccess = UIInputViewController().needsInputModeSwitchKey
-        }
+    func setNeedsInputModeSwitchKey(_ bool: Bool) {
+        self.needsInputModeSwitchKey = bool
     }
 
     func setHapticsAvailable() {
@@ -32,13 +30,12 @@ final class SemiStaticStates {
     }
 
     // MARK: 「キーボードを開く」—「キーボードを閉じる」の動作の間に変更しない値
-    private(set) var hasFullAccess = false
-    func setHasFullAccess(_ bool: Bool? = nil) {
-        if let bool {
-            self.hasFullAccess = bool
-        } else {
-            self.hasFullAccess = UIInputViewController().hasFullAccess
-        }
+    private(set) var hasFullAccess = {
+        UIInputViewController().hasFullAccess
+    }()
+
+    func setHasFullAccess(_ bool: Bool) {
+        self.hasFullAccess = bool
     }
 
     /// - do not  consider using screenHeight
