@@ -10,7 +10,7 @@ import StoreKit
 import SwiftUI
 
 struct SettingTabView: View {
-    @ObservedObject private var storeVariableSection = Store.variableSection
+    @EnvironmentObject private var appStates: MainAppStates
     private func canFlickLayout(_ layout: LanguageLayout) -> Bool {
         if layout == .flick {
             return true
@@ -31,7 +31,7 @@ struct SettingTabView: View {
                     Section(header: Text("言語")) {
                         PreferredLanguageSettingView()
                     }
-                    if self.canFlickLayout(storeVariableSection.japaneseLayout) {
+                    if self.canFlickLayout(appStates.japaneseLayout) {
                         Section(header: Text("操作性")) {
                             FlickSensitivitySettingView(.flickSensitivity)
                         }
@@ -40,14 +40,14 @@ struct SettingTabView: View {
                 Group {
                     Section(header: Text("カスタムキー")) {
                         CustomKeysSettingView()
-                        if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(storeVariableSection.japaneseLayout) {
+                        if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(appStates.japaneseLayout) {
                             BoolSettingView(.enablePasteButton)
                         }
                     }
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.enableClipboardHistoryManagerTab)
-                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $storeVariableSection.custardManager))
+                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
                     }
                     Section(header: Text("カーソルバー")) {
                         BoolSettingView(.useBetaMoveCursorBar)
@@ -100,7 +100,7 @@ struct SettingTabView: View {
                     }
 
                     Section(header: Text("カスタムタブ")) {
-                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $storeVariableSection.custardManager))
+                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
                     }
                 }
                 Section(header: Text("このアプリについて")) {

@@ -147,8 +147,6 @@
 		1A3ACF1825FB78BF007E9938 /* InternalSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */; };
 		1A3ACF2225FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */; };
 		1A3ACF2325FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */; };
-		1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */; };
-		1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */; };
 		1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C92500D44B002CAA93 /* ContentView.swift */; };
 		1A3DC1CC2500D44E002CAA93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */; };
 		1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1CE2500D44E002CAA93 /* Preview Assets.xcassets */; };
@@ -548,8 +546,6 @@
 		1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSetting.swift; sourceTree = "<group>"; };
 		1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedModeSetting.swift; sourceTree = "<group>"; };
 		1A3DC1C22500D44A002CAA93 /* azooKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = azooKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1A3DC1C92500D44B002CAA93 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1A3DC1CE2500D44E002CAA93 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -956,8 +952,6 @@
 				1AC0315E25120AA2004CA505 /* azooKey.entitlements */,
 				1AC031602512129A004CA505 /* Store.swift */,
 				1A5B1CDF26D1E495007D4E1C /* MainApp.swift */,
-				1A3DC1C52500D44B002CAA93 /* AppDelegate.swift */,
-				1A3DC1C72500D44B002CAA93 /* SceneDelegate.swift */,
 				1A3DC1C92500D44B002CAA93 /* ContentView.swift */,
 				1A9B09BD25600445004203BB /* DataSet */,
 				1AB50769255ECC32003C0BF2 /* LOUDSLogic */,
@@ -1839,7 +1833,6 @@
 				1AE102DA25D43E9100CA7277 /* ThemeManager.swift in Sources */,
 				1A3A162C2529671300A5BA4F /* FlickCustomKeySetting.swift in Sources */,
 				1ACC0F0E25CFE7FF00FC1B8A /* ThemeEditView.swift in Sources */,
-				1A3DC1C62500D44B002CAA93 /* AppDelegate.swift in Sources */,
 				1A370E59290CF35B0053D6D4 /* NumberCustard.swift in Sources */,
 				1AB8C38D25E1190900D39BC5 /* TabManager.swift in Sources */,
 				1A7D00D3292A34EB00F06B35 /* extension String.swift in Sources */,
@@ -1894,7 +1887,6 @@
 				1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A2B2B612994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift in Sources */,
-				1A3DC1C82500D44B002CAA93 /* SceneDelegate.swift in Sources */,
 				1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */,
 				1AF678FB25CED91C00F3987B /* UserActionManager.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,

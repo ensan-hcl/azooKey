@@ -12,7 +12,6 @@ import class CoreHaptics.CHHapticEngine
 
 final class Store {
     static let shared = Store()
-    static var variableSection = StoreVariableSection()
     var feedbackGenerator = UINotificationFeedbackGenerator()
     var messageManager = MessageManager()
     var hapticsEnabled = false
@@ -65,18 +64,13 @@ final class Store {
         }
         return false
     }
-
-    func showCustardImportView(url: URL) {
-        Self.variableSection.importFile = url
-    }
 }
 
-final class StoreVariableSection: ObservableObject {
+final class MainAppStates: ObservableObject {
     @Published var isKeyboardActivated: Bool = Store.shared.isKeyboardActivated
     @Published var requireFirstOpenView: Bool = !Store.shared.isKeyboardActivated
     @Published var japaneseLayout: LanguageLayout = .flick
     @Published var englishLayout: LanguageLayout = .flick
-    @Published var importFile: URL?
     @Published var custardManager: CustardManager
 
     init() {
@@ -85,5 +79,11 @@ final class StoreVariableSection: ObservableObject {
         @KeyboardSetting(.englishKeyboardLayout) var englishKeyboardLayout
         self.englishLayout = englishKeyboardLayout
         self.custardManager = CustardManager.load()
+    }
+}
+
+extension UIApplication {
+    func closeKeyboard() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }

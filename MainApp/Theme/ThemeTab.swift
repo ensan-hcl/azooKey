@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct ThemeTabView: View {
-    @ObservedObject private var storeVariableSection = Store.variableSection
-    @State private var refresh = false
+    @EnvironmentObject private var appStates: MainAppStates
     @State private var manager = ThemeIndexManager.load()
 
     @State private var editViewIndex: Int?
@@ -70,11 +69,22 @@ struct ThemeTabView: View {
         }
     }
 
+    private var tab: Tab.ExistentialTab {
+        switch appStates.japaneseLayout {
+        case .flick:
+            return .flick_hira
+        case .qwerty:
+            return .qwerty_hira
+        case let .custard(identifier):
+            return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
+        }
+    }
+
     private var listSection: some View {
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
                 HStack {
-                    KeyboardPreview(theme: theme, scale: 0.6)
+                    KeyboardPreview(theme: theme,scale: 0.6, defaultTab: tab)
                         .disabled(true)
                     selectButton(index)
                     if editViewIndex == index {
@@ -135,22 +145,11 @@ struct ThemeTabView: View {
                     }
                 }
                 Section(header: Text("選ぶ")) {
-                    if refresh {
-                        listSection
-                    } else {
-                        listSection
-                    }
+                    listSection
                 }
             }
             .navigationBarTitle(Text("着せ替え"), displayMode: .large)
-            .onAppear {
-                // この位置にonAppearを置く。NavigationViewは画面の遷移中常に現れている。
-                self.refresh.toggle()
-            }
         }
         .navigationViewStyle(.stack)
-        .onChange(of: storeVariableSection.japaneseLayout) {_ in
-            self.refresh.toggle()
-        }
     }
 }

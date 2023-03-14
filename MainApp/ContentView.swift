@@ -9,12 +9,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject private var appStates: MainAppStates
     @State private var selection = 0
-    @ObservedObject private var storeVariableSection = Store.variableSection
     @State private var isPresented = true
 
     @State private var messageManager = MessageManager()
     @State private var showWalkthrough = false
+    @State private var importFileURL: URL? = nil
 
     var body: some View {
         ZStack {
@@ -40,7 +41,7 @@ struct ContentView: View {
                     }
                     .tag(3)
             }
-            .fullScreenCover(isPresented: $storeVariableSection.requireFirstOpenView) {
+            .fullScreenCover(isPresented: $appStates.requireFirstOpenView) {
                 EnableAzooKeyView()
             }
             .onChange(of: selection) {value in
@@ -50,10 +51,8 @@ struct ContentView: View {
                     }
                 }
             }
-            .onChange(of: storeVariableSection.importFile) { value in
-                if value != nil {
-                    selection = 2
-                }
+            .onOpenURL { url in
+                importFileURL = url
             }
             .sheet(isPresented: $showWalkthrough) {
                 CustomizeTabWalkthroughView(isShowing: $showWalkthrough)
@@ -78,6 +77,9 @@ struct ContentView: View {
                         }
                     }
                 }
+            }
+            if importFileURL != nil {
+                URLImportCustardView(manager: $appStates.custardManager, url: $importFileURL)
             }
         }
     }
