@@ -156,8 +156,8 @@ final class InputManager {
         self.kanaKanjiConverter.stopComposition()
 
         self.isSelected = false
-        VariableStates.shared.setEnterKeyState(.return)
 
+        VariableStates.shared.setEnterKeyState(.return)
         if let updateResult {
             updateResult([])
         }
@@ -230,8 +230,6 @@ final class InputManager {
             self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
             // 変換を要求する
             self.setResult()
-
-            VariableStates.shared.setEnterKeyState(.complete)
             return
         }
 
@@ -258,8 +256,6 @@ final class InputManager {
         if requireSetResult {
             // 変換を実施する
             self.setResult()
-            // キーの種類を変更
-            VariableStates.shared.setEnterKeyState(.complete)
         }
     }
 
@@ -281,9 +277,6 @@ final class InputManager {
         if requireSetResult {
             // 変換を実施する
             self.setResult()
-            if self.composingText.isEmpty {
-                VariableStates.shared.setEnterKeyState(.return)
-            }
         }
     }
 
@@ -320,9 +313,6 @@ final class InputManager {
         if requireSetResult {
             // 変換を実施する
             self.setResult()
-            if self.composingText.isEmpty {
-                VariableStates.shared.setEnterKeyState(.return)
-            }
         }
     }
 
@@ -511,11 +501,8 @@ final class InputManager {
     func edit() {
         if isSelected {
             let selectedText = composingText.convertTarget
-            self.displayedTextManager.deleteBackward(count: 1)
-            self.isSelected = false
-            self.composingText.stopComposition()
+            self.stopComposition()
             self.input(text: selectedText)
-            VariableStates.shared.setEnterKeyState(.complete)
         }
     }
 
@@ -670,7 +657,6 @@ final class InputManager {
 
         self.isSelected = true
         self.setResult()
-        VariableStates.shared.setEnterKeyState(.edit)
     }
 
     /// 選択を解除した場合、Compositionをリセットする
@@ -742,6 +728,15 @@ final class InputManager {
                 debug("Complete first clause", firstClause)
                 self.complete(candidate: firstClause)
             }
+        }
+
+        // エンターキーの更新
+        if self.isSelected && !self.composingText.isEmpty {
+            VariableStates.shared.setEnterKeyState(.edit)
+        } else if !self.composingText.isEmpty {
+            VariableStates.shared.setEnterKeyState(.complete)
+        } else {
+            VariableStates.shared.setEnterKeyState(.return)
         }
     }
 }
