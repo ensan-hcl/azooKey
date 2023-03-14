@@ -37,19 +37,16 @@ struct HeaderLogoView: View {
 
     var body: some View {
         Group {
-            if let font30 = Design.fonts.azooKeyIconFont(iconSize * 0.75) {
-                switch colorScheme {
-                case .light:
-                    Text("A")
-                        .font(font30)
-                case .dark:
-                    Text("B")
-                        .font(font30)
-                @unknown default:
-                    Text("azooKey")
-                        .font(Font(UIFont.systemFont(ofSize: 30)))
-                }
-            } else {
+            switch colorScheme {
+            case .light:
+                Text("A")
+                    .font(Design.fonts.azooKeyIconFont(iconSize * 0.75))
+                    .accessibilityLabel("azooKeyのロゴ")
+            case .dark:
+                Text("B")
+                    .font(Design.fonts.azooKeyIconFont(iconSize * 0.75))
+                    .accessibilityLabel("azooKeyのロゴ")
+            @unknown default:
                 Text("azooKey")
                     .font(Font(UIFont.systemFont(ofSize: 30)))
             }
