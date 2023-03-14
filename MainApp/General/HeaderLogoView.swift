@@ -10,52 +10,29 @@ import SwiftUI
 
 struct HeaderLogoView: View {
     @Environment(\.colorScheme) private var colorScheme
-
-    enum Size {
-        case normal
-        case large
-    }
-
-    private let size: Size
-
-    init(size: Size = .normal) {
-        self.size = size
-    }
-
     private var iconColor: Color {
         Color("IconColor")
     }
-
-    private var iconSize: CGFloat {
-        switch self.size {
-        case .normal:
-            return 40
-        case .large:
-            return 60
-        }
-    }
+    private var iconSize: CGFloat = 40
 
     var body: some View {
         Group {
-            if let font30 = Design.fonts.azooKeyIconFont(iconSize * 0.75) {
-                switch colorScheme {
-                case .light:
-                    Text("A")
-                        .font(font30)
-                case .dark:
-                    Text("B")
-                        .font(font30)
-                @unknown default:
-                    Text("azooKey")
-                        .font(Font(UIFont.systemFont(ofSize: 30)))
-                }
-            } else {
+            switch colorScheme {
+            case .light:
+                Text("A")
+                    .font(Design.fonts.azooKeyIconFont(iconSize * 0.75))
+                    .accessibilityLabel("azooKeyのロゴ")
+            case .dark:
+                Text("B")
+                    .font(Design.fonts.azooKeyIconFont(iconSize * 0.75))
+                    .accessibilityLabel("azooKeyのロゴ")
+            @unknown default:
                 Text("azooKey")
-                    .font(Font(UIFont.systemFont(ofSize: 30)))
+                    .font(Font(UIFont.systemFont(ofSize: iconSize)))
             }
         }
         .foregroundColor(iconColor)
-        .padding(.top, 10)
+        .padding(.top, 5)
         .padding(.bottom, -5)
     }
 }
