@@ -39,6 +39,32 @@ final class InputManager {
         liveConversionManager.enabled && !self.isSelected
     }
 
+    private var keyboardLanguage: KeyboardLanguage {
+        VariableStates.shared.keyboardLanguage
+    }
+
+    private var keyboardInputStyle: InputStyle {
+        VariableStates.shared.inputStyle
+    }
+
+    func getEnterKeyState() -> VariableStates.RoughEnterKeyState {
+        if self.isSelected && !self.composingText.isEmpty {
+            return .edit
+        } else if !self.composingText.isEmpty {
+            return .complete
+        } else {
+            return .return
+        }
+    }
+
+    func getSurroundingText() -> (leftText: String, rightText: String) {
+        let left = adjustLeftString(self.displayedTextManager.documentContextBeforeInput ?? "")
+        let center = self.displayedTextManager.selectedText ?? ""
+        let right = self.displayedTextManager.documentContextAfterInput ?? ""
+
+        return (left + center, right)
+    }
+
     private func updateLog(candidate: Candidate) {
         for data in candidate.data {
             // 「感謝する: カンシャスル」→を「感謝: カンシャ」に置き換える
@@ -157,7 +183,6 @@ final class InputManager {
 
         self.isSelected = false
 
-        VariableStates.shared.setEnterKeyState(.return)
         if let updateResult {
             updateResult([])
         }
@@ -213,8 +238,13 @@ final class InputManager {
         self.displayedTextManager.insertMainDisplayText(text)
     }
 
-    // MARK: キーボード経由でユーザがinputを行った場合に呼び出す
-    func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false) {
+    /// テキスト入力を扱う関数
+    /// - Parameters:
+    ///   - text: 入力される関数
+    ///   - requireSetResult: `View`のアップデートを、この呼び出しで実施するべきか。この後さらに別の呼び出しを行う場合は、`false`にする。
+    ///   - simpleInsert: `ComposingText`を作るのではなく、直接文字を入力し、変換候補を表示しない。
+    ///   - inputStyle: 入力スタイル
+    func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false, inputStyle: InputStyle) {
         if simpleInsert {
             // 必要に応じて確定する
             _ = self.enter()
@@ -227,7 +257,7 @@ final class InputManager {
             // 変換をリセットする
             self.stopComposition()
             // 入力する
-            self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
+            self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
             // 変換を要求する
             self.setResult()
             return
@@ -245,13 +275,13 @@ final class InputManager {
             return
         }
 
-        if VariableStates.shared.keyboardLanguage == .none {
+        if keyboardLanguage == .none {
             _ = self.enter()
             self.displayedTextManager.insertText(text)
             return
         }
 
-        self.composingText.insertAtCursorPosition(text, inputStyle: VariableStates.shared.inputStyle)
+        self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
         debug("Input Manager input:", composingText)
         if requireSetResult {
             // 変換を実施する
@@ -488,21 +518,12 @@ final class InputManager {
         return left
     }
 
-    func updateSurroundingText() {
-        debug("updateSurroundingText Triggered")
-        let left = adjustLeftString(self.displayedTextManager.documentContextBeforeInput ?? "")
-        let center = self.displayedTextManager.selectedText ?? ""
-        let right = self.displayedTextManager.documentContextAfterInput ?? ""
-
-        VariableStates.shared.moveCursorBarState.updateLine(leftText: left + center, rightText: right)
-    }
-
     /// 選択状態にあるテキストを再度入力し、編集可能な状態にする
     func edit() {
         if isSelected {
             let selectedText = composingText.convertTarget
             self.stopComposition()
-            self.input(text: selectedText)
+            self.input(text: selectedText, inputStyle: keyboardInputStyle)
         }
     }
 
@@ -527,7 +548,7 @@ final class InputManager {
                     // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
                     self.deleteBackward(convertTargetCount: leftside.suffix(count).count, requireSetResult: false)
                     // ここで変換が行われる。内部的には差分管理システムによって「置換」の場合のキャッシュ変換が呼ばれる。
-                    self.input(text: replace, requireSetResult: requireSetResult)
+                    self.input(text: replace, requireSetResult: requireSetResult, inputStyle: keyboardInputStyle)
                     found = true
                     break
                 }
@@ -538,7 +559,7 @@ final class InputManager {
             return
         }
         // 言語の指定がない場合は、入力中のテキストの範囲でreplaceを実施する。
-        if VariableStates.shared.keyboardLanguage == .none {
+        if keyboardLanguage == .none {
             let leftside = displayedTextManager.documentContextBeforeInput ?? ""
             for count in (counts.min...counts.max).reversed() where count <= leftside.count {
                 if let replace = table[String(leftside.suffix(count))] {
@@ -567,7 +588,7 @@ final class InputManager {
         // deleteとinputを効率的に行うため、setResultを要求しない (変換を行わない)
         self.deleteBackward(convertTargetCount: 1, requireSetResult: false)
         // inputの内部でsetResultが発生する
-        self.input(text: changed, requireSetResult: requireSetResult)
+        self.input(text: changed, requireSetResult: requireSetResult, inputStyle: keyboardInputStyle)
     }
 
     /// キーボード経由でのカーソル移動
@@ -606,7 +627,6 @@ final class InputManager {
     ///  - note: この関数をユーティリティとして用いてはいけない。
     func userMovedCursor(count: Int) {
         debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
-        VariableStates.shared.textChangedCount += 1
         if composingText.isEmpty {
             // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
             return
@@ -619,16 +639,12 @@ final class InputManager {
     /// ユーザがキーボードを経由せずカットした場合の処理
     func userCutText(text: String) {
         self.stopComposition()
-        VariableStates.shared.textChangedCount += 1
     }
 
     // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
     func userSelectedText(text: String) {
         if text.isEmpty {
             return
-        }
-        defer {
-            VariableStates.shared.textChangedCount += 1
         }
         // 長すぎるのはダメ
         if text.count > 100 {
@@ -668,13 +684,13 @@ final class InputManager {
     func setResult() {
         let requireJapanesePrediction: Bool
         let requireEnglishPrediction: Bool
-        switch VariableStates.shared.inputStyle {
+        switch keyboardInputStyle {
         case .direct:
             requireJapanesePrediction = true
             requireEnglishPrediction = true
         case .roman2kana:
-            requireJapanesePrediction = VariableStates.shared.keyboardLanguage == .ja_JP
-            requireEnglishPrediction = VariableStates.shared.keyboardLanguage == .en_US
+            requireJapanesePrediction = keyboardLanguage == .ja_JP
+            requireEnglishPrediction = keyboardLanguage == .en_US
         }
         @KeyboardSetting(.typographyLetter) var typographyLetterCandidate
         @KeyboardSetting(.unicodeCandidate) var unicodeCandidate
@@ -688,8 +704,8 @@ final class InputManager {
             requireJapanesePrediction: requireJapanesePrediction,
             requireEnglishPrediction: requireEnglishPrediction,
             // VariableStatesを注入
-            keyboardLanguage: VariableStates.shared.keyboardLanguage,
-            mainInputStyle: VariableStates.shared.inputStyle,
+            keyboardLanguage: keyboardLanguage,
+            mainInputStyle: keyboardInputStyle,
             // KeyboardSettingsを注入
             typographyLetterCandidate: typographyLetterCandidate,
             unicodeCandidate: unicodeCandidate,
@@ -728,15 +744,6 @@ final class InputManager {
                 debug("Complete first clause", firstClause)
                 self.complete(candidate: firstClause)
             }
-        }
-
-        // エンターキーの更新
-        if self.isSelected && !self.composingText.isEmpty {
-            VariableStates.shared.setEnterKeyState(.edit)
-        } else if !self.composingText.isEmpty {
-            VariableStates.shared.setEnterKeyState(.complete)
-        } else {
-            VariableStates.shared.setEnterKeyState(.return)
         }
     }
 }
