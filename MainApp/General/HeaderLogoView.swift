@@ -28,11 +28,11 @@ struct HeaderLogoView: View {
                     .accessibilityLabel("azooKeyのロゴ")
             @unknown default:
                 Text("azooKey")
-                    .font(Font(UIFont.systemFont(ofSize: 30)))
+                    .font(Font(UIFont.systemFont(ofSize: iconSize)))
             }
         }
         .foregroundColor(iconColor)
-        .padding(.top, 10)
+        .padding(.top, 5)
         .padding(.bottom, -5)
     }
 }
