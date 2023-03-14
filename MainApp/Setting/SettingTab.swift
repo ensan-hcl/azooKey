@@ -128,8 +128,8 @@ struct SettingTabView: View {
             .navigationBarTitle(Text("設定"), displayMode: .large)
             .onAppear {
                 if Store.shared.shouldTryRequestReview, Store.shared.shouldRequestReview() {
-                    if let windowScene = UIApplication.shared.windows.first?.windowScene {
-                        SKStoreReviewController.requestReview(in: windowScene)
+                    if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                        SKStoreReviewController.requestReview(in: scene)
                     }
                 }
             }
