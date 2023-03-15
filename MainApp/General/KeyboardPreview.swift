@@ -20,7 +20,6 @@ private struct CandidateMock: ResultViewItemData {
 }
 
 struct KeyboardPreview: View {
-    private let resultModel = ResultModelVariableSection<CandidateMock>()
     private let theme: ThemeData
 
     private let scale: CGFloat
@@ -34,7 +33,7 @@ struct KeyboardPreview: View {
             orientation = UIDevice.current.orientation == UIDeviceOrientation.unknown ? .vertical : (UIDevice.current.orientation == UIDeviceOrientation.portrait ? .vertical : .horizontal)
         }
         SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width, orientation: orientation)
-        resultModel.setResults([
+        VariableStates.shared.resultModelVariableSection.setResults([
             CandidateMock(text: "azooKey"),
             CandidateMock(text: "あずーきー"),
             CandidateMock(text: "アズーキー")
@@ -45,7 +44,7 @@ struct KeyboardPreview: View {
     }
 
     var body: some View {
-        KeyboardView<CandidateMock>(resultModelVariableSection: resultModel, defaultTab: defaultTab)
+        KeyboardView(defaultTab: defaultTab)
             .environment(\.themeEnvironment, theme)
             .environment(\.showMessage, false)
             .scaleEffect(scale)

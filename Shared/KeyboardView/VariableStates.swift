@@ -24,6 +24,9 @@ final class VariableStates: ObservableObject {
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published private(set) var keyboardLayout: KeyboardLayout = .flick
 
+    /// `ResultModel`の変数
+    var resultModelVariableSection = ResultModelVariableSection()
+
     struct BoolStates: CustardExpressionEvaluatorContext {
         func getValue(for key: String) -> ExpressionValue? {
             if let boolValue = self[key] {
