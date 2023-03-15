@@ -94,7 +94,15 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                         }
                     }
                 )
-            Group {
+            VStack(spacing: 0) {
+                if let upsideComponent = variableStates.upsideComponent {
+                    Group {
+                        switch upsideComponent {
+                        default: EmptyView()
+                        }
+                    }
+                    .frame(height: Design.upsideComponentHeight())
+                }
                 if isResultViewExpanded {
                     ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, resultData: resultData)
                 } else {
