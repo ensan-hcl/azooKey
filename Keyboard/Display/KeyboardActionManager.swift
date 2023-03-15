@@ -61,6 +61,8 @@ final class KeyboardActionManager: UserActionManager {
         }
         self.inputManager.complete(candidate: candidate)
         self.registerActions(candidate.actions)
+        // エンターキーの状態の更新
+        VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
     }
 
     private func showResultView() {
