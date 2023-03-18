@@ -359,6 +359,18 @@
 		1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */; };
 		1AE70BF1258E5798009B9B8B /* TemplateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BF0258E5798009B9B8B /* TemplateData.swift */; };
 		1AEB864A251CE730000A8379 /* Roman2Kana.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEB8649251CE730000A8379 /* Roman2Kana.swift */; };
+		1AED1F2029C59C9D00BC6E05 /* emoji_genre_E13.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F1D29C59C9B00BC6E05 /* emoji_genre_E13.1.txt.gen */; };
+		1AED1F2229C59C9D00BC6E05 /* emoji_genre_E14.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F1E29C59C9C00BC6E05 /* emoji_genre_E14.0.txt.gen */; };
+		1AED1F2429C59C9D00BC6E05 /* emoji_genre_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F1F29C59C9C00BC6E05 /* emoji_genre_E15.0.txt.gen */; };
+		1AED1F2629C5A3C300BC6E05 /* emoji_genre_E13.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F1D29C59C9B00BC6E05 /* emoji_genre_E13.1.txt.gen */; };
+		1AED1F2729C5A3C300BC6E05 /* emoji_genre_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F1F29C59C9C00BC6E05 /* emoji_genre_E15.0.txt.gen */; };
+		1AED1F2829C5A3C300BC6E05 /* emoji_genre_E14.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F1E29C59C9C00BC6E05 /* emoji_genre_E14.0.txt.gen */; };
+		1AED1F2C29C5A6FB00BC6E05 /* emoji_all_E13.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F2929C5A6FA00BC6E05 /* emoji_all_E13.1.txt.gen */; };
+		1AED1F2D29C5A6FB00BC6E05 /* emoji_all_E13.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F2929C5A6FA00BC6E05 /* emoji_all_E13.1.txt.gen */; };
+		1AED1F2E29C5A6FB00BC6E05 /* emoji_all_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F2A29C5A6FB00BC6E05 /* emoji_all_E15.0.txt.gen */; };
+		1AED1F2F29C5A6FB00BC6E05 /* emoji_all_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F2A29C5A6FB00BC6E05 /* emoji_all_E15.0.txt.gen */; };
+		1AED1F3029C5A6FB00BC6E05 /* emoji_all_E14.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F2B29C5A6FB00BC6E05 /* emoji_all_E14.0.txt.gen */; };
+		1AED1F3129C5A6FB00BC6E05 /* emoji_all_E14.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1AED1F2B29C5A6FB00BC6E05 /* emoji_all_E14.0.txt.gen */; };
 		1AF1C55F252DD10F002FCC66 /* added_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF1C55E252DD10F002FCC66 /* added_last_n_character.swift */; };
 		1AF28CE0253C9FFC0012CF94 /* CursorMoveTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */; };
 		1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */; };
@@ -725,6 +737,12 @@
 		1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateEditingView.swift; sourceTree = "<group>"; };
 		1AE70BF0258E5798009B9B8B /* TemplateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateData.swift; sourceTree = "<group>"; };
 		1AEB8649251CE730000A8379 /* Roman2Kana.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Roman2Kana.swift; sourceTree = "<group>"; };
+		1AED1F1D29C59C9B00BC6E05 /* emoji_genre_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E13.1.txt.gen; path = Gen/generated/emoji_genre_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
+		1AED1F1E29C59C9C00BC6E05 /* emoji_genre_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E14.0.txt.gen; path = Gen/generated/emoji_genre_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1AED1F1F29C59C9C00BC6E05 /* emoji_genre_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E15.0.txt.gen; path = Gen/generated/emoji_genre_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1AED1F2929C5A6FA00BC6E05 /* emoji_all_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_all_E13.1.txt.gen; path = Gen/generated/emoji_all_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
+		1AED1F2A29C5A6FB00BC6E05 /* emoji_all_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_all_E15.0.txt.gen; path = Gen/generated/emoji_all_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1AED1F2B29C5A6FB00BC6E05 /* emoji_all_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_all_E14.0.txt.gen; path = Gen/generated/emoji_all_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
 		1AF1C55E252DD10F002FCC66 /* added_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = added_last_n_character.swift; sourceTree = "<group>"; };
 		1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorMoveTips.swift; sourceTree = "<group>"; };
 		1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiLargeText.swift; sourceTree = "<group>"; };
@@ -1267,6 +1285,7 @@
 				1AF678DD25CED84F00F3987B /* KeyboardView */,
 				1AF6785B25CC4FF800F3987B /* ThemeData */,
 				1A18425325DE614D003985AB /* Custard */,
+				1AED1F1929C5966B00BC6E05 /* Data */,
 				1AC5876825D930D000BB060E /* Localizable.strings */,
 				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
 			);
@@ -1522,6 +1541,19 @@
 			path = Template;
 			sourceTree = "<group>";
 		};
+		1AED1F1929C5966B00BC6E05 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				1AED1F2929C5A6FA00BC6E05 /* emoji_all_E13.1.txt.gen */,
+				1AED1F2B29C5A6FB00BC6E05 /* emoji_all_E14.0.txt.gen */,
+				1AED1F2A29C5A6FB00BC6E05 /* emoji_all_E15.0.txt.gen */,
+				1AED1F1D29C59C9B00BC6E05 /* emoji_genre_E13.1.txt.gen */,
+				1AED1F1E29C59C9C00BC6E05 /* emoji_genre_E14.0.txt.gen */,
+				1AED1F1F29C59C9C00BC6E05 /* emoji_genre_E15.0.txt.gen */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		1AF616B9256D40A5001A0B32 /* MemoryResetSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -1737,18 +1769,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AED1F3029C5A6FB00BC6E05 /* emoji_all_E14.0.txt.gen in Resources */,
 				1ACEEFF72566786A00899DA2 /* kaomoji_dict.tsv in Resources */,
 				1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */,
 				1AC5876525D930D000BB060E /* Localizable.strings in Resources */,
 				1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */,
+				1AED1F2429C59C9D00BC6E05 /* emoji_genre_E15.0.txt.gen in Resources */,
 				1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */,
 				1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */,
+				1AED1F2029C59C9D00BC6E05 /* emoji_genre_E13.1.txt.gen in Resources */,
 				1A7E6AEA299F435A0009CEBC /* emoji15.0_dict.tsv in Resources */,
 				1A60058525275CB9008E2B92 /* Settings.bundle in Resources */,
 				1AF6A55925FE0DA70037D5ED /* charID.chid in Resources */,
+				1AED1F2229C59C9D00BC6E05 /* emoji_genre_E14.0.txt.gen in Resources */,
+				1AED1F2C29C5A6FB00BC6E05 /* emoji_all_E13.1.txt.gen in Resources */,
 				1ADEBD9D25DCA9C700114F47 /* emoji13.1_dict.tsv in Resources */,
 				1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */,
 				1A146FBF28C8AAAF00AE6CCE /* emoji13_dict.tsv in Resources */,
+				1AED1F2E29C5A6FB00BC6E05 /* emoji_all_E15.0.txt.gen in Resources */,
 				1A146FBD28C8AAA400AE6CCE /* emoji...12_dict.tsv in Resources */,
 				1A3DC1CC2500D44E002CAA93 /* Assets.xcassets in Resources */,
 			);
@@ -1773,10 +1811,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AED1F3129C5A6FB00BC6E05 /* emoji_all_E14.0.txt.gen in Resources */,
+				1AED1F2D29C5A6FB00BC6E05 /* emoji_all_E13.1.txt.gen in Resources */,
+				1AED1F2F29C5A6FB00BC6E05 /* emoji_all_E15.0.txt.gen in Resources */,
 				1ACE50012987A7DC00C8C06F /* Dictionary in Resources */,
+				1AED1F2629C5A3C300BC6E05 /* emoji_genre_E13.1.txt.gen in Resources */,
 				1AFB685328D56F1800B5C717 /* Localizable.strings in Resources */,
+				1AED1F2729C5A3C300BC6E05 /* emoji_genre_E15.0.txt.gen in Resources */,
 				1AC03159251103EF004CA505 /* Designs.xcassets in Resources */,
 				1A7F547126A96A5F0032E91E /* AzooKeyIcon-Regular.otf in Resources */,
+				1AED1F2829C5A3C300BC6E05 /* emoji_genre_E14.0.txt.gen in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1799,7 +1843,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint --fix --format\n  # swiftlint\nelse\n  echo \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "python3 Gen/scripts/emoji.py\n\nif which swiftlint >/dev/null; then\n  swiftlint --fix --format\n  # swiftlint\nelse\n  echo \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		1A4E1F4A261582E8009B6EB7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1817,7 +1861,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint --fix --format\n  swiftlint\nelse\n  echo \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "python3 Gen/scripts/emoji.py\n\nif which swiftlint >/dev/null; then\n  swiftlint --fix --format\n  swiftlint\nelse\n  echo \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
