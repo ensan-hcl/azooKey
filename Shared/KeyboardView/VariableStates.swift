@@ -113,7 +113,9 @@ final class VariableStates: ObservableObject {
 
     @Published var upsideComponent: UpsideComponent?
 
+    // MARK: refresh用
     @Published var refreshing = true
+    @Published var lastTabCharacterPreferenceUpdate = Date()
 
     @Published private(set) var resizingState: ResizingState = .fullwidth
 

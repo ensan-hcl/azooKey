@@ -250,6 +250,8 @@
 		1AA346AF2567F15C00B41A16 /* SharedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346A92567F15700B41A16 /* SharedStore.swift */; };
 		1AA346BA25681C4C00B41A16 /* ImageSlideshowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */; };
 		1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */; };
+		1AA453D829C5F6E10018BDD6 /* TabCharacterPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453D729C5F6E10018BDD6 /* TabCharacterPreference.swift */; };
+		1AA453D929C5F6E10018BDD6 /* TabCharacterPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453D729C5F6E10018BDD6 /* TabCharacterPreference.swift */; };
 		1AA453DB29C5F8460018BDD6 /* IKTextDocumentProxyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453DA29C5F8460018BDD6 /* IKTextDocumentProxyWrapper.swift */; };
 		1AA453DC29C5F8460018BDD6 /* IKTextDocumentProxyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453DA29C5F8460018BDD6 /* IKTextDocumentProxyWrapper.swift */; };
 		1AA453DE29C5F8D80018BDD6 /* IKTextDocumentProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453DD29C5F8D80018BDD6 /* IKTextDocumentProxy.swift */; };
@@ -665,6 +667,7 @@
 		1AA346A92567F15700B41A16 /* SharedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStore.swift; sourceTree = "<group>"; };
 		1AA346B925681C4C00B41A16 /* ImageSlideshowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSlideshowView.swift; sourceTree = "<group>"; };
 		1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyTipsView.swift; sourceTree = "<group>"; };
+		1AA453D729C5F6E10018BDD6 /* TabCharacterPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCharacterPreference.swift; sourceTree = "<group>"; };
 		1AA453DA29C5F8460018BDD6 /* IKTextDocumentProxyWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IKTextDocumentProxyWrapper.swift; sourceTree = "<group>"; };
 		1AA453DD29C5F8D80018BDD6 /* IKTextDocumentProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IKTextDocumentProxy.swift; sourceTree = "<group>"; };
 		1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHeightSettingView.swift; sourceTree = "<group>"; };
@@ -965,6 +968,7 @@
 			children = (
 				1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */,
 				1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */,
+				1AA453D729C5F6E10018BDD6 /* TabCharacterPreference.swift */,
 				1AFE772F26077E0E0041D74D /* WalkthroughState.swift */,
 			);
 			path = UserDefaultsManager;
@@ -1906,6 +1910,7 @@
 				1AF6799C25CEDBC000F3987B /* KeyboardFeedback.swift in Sources */,
 				1AF6798825CEDBAE00F3987B /* SuggestView.swift in Sources */,
 				1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */,
+				1AA453D829C5F6E10018BDD6 /* TabCharacterPreference.swift in Sources */,
 				1A3ACEF925F9F9AA007E9938 /* ResizingRect.swift in Sources */,
 				1A12E25125C4428D00316009 /* Message.swift in Sources */,
 				1ACEEFDE25665F0100899DA2 /* CenterAlignedView.swift in Sources */,
@@ -2259,6 +2264,7 @@
 				1A4623E52524617B00EF5B02 /* LOUDS.swift in Sources */,
 				1A3DC21F2500D5F2002CAA93 /* FlickEnterKeyModel.swift in Sources */,
 				1A2E582F294F5E6A004F959B /* ActionUtils.swift in Sources */,
+				1AA453D929C5F6E10018BDD6 /* TabCharacterPreference.swift in Sources */,
 				1AD2B8E826C2C74D0053CE4A /* DoubleKeyboardSetting.swift in Sources */,
 				1A3ACEFA25F9F9AA007E9938 /* ResizingRect.swift in Sources */,
 				1ABF7D992639869B0045D6B2 /* Intertranslator.swift in Sources */,

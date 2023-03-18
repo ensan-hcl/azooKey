@@ -61,6 +61,13 @@ final class KeyboardActionManager: UserActionManager {
             self.registerActions(candidate.actions)
         } else if let candidate = candidate as? ReplacementCandidate {
             self.inputManager.replaceLastCharacters(table: [candidate.target: candidate.replace], inputStyle: .direct)
+            KeyboardInternalSetting.shared.update(\.tabCharacterPreference) { item in
+                switch candidate.targetType {
+                case .emoji:
+                    item.setPreference(base: candidate.base, replace: candidate.replace, for: .system(.emoji))
+                }
+            }
+            VariableStates.shared.lastTabCharacterPreferenceUpdate = .now
         } else {
             debug("notifyComplete: 確定できません")
         }

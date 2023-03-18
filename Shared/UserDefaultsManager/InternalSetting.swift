@@ -41,6 +41,8 @@ fileprivate extension UserDefaultsManager {
             let data = try JSONEncoder().encode(self[keyPath: value])
             if let key = Keys(keyPath: value) {
                 UserDefaults.standard.set(data, forKey: key.rawValue)
+            } else {
+                fatalError("Unknown Key Path: \(value)")
             }
         } catch {
             debug(error)
@@ -70,11 +72,14 @@ struct KeyboardInternalSetting: UserDefaultsManager {
     enum Keys: String, UserDefaultsKeys {
         typealias Manager = KeyboardInternalSetting
         case one_handed_mode_setting
+        case tab_character_preference
 
         init?(keyPath: PartialKeyPath<Manager>) {
             switch keyPath {
             case \Manager.oneHandedModeSetting:
                 self = .one_handed_mode_setting
+            case \Manager.tabCharacterPreference:
+                self = .tab_character_preference
             default:
                 return nil
             }
@@ -82,6 +87,7 @@ struct KeyboardInternalSetting: UserDefaultsManager {
     }
 
     private(set) var oneHandedModeSetting: OneHandedModeSetting = Self.load(key: .one_handed_mode_setting)
+    private(set) var tabCharacterPreference: TabCharacterPreference = Self.load(key: .tab_character_preference)
 }
 
 struct ContainerInternalSetting: UserDefaultsManager {
