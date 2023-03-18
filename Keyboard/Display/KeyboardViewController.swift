@@ -172,8 +172,12 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
-    func updateResultView(_ candidates: [Candidate]) {
+    func updateResultView(_ candidates: [any ResultViewItemData]) {
         VariableStates.shared.resultModelVariableSection.setResults(candidates)
+    }
+
+    func updateSearchResultView(_ candidates: [any ResultViewItemData]) {
+        VariableStates.shared.resultModelVariableSection.setSearchResults(candidates)
     }
 
     func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {

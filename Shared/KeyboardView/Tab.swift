@@ -96,6 +96,12 @@ enum Tab: Equatable {
                 return KeyboardLanguage.none
             }
         }
+
+        var replacementTarget: [ConverterBehaviorSemantics.ReplacementTarget] {
+            switch self {
+            default: return []
+            }
+        }
     }
 
     enum SpecialTab: Equatable {

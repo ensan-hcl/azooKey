@@ -259,6 +259,8 @@
 		1AAC102B29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */; };
 		1AAC102C29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */; };
 		1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */; };
+		1AB0973D29C429D600F81FAF /* TextReplacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0973C29C429D600F81FAF /* TextReplacer.swift */; };
+		1AB0974029C429DC00F81FAF /* TextReplacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0973C29C429D600F81FAF /* TextReplacer.swift */; };
 		1AB0974D29C476C900F81FAF /* InKeyboardSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0974C29C476C900F81FAF /* InKeyboardSearchBar.swift */; };
 		1AB0974E29C476C900F81FAF /* InKeyboardSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0974C29C476C900F81FAF /* InKeyboardSearchBar.swift */; };
 		1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */; };
@@ -669,6 +671,7 @@
 		1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAccessTipsView.swift; sourceTree = "<group>"; };
 		1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InKeyboardTextEditor.swift; sourceTree = "<group>"; };
 		1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji14.0_dict.tsv; sourceTree = "<group>"; };
+		1AB0973C29C429D600F81FAF /* TextReplacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextReplacer.swift; sourceTree = "<group>"; };
 		1AB0974C29C476C900F81FAF /* InKeyboardSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InKeyboardSearchBar.swift; sourceTree = "<group>"; };
 		1AB5075F255EC23C003C0BF2 /* AdditionalDictManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalDictManageView.swift; sourceTree = "<group>"; };
 		1AB5076A255ECC3C003C0BF2 /* Trie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trie.swift; sourceTree = "<group>"; };
@@ -1091,6 +1094,7 @@
 				1A64C8C7251372AB00ACD537 /* DicdataStore */,
 				1A8A8400250F64FC0093A701 /* Kana2Kanji */,
 				1A9218E9255238D5005F45C4 /* Converter */,
+				1AB0973B29C429C200F81FAF /* Replacer */,
 				1ADDE8652545D48900E524E1 /* Candidate.swift */,
 				1A65C00A250B800E00F297BF /* LatticeNode.swift */,
 				1A2C2FE028DA11D00001A0BB /* ComposingText.swift */,
@@ -1309,6 +1313,14 @@
 				1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */,
 			);
 			path = KeyboardHeightSetting;
+			sourceTree = "<group>";
+		};
+		1AB0973B29C429C200F81FAF /* Replacer */ = {
+			isa = PBXGroup;
+			children = (
+				1AB0973C29C429D600F81FAF /* TextReplacer.swift */,
+			);
+			path = Replacer;
 			sourceTree = "<group>";
 		};
 		1AB0974829C467A800F81FAF /* InKeyboardTextInput */ = {
@@ -2100,6 +2112,7 @@
 				1A2E5824294F452A004F959B /* ComposingTextTests.swift in Sources */,
 				1A2E58492951E88F004F959B /* RegisteredNodeProtocol.swift in Sources */,
 				1A2E580B294ED02C004F959B /* StringUtilsTests.swift in Sources */,
+				1AB0974029C429DC00F81FAF /* TextReplacer.swift in Sources */,
 				1A2E58602951ED56004F959B /* RomanTypographys.swift in Sources */,
 				1A2E583F2951C5B4004F959B /* MemoryResetCondition.swift in Sources */,
 				1A2E5812294F2561004F959B /* Roman2Kana.swift in Sources */,
@@ -2177,6 +2190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AB0973D29C429D600F81FAF /* TextReplacer.swift in Sources */,
 				1A86F4B82539356100B92B49 /* StringUtils.swift in Sources */,
 				1A12E24825C41A7100316009 /* Message.swift in Sources */,
 				1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */,

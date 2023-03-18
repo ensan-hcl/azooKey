@@ -49,6 +49,9 @@ indirect enum ActionType: Equatable {
     // アプリを開く
     case openApp(String)    // アプリを開く
 
+    // 文字検索
+    case setSearchQuery(String, [ConverterBehaviorSemantics.ReplacementTarget])
+
     // ステート変更
     case setBoolState(String, BoolOperation)
     // case _setBoolState(String, CompiledExpression)

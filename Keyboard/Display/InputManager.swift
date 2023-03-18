@@ -39,7 +39,7 @@ final class InputManager {
     private var rubyLog: OrderedDictionary<String, String> = [:]
 
     // 変換結果の通知用関数
-    private var updateResult: (([Candidate]) -> Void)?
+    private var updateResult: (([any ResultViewItemData]) -> Void)?
 
     private var liveConversionEnabled: Bool {
         liveConversionManager.enabled && !self.isSelected
@@ -55,12 +55,12 @@ final class InputManager {
         }
     }
 
-    func getSurroundingText() -> (leftText: String, rightText: String) {
+    func getSurroundingText() -> (leftText: String, center: String, rightText: String) {
         let left = adjustLeftString(self.displayedTextManager.documentContextBeforeInput ?? "")
         let center = self.displayedTextManager.selectedText ?? ""
         let right = self.displayedTextManager.documentContextAfterInput ?? ""
 
-        return (left + center, right)
+        return (left, center, right)
     }
 
     func getTextChangedCountDelta() -> Int {
@@ -132,6 +132,8 @@ final class InputManager {
 
     /// かな漢字変換を受け持つ変換器。
     private var kanaKanjiConverter = KanaKanjiConverter()
+    /// 置換機
+    private var textReplacer = TextReplacer()
 
     func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.kanaKanjiConverter.sendToDicdataStore(data)
@@ -141,7 +143,7 @@ final class InputManager {
         self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
-    func setUpdateResult(_ updateResult: @escaping ([Candidate]) -> Void) {
+    func setUpdateResult(_ updateResult: @escaping ([any ResultViewItemData]) -> Void) {
         self.updateResult = updateResult
     }
 
@@ -151,6 +153,20 @@ final class InputManager {
             return previousSystemOperation
         }
         return nil
+    }
+
+    /// 結果の更新
+    func updateTextReplacementCandidates(left: String, center: String, right: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) {
+        let results = self.textReplacer.getReplacementCandidate(left: left, center: center, right: right, target: target)
+        if let updateResult {
+            updateResult(results)
+        }
+    }
+
+    /// 検索結果の更新
+    func getSearchResult(query: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) -> [any ResultViewItemData] {
+        let results = self.textReplacer.getSearchResult(query: query, target: target)
+        return results
     }
 
     /// 変換を選択した場合に呼ばれる

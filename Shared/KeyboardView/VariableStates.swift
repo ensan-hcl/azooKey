@@ -123,6 +123,16 @@ final class VariableStates: ObservableObject {
 
     var moveCursorBarState = BetaMoveCursorBarState()
 
+    @Published private(set) var leftSideText: String = ""
+    @Published private(set) var centerText: String = ""
+    @Published private(set) var rightSideText: String = ""
+    func setSurroundingText(leftSide: String, center: String, rightSide: String) {
+        self.leftSideText = leftSide
+        self.centerText = center
+        self.rightSideText = rightSide
+        self.moveCursorBarState.updateLine(leftText: leftSide + center, rightText: rightSide)
+    }
+
     func setResizingMode(_ state: ResizingState) {
         switch state {
         case .fullwidth:
