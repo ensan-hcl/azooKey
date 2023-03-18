@@ -266,33 +266,63 @@ enum Design {
             return size == -1 ? 18: size
         }
 
-        func resultViewFont(theme: ThemeData) -> Font {
+        func resultViewFont(theme: ThemeData, fontSize: CGFloat? = nil) -> Font {
             // Font.custom("Mplus 1p Bold", size: resultViewFontSize).weight(theme.textFont.weight)
-            Font.system(size: resultViewFontSize).weight(theme.textFont.weight)
+            Font.system(size: fontSize ?? resultViewFontSize).weight(theme.textFont.weight)
         }
 
-        func keyLabelFont(text: String, width: CGFloat, scale: CGFloat, theme: ThemeData) -> Font {
-            @KeyboardSetting(.keyViewFontSize) var userDecidedSize
-            if userDecidedSize != -1 {
-                return .system(size: userDecidedSize * scale, weight: theme.textFont.weight, design: .default)
+        enum LabelFontSizeStrategy {
+            case max
+            case large
+            case medium
+            case small
+            case xsmall
+
+            var scale: CGFloat {
+                switch self {
+                case .large, .max:
+                    return 1
+                case .medium:
+                    return 0.8
+                case .small:
+                    return 0.7
+                case .xsmall:
+                    return 0.6
+                }
             }
-            let maxFontSize: Int
-            switch Design.layout {
-            case .flick:
-                maxFontSize = Int(21 * scale)
-            case .qwerty:
-                maxFontSize = Int(25 * scale)
-            }
+        }
+
+        private func getMaximumFontSize(for text: String, width: CGFloat, maxFontSize: Int) -> CGFloat {
             // 段階的フォールバック
             for fontsize in (10...maxFontSize).reversed() {
                 let size = UIFontMetrics.default.scaledValue(for: CGFloat(fontsize))
                 let font = UIFont.systemFont(ofSize: size, weight: .regular)
                 let title_size = text.size(withAttributes: [.font: font])
                 if title_size.width < width * 0.95 {
-                    return Font.system(size: size, weight: theme.textFont.weight, design: .default)
+                    return size
                 }
             }
-            let size = UIFontMetrics.default.scaledValue(for: 9)
+            return UIFontMetrics.default.scaledValue(for: 9)
+        }
+
+        func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, theme: ThemeData) -> Font {
+            if case .max = fontSize {
+                let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 30)
+                return Font.system(size: size, weight: theme.textFont.weight, design: .default)
+            }
+
+            @KeyboardSetting(.keyViewFontSize) var userDecidedSize
+            if userDecidedSize != -1 {
+                return .system(size: userDecidedSize * fontSize.scale, weight: theme.textFont.weight, design: .default)
+            }
+            let maxFontSize: Int
+            switch Design.layout {
+            case .flick:
+                maxFontSize = Int(21 * fontSize.scale)
+            case .qwerty:
+                maxFontSize = Int(25 * fontSize.scale)
+            }
+            let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: maxFontSize)
             return Font.system(size: size, weight: theme.textFont.weight, design: .default)
         }
     }
