@@ -21,7 +21,7 @@ struct InKeyboardTextEditor: View {
 
     private let configuration: Configuration
     @Binding private var text: String
-    @State private var proxyWrapper = UITextDocumentProxyWrapper()
+    @State private var proxyWrapper = IKTextDocumentProxyWrapper()
     @Environment(\.userActionManager) private var action
 
     var body: some View {
@@ -32,7 +32,6 @@ struct InKeyboardTextEditor: View {
             }
             .onDisappear {
                 action.setTextDocumentProxy(.ikTextFieldProxy(nil))
-                action.setTextDocumentProxy(.preference(.main))
             }
             .onChange(of: proxyWrapper) { newValue in
                 action.setTextDocumentProxy(.ikTextFieldProxy(newValue.proxy))
@@ -41,114 +40,10 @@ struct InKeyboardTextEditor: View {
     }
 }
 
-private struct UITextDocumentProxyWrapper: Equatable, Hashable {
-    private var updateDate: Date = Date()
-    var proxy: UITextDocumentProxy? {
-        didSet {
-            updateDate = Date()
-        }
-    }
-
-    static func == (lhs: UITextDocumentProxyWrapper, rhs: UITextDocumentProxyWrapper) -> Bool {
-        lhs.updateDate == rhs.updateDate
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(updateDate)
-    }
-}
-
-private final class CustomTextDocumentProxy: NSObject, UITextDocumentProxy {
-    private var input: any UITextInput
-
-    var documentContextBeforeInput: String? {
-        if self.input.markedTextRange != nil {
-            return nil
-        }
-        // カーソル位置は`selectedTextRange`で取得できる。
-        if let start = self.input.selectedTextRange?.start,
-           let range = self.input.textRange(from: self.input.beginningOfDocument, to: start) {
-            return self.input.text(in: range)
-        }
-        return nil
-    }
-
-    var documentContextAfterInput: String? {
-        if self.input.markedTextRange != nil {
-            return nil
-        }
-        // カーソル位置は`selectedTextRange`で取得できる。
-        if let end = self.input.selectedTextRange?.end,
-           let range = self.input.textRange(from: end, to: self.input.endOfDocument) {
-            return self.input.text(in: range)
-        }
-        return nil
-    }
-
-    var selectedText: String? {
-        if self.input.markedTextRange != nil {
-            return nil
-        }
-        if let range = self.input.selectedTextRange {
-            return self.input.text(in: range)
-        }
-        return nil
-    }
-
-    var documentInputMode: UITextInputMode? {
-        self.input.textInputView?.textInputMode
-    }
-
-    var documentIdentifier: UUID = UUID()
-
-    init(input: any UITextInput) {
-        self.input = input
-        super.init()
-    }
-
-    func adjustTextPosition(byCharacterOffset offset: Int) {
-        if let range = self.input.selectedTextRange,
-           let position = self.input.position(from: range.start, offset: offset) {
-            input.selectedTextRange = self.input.textRange(from: position, to: position)
-        }
-    }
-
-    func setMarkedText(_ markedText: String, selectedRange: NSRange) {
-        debug("CustomTextDocumentProxy.setMarkedText", markedText)
-        self.input.setMarkedText(markedText, selectedRange: selectedRange)
-    }
-
-    func unmarkText() {
-        if self.input.markedTextRange != nil {
-            self.input.unmarkText()
-        }
-    }
-
-    var hasText: Bool {
-        self.input.hasText
-    }
-
-    func insertText(_ text: String) {
-        self.input.insertText(text)
-    }
-
-    func deleteBackward() {
-        self.input.deleteBackward()
-    }
-}
-
-protocol IKTextEditor {
-    var isInKeyboard: Bool { get }
-}
-
-final class IKTextView: UITextView, IKTextEditor {
-    var isInKeyboard: Bool {
-        true
-    }
-}
+private final class IKTextView: UITextView {}
 
 private struct TextViewWrapper: UIViewRepresentable {
-    @Binding var proxyWrapper: UITextDocumentProxyWrapper
+    @Binding var proxyWrapper: IKTextDocumentProxyWrapper
     @Binding var text: String
     @Environment(\.userActionManager) private var action
     var configuration: InKeyboardTextEditor.Configuration
@@ -164,7 +59,7 @@ private struct TextViewWrapper: UIViewRepresentable {
         view.font = configuration.font
         view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         view.sizeToFit()
-        proxyWrapper.proxy = CustomTextDocumentProxy(input: view)
+        proxyWrapper.proxy = IKTextDocumentProxy(input: view)
         return view
     }
 
@@ -189,7 +84,7 @@ private struct TextViewWrapper: UIViewRepresentable {
 
         func textViewDidBeginEditing(_ view: UITextView) {
             parent.text = view.text ?? ""
-            parent.proxyWrapper.proxy = CustomTextDocumentProxy(input: view)
+            parent.proxyWrapper.proxy = IKTextDocumentProxy(input: view)
         }
 
         func textViewDidChange(_ view: UITextView) {
@@ -206,7 +101,7 @@ private struct TextViewWrapper: UIViewRepresentable {
         }
 
         func notifyWillChange(_ textInput: UITextInput) {
-            let proxy = CustomTextDocumentProxy(input: textInput)
+            let proxy = IKTextDocumentProxy(input: textInput)
             self.parent.action.notifySomethingWillChange(
                 left: proxy.documentContextBeforeInput ?? "",
                 center: proxy.selectedText ?? "",
@@ -215,7 +110,7 @@ private struct TextViewWrapper: UIViewRepresentable {
         }
 
         func notifyDidChange(_ textInput: UITextInput) {
-            let proxy = CustomTextDocumentProxy(input: textInput)
+            let proxy = IKTextDocumentProxy(input: textInput)
             self.parent.action.notifySomethingDidChange(
                 a_left: proxy.documentContextBeforeInput ?? "",
                 a_center: proxy.selectedText ?? "",
