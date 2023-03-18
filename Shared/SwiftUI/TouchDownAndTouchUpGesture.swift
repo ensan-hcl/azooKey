@@ -65,7 +65,11 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
         Coordinator(touchDownCallback: touchDownCallBack, touchMovedCallBack: touchMovedCallBack, touchUpCallback: touchUpCallBack)
     }
 
-    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<Self>) {}
+    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<Self>) {
+        context.coordinator.touchDownCallback = self.touchDownCallBack
+        context.coordinator.touchMovedCallBack = self.touchMovedCallBack
+        context.coordinator.touchUpCallback = self.touchUpCallBack
+    }
 }
 
 final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
