@@ -11,10 +11,10 @@ import SwiftUI
 
 /// タブに依存するデザイン上の数値を計算する構造体
 struct TabDependentDesign {
-    private let horizontalKeyCount: CGFloat
-    private let verticalKeyCount: CGFloat
-    private let layout: KeyboardLayout
-    private let orientation: KeyboardOrientation
+    let horizontalKeyCount: CGFloat
+    let verticalKeyCount: CGFloat
+    let layout: KeyboardLayout
+    let orientation: KeyboardOrientation
 
     private var interfaceWidth: CGFloat {
         VariableStates.shared.interfaceSize.width
@@ -173,19 +173,19 @@ enum Design {
 
     /// This property calculate suitable width for normal keyView.
     static var keyboardScreenHeight: CGFloat {
-        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: VariableStates.shared.upsideComponent != nil) + 2
+        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, upsideComponent: VariableStates.shared.upsideComponent) + 2
     }
 
     /// screenWidthに依存して決定する
     /// 12はresultViewのpadding
-    static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width, hasUpsideComponent: Bool = false) -> CGFloat {
+    static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width, upsideComponent: UpsideComponent? = nil) -> CGFloat {
         let scale: CGFloat
-        if hasUpsideComponent {
+        if let upsideComponent {
             switch orientation {
             case .vertical:
-                scale = max(SemiStaticStates.shared.keyboardHeightScale, 2.2)
+                scale = min(2.2, SemiStaticStates.shared.keyboardHeightScale + upsideComponentScale(upsideComponent).vertical)
             case .horizontal:
-                scale = max(SemiStaticStates.shared.keyboardHeightScale, 1.5)
+                scale = min(2.2, SemiStaticStates.shared.keyboardHeightScale + upsideComponentScale(upsideComponent).horizontal)
             }
         } else {
             scale = SemiStaticStates.shared.keyboardHeightScale
@@ -204,8 +204,15 @@ enum Design {
         }
     }
 
-    static func upsideComponentHeight() -> CGFloat {
-        Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: true) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, hasUpsideComponent: false)
+    private static func upsideComponentScale(_ component: UpsideComponent) -> (vertical: CGFloat, horizontal: CGFloat) {
+        switch component {
+        case .search:
+            return (vertical: 0.5, horizontal: 0.5)
+        }
+    }
+
+    static func upsideComponentHeight(_ component: UpsideComponent) -> CGFloat {
+        Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, upsideComponent: component) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, upsideComponent: nil)
     }
     /// keyboardHeightに依存して決定する
     static func resultViewHeight() -> CGFloat {
@@ -371,6 +378,12 @@ enum Design {
             case .qwerty:
                 return Color("RomanHighlightedKeyColor")
             }
+        }
+
+        func prominentBackgroundColor(_ theme: ThemeData) -> Color {
+            ColorTools.hsv(theme.resultBackgroundColor.color) { h, s, v, a in
+                Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
+            } ?? theme.normalKeyFillColor.color
         }
     }
 

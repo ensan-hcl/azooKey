@@ -94,16 +94,17 @@ struct KeyboardView: View {
                 if let upsideComponent = variableStates.upsideComponent {
                     Group {
                         switch upsideComponent {
-                        default: EmptyView()
+                        case let .search(target):
+                            UpsideSearchView(target: target)
                         }
                     }
-                    .frame(height: Design.upsideComponentHeight())
+                    .frame(height: Design.upsideComponentHeight(upsideComponent))
                 }
                 if isResultViewExpanded {
                     ExpandedResultView(isResultViewExpanded: $isResultViewExpanded)
                 } else {
                     VStack(spacing: 0) {
-                        ResultView(isResultViewExpanded: $isResultViewExpanded)
+                        KeyboardBarView(isResultViewExpanded: $isResultViewExpanded)
                             .padding(.vertical, 6)
                         if variableStates.refreshing {
                             keyboardView(tab: variableStates.tabManager.tab.existential)
@@ -162,7 +163,8 @@ struct KeyboardView: View {
             case let .special(tab):
                 switch tab {
                 case .clipboard_history_tab:
-                    // ClipboardHistoryTab()
+                    ClipboardHistoryTab()
+                case .emoji:
                     EmojiTab()
                 }
             }

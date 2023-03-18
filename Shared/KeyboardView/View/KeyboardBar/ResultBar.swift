@@ -1,12 +1,11 @@
 //
-//  ResultView.swift
+//  ResultBar.swift
 //  azooKey
 //
-//  Created by ensan on 2020/04/10.
-//  Copyright © 2020 ensan. All rights reserved.
+//  Created by ensan on 2023/03/19.
+//  Copyright © 2023 ensan. All rights reserved.
 //
 
-import Foundation
 import SwiftUI
 
 protocol ResultViewItemData {
@@ -38,77 +37,12 @@ struct ResultData: Identifiable {
     var candidate: any ResultViewItemData
 }
 
-struct ResultView: View {
-    @ObservedObject private var variableStates = VariableStates.shared
-    @Binding private var isResultViewExpanded: Bool
-    @Environment(\.themeEnvironment) private var theme
-
-    init(isResultViewExpanded: Binding<Bool>) {
-        self._isResultViewExpanded = isResultViewExpanded
-    }
-
-    var body: some View {
-        Group { [unowned variableStates] in
-            switch variableStates.barState {
-            case .cursor:
-                MoveCursorBar()
-            case .tab:
-                let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
-                TabBarView(data: tabBarData)
-            case .none:
-                switch variableStates.tabManager.tab {
-                case let .existential(.special(tab)) where tab == .clipboard_history_tab:
-                    ResultBar(isResultViewExpanded: $isResultViewExpanded)
-                default:
-                    ResultBar(isResultViewExpanded: $isResultViewExpanded)
-                }
-            }
-        }
-        .frame(height: Design.resultViewHeight())
-    }
-}
-
-struct TabBarButton: View {
-    @Environment(\.themeEnvironment) private var theme
-    @Environment(\.userActionManager) private var action
-
-    @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
-
-    private var tabBarButtonBackgroundColor: Color {
-        ColorTools.hsv(theme.resultBackgroundColor.color) { h, s, v, a in
-            Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
-        } ?? theme.normalKeyFillColor.color
-    }
-
-    private var tabBarButtonLabelColor: Color {
-        theme.resultTextColor.color
-    }
-
-    var body: some View {
-        Button {
-            self.action.registerAction(.setTabBar(.toggle))
-        } label: {
-            ZStack {
-                if displayTabBarButton {
-                    Circle()
-                        .strokeAndFill(fillContent: tabBarButtonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
-                        .frame(width: Design.resultViewHeight() * 0.8, height: Design.resultViewHeight() * 0.8)
-                    AzooKeyIcon(fixedSize: Design.resultViewHeight() * 0.6, color: .color(tabBarButtonLabelColor))
-                } else {
-                    EmptyView()
-                }
-            }
-        }
-        .frame(height: Design.resultViewHeight() * 0.6)
-        .padding(.all, 5)
-    }
-}
-
 struct ResultBar: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
     @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
     @Binding private var isResultViewExpanded: Bool
+    @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
     private var buttonWidth: CGFloat {
         Design.resultViewHeight() * 0.5
@@ -124,7 +58,11 @@ struct ResultBar: View {
     var body: some View {
         if model.results.isEmpty {
             CenterAlignedView {
-                TabBarButton()
+                if displayTabBarButton {
+                    KeyboardBarButton {
+                        self.action.registerAction(.setTabBar(.toggle))
+                    }
+                }
             }
             .background(Color(.sRGB, white: 1, opacity: 0.001))
             .onLongPressGesture {

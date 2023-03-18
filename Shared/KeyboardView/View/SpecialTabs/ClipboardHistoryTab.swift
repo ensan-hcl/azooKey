@@ -28,6 +28,7 @@ struct ClipboardHistoryTab: View {
     @Environment(\.userActionManager) private var action
     @State private var lastInsertedText: (text: String, changedCount: Int)?
     /// - note: 本来不要なはずだが、更新が発生しないので追加
+    // FIXME: TouchDownAnd...Viewの修正で治ったはず
     @State private var refreshUndoKey = false
 
     init() {
@@ -43,9 +44,7 @@ struct ClipboardHistoryTab: View {
     }
 
     private var listRowBackgroundColor: Color {
-        ColorTools.hsv(theme.resultBackgroundColor.color) { h, s, v, a in
-            Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
-        } ?? theme.normalKeyFillColor.color
+        Design.colors.prominentBackgroundColor(theme)
     }
 
     @ViewBuilder
