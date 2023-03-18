@@ -77,6 +77,10 @@ final class KeyboardActionManager: UserActionManager {
         if !target.isEmpty {
             self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: target)
         }
+        self.inputManager.complete(candidate: candidate)
+        self.registerActions(candidate.actions)
+        // エンターキーの状態の更新
+        VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
     }
 
     private func showResultView() {
