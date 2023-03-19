@@ -158,7 +158,12 @@ struct EmojiTab: View {
 
     @State private var selectedGenre: Genre?
 
-    @State private var expandLevel: ExpandKeyModel.Level = .medium
+    @State private var expandLevel: EmojiTabExpandModePreference.Level
+
+    init() {
+        let value = KeyboardInternalSetting.shared.emojiTabExpandModePreference.level
+        self._expandLevel = .init(initialValue: value)
+    }
     // 正方形のキーにする
     private var keySize: CGFloat {
         scrollViewHeight / CGFloat(verticalCount)
@@ -226,7 +231,11 @@ struct EmojiTab: View {
 
     private func expandKey() -> SimpleKeyView {
         SimpleKeyView(model: ExpandKeyModel(currentLevel: expandLevel, action: {
-            self.expandLevel = expandLevel.next()
+            let newValue = expandLevel.next()
+            self.expandLevel = newValue
+            KeyboardInternalSetting.shared.update(\.emojiTabExpandModePreference) { value in
+                value.level = newValue
+            }
         }), width: footerHeight, height: footerHeight)
     }
 
@@ -299,37 +308,13 @@ struct EmojiTab: View {
 }
 
 private struct ExpandKeyModel: SimpleKeyModelProtocol {
-    enum Level: UInt8, Codable {
-        case small
-        case medium
-        case large
-
-        func next() -> Level {
-            switch self {
-            case .small: return .medium
-            case .medium: return .large
-            case .large: return .small
-            }
-        }
-
-        var icon: String {
-            switch self {
-            case .small:
-                return "arrow.up.left.and.arrow.down.right"
-            case .medium:
-                return "arrow.up.left.and.arrow.down.right"
-            case .large:
-                return "arrow.down.right.and.arrow.up.left"
-            }
-        }
-    }
-    private var currentLevel: Level
+    private var currentLevel: EmojiTabExpandModePreference.Level
     private var action: () -> Void
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         KeyLabel(.image(self.currentLevel.icon), width: width, textSize: .max)
     }
 
-    init(currentLevel: Level, action: @escaping () -> Void) {
+    init(currentLevel: EmojiTabExpandModePreference.Level, action: @escaping () -> Void) {
         self.currentLevel = currentLevel
         self.action = action
     }
@@ -370,6 +355,27 @@ private struct EmojiKeyModel: SimpleKeyModelProtocol {
         KeyboardInternalSetting.shared.update(\.tabCharacterPreference) { value in
             value.setUsed(base: self.base, for: .system(.emoji))
             VariableStates.shared.lastTabCharacterPreferenceUpdate = .now
+        }
+    }
+}
+
+private extension EmojiTabExpandModePreference.Level {
+    func next() -> Self {
+        switch self {
+        case .small: return .medium
+        case .medium: return .large
+        case .large: return .small
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .small:
+            return "arrow.up.left.and.arrow.down.right"
+        case .medium:
+            return "arrow.up.left.and.arrow.down.right"
+        case .large:
+            return "arrow.down.right.and.arrow.up.left"
         }
     }
 }

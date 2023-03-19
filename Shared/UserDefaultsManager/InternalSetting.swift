@@ -10,7 +10,7 @@ import Foundation
 
 protocol UserDefaultsKeys: RawRepresentable where RawValue == String {
     associatedtype Manager: UserDefaultsManager
-    init?(keyPath: PartialKeyPath<Manager>)
+    init(keyPath: PartialKeyPath<Manager>)
 }
 
 protocol UserDefaultsManager {
@@ -39,11 +39,8 @@ fileprivate extension UserDefaultsManager {
     mutating func update(value: WritableKeyPath<Self, some Codable>) {
         do {
             let data = try JSONEncoder().encode(self[keyPath: value])
-            if let key = Keys(keyPath: value) {
-                UserDefaults.standard.set(data, forKey: key.rawValue)
-            } else {
-                fatalError("Unknown Key Path: \(value)")
-            }
+            let key = Keys(keyPath: value)
+            UserDefaults.standard.set(data, forKey: key.rawValue)
         } catch {
             debug(error)
         }
@@ -73,21 +70,25 @@ struct KeyboardInternalSetting: UserDefaultsManager {
         typealias Manager = KeyboardInternalSetting
         case one_handed_mode_setting
         case tab_character_preference
+        case emoji_tab_expand_mode_preference
 
-        init?(keyPath: PartialKeyPath<Manager>) {
+        init(keyPath: PartialKeyPath<Manager>) {
             switch keyPath {
             case \Manager.oneHandedModeSetting:
                 self = .one_handed_mode_setting
             case \Manager.tabCharacterPreference:
                 self = .tab_character_preference
+            case \Manager.emojiTabExpandModePreference:
+                self = .emoji_tab_expand_mode_preference
             default:
-                return nil
+                fatalError("Unknown Key Path: \(keyPath)")
             }
         }
     }
 
     private(set) var oneHandedModeSetting: OneHandedModeSetting = Self.load(key: .one_handed_mode_setting)
     private(set) var tabCharacterPreference: TabCharacterPreference = Self.load(key: .tab_character_preference)
+    private(set) var emojiTabExpandModePreference: EmojiTabExpandModePreference = Self.load(key: .emoji_tab_expand_mode_preference)
 }
 
 struct ContainerInternalSetting: UserDefaultsManager {
@@ -97,12 +98,12 @@ struct ContainerInternalSetting: UserDefaultsManager {
         typealias Manager = ContainerInternalSetting
         case walkthrough_state
 
-        init?(keyPath: PartialKeyPath<Manager>) {
+        init(keyPath: PartialKeyPath<Manager>) {
             switch keyPath {
             case \Manager.walkthroughState:
                 self = .walkthrough_state
             default:
-                return nil
+                fatalError("Unknown Key Path: \(keyPath)")
             }
         }
     }

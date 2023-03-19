@@ -262,6 +262,8 @@
 		1AA453DF29C5F8D80018BDD6 /* IKTextDocumentProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453DD29C5F8D80018BDD6 /* IKTextDocumentProxy.swift */; };
 		1AA453E129C609B30018BDD6 /* ResultBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453E029C609B30018BDD6 /* ResultBar.swift */; };
 		1AA453E229C609B30018BDD6 /* ResultBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453E029C609B30018BDD6 /* ResultBar.swift */; };
+		1AA453E629C718420018BDD6 /* EmojiTabExpandModePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453E529C718420018BDD6 /* EmojiTabExpandModePreference.swift */; };
+		1AA453E729C718420018BDD6 /* EmojiTabExpandModePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA453E529C718420018BDD6 /* EmojiTabExpandModePreference.swift */; };
 		1AAC102729B25D060020BDE9 /* KeyboardHeightSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */; };
 		1AAC102929B4EE4A0020BDE9 /* FullAccessTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */; };
 		1AAC102B29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */; };
@@ -681,6 +683,7 @@
 		1AA453DA29C5F8460018BDD6 /* IKTextDocumentProxyWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IKTextDocumentProxyWrapper.swift; sourceTree = "<group>"; };
 		1AA453DD29C5F8D80018BDD6 /* IKTextDocumentProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IKTextDocumentProxy.swift; sourceTree = "<group>"; };
 		1AA453E029C609B30018BDD6 /* ResultBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultBar.swift; sourceTree = "<group>"; };
+		1AA453E529C718420018BDD6 /* EmojiTabExpandModePreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTabExpandModePreference.swift; sourceTree = "<group>"; };
 		1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHeightSettingView.swift; sourceTree = "<group>"; };
 		1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAccessTipsView.swift; sourceTree = "<group>"; };
 		1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InKeyboardTextEditor.swift; sourceTree = "<group>"; };
@@ -981,6 +984,7 @@
 				1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */,
 				1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */,
 				1AA453D729C5F6E10018BDD6 /* TabCharacterPreference.swift */,
+				1AA453E529C718420018BDD6 /* EmojiTabExpandModePreference.swift */,
 				1AFE772F26077E0E0041D74D /* WalkthroughState.swift */,
 			);
 			path = UserDefaultsManager;
@@ -2021,6 +2025,7 @@
 				1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */,
 				1AB8C37025E0067600D39BC5 /* SimpleKeyView.swift in Sources */,
 				1AD2B8DE26C29FD10053CE4A /* FlickCustomKeyKeyboardSetting.swift in Sources */,
+				1AA453E629C718420018BDD6 /* EmojiTabExpandModePreference.swift in Sources */,
 				1AF6794C25CEDB8400F3987B /* ExpandedResultView.swift in Sources */,
 				1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */,
 				1AB8C3C625E24D0B00D39BC5 /* CustardManager.swift in Sources */,
@@ -2351,6 +2356,7 @@
 				1AB8C3C025E2303200D39BC5 /* TabBar.swift in Sources */,
 				1AEB864A251CE730000A8379 /* Roman2Kana.swift in Sources */,
 				1A3ACF2325FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */,
+				1AA453E729C718420018BDD6 /* EmojiTabExpandModePreference.swift in Sources */,
 				1A3DC2262500D63F002CAA93 /* SuggestView.swift in Sources */,
 				1A3DC20A2500D51F002CAA93 /* KeyboardView.swift in Sources */,
 				1A2E5822294F4357004F959B /* TypoCorrection.swift in Sources */,
