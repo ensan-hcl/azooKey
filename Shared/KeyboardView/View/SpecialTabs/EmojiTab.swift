@@ -12,18 +12,26 @@ struct EmojiTab: View {
     @ObservedObject private var variableStates = VariableStates.shared
     @Environment(\.themeEnvironment) private var theme
 
-    private struct EmojiData: Identifiable {
+    private struct EmojiData: Identifiable, Hashable {
+        static func == (lhs: EmojiTab.EmojiData, rhs: EmojiTab.EmojiData) -> Bool {
+            lhs.id == rhs.id
+        }
+
         init(emoji: String, base: String) {
             self.emoji = emoji
             self.base = base
+            self.keyModel = EmojiKeyModel(emoji, base: base, unpressedKeyColorType: .unimportant)
+            self.id = UUID()
         }
 
-        var id: Int {
-            emoji.hashValue
-        }
-
+        var id: UUID
         var emoji: String
         var base: String
+        var keyModel: EmojiKeyModel
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
     }
 
     private struct EmojiPreference: Codable {
@@ -227,17 +235,18 @@ struct EmojiTab: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 ScrollViewReader { proxy in
                     let gridItem = GridItem(.fixed(keySize), spacing: 0)
-                    LazyHStack(spacing: 20) {
+                    LazyHGrid(rows: Array(repeating: gridItem, count: verticalCount), spacing: 0) {
                         ForEach(allGenre) { genre in
                             let models = self.emojis[genre, default: []]
                             if !models.isEmpty {
-                                LazyHGrid(rows: Array(repeating: gridItem, count: verticalCount), spacing: 0) {
+                                Section {
                                     SimpleKeyView(model: SimpleKeyModel(keyType: .normal, keyLabelType: .image(genre.icon), unpressedKeyColorType: .selected, pressActions: []), width: keySize, height: keySize)
-                                    ForEach(0..<models.count, id: \.self) {i in
-                                        SimpleKeyView(model: EmojiKeyModel(models[i].emoji, base: models[i].base, unpressedKeyColorType: .unimportant), width: keySize, height: keySize)
+                                    ForEach(models) {model in
+                                        SimpleKeyView(model: model.keyModel, width: keySize, height: keySize)
                                     }
+                                } footer: {
+                                    Spacer()
                                 }
-                                .id(genre)
                             }
                         }
                     }
