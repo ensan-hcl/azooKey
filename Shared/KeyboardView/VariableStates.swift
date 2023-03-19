@@ -25,7 +25,7 @@ final class VariableStates: ObservableObject {
     @Published private(set) var keyboardLayout: KeyboardLayout = .flick
 
     /// `ResultModel`の変数
-    var resultModelVariableSection = ResultModelVariableSection()
+    let resultModelVariableSection = ResultModelVariableSection()
 
     struct BoolStates: CustardExpressionEvaluatorContext {
         func getValue(for key: String) -> ExpressionValue? {

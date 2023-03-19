@@ -45,10 +45,10 @@ struct ResultBar: View {
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
     private var buttonWidth: CGFloat {
-        Design.resultViewHeight() * 0.5
+        Design.keyboardBarHeight() * 0.5
     }
     private var buttonHeight: CGFloat {
-        Design.resultViewHeight() * 0.6
+        Design.keyboardBarHeight() * 0.6
     }
 
     init(isResultViewExpanded: Binding<Bool>) {

@@ -14,10 +14,10 @@ struct ExpandedResultView: View {
 
     private var splitedResults: [SplitedResultData]
     private var buttonWidth: CGFloat {
-        Design.resultViewHeight() * 0.5
+        Design.keyboardBarHeight() * 0.5
     }
     private var buttonHeight: CGFloat {
-        Design.resultViewHeight() * 0.6
+        Design.keyboardBarHeight() * 0.6
     }
 
     @Environment(\.themeEnvironment) private var theme

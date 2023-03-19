@@ -105,6 +105,7 @@ struct KeyboardView: View {
                 } else {
                     VStack(spacing: 0) {
                         KeyboardBarView(isResultViewExpanded: $isResultViewExpanded)
+                            .frame(height: Design.keyboardBarHeight())
                             .padding(.vertical, 6)
                         if variableStates.refreshing {
                             keyboardView(tab: variableStates.tabManager.tab.existential)

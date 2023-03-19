@@ -17,10 +17,10 @@ struct UpsideSearchView: View {
     @FocusState private var searchBarFocus
     private let target: [ConverterBehaviorSemantics.ReplacementTarget]
     private var buttonHeight: CGFloat {
-        Design.resultViewHeight() * 0.9
+        Design.keyboardBarHeight() * 0.9
     }
     private var searchBarHeight: CGFloat {
-        Design.resultViewHeight() * 0.8
+        Design.keyboardBarHeight() * 0.8
     }
 
     init(target: [ConverterBehaviorSemantics.ReplacementTarget]) {

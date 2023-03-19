@@ -14,10 +14,10 @@ struct EmojiTabResultBar: View {
     @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
     @Namespace private var namespace
     private var buttonHeight: CGFloat {
-        Design.resultViewHeight() * 0.9
+        Design.keyboardBarHeight() * 0.9
     }
     private var searchBarHeight: CGFloat {
-        Design.resultViewHeight() * 0.8
+        Design.keyboardBarHeight() * 0.8
     }
     private var searchBarDesign: InKeyboardSearchBar.Configuration {
         .init(placeholder: "絵文字を検索", theme: theme)
@@ -30,6 +30,7 @@ struct EmojiTabResultBar: View {
             KeyboardBarButton {
                 self.action.registerAction(.setTabBar(.on))
             }
+
             if !showResults {
                 // 見た目だけ表示しておいて、実際はoverlayのボタンになっている
                 InKeyboardSearchBar(text: $searchQuery, configuration: searchBarDesign)

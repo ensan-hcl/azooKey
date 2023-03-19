@@ -61,7 +61,7 @@ struct TabDependentDesign {
 
     // resultViewの幅を全体から引いたもの。キーを配置して良い部分の高さ。
     var keysHeight: CGFloat {
-        interfaceHeight - (Design.resultViewHeight() + 12)
+        interfaceHeight - (Design.keyboardBarHeight() + 12)
     }
 
     /// This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
@@ -214,22 +214,20 @@ enum Design {
     static func upsideComponentHeight(_ component: UpsideComponent) -> CGFloat {
         Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, upsideComponent: component) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, upsideComponent: nil)
     }
-    /// keyboardHeightに依存して決定する
-    static func resultViewHeight() -> CGFloat {
-        let keyboardHeight: CGFloat = VariableStates.shared.interfaceSize.height
-
+    /// バー部分の高さは`interfaceHeight`に基づいて決定する
+    static func keyboardBarHeight(interfaceHeight: CGFloat = VariableStates.shared.interfaceSize.height) -> CGFloat {
         switch layoutMode {
         case .phoneVertical:
-            return (keyboardHeight - 12) * 37 / 204
+            return (interfaceHeight - 12) * 37 / 204
         // return screenWidth / 8
         case .padVertical:
-            return (keyboardHeight - 12) * 31 / 180
+            return (interfaceHeight - 12) * 31 / 180
         // return screenWidth / 12
         case .phoneHorizontal:
-            return (keyboardHeight - 12) * 28 / 153
+            return (interfaceHeight - 12) * 28 / 153
         // return screenWidth / 18
         case .padHorizontal:
-            return (keyboardHeight - 12) * 9 / 55
+            return (interfaceHeight - 12) * 9 / 55
         // return screenWidth / 22
         }
     }

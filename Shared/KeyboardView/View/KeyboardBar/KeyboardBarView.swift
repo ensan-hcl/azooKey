@@ -19,23 +19,20 @@ struct KeyboardBarView: View {
     }
 
     var body: some View {
-        Group { [unowned variableStates] in
-            switch variableStates.barState {
-            case .cursor:
-                MoveCursorBar()
-            case .tab:
-                let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
-                TabBarView(data: tabBarData)
-            case .none:
-                switch variableStates.tabManager.tab {
-                case let .existential(.special(tab)) where tab == .clipboard_history_tab:
-                    EmojiTabResultBar()
-                default:
-                    ResultBar(isResultViewExpanded: $isResultViewExpanded)
-                }
+        switch variableStates.barState {
+        case .cursor:
+            MoveCursorBar()
+        case .tab:
+            let tabBarData = (try? CustardManager.load().tabbar(identifier: 0)) ?? .default
+            TabBarView(data: tabBarData)
+        case .none:
+            switch variableStates.tabManager.tab {
+            case let .existential(.special(tab)) where tab == .emoji:
+                EmojiTabResultBar()
+            default:
+                ResultBar(isResultViewExpanded: $isResultViewExpanded)
             }
         }
-        .frame(height: Design.resultViewHeight())
     }
 }
 
@@ -45,6 +42,7 @@ struct KeyboardBarButton: View {
         case systemImage(String)
     }
     @Environment(\.themeEnvironment) private var theme
+    @ObservedObject private var variableStates = VariableStates.shared
     private var action: () -> Void
     private let label: LabelType
 
@@ -61,23 +59,30 @@ struct KeyboardBarButton: View {
         theme.resultTextColor.color
     }
 
+    private var circleSize: CGFloat {
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height) * 0.8
+    }
+
+    private var iconSize: CGFloat {
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height) * 0.6
+    }
+
     var body: some View {
         Button(action: self.action) {
             ZStack {
                 Circle()
                     .strokeAndFill(fillContent: buttonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
-                    .frame(width: Design.resultViewHeight() * 0.8, height: Design.resultViewHeight() * 0.8)
+                    .frame(width: circleSize, height: circleSize)
                 switch label {
                 case .azooKeyIcon:
-                    AzooKeyIcon(fixedSize: Design.resultViewHeight() * 0.6, color: .color(buttonLabelColor))
+                    AzooKeyIcon(fixedSize: iconSize, color: .color(buttonLabelColor))
                 case let .systemImage(name):
                     Image(systemName: name)
-                        .frame(width: Design.resultViewHeight() * 0.6, height: Design.resultViewHeight() * 0.6)
+                        .frame(width: iconSize, height: iconSize)
                         .foregroundColor(buttonLabelColor)
                 }
             }
         }
-        .frame(height: Design.resultViewHeight() * 0.6)
         .padding(.all, 5)
     }
 }
