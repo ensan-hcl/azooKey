@@ -314,7 +314,7 @@ enum Design {
 
         func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, theme: ThemeData) -> Font {
             if case .max = fontSize {
-                let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 30)
+                let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 50)
                 return Font.system(size: size, weight: theme.textFont.weight, design: .default)
             }
 

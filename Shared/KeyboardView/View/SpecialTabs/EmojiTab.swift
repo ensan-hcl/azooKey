@@ -131,9 +131,22 @@ struct EmojiTab: View {
     }
 
     private var verticalCount: Int {
-        switch VariableStates.shared.keyboardOrientation {
-        case .vertical: return 5
-        case .horizontal: return 3
+        switch self.expandLevel {
+        case .small:
+            switch VariableStates.shared.keyboardOrientation {
+            case .vertical: return 6
+            case .horizontal: return 4
+            }
+        case .medium:
+            switch VariableStates.shared.keyboardOrientation {
+            case .vertical: return 5
+            case .horizontal: return 3
+            }
+        case .large:
+            switch VariableStates.shared.keyboardOrientation {
+            case .vertical: return 3
+            case .horizontal: return 2
+            }
         }
     }
 
@@ -145,6 +158,7 @@ struct EmojiTab: View {
 
     @State private var selectedGenre: Genre?
 
+    @State private var expandLevel: ExpandKeyModel.Level = .medium
     // 正方形のキーにする
     private var keySize: CGFloat {
         scrollViewHeight / CGFloat(verticalCount)
@@ -210,8 +224,10 @@ struct EmojiTab: View {
         SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), width: footerHeight, height: footerHeight)
     }
 
-    private func searchKey() -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("magnifyingglass"), unpressedKeyColorType: .special, pressActions: [], longPressActions: .none), width: footerHeight, height: footerHeight)
+    private func expandKey() -> SimpleKeyView {
+        SimpleKeyView(model: ExpandKeyModel(currentLevel: expandLevel, action: {
+            self.expandLevel = expandLevel.next()
+        }), width: footerHeight, height: footerHeight)
     }
 
     private func tabBarKey() -> SimpleKeyView {
@@ -247,6 +263,7 @@ struct EmojiTab: View {
                                 } footer: {
                                     Spacer()
                                 }
+                                .id(genre)
                             }
                         }
                     }
@@ -270,7 +287,7 @@ struct EmojiTab: View {
                     }
                 }
                 deleteKey()
-                searchKey()
+                expandKey()
             }
             .labelStyle(.iconOnly)
             .frame(height: footerHeight)
@@ -278,6 +295,50 @@ struct EmojiTab: View {
         .onChange(of: variableStates.lastTabCharacterPreferenceUpdate) { _ in
             self.emojis = Self.getEmojis()
         }
+    }
+}
+
+private struct ExpandKeyModel: SimpleKeyModelProtocol {
+    enum Level: UInt8, Codable {
+        case small
+        case medium
+        case large
+
+        func next() -> Level {
+            switch self {
+            case .small: return .medium
+            case .medium: return .large
+            case .large: return .small
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .small:
+                return "arrow.up.left.and.arrow.down.right"
+            case .medium:
+                return "arrow.up.left.and.arrow.down.right"
+            case .large:
+                return "arrow.down.right.and.arrow.up.left"
+            }
+        }
+    }
+    private var currentLevel: Level
+    private var action: () -> Void
+    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+        KeyLabel(.image(self.currentLevel.icon), width: width, textSize: .max)
+    }
+
+    init(currentLevel: Level, action: @escaping () -> Void) {
+        self.currentLevel = currentLevel
+        self.action = action
+    }
+    let pressActions: [ActionType] = []
+    let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
+    let longPressActions: LongpressActionType = .none
+
+    func additionalOnPress() {
+        self.action()
     }
 }
 
