@@ -52,6 +52,8 @@ private struct SearchBarWrapper: UIViewRepresentable {
         let view = IKSearchBar(frame: .zero)
 
         view.searchTextField.delegate = context.coordinator
+        // MARK: `inputView`に空の`UIView`を入れないと、フォーカスが当たったタイミングで標準のキーボードを開こうとしてエラーになることがある。
+        view.searchTextField.inputView = UIView()
         // inputDelegateの調整
         view.searchTextField.inputDelegate = context.coordinator
 

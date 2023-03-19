@@ -56,10 +56,10 @@ struct UpsideSearchView: View {
             }
             HStack {
                 InKeyboardSearchBar(text: $searchQuery, configuration: searchBarDesign)
+                    .focused($searchBarFocus)
                     .frame(height: searchBarHeight)
                     .cornerRadius(10)
                     .padding(.trailing, 5)
-                    .focused($searchBarFocus)
                     .onChange(of: searchQuery) { _ in
                         self.action.registerAction(.setSearchQuery(searchQuery, target))
                     }
@@ -76,6 +76,10 @@ struct UpsideSearchView: View {
         .onAppear {
             self.searchBarFocus = true
             self.action.setTextDocumentProxy(.preference(.ikTextField))
+        }
+        .onDisappear {
+            self.model.searchResults = []
+            self.searchBarFocus = false
         }
     }
     private func pressed(candidate: any ResultViewItemData) {

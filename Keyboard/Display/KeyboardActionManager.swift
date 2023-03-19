@@ -28,6 +28,7 @@ final class KeyboardActionManager: UserActionManager {
         }
         self.timers = []
         self.tempTextData = nil
+        self.setTextDocumentProxy(.ikTextFieldProxy(nil))
     }
 
     func sendToDicdataStore(_ data: DicdataStore.Notification) {
