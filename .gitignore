@@ -1,3 +1,4 @@
+/Gen/generated/*.gen
 /Keyboard/Converter/Dictionary/*.binary
 /Keyboard/Converter/Dictionary/cb/*.binary
 /Keyboard/Converter/Dictionary/p/*.csv
