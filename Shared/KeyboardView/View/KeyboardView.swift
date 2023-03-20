@@ -60,11 +60,8 @@ extension EnvironmentValues {
     }
 }
 
-struct KeyboardView<Candidate: ResultViewItemData>: View {
+struct KeyboardView: View {
     @ObservedObject private var variableStates = VariableStates.shared
-    @State private var resultData: [ResultData<Candidate>] = []
-
-    private unowned let resultModelVariableSection: ResultModelVariableSection<Candidate>
 
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
@@ -74,8 +71,7 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
 
     private let defaultTab: Tab.ExistentialTab?
 
-    init(resultModelVariableSection: ResultModelVariableSection<Candidate>, defaultTab: Tab.ExistentialTab? = nil) {
-        self.resultModelVariableSection = resultModelVariableSection
+    init(defaultTab: Tab.ExistentialTab? = nil) {
         self.defaultTab = defaultTab
     }
 
@@ -98,16 +94,18 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 if let upsideComponent = variableStates.upsideComponent {
                     Group {
                         switch upsideComponent {
-                        default: EmptyView()
+                        case let .search(target):
+                            UpsideSearchView(target: target)
                         }
                     }
-                    .frame(height: Design.upsideComponentHeight())
+                    .frame(height: Design.upsideComponentHeight(upsideComponent))
                 }
                 if isResultViewExpanded {
-                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, resultData: resultData)
+                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded)
                 } else {
                     VStack(spacing: 0) {
-                        ResultView(model: resultModelVariableSection, isResultViewExpanded: $isResultViewExpanded, resultData: $resultData)
+                        KeyboardBarView(isResultViewExpanded: $isResultViewExpanded)
+                            .frame(height: Design.keyboardBarHeight())
                             .padding(.vertical, 6)
                         if variableStates.refreshing {
                             keyboardView(tab: variableStates.tabManager.tab.existential)
@@ -167,6 +165,8 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                 switch tab {
                 case .clipboard_history_tab:
                     ClipboardHistoryTab()
+                case .emoji:
+                    EmojiTab()
                 }
             }
         }

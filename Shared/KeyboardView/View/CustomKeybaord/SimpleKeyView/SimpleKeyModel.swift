@@ -53,6 +53,9 @@ protocol SimpleKeyModelProtocol {
     func feedback()
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
+    /// `pressActions`とは別に、押された際に発火する操作
+    /// - note: タブ固有の事情で実行しなければならないような処理に利用すること
+    func additionalOnPress()
 }
 
 extension SimpleKeyModelProtocol {
@@ -63,6 +66,8 @@ extension SimpleKeyModelProtocol {
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
         theme.pushedKeyFillColor.color
     }
+
+    func additionalOnPress() {}
 }
 
 struct SimpleKeyModel: SimpleKeyModelProtocol {

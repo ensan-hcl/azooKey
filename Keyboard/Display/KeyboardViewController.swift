@@ -56,7 +56,6 @@ extension UIView {
 final class KeyboardViewController: UIInputViewController {
     private static var keyboardViewHost: KeyboardHostingController<Keyboard>?
     private static var loadedInstanceCount: Int = 0
-    private static let resultModelVariableSection = ResultModelVariableSection<Candidate>()
     private static let action = KeyboardActionManager()
     private static let notificationCenter = NotificationCenter.default
 
@@ -69,7 +68,7 @@ final class KeyboardViewController: UIInputViewController {
     struct Keyboard: View {
         let theme: ThemeData
         var body: some View {
-            KeyboardView<Candidate>(resultModelVariableSection: KeyboardViewController.resultModelVariableSection)
+            KeyboardView()
                 .environment(\.themeEnvironment, theme)
                 .environment(\.userActionManager, KeyboardViewController.action)
         }
@@ -173,8 +172,12 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
-    func updateResultView(_ candidates: [Candidate]) {
-        KeyboardViewController.resultModelVariableSection.setResults(candidates)
+    func updateResultView(_ candidates: [any ResultViewItemData]) {
+        VariableStates.shared.resultModelVariableSection.setResults(candidates)
+    }
+
+    func updateSearchResultView(_ candidates: [any ResultViewItemData]) {
+        VariableStates.shared.resultModelVariableSection.setSearchResults(candidates)
     }
 
     func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {

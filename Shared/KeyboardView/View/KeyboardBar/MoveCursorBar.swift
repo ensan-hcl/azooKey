@@ -185,7 +185,7 @@ struct MoveCursorBarBeta: View {
 
     private var background: some View {
         RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: state.viewWidth / 2)
-            .frame(height: Design.resultViewHeight())
+            .frame(height: Design.keyboardBarHeight())
             .cornerRadius(20)
             .gesture(swipeGesture)
     }
@@ -200,7 +200,7 @@ struct MoveCursorBarBeta: View {
             ForEach(state.displayLeftIndex - 4 ..< state.displayRightIndex + 4, id: \.self) { i in
                 Text(verbatim: state.getItem(at: i))
                     .font(.system(size: Design.fonts.resultViewFontSize).bold())
-                    .frame(width: state.itemWidth, height: Design.resultViewHeight())
+                    .frame(width: state.itemWidth, height: Design.keyboardBarHeight())
             }
         }
         .allowsHitTesting(false)
@@ -268,7 +268,7 @@ struct MoveCursorBarBeta: View {
     var body: some View {
         background
             .overlay(foregroundButtons)
-            .frame(height: Design.resultViewHeight())
+            .frame(height: Design.keyboardBarHeight())
     }
 }
 
@@ -337,7 +337,7 @@ struct MoveCursorBar: View {
         } else {
             Group {
                 RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: 200)
-                    .frame(height: Design.resultViewHeight())
+                    .frame(height: Design.keyboardBarHeight())
                     .cornerRadius(20)
                     .gesture(gesture)
                     .overlay(HStack {
@@ -359,7 +359,7 @@ struct MoveCursorBar: View {
                         })
                         Spacer()
                     }.foregroundColor(symbolsColor))
-            }.frame(height: Design.resultViewHeight())
+            }.frame(height: Design.keyboardBarHeight())
         }
     }
 }

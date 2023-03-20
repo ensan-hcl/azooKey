@@ -10,23 +10,31 @@ import Foundation
 import SwiftUI
 
 struct SimpleKeyView: View {
-    private let model: SimpleKeyModelProtocol
+    private let model: any SimpleKeyModelProtocol
     @ObservedObject private var variableStates = VariableStates.shared
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
 
-    private let tabDesign: TabDependentDesign
+    private let keyViewWidth: CGFloat
+    private let keyViewHeight: CGFloat
 
-    init(model: SimpleKeyModelProtocol, tabDesign: TabDependentDesign) {
+    init(model: any SimpleKeyModelProtocol, tabDesign: TabDependentDesign) {
         self.model = model
-        self.tabDesign = tabDesign
+        self.keyViewWidth = tabDesign.keyViewWidth
+        self.keyViewHeight = tabDesign.keyViewHeight
+    }
+
+    init(model: any SimpleKeyModelProtocol, width: CGFloat, height: CGFloat) {
+        self.model = model
+        self.keyViewWidth = width
+        self.keyViewHeight = height
     }
 
     @State private var isPressed = false
     @State private var pressStartDate = Date()
 
     var body: some View {
-        model.label(width: tabDesign.keyViewWidth, states: variableStates, theme: theme)
+        model.label(width: keyViewWidth, states: variableStates, theme: theme)
             .background(
                 RoundedRectangle(cornerRadius: 6)
                     .strokeAndFill(
@@ -34,9 +42,9 @@ struct SimpleKeyView: View {
                         strokeContent: theme.borderColor.color,
                         lineWidth: theme.borderWidth
                     )
-                    .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
+                    .frame(width: keyViewWidth, height: keyViewHeight)
             )
-            .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
+            .frame(width: keyViewWidth, height: keyViewHeight)
             .overlay(
                 Group {
                     if !(model is SimpleChangeKeyboardKeyModel && SemiStaticStates.shared.needsInputModeSwitchKey) {
@@ -56,6 +64,7 @@ struct SimpleKeyView: View {
                             action.registerLongPressActionEnd(self.model.longPressActions)
                             if Date().timeIntervalSince(pressStartDate) < 0.4 && state.distance < 30 {
                                 action.registerActions(self.model.pressActions)
+                                self.model.additionalOnPress()
                             }
                         }
                     }
@@ -64,6 +73,6 @@ struct SimpleKeyView: View {
                     action.registerLongPressActionEnd(self.model.longPressActions)
                 }
             )
-            .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight)
+            .frame(width: keyViewWidth, height: keyViewHeight)
     }
 }

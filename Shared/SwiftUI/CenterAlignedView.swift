@@ -18,18 +18,10 @@ struct CenterAlignedView<Content: View>: View {
     }
 
     var body: some View {
-        if let padding {
-            HStack {
-                Spacer(minLength: padding)
-                self.content()
-                Spacer(minLength: padding)
-            }
-        } else {
-            HStack {
-                Spacer()
-                self.content()
-                Spacer()
-            }
+        HStack {
+            Spacer(minLength: padding)
+            self.content()
+            Spacer(minLength: padding)
         }
     }
 }

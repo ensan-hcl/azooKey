@@ -9,7 +9,9 @@
 import CustardKit
 import Foundation
 
-enum UpsideComponent: Equatable {}
+enum UpsideComponent: Equatable {
+    case search([ConverterBehaviorSemantics.ReplacementTarget])
+}
 
 enum Tab: Equatable {
     case existential(ExistentialTab)
@@ -96,10 +98,19 @@ enum Tab: Equatable {
                 return KeyboardLanguage.none
             }
         }
+
+        var replacementTarget: [ConverterBehaviorSemantics.ReplacementTarget] {
+            switch self {
+            case .special(.emoji):
+                return [.emoji]
+            default: return []
+            }
+        }
     }
 
     enum SpecialTab: Equatable {
         case clipboard_history_tab
+        case emoji
     }
 
     enum UserDependentTab: Equatable {

@@ -24,6 +24,9 @@ final class VariableStates: ObservableObject {
     @Published var keyboardOrientation: KeyboardOrientation = .vertical
     @Published private(set) var keyboardLayout: KeyboardLayout = .flick
 
+    /// `ResultModel`の変数
+    let resultModelVariableSection = ResultModelVariableSection()
+
     struct BoolStates: CustardExpressionEvaluatorContext {
         func getValue(for key: String) -> ExpressionValue? {
             if let boolValue = self[key] {
@@ -110,7 +113,9 @@ final class VariableStates: ObservableObject {
 
     @Published var upsideComponent: UpsideComponent?
 
+    // MARK: refresh用
     @Published var refreshing = true
+    @Published var lastTabCharacterPreferenceUpdate = Date()
 
     @Published private(set) var resizingState: ResizingState = .fullwidth
 
@@ -119,6 +124,16 @@ final class VariableStates: ObservableObject {
     @Published var textChangedCount: Int = 0
 
     var moveCursorBarState = BetaMoveCursorBarState()
+
+    @Published private(set) var leftSideText: String = ""
+    @Published private(set) var centerText: String = ""
+    @Published private(set) var rightSideText: String = ""
+    func setSurroundingText(leftSide: String, center: String, rightSide: String) {
+        self.leftSideText = leftSide
+        self.centerText = center
+        self.rightSideText = rightSide
+        self.moveCursorBarState.updateLine(leftText: leftSide + center, rightText: rightSide)
+    }
 
     func setResizingMode(_ state: ResizingState) {
         switch state {
@@ -146,6 +161,7 @@ final class VariableStates: ObservableObject {
 
     func closeKeyboard() {
         self.tabManager.closeKeyboard()
+        self.upsideComponent = nil
         // このタイミングでクリップボードを確認する
         self.clipboardHistoryManager.checkUpdate()
         // 保存処理を行う

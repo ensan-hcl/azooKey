@@ -28,6 +28,7 @@ final class KeyboardActionManager: UserActionManager {
         }
         self.timers = []
         self.tempTextData = nil
+        self.setTextDocumentProxy(.ikTextFieldProxy(nil))
     }
 
     func sendToDicdataStore(_ data: DicdataStore.Notification) {
@@ -55,12 +56,28 @@ final class KeyboardActionManager: UserActionManager {
     ///   - text: String。確定された文字列。
     ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
     override func notifyComplete(_ candidate: any ResultViewItemData) {
-        guard let candidate = candidate as? Candidate else {
-            debug("確定できません")
-            return
+        let target = VariableStates.shared.tabManager.tab.existential.replacementTarget
+        if let candidate = candidate as? Candidate {
+            self.inputManager.complete(candidate: candidate)
+            self.registerActions(candidate.actions)
+        } else if let candidate = candidate as? ReplacementCandidate {
+            self.inputManager.replaceLastCharacters(table: [candidate.target: candidate.replace], inputStyle: .direct)
+            KeyboardInternalSetting.shared.update(\.tabCharacterPreference) { item in
+                switch candidate.targetType {
+                case .emoji:
+                    item.setPreference(base: candidate.base, replace: candidate.replace, for: .system(.emoji))
+                }
+            }
+            VariableStates.shared.lastTabCharacterPreferenceUpdate = .now
+        } else {
+            debug("notifyComplete: 確定できません")
         }
-        self.inputManager.complete(candidate: candidate)
-        self.registerActions(candidate.actions)
+        // 左右の文字列
+        let (left, center, right) = self.inputManager.getSurroundingText()
+        // MARK: Replacementの更新をする
+        if !target.isEmpty {
+            self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: target)
+        }
         // エンターキーの状態の更新
         VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
     }
@@ -119,8 +136,8 @@ final class KeyboardActionManager: UserActionManager {
             }
 
         case let .setCursorBar(operation):
-            let result = self.inputManager.getSurroundingText()
-            VariableStates.shared.moveCursorBarState.updateLine(leftText: result.leftText, rightText: result.rightText)
+            let (left, center, right) = self.inputManager.getSurroundingText()
+            VariableStates.shared.setSurroundingText(leftSide: left, center: center, rightSide: right)
             switch operation {
             case .on:
                 VariableStates.shared.barState = .cursor
@@ -213,19 +230,26 @@ final class KeyboardActionManager: UserActionManager {
                     self.registerActions(falseAction)
                 }
             }
+        case let .setSearchQuery(query, target):
+            let results = self.inputManager.getSearchResult(query: query, target: target)
+            self.delegate?.updateSearchResultView(results)
         }
 
         if requireSetResult {
             // MARK: VariableStateに操作の結果を反映する
             // 左右の文字列
-            let surroundingText = self.inputManager.getSurroundingText()
-            VariableStates.shared.moveCursorBarState.updateLine(leftText: surroundingText.leftText, rightText: surroundingText.rightText)
+            let (left, center, right) = self.inputManager.getSurroundingText()
+            VariableStates.shared.setSurroundingText(leftSide: left, center: center, rightSide: right)
             // エンターキーの状態
             VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
             // 文字列の変更を適用
             VariableStates.shared.textChangedCount += self.inputManager.getTextChangedCountDelta()
-            // MARK: タブを更新する
+            // MARK: 言語を更新する
             self.inputManager.setKeyboardLanguage(VariableStates.shared.keyboardLanguage)
+            // MARK: Replacementの更新をする
+            if !VariableStates.shared.tabManager.tab.existential.replacementTarget.isEmpty {
+                self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: VariableStates.shared.tabManager.tab.existential.replacementTarget)
+            }
         }
     }
 
@@ -384,9 +408,13 @@ final class KeyboardActionManager: UserActionManager {
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
         defer {
             // moveCursorBarStateの更新
-            VariableStates.shared.moveCursorBarState.updateLine(leftText: a_left + a_center, rightText: a_right)
+            VariableStates.shared.setSurroundingText(leftSide: a_left, center: a_center, rightSide: a_right)
             // エンターキーの状態の更新
             VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
+            // Replacementの更新
+            if !VariableStates.shared.tabManager.tab.existential.replacementTarget.isEmpty {
+                self.inputManager.updateTextReplacementCandidates(left: a_left, center: a_center, right: a_right, target: VariableStates.shared.tabManager.tab.existential.replacementTarget)
+            }
         }
         // 前のデータが保存されていない場合は操作しない
         guard let (tempLeft, b_center, b_right) = self.tempTextData else {

@@ -38,10 +38,10 @@ struct TabBarView: View {
                                 Image(systemName: image)
                             }
                         }
-                        .buttonStyle(ResultButtonStyle(height: Design.resultViewHeight() * 0.6))
+                        .buttonStyle(ResultButtonStyle(height: Design.keyboardBarHeight() * 0.6))
                     }
                 }
             }
-        }.frame(height: Design.resultViewHeight())
+        }.frame(height: Design.keyboardBarHeight())
     }
 }
