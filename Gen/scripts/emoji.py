@@ -403,6 +403,30 @@ def output(emojis, version_targets: list[str]):
                     lines.append(line)
             # tsvの行を出力する
             f.write("\n".join(lines))
+
+        # 辞書ファイル向けに./generated/emoji_dict.tsv.genを出力する
+        with open(f"{parent_dir}/generated/emoji_dict_{maximum_version}.txt.gen", "w") as f:
+            # format例: アーティスト	👨‍🎤	5	5	501	-20
+            lines = []
+            for emoji in emojis_sorted:
+                if version_greater_or_equal(emoji.version, maximum_version):
+                    # keywordはカタカナ化して、重複を除去し、「ひらがな/英数字」に完全マッチするもののみ許す
+                    keywords = [
+                        jaconv.hira2kata(keyword)
+                        for keyword in emoji.keywords
+                        if re.fullmatch(r"[\u3040-\u309Fー・a-zA-Z0-9]+", keyword)
+                    ]
+                    for keyword in keywords:
+                        line = "\t".join([
+                            keyword,
+                            emoji.codepoints,
+                            "5",
+                            "5",
+                            "501",
+                            "-20"
+                        ])
+                        lines.append(line)
+            f.write("\n".join(lines))
     print("Successfuly generated emoji data files")
 
 
