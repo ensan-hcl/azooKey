@@ -10,43 +10,37 @@ import CustardKit
 import Foundation
 import SwiftUI
 
-enum SuggestState {
-    case oneDirection(FlickDirection)
-    case all
-    case nothing
-
-    var isActive: Bool {
-        if case .nothing = self {
-            return false
-        }
-        return true
+struct FlickSuggestState {
+    enum SuggestType {
+        case all
+        case flick(FlickDirection)
     }
+    var items: [Int: [Int: SuggestType]] = [:]
 }
 
-// V：フリック・長押しされた時に表示されるビュー
-struct SuggestView: View {
-    private let model: SuggestModel
-    @ObservedObject private var modelVariableSection: SuggestModelVariableSection
+struct FlickSuggestView: View {
     @Environment(\.themeEnvironment) private var theme
+    private let model: SuggestModel
+    private let suggestType: FlickSuggestState.SuggestType
     private let tabDesign: TabDependentDesign
     private let size: CGSize
 
-    init(model: SuggestModel, tabDesign: TabDependentDesign, size: CGSize) {
+    init(model: SuggestModel, tabDesign: TabDependentDesign, size: CGSize, suggestType: FlickSuggestState.SuggestType) {
         self.model = model
-        self.modelVariableSection = model.variableSection
         self.tabDesign = tabDesign
         self.size = size
+        self.suggestType = suggestType
     }
 
     private func neededAppearView(direction: FlickDirection) -> some View {
-        if case .oneDirection(direction) = self.modelVariableSection.suggestState {
+        if case .flick(direction) = self.suggestType {
             if let model = self.model.flickModels[direction] {
                 return model.getSuggestView(size: size, isHidden: false, isPointed: true, theme: theme)
             } else {
                 return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
             }
         }
-        if case .all = self.modelVariableSection.suggestState {
+        if case .all = self.suggestType {
             if let model = self.model.flickModels[direction] {
                 return model.getSuggestView(size: size, isHidden: false, theme: theme)
             } else {
@@ -57,22 +51,20 @@ struct SuggestView: View {
     }
 
     var body: some View {
-        VStack(spacing: tabDesign.verticalSpacing) { [unowned modelVariableSection] in
-            if modelVariableSection.suggestState.isActive {
-                self.neededAppearView(direction: .top)
-                HStack(spacing: tabDesign.horizontalSpacing) {
-                    self.neededAppearView(direction: .left)
-                    RoundedRectangle(cornerRadius: 5.0)
-                        .strokeAndFill(
-                            fillContent: theme.specialKeyFillColor.color,
-                            strokeContent: theme.borderColor.color,
-                            lineWidth: theme.borderWidth
-                        )
-                        .frame(width: size.width, height: size.height)
-                    self.neededAppearView(direction: .right)
-                }
-                self.neededAppearView(direction: .bottom)
+        VStack(spacing: tabDesign.verticalSpacing) {
+            self.neededAppearView(direction: .top)
+            HStack(spacing: tabDesign.horizontalSpacing) {
+                self.neededAppearView(direction: .left)
+                RoundedRectangle(cornerRadius: 5.0)
+                    .strokeAndFill(
+                        fillContent: theme.specialKeyFillColor.color,
+                        strokeContent: theme.borderColor.color,
+                        lineWidth: theme.borderWidth
+                    )
+                    .frame(width: size.width, height: size.height)
+                self.neededAppearView(direction: .right)
             }
+            self.neededAppearView(direction: .bottom)
         }
         .frame(width: size.width, height: size.height)
         .allowsHitTesting(false)
