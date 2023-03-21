@@ -17,8 +17,6 @@
 		1A12E24825C41A7100316009 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24725C41A7100316009 /* Message.swift */; };
 		1A12E25125C4428D00316009 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E24725C41A7100316009 /* Message.swift */; };
 		1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A12E25725C4484200316009 /* DataUpdateView.swift */; };
-		1A146FBD28C8AAA400AE6CCE /* emoji...12_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A146FBC28C8AAA300AE6CCE /* emoji...12_dict.tsv */; };
-		1A146FBF28C8AAAF00AE6CCE /* emoji13_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A146FBE28C8AAAE00AE6CCE /* emoji13_dict.tsv */; };
 		1A18424325DD6857003985AB /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18424225DD6857003985AB /* FontPicker.swift */; };
 		1A18425D25DE6678003985AB /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425C25DE6678003985AB /* CustomKeyboard.swift */; };
 		1A18425E25DE6678003985AB /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18425C25DE6678003985AB /* CustomKeyboard.swift */; };
@@ -34,6 +32,12 @@
 		1A1A630029C8BCD400EF7B26 /* emoji_genre_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A62F529C8BCD300EF7B26 /* emoji_genre_E15.0.txt.gen */; };
 		1A1A630129C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A62F629C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen */; };
 		1A1A630229C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A62F629C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen */; };
+		1A1A630829C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630529C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen */; };
+		1A1A630929C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630529C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen */; };
+		1A1A630A29C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */; };
+		1A1A630B29C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */; };
+		1A1A630C29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */; };
+		1A1A630D29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */; };
 		1A1ECC9A295D3A64001AD7E0 /* UnicodeConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */; };
 		1A1ECC9D295DA93D001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9C295DA93D001AD7E0 /* Algorithms */; };
 		1A1ECC9F295DA962001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9E295DA962001AD7E0 /* Algorithms */; };
@@ -231,7 +235,6 @@
 		1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */; };
 		1A7D00D3292A34EB00F06B35 /* extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7D00D2292A34EB00F06B35 /* extension String.swift */; };
 		1A7D00D4292A34EB00F06B35 /* extension String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7D00D2292A34EB00F06B35 /* extension String.swift */; };
-		1A7E6AEA299F435A0009CEBC /* emoji15.0_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1A7E6AE9299F435A0009CEBC /* emoji15.0_dict.tsv */; };
 		1A7F546F26A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
 		1A7F547026A81F3B0032E91E /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F546E26A81F3B0032E91E /* Availability.swift */; };
 		1A7F547126A96A5F0032E91E /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
@@ -280,7 +283,6 @@
 		1AAC102929B4EE4A0020BDE9 /* FullAccessTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */; };
 		1AAC102B29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */; };
 		1AAC102C29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */; };
-		1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */; };
 		1AB0973D29C429D600F81FAF /* TextReplacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0973C29C429D600F81FAF /* TextReplacer.swift */; };
 		1AB0974029C429DC00F81FAF /* TextReplacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0973C29C429D600F81FAF /* TextReplacer.swift */; };
 		1AB0974329C450EF00F81FAF /* UpsideSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB0974229C450EF00F81FAF /* UpsideSearchView.swift */; };
@@ -373,7 +375,6 @@
 		1ADDE8662545D48900E524E1 /* Candidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADDE8652545D48900E524E1 /* Candidate.swift */; };
 		1ADE98772903F0A700C318C3 /* extension Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE98762903F0A700C318C3 /* extension Data.swift */; };
 		1ADE98782903F0A700C318C3 /* extension Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADE98762903F0A700C318C3 /* extension Data.swift */; };
-		1ADEBD9D25DCA9C700114F47 /* emoji13.1_dict.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */; };
 		1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1022E25D0C86500CA7277 /* ThemePicture.swift */; };
 		1AE1023025D0C86500CA7277 /* ThemePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1022E25D0C86500CA7277 /* ThemePicture.swift */; };
 		1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1023525D0C99200CA7277 /* PhotoPicker.swift */; };
@@ -531,8 +532,6 @@
 		1A12E24125C3E1CA00316009 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		1A12E24725C41A7100316009 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		1A12E25725C4484200316009 /* DataUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataUpdateView.swift; sourceTree = "<group>"; };
-		1A146FBC28C8AAA300AE6CCE /* emoji...12_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji...12_dict.tsv; sourceTree = "<group>"; };
-		1A146FBE28C8AAAE00AE6CCE /* emoji13_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji13_dict.tsv; sourceTree = "<group>"; };
 		1A18424225DD6857003985AB /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		1A18425C25DE6678003985AB /* CustomKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboard.swift; sourceTree = "<group>"; };
 		1A1A62A229C8B62D00EF7B26 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -544,6 +543,9 @@
 		1A1A62F429C8BCD300EF7B26 /* emoji_genre_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E14.0.txt.gen; path = Gen/generated/emoji_genre_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
 		1A1A62F529C8BCD300EF7B26 /* emoji_genre_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E15.0.txt.gen; path = Gen/generated/emoji_genre_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
 		1A1A62F629C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_all_E14.0.txt.gen; path = Gen/generated/emoji_all_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A630529C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_dict_E14.0.txt.gen; path = Gen/generated/emoji_dict_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_dict_E13.1.txt.gen; path = Gen/generated/emoji_dict_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_dict_E15.0.txt.gen; path = Gen/generated/emoji_dict_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
 		1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnicodeConversionTests.swift; sourceTree = "<group>"; };
 		1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayedTextManager.swift; sourceTree = "<group>"; };
 		1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConversionManager.swift; sourceTree = "<group>"; };
@@ -663,7 +665,6 @@
 		1A73F21629C1F23600833C11 /* EmojiTabResultBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTabResultBar.swift; sourceTree = "<group>"; };
 		1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabWalkthrough.swift; sourceTree = "<group>"; };
 		1A7D00D2292A34EB00F06B35 /* extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension String.swift"; sourceTree = "<group>"; };
-		1A7E6AE9299F435A0009CEBC /* emoji15.0_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji15.0_dict.tsv; sourceTree = "<group>"; };
 		1A7F546E26A81F3B0032E91E /* Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Availability.swift; sourceTree = "<group>"; };
 		1A7F547226A96A870032E91E /* AzooKeyIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyIcon.swift; sourceTree = "<group>"; };
 		1A86F4A92536033900B92B49 /* changed_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changed_last_n_character.swift; sourceTree = "<group>"; };
@@ -696,7 +697,6 @@
 		1AAC102629B25D060020BDE9 /* KeyboardHeightSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHeightSettingView.swift; sourceTree = "<group>"; };
 		1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAccessTipsView.swift; sourceTree = "<group>"; };
 		1AAC102A29B8DA610020BDE9 /* InKeyboardTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InKeyboardTextEditor.swift; sourceTree = "<group>"; };
-		1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji14.0_dict.tsv; sourceTree = "<group>"; };
 		1AB0973C29C429D600F81FAF /* TextReplacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextReplacer.swift; sourceTree = "<group>"; };
 		1AB0974229C450EF00F81FAF /* UpsideSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsideSearchView.swift; sourceTree = "<group>"; };
 		1AB0974C29C476C900F81FAF /* InKeyboardSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InKeyboardSearchBar.swift; sourceTree = "<group>"; };
@@ -763,7 +763,6 @@
 		1AD8FDF02988076F00DA4296 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
 		1ADDE8652545D48900E524E1 /* Candidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Candidate.swift; sourceTree = "<group>"; };
 		1ADE98762903F0A700C318C3 /* extension Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension Data.swift"; sourceTree = "<group>"; };
-		1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = emoji13.1_dict.tsv; sourceTree = "<group>"; };
 		1AE1022E25D0C86500CA7277 /* ThemePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicture.swift; sourceTree = "<group>"; };
 		1AE1023525D0C99200CA7277 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
@@ -915,6 +914,9 @@
 				1A1A62F129C8BCD300EF7B26 /* emoji_genre_E13.1.txt.gen */,
 				1A1A62F429C8BCD300EF7B26 /* emoji_genre_E14.0.txt.gen */,
 				1A1A62F529C8BCD300EF7B26 /* emoji_genre_E15.0.txt.gen */,
+				1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */,
+				1A1A630529C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen */,
+				1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1317,11 +1319,6 @@
 			children = (
 				1AF6A55825FE0DA70037D5ED /* charID.chid */,
 				1ACEEFF62566786A00899DA2 /* kaomoji_dict.tsv */,
-				1A146FBC28C8AAA300AE6CCE /* emoji...12_dict.tsv */,
-				1A146FBE28C8AAAE00AE6CCE /* emoji13_dict.tsv */,
-				1ADEBD9C25DCA9C700114F47 /* emoji13.1_dict.tsv */,
-				1AAE3E17281BF9CE00F6F963 /* emoji14.0_dict.tsv */,
-				1A7E6AE9299F435A0009CEBC /* emoji15.0_dict.tsv */,
 			);
 			path = DataSet;
 			sourceTree = "<group>";
@@ -1863,19 +1860,17 @@
 				1A1A62FF29C8BCD400EF7B26 /* emoji_genre_E15.0.txt.gen in Resources */,
 				1A1A62F929C8BCD400EF7B26 /* emoji_all_E15.0.txt.gen in Resources */,
 				1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */,
+				1A1A630829C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen in Resources */,
 				1AC5876525D930D000BB060E /* Localizable.strings in Resources */,
-				1AAE3E18281BF9CE00F6F963 /* emoji14.0_dict.tsv in Resources */,
 				1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */,
 				1A1A62FB29C8BCD400EF7B26 /* emoji_all_E13.1.txt.gen in Resources */,
 				1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */,
+				1A1A630C29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */,
 				1A1A62F729C8BCD400EF7B26 /* emoji_genre_E13.1.txt.gen in Resources */,
-				1A7E6AEA299F435A0009CEBC /* emoji15.0_dict.tsv in Resources */,
 				1A60058525275CB9008E2B92 /* Settings.bundle in Resources */,
 				1AF6A55925FE0DA70037D5ED /* charID.chid in Resources */,
-				1ADEBD9D25DCA9C700114F47 /* emoji13.1_dict.tsv in Resources */,
+				1A1A630A29C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen in Resources */,
 				1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */,
-				1A146FBF28C8AAAF00AE6CCE /* emoji13_dict.tsv in Resources */,
-				1A146FBD28C8AAA400AE6CCE /* emoji...12_dict.tsv in Resources */,
 				1A3DC1CC2500D44E002CAA93 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1900,9 +1895,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A1A630229C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen in Resources */,
+				1A1A630D29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */,
 				1ACE50012987A7DC00C8C06F /* Dictionary in Resources */,
 				1A1A62FA29C8BCD400EF7B26 /* emoji_all_E15.0.txt.gen in Resources */,
 				1A1A62FE29C8BCD400EF7B26 /* emoji_genre_E14.0.txt.gen in Resources */,
+				1A1A630B29C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen in Resources */,
+				1A1A630929C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen in Resources */,
 				1A1A62F829C8BCD400EF7B26 /* emoji_genre_E13.1.txt.gen in Resources */,
 				1A1A62FC29C8BCD400EF7B26 /* emoji_all_E13.1.txt.gen in Resources */,
 				1AFB685328D56F1800B5C717 /* Localizable.strings in Resources */,
