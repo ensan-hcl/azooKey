@@ -17,3 +17,8 @@ $(SRCROOT)/Shared/Data/emoji_all_E15.0.txt.gen
 $(SRCROOT)/Shared/Data/emoji_genre_E13.1.txt.gen
 $(SRCROOT)/Shared/Data/emoji_genre_E14.0.txt.gen
 $(SRCROOT)/Shared/Data/emoji_genre_E15.0.txt.gen
+
+# Emoji dict files
+$(SRCROOT)/Shared/Data/emoji_dict_E13.1.txt.gen
+$(SRCROOT)/Shared/Data/emoji_dict_E14.0.txt.gen
+$(SRCROOT)/Shared/Data/emoji_dict_E15.0.txt.gen
