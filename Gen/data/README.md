@@ -33,3 +33,7 @@
   * License: https://www.unicode.org/copyright.html
   * Copyright © 1991-2023 Unicode, Inc. All rights reserved. [Terms of use](https://www.unicode.org/copyright.html)
   * Usage: get search query data
+* `emoji_additional.tsv`
+  * azooKeyが独自に用意したもの
+  * License: MIT License (azooKeyのソースコードと同様)
+  * Usage: Manual emoji data
