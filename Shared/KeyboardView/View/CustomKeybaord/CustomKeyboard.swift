@@ -233,19 +233,18 @@ extension CustardInterfaceKey {
             case .enter:
                 return SimpleEnterKeyModel()
             case .flickKogaki:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
+                return SimpleKeyModel(keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .flickKutoten:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
+                return SimpleKeyModel(keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
             case .flickHiraTab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
+                return SimpleKeyModel(keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
             case .flickAbcTab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
+                return SimpleKeyModel(keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
             case .flickStar123Tab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))])
+                return SimpleKeyModel(keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))])
             }
         case let .custom(value):
             return SimpleKeyModel(
-                keyType: .normal,
                 keyLabelType: value.design.label.keyLabelType,
                 unpressedKeyColorType: value.design.color.simpleKeyColorType,
                 pressActions: value.press_actions.map {$0.actionType},

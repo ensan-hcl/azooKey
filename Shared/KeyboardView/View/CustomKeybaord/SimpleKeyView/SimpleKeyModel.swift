@@ -71,20 +71,13 @@ extension SimpleKeyModelProtocol {
 }
 
 struct SimpleKeyModel: SimpleKeyModelProtocol {
-    init(keyType: SimpleKeyColorType, keyLabelType: KeyLabelType, unpressedKeyColorType: SimpleUnpressedKeyColorType, pressActions: [ActionType], longPressActions: LongpressActionType = .none) {
-        self.keyType = keyType
+    init(keyLabelType: KeyLabelType, unpressedKeyColorType: SimpleUnpressedKeyColorType, pressActions: [ActionType], longPressActions: LongpressActionType = .none) {
         self.keyLabelType = keyLabelType
         self.unpressedKeyColorType = unpressedKeyColorType
         self.pressActions = pressActions
         self.longPressActions = longPressActions
     }
 
-    enum SimpleKeyColorType {
-        case normal
-        case functional
-    }
-
-    let keyType: SimpleKeyColorType
     let unpressedKeyColorType: SimpleUnpressedKeyColorType
     let keyLabelType: KeyLabelType
     let pressActions: [ActionType]

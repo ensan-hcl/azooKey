@@ -185,11 +185,11 @@ struct ClipboardHistoryTab: View {
         SimpleKeyView(model: SimpleEnterKeyModel(), tabDesign: design)
     }
     private func deleteKey(_ design: TabDependentDesign) -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: design)
+        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: design)
     }
 
     private func undoKey(_ design: TabDependentDesign, text: String) -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .text("取り消し"), unpressedKeyColorType: .special, pressActions: [.replaceLastCharacters([text: ""])]), tabDesign: design)
+        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .text("取り消し"), unpressedKeyColorType: .special, pressActions: [.replaceLastCharacters([text: ""])]), tabDesign: design)
     }
 
     var body: some View {

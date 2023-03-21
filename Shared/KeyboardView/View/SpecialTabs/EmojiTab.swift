@@ -226,7 +226,7 @@ struct EmojiTab: View {
     }
 
     private func deleteKey() -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), width: footerHeight, height: footerHeight)
+        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), width: footerHeight, height: footerHeight)
     }
 
     private func expandKey() -> SimpleKeyView {
@@ -240,11 +240,11 @@ struct EmojiTab: View {
     }
 
     private func tabBarKey() -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("list.bullet"), unpressedKeyColorType: .special, pressActions: [.setTabBar(.toggle)], longPressActions: .none), width: footerHeight, height: footerHeight)
+        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("list.bullet"), unpressedKeyColorType: .special, pressActions: [.setTabBar(.toggle)], longPressActions: .none), width: footerHeight, height: footerHeight)
     }
 
     private func backTabKey() -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyType: .functional, keyLabelType: .image("arrow.uturn.backward"), unpressedKeyColorType: .special, pressActions: [.moveTab(.last_tab)], longPressActions: .none), width: footerHeight, height: footerHeight)
+        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("arrow.uturn.backward"), unpressedKeyColorType: .special, pressActions: [.moveTab(.last_tab)], longPressActions: .none), width: footerHeight, height: footerHeight)
     }
 
     private func genreKey(_ genre: Genre) -> some View {
@@ -265,7 +265,7 @@ struct EmojiTab: View {
                             let models = self.emojis[genre, default: []]
                             if !models.isEmpty {
                                 Section {
-                                    SimpleKeyView(model: SimpleKeyModel(keyType: .normal, keyLabelType: .image(genre.icon), unpressedKeyColorType: .selected, pressActions: []), width: keySize, height: keySize)
+                                    SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image(genre.icon), unpressedKeyColorType: .selected, pressActions: []), width: keySize, height: keySize)
                                     ForEach(models) {model in
                                         SimpleKeyView(model: model.keyModel, width: keySize, height: keySize)
                                     }
