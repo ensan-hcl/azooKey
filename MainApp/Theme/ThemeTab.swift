@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ThemeTabView: View {
+    @Namespace private var namespace
     @EnvironmentObject private var appStates: MainAppStates
     @State private var manager = ThemeIndexManager.load()
 
@@ -43,6 +44,8 @@ struct ThemeTabView: View {
                     VStack {
                         Spacer()
                         circle(geometry: geometry, systemName: "checkmark", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
+                            .matchedGeometryEffect(id: "ThemeLightButton\(index)", in: namespace)
+                            .matchedGeometryEffect(id: "ThemeDarkButton\(index)", in: namespace)
                         Spacer()
                     }
                     .onTapGesture {
@@ -54,11 +57,13 @@ struct ThemeTabView: View {
                     VStack {
                         Spacer()
                         circle(geometry: geometry, systemName: "sun.max.fill", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
+                            .matchedGeometryEffect(id: "ThemeLightButton\(index)", in: namespace)
                             .onTapGesture {
                                 manager.selectForLightMode(at: index)
                             }
                         Spacer(minLength: 10)
                         circle(geometry: geometry, systemName: "moon.fill", color: manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
+                            .matchedGeometryEffect(id: "ThemeDarkButton\(index)", in: namespace)
                             .onTapGesture {
                                 manager.selectForDarkMode(at: index)
                             }
@@ -67,6 +72,7 @@ struct ThemeTabView: View {
                 }
             }
         }
+        .animation(.easeIn(duration: 0.2), value: manager.selectedIndex == manager.selectedIndexInDarkMode)
     }
 
     private var tab: Tab.ExistentialTab {
