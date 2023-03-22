@@ -140,7 +140,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         }
                         Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                     }
-                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout, needSuggest: false) {view, x, y in
+                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout) {view, x, y in
                         if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
                             if !isCovered(at: (x, y)) {
                                 Button {

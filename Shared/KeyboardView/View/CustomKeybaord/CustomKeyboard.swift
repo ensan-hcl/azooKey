@@ -325,11 +325,10 @@ struct CustomKeyboardView: View {
 struct CustardFlickKeysView<Content: View>: View {
     @State private var suggestState = FlickSuggestState()
 
-    init(models: [KeyPosition : (model: FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, needSuggest: Bool = true, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
+    init(models: [KeyPosition : (model: FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
         self.models = models
         self.tabDesign = tabDesign
         self.layout = layout
-        self.needSuggest = needSuggest
         self.contentGenerator = generator
     }
 
@@ -337,7 +336,6 @@ struct CustardFlickKeysView<Content: View>: View {
     private let models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)]
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
-    private let needSuggest: Bool
 
     private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
         let width = tabDesign.keyViewWidth(widthCount: width)
