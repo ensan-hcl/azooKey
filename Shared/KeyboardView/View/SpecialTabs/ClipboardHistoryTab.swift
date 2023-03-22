@@ -27,9 +27,6 @@ struct ClipboardHistoryTab: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
     @State private var lastInsertedText: (text: String, changedCount: Int)?
-    /// - note: 本来不要なはずだが、更新が発生しないので追加
-    // FIXME: TouchDownAnd...Viewの修正で治ったはず
-    @State private var refreshUndoKey = false
 
     init() {
         for item in VariableStates.shared.clipboardHistoryManager.items {
@@ -72,7 +69,6 @@ struct ClipboardHistoryTab: View {
                     Spacer()
                     Button("入力") {
                         action.registerAction(.input(string))
-                        self.refreshUndoKey.toggle()
                         self.lastInsertedText = (string, variableStates.textChangedCount)
                         KeyboardFeedback.click()
                     }
@@ -202,11 +198,7 @@ struct ClipboardHistoryTab: View {
                         if let (text, count) = lastInsertedText, count == variableStates.textChangedCount {
                             let design = TabDependentDesign(width: 3, height: 7, layout: .flick, orientation: .vertical)
                             enterKey(design)
-                            if self.refreshUndoKey {
-                                undoKey(design, text: text)
-                            } else {
-                                undoKey(design, text: text)
-                            }
+                            undoKey(design, text: text)
                             deleteKey(design)
                         } else {
                             let design = TabDependentDesign(width: 2, height: 7, layout: .flick, orientation: .vertical)
@@ -222,11 +214,7 @@ struct ClipboardHistoryTab: View {
                         if let (text, count) = lastInsertedText, count == variableStates.textChangedCount {
                             let design = TabDependentDesign(width: 8, height: 3, layout: .flick, orientation: .horizontal)
                             deleteKey(design)
-                            if self.refreshUndoKey {
-                                undoKey(design, text: text)
-                            } else {
-                                undoKey(design, text: text)
-                            }
+                            undoKey(design, text: text)
                             enterKey(design)
                         } else {
                             let design = TabDependentDesign(width: 8, height: 2, layout: .flick, orientation: .horizontal)
