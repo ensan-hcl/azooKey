@@ -286,17 +286,14 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         }
                     }
                 }
+                // FIXME: editingItemを更新しても`custard`が変更されない不具合
                 BottomSheetView(
                     isOpen: $showPreview,
                     maxHeight: Design.keyboardScreenHeight + 40,
                     minHeight: 0
                 ) {
-                    ZStack(alignment: .top) {
-                        Color.secondarySystemBackground
-                        KeyboardPreview(theme: .default, defaultTab: .custard(custard))
-                    }
+                    KeyboardPreview(theme: .default, defaultTab: .custard(custard))
                 }
-
             }
             .onChange(of: editingItem.rowCount) {_ in
                 updateModel()

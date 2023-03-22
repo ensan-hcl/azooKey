@@ -20,7 +20,6 @@ final class ResultModelVariableSection: ObservableObject {
     @Published var results: [ResultData] = []
     @Published var searchResults: [ResultData] = []
     @Published var updateResult: Bool = false
-    @Published var updateSearchResult: Bool = false
 
     func setResults(_ results: [any ResultViewItemData]) {
         self.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
@@ -28,7 +27,6 @@ final class ResultModelVariableSection: ObservableObject {
     }
     func setSearchResults(_ results: [any ResultViewItemData]) {
         self.searchResults = results.indices.map {ResultData(id: $0, candidate: results[$0])}
-        self.updateResult.toggle()
     }
 }
 
