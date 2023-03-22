@@ -78,7 +78,7 @@ struct ThemeEditView: CancelableEditor {
     let base: ThemeData
     @State private var theme: ThemeData = .base
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) private var dismiss
 
     @Binding private var manager: ThemeIndexManager
 
@@ -244,13 +244,12 @@ struct ThemeEditView: CancelableEditor {
                     } catch {
                         debug(error)
                     }
-                    // presentationMode.wrappedValue.dismiss()
                     self.viewType = .themeShareView
                 }
             )
         case .themeShareView:
             ThemeShareView(theme: self.theme, shareImage: shareImage) {
-                presentationMode.wrappedValue.dismiss()
+                self.dismiss()
                 RequestReviewManager.shared.shouldTryRequestReview = true
             }
             .navigationBarTitle(Text("完了"), displayMode: .inline)
@@ -259,7 +258,7 @@ struct ThemeEditView: CancelableEditor {
     }
 
     func cancel() {
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 
     private func save() throws {

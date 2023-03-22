@@ -34,7 +34,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     }
     private static let emptyItem: UserMadeTenKeyCustard = .init(tabName: "新規タブ", rowCount: "5", columnCount: "4", inputStyle: .direct, language: .none, keys: emptyKeys, addTabBarAutomatically: true)
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     let base: UserMadeTenKeyCustard
     @State private var editingItem: UserMadeTenKeyCustard
@@ -308,7 +308,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                 leading: Button("キャンセル", action: cancel),
                 trailing: Button("保存") {
                     self.save()
-                    presentationMode.wrappedValue.dismiss()
+                    self.dismiss()
                 }
             )
         }
@@ -387,6 +387,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
     }
 
     func cancel() {
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 }
