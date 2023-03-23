@@ -77,7 +77,7 @@ struct FlickKeyView: View {
                             self.setSuggestState(.all)
                         }
                         // 長押しの予約をする。
-                        self.action.reserveLongPressAction(self.model.longPressActions)
+                        self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
                     }
                 // 押し始めた後の変化である場合。
                 case let .started(date):
@@ -183,16 +183,16 @@ struct FlickKeyView: View {
                 case .inactive:
                     break
                 case .started:
-                    self.action.registerActions(self.model.pressActions)
+                    self.action.registerActions(self.model.pressActions, variableStates: variableStates)
                 case let .oneDirectionSuggested(direction, _):
                     if let flickKey = self.model.flickKeys[direction] {
-                        self.action.registerActions(flickKey.pressActions)
+                        self.action.registerActions(flickKey.pressActions, variableStates: variableStates)
                     }
                 case .longPressed:
                     break
                 case let .longFlicked(direction):
                     if let flickKey = self.model.flickKeys[direction], flickKey.longPressActions == .none {
-                        self.action.registerActions(flickKey.pressActions)
+                        self.action.registerActions(flickKey.pressActions, variableStates: variableStates)
                     }
                 }
                 pressState = .inactive
@@ -222,7 +222,7 @@ struct FlickKeyView: View {
 
     func longFlickReserve(_ direction: FlickDirection) {
         if let flickKey = self.model.flickKeys[direction] {
-            self.action.reserveLongPressAction(flickKey.longPressActions)
+            self.action.reserveLongPressAction(flickKey.longPressActions, variableStates: variableStates)
         }
     }
 

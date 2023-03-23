@@ -76,7 +76,7 @@ struct ExpandedResultView: View {
     }
 
     private func pressed(data: ResultData) {
-        self.action.notifyComplete(data.candidate)
+        self.action.notifyComplete(data.candidate, variableStates: VariableStates.shared)
         self.collapse()
     }
 

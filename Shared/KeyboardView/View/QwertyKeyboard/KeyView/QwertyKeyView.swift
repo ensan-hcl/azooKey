@@ -61,7 +61,7 @@ struct QwertyKeyView: View {
                 case .unpressed:
                     self.model.feedback()
                     self.pressState = .started(Date())
-                    self.action.reserveLongPressAction(self.model.longPressActions)
+                    self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                         // すでに処理が終了済みでなければ
                         if self.pressState.isActive {
@@ -94,12 +94,12 @@ struct QwertyKeyView: View {
                 case let .started(date):
                     // もし0.4秒未満押していたら
                     if Date().timeIntervalSince(date) < 0.4 {
-                        self.action.registerActions(self.model.pressActions)
+                        self.action.registerActions(self.model.pressActions, variableStates: variableStates)
                     }
                 case .longPressed:
                     break
                 case let .variations(selection):
-                    self.model.variationsModel.performSelected(selection: selection, actionManager: action)
+                    self.model.variationsModel.performSelected(selection: selection, actionManager: action, variableStates: variableStates)
                 }
                 self.pressState = .unpressed
             })

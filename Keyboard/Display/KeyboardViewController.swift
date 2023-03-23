@@ -176,10 +176,6 @@ final class KeyboardViewController: UIInputViewController {
         VariableStates.shared.resultModelVariableSection.setResults(candidates)
     }
 
-    func updateSearchResultView(_ candidates: [any ResultViewItemData]) {
-        VariableStates.shared.resultModelVariableSection.setSearchResults(candidates)
-    }
-
     func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
         let selector = #selector(self.handleInputModeList(from:with:))
         let view = ChangeKeyboardButtonView(selector: selector, size: size)
@@ -261,7 +257,7 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
         debug("KeyboardViewController.textDidChange", left, center, right)
 
-        Self.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right)
+        Self.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right, variableStates: VariableStates.shared)
         Self.action.setTextDocumentProxy(.preference(.main))
         // このタイミングでクリップボードを確認する
         VariableStates.shared.clipboardHistoryManager.checkUpdate()

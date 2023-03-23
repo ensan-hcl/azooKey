@@ -68,7 +68,7 @@ struct ClipboardHistoryTab: View {
                     }
                     Spacer()
                     Button("入力") {
-                        action.registerAction(.input(string))
+                        action.registerAction(.input(string), variableStates: variableStates)
                         self.lastInsertedText = (string, variableStates.textChangedCount)
                         KeyboardFeedback.click()
                     }
@@ -77,7 +77,7 @@ struct ClipboardHistoryTab: View {
                 .contextMenu {
                     Group {
                         Button {
-                            action.registerAction(.input(string))
+                            action.registerAction(.input(string), variableStates: variableStates)
                         } label: {
                             Label("入力する", systemImage: "text.badge.plus")
                         }

@@ -12,6 +12,7 @@ struct EmojiTabResultBar: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
     @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
+    @ObservedObject private var variableStates = VariableStates.shared
     @Namespace private var namespace
     private var buttonHeight: CGFloat {
         Design.keyboardBarHeight() * 0.9
@@ -28,7 +29,7 @@ struct EmojiTabResultBar: View {
     var body: some View {
         HStack {
             KeyboardBarButton {
-                self.action.registerAction(.setTabBar(.on))
+                self.action.registerAction(.setTabBar(.on), variableStates: variableStates)
             }
 
             if !showResults {
@@ -41,7 +42,7 @@ struct EmojiTabResultBar: View {
                                 self.action.registerActions([
                                     .moveTab(.user_dependent(.japanese)),
                                     .setUpsideComponent(.search([.emoji]))
-                                ])
+                                ], variableStates: variableStates)
                             }
                     }
                     .padding(.trailing, 5)
@@ -51,7 +52,7 @@ struct EmojiTabResultBar: View {
                     self.action.registerActions([
                         .moveTab(.user_dependent(.japanese)),
                         .setUpsideComponent(.search([.emoji]))
-                    ])
+                    ], variableStates: variableStates)
                 }
                 .matchedGeometryEffect(id: "SearchBar", in: namespace)
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -86,7 +87,7 @@ struct EmojiTabResultBar: View {
     }
 
     private func pressed(candidate: any ResultViewItemData) {
-        self.action.notifyComplete(candidate)
+        self.action.notifyComplete(candidate, variableStates: variableStates)
     }
 }
 

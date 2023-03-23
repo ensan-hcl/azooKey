@@ -39,6 +39,7 @@ struct ResultBar: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
     @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
+    @ObservedObject private var variableStates = VariableStates.shared
     @Binding private var isResultViewExpanded: Bool
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
@@ -58,13 +59,13 @@ struct ResultBar: View {
             CenterAlignedView {
                 if displayTabBarButton {
                     KeyboardBarButton {
-                        self.action.registerAction(.setTabBar(.toggle))
+                        self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
                     }
                 }
             }
             .background(Color(.sRGB, white: 1, opacity: 0.001))
             .onLongPressGesture {
-                self.action.registerAction(.setTabBar(.toggle))
+                self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
             }
         } else {
             HStack {
@@ -111,7 +112,7 @@ struct ResultBar: View {
     }
 
     private func pressed(candidate: any ResultViewItemData) {
-        self.action.notifyComplete(candidate)
+        self.action.notifyComplete(candidate, variableStates: variableStates)
     }
 
     private func expand() {

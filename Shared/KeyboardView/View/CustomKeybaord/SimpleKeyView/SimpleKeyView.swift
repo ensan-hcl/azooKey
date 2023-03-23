@@ -52,7 +52,7 @@ struct SimpleKeyView: View {
                             isPressed = true
                             pressStartDate = Date()
                             model.feedback()
-                            action.reserveLongPressAction(self.model.longPressActions)
+                            action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
                         } touchMovedCallBack: {state in
                             if state.distance > 15 {
                                 isPressed = false
@@ -63,7 +63,7 @@ struct SimpleKeyView: View {
                             isPressed = false
                             action.registerLongPressActionEnd(self.model.longPressActions)
                             if Date().timeIntervalSince(pressStartDate) < 0.4 && state.distance < 30 {
-                                action.registerActions(self.model.pressActions)
+                                action.registerActions(self.model.pressActions, variableStates: variableStates)
                                 self.model.additionalOnPress()
                             }
                         }

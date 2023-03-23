@@ -24,7 +24,7 @@ struct TabBarView: View {
                     ForEach(data.items.indices, id: \.self) {i in
                         let item = data.items[i]
                         Button {
-                            self.action.registerActions(item.actions.map {$0.actionType})
+                            self.action.registerActions(item.actions.map {$0.actionType}, variableStates: VariableStates.shared)
                         } label: {
                             switch item.label {
                             case let .text(text):

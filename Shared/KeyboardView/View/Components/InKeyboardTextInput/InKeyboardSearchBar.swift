@@ -161,7 +161,8 @@ private struct SearchBarWrapper: UIViewRepresentable {
             self.parent.action.notifySomethingDidChange(
                 a_left: proxy.documentContextBeforeInput ?? "",
                 a_center: proxy.selectedText ?? "",
-                a_right: proxy.documentContextAfterInput ?? ""
+                a_right: proxy.documentContextAfterInput ?? "",
+                variableStates: VariableStates.shared
             )
             self.parent.action.setTextDocumentProxy(.preference(.ikTextField))
             VariableStates.shared.setUIReturnKeyType(type: .default)

@@ -55,11 +55,11 @@ final class KeyboardActionManager: UserActionManager {
     /// - Parameters:
     ///   - text: String。確定された文字列。
     ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
-    override func notifyComplete(_ candidate: any ResultViewItemData) {
-        let target = VariableStates.shared.tabManager.tab.existential.replacementTarget
+    override func notifyComplete(_ candidate: any ResultViewItemData, variableStates: VariableStates) {
+        let target = variableStates.tabManager.tab.existential.replacementTarget
         if let candidate = candidate as? Candidate {
             self.inputManager.complete(candidate: candidate)
-            self.registerActions(candidate.actions)
+            self.registerActions(candidate.actions, variableStates: variableStates)
         } else if let candidate = candidate as? ReplacementCandidate {
             self.inputManager.replaceLastCharacters(table: [candidate.target: candidate.replace], inputStyle: .direct)
             KeyboardInternalSetting.shared.update(\.tabCharacterPreference) { item in
@@ -68,7 +68,7 @@ final class KeyboardActionManager: UserActionManager {
                     item.setPreference(base: candidate.base, replace: candidate.replace, for: .system(.emoji))
                 }
             }
-            VariableStates.shared.lastTabCharacterPreferenceUpdate = .now
+            variableStates.lastTabCharacterPreferenceUpdate = .now
         } else {
             debug("notifyComplete: 確定できません")
         }
@@ -79,33 +79,33 @@ final class KeyboardActionManager: UserActionManager {
             self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: target)
         }
         // エンターキーの状態の更新
-        VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
+        variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
     }
 
-    private func showResultView() {
-        VariableStates.shared.barState = .none
+    private func showResultView(variableStates: VariableStates) {
+        variableStates.barState = .none
     }
 
-    private func doAction(_ action: ActionType, requireSetResult: Bool = true) {
+    private func doAction(_ action: ActionType, requireSetResult: Bool = true, variableStates: VariableStates) {
         debug("doAction", action)
         switch action {
         case let .input(text):
-            self.showResultView()
-            if VariableStates.shared.boolStates.isCapsLocked && [.en_US, .el_GR].contains(VariableStates.shared.keyboardLanguage) {
+            self.showResultView(variableStates: variableStates)
+            if variableStates.boolStates.isCapsLocked && [.en_US, .el_GR].contains(variableStates.keyboardLanguage) {
                 let input = text.uppercased()
-                self.inputManager.input(text: input, requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
+                self.inputManager.input(text: input, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
             } else {
-                self.inputManager.input(text: text, requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
+                self.inputManager.input(text: text, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
             }
         case let .insertMainDisplay(text):
             self.inputManager.insertMainDisplayText(text)
         case let .delete(count):
-            self.showResultView()
+            self.showResultView(variableStates: variableStates)
             self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)
 
         case .smoothDelete:
             KeyboardFeedback.smoothDelete()
-            self.showResultView()
+            self.showResultView(variableStates: variableStates)
             self.inputManager.smoothDelete(requireSetResult: requireSetResult)
 
         case let .smartDelete(item):
@@ -118,7 +118,7 @@ final class KeyboardActionManager: UserActionManager {
 
         case .paste:
             if SemiStaticStates.shared.hasFullAccess {
-                self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true, inputStyle: VariableStates.shared.inputStyle)
+                self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true, inputStyle: variableStates.inputStyle)
             }
 
         case .deselectAndUseAsInputting:
@@ -137,66 +137,66 @@ final class KeyboardActionManager: UserActionManager {
 
         case let .setCursorBar(operation):
             let (left, center, right) = self.inputManager.getSurroundingText()
-            VariableStates.shared.setSurroundingText(leftSide: left, center: center, rightSide: right)
+            variableStates.setSurroundingText(leftSide: left, center: center, rightSide: right)
             switch operation {
             case .on:
-                VariableStates.shared.barState = .cursor
+                variableStates.barState = .cursor
             case .off:
-                VariableStates.shared.barState = .none
+                variableStates.barState = .none
             case .toggle:
-                if VariableStates.shared.barState == .cursor {
-                    VariableStates.shared.barState = .none
+                if variableStates.barState == .cursor {
+                    variableStates.barState = .none
                 } else {
-                    VariableStates.shared.barState = .cursor
+                    variableStates.barState = .cursor
                 }
             }
 
         case .enter:
-            self.showResultView()
+            self.showResultView(variableStates: variableStates)
             let actions = self.inputManager.enter()
-            self.registerActions(actions)
+            self.registerActions(actions, variableStates: variableStates)
 
         case .changeCharacterType:
-            self.showResultView()
-            self.inputManager.changeCharacter(requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
+            self.showResultView(variableStates: variableStates)
+            self.inputManager.changeCharacter(requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
 
         case let .replaceLastCharacters(table):
-            self.showResultView()
-            self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult, inputStyle: VariableStates.shared.inputStyle)
+            self.showResultView(variableStates: variableStates)
+            self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
 
         case let .moveTab(type):
-            VariableStates.shared.setTab(type)
+            variableStates.setTab(type)
 
         case let .setUpsideComponent(type):
             switch type {
             case nil:
-                if VariableStates.shared.upsideComponent != nil {
-                    VariableStates.shared.upsideComponent = nil
+                if variableStates.upsideComponent != nil {
+                    variableStates.upsideComponent = nil
                     self.delegate.reloadAllView()
                 } else {
-                    VariableStates.shared.upsideComponent = nil
+                    variableStates.upsideComponent = nil
                 }
             case .some:
-                VariableStates.shared.upsideComponent = type
+                variableStates.upsideComponent = type
                 self.delegate.reloadAllView()
             }
 
         case let .setTabBar(operation):
             switch operation {
             case .on:
-                VariableStates.shared.barState = .tab
+                variableStates.barState = .tab
             case .off:
-                VariableStates.shared.barState = .none
+                variableStates.barState = .none
             case .toggle:
-                if VariableStates.shared.barState == .tab {
-                    VariableStates.shared.barState = .none
+                if variableStates.barState == .tab {
+                    variableStates.barState = .none
                 } else {
-                    VariableStates.shared.barState = .tab
+                    variableStates.barState = .tab
                 }
             }
 
         case .enableResizingMode:
-            VariableStates.shared.setResizingMode(.resizing)
+            variableStates.setResizingMode(.resizing)
 
         case .hideLearningMemory:
             self.hideLearningMemory()
@@ -210,45 +210,45 @@ final class KeyboardActionManager: UserActionManager {
         case let .setBoolState(key, operation):
             switch operation {
             case .on:
-                VariableStates.shared.boolStates[key] = true
+                variableStates.boolStates[key] = true
             case .off:
-                VariableStates.shared.boolStates[key] = false
+                variableStates.boolStates[key] = false
             case .toggle:
-                VariableStates.shared.boolStates[key]?.toggle()
+                variableStates.boolStates[key]?.toggle()
             }
 
         //        case let ._setBoolState(key, compiledExpression):
-        //            if let value = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
-        //                VariableStates.shared.boolStates[key] = value
+        //            if let value = variableStates.boolStates.evaluateExpression(compiledExpression) {
+        //                variableStates.boolStates[key] = value
         //            }
         //
         case let .boolSwitch(compiledExpression, trueAction, falseAction):
-            if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
+            if let condition = variableStates.boolStates.evaluateExpression(compiledExpression) {
                 if condition {
-                    self.registerActions(trueAction)
+                    self.registerActions(trueAction, variableStates: variableStates)
                 } else {
-                    self.registerActions(falseAction)
+                    self.registerActions(falseAction, variableStates: variableStates)
                 }
             }
         case let .setSearchQuery(query, target):
             let results = self.inputManager.getSearchResult(query: query, target: target)
-            self.delegate?.updateSearchResultView(results)
+            variableStates.resultModelVariableSection.setSearchResults(results)
         }
 
         if requireSetResult {
             // MARK: VariableStateに操作の結果を反映する
             // 左右の文字列
             let (left, center, right) = self.inputManager.getSurroundingText()
-            VariableStates.shared.setSurroundingText(leftSide: left, center: center, rightSide: right)
+            variableStates.setSurroundingText(leftSide: left, center: center, rightSide: right)
             // エンターキーの状態
-            VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
+            variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
             // 文字列の変更を適用
-            VariableStates.shared.textChangedCount += self.inputManager.getTextChangedCountDelta()
+            variableStates.textChangedCount += self.inputManager.getTextChangedCountDelta()
             // MARK: 言語を更新する
-            self.inputManager.setKeyboardLanguage(VariableStates.shared.keyboardLanguage)
+            self.inputManager.setKeyboardLanguage(variableStates.keyboardLanguage)
             // MARK: Replacementの更新をする
-            if !VariableStates.shared.tabManager.tab.existential.replacementTarget.isEmpty {
-                self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: VariableStates.shared.tabManager.tab.existential.replacementTarget)
+            if !variableStates.tabManager.tab.existential.replacementTarget.isEmpty {
+                self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: variableStates.tabManager.tab.existential.replacementTarget)
             }
         }
     }
@@ -256,15 +256,15 @@ final class KeyboardActionManager: UserActionManager {
     /// 押した場合に行われる。
     /// - Parameters:
     ///   - action: 行われた動作。
-    override func registerAction(_ action: ActionType) {
-        self.doAction(action)
+    override func registerAction(_ action: ActionType, variableStates: VariableStates) {
+        self.doAction(action, variableStates: variableStates)
     }
 
     /// 複数のアクションを実行する
     /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
     ///  サポートされている最適化
     /// - `setResult`を一度のみ実施する
-    override func registerActions(_ actions: [ActionType]) {
+    override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
         let isSetActionTrigger = actions.map { action in
             switch action {
             case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
@@ -276,14 +276,14 @@ final class KeyboardActionManager: UserActionManager {
         if let lastIndex = isSetActionTrigger.lastIndex(where: { $0 }) {
             for (i, action) in actions.enumerated() {
                 if i == lastIndex {
-                    self.doAction(action, requireSetResult: true)
+                    self.doAction(action, requireSetResult: true, variableStates: variableStates)
                 } else {
-                    self.doAction(action, requireSetResult: false)
+                    self.doAction(action, requireSetResult: false, variableStates: variableStates)
                 }
             }
         } else {
             for action in actions {
-                self.doAction(action)
+                self.doAction(action, variableStates: variableStates)
             }
         }
     }
@@ -291,7 +291,7 @@ final class KeyboardActionManager: UserActionManager {
     /// 長押しを予約する関数。
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
-    override func reserveLongPressAction(_ action: LongpressActionType) {
+    override func reserveLongPressAction(_ action: LongpressActionType, variableStates: VariableStates) {
         if timers.contains(where: {$0.type == action}) {
             return
         }
@@ -301,14 +301,14 @@ final class KeyboardActionManager: UserActionManager {
             let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
             if span > 0.4 {
                 action.repeat.first?.feedback()
-                self?.registerActions(action.repeat)
+                self?.registerActions(action.repeat, variableStates: variableStates)
             }
         })
         self.timers.append((type: action, timer: startTimer))
 
         let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
             action.start.first?.feedback()
-            self?.registerActions(action.start)
+            self?.registerActions(action.start, variableStates: variableStates)
         })
         self.timers.append((type: action, timer: repeatTimer))
     }
@@ -405,15 +405,15 @@ final class KeyboardActionManager: UserActionManager {
     }
 
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
-    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String) {
+    override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String, variableStates: VariableStates) {
         defer {
             // moveCursorBarStateの更新
-            VariableStates.shared.setSurroundingText(leftSide: a_left, center: a_center, rightSide: a_right)
+            variableStates.setSurroundingText(leftSide: a_left, center: a_center, rightSide: a_right)
             // エンターキーの状態の更新
-            VariableStates.shared.setEnterKeyState(self.inputManager.getEnterKeyState())
+            variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
             // Replacementの更新
-            if !VariableStates.shared.tabManager.tab.existential.replacementTarget.isEmpty {
-                self.inputManager.updateTextReplacementCandidates(left: a_left, center: a_center, right: a_right, target: VariableStates.shared.tabManager.tab.existential.replacementTarget)
+            if !variableStates.tabManager.tab.existential.replacementTarget.isEmpty {
+                self.inputManager.updateTextReplacementCandidates(left: a_left, center: a_center, right: a_right, target: variableStates.tabManager.tab.existential.replacementTarget)
             }
         }
         // 前のデータが保存されていない場合は操作しない
@@ -490,7 +490,7 @@ final class KeyboardActionManager: UserActionManager {
         // 行全体を選択している場合は改行コードが含まれる。
 
         defer {
-            VariableStates.shared.textChangedCount += 1
+            variableStates.textChangedCount += 1
         }
 
         if b_left == "\n" && b_center == a_wholeText {

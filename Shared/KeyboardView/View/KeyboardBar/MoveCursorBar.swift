@@ -12,6 +12,7 @@ import SwiftUI
 class BetaMoveCursorBarState: ObservableObject {
     @Published private(set) var displayLeftIndex = 0
     @Published private(set) var displayRightIndex = 0
+    @Published fileprivate var line: [String] = []
     fileprivate var centerIndex: Int {
         displayLeftIndex + itemCount / 2
     }
@@ -26,7 +27,6 @@ class BetaMoveCursorBarState: ObservableObject {
     fileprivate var viewWidth: CGFloat {
         VariableStates.shared.interfaceSize.width * 0.85
     }
-    @Published fileprivate var line: [String] = []
 
     func updateLine(leftText: String, rightText: String) {
         debug("updateLine", leftText, rightText, viewWidth, itemWidth, itemCount, line)
@@ -49,7 +49,7 @@ class BetaMoveCursorBarState: ObservableObject {
     fileprivate func move(_ count: Int, actionManager: some UserActionManager) {
         displayLeftIndex += count
         displayRightIndex += count
-        actionManager.registerAction(.moveCursor(count))
+        actionManager.registerAction(.moveCursor(count), variableStates: VariableStates.shared)
     }
 
     fileprivate func originalPosition(index: Int) -> CGFloat {
@@ -76,6 +76,7 @@ class BetaMoveCursorBarState: ObservableObject {
 }
 
 struct MoveCursorBarBeta: View {
+    @ObservedObject private var variableStates = VariableStates.shared
     @ObservedObject private var state = VariableStates.shared.moveCursorBarState
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
@@ -221,7 +222,7 @@ struct MoveCursorBarBeta: View {
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]))
+                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]), variableStates: variableStates)
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
                                 debug("touch failed")
@@ -247,7 +248,7 @@ struct MoveCursorBarBeta: View {
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]))
+                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]), variableStates: variableStates)
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
                                 debug("touch failed")
@@ -278,6 +279,7 @@ private enum MoveCursorBarGestureState {
 }
 
 struct MoveCursorBar: View {
+    @ObservedObject private var variableStates = VariableStates.shared
     @State private var gestureState: MoveCursorBarGestureState = .inactive
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
@@ -296,10 +298,10 @@ struct MoveCursorBar: View {
                     let newCount = count + Int(dx / abs(dx))
                     if newCount > 1 {
                         self.gestureState = .moving(value.location, 0)
-                        self.action.registerAction(.moveCursor(1))
+                        self.action.registerAction(.moveCursor(1), variableStates: variableStates)
                     } else if newCount < -1 {
                         self.gestureState = .moving(value.location, 0)
-                        self.action.registerAction(.moveCursor(-1))
+                        self.action.registerAction(.moveCursor(-1), variableStates: variableStates)
                     } else {
                         self.gestureState = .moving(value.location, newCount)
                     }
@@ -343,7 +345,7 @@ struct MoveCursorBar: View {
                     .overlay(HStack {
                         Spacer()
                         Button(action: {
-                            self.action.registerAction(.moveCursor(-1))
+                            self.action.registerAction(.moveCursor(-1), variableStates: variableStates)
                         }, label: {
                             Image(systemName: "chevron.left.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                                 .padding()
@@ -352,7 +354,7 @@ struct MoveCursorBar: View {
                         Image(systemName: "circle.fill").font(.system(size: 22, weight: symbolsFontWeight, design: .default))
                         Spacer()
                         Button(action: {
-                            self.action.registerAction(.moveCursor(1))
+                            self.action.registerAction(.moveCursor(1), variableStates: variableStates)
                         }, label: {
                             Image(systemName: "chevron.right.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                                 .padding()

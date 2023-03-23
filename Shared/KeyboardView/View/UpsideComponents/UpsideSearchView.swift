@@ -12,6 +12,7 @@ struct UpsideSearchView: View {
     @Environment(\.userActionManager) private var action
     @Environment(\.themeEnvironment) private var theme
 
+    @ObservedObject private var variableStates = VariableStates.shared
     @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
     @State private var searchQuery = ""
     @FocusState private var searchBarFocus
@@ -61,14 +62,14 @@ struct UpsideSearchView: View {
                     .cornerRadius(10)
                     .padding(.trailing, 5)
                     .onChange(of: searchQuery) { _ in
-                        self.action.registerAction(.setSearchQuery(searchQuery, target))
+                        self.action.registerAction(.setSearchQuery(searchQuery, target), variableStates: variableStates)
                     }
                 KeyboardBarButton(label: .systemImage("face.smiling")) {
                     self.action.setTextDocumentProxy(.preference(.main))
-                    self.action.registerActions([.setUpsideComponent(nil), .moveTab(.existential(.special(.emoji)))])
+                    self.action.registerActions([.setUpsideComponent(nil), .moveTab(.existential(.special(.emoji)))], variableStates: variableStates)
                 }
                 KeyboardBarButton(label: .systemImage("arrowtriangle.down.fill")) {
-                    self.action.registerAction(.setUpsideComponent(nil))
+                    self.action.registerAction(.setUpsideComponent(nil), variableStates: variableStates)
                     self.action.setTextDocumentProxy(.preference(.main))
                 }
             }
@@ -83,6 +84,6 @@ struct UpsideSearchView: View {
         }
     }
     private func pressed(candidate: any ResultViewItemData) {
-        self.action.registerAction(.insertMainDisplay(candidate.text))
+        self.action.registerAction(.insertMainDisplay(candidate.text), variableStates: variableStates)
     }
 }
