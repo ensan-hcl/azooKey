@@ -25,6 +25,7 @@ struct KeyLabel: View {
     private let textSize: Design.Fonts.LabelFontSizeStrategy
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
+    @EnvironmentObject private var variableStates: VariableStates
 
     private var mainKeyColor: Color {
         textColor ?? theme.textColor.color
@@ -41,7 +42,7 @@ struct KeyLabel: View {
         Group {
             switch self.labelType {
             case let .text(text):
-                let font = Design.fonts.keyLabelFont(text: text, width: width, fontSize: self.textSize, theme: theme)
+                let font = Design.fonts.keyLabelFont(text: text, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
                 Text(text)
                     .font(font)
                     .foregroundColor(mainKeyColor)
@@ -49,9 +50,9 @@ struct KeyLabel: View {
 
             case let .symbols(symbols):
                 let mainText = symbols.first!
-                let font = Design.fonts.keyLabelFont(text: mainText, width: width, fontSize: self.textSize, theme: theme)
+                let font = Design.fonts.keyLabelFont(text: mainText, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
                 let subText = symbols.dropFirst().joined()
-                let subFont = Design.fonts.keyLabelFont(text: subText, width: width, fontSize: .xsmall, theme: theme)
+                let subFont = Design.fonts.keyLabelFont(text: subText, width: width, fontSize: .xsmall, layout: variableStates.keyboardLayout, theme: theme)
                 VStack {
                     Text(mainText)
                         .font(font)
@@ -78,8 +79,8 @@ struct KeyLabel: View {
                     .foregroundColor(mainKeyColor)
 
             case let .selectable(primary, secondery):
-                let font = Design.fonts.keyLabelFont(text: primary + primary, width: width, fontSize: self.textSize, theme: theme)
-                let subFont = Design.fonts.keyLabelFont(text: secondery + secondery, width: width, fontSize: .small, theme: theme)
+                let font = Design.fonts.keyLabelFont(text: primary + primary, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
+                let subFont = Design.fonts.keyLabelFont(text: secondery + secondery, width: width, fontSize: .small, layout: variableStates.keyboardLayout, theme: theme)
 
                 HStack(alignment: .bottom) {
                     Text(primary)

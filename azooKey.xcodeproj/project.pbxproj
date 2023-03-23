@@ -195,7 +195,6 @@
 		1A4623F52524621F00EF5B02 /* extension LOUDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4623F42524621F00EF5B02 /* extension LOUDS.swift */; };
 		1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */; };
 		1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4E09042527390100E7ABE5 /* TipsView.swift */; };
-		1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB02250290D800EB1864 /* SuggestModel.swift */; };
 		1A58AB0D25037E9E00EB1864 /* ExpandedResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */; };
 		1A5B1CE026D1E495007D4E1C /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5B1CDF26D1E495007D4E1C /* MainApp.swift */; };
 		1A5C7EAC25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A5C7EAB25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift */; };
@@ -439,7 +438,6 @@
 		1AF6797B25CEDB9B00F3987B /* QwertyKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A26029025147FEC00EAD647 /* QwertyKeyView.swift */; };
 		1AF6797C25CEDB9B00F3987B /* QwertyKeyModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2602AD251489C700EAD647 /* QwertyKeyModelProtocol.swift */; };
 		1AF6798125CEDBA400F3987B /* FlickKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC20B2500D53B002CAA93 /* FlickKeyboardView.swift */; };
-		1AF6798625CEDBAE00F3987B /* SuggestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58AB02250290D800EB1864 /* SuggestModel.swift */; };
 		1AF6798725CEDBAE00F3987B /* FlickedKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2222500D60F002CAA93 /* FlickedKeyModel.swift */; };
 		1AF6798825CEDBAE00F3987B /* SuggestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2252500D63F002CAA93 /* SuggestView.swift */; };
 		1AF6798D25CEDBB500F3987B /* FlickTabKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2202500D600002CAA93 /* FlickTabKeyModel.swift */; };
@@ -640,7 +638,6 @@
 		1A4623F42524621F00EF5B02 /* extension LOUDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension LOUDS.swift"; sourceTree = "<group>"; };
 		1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableEditor.swift; sourceTree = "<group>"; };
 		1A4E09042527390100E7ABE5 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
-		1A58AB02250290D800EB1864 /* SuggestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestModel.swift; sourceTree = "<group>"; };
 		1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedResultView.swift; sourceTree = "<group>"; };
 		1A5B1CDF26D1E495007D4E1C /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		1A5C7EAB25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredLanguageSettingView.swift; sourceTree = "<group>"; };
@@ -1179,7 +1176,6 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC2252500D63F002CAA93 /* SuggestView.swift */,
-				1A58AB02250290D800EB1864 /* SuggestModel.swift */,
 				1A3DC2222500D60F002CAA93 /* FlickedKeyModel.swift */,
 			);
 			path = SuggestView;
@@ -2073,7 +2069,6 @@
 				1AC8A5AA2595934C00B71E5A /* ArrayUtils.swift in Sources */,
 				1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */,
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
-				1AF6798625CEDBAE00F3987B /* SuggestModel.swift in Sources */,
 				1ACA28E629AB371300B794C8 /* ClipboardHistoryManager.swift in Sources */,
 				1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
@@ -2277,7 +2272,6 @@
 				1AB0973D29C429D600F81FAF /* TextReplacer.swift in Sources */,
 				1A86F4B82539356100B92B49 /* StringUtils.swift in Sources */,
 				1A12E24825C41A7100316009 /* Message.swift in Sources */,
-				1A58AB03250290D800EB1864 /* SuggestModel.swift in Sources */,
 				1A7F547026A81F3B0032E91E /* Availability.swift in Sources */,
 				1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */,
 				1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */,

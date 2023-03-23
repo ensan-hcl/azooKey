@@ -57,6 +57,7 @@ final class KeyboardViewController: UIInputViewController {
     private static var keyboardViewHost: KeyboardHostingController<Keyboard>?
     private static var loadedInstanceCount: Int = 0
     private static let action = KeyboardActionManager()
+    private static let variableStates = VariableStates()
     private static let notificationCenter = NotificationCenter.default
 
     deinit {
@@ -71,6 +72,7 @@ final class KeyboardViewController: UIInputViewController {
             KeyboardView()
                 .environment(\.themeEnvironment, theme)
                 .environment(\.userActionManager, KeyboardViewController.action)
+                .environmentObject(KeyboardViewController.variableStates)
         }
     }
 
@@ -80,7 +82,7 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardViewController.loadedInstanceCount += 1
 
         // 初期化の順序としてこの位置に置くこと
-        VariableStates.shared.initialize()
+        KeyboardViewController.variableStates.initialize()
 
         // 高さの設定を反映する
         @KeyboardSetting(.keyboardHeightScale) var keyboardHeightScale: Double
@@ -109,13 +111,14 @@ final class KeyboardViewController: UIInputViewController {
 
     private func getCurrentTheme() -> ThemeData {
         let indexManager = ThemeIndexManager.load()
+        let defaultTheme = ThemeData.default(layout: KeyboardViewController.variableStates.tabManager.tab.existential.layout)
         switch traitCollection.userInterfaceStyle {
         case .unspecified, .light:
-            return (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
+            return (try? indexManager.theme(at: indexManager.selectedIndex)) ?? defaultTheme
         case .dark:
-            return (try? indexManager.theme(at: indexManager.selectedIndexInDarkMode)) ?? .default
+            return (try? indexManager.theme(at: indexManager.selectedIndexInDarkMode)) ?? defaultTheme
         @unknown default:
-            return (try? indexManager.theme(at: indexManager.selectedIndex)) ?? .default
+            return (try? indexManager.theme(at: indexManager.selectedIndex)) ?? defaultTheme
         }
     }
 
@@ -137,11 +140,11 @@ final class KeyboardViewController: UIInputViewController {
 
     func updateStates() {
         // キーボードタイプはviewDidAppearのタイミングで取得できる
-        VariableStates.shared.setKeyboardType(self.textDocumentProxy.keyboardType)
+        KeyboardViewController.variableStates.setKeyboardType(self.textDocumentProxy.keyboardType)
 
         // クリップボード履歴を更新する
-        VariableStates.shared.clipboardHistoryManager.reload()
-        VariableStates.shared.clipboardHistoryManager.checkUpdate()
+        KeyboardViewController.variableStates.clipboardHistoryManager.reload()
+        KeyboardViewController.variableStates.clipboardHistoryManager.checkUpdate()
         // ロード済みのインスタンスの数が増えすぎるとパフォーマンスに悪影響があるので、適当なところで強制終了する
         // viewDidAppearで強制終了すると再ロードが自然な形で実行される
         if KeyboardViewController.loadedInstanceCount > 15 {
@@ -169,11 +172,12 @@ final class KeyboardViewController: UIInputViewController {
         if let bounds = KeyboardViewController.keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
             debug("KeyboardViewController.registerScreenActualSize bounds", bounds)
             SemiStaticStates.shared.setScreenWidth(bounds.width)
+            KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height ? .vertical : .horizontal, screenWidth: bounds.width)
         }
     }
 
     func updateResultView(_ candidates: [any ResultViewItemData]) {
-        VariableStates.shared.resultModelVariableSection.setResults(candidates)
+        KeyboardViewController.variableStates.resultModelVariableSection.setResults(candidates)
     }
 
     func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
@@ -185,7 +189,7 @@ final class KeyboardViewController: UIInputViewController {
     override func viewWillDisappear(_ animated: Bool) {
         debug("KeyboardViewController.viewWillDisappear: キーボードが閉じられます")
         KeyboardViewController.action.closeKeyboard()
-        VariableStates.shared.closeKeyboard()
+        KeyboardViewController.variableStates.closeKeyboard()
         KeyboardViewController.keyboardViewHost = nil
         KeyboardViewController.loadedInstanceCount -= 1
         super.viewWillDisappear(animated)
@@ -199,19 +203,21 @@ final class KeyboardViewController: UIInputViewController {
         // ただしこの時点でのUIScreen.mainの値はOSバージョンで変わる
         debug("KeyboardViewController.viewWillTransition", size, UIScreen.main.bounds.size)
         if #available(iOS 16, *) {
-            SemiStaticStates.shared.setScreenWidth(size.width, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical)
+            SemiStaticStates.shared.setScreenWidth(size.width)
+            KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical, screenWidth: size.width)
         } else {
-            SemiStaticStates.shared.setScreenWidth(size.width, orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal)
+            SemiStaticStates.shared.setScreenWidth(size.width)
+            KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal, screenWidth: size.width)
         }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        debug("KeyboardViewController.viewDidLayoutSubviews", SemiStaticStates.shared.screenWidth, Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth))
+        debug("KeyboardViewController.viewDidLayoutSubviews", SemiStaticStates.shared.screenWidth)
         if #available(iOS 16, *) {
-            self.view.frame.size.height = Design.keyboardScreenHeight
+            self.view.frame.size.height = Design.keyboardScreenHeight(upsideComponent: KeyboardViewController.variableStates.upsideComponent, orientation: KeyboardViewController.variableStates.keyboardOrientation)
         } else {
-            self.view.frame.size.height = Design.keyboardScreenHeight
+            self.view.frame.size.height = Design.keyboardScreenHeight(upsideComponent: KeyboardViewController.variableStates.upsideComponent, orientation: KeyboardViewController.variableStates.keyboardOrientation)
             self.updateViewConstraints()
         }
     }
@@ -257,11 +263,11 @@ final class KeyboardViewController: UIInputViewController {
         let right = self.textDocumentProxy.documentContextAfterInput ?? ""
         debug("KeyboardViewController.textDidChange", left, center, right)
 
-        Self.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right, variableStates: VariableStates.shared)
+        Self.action.notifySomethingDidChange(a_left: left, a_center: center, a_right: right, variableStates: KeyboardViewController.variableStates)
         Self.action.setTextDocumentProxy(.preference(.main))
         // このタイミングでクリップボードを確認する
-        VariableStates.shared.clipboardHistoryManager.checkUpdate()
-        VariableStates.shared.setUIReturnKeyType(type: self.textDocumentProxy.returnKeyType ?? .default)
+        KeyboardViewController.variableStates.clipboardHistoryManager.checkUpdate()
+        KeyboardViewController.variableStates.setUIReturnKeyType(type: self.textDocumentProxy.returnKeyType ?? .default)
     }
 
     @objc func openURL(_ url: URL) {}

@@ -21,8 +21,8 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol {
 
     let needSuggestView: Bool = false
 
-    var pressActions: [ActionType] {
-        switch VariableStates.shared.enterKeyState {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        switch variableStates.enterKeyState {
         case .complete:
             return [.enter]
         case .return:
@@ -41,8 +41,8 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol {
 
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .enter
 
-    func feedback() {
-        switch VariableStates.shared.enterKeyState {
+    func feedback(variableStates: VariableStates) {
+        switch variableStates.enterKeyState {
         case .complete, .edit:
             KeyboardFeedback.tabOrOtherKey()
         case let .return(type):
@@ -54,5 +54,4 @@ struct QwertyEnterKeyModel: QwertyKeyModelProtocol {
             }
         }
     }
-
 }

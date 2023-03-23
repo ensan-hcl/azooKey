@@ -35,7 +35,7 @@ enum SimpleUnpressedKeyColorType {
                 case .default:
                     return theme.specialKeyFillColor.color
                 default:
-                    if theme == .default {
+                    if theme == .default(layout: states.tabManager.tab.existential.layout) {
                         return Design.colors.specialEnterKeyColor
                     } else {
                         return theme.specialKeyFillColor.color
@@ -47,27 +47,23 @@ enum SimpleUnpressedKeyColorType {
 }
 
 protocol SimpleKeyModelProtocol {
-    var pressActions: [ActionType] {get}
     var longPressActions: LongpressActionType {get}
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
-    func feedback()
+    func pressActions(variableStates: VariableStates) -> [ActionType]
+    func feedback(variableStates: VariableStates)
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     /// `pressActions`とは別に、押された際に発火する操作
     /// - note: タブ固有の事情で実行しなければならないような処理に利用すること
-    func additionalOnPress()
+    func additionalOnPress(variableStates: VariableStates)
 }
 
 extension SimpleKeyModelProtocol {
-    func feedback() {
-        self.pressActions.first?.feedback()
-    }
-
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
         theme.pushedKeyFillColor.color
     }
 
-    func additionalOnPress() {}
+    func additionalOnPress(variableStates: VariableStates) {}
 }
 
 struct SimpleKeyModel: SimpleKeyModelProtocol {
@@ -80,18 +76,26 @@ struct SimpleKeyModel: SimpleKeyModelProtocol {
 
     let unpressedKeyColorType: SimpleUnpressedKeyColorType
     let keyLabelType: KeyLabelType
-    let pressActions: [ActionType]
+    private let pressActions: [ActionType]
     let longPressActions: LongpressActionType
 
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         KeyLabel(self.keyLabelType, width: width)
     }
+
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        pressActions
+    }
+
+    func feedback(variableStates: VariableStates) {
+        self.pressActions.first?.feedback(variableStates: variableStates)
+    }
+
 }
 
 struct SimpleEnterKeyModel: SimpleKeyModelProtocol {
-
-    var pressActions: [ActionType] {
-        switch VariableStates.shared.enterKeyState {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        switch variableStates.enterKeyState {
         case .complete:
             return [.enter]
         case .return:
@@ -107,10 +111,19 @@ struct SimpleEnterKeyModel: SimpleKeyModelProtocol {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width)
     }
+
+    func feedback(variableStates: VariableStates) {
+        switch variableStates.enterKeyState {
+        case .complete, .edit:
+            KeyboardFeedback.tabOrOtherKey()
+        case .return:
+            KeyboardFeedback.click()
+        }
+    }
 }
 
 struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol {
-    var pressActions: [ActionType] {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return []
         } else {
@@ -126,5 +139,9 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol {
         } else {
             return KeyLabel(.image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), width: width)
         }
+    }
+
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.tabOrOtherKey()
     }
 }

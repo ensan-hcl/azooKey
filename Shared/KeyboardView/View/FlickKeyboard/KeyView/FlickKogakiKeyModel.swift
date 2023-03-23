@@ -15,19 +15,20 @@ struct FlickKogakiKeyModel: FlickKeyModelProtocol {
 
     static let shared = FlickKogakiKeyModel()
 
-    let pressActions: [ActionType] = [.changeCharacterType]
     var longPressActions: LongpressActionType = .none
 
     let labelType: KeyLabelType = .text("小ﾞﾟ")
 
     @KeyboardSetting(.koganaFlickCustomKey) private var customKey
-    var flickKeys: [FlickDirection: FlickedKeyModel] {
+    func flickKeys(variableStates: VariableStates) -> [CustardKit.FlickDirection: FlickedKeyModel] {
         customKey.compiled().flick
     }
 
-    var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.kogana))
-
     private init() {}
+
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        [.changeCharacterType]
+    }
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         KeyLabel(self.labelType, width: width)
@@ -45,7 +46,7 @@ struct FlickKogakiKeyModel: FlickKeyModelProtocol {
         }
     }
 
-    func feedback() {
+    func feedback(variableStates: VariableStates) {
         KeyboardFeedback.tabOrOtherKey()
     }
 }

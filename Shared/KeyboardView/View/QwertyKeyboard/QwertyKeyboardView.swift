@@ -13,9 +13,9 @@ struct QwertyKeyboardView: View {
     private let tabDesign: TabDependentDesign
     private let keyModels: [[any QwertyKeyModelProtocol]]
 
-    init(keyModels: [[any QwertyKeyModelProtocol]]) {
+    init(keyModels: [[any QwertyKeyModelProtocol]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
         self.keyModels = keyModels
-        self.tabDesign = TabDependentDesign(width: 10, height: 4, layout: .qwerty, orientation: VariableStates.shared.keyboardOrientation)
+        self.tabDesign = TabDependentDesign(width: 10, height: 4, interfaceSize: interfaceSize, layout: .qwerty, orientation: keyboardOrientation)
     }
 
     private var verticalIndices: Range<Int> {

@@ -18,7 +18,7 @@ struct FlickTabKeyModel: FlickKeyModelProtocol {
     static let abcTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.english), key: .abcTab)
     static let numberTabKeyModel = FlickTabKeyModel(tab: .existential(.flick_numbersymbols), key: .symbolsTab)
 
-    var pressActions: [ActionType] {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
         key.get().actions
     }
     var longPressActions: LongpressActionType {
@@ -27,17 +27,16 @@ struct FlickTabKeyModel: FlickKeyModelProtocol {
     var labelType: KeyLabelType {
         key.get().labelType
     }
-    var flickKeys: [FlickDirection: FlickedKeyModel] {
+
+    func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         key.get().flick
     }
 
-    let suggestModel: SuggestModel
     var tab: Tab
 
     private init(tab: Tab, key: CustomizableFlickKey) {
         self.key = key
         self.tab = tab
-        self.suggestModel = SuggestModel([:], keyType: .custom(key))
     }
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
@@ -51,7 +50,7 @@ struct FlickTabKeyModel: FlickKeyModelProtocol {
         return theme.specialKeyFillColor.color
     }
 
-    func feedback() {
+    func feedback(variableStates: VariableStates) {
         KeyboardFeedback.tabOrOtherKey()
     }
 }

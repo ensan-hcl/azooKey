@@ -12,6 +12,7 @@ struct ResizingRect: View {
     typealias Position = (current: CGPoint, initial: CGPoint)
     @State private var top_left_edge: Position
     @State private var bottom_right_edge: Position
+    @EnvironmentObject private var variableStates: VariableStates
 
     private let lineWidth: CGFloat = 6
     private let edgeRatio: CGFloat = 1 / 5
@@ -46,7 +47,7 @@ struct ResizingRect: View {
     func updateUserDefaults() {
         // UserDefaultsのデータを更新する
         KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
-            value.set(layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation, size: size, position: position)
+            value.set(layout: variableStates.keyboardLayout, orientation: variableStates.keyboardOrientation, size: size, position: position)
         }
     }
 
@@ -259,9 +260,9 @@ struct ResizingRect: View {
                 }
                 Button {
                     if self.position == .zero && self.size == self.initialSize {
-                        VariableStates.shared.setResizingMode(.fullwidth)
+                        variableStates.setResizingMode(.fullwidth)
                     } else {
-                        VariableStates.shared.setResizingMode(.onehanded)
+                        variableStates.setResizingMode(.onehanded)
                     }
                 }label: {
                     Circle()
@@ -282,6 +283,7 @@ struct ResizingBindingFrame: ViewModifier {
     private let initialSize: CGSize
     @Binding private var position: CGPoint
     @Binding private var size: CGSize
+    @EnvironmentObject private var variableStates: VariableStates
 
     init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize) {
         self.initialSize = initialSize
@@ -322,7 +324,7 @@ struct ResizingBindingFrame: ViewModifier {
             let max = min(initialSize.width, initialSize.height) * 0.15
             let r = min(data.max * 0.7, max)
             let button1 = Button {
-                VariableStates.shared.setResizingMode(.resizing)
+                variableStates.setResizingMode(.resizing)
             }label: {
                 Circle()
                     .fill(Color.blue)
@@ -336,7 +338,7 @@ struct ResizingBindingFrame: ViewModifier {
             .frame(width: r, height: r)
 
             let button2 = Button {
-                VariableStates.shared.setResizingMode(.fullwidth)
+                variableStates.setResizingMode(.fullwidth)
             }label: {
                 Circle()
                     .fill(Color.blue)
@@ -355,10 +357,10 @@ struct ResizingBindingFrame: ViewModifier {
                     self.position = .zero
                     self.size.width = initialSize.width
                     self.size.height = initialSize.height
-                    VariableStates.shared.setResizingMode(.fullwidth)
+                    variableStates.setResizingMode(.fullwidth)
                 }
                 KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
-                    value.set(layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation, size: initialSize, position: .zero)
+                    value.set(layout: variableStates.keyboardLayout, orientation: variableStates.keyboardOrientation, size: initialSize, position: .zero)
                 }
             } label: {
                 Circle()
@@ -392,7 +394,7 @@ struct ResizingBindingFrame: ViewModifier {
     }
 
     @ViewBuilder func body(content: Content) -> some View {
-        switch VariableStates.shared.resizingState {
+        switch variableStates.resizingState {
         case .onehanded:
             editButton()
             content

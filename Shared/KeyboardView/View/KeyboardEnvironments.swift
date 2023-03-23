@@ -11,7 +11,7 @@ import SwiftUI
 struct ThemeEnvironmentKey: EnvironmentKey {
     typealias Value = ThemeData
 
-    static var defaultValue: ThemeData = .default
+    static var defaultValue: ThemeData = .default(layout: .flick)
 }
 
 extension EnvironmentValues {

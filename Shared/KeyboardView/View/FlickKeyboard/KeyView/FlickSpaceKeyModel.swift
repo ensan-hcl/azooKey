@@ -12,18 +12,15 @@ import SwiftUI
 
 struct FlickSpaceKeyModel: FlickKeyModelProtocol {
     static let shared = FlickSpaceKeyModel()
-    let suggestModel: SuggestModel
     let needSuggestView = true
-
-    init() {
-        self.suggestModel = SuggestModel(flickKeys, keyType: .normal)
-    }
-
-    let pressActions: [ActionType] = [.input(" ")]
 
     let longPressActions: LongpressActionType = .init(start: [.setCursorBar(.toggle)])
 
-    let flickKeys: [FlickDirection: FlickedKeyModel] = [
+    func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
+        flickKeys
+    }
+
+    private let flickKeys: [FlickDirection: FlickedKeyModel] = [
         .left: FlickedKeyModel(
             labelType: .text("←"),
             pressActions: [.moveCursor(-1)],
@@ -39,6 +36,10 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol {
         )
     ]
 
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        [.input(" ")]
+    }
+
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         KeyLabel(.text("空白"), width: width)
     }
@@ -47,8 +48,7 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol {
         theme.specialKeyFillColor.color
     }
 
-    func feedback() {
-        self.pressActions.first?.feedback()
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.click()
     }
-
 }

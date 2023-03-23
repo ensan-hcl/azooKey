@@ -45,6 +45,7 @@ private final class IKTextView: UITextView {}
 private struct TextViewWrapper: UIViewRepresentable {
     @Binding var proxyWrapper: IKTextDocumentProxyWrapper
     @Binding var text: String
+    @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.userActionManager) private var action
     var configuration: InKeyboardTextEditor.Configuration
 
@@ -115,10 +116,10 @@ private struct TextViewWrapper: UIViewRepresentable {
                 a_left: proxy.documentContextBeforeInput ?? "",
                 a_center: proxy.selectedText ?? "",
                 a_right: proxy.documentContextAfterInput ?? "",
-                variableStates: VariableStates.shared
+                variableStates: self.parent.variableStates
             )
             self.parent.action.setTextDocumentProxy(.preference(.ikTextField))
-            VariableStates.shared.setUIReturnKeyType(type: .default)
+            self.parent.variableStates.setUIReturnKeyType(type: .default)
         }
 
         // MARK: こちらで`textWillChange`などをハンドルすることで、`KeyboardViewController`では扱われなくなる

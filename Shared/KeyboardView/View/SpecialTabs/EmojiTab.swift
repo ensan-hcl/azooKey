@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct EmojiTab: View {
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.themeEnvironment) private var theme
 
     private struct EmojiData: Identifiable, Hashable {
@@ -119,7 +119,7 @@ struct EmojiTab: View {
 
     /// 参考用
     private var keysHeight: CGFloat {
-        TabDependentDesign(width: 1, height: 1, layout: .qwerty, orientation: VariableStates.shared.keyboardOrientation).keysHeight
+        TabDependentDesign(width: 1, height: 1, interfaceSize: variableStates.interfaceSize, layout: .qwerty, orientation: variableStates.keyboardOrientation).keysHeight
     }
 
     private var scrollViewHeight: CGFloat {
@@ -133,17 +133,17 @@ struct EmojiTab: View {
     private var verticalCount: Int {
         switch self.expandLevel {
         case .small:
-            switch VariableStates.shared.keyboardOrientation {
+            switch variableStates.keyboardOrientation {
             case .vertical: return 6
             case .horizontal: return 4
             }
         case .medium:
-            switch VariableStates.shared.keyboardOrientation {
+            switch variableStates.keyboardOrientation {
             case .vertical: return 5
             case .horizontal: return 3
             }
         case .large:
-            switch VariableStates.shared.keyboardOrientation {
+            switch variableStates.keyboardOrientation {
             case .vertical: return 3
             case .horizontal: return 2
             }
@@ -318,11 +318,16 @@ private struct ExpandKeyModel: SimpleKeyModelProtocol {
         self.currentLevel = currentLevel
         self.action = action
     }
-    let pressActions: [ActionType] = []
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
     let longPressActions: LongpressActionType = .none
 
-    func additionalOnPress() {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        []
+    }
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.tabOrOtherKey()
+    }
+    func additionalOnPress(variableStates: VariableStates) {
         self.action()
     }
 }
@@ -342,20 +347,21 @@ private struct EmojiKeyModel: SimpleKeyModelProtocol {
     var keyLabelType: KeyLabelType {
         .text(emoji)
     }
-
-    var pressActions: [ActionType] {
-        [.input(emoji)]
-    }
-
     func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
         KeyLabel(self.keyLabelType, width: width, textSize: .max)
     }
 
-    func additionalOnPress() {
+    func additionalOnPress(variableStates: VariableStates) {
         KeyboardInternalSetting.shared.update(\.tabCharacterPreference) { value in
             value.setUsed(base: self.base, for: .system(.emoji))
-            VariableStates.shared.lastTabCharacterPreferenceUpdate = .now
+            variableStates.lastTabCharacterPreferenceUpdate = .now
         }
+    }
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        [.input(emoji)]
+    }
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.click()
     }
 }
 

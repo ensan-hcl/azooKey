@@ -11,7 +11,7 @@ import SwiftUI
 struct MessageView: View {
     private let data: MessageData
     @Binding private var manager: MessageManager
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.userActionManager) private var action
 
     init(data: MessageData, manager: Binding<MessageManager>) {

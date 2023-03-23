@@ -16,16 +16,16 @@ protocol ResultViewItemData {
     #endif
 }
 
-final class ResultModelVariableSection: ObservableObject {
-    @Published var results: [ResultData] = []
-    @Published var searchResults: [ResultData] = []
-    @Published var updateResult: Bool = false
+struct ResultModelVariableSection {
+    private(set) var results: [ResultData] = []
+    private(set) var searchResults: [ResultData] = []
+    private(set) var updateResult: Bool = false
 
-    func setResults(_ results: [any ResultViewItemData]) {
+    mutating func setResults(_ results: [any ResultViewItemData]) {
         self.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
         self.updateResult.toggle()
     }
-    func setSearchResults(_ results: [any ResultViewItemData]) {
+    mutating func setSearchResults(_ results: [any ResultViewItemData]) {
         self.searchResults = results.indices.map {ResultData(id: $0, candidate: results[$0])}
     }
 }
@@ -38,16 +38,15 @@ struct ResultData: Identifiable {
 struct ResultBar: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
-    @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
     private var buttonWidth: CGFloat {
-        Design.keyboardBarHeight() * 0.5
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.5
     }
     private var buttonHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.6
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.6
     }
 
     init(isResultViewExpanded: Binding<Bool>) {
@@ -55,7 +54,7 @@ struct ResultBar: View {
     }
 
     var body: some View {
-        if model.results.isEmpty {
+        if variableStates.resultModelVariableSection.results.isEmpty {
             CenterAlignedView {
                 if displayTabBarButton {
                     KeyboardBarButton {
@@ -72,7 +71,7 @@ struct ResultBar: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     ScrollViewReader {scrollViewProxy in
                         LazyHStack(spacing: 10) {
-                            ForEach(model.results, id: \.id) {(data: ResultData) in
+                            ForEach(variableStates.resultModelVariableSection.results, id: \.id) {(data: ResultData) in
                                 if data.candidate.inputable {
                                     Button(data.candidate.text) {
                                         KeyboardFeedback.click()
@@ -89,7 +88,7 @@ struct ResultBar: View {
                                         .underline(true, color: .accentColor)
                                 }
                             }
-                        }.onChange(of: model.updateResult) { _ in
+                        }.onChange(of: variableStates.resultModelVariableSection.updateResult) { _ in
                             scrollViewProxy.scrollTo(0, anchor: .trailing)
                         }
                     }
@@ -121,6 +120,7 @@ struct ResultBar: View {
 }
 
 struct ResultContextMenuView: View {
+    @EnvironmentObject private var variableStates: VariableStates
     private let candidate: any ResultViewItemData
 
     init(candidate: any ResultViewItemData) {
@@ -130,8 +130,8 @@ struct ResultContextMenuView: View {
     var body: some View {
         Group {
             Button(action: {
-                VariableStates.shared.magnifyingText = candidate.text
-                VariableStates.shared.boolStates.isTextMagnifying = true
+                variableStates.magnifyingText = candidate.text
+                variableStates.boolStates.isTextMagnifying = true
             }) {
                 Text("大きな文字で表示する")
                 Image(systemName: "plus.magnifyingglass")

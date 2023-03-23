@@ -11,17 +11,15 @@ import SwiftUI
 struct UpsideSearchView: View {
     @Environment(\.userActionManager) private var action
     @Environment(\.themeEnvironment) private var theme
-
-    @ObservedObject private var variableStates = VariableStates.shared
-    @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
+    @EnvironmentObject private var variableStates: VariableStates
     @State private var searchQuery = ""
     @FocusState private var searchBarFocus
     private let target: [ConverterBehaviorSemantics.ReplacementTarget]
     private var buttonHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.9
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.9
     }
     private var searchBarHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.8
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.8
     }
 
     init(target: [ConverterBehaviorSemantics.ReplacementTarget]) {
@@ -36,7 +34,7 @@ struct UpsideSearchView: View {
         VStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 10) {
-                    ForEach(model.searchResults, id: \.id) {(data: ResultData) in
+                    ForEach(variableStates.resultModelVariableSection.searchResults, id: \.id) {(data: ResultData) in
                         if data.candidate.inputable {
                             Button(data.candidate.text) {
                                 KeyboardFeedback.click()
@@ -79,7 +77,7 @@ struct UpsideSearchView: View {
             self.action.setTextDocumentProxy(.preference(.ikTextField))
         }
         .onDisappear {
-            self.model.searchResults = []
+            self.variableStates.resultModelVariableSection.setSearchResults([])
             self.searchBarFocus = false
         }
     }

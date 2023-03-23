@@ -10,13 +10,12 @@ import Foundation
 import SwiftUI
 
 struct KeyboardView: View {
-    @ObservedObject private var variableStates = VariableStates.shared
-
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
 
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.showMessage) private var showMessage
+    @EnvironmentObject private var variableStates: VariableStates
 
     private let defaultTab: Tab.ExistentialTab?
 
@@ -34,7 +33,7 @@ struct KeyboardView: View {
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight)
+                                .frame(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))
                                 .clipped()
                         }
                     }
@@ -47,14 +46,14 @@ struct KeyboardView: View {
                             UpsideSearchView(target: target)
                         }
                     }
-                    .frame(height: Design.upsideComponentHeight(upsideComponent))
+                    .frame(height: Design.upsideComponentHeight(upsideComponent, orientation: variableStates.keyboardOrientation))
                 }
                 if isResultViewExpanded {
                     ExpandedResultView(isResultViewExpanded: $isResultViewExpanded)
                 } else {
                     VStack(spacing: 0) {
                         KeyboardBarView(isResultViewExpanded: $isResultViewExpanded)
-                            .frame(height: Design.keyboardBarHeight())
+                            .frame(height: Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation))
                             .padding(.vertical, 6)
                         if variableStates.refreshing {
                             keyboardView(tab: variableStates.tabManager.tab.existential)
@@ -67,7 +66,7 @@ struct KeyboardView: View {
             .resizingFrame(
                 size: $variableStates.interfaceSize,
                 position: $variableStates.interfacePosition,
-                initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth))
+                initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: variableStates.keyboardOrientation))
             )
             .padding(.bottom, 2)
             if variableStates.boolStates.isTextMagnifying {
@@ -81,33 +80,27 @@ struct KeyboardView: View {
                 }
             }
         }
-        .frame(height: Design.keyboardScreenHeight)
+        .frame(height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))
     }
 
     func keyboardView(tab: Tab.ExistentialTab) -> some View {
-        let target: Tab.ExistentialTab
-        if let defaultTab {
-            target = defaultTab
-        } else {
-            target = tab
-        }
-
+        let target: Tab.ExistentialTab = defaultTab ?? tab
         return Group {
             switch target {
             case .flick_hira:
-                FlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard)
+                FlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
             case .flick_abc:
-                FlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard)
+                FlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
             case .flick_numbersymbols:
-                FlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard)
+                FlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
             case .qwerty_hira:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard)
+                QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
             case .qwerty_abc:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().abcKeyboard)
+                QwertyKeyboardView(keyModels: QwertyDataProvider().abcKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
             case .qwerty_number:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().numberKeyboard)
+                QwertyKeyboardView(keyModels: QwertyDataProvider().numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
             case .qwerty_symbols:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard)
+                QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
             case let .custard(custard):
                 CustomKeyboardView(custard: custard)
             case let .special(tab):

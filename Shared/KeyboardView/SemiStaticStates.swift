@@ -40,7 +40,7 @@ final class SemiStaticStates {
 
     /// - do not  consider using screenHeight
     /// - スクリーンそのもののサイズ。キーボードビューの幅は片手モードなどによって変更が生じうるため、`screenWidth`は限定的な場面でのみ使うことが望まし。
-    private(set) var screenWidth: CGFloat = .zero
+    private(set) var screenWidth: CGFloat = UIScreen.main.bounds.width
     private(set) var keyboardHeightScale: CGFloat = 1
 
     /// - note: キーボードが開かれたタイミングで一度呼ぶのが望ましい。
@@ -50,35 +50,7 @@ final class SemiStaticStates {
 
     /// Function to set the width of area of keyboard
     /// - Parameter width: 使用可能な領域の幅.
-    /// - 副作用として、この関数はデバイスの向きを決定し、UIのサイズを調整する。
-    func setScreenWidth(_ width: CGFloat, orientation: KeyboardOrientation? = nil) {
-        if self.screenWidth == width && orientation == VariableStates.shared.keyboardOrientation {
-            return
-        }
-        if let orientation {
-            VariableStates.shared.setOrientation(orientation)
-        } else {
-            VariableStates.shared.setOrientation(UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height ? .vertical : .horizontal)
-        }
+    func setScreenWidth(_ width: CGFloat) {
         self.screenWidth = width
-        // screenWidthを更新してからDesign.keyboardHeightを呼ぶ必要がある。
-        // あまりいいデザインではない・・・。
-        let height = Design.keyboardHeight(screenWidth: width)
-        debug("SemiStaticStates setScreenWidth", width, height)
-        let (layout, orientation) = (layout: VariableStates.shared.keyboardLayout, orientation: VariableStates.shared.keyboardOrientation)
-
-        // 片手モードの処理
-        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
-            value.setIfFirst(layout: layout, orientation: orientation, size: .init(width: width, height: height), position: .zero)
-        }
-        switch VariableStates.shared.resizingState {
-        case .fullwidth:
-            VariableStates.shared.interfaceSize = CGSize(width: width, height: height)
-        case .onehanded, .resizing:
-            let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: layout, orientation: orientation)
-            // 安全のため、指示されたwidth, heightを超える値を許可しない。
-            VariableStates.shared.interfaceSize = CGSize(width: min(width, item.size.width), height: min(height, item.size.height))
-            VariableStates.shared.interfacePosition = item.position
-        }
     }
 }

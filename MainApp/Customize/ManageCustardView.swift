@@ -198,7 +198,7 @@ struct ManageCustardView: View {
                     Section(header: Text("読み込んだタブ")) {
                         Text("「\(custard.metadata.display_name)(\(custard.identifier))」の読み込みに成功しました")
                         CenterAlignedView {
-                            KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
+                            KeyboardPreview(scale: 0.7, defaultTab: .custard(custard))
                         }
                         Toggle("タブバーに追加", isOn: $addTabBar)
                         Button("保存") {
@@ -394,7 +394,7 @@ struct URLImportCustardView: View {
                     Section(header: Text("読み込んだタブ")) {
                         Text("「\(custard.metadata.display_name)(\(custard.identifier))」の読み込みに成功しました")
                         CenterAlignedView {
-                            KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
+                            KeyboardPreview(scale: 0.7, defaultTab: .custard(custard))
                         }
                         Toggle("タブバーに追加", isOn: $addTabBar)
                         Button("保存") {

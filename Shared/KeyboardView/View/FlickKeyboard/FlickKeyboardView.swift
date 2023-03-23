@@ -15,9 +15,9 @@ struct FlickKeyboardView: View {
 
     private let tabDesign: TabDependentDesign
     private let keyModels: [[any FlickKeyModelProtocol]]
-    init(keyModels: [[any FlickKeyModelProtocol]]) {
+    init(keyModels: [[any FlickKeyModelProtocol]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
         self.keyModels = keyModels
-        self.tabDesign = TabDependentDesign(width: 5, height: 4, layout: .flick, orientation: VariableStates.shared.keyboardOrientation)
+        self.tabDesign = TabDependentDesign(width: 5, height: 4, interfaceSize: interfaceSize, layout: .flick, orientation: keyboardOrientation)
     }
 
     private var horizontalIndices: Range<Int> {
@@ -47,7 +47,7 @@ struct FlickKeyboardView: View {
         } else {
             size = tabDesign.keyViewSize
         }
-        return FlickSuggestView(model: model.suggestModel, tabDesign: tabDesign, size: size, suggestType: suggestType)
+        return FlickSuggestView(model: model, tabDesign: tabDesign, size: size, suggestType: suggestType)
     }
 
     var body: some View {

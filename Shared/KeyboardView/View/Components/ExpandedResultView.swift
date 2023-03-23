@@ -10,14 +10,17 @@ import Foundation
 import SwiftUI
 
 struct ExpandedResultView: View {
+    @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
 
-    private var splitedResults: [SplitedResultData]
+    private var splitedResults: [SplitedResultData] {
+        Self.registerResults(results: variableStates.resultModelVariableSection.results, interfaceWidth: variableStates.interfaceSize.width)
+    }
     private var buttonWidth: CGFloat {
-        Design.keyboardBarHeight() * 0.5
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.5
     }
     private var buttonHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.6
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.6
     }
 
     @Environment(\.themeEnvironment) private var theme
@@ -25,7 +28,6 @@ struct ExpandedResultView: View {
 
     init(isResultViewExpanded: Binding<Bool>) {
         self._isResultViewExpanded = isResultViewExpanded
-        self.splitedResults = Self.registerResults(results: VariableStates.shared.resultModelVariableSection.results)
     }
 
     var body: some View {
@@ -72,11 +74,11 @@ struct ExpandedResultView: View {
                 .padding(.leading, 15)
             }
         }
-        .frame(height: VariableStates.shared.interfaceSize.height, alignment: .bottom)
+        .frame(height: variableStates.interfaceSize.height, alignment: .bottom)
     }
 
     private func pressed(data: ResultData) {
-        self.action.notifyComplete(data.candidate, variableStates: VariableStates.shared)
+        self.action.notifyComplete(data.candidate, variableStates: variableStates)
         self.collapse()
     }
 
@@ -84,14 +86,14 @@ struct ExpandedResultView: View {
         isResultViewExpanded = false
     }
 
-    private static func registerResults(results: [ResultData]) -> [SplitedResultData] {
+    private static func registerResults(results: [ResultData], interfaceWidth: CGFloat) -> [SplitedResultData] {
         var curSum: CGFloat = .zero
         var splited: [SplitedResultData] = []
         var curResult: [ResultData] = []
         let font = UIFont.systemFont(ofSize: Design.fonts.resultViewFontSize + 1)
         results.forEach {[unowned font] datum in
             let width = datum.candidate.text.size(withAttributes: [.font: font]).width + 20
-            if (curSum + width) < VariableStates.shared.interfaceSize.width {
+            if (curSum + width) < interfaceWidth {
                 curResult.append(datum)
                 curSum += width
             } else {

@@ -37,7 +37,7 @@ enum QwertyKeyPressState {
 
 struct QwertyKeyView: View {
     private let model: QwertyKeyModelProtocol
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
 
     @State private var pressState: QwertyKeyPressState = .unpressed
     @State private var suggest = false
@@ -59,7 +59,7 @@ struct QwertyKeyView: View {
                 self.suggest = true
                 switch self.pressState {
                 case .unpressed:
-                    self.model.feedback()
+                    self.model.feedback(variableStates: variableStates)
                     self.pressState = .started(Date())
                     self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -94,7 +94,7 @@ struct QwertyKeyView: View {
                 case let .started(date):
                     // もし0.4秒未満押していたら
                     if Date().timeIntervalSince(date) < 0.4 {
-                        self.action.registerActions(self.model.pressActions, variableStates: variableStates)
+                        self.action.registerActions(self.model.pressActions(variableStates: variableStates), variableStates: variableStates)
                     }
                 case .longPressed:
                     break
@@ -122,11 +122,11 @@ struct QwertyKeyView: View {
     }
 
     private var suggestColor: Color {
-        theme != .default ? .white : Design.colors.suggestKeyColor
+        theme != .default(layout: .qwerty) ? .white : Design.colors.suggestKeyColor(layout: variableStates.keyboardLayout)
     }
 
     private var suggestTextColor: Color? {
-        theme != .default ? .black : nil
+        theme != .default(layout: .qwerty) ? .black : nil
     }
 
     private var selection: Int? {

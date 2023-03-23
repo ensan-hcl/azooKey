@@ -19,12 +19,11 @@ struct FlickKeyModel: FlickKeyModelProtocol {
         )
     ], needSuggestView: false, keycolorType: .tabkey)
 
-    let suggestModel: SuggestModel
     let needSuggestView: Bool
-    let flickKeys: [FlickDirection: FlickedKeyModel]
+    private let flickKeys: [FlickDirection: FlickedKeyModel]
 
     let labelType: KeyLabelType
-    let pressActions: [ActionType]
+    private let pressActions: [ActionType]
     let longPressActions: LongpressActionType
     private let keycolorType: FlickKeyColorType
 
@@ -34,7 +33,6 @@ struct FlickKeyModel: FlickKeyModelProtocol {
         self.longPressActions = longPressActions
         self.flickKeys = flickKeys
         self.needSuggestView = needSuggestView
-        self.suggestModel = SuggestModel(flickKeys)
         self.keycolorType = keycolorType
     }
 
@@ -42,11 +40,19 @@ struct FlickKeyModel: FlickKeyModelProtocol {
         keycolorType.color(theme: theme)
     }
 
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        self.pressActions
+    }
+
+    func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
+        self.flickKeys
+    }
+
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         KeyLabel(self.labelType, width: width)
     }
 
-    func feedback() {
-        self.pressActions.first?.feedback()
+    func feedback(variableStates: VariableStates) {
+        self.pressActions.first?.feedback(variableStates: variableStates)
     }
 }

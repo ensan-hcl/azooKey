@@ -12,10 +12,10 @@ import SwiftUI
 // symbolタブ、123タブで表示される切り替えボタン
 struct QwertyTabKeyModel: QwertyKeyModelProtocol {
 
-    var pressActions: [ActionType] {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
         switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
-            switch VariableStates.shared.keyboardLanguage {
+            switch variableStates.keyboardLanguage {
             case .ja_JP, .none, .el_GR:
                 return [.moveTab(.user_dependent(.japanese))]
             case .en_US:
@@ -53,7 +53,7 @@ struct QwertyTabKeyModel: QwertyKeyModelProtocol {
         }
     }
 
-    func feedback() {
+    func feedback(variableStates: VariableStates) {
         KeyboardFeedback.tabOrOtherKey()
     }
 }

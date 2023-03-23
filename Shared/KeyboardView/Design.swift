@@ -16,25 +16,25 @@ struct TabDependentDesign {
     let layout: KeyboardLayout
     let orientation: KeyboardOrientation
 
-    private var interfaceWidth: CGFloat {
-        VariableStates.shared.interfaceSize.width
-    }
-    private var interfaceHeight: CGFloat {
-        VariableStates.shared.interfaceSize.height
-    }
+    private var interfaceWidth: CGFloat
+    private var interfaceHeight: CGFloat
 
-    init(width: Int, height: Int, layout: KeyboardLayout, orientation: KeyboardOrientation) {
+    init(width: Int, height: Int, interfaceSize: CGSize, layout: KeyboardLayout, orientation: KeyboardOrientation) {
         self.horizontalKeyCount = CGFloat(width)
         self.verticalKeyCount = CGFloat(height)
         self.layout = layout
         self.orientation = orientation
+        self.interfaceWidth = interfaceSize.width
+        self.interfaceHeight = interfaceSize.height
     }
 
-    init(width: CGFloat, height: CGFloat, layout: KeyboardLayout, orientation: KeyboardOrientation) {
+    init(width: CGFloat, height: CGFloat, interfaceSize: CGSize, layout: KeyboardLayout, orientation: KeyboardOrientation) {
         self.horizontalKeyCount = width
         self.verticalKeyCount = height
         self.layout = layout
         self.orientation = orientation
+        self.interfaceWidth = interfaceSize.width
+        self.interfaceHeight = interfaceSize.height
     }
 
     /// screenWidthとhorizontalKeyCountに依存
@@ -61,7 +61,7 @@ struct TabDependentDesign {
 
     // resultViewの幅を全体から引いたもの。キーを配置して良い部分の高さ。
     var keysHeight: CGFloat {
-        interfaceHeight - (Design.keyboardBarHeight() + 12)
+        interfaceHeight - (Design.keyboardBarHeight(interfaceHeight: interfaceHeight, orientation: orientation) + 12)
     }
 
     /// This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
@@ -135,13 +135,6 @@ enum Design {
     static let fonts = Fonts.default
     static let language = Language.default
 
-    private static var orientation: KeyboardOrientation {
-        VariableStates.shared.keyboardOrientation
-    }
-    private static var layout: KeyboardLayout {
-        VariableStates.shared.keyboardLayout
-    }
-
     /// レイアウトのモード
     enum LayoutMode {
         case phoneVertical
@@ -152,7 +145,7 @@ enum Design {
 
     /// レイアウトモードを決定する
     /// 特に、iPadでフローティングキーボードを利用する場合は`phoneVertical`になる。
-    private static var layoutMode: LayoutMode {
+    private static func layoutMode(orientation: KeyboardOrientation) -> LayoutMode {
         // TODO: この実装は検証される必要がある
         let usePadMode = UIDevice.current.userInterfaceIdiom == .pad
         // floating keyboardの場合
@@ -172,13 +165,13 @@ enum Design {
     }
 
     /// This property calculate suitable width for normal keyView.
-    static var keyboardScreenHeight: CGFloat {
-        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, upsideComponent: VariableStates.shared.upsideComponent) + 2
+    static func keyboardScreenHeight(upsideComponent: UpsideComponent?, orientation: KeyboardOrientation) -> CGFloat {
+        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: upsideComponent) + 2
     }
 
     /// screenWidthに依存して決定する
     /// 12はresultViewのpadding
-    static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width, upsideComponent: UpsideComponent? = nil) -> CGFloat {
+    static func keyboardHeight(screenWidth: CGFloat, orientation: KeyboardOrientation, upsideComponent: UpsideComponent? = nil) -> CGFloat {
         let scale: CGFloat
         if let upsideComponent {
             switch orientation {
@@ -192,7 +185,7 @@ enum Design {
         }
         // 安全装置として、widthが本来のscreenWidthを超えないようにする。
         let width = min(screenWidth, SemiStaticStates.shared.screenWidth)
-        switch layoutMode {
+        switch layoutMode(orientation: orientation) {
         case .phoneVertical:
             return 51 / 74 * width * scale + 12
         case .padVertical:
@@ -211,12 +204,12 @@ enum Design {
         }
     }
 
-    static func upsideComponentHeight(_ component: UpsideComponent) -> CGFloat {
-        Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, upsideComponent: component) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, upsideComponent: nil)
+    static func upsideComponentHeight(_ component: UpsideComponent, orientation: KeyboardOrientation) -> CGFloat {
+        Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: component) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: nil)
     }
     /// バー部分の高さは`interfaceHeight`に基づいて決定する
-    static func keyboardBarHeight(interfaceHeight: CGFloat = VariableStates.shared.interfaceSize.height) -> CGFloat {
-        switch layoutMode {
+    static func keyboardBarHeight(interfaceHeight: CGFloat, orientation: KeyboardOrientation) -> CGFloat {
+        switch layoutMode(orientation: orientation) {
         case .phoneVertical:
             return (interfaceHeight - 12) * 37 / 204
         // return screenWidth / 8
@@ -232,20 +225,15 @@ enum Design {
         }
     }
 
-    static func largeTextViewFontSize(_ text: String) -> CGFloat {
+    static func largeTextViewFontSize(_ text: String, upsideComponent: UpsideComponent?, orientation: KeyboardOrientation) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 10)
         let size = text.size(withAttributes: [.font: font])
         // 閉じるボタンの高さの分
-        return (self.keyboardScreenHeight - self.keyboardScreenHeight * 0.15) / size.height * 10
+        return (self.keyboardScreenHeight(upsideComponent: upsideComponent, orientation: orientation) * 0.85) / size.height * 10
     }
 
     enum Fonts {
         case `default`
-
-        private var layout: KeyboardLayout {
-            VariableStates.shared.keyboardLayout
-        }
-
         func azooKeyIconFont(fixedSize: CGFloat) -> Font {
             Font.custom("AzooKeyIcon-Regular", fixedSize: fixedSize)
         }
@@ -310,7 +298,7 @@ enum Design {
             return UIFontMetrics.default.scaledValue(for: 9)
         }
 
-        func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, theme: ThemeData) -> Font {
+        func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, layout: KeyboardLayout, theme: ThemeData) -> Font {
             if case .max = fontSize {
                 let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 50)
                 return Font.system(size: size, weight: theme.textFont.weight, design: .default)
@@ -321,7 +309,7 @@ enum Design {
                 return .system(size: userDecidedSize * fontSize.scale, weight: theme.textFont.weight, design: .default)
             }
             let maxFontSize: Int
-            switch Design.layout {
+            switch layout {
             case .flick:
                 maxFontSize = Int(21 * fontSize.scale)
             case .qwerty:
@@ -335,10 +323,6 @@ enum Design {
     enum Colors {
         case `default`
 
-        private var layout: KeyboardLayout {
-            VariableStates.shared.keyboardLayout
-        }
-
         var backGroundColor: Color {
             Color("BackGroundColor_iOS15")
         }
@@ -347,8 +331,8 @@ enum Design {
             Color("OpenKeyColor")
         }
 
-        var normalKeyColor: Color {
-            switch Design.layout {
+        func normalKeyColor(layout: KeyboardLayout) -> Color {
+            switch layout {
             case .flick:
                 return Color("NormalKeyColor")
             case .qwerty:
@@ -360,8 +344,8 @@ enum Design {
             Color("TabKeyColor_iOS15")
         }
 
-        var highlightedKeyColor: Color {
-            switch Design.layout {
+        func highlightedKeyColor(layout: KeyboardLayout) -> Color {
+            switch layout {
             case .flick:
                 return Color("HighlightedKeyColor")
             case .qwerty:
@@ -369,8 +353,8 @@ enum Design {
             }
         }
 
-        var suggestKeyColor: Color {
-            switch Design.layout {
+        func suggestKeyColor(layout: KeyboardLayout) -> Color {
+            switch layout {
             case .flick:
                 return .systemGray4
             case .qwerty:

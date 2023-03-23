@@ -11,14 +11,13 @@ import SwiftUI
 struct EmojiTabResultBar: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
-    @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
     @Namespace private var namespace
     private var buttonHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.9
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.9
     }
     private var searchBarHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.8
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.8
     }
     private var searchBarDesign: InKeyboardSearchBar.Configuration {
         .init(placeholder: "絵文字を検索", theme: theme)
@@ -57,7 +56,7 @@ struct EmojiTabResultBar: View {
                 .matchedGeometryEffect(id: "SearchBar", in: namespace)
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 10) {
-                        ForEach(model.results, id: \.id) {(data: ResultData) in
+                        ForEach(variableStates.resultModelVariableSection.results, id: \.id) {(data: ResultData) in
                             if data.candidate.inputable {
                                 Button(data.candidate.text) {
                                     KeyboardFeedback.click()
@@ -77,7 +76,7 @@ struct EmojiTabResultBar: View {
                     .padding(.horizontal, 5)
                 }
             }
-        }.onChange(of: model.results.isEmpty) { newValue in
+        }.onChange(of: variableStates.resultModelVariableSection.results.isEmpty) { newValue in
             if showResults != !newValue {
                 withAnimation(.easeIn(duration: 0.2)) {
                     showResults = !newValue
