@@ -9,10 +9,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    init() {}
-
+    private enum TabSelection {
+        case tips, theme, customize, settings
+    }
     @EnvironmentObject private var appStates: MainAppStates
-    @State private var selection = 0
+    @State private var selection: TabSelection = .tips
     @State private var messageManager = MessageManager()
     @State private var showWalkthrough = false
     @State private var importFileURL: URL? = nil
@@ -24,28 +25,28 @@ struct ContentView: View {
                     .tabItem {
                         TabItem(title: "使い方", systemImage: "lightbulb.fill")
                     }
-                    .tag(0)
+                    .tag(TabSelection.tips)
                 ThemeTabView()
                     .tabItem {
                         TabItem(title: "着せ替え", systemImage: "photo")
                     }
-                    .tag(1)
+                    .tag(TabSelection.theme)
                 CustomizeTabView()
                     .tabItem {
                         TabItem(title: "拡張", systemImage: "gearshape.2.fill")
                     }
-                    .tag(2)
+                    .tag(TabSelection.customize)
                 SettingTabView()
                     .tabItem {
                         TabItem(title: "設定", systemImage: "wrench.fill")
                     }
-                    .tag(3)
+                    .tag(TabSelection.settings)
             }
             .fullScreenCover(isPresented: $appStates.requireFirstOpenView) {
                 EnableAzooKeyView()
             }
             .onChange(of: selection) {value in
-                if value == 2 {
+                if value == .customize {
                     if ContainerInternalSetting.shared.walkthroughState.shouldDisplay(identifier: .extensions) {
                         self.showWalkthrough = true
                     }

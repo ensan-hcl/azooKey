@@ -22,7 +22,6 @@ final class ShareImage {
 struct ThemeShareView: View {
     private let theme: ThemeData
     private let dismissProcess: () -> Void
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     init(theme: ThemeData, shareImage: ShareImage, dismissProcess: @escaping () -> Void) {
         self.theme = theme

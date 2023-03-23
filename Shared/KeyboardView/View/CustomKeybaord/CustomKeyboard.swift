@@ -233,19 +233,18 @@ extension CustardInterfaceKey {
             case .enter:
                 return SimpleEnterKeyModel()
             case .flickKogaki:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
+                return SimpleKeyModel(keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .flickKutoten:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
+                return SimpleKeyModel(keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
             case .flickHiraTab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
+                return SimpleKeyModel(keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
             case .flickAbcTab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
+                return SimpleKeyModel(keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
             case .flickStar123Tab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))])
+                return SimpleKeyModel(keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))])
             }
         case let .custom(value):
             return SimpleKeyModel(
-                keyType: .normal,
                 keyLabelType: value.design.label.keyLabelType,
                 unpressedKeyColorType: value.design.color.simpleKeyColorType,
                 pressActions: value.press_actions.map {$0.actionType},
@@ -324,11 +323,12 @@ struct CustomKeyboardView: View {
 }
 
 struct CustardFlickKeysView<Content: View>: View {
-    init(models: [KeyPosition : (model: FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, needSuggest: Bool = true, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
+    @State private var suggestState = FlickSuggestState()
+
+    init(models: [KeyPosition : (model: FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
         self.models = models
         self.tabDesign = tabDesign
         self.layout = layout
-        self.needSuggest = needSuggest
         self.contentGenerator = generator
     }
 
@@ -336,7 +336,6 @@ struct CustardFlickKeysView<Content: View>: View {
     private let models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)]
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
-    private let needSuggest: Bool
 
     private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
         let width = tabDesign.keyViewWidth(widthCount: width)
@@ -349,37 +348,23 @@ struct CustardFlickKeysView<Content: View>: View {
     var body: some View {
         ZStack {
             ForEach(0..<layout.rowCount, id: \.self) {x in
+                let columnSuggestStates = self.suggestState.items[x, default: [:]]
                 ForEach(0..<layout.columnCount, id: \.self) {y in
                     if let data = models[.gridFit(x: x, y: y)] {
                         let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
-                        contentGenerator(FlickKeyView(model: data.model, size: info.size), x, y)
+                        contentGenerator(FlickKeyView(model: data.model, size: info.size, position: (x, y), suggestState: $suggestState), x, y)                            .zIndex(columnSuggestStates[y] != nil ? 1 : 0)
+                            .overlay(alignment: .center) {
+                                if let suggestType = columnSuggestStates[y] {
+                                    FlickSuggestView(model: data.model.suggestModel, tabDesign: tabDesign, size: info.size, suggestType: suggestType)
+                                        .zIndex(2)
+                                }
+                            }
                             .position(x: info.position.x, y: info.position.y)
                     }
                 }
-            }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
-            if needSuggest {
-                ForEach(0..<layout.rowCount, id: \.self) {x in
-                    ForEach(0..<layout.columnCount, id: \.self) {y in
-                        if let data = models[.gridFit(x: x, y: y)] {
-                            let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
-                            SuggestView(model: data.model.suggestModel, tabDesign: tabDesign, size: info.size)
-                                .position(x: info.position.x, y: info.position.y)
-                        }
-                    }
-                }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+                .zIndex(columnSuggestStates.isEmpty ? 0 : 1)
             }
-            /*
-             let suggests = models.filter{key, value in
-             return value.model.suggestModel.variableSection.suggestState.isActive
-             }.map{(key: $0.key, value: $0.value)}
-             ForEach(suggests.indices, id: \.self){ i in
-             if case let .gridFit(x: x, y: y) = suggests[i].key{
-             let info = flickKeyData(x: x, y: y, width: suggests[i].value.width, height: suggests[i].value.height)
-             SuggestView(model: suggests[i].value.model.suggestModel, tabDesign: tabDesign, size: info.size)
-             .position(x: info.position.x, y: info.position.y)
-             }
-             }
-             */
+            .frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
         }
     }
 }

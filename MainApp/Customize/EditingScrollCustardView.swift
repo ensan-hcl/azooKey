@@ -31,7 +31,7 @@ struct EditingScrollCustardView: CancelableEditor {
     private static let emptyItem: UserMadeGridScrollCustard = .init(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
     let base: UserMadeGridScrollCustard
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     @State private var showPreview = false
     @State private var editingItem: UserMadeGridScrollCustard
@@ -109,7 +109,7 @@ struct EditingScrollCustardView: CancelableEditor {
             leading: Button("キャンセル", action: cancel),
             trailing: Button("保存") {
                 self.save()
-                presentationMode.wrappedValue.dismiss()
+                self.dismiss()
             }
         )
     }
@@ -163,6 +163,6 @@ struct EditingScrollCustardView: CancelableEditor {
     }
 
     func cancel() {
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 }

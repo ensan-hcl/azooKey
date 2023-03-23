@@ -34,7 +34,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     }
     private static let emptyItem: UserMadeTenKeyCustard = .init(tabName: "新規タブ", rowCount: "5", columnCount: "4", inputStyle: .direct, language: .none, keys: emptyKeys, addTabBarAutomatically: true)
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     let base: UserMadeTenKeyCustard
     @State private var editingItem: UserMadeTenKeyCustard
@@ -140,7 +140,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         }
                         Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                     }
-                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout, needSuggest: false) {view, x, y in
+                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout) {view, x, y in
                         if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
                             if !isCovered(at: (x, y)) {
                                 Button {
@@ -286,17 +286,14 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         }
                     }
                 }
+                // FIXME: editingItemを更新しても`custard`が変更されない不具合
                 BottomSheetView(
                     isOpen: $showPreview,
                     maxHeight: Design.keyboardScreenHeight + 40,
                     minHeight: 0
                 ) {
-                    ZStack(alignment: .top) {
-                        Color.secondarySystemBackground
-                        KeyboardPreview(theme: .default, defaultTab: .custard(custard))
-                    }
+                    KeyboardPreview(theme: .default, defaultTab: .custard(custard))
                 }
-
             }
             .onChange(of: editingItem.rowCount) {_ in
                 updateModel()
@@ -311,7 +308,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                 leading: Button("キャンセル", action: cancel),
                 trailing: Button("保存") {
                     self.save()
-                    presentationMode.wrappedValue.dismiss()
+                    self.dismiss()
                 }
             )
         }
@@ -390,6 +387,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
     }
 
     func cancel() {
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 }

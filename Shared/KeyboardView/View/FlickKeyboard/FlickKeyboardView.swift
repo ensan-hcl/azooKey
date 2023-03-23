@@ -1,15 +1,18 @@
 //
-//  File.swift
+//  FlickKeyboardView.swift
 //  Keyboard
 //
 //  Created by ensan on 2020/04/16.
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import CustardKit
 import Foundation
 import SwiftUI
 
 struct FlickKeyboardView: View {
+    @State private var suggestState = FlickSuggestState()
+
     private let tabDesign: TabDependentDesign
     private let keyModels: [[any FlickKeyModelProtocol]]
     init(keyModels: [[any FlickKeyModelProtocol]]) {
@@ -33,10 +36,10 @@ struct FlickKeyboardView: View {
         } else {
             size = tabDesign.keyViewSize
         }
-        return FlickKeyView(model: model, size: size)
+        return FlickKeyView(model: model, size: size, position: (x: h, y: v), suggestState: $suggestState)
     }
 
-    private func suggestView(h: Int, v: Int) -> SuggestView {
+    private func suggestView(h: Int, v: Int, suggestType: FlickSuggestState.SuggestType) -> FlickSuggestView {
         let model = self.keyModels[h][v]
         let size: CGSize
         if model is FlickEnterKeyModel {
@@ -44,27 +47,27 @@ struct FlickKeyboardView: View {
         } else {
             size = tabDesign.keyViewSize
         }
-        return SuggestView(model: model.suggestModel, tabDesign: tabDesign, size: size)
+        return FlickSuggestView(model: model.suggestModel, tabDesign: tabDesign, size: size, suggestType: suggestType)
     }
 
     var body: some View {
         ZStack {
             HStack(spacing: tabDesign.horizontalSpacing) {
                 ForEach(self.horizontalIndices, id: \.self) {h in
+                    let columnSuggestStates = self.suggestState.items[h, default: [:]]
                     VStack(spacing: tabDesign.verticalSpacing) {
-                        ForEach(self.verticalIndices(h: h), id: \.self) {(v: Int) -> FlickKeyView in
+                        ForEach(self.verticalIndices(h: h), id: \.self) {v in
                             self.keyView(h: h, v: v)
+                                .zIndex(columnSuggestStates[v] != nil ? 1 : 0)
+                                .overlay(alignment: .center) {
+                                    if let suggestType = columnSuggestStates[v] {
+                                        suggestView(h: h, v: v, suggestType: suggestType)
+                                            .zIndex(2)
+                                    }
+                                }
                         }
                     }
-                }
-            }
-            HStack(spacing: tabDesign.horizontalSpacing) {
-                ForEach(self.horizontalIndices, id: \.self) {h in
-                    VStack(spacing: tabDesign.verticalSpacing) {
-                        ForEach(self.verticalIndices(h: h), id: \.self) {(v: Int) -> SuggestView in
-                            self.suggestView(h: h, v: v)
-                        }
-                    }
+                    .zIndex(columnSuggestStates.isEmpty ? 0 : 1)
                 }
             }
         }

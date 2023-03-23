@@ -33,11 +33,6 @@ struct KeyboardPreview: View {
             orientation = UIDevice.current.orientation == UIDeviceOrientation.unknown ? .vertical : (UIDevice.current.orientation == UIDeviceOrientation.portrait ? .vertical : .horizontal)
         }
         SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width, orientation: orientation)
-        VariableStates.shared.resultModelVariableSection.setResults([
-            CandidateMock(text: "azooKey"),
-            CandidateMock(text: "あずーきー"),
-            CandidateMock(text: "アズーキー")
-        ])
         self.theme = theme
         self.scale = scale
         self.defaultTab = defaultTab
@@ -49,5 +44,12 @@ struct KeyboardPreview: View {
             .environment(\.showMessage, false)
             .scaleEffect(scale)
             .frame(width: SemiStaticStates.shared.screenWidth * scale, height: Design.keyboardScreenHeight * scale)
+            .onAppear {
+                VariableStates.shared.resultModelVariableSection.setResults([
+                    CandidateMock(text: "azooKey"),
+                    CandidateMock(text: "あずーきー"),
+                    CandidateMock(text: "アズーキー")
+                ])
+            }
     }
 }

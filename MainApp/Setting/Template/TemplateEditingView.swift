@@ -20,7 +20,7 @@ struct TemplateEditingView: CancelableEditor {
         var appearance: Appearance = .form
     }
 
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) private var dismiss
     internal let base: TemplateData
     private let options: Options
     @Binding private var template: TemplateData
@@ -112,12 +112,12 @@ struct TemplateEditingView: CancelableEditor {
         // データの更新
         template = editingTemplate
         // 画面を閉じる
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 
     func cancel() {
         template = base
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 }
 

@@ -19,8 +19,6 @@ enum SuggestModelKeyType {
 }
 
 struct SuggestModel {
-    private(set) var variableSection = SuggestModelVariableSection()
-
     private let keyType: SuggestModelKeyType
     private let _flickModels: [FlickDirection: FlickedKeyModel]
     var flickModels: [FlickDirection: FlickedKeyModel] {
@@ -40,12 +38,4 @@ struct SuggestModel {
         self._flickModels = flickModels
         self.keyType = keyType
     }
-
-    func setSuggestState(_ state: SuggestState) {
-        self.variableSection.suggestState = state
-    }
-}
-
-final class SuggestModelVariableSection: ObservableObject {
-    @Published var suggestState: SuggestState = .nothing
 }

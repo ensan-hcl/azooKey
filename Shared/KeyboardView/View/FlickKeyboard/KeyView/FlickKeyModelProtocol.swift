@@ -43,7 +43,6 @@ protocol FlickKeyModelProtocol {
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 
     func isFlickAble(to direction: FlickDirection) -> Bool
-    func suggestStateChanged(_ type: SuggestState)
 
     func flickSensitivity(to direction: FlickDirection) -> CGFloat
     func feedback()
@@ -53,10 +52,6 @@ protocol FlickKeyModelProtocol {
 extension FlickKeyModelProtocol {
     func isFlickAble(to direction: FlickDirection) -> Bool {
         flickKeys.keys.contains(direction)
-    }
-
-    func suggestStateChanged(_ type: SuggestState) {
-        self.suggestModel.setSuggestState(type)
     }
 
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
