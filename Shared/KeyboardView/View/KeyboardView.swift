@@ -9,57 +9,6 @@
 import Foundation
 import SwiftUI
 
-struct ThemeEnvironmentKey: EnvironmentKey {
-    typealias Value = ThemeData
-
-    static var defaultValue: ThemeData = .default
-}
-
-extension EnvironmentValues {
-    var themeEnvironment: ThemeData {
-        get {
-            self[ThemeEnvironmentKey.self]
-        }
-        set {
-            self[ThemeEnvironmentKey.self] = newValue
-        }
-    }
-}
-
-struct MessageEnvironmentKey: EnvironmentKey {
-    typealias Value = Bool
-
-    static var defaultValue = true
-}
-
-extension EnvironmentValues {
-    var showMessage: Bool {
-        get {
-            self[MessageEnvironmentKey.self]
-        }
-        set {
-            self[MessageEnvironmentKey.self] = newValue
-        }
-    }
-}
-
-struct UserActionManagerEnvironmentKey: EnvironmentKey {
-    typealias Value = UserActionManager
-
-    static var defaultValue = UserActionManager()
-}
-
-extension EnvironmentValues {
-    var userActionManager: UserActionManager {
-        get {
-            self[UserActionManagerEnvironmentKey.self]
-        }
-        set {
-            self[UserActionManagerEnvironmentKey.self] = newValue
-        }
-    }
-}
-
 struct KeyboardView: View {
     @ObservedObject private var variableStates = VariableStates.shared
 

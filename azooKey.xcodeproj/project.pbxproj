@@ -38,6 +38,8 @@
 		1A1A630B29C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */; };
 		1A1A630C29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */; };
 		1A1A630D29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */; };
+		1A1A630F29CC353500EF7B26 /* KeyboardEnvironments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1A630E29CC353500EF7B26 /* KeyboardEnvironments.swift */; };
+		1A1A631029CC353500EF7B26 /* KeyboardEnvironments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1A630E29CC353500EF7B26 /* KeyboardEnvironments.swift */; };
 		1A1ECC9A295D3A64001AD7E0 /* UnicodeConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */; };
 		1A1ECC9D295DA93D001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9C295DA93D001AD7E0 /* Algorithms */; };
 		1A1ECC9F295DA962001AD7E0 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 1A1ECC9E295DA962001AD7E0 /* Algorithms */; };
@@ -537,15 +539,16 @@
 		1A1A62A229C8B62D00EF7B26 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1A1A62A429C8B62D00EF7B26 /* emoji.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = emoji.py; sourceTree = "<group>"; };
 		1A1A62DB29C8BA7500EF7B26 /* emoji.xcfilelist */ = {isa = PBXFileReference; lastKnownFileType = text.xcfilelist; name = emoji.xcfilelist; path = Gen/scripts/emoji.xcfilelist; sourceTree = SOURCE_ROOT; };
-		1A1A62F129C8BCD300EF7B26 /* emoji_genre_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E13.1.txt.gen; path = Gen/generated/emoji_genre_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1A62F229C8BCD300EF7B26 /* emoji_all_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_all_E15.0.txt.gen; path = Gen/generated/emoji_all_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1A62F329C8BCD300EF7B26 /* emoji_all_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_all_E13.1.txt.gen; path = Gen/generated/emoji_all_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1A62F429C8BCD300EF7B26 /* emoji_genre_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E14.0.txt.gen; path = Gen/generated/emoji_genre_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1A62F529C8BCD300EF7B26 /* emoji_genre_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E15.0.txt.gen; path = Gen/generated/emoji_genre_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1A62F629C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_all_E14.0.txt.gen; path = Gen/generated/emoji_all_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1A630529C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_dict_E14.0.txt.gen; path = Gen/generated/emoji_dict_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_dict_E13.1.txt.gen; path = Gen/generated/emoji_dict_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_dict_E15.0.txt.gen; path = Gen/generated/emoji_dict_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A62F129C8BCD300EF7B26 /* emoji_genre_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_genre_E13.1.txt.gen; path = Gen/generated/emoji_genre_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A62F229C8BCD300EF7B26 /* emoji_all_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_all_E15.0.txt.gen; path = Gen/generated/emoji_all_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A62F329C8BCD300EF7B26 /* emoji_all_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_all_E13.1.txt.gen; path = Gen/generated/emoji_all_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A62F429C8BCD300EF7B26 /* emoji_genre_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_genre_E14.0.txt.gen; path = Gen/generated/emoji_genre_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A62F529C8BCD300EF7B26 /* emoji_genre_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_genre_E15.0.txt.gen; path = Gen/generated/emoji_genre_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A62F629C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_all_E14.0.txt.gen; path = Gen/generated/emoji_all_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A630529C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_dict_E14.0.txt.gen; path = Gen/generated/emoji_dict_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_dict_E13.1.txt.gen; path = Gen/generated/emoji_dict_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_dict_E15.0.txt.gen; path = Gen/generated/emoji_dict_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
+		1A1A630E29CC353500EF7B26 /* KeyboardEnvironments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardEnvironments.swift; sourceTree = "<group>"; };
 		1A1ECC99295D3A64001AD7E0 /* UnicodeConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnicodeConversionTests.swift; sourceTree = "<group>"; };
 		1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayedTextManager.swift; sourceTree = "<group>"; };
 		1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConversionManager.swift; sourceTree = "<group>"; };
@@ -1234,6 +1237,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3DC2092500D51F002CAA93 /* KeyboardView.swift */,
+				1A1A630E29CC353500EF7B26 /* KeyboardEnvironments.swift */,
 				1AB0974129C450DF00F81FAF /* UpsideComponents */,
 				1AFAA16F29BF6FAE0047FF46 /* Components */,
 				1A58AB0B25037E8800EB1864 /* KeyboardBar */,
@@ -2006,6 +2010,7 @@
 				1A61E8F028CCD93000C5107A /* FlickSensitivitySettingView.swift in Sources */,
 				1A4E09052527390100E7ABE5 /* TipsView.swift in Sources */,
 				1A9476B028240928006E22A9 /* CIDData.swift in Sources */,
+				1A1A630F29CC353500EF7B26 /* KeyboardEnvironments.swift in Sources */,
 				1ACA28EA29AB3C2500B794C8 /* ClipboardHistoryTab.swift in Sources */,
 				1AA346C82568294400B41A16 /* CustomKeyTipsView.swift in Sources */,
 				1A3022B52632A22700E4495C /* CustomKeySettingFlickKeyView.swift in Sources */,
@@ -2371,6 +2376,7 @@
 				1A4623F52524621F00EF5B02 /* extension LOUDS.swift in Sources */,
 				1AD2B8E526C2BAB50053CE4A /* PreferedLanguageKeyboardSetting.swift in Sources */,
 				1A364E3225C8361A00A56583 /* LearningMemory.swift in Sources */,
+				1A1A631029CC353500EF7B26 /* KeyboardEnvironments.swift in Sources */,
 				1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */,
 				1AB0974E29C476C900F81FAF /* InKeyboardSearchBar.swift in Sources */,
 				1A26028B251476A800EAD647 /* QwertySuggestView.swift in Sources */,
