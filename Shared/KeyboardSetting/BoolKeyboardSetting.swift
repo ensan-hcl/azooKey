@@ -215,6 +215,7 @@ struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {
             if !tabBarData.items.contains(where: {$0.actions == [.moveTab(.system(.__clipboard_history_tab))]}) {
                 tabBarData.items.append(TabBarItem(label: .text("コピー履歴"), actions: [.moveTab(.system(.__clipboard_history_tab))]))
             }
+            tabBarData.lastUpdateDate = .now
             try manager.saveTabBarData(tabBarData: tabBarData)
             return "タブバーに「コピー履歴」ボタンを追加しました。"
         } catch {
@@ -229,6 +230,7 @@ struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {
             tabBarData.items.removeAll {
                 $0.actions == [.moveTab(.system(.__clipboard_history_tab))]
             }
+            tabBarData.lastUpdateDate = .now
             try manager.saveTabBarData(tabBarData: tabBarData)
         } catch {
             debug("EnableClipboardHistoryManagerTab onEnabled", error)
