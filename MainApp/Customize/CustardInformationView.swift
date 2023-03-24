@@ -82,7 +82,7 @@ struct CustardInformationView: View {
     var body: some View {
         Form {
             CenterAlignedView {
-                KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
+                KeyboardPreview(scale: 0.7, defaultTab: .custard(custard))
             }
             HStack {
                 Text("タブ名")

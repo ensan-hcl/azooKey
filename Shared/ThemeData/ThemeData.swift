@@ -41,20 +41,22 @@ struct ThemeData: Codable, Equatable {
         self.suggestKeyFillColor = suggestKeyFillColor
     }
 
-    static let `default`: Self = Self(
-        backgroundColor: .system(.backgroundColor),
-        picture: .none,
-        textColor: .dynamic(.primary),
-        textFont: .regular,
-        resultTextColor: .dynamic(.primary),
-        resultBackgroundColor: .system(.backgroundColor),
-        borderColor: .color(Color(white: 0, opacity: 0)),
-        borderWidth: 1,
-        normalKeyFillColor: .system(.normalKeyColor),
-        specialKeyFillColor: .system(.specialKeyColor),
-        pushedKeyFillColor: .system(.highlightedKeyColor),
-        suggestKeyFillColor: nil
-    )
+    static func `default`(layout: KeyboardLayout) -> Self {
+        .init(
+            backgroundColor: .system(.backgroundColor),
+            picture: .none,
+            textColor: .dynamic(.primary),
+            textFont: .regular,
+            resultTextColor: .dynamic(.primary),
+            resultBackgroundColor: .system(.backgroundColor),
+            borderColor: .color(Color(white: 0, opacity: 0)),
+            borderWidth: 1,
+            normalKeyFillColor: .system(layout == .qwerty ? .qwertyNormalKeyColor : .normalKeyColor),
+            specialKeyFillColor: .system(.specialKeyColor),
+            pushedKeyFillColor: .system(layout == .qwerty ? .qwertyHighlightedKeyColor : .highlightedKeyColor),
+            suggestKeyFillColor: nil
+        )
+    }
 
     static let base: Self = Self(
         backgroundColor: .color(Color(.displayP3, red: 0.839, green: 0.843, blue: 0.862)),

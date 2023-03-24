@@ -11,16 +11,15 @@ import SwiftUI
 struct UpsideSearchView: View {
     @Environment(\.userActionManager) private var action
     @Environment(\.themeEnvironment) private var theme
-
-    @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
+    @EnvironmentObject private var variableStates: VariableStates
     @State private var searchQuery = ""
     @FocusState private var searchBarFocus
     private let target: [ConverterBehaviorSemantics.ReplacementTarget]
     private var buttonHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.9
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.9
     }
     private var searchBarHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.8
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.8
     }
 
     init(target: [ConverterBehaviorSemantics.ReplacementTarget]) {
@@ -35,7 +34,7 @@ struct UpsideSearchView: View {
         VStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 10) {
-                    ForEach(model.searchResults, id: \.id) {(data: ResultData) in
+                    ForEach(variableStates.resultModelVariableSection.searchResults, id: \.id) {(data: ResultData) in
                         if data.candidate.inputable {
                             Button(data.candidate.text) {
                                 KeyboardFeedback.click()
@@ -61,14 +60,14 @@ struct UpsideSearchView: View {
                     .cornerRadius(10)
                     .padding(.trailing, 5)
                     .onChange(of: searchQuery) { _ in
-                        self.action.registerAction(.setSearchQuery(searchQuery, target))
+                        self.action.registerAction(.setSearchQuery(searchQuery, target), variableStates: variableStates)
                     }
                 KeyboardBarButton(label: .systemImage("face.smiling")) {
                     self.action.setTextDocumentProxy(.preference(.main))
-                    self.action.registerActions([.setUpsideComponent(nil), .moveTab(.existential(.special(.emoji)))])
+                    self.action.registerActions([.setUpsideComponent(nil), .moveTab(.existential(.special(.emoji)))], variableStates: variableStates)
                 }
                 KeyboardBarButton(label: .systemImage("arrowtriangle.down.fill")) {
-                    self.action.registerAction(.setUpsideComponent(nil))
+                    self.action.registerAction(.setUpsideComponent(nil), variableStates: variableStates)
                     self.action.setTextDocumentProxy(.preference(.main))
                 }
             }
@@ -78,11 +77,11 @@ struct UpsideSearchView: View {
             self.action.setTextDocumentProxy(.preference(.ikTextField))
         }
         .onDisappear {
-            self.model.searchResults = []
+            self.variableStates.resultModelVariableSection.setSearchResults([])
             self.searchBarFocus = false
         }
     }
     private func pressed(candidate: any ResultViewItemData) {
-        self.action.registerAction(.insertMainDisplay(candidate.text))
+        self.action.registerAction(.insertMainDisplay(candidate.text), variableStates: variableStates)
     }
 }

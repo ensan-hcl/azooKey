@@ -10,8 +10,6 @@ import Foundation
 import SwiftUI
 
 struct QwertySpaceKeyModel: QwertyKeyModelProtocol {
-
-    let pressActions: [ActionType] = [.input(" ")]
     var longPressActions: LongpressActionType = .init(start: [.setCursorBar(.toggle)])
 
     let needSuggestView: Bool = false
@@ -32,7 +30,11 @@ struct QwertySpaceKeyModel: QwertyKeyModelProtocol {
         }
     }
 
-    func feedback() {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        [.input(" ")]
+    }
+
+    func feedback(variableStates: VariableStates) {
         KeyboardFeedback.click()
     }
 }

@@ -87,7 +87,7 @@ struct TabManager {
         }
     }
 
-    mutating func initialize() {
+    mutating func initialize(variableStates: VariableStates) {
         switch lastTab {
         case .none:
             let targetTab: Tab = {
@@ -101,11 +101,11 @@ struct TabManager {
                     return .user_dependent(.japanese)
                 }
             }()
-            self.moveTab(to: targetTab)
+            self.moveTab(to: targetTab, variableStates: variableStates)
         case let .existential(tab):
-            self.moveTab(to: tab)
+            self.moveTab(to: tab, variableStates: variableStates)
         case let .user_dependent(tab):
-            self.moveTab(to: .user_dependent(tab))
+            self.moveTab(to: .user_dependent(tab), variableStates: variableStates)
         }
     }
 
@@ -113,12 +113,12 @@ struct TabManager {
         self.lastTab = self.currentTab
     }
 
-    mutating private func moveTab(to destination: Tab.ExistentialTab) {
+    mutating private func moveTab(to destination: Tab.ExistentialTab, variableStates: VariableStates) {
         // VariableStateの状態を遷移先のタブに合わせて適切に変更する
-        VariableStates.shared.setKeyboardLayout(destination.layout)
-        VariableStates.shared.setInputStyle(destination.inputStyle)
+        variableStates.setKeyboardLayout(destination.layout)
+        variableStates.setInputStyle(destination.inputStyle)
         if let language = destination.language {
-            VariableStates.shared.keyboardLanguage = language
+            variableStates.keyboardLanguage = language
         }
 
         // selfの状態を更新する
@@ -127,7 +127,7 @@ struct TabManager {
         self.currentTab = .existential(destination)
     }
 
-    mutating func setTemporalTab(_ destination: Tab) {
+    mutating func setTemporalTab(_ destination: Tab, variableStates: VariableStates) {
         // 適切なタブを取得する
         let actualTab: Tab.ExistentialTab
         switch destination {
@@ -143,10 +143,10 @@ struct TabManager {
         }
 
         // VariableStateの状態を遷移先のタブに合わせて適切に変更する
-        VariableStates.shared.setKeyboardLayout(actualTab.layout)
-        VariableStates.shared.setInputStyle(actualTab.inputStyle)
+        variableStates.setKeyboardLayout(actualTab.layout)
+        variableStates.setInputStyle(actualTab.inputStyle)
         if let language = actualTab.language {
-            VariableStates.shared.keyboardLanguage = language
+            variableStates.keyboardLanguage = language
         }
 
         // selfの状態を更新する
@@ -162,7 +162,7 @@ struct TabManager {
         }
     }
 
-    mutating func moveTab(to destination: Tab) {
+    mutating func moveTab(to destination: Tab, variableStates: VariableStates) {
         // 適切なタブを取得する
         let actualTab: Tab.ExistentialTab
         switch destination {
@@ -178,10 +178,10 @@ struct TabManager {
         }
 
         // VariableStateの状態を遷移先のタブに合わせて適切に変更する
-        VariableStates.shared.setKeyboardLayout(actualTab.layout)
-        VariableStates.shared.setInputStyle(actualTab.inputStyle)
+        variableStates.setKeyboardLayout(actualTab.layout)
+        variableStates.setInputStyle(actualTab.inputStyle)
         if let language = actualTab.language {
-            VariableStates.shared.keyboardLanguage = language
+            variableStates.keyboardLanguage = language
         }
 
         // selfの状態を更新する
@@ -190,14 +190,14 @@ struct TabManager {
         case let .existential(tab):
             self.lastTab = self.currentTab
             self.currentTab = .existential(tab)
-            // Custard内の変数の初期化を実行
-            if case let .custard(custard) = tab {
-                //                for value in custard.logics.initial_values {
-                //                    if case let .bool(bool) = value.value {
-                //                        VariableStates.shared.boolStates.initializeState(value.name, with: bool)
-                //                    }
-                //                }
-            }
+        // Custard内の変数の初期化を実行
+        //            if case let .custard(custard) = tab {
+        //                for value in custard.logics.initial_values {
+        //                    if case let .bool(bool) = value.value {
+        //                        variableStates.boolStates.initializeState(value.name, with: bool)
+        //                    }
+        //                }
+        //            }
         case let .user_dependent(tab):
             self.lastTab = self.currentTab
             self.currentTab = .user_dependent(tab)

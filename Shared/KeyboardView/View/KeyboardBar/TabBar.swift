@@ -12,6 +12,7 @@ import SwiftUI
 struct TabBarView: View {
     private let data: TabBarData
     @Environment(\.userActionManager) private var action
+    @EnvironmentObject private var variableStates: VariableStates
 
     init(data: TabBarData) {
         self.data = data
@@ -24,7 +25,7 @@ struct TabBarView: View {
                     ForEach(data.items.indices, id: \.self) {i in
                         let item = data.items[i]
                         Button {
-                            self.action.registerActions(item.actions.map {$0.actionType})
+                            self.action.registerActions(item.actions.map {$0.actionType}, variableStates: variableStates)
                         } label: {
                             switch item.label {
                             case let .text(text):
@@ -38,10 +39,10 @@ struct TabBarView: View {
                                 Image(systemName: image)
                             }
                         }
-                        .buttonStyle(ResultButtonStyle(height: Design.keyboardBarHeight() * 0.6))
+                        .buttonStyle(ResultButtonStyle(height: Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.6))
                     }
                 }
             }
-        }.frame(height: Design.keyboardBarHeight())
+        }.frame(height: Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation))
     }
 }

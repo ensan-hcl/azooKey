@@ -46,6 +46,7 @@ private struct SearchBarWrapper: UIViewRepresentable {
     @Binding var proxyWrapper: IKTextDocumentProxyWrapper
     @Binding var text: String
     @Environment(\.userActionManager) private var action
+    @EnvironmentObject private var variableStates: VariableStates
     var configuration: InKeyboardSearchBar.Configuration
 
     func makeUIView(context: UIViewRepresentableContext<Self>) -> IKSearchBar {
@@ -161,10 +162,11 @@ private struct SearchBarWrapper: UIViewRepresentable {
             self.parent.action.notifySomethingDidChange(
                 a_left: proxy.documentContextBeforeInput ?? "",
                 a_center: proxy.selectedText ?? "",
-                a_right: proxy.documentContextAfterInput ?? ""
+                a_right: proxy.documentContextAfterInput ?? "",
+                variableStates: self.parent.variableStates
             )
             self.parent.action.setTextDocumentProxy(.preference(.ikTextField))
-            VariableStates.shared.setUIReturnKeyType(type: .default)
+            self.parent.variableStates.setUIReturnKeyType(type: .default)
         }
 
         // MARK: こちらで`textWillChange`などをハンドルすることで、`KeyboardViewController`では扱われなくなる

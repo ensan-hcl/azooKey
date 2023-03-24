@@ -9,36 +9,25 @@
 import SwiftUI
 
 private final class ClipboardHistory: ObservableObject {
-    @Published var pinnedItems: [ClipboardHistoryManager.Item] = [] {
-        didSet {
-            VariableStates.shared.clipboardHistoryManager.items = self.pinnedItems + self.notPinnedItems
-        }
+    @Published private(set) var pinnedItems: [ClipboardHistoryManager.Item] = []
+    @Published private(set) var notPinnedItems: [ClipboardHistoryManager.Item] = []
+
+    func updatePinnedItems(variableStates: VariableStates, _ process: (inout [ClipboardHistoryManager.Item]) -> Void) {
+        process(&self.pinnedItems)
+        variableStates.clipboardHistoryManager.items = self.pinnedItems + self.notPinnedItems
     }
-    @Published var notPinnedItems: [ClipboardHistoryManager.Item] = [] {
-        didSet {
-            VariableStates.shared.clipboardHistoryManager.items = self.pinnedItems + self.notPinnedItems
-        }
+    func updateNotPinnedItems(variableStates: VariableStates, _ process: (inout [ClipboardHistoryManager.Item]) -> Void) {
+        process(&self.notPinnedItems)
+        variableStates.clipboardHistoryManager.items = self.pinnedItems + self.notPinnedItems
     }
 }
 
 struct ClipboardHistoryTab: View {
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
     @ObservedObject private var target = ClipboardHistory()
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
     @State private var lastInsertedText: (text: String, changedCount: Int)?
-
-    init() {
-        for item in VariableStates.shared.clipboardHistoryManager.items {
-            if item.pinnedDate != nil {
-                self.target.pinnedItems.append(item)
-            } else {
-                self.target.notPinnedItems.append(item)
-            }
-        }
-        self.target.pinnedItems.sort(by: >)
-        self.target.notPinnedItems.sort(by: >)
-    }
 
     private var listRowBackgroundColor: Color {
         Design.colors.prominentBackgroundColor(theme)
@@ -68,7 +57,7 @@ struct ClipboardHistoryTab: View {
                     }
                     Spacer()
                     Button("入力") {
-                        action.registerAction(.input(string))
+                        action.registerAction(.input(string), variableStates: variableStates)
                         self.lastInsertedText = (string, variableStates.textChangedCount)
                         KeyboardFeedback.click()
                     }
@@ -77,7 +66,7 @@ struct ClipboardHistoryTab: View {
                 .contextMenu {
                     Group {
                         Button {
-                            action.registerAction(.input(string))
+                            action.registerAction(.input(string), variableStates: variableStates)
                         } label: {
                             Label("入力する", systemImage: "text.badge.plus")
                         }
@@ -88,30 +77,42 @@ struct ClipboardHistoryTab: View {
                         }
                         if pinned {
                             Button {
-                                self.target.pinnedItems.remove(at: index)
+                                self.target.updatePinnedItems(variableStates: variableStates) {
+                                    $0.remove(at: index)
+                                }
                                 var item = item
                                 item.pinnedDate = nil
-                                self.target.notPinnedItems.append(item)
-                                self.target.notPinnedItems.sort(by: >)
+                                self.target.updateNotPinnedItems(variableStates: variableStates) {
+                                    $0.append(item)
+                                    $0.sort(by: >)
+                                }
                             } label: {
                                 Label("固定を解除", systemImage: "pin.slash")
                             }
                         } else {
                             Button {
-                                self.target.notPinnedItems.remove(at: index)
+                                self.target.updateNotPinnedItems(variableStates: variableStates) {
+                                    $0.remove(at: index)
+                                }
                                 var item = item
                                 item.pinnedDate = Date()
-                                self.target.pinnedItems.append(item)
-                                self.target.pinnedItems.sort(by: >)
+                                self.target.updatePinnedItems(variableStates: variableStates) {
+                                    $0.append(item)
+                                    $0.sort(by: >)
+                                }
                             } label: {
                                 Label("ピンで固定する", systemImage: "pin")
                             }
                         }
                         Button(role: .destructive) {
                             if pinned {
-                                self.target.pinnedItems.remove(at: index)
+                                self.target.updatePinnedItems(variableStates: variableStates) {
+                                    $0.remove(at: index)
+                                }
                             } else {
-                                self.target.notPinnedItems.remove(at: index)
+                                self.target.updateNotPinnedItems(variableStates: variableStates) {
+                                    $0.remove(at: index)
+                                }
                             }
                         } label: {
                             Label("削除", systemImage: "trash")
@@ -136,11 +137,15 @@ struct ClipboardHistoryTab: View {
                         listItemView(item, index: index, pinned: true)
                             .swipeActions(edge: .leading) {
                                 Button {
-                                    self.target.pinnedItems.remove(at: index)
+                                    self.target.updatePinnedItems(variableStates: variableStates) {
+                                        $0.remove(at: index)
+                                    }
                                     var item = item
                                     item.pinnedDate = nil
-                                    self.target.notPinnedItems.append(item)
-                                    self.target.notPinnedItems.sort(by: >)
+                                    self.target.updateNotPinnedItems(variableStates: variableStates) {
+                                        $0.append(item)
+                                        $0.sort(by: >)
+                                    }
                                 } label: {
                                     Image(systemName: "pin.slash.fill")
                                 }
@@ -148,7 +153,9 @@ struct ClipboardHistoryTab: View {
                             }
                     }
                     .onDelete { indices in
-                        self.target.pinnedItems.remove(atOffsets: indices)
+                        self.target.updatePinnedItems(variableStates: variableStates) {
+                            $0.remove(atOffsets: indices)
+                        }
                     }
                 }
             }
@@ -158,11 +165,15 @@ struct ClipboardHistoryTab: View {
                     listItemView(item, index: index)
                         .swipeActions(edge: .leading) {
                             Button {
-                                self.target.notPinnedItems.remove(at: index)
+                                self.target.updateNotPinnedItems(variableStates: variableStates) {
+                                    $0.remove(at: index)
+                                }
                                 var item = item
                                 item.pinnedDate = Date()
-                                self.target.pinnedItems.append(item)
-                                self.target.pinnedItems.sort(by: >)
+                                self.target.updatePinnedItems(variableStates: variableStates) {
+                                    $0.append(item)
+                                    $0.sort(by: >)
+                                }
                             } label: {
                                 Image(systemName: "pin.fill")
                             }
@@ -170,7 +181,9 @@ struct ClipboardHistoryTab: View {
                         }
                 }
                 .onDelete { indices in
-                    self.target.notPinnedItems.remove(atOffsets: indices)
+                    self.target.updateNotPinnedItems(variableStates: variableStates) {
+                        $0.remove(atOffsets: indices)
+                    }
                 }
             }
         }
@@ -196,12 +209,12 @@ struct ClipboardHistoryTab: View {
                     listView
                     HStack {
                         if let (text, count) = lastInsertedText, count == variableStates.textChangedCount {
-                            let design = TabDependentDesign(width: 3, height: 7, layout: .flick, orientation: .vertical)
+                            let design = TabDependentDesign(width: 3, height: 7, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .vertical)
                             enterKey(design)
                             undoKey(design, text: text)
                             deleteKey(design)
                         } else {
-                            let design = TabDependentDesign(width: 2, height: 7, layout: .flick, orientation: .vertical)
+                            let design = TabDependentDesign(width: 2, height: 7, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .vertical)
                             enterKey(design)
                             deleteKey(design)
                         }
@@ -212,12 +225,12 @@ struct ClipboardHistoryTab: View {
                     listView
                     VStack {
                         if let (text, count) = lastInsertedText, count == variableStates.textChangedCount {
-                            let design = TabDependentDesign(width: 8, height: 3, layout: .flick, orientation: .horizontal)
+                            let design = TabDependentDesign(width: 8, height: 3, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .horizontal)
                             deleteKey(design)
                             undoKey(design, text: text)
                             enterKey(design)
                         } else {
-                            let design = TabDependentDesign(width: 8, height: 2, layout: .flick, orientation: .horizontal)
+                            let design = TabDependentDesign(width: 8, height: 2, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .horizontal)
                             deleteKey(design)
                             enterKey(design)
                         }
@@ -227,6 +240,25 @@ struct ClipboardHistoryTab: View {
         }
         .font(Design.fonts.resultViewFont(theme: theme))
         .foregroundColor(theme.resultTextColor.color)
+        .onAppear {
+            for item in variableStates.clipboardHistoryManager.items {
+                if item.pinnedDate != nil {
+                    self.target.updatePinnedItems(variableStates: variableStates) {
+                        $0.append(item)
+                    }
+                } else {
+                    self.target.updateNotPinnedItems(variableStates: variableStates) {
+                        $0.append(item)
+                    }
+                }
+            }
+            self.target.updatePinnedItems(variableStates: variableStates) {
+                $0.sort(by: >)
+            }
+            self.target.updateNotPinnedItems(variableStates: variableStates) {
+                $0.sort(by: >)
+            }
+        }
     }
 }
 

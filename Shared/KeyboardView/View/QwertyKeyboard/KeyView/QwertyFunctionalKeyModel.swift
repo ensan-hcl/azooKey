@@ -12,7 +12,7 @@ import SwiftUI
 struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol {
     static var delete = QwertyFunctionalKeyModel(labelType: .image("delete.left"), rowInfo: (normal: 7, functional: 2, space: 0, enter: 0), pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)]))
 
-    let pressActions: [ActionType]
+    private let pressActions: [ActionType]
     var longPressActions: LongpressActionType
     /// 暫定
     let variationsModel = VariationsModel([])
@@ -30,12 +30,16 @@ struct QwertyFunctionalKeyModel: QwertyKeyModelProtocol {
         self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
     }
 
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        self.pressActions
+    }
+
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
         KeyLabel(self.labelType, width: width, textColor: color)
     }
 
-    func feedback() {
-        self.pressActions.first?.feedback()
+    func feedback(variableStates: VariableStates) {
+        self.pressActions.first?.feedback(variableStates: variableStates)
     }
 
 }

@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct KeyboardBarView: View {
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
     @Environment(\.themeEnvironment) private var theme
 
@@ -42,7 +42,7 @@ struct KeyboardBarButton: View {
         case systemImage(String)
     }
     @Environment(\.themeEnvironment) private var theme
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
     private var action: () -> Void
     private let label: LabelType
 
@@ -60,11 +60,11 @@ struct KeyboardBarButton: View {
     }
 
     private var circleSize: CGFloat {
-        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height) * 0.8
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.8
     }
 
     private var iconSize: CGFloat {
-        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height) * 0.6
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.6
     }
 
     var body: some View {

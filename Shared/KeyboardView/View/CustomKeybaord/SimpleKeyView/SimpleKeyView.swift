@@ -11,7 +11,7 @@ import SwiftUI
 
 struct SimpleKeyView: View {
     private let model: any SimpleKeyModelProtocol
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
 
@@ -51,8 +51,8 @@ struct SimpleKeyView: View {
                         TouchDownAndTouchUpGestureView {
                             isPressed = true
                             pressStartDate = Date()
-                            model.feedback()
-                            action.reserveLongPressAction(self.model.longPressActions)
+                            model.feedback(variableStates: variableStates)
+                            action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
                         } touchMovedCallBack: {state in
                             if state.distance > 15 {
                                 isPressed = false
@@ -63,8 +63,8 @@ struct SimpleKeyView: View {
                             isPressed = false
                             action.registerLongPressActionEnd(self.model.longPressActions)
                             if Date().timeIntervalSince(pressStartDate) < 0.4 && state.distance < 30 {
-                                action.registerActions(self.model.pressActions)
-                                self.model.additionalOnPress()
+                                action.registerActions(self.model.pressActions(variableStates: variableStates), variableStates: variableStates)
+                                self.model.additionalOnPress(variableStates: variableStates)
                             }
                         }
                     }

@@ -11,6 +11,7 @@ import SwiftUI
 struct MessageView: View {
     private let data: MessageData
     @Binding private var manager: MessageManager
+    @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.userActionManager) private var action
 
     init(data: MessageData, manager: Binding<MessageManager>) {
@@ -25,7 +26,7 @@ struct MessageView: View {
             HStack {
                 Spacer()
                 Button("詳細") {
-                    self.action.registerAction(.openApp(urlString))
+                    self.action.registerAction(.openApp(urlString), variableStates: variableStates)
                 }
                 Spacer()
                 Divider()
@@ -58,7 +59,7 @@ struct MessageView: View {
             HStack {
                 Spacer()
                 Button {
-                    self.action.registerAction(.openApp("azooKey://"))
+                    self.action.registerAction(.openApp("azooKey://"), variableStates: variableStates)
                 }label: {
                     Text(text).bold()
                 }

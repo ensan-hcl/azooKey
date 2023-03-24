@@ -63,9 +63,10 @@ enum ThemeColor {
 
     enum SystemColor: String, Codable {
         case normalKeyColor
-        case specialKeyColor
+        case qwertyNormalKeyColor
         case highlightedKeyColor
-        case suggestKeyColor
+        case qwertyHighlightedKeyColor
+        case specialKeyColor
         case backgroundColor
 
         var color: Color {
@@ -73,13 +74,15 @@ enum ThemeColor {
             case .backgroundColor:
                 return Design.colors.backGroundColor
             case .normalKeyColor:
-                return Design.colors.normalKeyColor
+                return Design.colors.normalKeyColor(layout: .flick)
+            case .qwertyNormalKeyColor:
+                return Design.colors.normalKeyColor(layout: .qwerty)
             case .specialKeyColor:
                 return Design.colors.specialKeyColor
             case .highlightedKeyColor:
-                return Design.colors.highlightedKeyColor
-            case .suggestKeyColor:
-                return Design.colors.suggestKeyColor
+                return Design.colors.highlightedKeyColor(layout: .flick)
+            case .qwertyHighlightedKeyColor:
+                return Design.colors.highlightedKeyColor(layout: .qwerty)
             }
         }
     }

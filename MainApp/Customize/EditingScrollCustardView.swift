@@ -92,13 +92,10 @@ struct EditingScrollCustardView: CancelableEditor {
                 }
                 BottomSheetView(
                     isOpen: $showPreview,
-                    maxHeight: Design.keyboardScreenHeight + 40,
+                    maxHeight: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation) + 40,
                     minHeight: 0
                 ) {
-                    ZStack(alignment: .top) {
-                        Color(.secondarySystemBackground)
-                        KeyboardPreview(theme: .default, defaultTab: .custard(makeCustard(data: editingItem)))
-                    }
+                    KeyboardPreview(defaultTab: .custard(makeCustard(data: editingItem)))
                 }
             }
         }

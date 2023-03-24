@@ -8,45 +8,18 @@
 
 import SwiftUI
 
-protocol ResultViewItemData {
-    var text: String {get}
-    var inputable: Bool {get}
-    #if DEBUG
-    func getDebugInformation() -> String
-    #endif
-}
-
-final class ResultModelVariableSection: ObservableObject {
-    @Published var results: [ResultData] = []
-    @Published var searchResults: [ResultData] = []
-    @Published var updateResult: Bool = false
-
-    func setResults(_ results: [any ResultViewItemData]) {
-        self.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
-        self.updateResult.toggle()
-    }
-    func setSearchResults(_ results: [any ResultViewItemData]) {
-        self.searchResults = results.indices.map {ResultData(id: $0, candidate: results[$0])}
-    }
-}
-
-struct ResultData: Identifiable {
-    var id: Int
-    var candidate: any ResultViewItemData
-}
-
 struct ResultBar: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
-    @ObservedObject private var model = VariableStates.shared.resultModelVariableSection
+    @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
     private var buttonWidth: CGFloat {
-        Design.keyboardBarHeight() * 0.5
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.5
     }
     private var buttonHeight: CGFloat {
-        Design.keyboardBarHeight() * 0.6
+        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.6
     }
 
     init(isResultViewExpanded: Binding<Bool>) {
@@ -54,24 +27,24 @@ struct ResultBar: View {
     }
 
     var body: some View {
-        if model.results.isEmpty {
+        if variableStates.resultModelVariableSection.results.isEmpty {
             CenterAlignedView {
                 if displayTabBarButton {
                     KeyboardBarButton {
-                        self.action.registerAction(.setTabBar(.toggle))
+                        self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
                     }
                 }
             }
             .background(Color(.sRGB, white: 1, opacity: 0.001))
             .onLongPressGesture {
-                self.action.registerAction(.setTabBar(.toggle))
+                self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
             }
         } else {
             HStack {
                 ScrollView(.horizontal, showsIndicators: false) {
                     ScrollViewReader {scrollViewProxy in
                         LazyHStack(spacing: 10) {
-                            ForEach(model.results, id: \.id) {(data: ResultData) in
+                            ForEach(variableStates.resultModelVariableSection.results, id: \.id) {(data: ResultData) in
                                 if data.candidate.inputable {
                                     Button(data.candidate.text) {
                                         KeyboardFeedback.click()
@@ -88,7 +61,7 @@ struct ResultBar: View {
                                         .underline(true, color: .accentColor)
                                 }
                             }
-                        }.onChange(of: model.updateResult) { _ in
+                        }.onChange(of: variableStates.resultModelVariableSection.updateResult) { _ in
                             scrollViewProxy.scrollTo(0, anchor: .trailing)
                         }
                     }
@@ -111,7 +84,7 @@ struct ResultBar: View {
     }
 
     private func pressed(candidate: any ResultViewItemData) {
-        self.action.notifyComplete(candidate)
+        self.action.notifyComplete(candidate, variableStates: variableStates)
     }
 
     private func expand() {
@@ -120,6 +93,7 @@ struct ResultBar: View {
 }
 
 struct ResultContextMenuView: View {
+    @EnvironmentObject private var variableStates: VariableStates
     private let candidate: any ResultViewItemData
 
     init(candidate: any ResultViewItemData) {
@@ -129,8 +103,8 @@ struct ResultContextMenuView: View {
     var body: some View {
         Group {
             Button(action: {
-                VariableStates.shared.magnifyingText = candidate.text
-                VariableStates.shared.boolStates.isTextMagnifying = true
+                variableStates.magnifyingText = candidate.text
+                variableStates.boolStates.isTextMagnifying = true
             }) {
                 Text("大きな文字で表示する")
                 Image(systemName: "plus.magnifyingglass")

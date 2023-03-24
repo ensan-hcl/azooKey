@@ -37,6 +37,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     @Environment(\.dismiss) private var dismiss
 
     let base: UserMadeTenKeyCustard
+    @StateObject private var variableStates = VariableStates()
     @State private var editingItem: UserMadeTenKeyCustard
     @Binding private var manager: CustardManager
     @State private var showPreview = false
@@ -101,6 +102,10 @@ struct EditingTenkeyCustardView: CancelableEditor {
         return false
     }
 
+    private var interfaceSize: CGSize {
+        .init(width: UIScreen.main.bounds.width, height: Design.keyboardHeight(screenWidth: UIScreen.main.bounds.width, orientation: MainAppDesign.keyboardOrientation))
+    }
+
     var body: some View {
         VStack {
             GeometryReader {_ in
@@ -140,7 +145,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         }
                         Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                     }
-                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout) {view, x, y in
+                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, interfaceSize: interfaceSize, layout: .flick, orientation: MainAppDesign.keyboardOrientation), layout: layout) {view, x, y in
                         if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
                             if !isCovered(at: (x, y)) {
                                 Button {
@@ -285,14 +290,15 @@ struct EditingTenkeyCustardView: CancelableEditor {
                             }
                         }
                     }
+                    .environmentObject(variableStates)
                 }
                 // FIXME: editingItemを更新しても`custard`が変更されない不具合
                 BottomSheetView(
                     isOpen: $showPreview,
-                    maxHeight: Design.keyboardScreenHeight + 40,
+                    maxHeight: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation) + 40,
                     minHeight: 0
                 ) {
-                    KeyboardPreview(theme: .default, defaultTab: .custard(custard))
+                    KeyboardPreview(defaultTab: .custard(custard))
                 }
             }
             .onChange(of: editingItem.rowCount) {_ in
@@ -311,6 +317,9 @@ struct EditingTenkeyCustardView: CancelableEditor {
                     self.dismiss()
                 }
             )
+        }
+        .onAppear {
+            variableStates.setInterfaceSize(orientation: MainAppDesign.keyboardOrientation, screenWidth: SemiStaticStates.shared.screenWidth)
         }
     }
 

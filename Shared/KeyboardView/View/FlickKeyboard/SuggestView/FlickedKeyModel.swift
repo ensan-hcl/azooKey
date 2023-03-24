@@ -39,10 +39,10 @@ struct FlickedKeyModel {
 
     func getSuggestView(size: CGSize, isHidden: Bool, isPointed: Bool = false, theme: ThemeData) -> some View {
         var pointedColor: Color {
-            theme != .default ? .white : .systemGray4
+            theme != .default(layout: .flick) ? .white : .systemGray4
         }
         var unpointedColor: Color {
-            theme != .default ? .white : .systemGray5
+            theme != .default(layout: .flick) ? .white : .systemGray5
         }
 
         let color = isPointed ? pointedColor : unpointedColor
@@ -55,7 +55,7 @@ struct FlickedKeyModel {
     }
 
     func label(width: CGFloat, theme: ThemeData) -> some View {
-        if theme != .default {
+        if theme != .default(layout: .flick) {
             return KeyLabel(self.labelType, width: width, textColor: .black)
         }
         return KeyLabel(self.labelType, width: width)

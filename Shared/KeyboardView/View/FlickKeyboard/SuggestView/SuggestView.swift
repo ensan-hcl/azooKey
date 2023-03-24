@@ -19,13 +19,14 @@ struct FlickSuggestState {
 }
 
 struct FlickSuggestView: View {
+    @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.themeEnvironment) private var theme
-    private let model: SuggestModel
+    private let model: any FlickKeyModelProtocol
     private let suggestType: FlickSuggestState.SuggestType
     private let tabDesign: TabDependentDesign
     private let size: CGSize
 
-    init(model: SuggestModel, tabDesign: TabDependentDesign, size: CGSize, suggestType: FlickSuggestState.SuggestType) {
+    init(model: any FlickKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize, suggestType: FlickSuggestState.SuggestType) {
         self.model = model
         self.tabDesign = tabDesign
         self.size = size
@@ -34,14 +35,14 @@ struct FlickSuggestView: View {
 
     private func neededAppearView(direction: FlickDirection) -> some View {
         if case .flick(direction) = self.suggestType {
-            if let model = self.model.flickModels[direction] {
+            if let model = self.model.flickKeys(variableStates: variableStates)[direction] {
                 return model.getSuggestView(size: size, isHidden: false, isPointed: true, theme: theme)
             } else {
                 return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)
             }
         }
         if case .all = self.suggestType {
-            if let model = self.model.flickModels[direction] {
+            if let model = self.model.flickKeys(variableStates: variableStates)[direction] {
                 return model.getSuggestView(size: size, isHidden: false, theme: theme)
             } else {
                 return FlickedKeyModel.zero.getSuggestView(size: size, isHidden: true, theme: theme)

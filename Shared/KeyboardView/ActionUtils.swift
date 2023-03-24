@@ -87,7 +87,7 @@ extension CodableLongpressActionData {
 }
 
 extension ActionType {
-    func feedback() {
+    func feedback(variableStates: VariableStates) {
         switch self {
         case .input, .paste, .insertMainDisplay:
             KeyboardFeedback.click()
@@ -100,11 +100,11 @@ extension ActionType {
         case .deselectAndUseAsInputting, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
         case let .boolSwitch(compiledExpression, trueAction, falseAction):
-            if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
+            if let condition = variableStates.boolStates.evaluateExpression(compiledExpression) {
                 if condition {
-                    trueAction.first?.feedback()
+                    trueAction.first?.feedback(variableStates: variableStates)
                 } else {
-                    falseAction.first?.feedback()
+                    falseAction.first?.feedback(variableStates: variableStates)
                 }
             }
         }

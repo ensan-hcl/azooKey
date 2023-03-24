@@ -21,7 +21,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
 
     static let shared = FlickChangeKeyboardModel()
 
-    var pressActions: [ActionType] {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
         switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
             return []
@@ -31,8 +31,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
     }
     var longPressActions: LongpressActionType = .none
 
-    let suggestModel = SuggestModel([:], keyType: .changeKeyboard)
-    var flickKeys: [FlickDirection: FlickedKeyModel] {
+    func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         if usePasteButton {
             return [.top: FlickedKeyModel(labelType: .image("doc.on.clipboard"), pressActions: [.paste])]
         }
@@ -52,7 +51,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
         theme.specialKeyFillColor.color
     }
 
-    func feedback() {
+    func feedback(variableStates: VariableStates) {
         KeyboardFeedback.tabOrOtherKey()
     }
 }

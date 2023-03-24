@@ -99,14 +99,14 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
                         }
                     }
                     CenterAlignedView {
-                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                        KeyboardPreview(scale: 0.8, defaultTab: tab)
                             .allowsHitTesting(false)
                             .disabled(true)
                     }
                 } else {
                     Text(labelText)
                     CenterAlignedView {
-                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                        KeyboardPreview(scale: 0.8, defaultTab: tab)
                             .allowsHitTesting(false)
                             .disabled(true)
                     }
@@ -122,7 +122,7 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
                 VStack {
                     Text(labelText)
                     CenterAlignedView {
-                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                        KeyboardPreview(scale: 0.8, defaultTab: tab)
                             .allowsHitTesting(false)
                             .disabled(true)
                     }

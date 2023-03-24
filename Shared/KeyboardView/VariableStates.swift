@@ -13,19 +13,14 @@ import SwiftUI
 
 /// 実行中変更され、かつViewが変更を検知できるべき値。
 final class VariableStates: ObservableObject {
-    static let shared = VariableStates()
-    private(set) var inputStyle: InputStyle = .direct
-    private(set) var tabManager = TabManager()
-    private(set) var clipboardHistoryManager = ClipboardHistoryManager()
-
-    private init() {}
-
-    @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
-    @Published var keyboardOrientation: KeyboardOrientation = .vertical
-    @Published private(set) var keyboardLayout: KeyboardLayout = .flick
-
-    /// `ResultModel`の変数
-    let resultModelVariableSection = ResultModelVariableSection()
+    init(interfaceWidth: CGFloat? = nil, orientation: KeyboardOrientation? = nil) {
+        if let interfaceWidth {
+            self.setInterfaceSize(orientation: orientation ?? .vertical, screenWidth: interfaceWidth)
+        } else if let orientation {
+            // 小さめの値を適当に入れる
+            self.setInterfaceSize(orientation: orientation, screenWidth: 200)
+        }
+    }
 
     struct BoolStates: CustardExpressionEvaluatorContext {
         func getValue(for key: String) -> ExpressionValue? {
@@ -48,7 +43,7 @@ final class VariableStates: ObservableObject {
         func evaluateExpression(_ compiledExpression: CompiledExpression) -> Bool? {
             debug(self.custardStates)
             do {
-                let condition = try CustardExpressionEvaluator(context: VariableStates.shared.boolStates).evaluate(compiledExpression: compiledExpression)
+                let condition = try CustardExpressionEvaluator(context: self).evaluate(compiledExpression: compiledExpression)
                 if case let .bool(value) = condition {
                     return value
                 }
@@ -94,6 +89,16 @@ final class VariableStates: ObservableObject {
             }
         }
     }
+    private(set) var inputStyle: InputStyle = .direct
+    private(set) var tabManager = TabManager()
+    private(set) var clipboardHistoryManager = ClipboardHistoryManager()
+
+    @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
+    @Published private(set) var keyboardOrientation: KeyboardOrientation = .vertical
+    @Published private(set) var keyboardLayout: KeyboardLayout = .flick
+
+    /// `ResultModel`の変数
+    @Published var resultModelVariableSection = ResultModelVariableSection()
 
     // Bool値の変数はここにまとめる
     @Published var boolStates = BoolStates()
@@ -102,32 +107,32 @@ final class VariableStates: ObservableObject {
     @Published var interfaceSize: CGSize = .zero
     @Published var interfacePosition: CGPoint = .zero
 
-    @Published var enterKeyType: UIReturnKeyType = .default
-    @Published var enterKeyState: EnterKeyState = .return(.default)
+    /// 外部では利用しないが、`enterKeyState`の更新時に必要になる
+    private var enterKeyType: UIReturnKeyType = .default
+    @Published private(set) var enterKeyState: EnterKeyState = .return(.default)
 
     @Published var barState: BarState = .none
 
     @Published var magnifyingText = ""
 
-    @Published var keyboardType: UIKeyboardType = .default
-
     @Published var upsideComponent: UpsideComponent?
 
     // MARK: refresh用
-    @Published var refreshing = true
     @Published var lastTabCharacterPreferenceUpdate = Date()
 
+    /// 片手モード編集状態
     @Published private(set) var resizingState: ResizingState = .fullwidth
 
     /// 周囲のテキストが変化した場合にインクリメントする値。変化の検出に利用する。
     /// - note: この値がどれだけ変化するかは実装によるので、変化量は意味をなさない。
     @Published var textChangedCount: Int = 0
 
-    var moveCursorBarState = BetaMoveCursorBarState()
+    @Published var moveCursorBarState = BetaMoveCursorBarState()
 
     @Published private(set) var leftSideText: String = ""
     @Published private(set) var centerText: String = ""
     @Published private(set) var rightSideText: String = ""
+
     func setSurroundingText(leftSide: String, center: String, rightSide: String) {
         self.leftSideText = leftSide
         self.centerText = center
@@ -138,11 +143,11 @@ final class VariableStates: ObservableObject {
     func setResizingMode(_ state: ResizingState) {
         switch state {
         case .fullwidth:
-            interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth) + 2)
+            interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: self.keyboardOrientation) + 2)
         case .onehanded, .resizing:
             let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation)
             // キーボードスクリーンのサイズを超えないように設定
-            interfaceSize = CGSize(width: min(item.size.width, SemiStaticStates.shared.screenWidth), height: min(item.size.height, Design.keyboardScreenHeight))
+            interfaceSize = CGSize(width: min(item.size.width, SemiStaticStates.shared.screenWidth), height: min(item.size.height, Design.keyboardScreenHeight(upsideComponent: self.upsideComponent, orientation: self.keyboardOrientation)))
             interfacePosition = item.position
         }
         self.resizingState = state
@@ -154,9 +159,8 @@ final class VariableStates: ObservableObject {
     }
 
     func initialize() {
-        self.tabManager.initialize()
+        self.tabManager.initialize(variableStates: self)
         self.moveCursorBarState.clear()
-        self.refreshView()
     }
 
     func closeKeyboard() {
@@ -166,10 +170,6 @@ final class VariableStates: ObservableObject {
         self.clipboardHistoryManager.checkUpdate()
         // 保存処理を行う
         self.clipboardHistoryManager.save()
-    }
-
-    func refreshView() {
-        refreshing.toggle()
     }
 
     func setKeyboardType(_ type: UIKeyboardType?) {
@@ -218,15 +218,13 @@ final class VariableStates: ObservableObject {
 
     func setTab(_ tab: Tab, temporary: Bool = false) {
         if temporary {
-            self.tabManager.setTemporalTab(tab)
+            self.tabManager.setTemporalTab(tab, variableStates: self)
         } else {
-            self.tabManager.moveTab(to: tab)
+            self.tabManager.moveTab(to: tab, variableStates: self)
         }
-        self.refreshView()
     }
 
     func setUIReturnKeyType(type: UIReturnKeyType) {
-        self.enterKeyType = type
         if case let .return(prev) = self.enterKeyState, prev != type {
             self.setEnterKeyState(.return)
         }
@@ -250,16 +248,26 @@ final class VariableStates: ObservableObject {
         self.inputStyle = style
     }
 
-    /// workarounds
-    /// * 1回目に値を保存してしまう
-    /// * if bool {} else{}にしてboolをvariableSectionに持たせてtoggleする。←これを採用した。
-    func setOrientation(_ orientation: KeyboardOrientation) {
-        if self.keyboardOrientation == orientation {
-            self.refreshView()
-            return
+    func setInterfaceSize(orientation: KeyboardOrientation, screenWidth: CGFloat) {
+        let height = Design.keyboardHeight(screenWidth: screenWidth, orientation: orientation)
+        if self.keyboardOrientation != orientation {
+            self.keyboardOrientation = orientation
+            self.updateResizingState()
         }
-        self.keyboardOrientation = orientation
-        self.updateResizingState()
-    }
+        let layout = self.keyboardLayout
 
+        // 片手モードの処理
+        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
+            value.setIfFirst(layout: layout, orientation: orientation, size: .init(width: screenWidth, height: height), position: .zero)
+        }
+        switch self.resizingState {
+        case .fullwidth:
+            self.interfaceSize = CGSize(width: screenWidth, height: height)
+        case .onehanded, .resizing:
+            let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: layout, orientation: orientation)
+            // 安全のため、指示されたwidth, heightを超える値を許可しない。
+            self.interfaceSize = CGSize(width: min(screenWidth, item.size.width), height: min(height, item.size.height))
+            self.interfacePosition = item.position
+        }
+    }
 }

@@ -12,18 +12,19 @@ import SwiftUI
 // symbolタブ、123タブで表示される切り替えボタン
 struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
     let languages: (KeyboardLanguage, KeyboardLanguage)
-    var currentTabLanguage: KeyboardLanguage? {
-        VariableStates.shared.tabManager.tab.existential.language
+    func currentTabLanguage(variableStates: VariableStates) -> KeyboardLanguage? {
+        variableStates.tabManager.tab.existential.language
     }
 
-    var pressActions: [ActionType] {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
         let target: KeyboardLanguage
-        if languages.0 == currentTabLanguage {
+        let current = currentTabLanguage(variableStates: variableStates)
+        if languages.0 == current {
             target = languages.1
-        } else if languages.1 == currentTabLanguage {
+        } else if languages.1 == current {
             target = languages.0
         } else if SemiStaticStates.shared.needsInputModeSwitchKey {
-            target = VariableStates.shared.keyboardLanguage
+            target = variableStates.keyboardLanguage
         } else {
             @KeyboardSetting(.preferredLanguage) var preferredLanguage: PreferredLanguage
             target = preferredLanguage.first
@@ -53,19 +54,20 @@ struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
     }
 
     func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel {
-        if languages.0 == currentTabLanguage {
+        let current = currentTabLanguage(variableStates: states)
+        if languages.0 == current {
             return KeyLabel(.selectable(languages.0.symbol, languages.1.symbol), width: width, textColor: color)
-        } else if languages.1 == currentTabLanguage {
+        } else if languages.1 == current {
             return KeyLabel(.selectable(languages.1.symbol, languages.0.symbol), width: width, textColor: color)
         } else if SemiStaticStates.shared.needsInputModeSwitchKey {
-            return KeyLabel(.text(VariableStates.shared.keyboardLanguage.symbol), width: width, textColor: color)
+            return KeyLabel(.text(states.keyboardLanguage.symbol), width: width, textColor: color)
         } else {
             @KeyboardSetting(.preferredLanguage) var preferredLanguage
             return KeyLabel(.text(preferredLanguage.first.symbol), width: width, textColor: color)
         }
     }
 
-    func feedback() {
+    func feedback(variableStates: VariableStates) {
         KeyboardFeedback.tabOrOtherKey()
     }
 }

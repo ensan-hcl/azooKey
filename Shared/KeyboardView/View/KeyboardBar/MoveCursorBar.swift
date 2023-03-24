@@ -9,27 +9,22 @@
 import Foundation
 import SwiftUI
 
-class BetaMoveCursorBarState: ObservableObject {
-    @Published private(set) var displayLeftIndex = 0
-    @Published private(set) var displayRightIndex = 0
+struct BetaMoveCursorBarState {
+    private(set) var displayLeftIndex = 0
+    private(set) var displayRightIndex = 0
+    fileprivate var line: [String] = []
+
+    private var itemCount: Int = 0
+    mutating func updateItemCount(viewWidth: CGFloat, itemWidth: CGFloat) {
+        self.itemCount = (Int(viewWidth / itemWidth) >> 1) << 1
+    }
+
     fileprivate var centerIndex: Int {
         displayLeftIndex + itemCount / 2
     }
 
-    fileprivate var itemCount: Int {
-        // 偶数にする
-        return (Int(self.viewWidth / self.itemWidth) >> 1) << 1
-    }
-    fileprivate var itemWidth: CGFloat {
-        Design.fonts.resultViewFontSize * 1.3
-    }
-    fileprivate var viewWidth: CGFloat {
-        VariableStates.shared.interfaceSize.width * 0.85
-    }
-    @Published fileprivate var line: [String] = []
-
-    func updateLine(leftText: String, rightText: String) {
-        debug("updateLine", leftText, rightText, viewWidth, itemWidth, itemCount, line)
+    mutating func updateLine(leftText: String, rightText: String) {
+        debug("updateLine", leftText, rightText, itemCount, line)
         var left = leftText.map {String($0)}
         if left.first == "\n" {
             left.removeFirst()
@@ -46,17 +41,13 @@ class BetaMoveCursorBarState: ObservableObject {
         return line[index]
     }
 
-    fileprivate func move(_ count: Int, actionManager: some UserActionManager) {
+    mutating fileprivate func move(_ count: Int, actionManager: some UserActionManager, variableStates: VariableStates) {
         displayLeftIndex += count
         displayRightIndex += count
-        actionManager.registerAction(.moveCursor(count))
+        actionManager.registerAction(.moveCursor(count), variableStates: variableStates)
     }
 
-    fileprivate func originalPosition(index: Int) -> CGFloat {
-        CGFloat(index) * self.itemWidth
-    }
-
-    fileprivate func tap(at index: Int, actionManager: some UserActionManager) {
+    mutating fileprivate func tap(at index: Int, actionManager: some UserActionManager, variableStates: VariableStates) {
         let diff: Int
         if index < 0 {
             diff = -1
@@ -65,10 +56,10 @@ class BetaMoveCursorBarState: ObservableObject {
         } else {
             diff = index - centerIndex
         }
-        move(diff, actionManager: actionManager)
+        move(diff, actionManager: actionManager, variableStates: variableStates)
     }
 
-    func clear() {
+    mutating func clear() {
         self.displayLeftIndex = 0
         self.displayRightIndex = 0
         self.line = []
@@ -76,7 +67,7 @@ class BetaMoveCursorBarState: ObservableObject {
 }
 
 struct MoveCursorBarBeta: View {
-    @ObservedObject private var state = VariableStates.shared.moveCursorBarState
+    @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
 
@@ -86,6 +77,13 @@ struct MoveCursorBarBeta: View {
         case moving(l1: CGPoint, l2: CGPoint, l3: CGPoint, count: Double)
     }
     @State private var swipeGestureState: SwipeGestureState = .inactive
+
+    fileprivate var itemWidth: CGFloat {
+        Design.fonts.resultViewFontSize * 1.3
+    }
+    fileprivate var viewWidth: CGFloat {
+        variableStates.interfaceSize.width * 0.85
+    }
 
     var swipeGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
@@ -127,11 +125,11 @@ struct MoveCursorBarBeta: View {
                     }
                     withAnimation(.linear(duration: 0.05)) {
                         if count >= 15 {
-                            state.move(1, actionManager: self.action)
+                            variableStates.moveCursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
                             count -= 15
                         }
                         if count <= -15 {
-                            state.move(-1, actionManager: self.action)
+                            variableStates.moveCursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
                             count += 15
                         }
                         swipeGestureState = .moving(l1: value.location, l2: l1, l3: l2, count: count)
@@ -146,18 +144,17 @@ struct MoveCursorBarBeta: View {
                     // offsetを計算する
                     // タップした位置を理解する
                     // 左端がx=0の座標系で考える。
-                    let center_x = VariableStates.shared.interfacePosition.x + SemiStaticStates.shared.screenWidth / 2
+                    let center_x = variableStates.interfacePosition.x + SemiStaticStates.shared.screenWidth / 2
                     let x = value.startLocation.x
-                    debug(center_x, x, VariableStates.shared.interfacePosition, VariableStates.shared.interfaceSize)
                     // あpい|う え
                     // pの位置をタップした場合、このdiffは-1*itemWidthに近い値になる
                     let diff_from_center = x - center_x
-                    let offset_double = diff_from_center / state.itemWidth
+                    let offset_double = diff_from_center / itemWidth
                     // center indexからのoffsetになる
                     let offset = Int(offset_double.rounded(.toNearestOrAwayFromZero))
-                    let index = state.centerIndex + offset
+                    let index = variableStates.moveCursorBarState.centerIndex + offset
                     withAnimation(.easeOut(duration: 0.1)) {
-                        state.tap(at: index, actionManager: self.action)
+                        variableStates.moveCursorBarState.tap(at: index, actionManager: self.action, variableStates: variableStates)
                     }
                 case .moving:
                     // 位置を揃える
@@ -184,8 +181,8 @@ struct MoveCursorBarBeta: View {
     }
 
     private var background: some View {
-        RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: state.viewWidth / 2)
-            .frame(height: Design.keyboardBarHeight())
+        RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: viewWidth / 2)
+            // TODO: ここからframeを消して問題なかったかチェックする
             .cornerRadius(20)
             .gesture(swipeGesture)
     }
@@ -197,16 +194,16 @@ struct MoveCursorBarBeta: View {
     private var textView: some View {
         HStack(spacing: .zero) {
             // 多めに描画しておく
-            ForEach(state.displayLeftIndex - 4 ..< state.displayRightIndex + 4, id: \.self) { i in
-                Text(verbatim: state.getItem(at: i))
+            ForEach(variableStates.moveCursorBarState.displayLeftIndex - 4 ..< variableStates.moveCursorBarState.displayRightIndex + 4, id: \.self) { i in
+                Text(verbatim: variableStates.moveCursorBarState.getItem(at: i))
                     .font(.system(size: Design.fonts.resultViewFontSize).bold())
-                    .frame(width: state.itemWidth, height: Design.keyboardBarHeight())
+                    .frame(width: itemWidth)
             }
         }
         .allowsHitTesting(false)
         .foregroundColor(theme.resultTextColor.color.opacity(0.4))
         .drawingGroup()
-        .frame(width: state.viewWidth)
+        .frame(width: viewWidth)
         .clipped()
     }
 
@@ -221,7 +218,7 @@ struct MoveCursorBarBeta: View {
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]))
+                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]), variableStates: variableStates)
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
                                 debug("touch failed")
@@ -230,7 +227,7 @@ struct MoveCursorBarBeta: View {
                             self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
-                                    state.move(-1, actionManager: self.action)
+                                    variableStates.moveCursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
                                 }
                             }
                         }
@@ -247,7 +244,7 @@ struct MoveCursorBarBeta: View {
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]))
+                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]), variableStates: variableStates)
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
                                 debug("touch failed")
@@ -256,7 +253,7 @@ struct MoveCursorBarBeta: View {
                             self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(1)]))
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
-                                    state.move(1, actionManager: self.action)
+                                    variableStates.moveCursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
                                 }
                             }
                         }
@@ -268,7 +265,9 @@ struct MoveCursorBarBeta: View {
     var body: some View {
         background
             .overlay(foregroundButtons)
-            .frame(height: Design.keyboardBarHeight())
+            .onAppear {
+                variableStates.moveCursorBarState.updateItemCount(viewWidth: viewWidth, itemWidth: itemWidth)
+            }
     }
 }
 
@@ -278,6 +277,7 @@ private enum MoveCursorBarGestureState {
 }
 
 struct MoveCursorBar: View {
+    @EnvironmentObject private var variableStates: VariableStates
     @State private var gestureState: MoveCursorBarGestureState = .inactive
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
@@ -296,10 +296,10 @@ struct MoveCursorBar: View {
                     let newCount = count + Int(dx / abs(dx))
                     if newCount > 1 {
                         self.gestureState = .moving(value.location, 0)
-                        self.action.registerAction(.moveCursor(1))
+                        self.action.registerAction(.moveCursor(1), variableStates: variableStates)
                     } else if newCount < -1 {
                         self.gestureState = .moving(value.location, 0)
-                        self.action.registerAction(.moveCursor(-1))
+                        self.action.registerAction(.moveCursor(-1), variableStates: variableStates)
                     } else {
                         self.gestureState = .moving(value.location, newCount)
                     }
@@ -337,13 +337,12 @@ struct MoveCursorBar: View {
         } else {
             Group {
                 RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: 200)
-                    .frame(height: Design.keyboardBarHeight())
                     .cornerRadius(20)
                     .gesture(gesture)
                     .overlay(HStack {
                         Spacer()
                         Button(action: {
-                            self.action.registerAction(.moveCursor(-1))
+                            self.action.registerAction(.moveCursor(-1), variableStates: variableStates)
                         }, label: {
                             Image(systemName: "chevron.left.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                                 .padding()
@@ -352,14 +351,14 @@ struct MoveCursorBar: View {
                         Image(systemName: "circle.fill").font(.system(size: 22, weight: symbolsFontWeight, design: .default))
                         Spacer()
                         Button(action: {
-                            self.action.registerAction(.moveCursor(1))
+                            self.action.registerAction(.moveCursor(1), variableStates: variableStates)
                         }, label: {
                             Image(systemName: "chevron.right.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
                                 .padding()
                         })
                         Spacer()
                     }.foregroundColor(symbolsColor))
-            }.frame(height: Design.keyboardBarHeight())
+            }
         }
     }
 }

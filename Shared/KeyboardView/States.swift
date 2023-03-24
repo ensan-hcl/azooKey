@@ -8,7 +8,7 @@
 
 import enum UIKit.UIReturnKeyType
 
-enum KeyboardLayout: String, CaseIterable {
+enum KeyboardLayout: String, CaseIterable, Equatable {
     /// フリック入力式のレイアウトで表示するスタイル
     case flick = "flick"
     /// qwerty入力式のレイアウトで表示するスタイル
