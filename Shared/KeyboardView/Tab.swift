@@ -34,6 +34,10 @@ enum Tab: Equatable {
             case (.flick_hira, .flick_hira), (.flick_abc, .flick_abc), (.flick_numbersymbols, .flick_numbersymbols), (.qwerty_hira, .qwerty_hira), (.qwerty_abc, .qwerty_abc), (.qwerty_number, .qwerty_number), (.qwerty_symbols, .qwerty_symbols): return true
             case (.custard(let l), .custard(let r)):
                 return l.identifier == r.identifier
+                    && l.input_style == r.input_style
+                    && l.language == r.language
+                    && l.metadata == r.metadata
+                    && l.interface == r.interface
             default: return false
             }
         }
