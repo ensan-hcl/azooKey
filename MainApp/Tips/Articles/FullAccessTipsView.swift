@@ -18,7 +18,10 @@ struct FullAccessTipsView: View {
                 Text("以下は、フルアクセスをオンにすることで利用できる設定項目です。フルアクセスを必要とする機能は、すべてデフォルトで無効になっているため、フルアクセスを許可しただけでキーボードの振る舞いが変わることはありません。")
                 Text("また、フルアクセスをオンにしたあとでも、いつでもフルアクセスをオフにすることができます。")
             }
-            BoolSettingView(.enableKeyHaptics)
+            // デバイスが触覚フィードバックをサポートしている場合のみ表示する
+            if SemiStaticStates.shared.hapticsAvailable {
+                BoolSettingView(.enableKeyHaptics)
+            }
             BoolSettingView(.enablePasteButton)
             BoolSettingView(.enableClipboardHistoryManagerTab)
 

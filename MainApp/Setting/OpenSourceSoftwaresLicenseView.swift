@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct OpenSourceSoftWaresLicenseView: View {
+struct OpenSourceSoftwaresLicenseView: View {
     private let license_mecab = """
     MeCab is copyrighted free software by Taku Kudo <taku@chasen.org> and
     Nippon Telegraph and Telephone Corporation, and is released under

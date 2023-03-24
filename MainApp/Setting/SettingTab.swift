@@ -28,15 +28,12 @@ struct SettingTabView: View {
                     Section(header: Text("キーボードの種類")) {
                         NavigationLink("キーボードの種類を設定する", destination: KeyboardLayoutTypeDetailsView())
                     }
-                    Section(header: Text("言語")) {
-                        PreferredLanguageSettingView()
-                    }
-                    if self.canFlickLayout(appStates.japaneseLayout) {
-                        Section(header: Text("操作性")) {
-                            FlickSensitivitySettingView(.flickSensitivity)
-                        }
-                    }
                 }
+                Section(header: Text("ライブ変換")) {
+                    BoolSettingView(.liveConversion)
+                    NavigationLink("詳しい設定", destination: LiveConversionSettingView())
+                }
+
                 Group {
                     Section(header: Text("カスタムキー")) {
                         CustomKeysSettingView()
@@ -69,13 +66,13 @@ struct SettingTabView: View {
                         FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)
                         FontSizeSettingView(.resultViewFontSize, .result, availableValueRange: 12...24)
                     }
+                    if self.canFlickLayout(appStates.japaneseLayout) {
+                        Section(header: Text("操作性")) {
+                            FlickSensitivitySettingView(.flickSensitivity)
+                        }
+                    }
                 }
                 Group {
-                    Section(header: Text("ライブ変換")) {
-                        BoolSettingView(.liveConversion)
-                        NavigationLink("詳しい設定", destination: LiveConversionSettingView())
-                    }
-
                     Section(header: Text("変換")) {
                         BoolSettingView(.englishCandidate)
                         BoolSettingView(.halfKanaCandidate)
@@ -85,6 +82,11 @@ struct SettingTabView: View {
                         MarkedTextSettingView(.markedTextSetting)
                         NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                     }
+
+                    Section(header: Text("言語")) {
+                        PreferredLanguageSettingView()
+                    }
+
                     Section(header: Text("ユーザ辞書")) {
                         BoolSettingView(.useOSUserDict)
                         NavigationLink("azooKeyユーザ辞書", destination: AzooKeyUserDictionaryView())
@@ -103,16 +105,18 @@ struct SettingTabView: View {
                         NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
                     }
                 }
-                Section(header: Text("このアプリについて")) {
+                Section(header: Text("オープンソースソフトウェア")) {
                     Text("azooKeyはオープンソースソフトウェアであり、GitHubでソースコードを公開しています。")
                     FallbackLink("View azooKey on GitHub", destination: URL(string: "https://github.com/ensan-hcl/azooKey")!)
+                    NavigationLink("Acknowledgements", destination: OpenSourceSoftwaresLicenseView())
+                }
+                Section(header: Text("このアプリについて")) {
                     NavigationLink("お問い合わせ", destination: ContactView())
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
                         .foregroundColor(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
                         .foregroundColor(.primary)
                     NavigationLink("更新履歴", destination: UpdateInformationView())
-                    NavigationLink("オープンソースソフトウェア", destination: OpenSourceSoftWaresLicenseView())
                     HStack {
                         Text("URL Scheme")
                         Spacer()
