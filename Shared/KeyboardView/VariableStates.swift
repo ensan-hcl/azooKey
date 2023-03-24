@@ -21,16 +21,6 @@ final class VariableStates: ObservableObject {
             self.setInterfaceSize(orientation: orientation, screenWidth: 200)
         }
     }
-    private(set) var inputStyle: InputStyle = .direct
-    private(set) var tabManager = TabManager()
-    private(set) var clipboardHistoryManager = ClipboardHistoryManager()
-
-    @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
-    @Published var keyboardOrientation: KeyboardOrientation = .vertical
-    @Published private(set) var keyboardLayout: KeyboardLayout = .flick
-
-    /// `ResultModel`の変数
-    @Published var resultModelVariableSection = ResultModelVariableSection()
 
     struct BoolStates: CustardExpressionEvaluatorContext {
         func getValue(for key: String) -> ExpressionValue? {
@@ -99,6 +89,16 @@ final class VariableStates: ObservableObject {
             }
         }
     }
+    private(set) var inputStyle: InputStyle = .direct
+    private(set) var tabManager = TabManager()
+    private(set) var clipboardHistoryManager = ClipboardHistoryManager()
+
+    @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
+    @Published private(set) var keyboardOrientation: KeyboardOrientation = .vertical
+    @Published private(set) var keyboardLayout: KeyboardLayout = .flick
+
+    /// `ResultModel`の変数
+    @Published var resultModelVariableSection = ResultModelVariableSection()
 
     // Bool値の変数はここにまとめる
     @Published var boolStates = BoolStates()
@@ -107,21 +107,20 @@ final class VariableStates: ObservableObject {
     @Published var interfaceSize: CGSize = .zero
     @Published var interfacePosition: CGPoint = .zero
 
-    @Published var enterKeyType: UIReturnKeyType = .default
-    @Published var enterKeyState: EnterKeyState = .return(.default)
+    /// 外部では利用しないが、`enterKeyState`の更新時に必要になる
+    private var enterKeyType: UIReturnKeyType = .default
+    @Published private(set) var enterKeyState: EnterKeyState = .return(.default)
 
     @Published var barState: BarState = .none
 
     @Published var magnifyingText = ""
 
-    @Published var keyboardType: UIKeyboardType = .default
-
     @Published var upsideComponent: UpsideComponent?
 
     // MARK: refresh用
-    @Published var refreshing = true
     @Published var lastTabCharacterPreferenceUpdate = Date()
 
+    /// 片手モード編集状態
     @Published private(set) var resizingState: ResizingState = .fullwidth
 
     /// 周囲のテキストが変化した場合にインクリメントする値。変化の検出に利用する。
@@ -133,6 +132,7 @@ final class VariableStates: ObservableObject {
     @Published private(set) var leftSideText: String = ""
     @Published private(set) var centerText: String = ""
     @Published private(set) var rightSideText: String = ""
+
     func setSurroundingText(leftSide: String, center: String, rightSide: String) {
         self.leftSideText = leftSide
         self.centerText = center
@@ -161,7 +161,6 @@ final class VariableStates: ObservableObject {
     func initialize() {
         self.tabManager.initialize(variableStates: self)
         self.moveCursorBarState.clear()
-        self.refreshView()
     }
 
     func closeKeyboard() {
@@ -171,10 +170,6 @@ final class VariableStates: ObservableObject {
         self.clipboardHistoryManager.checkUpdate()
         // 保存処理を行う
         self.clipboardHistoryManager.save()
-    }
-
-    func refreshView() {
-        refreshing.toggle()
     }
 
     func setKeyboardType(_ type: UIKeyboardType?) {
@@ -227,11 +222,9 @@ final class VariableStates: ObservableObject {
         } else {
             self.tabManager.moveTab(to: tab, variableStates: self)
         }
-        self.refreshView()
     }
 
     func setUIReturnKeyType(type: UIReturnKeyType) {
-        self.enterKeyType = type
         if case let .return(prev) = self.enterKeyState, prev != type {
             self.setEnterKeyState(.return)
         }
@@ -257,9 +250,7 @@ final class VariableStates: ObservableObject {
 
     func setInterfaceSize(orientation: KeyboardOrientation, screenWidth: CGFloat) {
         let height = Design.keyboardHeight(screenWidth: screenWidth, orientation: orientation)
-        if self.keyboardOrientation == orientation {
-            self.refreshView()
-        } else {
+        if self.keyboardOrientation != orientation {
             self.keyboardOrientation = orientation
             self.updateResizingState()
         }

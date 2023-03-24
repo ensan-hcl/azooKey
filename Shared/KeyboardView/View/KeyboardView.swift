@@ -55,11 +55,7 @@ struct KeyboardView: View {
                         KeyboardBarView(isResultViewExpanded: $isResultViewExpanded)
                             .frame(height: Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation))
                             .padding(.vertical, 6)
-                        if variableStates.refreshing {
-                            keyboardView(tab: variableStates.tabManager.tab.existential)
-                        } else {
-                            keyboardView(tab: variableStates.tabManager.tab.existential)
-                        }
+                        keyboardView(tab: variableStates.tabManager.tab.existential)
                     }
                 }
             }
