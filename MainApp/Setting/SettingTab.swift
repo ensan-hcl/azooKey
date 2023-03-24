@@ -103,16 +103,18 @@ struct SettingTabView: View {
                         NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
                     }
                 }
-                Section(header: Text("このアプリについて")) {
+                Section(header: Text("オープンソースソフトウェア")) {
                     Text("azooKeyはオープンソースソフトウェアであり、GitHubでソースコードを公開しています。")
                     FallbackLink("View azooKey on GitHub", destination: URL(string: "https://github.com/ensan-hcl/azooKey")!)
+                    NavigationLink("Acknowledgements", destination: OpenSourceSoftwaresLicenseView())
+                }
+                Section(header: Text("このアプリについて")) {
                     NavigationLink("お問い合わせ", destination: ContactView())
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
                         .foregroundColor(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
                         .foregroundColor(.primary)
                     NavigationLink("更新履歴", destination: UpdateInformationView())
-                    NavigationLink("オープンソースソフトウェア", destination: OpenSourceSoftWaresLicenseView())
                     HStack {
                         Text("URL Scheme")
                         Spacer()
