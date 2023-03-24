@@ -121,7 +121,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         HStack {
                             Text("縦方向キー数")
                             Spacer()
-                            TextField("縦方向キー数", text: $editingItem.columnCount)
+                            IntegerTextField("縦方向キー数", text: $editingItem.columnCount, range: 1 ... .max)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
@@ -129,7 +129,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         HStack {
                             Text("横方向キー数")
                             Spacer()
-                            TextField("横方向キー数", text: $editingItem.rowCount)
+                            IntegerTextField("横方向キー数", text: $editingItem.rowCount, range: 1 ... .max)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
