@@ -438,14 +438,14 @@ struct CustardInterfaceKeyEditor: View {
     @ViewBuilder private var sizePicker: some View {
         HStack {
             Text("縦")
-            TextField("縦", text: $height.converted(intStringConverter))
+            IntegerTextField("縦", text: $height.converted(intStringConverter), range: 1 ... .max)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .submitLabel(.done)
         }
         HStack {
             Text("横")
-            TextField("横", text: $width.converted(intStringConverter))
+            IntegerTextField("横", text: $width.converted(intStringConverter), range: 1 ... .max)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .submitLabel(.done)

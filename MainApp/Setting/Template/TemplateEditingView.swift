@@ -206,7 +206,7 @@ struct RandomTemplateLiteralSettingView: View {
             case .int:
                 VStack {
                     HStack {
-                        TextField("左端の値", text: $intStringRange.left)
+                        IntegerTextField("左端の値", text: $intStringRange.left)
                             .textFieldStyle(.roundedBorder)
                             .keyboardType(.numberPad)
                             .submitLabel(.done)
@@ -219,7 +219,7 @@ struct RandomTemplateLiteralSettingView: View {
                 }
                 VStack {
                     HStack {
-                        TextField("右端の値", text: $intStringRange.right)
+                        IntegerTextField("右端の値", text: $intStringRange.right)
                             .textFieldStyle(.roundedBorder)
                             .keyboardType(.numberPad)
                             .submitLabel(.done)

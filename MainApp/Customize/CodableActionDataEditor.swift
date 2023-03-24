@@ -190,7 +190,7 @@ private struct CodableActionEditor: View {
         case let .input(value):
             ActionEditTextField("入力する文字", action: $action) {value} convert: {.input($0)}
         case let .delete(count):
-            ActionEditTextField("削除する文字数", action: $action) {"\(count)"} convert: {value in
+            ActionEditIntegerTextField("削除する文字数", action: $action) {"\(count)"} convert: {value in
                 if let count = Int(value) {
                     return .delete(count)
                 }
@@ -198,7 +198,7 @@ private struct CodableActionEditor: View {
             }
             Text("負の値を指定すると右側の文字を削除します")
         case let .moveCursor(count):
-            ActionEditTextField("移動する文字数", action: $action) {"\(count)"} convert: {value in
+            ActionEditIntegerTextField("移動する文字数", action: $action) {"\(count)"} convert: {value in
                 if let count = Int(value) {
                     return .moveCursor(count)
                 }
@@ -246,6 +246,36 @@ private struct ActionEditTextField: View {
                     action.data = data
                 }
             }
+            .textFieldStyle(.roundedBorder)
+            .submitLabel(.done)
+    }
+}
+
+private struct ActionEditIntegerTextField: View {
+    private let title: LocalizedStringKey
+    private let range: ClosedRange<Int>
+    @Binding private var action: EditingCodableActionData
+    private let convert: (String) -> CodableActionData?
+    init(_ title: LocalizedStringKey, action: Binding<EditingCodableActionData>, range: ClosedRange<Int> = .min ... .max, initialValue: () -> String?,  convert: @escaping (String) -> CodableActionData?) {
+        self.title = title
+        self.range = range
+        self.convert = convert
+        self._action = action
+        if let initialValue = initialValue() {
+            self._value = State(initialValue: initialValue)
+        }
+    }
+
+    @State private var value = ""
+
+    var body: some View {
+        IntegerTextField(title, text: $value, range: range)
+            .onChange(of: value) {value in
+                if let data = convert(value) {
+                    action.data = data
+                }
+            }
+            .keyboardType(.numberPad)
             .textFieldStyle(.roundedBorder)
             .submitLabel(.done)
     }
