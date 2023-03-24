@@ -71,6 +71,7 @@ struct TabBarItem: Codable {
 
 struct TabBarData: Codable {
     let identifier: Int
+    var lastUpdateDate: Date? = .now
     var items: [TabBarItem]
 
     static let `default` = TabBarData(identifier: 0, items: [
