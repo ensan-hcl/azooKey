@@ -301,17 +301,14 @@ struct EditingTenkeyCustardView: CancelableEditor {
                     KeyboardPreview(defaultTab: .custard(custard))
                 }
             }
-            .onChange(of: editingItem.rowCount) {_ in
-                updateModel()
-            }
-            .onChange(of: editingItem.columnCount) {_ in
+            .onChange(of: layout) {_ in
                 updateModel()
             }
             .background(Color.secondarySystemBackground)
             .navigationBarBackButtonHidden(true)
             .navigationTitle(Text("カスタムタブを作る"))
             .navigationBarItems(
-                leading: Button("キャンセル", action: cancel),
+                leading: Button("キャンセル", role: .cancel, action: cancel),
                 trailing: Button("保存") {
                     self.save()
                     self.dismiss()
