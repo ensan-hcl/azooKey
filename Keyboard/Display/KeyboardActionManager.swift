@@ -430,16 +430,17 @@ final class KeyboardActionManager: UserActionManager {
         let a_left = adjustLeftString(a_left)
         let b_left = adjustLeftString(tempLeft)
 
-        // ライブ変換を行っていて入力中の場合、まずは確定してから話を進める
-        if !self.inputManager.composingText.isEmpty && !self.inputManager.isSelected && self.inputManager.liveConversionManager.enabled {
-            debug("in live conversion, user did change something: \((a_left, a_center, a_right)) \((b_left, b_center, b_right))")
-            _ = self.inputManager.enter(shouldModifyDisplayedText: false)
-        }
-
         // システムによる操作でこの関数が呼ばれた場合はスルーする
         if let operation = self.inputManager.getPreviousSystemOperation() {
             debug("non user operation \(operation)", a_left, a_center, a_right)
             return
+        }
+
+        let hasSomethingChanged = a_left != b_left || a_center != b_center || a_right != b_right
+        // ライブ変換を行っていて入力中の場合、まずは確定してから話を進める
+        if !self.inputManager.composingText.isEmpty && !self.inputManager.isSelected && self.inputManager.liveConversionManager.enabled && hasSomethingChanged {
+            debug("in live conversion, user did change something: \((a_left, a_center, a_right)) \((b_left, b_center, b_right))")
+            _ = self.inputManager.enter(shouldModifyDisplayedText: false)
         }
 
         // この場合はユーザによる操作であると考えられる
