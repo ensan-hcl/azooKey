@@ -195,7 +195,7 @@ final class KeyboardViewController: UIInputViewController {
         self.removeFromParent()
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         // この関数は「これから」向きが変わる場合に呼ばれるので、デバイスの向きによってwidthとheightが逆転するUIScreen.main.bounds.sizeを用いて向きを確かめることができる。
         // ただしこの時点でのUIScreen.mainの値はOSバージョンで変わる
@@ -241,7 +241,7 @@ final class KeyboardViewController: UIInputViewController {
      }
      */
     /// 引数の`textInput`は常に`nil`
-    override func textWillChange(_ textInput: UITextInput?) {
+    override func textWillChange(_ textInput: (any UITextInput)?) {
         super.textWillChange(textInput)
 
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""
@@ -253,7 +253,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     /// 引数の`textInput`は常に`nil`
-    override func textDidChange(_ textInput: UITextInput?) {
+    override func textDidChange(_ textInput: (any UITextInput)?) {
         super.textDidChange(textInput)
 
         let left = self.textDocumentProxy.documentContextBeforeInput ?? ""

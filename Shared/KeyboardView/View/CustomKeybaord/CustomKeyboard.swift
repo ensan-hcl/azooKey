@@ -60,7 +60,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    var flickKeyModels: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
+    var flickKeyModels: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -71,7 +71,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    var qwertyKeyModels: [KeyPosition: (model: QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
+    var qwertyKeyModels: [KeyPosition: (model: any QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -126,7 +126,7 @@ fileprivate extension CustardKeyDesign.ColorType {
 }
 
 extension CustardInterfaceKey {
-    var flickKeyModel: FlickKeyModelProtocol {
+    var flickKeyModel: any FlickKeyModelProtocol {
         switch self {
         case let .system(value):
             switch value {
@@ -170,12 +170,12 @@ extension CustardInterfaceKey {
         }
     }
 
-    private func convertToQwertyKeyModel(customKey: KeyFlickSetting.SettingData) -> QwertyKeyModelProtocol {
+    private func convertToQwertyKeyModel(customKey: KeyFlickSetting.SettingData) -> any QwertyKeyModelProtocol {
         let variations = VariationsModel([customKey.flick[.left], customKey.flick[.top], customKey.flick[.right], customKey.flick[.bottom]].compactMap {$0}.map {(label: $0.labelType, actions: $0.pressActions)})
         return QwertyKeyModel(labelType: customKey.labelType, pressActions: customKey.actions, longPressActions: customKey.longpressActions, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
     }
 
-    func qwertyKeyModel(layout: CustardInterfaceLayout) -> QwertyKeyModelProtocol {
+    func qwertyKeyModel(layout: CustardInterfaceLayout) -> any QwertyKeyModelProtocol {
         switch self {
         case let .system(value):
             switch value {
@@ -229,7 +229,7 @@ extension CustardInterfaceKey {
         }
     }
 
-    var simpleKeyModel: SimpleKeyModelProtocol {
+    var simpleKeyModel: any SimpleKeyModelProtocol {
         switch self {
         case let .system(value):
             switch value {
@@ -330,7 +330,7 @@ struct CustomKeyboardView: View {
 struct CustardFlickKeysView<Content: View>: View {
     @State private var suggestState = FlickSuggestState()
 
-    init(models: [KeyPosition : (model: FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
+    init(models: [KeyPosition : (model: any FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
         self.models = models
         self.tabDesign = tabDesign
         self.layout = layout
@@ -338,7 +338,7 @@ struct CustardFlickKeysView<Content: View>: View {
     }
 
     private let contentGenerator: (FlickKeyView, Int, Int) -> (Content)
-    private let models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)]
+    private let models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)]
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
 

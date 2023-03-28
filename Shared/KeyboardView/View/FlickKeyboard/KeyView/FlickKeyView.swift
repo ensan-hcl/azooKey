@@ -26,7 +26,7 @@ enum KeyPressState {
 }
 
 struct FlickKeyView: View {
-    private let model: FlickKeyModelProtocol
+    private let model: any FlickKeyModelProtocol
 
     @State private var pressState: KeyPressState = .inactive
     @Binding private var suggestState: FlickSuggestState
@@ -40,7 +40,7 @@ struct FlickKeyView: View {
     private let size: CGSize
     private let position: (x: Int, y: Int)
 
-    init(model: FlickKeyModelProtocol, size: CGSize, position: (x: Int, y: Int), suggestState: Binding<FlickSuggestState>) {
+    init(model: any FlickKeyModelProtocol, size: CGSize, position: (x: Int, y: Int), suggestState: Binding<FlickSuggestState>) {
         self.model = model
         self.size = size
         self.position = position
