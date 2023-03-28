@@ -155,11 +155,11 @@ struct CustardInformationView: View {
             }
         }
         .navigationBarTitle(Text("カスタムタブの情報"), displayMode: .inline)
-        .sheet(isPresented: self.$showActivityView) {
+        .sheet(isPresented: self.$showActivityView, content: {
             ActivityView(
                 activityItems: [exportedData.url].compactMap {$0},
                 applicationActivities: nil
             )
-        }
+        })
     }
 }

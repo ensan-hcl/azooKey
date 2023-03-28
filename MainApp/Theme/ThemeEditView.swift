@@ -229,11 +229,11 @@ struct ThemeEditView: CancelableEditor {
                     self.theme.pushedKeyFillColor = .color(pushedKeyColor)
                 }
             }
-            .sheet(isPresented: $isSheetPresented) {
+            .sheet(isPresented: $isSheetPresented, content: {
                 PhotoPicker(configuration: self.config,
                             pickerResult: $pickedImage,
                             isPresented: $isSheetPresented)
-            }
+            })
             .navigationBarTitle(Text(self.title), displayMode: .inline)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(

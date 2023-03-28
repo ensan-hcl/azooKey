@@ -65,14 +65,14 @@ struct ThemeShareView: View {
                 Label("閉じる", systemImage: "xmark")
             }
             .buttonStyle(ShareButtonStyle())
-        }.sheet(isPresented: self.$showActivityView) {
+        }.sheet(isPresented: self.$showActivityView, content: {
             if let image = shareImage.image {
                 ActivityView(
                     activityItems: [TextActivityItem("azooKeyで着せ替えました！", hashtags: ["#azooKey"], links: ["https://apps.apple.com/jp/app/azookey/id1542709230"]), ImageActivityItem(image)],
                     applicationActivities: nil
                 )
             }
-        }
+        })
     }
 
     private func shareOnTwitter() {
