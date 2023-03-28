@@ -36,7 +36,7 @@ enum QwertyKeyPressState {
 }
 
 struct QwertyKeyView: View {
-    private let model: QwertyKeyModelProtocol
+    private let model: any QwertyKeyModelProtocol
     @EnvironmentObject private var variableStates: VariableStates
 
     @State private var pressState: QwertyKeyPressState = .unpressed
@@ -47,7 +47,7 @@ struct QwertyKeyView: View {
     private let tabDesign: TabDependentDesign
     private let size: CGSize
 
-    init(model: QwertyKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize) {
+    init(model: any QwertyKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize) {
         self.model = model
         self.tabDesign = tabDesign
         self.size = size

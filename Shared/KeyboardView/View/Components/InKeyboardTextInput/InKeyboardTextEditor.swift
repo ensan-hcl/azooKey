@@ -101,7 +101,7 @@ private struct TextViewWrapper: UIViewRepresentable {
             parent.proxyWrapper.proxy = nil
         }
 
-        func notifyWillChange(_ textInput: UITextInput) {
+        func notifyWillChange(_ textInput: any UITextInput) {
             let proxy = IKTextDocumentProxy(input: textInput)
             self.parent.action.notifySomethingWillChange(
                 left: proxy.documentContextBeforeInput ?? "",
@@ -110,7 +110,7 @@ private struct TextViewWrapper: UIViewRepresentable {
             )
         }
 
-        func notifyDidChange(_ textInput: UITextInput) {
+        func notifyDidChange(_ textInput: any UITextInput) {
             let proxy = IKTextDocumentProxy(input: textInput)
             self.parent.action.notifySomethingDidChange(
                 a_left: proxy.documentContextBeforeInput ?? "",
@@ -123,7 +123,7 @@ private struct TextViewWrapper: UIViewRepresentable {
         }
 
         // MARK: こちらで`textWillChange`などをハンドルすることで、`KeyboardViewController`では扱われなくなる
-        func selectionWillChange(_ textInput: UITextInput?) {
+        func selectionWillChange(_ textInput: (any UITextInput)?) {
             debug("TextViewWrapper.Coordinator.selectionWillChange")
             guard let textInput else {
                 return
@@ -131,7 +131,7 @@ private struct TextViewWrapper: UIViewRepresentable {
             self.notifyWillChange(textInput)
         }
 
-        func selectionDidChange(_ textInput: UITextInput?) {
+        func selectionDidChange(_ textInput: (any UITextInput)?) {
             debug("TextViewWrapper.Coordinator.selectionDidChange")
             guard let textInput else {
                 return
@@ -139,7 +139,7 @@ private struct TextViewWrapper: UIViewRepresentable {
             self.notifyDidChange(textInput)
         }
 
-        func textWillChange(_ textInput: UITextInput?) {
+        func textWillChange(_ textInput: (any UITextInput)?) {
             debug("TextViewWrapper.Coordinator.textWillChange")
             guard let textInput else {
                 return
@@ -147,7 +147,7 @@ private struct TextViewWrapper: UIViewRepresentable {
             self.notifyWillChange(textInput)
         }
 
-        func textDidChange(_ textInput: UITextInput?) {
+        func textDidChange(_ textInput: (any UITextInput)?) {
             debug("TextViewWrapper.Coordinator.textDidChange")
             guard let textInput else {
                 return

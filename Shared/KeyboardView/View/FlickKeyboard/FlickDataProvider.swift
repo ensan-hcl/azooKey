@@ -89,8 +89,8 @@ struct FlickDataProvider {
     //    )
 
     @KeyboardSetting(.preferredLanguage) private static var preferredLanguage
-    static func TabKeys() -> [FlickKeyModelProtocol] {
-        let first: FlickKeyModelProtocol = {
+    static func TabKeys() -> [any FlickKeyModelProtocol] {
+        let first: any FlickKeyModelProtocol = {
             switch preferredLanguage.first {
             case .el_GR: return FlickChangeKeyboardModel.shared
             case .en_US: return FlickTabKeyModel.abcTabKeyModel
@@ -99,7 +99,7 @@ struct FlickDataProvider {
             }
         }()
 
-        let second: FlickKeyModelProtocol? = {
+        let second: (any FlickKeyModelProtocol)? = {
             guard let second = preferredLanguage.second else {
                 return nil
             }
@@ -134,7 +134,7 @@ struct FlickDataProvider {
         }
     }
     // 縦に並べる
-    var hiraKeyboard: [[FlickKeyModelProtocol]] = [
+    var hiraKeyboard: [[any FlickKeyModelProtocol]] = [
         // 第1列
         Self.TabKeys(),
         // 第2列
@@ -344,7 +344,7 @@ struct FlickDataProvider {
     ]
 
     // 縦に並べる
-    var abcKeyboard: [[FlickKeyModelProtocol]] = [
+    var abcKeyboard: [[any FlickKeyModelProtocol]] = [
         // 第1列
         Self.TabKeys(),
         // 第2列
@@ -504,7 +504,7 @@ struct FlickDataProvider {
 
     ]
     // 縦に並べる
-    var numberKeyboard: [[FlickKeyModelProtocol]] = [
+    var numberKeyboard: [[any FlickKeyModelProtocol]] = [
         // 第1列
         Self.TabKeys(),
         // 第2列

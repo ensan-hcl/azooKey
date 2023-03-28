@@ -36,7 +36,7 @@ final class DisplayedTextManager {
 
     /// marked textの有効化状態
     private(set) var isMarkedTextEnabled: Bool
-    private var proxy: UITextDocumentProxy! {
+    private var proxy: (any UITextDocumentProxy)! {
         switch preferredTextProxy {
         case .main: return displayedTextProxy
         case .ikTextField: return ikTextFieldProxy ?? displayedTextProxy
@@ -45,9 +45,9 @@ final class DisplayedTextManager {
 
     private var preferredTextProxy: AnyTextDocumentProxy.Preference = .main
     /// キーボード外のテキストを扱う`UITextDocumentProxy`
-    private var displayedTextProxy: UITextDocumentProxy!
+    private var displayedTextProxy: (any UITextDocumentProxy)!
     /// キーボード内テキストフィールドの`UITextDocumentProxy`
-    private var ikTextFieldProxy: UITextDocumentProxy?
+    private var ikTextFieldProxy: (any UITextDocumentProxy)?
 
     func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
         switch proxy {
