@@ -33,6 +33,7 @@ final class InputManager {
     enum SystemOperationType {
         case moveCursor
         case setMarkedText
+        case removeSelection
     }
 
     // 再変換機能の提供のために用いる辞書
@@ -271,13 +272,18 @@ final class InputManager {
         }
         if self.isSelected {
             // 選択部分を削除する
+            self.previousSystemOperation = .removeSelection
             self.displayedTextManager.deleteBackward(count: 1)
-            // 変換をリセットする
-            self.stopComposition()
+            // 状態をリセットする
+            self.composingText.stopComposition()
+            self.kanaKanjiConverter.stopComposition()
+            self.isSelected = false
             // 入力する
             self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
-            // 変換を要求する
-            self.setResult()
+            if requireSetResult {
+                // 変換を要求する
+                self.setResult()
+            }
             return
         }
 
