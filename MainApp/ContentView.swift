@@ -42,9 +42,9 @@ struct ContentView: View {
                     }
                     .tag(TabSelection.settings)
             }
-            .fullScreenCover(isPresented: $appStates.requireFirstOpenView) {
+            .fullScreenCover(isPresented: $appStates.requireFirstOpenView, content: {
                 EnableAzooKeyView()
-            }
+            })
             .onChange(of: selection) {value in
                 if value == .customize {
                     if ContainerInternalSetting.shared.walkthroughState.shouldDisplay(identifier: .extensions) {
@@ -55,10 +55,10 @@ struct ContentView: View {
             .onOpenURL { url in
                 importFileURL = url
             }
-            .sheet(isPresented: $showWalkthrough) {
+            .sheet(isPresented: $showWalkthrough, content: {
                 CustomizeTabWalkthroughView(isShowing: $showWalkthrough)
                     .background(Color.background)
-            }
+            })
             ForEach(messageManager.necessaryMessages, id: \.id) {data in
                 if messageManager.requireShow(data.id) {
                     switch data.id {
