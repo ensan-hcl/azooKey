@@ -2823,7 +2823,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.0.3;
-				OTHER_SWIFT_FLAGS = "-enable-upcoming-feature";
+				OTHER_SWIFT_FLAGS = "-enable-upcoming-feature ImplicitOpenExistentials";
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
 				PRODUCT_NAME = Keyboard;
 				PROVISIONING_PROFILE_SPECIFIER = "";
