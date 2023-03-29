@@ -53,7 +53,9 @@ struct ContentView: View {
                 }
             }
             .onOpenURL { url in
-                importFileURL = url
+                if url.scheme != "azooKey" {
+                    importFileURL = url
+                }
             }
             .sheet(isPresented: $showWalkthrough, content: {
                 CustomizeTabWalkthroughView(isShowing: $showWalkthrough)
@@ -69,6 +71,19 @@ struct ContentView: View {
                         DataUpdateView(id: data.id, manager: $messageManager) {
                             let builder = LOUDSBuilder(txtFileSplit: 2048)
                             builder.process()
+                        }
+                    case .ver2_1_emoji_tab:
+                        DataUpdateView(id: data.id, manager: $messageManager) {
+                            var manager = CustardManager.load()
+                            guard var tabBarData = try? manager.tabbar(identifier: 0) else {
+                                return
+                            }
+                            if tabBarData.items.contains(where: {$0.actions.contains(.moveTab(.system(.__emoji_tab)))}) {
+                                return
+                            }
+                            tabBarData.items.append(.init(label: .text("絵文字"), actions: [.moveTab(.system(.__emoji_tab))]))
+                            tabBarData.lastUpdateDate = .now
+                            try? manager.saveTabBarData(tabBarData: tabBarData)
                         }
                     case .iOS15_4_new_emoji, .iOS16_4_new_emoji:
                         // 絵文字を更新する

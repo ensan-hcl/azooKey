@@ -328,6 +328,8 @@ extension TabData {
                 return "最後に表示していたタブ"
             case .__clipboard_history_tab:
                 return "クリップボードの履歴"
+            case .__emoji_tab:
+                return "絵文字"
             }
         case let .custom(identifier):
             return LocalizedStringKey(identifier)
@@ -349,8 +351,9 @@ struct AvailableTabPicker: View {
             ("記号と数字(フリック入力)", .system(.flick_numbersymbols)),
             ("数字(ローマ字入力)", .system(.qwerty_numbers)),
             ("記号(ローマ字入力)", .system(.qwerty_symbols)),
-            ("最後に表示していたタブ", .system(.last_tab)),
+            ("絵文字", .system(.__emoji_tab)),
             ("クリップボードの履歴", .system(.__clipboard_history_tab)),
+            ("最後に表示していたタブ", .system(.last_tab)),
             ("日本語(フリック入力)", .system(.flick_japanese)),
             ("日本語(ローマ字入力)", .system(.qwerty_japanese)),
             ("英語(フリック入力)", .system(.flick_english)),

@@ -12,26 +12,14 @@ struct EmojiTab: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.themeEnvironment) private var theme
 
-    private struct EmojiData: Identifiable, Hashable {
-        static func == (lhs: EmojiTab.EmojiData, rhs: EmojiTab.EmojiData) -> Bool {
-            lhs.id == rhs.id
-        }
-
+    private struct EmojiData {
         init(emoji: String, base: String) {
             self.emoji = emoji
             self.base = base
-            self.keyModel = EmojiKeyModel(emoji, base: base, unpressedKeyColorType: .unimportant)
-            self.id = UUID()
         }
 
-        var id: UUID
         var emoji: String
         var base: String
-        var keyModel: EmojiKeyModel
-
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
-        }
     }
 
     private struct EmojiPreference: Codable {
@@ -266,8 +254,8 @@ struct EmojiTab: View {
                             if !models.isEmpty {
                                 Section {
                                     SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image(genre.icon), unpressedKeyColorType: .selected, pressActions: []), width: keySize, height: keySize)
-                                    ForEach(models) {model in
-                                        SimpleKeyView(model: model.keyModel, width: keySize, height: keySize)
+                                    ForEach(models.indices, id: \.self) {i in
+                                        SimpleKeyView(model: EmojiKeyModel(models[i].emoji, base: models[i].base), width: keySize, height: keySize)
                                     }
                                 } footer: {
                                     Spacer()
@@ -333,17 +321,19 @@ private struct ExpandKeyModel: SimpleKeyModelProtocol {
 }
 
 private struct EmojiKeyModel: SimpleKeyModelProtocol {
-    init(_ emoji: String, base: String, unpressedKeyColorType: SimpleUnpressedKeyColorType, longPressActions: LongpressActionType = .none) {
+    init(_ emoji: String, base: String) {
         self.emoji = emoji
         self.base = base
-        self.unpressedKeyColorType = unpressedKeyColorType
-        self.longPressActions = longPressActions
     }
 
-    private var emoji: String
-    private var base: String
-    let unpressedKeyColorType: SimpleUnpressedKeyColorType
-    let longPressActions: LongpressActionType
+    private let emoji: String
+    private let base: String
+    var unpressedKeyColorType: SimpleUnpressedKeyColorType {
+        .unimportant
+    }
+    var longPressActions: LongpressActionType {
+        .none
+    }
     var keyLabelType: KeyLabelType {
         .text(emoji)
     }

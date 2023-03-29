@@ -13,6 +13,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
     case iOS16_4_new_emoji = "iOS_16_4_new_emoji_commit"                    // MARK: frozen
     case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_release" // MARK: frozen
+    case ver2_1_emoji_tab = "ver2_1_emoji_tab"
 
     // MARK: 過去にプロダクションで用いていたメッセージID
     // ver1_9_user_dictionary_updateが実行されれば不要になるので、この宣言は削除
@@ -29,7 +30,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
 
     var needUsingContainerApp: Bool {
         switch self {
-        case .ver1_9_user_dictionary_update:
+        case .ver1_9_user_dictionary_update, .ver2_1_emoji_tab:
             return true
         case .iOS15_4_new_emoji, .iOS16_4_new_emoji, .mock:
             return false
@@ -161,6 +162,22 @@ struct MessageManager {
                 let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
                 return !FileManager.default.fileExists(atPath: binaryFilePath)
             }
+        ),
+        MessageData(
+            id: .ver2_1_emoji_tab,
+            title: "お知らせ",
+            description: "azooKeyで絵文字タブが使えるようになりました。本体アプリを開き、タブバーに絵文字タブを追加しますか？",
+            button: .two(primary: .openContainer(text: "追加"), secondary: .later),
+            precondition: {
+                true
+            },
+            silentDoneCondition: {
+                if (try? CustardManager.load().tabbar(identifier: 0))?.items.contains(where: {$0.actions.contains(.moveTab(.system(.__emoji_tab)))}) == true {
+                    return true
+                }
+                return false
+            },
+            containerAppShouldMakeItDone: { true }
         )
     ]
 
