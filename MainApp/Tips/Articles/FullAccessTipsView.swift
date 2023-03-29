@@ -9,6 +9,17 @@
 import SwiftUI
 
 struct FullAccessTipsView: View {
+    @EnvironmentObject private var appStates: MainAppStates
+    private func canFlickLayout(_ layout: LanguageLayout) -> Bool {
+        if layout == .flick {
+            return true
+        }
+        if case .custard = layout {
+            return true
+        }
+        return false
+    }
+
     var body: some View {
         TipsContentView("フルアクセスについて") {
             TipsContentParagraph {
@@ -22,7 +33,9 @@ struct FullAccessTipsView: View {
             if SemiStaticStates.shared.hapticsAvailable {
                 BoolSettingView(.enableKeyHaptics)
             }
-            BoolSettingView(.enablePasteButton)
+            if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(appStates.japaneseLayout) {
+                BoolSettingView(.enablePasteButton)
+            }
             BoolSettingView(.enableClipboardHistoryManagerTab)
 
             TipsContentParagraph {
