@@ -40,7 +40,7 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
             self.touchUpCallback = touchUpCallback
         }
 
-        @objc func tap(gesture: SingleScrollAndLongpressGestureRecognizer) {
+        @objc fileprivate func tap(gesture: SingleScrollAndLongpressGestureRecognizer) {
             switch gesture.state {
             case .began:
                 self.touchStart = Date()
@@ -72,7 +72,7 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
     }
 }
 
-final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
+fileprivate final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
     private var startLocation: CGPoint = .zero
 
     private var _distance: CGFloat = .zero

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-enum SimpleUnpressedKeyColorType {
+enum SimpleUnpressedKeyColorType: UInt8 {
     case normal
     case special
     case enter

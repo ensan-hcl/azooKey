@@ -37,6 +37,8 @@ extension TabData {
                 return .last_tab
             case .__clipboard_history_tab:
                 return .existential(.special(.clipboard_history_tab))
+            case .__emoji_tab:
+                return .existential(.special(.emoji))
             }
         case let .custom(identifier):
             if let custard = try? CustardManager.load().custard(identifier: identifier) {
