@@ -16,7 +16,7 @@ enum BoolOperation: Equatable {
 
 indirect enum ActionType: Equatable {
     // テキスト関係
-    case input(String)          // テキストの入力
+    case input(String, simplyInsert: Bool = false)          // テキストの入力
     case delete(Int)            // テキストの削除
     case smoothDelete           // テキストの一括削除
     case smartDelete(ScanItem)
