@@ -8,11 +8,23 @@
 
 import SwiftUI
 
+private struct EquatablePair<First: Equatable, Second: Equatable>: Equatable {
+    var first: First
+    var second: Second
+}
+
+private extension Equatable {
+    func and<T: Equatable>(_ value: T) -> EquatablePair<Self, T> {
+        .init(first: self, second: value)
+    }
+}
+
 struct ResultBar: View {
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
     @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
+    @State private var undoButtonAction: VariableStates.UndoAction?
     @KeyboardSetting(.displayTabBarButton) private var displayTabBarButton
 
     private var buttonWidth: CGFloat {
@@ -32,6 +44,31 @@ struct ResultBar: View {
                 if displayTabBarButton {
                     KeyboardBarButton {
                         self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
+                    }
+                    if let undoButtonAction {
+                        Button {
+                            KeyboardFeedback.click()
+                            self.action.registerAction(undoButtonAction.action, variableStates: variableStates)
+                        } label: {
+                            Label("取り消す", systemImage: "arrow.uturn.backward")
+                        }
+                        .buttonStyle(ResultButtonStyle(height: buttonHeight))
+                    }
+                }
+            }
+            .onAppear {
+                if variableStates.undoAction?.textChangedCount == variableStates.textChangedCount {
+                    self.undoButtonAction = variableStates.undoAction
+                } else {
+                    self.undoButtonAction = nil
+                }
+            }
+            .onChange(of: variableStates.undoAction.and(variableStates.textChangedCount)) {newValue in
+                withAnimation(.easeInOut) {
+                    if newValue.first?.textChangedCount == newValue.second {
+                        self.undoButtonAction = newValue.first
+                    } else {
+                        self.undoButtonAction = nil
                     }
                 }
             }

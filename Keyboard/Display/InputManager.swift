@@ -371,18 +371,21 @@ final class InputManager {
     }
 
     /// 特定の文字まで削除する
-    func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
+    ///  - returns: 削除した文字列
+    func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) -> String {
         // 選択状態ではオール削除になる
         if self.isSelected {
+            let targetText = self.composingText.convertTarget
             // 選択部分を完全に削除する
             self.displayedTextManager.deleteBackward(count: 1)
             // Compositionをリセットする
             self.stopComposition()
-            return
+            return targetText
         }
         // 入力中の場合
         if !self.composingText.isEmpty {
-            // TODO: Check implementation of `requireSetResult`
+            // この実装は、ライブ変換時はカーソルより右に文字列が存在しないことが保証されているために有効になっている。
+            let targetText = self.displayedTextManager.displayedLiveConversionText ?? String(self.composingText.convertTargetBeforeCursor)
             // カーソルより前を全部消す
             self.composingText.deleteBackwardFromCursorPosition(count: self.composingText.convertTargetCursorPosition)
             // 文字がもうなかった場合、ここで全て削除して終了
@@ -393,45 +396,53 @@ final class InputManager {
                 }
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
                 self.stopComposition()
-                return
+                return targetText
             }
             // カーソルを先頭に移動する
             self.moveCursor(count: self.composingText.convertTarget.count)
             if requireSetResult {
                 setResult()
             }
-            return
+            return targetText
         }
 
         var deletedCount = 0
+        var targetText = ""
         while let last = self.displayedTextManager.documentContextBeforeInput?.last {
             if nexts.contains(last) {
                 break
             } else {
+                targetText.insert(last, at: targetText.startIndex)
                 self.displayedTextManager.deleteBackward(count: 1)
                 deletedCount += 1
             }
         }
         if deletedCount == 0 {
+            if let last = self.displayedTextManager.documentContextBeforeInput?.last {
+                targetText.insert(last, at: targetText.startIndex)
+            }
             self.displayedTextManager.deleteBackward(count: 1)
         }
+        return targetText
     }
 
     /// テキストの進行方向に、特定の文字まで削除する
     /// 入力中はカーソルから右側を全部消す
-    func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
+    func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) -> String {
         // 選択状態ではオール削除になる
         if self.isSelected {
+            let targetText = self.composingText.convertTarget
             // 完全に削除する
             self.displayedTextManager.deleteBackward(count: 1)
             // Compositionをリセットする
             self.stopComposition()
-            return
+            return targetText
         }
         // 入力中の場合
         if !self.composingText.isEmpty {
             // TODO: Check implementation of `requireSetResult`
             // count文字消せるのは自明なので、返り値は無視できる
+            let targetText = self.composingText.convertTarget.suffix(self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
             self.composingText.deleteForwardFromCursorPosition(count: self.composingText.convertTarget.count - self.composingText.convertTargetCursorPosition)
             // 文字がもうなかった場合
             if self.composingText.isEmpty {
@@ -442,21 +453,28 @@ final class InputManager {
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
                 self.stopComposition()
             }
-            return
+            // setResultを呼ばない(カーソル右側の文字列は変換対象にならないため)
+            return String(targetText)
         }
 
         var deletedCount = 0
+        var targetText = ""
         while let first = self.displayedTextManager.documentContextAfterInput?.first {
             if nexts.contains(first) {
                 break
             } else {
                 self.displayedTextManager.deleteForward(count: 1)
+                targetText.append(first)
                 deletedCount += 1
             }
         }
         if deletedCount == 0 {
+            if let first = self.displayedTextManager.documentContextAfterInput?.first {
+                targetText.append(first)
+            }
             self.displayedTextManager.deleteForward(count: 1)
         }
+        return targetText
     }
 
     /// テキストの進行方向と逆に、特定の文字までカーソルを動かす

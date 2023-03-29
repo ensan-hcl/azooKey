@@ -88,14 +88,15 @@ final class KeyboardActionManager: UserActionManager {
 
     private func doAction(_ action: ActionType, requireSetResult: Bool = true, variableStates: VariableStates) {
         debug("doAction", action)
+        var undoAction: ActionType?
         switch action {
-        case let .input(text):
+        case let .input(text, simpleInsert):
             self.showResultView(variableStates: variableStates)
             if variableStates.boolStates.isCapsLocked && [.en_US, .el_GR].contains(variableStates.keyboardLanguage) {
                 let input = text.uppercased()
-                self.inputManager.input(text: input, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
+                self.inputManager.input(text: input, requireSetResult: requireSetResult, simpleInsert: simpleInsert, inputStyle: variableStates.inputStyle)
             } else {
-                self.inputManager.input(text: text, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
+                self.inputManager.input(text: text, requireSetResult: requireSetResult, simpleInsert: simpleInsert, inputStyle: variableStates.inputStyle)
             }
         case let .insertMainDisplay(text):
             self.inputManager.insertMainDisplayText(text)
@@ -106,16 +107,21 @@ final class KeyboardActionManager: UserActionManager {
         case .smoothDelete:
             KeyboardFeedback.smoothDelete()
             self.showResultView(variableStates: variableStates)
-            self.inputManager.smoothDelete(requireSetResult: requireSetResult)
-
+            let deletedText = self.inputManager.smoothDelete(requireSetResult: requireSetResult)
+            if !deletedText.isEmpty {
+                undoAction = .input(deletedText, simplyInsert: true)
+            }
         case let .smartDelete(item):
+            let deletedText: String
             switch item.direction {
             case .forward:
-                self.inputManager.smoothDeleteForward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
+                deletedText = self.inputManager.smoothDeleteForward(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             case .backward:
-                self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
+                deletedText = self.inputManager.smoothDelete(to: item.targets.map {Character($0)}, requireSetResult: requireSetResult)
             }
-
+            if !deletedText.isEmpty {
+                undoAction = .input(deletedText, simplyInsert: true)
+            }
         case .paste:
             if SemiStaticStates.shared.hasFullAccess {
                 self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true, inputStyle: variableStates.inputStyle)
@@ -244,6 +250,9 @@ final class KeyboardActionManager: UserActionManager {
             variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
             // 文字列の変更を適用
             variableStates.textChangedCount += self.inputManager.getTextChangedCountDelta()
+            if let undoAction {
+                variableStates.undoAction = .init(action: undoAction, textChangedCount: variableStates.textChangedCount)
+            }
             // MARK: 言語を更新する
             self.inputManager.setKeyboardLanguage(variableStates.keyboardLanguage)
             // MARK: Replacementの更新をする

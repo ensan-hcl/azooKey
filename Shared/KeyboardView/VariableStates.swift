@@ -127,6 +127,13 @@ final class VariableStates: ObservableObject {
     /// - note: この値がどれだけ変化するかは実装によるので、変化量は意味をなさない。
     @Published var textChangedCount: Int = 0
 
+    struct UndoAction: Equatable {
+        var action: ActionType
+        var textChangedCount: Int
+    }
+
+    @Published var undoAction: UndoAction?
+
     @Published var moveCursorBarState = BetaMoveCursorBarState()
 
     @Published private(set) var leftSideText: String = ""
