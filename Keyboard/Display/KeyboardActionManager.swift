@@ -82,6 +82,13 @@ final class KeyboardActionManager: UserActionManager {
         variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
     }
 
+    override func notifyForgetCandidate(_ candidate: any ResultViewItemData, variableStates: VariableStates) {
+        if let candidate = candidate as? Candidate {
+            self.sendToDicdataStore(.forgetMemory(candidate))
+            variableStates.temporalMessage = .doneForgetCandidate
+        }
+    }
+
     private func showResultView(variableStates: VariableStates) {
         variableStates.barState = .none
     }

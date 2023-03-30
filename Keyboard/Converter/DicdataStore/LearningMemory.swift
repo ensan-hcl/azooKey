@@ -196,7 +196,7 @@ struct LongTermLearningMemory {
     }
 
     /// 一時記憶と長期記憶の学習データをマージする
-    static func merge(tempTrie: TemporalLearningMemoryTrie) throws {
+    static func merge(tempTrie: TemporalLearningMemoryTrie, forgetTargets: [DicdataElement] = []) throws {
         // MARK: `.pause`ファイルが存在する場合、`merge`を行う前に`.2`ファイルの復活を試み、失敗した場合は`merge`を諦める。
         if fileExist(pauseFileURL) {
             debug("LongTermLearningMemory merge collapsion detected, trying recovery...")
@@ -255,6 +255,10 @@ struct LongTermLearningMemory {
                 var newDicdata: [DicdataElement] = []
                 var newMetadata: [MetadataElement] = []
                 for (dicdataElement, metadataElement) in zip(elements, metadata) {
+                    // 忘却対象である場合は弾く
+                    if forgetTargets.contains(dicdataElement) {
+                        continue
+                    }
                     if ruby != dicdataElement.ruby {
                         continue
                     }
@@ -533,6 +537,23 @@ struct TemporalLearningMemoryTrie {
         }
     }
 
+    @discardableResult
+    mutating func forget(dicdataElement: DicdataElement, chars: [UInt8]) -> Bool {
+        var index = 0
+        for char in chars {
+            if let nextIndex = nodes[index].children[char] {
+                index = nextIndex
+            } else {
+                // 存在しない場合
+                return false
+            }
+        }
+        // 存在する場合
+        // dataIndicesから削除する(dicdataの方は触らない)
+        nodes[index].dataIndices.removeAll(where: {self.dicdata[$0] == dicdataElement})
+        return true
+    }
+
     func perfectMatch(chars: [UInt8]) -> [DicdataElement] {
         var index = 0
         for char in chars {
@@ -773,12 +794,36 @@ final class LearningManager {
         self.temporaryMemory.memorize(dicdataElement: element, chars: chars)
     }
 
+    /// データに含まれる語彙の学習をリセットする関数
+    func forgetMemory(data: [DicdataElement]) {
+        // 1. temporary memoryを削除する
+        for element in data {
+            guard let chars = Self.keyToChars(element.ruby) else {
+                continue
+            }
+            self.temporaryMemory.forget(dicdataElement: element, chars: chars)
+        }
+        // 2. longterm memoryを削除する
+        do {
+            try LongTermLearningMemory.merge(tempTrie: self.temporaryMemory, forgetTargets: data)
+            // マージが済んだので、temporaryMemoryを空にする
+            self.temporaryMemory = TemporalLearningMemoryTrie()
+        } catch {
+            // アップデートに失敗した場合、そのまま諦める。
+            debug("LearningManager resetLearning: Failed to save LongTermLearningMemory", error)
+        }
+        // 状態を更新する
+        self.memoryCollapsed = LongTermLearningMemory.memoryCollapsed()
+    }
+
     func save() {
         if !options.learningType.needUpdateMemory {
             return
         }
         do {
             try LongTermLearningMemory.merge(tempTrie: self.temporaryMemory)
+            // マージが済んだので、temporaryMemoryを空にする
+            self.temporaryMemory = TemporalLearningMemoryTrie()
         } catch {
             // アップデートに失敗した場合、そのまま諦める。
             debug("LearningManager save: Failed to save LongTermLearningMemory", error)

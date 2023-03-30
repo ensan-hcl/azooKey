@@ -169,6 +169,8 @@
 		1A3ACF1825FB78BF007E9938 /* InternalSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */; };
 		1A3ACF2225FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */; };
 		1A3ACF2325FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */; };
+		1A3B4E0B29D538C6005F0CDC /* TemporalMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B4E0A29D538C6005F0CDC /* TemporalMessageView.swift */; };
+		1A3B4E0C29D538C6005F0CDC /* TemporalMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B4E0A29D538C6005F0CDC /* TemporalMessageView.swift */; };
 		1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C92500D44B002CAA93 /* ContentView.swift */; };
 		1A3DC1CC2500D44E002CAA93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */; };
 		1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1CE2500D44E002CAA93 /* Preview Assets.xcassets */; };
@@ -606,6 +608,7 @@
 		1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizingRect.swift; sourceTree = "<group>"; };
 		1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSetting.swift; sourceTree = "<group>"; };
 		1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedModeSetting.swift; sourceTree = "<group>"; };
+		1A3B4E0A29D538C6005F0CDC /* TemporalMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporalMessageView.swift; sourceTree = "<group>"; };
 		1A3DC1C22500D44A002CAA93 /* azooKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = azooKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A3DC1C92500D44B002CAA93 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1704,6 +1707,7 @@
 				1AFB68372518A40D00C649C4 /* LargeTextView.swift */,
 				1A58AB0C25037E9E00EB1864 /* ExpandedResultView.swift */,
 				1A12E24125C3E1CA00316009 /* MessageView.swift */,
+				1A3B4E0A29D538C6005F0CDC /* TemporalMessageView.swift */,
 				1A3ACEF825F9F9AA007E9938 /* ResizingRect.swift */,
 			);
 			path = Components;
@@ -2080,6 +2084,7 @@
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
 				1ACA28E629AB371300B794C8 /* ClipboardHistoryManager.swift in Sources */,
 				1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */,
+				1A3B4E0B29D538C6005F0CDC /* TemporalMessageView.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A2B2B612994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift in Sources */,
 				1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */,
@@ -2396,6 +2401,7 @@
 				1A2602F42514FB6E00EAD647 /* VariationsModel.swift in Sources */,
 				1A2602972514801F00EAD647 /* QwertyKeyModel.swift in Sources */,
 				1AF678F625CED91900F3987B /* UserActionManager.swift in Sources */,
+				1A3B4E0C29D538C6005F0CDC /* TemporalMessageView.swift in Sources */,
 				1A0FDF10291BED4F0088C5AA /* no_change.swift in Sources */,
 				1A2602AE251489C700EAD647 /* QwertyKeyModelProtocol.swift in Sources */,
 				1AE1025025D1265A00CA7277 /* ColorTools.swift in Sources */,
