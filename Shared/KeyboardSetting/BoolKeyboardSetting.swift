@@ -174,6 +174,17 @@ extension KeyboardSettingKey where Self == UseBetaMoveCursorBar {
     static var useBetaMoveCursorBar: Self { .init() }
 }
 
+struct HideResetButtonInOneHandedMode: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "片手モードで解除ボタンを表示しない"
+    static let explanation: LocalizedStringKey = "片手モードの際に表示される解除ボタンを非表示にします。片手モードの調整はタブバーのボタンから行えます。"
+    static let defaultValue = false
+    static let key: String = "hide_reset_button_in_one_handed_mode"
+}
+
+extension KeyboardSettingKey where Self == HideResetButtonInOneHandedMode {
+    static var hideResetButtonInOneHandedMode: Self { .init() }
+}
+
 struct StopLearningWhenSearch: BoolKeyboardSettingKey {
     static let title: LocalizedStringKey = "検索時は学習を停止"
     static let explanation: LocalizedStringKey = "web検索などで入力した単語を学習しません。"

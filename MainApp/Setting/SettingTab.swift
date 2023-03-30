@@ -66,8 +66,9 @@ struct SettingTabView: View {
                         FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)
                         FontSizeSettingView(.resultViewFontSize, .result, availableValueRange: 12...24)
                     }
-                    if self.canFlickLayout(appStates.japaneseLayout) {
-                        Section(header: Text("操作性")) {
+                    Section(header: Text("操作性")) {
+                        BoolSettingView(.hideResetButtonInOneHandedMode)
+                        if self.canFlickLayout(appStates.japaneseLayout) {
                             FlickSensitivitySettingView(.flickSensitivity)
                         }
                     }
