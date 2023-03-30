@@ -286,21 +286,27 @@ enum Design {
         }
 
         private func getMaximumFontSize(for text: String, width: CGFloat, maxFontSize: Int) -> CGFloat {
-            // 段階的フォールバック
-            for fontsize in (10...maxFontSize).reversed() {
-                let size = UIFontMetrics.default.scaledValue(for: CGFloat(fontsize))
+            var lowerBound = 9
+            var upperBound = maxFontSize
+            var mid = 0
+            while lowerBound < upperBound {
+                mid = (lowerBound + upperBound + 1) / 2
+                let size = UIFontMetrics.default.scaledValue(for: CGFloat(mid))
                 let font = UIFont.systemFont(ofSize: size, weight: .regular)
                 let title_size = text.size(withAttributes: [.font: font])
                 if title_size.width < width * 0.95 {
-                    return size
+                    lowerBound = mid
+                } else {
+                    upperBound = mid - 1
                 }
             }
-            return UIFontMetrics.default.scaledValue(for: 9)
+            let size = UIFontMetrics.default.scaledValue(for: CGFloat(lowerBound))
+            return size
         }
 
         func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, layout: KeyboardLayout, theme: ThemeData) -> Font {
             if case .max = fontSize {
-                let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 50)
+                let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 100)
                 return Font.system(size: size, weight: theme.textFont.weight, design: .default)
             }
 
