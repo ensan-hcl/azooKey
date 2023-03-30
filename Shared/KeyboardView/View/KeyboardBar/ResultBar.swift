@@ -131,6 +131,8 @@ struct ResultBar: View {
 
 struct ResultContextMenuView: View {
     @EnvironmentObject private var variableStates: VariableStates
+    @Environment(\.userActionManager) private var action
+    @KeyboardSetting(.learningType) private var learningType
     private let candidate: any ResultViewItemData
 
     init(candidate: any ResultViewItemData) {
@@ -145,6 +147,14 @@ struct ResultContextMenuView: View {
             }) {
                 Text("大きな文字で表示する")
                 Image(systemName: "plus.magnifyingglass")
+            }
+            if learningType.needUsingMemory {
+                Button(action: {
+                    action.notifyForgetCandidate(candidate, variableStates: variableStates)
+                }) {
+                    Text("この候補の学習をリセットする")
+                    Image(systemName: "clear")
+                }
             }
             #if DEBUG
             Button(action: {

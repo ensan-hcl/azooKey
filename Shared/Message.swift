@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert_2022_09_16_03"
@@ -219,6 +220,27 @@ struct MessageManager {
         } else {
             // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
             return SharedStore.userDefaults.string(forKey: id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: id.key) != Self.doneFlag
+        }
+    }
+}
+
+enum TemporalMessage {
+    case doneForgetCandidate
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .doneForgetCandidate:
+            return "候補の学習をリセットしました"
+        }
+    }
+
+    enum DismissCondition {
+        case auto
+        case ok
+    }
+    var dismissCondition: DismissCondition {
+        switch self {
+        case .doneForgetCandidate: return .auto
         }
     }
 }

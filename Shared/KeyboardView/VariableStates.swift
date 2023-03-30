@@ -140,6 +140,8 @@ final class VariableStates: ObservableObject {
     @Published private(set) var centerText: String = ""
     @Published private(set) var rightSideText: String = ""
 
+    @Published var temporalMessage: TemporalMessage?
+
     func setSurroundingText(leftSide: String, center: String, rightSide: String) {
         self.leftSideText = leftSide
         self.centerText = center

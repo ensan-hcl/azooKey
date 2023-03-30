@@ -75,6 +75,13 @@ struct KeyboardView: View {
                     }
                 }
             }
+            if showMessage, let message = variableStates.temporalMessage {
+                TemporalMessageView(message: message) {
+                    withAnimation(.easeIn) {
+                        variableStates.temporalMessage = nil
+                    }
+                }
+            }
         }
         .frame(height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))
     }
