@@ -284,7 +284,7 @@ struct ResizingBindingFrame: ViewModifier {
     @Binding private var position: CGPoint
     @Binding private var size: CGSize
     @EnvironmentObject private var variableStates: VariableStates
-
+    @KeyboardSetting(.hideResetButtonInOneHandedMode) private var hideResetButtonInOneHandedMode
     init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize) {
         self.initialSize = initialSize
         self._size = size
@@ -396,7 +396,9 @@ struct ResizingBindingFrame: ViewModifier {
     @ViewBuilder func body(content: Content) -> some View {
         switch variableStates.resizingState {
         case .onehanded:
-            editButton()
+            if !hideResetButtonInOneHandedMode {
+                editButton()
+            }
             content
                 .frame(width: size.width, height: size.height)
                 .offset(x: position.x, y: position.y)

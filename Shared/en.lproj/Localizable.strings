@@ -586,6 +586,9 @@
 "新しいカーソルバーを使う (試験版)" = "Use new cursor bar (experimental)";
 "新しいカーソルバーを有効化します。\n試験的機能のため、予告なく提供を終了する可能性があります。" = "Enable new cursor bar. \nSince this is an experimental feature, this feature may be discontinued without notice.";
 
+"片手モードで解除ボタンを表示しない" = "Do not display release button in one-handed mode";
+"片手モードの際に表示される解除ボタンを非表示にします。片手モードの調整はタブバーのボタンから行えます。" = "Hide the reset button displayed in one-handed mode. One-handed mode adjustment can be done from the tab bar button.";
+
 "より強力な学習を有効化 (試験版)" = "Enable more strong learning (experimental)";
 "より長い期間学習が保持されます。\n試験的機能のため、予告なく提供を終了する可能性があります。" = "Histories can be remembered much longer. \nSince this is an experimental feature, this feature may be discontinued without notice.";
 
