@@ -353,6 +353,9 @@ struct EmojiTab: View {
         .onChange(of: variableStates.lastTabCharacterPreferenceUpdate) { _ in
             self.emojis = Self.getEmojis()
         }
+        .onDisappear {
+            variableStates.resultModelVariableSection.setResults([])
+        }
     }
 }
 
