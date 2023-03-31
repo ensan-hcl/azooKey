@@ -12,18 +12,16 @@ struct EmojiTab: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(\.themeEnvironment) private var theme
 
-    private struct EmojiData {
+    private struct EmojiData: Identifiable {
         init(emoji: String, base: String) {
             self.emoji = emoji
             self.base = base
+            self.id = UUID()
         }
 
         var emoji: String
         var base: String
-    }
-
-    private struct EmojiPreference: Codable {
-        var lastUsedDate: Date?
+        var id: UUID
     }
 
     private enum Genre: UInt8, CaseIterable, Identifiable {
@@ -103,6 +101,52 @@ struct EmojiTab: View {
                 return "よく使う絵文字"
             }
         }
+
+        var next: Genre? {
+            switch self {
+            case .recent:
+                return .smileys
+            case .smileys:
+                return .natures
+            case .natures:
+                return .eats
+            case .eats:
+                return .activities
+            case .activities:
+                return .trips
+            case .trips:
+                return .items
+            case .items:
+                return .symbols
+            case .symbols:
+                return .flags
+            case .flags:
+                return nil
+            }
+        }
+
+        var prev: Genre? {
+            switch self {
+            case .recent:
+                return nil
+            case .smileys:
+                return .recent
+            case .natures:
+                return .smileys
+            case .eats:
+                return .natures
+            case .activities:
+                return .eats
+            case .trips:
+                return .activities
+            case .items:
+                return .trips
+            case .symbols:
+                return .items
+            case .flags:
+                return .symbols
+            }
+        }
     }
 
     /// 参考用
@@ -144,13 +188,16 @@ struct EmojiTab: View {
 
     @State private var emojis: [Genre: [EmojiData]] = Self.getEmojis()
 
-    @State private var selectedGenre: Genre?
+    @State private var selectedGenre: Genre = .recent
 
     @State private var expandLevel: EmojiTabExpandModePreference.Level
 
     init() {
         let value = KeyboardInternalSetting.shared.emojiTabExpandModePreference.level
         self._expandLevel = .init(initialValue: value)
+        if emojis[.recent, default: []].isEmpty {
+            self._selectedGenre = .init(initialValue: .smileys)
+        }
     }
     // 正方形のキーにする
     private var keySize: CGFloat {
@@ -202,7 +249,7 @@ struct EmojiTab: View {
             return [:]
         }
         let preference = KeyboardInternalSetting.shared.tabCharacterPreference
-        let recentlyUseed = preference.getRecentlyUsed(for: .system(.emoji), count: 29)
+        let recentlyUseed = preference.getRecentlyUsed(for: .system(.emoji), count: 49)
         emojis[.recent] = recentlyUseed
 
         let replacements = preference.getPreferences(for: .system(.emoji))
@@ -213,8 +260,12 @@ struct EmojiTab: View {
         }
     }
 
+    private var functionKeyWidth: CGFloat {
+        variableStates.interfaceSize.width / 13
+    }
+
     private func deleteKey() -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), width: footerHeight, height: footerHeight)
+        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), width: functionKeyWidth, height: footerHeight)
     }
 
     private func expandKey() -> SimpleKeyView {
@@ -224,58 +275,67 @@ struct EmojiTab: View {
             KeyboardInternalSetting.shared.update(\.emojiTabExpandModePreference) { value in
                 value.level = newValue
             }
-        }), width: footerHeight, height: footerHeight)
+        }), width: functionKeyWidth, height: footerHeight)
     }
 
     private func tabBarKey() -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("list.bullet"), unpressedKeyColorType: .special, pressActions: [.setTabBar(.toggle)], longPressActions: .none), width: footerHeight, height: footerHeight)
+        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("list.bullet"), unpressedKeyColorType: .special, pressActions: [.setTabBar(.toggle)], longPressActions: .none), width: functionKeyWidth, height: footerHeight)
     }
 
     private func backTabKey() -> SimpleKeyView {
-        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("arrow.uturn.backward"), unpressedKeyColorType: .special, pressActions: [.moveTab(.last_tab)], longPressActions: .none), width: footerHeight, height: footerHeight)
+        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("arrow.uturn.backward"), unpressedKeyColorType: .special, pressActions: [.moveTab(.last_tab)], longPressActions: .none), width: functionKeyWidth, height: footerHeight)
     }
 
     private func genreKey(_ genre: Genre) -> some View {
+        SimpleKeyView(model: GenreKeyModel(systemImage: genre.icon, unpressedKeyColorType: genre == selectedGenre ? .selected : .unimportant, action: { self.selectedGenre = genre }), width: functionKeyWidth, height: footerHeight)
+    }
+
+    private func switchGenreButton(genre: Genre, systemImage: String) -> some View {
         Button {
             self.selectedGenre = genre
         } label: {
-            KeyLabel(.image(genre.icon), width: 10)
+            Label(genre.title, systemImage: systemImage)
+                .labelStyle(.iconOnly)
+                .font(.largeTitle)
+                .foregroundColor(theme.resultTextColor.color)
+                .frame(width: footerHeight, height: scrollViewHeight)
+                .contentShape(Rectangle())
         }
     }
 
     var body: some View {
         VStack(spacing: 0) {
             ScrollView(.horizontal, showsIndicators: false) {
-                ScrollViewReader { proxy in
+                ScrollViewReader { reader in
                     let gridItem = GridItem(.fixed(keySize), spacing: 0)
-                    LazyHGrid(rows: Array(repeating: gridItem, count: verticalCount), spacing: 0) {
-                        ForEach(allGenre) { genre in
-                            let models = self.emojis[genre, default: []]
+                    HStack {
+                        if let prev = selectedGenre.prev {
+                            switchGenreButton(genre: prev, systemImage: "chevron.left")
+                        }
+                        LazyHGrid(rows: Array(repeating: gridItem, count: verticalCount), spacing: 0) {
+                            let models = self.emojis[selectedGenre, default: []]
                             if !models.isEmpty {
-                                Section {
-                                    SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image(genre.icon), unpressedKeyColorType: .selected, pressActions: []), width: keySize, height: keySize)
-                                    ForEach(models.indices, id: \.self) {i in
-                                        SimpleKeyView(model: EmojiKeyModel(models[i].emoji, base: models[i].base), width: keySize, height: keySize)
-                                    }
-                                } footer: {
-                                    Spacer()
+                                SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image(selectedGenre.icon), unpressedKeyColorType: .selected, pressActions: []), width: keySize, height: keySize)
+                                    .id(0)
+                                ForEach(models) { model in
+                                    SimpleKeyView(model: EmojiKeyModel(model.emoji, base: model.base), width: keySize, height: keySize)
                                 }
-                                .id(genre)
                             }
                         }
-                    }
-                    .onChange(of: selectedGenre) { newValue in
-                        if let newValue {
-                            proxy.scrollTo(newValue, anchor: .leading)
+                        .onChange(of: selectedGenre) { _ in
+                            reader.scrollTo(0)
+                        }
+                        .padding(.vertical, 0)
+                        .padding(.horizontal, 5)
+                        if let next = selectedGenre.next {
+                            switchGenreButton(genre: next, systemImage: "chevron.right")
                         }
                     }
-                    .padding(.vertical, 0)
-                    .padding(.horizontal, 5)
                 }
             }
             .frame(height: scrollViewHeight)
 
-            HStack {
+            HStack(spacing: 0) {
                 backTabKey()
                 tabBarKey()
                 ForEach(allGenre, id: \.self) { genre in
@@ -289,6 +349,7 @@ struct EmojiTab: View {
             .labelStyle(.iconOnly)
             .frame(height: footerHeight)
         }
+        .frame(width: variableStates.interfaceSize.width)
         .onChange(of: variableStates.lastTabCharacterPreferenceUpdate) { _ in
             self.emojis = Self.getEmojis()
         }
@@ -320,6 +381,32 @@ private struct ExpandKeyModel: SimpleKeyModelProtocol {
     }
 }
 
+private struct GenreKeyModel: SimpleKeyModelProtocol {
+    private var action: () -> Void
+    private var systemImage: String
+    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+        KeyLabel(.image(systemImage), width: width, textSize: .max)
+    }
+
+    init(systemImage: String, unpressedKeyColorType: SimpleUnpressedKeyColorType, action: @escaping () -> Void) {
+        self.action = action
+        self.systemImage = systemImage
+        self.unpressedKeyColorType = unpressedKeyColorType
+    }
+    let unpressedKeyColorType: SimpleUnpressedKeyColorType
+    let longPressActions: LongpressActionType = .none
+
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        []
+    }
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.tabOrOtherKey()
+    }
+    func additionalOnPress(variableStates: VariableStates) {
+        self.action()
+    }
+}
+
 private struct EmojiKeyModel: SimpleKeyModelProtocol {
     init(_ emoji: String, base: String) {
         self.emoji = emoji
@@ -334,11 +421,8 @@ private struct EmojiKeyModel: SimpleKeyModelProtocol {
     var longPressActions: LongpressActionType {
         .none
     }
-    var keyLabelType: KeyLabelType {
-        .text(emoji)
-    }
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
-        KeyLabel(self.keyLabelType, width: width, textSize: .max)
+    func label(width: CGFloat, states _: VariableStates, theme _: ThemeData) -> KeyLabel {
+        KeyLabel(.text(emoji), width: width, textSize: .max)
     }
 
     func additionalOnPress(variableStates: VariableStates) {

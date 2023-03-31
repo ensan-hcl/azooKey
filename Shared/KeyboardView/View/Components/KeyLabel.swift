@@ -39,62 +39,59 @@ struct KeyLabel: View {
     }
 
     var body: some View {
-        Group {
-            switch self.labelType {
-            case let .text(text):
-                let font = Design.fonts.keyLabelFont(text: text, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
-                Text(text)
-                    .font(font)
-                    .foregroundColor(mainKeyColor)
-                    .allowsHitTesting(false)
-
-            case let .symbols(symbols):
-                let mainText = symbols.first!
-                let font = Design.fonts.keyLabelFont(text: mainText, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
-                let subText = symbols.dropFirst().joined()
-                let subFont = Design.fonts.keyLabelFont(text: subText, width: width, fontSize: .xsmall, layout: variableStates.keyboardLayout, theme: theme)
-                VStack {
-                    Text(mainText)
-                        .font(font)
-                    Text(subText)
-                        .font(subFont)
-                }
+        switch self.labelType {
+        case let .text(text):
+            let font = Design.fonts.keyLabelFont(text: text, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
+            Text(text)
+                .font(font)
                 .foregroundColor(mainKeyColor)
                 .allowsHitTesting(false)
 
-            case let .image(imageName):
-                Image(systemName: imageName)
-                    .font(Design.fonts.iconImageFont(theme: theme))
-                    .foregroundColor(mainKeyColor)
-                    .allowsHitTesting(false)
-
-            case let .customImage(imageName):
-                Image(imageName)
-                    .resizable()
-                    .frame(width: 30, height: 30, alignment: .leading)
-                    .allowsHitTesting(false)
-
-            case .changeKeyboard:
-                self.action.makeChangeKeyboardButtonView()
-                    .foregroundColor(mainKeyColor)
-
-            case let .selectable(primary, secondery):
-                let font = Design.fonts.keyLabelFont(text: primary + primary, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
-                let subFont = Design.fonts.keyLabelFont(text: secondery + secondery, width: width, fontSize: .small, layout: variableStates.keyboardLayout, theme: theme)
-
-                HStack(alignment: .bottom) {
-                    Text(primary)
-                        .font(font)
-                        .padding(.trailing, -5)
-                        .foregroundColor(mainKeyColor)
-                    Text(secondery)
-                        .font(subFont.bold())
-                        .foregroundColor(.gray)
-                        .padding(.leading, -5)
-                        .offset(y: -1)
-                }.allowsHitTesting(false)
-
+        case let .symbols(symbols):
+            let mainText = symbols.first!
+            let font = Design.fonts.keyLabelFont(text: mainText, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
+            let subText = symbols.dropFirst().joined()
+            let subFont = Design.fonts.keyLabelFont(text: subText, width: width, fontSize: .xsmall, layout: variableStates.keyboardLayout, theme: theme)
+            VStack {
+                Text(mainText)
+                    .font(font)
+                Text(subText)
+                    .font(subFont)
             }
+            .foregroundColor(mainKeyColor)
+            .allowsHitTesting(false)
+
+        case let .image(imageName):
+            Image(systemName: imageName)
+                .font(Design.fonts.iconImageFont(theme: theme))
+                .foregroundColor(mainKeyColor)
+                .allowsHitTesting(false)
+
+        case let .customImage(imageName):
+            Image(imageName)
+                .resizable()
+                .frame(width: 30, height: 30, alignment: .leading)
+                .allowsHitTesting(false)
+
+        case .changeKeyboard:
+            self.action.makeChangeKeyboardButtonView()
+                .foregroundColor(mainKeyColor)
+
+        case let .selectable(primary, secondery):
+            let font = Design.fonts.keyLabelFont(text: primary + primary, width: width, fontSize: self.textSize, layout: variableStates.keyboardLayout, theme: theme)
+            let subFont = Design.fonts.keyLabelFont(text: secondery + secondery, width: width, fontSize: .small, layout: variableStates.keyboardLayout, theme: theme)
+
+            HStack(alignment: .bottom) {
+                Text(primary)
+                    .font(font)
+                    .padding(.trailing, -5)
+                    .foregroundColor(mainKeyColor)
+                Text(secondery)
+                    .font(subFont.bold())
+                    .foregroundColor(.gray)
+                    .padding(.leading, -5)
+                    .offset(y: -1)
+            }.allowsHitTesting(false)
         }
     }
 }
