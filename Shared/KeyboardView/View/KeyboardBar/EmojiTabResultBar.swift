@@ -76,10 +76,15 @@ struct EmojiTabResultBar: View {
                     .padding(.horizontal, 5)
                 }
             }
-        }.onChange(of: variableStates.resultModelVariableSection.results.isEmpty) { newValue in
-            if showResults != !newValue {
+        }
+        .onChange(of: variableStates.resultModelVariableSection.results.first?.candidate.text) { newValue in
+            if newValue == nil && showResults {
                 withAnimation(.easeIn(duration: 0.2)) {
-                    showResults = !newValue
+                    showResults = false
+                }
+            } else if newValue != nil && !showResults {
+                withAnimation(.easeIn(duration: 0.2)) {
+                    showResults = true
                 }
             }
         }
