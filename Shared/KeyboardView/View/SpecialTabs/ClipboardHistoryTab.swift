@@ -50,7 +50,6 @@ struct ClipboardHistoryTab: View {
     @StateObject private var target = ClipboardHistory()
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.userActionManager) private var action
-    @State private var lastInsertedText: (text: String, changedCount: Int)?
 
     private var listRowBackgroundColor: Color {
         Design.colors.prominentBackgroundColor(theme)
@@ -81,7 +80,7 @@ struct ClipboardHistoryTab: View {
                     Spacer()
                     Button("入力") {
                         action.registerAction(.input(string), variableStates: variableStates)
-                        self.lastInsertedText = (string, variableStates.textChangedCount)
+                        variableStates.undoAction = .init(action: .replaceLastCharacters([string: ""]), textChangedCount: variableStates.textChangedCount)
                         KeyboardFeedback.click()
                     }
                     .buttonStyle(.bordered)
@@ -90,6 +89,7 @@ struct ClipboardHistoryTab: View {
                     Group {
                         Button {
                             action.registerAction(.input(string), variableStates: variableStates)
+                            variableStates.undoAction = .init(action: .replaceLastCharacters([string: ""]), textChangedCount: variableStates.textChangedCount)
                         } label: {
                             Label("入力する", systemImage: "text.badge.plus")
                         }
@@ -197,10 +197,6 @@ struct ClipboardHistoryTab: View {
         SimpleKeyView(model: SimpleKeyModel(keyLabelType: .image("delete.left"), unpressedKeyColorType: .special, pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)])), tabDesign: design)
     }
 
-    private func undoKey(_ design: TabDependentDesign, text: String) -> some View {
-        SimpleKeyView(model: SimpleKeyModel(keyLabelType: .text("取り消し"), unpressedKeyColorType: .special, pressActions: [.replaceLastCharacters([text: ""])]), tabDesign: design)
-    }
-
     var body: some View {
         Group {
             switch variableStates.keyboardOrientation {
@@ -208,32 +204,18 @@ struct ClipboardHistoryTab: View {
                 VStack {
                     listView
                     HStack {
-                        if let (text, count) = lastInsertedText, count == variableStates.textChangedCount {
-                            let design = TabDependentDesign(width: 3, height: 7, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .vertical)
-                            enterKey(design)
-                            undoKey(design, text: text)
-                            deleteKey(design)
-                        } else {
-                            let design = TabDependentDesign(width: 2, height: 7, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .vertical)
-                            enterKey(design)
-                            deleteKey(design)
-                        }
+                        let design = TabDependentDesign(width: 2, height: 7, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .vertical)
+                        enterKey(design)
+                        deleteKey(design)
                     }
                 }
             case .horizontal:
                 HStack {
                     listView
                     VStack {
-                        if let (text, count) = lastInsertedText, count == variableStates.textChangedCount {
-                            let design = TabDependentDesign(width: 8, height: 3, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .horizontal)
-                            deleteKey(design)
-                            undoKey(design, text: text)
-                            enterKey(design)
-                        } else {
-                            let design = TabDependentDesign(width: 8, height: 2, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .horizontal)
-                            deleteKey(design)
-                            enterKey(design)
-                        }
+                        let design = TabDependentDesign(width: 8, height: 2, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .horizontal)
+                        deleteKey(design)
+                        enterKey(design)
                     }
                 }
             }
