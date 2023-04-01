@@ -171,6 +171,7 @@
 		1A3ACF2325FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */; };
 		1A3B4E0B29D538C6005F0CDC /* TemporalMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B4E0A29D538C6005F0CDC /* TemporalMessageView.swift */; };
 		1A3B4E0C29D538C6005F0CDC /* TemporalMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B4E0A29D538C6005F0CDC /* TemporalMessageView.swift */; };
+		1A3B4E2829D7E348005F0CDC /* PasteFromOtherAppsPermissionTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B4E2729D7E348005F0CDC /* PasteFromOtherAppsPermissionTipsView.swift */; };
 		1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1C92500D44B002CAA93 /* ContentView.swift */; };
 		1A3DC1CC2500D44E002CAA93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */; };
 		1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1CE2500D44E002CAA93 /* Preview Assets.xcassets */; };
@@ -609,6 +610,7 @@
 		1A3ACF1625FB78BF007E9938 /* InternalSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalSetting.swift; sourceTree = "<group>"; };
 		1A3ACF2125FB78D1007E9938 /* OneHandedModeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneHandedModeSetting.swift; sourceTree = "<group>"; };
 		1A3B4E0A29D538C6005F0CDC /* TemporalMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporalMessageView.swift; sourceTree = "<group>"; };
+		1A3B4E2729D7E348005F0CDC /* PasteFromOtherAppsPermissionTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteFromOtherAppsPermissionTipsView.swift; sourceTree = "<group>"; };
 		1A3DC1C22500D44A002CAA93 /* azooKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = azooKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A3DC1C92500D44B002CAA93 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1A3DC1CB2500D44E002CAA93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1595,6 +1597,7 @@
 				1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */,
 				1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */,
 				1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */,
+				1A3B4E2729D7E348005F0CDC /* PasteFromOtherAppsPermissionTipsView.swift */,
 			);
 			path = Articles;
 			sourceTree = "<group>";
@@ -2162,6 +2165,7 @@
 				1AF6797625CEDB9B00F3987B /* QwertyEnterKeyModel.swift in Sources */,
 				1AB50779255ECC6C003C0BF2 /* LOUDSBuilder.swift in Sources */,
 				1ADE98772903F0A700C318C3 /* extension Data.swift in Sources */,
+				1A3B4E2829D7E348005F0CDC /* PasteFromOtherAppsPermissionTipsView.swift in Sources */,
 				1AF6795825CEDB8E00F3987B /* QwertyDataProvider.swift in Sources */,
 				1ACEEFE92566601700899DA2 /* TipsViewComponent.swift in Sources */,
 				1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */,
