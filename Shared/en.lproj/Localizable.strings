@@ -191,6 +191,13 @@
 "azooKeyのソースコードを閲覧する" = "Review the implementation of azooKey";
 "Configuring open access for a custom keyboard | Apple Developer Documentation (英語)" = "Configuring open access for a custom keyboard | Apple Developer Documentation";
 
+"「ほかのAppからペースト」について" = "About 'Paste from other apps'";
+"「クリップボードの履歴」や「ペーストボタン」の機能を利用している際、頻繁に「ペーストの許可」を求めるダイアログが出ることがあります。" = "When using features like 'clipboard history' or 'paste button,' you may see frequent dialogues requesting permission to paste.";
+"azooKeyはクリップボードの履歴を保存するため、定期的にクリップボードをチェックします。また、ペーストする際にもクリップボードの情報を利用します。" = "azooKey periodically checks the clipboard to save its history, and also uses its information when pasting.";
+"設定アプリで「ほかのAppからペースト」を「許可」にすることで、ダイアログが出なくなります。" = "By allowing 'Paste from other apps' in Settings, you can avoid these dialogs.";
+"設定アプリを開く" = "Open Settings app";
+"なお、「クリップボードの履歴」を有効にしていない場合、クリップボードの中身を定期的に取得することはありません。また、取得したクリップボードのテキストはアプリ内でのみ利用されます。" = "Note that if you have not enabled 'clipboard history,' azooKey will not periodically access the clipboard. Also, the text obtained from the clipboard is only used within the app.";
+
 "日本語" = "Japanese";
 "英語" = "English";
 "ギリシャ語" = "Greek";
@@ -212,6 +219,10 @@
 "機能の改善・追加" = "Request improvements and new features";
 "変換候補の追加" = "Add candidates";
 "その他の質問・連絡など" = "Question, contacts, and others";
+
+"おすすめ" = "Suggestion";
+
+"%@を長押しでペースト" = "Longpress %@ to paste";
 
 "カスタムキー" = "Custom keys";
 "カスタムキーの設定" = "Edit custom keys";
@@ -306,9 +317,12 @@
 "カーソルバー" = "Cursor bar";
 "フィードバックを募集します" = "Feedback wanted";
 
+"ペースト" = "Paste";
 "ペーストボタン" = "Enable paste button";
 "左下のカーソル移動キーの上フリックにペーストボタンを追加します" = "Add a paste button to the upper flick of the lower left cursor bar key.";
 
+"「ペーストを許可」のダイアログについて" = "About the 'Allow Paste' Dialog";
+"クリップボードの履歴" = "Clipboard histories";
 "クリップボードの履歴を保存" = "Keep clipboard histories";
 "コピーした文字列の履歴を保存し、専用のタブから入力できるようにします。" = "Keeping histories of copied text, and make it possible to input them from clipboard history tab.";
 "タブバーに「コピー履歴」ボタンを追加しました。" = "'コピー履歴' button is added into tab bar.";
@@ -578,6 +592,7 @@
 "移動先のタブ" = "Tab to move";
 "キーをドラッグして移動してください。" = "Drag the key to move it.";
 "移動・追加" = "Move/Add";
+"このキーは編集できません" = "This key cannot be edited";
 "このキーを並び替える" = "Rearrange this key";
 "このキーに長押しキーを追加する" = "Add a new alternative key which appears when longpressed";
 "タブバーボタン" = "Tab bar button";
