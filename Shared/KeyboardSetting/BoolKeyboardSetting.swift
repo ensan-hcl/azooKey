@@ -228,7 +228,7 @@ struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {
             }
             tabBarData.lastUpdateDate = .now
             try manager.saveTabBarData(tabBarData: tabBarData)
-            return "タブバーに「コピー履歴」ボタンを追加しました。"
+            return "タブバーに「コピー履歴」ボタンを追加しました。「ペーストの許可」を求めるダイアログが繰り返し出る場合、本体設定の「ほかのAppからペースト」を「許可」に設定してください。"
         } catch {
             debug("EnableClipboardHistoryManagerTab onEnabled", error)
             return nil

@@ -91,7 +91,7 @@ final class VariableStates: ObservableObject {
     }
     private(set) var inputStyle: InputStyle = .direct
     private(set) var tabManager = TabManager()
-    private(set) var clipboardHistoryManager = ClipboardHistoryManager()
+    @Published var clipboardHistoryManager = ClipboardHistoryManager()
 
     @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
     @Published private(set) var keyboardOrientation: KeyboardOrientation = .vertical

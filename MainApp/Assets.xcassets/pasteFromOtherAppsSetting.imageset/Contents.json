@@ -1,0 +1,41 @@
+{
+  "images" : [
+    {
+      "filename" : "pasteFromOtherAppsSetting_lj.jpg",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "pasteFromOtherAppsSetting_dj.jpg",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "pasteFromOtherAppsSetting_le.jpg",
+      "idiom" : "universal",
+      "locale" : "en"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "pasteFromOtherAppsSetting_de.jpg",
+      "idiom" : "universal",
+      "locale" : "en"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "localizable" : true
+  }
+}

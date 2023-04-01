@@ -9,16 +9,12 @@
 import class UIKit.UIPasteboard
 import Foundation
 
-final class ClipboardHistoryManager {
+struct ClipboardHistoryManager {
     static let maxCount = 50
     struct Item: Equatable, Comparable, Hashable, Codable, Identifiable {
         var content: Content
         var createdData: Date
         var pinnedDate: Date?
-
-        static func == (lhs: ClipboardHistoryManager.Item, rhs: ClipboardHistoryManager.Item) -> Bool {
-            lhs.content == rhs.content
-        }
 
         static func < (lhs: ClipboardHistoryManager.Item, rhs: ClipboardHistoryManager.Item) -> Bool {
             if let rPinnedDate = rhs.pinnedDate {
@@ -60,7 +56,7 @@ final class ClipboardHistoryManager {
         self.sort()
     }
 
-    func reload() {
+    mutating func reload() {
         do {
             let newItems = try Self.load()
             self.items = newItems
@@ -87,11 +83,11 @@ final class ClipboardHistoryManager {
         }
     }
 
-    private func sort() {
+    private mutating func sort() {
         self.items.sort(by: >)
     }
 
-    func checkUpdate() {
+    mutating func checkUpdate() {
         guard self.enabled else {
             return
         }
@@ -121,6 +117,7 @@ final class ClipboardHistoryManager {
         while self.items.count > Self.maxCount {
             self.items.removeLast()
         }
+        debug("checkUpdate", self.items)
     }
 
     private static let directoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)

@@ -47,6 +47,9 @@ struct TipsTabView: View {
                         NavigationLink("タイムスタンプを使う", destination: TemplateSettingTipsView())
                         NavigationLink("キーをカスタマイズする", destination: CustomKeyTipsView())
                         NavigationLink("フルアクセスが必要な機能を使う", destination: FullAccessTipsView())
+                        if SemiStaticStates.shared.hasFullAccess {
+                            NavigationLink("「ほかのAppからペースト」について", destination: PasteFromOtherAppsPermissionTipsView())
+                        }
                     }
 
                     Section(header: Text("困ったときは")) {

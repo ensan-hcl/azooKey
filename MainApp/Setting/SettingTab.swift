@@ -44,6 +44,9 @@ struct SettingTabView: View {
                     Section(header: Text("タブバー")) {
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.enableClipboardHistoryManagerTab)
+                        if SemiStaticStates.shared.hasFullAccess {
+                            NavigationLink("「ペーストを許可」のダイアログについて", destination: PasteFromOtherAppsPermissionTipsView())
+                        }
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
                     }
                     Section(header: Text("カーソルバー")) {
