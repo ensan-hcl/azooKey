@@ -13,7 +13,6 @@ struct UpsideSearchView: View {
     @Environment(\.themeEnvironment) private var theme
     @EnvironmentObject private var variableStates: VariableStates
     @State private var searchQuery = ""
-    @FocusState private var searchBarFocus
     private let target: [ConverterBehaviorSemantics.ReplacementTarget]
     private var buttonHeight: CGFloat {
         Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.9
@@ -54,8 +53,7 @@ struct UpsideSearchView: View {
                 .padding(.horizontal, 5)
             }
             HStack {
-                InKeyboardSearchBar(text: $searchQuery, configuration: searchBarDesign)
-                    .focused($searchBarFocus)
+                InKeyboardSearchBar(text: $searchQuery, configuration: searchBarDesign, initiallyFocused: true)
                     .frame(height: searchBarHeight)
                     .cornerRadius(10)
                     .padding(.trailing, 5)
@@ -67,18 +65,16 @@ struct UpsideSearchView: View {
                     self.action.registerActions([.setUpsideComponent(nil), .moveTab(.existential(.special(.emoji)))], variableStates: variableStates)
                 }
                 KeyboardBarButton(label: .systemImage("arrowtriangle.down.fill")) {
-                    self.action.registerAction(.setUpsideComponent(nil), variableStates: variableStates)
                     self.action.setTextDocumentProxy(.preference(.main))
+                    self.action.registerAction(.setUpsideComponent(nil), variableStates: variableStates)
                 }
             }
         }
         .onAppear {
-            self.searchBarFocus = true
             self.action.setTextDocumentProxy(.preference(.ikTextField))
         }
         .onDisappear {
             self.variableStates.resultModelVariableSection.setSearchResults([])
-            self.searchBarFocus = false
         }
     }
     private func pressed(candidate: any ResultViewItemData) {

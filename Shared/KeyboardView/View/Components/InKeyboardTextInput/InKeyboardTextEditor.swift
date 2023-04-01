@@ -20,6 +20,7 @@ struct InKeyboardTextEditor: View {
     }
 
     private let configuration: Configuration
+    private let id = UUID()
     @Binding private var text: String
     @State private var proxyWrapper = IKTextDocumentProxyWrapper()
     @Environment(\.userActionManager) private var action
@@ -27,14 +28,14 @@ struct InKeyboardTextEditor: View {
     var body: some View {
         TextViewWrapper(proxyWrapper: $proxyWrapper, text: $text, configuration: configuration)
             .onAppear {
-                action.setTextDocumentProxy(.ikTextFieldProxy(proxyWrapper.proxy))
+                action.setTextDocumentProxy(.ikTextFieldProxy(id, proxyWrapper.proxy))
                 action.setTextDocumentProxy(.preference(.ikTextField))
             }
             .onDisappear {
-                action.setTextDocumentProxy(.ikTextFieldProxy(nil))
+                action.setTextDocumentProxy(.ikTextFieldProxy(id, nil))
             }
             .onChange(of: proxyWrapper) { newValue in
-                action.setTextDocumentProxy(.ikTextFieldProxy(newValue.proxy))
+                action.setTextDocumentProxy(.ikTextFieldProxy(id, newValue.proxy))
                 action.setTextDocumentProxy(.preference(.ikTextField))
             }
     }

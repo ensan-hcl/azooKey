@@ -9,9 +9,10 @@
 import SwiftUI
 
 struct InKeyboardSearchBar: View {
-    init(text: Binding<String>, configuration: Configuration) {
+    init(text: Binding<String>, configuration: Configuration, initiallyFocused: Bool = false) {
         self._text = text
         self.configuration = configuration
+        self.initiallyFocused = initiallyFocused
     }
     struct Configuration {
         var placeholder: String?
@@ -20,22 +21,22 @@ struct InKeyboardSearchBar: View {
     }
 
     private let configuration: Configuration
+    private let initiallyFocused: Bool
+    private let id = UUID()
     @Binding private var text: String
     @State private var proxyWrapper = IKTextDocumentProxyWrapper()
     @Environment(\.userActionManager) private var action
 
     var body: some View {
-        SearchBarWrapper(proxyWrapper: $proxyWrapper, text: $text, configuration: configuration)
-            .onAppear {
-                action.setTextDocumentProxy(.ikTextFieldProxy(proxyWrapper.proxy))
-                action.setTextDocumentProxy(.preference(.ikTextField))
-            }
+        SearchBarWrapper(proxyWrapper: $proxyWrapper, text: $text, configuration: configuration, initiallyFocused: self.initiallyFocused)
             .onDisappear {
-                action.setTextDocumentProxy(.ikTextFieldProxy(nil))
+                action.setTextDocumentProxy(.ikTextFieldProxy(id, nil))
             }
             .onChange(of: proxyWrapper) { newValue in
-                action.setTextDocumentProxy(.ikTextFieldProxy(newValue.proxy))
-                action.setTextDocumentProxy(.preference(.ikTextField))
+                action.setTextDocumentProxy(.ikTextFieldProxy(id, newValue.proxy))
+                if newValue.proxy != nil {
+                    action.setTextDocumentProxy(.preference(.ikTextField))
+                }
             }
     }
 }
@@ -48,6 +49,7 @@ private struct SearchBarWrapper: UIViewRepresentable {
     @Environment(\.userActionManager) private var action
     @EnvironmentObject private var variableStates: VariableStates
     var configuration: InKeyboardSearchBar.Configuration
+    var initiallyFocused: Bool
 
     func makeUIView(context: UIViewRepresentableContext<Self>) -> IKSearchBar {
         let view = IKSearchBar(frame: .zero)
@@ -105,7 +107,9 @@ private struct SearchBarWrapper: UIViewRepresentable {
         view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         view.searchTextField.addTarget(context.coordinator, action: #selector(context.coordinator.textFieldDidChange), for: .editingChanged)
         view.sizeToFit()
-
+        if initiallyFocused {
+            view.searchTextField.becomeFirstResponder()
+        }
         proxyWrapper.proxy = IKTextDocumentProxy(input: view.searchTextField)
         return view
     }

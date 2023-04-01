@@ -39,7 +39,7 @@ final class DisplayedTextManager {
     private var proxy: (any UITextDocumentProxy)! {
         switch preferredTextProxy {
         case .main: return displayedTextProxy
-        case .ikTextField: return ikTextFieldProxy ?? displayedTextProxy
+        case .ikTextField: return ikTextFieldProxy?.proxy ?? displayedTextProxy
         }
     }
 
@@ -47,15 +47,17 @@ final class DisplayedTextManager {
     /// キーボード外のテキストを扱う`UITextDocumentProxy`
     private var displayedTextProxy: (any UITextDocumentProxy)!
     /// キーボード内テキストフィールドの`UITextDocumentProxy`
-    private var ikTextFieldProxy: (any UITextDocumentProxy)?
+    private var ikTextFieldProxy: (id: UUID, proxy: (any UITextDocumentProxy))?
 
     func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
         switch proxy {
         case let .mainProxy(proxy):
             self.displayedTextProxy = proxy
-        case let .ikTextFieldProxy(proxy):
-            self.ikTextFieldProxy = proxy
-            if proxy == nil {
+        case let .ikTextFieldProxy(id, proxy):
+            if let proxy {
+                self.ikTextFieldProxy = (id, proxy)
+            } else if let (currentId, _) = ikTextFieldProxy, currentId == id {
+                self.ikTextFieldProxy = nil
                 self.preferredTextProxy = .main
             }
         case let .preference(preference):
@@ -77,6 +79,11 @@ final class DisplayedTextManager {
 
     var shouldSkipMarkedTextChange: Bool {
         self.isMarkedTextEnabled && preferredTextProxy == .ikTextField && ikTextFieldProxy != nil
+    }
+
+    func closeKeyboard() {
+        self.displayedTextProxy = nil
+        self.ikTextFieldProxy = nil
     }
 
     /// 入力を停止する

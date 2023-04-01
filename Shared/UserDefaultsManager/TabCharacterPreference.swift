@@ -13,7 +13,7 @@ struct TabCharacterPreference: Codable, KeyboardInternalSettingValue {
     static let initialValue = Self()
     private var preferences: [PreferenceItem] = []
     /// - note: Valueの配列は常にソートした状態にする
-    /// - note: 上位50件くらいまでを保存しておく
+    /// - note: 上位70件くらいまでを保存しておく
     private var recentlyUsedItems: [TabIdentifier: [RecentlyUsedItem]] = [:]
 
     func getPreferences(for tab: TabIdentifier) -> [String: String] {
@@ -42,8 +42,8 @@ struct TabCharacterPreference: Codable, KeyboardInternalSettingValue {
         items = items.sorted { lhs, rhs in
             lhs.score() < rhs.score()
         }
-        if items.count > 50 {
-            items.removeLast(items.count - 50)
+        if items.count > 70 {
+            items.removeLast(items.count - 70)
         }
         self.recentlyUsedItems[tab] = items
     }

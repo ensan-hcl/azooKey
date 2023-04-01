@@ -12,7 +12,7 @@ enum AnyTextDocumentProxy {
     /// メインの`UITextDocumentProxy`の設定に用いる
     case mainProxy((any UITextDocumentProxy)?)
     /// `IKTextEditor`系の`UITextDocumentProxy`の設定に用いる
-    case ikTextFieldProxy((any UITextDocumentProxy)?)
+    case ikTextFieldProxy(UUID, (any UITextDocumentProxy)?)
     /// 設定を切り替える場合に用いる
     case preference(Preference)
 

@@ -210,6 +210,7 @@ final class InputManager {
     func closeKeyboard() {
         debug("closeKeyboard: キーボードが閉じます")
         self.sendToDicdataStore(.closeKeyboard)
+        self.displayedTextManager.closeKeyboard()
         _ = self.enter()
     }
 
