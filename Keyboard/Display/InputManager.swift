@@ -26,6 +26,7 @@ final class InputManager {
     private var keyboardLanguage: KeyboardLanguage = .ja_JP
     func setKeyboardLanguage(_ value: KeyboardLanguage) {
         self.keyboardLanguage = value
+        self.kanaKanjiConverter.setKeyboardLanguage(value)
     }
 
     /// システム側でproxyを操作した結果、`textDidChange`などがよばれてしまう場合に、その呼び出しをスキップするため、フラグを事前に立てる
