@@ -258,6 +258,16 @@ final class InputManager {
         self.displayedTextManager.insertMainDisplayText(text)
     }
 
+    func deleteSelection() {
+        // 選択部分を削除する
+        self.previousSystemOperation = .removeSelection
+        self.displayedTextManager.deleteBackward(count: 1)
+        // 状態をリセットする
+        self.composingText.stopComposition()
+        self.kanaKanjiConverter.stopComposition()
+        self.isSelected = false
+    }
+
     /// テキスト入力を扱う関数
     /// - Parameters:
     ///   - text: 入力される関数
@@ -273,12 +283,7 @@ final class InputManager {
         }
         if self.isSelected {
             // 選択部分を削除する
-            self.previousSystemOperation = .removeSelection
-            self.displayedTextManager.deleteBackward(count: 1)
-            // 状態をリセットする
-            self.composingText.stopComposition()
-            self.kanaKanjiConverter.stopComposition()
-            self.isSelected = false
+            self.deleteSelection()
             // 入力する
             self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
             if requireSetResult {
@@ -570,12 +575,33 @@ final class InputManager {
         }
     }
 
+    /// クリップボードの文字列をペーストする
+    func paste() {
+        guard let text = UIPasteboard.general.string else {
+            return
+        }
+        guard !text.isEmpty else {
+            return
+        }
+        if isSelected {
+            // 選択部分を削除する
+            self.deleteSelection()
+        }
+        self.input(text: text, simpleInsert: true, inputStyle: .direct)
+    }
+
     /// 文字のreplaceを実施する
     /// `changeCharacter`を`CustardKit`で扱うためのAPI。
     /// キーボード経由でのみ実行される。
     func replaceLastCharacters(table: [String: String], requireSetResult: Bool = true, inputStyle: InputStyle) {
         debug(table, composingText, isSelected)
         if isSelected {
+            if let replace = table[self.composingText.convertTarget] {
+                // 選択部分を削除する
+                self.deleteSelection()
+                // 入力を実行する
+                self.input(text: replace, simpleInsert: true, inputStyle: .direct)
+            }
             return
         }
         let counts: (max: Int, min: Int) = table.keys.reduce(into: (max: 0, min: .max)) {
