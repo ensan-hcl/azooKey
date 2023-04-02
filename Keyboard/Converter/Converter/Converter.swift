@@ -13,6 +13,7 @@ import UIKit
 final class KanaKanjiConverter {
     private var converter = Kana2Kanji()
     private var checker = UITextChecker()
+    private var checkerInitialized: [KeyboardLanguage: Bool] = [.none: true, .ja_JP: true]
 
     // 前回の変換や確定の情報を取っておく部分。
     private var previousInputData: ComposingText?
@@ -26,6 +27,25 @@ final class KanaKanjiConverter {
         self.nodes = []
         self.completedData = nil
         self.lastData = nil
+    }
+
+    func setKeyboardLanguage(_ language: KeyboardLanguage) {
+        if !checkerInitialized[language, default: false] {
+            switch language {
+            case .en_US:
+                Task {
+                    _ = await checker.completions(forPartialWordRange: NSRange(location: 0, length: 1), in: "a", language: "en-US")
+                    checkerInitialized[language] = true
+                }
+            case .el_GR:
+                Task {
+                    _ = await checker.completions(forPartialWordRange: NSRange(location: 0, length: 1), in: "α", language: "el-GR")
+                    checkerInitialized[language] = true
+                }
+            case .none, .ja_JP:
+                checkerInitialized[language] = true
+            }
+        }
     }
 
     /// 上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
