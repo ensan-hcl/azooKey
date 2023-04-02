@@ -36,7 +36,7 @@ final class DisplayedTextManager {
 
     /// marked textの有効化状態
     private(set) var isMarkedTextEnabled: Bool
-    private var proxy: (any UITextDocumentProxy)! {
+    private var proxy: (any UITextDocumentProxy)? {
         switch preferredTextProxy {
         case .main: return displayedTextProxy
         case .ikTextField: return ikTextFieldProxy?.proxy ?? displayedTextProxy
@@ -45,7 +45,7 @@ final class DisplayedTextManager {
 
     private var preferredTextProxy: AnyTextDocumentProxy.Preference = .main
     /// キーボード外のテキストを扱う`UITextDocumentProxy`
-    private var displayedTextProxy: (any UITextDocumentProxy)!
+    private var displayedTextProxy: (any UITextDocumentProxy)?
     /// キーボード内テキストフィールドの`UITextDocumentProxy`
     private var ikTextFieldProxy: (id: UUID, proxy: (any UITextDocumentProxy))?
 
@@ -66,15 +66,15 @@ final class DisplayedTextManager {
     }
 
     var documentContextAfterInput: String? {
-        self.proxy.documentContextAfterInput
+        self.proxy?.documentContextAfterInput
     }
 
     var selectedText: String? {
-        self.proxy.selectedText
+        self.proxy?.selectedText
     }
 
     var documentContextBeforeInput: String? {
-        self.proxy.documentContextBeforeInput
+        self.proxy?.documentContextBeforeInput
     }
 
     var shouldSkipMarkedTextChange: Bool {
@@ -90,7 +90,7 @@ final class DisplayedTextManager {
     func stopComposition() {
         debug("DisplayedTextManager.stopComposition")
         if self.isMarkedTextEnabled {
-            self.proxy.unmarkText()
+            self.proxy?.unmarkText()
         } else {
             // Do nothing
         }
@@ -112,7 +112,7 @@ final class DisplayedTextManager {
         if count == 0 {
             return 0
         } else if count > 0 {
-            if let after = self.proxy.documentContextAfterInput {
+            if let after = self.proxy?.documentContextAfterInput {
                 // 改行があって右端の場合ここに来る。
                 if after.isEmpty {
                     return 1
@@ -123,7 +123,7 @@ final class DisplayedTextManager {
                 return 1
             }
         } else {
-            if let before = self.proxy.documentContextBeforeInput {
+            if let before = self.proxy?.documentContextBeforeInput {
                 let pre = before.suffix(-count)
                 return -pre.utf16.count
             } else {
@@ -137,14 +137,14 @@ final class DisplayedTextManager {
     private func updateMarkedText() {
         let text = self.displayedLiveConversionText ?? self.composingText.convertTarget
         let cursorPosition = self.displayedLiveConversionText.map(NSString.init(string:))?.length ?? NSString(string: String(self.composingText.convertTarget.prefix(self.composingText.convertTargetCursorPosition))).length
-        self.proxy.setMarkedText(text, selectedRange: NSRange(location: cursorPosition, length: 0))
+        self.proxy?.setMarkedText(text, selectedRange: NSRange(location: cursorPosition, length: 0))
     }
 
     func insertText(_ text: String) {
         guard !text.isEmpty else {
             return
         }
-        self.proxy.insertText(text)
+        self.proxy?.insertText(text)
         self.textChangedCount += 1
     }
 
@@ -153,7 +153,7 @@ final class DisplayedTextManager {
         guard !text.isEmpty else {
             return
         }
-        self.displayedTextProxy.insertText(text)
+        self.displayedTextProxy?.insertText(text)
         self.textChangedCount += 1
     }
 
@@ -162,7 +162,7 @@ final class DisplayedTextManager {
             return
         }
         let offset = self.getActualOffset(count: count)
-        self.proxy.adjustTextPosition(byCharacterOffset: offset)
+        self.proxy?.adjustTextPosition(byCharacterOffset: offset)
         self.textChangedCount += 1
     }
 
@@ -172,7 +172,7 @@ final class DisplayedTextManager {
             return
         }
         for _ in 0 ..< count {
-            self.proxy.deleteBackward()
+            self.proxy?.deleteBackward()
         }
         self.textChangedCount += 1
     }
@@ -198,11 +198,11 @@ final class DisplayedTextManager {
             return
         }
         for _ in 0 ..< count {
-            let before_b = self.proxy.documentContextBeforeInput
-            let before_a = self.proxy.documentContextAfterInput
+            let before_b = self.proxy?.documentContextBeforeInput
+            let before_a = self.proxy?.documentContextAfterInput
             self.moveCursor(count: 1)
-            if before_a != self.proxy.documentContextAfterInput || before_b != self.proxy.documentContextBeforeInput {
-                self.proxy.deleteBackward()
+            if before_a != self.proxy?.documentContextAfterInput || before_b != self.proxy?.documentContextBeforeInput {
+                self.proxy?.deleteBackward()
             } else {
                 return
             }
@@ -246,7 +246,7 @@ final class DisplayedTextManager {
 
             self.moveCursor(count: oldDisplayedText.count - oldCursorPosition)
             self.rawDeleteBackward(count: delete)
-            self.proxy.insertText(String(input))
+            self.proxy?.insertText(String(input))
             self.moveCursor(count: newCursorPosition - newDisplayedText.count)
         }
     }
@@ -256,7 +256,7 @@ final class DisplayedTextManager {
         self.composingText = composingText
         if delta != 0 {
             let offset = self.getActualOffset(count: delta)
-            self.proxy.adjustTextPosition(byCharacterOffset: offset)
+            self.proxy?.adjustTextPosition(byCharacterOffset: offset)
             return true
         }
         return false
