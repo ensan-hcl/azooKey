@@ -130,7 +130,7 @@ final class KeyboardActionManager: UserActionManager {
             }
         case .paste:
             if SemiStaticStates.shared.hasFullAccess {
-                self.inputManager.input(text: UIPasteboard.general.string ?? "", simpleInsert: true, inputStyle: variableStates.inputStyle)
+                self.inputManager.paste()
             }
 
         case .deselectAndUseAsInputting:
