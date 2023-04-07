@@ -169,31 +169,31 @@ final class ConverterTests: XCTestCase {
         // データリソースの場所を指定する
         DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
 
-        let cases: [(input: String, expect: String)] = [
-            ("3がつ8にち", "3月8日"),
-            ("いっていのわりあい", "一定の割合"),
-            ("あいふぉんをこうにゅうする", "iPhoneを購入する"),
-            ("それはくさ", "それは草"),
-            ("おにんぎょうさんみたいだね", "お人形さんみたいだね"),
-            ("にほんごぶんぽうのけいしきりろん", "日本語文法の形式理論"),
-            ("ぷらすちっくをさくげんするひつようがある", "プラスチックを削減する必要がある"),
-            ("きりんさんがすきです", "キリンさんが好きです"),
-            ("しんらばんしょうをすべるかみとなる", "森羅万象を統べる神となる"),
-            ("よねづけんしのしんきょく", "米津玄師の新曲"),
-            ("へいろをけんしゅつするもんだい", "閉路を検出する問題"),
-            ("それなすぎる", "それなすぎる"),
-            ("きたねえんだよやりかたが", "汚ねえんだよやり方が"),
-            ("なにわらってんだよ", "何笑ってんだよ"),
-            ("えもみがふかい", "エモみが深い"),
-            ("とうごてきかなかんじへんかん", "統語的かな漢字変換"),
-            ("あなたとふたりでいきをしていたい", "あなたとふたりで息をしていたい"),
-            ("こんごきをつけます", "今後気をつけます"),
-            ("ごめいわくをおかけしてもうしわけありません", "ご迷惑をおかけして申し訳ありません"),
-            ("どうぞよろしくおねがいいたします", "どうぞよろしくお願いいたします"),
-            ("らいぶへんかんでにゅうりょくがかいてきです", "ライブ変換で入力が快適です"),
-            ("にんちかがくがえがきだすにんげんのすがた", "認知科学が描き出す人間の姿"),
-            ("ぱいそんでかかれたそーすこーど", "Pythonで書かれたソースコード"),
-            ("SwiftでつくったApp", "Swiftで作ったApp"),
+        let cases: [(input: String, expect: [String])] = [
+            ("3がつ8にち", ["3月8日"]),
+            ("いっていのわりあい", ["一定の割合"]),
+            ("あいふぉんをこうにゅうする", ["iPhoneを購入する"]),
+            ("それはくさ", ["それは草"]),
+            ("おにんぎょうさんみたいだね", ["お人形さんみたいだね"]),
+            ("にほんごぶんぽうのけいしきりろん", ["日本語文法の形式理論"]),
+            ("ぷらすちっくをさくげんするひつようがある", ["プラスチックを削減する必要がある"]),
+            ("きりんさんがすきです", ["キリンさんが好きです"]),
+            ("しんらばんしょうをすべるかみとなる", ["森羅万象を統べる神となる"]),
+            ("よねづけんしのしんきょく", ["米津玄師の新曲"]),
+            ("へいろをけんしゅつするもんだい", ["閉路を検出する問題"]),
+            ("それなすぎる", ["それなすぎる"]),
+            ("きたねえんだよやりかたが", ["汚ねえんだよやり方が"]),
+            ("なにわらってんだよ", ["何笑ってんだよ", "なに笑ってんだよ"]),
+            ("えもみがふかい", ["エモみが深い"]),
+            ("とうごてきかなかんじへんかん", ["統語的かな漢字変換"]),
+            ("あなたとふたりでいきをしていたい", ["あなたとふたりで息をしていたい"]),
+            ("こんごきをつけます", ["今後気をつけます"]),
+            ("ごめいわくをおかけしてもうしわけありません", ["ご迷惑をおかけして申し訳ありません"]),
+            ("どうぞよろしくおねがいいたします", ["どうぞよろしくお願いいたします"]),
+            ("らいぶへんかんでにゅうりょくがかいてきです", ["ライブ変換で入力が快適です"]),
+            ("にんちかがくがえがきだすにんげんのすがた", ["認知科学が描き出す人間の姿"]),
+            ("ぱいそんでかかれたそーすこーど", ["Pythonで書かれたソースコード"]),
+            ("SwiftでつくったApp", ["Swiftで作ったApp"]),
         ]
 
         var score: Double = 0
@@ -203,9 +203,9 @@ final class ConverterTests: XCTestCase {
             c.insertAtCursorPosition(input, inputStyle: .direct)
             let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
 
-            if results.mainResults.first?.text == expect {
+            if expect.contains(results.mainResults[0].text) {
                 score += 1
-            } else if results.mainResults.count > 1 && results.mainResults[2].text == expect {
+            } else if results.mainResults.count > 1 && expect.contains(results.mainResults[1].text) {
                 score += 0.5
             }
         }
@@ -476,12 +476,12 @@ final class ConverterTests: XCTestCase {
         for (input, expect) in cases {
             let converter = KanaKanjiConverter()
             var c = ComposingText()
-            _ = c.insertAtCursorPosition(input, inputStyle: .direct)
+            c.insertAtCursorPosition(input, inputStyle: .direct)
             let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 10, requireJapanesePrediction: false, learningType: .nothing))
 
-            if results.mainResults.first?.text == expect {
+            if results.mainResults[0].text == expect {
                 score += 1
-            } else if results.mainResults.count > 1 && results.mainResults[2].text == expect {
+            } else if results.mainResults.count > 1 && results.mainResults[1].text == expect {
                 score += 0.5
             }
         }
