@@ -26,13 +26,33 @@ final class DicdataStoreTests: XCTestCase {
             ("ダイヒョウ", "代表"),
             ("テキナ", "的な"),
             ("ヤマダ", "山田"),
+            ("アイロ", "隘路"),
+            ("ナンタイ", "軟体"),
         ]
         for (key, word) in mustWords {
             var c = ComposingText()
-            _ = c.insertAtCursorPosition(key, inputStyle: .direct)
+            c.insertAtCursorPosition(key, inputStyle: .direct)
             let result = dicdataStore.getLOUDSData(inputData: c, from: 0, to: c.input.endIndex-1)
             // 冗長な書き方だが、こうすることで「どの項目でエラーが発生したのか」がはっきりするため、こう書いている。
             XCTAssertEqual(result.first(where: {$0.data.word == word})?.data.word, word)
+        }
+    }
+
+    /// 入っていてはおかしい候補をここに記述する
+    ///  - 主に以前混入していたが取り除いた語を記述する
+    func testMustNotWords() throws {
+        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
+        let dicdataStore = DicdataStore()
+        let mustWords = [
+            ("タイ", "体."),
+            ("アサッテ", "明日"),
+            ("チョ", "ちょwww"),
+        ]
+        for (key, word) in mustWords {
+            var c = ComposingText()
+            c.insertAtCursorPosition(key, inputStyle: .direct)
+            let result = dicdataStore.getLOUDSData(inputData: c, from: 0, to: c.input.endIndex-1)
+            XCTAssertNil(result.first(where: {$0.data.word == word && $0.data.ruby == key}))
         }
     }
 
