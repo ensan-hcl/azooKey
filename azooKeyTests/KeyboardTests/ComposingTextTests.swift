@@ -70,7 +70,6 @@ final class ComposingTextTests: XCTestCase {
         }
         // ローマ字の特殊ケース(促音)
         do {
-            let inputStyle = InputStyle.roman2kana
             var c = ComposingText()
             sequentialInput(&c, sequence: "itte", inputStyle: .roman2kana)
             XCTAssertEqual(c.input, [
@@ -84,7 +83,6 @@ final class ComposingTextTests: XCTestCase {
         }
         // ローマ字の特殊ケース(撥音)
         do {
-            let inputStyle = InputStyle.roman2kana
             var c = ComposingText()
             sequentialInput(&c, sequence: "anta", inputStyle: .roman2kana)
             XCTAssertEqual(c.input, [
