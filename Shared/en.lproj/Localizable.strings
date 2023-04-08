@@ -181,6 +181,11 @@
 "azooKeyは、キーボードの振動フィードバックや、キーボードからのペーストを実現するために、フルアクセスの許可が必要です。フルアクセスを許可していただくことで、これらの機能が使用できます。" = "azooKey requires full access permission in order to enable features such as keyboard haptics and pasting from the keyboard. By granting full access, these features can be utilized.";
 "以下は、フルアクセスをオンにすることで利用できる設定項目です。フルアクセスを必要とする機能は、すべてデフォルトで無効になっているため、フルアクセスを許可しただけでキーボードの振る舞いが変わることはありません。" = "The following are the settings that can be used when full access is turned on. As all functions requiring full access are disabled by default, simply granting full access will not change the behavior of the keyboard.";
 "また、フルアクセスをオンにしたあとでも、いつでもフルアクセスをオフにすることができます。" = "Furthermore, even after turning on full access, it is possible to turn it off at any time.";
+
+"フルアクセスをオンにすると、変換候補を長押しすることでキーボード上で誤変換を報告できるようになります。" = "When you turn on full access, you can report mis-conversions on the keyboard by long-pressing conversion candidates.";
+"報告の際には、「アプリのバージョン」「変換候補と読みと順位」「ローマ字入力かフリック入力か」「学習のあり/なし」の情報がサーバに送信されます。" = "When reporting, information such as the app version, conversion candidate, reading, ranking, input method (roman character input or flick input), and whether or not learning is enabled will be sent to the server.";
+"変換精度向上のため、報告をいただけると大変助かります。" = "Reporting would be greatly appreciated as it helps improve conversion accuracy.";
+
 "フルアクセスを許可しなくても、キーボードは完全に動作します。上記の機能を使わない場合は、オンにしないことを強くおすすめします。" = "The keyboard will function fully even without granting full access. It is strongly recommended not to turn on full access if you do not need to use the above features.";
 "なお、azooKeyはオープンソースであり、誰もが実装を確認することができます。" = "Additionally, azooKey is an open-source keyboard app, allowing anyone to review the implementation.";
 "フルアクセスを有効化する際、以下のような警告が表示されますが、すべてのキーボードアプリで共通して表示されている警告です。" = "The following warning appears when enabling full access, but it is a warning that is common to all keyboard apps.";
