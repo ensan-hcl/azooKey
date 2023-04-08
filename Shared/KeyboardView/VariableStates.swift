@@ -175,6 +175,8 @@ final class VariableStates: ObservableObject {
     func closeKeyboard() {
         self.tabManager.closeKeyboard()
         self.upsideComponent = nil
+        // 変更する
+        self.textChangedCount += 1
         // このタイミングでクリップボードを確認する
         self.clipboardHistoryManager.checkUpdate()
         // 保存処理を行う
