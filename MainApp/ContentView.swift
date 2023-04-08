@@ -78,10 +78,10 @@ struct ContentView: View {
                             guard var tabBarData = try? manager.tabbar(identifier: 0) else {
                                 return
                             }
-                            if tabBarData.items.contains(where: {$0.actions.contains(.moveTab(.system(.__emoji_tab)))}) {
+                            if tabBarData.items.contains(where: {$0.actions.contains(.moveTab(.system(.emoji_tab)))}) {
                                 return
                             }
-                            tabBarData.items.append(.init(label: .text("絵文字"), actions: [.moveTab(.system(.__emoji_tab))]))
+                            tabBarData.items.append(.init(label: .text("絵文字"), actions: [.moveTab(.system(.emoji_tab))]))
                             tabBarData.lastUpdateDate = .now
                             try? manager.saveTabBarData(tabBarData: tabBarData)
                         }

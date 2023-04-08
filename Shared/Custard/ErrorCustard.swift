@@ -15,7 +15,7 @@ extension Custard {
         identifier: "error_message",
         language: .undefined,
         input_style: .direct,
-        metadata: .init(custard_version: .v1_0, display_name: "エラーメッセージ"),
+        metadata: .init(custard_version: .v1_2, display_name: "エラーメッセージ"),
         interface: .init(
             keyStyle: .tenkeyStyle,
             keyLayout: .gridFit(.init(rowCount: 1, columnCount: 6)),

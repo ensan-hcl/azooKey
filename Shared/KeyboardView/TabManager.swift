@@ -35,9 +35,9 @@ extension TabData {
                 return .user_dependent(.english)
             case .last_tab:
                 return .last_tab
-            case .__clipboard_history_tab:
+            case .clipboard_history_tab:
                 return .existential(.special(.clipboard_history_tab))
-            case .__emoji_tab:
+            case .emoji_tab:
                 return .existential(.special(.emoji))
             }
         case let .custom(identifier):
