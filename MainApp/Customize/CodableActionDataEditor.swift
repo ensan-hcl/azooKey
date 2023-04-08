@@ -15,7 +15,7 @@ extension CodableActionData {
     var hasAssociatedValue: Bool {
         switch self {
         case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication: return true
-        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard, .__paste: return false
+        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard, .paste: return false
         }
     }
 
@@ -26,7 +26,7 @@ extension CodableActionData {
         case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
         case let .smartDelete(value): return "\(value.targets.joined(separator: ","))の隣まで削除"
-        case .__paste: return "ペーストする"
+        case .paste: return "ペーストする"
         case .moveTab: return "タブの移動"
         case .replaceLastCharacters: return "文字を置換"
         case .complete: return "確定"
@@ -326,9 +326,9 @@ extension TabData {
                 return "記号(ローマ字入力)"
             case .last_tab:
                 return "最後に表示していたタブ"
-            case .__clipboard_history_tab:
+            case .clipboard_history_tab:
                 return "クリップボードの履歴"
-            case .__emoji_tab:
+            case .emoji_tab:
                 return "絵文字"
             }
         case let .custom(identifier):
@@ -351,8 +351,8 @@ struct AvailableTabPicker: View {
             ("記号と数字(フリック入力)", .system(.flick_numbersymbols)),
             ("数字(ローマ字入力)", .system(.qwerty_numbers)),
             ("記号(ローマ字入力)", .system(.qwerty_symbols)),
-            ("絵文字", .system(.__emoji_tab)),
-            ("クリップボードの履歴", .system(.__clipboard_history_tab)),
+            ("絵文字", .system(.emoji_tab)),
+            ("クリップボードの履歴", .system(.clipboard_history_tab)),
             ("最後に表示していたタブ", .system(.last_tab)),
             ("日本語(フリック入力)", .system(.flick_japanese)),
             ("日本語(ローマ字入力)", .system(.qwerty_japanese)),
@@ -524,7 +524,7 @@ private struct ActionPicker: View {
                 }
                 if SemiStaticStates.shared.hasFullAccess {
                     Button("ペースト") {
-                        process(.__paste)
+                        process(.paste)
                     }
                 }
             }

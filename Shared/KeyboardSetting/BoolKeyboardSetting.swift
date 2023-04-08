@@ -223,8 +223,8 @@ struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {
         do {
             var manager = CustardManager.load()
             var tabBarData = (try? manager.tabbar(identifier: 0)) ?? .default
-            if !tabBarData.items.contains(where: {$0.actions == [.moveTab(.system(.__clipboard_history_tab))]}) {
-                tabBarData.items.append(TabBarItem(label: .text("コピー履歴"), actions: [.moveTab(.system(.__clipboard_history_tab))]))
+            if !tabBarData.items.contains(where: {$0.actions == [.moveTab(.system(.clipboard_history_tab))]}) {
+                tabBarData.items.append(TabBarItem(label: .text("コピー履歴"), actions: [.moveTab(.system(.clipboard_history_tab))]))
             }
             tabBarData.lastUpdateDate = .now
             try manager.saveTabBarData(tabBarData: tabBarData)
@@ -239,7 +239,7 @@ struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {
             var manager = CustardManager.load()
             var tabBarData = (try? manager.tabbar(identifier: 0)) ?? .default
             tabBarData.items.removeAll {
-                $0.actions == [.moveTab(.system(.__clipboard_history_tab))]
+                $0.actions == [.moveTab(.system(.clipboard_history_tab))]
             }
             tabBarData.lastUpdateDate = .now
             try manager.saveTabBarData(tabBarData: tabBarData)

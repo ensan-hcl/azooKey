@@ -78,7 +78,7 @@ struct TabBarData: Codable {
         TabBarItem(label: .text("片手"), actions: [.enableResizingMode, .toggleTabBar]),
         TabBarItem(label: .text("あいう"), actions: [.moveTab(.system(.user_japanese))]),
         TabBarItem(label: .text("ABC"), actions: [.moveTab(.system(.user_english))]),
-        TabBarItem(label: .text("絵文字"), actions: [.moveTab(.system(.__emoji_tab))]),
+        TabBarItem(label: .text("絵文字"), actions: [.moveTab(.system(.emoji_tab))]),
         TabBarItem(label: .text("閉じる"), actions: [.dismissKeyboard])
     ])
 }

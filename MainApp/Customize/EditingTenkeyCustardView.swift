@@ -64,7 +64,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
             language: editingItem.language,
             input_style: editingItem.inputStyle,
             metadata: .init(
-                custard_version: .v1_0,
+                custard_version: .v1_2,
                 display_name: editingItem.tabName
             ),
             interface: .init(

@@ -173,7 +173,7 @@ struct MessageManager {
                 true
             },
             silentDoneCondition: {
-                if (try? CustardManager.load().tabbar(identifier: 0))?.items.contains(where: {$0.actions.contains(.moveTab(.system(.__emoji_tab)))}) == true {
+                if (try? CustardManager.load().tabbar(identifier: 0))?.items.contains(where: {$0.actions.contains(.moveTab(.system(.emoji_tab)))}) == true {
                     return true
                 }
                 return false

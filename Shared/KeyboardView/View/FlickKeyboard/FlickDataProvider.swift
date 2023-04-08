@@ -16,7 +16,7 @@ struct FlickDataProvider {
     //        identifier: "bool_state_test",
     //        language: .undefined,
     //        input_style: .direct,
-    //        metadata: .init(custard_version: .v1_0, display_name: "BoolStateTest"),
+    //        metadata: .init(custard_version: .v1_2, display_name: "BoolStateTest"),
     //        logics: .init(initialValues: [
     //            .init(name: "toggle1", value: .bool(false)),
     //            .init(name: "toggle2", value: .bool(false))

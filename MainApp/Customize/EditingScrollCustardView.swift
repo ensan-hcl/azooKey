@@ -137,7 +137,7 @@ struct EditingScrollCustardView: CancelableEditor {
             identifier: data.tabName.isEmpty ? "new_tab" : data.tabName,
             language: .none,
             input_style: .direct,
-            metadata: .init(custard_version: .v1_0, display_name: data.tabName.isEmpty ? "New tab" : data.tabName),
+            metadata: .init(custard_version: .v1_2, display_name: data.tabName.isEmpty ? "New tab" : data.tabName),
             interface: .init(
                 keyStyle: .tenkeyStyle,
                 keyLayout: .gridScroll(.init(direction: data.direction, rowCount: rowCount, columnCount: columnCount)),

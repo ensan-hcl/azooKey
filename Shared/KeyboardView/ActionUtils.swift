@@ -50,7 +50,7 @@ extension CodableActionData {
             }
         case .dismissKeyboard:
             return .dismissKeyboard
-        case .__paste:
+        case .paste:
             return .paste
         //        case let .setCursorBar(value):
         //            return .setCursorBar(value)
