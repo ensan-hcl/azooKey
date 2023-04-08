@@ -341,6 +341,43 @@ final class KeyboardActionManager: UserActionManager {
         }
     }
 
+    override func notifyReportWrongConversion(_ candidate: any ResultViewItemData, index: Int?, variableStates: VariableStates) async {
+        let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLSfpYQqbX8u5SgGVfXjNzCPtKAH_5Mp7PCkUiCiUceEaevb8pQ/formResponse")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("no-cors", forHTTPHeaderField: "mode")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        let surfaceCandidate = candidate.text
+        let ruby: String
+        if let candidate = candidate as? Candidate {
+            let composingText = inputManager.getComposingText()
+            // 以下のようなフォーマットになる
+            // あか / roman(a) roman(k) roman(a)
+            ruby = composingText.convertTarget + " / " + composingText.input.map {"\($0.inputStyle.rawValue)(\($0.character))"}.joined()
+        } else {
+            ruby = "Unknown case"
+        }
+        let index: String = index?.description ?? "nil"
+        let version = SharedStore.currentAppVersion?.description ?? "Unknown Version"
+        @KeyboardSetting(.learningType) var learningType
+        let learning = learningType.needUsingMemory ? "有効" : "無効"
+        request.httpBody = "entry.134904003=\(surfaceCandidate)&entry.869464972=\(ruby)&entry.1459534202=\(index)&entry.571429448=\(version)&entry.524189292=\(learning)"
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
+            .data(using: .utf8) ?? Data()
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            debug("notifyReportWrongConversion response", response)
+            await MainActor.run {
+                variableStates.temporalMessage = .doneReportWrongConversion
+            }
+        } catch {
+            debug("notifyReportWrongConversion error", error)
+            await MainActor.run {
+                variableStates.temporalMessage = .failedReportWrongConversion
+            }
+        }
+    }
+
     /// 何かが変化する前に状態の保存を行う関数。
     override func notifySomethingWillChange(left: String, center: String, right: String) {
         // self.tempTextDataが`nil`でない場合、上書きせず終了する

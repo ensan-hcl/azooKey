@@ -69,6 +69,10 @@ final class InputManager {
         self.displayedTextManager.getTextChangedCountDelta()
     }
 
+    func getComposingText() -> ComposingText {
+        self.composingText
+    }
+
     private func updateLog(candidate: Candidate) {
         for data in candidate.data {
             // 「感謝する: カンシャスル」→を「感謝: カンシャ」に置き換える

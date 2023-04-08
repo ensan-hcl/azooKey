@@ -20,6 +20,7 @@ class UserActionManager {
     func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {}
     func notifyComplete(_ candidate: any ResultViewItemData, variableStates: VariableStates) {}
     func notifyForgetCandidate(_ candidate: any ResultViewItemData, variableStates: VariableStates) {}
+    func notifyReportWrongConversion(_ candidate: any ResultViewItemData, index: Int?, variableStates: VariableStates) async {}
     func notifySomethingWillChange(left: String, center: String, right: String) {}
     func notifySomethingDidChange(a_left: String, a_center: String, a_right: String, variableStates: VariableStates) {}
 
