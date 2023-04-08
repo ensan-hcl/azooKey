@@ -276,42 +276,21 @@ final class InputManager {
     ///   - simpleInsert: `ComposingText`を作るのではなく、直接文字を入力し、変換候補を表示しない。
     ///   - inputStyle: 入力スタイル
     func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false, inputStyle: InputStyle) {
-        if simpleInsert {
+        if self.isSelected {
+            // 選択部分を削除する
+            self.deleteSelection()
+        }
+        // 直接入力の条件
+        if simpleInsert         // flag
+            || text == "\n"     // 改行
+            || text == " " || text == "　" || text == "\t" || text == "\0" // スペース類
+            || self.keyboardLanguage == .none  // 言語がnone
+        {
             // 必要に応じて確定する
             _ = self.enter()
             self.displayedTextManager.insertText(text)
             return
         }
-        if self.isSelected {
-            // 選択部分を削除する
-            self.deleteSelection()
-            // 入力する
-            self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
-            if requireSetResult {
-                // 変換を要求する
-                self.setResult()
-            }
-            return
-        }
-
-        if text == "\n"{
-            _ = self.enter()
-            self.displayedTextManager.insertText(text)
-            return
-        }
-        // スペースだった場合
-        if text == " " || text == "　" || text == "\t" || text == "\0"{
-            _ = self.enter()
-            self.displayedTextManager.insertText(text)
-            return
-        }
-
-        if keyboardLanguage == .none {
-            _ = self.enter()
-            self.displayedTextManager.insertText(text)
-            return
-        }
-
         self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
         debug("Input Manager input:", composingText)
         if requireSetResult {
