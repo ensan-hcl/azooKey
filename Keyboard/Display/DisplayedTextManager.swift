@@ -82,7 +82,6 @@ final class DisplayedTextManager {
     }
 
     func closeKeyboard() {
-        self.displayedTextProxy = nil
         self.ikTextFieldProxy = nil
     }
 
