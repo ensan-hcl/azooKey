@@ -89,7 +89,7 @@ struct ResultBar: View {
                                     }
                                     .buttonStyle(ResultButtonStyle(height: buttonHeight))
                                     .contextMenu {
-                                        ResultContextMenuView(candidate: data.candidate)
+                                        ResultContextMenuView(candidate: data.candidate, index: data.id)
                                     }
                                     .id(data.id)
                                 } else {
@@ -134,9 +134,11 @@ struct ResultContextMenuView: View {
     @Environment(\.userActionManager) private var action
     @KeyboardSetting(.learningType) private var learningType
     private let candidate: any ResultViewItemData
+    private let index: Int?
 
-    init(candidate: any ResultViewItemData) {
+    init(candidate: any ResultViewItemData, index: Int? = nil) {
         self.candidate = candidate
+        self.index = index
     }
 
     var body: some View {
@@ -154,6 +156,15 @@ struct ResultContextMenuView: View {
                 }) {
                     Text("この候補の学習をリセットする")
                     Image(systemName: "clear")
+                }
+            }
+            if SemiStaticStates.shared.hasFullAccess {
+                Button {
+                    Task.detached {
+                        await action.notifyReportWrongConversion(candidate, index: index, variableStates: variableStates)
+                    }
+                } label: {
+                    Label("誤変換を報告", systemImage: "exclamationmark.bubble")
                 }
             }
             #if DEBUG
