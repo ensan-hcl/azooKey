@@ -10,9 +10,12 @@ import SwiftUI
 
 struct MarkedTextSettingView: View {
     typealias SettingKey = MarkedTextSettingKey
-    init(_ key: SettingKey) {}
     @State private var isOn = false
-    @State private var setting = SettingUpdater<SettingKey>()
+    @State private var setting: SettingUpdater<SettingKey>
+
+    @MainActor init(_ key: SettingKey) {
+        self._setting = .init(initialValue: .init())
+    }
 
     func forward(_ settingValue: MarkedTextSettingKey.Value) -> Bool {
         if settingValue == .disabled {

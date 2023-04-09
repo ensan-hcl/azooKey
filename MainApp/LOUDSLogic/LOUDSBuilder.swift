@@ -190,7 +190,7 @@ struct LOUDSBuilder {
         return binary
     }
 
-    func process(to identifier: String = "user") {
+    @MainActor func process(to identifier: String = "user") {
         let trieroot = TrieNode<Character, Int>()
 
         let (paths, blocks, useradds) = self.loadUserDictInfo()

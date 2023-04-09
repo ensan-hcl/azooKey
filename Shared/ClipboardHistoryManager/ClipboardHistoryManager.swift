@@ -38,7 +38,7 @@ struct ClipboardHistoryManager {
     private var collapsed = false
     private var previousChangedCount = 0
 
-    private var enabled: Bool {
+    @MainActor private var enabled: Bool {
         @KeyboardSetting(.enableClipboardHistoryManagerTab) var required: Bool
         return required && SemiStaticStates.shared.hasFullAccess
     }
@@ -67,7 +67,7 @@ struct ClipboardHistoryManager {
         }
     }
 
-    func save() {
+    @MainActor func save() {
         // 読み込みに失敗している場合は上書きを行わない
         guard !self.collapsed else {
             return
@@ -87,7 +87,7 @@ struct ClipboardHistoryManager {
         self.items.sort(by: >)
     }
 
-    mutating func checkUpdate() {
+    @MainActor mutating func checkUpdate() {
         guard self.enabled else {
             return
         }

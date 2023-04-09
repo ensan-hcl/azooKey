@@ -41,13 +41,13 @@ struct BetaMoveCursorBarState {
         return line[index]
     }
 
-    mutating fileprivate func move(_ count: Int, actionManager: some UserActionManager, variableStates: VariableStates) {
+    @MainActor mutating fileprivate func move(_ count: Int, actionManager: some UserActionManager, variableStates: VariableStates) {
         displayLeftIndex += count
         displayRightIndex += count
         actionManager.registerAction(.moveCursor(count), variableStates: variableStates)
     }
 
-    mutating fileprivate func tap(at index: Int, actionManager: some UserActionManager, variableStates: VariableStates) {
+    @MainActor mutating fileprivate func tap(at index: Int, actionManager: some UserActionManager, variableStates: VariableStates) {
         let diff: Int
         if index < 0 {
             diff = -1

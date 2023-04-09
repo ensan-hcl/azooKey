@@ -13,7 +13,8 @@ import SwiftUI
 
 /// 実行中変更され、かつViewが変更を検知できるべき値。
 final class VariableStates: ObservableObject {
-    init(interfaceWidth: CGFloat? = nil, orientation: KeyboardOrientation? = nil) {
+    @MainActor init(interfaceWidth: CGFloat? = nil, orientation: KeyboardOrientation? = nil) {
+        self.tabManager = TabManager()
         if let interfaceWidth {
             self.setInterfaceSize(orientation: orientation ?? .vertical, screenWidth: interfaceWidth)
         } else if let orientation {
@@ -90,7 +91,7 @@ final class VariableStates: ObservableObject {
         }
     }
     private(set) var inputStyle: InputStyle = .direct
-    private(set) var tabManager = TabManager()
+    private(set) var tabManager: TabManager
     @Published var clipboardHistoryManager = ClipboardHistoryManager()
 
     @Published var keyboardLanguage: KeyboardLanguage = .ja_JP
@@ -167,12 +168,12 @@ final class VariableStates: ObservableObject {
         }
     }
 
-    func initialize() {
+    @MainActor func initialize() {
         self.tabManager.initialize(variableStates: self)
         self.moveCursorBarState.clear()
     }
 
-    func closeKeyboard() {
+    @MainActor func closeKeyboard() {
         self.tabManager.closeKeyboard()
         self.upsideComponent = nil
         // 変更する
@@ -183,7 +184,7 @@ final class VariableStates: ObservableObject {
         self.clipboardHistoryManager.save()
     }
 
-    func setKeyboardType(_ type: UIKeyboardType?) {
+    @MainActor func setKeyboardType(_ type: UIKeyboardType?) {
         debug("setKeyboardType:", type.debugDescription)
         guard let type else {
             return
@@ -227,7 +228,7 @@ final class VariableStates: ObservableObject {
         }
     }
 
-    func setTab(_ tab: Tab, temporary: Bool = false) {
+    @MainActor func setTab(_ tab: Tab, temporary: Bool = false) {
         if temporary {
             self.tabManager.setTemporalTab(tab, variableStates: self)
         } else {

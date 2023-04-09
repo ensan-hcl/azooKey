@@ -9,7 +9,7 @@
 import SwiftUI
 
 /// キーボードへのアクション部門の動作を担う。
-final class KeyboardActionManager: UserActionManager {
+@MainActor final class KeyboardActionManager: UserActionManager {
     override init() {}
 
     private var inputManager = InputManager()

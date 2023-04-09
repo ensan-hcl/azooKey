@@ -56,7 +56,7 @@ struct MessageData: Identifiable {
     let precondition: () -> Bool
 
     /// メッセージを表示せずにDoneにして良い条件
-    let silentDoneCondition: () -> Bool
+    let silentDoneCondition: @MainActor () -> Bool
 
     /// 収容アプリがDoneにすべき条件
     let containerAppShouldMakeItDone: () -> Bool
@@ -184,7 +184,7 @@ struct MessageManager {
 
     private var needShow: [MessageIdentifier: Bool]
 
-    init() {
+    @MainActor init() {
         self.needShow = necessaryMessages.reduce(into: [:]) {dict, value in
             dict[value.id] = value.precondition() && Self.checkDone(value.id)
         }

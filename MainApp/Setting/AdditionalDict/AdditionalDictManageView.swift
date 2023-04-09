@@ -82,13 +82,17 @@ struct AdditionalDictBlockManager: OnOffSettingSet {
 final class AdditionalDictManager: ObservableObject {
     @Published var systemDict: AdditionalSystemDictManager {
         didSet {
-            self.userDictUpdate()
+            Task.detached {
+                await self.userDictUpdate()
+            }
         }
     }
 
     @Published var blockTargets: AdditionalDictBlockManager {
         didSet {
-            self.userDictUpdate()
+            Task.detached {
+                await self.userDictUpdate()
+            }
         }
     }
 
@@ -100,7 +104,7 @@ final class AdditionalDictManager: ObservableObject {
         self.blockTargets = .init(dataList: blockList ?? [])
     }
 
-    func userDictUpdate() {
+    @MainActor func userDictUpdate() {
         var list: [String] = []
         AdditionalSystemDictManager.Target.allCases.forEach { target in
             if self.systemDict[target] {

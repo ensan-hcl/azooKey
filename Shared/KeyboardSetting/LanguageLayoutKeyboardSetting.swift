@@ -78,7 +78,7 @@ extension LanguageLayout: Savable {
 }
 
 extension StoredInUserDefault where Value == LanguageLayout {
-    static func get() -> Value? {
+    @MainActor static func get() -> Value? {
         if let data = SharedStore.userDefaults.data(forKey: key), let type = LanguageLayout.get(data) {
             return type
         } else if let string = SharedStore.userDefaults.string(forKey: key), let type = KeyboardLayout.get(string) {
@@ -89,14 +89,14 @@ extension StoredInUserDefault where Value == LanguageLayout {
         }
         return nil
     }
-    static func set(newValue: Value) {
+    @MainActor static func set(newValue: Value) {
         SharedStore.userDefaults.set(newValue.saveValue, forKey: key)
     }
 }
 
 protocol LanguageLayoutKeyboardSetting: KeyboardSettingKey, StoredInUserDefault where Value == LanguageLayout {}
 extension LanguageLayoutKeyboardSetting {
-    static var value: Value {
+    @MainActor static var value: Value {
         get {
             get() ?? defaultValue
         }

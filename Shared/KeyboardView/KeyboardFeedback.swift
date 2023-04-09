@@ -11,7 +11,7 @@ import Foundation
 import class UIKit.UIImpactFeedbackGenerator
 
 /// フィードバックを返すためのツールセット
-enum KeyboardFeedback {
+@MainActor enum KeyboardFeedback {
     @KeyboardSetting(.enableKeySound) private static var enableSound
     @KeyboardSetting(.enableKeyHaptics) private static var requestedHaptics
     private static var enableHaptics: Bool {

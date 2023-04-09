@@ -15,7 +15,7 @@ final class MainAppStates: ObservableObject {
     @Published var englishLayout: LanguageLayout = .flick
     @Published var custardManager: CustardManager
 
-    init() {
+    @MainActor init() {
         let keyboardActivation = SharedStore.checkKeyboardActivation()
         self.isKeyboardActivated = keyboardActivation
         self.requireFirstOpenView = !keyboardActivation

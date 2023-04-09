@@ -25,6 +25,7 @@ struct ThemeTabView: View {
         }
     }
 
+    @MainActor
     private func circle(geometry: GeometryProxy, systemName: String, color: Color) -> some View {
         let width = min(min(geometry.size.width / 1.5, 180), geometry.size.height / 2.5) // 高さに2つ入るサイズを超えないように設定
         return Circle()
@@ -37,6 +38,7 @@ struct ThemeTabView: View {
             )
     }
 
+    @MainActor
     private func selectButton(_ index: Int) -> some View {
         GeometryReader {geometry in
             if manager.selectedIndex == manager.selectedIndexInDarkMode {
@@ -86,7 +88,9 @@ struct ThemeTabView: View {
         }
     }
 
+    @MainActor @ViewBuilder
     private var listSection: some View {
+        let tab = tab
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
                 HStack {

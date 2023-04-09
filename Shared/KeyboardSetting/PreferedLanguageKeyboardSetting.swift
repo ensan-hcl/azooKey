@@ -39,7 +39,7 @@ struct PreferredLanguageSetting: KeyboardSettingKey {
     static let explanation: LocalizedStringKey = "キーボード上で入力する言語を選択できます。"
     static let defaultValue: PreferredLanguage = PreferredLanguage(first: .ja_JP, second: .en_US)
     private static let key = "preferred_language_order"
-    static var value: PreferredLanguage {
+    @MainActor static var value: PreferredLanguage {
         get {
             if let value = SharedStore.userDefaults.value(forKey: key), let data = PreferredLanguage.get(value) {
                 return data

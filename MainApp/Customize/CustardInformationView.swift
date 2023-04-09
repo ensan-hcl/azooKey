@@ -81,6 +81,7 @@ struct CustardInformationView: View {
 
     var body: some View {
         Form {
+            let custard = custard
             CenterAlignedView {
                 KeyboardPreview(scale: 0.7, defaultTab: .custard(custard))
             }

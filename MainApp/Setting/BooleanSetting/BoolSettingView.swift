@@ -9,14 +9,17 @@
 import SwiftUI
 
 struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
-    init(_ key: SettingKey) {}
     private enum AlertMessage {
         case `default`
         case message(LocalizedStringKey)
     }
     @State private var isOn = false
     @State private var alertMessage = AlertMessage.default
-    @State private var setting = SettingUpdater<SettingKey>()
+    @State private var setting: SettingUpdater<SettingKey>
+
+    @MainActor init(_ key: SettingKey) {
+        self._setting = .init(initialValue: .init())
+    }
 
     private var toggle: some View {
         Toggle(isOn: $setting.value) {

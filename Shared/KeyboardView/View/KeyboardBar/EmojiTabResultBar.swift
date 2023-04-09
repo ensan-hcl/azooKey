@@ -103,7 +103,7 @@ struct EmojiTabResultBarButtonStyle: ButtonStyle {
         self.height = height
     }
 
-    func makeBody(configuration: Configuration) -> some View {
+    @MainActor func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(Design.fonts.resultViewFont(theme: theme, fontSize: height * 0.9))
             .frame(height: height)

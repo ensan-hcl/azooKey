@@ -16,10 +16,12 @@ protocol BoolKeyboardSettingKey: KeyboardSettingKey, StoredInUserDefault where V
     static func onDisabled()
 }
 extension StoredInUserDefault where Value == Bool {
+    @MainActor
     static func get() -> Value? {
         let object = SharedStore.userDefaults.object(forKey: key)
         return object as? Bool
     }
+    @MainActor
     static func set(newValue: Value) {
         SharedStore.userDefaults.set(newValue, forKey: key)
     }
@@ -29,7 +31,7 @@ extension BoolKeyboardSettingKey {
     static func onEnabled() -> LocalizedStringKey? { nil }
     static func onDisabled() {}
 
-    static var value: Value {
+    @MainActor static var value: Value {
         get {
             get() ?? defaultValue
         }

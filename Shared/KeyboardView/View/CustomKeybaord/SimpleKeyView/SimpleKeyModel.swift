@@ -16,7 +16,7 @@ enum SimpleUnpressedKeyColorType: UInt8 {
     case selected
     case unimportant
 
-    func color(states: VariableStates, theme: ThemeData) -> Color {
+    @MainActor func color(states: VariableStates, theme: ThemeData) -> Color {
         switch self {
         case .normal:
             return theme.normalKeyFillColor.color
@@ -49,13 +49,13 @@ enum SimpleUnpressedKeyColorType: UInt8 {
 protocol SimpleKeyModelProtocol {
     var longPressActions: LongpressActionType {get}
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
-    func pressActions(variableStates: VariableStates) -> [ActionType]
-    func feedback(variableStates: VariableStates)
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color
+    @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func feedback(variableStates: VariableStates)
+    @MainActor func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
+    @MainActor func backGroundColorWhenPressed(theme: ThemeData) -> Color
     /// `pressActions`とは別に、押された際に発火する操作
     /// - note: タブ固有の事情で実行しなければならないような処理に利用すること
-    func additionalOnPress(variableStates: VariableStates)
+    @MainActor func additionalOnPress(variableStates: VariableStates)
 }
 
 extension SimpleKeyModelProtocol {

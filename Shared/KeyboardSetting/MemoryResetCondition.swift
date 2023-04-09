@@ -46,7 +46,7 @@ enum MemoryResetCondition: Int, Savable {
 
     private static let key = "memory_reset_setting"
 
-    static func set(value: Self) {
+    @MainActor static func set(value: Self) {
         SharedStore.userDefaults.set(value.saveValue, forKey: key)
     }
 
