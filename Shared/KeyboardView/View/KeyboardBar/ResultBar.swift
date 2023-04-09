@@ -187,7 +187,7 @@ struct ResultButtonStyle: ButtonStyle {
         self.height = height
     }
 
-    func makeBody(configuration: Configuration) -> some View {
+    @MainActor func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(Design.fonts.resultViewFont(theme: theme))
             .frame(height: height)

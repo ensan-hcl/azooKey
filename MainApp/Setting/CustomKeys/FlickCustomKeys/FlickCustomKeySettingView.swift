@@ -102,9 +102,11 @@ struct FlickCustomKeysSettingSelectView: View {
 struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: View {
     @State private var bottomSheetShown = false
     @State private var selectedPosition: FlickKeyPosition = .center
-    @State private var setting = SettingUpdater<SettingKey>()
+    @State private var setting: SettingUpdater<SettingKey>
 
-    init(_ key: SettingKey) {}
+    @MainActor init(_ key: SettingKey) {
+        self._setting = .init(initialValue: .init())
+    }
 
     private let screenWidth = UIScreen.main.bounds.width
 

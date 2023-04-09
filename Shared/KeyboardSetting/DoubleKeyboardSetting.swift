@@ -12,17 +12,19 @@ import SwiftUI
 protocol DoubleKeyboardSettingKey: KeyboardSettingKey, StoredInUserDefault where Value == Double {}
 
 extension StoredInUserDefault where Value == Double {
+    @MainActor
     static func get() -> Value? {
         let object = SharedStore.userDefaults.object(forKey: key)
         return object as? Value
     }
+    @MainActor
     static func set(newValue: Value) {
         SharedStore.userDefaults.set(newValue, forKey: key)
     }
 }
 
 extension DoubleKeyboardSettingKey {
-    static var value: Value {
+    @MainActor static var value: Value {
         get {
             get() ?? defaultValue
         }

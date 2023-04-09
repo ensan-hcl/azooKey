@@ -10,14 +10,14 @@ import Foundation
 import SwiftUI
 
 extension StoredInUserDefault where Value == KeyFlickSetting {
-    static func get() -> Value? {
+    @MainActor static func get() -> Value? {
         let value = SharedStore.userDefaults.value(forKey: key)
         if let value, let data = KeyFlickSetting.get(value) {
             return data
         }
         return nil
     }
-    static func set(newValue: Value) {
+    @MainActor static func set(newValue: Value) {
         SharedStore.userDefaults.set(newValue.saveValue, forKey: key)
     }
 }
@@ -29,7 +29,7 @@ extension FlickCustomKeyKeyboardSetting {
     static var defaultValue: Value {
         identifier.defaultSetting
     }
-    static var value: Value {
+    @MainActor static var value: Value {
         get {
             get() ?? defaultValue
         }

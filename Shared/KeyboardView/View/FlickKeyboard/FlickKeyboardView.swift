@@ -28,7 +28,7 @@ struct FlickKeyboardView: View {
         keyModels[h].indices
     }
 
-    private func keyView(h: Int, v: Int) -> FlickKeyView {
+    @MainActor private func keyView(h: Int, v: Int) -> FlickKeyView {
         let model = self.keyModels[h][v]
         let size: CGSize
         if model is FlickEnterKeyModel {
@@ -39,6 +39,7 @@ struct FlickKeyboardView: View {
         return FlickKeyView(model: model, size: size, position: (x: h, y: v), suggestState: $suggestState)
     }
 
+    @MainActor
     private func suggestView(h: Int, v: Int, suggestType: FlickSuggestState.SuggestType) -> FlickSuggestView {
         let model = self.keyModels[h][v]
         let size: CGSize

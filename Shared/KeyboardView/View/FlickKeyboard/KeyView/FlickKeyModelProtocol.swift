@@ -34,21 +34,21 @@ protocol FlickKeyModelProtocol {
     var longPressActions: LongpressActionType {get}
     var needSuggestView: Bool {get}
 
-    func pressActions(variableStates: VariableStates) -> [ActionType]
-    func label(width: CGFloat, states: VariableStates) -> KeyLabel
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
+    @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func label(width: CGFloat, states: VariableStates) -> KeyLabel
+    @MainActor func backGroundColorWhenPressed(theme: ThemeData) -> Color
+    @MainActor func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 
-    func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool
-    func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel]
+    @MainActor func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool
+    @MainActor func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel]
 
-    func flickSensitivity(to direction: FlickDirection) -> CGFloat
-    func feedback(variableStates: VariableStates)
+    @MainActor func flickSensitivity(to direction: FlickDirection) -> CGFloat
+    @MainActor func feedback(variableStates: VariableStates)
 
 }
 
 extension FlickKeyModelProtocol {
-    func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool {
+    @MainActor func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool {
         flickKeys(variableStates: variableStates).keys.contains(direction)
     }
 
@@ -60,7 +60,7 @@ extension FlickKeyModelProtocol {
         theme.normalKeyFillColor.color
     }
 
-    func flickSensitivity(to direction: FlickDirection) -> CGFloat {
+    @MainActor func flickSensitivity(to direction: FlickDirection) -> CGFloat {
         @KeyboardSetting<FlickSensitivitySettingKey>(.flickSensitivity) var flickSensitivity
         return 25 / flickSensitivity
     }

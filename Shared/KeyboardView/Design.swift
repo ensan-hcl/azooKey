@@ -242,7 +242,7 @@ enum Design {
             Font.custom("AzooKeyIcon-Regular", size: size, relativeTo: style)
         }
 
-        var iconFontSize: CGFloat {
+        @MainActor var iconFontSize: CGFloat {
             @KeyboardSetting(.keyViewFontSize) var userDecidedSize
             if userDecidedSize != -1 {
                 return UIFontMetrics.default.scaledValue(for: userDecidedSize)
@@ -250,16 +250,16 @@ enum Design {
             return UIFontMetrics.default.scaledValue(for: 20)
         }
 
-        func iconImageFont(theme: ThemeData) -> Font {
+        @MainActor func iconImageFont(theme: ThemeData) -> Font {
             Font.system(size: self.iconFontSize, weight: theme.textFont.weight)
         }
 
-        var resultViewFontSize: CGFloat {
+        @MainActor var resultViewFontSize: CGFloat {
             @KeyboardSetting(.resultViewFontSize) var size
             return size == -1 ? 18: size
         }
 
-        func resultViewFont(theme: ThemeData, fontSize: CGFloat? = nil) -> Font {
+        @MainActor func resultViewFont(theme: ThemeData, fontSize: CGFloat? = nil) -> Font {
             // Font.custom("Mplus 1p Bold", size: resultViewFontSize).weight(theme.textFont.weight)
             Font.system(size: fontSize ?? resultViewFontSize).weight(theme.textFont.weight)
         }
@@ -304,7 +304,7 @@ enum Design {
             return size
         }
 
-        func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, layout: KeyboardLayout, theme: ThemeData) -> Font {
+        @MainActor func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, layout: KeyboardLayout, theme: ThemeData) -> Font {
             if case .max = fontSize {
                 let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 100)
                 return Font.system(size: size, weight: theme.textFont.weight, design: .default)

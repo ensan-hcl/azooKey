@@ -12,7 +12,7 @@ import SwiftUI
 // symbolタブ、123タブで表示される切り替えボタン
 struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {
     let languages: (KeyboardLanguage, KeyboardLanguage)
-    func currentTabLanguage(variableStates: VariableStates) -> KeyboardLanguage? {
+    @MainActor func currentTabLanguage(variableStates: VariableStates) -> KeyboardLanguage? {
         variableStates.tabManager.tab.existential.language
     }
 

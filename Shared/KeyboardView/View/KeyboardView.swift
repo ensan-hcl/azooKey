@@ -86,23 +86,23 @@ struct KeyboardView: View {
         .frame(height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))
     }
 
-    @ViewBuilder
+    @MainActor @ViewBuilder
     func keyboardView(tab: Tab.ExistentialTab) -> some View {
         switch tab {
         case .flick_hira:
-            FlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+            FlickKeyboardView(keyModels: FlickDataProvider.hiraKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case .flick_abc:
-            FlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+            FlickKeyboardView(keyModels: FlickDataProvider.abcKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case .flick_numbersymbols:
-            FlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+            FlickKeyboardView(keyModels: FlickDataProvider.numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case .qwerty_hira:
-            QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+            QwertyKeyboardView(keyModels: QwertyDataProvider.hiraKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case .qwerty_abc:
-            QwertyKeyboardView(keyModels: QwertyDataProvider().abcKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+            QwertyKeyboardView(keyModels: QwertyDataProvider.abcKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case .qwerty_number:
-            QwertyKeyboardView(keyModels: QwertyDataProvider().numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+            QwertyKeyboardView(keyModels: QwertyDataProvider.numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case .qwerty_symbols:
-            QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+            QwertyKeyboardView(keyModels: QwertyDataProvider.symbolsKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case let .custard(custard):
             CustomKeyboardView(custard: custard)
         case let .special(tab):

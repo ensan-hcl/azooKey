@@ -18,7 +18,7 @@ struct VariationsModel {
         self.direction = direction
     }
 
-    func performSelected(selection: Int?, actionManager: some UserActionManager, variableStates: VariableStates) {
+    @MainActor func performSelected(selection: Int?, actionManager: some UserActionManager, variableStates: VariableStates) {
         if self.variations.isEmpty {
             return
         }

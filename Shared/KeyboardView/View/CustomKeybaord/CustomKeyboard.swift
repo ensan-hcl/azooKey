@@ -60,7 +60,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    var flickKeyModels: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] {
+    @MainActor var flickKeyModels: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -71,7 +71,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    var qwertyKeyModels: [KeyPosition: (model: any QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
+    @MainActor var qwertyKeyModels: [KeyPosition: (model: any QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -126,7 +126,7 @@ fileprivate extension CustardKeyDesign.ColorType {
 }
 
 extension CustardInterfaceKey {
-    var flickKeyModel: any FlickKeyModelProtocol {
+    @MainActor var flickKeyModel: any FlickKeyModelProtocol {
         switch self {
         case let .system(value):
             switch value {
@@ -139,11 +139,11 @@ extension CustardInterfaceKey {
             case .flickKutoten:
                 return FlickKanaSymbolsKeyModel.shared
             case .flickHiraTab:
-                return FlickTabKeyModel.hiraTabKeyModel
+                return FlickTabKeyModel.hiraTabKeyModel()
             case .flickAbcTab:
-                return FlickTabKeyModel.abcTabKeyModel
+                return FlickTabKeyModel.abcTabKeyModel()
             case .flickStar123Tab:
-                return FlickTabKeyModel.numberTabKeyModel
+                return FlickTabKeyModel.numberTabKeyModel()
             }
         case let .custom(value):
             let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variations.reduce(into: [:]) {dictionary, variation in
@@ -175,7 +175,7 @@ extension CustardInterfaceKey {
         return QwertyKeyModel(labelType: customKey.labelType, pressActions: customKey.actions, longPressActions: customKey.longpressActions, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
     }
 
-    func qwertyKeyModel(layout: CustardInterfaceLayout) -> any QwertyKeyModelProtocol {
+    @MainActor func qwertyKeyModel(layout: CustardInterfaceLayout) -> any QwertyKeyModelProtocol {
         switch self {
         case let .system(value):
             switch value {

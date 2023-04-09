@@ -27,7 +27,7 @@ private final class UserDictManagerVariables: ObservableObject {
         }
     }
 
-    func save() {
+    @MainActor func save() {
         TemplateData.save(templates)
 
         let userDictionary = UserDictionary(items: self.items)

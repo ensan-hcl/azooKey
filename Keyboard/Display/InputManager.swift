@@ -9,7 +9,7 @@
 import OrderedCollections
 import UIKit
 
-final class InputManager {
+@MainActor final class InputManager {
     // 入力中の文字列を管理する構造体
     private(set) var composingText = ComposingText()
     // 表示される文字列を管理するクラス

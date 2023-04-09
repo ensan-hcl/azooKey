@@ -86,12 +86,12 @@ protocol QwertyKeyModelProtocol {
 
     var variationsModel: VariationsModel {get}
 
-    func pressActions(variableStates: VariableStates) -> [ActionType]
-    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
+    @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
 
-    func feedback(variableStates: VariableStates)
+    @MainActor func feedback(variableStates: VariableStates)
 }
 
 extension QwertyKeyModelProtocol {

@@ -32,6 +32,7 @@ struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
     static let defaultValue: Value = Value.weak
     static let key: String = "automatic_completion_strength"
 
+    @MainActor
     static func get() -> Value? {
         let object = SharedStore.userDefaults.object(forKey: key)
         if let object, let value = object as? Int {
@@ -39,6 +40,7 @@ struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
         }
         return nil
     }
+    @MainActor
     static func set(newValue: Value) {
         SharedStore.userDefaults.set(newValue.rawValue, forKey: key)
     }

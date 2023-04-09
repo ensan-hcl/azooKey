@@ -12,9 +12,10 @@ struct KeyboardHeightSettingView: View {
     typealias SettingKey = KeyboardHeightScaleSettingKey
     @State private var enabled: Bool
     @State private var showAlert = false
-    @State private var setting = SettingUpdater<SettingKey>()
+    @State private var setting: SettingUpdater<SettingKey>
 
-    init(_ key: SettingKey) {
+    @MainActor init(_ key: SettingKey) {
+        self._setting = .init(initialValue: .init())
         if SettingKey.value == 1 {
             _enabled = .init(initialValue: false)
         } else {

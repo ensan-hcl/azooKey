@@ -10,7 +10,7 @@ import Foundation
 
 // ライブ変換を管理するためのクラス
 final class LiveConversionManager {
-    init() {
+    @MainActor init() {
         @KeyboardSetting(.liveConversion) var enabled
         self.enabled = enabled
     }
@@ -21,7 +21,7 @@ final class LiveConversionManager {
     private(set) var lastUsedCandidate: Candidate?
     private var headClauseCandidateHistories: [[Candidate]] = []
 
-    func stopComposition() {
+    @MainActor func stopComposition() {
         self.lastUsedCandidate = nil
         @KeyboardSetting(.liveConversion) var enabled
         self.enabled = enabled
@@ -131,7 +131,7 @@ final class LiveConversionManager {
     /// 最初の文節を確定して良い場合Candidateを返す関数
     /// - warning:
     ///   この関数を呼んで結果を得た場合、必ずそのCandidateで確定処理を行う必要がある。
-    func candidateForCompleteFirstClause() -> Candidate? {
+    @MainActor func candidateForCompleteFirstClause() -> Candidate? {
         @KeyboardSetting(.automaticCompletionStrength) var strength
         guard let history = headClauseCandidateHistories.first else {
             return nil

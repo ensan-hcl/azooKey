@@ -121,7 +121,7 @@ enum Tab: Equatable {
         case japanese
         case english
 
-        var actualTab: ExistentialTab {
+        @MainActor var actualTab: ExistentialTab {
             // ユーザの設定に合わせて遷移先のタブ(非user_dependent)を返す
             switch self {
             case .english:
@@ -148,7 +148,7 @@ enum Tab: Equatable {
         }
     }
 
-    var inputStyle: InputStyle {
+    @MainActor var inputStyle: InputStyle {
         switch self {
         case let .existential(tab):
             return tab.inputStyle
@@ -160,7 +160,7 @@ enum Tab: Equatable {
         }
     }
 
-    var layout: KeyboardLayout {
+    @MainActor var layout: KeyboardLayout {
         switch self {
         case let .existential(tab):
             return tab.layout
@@ -172,7 +172,7 @@ enum Tab: Equatable {
         }
     }
 
-    var language: KeyboardLanguage? {
+    @MainActor var language: KeyboardLanguage? {
         switch self {
         case let .existential(tab):
             return tab.language

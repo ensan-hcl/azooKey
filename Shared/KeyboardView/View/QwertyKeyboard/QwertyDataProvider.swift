@@ -9,7 +9,7 @@
 import Foundation
 
 struct QwertyDataProvider {
-    static func tabKeys(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)) -> (languageKey: any QwertyKeyModelProtocol, numbersKey: any QwertyKeyModelProtocol, symbolsKey: any QwertyKeyModelProtocol, changeKeyboardKey: any QwertyKeyModelProtocol) {
+    @MainActor static func tabKeys(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)) -> (languageKey: any QwertyKeyModelProtocol, numbersKey: any QwertyKeyModelProtocol, symbolsKey: any QwertyKeyModelProtocol, changeKeyboardKey: any QwertyKeyModelProtocol) {
         @KeyboardSetting(.preferredLanguage) var preferredLanguage
         let languageKey: any QwertyKeyModelProtocol
         let first = preferredLanguage.first
@@ -47,7 +47,7 @@ struct QwertyDataProvider {
     }
 
     // 横に並べる
-    var numberKeyboard: [[any QwertyKeyModelProtocol]] {[
+    @MainActor static var numberKeyboard: [[any QwertyKeyModelProtocol]] {[
         [
             QwertyKeyModel(
                 labelType: .text("1"),
@@ -245,7 +245,7 @@ struct QwertyDataProvider {
     ]
     }
     // 横に並べる
-    var symbolsKeyboard: [[any QwertyKeyModelProtocol]] = [
+    @MainActor static var symbolsKeyboard: [[any QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(
                 labelType: .text("["),
@@ -467,7 +467,7 @@ struct QwertyDataProvider {
     ]
 
     // 横に並べる
-    var hiraKeyboard: [[any QwertyKeyModelProtocol]] = [
+    @MainActor static var hiraKeyboard: [[any QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
             QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
@@ -512,7 +512,7 @@ struct QwertyDataProvider {
     ]
 
     // 横に並べる
-    var abcKeyboard: [[any QwertyKeyModelProtocol]] = [
+    @MainActor static var abcKeyboard: [[any QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
             QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),

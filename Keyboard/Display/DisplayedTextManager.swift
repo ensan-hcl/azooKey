@@ -10,7 +10,7 @@ import UIKit
 
 /// UI側の入力中のテキストの更新を受け持つクラス
 final class DisplayedTextManager {
-    init() {
+    @MainActor init() {
         @KeyboardSetting(.liveConversion) var enabled
         self.isLiveConversionEnabled = enabled
 
@@ -86,7 +86,7 @@ final class DisplayedTextManager {
     }
 
     /// 入力を停止する
-    func stopComposition() {
+    @MainActor func stopComposition() {
         debug("DisplayedTextManager.stopComposition")
         if self.isMarkedTextEnabled {
             self.proxy?.unmarkText()
@@ -99,7 +99,7 @@ final class DisplayedTextManager {
     }
 
     /// 設定を更新する
-    private func reloadSetting() {
+    @MainActor private func reloadSetting() {
         @KeyboardSetting(.liveConversion) var enabled
         self.isLiveConversionEnabled = enabled
         @KeyboardSetting(.markedTextSetting) var markedTextEnabled

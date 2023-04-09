@@ -58,8 +58,12 @@ struct TabManager {
             return currentTab
         }
     }
+
+    @MainActor init() {
+        self.currentTab = Self.getDefaultTab().managerTab
+    }
     /// メインのタブ。
-    private var currentTab: ManagerTab = Self.getDefaultTab().managerTab
+    private var currentTab: ManagerTab
     /// 一時的に表示を切り替えるタブ。lastTabに反映されない。
     private var temporalTab: ManagerTab?
     private var lastTab: ManagerTab?
@@ -68,7 +72,7 @@ struct TabManager {
         case existential(Tab.ExistentialTab)
         case user_dependent(Tab.UserDependentTab)
 
-        var existential: Tab.ExistentialTab {
+        @MainActor var existential: Tab.ExistentialTab {
             switch self {
             case let .existential(tab):
                 return tab
@@ -78,7 +82,7 @@ struct TabManager {
         }
     }
 
-    func isCurrentTab(tab: Tab) -> Bool {
+    @MainActor func isCurrentTab(tab: Tab) -> Bool {
         switch tab {
         case let .existential(actualTab):
             return self.tab.existential == actualTab
@@ -89,7 +93,7 @@ struct TabManager {
         }
     }
 
-    mutating func initialize(variableStates: VariableStates) {
+    @MainActor mutating func initialize(variableStates: VariableStates) {
         switch lastTab {
         case .none:
             let targetTab: Tab = {
@@ -138,7 +142,7 @@ struct TabManager {
         }
     }
 
-    private static func getDefaultTab() -> (existentialTab: Tab.ExistentialTab, managerTab: ManagerTab) {
+    @MainActor private static func getDefaultTab() -> (existentialTab: Tab.ExistentialTab, managerTab: ManagerTab) {
         @KeyboardSetting(.preferredLanguage) var preferredLanguage: PreferredLanguage
         switch preferredLanguage.first {
         case .ja_JP:
@@ -150,7 +154,7 @@ struct TabManager {
         }
     }
 
-    mutating func setTemporalTab(_ destination: Tab, variableStates: VariableStates) {
+    @MainActor mutating func setTemporalTab(_ destination: Tab, variableStates: VariableStates) {
         let actualTab: Tab.ExistentialTab
         switch destination {
         case let .existential(tab):
@@ -171,7 +175,7 @@ struct TabManager {
         }
     }
 
-    mutating func moveTab(to destination: Tab, variableStates: VariableStates) {
+    @MainActor mutating func moveTab(to destination: Tab, variableStates: VariableStates) {
         switch destination {
         case let .existential(tab):
             self.updateVariableStates(variableStates, layout: tab.layout, inputStyle: tab.inputStyle, language: tab.language)
