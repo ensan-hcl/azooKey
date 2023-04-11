@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert_2022_09_16_03"
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
     case iOS16_4_new_emoji = "iOS_16_4_new_emoji_commit"                    // MARK: frozen
     case ver1_9_user_dictionary_update = "ver1_9_user_dictionary_update_release" // MARK: frozen
+    case ver2_1_emoji_tab = "ver2_1_emoji_tab"
 
     // MARK: 過去にプロダクションで用いていたメッセージID
     // ver1_9_user_dictionary_updateが実行されれば不要になるので、この宣言は削除
@@ -29,7 +31,7 @@ enum MessageIdentifier: String, Hashable, CaseIterable {
 
     var needUsingContainerApp: Bool {
         switch self {
-        case .ver1_9_user_dictionary_update:
+        case .ver1_9_user_dictionary_update, .ver2_1_emoji_tab:
             return true
         case .iOS15_4_new_emoji, .iOS16_4_new_emoji, .mock:
             return false
@@ -54,7 +56,7 @@ struct MessageData: Identifiable {
     let precondition: () -> Bool
 
     /// メッセージを表示せずにDoneにして良い条件
-    let silentDoneCondition: () -> Bool
+    let silentDoneCondition: @MainActor () -> Bool
 
     /// 収容アプリがDoneにすべき条件
     let containerAppShouldMakeItDone: () -> Bool
@@ -161,12 +163,28 @@ struct MessageManager {
                 let binaryFilePath = directoryPath.appendingPathComponent("user.louds", isDirectory: false).path
                 return !FileManager.default.fileExists(atPath: binaryFilePath)
             }
+        ),
+        MessageData(
+            id: .ver2_1_emoji_tab,
+            title: "お知らせ",
+            description: "azooKeyで絵文字タブが使えるようになりました。本体アプリを開き、タブバーに絵文字タブを追加しますか？",
+            button: .two(primary: .openContainer(text: "追加"), secondary: .later),
+            precondition: {
+                true
+            },
+            silentDoneCondition: {
+                if (try? CustardManager.load().tabbar(identifier: 0))?.items.contains(where: {$0.actions.contains(.moveTab(.system(.emoji_tab)))}) == true {
+                    return true
+                }
+                return false
+            },
+            containerAppShouldMakeItDone: { true }
         )
     ]
 
     private var needShow: [MessageIdentifier: Bool]
 
-    init() {
+    @MainActor init() {
         self.needShow = necessaryMessages.reduce(into: [:]) {dict, value in
             dict[value.id] = value.precondition() && Self.checkDone(value.id)
         }
@@ -202,6 +220,33 @@ struct MessageManager {
         } else {
             // 本体アプリでも完了にできる場合、共有のSelf.userDefaultsに加えて本体のみのUserDefaults.standardでもチェック
             return SharedStore.userDefaults.string(forKey: id.key) != Self.doneFlag && UserDefaults.standard.string(forKey: id.key) != Self.doneFlag
+        }
+    }
+}
+
+enum TemporalMessage {
+    case doneForgetCandidate
+    case doneReportWrongConversion
+    case failedReportWrongConversion
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .doneForgetCandidate:
+            return "候補の学習をリセットしました"
+        case .doneReportWrongConversion:
+            return "誤変換を報告しました"
+        case .failedReportWrongConversion:
+            return "誤変換の報告に失敗しました"
+        }
+    }
+
+    enum DismissCondition {
+        case auto
+        case ok
+    }
+    var dismissCondition: DismissCondition {
+        switch self {
+        case .doneForgetCandidate, .doneReportWrongConversion, .failedReportWrongConversion: return .auto
         }
     }
 }

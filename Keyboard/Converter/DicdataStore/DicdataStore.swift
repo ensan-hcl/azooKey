@@ -66,6 +66,7 @@ final class DicdataStore {
     enum Notification {
         case importOSUserDict([DicdataElement])
         case setRequestOptions(ConvertRequestOptions)
+        case forgetMemory(Candidate)
         case closeKeyboard
     }
 
@@ -75,23 +76,34 @@ final class DicdataStore {
             self.closeKeyboard()
         case let .importOSUserDict(osUserDict):
             self.osUserDict = osUserDict
+        case let .forgetMemory(candidate):
+            self.learningManager.forgetMemory(data: candidate.data)
+            // loudsの処理があるので、リセットを実施する
+            self.reloadMemory()
         case let .setRequestOptions(value):
             self.requestOptions = value
             let shouldReset = self.learningManager.setRequestOptions(options: value)
             if shouldReset {
-                self.loudses.removeValue(forKey: "memory")
-                self.importedLoudses.remove("memory")
+                self.reloadMemory()
             }
         }
+    }
+
+    private func reloadMemory() {
+        self.loudses.removeValue(forKey: "memory")
+        self.importedLoudses.remove("memory")
+    }
+
+    private func reloadUser() {
+        self.loudses.removeValue(forKey: "user")
+        self.importedLoudses.remove("user")
     }
 
     private func closeKeyboard() {
         self.learningManager.save()
         // saveしたあとにmemoryのキャッシュされたLOUDSを使い続けないよう、キャッシュから削除する。
-        self.loudses.removeValue(forKey: "memory")
-        self.importedLoudses.remove("memory")
-        self.loudses.removeValue(forKey: "user")
-        self.importedLoudses.remove("user")
+        self.reloadMemory()
+        self.reloadUser()
     }
 
     /// ペナルティ関数。文字数で決める。
@@ -462,7 +474,7 @@ final class DicdataStore {
         }
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
-        if requestOptions.keyboardLanguage != .en_US && requestOptions.mainInputStyle == .roman2kana {
+        if requestOptions.keyboardLanguage != .en_US && inputData.input[inputRange].allSatisfy({$0.inputStyle == .roman2kana}) {
             if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[convertTarget] {
                 result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
                 result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))

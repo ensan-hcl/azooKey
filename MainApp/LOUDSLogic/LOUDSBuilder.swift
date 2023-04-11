@@ -190,7 +190,7 @@ struct LOUDSBuilder {
         return binary
     }
 
-    func process(to identifier: String = "user") {
+    @MainActor func process(to identifier: String = "user") {
         let trieroot = TrieNode<Character, Int>()
 
         let (paths, blocks, useradds) = self.loadUserDictInfo()
@@ -281,7 +281,8 @@ struct LOUDSBuilder {
                 }
             }
 
-            Store.shared.messageManager.done(.ver1_9_user_dictionary_update)
+            var manager = MessageManager()
+            manager.done(.ver1_9_user_dictionary_update)
         }
     }
 

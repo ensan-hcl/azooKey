@@ -54,7 +54,7 @@ struct LearningTypeSetting: KeyboardSettingKey {
     static let title: LocalizedStringKey = "学習の使用"
     static let explanation: LocalizedStringKey = "「新たに学習し、反映する(デフォルト)」「新たな学習を停止する」「新たに学習せず、これまでの学習も反映しない」選択できます。この設定の変更で学習結果が消えることはありません。"
     private static let key = "memory_learining_styple_setting"
-    static var value: LearningType {
+    @MainActor static var value: LearningType {
         get {
             if let object = SharedStore.userDefaults.object(forKey: key),
                let value = LearningType.get(object) {

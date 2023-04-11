@@ -11,11 +11,17 @@ import Foundation
 import SwiftUI
 
 struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
-    let needSuggestView: Bool = false
+    @KeyboardSetting(.enablePasteButton) private var _enablePasteButton
+    private var usePasteButton: Bool {
+        !SemiStaticStates.shared.needsInputModeSwitchKey && SemiStaticStates.shared.hasFullAccess && _enablePasteButton
+    }
+    var needSuggestView: Bool {
+        usePasteButton
+    }
 
     static let shared = FlickChangeKeyboardModel()
 
-    var pressActions: [ActionType] {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
         switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
             return []
@@ -25,11 +31,11 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
     }
     var longPressActions: LongpressActionType = .none
 
-    let suggestModel: SuggestModel
-    let flickKeys: [FlickDirection: FlickedKeyModel] = [:]
-
-    init() {
-        self.suggestModel = SuggestModel([:])
+    func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
+        if usePasteButton {
+            return [.top: FlickedKeyModel(labelType: .image("doc.on.clipboard"), pressActions: [.paste])]
+        }
+        return [:]
     }
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
@@ -45,7 +51,7 @@ struct FlickChangeKeyboardModel: FlickKeyModelProtocol {
         theme.specialKeyFillColor.color
     }
 
-    func sound() {
-        Sound.tabOrOtherKey()
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.tabOrOtherKey()
     }
 }

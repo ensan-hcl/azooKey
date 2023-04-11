@@ -16,6 +16,7 @@ private enum EnableAzooKeyViewStep {
 }
 
 struct EnableAzooKeyView: View {
+    @EnvironmentObject private var appStates: MainAppStates
     @State private var step: EnableAzooKeyViewStep = .menu
     @State private var text = ""
     @State private var showDoneMessage = false
@@ -61,7 +62,7 @@ struct EnableAzooKeyView: View {
                             EnableAzooKeyViewText("この設定をしないとキーボードが使えません", with: "exclamationmark.triangle.fill")
                             CenterAlignedView {
                                 EnableAzooKeyViewButton("閉じる", systemName: "xmark", style: .destructive) {
-                                    Store.variableSection.requireFirstOpenView = false
+                                    appStates.requireFirstOpenView = false
                                 }
                             }
                         }
@@ -106,7 +107,7 @@ struct EnableAzooKeyView: View {
                                 EnableAzooKeyViewText("azooKeyが開かれました！", with: "checkmark")
                                 CenterAlignedView {
                                     EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill") {
-                                        Store.variableSection.requireFirstOpenView = false
+                                        appStates.requireFirstOpenView = false
                                     }
                                 }
                             } else {
@@ -116,7 +117,7 @@ struct EnableAzooKeyView: View {
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.continue)
                                 .onSubmit {
-                                    Store.variableSection.requireFirstOpenView = false
+                                    appStates.requireFirstOpenView = false
                                 }
                             if !showDoneMessage {
                                 EnableAzooKeyViewImage("initSettingGlobeTapImage")
@@ -125,7 +126,7 @@ struct EnableAzooKeyView: View {
                             if !showDoneMessage {
                                 CenterAlignedView {
                                     EnableAzooKeyViewButton("始める", systemName: "arrowshape.turn.up.right.fill") {
-                                        Store.variableSection.requireFirstOpenView = false
+                                        appStates.requireFirstOpenView = false
                                     }
                                 }
                             }
@@ -155,11 +156,10 @@ struct EnableAzooKeyView: View {
         .animation(.interactiveSpring(), value: step)
         .animation(.spring(), value: showDoneMessage)
         .onEnterForeground { _ in
-            if Store.shared.isKeyboardActivated {
+            if SharedStore.checkKeyboardActivation() {
                 self.step = .setting
-                Store.variableSection.isKeyboardActivated = true
+                appStates.isKeyboardActivated = true
             }
         }
-
     }
 }

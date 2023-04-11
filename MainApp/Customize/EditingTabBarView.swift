@@ -25,18 +25,19 @@ struct EditingTabBarItem: Identifiable, Equatable {
 
 struct EditingTabBarView: View {
     @Binding private var manager: CustardManager
-    @Binding private var tabBarData: TabBarData
     @State private var items: [EditingTabBarItem] = []
     @State private var editMode = EditMode.inactive
+    @State private var lastUpdateDate: Date
 
-    init(tabBarData: Binding<TabBarData>, manager: Binding<CustardManager>) {
-        self._items = State(initialValue: tabBarData.wrappedValue.items.indices.map {i in
+    init(manager: Binding<CustardManager>) {
+        let tabBarData = (try? manager.wrappedValue.tabbar(identifier: 0)) ?? .default
+        self._items = State(initialValue: tabBarData.items.indices.map {i in
             EditingTabBarItem(
-                label: tabBarData.wrappedValue.items[i].label,
-                actions: tabBarData.wrappedValue.items[i].actions
+                label: tabBarData.items[i].label,
+                actions: tabBarData.items[i].actions
             )
         })
-        self._tabBarData = tabBarData
+        self._lastUpdateDate = State(initialValue: tabBarData.lastUpdateDate ?? .now)
         self._manager = manager
     }
 
@@ -63,13 +64,30 @@ struct EditingTabBarView: View {
                     }
                 } label: { item in
                     label(labelType: item.label)
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                items.removeAll(where: {$0.id == item.id})
+                            } label: {
+                                Label("削除", systemImage: "trash")
+                            }
+                        }
                 }
                 .onDelete(perform: delete)
                 .onMove(perform: move)
             }
         }
-        .onChange(of: items) {_ in
-            self.save()
+        .onAppear {
+            if let tabBarData = try? manager.tabbar(identifier: 0), tabBarData.lastUpdateDate != self.lastUpdateDate {
+                self.items = tabBarData.items.indices.map {i in
+                    EditingTabBarItem(
+                        label: tabBarData.items[i].label,
+                        actions: tabBarData.items[i].actions
+                    )
+                }
+            }
+        }
+        .onChange(of: items) {newValue in
+            self.save(newValue)
         }
         .navigationBarTitle(Text("タブバーの編集"), displayMode: .inline)
         .navigationBarItems(trailing: editButton)
@@ -101,12 +119,15 @@ struct EditingTabBarView: View {
         return "動作なし"
     }
 
-    private func save() {
+    private func save(_ items: [EditingTabBarItem]) {
         do {
-            self.tabBarData = TabBarData(identifier: tabBarData.identifier, items: self.items.map {
+            debug("EditingTabBarView.save")
+            let newLastUpdateDate: Date = .now
+            let tabBarData = TabBarData(identifier: 0, lastUpdateDate: newLastUpdateDate, items: items.map {
                 TabBarItem(label: $0.label, actions: $0.actions)
             })
-            try manager.saveTabBarData(tabBarData: self.tabBarData)
+            try manager.saveTabBarData(tabBarData: tabBarData)
+            self.lastUpdateDate = newLastUpdateDate
         } catch {
             debug(error)
         }

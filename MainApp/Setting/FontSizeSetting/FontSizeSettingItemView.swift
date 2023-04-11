@@ -17,57 +17,53 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
     private let availableValueRange: ClosedRange<Double>
     private let target: Target
 
-    @State private var localValue: Double = -1
-    @State private var isOn = false
+    @State private var enabled: Bool
+    @State private var showAlert = false
+    @State private var setting: SettingUpdater<SettingKey>
 
+    @MainActor 
     init(_ key: SettingKey, _ target: Target, availableValueRange: ClosedRange<Double>) {
         self.target = target
         self.availableValueRange = availableValueRange
-        _localValue = State(initialValue: SettingKey.value)
-
+        self._setting = .init(initialValue: .init())
+        _enabled = State(initialValue: SettingKey.value != SettingKey.defaultValue)
     }
 
     var body: some View {
-        HStack {
-            Text(SettingKey.title)
-            Button {
-                isOn = true
-            } label: {
-                Image(systemName: "questionmark.circle")
-            }
-            Spacer()
-            let size = localValue == -1 ? SettingKey.defaultValue : localValue
-            switch self.target {
-            case .key:
-                KeyView(fontSize: size)
-
-            case .result:
-                Text("サンプル")
-                    .font(.system(size: size))
-                    .underline()
-                    .padding()
+        Toggle(isOn: $enabled) {
+            HStack {
+                Text(SettingKey.title)
+                Button {
+                    showAlert = true
+                } label: {
+                    Image(systemName: "questionmark.circle")
+                }
             }
         }
-        .alert(isPresented: $isOn) {
-            Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK")) {
-                isOn = false
-            })
+        .onChange(of: enabled) { newValue in
+            if newValue {
+                setting.value = 18
+            } else {
+                setting.value = SettingKey.defaultValue
+            }
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK")))
         }
         .listRowSeparator(.hidden)
-        Toggle("自動", isOn: .init(get: {SettingKey.value == -1}, set: {
-            if $0 {
-                SettingKey.value = -1
-                localValue = -1
-            } else {
-                SettingKey.value = 16
-                localValue = 16
-            }
-        }))
 
-        if localValue != -1 {
-            Slider(value: $localValue, in: availableValueRange) { (edited: Bool) in
-                if edited {
-                    SettingKey.value = localValue
+        if enabled {
+            VStack {
+                Slider(value: $setting.value, in: availableValueRange)
+                switch self.target {
+                case .key:
+                    KeyView(fontSize: setting.value)
+
+                case .result:
+                    Text("サンプル")
+                        .font(.system(size: setting.value))
+                        .underline()
+                        .padding()
                 }
             }
         }
@@ -75,7 +71,7 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
 }
 
 private struct KeyView: View {
-    @ObservedObject private var storeVariableSection = Store.variableSection
+    @EnvironmentObject private var appStates: MainAppStates
     private let fontSize: CGFloat
 
     init(fontSize: CGFloat) {
@@ -84,7 +80,7 @@ private struct KeyView: View {
 
     private var size: CGSize {
         let screenWidth = UIScreen.main.bounds.width
-        switch storeVariableSection.japaneseLayout {
+        switch appStates.japaneseLayout {
         case .flick:
             return CGSize(width: screenWidth / 5.6, height: screenWidth / 8)
         case .qwerty:

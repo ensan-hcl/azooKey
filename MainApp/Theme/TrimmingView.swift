@@ -15,7 +15,7 @@ private final class TrimmingViewModel {
 }
 
 struct TrimmingView: View {
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) private var dismiss
 
     private let maxSize: CGSize
     private let aspectRatio: CGSize
@@ -173,7 +173,7 @@ struct TrimmingView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(trailing: Button("完了") {
             updateResult()
-            presentationMode.wrappedValue.dismiss()
+            self.dismiss()
         })
 
     }

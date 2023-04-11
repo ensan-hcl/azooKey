@@ -11,30 +11,30 @@ import SwiftUI
 
 /// タブに依存するデザイン上の数値を計算する構造体
 struct TabDependentDesign {
-    private let horizontalKeyCount: CGFloat
-    private let verticalKeyCount: CGFloat
-    private let layout: KeyboardLayout
-    private let orientation: KeyboardOrientation
+    let horizontalKeyCount: CGFloat
+    let verticalKeyCount: CGFloat
+    let layout: KeyboardLayout
+    let orientation: KeyboardOrientation
 
-    private var interfaceWidth: CGFloat {
-        VariableStates.shared.interfaceSize.width
-    }
-    private var interfaceHeight: CGFloat {
-        VariableStates.shared.interfaceSize.height
-    }
+    private var interfaceWidth: CGFloat
+    private var interfaceHeight: CGFloat
 
-    init(width: Int, height: Int, layout: KeyboardLayout, orientation: KeyboardOrientation) {
+    init(width: Int, height: Int, interfaceSize: CGSize, layout: KeyboardLayout, orientation: KeyboardOrientation) {
         self.horizontalKeyCount = CGFloat(width)
         self.verticalKeyCount = CGFloat(height)
         self.layout = layout
         self.orientation = orientation
+        self.interfaceWidth = interfaceSize.width
+        self.interfaceHeight = interfaceSize.height
     }
 
-    init(width: CGFloat, height: CGFloat, layout: KeyboardLayout, orientation: KeyboardOrientation) {
+    init(width: CGFloat, height: CGFloat, interfaceSize: CGSize, layout: KeyboardLayout, orientation: KeyboardOrientation) {
         self.horizontalKeyCount = width
         self.verticalKeyCount = height
         self.layout = layout
         self.orientation = orientation
+        self.interfaceWidth = interfaceSize.width
+        self.interfaceHeight = interfaceSize.height
     }
 
     /// screenWidthとhorizontalKeyCountに依存
@@ -61,7 +61,7 @@ struct TabDependentDesign {
 
     // resultViewの幅を全体から引いたもの。キーを配置して良い部分の高さ。
     var keysHeight: CGFloat {
-        interfaceHeight - (Design.resultViewHeight() + 12)
+        interfaceHeight - (Design.keyboardBarHeight(interfaceHeight: interfaceHeight, orientation: orientation) + 12)
     }
 
     /// This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
@@ -135,13 +135,6 @@ enum Design {
     static let fonts = Fonts.default
     static let language = Language.default
 
-    private static var orientation: KeyboardOrientation {
-        VariableStates.shared.keyboardOrientation
-    }
-    private static var layout: KeyboardLayout {
-        VariableStates.shared.keyboardLayout
-    }
-
     /// レイアウトのモード
     enum LayoutMode {
         case phoneVertical
@@ -152,9 +145,9 @@ enum Design {
 
     /// レイアウトモードを決定する
     /// 特に、iPadでフローティングキーボードを利用する場合は`phoneVertical`になる。
-    private static var layoutMode: LayoutMode {
+    private static func layoutMode(orientation: KeyboardOrientation) -> LayoutMode {
         // TODO: この実装は検証される必要がある
-        var usePadMode = UIDevice.current.userInterfaceIdiom == .pad
+        let usePadMode = UIDevice.current.userInterfaceIdiom == .pad
         // floating keyboardの場合
         if usePadMode, SemiStaticStates.shared.screenWidth < 400 {
             return .phoneVertical
@@ -172,61 +165,75 @@ enum Design {
     }
 
     /// This property calculate suitable width for normal keyView.
-    /// キーボードの高さはスクリーンの幅から決定するため、キーボードスクリーンの高さはこのように書いて良い。
-    static var keyboardScreenHeight: CGFloat {
-        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth) + 2
+    static func keyboardScreenHeight(upsideComponent: UpsideComponent?, orientation: KeyboardOrientation) -> CGFloat {
+        keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: upsideComponent) + 2
     }
 
     /// screenWidthに依存して決定する
     /// 12はresultViewのpadding
-    static func keyboardHeight(screenWidth: CGFloat = VariableStates.shared.interfaceSize.width) -> CGFloat {
+    static func keyboardHeight(screenWidth: CGFloat, orientation: KeyboardOrientation, upsideComponent: UpsideComponent? = nil) -> CGFloat {
+        let scale: CGFloat
+        if let upsideComponent {
+            switch orientation {
+            case .vertical:
+                scale = min(2.2, SemiStaticStates.shared.keyboardHeightScale + upsideComponentScale(upsideComponent).vertical)
+            case .horizontal:
+                scale = min(2.2, SemiStaticStates.shared.keyboardHeightScale + upsideComponentScale(upsideComponent).horizontal)
+            }
+        } else {
+            scale = SemiStaticStates.shared.keyboardHeightScale
+        }
         // 安全装置として、widthが本来のscreenWidthを超えないようにする。
         let width = min(screenWidth, SemiStaticStates.shared.screenWidth)
-        switch layoutMode {
+        switch layoutMode(orientation: orientation) {
         case .phoneVertical:
-            return 51 / 74 * width + 12
+            return 51 / 74 * width * scale + 12
         case .padVertical:
-            return 15 / 31 * width + 12
+            return 15 / 31 * width * scale + 12
         case .phoneHorizontal:
-            return 17 / 56 * width + 12
+            return 17 / 56 * width * scale + 12
         case .padHorizontal:
-            return 5 / 18 * width + 12
+            return 5 / 18 * width * scale + 12
         }
     }
 
-    /// keyboardHeightに依存して決定する
-    static func resultViewHeight(keyboardHeight: CGFloat = VariableStates.shared.interfaceSize.height) -> CGFloat {
-        // let keyboardHeight = self.keyboardHeight(screenWidth: screenWidth)
-        switch layoutMode {
+    private static func upsideComponentScale(_ component: UpsideComponent) -> (vertical: CGFloat, horizontal: CGFloat) {
+        switch component {
+        case .search:
+            return (vertical: 0.5, horizontal: 0.5)
+        }
+    }
+
+    static func upsideComponentHeight(_ component: UpsideComponent, orientation: KeyboardOrientation) -> CGFloat {
+        Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: component) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: nil)
+    }
+    /// バー部分の高さは`interfaceHeight`に基づいて決定する
+    static func keyboardBarHeight(interfaceHeight: CGFloat, orientation: KeyboardOrientation) -> CGFloat {
+        switch layoutMode(orientation: orientation) {
         case .phoneVertical:
-            return (keyboardHeight - 12) * 37 / 204
+            return (interfaceHeight - 12) * 37 / 204
         // return screenWidth / 8
         case .padVertical:
-            return (keyboardHeight - 12) * 31 / 180
+            return (interfaceHeight - 12) * 31 / 180
         // return screenWidth / 12
         case .phoneHorizontal:
-            return (keyboardHeight - 12) * 28 / 153
+            return (interfaceHeight - 12) * 28 / 153
         // return screenWidth / 18
         case .padHorizontal:
-            return (keyboardHeight - 12) * 9 / 55
+            return (interfaceHeight - 12) * 9 / 55
         // return screenWidth / 22
         }
     }
 
-    static func largeTextViewFontSize(_ text: String) -> CGFloat {
+    static func largeTextViewFontSize(_ text: String, upsideComponent: UpsideComponent?, orientation: KeyboardOrientation) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 10)
         let size = text.size(withAttributes: [.font: font])
         // 閉じるボタンの高さの分
-        return (self.keyboardScreenHeight - self.keyboardScreenHeight * 0.15) / size.height * 10
+        return (self.keyboardScreenHeight(upsideComponent: upsideComponent, orientation: orientation) * 0.85) / size.height * 10
     }
 
     enum Fonts {
         case `default`
-
-        private var layout: KeyboardLayout {
-            VariableStates.shared.keyboardLayout
-        }
-
         func azooKeyIconFont(fixedSize: CGFloat) -> Font {
             Font.custom("AzooKeyIcon-Regular", fixedSize: fixedSize)
         }
@@ -235,7 +242,7 @@ enum Design {
             Font.custom("AzooKeyIcon-Regular", size: size, relativeTo: style)
         }
 
-        var iconFontSize: CGFloat {
+        @MainActor var iconFontSize: CGFloat {
             @KeyboardSetting(.keyViewFontSize) var userDecidedSize
             if userDecidedSize != -1 {
                 return UIFontMetrics.default.scaledValue(for: userDecidedSize)
@@ -243,52 +250,84 @@ enum Design {
             return UIFontMetrics.default.scaledValue(for: 20)
         }
 
-        func iconImageFont(theme: ThemeData) -> Font {
+        @MainActor func iconImageFont(theme: ThemeData) -> Font {
             Font.system(size: self.iconFontSize, weight: theme.textFont.weight)
         }
 
-        var resultViewFontSize: CGFloat {
+        @MainActor var resultViewFontSize: CGFloat {
             @KeyboardSetting(.resultViewFontSize) var size
             return size == -1 ? 18: size
         }
 
-        func resultViewFont(theme: ThemeData) -> Font {
+        @MainActor func resultViewFont(theme: ThemeData, fontSize: CGFloat? = nil) -> Font {
             // Font.custom("Mplus 1p Bold", size: resultViewFontSize).weight(theme.textFont.weight)
-            Font.system(size: resultViewFontSize).weight(theme.textFont.weight)
+            Font.system(size: fontSize ?? resultViewFontSize).weight(theme.textFont.weight)
         }
 
-        func keyLabelFont(text: String, width: CGFloat, scale: CGFloat, theme: ThemeData) -> Font {
-            @KeyboardSetting(.keyViewFontSize) var userDecidedSize
-            if userDecidedSize != -1 {
-                return .system(size: userDecidedSize * scale, weight: theme.textFont.weight, design: .default)
+        enum LabelFontSizeStrategy {
+            case max
+            case large
+            case medium
+            case small
+            case xsmall
+
+            var scale: CGFloat {
+                switch self {
+                case .large, .max:
+                    return 1
+                case .medium:
+                    return 0.8
+                case .small:
+                    return 0.7
+                case .xsmall:
+                    return 0.6
+                }
             }
-            let maxFontSize: Int
-            switch Design.layout {
-            case .flick:
-                maxFontSize = Int(21 * scale)
-            case .qwerty:
-                maxFontSize = Int(25 * scale)
-            }
-            // 段階的フォールバック
-            for fontsize in (10...maxFontSize).reversed() {
-                let size = UIFontMetrics.default.scaledValue(for: CGFloat(fontsize))
+        }
+
+        private func getMaximumFontSize(for text: String, width: CGFloat, maxFontSize: Int) -> CGFloat {
+            var lowerBound = 9
+            var upperBound = maxFontSize
+            var mid = 0
+            while lowerBound < upperBound {
+                mid = (lowerBound + upperBound + 1) / 2
+                let size = UIFontMetrics.default.scaledValue(for: CGFloat(mid))
                 let font = UIFont.systemFont(ofSize: size, weight: .regular)
                 let title_size = text.size(withAttributes: [.font: font])
                 if title_size.width < width * 0.95 {
-                    return Font.system(size: size, weight: theme.textFont.weight, design: .default)
+                    lowerBound = mid
+                } else {
+                    upperBound = mid - 1
                 }
             }
-            let size = UIFontMetrics.default.scaledValue(for: 9)
+            let size = UIFontMetrics.default.scaledValue(for: CGFloat(lowerBound))
+            return size
+        }
+
+        @MainActor func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, layout: KeyboardLayout, theme: ThemeData) -> Font {
+            if case .max = fontSize {
+                let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 100)
+                return Font.system(size: size, weight: theme.textFont.weight, design: .default)
+            }
+
+            @KeyboardSetting(.keyViewFontSize) var userDecidedSize
+            if userDecidedSize != -1 {
+                return .system(size: userDecidedSize * fontSize.scale, weight: theme.textFont.weight, design: .default)
+            }
+            let maxFontSize: Int
+            switch layout {
+            case .flick:
+                maxFontSize = Int(21 * fontSize.scale)
+            case .qwerty:
+                maxFontSize = Int(25 * fontSize.scale)
+            }
+            let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: maxFontSize)
             return Font.system(size: size, weight: theme.textFont.weight, design: .default)
         }
     }
 
     enum Colors {
         case `default`
-
-        private var layout: KeyboardLayout {
-            VariableStates.shared.keyboardLayout
-        }
 
         var backGroundColor: Color {
             Color("BackGroundColor_iOS15")
@@ -298,8 +337,8 @@ enum Design {
             Color("OpenKeyColor")
         }
 
-        var normalKeyColor: Color {
-            switch Design.layout {
+        func normalKeyColor(layout: KeyboardLayout) -> Color {
+            switch layout {
             case .flick:
                 return Color("NormalKeyColor")
             case .qwerty:
@@ -311,8 +350,8 @@ enum Design {
             Color("TabKeyColor_iOS15")
         }
 
-        var highlightedKeyColor: Color {
-            switch Design.layout {
+        func highlightedKeyColor(layout: KeyboardLayout) -> Color {
+            switch layout {
             case .flick:
                 return Color("HighlightedKeyColor")
             case .qwerty:
@@ -320,13 +359,19 @@ enum Design {
             }
         }
 
-        var suggestKeyColor: Color {
-            switch Design.layout {
+        func suggestKeyColor(layout: KeyboardLayout) -> Color {
+            switch layout {
             case .flick:
                 return .systemGray4
             case .qwerty:
                 return Color("RomanHighlightedKeyColor")
             }
+        }
+
+        func prominentBackgroundColor(_ theme: ThemeData) -> Color {
+            ColorTools.hsv(theme.resultBackgroundColor.color) { h, s, v, a in
+                Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
+            } ?? theme.normalKeyFillColor.color
         }
     }
 

@@ -38,7 +38,7 @@ extension QwertyCustomKey: QwertyKey {}
 extension QwertyVariationKey: QwertyKey {}
 
 private extension QwertyCustomKeysValue {
-    subscript(_ state: Selection) -> QwertyKey {
+    subscript(_ state: Selection) -> any QwertyKey {
         get {
             let sIndex = state.selectIndex
             let lpsIndex = state.longpressSelectIndex

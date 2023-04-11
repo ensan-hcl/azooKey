@@ -31,7 +31,7 @@ struct EditingScrollCustardView: CancelableEditor {
     private static let emptyItem: UserMadeGridScrollCustard = .init(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
     let base: UserMadeGridScrollCustard
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     @State private var showPreview = false
     @State private var editingItem: UserMadeGridScrollCustard
@@ -68,7 +68,7 @@ struct EditingScrollCustardView: CancelableEditor {
                             HStack {
                                 Text("縦方向キー数")
                                 Spacer()
-                                TextField("縦方向キー数", text: $editingItem.columnCount)
+                                IntegerTextField("縦方向キー数", text: $editingItem.columnCount, range: 1 ... .max)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
@@ -76,7 +76,7 @@ struct EditingScrollCustardView: CancelableEditor {
                             HStack {
                                 Text("横方向キー数")
                                 Spacer()
-                                TextField("横方向キー数", text: $editingItem.rowCount)
+                                IntegerTextField("横方向キー数", text: $editingItem.rowCount, range: 1 ... .max)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
@@ -92,13 +92,10 @@ struct EditingScrollCustardView: CancelableEditor {
                 }
                 BottomSheetView(
                     isOpen: $showPreview,
-                    maxHeight: Design.keyboardScreenHeight + 40,
+                    maxHeight: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation) + 40,
                     minHeight: 0
                 ) {
-                    ZStack(alignment: .top) {
-                        Color(.secondarySystemBackground)
-                        KeyboardPreview(theme: .default, defaultTab: .custard(makeCustard(data: editingItem)))
-                    }
+                    KeyboardPreview(defaultTab: .custard(makeCustard(data: editingItem)))
                 }
             }
         }
@@ -109,7 +106,7 @@ struct EditingScrollCustardView: CancelableEditor {
             leading: Button("キャンセル", action: cancel),
             trailing: Button("保存") {
                 self.save()
-                presentationMode.wrappedValue.dismiss()
+                self.dismiss()
             }
         )
     }
@@ -140,7 +137,7 @@ struct EditingScrollCustardView: CancelableEditor {
             identifier: data.tabName.isEmpty ? "new_tab" : data.tabName,
             language: .none,
             input_style: .direct,
-            metadata: .init(custard_version: .v1_0, display_name: data.tabName.isEmpty ? "New tab" : data.tabName),
+            metadata: .init(custard_version: .v1_2, display_name: data.tabName.isEmpty ? "New tab" : data.tabName),
             interface: .init(
                 keyStyle: .tenkeyStyle,
                 keyLayout: .gridScroll(.init(direction: data.direction, rowCount: rowCount, columnCount: columnCount)),
@@ -163,6 +160,6 @@ struct EditingScrollCustardView: CancelableEditor {
     }
 
     func cancel() {
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 }

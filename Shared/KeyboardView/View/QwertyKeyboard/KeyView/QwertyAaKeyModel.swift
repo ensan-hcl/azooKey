@@ -16,8 +16,8 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
 
     let needSuggestView: Bool = false
 
-    var pressActions: [ActionType] {
-        if VariableStates.shared.boolStates.isCapsLocked {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        if variableStates.boolStates.isCapsLocked {
             return [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .off)]
         } else {
             return [.changeCharacterType]
@@ -38,8 +38,8 @@ struct QwertyAaKeyModel: QwertyKeyModelProtocol {
 
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .special
 
-    func sound() {
-        Sound.tabOrOtherKey()
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.tabOrOtherKey()
     }
 
 }

@@ -16,7 +16,7 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol {
     static let shared = FlickKanaSymbolsKeyModel()
     @KeyboardSetting(.kanaSymbolsFlickCustomKey) private var customKey
 
-    var pressActions: [ActionType] {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
         customKey.compiled().actions
     }
     var longPressActions: LongpressActionType {
@@ -25,11 +25,9 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol {
     var labelType: KeyLabelType {
         customKey.compiled().labelType
     }
-    var flickKeys: [FlickDirection: FlickedKeyModel] {
+    func flickKeys(variableStates: VariableStates) -> [CustardKit.FlickDirection: FlickedKeyModel] {
         customKey.compiled().flick
     }
-
-    var suggestModel: SuggestModel = SuggestModel(keyType: .custom(.kanaSymbols))
 
     private init() {}
 
@@ -37,7 +35,7 @@ struct FlickKanaSymbolsKeyModel: FlickKeyModelProtocol {
         KeyLabel(self.labelType, width: width)
     }
 
-    func sound() {
-        Sound.click()
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.click()
     }
 }

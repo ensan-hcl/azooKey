@@ -10,7 +10,11 @@ import SwiftUI
 
 struct LiveConversionSettingView: View {
     private static let strength: [AutomaticCompletionStrengthKey.Value] = [.disabled, .weak, .normal, .strong, .ultrastrong]
-    @State private var setting = SettingUpdater<AutomaticCompletionStrengthKey>()
+    @State private var setting: SettingUpdater<AutomaticCompletionStrengthKey>
+
+    @MainActor init() {
+        self._setting = .init(initialValue: .init())
+    }
 
     var body: some View {
         Form {

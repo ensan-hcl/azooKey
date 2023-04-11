@@ -34,14 +34,15 @@ struct EditingTenkeyCustardView: CancelableEditor {
     }
     private static let emptyItem: UserMadeTenKeyCustard = .init(tabName: "新規タブ", rowCount: "5", columnCount: "4", inputStyle: .direct, language: .none, keys: emptyKeys, addTabBarAutomatically: true)
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     let base: UserMadeTenKeyCustard
+    @StateObject private var variableStates = VariableStates()
     @State private var editingItem: UserMadeTenKeyCustard
     @Binding private var manager: CustardManager
     @State private var showPreview = false
     @State private var copiedKey: UserMadeTenKeyCustard.KeyData?
-    private var models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
+    private var models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] {
         (0..<layout.rowCount).reduce(into: [:]) {dict, x in
             (0..<layout.columnCount).forEach {y in
                 if let value = editingItem.keys[.gridFit(x: x, y: y)] {
@@ -63,7 +64,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
             language: editingItem.language,
             input_style: editingItem.inputStyle,
             metadata: .init(
-                custard_version: .v1_0,
+                custard_version: .v1_2,
                 display_name: editingItem.tabName
             ),
             interface: .init(
@@ -101,6 +102,10 @@ struct EditingTenkeyCustardView: CancelableEditor {
         return false
     }
 
+    private var interfaceSize: CGSize {
+        .init(width: UIScreen.main.bounds.width, height: Design.keyboardHeight(screenWidth: UIScreen.main.bounds.width, orientation: MainAppDesign.keyboardOrientation))
+    }
+
     var body: some View {
         VStack {
             GeometryReader {_ in
@@ -116,7 +121,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         HStack {
                             Text("縦方向キー数")
                             Spacer()
-                            TextField("縦方向キー数", text: $editingItem.columnCount)
+                            IntegerTextField("縦方向キー数", text: $editingItem.columnCount, range: 1 ... .max)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
@@ -124,7 +129,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         HStack {
                             Text("横方向キー数")
                             Spacer()
-                            TextField("横方向キー数", text: $editingItem.rowCount)
+                            IntegerTextField("横方向キー数", text: $editingItem.rowCount, range: 1 ... .max)
                                 .keyboardType(.numberPad)
                                 .textFieldStyle(.roundedBorder)
                                 .submitLabel(.done)
@@ -140,7 +145,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         }
                         Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                     }
-                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, layout: .flick, orientation: .vertical), layout: layout, needSuggest: false) {view, x, y in
+                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, interfaceSize: interfaceSize, layout: .flick, orientation: MainAppDesign.keyboardOrientation), layout: layout) {view, x, y in
                         if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
                             if !isCovered(at: (x, y)) {
                                 Button {
@@ -285,35 +290,33 @@ struct EditingTenkeyCustardView: CancelableEditor {
                             }
                         }
                     }
+                    .environmentObject(variableStates)
                 }
+                // FIXME: editingItemを更新しても`custard`が変更されない不具合
                 BottomSheetView(
                     isOpen: $showPreview,
-                    maxHeight: Design.keyboardScreenHeight + 40,
+                    maxHeight: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation) + 40,
                     minHeight: 0
                 ) {
-                    ZStack(alignment: .top) {
-                        Color.secondarySystemBackground
-                        KeyboardPreview(theme: .default, defaultTab: .custard(custard))
-                    }
+                    KeyboardPreview(defaultTab: .custard(custard))
                 }
-
             }
-            .onChange(of: editingItem.rowCount) {_ in
-                updateModel()
-            }
-            .onChange(of: editingItem.columnCount) {_ in
+            .onChange(of: layout) {_ in
                 updateModel()
             }
             .background(Color.secondarySystemBackground)
             .navigationBarBackButtonHidden(true)
             .navigationTitle(Text("カスタムタブを作る"))
             .navigationBarItems(
-                leading: Button("キャンセル", action: cancel),
+                leading: Button("キャンセル", role: .cancel, action: cancel),
                 trailing: Button("保存") {
                     self.save()
-                    presentationMode.wrappedValue.dismiss()
+                    self.dismiss()
                 }
             )
+        }
+        .onAppear {
+            variableStates.setInterfaceSize(orientation: MainAppDesign.keyboardOrientation, screenWidth: SemiStaticStates.shared.screenWidth)
         }
     }
 
@@ -390,6 +393,6 @@ struct EditingTenkeyCustardView: CancelableEditor {
     }
 
     func cancel() {
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 }

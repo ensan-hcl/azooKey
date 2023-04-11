@@ -9,73 +9,17 @@
 import Foundation
 import SwiftUI
 
-struct ThemeEnvironmentKey: EnvironmentKey {
-    typealias Value = ThemeData
-
-    static var defaultValue: ThemeData = .default
-}
-
-extension EnvironmentValues {
-    var themeEnvironment: ThemeData {
-        get {
-            self[ThemeEnvironmentKey.self]
-        }
-        set {
-            self[ThemeEnvironmentKey.self] = newValue
-        }
-    }
-}
-
-struct MessageEnvironmentKey: EnvironmentKey {
-    typealias Value = Bool
-
-    static var defaultValue = true
-}
-
-extension EnvironmentValues {
-    var showMessage: Bool {
-        get {
-            self[MessageEnvironmentKey.self]
-        }
-        set {
-            self[MessageEnvironmentKey.self] = newValue
-        }
-    }
-}
-
-struct UserActionManagerEnvironmentKey: EnvironmentKey {
-    typealias Value = UserActionManager
-
-    static var defaultValue = UserActionManager()
-}
-
-extension EnvironmentValues {
-    var userActionManager: UserActionManager {
-        get {
-            self[UserActionManagerEnvironmentKey.self]
-        }
-        set {
-            self[UserActionManagerEnvironmentKey.self] = newValue
-        }
-    }
-}
-
-struct KeyboardView<Candidate: ResultViewItemData>: View {
-    @ObservedObject private var variableStates = VariableStates.shared
-    @State private var resultData: [ResultData<Candidate>] = []
-
-    private unowned let resultModelVariableSection: ResultModelVariableSection<Candidate>
-
+struct KeyboardView: View {
     @State private var messageManager: MessageManager = MessageManager()
     @State private var isResultViewExpanded = false
 
     @Environment(\.themeEnvironment) private var theme
     @Environment(\.showMessage) private var showMessage
+    @EnvironmentObject private var variableStates: VariableStates
 
     private let defaultTab: Tab.ExistentialTab?
 
-    init(resultModelVariableSection: ResultModelVariableSection<Candidate>, defaultTab: Tab.ExistentialTab? = nil) {
-        self.resultModelVariableSection = resultModelVariableSection
+    init(defaultTab: Tab.ExistentialTab? = nil) {
         self.defaultTab = defaultTab
     }
 
@@ -89,30 +33,36 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight)
+                                .frame(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))
                                 .clipped()
                         }
                     }
                 )
-            Group {
+            VStack(spacing: 0) {
+                if let upsideComponent = variableStates.upsideComponent {
+                    Group {
+                        switch upsideComponent {
+                        case let .search(target):
+                            UpsideSearchView(target: target)
+                        }
+                    }
+                    .frame(height: Design.upsideComponentHeight(upsideComponent, orientation: variableStates.keyboardOrientation))
+                }
                 if isResultViewExpanded {
-                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded, resultData: resultData)
+                    ExpandedResultView(isResultViewExpanded: $isResultViewExpanded)
                 } else {
                     VStack(spacing: 0) {
-                        ResultView(model: resultModelVariableSection, isResultViewExpanded: $isResultViewExpanded, resultData: $resultData)
+                        KeyboardBarView(isResultViewExpanded: $isResultViewExpanded)
+                            .frame(height: Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation))
                             .padding(.vertical, 6)
-                        if variableStates.refreshing {
-                            keyboardView(tab: variableStates.tabManager.tab.existential)
-                        } else {
-                            keyboardView(tab: variableStates.tabManager.tab.existential)
-                        }
+                        keyboardView(tab: defaultTab ?? variableStates.tabManager.tab.existential)
                     }
                 }
             }
             .resizingFrame(
                 size: $variableStates.interfaceSize,
                 position: $variableStates.interfacePosition,
-                initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: SemiStaticStates.shared.screenHeight)
+                initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: variableStates.keyboardOrientation))
             )
             .padding(.bottom, 2)
             if variableStates.boolStates.isTextMagnifying {
@@ -125,36 +75,42 @@ struct KeyboardView<Candidate: ResultViewItemData>: View {
                     }
                 }
             }
+            if showMessage, let message = variableStates.temporalMessage {
+                TemporalMessageView(message: message) {
+                    withAnimation(.easeIn) {
+                        variableStates.temporalMessage = nil
+                    }
+                }
+            }
         }
-        .frame(height: Design.keyboardScreenHeight)
+        .frame(height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))
     }
 
+    @MainActor @ViewBuilder
     func keyboardView(tab: Tab.ExistentialTab) -> some View {
-        let target: Tab.ExistentialTab
-        if let defaultTab {
-            target = defaultTab
-        } else {
-            target = tab
-        }
-
-        return Group {
-            switch target {
-            case .flick_hira:
-                FlickKeyboardView(keyModels: FlickDataProvider().hiraKeyboard)
-            case .flick_abc:
-                FlickKeyboardView(keyModels: FlickDataProvider().abcKeyboard)
-            case .flick_numbersymbols:
-                FlickKeyboardView(keyModels: FlickDataProvider().numberKeyboard)
-            case .qwerty_hira:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().hiraKeyboard)
-            case .qwerty_abc:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().abcKeyboard)
-            case .qwerty_number:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().numberKeyboard)
-            case .qwerty_symbols:
-                QwertyKeyboardView(keyModels: QwertyDataProvider().symbolsKeyboard)
-            case let .custard(custard):
-                CustomKeyboardView(custard: custard)
+        switch tab {
+        case .flick_hira:
+            FlickKeyboardView(keyModels: FlickDataProvider.hiraKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+        case .flick_abc:
+            FlickKeyboardView(keyModels: FlickDataProvider.abcKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+        case .flick_numbersymbols:
+            FlickKeyboardView(keyModels: FlickDataProvider.numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+        case .qwerty_hira:
+            QwertyKeyboardView(keyModels: QwertyDataProvider.hiraKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+        case .qwerty_abc:
+            QwertyKeyboardView(keyModels: QwertyDataProvider.abcKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+        case .qwerty_number:
+            QwertyKeyboardView(keyModels: QwertyDataProvider.numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+        case .qwerty_symbols:
+            QwertyKeyboardView(keyModels: QwertyDataProvider.symbolsKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
+        case let .custard(custard):
+            CustomKeyboardView(custard: custard)
+        case let .special(tab):
+            switch tab {
+            case .clipboard_history_tab:
+                ClipboardHistoryTab()
+            case .emoji:
+                EmojiTab()
             }
         }
     }

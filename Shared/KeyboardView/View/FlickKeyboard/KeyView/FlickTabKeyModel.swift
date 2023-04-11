@@ -11,37 +11,33 @@ import Foundation
 import SwiftUI
 
 struct FlickTabKeyModel: FlickKeyModelProtocol {
-    private let key: CustomizableFlickKey
+    private let data: KeyFlickSetting.SettingData
     let needSuggestView: Bool = true
 
-    static let hiraTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.japanese), key: .hiraTab)
-    static let abcTabKeyModel = FlickTabKeyModel(tab: .user_dependent(.english), key: .abcTab)
-    static let numberTabKeyModel = FlickTabKeyModel(tab: .existential(.flick_numbersymbols), key: .symbolsTab)
+    @MainActor static func hiraTabKeyModel() -> Self { FlickTabKeyModel(tab: .user_dependent(.japanese), key: .hiraTab) }
+    @MainActor static func abcTabKeyModel() -> Self {  FlickTabKeyModel(tab: .user_dependent(.english), key: .abcTab) }
+    @MainActor static func numberTabKeyModel() -> Self {  FlickTabKeyModel(tab: .existential(.flick_numbersymbols), key: .symbolsTab) }
 
-    var pressActions: [ActionType] {
-        key.get().actions
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        self.data.actions
     }
     var longPressActions: LongpressActionType {
-        key.get().longpressActions
-    }
-    var labelType: KeyLabelType {
-        key.get().labelType
-    }
-    var flickKeys: [FlickDirection: FlickedKeyModel] {
-        key.get().flick
+        self.data.longpressActions
     }
 
-    let suggestModel: SuggestModel
-    var tab: Tab
+    func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
+        self.data.flick
+    }
 
-    private init(tab: Tab, key: CustomizableFlickKey) {
-        self.key = key
+    private var tab: Tab
+
+    @MainActor private init(tab: Tab, key: CustomizableFlickKey) {
+        self.data = key.get()
         self.tab = tab
-        self.suggestModel = SuggestModel([:], keyType: .custom(key))
     }
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
-        KeyLabel(self.labelType, width: width)
+        KeyLabel(self.data.labelType, width: width)
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
@@ -51,7 +47,7 @@ struct FlickTabKeyModel: FlickKeyModelProtocol {
         return theme.specialKeyFillColor.color
     }
 
-    func sound() {
-        Sound.tabOrOtherKey()
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.tabOrOtherKey()
     }
 }

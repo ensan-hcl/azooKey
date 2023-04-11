@@ -37,7 +37,7 @@ struct PasteLongPressButton: View {
         Image(systemName: "doc.on.clipboard")
             .onLongPressGesture(minimumDuration: 0.5) {
                 if let string = UIPasteboard.general.string {
-                    Store.shared.feedbackGenerator.notificationOccurred(.success)
+                    MainAppFeedback.success()
                     text = string
                 }
             }

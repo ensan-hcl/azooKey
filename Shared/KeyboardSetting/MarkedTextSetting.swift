@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct MarkedTextSettingKey: KeyboardSettingKey {
-    static var value: Value {
+    @MainActor static var value: Value {
         get {
             let string = SharedStore.userDefaults.string(forKey: key)
             if let string, let value = Value(rawValue: string) {

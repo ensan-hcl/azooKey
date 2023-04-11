@@ -15,7 +15,7 @@ extension CodableActionData {
     var hasAssociatedValue: Bool {
         switch self {
         case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication: return true
-        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard: return false
+        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard, .paste: return false
         }
     }
 
@@ -26,6 +26,7 @@ extension CodableActionData {
         case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
         case let .smartDelete(value): return "\(value.targets.joined(separator: ","))の隣まで削除"
+        case .paste: return "ペーストする"
         case .moveTab: return "タブの移動"
         case .replaceLastCharacters: return "文字を置換"
         case .complete: return "確定"
@@ -189,7 +190,7 @@ private struct CodableActionEditor: View {
         case let .input(value):
             ActionEditTextField("入力する文字", action: $action) {value} convert: {.input($0)}
         case let .delete(count):
-            ActionEditTextField("削除する文字数", action: $action) {"\(count)"} convert: {value in
+            ActionEditIntegerTextField("削除する文字数", action: $action) {"\(count)"} convert: {value in
                 if let count = Int(value) {
                     return .delete(count)
                 }
@@ -197,7 +198,7 @@ private struct CodableActionEditor: View {
             }
             Text("負の値を指定すると右側の文字を削除します")
         case let .moveCursor(count):
-            ActionEditTextField("移動する文字数", action: $action) {"\(count)"} convert: {value in
+            ActionEditIntegerTextField("移動する文字数", action: $action) {"\(count)"} convert: {value in
                 if let count = Int(value) {
                     return .moveCursor(count)
                 }
@@ -250,6 +251,36 @@ private struct ActionEditTextField: View {
     }
 }
 
+private struct ActionEditIntegerTextField: View {
+    private let title: LocalizedStringKey
+    private let range: ClosedRange<Int>
+    @Binding private var action: EditingCodableActionData
+    private let convert: (String) -> CodableActionData?
+    init(_ title: LocalizedStringKey, action: Binding<EditingCodableActionData>, range: ClosedRange<Int> = .min ... .max, initialValue: () -> String?,  convert: @escaping (String) -> CodableActionData?) {
+        self.title = title
+        self.range = range
+        self.convert = convert
+        self._action = action
+        if let initialValue = initialValue() {
+            self._value = State(initialValue: initialValue)
+        }
+    }
+
+    @State private var value = ""
+
+    var body: some View {
+        IntegerTextField(title, text: $value, range: range)
+            .onChange(of: value) {value in
+                if let data = convert(value) {
+                    action.data = data
+                }
+            }
+            .keyboardType(.numberPad)
+            .textFieldStyle(.roundedBorder)
+            .submitLabel(.done)
+    }
+}
+
 private struct ActionMoveTabEditView: View {
     @Binding private var action: EditingCodableActionData
     private let availableCustards: [String]
@@ -295,6 +326,10 @@ extension TabData {
                 return "記号(ローマ字入力)"
             case .last_tab:
                 return "最後に表示していたタブ"
+            case .clipboard_history_tab:
+                return "クリップボードの履歴"
+            case .emoji_tab:
+                return "絵文字"
             }
         case let .custom(identifier):
             return LocalizedStringKey(identifier)
@@ -316,6 +351,8 @@ struct AvailableTabPicker: View {
             ("記号と数字(フリック入力)", .system(.flick_numbersymbols)),
             ("数字(ローマ字入力)", .system(.qwerty_numbers)),
             ("記号(ローマ字入力)", .system(.qwerty_symbols)),
+            ("絵文字", .system(.emoji_tab)),
+            ("クリップボードの履歴", .system(.clipboard_history_tab)),
             ("最後に表示していたタブ", .system(.last_tab)),
             ("日本語(フリック入力)", .system(.flick_japanese)),
             ("日本語(ローマ字入力)", .system(.qwerty_japanese)),
@@ -484,6 +521,11 @@ private struct ActionPicker: View {
                 }
                 Button("文字の削除") {
                     process(.delete(1))
+                }
+                if SemiStaticStates.shared.hasFullAccess {
+                    Button("ペースト") {
+                        process(.paste)
+                    }
                 }
             }
             Section(header: Text("高度")) {

@@ -16,6 +16,7 @@ protocol Savable {
 }
 
 @propertyWrapper
+@MainActor
 struct KeyboardSetting<T: KeyboardSettingKey> {
     init(_ key: T) {}
     var wrappedValue: T.Value {
@@ -33,15 +34,18 @@ struct KeyboardSetting<T: KeyboardSettingKey> {
 struct SettingUpdater<Wrapped: KeyboardSettingKey> {
     var value: Wrapped.Value {
         didSet {
-            Wrapped.value = value
+            let newValue = value
+            Task.detached { @MainActor in
+                Wrapped.value = newValue
+            }
         }
     }
 
-    init() {
+    @MainActor init() {
         self.value = Wrapped.value
     }
 
-    mutating func reload() {
+    @MainActor mutating func reload() {
         self.value = Wrapped.value
     }
 }
@@ -51,10 +55,17 @@ protocol KeyboardSettingKey {
     static var defaultValue: Value { get }
     static var title: LocalizedStringKey { get }
     static var explanation: LocalizedStringKey { get }
-    static var value: Value { get set }
+    @MainActor static var value: Value { get set }
+    static var requireFullAccess: Bool { get }
 }
 
 protocol StoredInUserDefault {
     associatedtype Value
     static var key: String { get }
+}
+
+extension KeyboardSettingKey {
+    static var requireFullAccess: Bool {
+        false
+    }
 }

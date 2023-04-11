@@ -12,11 +12,10 @@ import SwiftUI
 
 struct FlickEnterKeyModel: FlickKeyModelProtocol {
     static let shared = FlickEnterKeyModel()
-    let suggestModel = SuggestModel([:])
     let needSuggestView = false
 
-    var pressActions: [ActionType] {
-        switch VariableStates.shared.enterKeyState {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        switch variableStates.enterKeyState {
         case .complete:
             return [.enter]
         case .return:
@@ -28,7 +27,9 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol {
 
     var longPressActions: LongpressActionType = .none
 
-    var flickKeys: [FlickDirection: FlickedKeyModel] = [:]
+    func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
+        [:]
+    }
 
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
@@ -44,7 +45,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol {
             case .default:
                 return theme.specialKeyFillColor.color
             default:
-                if theme == .default {
+                if theme == .default(layout: .flick) {
                     return Design.colors.specialEnterKeyColor
                 } else {
                     return theme.specialKeyFillColor.color
@@ -53,18 +54,17 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol {
         }
     }
 
-    func sound() {
-        switch VariableStates.shared.enterKeyState {
+    func feedback(variableStates: VariableStates) {
+        switch variableStates.enterKeyState {
         case .complete, .edit:
-            Sound.tabOrOtherKey()
+            KeyboardFeedback.tabOrOtherKey()
         case let .return(type):
             switch type {
             case .default:
-                Sound.click()
+                KeyboardFeedback.click()
             default:
-                Sound.tabOrOtherKey()
+                KeyboardFeedback.tabOrOtherKey()
             }
         }
     }
-
 }

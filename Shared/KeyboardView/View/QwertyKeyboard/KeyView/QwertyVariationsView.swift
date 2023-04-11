@@ -14,6 +14,7 @@ struct QwertyVariationsView: View {
     private let selection: Int?
     @Environment(\.themeEnvironment) private var theme
     private let tabDesign: TabDependentDesign
+
     init(model: VariationsModel, selection: Int?, tabDesign: TabDependentDesign) {
         self.tabDesign = tabDesign
         self.model = model
@@ -21,7 +22,7 @@ struct QwertyVariationsView: View {
     }
 
     private var suggestColor: Color {
-        theme != .default ? .white : Design.colors.suggestKeyColor
+        theme != .default(layout: .qwerty) ? .white : Design.colors.suggestKeyColor(layout: .qwerty)
     }
 
     var body: some View {
@@ -40,7 +41,7 @@ struct QwertyVariationsView: View {
 
     private func getLabel(_ labelType: KeyLabelType) -> KeyLabel {
         let width = tabDesign.keyViewWidth
-        if theme != .default {
+        if theme != .default(layout: .qwerty) {
             return KeyLabel(labelType, width: width, textColor: .black)
         }
         return KeyLabel(labelType, width: width)

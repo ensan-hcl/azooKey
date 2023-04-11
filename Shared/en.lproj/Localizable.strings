@@ -176,6 +176,33 @@
 "日本語と英語それぞれで「ローマ字入力」または「フリック入力」を選ぶことが可能です。" = "You can select Qwerty and Flick input styles for each of Japanese and English.";
 "現在は携帯電話式の入力については対応していません。" = "Currently, azooKey doesn't support the Japanese flip phone input style.";
 
+"フルアクセスが必要な機能を使う" = "Use features requiring full access";
+"フルアクセスについて" = "About full access";
+"azooKeyは、キーボードの振動フィードバックや、キーボードからのペーストを実現するために、フルアクセスの許可が必要です。フルアクセスを許可していただくことで、これらの機能が使用できます。" = "azooKey requires full access permission in order to enable features such as keyboard haptics and pasting from the keyboard. By granting full access, these features can be utilized.";
+"以下は、フルアクセスをオンにすることで利用できる設定項目です。フルアクセスを必要とする機能は、すべてデフォルトで無効になっているため、フルアクセスを許可しただけでキーボードの振る舞いが変わることはありません。" = "The following are the settings that can be used when full access is turned on. As all functions requiring full access are disabled by default, simply granting full access will not change the behavior of the keyboard.";
+"また、フルアクセスをオンにしたあとでも、いつでもフルアクセスをオフにすることができます。" = "Furthermore, even after turning on full access, it is possible to turn it off at any time.";
+
+"フルアクセスをオンにすると、変換候補を長押しすることでキーボード上で誤変換を報告できるようになります。" = "When you turn on full access, you can report mis-conversions on the keyboard by long-pressing conversion candidates.";
+"報告の際には、「アプリのバージョン」「変換候補と読みと順位」「ローマ字入力かフリック入力か」「学習のあり/なし」の情報がサーバに送信されます。" = "When reporting, information such as the app version, conversion candidate, reading, ranking, input method (roman character input or flick input), and whether or not learning is enabled will be sent to the server.";
+"変換精度向上のため、報告をいただけると大変助かります。" = "Reporting would be greatly appreciated as it helps improve conversion accuracy.";
+
+"フルアクセスを許可しなくても、キーボードは完全に動作します。上記の機能を使わない場合は、オンにしないことを強くおすすめします。" = "The keyboard will function fully even without granting full access. It is strongly recommended not to turn on full access if you do not need to use the above features.";
+"なお、azooKeyはオープンソースであり、誰もが実装を確認することができます。" = "Additionally, azooKey is an open-source keyboard app, allowing anyone to review the implementation.";
+"フルアクセスを有効化する際、以下のような警告が表示されますが、すべてのキーボードアプリで共通して表示されている警告です。" = "The following warning appears when enabling full access, but it is a warning that is common to all keyboard apps.";
+"azooKeyは安全なキーボードアプリであり、ユーザの明示的な同意なく、個人情報を外部に送信したり、保存したりすることはありません。" = "azooKey is a safe keyboard app and does not transmit or store personal information without the explicit consent of the user.";
+"フルアクセスをオフにする（設定アプリが開きます）" = "Turn off full access (opens the Settings app)";
+"フルアクセスをオンにする（設定アプリが開きます）" = "Turn on full access (opens the Settings app)";
+"参考情報" = "References";
+"azooKeyのソースコードを閲覧する" = "Review the implementation of azooKey";
+"Configuring open access for a custom keyboard | Apple Developer Documentation (英語)" = "Configuring open access for a custom keyboard | Apple Developer Documentation";
+
+"「ほかのAppからペースト」について" = "About 'Paste from other apps'";
+"「クリップボードの履歴」や「ペーストボタン」の機能を利用している際、頻繁に「ペーストの許可」を求めるダイアログが出ることがあります。" = "When using features like 'clipboard history' or 'paste button,' you may see frequent dialogues requesting permission to paste.";
+"azooKeyはクリップボードの履歴を保存するため、定期的にクリップボードをチェックします。また、ペーストする際にもクリップボードの情報を利用します。" = "azooKey periodically checks the clipboard to save its history, and also uses its information when pasting.";
+"設定アプリで「ほかのAppからペースト」を「許可」にすることで、ダイアログが出なくなります。" = "By allowing 'Paste from other apps' in Settings, you can avoid these dialogs.";
+"設定アプリを開く" = "Open Settings app";
+"なお、「クリップボードの履歴」を有効にしていない場合、クリップボードの中身を定期的に取得することはありません。また、取得したクリップボードのテキストはアプリ内でのみ利用されます。" = "Note that if you have not enabled 'clipboard history,' azooKey will not periodically access the clipboard. Also, the text obtained from the clipboard is only used within the app.";
+
 "日本語" = "Japanese";
 "英語" = "English";
 "ギリシャ語" = "Greek";
@@ -198,6 +225,10 @@
 "変換候補の追加" = "Add candidates";
 "その他の質問・連絡など" = "Question, contacts, and others";
 
+"おすすめ" = "Suggestion";
+
+"%@を長押しでペースト" = "Longpress %@ to paste";
+
 "カスタムキー" = "Custom keys";
 "カスタムキーの設定" = "Edit custom keys";
 "設定する" = "Set";
@@ -212,6 +243,10 @@
 "ラベルの種類" = "Type of label";
 "テキスト" = "Text";
 "システムアイコン" = "System icon";
+"メインとサブ" = "Main and sub";
+"アイコンの名前" = "Name of icon";
+"メインのラベル" = "Main label";
+"サブのラベル" = "Sub label";
 "キーに表示される文字を設定します。" = "Set the label.";
 "入力される文字とは異なっていても構いません。" = "Not necessarily equal to input letter.";
 "キーを押して入力される文字を設定します。" = "Set letters inputted when you press this key.";
@@ -261,13 +296,20 @@
 "移動" = "Move";
 "追加" = "Add";
 
+"この機能にはフルアクセスが必要です。この機能を使いたい場合は、「設定」>「キーボード」でフルアクセスを有効にしてください。" = "This feature requires full access. To use this feature, please enable full access at 'Settings' > 'Keyboard'.";
+"「設定」アプリを開く" = "Open 'Settings' app";
+
 "第1言語" = "First language";
 "第2言語" = "Second language";
 "指定しない" = "Don't use";
 
+"サウンドと振動" = "Keyboard Feedbacks";
 "サウンド" = "Sounds";
-"キー音のON/OFF" = "Enable keyboard sounds";
+"キーの音" = "Enable keyboard sounds";
 "キーを押した際に音を鳴らします♪" = "Make sounds when you press keys♪";
+
+"振動フィードバック" = "Enable keyboard haptics";
+"キーを押した際に端末を振動させます。" = "Enable haptics feedback when you press keys.";
 
 "表示" = "Display";
 "キーの表示サイズ" = "Font size of key labels";
@@ -279,6 +321,16 @@
 
 "カーソルバー" = "Cursor bar";
 "フィードバックを募集します" = "Feedback wanted";
+
+"ペースト" = "Paste";
+"ペーストボタン" = "Enable paste button";
+"左下のカーソル移動キーの上フリックにペーストボタンを追加します" = "Add a paste button to the upper flick of the lower left cursor bar key.";
+
+"「ペーストを許可」のダイアログについて" = "About the 'Allow Paste' Dialog";
+"クリップボードの履歴" = "Clipboard histories";
+"クリップボードの履歴を保存" = "Keep clipboard histories";
+"コピーした文字列の履歴を保存し、専用のタブから入力できるようにします。" = "Keeping histories of copied text, and make it possible to input them from clipboard history tab.";
+"タブバーに「コピー履歴」ボタンを追加しました。" = "'コピー履歴' button is added into tab bar.";
 
 "変換" = "Candidates";
 "ライブ変換" = "Live Conversion";
@@ -344,11 +396,14 @@
 "フリックの感度" = "Flicking sensitivity";
 "どれだけ指を動かしたらフリックと判定するか調整できます。" = "You can adjust how much you move your finger to determine a flick.";
 "操作性" = "Usability";
-"設定: とても反応しにくい" = "Setting: Very insensitive";
-"設定: 反応しにくい" = "Setting: Insensitive";
-"設定: 普通" = "Setting: Normal";
-"設定: 反応しやすい" = "Setting: Sensitive";
-"設定: とても反応しやすい" = "Setting: Very sensitive";
+"とても反応しにくい" = "Very insensitive";
+"反応しにくい" = "Insensitive";
+"普通" = "Normal";
+"反応しやすい" = "Sensitive";
+"とても反応しやすい" = "Very sensitive";
+
+"キーボードの高さ" = "Keyboard height";
+"キーボードの高さを調整できます。" = "You can edit keyboard height.";
 
 "テンプレート" = "Templates";
 "テンプレートの管理" = "Manage templates";
@@ -402,7 +457,7 @@
 "プライバシーポリシー" = "Privacy Policy (Japanese)";
 "利用規約" = "Terms of use (Japanese)";
 "更新履歴" = "Update histories (Japanese)";
-"オープンソースソフトウェア" = "Open-source software (Japanese)";
+"オープンソースソフトウェア" = "Open source softwares (Japanese)";
 "バージョン" = "Version";
 
 "カスタムタブ" = "Custom tabs";
@@ -517,6 +572,7 @@
 "移動する文字数" = "Count of movement";
 "タブの移動" = "Move to tab";
 "タブを選択" = "Select destination tab";
+"ペーストする" = "Paste copied text";
 "文頭まで削除" = "Delete to beginning of the sentence";
 "Caps lockのモードの切り替え" = "Toggle caps lock";
 "カーソルバーの切り替え" = "Toggle show or not show cursor bar";
@@ -541,6 +597,7 @@
 "移動先のタブ" = "Tab to move";
 "キーをドラッグして移動してください。" = "Drag the key to move it.";
 "移動・追加" = "Move/Add";
+"このキーは編集できません" = "This key cannot be edited";
 "このキーを並び替える" = "Rearrange this key";
 "このキーに長押しキーを追加する" = "Add a new alternative key which appears when longpressed";
 "タブバーボタン" = "Tab bar button";
@@ -548,6 +605,9 @@
 
 "新しいカーソルバーを使う (試験版)" = "Use new cursor bar (experimental)";
 "新しいカーソルバーを有効化します。\n試験的機能のため、予告なく提供を終了する可能性があります。" = "Enable new cursor bar. \nSince this is an experimental feature, this feature may be discontinued without notice.";
+
+"片手モードで解除ボタンを表示しない" = "Do not display release button in one-handed mode";
+"片手モードの際に表示される解除ボタンを非表示にします。片手モードの調整はタブバーのボタンから行えます。" = "Hide the reset button displayed in one-handed mode. One-handed mode adjustment can be done from the tab bar button.";
 
 "より強力な学習を有効化 (試験版)" = "Enable more strong learning (experimental)";
 "より長い期間学習が保持されます。\n試験的機能のため、予告なく提供を終了する可能性があります。" = "Histories can be remembered much longer. \nSince this is an experimental feature, this feature may be discontinued without notice.";

@@ -20,35 +20,31 @@ private struct CandidateMock: ResultViewItemData {
 }
 
 struct KeyboardPreview: View {
-    private let resultModel = ResultModelVariableSection<CandidateMock>()
     private let theme: ThemeData
 
     private let scale: CGFloat
     private let defaultTab: Tab.ExistentialTab?
+    @StateObject private var variableStates = VariableStates(interfaceWidth: UIScreen.main.bounds.width, orientation: MainAppDesign.keyboardOrientation)
 
-    init(theme: ThemeData, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil) {
-        let orientation: KeyboardOrientation
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            orientation = .vertical
-        } else {
-            orientation = UIDevice.current.orientation == UIDeviceOrientation.unknown ? .vertical : (UIDevice.current.orientation == UIDeviceOrientation.portrait ? .vertical : .horizontal)
-        }
-        SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width, orientation: orientation)
-        resultModel.setResults([
-            CandidateMock(text: "azooKey"),
-            CandidateMock(text: "あずーきー"),
-            CandidateMock(text: "アズーキー")
-        ])
-        self.theme = theme
+    init(theme: ThemeData? = nil, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil) {
+        self.theme = theme ?? .default(layout: defaultTab?.layout ?? .flick)
         self.scale = scale
         self.defaultTab = defaultTab
     }
 
     var body: some View {
-        KeyboardView<CandidateMock>(resultModelVariableSection: resultModel, defaultTab: defaultTab)
+        KeyboardView(defaultTab: defaultTab)
+            .environmentObject(variableStates)
             .environment(\.themeEnvironment, theme)
             .environment(\.showMessage, false)
             .scaleEffect(scale)
-            .frame(width: SemiStaticStates.shared.screenWidth * scale, height: Design.keyboardScreenHeight * scale)
+            .frame(width: SemiStaticStates.shared.screenWidth * scale, height: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation) * scale)
+            .onAppear {
+                variableStates.resultModelVariableSection.setResults([
+                    CandidateMock(text: "azooKey"),
+                    CandidateMock(text: "あずーきー"),
+                    CandidateMock(text: "アズーキー")
+                ])
+            }
     }
 }

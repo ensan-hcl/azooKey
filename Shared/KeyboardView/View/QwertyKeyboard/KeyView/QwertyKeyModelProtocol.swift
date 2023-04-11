@@ -68,7 +68,7 @@ enum QwertyUnpressedKeyColorType {
                 case .default:
                     return theme.specialKeyFillColor.color
                 default:
-                    if theme == .default {
+                    if theme == .default(layout: .qwerty) {
                         return Design.colors.specialEnterKeyColor
                     } else {
                         return theme.specialKeyFillColor.color
@@ -80,18 +80,18 @@ enum QwertyUnpressedKeyColorType {
 }
 
 protocol QwertyKeyModelProtocol {
-    var pressActions: [ActionType] {get}
     var longPressActions: LongpressActionType {get}
     var keySizeType: QwertyKeySizeType {get}
     var needSuggestView: Bool {get}
 
     var variationsModel: VariationsModel {get}
 
-    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
+    @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
     func backGroundColorWhenPressed(theme: ThemeData) -> Color
     var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
 
-    func sound()
+    @MainActor func feedback(variableStates: VariableStates)
 }
 
 extension QwertyKeyModelProtocol {

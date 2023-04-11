@@ -70,12 +70,12 @@ struct FontPickView: View {
             }
             Text("テキスト Text").font(selectedFont)
         }
-        .sheet(isPresented: $isFontPickerPresented) {
+        .sheet(isPresented: $isFontPickerPresented, content: {
             FontPicker(
                 configuration: .init(),
                 pickerResult: $selectedFont,
                 isPresented: $isFontPickerPresented
             )
-        }
+        })
     }
 }

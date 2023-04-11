@@ -9,7 +9,11 @@
 import SwiftUI
 
 struct LearningTypeSettingView: View {
-    @State private var setting = SettingUpdater<LearningTypeSetting>()
+    @State private var setting: SettingUpdater<LearningTypeSetting>
+
+    @MainActor init() {
+        self._setting = .init(initialValue: .init())
+    }
 
     var body: some View {
         HStack {

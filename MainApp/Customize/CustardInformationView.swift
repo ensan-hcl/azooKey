@@ -81,8 +81,9 @@ struct CustardInformationView: View {
 
     var body: some View {
         Form {
+            let custard = custard
             CenterAlignedView {
-                KeyboardPreview(theme: .default, scale: 0.7, defaultTab: .custard(custard))
+                KeyboardPreview(scale: 0.7, defaultTab: .custard(custard))
             }
             HStack {
                 Text("タブ名")
@@ -155,11 +156,11 @@ struct CustardInformationView: View {
             }
         }
         .navigationBarTitle(Text("カスタムタブの情報"), displayMode: .inline)
-        .sheet(isPresented: self.$showActivityView) {
+        .sheet(isPresented: self.$showActivityView, content: {
             ActivityView(
                 activityItems: [exportedData.url].compactMap {$0},
                 applicationActivities: nil
             )
-        }
+        })
     }
 }

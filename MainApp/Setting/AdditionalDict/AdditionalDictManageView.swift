@@ -41,18 +41,13 @@ struct AdditionalSystemDictManager: OnOffSettingSet {
         var dictFileIdentifiers: [String] {
             switch self {
             case .emoji:
-                var targets = [
-                    "emoji...12_dict.tsv",
-                    "emoji13_dict.tsv",
-                    "emoji13.1_dict.tsv"
-                ]
-                if #available(iOS 15.4, *) {
-                    targets.append("emoji14.0_dict.tsv")
-                }
                 if #available(iOS 16.4, *) {
-                    targets.append("emoji15.0_dict.tsv")
+                    return ["emoji_dict_E15.0.txt.gen"]
+                } else if #available(iOS 15.4, *) {
+                    return ["emoji_dict_E14.0.txt.gen"]
+                } else {
+                    return ["emoji_dict_E13.1.txt.gen"]
                 }
-                return targets
             case .kaomoji:
                 return ["kaomoji_dict.tsv"]
             }
@@ -87,13 +82,17 @@ struct AdditionalDictBlockManager: OnOffSettingSet {
 final class AdditionalDictManager: ObservableObject {
     @Published var systemDict: AdditionalSystemDictManager {
         didSet {
-            self.userDictUpdate()
+            Task.detached {
+                await self.userDictUpdate()
+            }
         }
     }
 
     @Published var blockTargets: AdditionalDictBlockManager {
         didSet {
-            self.userDictUpdate()
+            Task.detached {
+                await self.userDictUpdate()
+            }
         }
     }
 
@@ -105,13 +104,11 @@ final class AdditionalDictManager: ObservableObject {
         self.blockTargets = .init(dataList: blockList ?? [])
     }
 
-    func userDictUpdate() {
-        var targets: [String] = []
+    @MainActor func userDictUpdate() {
         var list: [String] = []
         AdditionalSystemDictManager.Target.allCases.forEach { target in
             if self.systemDict[target] {
                 list.append(target.rawValue)
-                targets.append(contentsOf: target.dictFileIdentifiers)
             }
         }
 
@@ -129,7 +126,6 @@ final class AdditionalDictManager: ObservableObject {
 
         let builder = LOUDSBuilder(txtFileSplit: 2048)
         builder.process()
-        Store.shared.noticeReloadUserDict()
     }
 
 }
@@ -173,7 +169,7 @@ struct AdditionalDictManageView: View {
         }
         .navigationBarTitle(Text("絵文字と顔文字"), displayMode: .inline)
         .onDisappear {
-            Store.shared.shouldTryRequestReview = true
+            RequestReviewManager.shared.shouldTryRequestReview = true
         }
     }
 }

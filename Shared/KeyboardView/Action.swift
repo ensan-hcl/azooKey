@@ -16,15 +16,19 @@ enum BoolOperation: Equatable {
 
 indirect enum ActionType: Equatable {
     // テキスト関係
-    case input(String)          // テキストの入力
+    case input(String, simplyInsert: Bool = false)          // テキストの入力
     case delete(Int)            // テキストの削除
     case smoothDelete           // テキストの一括削除
     case smartDelete(ScanItem)
 
+    case insertMainDisplay(String)   // displayのproxyにテキストをそのまま入力する
+
+    /// クリップボードからペーストする
+    ///  - note: フルアクセスがない場合動作しない
+    case paste
+
     case deselectAndUseAsInputting   // 選択を解除して編集中とみなす
-    // 取り込み関係
-    case saveSelectedTextIfNeeded           // 選択部分が存在していたら一時保存する。
-    case restoreSelectedTextIfNeeded        // 選択部分の一時保存したデータを取り出して代入する
+
     // カーソル関係
     case moveCursor(Int)
     case smartMoveCursor(ScanItem)
@@ -39,11 +43,14 @@ indirect enum ActionType: Equatable {
     // タブの変更
     case moveTab(Tab)
     case setTabBar(BoolOperation)
-
+    case setUpsideComponent(UpsideComponent?)
     // キーボードを閉じる
     case dismissKeyboard
     // アプリを開く
     case openApp(String)    // アプリを開く
+
+    // 文字検索
+    case setSearchQuery(String, [ConverterBehaviorSemantics.ReplacementTarget])
 
     // ステート変更
     case setBoolState(String, BoolOperation)
@@ -51,11 +58,6 @@ indirect enum ActionType: Equatable {
 
     // 条件分岐アクション
     case boolSwitch(CompiledExpression, trueAction: [ActionType], falseAction: [ActionType])
-
-    #if DEBUG
-    // デバッグ用
-    case DEBUG_DATA_INPUT
-    #endif
 }
 
 struct LongpressActionType: Equatable {

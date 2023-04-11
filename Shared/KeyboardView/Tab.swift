@@ -9,6 +9,10 @@
 import CustardKit
 import Foundation
 
+enum UpsideComponent: Equatable {
+    case search([ConverterBehaviorSemantics.ReplacementTarget])
+}
+
 enum Tab: Equatable {
     case existential(ExistentialTab)
     case user_dependent(UserDependentTab)
@@ -23,12 +27,17 @@ enum Tab: Equatable {
         case qwerty_number
         case qwerty_symbols
         case custard(Custard)
+        case special(SpecialTab)
 
         public static func == (lhs: ExistentialTab, rhs: ExistentialTab) -> Bool {
             switch (lhs, rhs) {
             case (.flick_hira, .flick_hira), (.flick_abc, .flick_abc), (.flick_numbersymbols, .flick_numbersymbols), (.qwerty_hira, .qwerty_hira), (.qwerty_abc, .qwerty_abc), (.qwerty_number, .qwerty_number), (.qwerty_symbols, .qwerty_symbols): return true
             case (.custard(let l), .custard(let r)):
                 return l.identifier == r.identifier
+                    && l.input_style == r.input_style
+                    && l.language == r.language
+                    && l.metadata == r.metadata
+                    && l.interface == r.interface
             default: return false
             }
         }
@@ -62,6 +71,9 @@ enum Tab: Equatable {
                 case .pcStyle:
                     return .qwerty
                 }
+            case .special:
+                // FIXME: 仮置き
+                return .flick
             }
         }
 
@@ -86,15 +98,30 @@ enum Tab: Equatable {
                 }
             case .flick_numbersymbols, .qwerty_number, .qwerty_symbols:
                 return nil
+            case .special:
+                return KeyboardLanguage.none
             }
         }
+
+        var replacementTarget: [ConverterBehaviorSemantics.ReplacementTarget] {
+            switch self {
+            case .special(.emoji):
+                return [.emoji]
+            default: return []
+            }
+        }
+    }
+
+    enum SpecialTab: Equatable {
+        case clipboard_history_tab
+        case emoji
     }
 
     enum UserDependentTab: Equatable {
         case japanese
         case english
 
-        var actualTab: ExistentialTab {
+        @MainActor var actualTab: ExistentialTab {
             // ユーザの設定に合わせて遷移先のタブ(非user_dependent)を返す
             switch self {
             case .english:
@@ -121,7 +148,7 @@ enum Tab: Equatable {
         }
     }
 
-    var inputStyle: InputStyle {
+    @MainActor var inputStyle: InputStyle {
         switch self {
         case let .existential(tab):
             return tab.inputStyle
@@ -133,7 +160,7 @@ enum Tab: Equatable {
         }
     }
 
-    var layout: KeyboardLayout {
+    @MainActor var layout: KeyboardLayout {
         switch self {
         case let .existential(tab):
             return tab.layout
@@ -145,7 +172,7 @@ enum Tab: Equatable {
         }
     }
 
-    var language: KeyboardLanguage? {
+    @MainActor var language: KeyboardLanguage? {
         switch self {
         case let .existential(tab):
             return tab.language

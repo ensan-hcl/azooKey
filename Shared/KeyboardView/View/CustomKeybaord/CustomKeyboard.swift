@@ -17,6 +17,8 @@ fileprivate extension CustardKeyLabelStyle {
             return .text(value)
         case let .systemImage(value):
             return .image(value)
+        case let .mainAndSub(main, sub):
+            return .symbols([main, sub])
         }
     }
 }
@@ -44,21 +46,21 @@ fileprivate extension CustardInterfaceStyle {
 }
 
 fileprivate extension CustardInterface {
-    func tabDesign(keyboardOrientation: KeyboardOrientation) -> TabDependentDesign {
+    func tabDesign(interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) -> TabDependentDesign {
         switch self.keyLayout {
         case let .gridFit(value):
-            return TabDependentDesign(width: value.rowCount, height: value.columnCount, layout: keyStyle.keyboardLayout, orientation: keyboardOrientation)
+            return TabDependentDesign(width: value.rowCount, height: value.columnCount, interfaceSize: interfaceSize, layout: keyStyle.keyboardLayout, orientation: keyboardOrientation)
         case let .gridScroll(value):
             switch value.direction {
             case .vertical:
-                return TabDependentDesign(width: CGFloat(Int(value.rowCount)), height: CGFloat(value.columnCount), layout: .flick, orientation: keyboardOrientation)
+                return TabDependentDesign(width: CGFloat(Int(value.rowCount)), height: CGFloat(value.columnCount), interfaceSize: interfaceSize, layout: .flick, orientation: keyboardOrientation)
             case .horizontal:
-                return TabDependentDesign(width: CGFloat(value.rowCount), height: CGFloat(Int(value.columnCount)), layout: .flick, orientation: keyboardOrientation)
+                return TabDependentDesign(width: CGFloat(value.rowCount), height: CGFloat(Int(value.columnCount)), interfaceSize: interfaceSize, layout: .flick, orientation: keyboardOrientation)
             }
         }
     }
 
-    var flickKeyModels: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)] {
+    @MainActor var flickKeyModels: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -69,7 +71,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    var qwertyKeyModels: [KeyPosition: (model: QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
+    @MainActor var qwertyKeyModels: [KeyPosition: (model: any QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -124,7 +126,7 @@ fileprivate extension CustardKeyDesign.ColorType {
 }
 
 extension CustardInterfaceKey {
-    var flickKeyModel: FlickKeyModelProtocol {
+    @MainActor var flickKeyModel: any FlickKeyModelProtocol {
         switch self {
         case let .system(value):
             switch value {
@@ -137,11 +139,11 @@ extension CustardInterfaceKey {
             case .flickKutoten:
                 return FlickKanaSymbolsKeyModel.shared
             case .flickHiraTab:
-                return FlickTabKeyModel.hiraTabKeyModel
+                return FlickTabKeyModel.hiraTabKeyModel()
             case .flickAbcTab:
-                return FlickTabKeyModel.abcTabKeyModel
+                return FlickTabKeyModel.abcTabKeyModel()
             case .flickStar123Tab:
-                return FlickTabKeyModel.numberTabKeyModel
+                return FlickTabKeyModel.numberTabKeyModel()
             }
         case let .custom(value):
             let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variations.reduce(into: [:]) {dictionary, variation in
@@ -168,12 +170,12 @@ extension CustardInterfaceKey {
         }
     }
 
-    private func convertToQwertyKeyModel(model: FlickKeyModelProtocol) -> QwertyKeyModelProtocol {
-        let variations = VariationsModel([model.flickKeys[.left], model.flickKeys[.top], model.flickKeys[.right], model.flickKeys[.bottom]].compactMap {$0}.map {(label: $0.labelType, actions: $0.pressActions)})
-        return QwertyKeyModel(labelType: .text("小ﾞﾟ"), pressActions: [.changeCharacterType], longPressActions: .none, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
+    private func convertToQwertyKeyModel(customKey: KeyFlickSetting.SettingData) -> any QwertyKeyModelProtocol {
+        let variations = VariationsModel([customKey.flick[.left], customKey.flick[.top], customKey.flick[.right], customKey.flick[.bottom]].compactMap {$0}.map {(label: $0.labelType, actions: $0.pressActions)})
+        return QwertyKeyModel(labelType: customKey.labelType, pressActions: customKey.actions, longPressActions: customKey.longpressActions, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
     }
 
-    func qwertyKeyModel(layout: CustardInterfaceLayout) -> QwertyKeyModelProtocol {
+    @MainActor func qwertyKeyModel(layout: CustardInterfaceLayout) -> any QwertyKeyModelProtocol {
         switch self {
         case let .system(value):
             switch value {
@@ -189,15 +191,20 @@ extension CustardInterfaceKey {
             case .enter:
                 return QwertyEnterKeyModel(keySizeType: .enter)
             case .flickKogaki:
-                return  convertToQwertyKeyModel(model: FlickKogakiKeyModel.shared)
+                @KeyboardSetting(.koganaFlickCustomKey) var customKey
+                return convertToQwertyKeyModel(customKey: customKey.compiled())
             case .flickKutoten:
-                return convertToQwertyKeyModel(model: FlickKanaSymbolsKeyModel.shared)
+                @KeyboardSetting(.kanaSymbolsFlickCustomKey) var customKey
+                return convertToQwertyKeyModel(customKey: customKey.compiled())
             case .flickHiraTab:
-                return convertToQwertyKeyModel(model: FlickTabKeyModel.hiraTabKeyModel)
+                @KeyboardSetting(.hiraTabFlickCustomKey) var customKey
+                return convertToQwertyKeyModel(customKey: customKey.compiled())
             case .flickAbcTab:
-                return convertToQwertyKeyModel(model: FlickTabKeyModel.abcTabKeyModel)
+                @KeyboardSetting(.abcTabFlickCustomKey) var customKey
+                return convertToQwertyKeyModel(customKey: customKey.compiled())
             case .flickStar123Tab:
-                return convertToQwertyKeyModel(model: FlickTabKeyModel.numberTabKeyModel)
+                @KeyboardSetting(.symbolsTabFlickCustomKey) var customKey
+                return convertToQwertyKeyModel(customKey: customKey.compiled())
             }
         case let .custom(value):
             let variations: [(label: KeyLabelType, actions: [ActionType])] = value.variations.reduce(into: []) {array, variation in
@@ -222,7 +229,7 @@ extension CustardInterfaceKey {
         }
     }
 
-    var simpleKeyModel: SimpleKeyModelProtocol {
+    var simpleKeyModel: any SimpleKeyModelProtocol {
         switch self {
         case let .system(value):
             switch value {
@@ -231,19 +238,18 @@ extension CustardInterfaceKey {
             case .enter:
                 return SimpleEnterKeyModel()
             case .flickKogaki:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
+                return SimpleKeyModel(keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .flickKutoten:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
+                return SimpleKeyModel(keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
             case .flickHiraTab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
+                return SimpleKeyModel(keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.japanese))])
             case .flickAbcTab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
+                return SimpleKeyModel(keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.user_dependent(.english))])
             case .flickStar123Tab:
-                return SimpleKeyModel(keyType: .functional, keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))])
+                return SimpleKeyModel(keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.existential(.flick_numbersymbols))])
             }
         case let .custom(value):
             return SimpleKeyModel(
-                keyType: .normal,
                 keyLabelType: value.design.label.keyLabelType,
                 unpressedKeyColorType: value.design.color.simpleKeyColorType,
                 pressActions: value.press_actions.map {$0.actionType},
@@ -256,9 +262,9 @@ extension CustardInterfaceKey {
 struct CustomKeyboardView: View {
     private let custard: Custard
     private var tabDesign: TabDependentDesign {
-        custard.interface.tabDesign(keyboardOrientation: variableStates.keyboardOrientation)
+        custard.interface.tabDesign(interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
     }
-    @ObservedObject private var variableStates = VariableStates.shared
+    @EnvironmentObject private var variableStates: VariableStates
 
     init(custard: Custard) {
         self.custard = custard
@@ -322,19 +328,19 @@ struct CustomKeyboardView: View {
 }
 
 struct CustardFlickKeysView<Content: View>: View {
-    init(models: [KeyPosition : (model: FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, needSuggest: Bool = true, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
+    @State private var suggestState = FlickSuggestState()
+
+    init(models: [KeyPosition : (model: any FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView, Int, Int) -> (Content)) {
         self.models = models
         self.tabDesign = tabDesign
         self.layout = layout
-        self.needSuggest = needSuggest
         self.contentGenerator = generator
     }
 
     private let contentGenerator: (FlickKeyView, Int, Int) -> (Content)
-    private let models: [KeyPosition: (model: FlickKeyModelProtocol, width: Int, height: Int)]
+    private let models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)]
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
-    private let needSuggest: Bool
 
     private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
         let width = tabDesign.keyViewWidth(widthCount: width)
@@ -347,37 +353,23 @@ struct CustardFlickKeysView<Content: View>: View {
     var body: some View {
         ZStack {
             ForEach(0..<layout.rowCount, id: \.self) {x in
+                let columnSuggestStates = self.suggestState.items[x, default: [:]]
                 ForEach(0..<layout.columnCount, id: \.self) {y in
                     if let data = models[.gridFit(x: x, y: y)] {
                         let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
-                        contentGenerator(FlickKeyView(model: data.model, size: info.size), x, y)
+                        contentGenerator(FlickKeyView(model: data.model, size: info.size, position: (x, y), suggestState: $suggestState), x, y)                            .zIndex(columnSuggestStates[y] != nil ? 1 : 0)
+                            .overlay(alignment: .center) {
+                                if let suggestType = columnSuggestStates[y] {
+                                    FlickSuggestView(model: data.model, tabDesign: tabDesign, size: info.size, suggestType: suggestType)
+                                        .zIndex(2)
+                                }
+                            }
                             .position(x: info.position.x, y: info.position.y)
                     }
                 }
-            }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
-            if needSuggest {
-                ForEach(0..<layout.rowCount, id: \.self) {x in
-                    ForEach(0..<layout.columnCount, id: \.self) {y in
-                        if let data = models[.gridFit(x: x, y: y)] {
-                            let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
-                            SuggestView(model: data.model.suggestModel, tabDesign: tabDesign, size: info.size)
-                                .position(x: info.position.x, y: info.position.y)
-                        }
-                    }
-                }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+                .zIndex(columnSuggestStates.isEmpty ? 0 : 1)
             }
-            /*
-             let suggests = models.filter{key, value in
-             return value.model.suggestModel.variableSection.suggestState.isActive
-             }.map{(key: $0.key, value: $0.value)}
-             ForEach(suggests.indices, id: \.self){ i in
-             if case let .gridFit(x: x, y: y) = suggests[i].key{
-             let info = flickKeyData(x: x, y: y, width: suggests[i].value.width, height: suggests[i].value.height)
-             SuggestView(model: suggests[i].value.model.suggestModel, tabDesign: tabDesign, size: info.size)
-             .position(x: info.position.x, y: info.position.y)
-             }
-             }
-             */
+            .frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
         }
     }
 }

@@ -31,32 +31,25 @@ enum FlickKeyColorType {
 }
 
 protocol FlickKeyModelProtocol {
-    var suggestModel: SuggestModel {get}
-    var pressActions: [ActionType] {get}
     var longPressActions: LongpressActionType {get}
-    var flickKeys: [FlickDirection: FlickedKeyModel] {get}
     var needSuggestView: Bool {get}
 
-    // 描画に関わるものは変数としてVariableStatesを受け取る。こうすることでVariableStatesの更新に合わせて変更されるようになる。
-    func label(width: CGFloat, states: VariableStates) -> KeyLabel
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
+    @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func label(width: CGFloat, states: VariableStates) -> KeyLabel
+    @MainActor func backGroundColorWhenPressed(theme: ThemeData) -> Color
+    @MainActor func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
 
-    func isFlickAble(to direction: FlickDirection) -> Bool
-    func suggestStateChanged(_ type: SuggestState)
+    @MainActor func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool
+    @MainActor func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel]
 
-    func flickSensitivity(to direction: FlickDirection) -> CGFloat
-    func sound()
+    @MainActor func flickSensitivity(to direction: FlickDirection) -> CGFloat
+    @MainActor func feedback(variableStates: VariableStates)
 
 }
 
 extension FlickKeyModelProtocol {
-    func isFlickAble(to direction: FlickDirection) -> Bool {
-        flickKeys.keys.contains(direction)
-    }
-
-    func suggestStateChanged(_ type: SuggestState) {
-        self.suggestModel.setSuggestState(type)
+    @MainActor func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool {
+        flickKeys(variableStates: variableStates).keys.contains(direction)
     }
 
     func backGroundColorWhenPressed(theme: ThemeData) -> Color {
@@ -67,7 +60,7 @@ extension FlickKeyModelProtocol {
         theme.normalKeyFillColor.color
     }
 
-    func flickSensitivity(to direction: FlickDirection) -> CGFloat {
+    @MainActor func flickSensitivity(to direction: FlickDirection) -> CGFloat {
         @KeyboardSetting<FlickSensitivitySettingKey>(.flickSensitivity) var flickSensitivity
         return 25 / flickSensitivity
     }

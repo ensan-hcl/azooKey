@@ -10,7 +10,7 @@ import Foundation
 
 struct TemplateData: Codable {
     var name: String
-    var literal: TemplateLiteralProtocol
+    var literal: any TemplateLiteralProtocol
     var type: TemplateLiteralType
 
     private enum CodingKeys: String, CodingKey {

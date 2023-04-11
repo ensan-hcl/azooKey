@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct ThemeTabView: View {
-    @ObservedObject private var storeVariableSection = Store.variableSection
-    @State private var refresh = false
+    @Namespace private var namespace
+    @EnvironmentObject private var appStates: MainAppStates
     @State private var manager = ThemeIndexManager.load()
 
     @State private var editViewIndex: Int?
@@ -25,6 +25,7 @@ struct ThemeTabView: View {
         }
     }
 
+    @MainActor
     private func circle(geometry: GeometryProxy, systemName: String, color: Color) -> some View {
         let width = min(min(geometry.size.width / 1.5, 180), geometry.size.height / 2.5) // 高さに2つ入るサイズを超えないように設定
         return Circle()
@@ -37,6 +38,7 @@ struct ThemeTabView: View {
             )
     }
 
+    @MainActor
     private func selectButton(_ index: Int) -> some View {
         GeometryReader {geometry in
             if manager.selectedIndex == manager.selectedIndexInDarkMode {
@@ -44,6 +46,8 @@ struct ThemeTabView: View {
                     VStack {
                         Spacer()
                         circle(geometry: geometry, systemName: "checkmark", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
+                            .matchedGeometryEffect(id: "ThemeLightButton\(index)", in: namespace)
+                            .matchedGeometryEffect(id: "ThemeDarkButton\(index)", in: namespace)
                         Spacer()
                     }
                     .onTapGesture {
@@ -55,11 +59,13 @@ struct ThemeTabView: View {
                     VStack {
                         Spacer()
                         circle(geometry: geometry, systemName: "sun.max.fill", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
+                            .matchedGeometryEffect(id: "ThemeLightButton\(index)", in: namespace)
                             .onTapGesture {
                                 manager.selectForLightMode(at: index)
                             }
                         Spacer(minLength: 10)
                         circle(geometry: geometry, systemName: "moon.fill", color: manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
+                            .matchedGeometryEffect(id: "ThemeDarkButton\(index)", in: namespace)
                             .onTapGesture {
                                 manager.selectForDarkMode(at: index)
                             }
@@ -68,13 +74,27 @@ struct ThemeTabView: View {
                 }
             }
         }
+        .animation(.easeIn(duration: 0.2), value: manager.selectedIndex == manager.selectedIndexInDarkMode)
     }
 
+    private var tab: Tab.ExistentialTab {
+        switch appStates.japaneseLayout {
+        case .flick:
+            return .flick_hira
+        case .qwerty:
+            return .qwerty_hira
+        case let .custard(identifier):
+            return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
+        }
+    }
+
+    @MainActor @ViewBuilder
     private var listSection: some View {
+        let tab = tab
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
                 HStack {
-                    KeyboardPreview(theme: theme, scale: 0.6)
+                    KeyboardPreview(theme: theme,scale: 0.6, defaultTab: tab)
                         .disabled(true)
                     selectButton(index)
                     if editViewIndex == index {
@@ -135,22 +155,11 @@ struct ThemeTabView: View {
                     }
                 }
                 Section(header: Text("選ぶ")) {
-                    if refresh {
-                        listSection
-                    } else {
-                        listSection
-                    }
+                    listSection
                 }
             }
             .navigationBarTitle(Text("着せ替え"), displayMode: .large)
-            .onAppear {
-                // この位置にonAppearを置く。NavigationViewは画面の遷移中常に現れている。
-                self.refresh.toggle()
-            }
         }
         .navigationViewStyle(.stack)
-        .onChange(of: storeVariableSection.japaneseLayout) {_ in
-            self.refresh.toggle()
-        }
     }
 }

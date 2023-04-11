@@ -1,3 +1,4 @@
+/Gen/generated/*.gen
 /Keyboard/Converter/Dictionary/*.binary
 /Keyboard/Converter/Dictionary/cb/*.binary
 /Keyboard/Converter/Dictionary/p/*.csv
@@ -8,7 +9,7 @@
 AzooKey-dict
 deprecated/
 KanaKanjiConverterKit/
-
+Package.resolved
 # Xcode settings
 # Created by https://www.toptal.com/developers/gitignore/api/xcode
 # Edit at https://www.toptal.com/developers/gitignore?templates=xcode

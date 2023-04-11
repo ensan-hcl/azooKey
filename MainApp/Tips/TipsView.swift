@@ -9,22 +9,19 @@
 import SwiftUI
 
 struct TipsTabView: View {
-    @ObservedObject private var storeVariableSection = Store.variableSection
-    @State private var isTop = true
+    @EnvironmentObject private var appStates: MainAppStates
     @AppStorage("read_article_iOS14_service_termination") private var readArticle_iOS14_service_termination = false
 
     var body: some View {
         VStack {
-            if isTop {
-                HeaderLogoView()
-            }
+            HeaderLogoView()
             NavigationView {
                 Form {
                     Section(header: Text("キーボードを使えるようにする")) {
-                        if !storeVariableSection.isKeyboardActivated {
+                        if !appStates.isKeyboardActivated {
                             Text("キーボードを有効化する")
                                 .onTapGesture {
-                                    Store.variableSection.requireFirstOpenView = true
+                                    appStates.requireFirstOpenView = true
                                 }
                         }
                         NavigationLink("入力方法を選ぶ", destination: SelctInputStyleTipsView())
@@ -49,6 +46,10 @@ struct TipsTabView: View {
                         NavigationLink("大文字に固定する", destination: CapsLockTipsView())
                         NavigationLink("タイムスタンプを使う", destination: TemplateSettingTipsView())
                         NavigationLink("キーをカスタマイズする", destination: CustomKeyTipsView())
+                        NavigationLink("フルアクセスが必要な機能を使う", destination: FullAccessTipsView())
+                        if SemiStaticStates.shared.hasFullAccess {
+                            NavigationLink("「ほかのAppからペースト」について", destination: PasteFromOtherAppsPermissionTipsView())
+                        }
                     }
 
                     Section(header: Text("困ったときは")) {

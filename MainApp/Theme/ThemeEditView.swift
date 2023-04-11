@@ -73,10 +73,12 @@ private struct ThemeFontDoubleTranslator: Intertranslator {
 }
 
 struct ThemeEditView: CancelableEditor {
+    @EnvironmentObject private var appStates: MainAppStates
+
     let base: ThemeData
     @State private var theme: ThemeData = .base
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) private var dismiss
 
     @Binding private var manager: ThemeIndexManager
 
@@ -85,8 +87,6 @@ struct ThemeEditView: CancelableEditor {
     @State private var pickedImage: UIImage?
     @State private var isSheetPresented = false
     @State private var viewType = ViewType.editor
-
-    @ObservedObject private var storeVariableSection = Store.variableSection
 
     private let colorConverter = ThemeColorTranslator.self
     private let normalColorConverter = ThemeNormalKeyColorTranslator.self
@@ -98,23 +98,9 @@ struct ThemeEditView: CancelableEditor {
     }
 
     private let title: LocalizedStringKey
-
-    @State private var tab: Tab.ExistentialTab
     private var shareImage = ShareImage()
 
     init(index: Int?, manager: Binding<ThemeIndexManager>) {
-        let tab: Tab.ExistentialTab = {
-            switch Store.variableSection.japaneseLayout {
-            case .flick:
-                return .flick_hira
-            case .qwerty:
-                return .qwerty_hira
-            case let .custard(identifier):
-                return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
-            }
-        }()
-
-        self._tab = State(initialValue: tab)
         self._manager = manager
         if let index {
             do {
@@ -195,6 +181,16 @@ struct ThemeEditView: CancelableEditor {
                         .foregroundColor(.red)
                     }
                 }
+                let tab: Tab.ExistentialTab = {
+                    switch appStates.japaneseLayout {
+                    case .flick:
+                        return .flick_hira
+                    case .qwerty:
+                        return .qwerty_hira
+                    case let .custard(identifier):
+                        return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
+                    }
+                }()
                 KeyboardPreview(theme: self.theme, defaultTab: tab)
                 NavigationLink(destination: Group {
                     if let pickedImage {
@@ -202,7 +198,7 @@ struct ThemeEditView: CancelableEditor {
                             uiImage: pickedImage,
                             resultImage: $trimmedImage,
                             maxSize: CGSize(width: 1280, height: 720),
-                            aspectRatio: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight)
+                            aspectRatio: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation))
                         )}
                 }, isActive: $isTrimmingViewPresented) {
                     EmptyView()
@@ -233,11 +229,11 @@ struct ThemeEditView: CancelableEditor {
                     self.theme.pushedKeyFillColor = .color(pushedKeyColor)
                 }
             }
-            .sheet(isPresented: $isSheetPresented) {
+            .sheet(isPresented: $isSheetPresented, content: {
                 PhotoPicker(configuration: self.config,
                             pickerResult: $pickedImage,
                             isPresented: $isSheetPresented)
-            }
+            })
             .navigationBarTitle(Text(self.title), displayMode: .inline)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(
@@ -248,26 +244,13 @@ struct ThemeEditView: CancelableEditor {
                     } catch {
                         debug(error)
                     }
-                    // presentationMode.wrappedValue.dismiss()
                     self.viewType = .themeShareView
                 }
             )
-            .onChange(of: storeVariableSection.japaneseLayout) {value in
-                self.tab = {
-                    switch value {
-                    case .flick:
-                        return .flick_hira
-                    case .qwerty:
-                        return .qwerty_hira
-                    case let .custard(identifier):
-                        return .custard((try? CustardManager.load().custard(identifier: identifier)) ?? .errorMessage)
-                    }
-                }()
-            }
         case .themeShareView:
             ThemeShareView(theme: self.theme, shareImage: shareImage) {
-                presentationMode.wrappedValue.dismiss()
-                Store.shared.shouldTryRequestReview = true
+                self.dismiss()
+                RequestReviewManager.shared.shouldTryRequestReview = true
             }
             .navigationBarTitle(Text("完了"), displayMode: .inline)
             .navigationBarItems(leading: EmptyView(), trailing: EmptyView())
@@ -275,7 +258,7 @@ struct ThemeEditView: CancelableEditor {
     }
 
     func cancel() {
-        presentationMode.wrappedValue.dismiss()
+        self.dismiss()
     }
 
     private func save() throws {

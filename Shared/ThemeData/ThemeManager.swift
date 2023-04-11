@@ -88,14 +88,16 @@ struct ThemeIndexManager: Equatable {
 
     func theme(at index: Int) throws -> ThemeData {
         if index == 0 {
-            return .default
+            return .default(layout: .flick)
         }
         let themeFileURL = Self.fileURL(name: "themes/theme_\(index).theme")
         let data = try Data(contentsOf: themeFileURL)
         var themeData = try JSONDecoder().decode(ThemeData.self, from: data)
 
         // 背景画像を設定する
-        if case let .path(path) = themeData.picture, let uiImage = UIImage(contentsOfFile: Self.fileURL(name: path).path) {
+        if case let .path(path) = themeData.picture,
+           let data = try? Data(contentsOf: Self.fileURL(name: path)),
+           let uiImage = UIImage(data: data) {
             themeData.picture = .uiImage(uiImage)
         }
 

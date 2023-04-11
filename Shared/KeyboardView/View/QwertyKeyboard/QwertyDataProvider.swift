@@ -9,9 +9,9 @@
 import Foundation
 
 struct QwertyDataProvider {
-    static func tabKeys(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)) -> (languageKey: QwertyKeyModelProtocol, numbersKey: QwertyKeyModelProtocol, symbolsKey: QwertyKeyModelProtocol, changeKeyboardKey: QwertyKeyModelProtocol) {
+    @MainActor static func tabKeys(rowInfo: (normal: Int, functional: Int, space: Int, enter: Int)) -> (languageKey: any QwertyKeyModelProtocol, numbersKey: any QwertyKeyModelProtocol, symbolsKey: any QwertyKeyModelProtocol, changeKeyboardKey: any QwertyKeyModelProtocol) {
         @KeyboardSetting(.preferredLanguage) var preferredLanguage
-        let languageKey: QwertyKeyModelProtocol
+        let languageKey: any QwertyKeyModelProtocol
         let first = preferredLanguage.first
         if let second = preferredLanguage.second {
             languageKey = QwertySwitchLanguageKeyModel(rowInfo: rowInfo, languages: (first, second))
@@ -29,10 +29,10 @@ struct QwertyDataProvider {
             languageKey = QwertyFunctionalKeyModel(labelType: .text(first.symbol), rowInfo: rowInfo, pressActions: [.moveTab(targetTab)], longPressActions: .none, needSuggestView: false)
         }
 
-        let numbersKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.setTabBar(.toggle)]))
-        let symbolsKey: QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.setTabBar(.toggle)]))
+        let numbersKey: any QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_number))], longPressActions: .init(start: [.setTabBar(.toggle)]))
+        let symbolsKey: any QwertyKeyModelProtocol = QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.existential(.qwerty_symbols))], longPressActions: .init(start: [.setTabBar(.toggle)]))
 
-        let changeKeyboardKey: QwertyKeyModelProtocol
+        let changeKeyboardKey: any QwertyKeyModelProtocol
         if let second = preferredLanguage.second {
             changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .secondTab(secondLanguage: second))
         } else {
@@ -47,7 +47,7 @@ struct QwertyDataProvider {
     }
 
     // 横に並べる
-    var numberKeyboard: [[QwertyKeyModelProtocol]] {[
+    @MainActor static var numberKeyboard: [[any QwertyKeyModelProtocol]] {[
         [
             QwertyKeyModel(
                 labelType: .text("1"),
@@ -245,7 +245,7 @@ struct QwertyDataProvider {
     ]
     }
     // 横に並べる
-    var symbolsKeyboard: [[QwertyKeyModelProtocol]] = [
+    @MainActor static var symbolsKeyboard: [[any QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(
                 labelType: .text("["),
@@ -467,7 +467,7 @@ struct QwertyDataProvider {
     ]
 
     // 横に並べる
-    var hiraKeyboard: [[QwertyKeyModelProtocol]] = [
+    @MainActor static var hiraKeyboard: [[any QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
             QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),
@@ -512,7 +512,7 @@ struct QwertyDataProvider {
     ]
 
     // 横に並べる
-    var abcKeyboard: [[QwertyKeyModelProtocol]] = [
+    @MainActor static var abcKeyboard: [[any QwertyKeyModelProtocol]] = [
         [
             QwertyKeyModel(labelType: .text("q"), pressActions: [.input("q")]),
             QwertyKeyModel(labelType: .text("w"), pressActions: [.input("w")]),

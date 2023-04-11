@@ -14,8 +14,8 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
 
     static let shared = FlickAaKeyModel()
 
-    var pressActions: [ActionType] {
-        if VariableStates.shared.boolStates.isCapsLocked {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        if variableStates.boolStates.isCapsLocked {
             return [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .off)]
         } else {
             return [.changeCharacterType]
@@ -23,8 +23,8 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
     }
 
     let longPressActions: LongpressActionType = .none
-    var flickKeys: [FlickDirection: FlickedKeyModel] {
-        if VariableStates.shared.boolStates.isCapsLocked {
+    func flickKeys(variableStates: VariableStates) -> [CustardKit.FlickDirection: FlickedKeyModel] {
+        if variableStates.boolStates.isCapsLocked {
             return [:]
         } else {
             return [
@@ -36,8 +36,6 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
         }
     }
 
-    var suggestModel: SuggestModel = SuggestModel([:], keyType: .aA)
-
     func label(width: CGFloat, states: VariableStates) -> KeyLabel {
         if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width)
@@ -46,8 +44,8 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
         }
     }
 
-    func sound() {
-        Sound.tabOrOtherKey()
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.tabOrOtherKey()
     }
 
     func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {

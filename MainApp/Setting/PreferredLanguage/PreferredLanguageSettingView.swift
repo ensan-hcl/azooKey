@@ -12,11 +12,11 @@ import SwiftUI
 struct PreferredLanguageSettingView: View {
     // Viewを動的に更新するためには設定を`@State`としておく必要がある。
     @State private var selection: PreferredLanguage
-    init() {
+    @MainActor init() {
         self._selection = .init(initialValue: PreferredLanguageSetting.value)
     }
 
-    private var firstLanguage: Binding<KeyboardLanguage> {
+    @MainActor private var firstLanguage: Binding<KeyboardLanguage> {
         Binding(
             get: {
                 selection.first
@@ -41,7 +41,7 @@ struct PreferredLanguageSettingView: View {
         )
     }
 
-    private var secondLanguage: Binding<KeyboardLanguage> {
+    @MainActor private var secondLanguage: Binding<KeyboardLanguage> {
         Binding(
             get: {
                 selection.second ?? .none

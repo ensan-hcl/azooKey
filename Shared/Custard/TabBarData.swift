@@ -71,12 +71,14 @@ struct TabBarItem: Codable {
 
 struct TabBarData: Codable {
     let identifier: Int
-    let items: [TabBarItem]
+    var lastUpdateDate: Date? = .now
+    var items: [TabBarItem]
 
     static let `default` = TabBarData(identifier: 0, items: [
         TabBarItem(label: .text("片手"), actions: [.enableResizingMode, .toggleTabBar]),
         TabBarItem(label: .text("あいう"), actions: [.moveTab(.system(.user_japanese))]),
         TabBarItem(label: .text("ABC"), actions: [.moveTab(.system(.user_english))]),
+        TabBarItem(label: .text("絵文字"), actions: [.moveTab(.system(.emoji_tab))]),
         TabBarItem(label: .text("閉じる"), actions: [.dismissKeyboard])
     ])
 }

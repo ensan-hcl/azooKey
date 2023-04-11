@@ -9,20 +9,29 @@
 import Foundation
 import SwiftUI
 
-protocol BoolKeyboardSettingKey: KeyboardSettingKey, StoredInUserDefault where Value == Bool {}
-
+protocol BoolKeyboardSettingKey: KeyboardSettingKey, StoredInUserDefault where Value == Bool {
+    /// 有効化時に実行される処理
+    static func onEnabled() -> LocalizedStringKey?
+    /// 無効化時に実行される処理
+    static func onDisabled()
+}
 extension StoredInUserDefault where Value == Bool {
+    @MainActor
     static func get() -> Value? {
         let object = SharedStore.userDefaults.object(forKey: key)
         return object as? Bool
     }
+    @MainActor
     static func set(newValue: Value) {
         SharedStore.userDefaults.set(newValue, forKey: key)
     }
 }
 
 extension BoolKeyboardSettingKey {
-    static var value: Value {
+    static func onEnabled() -> LocalizedStringKey? { nil }
+    static func onDisabled() {}
+
+    @MainActor static var value: Value {
         get {
             get() ?? defaultValue
         }
@@ -110,7 +119,7 @@ extension KeyboardSettingKey where Self == MemoryResetFlag {
 }
 
 struct EnableKeySound: BoolKeyboardSettingKey {
-    static let title: LocalizedStringKey = "キー音のON/OFF"
+    static let title: LocalizedStringKey = "キーの音"
     static let explanation: LocalizedStringKey = "キーを押した際に音を鳴らします♪"
     static let defaultValue = false
     static let key: String = "sound_enable_setting"
@@ -118,6 +127,20 @@ struct EnableKeySound: BoolKeyboardSettingKey {
 
 extension KeyboardSettingKey where Self == EnableKeySound {
     static var enableKeySound: Self { .init() }
+}
+
+/// キーボードの触覚フィードバックを有効化する設定
+/// - note: この機能はフルアクセスがないと実現できない
+struct EnableKeyHaptics: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "振動フィードバック"
+    static let explanation: LocalizedStringKey = "キーを押した際に端末を振動させます。"
+    static let defaultValue = false
+    static let key: String = "enable_key_haptics"
+    static let requireFullAccess: Bool = true
+}
+
+extension KeyboardSettingKey where Self == EnableKeyHaptics {
+    static var enableKeyHaptics: Self { .init() }
 }
 
 struct UseOSUserDict: BoolKeyboardSettingKey {
@@ -153,6 +176,17 @@ extension KeyboardSettingKey where Self == UseBetaMoveCursorBar {
     static var useBetaMoveCursorBar: Self { .init() }
 }
 
+struct HideResetButtonInOneHandedMode: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "片手モードで解除ボタンを表示しない"
+    static let explanation: LocalizedStringKey = "片手モードの際に表示される解除ボタンを非表示にします。片手モードの調整はタブバーのボタンから行えます。"
+    static let defaultValue = false
+    static let key: String = "hide_reset_button_in_one_handed_mode"
+}
+
+extension KeyboardSettingKey where Self == HideResetButtonInOneHandedMode {
+    static var hideResetButtonInOneHandedMode: Self { .init() }
+}
+
 struct StopLearningWhenSearch: BoolKeyboardSettingKey {
     static let title: LocalizedStringKey = "検索時は学習を停止"
     static let explanation: LocalizedStringKey = "web検索などで入力した単語を学習しません。"
@@ -162,4 +196,61 @@ struct StopLearningWhenSearch: BoolKeyboardSettingKey {
 
 extension KeyboardSettingKey where Self == StopLearningWhenSearch {
     static var stopLearningWhenSearch: Self { .init() }
+}
+
+/// ペーストボタンを追加する設定
+/// - note: この機能はフリックのキーボードのみで提供する
+/// - note: この機能はフルアクセスがないと実現できない
+struct EnablePasteButton: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "ペーストボタン"
+    static let explanation: LocalizedStringKey = "左下のカーソル移動キーの上フリックにペーストボタンを追加します"
+    static let defaultValue = false
+    static let key: String = "enable_paste_button_on_flick_cursorbar_key"
+    static let requireFullAccess: Bool = true
+}
+
+extension KeyboardSettingKey where Self == EnablePasteButton {
+    static var enablePasteButton: Self { .init() }
+}
+
+/// クリップボード履歴マネージャを有効化する設定
+/// - note: この機能はフルアクセスがないと実現できない
+struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {
+    static let title: LocalizedStringKey = "クリップボードの履歴を保存"
+    static let explanation: LocalizedStringKey = "コピーした文字列の履歴を保存し、専用のタブから入力できるようにします。"
+    static let defaultValue = false
+    static let key: String = "enable_clipboard_history_manager_tab"
+    static let requireFullAccess: Bool = true
+    static func onEnabled() -> LocalizedStringKey? {
+        do {
+            var manager = CustardManager.load()
+            var tabBarData = (try? manager.tabbar(identifier: 0)) ?? .default
+            if !tabBarData.items.contains(where: {$0.actions == [.moveTab(.system(.clipboard_history_tab))]}) {
+                tabBarData.items.append(TabBarItem(label: .text("コピー履歴"), actions: [.moveTab(.system(.clipboard_history_tab))]))
+            }
+            tabBarData.lastUpdateDate = .now
+            try manager.saveTabBarData(tabBarData: tabBarData)
+            return "タブバーに「コピー履歴」ボタンを追加しました。「ペーストの許可」を求めるダイアログが繰り返し出る場合、本体設定の「ほかのAppからペースト」を「許可」に設定してください。"
+        } catch {
+            debug("EnableClipboardHistoryManagerTab onEnabled", error)
+            return nil
+        }
+    }
+    static func onDisabled() {
+        do {
+            var manager = CustardManager.load()
+            var tabBarData = (try? manager.tabbar(identifier: 0)) ?? .default
+            tabBarData.items.removeAll {
+                $0.actions == [.moveTab(.system(.clipboard_history_tab))]
+            }
+            tabBarData.lastUpdateDate = .now
+            try manager.saveTabBarData(tabBarData: tabBarData)
+        } catch {
+            debug("EnableClipboardHistoryManagerTab onEnabled", error)
+        }
+    }
+}
+
+extension KeyboardSettingKey where Self == EnableClipboardHistoryManagerTab {
+    static var enableClipboardHistoryManagerTab: Self { .init() }
 }

@@ -50,6 +50,8 @@ extension CodableActionData {
             }
         case .dismissKeyboard:
             return .dismissKeyboard
+        case .paste:
+            return .paste
         //        case let .setCursorBar(value):
         //            return .setCursorBar(value)
         //        case let .setCapsLockState(value):
@@ -85,30 +87,26 @@ extension CodableLongpressActionData {
 }
 
 extension ActionType {
-    func sound() {
+    @MainActor func feedback(variableStates: VariableStates) {
         switch self {
-        case .input:
-            Sound.click()
+        case .input, .paste, .insertMainDisplay:
+            KeyboardFeedback.click()
         case .delete:
-            Sound.delete()
+            KeyboardFeedback.delete()
         case .smoothDelete, .smartDelete, .smartMoveCursor:
-            Sound.smoothDelete()
-        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState/*, ._setBoolState*/:
-            Sound.tabOrOtherKey()
-        case .deselectAndUseAsInputting, .saveSelectedTextIfNeeded, .restoreSelectedTextIfNeeded, .openApp, .dismissKeyboard, .hideLearningMemory:
+            KeyboardFeedback.smoothDelete()
+        case .moveTab, .enter, .changeCharacterType, .setCursorBar, .moveCursor, .enableResizingMode, .replaceLastCharacters, .setTabBar, .setBoolState, .setUpsideComponent, .setSearchQuery/*, ._setBoolState*/:
+            KeyboardFeedback.tabOrOtherKey()
+        case .deselectAndUseAsInputting, .openApp, .dismissKeyboard, .hideLearningMemory:
             return
         case let .boolSwitch(compiledExpression, trueAction, falseAction):
-            if let condition = VariableStates.shared.boolStates.evaluateExpression(compiledExpression) {
+            if let condition = variableStates.boolStates.evaluateExpression(compiledExpression) {
                 if condition {
-                    trueAction.first?.sound()
+                    trueAction.first?.feedback(variableStates: variableStates)
                 } else {
-                    falseAction.first?.sound()
+                    falseAction.first?.feedback(variableStates: variableStates)
                 }
             }
-        #if DEBUG
-        case .DEBUG_DATA_INPUT:
-            return
-        #endif
         }
     }
 }

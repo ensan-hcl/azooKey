@@ -36,8 +36,8 @@ enum QwertyKeyPressState {
 }
 
 struct QwertyKeyView: View {
-    private let model: QwertyKeyModelProtocol
-    @ObservedObject private var variableStates = VariableStates.shared
+    private let model: any QwertyKeyModelProtocol
+    @EnvironmentObject private var variableStates: VariableStates
 
     @State private var pressState: QwertyKeyPressState = .unpressed
     @State private var suggest = false
@@ -47,7 +47,7 @@ struct QwertyKeyView: View {
     private let tabDesign: TabDependentDesign
     private let size: CGSize
 
-    init(model: QwertyKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize) {
+    init(model: any QwertyKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize) {
         self.model = model
         self.tabDesign = tabDesign
         self.size = size
@@ -59,9 +59,9 @@ struct QwertyKeyView: View {
                 self.suggest = true
                 switch self.pressState {
                 case .unpressed:
-                    self.model.sound()
+                    self.model.feedback(variableStates: variableStates)
                     self.pressState = .started(Date())
-                    self.action.reserveLongPressAction(self.model.longPressActions)
+                    self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                         // すでに処理が終了済みでなければ
                         if self.pressState.isActive {
@@ -94,12 +94,12 @@ struct QwertyKeyView: View {
                 case let .started(date):
                     // もし0.4秒未満押していたら
                     if Date().timeIntervalSince(date) < 0.4 {
-                        self.action.registerActions(self.model.pressActions)
+                        self.action.registerActions(self.model.pressActions(variableStates: variableStates), variableStates: variableStates)
                     }
                 case .longPressed:
                     break
                 case let .variations(selection):
-                    self.model.variationsModel.performSelected(selection: selection, actionManager: action)
+                    self.model.variationsModel.performSelected(selection: selection, actionManager: action, variableStates: variableStates)
                 }
                 self.pressState = .unpressed
             })
@@ -122,11 +122,11 @@ struct QwertyKeyView: View {
     }
 
     private var suggestColor: Color {
-        theme != .default ? .white : Design.colors.suggestKeyColor
+        theme != .default(layout: .qwerty) ? .white : Design.colors.suggestKeyColor(layout: variableStates.keyboardLayout)
     }
 
     private var suggestTextColor: Color? {
-        theme != .default ? .black : nil
+        theme != .default(layout: .qwerty) ? .black : nil
     }
 
     private var selection: Int? {

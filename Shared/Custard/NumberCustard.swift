@@ -139,7 +139,7 @@ extension Custard {
         identifier: "azooKey_internal_number_pad",
         language: .none,
         input_style: .direct,
-        metadata: CustardMetadata(custard_version: .v1_0, display_name: "数字"),
+        metadata: CustardMetadata(custard_version: .v1_2, display_name: "数字"),
         interface: CustardInterface(
             keyStyle: .tenkeyStyle,
             keyLayout: .gridFit(.init(rowCount: 3, columnCount: 4)),
@@ -165,7 +165,7 @@ extension Custard {
         identifier: "azooKey_internal_decimal_pad",
         language: .none,
         input_style: .direct,
-        metadata: CustardMetadata(custard_version: .v1_0, display_name: "数字"),
+        metadata: CustardMetadata(custard_version: .v1_2, display_name: "数字"),
         interface: CustardInterface(
             keyStyle: .tenkeyStyle,
             keyLayout: .gridFit(.init(rowCount: 3, columnCount: 4)),
@@ -191,7 +191,7 @@ extension Custard {
         identifier: "azooKey_internal_phone_pad",
         language: .none,
         input_style: .direct,
-        metadata: CustardMetadata(custard_version: .v1_0, display_name: "数字"),
+        metadata: CustardMetadata(custard_version: .v1_2, display_name: "数字"),
         interface: CustardInterface(
             keyStyle: .tenkeyStyle,
             keyLayout: .gridFit(.init(rowCount: 3, columnCount: 4)),

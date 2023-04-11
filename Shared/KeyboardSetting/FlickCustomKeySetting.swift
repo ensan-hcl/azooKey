@@ -268,7 +268,7 @@ extension KeyFlickSetting {
 }
 
 extension CustomizableFlickKey {
-    func get() -> KeyFlickSetting.SettingData {
+    @MainActor func get() -> KeyFlickSetting.SettingData {
         let setting: KeyFlickSetting
         switch self {
         case .kogana:

@@ -125,12 +125,6 @@ struct Candidate {
         self.text = Self.parseTemplate(text)
     }
 
-    #if DEBUG
-    func getDebugInformation() -> String {
-        self.data.debugDescription
-    }
-    #endif
-
     /// 入力を文としたとき、prefixになる文節に対応するCandidateを作る
     static func makePrefixClauseCandidate(data: some Collection<DicdataElement>) -> Candidate {
         var text = ""
@@ -161,4 +155,12 @@ struct Candidate {
         )
     }
 
+}
+
+extension Candidate: ResultViewItemData {
+    #if DEBUG
+    func getDebugInformation() -> String {
+        self.data.debugDescription
+    }
+    #endif
 }

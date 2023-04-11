@@ -22,6 +22,7 @@ extension LanguageLayout {
 }
 
 struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: View {
+    @EnvironmentObject private var appStates: MainAppStates
     @State private var selection: LanguageLayout = .flick
     @State private var ignoreChange = false
     private let custardManager = CustardManager.load()
@@ -98,14 +99,14 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
                         }
                     }
                     CenterAlignedView {
-                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                        KeyboardPreview(scale: 0.8, defaultTab: tab)
                             .allowsHitTesting(false)
                             .disabled(true)
                     }
                 } else {
                     Text(labelText)
                     CenterAlignedView {
-                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                        KeyboardPreview(scale: 0.8, defaultTab: tab)
                             .allowsHitTesting(false)
                             .disabled(true)
                     }
@@ -121,7 +122,7 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
                 VStack {
                     Text(labelText)
                     CenterAlignedView {
-                        KeyboardPreview(theme: .default, scale: 0.8, defaultTab: tab)
+                        KeyboardPreview(scale: 0.8, defaultTab: tab)
                             .allowsHitTesting(false)
                             .disabled(true)
                     }
@@ -143,13 +144,13 @@ struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: Vie
             SettingKey.value = type
             switch language {
             case .japanese:
-                Store.variableSection.japaneseLayout = type
+                appStates.japaneseLayout = type
             case .english:
-                Store.variableSection.englishLayout = type
+                appStates.englishLayout = type
             }
             if setTogether {
                 EnglishKeyboardLayout.value = type
-                Store.variableSection.englishLayout = type
+                appStates.englishLayout = type
             }
         }
         .onAppear {

@@ -16,7 +16,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
         case secondTab(secondLanguage: KeyboardLanguage)
     }
 
-    var pressActions: [ActionType] {
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return []
         }
@@ -32,7 +32,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
                     return .user_dependent(.japanese)
                 }
             }()
-            switch VariableStates.shared.tabManager.tab.existential {
+            switch variableStates.tabManager.tab.existential {
             case .qwerty_hira:
                 return [.moveTab(.existential(.qwerty_symbols))]
             case .qwerty_abc:
@@ -87,7 +87,7 @@ struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
         }
     }
 
-    func sound() {
-        Sound.tabOrOtherKey()
+    func feedback(variableStates: VariableStates) {
+        KeyboardFeedback.tabOrOtherKey()
     }
 }

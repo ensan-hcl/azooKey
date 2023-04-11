@@ -1,0 +1,24 @@
+#  emoji.xcfilelist
+#  azooKey
+#
+#  Created by ensan on 2023/03/21.
+#  Copyright © 2023 ensan. All rights reserved.
+
+# This file may be set as an input or output file list for a shell script build phase.
+# List file paths below; one per line. These paths will be considered inputs or outputs for the script phase.
+# Build settings will be expanded, e.g. $(SRCROOT)/fileName
+
+# Emoji search files
+$(SRCROOT)/Shared/Data/emoji_all_E13.1.txt.gen
+$(SRCROOT)/Shared/Data/emoji_all_E14.0.txt.gen
+$(SRCROOT)/Shared/Data/emoji_all_E15.0.txt.gen
+
+# Emoji genre files
+$(SRCROOT)/Shared/Data/emoji_genre_E13.1.txt.gen
+$(SRCROOT)/Shared/Data/emoji_genre_E14.0.txt.gen
+$(SRCROOT)/Shared/Data/emoji_genre_E15.0.txt.gen
+
+# Emoji dict files
+$(SRCROOT)/Shared/Data/emoji_dict_E13.1.txt.gen
+$(SRCROOT)/Shared/Data/emoji_dict_E14.0.txt.gen
+$(SRCROOT)/Shared/Data/emoji_dict_E15.0.txt.gen

@@ -102,9 +102,11 @@ struct FlickCustomKeysSettingSelectView: View {
 struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: View {
     @State private var bottomSheetShown = false
     @State private var selectedPosition: FlickKeyPosition = .center
-    @State private var setting = SettingUpdater<SettingKey>()
+    @State private var setting: SettingUpdater<SettingKey>
 
-    init(_ key: SettingKey) {}
+    @MainActor init(_ key: SettingKey) {
+        self._setting = .init(initialValue: .init())
+    }
 
     private let screenWidth = UIScreen.main.bounds.width
 
@@ -141,78 +143,76 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                 bottomSheetShown = true
             }
             .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-            if let position = selectedPosition {
-                BottomSheetView(
-                    isOpen: self.$bottomSheetShown,
-                    maxHeight: geometry.size.height * 0.7
-                ) {
-                    Form {
-                        if isPossiblePosition(position) {
-                            switch mainEditor {
-                            case .input:
-                                Section(header: Text("入力")) {
-                                    if self.isInputActionEditable(actions: setting.value[keyPath: position.keyPath].actions) {
-                                        Text("キーを押して入力される文字を設定します。")
-                                        TextField("入力", text: Binding(
-                                                    get: {
-                                                        setting.value[.input, position]
-                                                    },
-                                                    set: {
-                                                        setting.value[.input, position] = $0
-                                                    }))
-                                            .textFieldStyle(.roundedBorder)
-                                            .submitLabel(.done)
-                                    } else {
-                                        Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
-                                        Button("入力を設定する") {
-                                            setting.value[.input, position] = ""
-                                        }
-                                        .foregroundColor(.accentColor)
-                                    }
-                                }
-                            case .tab:
-                                Section(header: Text("タブ")) {
-                                    let tab = self.getTab(actions: setting.value[keyPath: position.keyPath].actions)
-                                    if tab != nil || setting.value[keyPath: position.keyPath].actions.isEmpty {
-                                        Text("キーを押して移動するタブを設定します。")
-                                        AvailableTabPicker(tab ?? .system(.user_japanese)) {tabData in
-                                            setting.value[keyPath: position.keyPath].actions = [.moveTab(tabData)]
-                                        }
-                                    } else {
-                                        tabSetter(keyPath: position.keyPath)
-                                    }
-                                }
-                            }
-                            Section(header: Text("ラベル")) {
-                                Text("キーに表示される文字を設定します。")
-                                TextField("ラベル", text: Binding(
-                                            get: {
-                                                setting.value[.label, position]
-                                            },
-                                            set: {
-                                                setting.value[.label, position] = $0
-                                            }))
+            BottomSheetView(
+                isOpen: self.$bottomSheetShown,
+                maxHeight: geometry.size.height * 0.7
+            ) {
+                Form {
+                    if isPossiblePosition(selectedPosition) {
+                        switch mainEditor {
+                        case .input:
+                            Section(header: Text("入力")) {
+                                if self.isInputActionEditable(actions: setting.value[keyPath: selectedPosition.keyPath].actions) {
+                                    Text("キーを押して入力される文字を設定します。")
+                                    TextField("入力", text: Binding(
+                                        get: {
+                                            setting.value[.input, selectedPosition]
+                                        },
+                                        set: {
+                                            setting.value[.input, selectedPosition] = $0
+                                        }))
                                     .textFieldStyle(.roundedBorder)
                                     .submitLabel(.done)
-                            }
-                            Section(header: Text("アクション")) {
-                                Text("キーを押したときの動作をより詳しく設定します。")
-                                NavigationLink("アクションを編集する", destination: CodableActionDataEditor($setting.value[keyPath: position.bindedKeyPath].actions, availableCustards: CustardManager.load().availableCustards))
+                                } else {
+                                    Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
+                                    Button("入力を設定する") {
+                                        setting.value[.input, selectedPosition] = ""
+                                    }
                                     .foregroundColor(.accentColor)
+                                }
                             }
-                            Section(header: Text("長押しアクション")) {
-                                Text("キーを長押ししたときの動作をより詳しく設定します。")
-                                NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($setting.value[keyPath: position.bindedKeyPath].longpressActions, availableCustards: CustardManager.load().availableCustards))
-                                    .foregroundColor(.accentColor)
+                        case .tab:
+                            Section(header: Text("タブ")) {
+                                let tab = self.getTab(actions: setting.value[keyPath: selectedPosition.keyPath].actions)
+                                if tab != nil || setting.value[keyPath: selectedPosition.keyPath].actions.isEmpty {
+                                    Text("キーを押して移動するタブを設定します。")
+                                    AvailableTabPicker(tab ?? .system(.user_japanese)) {tabData in
+                                        setting.value[keyPath: selectedPosition.keyPath].actions = [.moveTab(tabData)]
+                                    }
+                                } else {
+                                    tabSetter(keyPath: selectedPosition.keyPath)
+                                }
                             }
-                            Button("リセット", action: reload)
-                                .foregroundColor(.red)
-                        } else {
-                            Text("このキーは編集できません")
                         }
+                        Section(header: Text("ラベル")) {
+                            Text("キーに表示される文字を設定します。")
+                            TextField("ラベル", text: Binding(
+                                get: {
+                                    setting.value[.label, selectedPosition]
+                                },
+                                set: {
+                                    setting.value[.label, selectedPosition] = $0
+                                }))
+                            .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
+                        }
+                        Section(header: Text("アクション")) {
+                            Text("キーを押したときの動作をより詳しく設定します。")
+                            NavigationLink("アクションを編集する", destination: CodableActionDataEditor($setting.value[keyPath: selectedPosition.bindedKeyPath].actions, availableCustards: CustardManager.load().availableCustards))
+                                .foregroundColor(.accentColor)
+                        }
+                        Section(header: Text("長押しアクション")) {
+                            Text("キーを長押ししたときの動作をより詳しく設定します。")
+                            NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($setting.value[keyPath: selectedPosition.bindedKeyPath].longpressActions, availableCustards: CustardManager.load().availableCustards))
+                                .foregroundColor(.accentColor)
+                        }
+                        Button("リセット", action: reload)
+                            .foregroundColor(.red)
+                    } else {
+                        Text("このキーは編集できません")
                     }
-                    .foregroundColor(.primary)
                 }
+                .foregroundColor(.primary)
             }
         }
     }

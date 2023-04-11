@@ -11,7 +11,7 @@ import SwiftUI
 
 struct QwertyKeyModel: QwertyKeyModelProtocol {
 
-    let pressActions: [ActionType]
+    private let pressActions: [ActionType]
     var longPressActions: LongpressActionType
 
     let labelType: KeyLabelType
@@ -38,8 +38,12 @@ struct QwertyKeyModel: QwertyKeyModelProtocol {
         return KeyLabel(self.labelType, width: width, textColor: color)
     }
 
-    func sound() {
-        self.pressActions.first?.sound()
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        self.pressActions
+    }
+
+    func feedback(variableStates: VariableStates) {
+        self.pressActions.first?.feedback(variableStates: variableStates)
     }
 
 }

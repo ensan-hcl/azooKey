@@ -8,7 +8,7 @@
 
 import enum UIKit.UIReturnKeyType
 
-enum KeyboardLayout: String, CaseIterable {
+enum KeyboardLayout: String, CaseIterable, Equatable {
     /// フリック入力式のレイアウトで表示するスタイル
     case flick = "flick"
     /// qwerty入力式のレイアウトで表示するスタイル
@@ -53,6 +53,12 @@ enum KeyboardOrientation {
     case horizontal     // height<width
 }
 
+enum RoughEnterKeyState {
+    case `return`
+    case edit
+    case complete
+}
+
 enum EnterKeyState {
     case complete   // 決定
     case `return`(UIReturnKeyType)   // 改行
@@ -63,4 +69,15 @@ enum BarState {
     case none   // なし
     case tab    // タブバー
     case cursor // カーソルバー
+}
+
+enum ConverterBehaviorSemantics {
+    /// 標準的な日本語入力のように、変換する候補を選ぶパターン
+    case conversion
+    /// iOSの英語入力のように、確定は不要だが、左右の文字列の置き換え候補が出てくるパターン
+    case replacement([ReplacementTarget])
+
+    enum ReplacementTarget: UInt8 {
+        case emoji
+    }
 }

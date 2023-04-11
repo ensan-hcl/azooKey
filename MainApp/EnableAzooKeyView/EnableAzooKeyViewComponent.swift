@@ -37,9 +37,7 @@ struct EnableAzooKeyViewText: View {
 
     var body: some View {
         HStack {
-            if let systemName {
-                Image(systemName: systemName)
-            }
+            Image(systemName: systemName)
             Text(text)
         }
         .lineLimit(nil)
