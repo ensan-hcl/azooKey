@@ -13,7 +13,7 @@ struct UpdateInformationView: View {
             // version 2系
             Group {
                 Group {
-                    VersionView("2.1", releaseDate: "2023年04月xx日") {
+                    VersionView("2.1", releaseDate: "2023年04月09日") {
                         ParagraphView("新しい機能を追加しました。") {
                             "絵文字タブを追加しました"
                             "キーボードの高さを調整できるようになりました"
