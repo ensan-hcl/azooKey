@@ -330,7 +330,7 @@ struct ComposingText {
 
     /// 文頭の方を確定させる関数
     ///  - parameters:
-    ///   - correspondingCount: `converTarget`において対応する文字数
+    ///   - correspondingCount: `input`において対応する文字数
     mutating func prefixComplete(correspondingCount: Int) {
         let correspondingCount = min(correspondingCount, self.input.count)
         self.input.removeFirst(correspondingCount)
