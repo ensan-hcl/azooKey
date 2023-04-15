@@ -120,13 +120,14 @@ struct UserDictionary: Codable {
     }
 }
 
-struct UserDictionaryData: Identifiable, Codable {
+struct UserDictionaryData: Equatable, Identifiable, Codable {
     var ruby: String
     var word: String
     var isVerb: Bool
     var isPersonName: Bool
     var isPlaceName: Bool
     let id: Int
+    var shared: Bool? = false
 
     func makeEditableData() -> EditableUserDictionaryData {
         EditableUserDictionaryData(data: self)
