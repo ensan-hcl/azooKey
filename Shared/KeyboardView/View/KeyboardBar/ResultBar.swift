@@ -72,6 +72,7 @@ struct ResultBar: View {
                     }
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.sRGB, white: 1, opacity: 0.001))
             .onLongPressGesture {
                 self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
