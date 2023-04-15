@@ -170,6 +170,9 @@ private struct UserDictionaryDataEditor: CancelableEditor {
 
     @State private var wordEditMode: Bool = false
     @State private var pickerTemplateName: String? = nil
+    @State private var shareThisWord = false
+    @State private var showExplanation = false
+    @State private var sending = false
     @FocusState private var focusOnWordField: Bool?
 
     @available(iOS 16.0, *)
@@ -255,6 +258,12 @@ private struct UserDictionaryDataEditor: CancelableEditor {
 
     var body: some View {
         Form {
+            if sending {
+                HStack {
+                    Text("申請中です")
+                    ProgressView()
+                }
+            }
             Section(header: Text("読みと単語"), footer: Text("\(systemImage: "doc.on.clipboard")を長押しでペースト")) {
                 HStack {
                     if wordEditMode {
@@ -302,6 +311,28 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                 Toggle("人・動物・会社などの名前である", isOn: $item.data.isPersonName)
                 Toggle("場所・建物などの名前である", isOn: $item.data.isPlaceName)
             }
+            if self.base.0.data.shared != true || (self.base.0.data != self.item.data) {
+                Toggle(isOn: $shareThisWord) {
+                    HStack {
+                        Text("この単語をシェアする")
+                        Button {
+                            showExplanation = true
+                        } label: {
+                            Image(systemName: "questionmark.circle")
+                        }
+                    }
+                }
+                .toggleStyle(.switch)
+                .alert(isPresented: $showExplanation) {
+                    Alert(
+                        title: Text("この単語をシェアする"),
+                        message: Text("この単語をazooKeyの本体辞書に追加することを申請します。\n個人情報を含む単語は申請しないでください。"),
+                        dismissButton: .default(Text("OK")) {
+                            showExplanation = false
+                        }
+                    )
+                }
+            }
             if #available(iOS 16.0, *), let selectedTemplate {
                 if let index = templateIndex(name: selectedTemplate.name) {
                     Section(header: Text("テンプレートを編集する")) {
@@ -341,9 +372,23 @@ private struct UserDictionaryDataEditor: CancelableEditor {
             leading: Button("キャンセル", action: cancel),
             trailing: Button("完了") {
                 if item.error == nil {
-                    self.save()
-                    variables.mode = .list
-                    MainAppFeedback.success()
+                    if self.shareThisWord {
+                        Task.detached { @MainActor in
+                            self.sending = true
+                            let data = self.item.makeStableData()
+                            let success = await self.sendSharedWord(data: data)
+                            self.item.data.shared = success
+                            self.save()
+                            self.variables.mode = .list
+                            MainAppFeedback.success()
+                            self.sending = false
+                        }
+                    } else {
+                        self.save()
+                        let data = self.item.makeStableData()
+                        variables.mode = .list
+                        MainAppFeedback.success()
+                    }
                 }
             }
         )
@@ -361,6 +406,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
         variables.mode = .list
     }
 
+    @MainActor
     private func save() {
         if item.error == nil {
             if let itemIndex = variables.items.firstIndex(where: {$0.id == self.item.id}) {
@@ -370,5 +416,20 @@ private struct UserDictionaryDataEditor: CancelableEditor {
             }
             variables.save()
         }
+    }
+
+    private func sendSharedWord(data: UserDictionaryData) async -> Bool {
+        var options: [SharedStore.ShareThisWordOptions] = []
+        if data.isPersonName {
+            options.append(.人・動物・会社などの名前)
+        }
+        if data.isPlaceName {
+            options.append(.場所・建物などの名前)
+        }
+        if data.isVerb {
+            options.append(.五段活用)
+        }
+
+        return await SharedStore.sendSharedWord(word: data.word, ruby: data.ruby, options: options)
     }
 }

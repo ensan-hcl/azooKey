@@ -248,6 +248,7 @@
 		1A7F547126A96A5F0032E91E /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
 		1A7F547326A96A870032E91E /* AzooKeyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F547226A96A870032E91E /* AzooKeyIcon.swift */; };
 		1A7F547426A96A870032E91E /* AzooKeyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F547226A96A870032E91E /* AzooKeyIcon.swift */; };
+		1A855C7829EA8A6400DD3702 /* ShareWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A855C7729EA8A6400DD3702 /* ShareWordView.swift */; };
 		1A86F4AA2536033900B92B49 /* changed_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4A92536033900B92B49 /* changed_last_n_character.swift */; };
 		1A86F4B82539356100B92B49 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A86F4B72539356100B92B49 /* StringUtils.swift */; };
 		1A8A8402250F65110093A701 /* all.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8401250F65110093A701 /* all.swift */; };
@@ -678,6 +679,7 @@
 		1A7D00D2292A34EB00F06B35 /* extension String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "extension String.swift"; sourceTree = "<group>"; };
 		1A7F546E26A81F3B0032E91E /* Availability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Availability.swift; sourceTree = "<group>"; };
 		1A7F547226A96A870032E91E /* AzooKeyIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeyIcon.swift; sourceTree = "<group>"; };
+		1A855C7729EA8A6400DD3702 /* ShareWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareWordView.swift; sourceTree = "<group>"; };
 		1A86F4A92536033900B92B49 /* changed_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changed_last_n_character.swift; sourceTree = "<group>"; };
 		1A86F4B72539356100B92B49 /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		1A8A8401250F65110093A701 /* all.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = all.swift; sourceTree = "<group>"; };
@@ -1472,6 +1474,7 @@
 				1AB5075E255EC21D003C0BF2 /* AdditionalDict */,
 				1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */,
 				1A9B0A6D2565797E004203BB /* ContactView.swift */,
+				1A855C7729EA8A6400DD3702 /* ShareWordView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -2169,6 +2172,7 @@
 				1AF6795825CEDB8E00F3987B /* QwertyDataProvider.swift in Sources */,
 				1ACEEFE92566601700899DA2 /* TipsViewComponent.swift in Sources */,
 				1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */,
+				1A855C7829EA8A6400DD3702 /* ShareWordView.swift in Sources */,
 				1A5C7EC525F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */,
 				1A7F546F26A81F3B0032E91E /* Availability.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,
