@@ -131,7 +131,7 @@ final class KanaKanjiConverter {
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
-                        correspondingCount: ruby.count,
+                        correspondingCount: inputData.input.count,
                         lastMid: MIDData.一般.mid,
                         data: data
                     )
@@ -144,7 +144,7 @@ final class KanaKanjiConverter {
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
-                        correspondingCount: ruby.count,
+                        correspondingCount: inputData.input.count,
                         lastMid: MIDData.一般.mid,
                         data: data
                     )
@@ -163,7 +163,7 @@ final class KanaKanjiConverter {
                     let candidate: Candidate = Candidate(
                         text: ruby,
                         value: penalty,
-                        correspondingCount: ruby.count,
+                        correspondingCount: inputData.input.count,
                         lastMid: MIDData.一般.mid,
                         data: data
                     )
@@ -176,7 +176,7 @@ final class KanaKanjiConverter {
                     let candidate: Candidate = Candidate(
                         text: word,
                         value: value,
-                        correspondingCount: ruby.count,
+                        correspondingCount: inputData.input.count,
                         lastMid: MIDData.一般.mid,
                         data: data
                     )

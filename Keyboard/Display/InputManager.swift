@@ -781,7 +781,7 @@ import UIKit
                 self.previousSystemOperation = .setMarkedText
             }
             if liveConversionEnabled {
-                let liveConversionText = self.liveConversionManager.updateWithNewResults(results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
+                let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: liveConversionText)
             } else {
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
