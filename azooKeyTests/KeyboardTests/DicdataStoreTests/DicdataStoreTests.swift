@@ -28,6 +28,8 @@ final class DicdataStoreTests: XCTestCase {
             ("ヤマダ", "山田"),
             ("アイロ", "隘路"),
             ("ナンタイ", "軟体"),
+            ("ナンジ", "何時"),
+            ("ナド", "等"),
         ]
         for (key, word) in mustWords {
             var c = ComposingText()
