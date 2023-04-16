@@ -60,14 +60,14 @@ final class LiveConversionManager {
 
     /// かな漢字変換結果を受け取ってライブ変換状態の更新を行う関数
     ///  - Returns: ライブ変換で表示するテキスト
-    func updateWithNewResults(_ candidates: [Candidate], firstClauseResults: [Candidate], convertTargetCursorPosition: Int, convertTarget: String) -> String {
+    func updateWithNewResults(_ composingText: ComposingText, _ candidates: [Candidate], firstClauseResults: [Candidate], convertTargetCursorPosition: Int, convertTarget: String) -> String {
         // TODO: 最後の1単語のライブ変換を抑制したい
         // TODO: ローマ字入力中に最後の単語が優先される問題
         var candidate: Candidate
         if convertTargetCursorPosition > 1, let firstCandidate = candidates.first(where: {$0.data.map {$0.ruby}.joined().count == convertTarget.count}) {
             candidate = firstCandidate
         } else {
-            candidate = .init(text: convertTarget, value: 0, correspondingCount: convertTarget.count, lastMid: MIDData.一般.mid, data: [.init(ruby: convertTarget.toKatakana(), cid: CIDData.一般名詞.cid, mid: MIDData.一般.mid, value: 0)])
+            candidate = .init(text: convertTarget, value: 0, correspondingCount: composingText.input.count, lastMid: MIDData.一般.mid, data: [.init(ruby: convertTarget.toKatakana(), cid: CIDData.一般名詞.cid, mid: MIDData.一般.mid, value: 0)])
         }
         self.adjustCandidate(candidate: &candidate)
         debug("Live Conversion:", candidate)

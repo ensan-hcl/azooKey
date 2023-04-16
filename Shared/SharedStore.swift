@@ -51,6 +51,35 @@ enum SharedStore {
             SharedStore.userDefaults.set(appVersionString, forKey: lastAppVersionKey)
         }
     }
+
+    enum ShareThisWordOptions: String {
+        case 人・動物・会社などの名前
+        case 場所・建物などの名前
+        case 五段活用
+    }
+
+    static func sendSharedWord(word: String, ruby: String, options: [ShareThisWordOptions]) async -> Bool {
+        let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLScrNWRx2DBb1fCbfcHenyO4myrD4e85WlhIJrkyEnEF0zCD1A/formResponse")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("no-cors", forHTTPHeaderField: "mode")
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        var parameters = "entry.879616659=\(word)&entry.1030786153=\(ruby)"
+        for option in options {
+            parameters += "&entry.1819903648=\(option.rawValue)"
+        }
+        request.httpBody = parameters
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
+            .data(using: .utf8) ?? Data()
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            debug("sendSharedWord response", response)
+            return true
+        } catch {
+            debug("sendSharedWord error", error)
+            return false
+        }
+    }
 }
 
 extension AppVersion {
