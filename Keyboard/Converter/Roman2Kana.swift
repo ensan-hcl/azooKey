@@ -8,8 +8,8 @@
 
 import Foundation
 enum Roman2Kana {
-    static let katakanaChanges: [String: String] = hiraganaChanges.mapValues { $0.toKatakana() }
-    static let hiraganaChanges: [String: String] = [
+    static let katakanaChanges: [String: String] = Dictionary(uniqueKeysWithValues: hiraganaChanges.map { (String($0.key), String($0.value)) })
+    static let hiraganaChanges: [[Character]: [Character]] = Dictionary(uniqueKeysWithValues: [
         "a": "あ",
         "xa": "ぁ",
         "la": "ぁ",
@@ -272,31 +272,31 @@ enum Roman2Kana {
         "zj": "↓",
         "zk": "↑",
         "zl": "→"
-    ]
+    ].map {(Array($0.key), Array($0.value))})
 
-    static func toHiragana(currentText: some StringProtocol, added: String) -> (result: String, delete: Int, input: [ComposingText.ConvertTargetElement]) {
+    static func toHiragana(currentText: [Character], added: Character) -> [Character] {
         let last_3 = currentText.suffix(3)
-        if let kana = Roman2Kana.hiraganaChanges[last_3 + added] {
-            return (result: currentText.prefix(currentText.count - last_3.count) + kana, delete: last_3.count, input: [.init(string: kana, inputStyle: .roman2kana)])
+        if let kana = Roman2Kana.hiraganaChanges[last_3 + [added]] {
+            return currentText.prefix(currentText.count - last_3.count) + kana
         }
         let last_2 = currentText.suffix(2)
-        if let kana = Roman2Kana.hiraganaChanges[last_2 + added] {
-            return (result: currentText.prefix(currentText.count - last_2.count) + kana, delete: last_2.count, input: [.init(string: kana, inputStyle: .roman2kana)])
+        if let kana = Roman2Kana.hiraganaChanges[last_2 + [added]] {
+            return currentText.prefix(currentText.count - last_2.count) + kana
         }
         let last_1 = currentText.suffix(1)
-        if let kana = Roman2Kana.hiraganaChanges[last_1 + added] {
-            return (result: currentText.prefix(currentText.count - last_1.count) + kana, delete: last_1.count, input: [.init(string: kana, inputStyle: .roman2kana)])
+        if let kana = Roman2Kana.hiraganaChanges[last_1 + [added]] {
+            return currentText.prefix(currentText.count - last_1.count) + kana
         }
-        if last_1 == added && added.onlyRomanAlphabet {
-            return (result: currentText.prefix(currentText.count - last_1.count) + "っ" + added, delete: 1, input: [.init(string: "っ", inputStyle: .direct), .init(string: added, inputStyle: .roman2kana)])
+        if last_1 == [added] && String(added).onlyRomanAlphabet {
+            return currentText.prefix(currentText.count - last_1.count) + ["っ", added]
         }
-        if last_1 == "n" && added != "y"{
-            return (result: currentText.prefix(currentText.count - last_1.count) + "ん" + added, delete: 1, input: [.init(string: "ん", inputStyle: .direct), .init(string: added, inputStyle: .roman2kana)])
+        if last_1 == ["n"] && added != "y"{
+            return currentText.prefix(currentText.count - last_1.count) + ["ん", added]
         }
 
-        if let kana = Roman2Kana.hiraganaChanges[added] {
-            return (result: currentText + kana, delete: .zero, input: [.init(string: kana, inputStyle: .roman2kana)])
+        if let kana = Roman2Kana.hiraganaChanges[[added]] {
+            return currentText + kana
         }
-        return (result: currentText + added, delete: .zero, input: [.init(string: added, inputStyle: .roman2kana)])
+        return currentText + [added]
     }
 }

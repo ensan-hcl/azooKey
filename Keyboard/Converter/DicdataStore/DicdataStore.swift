@@ -204,7 +204,7 @@ final class DicdataStore {
         let stringSet = stringToInfo.keys.map {($0, $0.map {self.charsID[$0, default: .max]})}
         let (minCharIDsCount, maxCharIDsCount) = stringSet.lazy.map {$0.1.count}.minAndMax() ?? (0, -1)
         // 先頭の文字: そこで検索したい文字列の集合
-        let group = [Character: [(String, [UInt8])]].init(grouping: stringSet, by: {$0.0.first!})
+        let group = [Character: [([Character], [UInt8])]].init(grouping: stringSet, by: {$0.0.first!})
 
         let depth = minCharIDsCount - 1 ..< maxCharIDsCount
         var indices: [(String, Set<Int>)] = group.map {dic in
@@ -220,14 +220,15 @@ final class DicdataStore {
         var dicdata: [DicdataElement] = []
         for (identifier, value) in indices {
             let result: [DicdataElement] = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
-                let penalty = stringToInfo[data.ruby, default: (0, .zero)].penalty
+                let rubyArray = Array(data.ruby)
+                let penalty = stringToInfo[rubyArray, default: (0, .zero)].penalty
                 if penalty.isZero {
                     return data
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
                 let pUnit: PValue = Self.getPenalty(data: data) / 2   // 負の値
                 let adjust = pUnit * penalty * ratio
-                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
+                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: rubyArray.count) {
                     return nil
                 }
                 return data.adjustedData(adjust)
@@ -240,21 +241,21 @@ final class DicdataStore {
             do {
                 let result = self.getWiseDicdata(convertTarget: segments[i - fromIndex], allowRomanLetter: i + 1 == toIndexRight, inputData: inputData, inputRange: fromIndex ..< i)
                 for item in result {
-                    stringToInfo[item.ruby] = (i, 0)
+                    stringToInfo[Array(item.ruby)] = (i, 0)
                 }
                 dicdata.append(contentsOf: result)
             }
             do {
                 let result = self.getMatchOSUserDict(segments[i - fromIndex])
                 for item in result {
-                    stringToInfo[item.ruby] = (i, 0)
+                    stringToInfo[Array(item.ruby)] = (i, 0)
                 }
                 dicdata.append(contentsOf: result)
             }
         }
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.compactMap {
-                guard let endIndex = stringToInfo[$0.ruby]?.endIndex else {
+                guard let endIndex = stringToInfo[Array($0.ruby)]?.endIndex else {
                     return nil
                 }
                 let node = LatticeNode(data: $0, inputRange: fromIndex ..< endIndex + 1)
@@ -264,7 +265,7 @@ final class DicdataStore {
             return result
         } else {
             let result: [LatticeNode] = dicdata.compactMap {
-                guard let endIndex = stringToInfo[$0.ruby]?.endIndex else {
+                guard let endIndex = stringToInfo[Array($0.ruby)]?.endIndex else {
                     return nil
                 }
                 return LatticeNode(data: $0, inputRange: fromIndex ..< endIndex + 1)
@@ -291,7 +292,7 @@ final class DicdataStore {
         let strings = string2penalty.keys.map {
             (key: $0, charIDs: $0.map {self.charsID[$0, default: .max]})
         }
-        let group = [Character: [(key: String, charIDs: [UInt8])]].init(grouping: strings, by: {$0.key.first!})
+        let group = [Character: [(key: [Character], charIDs: [UInt8])]].init(grouping: strings, by: {$0.key.first!})
 
         var indices: [(String, Set<Int>)] = group.map {dic in
             let head = String(dic.key)
@@ -315,14 +316,15 @@ final class DicdataStore {
         var dicdata: [DicdataElement] = []
         for (identifier, value) in indices {
             let result: [DicdataElement] = self.getDicdataFromLoudstxt3(identifier: identifier, indices: value).compactMap { (data) -> DicdataElement? in
-                let penalty = string2penalty[data.ruby, default: .zero]
+                let rubyArray = Array(data.ruby)
+                let penalty = string2penalty[rubyArray, default: .zero]
                 if penalty.isZero {
                     return data
                 }
                 let ratio = Self.penaltyRatio[data.lcid]
                 let pUnit: PValue = Self.getPenalty(data: data) / 2   // 負の値
                 let adjust = pUnit * penalty * ratio
-                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: data.ruby.count) {
+                if self.shouldBeRemoved(value: data.value() + adjust, wordCount: rubyArray.count) {
                     return nil
                 }
                 return data.adjustedData(adjust)
@@ -456,8 +458,8 @@ final class DicdataStore {
         // 入力を全てひらがな、カタカナに変換したものを候補に追加する
         // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
         if requestOptions.keyboardLanguage != .en_US && inputData.input[inputRange].allSatisfy({$0.inputStyle == .roman2kana}) {
-            if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[convertTarget] {
-                result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
+            if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[Array(convertTarget)] {
+                result.append(DicdataElement(word: String(hiragana), ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
                 result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
             }
         }
