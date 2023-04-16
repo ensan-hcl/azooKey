@@ -13,6 +13,17 @@ struct UpdateInformationView: View {
             // version 2系
             Group {
                 Group {
+                    VersionView("2.1.1", releaseDate: "2023年04月17日") {
+                        ParagraphView("新しい機能を追加しました。") {
+                            "アプリ内で本体辞書への変換候補の追加を申請できるようになりました"
+                        }
+                        ParagraphView("不具合を修正しました。") {
+                            "ローマ字入力で余計な文字が入力される不具合を修正しました"
+                            "タブバーを変換候補欄の長押しで表示できない不具合を修正しました"
+                            "辞書に不足していた単語を複数追加しました"
+                        }
+                    }
+                    NavigationLink("変換候補の追加", destination: ShareWordView())
                     VersionView("2.1", releaseDate: "2023年04月09日") {
                         ParagraphView("新しい機能を追加しました。") {
                             "絵文字タブを追加しました"
