@@ -6,6 +6,7 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import Algorithms
 import Foundation
 
 final class DicdataStore {
@@ -199,29 +200,9 @@ final class DicdataStore {
         // MARK: 誤り訂正の対象を列挙する。非常に重い処理。
         var stringToInfo = inputData.getRangesWithTypos(fromIndex, rightIndexRange: toIndexLeft ..< toIndexRight)
 
-        // MARK: 検索対象を列挙していく。prefixの共通するものを削除して検索をなるべく減らすことが目的。
-        // prefixの共通するものを削除して検索をなるべく減らす
-        var (_stringSet, minCharIDsCount, maxCharIDsCount) = stringToInfo.keys.reduce(into: (set: Set(stringToInfo.keys), minCount: Int.max, maxCount: 0)) { (data, key) in
-            let keyCount = key.count
-            if keyCount < data.minCount {
-                data.minCount = keyCount
-            }
-            if data.maxCount < keyCount {
-                data.maxCount = keyCount
-            }
-            if keyCount > 4 {
-                return
-            }
-            if data.set.contains(where: {$0.hasPrefix(key) && $0.count != key.count}) {
-                data.set.remove(key)
-            }
-        }
-        let stringSet = _stringSet.map {($0, $0.map {self.charsID[$0, default: .max]})}
-        if stringSet.isEmpty {
-            minCharIDsCount = 0
-            maxCharIDsCount = -1
-        }
-        // MARK: 列挙した検索対象から、順に検索を行う。この時点ではindicesを取得するのみ。
+        // MARK: 検索対象を列挙していく。
+        let stringSet = stringToInfo.keys.map {($0, $0.map {self.charsID[$0, default: .max]})}
+        let (minCharIDsCount, maxCharIDsCount) = stringSet.lazy.map {$0.1.count}.minAndMax() ?? (0, -1)
         // 先頭の文字: そこで検索したい文字列の集合
         let group = [Character: [(String, [UInt8])]].init(grouping: stringSet, by: {$0.0.first!})
 
