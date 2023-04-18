@@ -255,6 +255,7 @@
 		1A8A8404250F65410093A701 /* added_last_1_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8403250F65410093A701 /* added_last_1_character.swift */; };
 		1A8A8408250F65B40093A701 /* deleted_last_n_character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8407250F65B40093A701 /* deleted_last_n_character.swift */; };
 		1A8A840A250F65DA0093A701 /* completed_first.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8A8409250F65DA0093A701 /* completed_first.swift */; };
+		1A8E219029EEE279002A5532 /* JapaneseNumberConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E218F29EEE279002A5532 /* JapaneseNumberConversionTests.swift */; };
 		1A8E454328E1379C00133D3B /* MarkedTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */; };
 		1A8E454428E1379C00133D3B /* MarkedTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */; };
 		1A8E454728E1390100133D3B /* MarkedTextSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454628E1390100133D3B /* MarkedTextSettingView.swift */; };
@@ -686,6 +687,7 @@
 		1A8A8403250F65410093A701 /* added_last_1_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = added_last_1_character.swift; sourceTree = "<group>"; };
 		1A8A8407250F65B40093A701 /* deleted_last_n_character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deleted_last_n_character.swift; sourceTree = "<group>"; };
 		1A8A8409250F65DA0093A701 /* completed_first.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = completed_first.swift; sourceTree = "<group>"; };
+		1A8E218F29EEE279002A5532 /* JapaneseNumberConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseNumberConversionTests.swift; sourceTree = "<group>"; };
 		1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedTextSetting.swift; sourceTree = "<group>"; };
 		1A8E454628E1390100133D3B /* MarkedTextSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedTextSettingView.swift; sourceTree = "<group>"; };
 		1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmoothDeleteTipsView.swift; sourceTree = "<group>"; };
@@ -1483,6 +1485,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC09DBD299533DF009BDBC7 /* DicdataStoreTests.swift */,
+				1A8E218F29EEE279002A5532 /* JapaneseNumberConversionTests.swift */,
 			);
 			path = DicdataStoreTests;
 			sourceTree = "<group>";
@@ -2274,6 +2277,7 @@
 				1A2E58552951EC87004F959B /* all.swift in Sources */,
 				1A2E5813294F2568004F959B /* ComposingText.swift in Sources */,
 				1A2E586229549CF9004F959B /* WithMutableValueTests.swift in Sources */,
+				1A8E219029EEE279002A5532 /* JapaneseNumberConversionTests.swift in Sources */,
 				1A2E5827294F4EAE004F959B /* DicdataElement.swift in Sources */,
 				1A2E58312950AA45004F959B /* KeyboardSetting.swift in Sources */,
 				1AD8D74F295E946A00112B80 /* ClauseDataUnitTests.swift in Sources */,
