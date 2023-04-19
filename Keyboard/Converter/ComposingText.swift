@@ -486,7 +486,7 @@ extension ComposingText {
     ///   - convertTargetElements: 領域内まで読んで作成した`convertTarget`
     /// - Returns: 領域がvalidであれば`convertTarget`を返し、invalidなら`nil`を返す。
     /// - Note: `elements = [r(k, a, n, s, h, a)]`のとき、`k,a,n,s,h,a`や`k, a`は正当だが`a, n`や`s, h`は正当ではない。`k, a, n`は特に正当であるとみなす。
-    static func getConvertTargetIfRightSideIsValid(lastElement: InputElement, of originalElements: [InputElement], to rightIndex: Int, convertTargetElements: [ConvertTargetElement]) -> String? {
+    static func getConvertTargetIfRightSideIsValid(lastElement: InputElement, of originalElements: [InputElement], to rightIndex: Int, convertTargetElements: [ConvertTargetElement]) -> [Character]? {
         debug("getConvertTargetIfRightSideIsValid", lastElement, rightIndex)
         if originalElements.endIndex < rightIndex {
             return nil
@@ -505,23 +505,23 @@ extension ComposingText {
             if !lastElement.string.hasSuffix("n") && lastElement.string.last == nextFirstElement.character {
                 // 書き換える
                 convertTargetElements[convertTargetElements.endIndex - 1].string.removeLast()
-                convertTargetElements.append(ConvertTargetElement(string: "っ", inputStyle: .direct))
+                convertTargetElements.append(ConvertTargetElement(string: ["っ"], inputStyle: .direct))
             }
 
             if lastElement.string.hasSuffix("n") && !["a", "i", "u", "e", "o", "y", "n"].contains(nextFirstElement.character) {
                 // 書き換える
                 convertTargetElements[convertTargetElements.endIndex - 1].string.removeLast()
-                convertTargetElements.append(ConvertTargetElement(string: "ん", inputStyle: .direct))
+                convertTargetElements.append(ConvertTargetElement(string: ["ん"], inputStyle: .direct))
             }
         }
-        return convertTargetElements.reduce(into: "") {$0 += $1.string}
+        return convertTargetElements.reduce(into: []) {$0 += $1.string}
     }
 
     // inputStyleが同一であるような文字列を集積したもの
     // k, o, r, e, h, aまでをローマ字入力し、p, e, nをダイレクト入力、d, e, s, uをローマ字入力した場合、
     // originalInputに対して[ElementComposition(これは, roman2kana), ElementComposition(pen, direct), ElementComposition(です, roman2kana)]、のようになる。
     struct ConvertTargetElement {
-        var string: String
+        var string: [Character]
         var inputStyle: InputStyle
     }
 
@@ -529,28 +529,28 @@ extension ComposingText {
         // currentElementsが空の場合、および
         // 直前のElementの入力方式が同じでない場合は、新たなConvertTargetElementを作成して追加する
         if currentElements.last?.inputStyle != newElement.inputStyle {
-            currentElements.append(ConvertTargetElement(string: updateConvertTarget(current: "", inputStyle: newElement.inputStyle, newCharacter: newElement.character), inputStyle: newElement.inputStyle))
+            currentElements.append(ConvertTargetElement(string: updateConvertTarget(current: [], inputStyle: newElement.inputStyle, newCharacter: newElement.character), inputStyle: newElement.inputStyle))
             return
         }
         // 末尾のエレメントの文字列を更新する
         updateConvertTarget(&currentElements[currentElements.endIndex - 1].string, inputStyle: newElement.inputStyle, newCharacter: newElement.character)
     }
 
-    static func updateConvertTarget(current: String, inputStyle: InputStyle, newCharacter: Character) -> String {
+    static func updateConvertTarget(current: [Character], inputStyle: InputStyle, newCharacter: Character) -> [Character] {
         switch inputStyle {
         case .direct:
-            return current + String(newCharacter)
+            return current + [newCharacter]
         case .roman2kana:
-            return Roman2Kana.toHiragana(currentText: current, added: String(newCharacter)).result
+            return Roman2Kana.toHiragana(currentText: current, added: newCharacter)
         }
     }
 
-    static func updateConvertTarget(_ convertTarget: inout String, inputStyle: InputStyle, newCharacter: Character) {
+    static func updateConvertTarget(_ convertTarget: inout [Character], inputStyle: InputStyle, newCharacter: Character) {
         switch inputStyle {
         case .direct:
             convertTarget.append(newCharacter)
         case .roman2kana:
-            convertTarget = Roman2Kana.toHiragana(currentText: convertTarget, added: String(newCharacter)).result
+            convertTarget = Roman2Kana.toHiragana(currentText: convertTarget, added: newCharacter)
         }
     }
 

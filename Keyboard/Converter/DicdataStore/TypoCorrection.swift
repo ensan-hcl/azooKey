@@ -20,7 +20,7 @@ extension ComposingText {
     /// getRangeWithTyposの複数版にあたる。`result`の計算が一回で済む分、高速になる。
     /// 例えば`left=4, rightIndexRange=6..<10`の場合、`4...6, 4...7, 4...8, 4...9`の範囲で計算する
     /// `left <= rightIndexRange.startIndex`が常に成り立つ
-    func getRangesWithTypos(_ left: Int, rightIndexRange: Range<Int>) -> [String: (endIndex: Int, penalty: PValue)] {
+    func getRangesWithTypos(_ left: Int, rightIndexRange: Range<Int>) -> [[Character]: (endIndex: Int, penalty: PValue)] {
         let count = rightIndexRange.endIndex - left
         debug("getRangesWithTypos", left, rightIndexRange, count)
         let nodes = (0..<count).map {(i: Int) in
@@ -35,7 +35,7 @@ extension ComposingText {
 
         let maxPenalty: PValue = 3.5 * 3
         // Performance Tuning Note：直接Dictionaryを作るのではなく、一度Arrayを作ってから最後にDictionaryに変換する方が、高速である
-        var stringToInfo: [(String, (endIndex: Int, penalty: PValue))] = []
+        var stringToInfo: [([Character], (endIndex: Int, penalty: PValue))] = []
 
         // 深さ優先で列挙する
         var stack: [(convertTargetElements: [ConvertTargetElement], lastElement: InputElement, count: Int, penalty: PValue)] = nodes[0].compactMap { typoCandidate in
@@ -53,7 +53,7 @@ extension ComposingText {
         }
         while let (convertTargetElements, lastElement, count, penalty) = stack.popLast() {
             if rightIndexRange.contains(count + left - 1) {
-                if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: lastElement, of: self.input, to: count + left, convertTargetElements: convertTargetElements)?.toKatakana() {
+                if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: lastElement, of: self.input, to: count + left, convertTargetElements: convertTargetElements)?.map({$0.toKatakana()}) {
                     stringToInfo.append((convertTarget, (count + left - 1, penalty)))
                 }
             }
@@ -96,7 +96,7 @@ extension ComposingText {
         return Dictionary(stringToInfo, uniquingKeysWith: {$0.penalty < $1.penalty ? $1 : $0})
     }
 
-    func getRangeWithTypos(_ left: Int, _ right: Int) -> [String: PValue] {
+    func getRangeWithTypos(_ left: Int, _ right: Int) -> [[Character]: PValue] {
         // 各iから始まる候補を列挙する
         // 例えばinput = [d(あ), r(s), r(i), r(t), r(s), d(は), d(は), d(れ)]の場合
         // nodes =      [[d(あ)], [r(s)], [r(i)], [r(t), [r(t), r(a)]], [r(s)], [d(は), d(ば), d(ぱ)], [d(れ)]]
@@ -129,11 +129,11 @@ extension ComposingText {
             return nil
         }
 
-        var stringToPenalty: [(String, PValue)] = []
+        var stringToPenalty: [([Character], PValue)] = []
 
         while let (convertTargetElements, lastElement, count, penalty) = stack.popLast() {
             if count + left - 1 == right {
-                if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: lastElement, of: self.input, to: count + left, convertTargetElements: convertTargetElements)?.toKatakana() {
+                if let convertTarget = ComposingText.getConvertTargetIfRightSideIsValid(lastElement: lastElement, of: self.input, to: count + left, convertTargetElements: convertTargetElements)?.map({$0.toKatakana()}) {
                     stringToPenalty.append((convertTarget, penalty))
                 }
                 continue
