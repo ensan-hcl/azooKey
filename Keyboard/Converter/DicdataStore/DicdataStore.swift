@@ -239,7 +239,7 @@ final class DicdataStore {
 
         for i in toIndexLeft ..< toIndexRight {
             do {
-                let result = self.getWiseDicdata(convertTarget: segments[i - fromIndex], allowRomanLetter: i + 1 == toIndexRight, inputData: inputData, inputRange: fromIndex ..< i)
+                let result = self.getWiseDicdata(convertTarget: segments[i - fromIndex], inputData: inputData, inputRange: fromIndex ..< i + 1)
                 for item in result {
                     stringToInfo[Array(item.ruby)] = (i, 0)
                 }
@@ -332,10 +332,8 @@ final class DicdataStore {
             dicdata.append(contentsOf: result)
         }
         dicdata.append(contentsOf: strings.flatMap {self.learningManager.temporaryPerfectMatch(charIDs: $0.charIDs)})
-        dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, allowRomanLetter: toIndex == inputData.input.count - 1, inputData: inputData, inputRange: fromIndex ..< toIndex + 1))
+        dicdata.append(contentsOf: self.getWiseDicdata(convertTarget: segment, inputData: inputData, inputRange: fromIndex ..< toIndex + 1))
         dicdata.append(contentsOf: self.getMatchOSUserDict(segment))
-
-        debug("getLOUDSData", "\(fromIndex) ..< \(toIndex + 1)", dicdata.contains {$0.word == "使っ"})
 
         if fromIndex == .zero {
             let result: [LatticeNode] = dicdata.map {
@@ -438,7 +436,7 @@ final class DicdataStore {
     ///     - convertTarget: カタカナ変換済みの文字列
     /// - note
     ///     - 入力全体をカタカナとかひらがなに変換するやつは、Converter側でやっているので注意。
-    private func getWiseDicdata(convertTarget: String, allowRomanLetter: Bool, inputData: ComposingText, inputRange: Range<Int>) -> [DicdataElement] {
+    private func getWiseDicdata(convertTarget: String, inputData: ComposingText, inputRange: Range<Int>) -> [DicdataElement] {
         var result: [DicdataElement] = []
         result.append(contentsOf: self.getJapaneseNumberDicdata(head: convertTarget))
         if inputData.input[..<inputRange.startIndex].last?.character.isNumber != true && inputData.input[inputRange.endIndex...].first?.character.isNumber != true, let number = Float(convertTarget) {
@@ -451,12 +449,12 @@ final class DicdataStore {
             }
         }
 
-        // headを英単語として候補に追加する
+        // convertTargetを英単語として候補に追加する
         if requestOptions.keyboardLanguage == .en_US && convertTarget.onlyRomanAlphabet {
             result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.英単語.mid, value: -14))
         }
-        // 入力を全てひらがな、カタカナに変換したものを候補に追加する
-        // ローマ字変換の場合、先頭を単体でひらがな・カタカナ化した候補も追加
+
+        // ローマ字入力の場合、単体でひらがな・カタカナ化した候補も追加
         if requestOptions.keyboardLanguage != .en_US && inputData.input[inputRange].allSatisfy({$0.inputStyle == .roman2kana}) {
             if let katakana = Roman2Kana.katakanaChanges[convertTarget], let hiragana = Roman2Kana.hiraganaChanges[Array(convertTarget)] {
                 result.append(DicdataElement(word: String(hiragana), ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
@@ -464,13 +462,15 @@ final class DicdataStore {
             }
         }
 
-        if convertTarget.count == 1, allowRomanLetter || !convertTarget.onlyRomanAlphabet {
-            let hira = convertTarget.toKatakana()
-            if convertTarget == hira {
-                result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
+        // 入力を全てひらがな、カタカナに変換したものを候補に追加する
+        if convertTarget.count == 1 {
+            let katakana = convertTarget.toKatakana()
+            let hiragana = convertTarget.toHiragana()
+            if convertTarget == katakana {
+                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
             } else {
-                result.append(DicdataElement(word: hira, ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
-                result.append(DicdataElement(ruby: convertTarget, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
+                result.append(DicdataElement(word: hiragana, ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -13))
+                result.append(DicdataElement(ruby: katakana, cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -14))
             }
         }
 

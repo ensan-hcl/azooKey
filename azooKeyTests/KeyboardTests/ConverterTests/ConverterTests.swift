@@ -134,14 +134,29 @@ final class ConverterTests: XCTestCase {
                 ("つかっている", "使っている"),
                 ("しんだどうぶつ", "死んだ動物"),
                 ("けいさん", "計算"),
+                ("azooKeyのへんかんのうりょく。", "azooKeyの変換能力。"),
+                ("じどうAIそうじゅう。", "自動AI操縦。"),
             ]
 
+            // full input
             for (input, expect) in cases {
                 let converter = KanaKanjiConverter()
                 var c = ComposingText()
                 sequentialInput(&c, sequence: input, inputStyle: .direct)
                 let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
                 XCTAssertEqual(results.mainResults.first?.text, expect)
+            }
+            // gradual input
+            for (input, expect) in cases {
+                let converter = KanaKanjiConverter()
+                var c = ComposingText()
+                for char in input {
+                    c.insertAtCursorPosition(String(char), inputStyle: .direct)
+                    let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+                    if c.input.count == input.count {
+                        XCTAssertEqual(results.mainResults.first?.text, expect)
+                    }
+                }
             }
         }
         // ローマ字入力
@@ -152,12 +167,26 @@ final class ConverterTests: XCTestCase {
                 ("keisann", "計算"),
             ]
 
+            // full input
             for (input, expect) in cases {
                 let converter = KanaKanjiConverter()
                 var c = ComposingText()
                 sequentialInput(&c, sequence: input, inputStyle: .roman2kana)
                 let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
                 XCTAssertEqual(results.mainResults.first?.text, expect)
+            }
+
+            // gradual input
+            for (input, expect) in cases {
+                let converter = KanaKanjiConverter()
+                var c = ComposingText()
+                for char in input {
+                    c.insertAtCursorPosition(String(char), inputStyle: .roman2kana)
+                    let results = converter.requestCandidates(c, options: ConvertRequestOptions(N_best: 5, requireJapanesePrediction: true))
+                    if c.input.count == input.count {
+                        XCTAssertEqual(results.mainResults.first?.text, expect)
+                    }
+                }
             }
         }
     }
