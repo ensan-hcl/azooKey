@@ -12,39 +12,46 @@
 /// のようになる。`
 /// カーソルのポジションもこのクラスが管理する。
 /// 設計方針として、inputStyleに関わる実装の違いは全てアップデート方法の違いとして吸収し、`input` / `delete` / `moveCursor` / `complete`時の違いとしては露出させないようにすることを目指した。
-struct ComposingText {
+public struct ComposingText {
+    public init(convertTargetCursorPosition: Int = 0, input: [ComposingText.InputElement] = [], convertTarget: String = "") {
+        self.convertTargetCursorPosition = convertTargetCursorPosition
+        self.input = input
+        self.convertTarget = convertTarget
+    }
+
     /// カーソルの位置。0は左端（左から右に書く言語の場合）に対応する。
-    private(set) var convertTargetCursorPosition: Int = 0
+    public private(set) var convertTargetCursorPosition: Int = 0
     /// ユーザの入力シーケンス。historyとは異なり、変換対象文字列に対応するものを保持する。また、deleteやmove cursor等の操作履歴は保持しない。
-    private(set) var input: [InputElement] = []
+    public private(set) var input: [InputElement] = []
     /// 変換対象文字列。
-    private(set) var convertTarget: String = ""
+    public private(set) var convertTarget: String = ""
+
 
     /// ユーザ入力の単位
-    struct InputElement {
+    public struct InputElement {
         /// 入力された文字
-        var character: Character
+        public var character: Character
         /// そのときの入力方式(ローマ字入力 / ダイレクト入力)
-        var inputStyle: InputStyle
+        public var inputStyle: InputStyle
     }
 
     /// 変換対象文字列が存在するか否か
-    var isEmpty: Bool {
+    public var isEmpty: Bool {
         self.convertTarget.isEmpty
     }
 
     /// カーソルが右端に存在するか
-    var isAtEndIndex: Bool {
+    public var isAtEndIndex: Bool {
         self.convertTarget.count == self.convertTargetCursorPosition
     }
 
     /// カーソルが左端に存在するか
-    var isAtStartIndex: Bool {
+    public var isAtStartIndex: Bool {
         0 == self.convertTargetCursorPosition
     }
 
     /// カーソルより前の変換対象
-    var convertTargetBeforeCursor: some StringProtocol {
+    public var convertTargetBeforeCursor: some StringProtocol {
         self.convertTarget.prefix(self.convertTargetCursorPosition)
     }
 
@@ -229,7 +236,7 @@ struct ComposingText {
     }
 
     /// 現在のカーソル位置に文字を追加する関数
-    mutating func insertAtCursorPosition(_ string: String, inputStyle: InputStyle) {
+    public mutating func insertAtCursorPosition(_ string: String, inputStyle: InputStyle) {
         if string.isEmpty {
             return
         }
@@ -250,7 +257,7 @@ struct ComposingText {
     }
 
     /// 現在のカーソル位置から（左から右に書く言語では）右側の文字を削除する関数
-    mutating func deleteForwardFromCursorPosition(count: Int) {
+    public mutating func deleteForwardFromCursorPosition(count: Int) {
         let count = min(convertTarget.count - convertTargetCursorPosition, count)
         if count == 0 {
             return
@@ -261,7 +268,7 @@ struct ComposingText {
 
     /// 現在のカーソル位置から（左から右に書く言語では）左側の文字を削除する関数
     /// エッジケースとして、`sha: しゃ|`の状態で1文字消すような場合がある。この場合、`[s, h, a]`を`[し, ゃ]`に変換した上で「ゃ」を削除する。
-    mutating func deleteBackwardFromCursorPosition(count: Int) {
+    public mutating func deleteBackwardFromCursorPosition(count: Int) {
         let count = min(convertTargetCursorPosition, count)
 
         if count == 0 {
@@ -322,7 +329,7 @@ struct ComposingText {
     ///   - count: `convertTarget`において対応する文字数
     /// - returns: 実際に動かした文字数
     /// - note: 動かすことのできない文字数を指定した場合、返り値が変化する。
-    mutating func moveCursorFromCursorPosition(count: Int) -> Int {
+    public mutating func moveCursorFromCursorPosition(count: Int) -> Int {
         let count = max(min(self.convertTarget.count - self.convertTargetCursorPosition, count), -self.convertTargetCursorPosition)
         self.convertTargetCursorPosition += count
         return count
@@ -331,7 +338,7 @@ struct ComposingText {
     /// 文頭の方を確定させる関数
     ///  - parameters:
     ///   - correspondingCount: `input`において対応する文字数
-    mutating func prefixComplete(correspondingCount: Int) {
+    public mutating func prefixComplete(correspondingCount: Int) {
         let correspondingCount = min(correspondingCount, self.input.count)
         self.input.removeFirst(correspondingCount)
         // convetTargetを更新する
@@ -347,7 +354,7 @@ struct ComposingText {
     }
 
     /// 現在のカーソル位置までの文字でComposingTextを作成し、返す
-    func prefixToCursorPosition() -> ComposingText {
+    public func prefixToCursorPosition() -> ComposingText {
         var text = self
         let index = text.forceGetInputCursorPosition(target: text.convertTarget.prefix(text.convertTargetCursorPosition))
         text.input = Array(text.input.prefix(index))
@@ -355,7 +362,7 @@ struct ComposingText {
         return text
     }
 
-    mutating func stopComposition() {
+    public mutating func stopComposition() {
         self.input = []
         self.convertTarget = ""
         self.convertTargetCursorPosition = 0
@@ -585,7 +592,7 @@ extension ComposingText {
 
 #if DEBUG
 extension ComposingText.InputElement: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         switch self.inputStyle {
         case .direct:
             return "direct(\(character))"
@@ -601,7 +608,7 @@ extension ComposingText.ConvertTargetElement: CustomDebugStringConvertible {
     }
 }
 extension InputStyle: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         "." + self.rawValue
     }
 }

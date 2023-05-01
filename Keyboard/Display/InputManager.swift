@@ -6,6 +6,7 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+import KanaKanjiConverterModule
 import OrderedCollections
 import UIKit
 
@@ -26,7 +27,7 @@ import UIKit
     private var keyboardLanguage: KeyboardLanguage = .ja_JP
     func setKeyboardLanguage(_ value: KeyboardLanguage) {
         self.keyboardLanguage = value
-        self.kanaKanjiConverter.setKeyboardLanguage(value)
+        self.kanaKanjiConverter.setKeyboardLanguage(value.keyboardLanguageForKanaKanjiConverter)
     }
 
     /// システム側でproxyを操作した結果、`textDidChange`などがよばれてしまう場合に、その呼び出しをスキップするため、フラグを事前に立てる
@@ -256,7 +257,7 @@ import UIKit
             self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
         }
         self.stopComposition()
-        return actions
+        return actions.map(\.action)
     }
 
     func insertMainDisplayText(_ text: String) {
@@ -295,7 +296,7 @@ import UIKit
             self.displayedTextManager.insertText(text)
             return
         }
-        self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
+        self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle.inputStyleForKanaKanjiConverter)
         debug("Input Manager input:", composingText)
         if requireSetResult {
             // 変換を実施する
@@ -733,6 +734,8 @@ import UIKit
         self.stopComposition()
     }
 
+    private static let memoryDirectoryURL = (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? sharedContainerURL
+    private static let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
     /// 変換リクエストを送信し、結果をDisplayed Textにも反映する関数
     func setResult() {
         let inputData = composingText.prefixToCursorPosition()
@@ -759,15 +762,19 @@ import UIKit
             N_best: 10,
             requireJapanesePrediction: requireJapanesePrediction,
             requireEnglishPrediction: requireEnglishPrediction,
-            keyboardLanguage: keyboardLanguage,
+            keyboardLanguage: keyboardLanguage.keyboardLanguageForKanaKanjiConverter,
             // KeyboardSettingsを注入
             typographyLetterCandidate: typographyLetterCandidate,
             unicodeCandidate: unicodeCandidate,
             englishCandidateInRoman2KanaInput: englishCandidateInRoman2KanaInput,
             fullWidthRomanCandidate: fullWidthRomanCandidate,
             halfWidthKanaCandidate: halfWidthKanaCandidate,
-            learningType: learningType,
-            maxMemoryCount: 65536
+            learningType: learningType.learningTypeForKanaKanjiConverter,
+            maxMemoryCount: 65536,
+            shouldResetMemory: MemoryResetCondition.shouldReset(),
+            memoryDirectoryURL: Self.memoryDirectoryURL,
+            sharedContainerURL: Self.sharedContainerURL,
+            metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")
         )
         debug("InputManager.setResult: options", options)
 
@@ -798,3 +805,62 @@ import UIKit
         }
     }
 }
+
+extension Candidate: ResultViewItemData {
+    #if DEBUG
+    func getDebugInformation() -> String {
+        self.data.debugDescription
+    }
+    #endif
+}
+
+extension KeyboardLanguage {
+    var keyboardLanguageForKanaKanjiConverter: KanaKanjiConverterModule.KeyboardLanguage {
+        switch self {
+        case .en_US:
+            return .en_US
+        case .ja_JP:
+            return .ja_JP
+        case .el_GR:
+            return .el_GR
+        case .none:
+            return .none
+        }
+    }
+}
+
+extension LearningType {
+    var learningTypeForKanaKanjiConverter: KanaKanjiConverterModule.LearningType {
+        switch self {
+        case .inputAndOutput:
+            return .inputAndOutput
+        case .onlyOutput:
+            return .onlyOutput
+        case .nothing:
+            return .nothing
+        }
+    }
+}
+
+extension InputStyle {
+    var inputStyleForKanaKanjiConverter: KanaKanjiConverterModule.InputStyle {
+        switch self {
+        case .direct:
+            return .direct
+        case .roman2kana:
+            return .roman2kana
+        }
+    }
+}
+
+extension CompleteAction {
+    var action: ActionType {
+        switch self {
+        case .moveCursor(let value):
+            return .moveCursor(value)
+        }
+    }
+}
+
+extension ReplacementCandidate: ResultViewItemData {}
+extension TextReplacer.SearchResultItem: ResultViewItemData {}

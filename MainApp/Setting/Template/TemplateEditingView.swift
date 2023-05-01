@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import KanaKanjiConverterModule
 
 struct TemplateEditingView: CancelableEditor {
     enum Appearance {

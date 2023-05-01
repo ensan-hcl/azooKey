@@ -8,11 +8,11 @@
 
 import Foundation
 
-struct DicdataElement: Equatable, Hashable {
+public struct DicdataElement: Equatable, Hashable {
     static let BOSData = Self(word: "", ruby: "", cid: CIDData.BOS.cid, mid: MIDData.BOS.mid, value: 0, adjust: 0)
     static let EOSData = Self(word: "", ruby: "", cid: CIDData.EOS.cid, mid: MIDData.EOS.mid, value: 0, adjust: 0)
 
-    init(word: String, ruby: String, lcid: Int, rcid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
+    public init(word: String, ruby: String, lcid: Int, rcid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.word = word
         self.ruby = ruby
         self.lcid = lcid
@@ -22,7 +22,7 @@ struct DicdataElement: Equatable, Hashable {
         self.adjust = adjust
     }
 
-    init(word: String, ruby: String, cid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
+    public init(word: String, ruby: String, cid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.word = word
         self.ruby = ruby
         self.lcid = cid
@@ -32,7 +32,7 @@ struct DicdataElement: Equatable, Hashable {
         self.adjust = adjust
     }
 
-    init(ruby: String, cid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
+    public init(ruby: String, cid: Int, mid: Int, value: PValue, adjust: PValue = .zero) {
         self.word = ruby
         self.ruby = ruby
         self.lcid = cid
@@ -42,27 +42,27 @@ struct DicdataElement: Equatable, Hashable {
         self.adjust = adjust
     }
 
-    func adjustedData(_ adjustValue: PValue) -> Self {
+    public func adjustedData(_ adjustValue: PValue) -> Self {
         .init(word: word, ruby: ruby, lcid: lcid, rcid: rcid, mid: mid, value: baseValue, adjust: adjustValue + self.adjust)
     }
 
-    var word: String
-    var ruby: String
-    var lcid: Int
-    var rcid: Int
-    var mid: Int
+    public var word: String
+    public var ruby: String
+    public var lcid: Int
+    public var rcid: Int
+    public var mid: Int
     var baseValue: PValue
-    var adjust: PValue
+    public var adjust: PValue
 
-    func value() -> PValue {
+    public func value() -> PValue {
         min(.zero, self.baseValue + self.adjust)
     }
 
-    static func == (lhs: Self, rhs: Self) -> Bool {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.word == rhs.word && lhs.ruby == rhs.ruby && lhs.lcid == rhs.lcid && lhs.mid == rhs.mid && lhs.rcid == rhs.rcid
     }
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(word)
         hasher.combine(ruby)
         hasher.combine(lcid)
@@ -71,7 +71,7 @@ struct DicdataElement: Equatable, Hashable {
 }
 
 extension DicdataElement: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         "(ruby: \(self.ruby), word: \(self.word), adjust: \(self.adjust), value: \(self.value()))"
     }
 }

@@ -10,7 +10,9 @@ import Foundation
 import UIKit
 
 /// かな漢字変換の管理を受け持つクラス
-final class KanaKanjiConverter {
+public final class KanaKanjiConverter {
+    public init() {}
+
     private var converter = Kana2Kanji()
     private var checker = UITextChecker()
     private var checkerInitialized: [KeyboardLanguage: Bool] = [.none: true, .ja_JP: true]
@@ -22,14 +24,14 @@ final class KanaKanjiConverter {
     private var lastData: DicdataElement?
 
     /// リセットする関数
-    func stopComposition() {
+    public func stopComposition() {
         self.previousInputData = nil
         self.nodes = []
         self.completedData = nil
         self.lastData = nil
     }
 
-    func setKeyboardLanguage(_ language: KeyboardLanguage) {
+    public func setKeyboardLanguage(_ language: KeyboardLanguage) {
         if !checkerInitialized[language, default: false] {
             switch language {
             case .en_US:
@@ -51,20 +53,20 @@ final class KanaKanjiConverter {
     /// 上流の関数から`dicdataStore`で行うべき操作を伝播する関数。
     /// - Parameters:
     ///   - data: 行うべき操作。
-    func sendToDicdataStore(_ data: DicdataStore.Notification) {
+    public func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.converter.dicdataStore.sendToDicdataStore(data)
     }
     /// 確定操作後、内部状態のキャッシュを変更する関数。
     /// - Parameters:
     ///   - candidate: 確定された候補。
-    func setCompletedData(_ candidate: Candidate) {
+    public func setCompletedData(_ candidate: Candidate) {
         self.completedData = candidate
     }
 
     /// 確定操作後、学習メモリをアップデートする関数。
     /// - Parameters:
     ///   - candidate: 確定された候補。
-    func updateLearningData(_ candidate: Candidate) {
+    public func updateLearningData(_ candidate: Candidate) {
         self.converter.dicdataStore.updateLearningData(candidate, with: self.lastData)
         self.lastData = candidate.data.last
     }
@@ -88,7 +90,7 @@ final class KanaKanjiConverter {
         if options.unicodeCandidate {
             result.append(contentsOf: self.unicodeCandidates(inputData))
         }
-        result.append(contentsOf: self.toVersionCandidate(inputData))
+        result.append(contentsOf: self.toVersionCandidate(inputData, options: options))
         return result
     }
 
@@ -548,7 +550,7 @@ final class KanaKanjiConverter {
         }
     }
 
-    func getApporopriateActions(_ candidate: Candidate) -> [ActionType] {
+    public func getApporopriateActions(_ candidate: Candidate) -> [CompleteAction] {
         if ["[]", "()", "｛｝", "〈〉", "〔〕", "（）", "「」", "『』", "【】", "{}", "<>", "《》", "\"\"", "\'\'", "””"].contains(candidate.text) {
             return [.moveCursor(-1)]
         }
@@ -565,7 +567,7 @@ final class KanaKanjiConverter {
     ///   - options: リクエストにかかるパラメータ。
     /// - Returns:
     ///   重複のない変換候補。
-    func requestCandidates(_ inputData: ComposingText, options: ConvertRequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
+    public func requestCandidates(_ inputData: ComposingText, options: ConvertRequestOptions) -> (mainResults: [Candidate], firstClauseResults: [Candidate]) {
         debug("requestCandidates 入力は", inputData)
         // 変換対象が無の場合
         if inputData.convertTarget.isEmpty {

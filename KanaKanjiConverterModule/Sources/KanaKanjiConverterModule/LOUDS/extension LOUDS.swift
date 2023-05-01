@@ -9,11 +9,6 @@
 import Foundation
 
 extension LOUDS {
-    private static let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-    private static var bundleURL: URL {
-        DicdataStore.bundleURL
-    }
-
     private static func loadLOUDSBinary(from url: URL) -> [UInt64]? {
         do {
             let binaryData = try Data(contentsOf: url, options: [.uncached]) // 2度読み込むことはないのでキャッシュ不要
@@ -25,41 +20,41 @@ extension LOUDS {
         }
     }
 
-    private static func getLOUDSURL(_ identifier: String) -> (chars: URL, louds: URL) {
+    private static func getLOUDSURL(_ identifier: String, option: ConvertRequestOptions) -> (chars: URL, louds: URL) {
 
         if identifier == "user"{
             return (
-                containerURL.appendingPathComponent("user.loudschars2", isDirectory: false),
-                containerURL.appendingPathComponent("user.louds", isDirectory: false)
+                option.sharedContainerURL.appendingPathComponent("user.loudschars2", isDirectory: false),
+                option.sharedContainerURL.appendingPathComponent("user.louds", isDirectory: false)
             )
         }
         if identifier == "memory"{
             return (
-                LongTermLearningMemory.directoryURL.appendingPathComponent("memory.loudschars2", isDirectory: false),
-                LongTermLearningMemory.directoryURL.appendingPathComponent("memory.louds", isDirectory: false)
+                option.memoryDirectoryURL.appendingPathComponent("memory.loudschars2", isDirectory: false),
+                option.memoryDirectoryURL.appendingPathComponent("memory.louds", isDirectory: false)
             )
         }
         return (
-            bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudschars2", isDirectory: false),
-            bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).louds", isDirectory: false)
+            option.bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudschars2", isDirectory: false),
+            option.bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).louds", isDirectory: false)
         )
     }
 
-    private static func getLoudstxt3URL(_ identifier: String) -> URL {
+    private static func getLoudstxt3URL(_ identifier: String, option: ConvertRequestOptions) -> URL {
         if identifier.hasPrefix("user") {
-            return containerURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
+            return option.sharedContainerURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
         }
         if identifier.hasPrefix("memory") {
-            return LongTermLearningMemory.directoryURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
+            return option.memoryDirectoryURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
         }
-        return bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudstxt3", isDirectory: false)
+        return option.bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudstxt3", isDirectory: false)
     }
 
     /// LOUDSをファイルから読み込む関数
     /// - Parameter identifier: ファイル名
     /// - Returns: 存在すればLOUDSデータを返し、存在しなければ`nil`を返す。
-    internal static func load(_ identifier: String) -> LOUDS? {
-        let (charsURL, loudsURL) = getLOUDSURL(identifier)
+    internal static func load(_ identifier: String, option: ConvertRequestOptions) -> LOUDS? {
+        let (charsURL, loudsURL) = getLOUDSURL(identifier, option: option)
         let nodeIndex2ID: [UInt8]
         do {
             nodeIndex2ID = try Array(Data(contentsOf: charsURL, options: [.uncached]))   // 2度読み込むことはないのでキャッシュ不要
@@ -108,10 +103,10 @@ extension LOUDS {
 
     }
 
-    internal static func getDataForLoudstxt3(_ identifier: String, indices: [Int]) -> [DicdataElement] {
+    internal static func getDataForLoudstxt3(_ identifier: String, indices: [Int], option: ConvertRequestOptions) -> [DicdataElement] {
         let binary: Data
         do {
-            let url = getLoudstxt3URL(identifier)
+            let url = getLoudstxt3URL(identifier, option: option)
             binary = try Data(contentsOf: url)
         } catch {
             debug("getDataForLoudstxt3: \(error)")

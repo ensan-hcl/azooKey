@@ -6,6 +6,7 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+import KanaKanjiConverterModule
 import UIKit
 
 /// UI側の入力中のテキストの更新を受け持つクラス

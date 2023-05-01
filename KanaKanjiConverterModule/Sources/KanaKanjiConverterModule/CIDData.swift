@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CIDData {
+public enum CIDData {
     static var totalCount: Int {
         1319
     }
@@ -22,7 +22,7 @@ enum CIDData {
     case 地名一般
     case 数
     case EOS
-    var cid: Int {
+    public var cid: Int {
         switch self {
         case .BOS: return 0
         case .記号: return 5

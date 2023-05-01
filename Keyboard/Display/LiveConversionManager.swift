@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KanaKanjiConverterModule
 
 // ライブ変換を管理するためのクラス
 final class LiveConversionManager {

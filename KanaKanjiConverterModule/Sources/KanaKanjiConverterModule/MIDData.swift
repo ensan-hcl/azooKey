@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum MIDData {
+public enum MIDData {
     static var totalCount: Int {
         503
     }
@@ -20,7 +20,7 @@ enum MIDData {
     case 小さい数字
     case 年
     case 絵文字
-    var mid: Int {
+    public var mid: Int {
         switch self {
         case .BOS: return 500
         case .EOS: return 500

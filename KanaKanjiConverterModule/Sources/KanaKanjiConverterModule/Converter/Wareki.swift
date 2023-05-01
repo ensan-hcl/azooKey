@@ -13,9 +13,9 @@ extension KanaKanjiConverter {
     /// Mozcは「バージョン」で言語モデルのバージョンが表示されるらしいので、azooKeyもこれをつけて「azooKey 1.7.2」とか表示させよう。
     /// - parameters:
     ///  - inputData: 入力情報。
-    func toVersionCandidate(_ inputData: ComposingText) -> [Candidate] {
-        if inputData.convertTarget.toKatakana() == "バージョン", let version = SharedStore.currentAppVersion?.description {
-            let versionString = "azooKey Version \(version)"
+    func toVersionCandidate(_ inputData: ComposingText, options: ConvertRequestOptions) -> [Candidate] {
+        if inputData.convertTarget.toKatakana() == "バージョン" {
+            let versionString = "azooKey Version \(options.metadata.appVersionString)"
             return [Candidate(
                 text: versionString,
                 value: -30,

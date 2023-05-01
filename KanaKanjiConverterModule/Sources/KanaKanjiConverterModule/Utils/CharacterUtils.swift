@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CharacterUtils {
+public enum CharacterUtils {
     /// 小書きのかなカナ集合
     private static let kogakiKana: Set<Character> = [
         "ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "ゕ", "ゖ", "っ", "ゃ", "ゅ", "ょ", "ゎ",
@@ -233,7 +233,7 @@ enum CharacterUtils {
     }
 
     /// 濁点、小書き、半濁点などを相互に変換する関数。
-    static func requestChange(_ character: Character) -> String {
+    public static func requestChange(_ character: Character) -> String {
         if character.isLowercase {
             return character.uppercased()
         }

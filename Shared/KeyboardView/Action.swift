@@ -9,6 +9,7 @@
 import CustardExpressionEvaluator
 import CustardKit
 import Foundation
+import enum KanaKanjiConverterModule.ConverterBehaviorSemantics
 
 enum BoolOperation: Equatable {
     case on, off, toggle

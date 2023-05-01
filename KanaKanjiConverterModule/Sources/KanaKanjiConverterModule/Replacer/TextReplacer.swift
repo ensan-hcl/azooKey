@@ -12,12 +12,12 @@ import Foundation
 /// 例えば、「tha|nk」と入力があるとき、「think」や「thanks」などを候補として表示することが考えられる。
 ///
 /// 現在の機能は「絵文字」のバリエーションを表示することに限定する。
-struct TextReplacer {
+public struct TextReplacer {
     // TODO: prefix trieなどの方が便利だと思う
     private var emojiSearchDict: [String: [String]] = [:]
     private var emojiGroups: [EmojiGroup] = []
 
-    init() {
+    public init() {
         let fileURL: URL
         // 読み込むファイルはバージョンごとに変更する必要がある
         if #available(iOS 16.4, *) {
@@ -59,10 +59,10 @@ struct TextReplacer {
         }
     }
 
-    func getSearchResult(query: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) -> [any ResultViewItemData] {
+    public func getSearchResult(query: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) -> [SearchResultItem] {
         // 正規化する
         let query = query.lowercased().toHiragana()
-        var results: [any ResultViewItemData] = []
+        var results: [SearchResultItem] = []
         if target.contains(.emoji) {
             if let candidates = self.emojiSearchDict[query] {
                 for candidate in candidates {
@@ -73,18 +73,18 @@ struct TextReplacer {
         return results
     }
 
-    struct SearchResultItem: ResultViewItemData {
-        var query: String
-        var text: String
-        var inputable: Bool {
+    public struct SearchResultItem {
+        public var query: String
+        public var text: String
+        public var inputable: Bool {
             true
         }
-        func getDebugInformation() -> String {
+        public func getDebugInformation() -> String {
             "SearchResultItem(\(text))"
         }
     }
 
-    func getReplacementCandidate(left: String, center: String, right: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) -> [ReplacementCandidate] {
+    public func getReplacementCandidate(left: String, center: String, right: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) -> [ReplacementCandidate] {
         var results: [ReplacementCandidate] = []
         if target.contains(.emoji) {
             if center.count == 1, let item = self.emojiGroups.first(where: {$0.all.contains(center)}) {
@@ -112,20 +112,20 @@ struct TextReplacer {
     }
 }
 
-struct ReplacementCandidate: ResultViewItemData {
-    var target: String
-    var replace: String
-    var base: String
-    var targetType: ConverterBehaviorSemantics.ReplacementTarget
+public struct ReplacementCandidate {
+    public var target: String
+    public var replace: String
+    public var base: String
+    public var targetType: ConverterBehaviorSemantics.ReplacementTarget
 
-    var text: String {
+    public var text: String {
         replace
     }
-    var inputable: Bool {
+    public var inputable: Bool {
         true
     }
 
-    func getDebugInformation() -> String {
+    public func getDebugInformation() -> String {
         "ReplacementCandidate(\(target)->\(replace))"
     }
 }

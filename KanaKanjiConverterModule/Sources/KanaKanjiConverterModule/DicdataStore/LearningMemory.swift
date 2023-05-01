@@ -26,32 +26,31 @@ private struct MetadataElement: CustomDebugStringConvertible {
 
 /// 長期記憶用の構造体
 struct LongTermLearningMemory {
-    static let directoryURL = (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-    private static var pauseFileURL: URL {
+    private static func pauseFileURL(directoryURL: URL) -> URL {
         directoryURL.appendingPathComponent(".pause", isDirectory: false)
     }
-    private static func loudsFileURL(asTemporaryFile: Bool) -> URL {
+    private static func loudsFileURL(asTemporaryFile: Bool, directoryURL: URL) -> URL {
         if asTemporaryFile {
             return directoryURL.appendingPathComponent("memory.louds.2", isDirectory: false)
         } else {
             return directoryURL.appendingPathComponent("memory.louds", isDirectory: false)
         }
     }
-    private static func metadataFileURL(asTemporaryFile: Bool) -> URL {
+    private static func metadataFileURL(asTemporaryFile: Bool, directoryURL: URL) -> URL {
         if asTemporaryFile {
             return directoryURL.appendingPathComponent("memory.memorymetadata.2", isDirectory: false)
         } else {
             return directoryURL.appendingPathComponent("memory.memorymetadata", isDirectory: false)
         }
     }
-    private static func loudsCharsFileURL(asTemporaryFile: Bool) -> URL {
+    private static func loudsCharsFileURL(asTemporaryFile: Bool, directoryURL: URL) -> URL {
         if asTemporaryFile {
             return directoryURL.appendingPathComponent("memory.loudschars2.2", isDirectory: false)
         } else {
             return directoryURL.appendingPathComponent("memory.loudschars2", isDirectory: false)
         }
     }
-    private static func loudsTxt3FileURL(_ value: String, asTemporaryFile: Bool) -> URL {
+    private static func loudsTxt3FileURL(_ value: String, asTemporaryFile: Bool, directoryURL: URL) -> URL {
         if asTemporaryFile {
             return directoryURL.appendingPathComponent("memory\(value).loudstxt3.2", isDirectory: false)
         } else {
@@ -76,8 +75,8 @@ struct LongTermLearningMemory {
 
     /// 学習が壊れた状態にあるか判定する関数
     ///  - note: 壊れている場合、一時的に学習をオフにすると良い。
-    static func memoryCollapsed() -> Bool {
-        fileExist(pauseFileURL)
+    static func memoryCollapsed(directoryURL: URL) -> Bool {
+        fileExist(pauseFileURL(directoryURL: directoryURL))
     }
 
     static var txtFileSplit: Int { 2048 }
@@ -170,7 +169,7 @@ struct LongTermLearningMemory {
     }
 
     /// 関連するファイルを全て削除する
-    static func reset() throws {
+    static func reset(directoryURL: URL) throws {
         // 全削除する
         let fileURLs = try FileManager.default.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil)
         for file in fileURLs {
@@ -196,11 +195,12 @@ struct LongTermLearningMemory {
     }
 
     /// 一時記憶と長期記憶の学習データをマージする
-    static func merge(tempTrie: TemporalLearningMemoryTrie, forgetTargets: [DicdataElement] = []) throws {
+    static func merge(tempTrie: TemporalLearningMemoryTrie, forgetTargets: [DicdataElement] = [], directoryURL: URL) throws {
         // MARK: `.pause`ファイルが存在する場合、`merge`を行う前に`.2`ファイルの復活を試み、失敗した場合は`merge`を諦める。
-        if fileExist(pauseFileURL) {
+        if fileExist(pauseFileURL(directoryURL: directoryURL)) {
             debug("LongTermLearningMemory merge collapsion detected, trying recovery...")
             try overwriteTempFiles(
+                directoryURL: directoryURL,
                 loudsFileTemp: nil,
                 loudsCharsFileTemp: nil,
                 metadataFileTemp: nil,
@@ -216,7 +216,7 @@ struct LongTermLearningMemory {
         // 構造:
         // dataCount(UInt32), count, data*count, count, data*count, ...
         // MARK: 読み出しは、`metadataFile`が存在しなかった場合（学習が一切ない場合）に失敗する。
-        let ltMetadata = (try? Data(contentsOf: metadataFileURL(asTemporaryFile: false))) ?? Data([.zero, .zero, .zero, .zero])
+        let ltMetadata = (try? Data(contentsOf: metadataFileURL(asTemporaryFile: false, directoryURL: directoryURL))) ?? Data([.zero, .zero, .zero, .zero])
         // 最初の4byteはentry countに対応する
         var metadataOffset = 0
         let entryCount = ltMetadata[metadataOffset ..< metadataOffset + 4].toArray(of: UInt32.self)[0]
@@ -229,7 +229,7 @@ struct LongTermLearningMemory {
             // loudstxt3の数
             let loudstxtData: Data
             do {
-                loudstxtData = try Data(contentsOf: loudsTxt3FileURL("\(loudstxtIndex)", asTemporaryFile: false))
+                loudstxtData = try Data(contentsOf: loudsTxt3FileURL("\(loudstxtIndex)", asTemporaryFile: false, directoryURL: directoryURL))
             } catch {
                 debug("LongTermLearningMemory merge failed to read \(loudstxtIndex)", error)
                 continue
@@ -293,7 +293,7 @@ struct LongTermLearningMemory {
             }
         }
         // newTrieのデータからLOUDSを作り書き出す
-        try self.update(trie: newTrie)
+        try self.update(trie: newTrie, directoryURL: directoryURL)
         debug("LongTermLearningMemory merge ⏰", Date().timeIntervalSince(startTime), newTrie.dicdata.count)
     }
 
@@ -336,10 +336,10 @@ struct LongTermLearningMemory {
     /// 例えば1のステップの実行中にエラーが生じた場合、次回キーボードを開いた際は単に更新前のファイルを読み込む。
     ///
     /// 3のステップの実行中にエラーが生じた場合、次回キーボードを開いた際は学習を停止状態にする。ついで閉じる際に再度ステップ3を実行することで、安全に全てのファイルを更新することができる。
-    static func update(trie: TemporalLearningMemoryTrie) throws {
+    static func update(trie: TemporalLearningMemoryTrie, directoryURL: URL) throws {
         // MARK: `.pause`の存在を確認し、存在していれば失敗させる
         // この場合、先に復活作業を実施すべきである
-        guard !fileExist(pauseFileURL) else {
+        guard !fileExist(pauseFileURL(directoryURL: directoryURL)) else {
             throw UpdateError.pauseFileExist
         }
 
@@ -363,18 +363,18 @@ struct LongTermLearningMemory {
         }
 
         let bytes = Self.BoolToUInt64(bits)
-        let loudsFileTemp = loudsFileURL(asTemporaryFile: true)
+        let loudsFileTemp = loudsFileURL(asTemporaryFile: true, directoryURL: directoryURL)
         do {
             let binary = Data(bytes: bytes, count: bytes.count * 8)
             try binary.write(to: loudsFileTemp)
         }
 
-        let loudsCharsFileTemp = loudsCharsFileURL(asTemporaryFile: true)
+        let loudsCharsFileTemp = loudsCharsFileURL(asTemporaryFile: true, directoryURL: directoryURL)
         do {
             let binary = Data(bytes: nodes2Characters, count: nodes2Characters.count)
             try binary.write(to: loudsCharsFileTemp)
         }
-        let metadataFileTemp = metadataFileURL(asTemporaryFile: true)
+        let metadataFileTemp = metadataFileURL(asTemporaryFile: true, directoryURL: directoryURL)
         do {
             var binary = Data()
             binary += Data(bytes: [UInt32(metadata.count)], count: 4) // エントリ数をUInt32でマップ
@@ -398,16 +398,17 @@ struct LongTermLearningMemory {
                 do {
                     let start = indices.startIndex / txtFileSplit
                     let binary = make_loudstxt3(lines: Array(dicdata[indices]))
-                    try binary.write(to: loudsTxt3FileURL("\(start)", asTemporaryFile: true), options: .atomic)
+                    try binary.write(to: loudsTxt3FileURL("\(start)", asTemporaryFile: true, directoryURL: directoryURL), options: .atomic)
                 }
             }
         }
 
         // MARK: `.pause`ファイルを書き出す
-        try Data().write(to: pauseFileURL)
+        try Data().write(to: pauseFileURL(directoryURL: directoryURL))
 
         // MARK: 各`.2`のファイルで元のファイルを上書きする
         try overwriteTempFiles(
+            directoryURL: directoryURL,
             loudsFileTemp: loudsFileTemp,
             loudsCharsFileTemp: loudsCharsFileTemp,
             metadataFileTemp: metadataFileTemp,
@@ -418,20 +419,20 @@ struct LongTermLearningMemory {
     }
 
     /// - note: 上書きが全て成功するまで、一時ファイルは削除してはいけない。安全のため、`.pause`を除きそもそも一時ファイルを一切削除しないようにする。
-    private static func overwriteTempFiles(loudsFileTemp: URL?, loudsCharsFileTemp: URL?, metadataFileTemp: URL?, loudsTxt3FileCount: Int?, removingRead2File: Bool) throws {
+    private static func overwriteTempFiles(directoryURL: URL, loudsFileTemp: URL?, loudsCharsFileTemp: URL?, metadataFileTemp: URL?, loudsTxt3FileCount: Int?, removingRead2File: Bool) throws {
         try overwrite(
-            from: loudsCharsFileTemp ?? loudsCharsFileURL(asTemporaryFile: true),
-            to: loudsCharsFileURL(asTemporaryFile: false)
+            from: loudsCharsFileTemp ?? loudsCharsFileURL(asTemporaryFile: true, directoryURL: directoryURL),
+            to: loudsCharsFileURL(asTemporaryFile: false, directoryURL: directoryURL)
         )
         try overwrite(
-            from: metadataFileTemp ?? metadataFileURL(asTemporaryFile: true),
-            to: metadataFileURL(asTemporaryFile: false)
+            from: metadataFileTemp ?? metadataFileURL(asTemporaryFile: true, directoryURL: directoryURL),
+            to: metadataFileURL(asTemporaryFile: false, directoryURL: directoryURL)
         )
         if let loudsTxt3FileCount {
             for i in  0 ..< loudsTxt3FileCount {
                 try overwrite(
-                    from: loudsTxt3FileURL("\(i)", asTemporaryFile: true),
-                    to: loudsTxt3FileURL("\(i)", asTemporaryFile: false)
+                    from: loudsTxt3FileURL("\(i)", asTemporaryFile: true, directoryURL: directoryURL),
+                    to: loudsTxt3FileURL("\(i)", asTemporaryFile: false, directoryURL: directoryURL)
                 )
             }
         } else {
@@ -444,11 +445,11 @@ struct LongTermLearningMemory {
         }
         // 読み出し側で最初に読み出されるのは`.louds`なので、これを最後に書き出す方が安全
         try overwrite(
-            from: loudsFileTemp ?? loudsFileURL(asTemporaryFile: true),
-            to: loudsFileURL(asTemporaryFile: false)
+            from: loudsFileTemp ?? loudsFileURL(asTemporaryFile: true, directoryURL: directoryURL),
+            to: loudsFileURL(asTemporaryFile: false, directoryURL: directoryURL)
         )
         if removingRead2File {
-            try FileManager.default.removeItem(at: pauseFileURL)
+            try FileManager.default.removeItem(at: pauseFileURL(directoryURL: directoryURL))
         }
     }
 }
@@ -602,16 +603,16 @@ struct TemporalLearningMemoryTrie {
 }
 
 final class LearningManager {
-    private static var char2UInt8: [Character: UInt8] = {
+    private static func updateChar2Int8(bundleURL: URL) {
         do {
-            let chidURL = DicdataStore.bundleURL.appendingPathComponent("Dictionary/louds/charID.chid", isDirectory: false)
+            let chidURL = bundleURL.appendingPathComponent("Dictionary/louds/charID.chid", isDirectory: false)
             let string = try String(contentsOf: chidURL, encoding: .utf8)
-            return [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
+            Self.char2UInt8 = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
             debug("ファイルが存在しません: \(error)")
-            return [:]
         }
-    }()
+    }
+    private static var char2UInt8: [Character: UInt8] = [:]
 
     static var today: UInt16 {
         UInt16(Int(Date().timeIntervalSince1970) / 86400) - 19000
@@ -631,7 +632,7 @@ final class LearningManager {
     }
 
     private var temporaryMemory: TemporalLearningMemoryTrie = .init()
-    private var options: ConvertRequestOptions = .init()
+    private var options: ConvertRequestOptions = .default
     private var memoryCollapsed: Bool = false
 
     var enabled: Bool {
@@ -639,21 +640,23 @@ final class LearningManager {
     }
 
     init() {
-        self.memoryCollapsed = LongTermLearningMemory.memoryCollapsed()
+        self.memoryCollapsed = LongTermLearningMemory.memoryCollapsed(directoryURL: self.options.memoryDirectoryURL)
         if memoryCollapsed {
             // 学習データが壊れている状態であることを警告する
             debug("LearningManager init: Memory Collapsed")
         }
-        if MemoryResetCondition.shouldReset() {
-            self.reset()
-        }
         if !options.learningType.needUsingMemory {
             return
         }
+        Self.updateChar2Int8(bundleURL: options.bundleURL)
     }
 
     /// - Returns: Whether cache should be reseted or not.
     func setRequestOptions(options: ConvertRequestOptions) -> Bool {
+        // 変更があったら`char2Int8`を読み込み直す
+        if options.bundleURL != self.options.bundleURL {
+            Self.updateChar2Int8(bundleURL: options.bundleURL)
+        }
         self.options = options
         LongTermLearningMemory.maxMemoryCount = options.maxMemoryCount
 
@@ -664,8 +667,9 @@ final class LearningManager {
         }
 
         // リセットチェックも実施
-        if MemoryResetCondition.shouldReset() {
+        if options.shouldResetMemory {
             self.reset()
+            self.options.shouldResetMemory = false
             return true
         }
         return false
@@ -805,7 +809,7 @@ final class LearningManager {
         }
         // 2. longterm memoryを削除する
         do {
-            try LongTermLearningMemory.merge(tempTrie: self.temporaryMemory, forgetTargets: data)
+            try LongTermLearningMemory.merge(tempTrie: self.temporaryMemory, forgetTargets: data, directoryURL: self.options.memoryDirectoryURL)
             // マージが済んだので、temporaryMemoryを空にする
             self.temporaryMemory = TemporalLearningMemoryTrie()
         } catch {
@@ -813,7 +817,7 @@ final class LearningManager {
             debug("LearningManager resetLearning: Failed to save LongTermLearningMemory", error)
         }
         // 状態を更新する
-        self.memoryCollapsed = LongTermLearningMemory.memoryCollapsed()
+        self.memoryCollapsed = LongTermLearningMemory.memoryCollapsed(directoryURL: self.options.memoryDirectoryURL)
     }
 
     func save() {
@@ -821,7 +825,7 @@ final class LearningManager {
             return
         }
         do {
-            try LongTermLearningMemory.merge(tempTrie: self.temporaryMemory)
+            try LongTermLearningMemory.merge(tempTrie: self.temporaryMemory, directoryURL: self.options.memoryDirectoryURL)
             // マージが済んだので、temporaryMemoryを空にする
             self.temporaryMemory = TemporalLearningMemoryTrie()
         } catch {
@@ -829,13 +833,13 @@ final class LearningManager {
             debug("LearningManager save: Failed to save LongTermLearningMemory", error)
         }
         // 状態を更新する
-        self.memoryCollapsed = LongTermLearningMemory.memoryCollapsed()
+        self.memoryCollapsed = LongTermLearningMemory.memoryCollapsed(directoryURL: self.options.memoryDirectoryURL)
     }
 
     func reset() {
         self.temporaryMemory = TemporalLearningMemoryTrie()
         do {
-            try LongTermLearningMemory.reset()
+            try LongTermLearningMemory.reset(directoryURL: self.options.memoryDirectoryURL)
         } catch {
             debug("LearningManager reset failed", error)
         }

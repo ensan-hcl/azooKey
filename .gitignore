@@ -1,15 +1,15 @@
+# azooKey Settings
 /Gen/generated/*.gen
-/Keyboard/Converter/Dictionary/*.binary
-/Keyboard/Converter/Dictionary/cb/*.binary
-/Keyboard/Converter/Dictionary/p/*.csv
-/Keyboard/Converter/Dictionary/louds/*.louds
-/Keyboard/Converter/Dictionary/louds/*.loudschars2
-/Keyboard/Converter/Dictionary/louds/*.loudstxt3
-/Keyboard/Converter/Dictionary/louds/*.chid
+/KanaKanjiConverterModule/Sources/KanaKanjiConverterModule/Dictionary/*.binary
+/KanaKanjiConverterModule/Sources/KanaKanjiConverterModule/Dictionary/cb/*.binary
+/KanaKanjiConverterModule/Sources/KanaKanjiConverterModule/Dictionary/p/*.csv
+/KanaKanjiConverterModule/Sources/KanaKanjiConverterModule/Dictionary/louds/*.louds
+/KanaKanjiConverterModule/Sources/KanaKanjiConverterModule/Dictionary/louds/*.loudschars2
+/KanaKanjiConverterModule/Sources/KanaKanjiConverterModule/Dictionary/louds/*.loudstxt3
+/KanaKanjiConverterModule/Sources/KanaKanjiConverterModule/Dictionary/louds/*.chid
 AzooKey-dict
-deprecated/
-KanaKanjiConverterKit/
 Package.resolved
+
 # Xcode settings
 # Created by https://www.toptal.com/developers/gitignore/api/xcode
 # Edit at https://www.toptal.com/developers/gitignore?templates=xcode

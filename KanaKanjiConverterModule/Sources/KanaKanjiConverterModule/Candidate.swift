@@ -62,26 +62,31 @@ struct CandidateData {
     }
 }
 
+public enum CompleteAction {
+    /// カーソルを調整する
+    case moveCursor(Int)
+}
+
 /// 変換候補のデータ
-struct Candidate {
+public struct Candidate {
     /// 入力となるテキスト
-    var text: String
+    public var text: String
     /// 評価値
-    let value: PValue
+    public let value: PValue
     /// composingText.inputにおいて対応する文字数。
-    var correspondingCount: Int
+    public var correspondingCount: Int
     /// 最後のmid(予測変換に利用)
-    let lastMid: Int
+    public let lastMid: Int
     /// DicdataElement列
-    let data: [DicdataElement]
+    public let data: [DicdataElement]
     /// 変換として選択した際に実行する`action`。
     /// - note: 括弧を入力した際にカーソルを移動するために追加した変数
-    var actions: [ActionType]
+    public var actions: [CompleteAction]
     /// 入力できるものか
     /// - note: 文字数表示のために追加したフラグ
-    let inputable: Bool
+    public let inputable: Bool
 
-    init(text: String, value: PValue, correspondingCount: Int, lastMid: Int, data: [DicdataElement], actions: [ActionType] = [], inputable: Bool = true) {
+    public init(text: String, value: PValue, correspondingCount: Int, lastMid: Int, data: [DicdataElement], actions: [CompleteAction] = [], inputable: Bool = true) {
         self.text = text
         self.value = value
         self.correspondingCount = correspondingCount
@@ -93,7 +98,7 @@ struct Candidate {
     /// 後から`action`を追加した形を生成する関数
     /// - parameters:
     ///  - actions: 実行する`action`
-    @inlinable mutating func withActions(_ actions: [ActionType]) {
+    @inlinable public mutating func withActions(_ actions: [CompleteAction]) {
         self.actions = actions
     }
 
@@ -101,7 +106,7 @@ struct Candidate {
     private static let randomExpression = "<random type=\".*?\" value=\".*?\">"
 
     /// テンプレートをパースして、変換候補のテキストを生成する。
-    static func parseTemplate(_ text: String) -> String {
+    public static func parseTemplate(_ text: String) -> String {
         var newText = text
         while let range = newText.range(of: Self.dateExpression, options: .regularExpression) {
             let templateString = String(newText[range])
@@ -119,14 +124,14 @@ struct Candidate {
     }
 
     /// テンプレートをパースして、変換候補のテキストを生成し、反映する。
-    @inlinable mutating func parseTemplate() {
+    @inlinable public mutating func parseTemplate() {
         // ここでCandidate.textとdata.map(\.word).join("")の整合性が壊れることに注意
         // ただし、dataの方を加工するのは望ましい挙動ではない。
         self.text = Self.parseTemplate(text)
     }
 
     /// 入力を文としたとき、prefixになる文節に対応するCandidateを作る
-    static func makePrefixClauseCandidate(data: some Collection<DicdataElement>) -> Candidate {
+    public static func makePrefixClauseCandidate(data: some Collection<DicdataElement>) -> Candidate {
         var text = ""
         var correspondingCount = 0
         var lastRcid = CIDData.BOS.cid
@@ -155,12 +160,4 @@ struct Candidate {
         )
     }
 
-}
-
-extension Candidate: ResultViewItemData {
-    #if DEBUG
-    func getDebugInformation() -> String {
-        self.data.debugDescription
-    }
-    #endif
 }

@@ -8,17 +8,17 @@
 
 import Foundation
 
-struct TemplateData: Codable {
-    var name: String
-    var literal: any TemplateLiteralProtocol
-    var type: TemplateLiteralType
+public struct TemplateData: Codable {
+    public var name: String
+    public var literal: any TemplateLiteralProtocol
+    public var type: TemplateLiteralType
 
     private enum CodingKeys: String, CodingKey {
         case template
         case name
     }
 
-    init(template: String, name: String) {
+    public init(template: String, name: String) {
         self.name = name
         if template.dropFirst().hasPrefix("date") {
             self.type = .date
@@ -38,27 +38,27 @@ struct TemplateData: Codable {
         }
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let template = try values.decode(String.self, forKey: .template)
         let name = try values.decode(String.self, forKey: .name)
         self.init(template: template, name: name)
     }
 
-    var previewString: String {
+    public var previewString: String {
         literal.previewString()
     }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         // containerはvarにしておく
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.literal.export(), forKey: .template)
         try container.encode(name, forKey: .name)
     }
 
-    static let dataFileName = "user_templates.json"
+    public static let dataFileName = "user_templates.json"
 
-    static func save(_ data: [TemplateData]) {
+    public static func save(_ data: [TemplateData]) {
         if let json = try? JSONEncoder().encode(data) {
             guard let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(TemplateData.dataFileName) else {
                 return
@@ -71,7 +71,7 @@ struct TemplateData: Codable {
         }
     }
 
-    static func load() -> [TemplateData] {
+    public static func load() -> [TemplateData] {
         do {
             let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(Self.dataFileName)
             let json = try Data(contentsOf: url)
@@ -91,18 +91,18 @@ struct TemplateData: Codable {
     }
 }
 
-protocol TemplateLiteralProtocol {
+public protocol TemplateLiteralProtocol {
     func export() -> String
 
     func previewString() -> String
 }
 
-enum TemplateLiteralType {
+public enum TemplateLiteralType {
     case date
     case random
 }
 
-extension TemplateLiteralProtocol {
+public extension TemplateLiteralProtocol {
     static func parse(splited: [some StringProtocol], key: String) -> some StringProtocol {
         let result = (splited.first {$0.hasPrefix(key + "=\"")} ?? "").dropFirst(key.count + 2).dropLast(1)
         if result.hasSuffix("\"") {
@@ -112,19 +112,27 @@ extension TemplateLiteralProtocol {
     }
 }
 
-struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
-    static let example = DateTemplateLiteral(format: "yyyy年MM月dd日(EEE) a hh:mm:ss", type: .western, language: .japanese, delta: "0", deltaUnit: 1)
-    var format: String
-    var type: CalendarType
-    var language: Language
-    var delta: String
-    var deltaUnit: Int
+public struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
+    public init(format: String, type: DateTemplateLiteral.CalendarType, language: DateTemplateLiteral.Language, delta: String, deltaUnit: Int) {
+        self.format = format
+        self.type = type
+        self.language = language
+        self.delta = delta
+        self.deltaUnit = deltaUnit
+    }
 
-    enum CalendarType: String {
+    public static let example = DateTemplateLiteral(format: "yyyy年MM月dd日(EEE) a hh:mm:ss", type: .western, language: .japanese, delta: "0", deltaUnit: 1)
+    public var format: String
+    public var type: CalendarType
+    public var language: Language
+    public var delta: String
+    public var deltaUnit: Int
+
+    public enum CalendarType: String {
         case western
         case japanese
 
-        var identifier: Calendar.Identifier {
+        public var identifier: Calendar.Identifier {
             switch self {
             case .western:
                 return .gregorian
@@ -134,16 +142,16 @@ struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
         }
     }
 
-    enum Language: String {
+    public enum Language: String {
         case english = "en_US"
         case japanese = "ja_JP"
 
-        var identifier: String {
+        public var identifier: String {
             self.rawValue
         }
     }
 
-    func previewString() -> String {
+    public func previewString() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: self.language.identifier)
         formatter.calendar = Calendar(identifier: self.type.identifier)
@@ -151,7 +159,7 @@ struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
         return formatter.string(from: Date().advanced(by: Double((Int(delta) ?? 0) * deltaUnit)))
     }
 
-    static func `import`(from string: String, escaped: Bool = false) -> DateTemplateLiteral {
+    public static func `import`(from string: String, escaped: Bool = false) -> DateTemplateLiteral {
         let splited = string.split(separator: " ")
         let format = parse(splited: splited, key: "format")
         let type = parse(splited: splited, key: "type")
@@ -167,29 +175,33 @@ struct DateTemplateLiteral: TemplateLiteralProtocol, Equatable {
         )
     }
 
-    func export() -> String {
+    public func export() -> String {
         """
         <date format="\(format.escaped())" type="\(type.rawValue)" language="\(language.identifier)" delta="\(delta)" deltaunit="\(deltaUnit)">
         """
     }
 }
 
-struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable {
-    static func == (lhs: RandomTemplateLiteral, rhs: RandomTemplateLiteral) -> Bool {
+public struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable {
+    public init(value: RandomTemplateLiteral.Value) {
+        self.value = value
+    }
+
+    public static func == (lhs: RandomTemplateLiteral, rhs: RandomTemplateLiteral) -> Bool {
         lhs.value == rhs.value
     }
 
-    enum ValueType: String {
+    public enum ValueType: String {
         case int
         case double
         case string
     }
-    enum Value: Equatable {
+    public enum Value: Equatable {
         case int(from: Int, to: Int)
         case double(from: Double, to: Double)
         case string([String])
 
-        var type: ValueType {
+        public var type: ValueType {
             switch self {
             case .int(from: _, to: _):
                 return .int
@@ -200,7 +212,7 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable {
             }
         }
 
-        var string: String {
+        public var string: String {
             switch self {
             case let .int(from: left, to: right):
                 return "\(left),\(right)"
@@ -211,9 +223,9 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable {
             }
         }
     }
-    var value: Value
+    public var value: Value
 
-    func previewString() -> String {
+    public func previewString() -> String {
         switch value {
         case let .int(from: left, to: right):
             return "\(Int.random(in: left...right))"
@@ -224,7 +236,7 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable {
         }
     }
 
-    static func `import`(from string: String, escaped: Bool = false) -> RandomTemplateLiteral {
+    public static func `import`(from string: String, escaped: Bool = false) -> RandomTemplateLiteral {
         let splited = string.split(separator: " ")
         let type = parse(splited: splited, key: "type")
         let valueString = parse(splited: splited, key: "value").unescaped()
@@ -244,7 +256,7 @@ struct RandomTemplateLiteral: TemplateLiteralProtocol, Equatable {
         return RandomTemplateLiteral(value: value)
     }
 
-    func export() -> String {
+    public func export() -> String {
         """
         <random type="\(value.type.rawValue)" value="\(value.string.escaped())">
         """

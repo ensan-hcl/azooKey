@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-typealias PValue = Float16
+public typealias PValue = Float16
 
 struct Kana2Kanji {
     var dicdataStore = DicdataStore()
