@@ -7,11 +7,13 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 ## 開発ガイド
 
 * パフォーマンス改善、バグ修正、機能追加などのPull Requestを歓迎します。機能追加の場合は事前にIssueで議論した方がスムーズです。
-* 開発は基本的に`develop`で行います。新規にPRを作成する場合、`develop`からブランチを切っていただけるとスムーズです。
+* 開発は基本的に`develop`で行います。新規にPRを作成する場合、まずこのレポジトリをフォークし、`develop`からブランチを切ってください。
 
 ### ビルド・利用方法
 
-1. [Google DriveからazooKey_dictionaryをダウンロード](https://drive.google.com/drive/folders/1Kh7fgMFIzkpg7YwP3GhWTxFkXI-yzT9E?usp=sharing)し、`Keyboard/Converter/`配下に`Dictionary`ファイルを配置してください。
+Apple Developer Account（無料）が必要です。開発環境は最新のXcodeを利用してください。
+
+1. [Google DriveからazooKeyの辞書をダウンロードします](https://drive.google.com/drive/folders/1Kh7fgMFIzkpg7YwP3GhWTxFkXI-yzT9E?usp=sharing)。最新バージョンのフォルダの中にある「`Dictionary`」というフォルダを右クリックし、フォルダごとダウンロードします。ついで、`Keyboard/Converter/`配下に`Dictionary`フォルダを配置してください。上書きして構いません。
 
 1. `azooKey.xcodeproj`を開き、Xcodeの指示に従って「Run (Command+R)」を実行してください。
 
