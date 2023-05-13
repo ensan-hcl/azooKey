@@ -5,7 +5,6 @@
 //  Created by ensan on 2023/05/13.
 //  Copyright © 2023 DevEn3. All rights reserved.
 //
-
 import Foundation
 
 extension KanaKanjiConverter {
