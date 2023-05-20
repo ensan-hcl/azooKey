@@ -9,9 +9,9 @@
 import Foundation
 
 /// ラティスのノード。これを用いて計算する。
-final class LatticeNode {
+public final class LatticeNode {
     /// このノードが保持する辞書データ
-    let data: DicdataElement
+    public let data: DicdataElement
     /// このノードの前に来ているノード。`N_best`の分だけ保存する
     var prevs: [RegisteredNode] = []
     /// `prevs`の各要素に対応するスコアのデータ

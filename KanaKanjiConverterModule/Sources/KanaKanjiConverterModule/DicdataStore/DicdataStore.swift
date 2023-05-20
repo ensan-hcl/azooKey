@@ -10,6 +10,11 @@ import Algorithms
 import Foundation
 
 public final class DicdataStore {
+    public init(convertRequestOptions: ConvertRequestOptions) {
+        self.requestOptions = convertRequestOptions
+        self.setup()
+    }
+
     init(requestOptions: ConvertRequestOptions = .default) {
         self.requestOptions = requestOptions
         debug("DicdataStoreが初期化されました")
@@ -80,7 +85,13 @@ public final class DicdataStore {
             // loudsの処理があるので、リセットを実施する
             self.reloadMemory()
         case let .setRequestOptions(value):
-            self.requestOptions = value
+            // bundleURLが変わる場合はsetupを再実行する
+            if value.bundleURL != self.requestOptions.bundleURL {
+                self.requestOptions = value
+                self.setup()
+            } else {
+                self.requestOptions = value
+            }
             let shouldReset = self.learningManager.setRequestOptions(options: value)
             if shouldReset {
                 self.reloadMemory()
@@ -183,7 +194,7 @@ public final class DicdataStore {
     ///   - inputData: 入力データ
     ///   - from: 起点
     ///   - toIndexRange: `from ..< (toIndexRange)`の範囲で辞書ルックアップを行う。
-    internal func getLOUDSDataInRange(inputData: ComposingText, from fromIndex: Int, toIndexRange: Range<Int>? = nil) -> [LatticeNode] {
+    public func getLOUDSDataInRange(inputData: ComposingText, from fromIndex: Int, toIndexRange: Range<Int>? = nil) -> [LatticeNode] {
         let toIndexLeft = toIndexRange?.startIndex ?? fromIndex
         let toIndexRight = min(toIndexRange?.endIndex ?? inputData.input.count, fromIndex + self.maxlength)
         debug("getLOUDSDataInRange", fromIndex, toIndexRange?.description ?? "nil", toIndexLeft, toIndexRight)
@@ -277,7 +288,7 @@ public final class DicdataStore {
     ///   - inputData: 入力データ
     ///   - from: 始点
     ///   - to: 終点
-    internal func getLOUDSData(inputData: ComposingText, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
+    public func getLOUDSData(inputData: ComposingText, from fromIndex: Int, to toIndex: Int) -> [LatticeNode] {
         if toIndex - fromIndex > self.maxlength || fromIndex > toIndex {
             return []
         }

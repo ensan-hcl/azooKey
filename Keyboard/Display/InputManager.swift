@@ -7,6 +7,7 @@
 //
 
 import KanaKanjiConverterModule
+import KanaKanjiConverterResource
 import OrderedCollections
 import UIKit
 
@@ -774,7 +775,8 @@ import UIKit
             shouldResetMemory: MemoryResetCondition.shouldReset(),
             memoryDirectoryURL: Self.memoryDirectoryURL,
             sharedContainerURL: Self.sharedContainerURL,
-            metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")
+            metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown"),
+            dictionaryResourceURL: KanaKanjiConverterResourceURL.url
         )
         debug("InputManager.setResult: options", options)
 

@@ -1,11 +1,12 @@
 //
 //  JapaneseNumberConversionTests.swift
-//  azooKeyTests
+//  KanaKanjiConverterModuleTests
 //
 //  Created by ensan on 2023/04/18.
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+@testable import KanaKanjiConverterModule
 import XCTest
 
 final class JapaneseNumberConversionTests: XCTestCase {

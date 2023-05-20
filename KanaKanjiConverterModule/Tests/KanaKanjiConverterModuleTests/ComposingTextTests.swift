@@ -1,11 +1,12 @@
 //
 //  ComposingTextTests.swift
-//  azooKeyTests
+//  KanaKanjiConverterModuleTests
 //
 //  Created by ensan on 2022/12/18.
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+@testable import KanaKanjiConverterModule
 import XCTest
 
 final class ComposingTextTests: XCTestCase {

@@ -9,7 +9,7 @@
 import Foundation
 
 public struct ConvertRequestOptions {
-    public init(N_best: Int, requireJapanesePrediction: Bool, requireEnglishPrediction: Bool, keyboardLanguage: KeyboardLanguage, typographyLetterCandidate: Bool, unicodeCandidate: Bool, englishCandidateInRoman2KanaInput: Bool, fullWidthRomanCandidate: Bool, halfWidthKanaCandidate: Bool, learningType: LearningType, maxMemoryCount: Int, shouldResetMemory: Bool, memoryDirectoryURL: URL, sharedContainerURL: URL, metadata: ConvertRequestOptions.Metadata) {
+    public init(N_best: Int, requireJapanesePrediction: Bool, requireEnglishPrediction: Bool, keyboardLanguage: KeyboardLanguage, typographyLetterCandidate: Bool, unicodeCandidate: Bool, englishCandidateInRoman2KanaInput: Bool, fullWidthRomanCandidate: Bool, halfWidthKanaCandidate: Bool, learningType: LearningType, maxMemoryCount: Int, shouldResetMemory: Bool, memoryDirectoryURL: URL, sharedContainerURL: URL, metadata: ConvertRequestOptions.Metadata, dictionaryResourceURL: URL) {
         self.N_best = N_best
         self.requireJapanesePrediction = requireJapanesePrediction
         self.requireEnglishPrediction = requireEnglishPrediction
@@ -25,8 +25,7 @@ public struct ConvertRequestOptions {
         self.memoryDirectoryURL = memoryDirectoryURL
         self.sharedContainerURL = sharedContainerURL
         self.metadata = metadata
-        // fixed
-        self.bundleURL = Bundle.module.bundleURL
+        self.bundleURL = dictionaryResourceURL
     }
 
     public var N_best: Int
@@ -63,9 +62,10 @@ public struct ConvertRequestOptions {
             learningType: .inputAndOutput,
             maxMemoryCount: 65536,
             shouldResetMemory: false,
-            memoryDirectoryURL: (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? Bundle.module.bundleURL,
-            sharedContainerURL: Bundle.module.bundleURL,
-            metadata: Metadata(appVersionString: "Unknown")
+            memoryDirectoryURL: (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? Bundle.main.bundleURL,
+            sharedContainerURL: Bundle.main.bundleURL,
+            metadata: Metadata(appVersionString: "Unknown"),
+            dictionaryResourceURL: Bundle.main.bundleURL
         )
     }
 

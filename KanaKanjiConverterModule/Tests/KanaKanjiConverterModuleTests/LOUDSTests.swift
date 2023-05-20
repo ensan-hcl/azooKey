@@ -1,15 +1,17 @@
 //
 //  LOUDSTests.swift
-//  azooKeyTests
+//  KanaKanjiConverterModuleTests
 //
 //  Created by ensan on 2023/02/02.
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+@testable import KanaKanjiConverterModule
 import XCTest
 
 final class LOUDSTests: XCTestCase {
     func loadCharIDs() -> [Character: UInt8] {
+        // FIXME: ちゃんとリソースを指定する
         let bundleURL = Bundle(for: type(of: self)).bundleURL
         do {
             let string = try String(contentsOf: bundleURL.appendingPathComponent("Dictionary/louds/charID.chid", isDirectory: false), encoding: String.Encoding.utf8)
@@ -21,9 +23,9 @@ final class LOUDSTests: XCTestCase {
     }
 
     func testSearchNodeIndex() throws {
+        // FIXME: ちゃんとリソースを指定する
         // データリソースの場所を指定する
-        DicdataStore.bundleURL = Bundle(for: type(of: self)).bundleURL
-        let louds = LOUDS.load("シ")
+        let louds = LOUDS.load("シ", option: .default)
         XCTAssertNotNil(louds)
         guard let louds else { return }
         let charIDs = loadCharIDs()
@@ -33,7 +35,7 @@ final class LOUDSTests: XCTestCase {
         XCTAssertNotNil(index)
         guard let index else { return }
 
-        let dicdata: [DicdataElement] = LOUDS.getDataForLoudstxt3("シ" + "\(index >> 11)", indices: [index & 2047])
+        let dicdata: [DicdataElement] = LOUDS.getDataForLoudstxt3("シ" + "\(index >> 11)", indices: [index & 2047], option: .default)
         XCTAssertTrue(dicdata.contains {$0.word == "司会"})
         XCTAssertTrue(dicdata.contains {$0.word == "視界"})
         XCTAssertTrue(dicdata.contains {$0.word == "死界"})

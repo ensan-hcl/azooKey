@@ -1,11 +1,12 @@
 //
 //  RegisteredNodeTests.swift
-//  azooKeyTests
+//  KanaKanjiConverterModuleTests
 //
 //  Created by ensan on 2023/01/31.
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+@testable import KanaKanjiConverterModule
 import XCTest
 
 final class RegisteredNodeTests: XCTestCase {
