@@ -9,6 +9,7 @@
 /KanaKanjiConverterModule/Sources/KanaKanjiConverterResource/Dictionary/louds/*.chid
 AzooKey-dict
 Package.resolved
+*.DS_Store
 
 # Xcode settings
 # Created by https://www.toptal.com/developers/gitignore/api/xcode
