@@ -41,7 +41,7 @@ let package = Package(
         ),
         .testTarget(
             name: "KanaKanjiConverterModuleTests",
-            dependencies: ["KanaKanjiConverterModule"]
+            dependencies: ["KanaKanjiConverterModule", "KanaKanjiConverterResource"]
         ),
     ]
 )

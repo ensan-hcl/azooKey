@@ -7,8 +7,12 @@
 //
 
 import Foundation
-import UIKit
+
+#if os(iOS) || os(tvOS)
 public typealias PValue = Float16
+#else
+public typealias PValue = Float32
+#endif
 
 struct Kana2Kanji {
     var dicdataStore = DicdataStore()

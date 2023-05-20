@@ -7,14 +7,13 @@
 //
 
 import Foundation
-import UIKit
 
 /// かな漢字変換の管理を受け持つクラス
 public final class KanaKanjiConverter {
     public init() {}
 
     private var converter = Kana2Kanji()
-    private var checker = UITextChecker()
+    private var checker = SpellChecker()
     private var checkerInitialized: [KeyboardLanguage: Bool] = [.none: true, .ja_JP: true]
 
     // 前回の変換や確定の情報を取っておく部分。
@@ -36,12 +35,12 @@ public final class KanaKanjiConverter {
             switch language {
             case .en_US:
                 Task {
-                    _ = await checker.completions(forPartialWordRange: NSRange(location: 0, length: 1), in: "a", language: "en-US")
+                    _ = checker.completions(forPartialWordRange: NSRange(location: 0, length: 1), in: "a", language: "en-US")
                     checkerInitialized[language] = true
                 }
             case .el_GR:
                 Task {
-                    _ = await checker.completions(forPartialWordRange: NSRange(location: 0, length: 1), in: "α", language: "el-GR")
+                    _ = checker.completions(forPartialWordRange: NSRange(location: 0, length: 1), in: "α", language: "el-GR")
                     checkerInitialized[language] = true
                 }
             case .none, .ja_JP:

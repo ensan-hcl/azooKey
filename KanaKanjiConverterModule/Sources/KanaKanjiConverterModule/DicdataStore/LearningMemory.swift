@@ -125,7 +125,7 @@ struct LongTermLearningMemory {
             data.count
         }
         var ruby: String
-        var data: [(word: String, lcid: Int, rcid: Int, mid: Int, score: Float16)]
+        var data: [(word: String, lcid: Int, rcid: Int, mid: Int, score: PValue)]
 
         init(dicdata: [DicdataElement]) {
             self.ruby = ""

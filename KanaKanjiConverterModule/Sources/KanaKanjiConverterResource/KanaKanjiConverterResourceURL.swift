@@ -9,6 +9,6 @@ import Foundation
 
 public enum KanaKanjiConverterResourceURL {
     public static var url: URL {
-        return Bundle.module.bundleURL
+        return Bundle.module.resourceURL?.standardizedFileURL ?? Bundle.module.bundleURL
     }
 }
