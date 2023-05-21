@@ -81,7 +81,7 @@ mergeされた変更は、その後のリリースでazooKeyのユーザに提�
 
 基本的に、開発は以上のプロセスと同じ方法で行います。開発への参加は大歓迎です。
 
-何か新しいことを始める場合、まずはIssueを立てるか、すでに立っているIssueにコメントしてください。
+何か新しいことを始める場合、まずはIssueを立てるか、すでに立っているIssueを引き受けてください。[Good First IssueのラベルのついているIssue](https://github.com/ensan-hcl/azooKey/labels/good%20first%20issue)は取り組みやすいと思います。
 
 開発作業中にわからないことがあった場合は気軽にIssueで質問してください。
 
