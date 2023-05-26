@@ -2373,6 +2373,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LLVM_LTO = YES_THIN;
 				MARKETING_VERSION = 2.1.1;
 				OTHER_SWIFT_FLAGS = "-enable-upcoming-feature ImplicitOpenExistentials";
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
@@ -2400,6 +2401,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LLVM_LTO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKeyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -2423,6 +2425,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LLVM_LTO = YES_THIN;
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKeyTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2536,6 +2539,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				LLVM_LTO = YES_THIN;
 				MARKETING_VERSION = 2.1.1;
 				OTHER_SWIFT_FLAGS = "-enable-upcoming-feature ImplicitOpenExistentials";
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey.keyboard;
