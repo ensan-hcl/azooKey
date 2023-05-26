@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import enum KanaKanjiConverterModule.KeyboardLanguage
 
 // symbolタブ、123タブで表示される切り替えボタン
 struct QwertySwitchLanguageKeyModel: QwertyKeyModelProtocol {

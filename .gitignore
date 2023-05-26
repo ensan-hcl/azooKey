@@ -1,16 +1,14 @@
+# azooKey Settings
 /Gen/generated/*.gen
-/Keyboard/Converter/Dictionary/*.binary
-/Keyboard/Converter/Dictionary/cb/*.binary
-/Keyboard/Converter/Dictionary/p/*.csv
-/Keyboard/Converter/Dictionary/louds/*.louds
-/Keyboard/Converter/Dictionary/louds/*.loudschars2
-/Keyboard/Converter/Dictionary/louds/*.loudstxt3
-/Keyboard/Converter/Dictionary/louds/*.chid
+/Keyboard/Dictionary/*.binary
+/Keyboard/Dictionary/cb/*.binary
+/Keyboard/Dictionary/p/*.csv
+/Keyboard/Dictionary/louds/*.louds
+/Keyboard/Dictionary/louds/*.loudschars2
+/Keyboard/Dictionary/louds/*.loudstxt3
+/Keyboard/Dictionary/louds/*.chid
 AzooKey-dict
-deprecated/
-KanaKanjiConverterKit/
 Package.resolved
-
 *.DS_Store
 
 # Xcode settings

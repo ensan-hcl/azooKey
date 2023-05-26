@@ -7,13 +7,10 @@
 //
 
 import Foundation
+import KanaKanjiConverterModule
 import SwiftUI
 
-enum LearningType: Int, CaseIterable {
-    case inputAndOutput = 0
-    case onlyOutput = 1
-    case nothing = 2
-
+extension LearningType {
     var string: LocalizedStringKey {
         switch self {
         case .inputAndOutput: return "学習する(デフォルト)"

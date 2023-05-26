@@ -8,6 +8,7 @@
 
 import CustardKit
 import Foundation
+import KanaKanjiConverterModule
 
 enum UpsideComponent: Equatable {
     case search([ConverterBehaviorSemantics.ReplacementTarget])

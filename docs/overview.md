@@ -4,6 +4,7 @@ azooKeyは以下のような構成になっています。
 
 ```
 MainApp: 本体アプリの実装
+KanaKanjiConverterModule: かな漢字変換モジュール
 Keyboard: キーボードアプリの実装
 Shared: MainAppとKeyboardで共有される実装
 azooKeyTests: MainAppとKeyboardのテスト
@@ -15,7 +16,13 @@ MainAppはazooKeyの種々の設定を行うためのアプリです。
 
 SwiftUIを用いて実装しています。
 
-**TODO: 状態管理があまり綺麗にできていないため、リファクタリングが必要です。**
+## KanaKanjiConverterModule
+
+`KanaKanjiConverterModule`はかな漢字変換を実行するためのAPIを提供します。
+
+`KanaKanjiConverter`は変換アルゴリズムの実装である`Kana2Kanji`のAPIを呼び出す前の差分管理や、結果を並べ替えたり候補を追加したりする処理を受け持ちます。`Kana2Kanji`は`DicdataStore`に問い合わせつつ、かな漢字変換を実行します。
+
+`DicdataStore`はクエリを受け取るとアプリケーションにバンドルされた辞書ファイルを読み込み、適切な応答を返します。学習、誤り訂正などはこのレイヤで管理されています。
 
 ## Keyboard
 
@@ -24,10 +31,6 @@ Keyboardはキーボード本体の実装です。
 `Keyboard/Display/KeyboardViewController.swift`の`viewDidLoad`が実質的なエントリーポイントです。`viewDidLoad`が呼ばれると、`KeyboardActionManager`のインスタンスが1つ生成され、ユーザの操作を管理するようになります。また、KeyboardのUIの読み込みが行われます。KeyboardのUIはSwiftUIで実装されていますが、実装をMainAppと共有するためShared配下に存在します。
 
 `KeyboardActionManager`は`InputManager`を用いて変換状態を管理します。`InputManager`は変換器である`KanaKanjiConverter`のAPIを呼び出したり、`LiveConversionManager`を通してライブ変換に関する処理を行ったり、`DisplayedTextManager`を通してディスプレイされるテキストの管理を行ったりします。
-
-`KanaKanjiConverter`は変換アルゴリズムの実装である`Kana2Kanji`のAPIを呼び出す前の差分管理や、結果を並べ替えたり候補を追加したりする処理を受け持ちます。`Kana2Kanji`は`DicdataStore`に問い合わせつつ、かな漢字変換を実行します。
-
-`DicdataStore`はクエリを受け取るとアプリケーションにバンドルされた辞書ファイルを読み込み、適切な応答を返します。学習、誤り訂正などはこのレイヤで管理されています。
 
 ## Shared
 

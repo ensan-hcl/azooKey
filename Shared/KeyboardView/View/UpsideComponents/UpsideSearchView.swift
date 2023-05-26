@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import enum KanaKanjiConverterModule.ConverterBehaviorSemantics
 
 struct UpsideSearchView: View {
     @Environment(\.userActionManager) private var action

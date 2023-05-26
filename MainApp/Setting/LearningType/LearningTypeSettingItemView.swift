@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import enum KanaKanjiConverterModule.LearningType
 
 struct LearningTypeSettingView: View {
     @State private var setting: SettingUpdater<LearningTypeSetting>

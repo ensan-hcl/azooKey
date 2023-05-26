@@ -10,6 +10,8 @@ import CustardExpressionEvaluator
 import CustardKit
 import Foundation
 import SwiftUI
+import enum KanaKanjiConverterModule.InputStyle
+import enum KanaKanjiConverterModule.KeyboardLanguage
 
 /// 実行中変更され、かつViewが変更を検知できるべき値。
 final class VariableStates: ObservableObject {

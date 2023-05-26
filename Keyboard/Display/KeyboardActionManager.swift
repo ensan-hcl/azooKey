@@ -6,6 +6,7 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import KanaKanjiConverterModule
 import SwiftUI
 
 /// キーボードへのアクション部門の動作を担う。
@@ -58,7 +59,7 @@ import SwiftUI
         let target = variableStates.tabManager.tab.existential.replacementTarget
         if let candidate = candidate as? Candidate {
             self.inputManager.complete(candidate: candidate)
-            self.registerActions(candidate.actions, variableStates: variableStates)
+            self.registerActions(candidate.actions.map(\.action), variableStates: variableStates)
         } else if let candidate = candidate as? ReplacementCandidate {
             self.inputManager.replaceLastCharacters(table: [candidate.target: candidate.replace], inputStyle: .direct)
             KeyboardInternalSetting.shared.update(\.tabCharacterPreference) { item in
