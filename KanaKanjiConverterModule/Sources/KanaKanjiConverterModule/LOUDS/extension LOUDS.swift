@@ -35,8 +35,8 @@ extension LOUDS {
             )
         }
         return (
-            option.bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudschars2", isDirectory: false),
-            option.bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).louds", isDirectory: false)
+            option.dictionaryResourceURL.appendingPathComponent("louds/\(identifier).loudschars2", isDirectory: false),
+            option.dictionaryResourceURL.appendingPathComponent("louds/\(identifier).louds", isDirectory: false)
         )
     }
 
@@ -47,7 +47,7 @@ extension LOUDS {
         if identifier.hasPrefix("memory") {
             return option.memoryDirectoryURL.appendingPathComponent("\(identifier).loudstxt3", isDirectory: false)
         }
-        return option.bundleURL.appendingPathComponent("Dictionary/louds/\(identifier).loudstxt3", isDirectory: false)
+        return option.dictionaryResourceURL.appendingPathComponent("louds/\(identifier).loudstxt3", isDirectory: false)
     }
 
     /// LOUDSをファイルから読み込む関数

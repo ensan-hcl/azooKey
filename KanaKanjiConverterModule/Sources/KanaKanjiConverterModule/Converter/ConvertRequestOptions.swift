@@ -25,7 +25,7 @@ public struct ConvertRequestOptions {
         self.memoryDirectoryURL = memoryDirectoryURL
         self.sharedContainerURL = sharedContainerURL
         self.metadata = metadata
-        self.bundleURL = dictionaryResourceURL
+        self.dictionaryResourceURL = dictionaryResourceURL
     }
 
     public var N_best: Int
@@ -44,7 +44,7 @@ public struct ConvertRequestOptions {
     // ディレクトリなど
     public var memoryDirectoryURL: URL
     public var sharedContainerURL: URL
-    public var bundleURL: URL
+    public var dictionaryResourceURL: URL
     // メタデータ
     public var metadata: Metadata
 

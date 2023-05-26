@@ -34,7 +34,7 @@ final class ConverterTests: XCTestCase {
             memoryDirectoryURL: URL(fileURLWithPath: ""),
             sharedContainerURL: URL(fileURLWithPath: ""),
             metadata: .init(appVersionString: "Tests"),
-            dictionaryResourceURL: KanaKanjiConverterResourceURL.url
+            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true)
         )
     }
 

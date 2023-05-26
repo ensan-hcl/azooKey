@@ -605,7 +605,7 @@ struct TemporalLearningMemoryTrie {
 final class LearningManager {
     private static func updateChar2Int8(bundleURL: URL) {
         do {
-            let chidURL = bundleURL.appendingPathComponent("Dictionary/louds/charID.chid", isDirectory: false)
+            let chidURL = bundleURL.appendingPathComponent("louds/charID.chid", isDirectory: false)
             let string = try String(contentsOf: chidURL, encoding: .utf8)
             Self.char2UInt8 = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
@@ -648,14 +648,14 @@ final class LearningManager {
         if !options.learningType.needUsingMemory {
             return
         }
-        Self.updateChar2Int8(bundleURL: options.bundleURL)
+        Self.updateChar2Int8(bundleURL: options.dictionaryResourceURL)
     }
 
     /// - Returns: Whether cache should be reseted or not.
     func setRequestOptions(options: ConvertRequestOptions) -> Bool {
         // 変更があったら`char2Int8`を読み込み直す
-        if options.bundleURL != self.options.bundleURL {
-            Self.updateChar2Int8(bundleURL: options.bundleURL)
+        if options.dictionaryResourceURL != self.options.dictionaryResourceURL {
+            Self.updateChar2Int8(bundleURL: options.dictionaryResourceURL)
         }
         self.options = options
         LongTermLearningMemory.maxMemoryCount = options.maxMemoryCount

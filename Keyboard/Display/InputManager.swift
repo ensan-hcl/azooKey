@@ -776,7 +776,7 @@ import UIKit
             memoryDirectoryURL: Self.memoryDirectoryURL,
             sharedContainerURL: Self.sharedContainerURL,
             metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown"),
-            dictionaryResourceURL: KanaKanjiConverterResourceURL.url
+            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true)
         )
         debug("InputManager.setResult: options", options)
 

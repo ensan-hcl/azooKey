@@ -13,14 +13,14 @@ import XCTest
 final class LOUDSTests: XCTestCase {
     func requestOptions() -> ConvertRequestOptions {
         var options: ConvertRequestOptions = .default
-        options.bundleURL = KanaKanjiConverterResourceURL.url
+        options.dictionaryResourceURL = KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true)
         return options
     }
 
     func loadCharIDs() -> [Character: UInt8] {
-        let bundleURL = KanaKanjiConverterResourceURL.url
+        let resourceURL = KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true)
         do {
-            let string = try String(contentsOf: bundleURL.appendingPathComponent("Dictionary/louds/charID.chid", isDirectory: false), encoding: String.Encoding.utf8)
+            let string = try String(contentsOf: resourceURL.appendingPathComponent("louds/charID.chid", isDirectory: false), encoding: String.Encoding.utf8)
             return [Character: UInt8](uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
             print("ファイルが見つかりませんでした")
