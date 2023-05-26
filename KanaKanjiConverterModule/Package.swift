@@ -11,11 +11,7 @@ let package = Package(
         .library(
             name: "KanaKanjiConverterModule",
             targets: ["KanaKanjiConverterModule"]
-        ),
-        .library(
-            name: "KanaKanjiConverterResource",
-            targets: ["KanaKanjiConverterResource"]
-        ),
+        )
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -25,13 +21,6 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(
-            name: "KanaKanjiConverterResource",
-            dependencies: [],
-            resources: [
-                .copy("Dictionary")
-            ]
-        ),
         .target(
             name: "KanaKanjiConverterModule",
             dependencies: [

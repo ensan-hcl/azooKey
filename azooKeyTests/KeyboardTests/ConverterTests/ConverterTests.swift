@@ -7,7 +7,6 @@
 //
 
 import KanaKanjiConverterModule
-import KanaKanjiConverterResource
 import XCTest
 
 final class ConverterTests: XCTestCase {
@@ -31,7 +30,7 @@ final class ConverterTests: XCTestCase {
             learningType: .nothing,
             maxMemoryCount: 0,
             shouldResetMemory: false,
-            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true),
+            dictionaryResourceURL: Bundle(for: type(of: self)).bundleURL.appendingPathComponent("Dictionary", isDirectory: true),
             memoryDirectoryURL: URL(fileURLWithPath: ""),
             sharedContainerURL: URL(fileURLWithPath: ""),
             metadata: .init(appVersionString: "Tests")

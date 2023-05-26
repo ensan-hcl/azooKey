@@ -8,7 +8,6 @@
 
 import XCTest
 import KanaKanjiConverterModule
-import KanaKanjiConverterResource
 
 final class DicdataStoreTests: XCTestCase {
     func sequentialInput(_ composingText: inout ComposingText, sequence: String, inputStyle: KanaKanjiConverterModule.InputStyle) {
@@ -31,7 +30,7 @@ final class DicdataStoreTests: XCTestCase {
             learningType: .nothing,
             maxMemoryCount: 0,
             shouldResetMemory: false,
-            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true),
+            dictionaryResourceURL: Bundle(for: type(of: self)).bundleURL.appendingPathComponent("Dictionary", isDirectory: true),
             memoryDirectoryURL: URL(fileURLWithPath: ""),
             sharedContainerURL: URL(fileURLWithPath: ""),
             metadata: .init(appVersionString: "Tests")

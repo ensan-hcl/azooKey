@@ -7,7 +7,6 @@
 //
 
 import KanaKanjiConverterModule
-import KanaKanjiConverterResource
 import OrderedCollections
 import UIKit
 
@@ -735,6 +734,7 @@ import UIKit
         self.stopComposition()
     }
 
+    private static let dictionaryResourceURL = Bundle.main.bundleURL.appendingPathComponent("Dictionary", isDirectory: true)
     private static let memoryDirectoryURL = (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? sharedContainerURL
     private static let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
     /// 変換リクエストを送信し、結果をDisplayed Textにも反映する関数
@@ -773,7 +773,7 @@ import UIKit
             learningType: learningType.learningTypeForKanaKanjiConverter,
             maxMemoryCount: 65536,
             shouldResetMemory: MemoryResetCondition.shouldReset(),
-            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true),
+            dictionaryResourceURL: Self.dictionaryResourceURL,
             memoryDirectoryURL: Self.memoryDirectoryURL,
             sharedContainerURL: Self.sharedContainerURL,
             metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")

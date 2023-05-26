@@ -1,12 +1,12 @@
 # azooKey Settings
 /Gen/generated/*.gen
-/KanaKanjiConverterModule/Sources/KanaKanjiConverterResource/Dictionary/*.binary
-/KanaKanjiConverterModule/Sources/KanaKanjiConverterResource/Dictionary/cb/*.binary
-/KanaKanjiConverterModule/Sources/KanaKanjiConverterResource/Dictionary/p/*.csv
-/KanaKanjiConverterModule/Sources/KanaKanjiConverterResource/Dictionary/louds/*.louds
-/KanaKanjiConverterModule/Sources/KanaKanjiConverterResource/Dictionary/louds/*.loudschars2
-/KanaKanjiConverterModule/Sources/KanaKanjiConverterResource/Dictionary/louds/*.loudstxt3
-/KanaKanjiConverterModule/Sources/KanaKanjiConverterResource/Dictionary/louds/*.chid
+/Keyboard/Dictionary/*.binary
+/Keyboard/Dictionary/cb/*.binary
+/Keyboard/Dictionary/p/*.csv
+/Keyboard/Dictionary/louds/*.louds
+/Keyboard/Dictionary/louds/*.loudschars2
+/Keyboard/Dictionary/louds/*.loudstxt3
+/Keyboard/Dictionary/louds/*.chid
 AzooKey-dict
 Package.resolved
 *.DS_Store

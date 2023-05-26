@@ -14,7 +14,7 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 
 Apple Developer Account（無料）が必要です。開発環境は最新のXcodeを利用してください。
 
-1. [Google DriveからazooKeyの辞書をダウンロードします](https://drive.google.com/drive/folders/1Kh7fgMFIzkpg7YwP3GhWTxFkXI-yzT9E?usp=sharing)。最新バージョンのフォルダの中にある「`Dictionary`」というフォルダを右クリックし、フォルダごとダウンロードします。ついで、`Keyboard/Converter/`配下に`Dictionary`フォルダを配置してください。上書きして構いません。
+1. [Google DriveからazooKeyの辞書をダウンロードします](https://drive.google.com/drive/folders/1Kh7fgMFIzkpg7YwP3GhWTxFkXI-yzT9E?usp=sharing)。最新バージョンのフォルダの中にある「`Dictionary`」というフォルダを右クリックし、フォルダごとダウンロードします。ついで、`Keyboard/`配下に`Dictionary`フォルダを配置してください。上書きして構いません。
 
 1. `azooKey.xcodeproj`を開き、Xcodeの指示に従って「Run (Command+R)」を実行してください。
 
