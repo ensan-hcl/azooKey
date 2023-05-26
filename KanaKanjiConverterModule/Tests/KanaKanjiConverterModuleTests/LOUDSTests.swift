@@ -7,20 +7,19 @@
 //
 
 @testable import KanaKanjiConverterModule
-@testable import KanaKanjiConverterResource
 import XCTest
 
 final class LOUDSTests: XCTestCase {
+    static var resourceURL = Bundle.module.resourceURL!.standardizedFileURL.appendingPathComponent("DictionaryMock", isDirectory: true)
     func requestOptions() -> ConvertRequestOptions {
         var options: ConvertRequestOptions = .default
-        options.dictionaryResourceURL = KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true)
+        options.dictionaryResourceURL = Self.resourceURL
         return options
     }
 
     func loadCharIDs() -> [Character: UInt8] {
-        let resourceURL = KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true)
         do {
-            let string = try String(contentsOf: resourceURL.appendingPathComponent("louds/charID.chid", isDirectory: false), encoding: String.Encoding.utf8)
+            let string = try String(contentsOf: Self.resourceURL.appendingPathComponent("louds/charID.chid", isDirectory: false), encoding: String.Encoding.utf8)
             return [Character: UInt8](uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
             print("ファイルが見つかりませんでした")
@@ -30,6 +29,7 @@ final class LOUDSTests: XCTestCase {
 
     func testSearchNodeIndex() throws {
         // データリソースの場所を指定する
+        print("Options: ", requestOptions())
         let louds = LOUDS.load("シ", option: requestOptions())
         XCTAssertNotNil(louds)
         guard let louds else { return }
