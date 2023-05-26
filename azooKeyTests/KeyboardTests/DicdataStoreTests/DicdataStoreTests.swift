@@ -31,10 +31,10 @@ final class DicdataStoreTests: XCTestCase {
             learningType: .nothing,
             maxMemoryCount: 0,
             shouldResetMemory: false,
+            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true),
             memoryDirectoryURL: URL(fileURLWithPath: ""),
             sharedContainerURL: URL(fileURLWithPath: ""),
-            metadata: .init(appVersionString: "Tests"),
-            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true)
+            metadata: .init(appVersionString: "Tests")
         )
     }
 

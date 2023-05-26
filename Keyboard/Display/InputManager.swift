@@ -773,10 +773,10 @@ import UIKit
             learningType: learningType.learningTypeForKanaKanjiConverter,
             maxMemoryCount: 65536,
             shouldResetMemory: MemoryResetCondition.shouldReset(),
+            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true),
             memoryDirectoryURL: Self.memoryDirectoryURL,
             sharedContainerURL: Self.sharedContainerURL,
-            metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown"),
-            dictionaryResourceURL: KanaKanjiConverterResourceURL.url.appendingPathComponent("Dictionary", isDirectory: true)
+            metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")
         )
         debug("InputManager.setResult: options", options)
 
