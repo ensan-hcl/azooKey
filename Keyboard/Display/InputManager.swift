@@ -27,7 +27,7 @@ import UIKit
     private var keyboardLanguage: KeyboardLanguage = .ja_JP
     func setKeyboardLanguage(_ value: KeyboardLanguage) {
         self.keyboardLanguage = value
-        self.kanaKanjiConverter.setKeyboardLanguage(value.keyboardLanguageForKanaKanjiConverter)
+        self.kanaKanjiConverter.setKeyboardLanguage(value)
     }
 
     /// システム側でproxyを操作した結果、`textDidChange`などがよばれてしまう場合に、その呼び出しをスキップするため、フラグを事前に立てる
@@ -296,7 +296,7 @@ import UIKit
             self.displayedTextManager.insertText(text)
             return
         }
-        self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle.inputStyleForKanaKanjiConverter)
+        self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
         debug("Input Manager input:", composingText)
         if requireSetResult {
             // 変換を実施する
@@ -763,14 +763,14 @@ import UIKit
             N_best: 10,
             requireJapanesePrediction: requireJapanesePrediction,
             requireEnglishPrediction: requireEnglishPrediction,
-            keyboardLanguage: keyboardLanguage.keyboardLanguageForKanaKanjiConverter,
+            keyboardLanguage: keyboardLanguage,
             // KeyboardSettingsを注入
             typographyLetterCandidate: typographyLetterCandidate,
             unicodeCandidate: unicodeCandidate,
             englishCandidateInRoman2KanaInput: englishCandidateInRoman2KanaInput,
             fullWidthRomanCandidate: fullWidthRomanCandidate,
             halfWidthKanaCandidate: halfWidthKanaCandidate,
-            learningType: learningType.learningTypeForKanaKanjiConverter,
+            learningType: learningType,
             maxMemoryCount: 65536,
             shouldResetMemory: MemoryResetCondition.shouldReset(),
             dictionaryResourceURL: Self.dictionaryResourceURL,
@@ -814,45 +814,6 @@ extension Candidate: ResultViewItemData {
         self.data.debugDescription
     }
     #endif
-}
-
-extension KeyboardLanguage {
-    var keyboardLanguageForKanaKanjiConverter: KanaKanjiConverterModule.KeyboardLanguage {
-        switch self {
-        case .en_US:
-            return .en_US
-        case .ja_JP:
-            return .ja_JP
-        case .el_GR:
-            return .el_GR
-        case .none:
-            return .none
-        }
-    }
-}
-
-extension LearningType {
-    var learningTypeForKanaKanjiConverter: KanaKanjiConverterModule.LearningType {
-        switch self {
-        case .inputAndOutput:
-            return .inputAndOutput
-        case .onlyOutput:
-            return .onlyOutput
-        case .nothing:
-            return .nothing
-        }
-    }
-}
-
-extension InputStyle {
-    var inputStyleForKanaKanjiConverter: KanaKanjiConverterModule.InputStyle {
-        switch self {
-        case .direct:
-            return .direct
-        case .roman2kana:
-            return .roman2kana
-        }
-    }
 }
 
 extension CompleteAction {

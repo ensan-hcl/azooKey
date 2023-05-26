@@ -9,6 +9,7 @@
 import CryptoKit
 import CustardKit
 import Foundation
+import enum KanaKanjiConverterModule.KeyboardLanguage
 
 struct CustardInternalMetaData: Codable {
     var origin: Origin

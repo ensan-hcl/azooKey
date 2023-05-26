@@ -7,6 +7,7 @@
 //
 
 import enum UIKit.UIReturnKeyType
+import enum KanaKanjiConverterModule.KeyboardLanguage
 
 enum KeyboardLayout: String, CaseIterable, Equatable {
     /// フリック入力式のレイアウトで表示するスタイル
@@ -15,19 +16,7 @@ enum KeyboardLayout: String, CaseIterable, Equatable {
     case qwerty = "roman"
 }
 
-enum InputStyle: String {
-    /// 入力された文字を直接入力するスタイル
-    case direct = "direct"
-    /// ローマ字日本語入力とするスタイル
-    case roman2kana = "roman"
-}
-
-enum KeyboardLanguage: String, Codable, Equatable {
-    case en_US
-    case ja_JP
-    case el_GR
-    case none
-
+extension KeyboardLanguage {
     var symbol: String {
         switch self {
         case .en_US:

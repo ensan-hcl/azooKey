@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import enum KanaKanjiConverterModule.KeyboardLanguage
 
 struct PreferredLanguageSettingView: View {
     // Viewを動的に更新するためには設定を`@State`としておく必要がある。

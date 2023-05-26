@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import enum KanaKanjiConverterModule.KeyboardLanguage
 
 extension LanguageLayout {
     var label: LocalizedStringKey {

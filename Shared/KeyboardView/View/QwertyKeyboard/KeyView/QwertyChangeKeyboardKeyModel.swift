@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import enum KanaKanjiConverterModule.KeyboardLanguage
 
 struct QwertyChangeKeyboardKeyModel: QwertyKeyModelProtocol {
 

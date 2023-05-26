@@ -19,22 +19,9 @@ public enum KeyboardLanguage: String, Codable, Equatable {
     case ja_JP
     case el_GR
     case none
-
-    var symbol: String {
-        switch self {
-        case .en_US:
-            return "A"
-        case .el_GR:
-            return "Ω"
-        case .ja_JP:
-            return "あ"
-        case .none:
-            return ""
-        }
-    }
 }
 
-public enum LearningType {
+public enum LearningType: Int, CaseIterable {
     case inputAndOutput
     case onlyOutput
     case nothing 
