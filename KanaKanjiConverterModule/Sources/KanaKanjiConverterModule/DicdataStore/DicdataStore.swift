@@ -616,7 +616,7 @@ public final class DicdataStore {
     ///   連接確率の対数。
     /// - 要求があった場合ごとにファイルを読み込んで
     /// 速度: ⏱0.115224 : 変換_処理_連接コスト計算_CCValue
-    internal func getCCValue(_ former: Int, _ latter: Int) -> PValue {
+    public func getCCValue(_ former: Int, _ latter: Int) -> PValue {
         if !ccParsed[former] {
             let url = requestOptions.dictionaryResourceURL.appendingPathComponent("cb/\(former).binary", isDirectory: false)
             let values = loadCCBinary(url: url)
@@ -634,7 +634,7 @@ public final class DicdataStore {
     /// - Returns:
     ///   意味連接確率の対数。
     /// - 要求があった場合ごとに確率値をパースして取得する。
-    internal func getMMValue(_ former: Int, _ latter: Int) -> PValue {
+    public func getMMValue(_ former: Int, _ latter: Int) -> PValue {
         if former == 500 || latter == 500 {
             return 0
         }

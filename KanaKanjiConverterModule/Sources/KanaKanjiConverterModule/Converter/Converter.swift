@@ -11,6 +11,9 @@ import Foundation
 /// かな漢字変換の管理を受け持つクラス
 public final class KanaKanjiConverter {
     public init() {}
+    public init(dicdataStore: DicdataStore) {
+        self.converter = .init(dicdataStore: dicdataStore)
+    }
 
     private var converter = Kana2Kanji()
     private var checker = SpellChecker()

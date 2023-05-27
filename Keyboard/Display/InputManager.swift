@@ -811,7 +811,7 @@ import UIKit
 extension Candidate: ResultViewItemData {
     #if DEBUG
     func getDebugInformation() -> String {
-        self.data.debugDescription
+        "Candidate(text: \(self.text), value: \(self.value), data: \(self.data.debugDescription))"
     }
     #endif
 }
