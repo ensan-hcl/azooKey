@@ -9,6 +9,7 @@
 import Foundation
 import struct KanaKanjiConverterModule.TemplateData
 import enum KanaKanjiConverterModule.CIDData
+import SwiftUtils
 
 extension LOUDSBuilder {
     static var char2UInt8: [Character: UInt8] = [:]

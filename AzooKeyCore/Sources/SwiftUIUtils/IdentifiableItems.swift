@@ -9,11 +9,11 @@
 import Foundation
 import SwiftUI
 
-extension Binding where Value: RandomAccessCollection & MutableCollection, Value.Element: Identifiable {
+public extension Binding where Value: RandomAccessCollection & MutableCollection, Value.Element: Identifiable {
     struct IdentifiableItem: Identifiable {
-        @Binding<Value.Element> private(set) var item: Value.Element
-        let index: Value.Index
-        let id: Value.Element.ID
+        @Binding<Value.Element> public private(set) var item: Value.Element
+        public let index: Value.Index
+        public let id: Value.Element.ID
     }
 
     var identifiableItems: [IdentifiableItem] {

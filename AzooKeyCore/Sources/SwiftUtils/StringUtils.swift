@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension StringProtocol {
+public extension StringProtocol {
     /// ローマ字と数字のみかどうか
     ///  - note: 空文字列の場合`false`を返す。
     @inlinable
@@ -42,13 +42,13 @@ extension StringProtocol {
 
     /// 仮名か
     @inlinable
-    public var isKana: Bool {
+    var isKana: Bool {
         !isEmpty && range(of: "[^ぁ-ゖァ-ヶ]", options: .regularExpression) == nil
     }
 
     /// Returns a String value in which Hiraganas are all converted to Katakana.
     /// - Returns: A String value in which Hiraganas are all converted to Katakana.
-    @inlinable public func toKatakana() -> String {
+    @inlinable func toKatakana() -> String {
         // カタカナはutf16で常に2バイトなので、utf16単位で処理して良い
         let result = self.utf16.map { scalar -> UInt16 in
             if 0x3041 <= scalar && scalar <= 0x3096 {
@@ -62,7 +62,7 @@ extension StringProtocol {
 
     /// Returns a String value in which Katakana are all converted to Hiragana.
     /// - Returns: A String value in which Katakana are all converted to Hiragana.
-    @inlinable public func toHiragana() -> String {
+    @inlinable func toHiragana() -> String {
         // ひらがなはutf16で常に2バイトなので、utf16単位で処理して良い
         let result = self.utf16.map { scalar -> UInt16 in
             if 0x30A1 <= scalar && scalar <= 0x30F6 {
@@ -79,7 +79,7 @@ extension StringProtocol {
     ///   - offset: The distance to offset from the start index.
     /// - Returns: An Index value that is the specified distance from the start index.
     @inlinable
-    public func indexFromStart(_ offset: Int) -> Index {
+    func indexFromStart(_ offset: Int) -> Index {
         self.index(self.startIndex, offsetBy: offset)
     }
 
@@ -93,7 +93,7 @@ extension StringProtocol {
      " -> \d
      */
     // please use these letters in order to avoid user-inputting text crash
-    public func escaped() -> String {
+    func escaped() -> String {
         var result = self.replacingOccurrences(of: "\\", with: "\\b")
         result = result.replacingOccurrences(of: "\0", with: "\\0")
         result = result.replacingOccurrences(of: "\n", with: "\\n")
@@ -104,7 +104,7 @@ extension StringProtocol {
         return result
     }
 
-    public func unescaped() -> String {
+    func unescaped() -> String {
         var result = self.replacingOccurrences(of: "\\d", with: "\"")
         result = result.replacingOccurrences(of: "\\s", with: " ")
         result = result.replacingOccurrences(of: "\\c", with: ",")

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftUtils
 
 enum ThemePicture: Equatable {
     case none

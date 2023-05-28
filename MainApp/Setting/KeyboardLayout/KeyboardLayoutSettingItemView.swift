@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
 import enum KanaKanjiConverterModule.KeyboardLanguage
 
 extension LanguageLayout {

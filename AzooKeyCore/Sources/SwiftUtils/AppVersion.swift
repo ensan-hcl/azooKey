@@ -13,7 +13,7 @@ import Foundation
 /// It is initialized with a string that represents a version of an app.
 /// The string must be in the format of "major.minor.patch".
 /// The string must not contain any other characters than numbers and dots.
-struct AppVersion: Codable, Equatable, Comparable, Hashable, LosslessStringConvertible, CustomStringConvertible {
+public struct AppVersion: Codable, Equatable, Comparable, Hashable, LosslessStringConvertible, CustomStringConvertible {
 
     /// ParseError is an enum that represents an error that occurs when parsing a string to an AppVersion.
     private enum ParseError: Error {
@@ -21,7 +21,7 @@ struct AppVersion: Codable, Equatable, Comparable, Hashable, LosslessStringConve
     }
 
     /// Initializes an AppVersion with a string that represents a version of an app.
-    init?(_ description: String) {
+    public init?(_ description: String) {
         if let versionSequence = try? description.split(separator: ".").map({ (value: Substring) throws -> Int in
             guard let value = Int(value) else { throw ParseError.nonIntegerValue }
             return value
@@ -49,7 +49,7 @@ struct AppVersion: Codable, Equatable, Comparable, Hashable, LosslessStringConve
     }
 
     /// Compares two AppVersions.
-    static func < (lhs: AppVersion, rhs: AppVersion) -> Bool {
+    public static func < (lhs: AppVersion, rhs: AppVersion) -> Bool {
         for (l, r) in zip([lhs.majorVersion, lhs.minorVersion, lhs.patchVersion], [rhs.majorVersion, rhs.minorVersion, rhs.patchVersion]) {
             if l == r {
                 continue
@@ -59,11 +59,11 @@ struct AppVersion: Codable, Equatable, Comparable, Hashable, LosslessStringConve
         return false
     }
 
-    var majorVersion: Int
-    var minorVersion: Int
-    var patchVersion: Int
+    public var majorVersion: Int
+    public var minorVersion: Int
+    public var patchVersion: Int
 
-    var description: String {
+    public var description: String {
         "\(majorVersion).\(minorVersion).\(patchVersion)"
     }
 }

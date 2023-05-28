@@ -8,6 +8,7 @@
 
 import Foundation
 import KanaKanjiConverterModule
+import SwiftUtils
 
 // ライブ変換を管理するためのクラス
 final class LiveConversionManager {

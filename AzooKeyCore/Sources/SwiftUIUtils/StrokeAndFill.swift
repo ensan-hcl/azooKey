@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-extension Shape {
+public extension Shape {
     func strokeAndFill(fillContent: some ShapeStyle, strokeContent: some ShapeStyle, lineWidth: CGFloat) -> some View {
         ZStack {
             self.fill(fillContent)

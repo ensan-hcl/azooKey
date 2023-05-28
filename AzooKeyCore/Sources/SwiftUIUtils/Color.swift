@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-extension Color {
+public extension Color {
     static let systemGray = Color(.systemGray)
     static let systemGray2 = Color(.systemGray2)
     static let systemGray3 = Color(.systemGray3)

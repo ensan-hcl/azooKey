@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUtils
 import UIKit
 
 struct ThemeIndices: Codable, Equatable {

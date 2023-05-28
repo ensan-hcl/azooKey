@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-extension LocalizedStringKey.StringInterpolation {
+public extension LocalizedStringKey.StringInterpolation {
     mutating func appendInterpolation(_ value: LocalizedStringKey, color: Color? = nil) {
         self.appendInterpolation(Text(value).foregroundColor(color))
     }

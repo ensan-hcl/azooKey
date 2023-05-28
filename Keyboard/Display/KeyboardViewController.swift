@@ -8,6 +8,7 @@
 
 import KanaKanjiConverterModule
 import SwiftUI
+import SwiftUtils
 import UIKit
 
 final private class KeyboardHostingController<Content: View>: UIHostingController<Content> {

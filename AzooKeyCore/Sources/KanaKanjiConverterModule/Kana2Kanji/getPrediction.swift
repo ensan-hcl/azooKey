@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUtils
 
 extension Kana2Kanji {
     /// CandidateDataの状態から予測変換候補を取得する関数

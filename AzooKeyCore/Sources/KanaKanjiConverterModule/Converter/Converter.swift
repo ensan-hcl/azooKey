@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUtils
 
 /// かな漢字変換の管理を受け持つクラス
 public final class KanaKanjiConverter {

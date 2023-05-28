@@ -8,16 +8,16 @@
 
 import SwiftUI
 
-struct CenterAlignedView<Content: View>: View {
+public struct CenterAlignedView<Content: View>: View {
     private let content: () -> Content
     private let padding: CGFloat?
 
-    init(padding: CGFloat? = nil, @ViewBuilder _ content: @escaping () -> Content) {
+    public init(padding: CGFloat? = nil, @ViewBuilder _ content: @escaping () -> Content) {
         self.content = content
         self.padding = padding
     }
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Spacer(minLength: padding)
             self.content()

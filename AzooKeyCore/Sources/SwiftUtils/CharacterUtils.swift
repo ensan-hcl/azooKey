@@ -26,12 +26,12 @@ public enum CharacterUtils {
     }
 
     /// ローマ字(a-z, A-Zか否か)
-    static func isRomanLetter(_ character: Character) -> Bool {
+    public static func isRomanLetter(_ character: Character) -> Bool {
         character.isASCII && character.isCased
     }
 
     /// 自分が小書きであれば該当する文字を返す。
-    static func kogaki(_ character: Character) -> Character {
+    public static func kogaki(_ character: Character) -> Character {
         switch character {
         case "あ":return "ぁ"
         case "い":return "ぃ"
@@ -62,7 +62,7 @@ public enum CharacterUtils {
     }
 
     /// 小書きから大書きを返す
-    static func ogaki(_ character: Character) -> Character {
+    public static func ogaki(_ character: Character) -> Character {
         switch character {
         case "ぁ":return "あ"
         case "ぃ":return "い"
@@ -93,11 +93,11 @@ public enum CharacterUtils {
     }
 
     /// 濁点付きか否か
-    static func isDakuten(_ character: Character) -> Bool {
+    public static func isDakuten(_ character: Character) -> Bool {
         dakutenKana.contains(character)
     }
     /// 濁点をつけて返す
-    static func dakuten(_ character: Character) -> Character {
+    public static func dakuten(_ character: Character) -> Character {
         switch character {
         case"う":return "ゔ"
         case"か":return "が"
@@ -145,7 +145,7 @@ public enum CharacterUtils {
         }
     }
     /// 濁点を外して返す
-    static func mudakuten(_ character: Character) -> Character {
+    public static func mudakuten(_ character: Character) -> Character {
         switch character {
         case"ゔ":return "う"
         case"が":return "か"
@@ -193,14 +193,14 @@ public enum CharacterUtils {
         }
     }
     /// 半濁点かどうか
-    static func isHandakuten(_ character: Character) -> Bool {
+    public static func isHandakuten(_ character: Character) -> Bool {
         [
             "ぱ", "ぴ", "ぷ", "ぺ", "ぽ",
             "パ", "ピ", "プ", "ペ", "ポ"
         ].contains(character)
     }
     /// 半濁点をつけて返す
-    static func handakuten(_ character: Character) -> Character {
+    public static func handakuten(_ character: Character) -> Character {
         switch character {
         case"は":return "ぱ"
         case"ひ":return "ぴ"
@@ -216,7 +216,7 @@ public enum CharacterUtils {
         }
     }
     /// 半濁点を外して返す
-    static func muhandakuten(_ character: Character) -> Character {
+    public static func muhandakuten(_ character: Character) -> Character {
         switch character {
         case"ぱ":return "は"
         case"ぴ":return "ひ"
@@ -285,7 +285,7 @@ public enum CharacterUtils {
     }
 }
 
-extension Character {
+public extension Character {
     /// Returns the Katakanized version of the character.
     @inlinable func toKatakana() -> Character {
         if self.unicodeScalars.count != 1 {

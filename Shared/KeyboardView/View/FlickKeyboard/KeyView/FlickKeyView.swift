@@ -9,6 +9,7 @@
 import CustardKit
 import Foundation
 import SwiftUI
+import SwiftUIUtils
 
 enum KeyPressState {
     case inactive

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUtils
 
 /// `TextReplacer`は前後の文脈に基づいて、現在のカーソル位置の語の置き換えを提案するためのモジュールである。
 /// 例えば、「tha|nk」と入力があるとき、「think」や「thanks」などを候補として表示することが考えられる。

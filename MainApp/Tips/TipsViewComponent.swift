@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
 
 struct TipsContentView<Content: View>: View {
     private let content: () -> Content

@@ -9,6 +9,7 @@
 import Foundation
 import PhotosUI
 import SwiftUI
+import SwiftUtils
 
 struct PhotoPicker: UIViewControllerRepresentable {
     internal init(configuration: PHPickerConfiguration, pickerResult: Binding<UIImage?>, isPresented: Binding<Bool>) {

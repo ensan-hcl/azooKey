@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-enum ColorTools {
-    static func rgba(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
+public enum ColorTools {
+    public static func rgba(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
         guard let rgba = color.cgColor?.components else {
             return nil
         }
@@ -22,7 +22,7 @@ enum ColorTools {
         return process(r, g, b, a)
     }
 
-    static func hsv(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
+    public static func hsv(_ color: Color, process: (Double, Double, Double, Double) -> Color = {Color(hue: $0, saturation: $1, brightness: $2, opacity: $3)}) -> Color? {
         guard let rgba = color.cgColor?.components else {
             return nil
         }

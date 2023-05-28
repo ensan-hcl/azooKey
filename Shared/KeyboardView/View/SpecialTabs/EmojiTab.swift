@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUtils
 
 struct EmojiTab: View {
     @EnvironmentObject private var variableStates: VariableStates

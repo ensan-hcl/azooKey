@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SwiftUtils
+
 extension Kana2Kanji {
     /// カナを漢字に変換する関数, 部分的に確定した後の場合。
     /// ### 実装方法

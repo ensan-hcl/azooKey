@@ -6,6 +6,7 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+@testable import SwiftUtils
 import XCTest
 
 final class StringExtensionTests: XCTestCase {

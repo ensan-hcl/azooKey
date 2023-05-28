@@ -10,6 +10,7 @@ import CustardExpressionEvaluator
 import CustardKit
 import Foundation
 import SwiftUI
+import SwiftUtils
 import enum KanaKanjiConverterModule.InputStyle
 import enum KanaKanjiConverterModule.KeyboardLanguage
 

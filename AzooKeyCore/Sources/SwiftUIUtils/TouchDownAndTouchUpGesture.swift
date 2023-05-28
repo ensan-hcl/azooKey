@@ -8,18 +8,25 @@
 
 import Foundation
 import SwiftUI
+import SwiftUtils
 
-struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
+public struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
+    public init(touchDownCallBack: @escaping () -> Void, touchMovedCallBack: @escaping (TouchDownAndTouchUpGestureView.GestureState) -> Void, touchUpCallBack: @escaping (TouchDownAndTouchUpGestureView.GestureState) -> Void) {
+        self.touchDownCallBack = touchDownCallBack
+        self.touchMovedCallBack = touchMovedCallBack
+        self.touchUpCallBack = touchUpCallBack
+    }
+
     let touchDownCallBack: () -> Void
     let touchMovedCallBack: (GestureState) -> Void
     let touchUpCallBack: (GestureState) -> Void
 
-    struct GestureState {
-        var distance: CGFloat
-        var time: CGFloat
+    public struct GestureState {
+        public var distance: CGFloat
+        public var time: CGFloat
     }
 
-    func makeUIView(context: UIViewRepresentableContext<Self>) -> Self.UIViewType {
+    public func makeUIView(context: UIViewRepresentableContext<Self>) -> Self.UIViewType {
         let view = UIView(frame: .zero)
         let tap = SingleScrollAndLongpressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.tap))
         tap.delegate = context.coordinator
@@ -27,7 +34,7 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
         return view
     }
 
-    class Coordinator: NSObject, UIGestureRecognizerDelegate {
+    public class Coordinator: NSObject, UIGestureRecognizerDelegate {
         var touchDownCallback: () -> Void
         var touchMovedCallBack: (GestureState) -> Void
         var touchUpCallback: (GestureState) -> Void
@@ -56,16 +63,16 @@ struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
             }
         }
 
-        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             true
         }
 
     }
-    func makeCoordinator() -> Coordinator {
+    public func makeCoordinator() -> Coordinator {
         Coordinator(touchDownCallback: touchDownCallBack, touchMovedCallBack: touchMovedCallBack, touchUpCallback: touchUpCallBack)
     }
 
-    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<Self>) {
+    public func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<Self>) {
         context.coordinator.touchDownCallback = self.touchDownCallBack
         context.coordinator.touchMovedCallBack = self.touchMovedCallBack
         context.coordinator.touchUpCallback = self.touchUpCallBack

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUtils
 
 protocol UserDefaultsKeys: RawRepresentable where RawValue == String {
     associatedtype Manager: UserDefaultsManager

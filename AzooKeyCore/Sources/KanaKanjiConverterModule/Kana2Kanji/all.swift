@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SwiftUtils
+
 extension Kana2Kanji {
     /// Latticeを構成する基本単位
     typealias Nodes = [[LatticeNode]]

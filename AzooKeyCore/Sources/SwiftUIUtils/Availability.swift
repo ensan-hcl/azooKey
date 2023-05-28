@@ -8,9 +8,9 @@
 
 import Foundation
 import SwiftUI
-// Though this file is now empty, add new items if there's need for availablity-erased views.
 
-extension View {
+public extension View {
+    @available(iOS 15.0, *)
     @ViewBuilder
     func iOS16_scrollContentBackground(_ visibility: Visibility) -> some View {
         if #available(iOS 16, *) {

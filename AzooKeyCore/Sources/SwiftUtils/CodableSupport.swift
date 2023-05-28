@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Encodable {
+public extension Encodable {
     /// Encodes this value into the given container.
     /// - Parameters:
     ///   - container: The container to encode this value into.

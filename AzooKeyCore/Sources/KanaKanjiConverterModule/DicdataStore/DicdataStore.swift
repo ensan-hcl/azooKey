@@ -8,6 +8,7 @@
 
 import Algorithms
 import Foundation
+import SwiftUtils
 
 public final class DicdataStore {
     public init(convertRequestOptions: ConvertRequestOptions) {

@@ -8,6 +8,7 @@
 
 import KanaKanjiConverterModule
 import OrderedCollections
+import SwiftUtils
 import UIKit
 
 @MainActor final class InputManager {

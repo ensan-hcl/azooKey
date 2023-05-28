@@ -11,7 +11,7 @@ import Foundation
 /// - Parameter:
 ///   - items: The items to print.
 /// - Note: This function is always preferred over `print` in the codebase.
-@inlinable func debug(_ items: Any...) {
+@inlinable public func debug(_ items: Any...) {
 #if DEBUG
     print(items.reduce(into: "") {$0.append(contentsOf: " \($1)")})
 #endif

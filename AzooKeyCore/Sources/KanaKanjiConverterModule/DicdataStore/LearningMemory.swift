@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUtils
 
 private struct MetadataElement: CustomDebugStringConvertible {
     init(day: UInt16, count: UInt8) {

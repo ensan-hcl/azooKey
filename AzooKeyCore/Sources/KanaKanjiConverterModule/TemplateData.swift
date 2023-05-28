@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUtils
 
 public struct TemplateData: Codable {
     public var name: String

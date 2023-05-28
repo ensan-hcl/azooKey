@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
+import SwiftUtils
 
 private struct EquatablePair<First: Equatable, Second: Equatable>: Equatable {
     var first: First

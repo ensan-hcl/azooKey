@@ -8,7 +8,14 @@
 import Foundation
 import Algorithms
 
-extension Sequence {
+@resultBuilder
+public struct ArrayBuilder {
+    public static func buildBlock<T>(_ values: T...) -> [T] {
+        values
+    }
+}
+
+public extension Sequence {
     /// Returns a sequence that contains the elements of this sequence followed by the elements of the given sequence.
     /// - Parameters:
     ///   - sequence: A sequence of elements to chain.
@@ -71,7 +78,7 @@ public extension MutableCollection {
     }
 }
 
-extension Collection {
+public extension Collection {
     /// Returns a SubSequence containing the elements of this sequence up to the first element that does not satisfy the given predicate.
     /// - Parameters:
     ///   - condition: A closure that takes an element of the sequence as its argument and returns a Boolean value indicating whether the element should be included.
@@ -85,7 +92,7 @@ extension Collection {
     }
 }
 
-extension Collection where Self.Element: Equatable {
+public extension Collection where Self.Element: Equatable {
     /// Returns a Bool value indicating whether the collection has the given prefix.
     /// - Parameters:
     ///   - prefix: A collection to search for at the beginning of this collection.

@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
+import SwiftUtils
 
 private final class ClipboardHistory: ObservableObject {
     @Published private(set) var pinnedItems: [ClipboardHistoryManager.Item] = []

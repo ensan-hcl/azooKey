@@ -8,8 +8,9 @@
 
 import SwiftUI
 
-struct IntegerTextField: View {
-    init(_ title: LocalizedStringKey, text: Binding<String>, range: ClosedRange<Int> = .min ... .max) {
+@available(iOS 15.0, *)
+public struct IntegerTextField: View {
+    public init(_ title: LocalizedStringKey, text: Binding<String>, range: ClosedRange<Int> = .min ... .max) {
         self.title = title
         self._text = text
         self.range = range
@@ -19,7 +20,7 @@ struct IntegerTextField: View {
     private let range: ClosedRange<Int>
     @Binding private var text: String
 
-    var body: some View {
+    public var body: some View {
         HStack {
             TextField(title, text: $text)
                 .onChange(of: text) { newValue in
@@ -31,7 +32,7 @@ struct IntegerTextField: View {
                         }
                     }
                 }
-            HStack (spacing: 0) {
+            HStack(spacing: 0) {
                 Button {
                     if let value = Int(text) {
                         if value == range.upperBound {

@@ -6,7 +6,7 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
-@testable import KanaKanjiConverterModule
+@testable import SwiftUtils
 import XCTest
 
 final class WithMutableValueTests: XCTestCase {

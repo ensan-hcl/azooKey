@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SwiftUtils
+
 extension Kana2Kanji {
     /// カナを漢字に変換する関数, 最後の複数文字を追加した場合。
     /// - Parameters:

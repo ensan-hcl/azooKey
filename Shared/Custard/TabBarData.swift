@@ -8,6 +8,7 @@
 
 import CustardKit
 import Foundation
+import SwiftUtils
 
 enum TabBarItemLabelType: Codable, Equatable {
     case text(String)

@@ -9,6 +9,7 @@
 import CustardKit
 import Foundation
 import SwiftUI
+import SwiftUIUtils
 
 private enum LabelType {
     case text, systemImage, mainAndSub
