@@ -13,6 +13,6 @@ import Foundation
 ///   - value: The value to modify.
 ///   - process: The process to modify the value.
 /// - Note: This function should be used when specific subscript setter is called for multiple times.
-public func withMutableValue<T>(_ value: inout T, process: (inout T) -> Void) {
+@inlinable public func withMutableValue<T>(_ value: inout T, process: (inout T) -> Void) {
     process(&value)
 }

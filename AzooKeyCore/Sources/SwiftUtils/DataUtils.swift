@@ -13,7 +13,7 @@ extension Data {
     /// - Parameter:
     ///   - type: The type to convert this data to.
     /// - Returns: An array of the given type.
-    public func toArray<T>(of type: T.Type) -> [T] {
+    @inlinable public func toArray<T>(of type: T.Type) -> [T] {
         self.withUnsafeBytes {pointer -> [T] in
             Array(
                 UnsafeBufferPointer(

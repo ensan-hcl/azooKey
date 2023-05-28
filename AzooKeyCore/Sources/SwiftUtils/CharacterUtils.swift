@@ -26,7 +26,7 @@ public enum CharacterUtils {
     }
 
     /// ローマ字(a-z, A-Zか否か)
-    public static func isRomanLetter(_ character: Character) -> Bool {
+    @inlinable public static func isRomanLetter(_ character: Character) -> Bool {
         character.isASCII && character.isCased
     }
 
