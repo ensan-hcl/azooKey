@@ -699,7 +699,7 @@
 		1AF28CF5253D1DC30012CF94 /* QwertyChangeKeyboardKeyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyChangeKeyboardKeyModel.swift; sourceTree = "<group>"; };
 		1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTypeSettingFailureTips.swift; sourceTree = "<group>"; };
 		1AF28D05253DE4B60012CF94 /* KeyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyLabel.swift; sourceTree = "<group>"; };
-		1AF3060029FE6C2800B4DAC3 /* KanaKanjiConverterModule */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KanaKanjiConverterModule; sourceTree = "<group>"; };
+		1AF3060029FE6C2800B4DAC3 /* AzooKeyCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AzooKeyCore; sourceTree = "<group>"; };
 		1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetSetting.swift; sourceTree = "<group>"; };
 		1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetCondition.swift; sourceTree = "<group>"; };
 		1AF6784925CC20B400F3987B /* ThemeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTab.swift; sourceTree = "<group>"; };
@@ -973,7 +973,7 @@
 		1A3DC1B92500D44A002CAA93 = {
 			isa = PBXGroup;
 			children = (
-				1AF3060029FE6C2800B4DAC3 /* KanaKanjiConverterModule */,
+				1AF3060029FE6C2800B4DAC3 /* AzooKeyCore */,
 				1A1A629929C8B62D00EF7B26 /* Gen */,
 				1AA346B42567F26000B41A16 /* Shared */,
 				1A3DC1C42500D44A002CAA93 /* MainApp */,
