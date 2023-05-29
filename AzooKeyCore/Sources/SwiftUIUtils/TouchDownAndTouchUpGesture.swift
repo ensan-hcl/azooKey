@@ -10,6 +10,8 @@ import Foundation
 import SwiftUI
 import SwiftUtils
 
+#if os(iOS)
+import UIKit
 public struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
     public init(touchDownCallBack: @escaping () -> Void, touchMovedCallBack: @escaping (TouchDownAndTouchUpGestureView.GestureState) -> Void, touchUpCallBack: @escaping (TouchDownAndTouchUpGestureView.GestureState) -> Void) {
         self.touchDownCallBack = touchDownCallBack
@@ -122,3 +124,4 @@ fileprivate final class SingleScrollAndLongpressGestureRecognizer: UIGestureReco
         self.startLocation = .zero
     }
 }
+#endif

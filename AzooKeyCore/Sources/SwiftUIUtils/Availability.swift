@@ -10,10 +10,10 @@ import Foundation
 import SwiftUI
 
 public extension View {
-    @available(iOS 15.0, *)
+    @available(iOS 15, macOS 12, *)
     @ViewBuilder
     func iOS16_scrollContentBackground(_ visibility: Visibility) -> some View {
-        if #available(iOS 16, *) {
+        if #available(iOS 16, macOS 13, *) {
             self.scrollContentBackground(visibility)
         } else {
             self
