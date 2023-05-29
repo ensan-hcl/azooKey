@@ -20,6 +20,6 @@ jobs:
         swift-version: "5.8"
     - uses: actions/checkout@v3
     - name: Build
-      run: swift build --package-path KanaKanjiConverterModule -v
+      run: swift build --package-path AzooKeyCore -v
     - name: Run tests
-      run: swift test --package-path KanaKanjiConverterModule -v
+      run: swift test --package-path AzooKeyCore -v
