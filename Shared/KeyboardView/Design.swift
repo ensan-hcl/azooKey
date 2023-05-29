@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftUIUtils
 
 /// タブに依存するデザイン上の数値を計算する構造体
 struct TabDependentDesign {

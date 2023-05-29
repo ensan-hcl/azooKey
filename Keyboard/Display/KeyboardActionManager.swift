@@ -8,6 +8,7 @@
 
 import KanaKanjiConverterModule
 import SwiftUI
+import SwiftUtils
 
 /// キーボードへのアクション部門の動作を担う。
 @MainActor final class KeyboardActionManager: UserActionManager {

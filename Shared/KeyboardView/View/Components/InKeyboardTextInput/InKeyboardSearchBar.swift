@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUtils
 
 struct InKeyboardSearchBar: View {
     init(text: Binding<String>, configuration: Configuration, initiallyFocused: Bool = false) {

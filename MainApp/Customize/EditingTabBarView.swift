@@ -9,6 +9,7 @@
 import CustardKit
 import Foundation
 import SwiftUI
+import SwiftUtils
 
 struct EditingTabBarItem: Identifiable, Equatable {
     let id = UUID()

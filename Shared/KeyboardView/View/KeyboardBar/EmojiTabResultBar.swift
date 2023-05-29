@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
 
 struct EmojiTabResultBar: View {
     @Environment(\.themeEnvironment) private var theme

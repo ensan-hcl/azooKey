@@ -7,6 +7,7 @@
 //
 
 import KanaKanjiConverterModule
+import SwiftUtils
 import UIKit
 
 /// UI側の入力中のテキストの更新を受け持つクラス

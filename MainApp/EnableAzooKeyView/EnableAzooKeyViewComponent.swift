@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
 
 struct EnableAzooKeyViewHeader: View {
     private let text: LocalizedStringKey

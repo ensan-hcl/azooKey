@@ -8,6 +8,8 @@
 
 import Foundation
 import SwiftUI
+import SwiftUIUtils
+import SwiftUtils
 
 struct BetaMoveCursorBarState {
     private(set) var displayLeftIndex = 0

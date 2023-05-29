@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftUIUtils
 
 struct SimpleKeyView: View {
     private let model: any SimpleKeyModelProtocol

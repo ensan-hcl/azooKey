@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
 
 struct DisclosuringList<Item: Identifiable, Label: View, Content: View>: View {
     @Environment(\.editMode) var editMode

@@ -6,6 +6,7 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+import SwiftUtils
 import UIKit
 
 final class IKTextDocumentProxy: NSObject, UITextDocumentProxy {

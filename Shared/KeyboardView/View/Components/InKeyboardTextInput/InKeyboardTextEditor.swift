@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftUtils
 
 struct InKeyboardTextEditor: View {
     init(text: Binding<String>, configuration: Configuration) {

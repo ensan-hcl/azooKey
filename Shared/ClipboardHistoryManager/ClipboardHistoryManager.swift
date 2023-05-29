@@ -8,6 +8,7 @@
 
 import class UIKit.UIPasteboard
 import Foundation
+import SwiftUtils
 
 struct ClipboardHistoryManager {
     static let maxCount = 50

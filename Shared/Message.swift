@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftUtils
 
 enum MessageIdentifier: String, Hashable, CaseIterable {
     case mock = "mock_alert_2022_09_16_03"

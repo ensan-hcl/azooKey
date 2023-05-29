@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
+import SwiftUtils
 
 struct ThemeTabView: View {
     @Namespace private var namespace

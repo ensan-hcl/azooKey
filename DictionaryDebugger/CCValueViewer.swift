@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
 import KanaKanjiConverterModule
 
 struct CCValueViewer: View {

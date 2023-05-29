@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftUtils
 
 protocol BoolKeyboardSettingKey: KeyboardSettingKey, StoredInUserDefault where Value == Bool {
     /// 有効化時に実行される処理

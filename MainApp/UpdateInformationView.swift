@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import SwiftUtils
+
 struct UpdateInformationView: View {
     var body: some View {
         Form {
