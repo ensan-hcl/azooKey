@@ -6,9 +6,9 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+import KanaKanjiConverterModule
 import SwiftUI
 import SwiftUIUtils
-import KanaKanjiConverterModule
 
 struct MMValueViewer: View {
     private let dicdataStore: DicdataStore

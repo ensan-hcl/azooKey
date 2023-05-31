@@ -6,9 +6,9 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+import KanaKanjiConverterModule
 import SwiftUI
 import SwiftUIUtils
-import KanaKanjiConverterModule
 
 struct KanaKanjiConvertResultViewer: View {
     private let converter: KanaKanjiConverter
@@ -45,9 +45,9 @@ struct KanaKanjiConvertResultViewer: View {
             .keyboardType(.numberPad)
             .submitLabel(.done)
         Text(requestConversion()
-            .prefix(prefix)
-            .map{"word: \($0.text), value: \($0.value), data: \($0.data.map{$0.debugDescription}.joined(separator: ", "))"}
-            .joined(separator: "\n")
+                .prefix(prefix)
+                .map {"word: \($0.text), value: \($0.value), data: \($0.data.map {$0.debugDescription}.joined(separator: ", "))"}
+                .joined(separator: "\n")
         )
     }
 }

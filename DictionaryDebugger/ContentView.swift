@@ -6,11 +6,11 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
-import SwiftUI
 import KanaKanjiConverterModule
+import SwiftUI
 
 struct ContentView: View {
-    @State private var dicdataStore: DicdataStore? = nil
+    @State private var dicdataStore: DicdataStore?
 
     var body: some View {
         ScrollView {
