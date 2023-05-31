@@ -9,7 +9,7 @@ let swiftSettings: [SwiftSetting] = [
     .enableUpcomingFeature("ExistentialAny"),
     .enableUpcomingFeature("ForwardTrailingClosures"),
     .enableUpcomingFeature("ImplicitOpenExistentials"),
-    .enableUpcomingFeature("StrictConcurrency"),
+    .enableUpcomingFeature("StrictConcurrency")
 ]
 let package = Package(
     name: "AzooKeyCore",
@@ -27,12 +27,12 @@ let package = Package(
         .library(
             name: "SwiftUIUtils",
             targets: ["SwiftUIUtils"]
-        ),
+        )
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -40,7 +40,7 @@ let package = Package(
         .target(
             name: "SwiftUtils",
             dependencies: [
-                .product(name: "Algorithms", package: "swift-algorithms"),
+                .product(name: "Algorithms", package: "swift-algorithms")
             ],
             resources: [],
             swiftSettings: swiftSettings
@@ -74,6 +74,6 @@ let package = Package(
                 .copy("DictionaryMock")
             ],
             swiftSettings: swiftSettings
-        ),
+        )
     ]
 )

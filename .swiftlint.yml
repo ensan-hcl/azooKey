@@ -7,6 +7,9 @@ disabled_rules:
   - identifier_name
   - cyclomatic_complexity
   - large_tuple
+  - function_parameter_count
+  - nesting
+  - redundant_string_enum_value   # Codableの適合性で利用されるため、明示的にしたい
 opt_in_rules:
   - unused_import
   - unused_declaration
@@ -25,15 +28,14 @@ opt_in_rules:
   - toggle_bool # .toggleを推奨
 
 included:
-  - KanaKanjier
+  - MainApp
   - Keyboard
   - Shared
-  - KanaKanjierTests
+  - azooKeyTests
+  - AzooKeyCore
+  - DictionaryDebugger
 excluded:
-  - LOUDSBuilder
-  - ValuesBinary
-  - deprecated
-  - KanaKanjierUITests
+  - AzooKeyCore/.build
 type_name:
   excluded: 
     - ID

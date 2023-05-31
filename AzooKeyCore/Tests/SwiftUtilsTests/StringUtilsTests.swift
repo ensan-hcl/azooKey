@@ -86,7 +86,6 @@ final class StringTests: XCTestCase {
         XCTAssertEqual("えモじ😇".toHiragana(), "えもじ😇")
     }
 
-
     func testPerformanceExample() throws {
     }
 }

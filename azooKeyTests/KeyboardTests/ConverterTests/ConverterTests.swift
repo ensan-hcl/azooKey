@@ -127,7 +127,7 @@ final class ConverterTests: XCTestCase {
                 c.deleteBackwardFromCursorPosition(count: count)
                 _ = converter.requestCandidates(c, options: requestOptions())
 
-                c.insertAtCursorPosition(String(text[i-count+1 ... i]), inputStyle: .direct)
+                c.insertAtCursorPosition(String(text[i - count + 1 ... i]), inputStyle: .direct)
                 _ = converter.requestCandidates(c, options: requestOptions())
             }
             if c.input.count == text.count {
@@ -145,7 +145,7 @@ final class ConverterTests: XCTestCase {
                 ("しんだどうぶつ", "死んだ動物"),
                 ("けいさん", "計算"),
                 ("azooKeyのへんかんのうりょく。", "azooKeyの変換能力。"),
-                ("じどうAIそうじゅう。", "自動AI操縦。"),
+                ("じどうAIそうじゅう。", "自動AI操縦。")
             ]
 
             // full input
@@ -174,7 +174,7 @@ final class ConverterTests: XCTestCase {
             let cases: [(input: String, expect: String)] = [
                 ("tukatteiru", "使っている"),
                 ("sindadoubutu", "死んだ動物"),
-                ("keisann", "計算"),
+                ("keisann", "計算")
             ]
 
             // full input
@@ -200,7 +200,6 @@ final class ConverterTests: XCTestCase {
             }
         }
     }
-
 
     // 変換結果が比較的一意なテストケースを無数に持ち、一定の割合を正解することを要求する
     // 辞書を更新した結果性能が悪化したら気付ける
@@ -237,7 +236,7 @@ final class ConverterTests: XCTestCase {
             ("よとうもやとうもでぃすればちゅうりつ", ["与党も野党もディスれば中立"]),
             ("だいすきなえしさん", ["大好きな絵師さん"]),
             ("ぱいそんでかかれたそーすこーど", ["Pythonで書かれたソースコード"]),
-            ("SwiftでつくったApp", ["Swiftで作ったApp"]),
+            ("SwiftでつくったApp", ["Swiftで作ったApp"])
         ]
 
         var score: Double = 0
@@ -257,7 +256,6 @@ final class ConverterTests: XCTestCase {
         print("testAccuracy Result: accuracy \(accuracy), score \(score), count \(cases.count)")
         XCTAssertGreaterThan(accuracy, 0.7) // 0.7 < acuracy
     }
-
 
     /// MIDベースの文節単位計算でどれだけ同音異義語の判断が向上しているか確認する。
     func testMeaningBasedConversionAccuracy() throws {
@@ -511,7 +509,7 @@ final class ConverterTests: XCTestCase {
             ("きんきゅう、ようじ、きたく", "緊急、用事、帰宅"),
 
             ("おやぶん、こぶん", "親分、子分"),
-            ("かんぶん、こぶん", "漢文、古文"),
+            ("かんぶん、こぶん", "漢文、古文")
         ]
 
         var score: Double = 0

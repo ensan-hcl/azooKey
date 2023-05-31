@@ -21,7 +21,7 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
     @State private var showAlert = false
     @State private var setting: SettingUpdater<SettingKey>
 
-    @MainActor 
+    @MainActor
     init(_ key: SettingKey, _ target: Target, availableValueRange: ClosedRange<Double>) {
         self.target = target
         self.availableValueRange = availableValueRange

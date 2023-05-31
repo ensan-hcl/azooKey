@@ -8,9 +8,9 @@
 
 import Foundation
 import PhotosUI
-import SwiftUtils
 import SwiftUI
 import SwiftUIUtils
+import SwiftUtils
 
 private struct ThemeColorTranslator: Intertranslator {
     typealias First = ThemeColor

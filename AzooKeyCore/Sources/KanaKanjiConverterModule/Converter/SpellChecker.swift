@@ -12,19 +12,18 @@ import UIKit
 import AppKit
 #endif
 
-
 final class SpellChecker {
-#if os(iOS) || os(tvOS)
+    #if os(iOS) || os(tvOS)
     private let checker = UITextChecker()
-#elseif os(macOS)
+    #elseif os(macOS)
     private let checker = NSSpellChecker.shared
-#endif
+    #endif
 
     func completions(forPartialWordRange range: NSRange, in string: String, language: String) -> [String]? {
-#if os(iOS) || os(tvOS)
+        #if os(iOS) || os(tvOS)
         return checker.completions(forPartialWordRange: range, in: string, language: language)
-#elseif os(macOS)
+        #elseif os(macOS)
         return checker.completions(forPartialWordRange: range, in: string, language: language, inSpellDocumentWithTag: 0)
-#endif
+        #endif
     }
 }

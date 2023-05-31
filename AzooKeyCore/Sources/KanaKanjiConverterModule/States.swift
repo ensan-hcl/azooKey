@@ -1,10 +1,9 @@
 //
 //  States.swift
-//  
+//
 //
 //  Created by ensan on 2023/04/30.
 //
-
 
 public enum InputStyle: String {
     /// 入力された文字を直接入力するスタイル
@@ -12,7 +11,6 @@ public enum InputStyle: String {
     /// ローマ字日本語入力とするスタイル
     case roman2kana = "roman"
 }
-
 
 public enum KeyboardLanguage: String, Codable, Equatable {
     case en_US
@@ -24,7 +22,7 @@ public enum KeyboardLanguage: String, Codable, Equatable {
 public enum LearningType: Int, CaseIterable {
     case inputAndOutput
     case onlyOutput
-    case nothing 
+    case nothing
 
     var needUpdateMemory: Bool {
         self == .inputAndOutput
@@ -34,7 +32,6 @@ public enum LearningType: Int, CaseIterable {
         self != .nothing
     }
 }
-
 
 public enum ConverterBehaviorSemantics {
     /// 標準的な日本語入力のように、変換する候補を選ぶパターン

@@ -42,7 +42,7 @@ struct ShareWordView: View {
                 Button("申請する") {
                     Task.detached {
                         self.sending = true
-                        let _ = await SharedStore.sendSharedWord(word: word, ruby: ruby.toKatakana(), options: [])
+                        _ = await SharedStore.sendSharedWord(word: word, ruby: ruby.toKatakana(), options: [])
                         self.sending = false
                         await MainActor.run {
                             dismiss()

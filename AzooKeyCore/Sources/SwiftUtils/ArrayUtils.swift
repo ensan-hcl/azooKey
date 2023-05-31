@@ -1,12 +1,12 @@
 //
 //  ArrayUtils.swift
-//  
+//
 //
 //  Created by ensan on 2023/04/30.
 //
 
-import Foundation
 import Algorithms
+import Foundation
 
 @resultBuilder
 public struct ArrayBuilder {

@@ -46,29 +46,29 @@ extension CodableActionData {
             case .shortcuts:
                 return "ショートカットを実行する"
             }
-//        case .setBoolState: return "Bool変数を設定"
-//        case .boolSwitch: return "条件分岐"
-//        case let .setCursorBar(value):
-//            // TODO: LOCALIZE
-//            switch value {
-//            case .on: return "カーソルバーを表示する"
-//            case .off: return "カーソルバーを消す"
-//            case .toggle: return "カーソルバーの切り替え"
-//            }
-//        case let .setCapsLockState(value):
-//            // TODO: LOCALIZE
-//            switch value {
-//            case .on: return "Caps lockのモードのオン"
-//            case .off: return "Caps lockのモードのオフ"
-//            case .toggle: return "Caps lockのモードの切り替え"
-//            }
-//        case let .setTabBar(value):
-//            // TODO: LOCALIZE
-//            switch value {
-//            case .on: return "タブバーを表示する"
-//            case .off: return "タブバーを消す"
-//            case .toggle: return "タブバーの切り替え"
-//            }
+        //        case .setBoolState: return "Bool変数を設定"
+        //        case .boolSwitch: return "条件分岐"
+        //        case let .setCursorBar(value):
+        //            // TODO: LOCALIZE
+        //            switch value {
+        //            case .on: return "カーソルバーを表示する"
+        //            case .off: return "カーソルバーを消す"
+        //            case .toggle: return "カーソルバーの切り替え"
+        //            }
+        //        case let .setCapsLockState(value):
+        //            // TODO: LOCALIZE
+        //            switch value {
+        //            case .on: return "Caps lockのモードのオン"
+        //            case .off: return "Caps lockのモードのオフ"
+        //            case .toggle: return "Caps lockのモードの切り替え"
+        //            }
+        //        case let .setTabBar(value):
+        //            // TODO: LOCALIZE
+        //            switch value {
+        //            case .on: return "タブバーを表示する"
+        //            case .off: return "タブバーを消す"
+        //            case .toggle: return "タブバーの切り替え"
+        //            }
         }
     }
 }
@@ -257,7 +257,7 @@ private struct ActionEditIntegerTextField: View {
     private let range: ClosedRange<Int>
     @Binding private var action: EditingCodableActionData
     private let convert: (String) -> CodableActionData?
-    init(_ title: LocalizedStringKey, action: Binding<EditingCodableActionData>, range: ClosedRange<Int> = .min ... .max, initialValue: () -> String?,  convert: @escaping (String) -> CodableActionData?) {
+    init(_ title: LocalizedStringKey, action: Binding<EditingCodableActionData>, range: ClosedRange<Int> = .min ... .max, initialValue: () -> String?, convert: @escaping (String) -> CodableActionData?) {
         self.title = title
         self.range = range
         self.convert = convert
