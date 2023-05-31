@@ -6,8 +6,8 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
-import XCTest
 import KanaKanjiConverterModule
+import XCTest
 
 final class DicdataStoreTests: XCTestCase {
     func sequentialInput(_ composingText: inout ComposingText, sequence: String, inputStyle: KanaKanjiConverterModule.InputStyle) {
@@ -49,12 +49,12 @@ final class DicdataStoreTests: XCTestCase {
             ("アイロ", "隘路"),
             ("ナンタイ", "軟体"),
             ("ナンジ", "何時"),
-            ("ナド", "等"),
+            ("ナド", "等")
         ]
         for (key, word) in mustWords {
             var c = ComposingText()
             c.insertAtCursorPosition(key, inputStyle: .direct)
-            let result = dicdataStore.getLOUDSData(inputData: c, from: 0, to: c.input.endIndex-1)
+            let result = dicdataStore.getLOUDSData(inputData: c, from: 0, to: c.input.endIndex - 1)
             // 冗長な書き方だが、こうすることで「どの項目でエラーが発生したのか」がはっきりするため、こう書いている。
             XCTAssertEqual(result.first(where: {$0.data.word == word})?.data.word, word)
         }
@@ -68,12 +68,12 @@ final class DicdataStoreTests: XCTestCase {
             ("タイ", "体."),
             ("アサッテ", "明日"),
             ("チョ", "ちょwww"),
-            ("a", "あ"),   // direct入力の場合「a」で「あ」をサジェストしてはいけない
+            ("a", "あ")   // direct入力の場合「a」で「あ」をサジェストしてはいけない
         ]
         for (key, word) in mustWords {
             var c = ComposingText()
             c.insertAtCursorPosition(key, inputStyle: .direct)
-            let result = dicdataStore.getLOUDSData(inputData: c, from: 0, to: c.input.endIndex-1)
+            let result = dicdataStore.getLOUDSData(inputData: c, from: 0, to: c.input.endIndex - 1)
             XCTAssertNil(result.first(where: {$0.data.word == word && $0.data.ruby == key}))
         }
     }
