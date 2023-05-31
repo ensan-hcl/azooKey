@@ -9,7 +9,7 @@
 import Foundation
 
 extension KanaKanjiConverter {
-    
+
     /// バージョン情報を表示する関数。
     /// Mozcは「バージョン」で言語モデルのバージョンが表示されるらしいので、azooKeyもこれをつけて「azooKey 1.7.2」とか表示させよう。
     /// - parameters:

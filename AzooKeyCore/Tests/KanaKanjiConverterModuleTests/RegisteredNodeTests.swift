@@ -72,7 +72,7 @@ final class RegisteredNodeTests: XCTestCase {
             data: [node1.data, node2.data, node3.data, node4.data]
         )
         XCTAssertEqual(result.data, expectedResult.data)
-        XCTAssertEqual(result.clauses.map{$0.value}, expectedResult.clauses.map{$0.value})
-        XCTAssertEqual(result.clauses.map{$0.clause}, expectedResult.clauses.map{$0.clause})
+        XCTAssertEqual(result.clauses.map {$0.value}, expectedResult.clauses.map {$0.value})
+        XCTAssertEqual(result.clauses.map {$0.clause}, expectedResult.clauses.map {$0.clause})
     }
 }

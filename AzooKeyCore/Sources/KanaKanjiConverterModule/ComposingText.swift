@@ -28,7 +28,6 @@ public struct ComposingText {
     /// 変換対象文字列。
     public private(set) var convertTarget: String = ""
 
-
     /// ユーザ入力の単位
     public struct InputElement {
         /// 入力された文字

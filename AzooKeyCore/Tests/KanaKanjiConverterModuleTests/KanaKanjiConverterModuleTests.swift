@@ -1,5 +1,5 @@
-import XCTest
 @testable import KanaKanjiConverterModule
+import XCTest
 
 final class KanaKanjiConverterModuleTests: XCTestCase {
     func testExample() throws {
