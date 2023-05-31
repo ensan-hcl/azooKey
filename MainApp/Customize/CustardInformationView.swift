@@ -8,9 +8,9 @@
 
 import CustardKit
 import Foundation
-import SwiftUtils
 import SwiftUI
 import SwiftUIUtils
+import SwiftUtils
 
 fileprivate extension CustardLanguage {
     var label: LocalizedStringKey {

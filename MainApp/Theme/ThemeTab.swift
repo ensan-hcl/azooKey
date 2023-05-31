@@ -96,7 +96,7 @@ struct ThemeTabView: View {
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
                 HStack {
-                    KeyboardPreview(theme: theme,scale: 0.6, defaultTab: tab)
+                    KeyboardPreview(theme: theme, scale: 0.6, defaultTab: tab)
                         .disabled(true)
                     selectButton(index)
                     if editViewIndex == index {

@@ -24,4 +24,3 @@ struct KeyboardBehaviorIssueAfterInstallTipsView: View {
         }
     }
 }
-

@@ -13,7 +13,7 @@ import SwiftUtils
 
 extension LOUDSBuilder {
     static var char2UInt8: [Character: UInt8] = [:]
-    
+
     static func loadCharID() {
         do {
             let chidURL = Bundle.main.bundleURL.appendingPathComponent("charID.chid", isDirectory: false)
@@ -23,7 +23,7 @@ extension LOUDSBuilder {
             debug("ファイルが存在しません: \(error)")
         }
     }
-    
+
     static func getID(from char: Character) -> UInt8? {
         Self.char2UInt8[char]
     }
@@ -32,13 +32,13 @@ extension LOUDSBuilder {
 struct LOUDSBuilder {
     let txtFileSplit: Int
     let templateData: [TemplateData]
-    
+
     init(txtFileSplit: Int) {
         self.txtFileSplit = txtFileSplit
         Self.loadCharID()
         self.templateData = TemplateData.load()
     }
-    
+
     private func BoolToUInt64(_ bools: [Bool]) -> [UInt64] {
         let unit = 64
         let value = bools.count.quotientAndRemainder(dividingBy: unit)
@@ -53,18 +53,18 @@ struct LOUDSBuilder {
         }
         return result
     }
-    
+
     struct DataBlock {
         var count: Int {
             data.count
         }
         var ruby: String
         var data: [(word: String, lcid: Int, rcid: Int, mid: Int, score: Float)]
-        
+
         init(entries: [String]) {
             self.ruby = ""
             self.data = []
-            
+
             for entry in entries {
                 let items = entry.utf8.split(separator: UInt8(ascii: "\t"), omittingEmptySubsequences: false).map {String($0)!}
                 assert(items.count == 6)
@@ -74,7 +74,7 @@ struct LOUDSBuilder {
                 let rcid = Int(items[3]) ?? lcid
                 let mid = Int(items[4]) ?? .zero
                 let score = Float(items[5]) ?? -30.0
-                
+
                 if self.ruby.isEmpty {
                     self.ruby = ruby
                 } else {
@@ -83,13 +83,13 @@ struct LOUDSBuilder {
                 self.data.append((word, lcid, rcid, mid, score))
             }
         }
-        
+
         func makeLoudstxt3Entry() -> Data {
             var data = Data()
             // エントリのカウントを2byteでエンコード
             var count = UInt16(self.count)
             data.append(contentsOf: Data(bytes: &count, count: MemoryLayout<UInt16>.size))
-            
+
             // 数値データ部をエンコード
             // 10byteが1つのエントリに対応するので、10*count byte
             for (_, lcid, rcid, mid, score) in self.data {
@@ -105,7 +105,7 @@ struct LOUDSBuilder {
                 var score = Float32(score)
                 data.append(contentsOf: Data(bytes: &score, count: MemoryLayout<Float32>.size))
             }
-            
+
             // wordをエンコード
             // 最先頭の要素はrubyになる
             let text = ([self.ruby] + self.data.map { $0.word == self.ruby ? "" : $0.word }).joined(separator: "\t")
@@ -113,7 +113,7 @@ struct LOUDSBuilder {
             return data
         }
     }
-    
+
     func loadUserDictInfo() -> (paths: [String], blocks: [String], useradds: [UserDictionaryData]) {
         let paths: [String]
         if let list = UserDefaults.standard.array(forKey: "additional_dict") as? [String] {
@@ -121,24 +121,24 @@ struct LOUDSBuilder {
         } else {
             paths = []
         }
-        
+
         let blocks: [String]
         if let list = UserDefaults.standard.array(forKey: "additional_dict_blocks") as? [String] {
             blocks = list.compactMap {AdditionalDictBlockManager.Target(rawValue: $0)}.flatMap {$0.characters}
         } else {
             blocks = []
         }
-        
+
         let useradds: [UserDictionaryData]
         if let dictionary = UserDictionary.get() {
             useradds = dictionary.items
         } else {
             useradds = []
         }
-        
+
         return (paths, blocks, useradds)
     }
-    
+
     func parseTemplate(_ word: some StringProtocol) -> String {
         if let range = word.range(of: "\\{\\{.*?\\}\\}", options: .regularExpression) {
             let center: String
@@ -147,7 +147,7 @@ struct LOUDSBuilder {
             } else {
                 center = String(word[range])
             }
-            
+
             let left = word[word.startIndex..<range.lowerBound]
             let right = word[range.upperBound..<word.endIndex]
             return parseTemplate(left) + center + parseTemplate(right)
@@ -155,7 +155,7 @@ struct LOUDSBuilder {
             return word.escaped()
         }
     }
-    
+
     func makeDictionaryForm(_ data: UserDictionaryData) -> [String] {
         let katakanaRuby = data.ruby.toKatakana()
         if data.isVerb {
@@ -175,30 +175,30 @@ struct LOUDSBuilder {
         }
         return ["\(katakanaRuby)\t\(parseTemplate(data.word))\t\(cid)\t\(cid)\t\(501)\t-5.0000"]
     }
-    
+
     func make_loudstxt3(lines: [DataBlock]) -> Data {
         let lc = lines.count    // データ数
         let count = Data(bytes: [UInt16(lc)], count: 2) // データ数をUInt16でマップ
-        
+
         let data = lines.map { $0.makeLoudstxt3Entry() }
         let body = data.reduce(Data(), +)   // データ
-        
+
         let header_endIndex: UInt32 = 2 + UInt32(lc) * UInt32(MemoryLayout<UInt32>.size)
         let headerArray = data.dropLast().reduce(into: [header_endIndex]) {array, value in // ヘッダの作成
             array.append(array.last! + UInt32(value.count))
         }
-        
+
         let header = Data(bytes: headerArray, count: MemoryLayout<UInt32>.size * headerArray.count)
         let binary = count + header + body
-        
+
         return binary
     }
-    
+
     @MainActor func process(to identifier: String = "user") {
         let trieroot = TrieNode<Character, Int>()
-        
+
         let (paths, blocks, useradds) = self.loadUserDictInfo()
-        
+
         var csvLines: [Substring] = []
         do {
             for path in paths {
@@ -217,15 +217,15 @@ struct LOUDSBuilder {
             csvLines = []
             return
         }
-        
+
         let directoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
-        
+
         let binaryFileURL = directoryURL.appendingPathComponent("\(identifier).louds", isDirectory: false)
         let loudsCharsFileURL = directoryURL.appendingPathComponent("\(identifier).loudschars2", isDirectory: false)
         let loudsTxtFileURL: (String) -> URL = {directoryURL.appendingPathComponent("\(identifier + $0).loudstxt", isDirectory: false)}
         let loudsTxt2FileURL: (String) -> URL = {directoryURL.appendingPathComponent("\(identifier + $0).loudstxt2", isDirectory: false)}
         let loudsTxt3FileURL: (String) -> URL = {directoryURL.appendingPathComponent("\(identifier + $0).loudstxt3", isDirectory: false)}
-        
+
         var currentID = 0
         var nodes2Characters: [Character] = ["\0", "\0"]
         var data: [DataBlock] = [.init(entries: []), .init(entries: [])]
@@ -245,16 +245,16 @@ struct LOUDSBuilder {
             }
             currentNodes = currentNodes.flatMap {$0.1.children.map {($0.key, $0.value)}.sorted(by: {$0.0 < $1.0})}
         }
-        
+
         let bytes = BoolToUInt64(bits)
-        
+
         do {
             let binary = Data(bytes: bytes, count: bytes.count * 8)
             try binary.write(to: binaryFileURL)
         } catch {
             debug(error)
         }
-        
+
         do {
             let uint8s = nodes2Characters.map {Self.getID(from: $0) ?? 0}    // エラー回避。0は"\0"に対応し、呼ばれることはない。
             let binary = Data(bytes: uint8s, count: uint8s.count)
@@ -262,7 +262,7 @@ struct LOUDSBuilder {
         } catch {
             debug(error)
         }
-        
+
         do {
             let count = (data.count) / txtFileSplit
             let indiceses: [Range<Int>] = (0...count).map {
@@ -271,7 +271,7 @@ struct LOUDSBuilder {
                 let end = data.count < _end ? data.count:_end
                 return start..<end
             }
-            
+
             for indices in indiceses {
                 do {
                     let start = indices.startIndex / txtFileSplit
@@ -284,10 +284,10 @@ struct LOUDSBuilder {
                     debug("LOUDSBuilder.process", error)
                 }
             }
-            
+
             var manager = MessageManager()
             manager.done(.ver1_9_user_dictionary_update)
         }
     }
-    
+
 }
