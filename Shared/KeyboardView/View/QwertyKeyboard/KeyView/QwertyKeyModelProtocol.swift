@@ -49,7 +49,7 @@ enum QwertyUnpressedKeyColorType {
     case selected
     case unimportant
 
-    func color(states: VariableStates, theme: ThemeData) -> Color {
+    func color(states: VariableStates, theme: AzooKeyTheme) -> Color {
         switch self {
         case .normal:
             return theme.normalKeyFillColor.color
@@ -88,14 +88,14 @@ protocol QwertyKeyModelProtocol {
 
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
     @MainActor func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color
+    func backGroundColorWhenPressed(theme: AzooKeyTheme) -> Color
     var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
 
     @MainActor func feedback(variableStates: VariableStates)
 }
 
 extension QwertyKeyModelProtocol {
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
+    func backGroundColorWhenPressed(theme: AzooKeyTheme) -> Color {
         theme.pushedKeyFillColor.color
     }
 }

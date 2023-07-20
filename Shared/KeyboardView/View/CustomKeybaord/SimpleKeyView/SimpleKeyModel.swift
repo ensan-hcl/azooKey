@@ -16,7 +16,7 @@ enum SimpleUnpressedKeyColorType: UInt8 {
     case selected
     case unimportant
 
-    @MainActor func color(states: VariableStates, theme: ThemeData) -> Color {
+    @MainActor func color(states: VariableStates, theme: AzooKeyTheme) -> Color {
         switch self {
         case .normal:
             return theme.normalKeyFillColor.color
@@ -51,15 +51,15 @@ protocol SimpleKeyModelProtocol {
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
     @MainActor func feedback(variableStates: VariableStates)
-    @MainActor func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel
-    @MainActor func backGroundColorWhenPressed(theme: ThemeData) -> Color
+    @MainActor func label(width: CGFloat, states: VariableStates, theme: AzooKeyTheme) -> KeyLabel
+    @MainActor func backGroundColorWhenPressed(theme: AzooKeyTheme) -> Color
     /// `pressActions`とは別に、押された際に発火する操作
     /// - note: タブ固有の事情で実行しなければならないような処理に利用すること
     @MainActor func additionalOnPress(variableStates: VariableStates)
 }
 
 extension SimpleKeyModelProtocol {
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
+    func backGroundColorWhenPressed(theme: AzooKeyTheme) -> Color {
         theme.pushedKeyFillColor.color
     }
 
@@ -79,7 +79,7 @@ struct SimpleKeyModel: SimpleKeyModelProtocol {
     private let pressActions: [ActionType]
     let longPressActions: LongpressActionType
 
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, theme: AzooKeyTheme) -> KeyLabel {
         KeyLabel(self.keyLabelType, width: width)
     }
 
@@ -107,7 +107,7 @@ struct SimpleEnterKeyModel: SimpleKeyModelProtocol {
 
     let longPressActions: LongpressActionType = .none
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .enter
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, theme: AzooKeyTheme) -> KeyLabel {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width)
     }
@@ -133,7 +133,7 @@ struct SimpleChangeKeyboardKeyModel: SimpleKeyModelProtocol {
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
     let longPressActions: LongpressActionType = .none
 
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, theme: AzooKeyTheme) -> KeyLabel {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.changeKeyboard, width: width)
         } else {

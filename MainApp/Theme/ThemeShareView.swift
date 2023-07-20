@@ -20,10 +20,10 @@ final class ShareImage {
 }
 
 struct ThemeShareView: View {
-    private let theme: ThemeData
+    private let theme: AzooKeyTheme
     private let dismissProcess: () -> Void
 
-    init(theme: ThemeData, shareImage: ShareImage, dismissProcess: @escaping () -> Void) {
+    init(theme: AzooKeyTheme, shareImage: ShareImage, dismissProcess: @escaping () -> Void) {
         self.theme = theme
         self.dismissProcess = dismissProcess
         self.shareImage = shareImage

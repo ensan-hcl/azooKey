@@ -48,7 +48,7 @@ struct FlickAaKeyModel: FlickKeyModelProtocol {
         KeyboardFeedback.tabOrOtherKey()
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: AzooKeyTheme) -> Color {
         if states.boolStates.isCapsLocked {
             return theme.specialKeyFillColor.color
         } else {

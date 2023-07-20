@@ -10,13 +10,13 @@ import Foundation
 import SwiftUI
 import SwiftUtils
 
-enum ThemePicture: Equatable {
+public enum ThemePicture: Equatable {
     case none
     case path(String)
     case asset(String)
     case uiImage(UIImage)
 
-    var image: Image? {
+    public var image: Image? {
         switch self {
         case .none:
             return nil

@@ -36,7 +36,7 @@ struct FlickEnterKeyModel: FlickKeyModelProtocol {
         return KeyLabel(.text(text), width: width)
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: AzooKeyTheme) -> Color {
         switch states.enterKeyState {
         case .complete, .edit:
             return theme.specialKeyFillColor.color

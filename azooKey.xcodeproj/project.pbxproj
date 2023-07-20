@@ -181,6 +181,13 @@
 		1A73F21729C1F23600833C11 /* EmojiTabResultBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F21629C1F23600833C11 /* EmojiTabResultBar.swift */; };
 		1A73F21829C1F23600833C11 /* EmojiTabResultBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F21629C1F23600833C11 /* EmojiTabResultBar.swift */; };
 		1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */; };
+		1A7F37742A683428009AC382 /* SwiftUIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1A7F37732A683428009AC382 /* SwiftUIUtils */; };
+		1A7F377A2A6946D4009AC382 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F37792A6946D3009AC382 /* ThemeManager.swift */; };
+		1A7F377B2A6946D4009AC382 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F37792A6946D3009AC382 /* ThemeManager.swift */; };
+		1A7F377E2A697EE9009AC382 /* AzooKeySpecificTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F377D2A697EE9009AC382 /* AzooKeySpecificTheme.swift */; };
+		1A7F377F2A697EE9009AC382 /* AzooKeySpecificTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7F377D2A697EE9009AC382 /* AzooKeySpecificTheme.swift */; };
+		1A7F37812A698741009AC382 /* KeyboardThemes in Frameworks */ = {isa = PBXBuildFile; productRef = 1A7F37802A698741009AC382 /* KeyboardThemes */; };
+		1A7F37832A69874C009AC382 /* KeyboardThemes in Frameworks */ = {isa = PBXBuildFile; productRef = 1A7F37822A69874C009AC382 /* KeyboardThemes */; };
 		1A7F547126A96A5F0032E91E /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
 		1A855C7829EA8A6400DD3702 /* ShareWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A855C7729EA8A6400DD3702 /* ShareWordView.swift */; };
 		1A8E454328E1379C00133D3B /* MarkedTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */; };
@@ -282,7 +289,6 @@
 		1AD8D74A295E8AFD00112B80 /* AutoCompletionStrengthSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A347FE328D22E7F007D7852 /* AutoCompletionStrengthSetting.swift */; };
 		1AD8D74C295E8C2D00112B80 /* MarkedTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */; };
 		1AD8FDF12988076F00DA4296 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8FDF02988076F00DA4296 /* ConverterTests.swift */; };
-		1AD96FB62A22F9C100FD4EA4 /* SwiftUIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AD96FB52A22F9C100FD4EA4 /* SwiftUIUtils */; };
 		1AD96FB82A22F9C800FD4EA4 /* SwiftUIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AD96FB72A22F9C800FD4EA4 /* SwiftUIUtils */; };
 		1AD96FBA2A22F9CD00FD4EA4 /* SwiftUIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AD96FB92A22F9CD00FD4EA4 /* SwiftUIUtils */; };
 		1AD96FBC2A22FBAD00FD4EA4 /* AzooKeyIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD96FBB2A22FBAD00FD4EA4 /* AzooKeyIcon.swift */; };
@@ -290,15 +296,9 @@
 		1AD96FBF2A22FECC00FD4EA4 /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AD96FBE2A22FECC00FD4EA4 /* SwiftUtils */; };
 		1AD96FC12A234AE000FD4EA4 /* extension CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD96FC02A234AE000FD4EA4 /* extension CGPoint.swift */; };
 		1AD96FC22A234AE000FD4EA4 /* extension CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD96FC02A234AE000FD4EA4 /* extension CGPoint.swift */; };
-		1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1022E25D0C86500CA7277 /* ThemePicture.swift */; };
-		1AE1023025D0C86500CA7277 /* ThemePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1022E25D0C86500CA7277 /* ThemePicture.swift */; };
 		1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1023525D0C99200CA7277 /* PhotoPicker.swift */; };
-		1AE1023D25D0E3FD00CA7277 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */; };
-		1AE1023E25D0E3FD00CA7277 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */; };
 		1AE1025625D1788300CA7277 /* Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025525D1788300CA7277 /* Capture.swift */; };
 		1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102CE25D3713C00CA7277 /* TrimmingView.swift */; };
-		1AE102DA25D43E9100CA7277 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102D925D43E9100CA7277 /* ThemeManager.swift */; };
-		1AE102E425D43E9700CA7277 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102D925D43E9100CA7277 /* ThemeManager.swift */; };
 		1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1913525D4A3370044EE4B /* ThemeShareView.swift */; };
 		1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
 		1AE3DF02258A20A2007C7C4A /* FlickCustomKeySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3A162B2529671300A5BA4F /* FlickCustomKeySetting.swift */; };
@@ -315,8 +315,6 @@
 		1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */; };
 		1AF616BB256D40CB001A0B32 /* MemoryResetCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */; };
 		1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6784925CC20B400F3987B /* ThemeTab.swift */; };
-		1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
-		1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6785525CC4FF500F3987B /* ThemeData.swift */; };
 		1AF678AF25CE3B4A00F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
 		1AF678B425CE3B7000F3987B /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678AE25CE3B4A00F3987B /* States.swift */; };
 		1AF678DF25CED86500F3987B /* VariableStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF678DE25CED86500F3987B /* VariableStates.swift */; };
@@ -554,6 +552,8 @@
 		1A73F21329C14C7500833C11 /* EmojiTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTab.swift; sourceTree = "<group>"; };
 		1A73F21629C1F23600833C11 /* EmojiTabResultBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTabResultBar.swift; sourceTree = "<group>"; };
 		1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeTabWalkthrough.swift; sourceTree = "<group>"; };
+		1A7F37792A6946D3009AC382 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		1A7F377D2A697EE9009AC382 /* AzooKeySpecificTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzooKeySpecificTheme.swift; sourceTree = "<group>"; };
 		1A855C7729EA8A6400DD3702 /* ShareWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareWordView.swift; sourceTree = "<group>"; };
 		1A8E454228E1379C00133D3B /* MarkedTextSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedTextSetting.swift; sourceTree = "<group>"; };
 		1A8E454628E1390100133D3B /* MarkedTextSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedTextSettingView.swift; sourceTree = "<group>"; };
@@ -625,12 +625,9 @@
 		1AD8FDF02988076F00DA4296 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
 		1AD96FBB2A22FBAD00FD4EA4 /* AzooKeyIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AzooKeyIcon.swift; sourceTree = "<group>"; };
 		1AD96FC02A234AE000FD4EA4 /* extension CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "extension CGPoint.swift"; sourceTree = "<group>"; };
-		1AE1022E25D0C86500CA7277 /* ThemePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicture.swift; sourceTree = "<group>"; };
 		1AE1023525D0C99200CA7277 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
-		1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		1AE1025525D1788300CA7277 /* Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
 		1AE102CE25D3713C00CA7277 /* TrimmingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrimmingView.swift; sourceTree = "<group>"; };
-		1AE102D925D43E9100CA7277 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		1AE1913525D4A3370044EE4B /* ThemeShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeShareView.swift; sourceTree = "<group>"; };
 		1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AzooKeyIcon-Regular.otf"; sourceTree = "<group>"; };
 		1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListView.swift; sourceTree = "<group>"; };
@@ -645,7 +642,6 @@
 		1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetSetting.swift; sourceTree = "<group>"; };
 		1AF616BA256D40CB001A0B32 /* MemoryResetCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetCondition.swift; sourceTree = "<group>"; };
 		1AF6784925CC20B400F3987B /* ThemeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTab.swift; sourceTree = "<group>"; };
-		1AF6785525CC4FF500F3987B /* ThemeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeData.swift; sourceTree = "<group>"; };
 		1AF678AE25CE3B4A00F3987B /* States.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = States.swift; sourceTree = "<group>"; };
 		1AF678DE25CED86500F3987B /* VariableStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableStates.swift; sourceTree = "<group>"; };
 		1AF678F525CED91900F3987B /* UserActionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionManager.swift; sourceTree = "<group>"; };
@@ -680,8 +676,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A70DFFD291F2D1E00A83849 /* CustardKit in Frameworks */,
+				1A7F37832A69874C009AC382 /* KeyboardThemes in Frameworks */,
 				1A73F21229C0B36D00833C11 /* OrderedCollections in Frameworks */,
-				1AD96FB62A22F9C100FD4EA4 /* SwiftUIUtils in Frameworks */,
+				1A7F37742A683428009AC382 /* SwiftUIUtils in Frameworks */,
 				1AF306022A00070000B4DAC3 /* KanaKanjiConverterModule in Frameworks */,
 				1A606B06292E53BA00CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
@@ -711,6 +708,7 @@
 				1A8E454A28E5711800133D3B /* OrderedCollections in Frameworks */,
 				1AF305FF29FE6B6F00B4DAC3 /* KanaKanjiConverterModule in Frameworks */,
 				1A9E908F2822CEC100E73846 /* DequeModule in Frameworks */,
+				1A7F37812A698741009AC382 /* KeyboardThemes in Frameworks */,
 				1AD96FB82A22F9C800FD4EA4 /* SwiftUIUtils in Frameworks */,
 				1A606B08292E53C500CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
@@ -1090,6 +1088,15 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		1A7F377C2A697EC9009AC382 /* AzooKeyTheme */ = {
+			isa = PBXGroup;
+			children = (
+				1A7F37792A6946D3009AC382 /* ThemeManager.swift */,
+				1A7F377D2A697EE9009AC382 /* AzooKeySpecificTheme.swift */,
+			);
+			path = AzooKeyTheme;
+			sourceTree = "<group>";
+		};
 		1A8E454528E138F300133D3B /* MarkedTextSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -1129,11 +1136,11 @@
 				1AC03158251103EF004CA505 /* Designs.xcassets */,
 				1AA346A92567F15700B41A16 /* SharedStore.swift */,
 				1A12E24725C41A7100316009 /* Message.swift */,
+				1A7F377C2A697EC9009AC382 /* AzooKeyTheme */,
 				1AD2B8D626C272E60053CE4A /* KeyboardSetting */,
 				1A3ACF1525FB78B1007E9938 /* UserDefaultsManager */,
 				1ACA28E429AB36F100B794C8 /* ClipboardHistoryManager */,
 				1AF678DD25CED84F00F3987B /* KeyboardView */,
-				1AF6785B25CC4FF800F3987B /* ThemeData */,
 				1A18425325DE614D003985AB /* Custard */,
 				1AC5876825D930D000BB060E /* Localizable.strings */,
 				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
@@ -1414,17 +1421,6 @@
 			path = Theme;
 			sourceTree = "<group>";
 		};
-		1AF6785B25CC4FF800F3987B /* ThemeData */ = {
-			isa = PBXGroup;
-			children = (
-				1AF6785525CC4FF500F3987B /* ThemeData.swift */,
-				1AE102D925D43E9100CA7277 /* ThemeManager.swift */,
-				1AE1023C25D0E3FD00CA7277 /* ThemeColor.swift */,
-				1AE1022E25D0C86500CA7277 /* ThemePicture.swift */,
-			);
-			path = ThemeData;
-			sourceTree = "<group>";
-		};
 		1AF678DD25CED84F00F3987B /* KeyboardView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1507,7 +1503,8 @@
 				1A606B05292E53BA00CEDB15 /* CustardExpressionEvaluator */,
 				1A73F21129C0B36D00833C11 /* OrderedCollections */,
 				1AF306012A00070000B4DAC3 /* KanaKanjiConverterModule */,
-				1AD96FB52A22F9C100FD4EA4 /* SwiftUIUtils */,
+				1A7F37732A683428009AC382 /* SwiftUIUtils */,
+				1A7F37822A69874C009AC382 /* KeyboardThemes */,
 			);
 			productName = MainApp;
 			productReference = 1A3DC1C22500D44A002CAA93 /* azooKey.app */;
@@ -1575,6 +1572,7 @@
 				1AF305FE29FE6B6F00B4DAC3 /* KanaKanjiConverterModule */,
 				1AD96FB72A22F9C800FD4EA4 /* SwiftUIUtils */,
 				1AD96FBE2A22FECC00FD4EA4 /* SwiftUtils */,
+				1A7F37802A698741009AC382 /* KeyboardThemes */,
 			);
 			productName = Keyboard;
 			productReference = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */;
@@ -1791,7 +1789,6 @@
 			files = (
 				1AF6799C25CEDBC000F3987B /* KeyboardFeedback.swift in Sources */,
 				1AF6798825CEDBAE00F3987B /* SuggestView.swift in Sources */,
-				1AF6785625CC4FF500F3987B /* ThemeData.swift in Sources */,
 				1AA453D829C5F6E10018BDD6 /* TabCharacterPreference.swift in Sources */,
 				1A3ACEF925F9F9AA007E9938 /* ResizingRect.swift in Sources */,
 				1A12E25125C4428D00316009 /* Message.swift in Sources */,
@@ -1821,7 +1818,6 @@
 				1A3022B52632A22700E4495C /* CustomKeySettingFlickKeyView.swift in Sources */,
 				1A73F20929C01B7600833C11 /* closeKeyboard.swift in Sources */,
 				1A39A1A2259325D7008DDCFE /* AzooKeyUserDictionaryData.swift in Sources */,
-				1AE102DA25D43E9100CA7277 /* ThemeManager.swift in Sources */,
 				1A3A162C2529671300A5BA4F /* FlickCustomKeySetting.swift in Sources */,
 				1ACC0F0E25CFE7FF00FC1B8A /* ThemeEditView.swift in Sources */,
 				1A370E59290CF35B0053D6D4 /* NumberCustard.swift in Sources */,
@@ -1902,7 +1898,6 @@
 				1A3A160E2528C70800A5BA4F /* HeaderLogoView.swift in Sources */,
 				1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */,
 				1AF6797925CEDB9B00F3987B /* QwertyKeyModel.swift in Sources */,
-				1AE1022F25D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
 				1A73F20E29C0B18800833C11 /* AnyTextDocumentProxy.swift in Sources */,
 				1AD5E17826AB230F001B4FF7 /* CustomKeysSettingView.swift in Sources */,
@@ -1935,6 +1930,7 @@
 				1AD2B8E426C2BAB50053CE4A /* PreferedLanguageKeyboardSetting.swift in Sources */,
 				1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */,
 				1AD4454326AA8E93003CF854 /* LargeButtonStyle.swift in Sources */,
+				1A7F377E2A697EE9009AC382 /* AzooKeySpecificTheme.swift in Sources */,
 				1AD2B8F026C2D4ED0053CE4A /* QwertyCustomKeyKeyboardSetting.swift in Sources */,
 				1AF6799B25CEDBC000F3987B /* Design.swift in Sources */,
 				1ACE00752567525000899DA2 /* QwertyCustomKeySetting.swift in Sources */,
@@ -1953,7 +1949,6 @@
 				1A855C7829EA8A6400DD3702 /* ShareWordView.swift in Sources */,
 				1A5C7EC525F3791E00A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,
-				1AE1023D25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
 				1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */,
 				1AFA57602584810800477DC2 /* Focus.swift in Sources */,
 				1AF616BB256D40CB001A0B32 /* MemoryResetCondition.swift in Sources */,
@@ -1968,6 +1963,7 @@
 				1AC8A5D3259815C300B71E5A /* FlickCustomKeySettingView.swift in Sources */,
 				1AF6798D25CEDBB500F3987B /* FlickTabKeyModel.swift in Sources */,
 				1AF679A125CEDC3A00F3987B /* FlickDataProvider.swift in Sources */,
+				1A7F377A2A6946D4009AC382 /* ThemeManager.swift in Sources */,
 				1ACEEFD025665E3600899DA2 /* FallbackLink.swift in Sources */,
 				1A2E58442951E5E7004F959B /* Tab.swift in Sources */,
 			);
@@ -2019,6 +2015,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A7F377F2A697EE9009AC382 /* AzooKeySpecificTheme.swift in Sources */,
 				1A12E24825C41A7100316009 /* Message.swift in Sources */,
 				1AC8A5DD25986CA500B71E5A /* FlickKanaSymbolsKeyModel.swift in Sources */,
 				1AB8C3F025E2A27C00D39BC5 /* TabBarData.swift in Sources */,
@@ -2033,7 +2030,6 @@
 				1A3DC21B2500D5D1002CAA93 /* FlickKeyModelProtocol.swift in Sources */,
 				1AD2B8D926C272F80053CE4A /* BoolKeyboardSetting.swift in Sources */,
 				1AAC102C29B8DA610020BDE9 /* InKeyboardTextEditor.swift in Sources */,
-				1AE1023E25D0E3FD00CA7277 /* ThemeColor.swift in Sources */,
 				1A3DC2212500D600002CAA93 /* FlickTabKeyModel.swift in Sources */,
 				1AA346962567F04300B41A16 /* QwertyCustomKeySetting.swift in Sources */,
 				1AB8C36325DFE80A00D39BC5 /* SimpleKeyModel.swift in Sources */,
@@ -2041,7 +2037,6 @@
 				1A1ECCA6295DFADF001AD7E0 /* InputManager.swift in Sources */,
 				1A2602BE25148BB100EAD647 /* QwertyEnterKeyModel.swift in Sources */,
 				1A5C7ECA25F3792300A7CBA8 /* QwertyLanguageSwitchKeyModel.swift in Sources */,
-				1AE102E425D43E9700CA7277 /* ThemeManager.swift in Sources */,
 				1AD2B8E226C2B0880053CE4A /* LanguageLayoutKeyboardSetting.swift in Sources */,
 				1A3022B8263396FF00E4495C /* UserMadeCustard.swift in Sources */,
 				1A8E454428E1379C00133D3B /* MarkedTextSetting.swift in Sources */,
@@ -2076,6 +2071,7 @@
 				1AF28CEC253D15560012CF94 /* FlickChangeKeyboardKeyModel.swift in Sources */,
 				1AB8C3C025E2303200D39BC5 /* TabBar.swift in Sources */,
 				1A3ACF2325FB78D1007E9938 /* OneHandedModeSetting.swift in Sources */,
+				1A7F377B2A6946D4009AC382 /* ThemeManager.swift in Sources */,
 				1AA453E729C718420018BDD6 /* EmojiTabExpandModePreference.swift in Sources */,
 				1A3DC2262500D63F002CAA93 /* SuggestView.swift in Sources */,
 				1A3DC20A2500D51F002CAA93 /* KeyboardView.swift in Sources */,
@@ -2108,7 +2104,6 @@
 				1AB8C37525E0067700D39BC5 /* SimpleKeyView.swift in Sources */,
 				1A73F21029C0B18800833C11 /* AnyTextDocumentProxy.swift in Sources */,
 				1AB8C38E25E1190900D39BC5 /* TabManager.swift in Sources */,
-				1AF6787025CCC64F00F3987B /* ThemeData.swift in Sources */,
 				1A370E5A290CF35B0053D6D4 /* NumberCustard.swift in Sources */,
 				1A6F959725144481007399AC /* QwertyKeyboardView.swift in Sources */,
 				1AA453DC29C5F8460018BDD6 /* IKTextDocumentProxyWrapper.swift in Sources */,
@@ -2121,7 +2116,6 @@
 				1A3DC2072500D4FF002CAA93 /* KeyboardActionManager.swift in Sources */,
 				1A3A16322529712300A5BA4F /* FlickKogakiKeyModel.swift in Sources */,
 				1A2E58462951E5E7004F959B /* Tab.swift in Sources */,
-				1AE1023025D0C86500CA7277 /* ThemePicture.swift in Sources */,
 				1AC8A594259587A200B71E5A /* Design.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2707,6 +2701,18 @@
 			package = 1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = OrderedCollections;
 		};
+		1A7F37732A683428009AC382 /* SwiftUIUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUIUtils;
+		};
+		1A7F37802A698741009AC382 /* KeyboardThemes */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardThemes;
+		};
+		1A7F37822A69874C009AC382 /* KeyboardThemes */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardThemes;
+		};
 		1A8E454928E5711800133D3B /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */;
@@ -2720,10 +2726,6 @@
 		1ABDFC342A18C60A00CED3A3 /* KanaKanjiConverterModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = KanaKanjiConverterModule;
-		};
-		1AD96FB52A22F9C100FD4EA4 /* SwiftUIUtils */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUIUtils;
 		};
 		1AD96FB72A22F9C800FD4EA4 /* SwiftUIUtils */ = {
 			isa = XCSwiftPackageProductDependency;

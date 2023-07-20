@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct ThemeEnvironmentKey: EnvironmentKey {
-    typealias Value = ThemeData
+    typealias Value = AzooKeyTheme
 
-    static var defaultValue: ThemeData = .default(layout: .flick)
+    static var defaultValue: AzooKeyTheme = .default(layout: .flick)
 }
 
 extension EnvironmentValues {
-    var themeEnvironment: ThemeData {
+    var themeEnvironment: AzooKeyTheme {
         get {
             self[ThemeEnvironmentKey.self]
         }

@@ -367,7 +367,7 @@ struct EmojiTab: View {
 private struct ExpandKeyModel: SimpleKeyModelProtocol {
     private var currentLevel: EmojiTabExpandModePreference.Level
     private var action: () -> Void
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, theme: AzooKeyTheme) -> KeyLabel {
         KeyLabel(.image(self.currentLevel.icon), width: width, textSize: .max)
     }
 
@@ -392,7 +392,7 @@ private struct ExpandKeyModel: SimpleKeyModelProtocol {
 private struct GenreKeyModel: SimpleKeyModelProtocol {
     private var action: () -> Void
     private var systemImage: String
-    func label(width: CGFloat, states: VariableStates, theme: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states: VariableStates, theme: AzooKeyTheme) -> KeyLabel {
         KeyLabel(.image(systemImage), width: width, textSize: .max)
     }
 
@@ -429,7 +429,7 @@ private struct EmojiKeyModel: SimpleKeyModelProtocol {
     var longPressActions: LongpressActionType {
         .none
     }
-    func label(width: CGFloat, states _: VariableStates, theme _: ThemeData) -> KeyLabel {
+    func label(width: CGFloat, states _: VariableStates, theme _: AzooKeyTheme) -> KeyLabel {
         KeyLabel(.text(emoji), width: width, textSize: .max)
     }
 

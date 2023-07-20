@@ -251,7 +251,7 @@ enum Design {
             return UIFontMetrics.default.scaledValue(for: 20)
         }
 
-        @MainActor func iconImageFont(theme: ThemeData) -> Font {
+        @MainActor func iconImageFont(theme: AzooKeyTheme) -> Font {
             Font.system(size: self.iconFontSize, weight: theme.textFont.weight)
         }
 
@@ -260,7 +260,7 @@ enum Design {
             return size == -1 ? 18: size
         }
 
-        @MainActor func resultViewFont(theme: ThemeData, fontSize: CGFloat? = nil) -> Font {
+        @MainActor func resultViewFont(theme: AzooKeyTheme, fontSize: CGFloat? = nil) -> Font {
             // Font.custom("Mplus 1p Bold", size: resultViewFontSize).weight(theme.textFont.weight)
             Font.system(size: fontSize ?? resultViewFontSize).weight(theme.textFont.weight)
         }
@@ -305,7 +305,7 @@ enum Design {
             return size
         }
 
-        @MainActor func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, layout: KeyboardLayout, theme: ThemeData) -> Font {
+        @MainActor func keyLabelFont(text: String, width: CGFloat, fontSize: LabelFontSizeStrategy, layout: KeyboardLayout, theme: AzooKeyTheme) -> Font {
             if case .max = fontSize {
                 let size = self.getMaximumFontSize(for: text, width: width, maxFontSize: 100)
                 return Font.system(size: size, weight: theme.textFont.weight, design: .default)
@@ -369,7 +369,7 @@ enum Design {
             }
         }
 
-        func prominentBackgroundColor(_ theme: ThemeData) -> Color {
+        func prominentBackgroundColor(_ theme: AzooKeyTheme) -> Color {
             ColorTools.hsv(theme.resultBackgroundColor.color) { h, s, v, a in
                 Color(hue: h, saturation: s, brightness: min(1, 0.7 * v + 0.3), opacity: min(1, 0.8 * a + 0.2 ))
             } ?? theme.normalKeyFillColor.color

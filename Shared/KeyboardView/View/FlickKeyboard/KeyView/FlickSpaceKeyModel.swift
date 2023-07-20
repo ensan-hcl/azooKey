@@ -44,7 +44,7 @@ struct FlickSpaceKeyModel: FlickKeyModelProtocol {
         KeyLabel(.text("空白"), width: width)
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: AzooKeyTheme) -> Color {
         theme.specialKeyFillColor.color
     }
 

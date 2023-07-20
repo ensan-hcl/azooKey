@@ -18,7 +18,7 @@ struct ThemeTabView: View {
     @State private var editViewIndex: Int?
     @State private var editViewEnabled = false
 
-    private func theme(at index: Int) -> ThemeData? {
+    private func theme(at index: Int) -> AzooKeyTheme? {
         do {
             return try manager.theme(at: index)
         } catch {
