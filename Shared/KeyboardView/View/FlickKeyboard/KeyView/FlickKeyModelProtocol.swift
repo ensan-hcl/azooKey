@@ -16,7 +16,7 @@ enum FlickKeyColorType {
     case selected
     case unimportant
 
-    func color(theme: ThemeData) -> Color {
+    func color(theme: AzooKeyTheme) -> Color {
         switch self {
         case .normal:
             return theme.normalKeyFillColor.color
@@ -36,8 +36,8 @@ protocol FlickKeyModelProtocol {
 
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
     @MainActor func label(width: CGFloat, states: VariableStates) -> KeyLabel
-    @MainActor func backGroundColorWhenPressed(theme: ThemeData) -> Color
-    @MainActor func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color
+    @MainActor func backGroundColorWhenPressed(theme: AzooKeyTheme) -> Color
+    @MainActor func backGroundColorWhenUnpressed(states: VariableStates, theme: AzooKeyTheme) -> Color
 
     @MainActor func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool
     @MainActor func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel]
@@ -52,11 +52,11 @@ extension FlickKeyModelProtocol {
         flickKeys(variableStates: variableStates).keys.contains(direction)
     }
 
-    func backGroundColorWhenPressed(theme: ThemeData) -> Color {
+    func backGroundColorWhenPressed(theme: AzooKeyTheme) -> Color {
         theme.pushedKeyFillColor.color
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: AzooKeyTheme) -> Color {
         theme.normalKeyFillColor.color
     }
 

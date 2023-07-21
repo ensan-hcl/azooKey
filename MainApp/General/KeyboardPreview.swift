@@ -20,13 +20,13 @@ private struct CandidateMock: ResultViewItemData {
 }
 
 struct KeyboardPreview: View {
-    private let theme: ThemeData
+    private let theme: AzooKeyTheme
 
     private let scale: CGFloat
     private let defaultTab: Tab.ExistentialTab?
     @StateObject private var variableStates = VariableStates(interfaceWidth: UIScreen.main.bounds.width, orientation: MainAppDesign.keyboardOrientation)
 
-    init(theme: ThemeData? = nil, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil) {
+    init(theme: AzooKeyTheme? = nil, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil) {
         self.theme = theme ?? .default(layout: defaultTab?.layout ?? .flick)
         self.scale = scale
         self.defaultTab = defaultTab

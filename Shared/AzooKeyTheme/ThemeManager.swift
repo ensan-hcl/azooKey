@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KeyboardThemes
 import SwiftUtils
 import UIKit
 
@@ -87,13 +88,13 @@ struct ThemeIndexManager: Equatable {
         }
     }
 
-    func theme(at index: Int) throws -> ThemeData {
+    func theme(at index: Int) throws -> AzooKeyTheme {
         if index == 0 {
             return .default(layout: .flick)
         }
         let themeFileURL = Self.fileURL(name: "themes/theme_\(index).theme")
         let data = try Data(contentsOf: themeFileURL)
-        var themeData = try JSONDecoder().decode(ThemeData.self, from: data)
+        var themeData = try JSONDecoder().decode(AzooKeyTheme.self, from: data)
 
         // 背景画像を設定する
         if case let .path(path) = themeData.picture,
@@ -105,7 +106,7 @@ struct ThemeIndexManager: Equatable {
         return themeData
     }
 
-    mutating func saveTheme(theme: ThemeData) throws -> Int {
+    mutating func saveTheme(theme: AzooKeyTheme) throws -> Int {
         var saveData = theme
         let id: Int
         if let _id = saveData.id {

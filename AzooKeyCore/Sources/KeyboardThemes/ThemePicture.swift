@@ -6,17 +6,18 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+#if canImport(UIKit)
 import Foundation
 import SwiftUI
 import SwiftUtils
 
-enum ThemePicture: Equatable {
+public enum ThemePicture: Equatable {
     case none
     case path(String)
     case asset(String)
     case uiImage(UIImage)
 
-    var image: Image? {
+    public var image: Image? {
         switch self {
         case .none:
             return nil
@@ -91,3 +92,11 @@ extension ThemePicture: Codable {
     }
 
 }
+#else
+
+/// Mock type for enabling build in macOS
+public enum ThemePicture: Equatable, Codable {
+    case none
+}
+
+#endif

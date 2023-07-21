@@ -9,12 +9,12 @@
 import Foundation
 import SwiftUI
 
-enum ThemeColor {
+public enum ThemeColor<SystemColor: ApplicationSpecificColor> {
     case color(Color)
     case system(SystemColor)
     case dynamic(DynamicColor)
 
-    var color: Color {
+    public var color: Color {
         switch self {
         case let .color(color):
             return color
@@ -25,7 +25,7 @@ enum ThemeColor {
         }
     }
 
-    enum DynamicColor: String, Codable, CaseIterable {
+    public enum DynamicColor: String, Codable, CaseIterable {
         case accentColor
         case black
         case blue
@@ -61,31 +61,6 @@ enum ThemeColor {
         }
     }
 
-    enum SystemColor: String, Codable {
-        case normalKeyColor
-        case qwertyNormalKeyColor
-        case highlightedKeyColor
-        case qwertyHighlightedKeyColor
-        case specialKeyColor
-        case backgroundColor
-
-        var color: Color {
-            switch self {
-            case .backgroundColor:
-                return Design.colors.backGroundColor
-            case .normalKeyColor:
-                return Design.colors.normalKeyColor(layout: .flick)
-            case .qwertyNormalKeyColor:
-                return Design.colors.normalKeyColor(layout: .qwerty)
-            case .specialKeyColor:
-                return Design.colors.specialKeyColor
-            case .highlightedKeyColor:
-                return Design.colors.highlightedKeyColor(layout: .flick)
-            case .qwertyHighlightedKeyColor:
-                return Design.colors.highlightedKeyColor(layout: .qwerty)
-            }
-        }
-    }
 }
 
 extension ThemeColor: Codable, Equatable {

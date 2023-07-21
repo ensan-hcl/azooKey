@@ -18,7 +18,7 @@ struct InKeyboardSearchBar: View {
     struct Configuration {
         var placeholder: String?
         var clearButtonMode: UITextField.ViewMode?
-        var theme: ThemeData?
+        var theme: AzooKeyTheme?
     }
 
     private let configuration: Configuration

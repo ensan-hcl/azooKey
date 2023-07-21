@@ -40,7 +40,7 @@ struct FlickTabKeyModel: FlickKeyModelProtocol {
         KeyLabel(self.data.labelType, width: width)
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: AzooKeyTheme) -> Color {
         if states.tabManager.isCurrentTab(tab: tab) {
             return theme.pushedKeyFillColor.color
         }

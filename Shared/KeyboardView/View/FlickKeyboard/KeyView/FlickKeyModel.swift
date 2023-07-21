@@ -36,7 +36,7 @@ struct FlickKeyModel: FlickKeyModelProtocol {
         self.keycolorType = keycolorType
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData) -> Color {
+    func backGroundColorWhenUnpressed(states: VariableStates, theme: AzooKeyTheme) -> Color {
         keycolorType.color(theme: theme)
     }
 

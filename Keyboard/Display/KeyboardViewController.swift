@@ -67,7 +67,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     struct Keyboard: View {
-        let theme: ThemeData
+        let theme: AzooKeyTheme
         var body: some View {
             KeyboardView()
                 .environment(\.themeEnvironment, theme)
@@ -109,9 +109,9 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardViewController.action.setDelegateViewController(self)
     }
 
-    private func getCurrentTheme() -> ThemeData {
+    private func getCurrentTheme() -> AzooKeyTheme {
         let indexManager = ThemeIndexManager.load()
-        let defaultTheme = ThemeData.default(layout: KeyboardViewController.variableStates.tabManager.tab.existential.layout)
+        let defaultTheme = AzooKeyTheme.default(layout: KeyboardViewController.variableStates.tabManager.tab.existential.layout)
         switch traitCollection.userInterfaceStyle {
         case .unspecified, .light:
             return (try? indexManager.theme(at: indexManager.selectedIndex)) ?? defaultTheme

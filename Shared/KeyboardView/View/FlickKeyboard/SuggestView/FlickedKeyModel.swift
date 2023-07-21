@@ -38,7 +38,7 @@ struct FlickedKeyModel {
         self.longPressActions = longPressActions
     }
 
-    func getSuggestView(size: CGSize, isHidden: Bool, isPointed: Bool = false, theme: ThemeData) -> some View {
+    func getSuggestView(size: CGSize, isHidden: Bool, isPointed: Bool = false, theme: AzooKeyTheme) -> some View {
         var pointedColor: Color {
             theme != .default(layout: .flick) ? .white : .systemGray4
         }
@@ -55,7 +55,7 @@ struct FlickedKeyModel {
             .opacity(isHidden ? 0:1)
     }
 
-    func label(width: CGFloat, theme: ThemeData) -> some View {
+    func label(width: CGFloat, theme: AzooKeyTheme) -> some View {
         if theme != .default(layout: .flick) {
             return KeyLabel(self.labelType, width: width, textColor: .black)
         }
