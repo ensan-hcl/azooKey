@@ -8,6 +8,7 @@
 
 import Foundation
 import KeyboardThemes
+import KeyboardViews
 import SwiftUI
 
 enum AzooKeySpecificTheme: ApplicationSpecificTheme {
@@ -56,8 +57,10 @@ extension AzooKeyTheme {
         pushedKeyFillColor: .color(Color(.displayP3, red: 0.929, green: 0.929, blue: 0.945)),
         suggestKeyFillColor: nil
     )
+}
 
-    static func `default`(layout: KeyboardLayout) -> Self {
+extension AzooKeySpecificTheme: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable {
+    static func `default`(layout: KeyboardLayout) -> AzooKeyTheme {
         .init(
             backgroundColor: .system(.backgroundColor),
             picture: .none,

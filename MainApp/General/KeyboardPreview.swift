@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KeyboardViews
 import SwiftUI
 
 private struct CandidateMock: ResultViewItemData {
@@ -24,18 +25,23 @@ struct KeyboardPreview: View {
 
     private let scale: CGFloat
     private let defaultTab: Tab.ExistentialTab?
-    @StateObject private var variableStates = VariableStates(interfaceWidth: UIScreen.main.bounds.width, orientation: MainAppDesign.keyboardOrientation)
+    @StateObject private var variableStates = VariableStates(
+        interfaceWidth: UIScreen.main.bounds.width,
+        orientation: MainAppDesign.keyboardOrientation,
+        clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(),
+        tabManagerConfig: TabManagerConfig()
+    )
 
     init(theme: AzooKeyTheme? = nil, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil) {
-        self.theme = theme ?? .default(layout: defaultTab?.layout ?? .flick)
+        self.theme = theme ?? AzooKeySpecificTheme.default(layout: defaultTab?.layout ?? .flick)
         self.scale = scale
         self.defaultTab = defaultTab
     }
 
     var body: some View {
-        KeyboardView(defaultTab: defaultTab)
+        KeyboardView<AzooKeyKeyboardViewExtension>(defaultTab: defaultTab)
             .environmentObject(variableStates)
-            .environment(\.themeEnvironment, theme)
+            .themeEnvironment(theme)
             .environment(\.showMessage, false)
             .scaleEffect(scale)
             .frame(width: SemiStaticStates.shared.screenWidth * scale, height: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation) * scale)

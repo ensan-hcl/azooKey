@@ -90,7 +90,7 @@ struct ThemeIndexManager: Equatable {
 
     func theme(at index: Int) throws -> AzooKeyTheme {
         if index == 0 {
-            return .default(layout: .flick)
+            return AzooKeySpecificTheme.default(layout: .flick)
         }
         let themeFileURL = Self.fileURL(name: "themes/theme_\(index).theme")
         let data = try Data(contentsOf: themeFileURL)

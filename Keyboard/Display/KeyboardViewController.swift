@@ -7,6 +7,7 @@
 //
 
 import KanaKanjiConverterModule
+import KeyboardViews
 import SwiftUI
 import SwiftUtils
 import UIKit
@@ -57,7 +58,10 @@ final class KeyboardViewController: UIInputViewController {
     private static var keyboardViewHost: KeyboardHostingController<Keyboard>?
     private static var loadedInstanceCount: Int = 0
     private static let action = KeyboardActionManager()
-    private static let variableStates = VariableStates()
+    private static let variableStates = VariableStates(
+        clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(),
+        tabManagerConfig: TabManagerConfig()
+    )
     private static let notificationCenter = NotificationCenter.default
 
     deinit {
@@ -69,8 +73,8 @@ final class KeyboardViewController: UIInputViewController {
     struct Keyboard: View {
         let theme: AzooKeyTheme
         var body: some View {
-            KeyboardView()
-                .environment(\.themeEnvironment, theme)
+            KeyboardView<AzooKeyKeyboardViewExtension>()
+                .themeEnvironment(theme)
                 .environment(\.userActionManager, KeyboardViewController.action)
                 .environmentObject(KeyboardViewController.variableStates)
         }
@@ -111,7 +115,7 @@ final class KeyboardViewController: UIInputViewController {
 
     private func getCurrentTheme() -> AzooKeyTheme {
         let indexManager = ThemeIndexManager.load()
-        let defaultTheme = AzooKeyTheme.default(layout: KeyboardViewController.variableStates.tabManager.tab.existential.layout)
+        let defaultTheme = AzooKeySpecificTheme.default(layout: KeyboardViewController.variableStates.tabManager.existentialTab().layout)
         switch traitCollection.userInterfaceStyle {
         case .unspecified, .light:
             return (try? indexManager.theme(at: indexManager.selectedIndex)) ?? defaultTheme
@@ -180,10 +184,9 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardViewController.variableStates.resultModelVariableSection.setResults(candidates)
     }
 
-    func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
+    func makeChangeKeyboardButtonView<Extension: ApplicationSpecificKeyboardViewExtension>(size: CGFloat) -> ChangeKeyboardButtonView<Extension> {
         let selector = #selector(self.handleInputModeList(from:with:))
-        let view = ChangeKeyboardButtonView(selector: selector, size: size)
-        return view
+        return ChangeKeyboardButtonView(selector: selector, size: size)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

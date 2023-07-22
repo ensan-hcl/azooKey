@@ -8,6 +8,7 @@
 
 import Foundation
 import KeyboardThemes
+import KeyboardViews
 import PhotosUI
 import SwiftUI
 import SwiftUIUtils

@@ -10,6 +10,7 @@ import CryptoKit
 import CustardKit
 import Foundation
 import enum KanaKanjiConverterModule.KeyboardLanguage
+import KeyboardViews
 import SwiftUtils
 
 struct CustardInternalMetaData: Codable {
@@ -53,7 +54,7 @@ struct CustardManagerIndex: Codable {
     }
 }
 
-struct CustardManager {
+struct CustardManager: CustardManagerProtocol {
     private static let directoryName = "custard/"
     private var index = CustardManagerIndex()
 

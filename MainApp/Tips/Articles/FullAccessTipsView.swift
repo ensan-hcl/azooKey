@@ -6,6 +6,7 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+import KeyboardViews
 import SwiftUI
 
 struct FullAccessTipsView: View {

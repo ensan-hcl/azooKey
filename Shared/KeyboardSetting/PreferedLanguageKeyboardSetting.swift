@@ -7,13 +7,8 @@
 //
 
 import Foundation
+import KeyboardViews
 import SwiftUI
-import enum KanaKanjiConverterModule.KeyboardLanguage
-
-struct PreferredLanguage: Codable, Hashable {
-    var first: KeyboardLanguage
-    var second: KeyboardLanguage?
-}
 
 extension PreferredLanguage: Savable {
     typealias SaveValue = Data

@@ -7,6 +7,7 @@
 //
 
 import KanaKanjiConverterModule
+import KeyboardViews
 import OrderedCollections
 import SwiftUtils
 import UIKit
@@ -811,7 +812,7 @@ import UIKit
 
 extension Candidate: ResultViewItemData {
     #if DEBUG
-    func getDebugInformation() -> String {
+    public func getDebugInformation() -> String {
         "Candidate(text: \(self.text), value: \(self.value), data: \(self.data.debugDescription))"
     }
     #endif

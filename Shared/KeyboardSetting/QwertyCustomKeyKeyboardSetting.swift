@@ -6,9 +6,14 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import KeyboardViews
 import SwiftUI
 
 protocol QwertyCustomKeyKeyboardSetting: KeyboardSettingKey where Value == QwertyCustomKeysValue {
+}
+
+extension QwertyCustomKeysValue: Savable {
+    typealias SaveValue = Data
 }
 
 struct NumberTabCustomKeysSetting: QwertyCustomKeyKeyboardSetting {

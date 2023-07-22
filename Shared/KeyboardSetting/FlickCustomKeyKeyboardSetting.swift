@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KeyboardViews
 import SwiftUI
 
 extension StoredInUserDefault where Value == KeyFlickSetting {
@@ -19,6 +20,18 @@ extension StoredInUserDefault where Value == KeyFlickSetting {
     }
     @MainActor static func set(newValue: Value) {
         SharedStore.userDefaults.set(newValue.saveValue, forKey: key)
+    }
+}
+
+extension KeyFlickSetting: Savable {
+    typealias SaveValue = Data
+    var saveValue: Data {
+        let encoder = JSONEncoder()
+        if let encodedValue = try? encoder.encode(self) {
+            return encodedValue
+        } else {
+            return Data()
+        }
     }
 }
 

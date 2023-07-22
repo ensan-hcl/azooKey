@@ -8,6 +8,7 @@
 
 import CustardKit
 import Foundation
+import KeyboardViews
 import SwiftUI
 import SwiftUIUtils
 import SwiftUtils

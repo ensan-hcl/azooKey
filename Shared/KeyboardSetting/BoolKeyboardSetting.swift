@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import KeyboardViews
 import SwiftUI
 import SwiftUtils
 
