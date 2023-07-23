@@ -13,8 +13,8 @@ import SwiftUtils
 import UIKit
 
 /// UI側の入力中のテキストの更新を受け持つクラス
-final class DisplayedTextManager {
-    @MainActor init() {
+@MainActor final class DisplayedTextManager {
+    init() {
         @KeyboardSetting(.liveConversion) var enabled
         self.isLiveConversionEnabled = enabled
 
