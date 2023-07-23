@@ -10,13 +10,13 @@ import Foundation
 import SwiftUI
 import SwiftUtils
 
-public protocol MessageIdentifierProtocol: Hashable, Identifiable {
+public protocol MessageIdentifierProtocol: Hashable, Identifiable, Sendable {
     var needUsingContainerApp: Bool { get }
     var key: String { get }
 }
 
-public struct MessageData<ID: MessageIdentifierProtocol> {
-    public init(id: ID, title: String, description: String, button: MessageData<ID>.MessageButtonStyle, precondition: @escaping () -> Bool, silentDoneCondition: @escaping @MainActor () -> Bool, containerAppShouldMakeItDone: @escaping () -> Bool) {
+public struct MessageData<ID: MessageIdentifierProtocol>: Sendable {
+    public init(id: ID, title: String, description: String, button: MessageData<ID>.MessageButtonStyle, precondition: @Sendable @escaping () -> Bool, silentDoneCondition: @Sendable @escaping @MainActor () -> Bool, containerAppShouldMakeItDone: @Sendable @escaping () -> Bool) {
         self.id = id
         self.title = title
         self.description = description
@@ -39,20 +39,20 @@ public struct MessageData<ID: MessageIdentifierProtocol> {
     let button: MessageButtonStyle
 
     /// メッセージを表示する前提条件
-    let precondition: () -> Bool
+    let precondition: @Sendable () -> Bool
 
     /// メッセージを表示せずにDoneにして良い条件
-    let silentDoneCondition: @MainActor () -> Bool
+    let silentDoneCondition: @Sendable @MainActor () -> Bool
 
     /// 収容アプリがDoneにすべき条件
-    let containerAppShouldMakeItDone: () -> Bool
+    let containerAppShouldMakeItDone: @Sendable () -> Bool
 
-    public enum MessageButtonStyle {
+    public enum MessageButtonStyle: Sendable {
         case one(MessagePrimaryButtonStyle)
         case two(primary: MessagePrimaryButtonStyle, secondary: MessageSecondaryButtonStyle)
     }
 
-    public enum MessageSecondaryButtonStyle {
+    public enum MessageSecondaryButtonStyle: Sendable {
         /// 「詳細」と表示し、押した場合リンクにする
         case details(url: String)
 
@@ -63,7 +63,7 @@ public struct MessageData<ID: MessageIdentifierProtocol> {
         case OK
     }
 
-    public enum MessagePrimaryButtonStyle {
+    public enum MessagePrimaryButtonStyle: Sendable {
         /// 指定した単語を表示し、押した場合収容アプリを開く
         case openContainer(text: String)
 

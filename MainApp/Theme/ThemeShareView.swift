@@ -34,7 +34,7 @@ struct ThemeShareView: View {
     @State private var captureRect: CGRect = .zero
     private var shareImage: ShareImage
 
-    @ViewBuilder private var keyboardPreview: some View {
+    @MainActor @ViewBuilder private var keyboardPreview: some View {
         KeyboardPreview(theme: theme, scale: 0.9)
     }
     var body: some View {
@@ -76,7 +76,7 @@ struct ThemeShareView: View {
         })
     }
 
-    private func shareOnTwitter() {
+    @MainActor private func shareOnTwitter() {
         let parameters = [
             "text": "azooKeyで着せ替えました！",
             "url": "https://apps.apple.com/jp/app/azookey/id1542709230",
@@ -165,7 +165,7 @@ private struct ShareButtonStyle: ButtonStyle {
 }
 
 private extension View {
-    func snapshot() -> UIImage {
+    @MainActor func snapshot() -> UIImage {
         let controller = UIHostingController(rootView: self)
         let view = controller.view
 

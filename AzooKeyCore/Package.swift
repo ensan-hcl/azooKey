@@ -9,7 +9,8 @@ let swiftSettings: [SwiftSetting] = [
     .enableUpcomingFeature("ExistentialAny"),
     .enableUpcomingFeature("ForwardTrailingClosures"),
     .enableUpcomingFeature("ImplicitOpenExistentials"),
-    .enableUpcomingFeature("StrictConcurrency")
+    .enableUpcomingFeature("StrictConcurrency"),
+    .unsafeFlags(["-strict-concurrency=complete"])
 ]
 let package = Package(
     name: "AzooKeyCore",

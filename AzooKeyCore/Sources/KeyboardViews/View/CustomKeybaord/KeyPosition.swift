@@ -7,7 +7,7 @@
 //
 
 import Foundation
-public enum KeyPosition: Hashable, Codable {
+public enum KeyPosition: Hashable, Codable, Sendable {
     case gridFit(x: Int, y: Int)
     case gridScroll(index: Int)
 

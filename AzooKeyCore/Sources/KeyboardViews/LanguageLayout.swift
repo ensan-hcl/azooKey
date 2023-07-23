@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LanguageLayout: Codable, Hashable {
+public enum LanguageLayout: Codable, Hashable, Sendable {
     case flick
     case qwerty
     case custard(String)

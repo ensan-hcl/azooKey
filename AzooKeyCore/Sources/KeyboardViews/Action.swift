@@ -6,16 +6,16 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
-import CustardExpressionEvaluator
+@preconcurrency import enum CustardExpressionEvaluator.CompiledExpression
 import CustardKit
 import Foundation
-import enum KanaKanjiConverterModule.ConverterBehaviorSemantics
+@preconcurrency import enum KanaKanjiConverterModule.ConverterBehaviorSemantics
 
-public enum BoolOperation: Equatable {
+public enum BoolOperation: Equatable, Sendable {
     case on, off, toggle
 }
 
-public indirect enum ActionType: Equatable {
+public indirect enum ActionType: Equatable, Sendable {
     // テキスト関係
     case input(String, simplyInsert: Bool = false)          // テキストの入力
     case delete(Int)            // テキストの削除
@@ -61,7 +61,7 @@ public indirect enum ActionType: Equatable {
     case boolSwitch(CompiledExpression, trueAction: [ActionType], falseAction: [ActionType])
 }
 
-public struct LongpressActionType: Equatable {
+public struct LongpressActionType: Equatable, Sendable {
     static let none = LongpressActionType()
     internal init(start: [ActionType] = [], repeat: [ActionType] = []) {
         self.start = start

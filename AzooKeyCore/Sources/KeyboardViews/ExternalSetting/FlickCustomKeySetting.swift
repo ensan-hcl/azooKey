@@ -9,7 +9,7 @@
 import CustardKit
 import Foundation
 
-public enum CustomizableFlickKey: String, Codable {
+public enum CustomizableFlickKey: String, Codable, Sendable {
     case kogana = "kogana"
     case kanaSymbols = "kana_symbols"
     case hiraTab = "hira_tab"
@@ -82,7 +82,7 @@ public enum CustomizableFlickKey: String, Codable {
     }
 }
 
-public enum FlickKeyPosition: String, Codable {
+public enum FlickKeyPosition: String, Codable, Sendable {
     case left = "left"
     case top = "top"
     case right = "right"
@@ -90,7 +90,7 @@ public enum FlickKeyPosition: String, Codable {
     case center = "center"
 }
 
-public struct FlickCustomKey: Codable, Equatable {
+public struct FlickCustomKey: Codable, Equatable, Sendable {
     public var label: String
     public var actions: [CodableActionData]
     public var longpressActions: CodableLongpressActionData
@@ -133,7 +133,7 @@ public struct FlickCustomKey: Codable, Equatable {
     }
 }
 
-public struct KeyFlickSetting: Codable, Equatable {
+public struct KeyFlickSetting: Codable, Equatable, Sendable {
     enum CodingKeys: String, CodingKey {
         case targetKeyIdentifier
 

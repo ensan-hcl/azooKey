@@ -387,12 +387,12 @@ struct CustardInterfaceKeyEditor: View {
         self._height = data.height
     }
 
-    private let screenWidth = UIScreen.main.bounds.width
+    @MainActor private var screenWidth: CGFloat { UIScreen.main.bounds.width }
 
-    private var keySize: CGSize {
+    @MainActor private var keySize: CGSize {
         CGSize(width: screenWidth / 5.6, height: screenWidth / 8)
     }
-    private var spacing: CGFloat {
+    @MainActor private var spacing: CGFloat {
         (screenWidth - keySize.width * 5) / 5
     }
 
@@ -605,7 +605,7 @@ struct CustardInterfaceKeyEditor: View {
         }
     }
 
-    private func keysView(key: CustardInterfaceCustomKey) -> some View {
+    @MainActor private func keysView(key: CustardInterfaceCustomKey) -> some View {
         VStack {
             keyView(key: key, position: .top)
             HStack {
@@ -617,7 +617,7 @@ struct CustardInterfaceKeyEditor: View {
         }
     }
 
-    @ViewBuilder private func keyView(key: CustardInterfaceCustomKey, position: FlickKeyPosition) -> some View {
+    @MainActor @ViewBuilder private func keyView(key: CustardInterfaceCustomKey, position: FlickKeyPosition) -> some View {
         switch key[.labelType, position] {
         case .text:
             CustomKeySettingFlickKeyView(position, label: key[.labelText, position], selectedPosition: $selectedPosition)

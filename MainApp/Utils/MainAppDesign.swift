@@ -13,7 +13,7 @@ import enum KeyboardViews.KeyboardOrientation
 enum MainAppDesign {
     static let imageMaximumWidth: Double = 500
 
-    static var keyboardOrientation: KeyboardOrientation {
+    @MainActor static var keyboardOrientation: KeyboardOrientation {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .vertical
         } else {

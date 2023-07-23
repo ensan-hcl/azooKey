@@ -10,12 +10,12 @@ import CustardKit
 import Foundation
 import SwiftUtils
 
-public enum TabBarItemLabelType: Codable, Equatable {
+public enum TabBarItemLabelType: Codable, Equatable, Sendable {
     case text(String)
     case imageAndText(ImageAndText)
     case image(String)
 
-    public struct ImageAndText: Codable, Equatable {
+    public struct ImageAndText: Codable, Equatable, Sendable {
         public init(systemName: String, text: String) {
             self.systemName = systemName
             self.text = text
@@ -70,7 +70,7 @@ public extension TabBarItemLabelType {
     }
 }
 
-public struct TabBarItem: Codable {
+public struct TabBarItem: Codable, Sendable {
     public init(label: TabBarItemLabelType, actions: [CodableActionData]) {
         self.label = label
         self.actions = actions
@@ -80,7 +80,7 @@ public struct TabBarItem: Codable {
     public let actions: [CodableActionData]
 }
 
-public struct TabBarData: Codable {
+public struct TabBarData: Codable, Sendable {
     public init(identifier: Int, lastUpdateDate: Date? = Date(), items: [TabBarItem]) {
         self.identifier = identifier
         self.lastUpdateDate = lastUpdateDate

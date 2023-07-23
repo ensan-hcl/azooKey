@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable, Equatable {
+public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable, Equatable, Sendable {
     public typealias ColorData = ThemeColor<ApplicationExtension.ApplicationColor>
     public var id: Int?
     public var backgroundColor: ColorData
@@ -77,7 +77,7 @@ public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable
 
 }
 
-public enum ThemeFontWeight: Int, Codable {
+public enum ThemeFontWeight: Int, Codable, Sendable {
     case ultraLight = 1
     case thin = 2
     case light = 3
