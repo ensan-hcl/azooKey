@@ -86,8 +86,6 @@
 		1A62CB492A6D0856005DBBCE /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB482A6D0856005DBBCE /* SwiftUtils */; };
 		1A62CB4B2A6D0866005DBBCE /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB4A2A6D0866005DBBCE /* KanaKanjiConverterModule */; };
 		1A62CB4D2A6D0866005DBBCE /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB4C2A6D0866005DBBCE /* SwiftUtils */; };
-		1A62CB4F2A6D1614005DBBCE /* AzooKeyLogics in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB4E2A6D1614005DBBCE /* AzooKeyLogics */; };
-		1A62CB512A6D1618005DBBCE /* AzooKeyLogics in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB502A6D1618005DBBCE /* AzooKeyLogics */; };
 		1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */; };
 		1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */; };
 		1A64A8CF257C7F760022C081 /* ConjunctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8CE257C7F760022C081 /* ConjunctionBuilder.swift */; };
@@ -156,6 +154,8 @@
 		1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */; };
 		1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BE0258DB4B9009B9B8B /* TemplateListView.swift */; };
 		1AE70BEB258E5767009B9B8B /* TemplateEditingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */; };
+		1AED0A5F2A6D22C3005B87E5 /* AzooKeyUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AED0A5E2A6D22C3005B87E5 /* AzooKeyUtils */; };
+		1AED0A612A6D22CB005B87E5 /* AzooKeyUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AED0A602A6D22CB005B87E5 /* AzooKeyUtils */; };
 		1AF28CE0253C9FFC0012CF94 /* CursorMoveTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */; };
 		1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */; };
 		1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */; };
@@ -384,8 +384,8 @@
 				1A62CB492A6D0856005DBBCE /* SwiftUtils in Frameworks */,
 				1A7F37742A683428009AC382 /* SwiftUIUtils in Frameworks */,
 				1AF306022A00070000B4DAC3 /* KanaKanjiConverterModule in Frameworks */,
-				1A62CB4F2A6D1614005DBBCE /* AzooKeyLogics in Frameworks */,
 				1A7F37882A6A1A90009AC382 /* KeyboardViews in Frameworks */,
+				1AED0A5F2A6D22C3005B87E5 /* AzooKeyUtils in Frameworks */,
 				1A62CB472A6D0856005DBBCE /* KanaKanjiConverterModule in Frameworks */,
 				1A606B06292E53BA00CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
@@ -416,8 +416,8 @@
 				1A62CB4D2A6D0866005DBBCE /* SwiftUtils in Frameworks */,
 				1A9E908F2822CEC100E73846 /* DequeModule in Frameworks */,
 				1A7F37812A698741009AC382 /* KeyboardThemes in Frameworks */,
-				1A62CB512A6D1618005DBBCE /* AzooKeyLogics in Frameworks */,
 				1AD96FB82A22F9C800FD4EA4 /* SwiftUIUtils in Frameworks */,
+				1AED0A612A6D22CB005B87E5 /* AzooKeyUtils in Frameworks */,
 				1A62CB4B2A6D0866005DBBCE /* KanaKanjiConverterModule in Frameworks */,
 				1A606B08292E53C500CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
@@ -979,7 +979,7 @@
 				1A7F37872A6A1A90009AC382 /* KeyboardViews */,
 				1A62CB462A6D0856005DBBCE /* KanaKanjiConverterModule */,
 				1A62CB482A6D0856005DBBCE /* SwiftUtils */,
-				1A62CB4E2A6D1614005DBBCE /* AzooKeyLogics */,
+				1AED0A5E2A6D22C3005B87E5 /* AzooKeyUtils */,
 			);
 			productName = MainApp;
 			productReference = 1A3DC1C22500D44A002CAA93 /* azooKey.app */;
@@ -1049,7 +1049,7 @@
 				1A7F37892A6A1A99009AC382 /* KeyboardViews */,
 				1A62CB4A2A6D0866005DBBCE /* KanaKanjiConverterModule */,
 				1A62CB4C2A6D0866005DBBCE /* SwiftUtils */,
-				1A62CB502A6D1618005DBBCE /* AzooKeyLogics */,
+				1AED0A602A6D22CB005B87E5 /* AzooKeyUtils */,
 			);
 			productName = Keyboard;
 			productReference = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */;
@@ -1983,14 +1983,6 @@
 			package = 1A62CB452A6D0856005DBBCE /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */;
 			productName = SwiftUtils;
 		};
-		1A62CB4E2A6D1614005DBBCE /* AzooKeyLogics */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AzooKeyLogics;
-		};
-		1A62CB502A6D1618005DBBCE /* AzooKeyLogics */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AzooKeyLogics;
-		};
 		1A70DFFC291F2D1E00A83849 /* CustardKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */;
@@ -2047,6 +2039,14 @@
 		1AD96FB92A22F9CD00FD4EA4 /* SwiftUIUtils */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIUtils;
+		};
+		1AED0A5E2A6D22C3005B87E5 /* AzooKeyUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AzooKeyUtils;
+		};
+		1AED0A602A6D22CB005B87E5 /* AzooKeyUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AzooKeyUtils;
 		};
 		1AF306012A00070000B4DAC3 /* KanaKanjiConverterModule */ = {
 			isa = XCSwiftPackageProductDependency;

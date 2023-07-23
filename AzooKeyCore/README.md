@@ -47,3 +47,6 @@ private static let variableStates = VariableStates(
 
 この型を通じてKeyboardViewにユーザ設定を注入したり、お知らせのデータを注入したりすることができます。
 
+
+## AzooKeyUtils
+azooKey固有の実装をまとめたユーティリティのモジュールです。
