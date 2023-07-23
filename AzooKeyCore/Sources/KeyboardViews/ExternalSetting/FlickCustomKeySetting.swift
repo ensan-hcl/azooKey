@@ -102,7 +102,7 @@ public struct FlickCustomKey: Codable, Equatable {
         case longpressActions
     }
 
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(label, forKey: .label)
         try container.encode(actions, forKey: .actions)
@@ -115,7 +115,7 @@ public struct FlickCustomKey: Codable, Equatable {
         self.longpressActions = longpressActions
     }
 
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let label = try container.decode(String.self, forKey: .label)
         let actions = try? container.decode([CodableActionData].self, forKey: .actions)
@@ -176,7 +176,7 @@ public struct KeyFlickSetting: Codable, Equatable {
         self.targetKeyIdentifier = identifier.rawValue
     }
 
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         if let targetKeyIdentifier = try? values.decode(String.self, forKey: .targetKeyIdentifier),
            let left = try? values.decode(String.self, forKey: .left),

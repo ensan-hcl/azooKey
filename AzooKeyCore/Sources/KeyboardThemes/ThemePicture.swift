@@ -41,7 +41,7 @@ extension ThemePicture: Codable {
         case emptyPath
     }
 
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let valueType = try values.decode(ValueType.self, forKey: .valueType)
         let value = try values.decodeIfPresent(String.self, forKey: .value)
@@ -68,7 +68,7 @@ extension ThemePicture: Codable {
         case value
     }
 
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         let valueType: ValueType

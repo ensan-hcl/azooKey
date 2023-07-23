@@ -68,7 +68,7 @@ extension ThemeColor: Codable, Equatable {
         case emptyData
     }
 
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
 
         let color = try values.decode(Color?.self, forKey: .color)
@@ -92,7 +92,7 @@ extension ThemeColor: Codable, Equatable {
         case dynamicColor
     }
 
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         let color: Color?
@@ -138,7 +138,7 @@ extension Color: Codable {
         case opacity
     }
 
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let red = try values.decode(Double.self, forKey: .red)
         let green = try values.decode(Double.self, forKey: .green)
@@ -147,7 +147,7 @@ extension Color: Codable {
         self.init(.displayP3, red: red, green: green, blue: blue, opacity: opacity)
     }
 
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         guard let rgba = self.cgColor?.components else {
             throw EncodeError.dynamicColor(self)
