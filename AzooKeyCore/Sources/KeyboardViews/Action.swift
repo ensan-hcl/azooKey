@@ -6,10 +6,10 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
-@preconcurrency import enum CustardExpressionEvaluator.CompiledExpression
+import enum CustardExpressionEvaluator.CompiledExpression
 import CustardKit
 import Foundation
-@preconcurrency import enum KanaKanjiConverterModule.ConverterBehaviorSemantics
+import enum KanaKanjiConverterModule.ConverterBehaviorSemantics
 
 public enum BoolOperation: Equatable, Sendable {
     case on, off, toggle

@@ -35,7 +35,7 @@ public final class VariableStates: ObservableObject {
     }
 
     public struct BoolStates: CustardExpressionEvaluatorContext {
-        public func getValue(for key: String) -> ExpressionValue? {
+        @MainActor public func getValue(for key: String) -> ExpressionValue? {
             if let boolValue = self[key] {
                 return .bool(boolValue)
             }
@@ -72,7 +72,7 @@ public final class VariableStates: ObservableObject {
             }
         }
 
-        public subscript(_ key: String) -> Bool? {
+        @MainActor public subscript(_ key: String) -> Bool? {
             get {
                 if key == "isTextMagnifying" {
                     return self.isTextMagnifying
@@ -167,7 +167,7 @@ public final class VariableStates: ObservableObject {
         self.moveCursorBarState.updateLine(leftText: leftSide + center, rightText: rightSide)
     }
 
-    public func setResizingMode(_ state: ResizingState) {
+    @MainActor public func setResizingMode(_ state: ResizingState) {
         switch state {
         case .fullwidth:
             interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: self.keyboardOrientation) + 2)
@@ -264,7 +264,7 @@ public final class VariableStates: ObservableObject {
         }
     }
 
-    public func updateResizingState() {
+    @MainActor public func updateResizingState() {
         let isLastOnehandedMode = keyboardInternalSettingManager.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation).isLastOnehandedMode
         if isLastOnehandedMode {
             self.setResizingMode(.onehanded)
@@ -273,7 +273,7 @@ public final class VariableStates: ObservableObject {
         }
     }
 
-    public func setKeyboardLayout(_ layout: KeyboardLayout) {
+    @MainActor public func setKeyboardLayout(_ layout: KeyboardLayout) {
         self.keyboardLayout = layout
         self.updateResizingState()
     }
@@ -282,7 +282,7 @@ public final class VariableStates: ObservableObject {
         self.inputStyle = style
     }
 
-    public func setInterfaceSize(orientation: KeyboardOrientation, screenWidth: CGFloat) {
+    @MainActor public func setInterfaceSize(orientation: KeyboardOrientation, screenWidth: CGFloat) {
         let height = Design.keyboardHeight(screenWidth: screenWidth, orientation: orientation)
         if self.keyboardOrientation != orientation {
             self.keyboardOrientation = orientation

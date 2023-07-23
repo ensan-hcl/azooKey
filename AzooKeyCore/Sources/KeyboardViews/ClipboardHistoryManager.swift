@@ -151,7 +151,7 @@ public struct ClipboardHistoryManager {
         case sharedDirectoryInaccessible
     }
 
-    static func save(_ items: [ClipboardHistoryItem], config: any ClipboardHistoryManagerConfiguration) throws {
+    @MainActor static func save(_ items: [ClipboardHistoryItem], config: any ClipboardHistoryManagerConfiguration) throws {
         // jsonファイルとして共有空間に保存する
         // FullAccessがない場合は不可能なので`fail`にする
         guard SemiStaticStates.shared.hasFullAccess else {

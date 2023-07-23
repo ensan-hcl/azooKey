@@ -32,7 +32,7 @@ enum VariationsViewDirection {
 }
 
 struct QwertySuggestView {
-    static func expandedPath(rdw: CGFloat, ldw: CGFloat, width: CGFloat, tabDesign: TabDependentDesign) -> some Shape {
+    @MainActor static func expandedPath(rdw: CGFloat, ldw: CGFloat, width: CGFloat, tabDesign: TabDependentDesign) -> some Shape {
         Path { path in
             path.move(to: CGPoint(x: 122, y: 281))
             path.addLine(to: CGPoint(x: 53, y: 281))
@@ -88,14 +88,14 @@ struct QwertySuggestView {
         .scale(x: width / 109, y: (tabDesign.keyViewHeight * 2 + tabDesign.verticalSpacing) / 281, anchor: .top)
     }
 
-    static func scaleToFrameSize(keyWidth: CGFloat, scale_y: CGFloat, color: Color, borderColor: Color, borderWidth: CGFloat, tabDesign: TabDependentDesign) -> some View {
+    @MainActor static func scaleToFrameSize(keyWidth: CGFloat, scale_y: CGFloat, color: Color, borderColor: Color, borderWidth: CGFloat, tabDesign: TabDependentDesign) -> some View {
         let height = (tabDesign.keyViewHeight * 2 + tabDesign.verticalSpacing) * scale_y
         return expandedPath(rdw: 0, ldw: 0, width: keyWidth, tabDesign: tabDesign)
             .strokeAndFill(fillContent: color, strokeContent: borderColor, lineWidth: borderWidth)
             .frame(width: keyWidth, height: height)
     }
 
-    static func scaleToVariationsSize(keyWidth: CGFloat, scale_y: CGFloat, variationsCount: Int, color: Color, borderColor: Color, borderWidth: CGFloat, direction: VariationsViewDirection, tabDesign: TabDependentDesign) -> some View {
+    @MainActor static func scaleToVariationsSize(keyWidth: CGFloat, scale_y: CGFloat, variationsCount: Int, color: Color, borderColor: Color, borderWidth: CGFloat, direction: VariationsViewDirection, tabDesign: TabDependentDesign) -> some View {
         let keyViewSize = tabDesign.keyViewSize
         let height = (keyViewSize.height * 2 + tabDesign.verticalSpacing) * scale_y
         let dw = (keyViewSize.width * CGFloat(variationsCount - 1) + tabDesign.horizontalSpacing * CGFloat(variationsCount - 1)) * 109 / keyViewSize.width

@@ -8,7 +8,7 @@
 
 import CustardKit
 import Foundation
-@preconcurrency import KanaKanjiConverterModule
+import KanaKanjiConverterModule
 
 public enum UpsideComponent: Equatable, Sendable {
     case search([ConverterBehaviorSemantics.ReplacementTarget])
