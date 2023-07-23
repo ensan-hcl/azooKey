@@ -21,7 +21,7 @@ public extension UserMadeCustard {
         case tenkey
     }
 
-    func encode(to encoder: Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case let .gridScroll(value):
@@ -31,7 +31,7 @@ public extension UserMadeCustard {
         }
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard let key = container.allKeys.first else {
             throw DecodingError.dataCorrupted(
@@ -116,7 +116,7 @@ public struct UserMadeTenKeyCustard: Codable {
         public var width: Int
         public var height: Int
 
-        public func encode(to encoder: Encoder) throws {
+        public func encode(to encoder: any Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(width, forKey: .width)
             try container.encode(height, forKey: .height)
@@ -130,7 +130,7 @@ public struct UserMadeTenKeyCustard: Codable {
             }
         }
 
-        public init(from decoder: Decoder) throws {
+        public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.width = try container.decode(Int.self, forKey: .width)
             self.height = try container.decode(Int.self, forKey: .height)

@@ -43,14 +43,14 @@ public struct CustardManagerIndex: Codable {
         self.metadata = metadata
     }
 
-    public func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(availableCustards, forKey: .availableCustards)
         try container.encode(availableTabBars, forKey: .availableTabBars)
         try container.encode(metadata, forKey: .metadata)
     }
 
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.availableCustards = try container.decode([String].self, forKey: .availableCustards)
         self.availableTabBars = try container.decode([Int].self, forKey: .availableTabBars)

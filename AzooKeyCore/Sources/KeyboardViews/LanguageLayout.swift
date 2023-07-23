@@ -20,7 +20,7 @@ public extension LanguageLayout {
         case custard
     }
 
-    func encode(to encoder: Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
         case .flick:
@@ -32,7 +32,7 @@ public extension LanguageLayout {
         }
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard let key = container.allKeys.first else {
             throw DecodingError.dataCorrupted(

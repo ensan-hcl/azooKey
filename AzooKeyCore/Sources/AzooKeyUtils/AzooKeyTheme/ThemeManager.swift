@@ -28,7 +28,7 @@ struct ThemeIndices: Codable, Equatable {
         case selectedIndex_dark
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.currentIndices = try container.decode([Int].self, forKey: .currentIndices)
         self.selectedIndex = try container.decode(Int.self, forKey: .selectedIndex)

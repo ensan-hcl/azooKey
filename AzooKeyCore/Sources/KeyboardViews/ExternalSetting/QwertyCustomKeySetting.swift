@@ -34,7 +34,7 @@ private struct _QwertyCustomKey: Codable {
         self.longpresses = longpresses
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let name = try values.decode(String.self, forKey: .name)
         let longpress = try values.decode([String].self, forKey: .longpress)
@@ -80,12 +80,12 @@ struct QwertyCustomKeysArray: Codable {
         case keys
     }
 
-    func encode(to encoder: Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(keys, forKey: .keys)
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         if let keys = try? container.decode([QwertyCustomKey].self, forKey: .keys) {
             self.keys = keys

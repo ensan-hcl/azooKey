@@ -57,7 +57,7 @@ public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable
         case suggestKeyFillColor
     }
 
-    public init(from decoder: Decoder) throws {
+    public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let backgroundColor = try container.decode(ColorData.self, forKey: .backgroundColor)
         self.id = try container.decode(Int.self, forKey: .id)

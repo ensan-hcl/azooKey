@@ -41,15 +41,15 @@ public extension TabBarItemLabelType {
         }
     }
 
-    func encode(to encoder: Encoder) throws {
+    func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         switch self {
-        case let .text(value as Encodable), let .imageAndText(value as Encodable), let .image(value as Encodable):
+        case let .text(value as any Encodable), let .imageAndText(value as any Encodable), let .image(value as any Encodable):
             try value.containerEncode(container: &container, key: self.key)
         }
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard let key = container.allKeys.first else {
             throw DecodingError.dataCorrupted(
