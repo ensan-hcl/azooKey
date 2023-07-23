@@ -27,6 +27,10 @@ let package = Package(
         .library(
             name: "KeyboardViews",
             targets: ["KeyboardViews"]
+        ),
+        .library(
+            name: "AzooKeyUtils",
+            targets: ["AzooKeyUtils"]
         )
     ],
     dependencies: [
@@ -58,6 +62,15 @@ let package = Package(
             dependencies: [
                 "KeyboardThemes",
                 .product(name: "KanaKanjiConverterModule", package: "AzooKeyKanaKanjiConverter")
+            ],
+            resources: [],
+            swiftSettings: swiftSettings
+        ),
+        .target(
+            name: "AzooKeyUtils",
+            dependencies: [
+                "KeyboardThemes",
+                "KeyboardViews"
             ],
             resources: [],
             swiftSettings: swiftSettings

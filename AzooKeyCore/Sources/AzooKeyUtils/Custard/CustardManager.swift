@@ -13,19 +13,23 @@ import enum KanaKanjiConverterModule.KeyboardLanguage
 import KeyboardViews
 import SwiftUtils
 
-struct CustardInternalMetaData: Codable {
-    var origin: Origin
+public struct CustardInternalMetaData: Codable {
+    public init(origin: CustardInternalMetaData.Origin) {
+        self.origin = origin
+    }
 
-    enum Origin: String, Codable {
+    public var origin: Origin
+
+    public enum Origin: String, Codable {
         case userMade
         case imported
     }
 }
 
-struct CustardManagerIndex: Codable {
-    var availableCustards: [String] = []
-    var availableTabBars: [Int] = []
-    var metadata: [String: CustardInternalMetaData] = [:]
+public struct CustardManagerIndex: Codable {
+    public var availableCustards: [String] = []
+    public var availableTabBars: [Int] = []
+    public var metadata: [String: CustardInternalMetaData] = [:]
 
     enum CodingKeys: CodingKey {
         case availableCustards
@@ -33,20 +37,20 @@ struct CustardManagerIndex: Codable {
         case metadata
     }
 
-    internal init(availableCustards: [String] = [], availableTabBars: [Int] = [], metadata: [String: CustardInternalMetaData] = [:]) {
+    public init(availableCustards: [String] = [], availableTabBars: [Int] = [], metadata: [String: CustardInternalMetaData] = [:]) {
         self.availableCustards = availableCustards
         self.availableTabBars = availableTabBars
         self.metadata = metadata
     }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(availableCustards, forKey: .availableCustards)
         try container.encode(availableTabBars, forKey: .availableTabBars)
         try container.encode(metadata, forKey: .metadata)
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.availableCustards = try container.decode([String].self, forKey: .availableCustards)
         self.availableTabBars = try container.decode([Int].self, forKey: .availableTabBars)
@@ -54,7 +58,7 @@ struct CustardManagerIndex: Codable {
     }
 }
 
-struct CustardManager: CustardManagerProtocol {
+public struct CustardManager: CustardManagerProtocol {
     private static let directoryName = "custard/"
     private var index = CustardManagerIndex()
 
@@ -86,7 +90,7 @@ struct CustardManager: CustardManagerProtocol {
         }
     }
 
-    static func load() -> Self {
+    public static func load() -> Self {
         directoryExistCheck()
         let themeIndexURL = fileURL(name: "index.json")
         do {
@@ -99,7 +103,7 @@ struct CustardManager: CustardManagerProtocol {
         }
     }
 
-    func save() {
+    public func save() {
         let indexURL = Self.fileURL(name: "index.json")
         do {
             let data = try JSONEncoder().encode(self.index)
@@ -109,7 +113,7 @@ struct CustardManager: CustardManagerProtocol {
         }
     }
 
-    func userMadeCustardData(identifier: String) throws -> UserMadeCustard {
+    public func userMadeCustardData(identifier: String) throws -> UserMadeCustard {
         let fileName = Self.fileName(identifier)
         let fileURL = Self.fileURL(name: "\(fileName)_edit.json")
         let data = try Data(contentsOf: fileURL)
@@ -117,7 +121,7 @@ struct CustardManager: CustardManagerProtocol {
         return userMadeCustard
     }
 
-    func custard(identifier: String) throws -> Custard {
+    public func custard(identifier: String) throws -> Custard {
         let fileName = Self.fileName(identifier)
         let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
         let data = try Data(contentsOf: fileURL)
@@ -125,28 +129,28 @@ struct CustardManager: CustardManagerProtocol {
         return custard
     }
 
-    func custardFileIfExist(identifier: String) throws -> URL {
+    public func custardFileIfExist(identifier: String) throws -> URL {
         let fileName = Self.fileName(identifier)
         let fileURL = Self.fileURL(name: "\(fileName)_main.custard")
         _ = try Data(contentsOf: fileURL)
         return fileURL
     }
 
-    func tabbar(identifier: Int) throws -> TabBarData {
+    public func tabbar(identifier: Int) throws -> TabBarData {
         let fileURL = Self.fileURL(name: "tabbar_\(identifier).tabbar")
         let data = try Data(contentsOf: fileURL)
         let custard = try JSONDecoder().decode(TabBarData.self, from: data)
         return custard
     }
 
-    func checkTabExistInTabBar(identifier: Int = 0, tab: TabData) -> Bool {
+    public func checkTabExistInTabBar(identifier: Int = 0, tab: TabData) -> Bool {
         guard let tabbar = try? self.tabbar(identifier: identifier) else {
             return false
         }
         return tabbar.items.contains(where: {$0.actions == [.moveTab(tab)]})
     }
 
-    mutating func addTabBar(identifier: Int = 0, item: TabBarItem) throws {
+    public mutating func addTabBar(identifier: Int = 0, item: TabBarItem) throws {
         let tabbar = try self.tabbar(identifier: identifier)
         let newTabBar = TabBarData(
             identifier: tabbar.identifier,
@@ -155,7 +159,7 @@ struct CustardManager: CustardManagerProtocol {
         try self.saveTabBarData(tabBarData: newTabBar)
     }
 
-    mutating func saveCustard(custard: Custard, metadata: CustardInternalMetaData, userData: UserMadeCustard? = nil, updateTabBar: Bool = false) throws {
+    public mutating func saveCustard(custard: Custard, metadata: CustardInternalMetaData, userData: UserMadeCustard? = nil, updateTabBar: Bool = false) throws {
         let encoder = JSONEncoder()
         let data = try encoder.encode(custard)
         let fileName = Self.fileName(custard.identifier)
@@ -179,7 +183,7 @@ struct CustardManager: CustardManagerProtocol {
         self.save()
     }
 
-    mutating func saveTabBarData(tabBarData: TabBarData) throws {
+    public mutating func saveTabBarData(tabBarData: TabBarData) throws {
         let encoder = JSONEncoder()
         let data = try encoder.encode(tabBarData)
         let fileURL = Self.fileURL(name: "tabbar_\(tabBarData.identifier).tabbar")
@@ -190,7 +194,7 @@ struct CustardManager: CustardManagerProtocol {
         self.save()
     }
 
-    mutating func removeCustard(identifier: String) {
+    public mutating func removeCustard(identifier: String) {
         do {
             let fileName = Self.fileName(identifier)
             self.index.availableCustards.removeAll {$0 == identifier}
@@ -205,7 +209,7 @@ struct CustardManager: CustardManagerProtocol {
         }
     }
 
-    mutating func removeTabBar(identifier: Int) {
+    public mutating func removeTabBar(identifier: Int) {
         do {
             let fileURL = Self.fileURL(name: "tabbar_\(identifier).tabbar")
             try FileManager.default.removeItem(atPath: fileURL.path)
@@ -216,7 +220,7 @@ struct CustardManager: CustardManagerProtocol {
         }
     }
 
-    func availableCustard(for language: KeyboardLanguage) -> [String] {
+    public func availableCustard(for language: KeyboardLanguage) -> [String] {
         switch language {
         case .ja_JP:
             return self.availableCustards.compactMap {
@@ -259,15 +263,15 @@ struct CustardManager: CustardManagerProtocol {
         }
     }
 
-    var availableCustards: [String] {
+    public var availableCustards: [String] {
         index.availableCustards
     }
 
-    var availableTabBars: [Int] {
+    public var availableTabBars: [Int] {
         index.availableTabBars
     }
 
-    var metadata: [String: CustardInternalMetaData] {
+    public var metadata: [String: CustardInternalMetaData] {
         index.metadata
     }
 

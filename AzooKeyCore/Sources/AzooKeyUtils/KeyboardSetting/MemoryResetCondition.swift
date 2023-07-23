@@ -8,12 +8,12 @@
 
 import Foundation
 
-enum MemoryResetCondition: Int, Savable {
-    typealias SaveValue = String
+public enum MemoryResetCondition: Int, Savable {
+    public typealias SaveValue = String
     case none = 0
     case need = 1
 
-    var saveValue: SaveValue {
+    public var saveValue: SaveValue {
         switch self {
         case .none:
             return "none"
@@ -22,7 +22,7 @@ enum MemoryResetCondition: Int, Savable {
         }
     }
 
-    static func get(_ value: Any) -> MemoryResetCondition? {
+    public static func get(_ value: Any) -> MemoryResetCondition? {
         if let value = value as? SaveValue {
             if value.hasPrefix("none") {
                 return MemoryResetCondition.none
@@ -33,7 +33,7 @@ enum MemoryResetCondition: Int, Savable {
         return nil
     }
 
-    static func identifier(_ value: Any) -> String? {
+    public static func identifier(_ value: Any) -> String? {
         if let value = value as? SaveValue {
             if value.hasPrefix("none") {
                 return nil
@@ -46,11 +46,11 @@ enum MemoryResetCondition: Int, Savable {
 
     private static let key = "memory_reset_setting"
 
-    @MainActor static func set(value: Self) {
+    @MainActor public static func set(value: Self) {
         SharedStore.userDefaults.set(value.saveValue, forKey: key)
     }
 
-    static func shouldReset() -> Bool {
+    public static func shouldReset() -> Bool {
         if let object = SharedStore.userDefaults.object(forKey: key),
            let identifier = identifier(object) {
             if let finished = UserDefaults.standard.string(forKey: "finished_reset"), finished == identifier {

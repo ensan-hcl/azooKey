@@ -10,12 +10,12 @@ import CustardKit
 import Foundation
 import KeyboardViews
 
-enum UserMadeCustard: Codable {
+public enum UserMadeCustard: Codable {
     case gridScroll(UserMadeGridScrollCustard)
     case tenkey(UserMadeTenKeyCustard)
 }
 
-extension UserMadeCustard {
+public extension UserMadeCustard {
     enum CodingKeys: CodingKey {
         case gridScroll
         case tenkey
@@ -58,27 +58,47 @@ extension UserMadeCustard {
     }
 }
 
-struct UserMadeGridScrollCustard: Codable {
-    var tabName: String
-    var direction: CustardInterfaceLayoutScrollValue.ScrollDirection
-    var columnCount: String
-    var rowCount: String
-    var words: String
-    var addTabBarAutomatically: Bool
+public struct UserMadeGridScrollCustard: Codable {
+    public init(tabName: String, direction: CustardInterfaceLayoutScrollValue.ScrollDirection, columnCount: String, rowCount: String, words: String, addTabBarAutomatically: Bool) {
+        self.tabName = tabName
+        self.direction = direction
+        self.columnCount = columnCount
+        self.rowCount = rowCount
+        self.words = words
+        self.addTabBarAutomatically = addTabBarAutomatically
+    }
+
+    public var tabName: String
+    public var direction: CustardInterfaceLayoutScrollValue.ScrollDirection
+    public var columnCount: String
+    public var rowCount: String
+    public var words: String
+    public var addTabBarAutomatically: Bool
 }
 
-struct UserMadeTenKeyCustard: Codable {
-    var tabName: String
-    var rowCount: String
-    var columnCount: String
-    var inputStyle: CustardInputStyle
-    var language: CustardLanguage
-    var keys: [KeyPosition: KeyData]
-    var emptyKeys: Set<KeyPosition> = []
-    var addTabBarAutomatically: Bool
+public struct UserMadeTenKeyCustard: Codable {
+    public init(tabName: String, rowCount: String, columnCount: String, inputStyle: CustardInputStyle, language: CustardLanguage, keys: [KeyPosition: UserMadeTenKeyCustard.KeyData], emptyKeys: Set<KeyPosition> = [], addTabBarAutomatically: Bool) {
+        self.tabName = tabName
+        self.rowCount = rowCount
+        self.columnCount = columnCount
+        self.inputStyle = inputStyle
+        self.language = language
+        self.keys = keys
+        self.emptyKeys = emptyKeys
+        self.addTabBarAutomatically = addTabBarAutomatically
+    }
 
-    struct KeyData: Codable, Hashable {
-        init(model: CustardInterfaceKey, width: Int, height: Int) {
+    public var tabName: String
+    public var rowCount: String
+    public var columnCount: String
+    public var inputStyle: CustardInputStyle
+    public var language: CustardLanguage
+    public var keys: [KeyPosition: KeyData]
+    public var emptyKeys: Set<KeyPosition> = []
+    public var addTabBarAutomatically: Bool
+
+    public struct KeyData: Codable, Hashable {
+        public init(model: CustardInterfaceKey, width: Int, height: Int) {
             self.model = model
             self.width = width
             self.height = height
@@ -92,11 +112,11 @@ struct UserMadeTenKeyCustard: Codable {
             case system, custom
         }
 
-        var model: CustardInterfaceKey
-        var width: Int
-        var height: Int
+        public var model: CustardInterfaceKey
+        public var width: Int
+        public var height: Int
 
-        func encode(to encoder: Encoder) throws {
+        public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(width, forKey: .width)
             try container.encode(height, forKey: .height)
@@ -110,7 +130,7 @@ struct UserMadeTenKeyCustard: Codable {
             }
         }
 
-        init(from decoder: Decoder) throws {
+        public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.width = try container.decode(Int.self, forKey: .width)
             self.height = try container.decode(Int.self, forKey: .height)
