@@ -37,7 +37,7 @@ struct FlickEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
         return KeyLabel(.text(text), width: width)
     }
 
-    func backGroundColorWhenUnpressed(states: VariableStates, theme: Extension.Theme) -> Color {
+    func backGroundColorWhenUnpressed<ThemeExtension: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>(states: VariableStates, theme: ThemeData<ThemeExtension>) -> Color {
         switch states.enterKeyState {
         case .complete, .edit:
             return theme.specialKeyFillColor.color
@@ -46,7 +46,7 @@ struct FlickEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
             case .default:
                 return theme.specialKeyFillColor.color
             default:
-                if theme == Extension.ThemeExtension.default(layout: .flick) {
+                if theme == ThemeExtension.default(layout: .flick) {
                     return Design.colors.specialEnterKeyColor
                 } else {
                     return theme.specialKeyFillColor.color

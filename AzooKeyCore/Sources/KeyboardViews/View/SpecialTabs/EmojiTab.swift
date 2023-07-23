@@ -188,19 +188,13 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         Genre.allCases.sorted(by: {$0.rawValue < $1.rawValue})
     }
 
-    @State private var emojis: [Genre: [EmojiData]] = Self.getEmojis()
+    @State private var emojis: [Genre: [EmojiData]] = [:]
 
-    @State private var selectedGenre: Genre = .recent
+    @State private var selectedGenre: Genre = .smileys
 
-    @State private var expandLevel: EmojiTabExpandModePreference.Level
+    @State private var expandLevel: EmojiTabExpandModePreference.Level = .large
 
-    init() {
-        let value = KeyboardInternalSetting.shared.emojiTabExpandModePreference.level
-        self._expandLevel = .init(initialValue: value)
-        if emojis[.recent, default: []].isEmpty {
-            self._selectedGenre = .init(initialValue: .smileys)
-        }
-    }
+    init() {}
     // 正方形のキーにする
     private var keySize: CGFloat {
         scrollViewHeight / CGFloat(verticalCount)
@@ -210,7 +204,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         .init(emoji: replacements[emoji, default: emoji], base: emoji)
     }
 
-    private static func getEmojis() -> [Genre: [EmojiData]] {
+    private static func getEmojis(keyboardInternalSettingManager: KeyboardInternalSettingManager) -> [Genre: [EmojiData]] {
         let fileURL: URL
         // 読み込むファイルはバージョンごとに変更する必要がある
         if #available(iOS 16.4, *) {
@@ -250,7 +244,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
             debug(error)
             return [:]
         }
-        let preference = KeyboardInternalSetting.shared.tabCharacterPreference
+        let preference = keyboardInternalSettingManager.tabCharacterPreference
         let recentlyUseed = preference.getRecentlyUsed(for: .system(.emoji), count: 49)
         emojis[.recent] = recentlyUseed
 
@@ -274,7 +268,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         SimpleKeyView(model: ExpandKeyModel<Extension>(currentLevel: expandLevel, action: {
             let newValue = expandLevel.next()
             self.expandLevel = newValue
-            KeyboardInternalSetting.shared.update(\.emojiTabExpandModePreference) { value in
+            variableStates.keyboardInternalSettingManager.update(\.emojiTabExpandModePreference) { value in
                 value.level = newValue
             }
         }), width: functionKeyWidth, height: footerHeight)
@@ -353,9 +347,14 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         }
         .frame(width: variableStates.interfaceSize.width)
         .onChange(of: variableStates.lastTabCharacterPreferenceUpdate) { _ in
-            self.emojis = Self.getEmojis()
+            self.emojis = Self.getEmojis(keyboardInternalSettingManager: variableStates.keyboardInternalSettingManager)
         }
         .onAppear {
+            self.emojis = Self.getEmojis(keyboardInternalSettingManager: variableStates.keyboardInternalSettingManager)
+            self.expandLevel = variableStates.keyboardInternalSettingManager.emojiTabExpandModePreference.level
+            if !self.emojis[.recent, default: []].isEmpty {
+                self.selectedGenre = .recent
+            }
             variableStates.resultModelVariableSection.setResults([])
             variableStates.barState = .none
         }
@@ -435,7 +434,7 @@ private struct EmojiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
     }
 
     func additionalOnPress(variableStates: VariableStates) {
-        KeyboardInternalSetting.shared.update(\.tabCharacterPreference) { value in
+        variableStates.keyboardInternalSettingManager.update(\.tabCharacterPreference) { value in
             value.setUsed(base: self.base, for: .system(.emoji))
             variableStates.lastTabCharacterPreferenceUpdate = Date()
         }

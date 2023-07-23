@@ -60,7 +60,8 @@ final class KeyboardViewController: UIInputViewController {
     private static let action = KeyboardActionManager()
     private static let variableStates = VariableStates(
         clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(),
-        tabManagerConfig: TabManagerConfig()
+        tabManagerConfig: TabManagerConfig(),
+        userDefaults: UserDefaults.standard
     )
     private static let notificationCenter = NotificationCenter.default
 

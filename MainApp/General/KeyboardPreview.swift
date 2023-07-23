@@ -29,7 +29,8 @@ struct KeyboardPreview: View {
         interfaceWidth: UIScreen.main.bounds.width,
         orientation: MainAppDesign.keyboardOrientation,
         clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(),
-        tabManagerConfig: TabManagerConfig()
+        tabManagerConfig: TabManagerConfig(),
+        userDefaults: UserDefaults.standard
     )
 
     init(theme: AzooKeyTheme? = nil, scale: CGFloat = 1, defaultTab: Tab.ExistentialTab? = nil) {

@@ -14,6 +14,7 @@ public protocol UserDefaultsKeys: RawRepresentable where RawValue == String {
 
 public protocol UserDefaultsManager {
     associatedtype Keys: UserDefaultsKeys where Keys.Manager == Self
+    var userDefaults: UserDefaults { get }
     mutating func update<T: Codable>(_ value: KeyPath<Self, T>, newValue: T)
     mutating func update<T: Codable>(_ value: KeyPath<Self, T>, process: (inout T) -> Void)
 }
@@ -39,14 +40,14 @@ public extension UserDefaultsManager {
         do {
             let data = try JSONEncoder().encode(self[keyPath: value])
             let key = Keys(keyPath: value)
-            UserDefaults.standard.set(data, forKey: key.rawValue)
+            userDefaults.set(data, forKey: key.rawValue)
         } catch {
             debug(error)
         }
     }
 
-    static func load<T: StaticInitialValueAvailable>(key: Keys) -> T {
-        if let value = UserDefaults.standard.data(forKey: key.rawValue) {
+    static func load<T: StaticInitialValueAvailable>(key: Keys, userDefaults: UserDefaults) -> T {
+        if let value = userDefaults.data(forKey: key.rawValue) {
             do {
                 let value = try JSONDecoder().decode(T.self, from: value)
                 return value

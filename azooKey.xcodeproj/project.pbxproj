@@ -787,7 +787,6 @@
 				1AFA11062A6C188700A359E0 /* AzooKeyKeyboardViewExtension.swift */,
 				1A7F377C2A697EC9009AC382 /* AzooKeyTheme */,
 				1AD2B8D626C272E60053CE4A /* KeyboardSetting */,
-				1ACA28E429AB36F100B794C8 /* ClipboardHistoryManager */,
 				1A18425325DE614D003985AB /* Custard */,
 				1AC5876825D930D000BB060E /* Localizable.strings */,
 				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
@@ -870,13 +869,6 @@
 				1AC09DBD299533DF009BDBC7 /* DicdataStoreTests.swift */,
 			);
 			path = DicdataStoreTests;
-			sourceTree = "<group>";
-		};
-		1ACA28E429AB36F100B794C8 /* ClipboardHistoryManager */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ClipboardHistoryManager;
 			sourceTree = "<group>";
 		};
 		1ACE006F2567514400899DA2 /* FlickCustomKeys */ = {

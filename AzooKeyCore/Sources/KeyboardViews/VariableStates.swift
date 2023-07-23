@@ -20,10 +20,12 @@ public final class VariableStates: ObservableObject {
         interfaceWidth: CGFloat? = nil,
         orientation: KeyboardOrientation? = nil,
         clipboardHistoryManagerConfig: any ClipboardHistoryManagerConfiguration,
-        tabManagerConfig: any TabManagerConfiguration
+        tabManagerConfig: any TabManagerConfiguration,
+        userDefaults: UserDefaults
     ) {
         self.tabManager = TabManager(config: tabManagerConfig)
         self.clipboardHistoryManager = ClipboardHistoryManager(config: clipboardHistoryManagerConfig)
+        self.keyboardInternalSettingManager = KeyboardInternalSettingManager(userDefaults: userDefaults)
         if let interfaceWidth {
             self.setInterfaceSize(orientation: orientation ?? .vertical, screenWidth: interfaceWidth)
         } else if let orientation {
@@ -101,6 +103,7 @@ public final class VariableStates: ObservableObject {
     }
     private(set) public var inputStyle: InputStyle = .direct
     private(set) public var tabManager: TabManager
+    public var keyboardInternalSettingManager: KeyboardInternalSettingManager
     @Published public var clipboardHistoryManager: ClipboardHistoryManager
 
     @Published public var keyboardLanguage: KeyboardLanguage = .ja_JP
@@ -169,13 +172,13 @@ public final class VariableStates: ObservableObject {
         case .fullwidth:
             interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: self.keyboardOrientation) + 2)
         case .onehanded, .resizing:
-            let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation)
+            let item = keyboardInternalSettingManager.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation)
             // キーボードスクリーンのサイズを超えないように設定
             interfaceSize = CGSize(width: min(item.size.width, SemiStaticStates.shared.screenWidth), height: min(item.size.height, Design.keyboardScreenHeight(upsideComponent: self.upsideComponent, orientation: self.keyboardOrientation)))
             interfacePosition = item.position
         }
         self.resizingState = state
-        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
+        keyboardInternalSettingManager.update(\.oneHandedModeSetting) {value in
             value.update(layout: keyboardLayout, orientation: keyboardOrientation) {value in
                 value.isLastOnehandedMode = state != .fullwidth
             }
@@ -262,7 +265,7 @@ public final class VariableStates: ObservableObject {
     }
 
     public func updateResizingState() {
-        let isLastOnehandedMode = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation).isLastOnehandedMode
+        let isLastOnehandedMode = keyboardInternalSettingManager.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation).isLastOnehandedMode
         if isLastOnehandedMode {
             self.setResizingMode(.onehanded)
         } else {
@@ -288,14 +291,14 @@ public final class VariableStates: ObservableObject {
         let layout = self.keyboardLayout
 
         // 片手モードの処理
-        KeyboardInternalSetting.shared.update(\.oneHandedModeSetting) {value in
+        keyboardInternalSettingManager.update(\.oneHandedModeSetting) {value in
             value.setIfFirst(layout: layout, orientation: orientation, size: .init(width: screenWidth, height: height), position: .zero)
         }
         switch self.resizingState {
         case .fullwidth:
             self.interfaceSize = CGSize(width: screenWidth, height: height)
         case .onehanded, .resizing:
-            let item = KeyboardInternalSetting.shared.oneHandedModeSetting.item(layout: layout, orientation: orientation)
+            let item = keyboardInternalSettingManager.oneHandedModeSetting.item(layout: layout, orientation: orientation)
             // 安全のため、指示されたwidth, heightを超える値を許可しない。
             self.interfaceSize = CGSize(width: min(screenWidth, item.size.width), height: min(height, item.size.height))
             self.interfacePosition = item.position

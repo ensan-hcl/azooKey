@@ -40,7 +40,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     @Environment(\.dismiss) private var dismiss
 
     let base: UserMadeTenKeyCustard
-    @StateObject private var variableStates = VariableStates(clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(), tabManagerConfig: TabManagerConfig())
+    @StateObject private var variableStates = VariableStates(clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(), tabManagerConfig: TabManagerConfig(), userDefaults: UserDefaults.standard)
     @State private var editingItem: UserMadeTenKeyCustard
     @Binding private var manager: CustardManager
     @State private var showPreview = false

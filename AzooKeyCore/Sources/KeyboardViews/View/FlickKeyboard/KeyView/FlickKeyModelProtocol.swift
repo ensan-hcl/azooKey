@@ -38,8 +38,8 @@ public protocol FlickKeyModelProtocol<Extension> {
     var needSuggestView: Bool {get}
 
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
-    @MainActor func backGroundColorWhenPressed(theme: ThemeData<Extension.ThemeExtension>) -> Color
-    @MainActor func backGroundColorWhenUnpressed(states: VariableStates, theme: ThemeData<Extension.ThemeExtension>) -> Color
+    @MainActor func backGroundColorWhenPressed<ThemeExtension: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>(theme: ThemeData<ThemeExtension>) -> Color
+    @MainActor func backGroundColorWhenUnpressed<ThemeExtension: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>(states: VariableStates, theme: ThemeData<ThemeExtension>) -> Color
 
     @MainActor func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel]
     @MainActor func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool
@@ -58,7 +58,7 @@ extension FlickKeyModelProtocol {
         (flickKeys(variableStates: variableStates) as [FlickDirection: FlickedKeyModel]).keys.contains(direction)
     }
 
-    func backGroundColorWhenPressed(theme: ThemeData<some ApplicationSpecificTheme>) -> Color {
+    func backGroundColorWhenPressed(theme: ThemeData<some ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>) -> Color {
         theme.pushedKeyFillColor.color
     }
 
