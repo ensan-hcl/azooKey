@@ -259,6 +259,7 @@ public final class VariableStates: ObservableObject {
     }
 
     public func setUIReturnKeyType(type: UIReturnKeyType) {
+        self.enterKeyType = type
         if case let .return(prev) = self.enterKeyState, prev != type {
             self.setEnterKeyState(.return)
         }
