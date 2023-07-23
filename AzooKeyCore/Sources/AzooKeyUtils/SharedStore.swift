@@ -9,24 +9,24 @@
 import Foundation
 import SwiftUtils
 
-enum SharedStore {
+public enum SharedStore {
     @MainActor static let userDefaults = UserDefaults(suiteName: Self.appGroupKey)!
-    static let bundleName = "DevEn3.azooKey.keyboard"
-    static let appGroupKey = "group.com.azooKey.keyboard"
+    public static let bundleName = "DevEn3.azooKey.keyboard"
+    public static let appGroupKey = "group.com.azooKey.keyboard"
 
     private static var appVersionString: String? {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
     }
     private static let initialAppVersionKey = "InitialAppVersion"
     private static let lastAppVersionKey = "LastAppVersion"
-    static var currentAppVersion: AppVersion? {
+    public static var currentAppVersion: AppVersion? {
         if let appVersionString = appVersionString {
             return AppVersion(appVersionString)
         }
         return nil
     }
     // this value will be 1.7.1 at minimum
-    @MainActor static var initialAppVersion: AppVersion? {
+    @MainActor public static var initialAppVersion: AppVersion? {
         if let appVersionString = userDefaults.string(forKey: initialAppVersionKey) {
             return AppVersion(appVersionString)
         }
@@ -34,32 +34,32 @@ enum SharedStore {
     }
 
     // this value will be 2.0.0 at minimum
-    @MainActor static var lastAppVersion: AppVersion? {
+    @MainActor public static var lastAppVersion: AppVersion? {
         if let appVersionString = userDefaults.string(forKey: lastAppVersionKey) {
             return AppVersion(appVersionString)
         }
         return nil
     }
 
-    @MainActor static func setInitialAppVersion() {
+    @MainActor public static func setInitialAppVersion() {
         if initialAppVersion == nil, let appVersionString = appVersionString {
             SharedStore.userDefaults.set(appVersionString, forKey: initialAppVersionKey)
         }
     }
 
-    @MainActor static func setLastAppVersion() {
+    @MainActor public static func setLastAppVersion() {
         if let appVersionString = appVersionString {
             SharedStore.userDefaults.set(appVersionString, forKey: lastAppVersionKey)
         }
     }
 
-    enum ShareThisWordOptions: String {
+    public enum ShareThisWordOptions: String {
         case 人・動物・会社などの名前
         case 場所・建物などの名前
         case 五段活用
     }
 
-    static func sendSharedWord(word: String, ruby: String, options: [ShareThisWordOptions]) async -> Bool {
+    public static func sendSharedWord(word: String, ruby: String, options: [ShareThisWordOptions]) async -> Bool {
         let url = URL(string: "https://docs.google.com/forms/d/e/1FAIpQLScrNWRx2DBb1fCbfcHenyO4myrD4e85WlhIJrkyEnEF0zCD1A/formResponse")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -83,7 +83,7 @@ enum SharedStore {
     }
 }
 
-extension AppVersion {
+public extension AppVersion {
     static let azooKey_v2_0_2 = AppVersion("2.0.2")!
     static let azooKey_v1_9 = AppVersion("1.9")!
     static let azooKey_v1_8_1 = AppVersion("1.8.1")!

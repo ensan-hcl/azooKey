@@ -6,6 +6,7 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import Foundation
 import SwiftUI
 import struct KanaKanjiConverterModule.TemplateData

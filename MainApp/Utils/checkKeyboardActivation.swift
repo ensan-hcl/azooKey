@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import enum AzooKeyUtils.SharedStore
 
 extension SharedStore {
     static func checkKeyboardActivation() -> Bool {

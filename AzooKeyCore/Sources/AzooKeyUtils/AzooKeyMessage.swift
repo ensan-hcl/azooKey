@@ -9,7 +9,7 @@
 import Foundation
 import KeyboardViews
 
-enum MessageIdentifier: String, CaseIterable, MessageIdentifierProtocol {
+public enum MessageIdentifier: String, CaseIterable, MessageIdentifierProtocol {
     case mock = "mock_alert_2022_09_16_03"
     case iOS15_4_new_emoji = "iOS_15_4_new_emoji"                    // MARK: frozen
     case iOS16_4_new_emoji = "iOS_16_4_new_emoji_commit"                    // MARK: frozen
@@ -25,11 +25,11 @@ enum MessageIdentifier: String, CaseIterable, MessageIdentifierProtocol {
     // case liveconversion_introduction = "liveconversion_introduction" // MARK: frozen
     // case ver1_8_autocomplete_introduction = "ver1_8_autocomplete_introduction" // MARK: frozen
 
-    var key: String {
+    public var key: String {
         self.rawValue + "_status"
     }
 
-    var needUsingContainerApp: Bool {
+    public var needUsingContainerApp: Bool {
         switch self {
         case .ver1_9_user_dictionary_update, .ver2_1_emoji_tab:
             return true
@@ -38,17 +38,17 @@ enum MessageIdentifier: String, CaseIterable, MessageIdentifierProtocol {
         }
     }
 
-    var id: String {
+    public var id: String {
         self.rawValue
     }
 }
 
-enum AzooKeyMessageProvider: ApplicationSpecificKeyboardViewMessageProvider {
-    typealias MessageID = MessageIdentifier
+public enum AzooKeyMessageProvider: ApplicationSpecificKeyboardViewMessageProvider {
+    public typealias MessageID = MessageIdentifier
 
-    static var userDefaults: UserDefaults { UserDefaults(suiteName: SharedStore.appGroupKey)! }
+    public static var userDefaults: UserDefaults { UserDefaults(suiteName: SharedStore.appGroupKey)! }
 
-    static var messages: [MessageData<MessageIdentifier>] {
+    public static var messages: [MessageData<MessageIdentifier>] {
         [
             MessageData(
                 id: .iOS15_4_new_emoji,
@@ -141,7 +141,7 @@ enum AzooKeyMessageProvider: ApplicationSpecificKeyboardViewMessageProvider {
     }
 }
 
-extension MessageManager where ID == MessageIdentifier {
+public extension MessageManager where ID == MessageIdentifier {
     @MainActor init() {
         self.init(necessaryMessages: AzooKeyMessageProvider.messages, userDefaults: UserDefaults(suiteName: SharedStore.appGroupKey)!)
     }

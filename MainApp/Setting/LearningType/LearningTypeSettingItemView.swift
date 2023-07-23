@@ -6,6 +6,7 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import SwiftUI
 import enum KanaKanjiConverterModule.LearningType
 

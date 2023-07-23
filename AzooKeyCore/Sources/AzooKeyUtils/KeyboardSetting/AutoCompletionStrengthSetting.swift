@@ -9,15 +9,15 @@
 import Foundation
 import SwiftUI
 
-struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
-    enum Value: Int {
+public struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
+    public enum Value: Int {
         case disabled  // 無効化
         case weak      // 弱い
         case normal    // 普通
         case strong    // 強い
         case ultrastrong  // 非常に強い
 
-        var threshold: Int {
+        public var threshold: Int {
             switch self {
             case .disabled: return .max
             case .weak: return 16
@@ -27,10 +27,10 @@ struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
             }
         }
     }
-    static let title: LocalizedStringKey = "自動確定の速さ"
-    static let explanation: LocalizedStringKey = "自動確定を使うと長い文章を打っているときに候補の選択がしやすくなります。"
-    static let defaultValue: Value = Value.weak
-    static let key: String = "automatic_completion_strength"
+    public static let title: LocalizedStringKey = "自動確定の速さ"
+    public static let explanation: LocalizedStringKey = "自動確定を使うと長い文章を打っているときに候補の選択がしやすくなります。"
+    public static let defaultValue: Value = Value.weak
+    public static let key: String = "automatic_completion_strength"
 
     @MainActor
     static func get() -> Value? {
@@ -45,7 +45,7 @@ struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
         SharedStore.userDefaults.set(newValue.rawValue, forKey: key)
     }
 
-    static var value: Value {
+    public static var value: Value {
         get {
             get() ?? defaultValue
         }
@@ -55,6 +55,6 @@ struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
     }
 }
 
-extension KeyboardSettingKey where Self == AutomaticCompletionStrengthKey {
+public extension KeyboardSettingKey where Self == AutomaticCompletionStrengthKey {
     static var automaticCompletionStrength: Self { .init() }
 }

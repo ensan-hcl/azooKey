@@ -4,11 +4,11 @@ azooKeyは以下のような構成になっています。
 
 ```
 AzooKeyCore: azooKey全体で共有するモジュール
-Shared: MainAppとKeyboardで共有される実装
 MainApp: 本体アプリの実装
 Keyboard: キーボードアプリの実装
 azooKeyTests: MainAppとKeyboardのテスト
 DictionaryDebugger: 辞書のデバッグツール
+Resources: MainAppとKeyboardで共有されるリソース
 ```
 
 ## MainApp
@@ -41,13 +41,14 @@ https://github.com/ensan-hcl/CustardKit
 
 `AzooKeyCore`は全体で共有すべき実装を記述したSwift Packageです。詳しくは[README](../AzooKeyCore/README.md)を参照してください。
 
-## Shared
+## Resources
 
-SharedはazooKey全体で共有される実装です。主に以下のものを含みます。
+SharedはazooKey全体で共有されるリソースです。主に以下のものなどを含みます。
 
-* キーボードの設定の実装
-
-現在、Sharedの実装の`AzooKeyCore`への移行を進めており、このディレクトリは将来的に廃止されます。
+* 絵文字の生データ
+* Localization.strings
+* フォント
+* 色データ
 
 ## azooKeyTests
 

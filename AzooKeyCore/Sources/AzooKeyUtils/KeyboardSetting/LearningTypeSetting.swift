@@ -10,7 +10,7 @@ import Foundation
 import KanaKanjiConverterModule
 import SwiftUI
 
-extension LearningType {
+public extension LearningType {
     var string: LocalizedStringKey {
         switch self {
         case .inputAndOutput: return "学習する(デフォルト)"
@@ -38,7 +38,7 @@ extension LearningType: Savable {
         self.id
     }
 
-    static func get(_ value: Any) -> LearningType? {
+    public static func get(_ value: Any) -> LearningType? {
         if let id = value as? Int {
             return Self(rawValue: id)
         }
@@ -46,12 +46,12 @@ extension LearningType: Savable {
     }
 }
 
-struct LearningTypeSetting: KeyboardSettingKey {
-    static let defaultValue = LearningType.inputAndOutput
-    static let title: LocalizedStringKey = "学習の使用"
-    static let explanation: LocalizedStringKey = "「新たに学習し、反映する(デフォルト)」「新たな学習を停止する」「新たに学習せず、これまでの学習も反映しない」選択できます。この設定の変更で学習結果が消えることはありません。"
-    private static let key = "memory_learining_styple_setting"
-    @MainActor static var value: LearningType {
+public struct LearningTypeSetting: KeyboardSettingKey {
+    public static let defaultValue = LearningType.inputAndOutput
+    public static let title: LocalizedStringKey = "学習の使用"
+    public static let explanation: LocalizedStringKey = "「新たに学習し、反映する(デフォルト)」「新たな学習を停止する」「新たに学習せず、これまでの学習も反映しない」選択できます。この設定の変更で学習結果が消えることはありません。"
+    public static let key = "memory_learining_styple_setting"
+    @MainActor public static var value: LearningType {
         get {
             if let object = SharedStore.userDefaults.object(forKey: key),
                let value = LearningType.get(object) {
@@ -65,6 +65,6 @@ struct LearningTypeSetting: KeyboardSettingKey {
     }
 }
 
-extension KeyboardSettingKey where Self == LearningTypeSetting {
+public extension KeyboardSettingKey where Self == LearningTypeSetting {
     static var learningType: Self { .init() }
 }

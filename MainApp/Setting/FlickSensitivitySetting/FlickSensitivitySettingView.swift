@@ -6,6 +6,7 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import SwiftUI
 
 struct FlickSensitivitySettingView: View {

@@ -28,7 +28,7 @@ extension LanguageLayout: Savable {
     }
 }
 
-extension StoredInUserDefault where Value == LanguageLayout {
+public extension StoredInUserDefault where Value == LanguageLayout {
     @MainActor static func get() -> Value? {
         if let data = SharedStore.userDefaults.data(forKey: key), let type = LanguageLayout.get(data) {
             return type
@@ -45,8 +45,8 @@ extension StoredInUserDefault where Value == LanguageLayout {
     }
 }
 
-protocol LanguageLayoutKeyboardSetting: KeyboardSettingKey, StoredInUserDefault where Value == LanguageLayout {}
-extension LanguageLayoutKeyboardSetting {
+public protocol LanguageLayoutKeyboardSetting: KeyboardSettingKey, StoredInUserDefault where Value == LanguageLayout {}
+public extension LanguageLayoutKeyboardSetting {
     @MainActor static var value: Value {
         get {
             get() ?? defaultValue
@@ -57,25 +57,25 @@ extension LanguageLayoutKeyboardSetting {
     }
 }
 
-struct JapaneseKeyboardLayout: LanguageLayoutKeyboardSetting {
-    static let title: LocalizedStringKey = "日本語キーボードの種類"
-    static let explanation: LocalizedStringKey = "日本語の入力方法をフリック入力とローマ字入力から選択できます。"
-    static let defaultValue: LanguageLayout = .flick
-    static let key: String = "keyboard_type"
+public struct JapaneseKeyboardLayout: LanguageLayoutKeyboardSetting {
+    public static let title: LocalizedStringKey = "日本語キーボードの種類"
+    public static let explanation: LocalizedStringKey = "日本語の入力方法をフリック入力とローマ字入力から選択できます。"
+    public static let defaultValue: LanguageLayout = .flick
+    public static let key: String = "keyboard_type"
 }
 
-extension KeyboardSettingKey where Self == JapaneseKeyboardLayout {
+public extension KeyboardSettingKey where Self == JapaneseKeyboardLayout {
     static var japaneseKeyboardLayout: Self { .init() }
 }
 
-struct EnglishKeyboardLayout: LanguageLayoutKeyboardSetting {
-    static let title: LocalizedStringKey = "英語キーボードの種類"
-    static let explanation: LocalizedStringKey = "英語の入力方法をフリック入力とローマ字入力から選択できます。"
-    static let defaultValue: LanguageLayout = .flick
-    static let key: String = "keyboard_type_en"
+public struct EnglishKeyboardLayout: LanguageLayoutKeyboardSetting {
+    public static let title: LocalizedStringKey = "英語キーボードの種類"
+    public static let explanation: LocalizedStringKey = "英語の入力方法をフリック入力とローマ字入力から選択できます。"
+    public static let defaultValue: LanguageLayout = .flick
+    public static let key: String = "keyboard_type_en"
 }
 
-extension KeyboardSettingKey where Self == EnglishKeyboardLayout {
+public extension KeyboardSettingKey where Self == EnglishKeyboardLayout {
     static var englishKeyboardLayout: Self { .init() }
 }
 

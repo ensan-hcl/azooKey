@@ -6,6 +6,7 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import CustardKit
 import Foundation
 import KeyboardViews

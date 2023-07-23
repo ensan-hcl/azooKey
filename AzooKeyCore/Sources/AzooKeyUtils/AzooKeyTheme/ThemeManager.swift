@@ -42,7 +42,7 @@ struct ThemeIndices: Codable, Equatable {
     }
 }
 
-struct ThemeIndexManager: Equatable {
+public struct ThemeIndexManager: Equatable {
     private var index: ThemeIndices
 
     private static func fileURL(name: String) -> URL {
@@ -65,7 +65,7 @@ struct ThemeIndexManager: Equatable {
         }
     }
 
-    static func load() -> Self {
+    public static func load() -> Self {
         directoryExistCheck()
         let themeIndexURL = fileURL(name: "themes/index.json")
         do {
@@ -78,7 +78,7 @@ struct ThemeIndexManager: Equatable {
         }
     }
 
-    func save() {
+    public func save() {
         let themeIndexURL = Self.fileURL(name: "themes/index.json")
         do {
             let data = try JSONEncoder().encode(self.index)
@@ -88,7 +88,7 @@ struct ThemeIndexManager: Equatable {
         }
     }
 
-    func theme(at index: Int) throws -> AzooKeyTheme {
+    public func theme(at index: Int) throws -> AzooKeyTheme {
         if index == 0 {
             return AzooKeySpecificTheme.default(layout: .flick)
         }
@@ -106,7 +106,7 @@ struct ThemeIndexManager: Equatable {
         return themeData
     }
 
-    mutating func saveTheme(theme: AzooKeyTheme) throws -> Int {
+    public mutating func saveTheme(theme: AzooKeyTheme) throws -> Int {
         var saveData = theme
         let id: Int
         if let _id = saveData.id {
@@ -140,23 +140,23 @@ struct ThemeIndexManager: Equatable {
         return id
     }
 
-    mutating func select(at index: Int) {
+    public mutating func select(at index: Int) {
         self.index.selectedIndex = index
         self.index.selectedIndex_dark = index
         self.save()
     }
 
-    mutating func selectForLightMode(at index: Int) {
+    public mutating func selectForLightMode(at index: Int) {
         self.index.selectedIndex = index
         self.save()
     }
 
-    mutating func selectForDarkMode(at index: Int) {
+    public mutating func selectForDarkMode(at index: Int) {
         self.index.selectedIndex_dark = index
         self.save()
     }
 
-    mutating func remove(index: Int) {
+    public mutating func remove(index: Int) {
         if index == 0 {
             return
         }
@@ -176,15 +176,15 @@ struct ThemeIndexManager: Equatable {
         }
     }
 
-    var indices: [Int] {
+    public var indices: [Int] {
         index.currentIndices
     }
 
-    var selectedIndex: Int {
+    public var selectedIndex: Int {
         index.selectedIndex
     }
 
-    var selectedIndexInDarkMode: Int {
+    public var selectedIndexInDarkMode: Int {
         index.selectedIndex_dark
     }
 

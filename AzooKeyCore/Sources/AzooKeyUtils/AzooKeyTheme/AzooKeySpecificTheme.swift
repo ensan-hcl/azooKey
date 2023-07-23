@@ -11,8 +11,8 @@ import KeyboardThemes
 import KeyboardViews
 import SwiftUI
 
-enum AzooKeySpecificTheme: ApplicationSpecificTheme {
-    enum ApplicationColor: ApplicationSpecificColor {
+public enum AzooKeySpecificTheme: ApplicationSpecificTheme {
+    public enum ApplicationColor: ApplicationSpecificColor {
         case normalKeyColor
         case qwertyNormalKeyColor
         case highlightedKeyColor
@@ -20,7 +20,7 @@ enum AzooKeySpecificTheme: ApplicationSpecificTheme {
         case specialKeyColor
         case backgroundColor
 
-        var color: Color {
+        public var color: Color {
             switch self {
             case .backgroundColor:
                 return Design.colors.backGroundColor
@@ -40,9 +40,9 @@ enum AzooKeySpecificTheme: ApplicationSpecificTheme {
 
 }
 
-typealias AzooKeyTheme = ThemeData<AzooKeySpecificTheme>
+public typealias AzooKeyTheme = ThemeData<AzooKeySpecificTheme>
 
-extension AzooKeyTheme {
+public extension AzooKeyTheme {
     static let base: Self = Self(
         backgroundColor: .color(Color(.displayP3, red: 0.839, green: 0.843, blue: 0.862)),
         picture: .none,
@@ -60,7 +60,7 @@ extension AzooKeyTheme {
 }
 
 extension AzooKeySpecificTheme: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable {
-    static func `default`(layout: KeyboardLayout) -> AzooKeyTheme {
+    public static func `default`(layout: KeyboardLayout) -> AzooKeyTheme {
         .init(
             backgroundColor: .system(.backgroundColor),
             picture: .none,

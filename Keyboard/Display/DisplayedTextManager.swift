@@ -6,6 +6,7 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import KanaKanjiConverterModule
 import KeyboardViews
 import SwiftUtils

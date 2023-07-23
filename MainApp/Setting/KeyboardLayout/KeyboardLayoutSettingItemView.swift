@@ -10,6 +10,7 @@ import KeyboardViews
 import SwiftUI
 import SwiftUIUtils
 import enum KanaKanjiConverterModule.KeyboardLanguage
+import AzooKeyUtils
 
 extension LanguageLayout {
     var label: LocalizedStringKey {

@@ -21,7 +21,7 @@ extension PreferredLanguage: Savable {
         }
     }
 
-    static func get(_ value: Any) -> Self? {
+    public static func get(_ value: Any) -> Self? {
         if let data = value as? Data, let result = try? JSONDecoder().decode(Self.self, from: data) {
             return result
         }
@@ -29,13 +29,13 @@ extension PreferredLanguage: Savable {
     }
 }
 
-struct PreferredLanguageSetting: KeyboardSettingKey {
-    typealias Value = PreferredLanguage
-    static let title: LocalizedStringKey = "入力する言語"
-    static let explanation: LocalizedStringKey = "キーボード上で入力する言語を選択できます。"
-    static let defaultValue: PreferredLanguage = PreferredLanguage(first: .ja_JP, second: .en_US)
+public struct PreferredLanguageSetting: KeyboardSettingKey {
+    public typealias Value = PreferredLanguage
+    public static let title: LocalizedStringKey = "入力する言語"
+    public static let explanation: LocalizedStringKey = "キーボード上で入力する言語を選択できます。"
+    public static let defaultValue: PreferredLanguage = PreferredLanguage(first: .ja_JP, second: .en_US)
     private static let key = "preferred_language_order"
-    @MainActor static var value: PreferredLanguage {
+    @MainActor public static var value: PreferredLanguage {
         get {
             if let value = SharedStore.userDefaults.value(forKey: key), let data = PreferredLanguage.get(value) {
                 return data
@@ -48,6 +48,6 @@ struct PreferredLanguageSetting: KeyboardSettingKey {
     }
 }
 
-extension KeyboardSettingKey where Self == PreferredLanguageSetting {
+public extension KeyboardSettingKey where Self == PreferredLanguageSetting {
     static var preferredLanguage: Self { .init() }
 }
