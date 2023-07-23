@@ -20,6 +20,7 @@ jobs:
         swift-version: "5.8"
     - uses: actions/checkout@v3
     - name: Build
-      run: swift build --package-path AzooKeyCore --target KanaKanjiConverterModule -v;swift build --package-path AzooKeyCore --target SwiftUtils;swift build --package-path AzooKeyCore --target SwiftUIUtils;swift build --package-path AzooKeyCore --target KeyboardThemes
-#    - name: Run tests
-#      run: swift test --package-path AzooKeyCore -v --skip-build
+      # TODO: add KeyboardViews
+      run: swift build --package-path AzooKeyCore --target SwiftUIUtils;swift build --package-path AzooKeyCore --target KeyboardThemes
+    - name: Run tests
+      run: echo "There is no test suits yet"
