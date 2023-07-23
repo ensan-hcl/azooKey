@@ -84,7 +84,7 @@ private static let variableStates = VariableStates(
 
 ```
 
-初期化には`any ClipboardHistoryManagerConfiguration`と`any TabManagerConfiguration`の値が必要になります。azooKeyではそれぞれ`ClipboardHistoryManagerConfig`と`TabManagerConfig`として実装しています。最小実装は以下の通りになるでしょう。
+初期化には`any ClipboardHistoryManagerConfiguration`と`any TabManagerConfiguration`の値が必要になります。azooKeyではそれぞれ`ClipboardHistoryManagerConfig`と`TabManagerConfig`として実装しています。
 
 ### `AppSpecificExtension`
 
