@@ -117,7 +117,7 @@ enum AzooKeyKeyboardViewExtension: ApplicationSpecificKeyboardViewExtension {
 }
 
 struct ClipboardHistoryManagerConfig: ClipboardHistoryManagerConfiguration {
-    @MainActor var enabled: Bool {
+    var enabled: Bool {
         EnableClipboardHistoryManagerTab.value
     }
 
