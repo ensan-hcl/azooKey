@@ -13,7 +13,7 @@ let swiftSettings: [SwiftSetting] = [
 ]
 let package = Package(
     name: "AzooKeyCore",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v14), .macOS(.v11)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
