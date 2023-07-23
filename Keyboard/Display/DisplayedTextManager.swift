@@ -7,6 +7,7 @@
 //
 
 import KanaKanjiConverterModule
+import KeyboardViews
 import SwiftUtils
 import UIKit
 

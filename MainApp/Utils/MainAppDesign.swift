@@ -8,6 +8,7 @@
 
 import class UIKit.UIDevice
 import enum UIKit.UIDeviceOrientation
+import enum KeyboardViews.KeyboardOrientation
 
 enum MainAppDesign {
     static let imageMaximumWidth: Double = 500

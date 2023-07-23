@@ -8,6 +8,7 @@
 
 import CustardKit
 import Foundation
+import KeyboardViews
 import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
@@ -39,7 +40,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     @Environment(\.dismiss) private var dismiss
 
     let base: UserMadeTenKeyCustard
-    @StateObject private var variableStates = VariableStates()
+    @StateObject private var variableStates = VariableStates(clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(), tabManagerConfig: TabManagerConfig(), userDefaults: UserDefaults.standard)
     @State private var editingItem: UserMadeTenKeyCustard
     @Binding private var manager: CustardManager
     @State private var showPreview = false
@@ -48,9 +49,9 @@ struct EditingTenkeyCustardView: CancelableEditor {
         (0..<layout.rowCount).reduce(into: [:]) {dict, x in
             (0..<layout.columnCount).forEach {y in
                 if let value = editingItem.keys[.gridFit(x: x, y: y)] {
-                    dict[.gridFit(x: x, y: y)] = (value.model.flickKeyModel, value.width, value.height)
+                    dict[.gridFit(x: x, y: y)] = (value.model.flickKeyModel(extension: AzooKeyKeyboardViewExtension.self), value.width, value.height)
                 } else if !editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
-                    dict[.gridFit(x: x, y: y)] = (CustardInterfaceKey.custom(.empty).flickKeyModel, 1, 1)
+                    dict[.gridFit(x: x, y: y)] = (CustardInterfaceKey.custom(.empty).flickKeyModel(extension: AzooKeyKeyboardViewExtension.self), 1, 1)
                 }
             }
         }
@@ -147,7 +148,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         }
                         Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                     }
-                    CustardFlickKeysView(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, interfaceSize: interfaceSize, layout: .flick, orientation: MainAppDesign.keyboardOrientation), layout: layout) {view, x, y in
+                    CustardFlickKeysView<AzooKeyKeyboardViewExtension, _>(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, interfaceSize: interfaceSize, layout: .flick, orientation: MainAppDesign.keyboardOrientation), layout: layout) {(view: FlickKeyView<AzooKeyKeyboardViewExtension>, x: Int, y: Int) in
                         if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
                             if !isCovered(at: (x, y)) {
                                 Button {

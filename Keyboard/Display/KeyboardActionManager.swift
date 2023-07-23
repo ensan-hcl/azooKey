@@ -7,6 +7,7 @@
 //
 
 import KanaKanjiConverterModule
+import KeyboardViews
 import SwiftUI
 import SwiftUtils
 
@@ -48,8 +49,8 @@ import SwiftUtils
         self.inputManager.setTextDocumentProxy(proxy)
     }
 
-    override func makeChangeKeyboardButtonView() -> ChangeKeyboardButtonView {
-        delegate.makeChangeKeyboardButtonView(size: Design.fonts.iconFontSize)
+    override func makeChangeKeyboardButtonView<Extension: ApplicationSpecificKeyboardViewExtension>() -> ChangeKeyboardButtonView<Extension> {
+        delegate.makeChangeKeyboardButtonView(size: Design.fonts.iconFontSize(keyViewFontSizePreference: Extension.SettingProvider.keyViewFontSize))
     }
 
     /// 変換を確定した場合に呼ばれる。
@@ -57,13 +58,13 @@ import SwiftUtils
     ///   - text: String。確定された文字列。
     ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
     override func notifyComplete(_ candidate: any ResultViewItemData, variableStates: VariableStates) {
-        let target = variableStates.tabManager.tab.existential.replacementTarget
+        let target = variableStates.tabManager.existentialTab().replacementTarget
         if let candidate = candidate as? Candidate {
             self.inputManager.complete(candidate: candidate)
             self.registerActions(candidate.actions.map(\.action), variableStates: variableStates)
         } else if let candidate = candidate as? ReplacementCandidate {
             self.inputManager.replaceLastCharacters(table: [candidate.target: candidate.replace], inputStyle: .direct)
-            KeyboardInternalSetting.shared.update(\.tabCharacterPreference) { item in
+            variableStates.keyboardInternalSettingManager.update(\.tabCharacterPreference) { item in
                 switch candidate.targetType {
                 case .emoji:
                     item.setPreference(base: candidate.base, replace: candidate.replace, for: .system(.emoji))
@@ -113,7 +114,7 @@ import SwiftUtils
             self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)
 
         case .smoothDelete:
-            KeyboardFeedback.smoothDelete()
+            KeyboardFeedback<AzooKeyKeyboardViewExtension>.smoothDelete()
             self.showResultView(variableStates: variableStates)
             let deletedText = self.inputManager.smoothDelete(requireSetResult: requireSetResult)
             if !deletedText.isEmpty {
@@ -264,8 +265,8 @@ import SwiftUtils
             // MARK: 言語を更新する
             self.inputManager.setKeyboardLanguage(variableStates.keyboardLanguage)
             // MARK: Replacementの更新をする
-            if !variableStates.tabManager.tab.existential.replacementTarget.isEmpty {
-                self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: variableStates.tabManager.tab.existential.replacementTarget)
+            if !variableStates.tabManager.existentialTab().replacementTarget.isEmpty {
+                self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: variableStates.tabManager.existentialTab().replacementTarget)
             }
         }
     }
@@ -317,14 +318,14 @@ import SwiftUtils
         let startTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
             let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
             if span > 0.4 {
-                action.repeat.first?.feedback(variableStates: variableStates)
+                action.repeat.first?.feedback(variableStates: variableStates, extension: AzooKeyKeyboardViewExtension.self)
                 self?.registerActions(action.repeat, variableStates: variableStates)
             }
         })
         self.timers.append((type: action, timer: startTimer))
 
         let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
-            action.start.first?.feedback(variableStates: variableStates)
+            action.start.first?.feedback(variableStates: variableStates, extension: AzooKeyKeyboardViewExtension.self)
             self?.registerActions(action.start, variableStates: variableStates)
         })
         self.timers.append((type: action, timer: repeatTimer))
@@ -351,7 +352,7 @@ import SwiftUtils
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         let surfaceCandidate = candidate.text
         let ruby: String
-        if let candidate = candidate as? Candidate {
+        if candidate is Candidate {
             let composingText = inputManager.getComposingText()
             // 以下のようなフォーマットになる
             // あか / roman(a) roman(k) roman(a)
@@ -466,8 +467,8 @@ import SwiftUtils
             // エンターキーの状態の更新
             variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
             // Replacementの更新
-            if !variableStates.tabManager.tab.existential.replacementTarget.isEmpty {
-                self.inputManager.updateTextReplacementCandidates(left: a_left, center: a_center, right: a_right, target: variableStates.tabManager.tab.existential.replacementTarget)
+            if !variableStates.tabManager.existentialTab().replacementTarget.isEmpty {
+                self.inputManager.updateTextReplacementCandidates(left: a_left, center: a_center, right: a_right, target: variableStates.tabManager.existentialTab().replacementTarget)
             }
         }
         // 前のデータが保存されていない場合は操作しない

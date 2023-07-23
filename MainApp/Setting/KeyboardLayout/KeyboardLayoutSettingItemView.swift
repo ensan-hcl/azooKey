@@ -6,6 +6,7 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import KeyboardViews
 import SwiftUI
 import SwiftUIUtils
 import enum KanaKanjiConverterModule.KeyboardLanguage

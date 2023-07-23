@@ -9,6 +9,7 @@
 import Foundation
 import struct KanaKanjiConverterModule.TemplateData
 import enum KanaKanjiConverterModule.CIDData
+import KeyboardViews
 import SwiftUtils
 
 extension LOUDSBuilder {

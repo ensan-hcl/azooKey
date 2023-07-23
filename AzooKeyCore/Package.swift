@@ -31,6 +31,10 @@ let package = Package(
         .library(
             name: "KeyboardThemes",
             targets: ["KeyboardThemes"]
+        ),
+        .library(
+            name: "KeyboardViews",
+            targets: ["KeyboardViews"]
         )
     ],
     dependencies: [
@@ -69,6 +73,15 @@ let package = Package(
             name: "KeyboardThemes",
             dependencies: [
                 "SwiftUtils"
+            ],
+            resources: [],
+            swiftSettings: swiftSettings
+        ),
+        .target(
+            name: "KeyboardViews",
+            dependencies: [
+                "KeyboardThemes",
+                "KanaKanjiConverterModule"
             ],
             resources: [],
             swiftSettings: swiftSettings
