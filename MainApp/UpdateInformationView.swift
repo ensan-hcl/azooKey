@@ -14,7 +14,16 @@ struct UpdateInformationView: View {
         Form {
             // version 2系
             Group {
+                // version 2.1系
                 Group {
+                    VersionView("2.1.2", releaseDate: "2023年07月27日") {
+                        ParagraphView("変換のパフォーマンスを大幅に改善しました。")
+                        ParagraphView("不具合を修正しました。") {
+                            "検索時などに「改行」キーの文字が変わらない問題を修正しました"
+                            "「まるまん」などの特定の文字を入力した場合にキーボードがクラッシュする不具合を修正しました"
+                        }
+                        ParagraphView("その他辞書の軽微な改善を行いました。")
+                    }
                     VersionView("2.1.1", releaseDate: "2023年04月17日") {
                         ParagraphView("新しい機能を追加しました。") {
                             "アプリ内で本体辞書への変換候補の追加を申請できるようになりました"
