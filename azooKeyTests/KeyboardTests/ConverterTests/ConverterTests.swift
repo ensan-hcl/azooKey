@@ -9,7 +9,7 @@
 import KanaKanjiConverterModule
 import XCTest
 
-final class ConverterTests: XCTestCase {
+@MainActor final class ConverterTests: XCTestCase {
     func sequentialInput(_ composingText: inout ComposingText, sequence: String, inputStyle: KanaKanjiConverterModule.InputStyle) {
         for char in sequence {
             composingText.insertAtCursorPosition(String(char), inputStyle: inputStyle)
