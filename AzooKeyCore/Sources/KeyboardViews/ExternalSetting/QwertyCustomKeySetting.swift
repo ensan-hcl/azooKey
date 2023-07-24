@@ -45,7 +45,7 @@ private struct _QwertyCustomKey: Codable {
     }
 }
 
-public struct QwertyVariationKey: Codable, Equatable {
+public struct QwertyVariationKey: Codable, Equatable, Sendable {
     public init(name: String, actions: [CodableActionData]) {
         self.name = name
         self.actions = actions
@@ -55,7 +55,7 @@ public struct QwertyVariationKey: Codable, Equatable {
     public var actions: [CodableActionData]
 }
 
-public struct QwertyCustomKey: Codable, Equatable {
+public struct QwertyCustomKey: Codable, Equatable, Sendable {
     public init(name: String, actions: [CodableActionData], longpresses: [QwertyVariationKey]) {
         self.name = name
         self.actions = actions
@@ -99,7 +99,7 @@ struct QwertyCustomKeysArray: Codable {
     }
 }
 
-public struct QwertyCustomKeysValue: Equatable {
+public struct QwertyCustomKeysValue: Equatable, Sendable {
     public static let defaultValue = QwertyCustomKeysValue(keys: [
         QwertyCustomKey(name: "。", actions: [.input("。")], longpresses: [QwertyVariationKey(name: "。", actions: [.input("。")]), QwertyVariationKey(name: ".", actions: [.input(".")])]),
         QwertyCustomKey(name: "、", actions: [.input("、")], longpresses: [QwertyVariationKey(name: "、", actions: [.input("、")]), QwertyVariationKey(name: ",", actions: [.input(",")])]),

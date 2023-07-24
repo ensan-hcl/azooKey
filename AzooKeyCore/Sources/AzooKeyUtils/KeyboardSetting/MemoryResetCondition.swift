@@ -50,7 +50,7 @@ public enum MemoryResetCondition: Int, Savable {
         SharedStore.userDefaults.set(value.saveValue, forKey: key)
     }
 
-    public static func shouldReset() -> Bool {
+    @MainActor public static func shouldReset() -> Bool {
         if let object = SharedStore.userDefaults.object(forKey: key),
            let identifier = identifier(object) {
             if let finished = UserDefaults.standard.string(forKey: "finished_reset"), finished == identifier {

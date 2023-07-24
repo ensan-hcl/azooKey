@@ -422,7 +422,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
 }
 
 extension View {
-    func resizingFrame<Extension: ApplicationSpecificKeyboardViewExtension>(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize, extension: Extension.Type) -> some View {
+    @MainActor func resizingFrame<Extension: ApplicationSpecificKeyboardViewExtension>(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize, extension: Extension.Type) -> some View {
         self.modifier(ResizingBindingFrame<Extension>(size: size, position: position, initialSize: initialSize))
     }
 }

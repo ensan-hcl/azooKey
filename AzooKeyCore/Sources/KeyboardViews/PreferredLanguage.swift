@@ -8,7 +8,7 @@
 import Foundation
 import enum KanaKanjiConverterModule.KeyboardLanguage
 
-public struct PreferredLanguage: Codable, Hashable {
+public struct PreferredLanguage: Codable, Hashable, Sendable {
     public init(first: KeyboardLanguage, second: KeyboardLanguage?) {
         self.first = first
         self.second = second

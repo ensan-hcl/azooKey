@@ -39,7 +39,7 @@ public struct FlickedKeyModel {
         self.longPressActions = longPressActions
     }
 
-    func getSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>(size: CGSize, isHidden: Bool, isPointed: Bool = false, theme: Extension.Theme, extension: Extension.Type) -> some View {
+    @MainActor func getSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>(size: CGSize, isHidden: Bool, isPointed: Bool = false, theme: Extension.Theme, extension: Extension.Type) -> some View {
         var pointedColor: Color {
             theme != Extension.ThemeExtension.default(layout: .flick) ? .white : .systemGray4
         }
@@ -56,7 +56,7 @@ public struct FlickedKeyModel {
             .opacity(isHidden ? 0:1)
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, theme: Extension.Theme, extension: Extension.Type) -> some View {
+    @MainActor func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, theme: Extension.Theme, extension: Extension.Type) -> some View {
         if theme != Extension.ThemeExtension.default(layout: .flick) {
             return KeyLabel<Extension>(self.labelType, width: width, textColor: .black)
         }

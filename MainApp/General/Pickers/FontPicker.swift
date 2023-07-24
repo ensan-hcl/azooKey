@@ -57,7 +57,7 @@ struct FontPickView: View {
     @State private var isFontPickerPresented = false
     @State private var selectedFont: Font = .body
 
-    private var fontPickerConfig: UIFontPickerViewController.Configuration {
+    @MainActor private var fontPickerConfig: UIFontPickerViewController.Configuration {
         let config = UIFontPickerViewController.Configuration()
         config.displayUsingSystemFont = false
         config.includeFaces = true

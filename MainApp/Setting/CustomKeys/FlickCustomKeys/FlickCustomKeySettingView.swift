@@ -110,12 +110,12 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
         self._setting = .init(initialValue: .init())
     }
 
-    private let screenWidth = UIScreen.main.bounds.width
+    @MainActor private var screenWidth: CGFloat { UIScreen.main.bounds.width }
 
-    private var keySize: CGSize {
+    @MainActor private var keySize: CGSize {
         CGSize(width: screenWidth / 5.6, height: screenWidth / 8)
     }
-    private var spacing: CGFloat {
+    @MainActor private var spacing: CGFloat {
         (screenWidth - keySize.width * 5) / 5
     }
 

@@ -66,12 +66,6 @@ final class KeyboardViewController: UIInputViewController {
     )
     private static let notificationCenter = NotificationCenter.default
 
-    deinit {
-        KeyboardViewController.keyboardViewHost = nil
-        self.view.clearAllView()
-        self.removeFromParent()
-    }
-
     struct Keyboard: View {
         let theme: AzooKeyTheme
         var body: some View {

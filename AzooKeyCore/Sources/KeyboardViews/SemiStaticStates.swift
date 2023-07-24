@@ -16,12 +16,12 @@ public final class SemiStaticStates {
     private init() {}
 
     // MARK: 端末依存の値
-    private(set) public lazy var needsInputModeSwitchKey = {
+    @MainActor private(set) public lazy var needsInputModeSwitchKey = {
         UIInputViewController().needsInputModeSwitchKey
     }()
     private(set) public lazy var hapticsAvailable = false
 
-    public func setNeedsInputModeSwitchKey(_ bool: Bool) {
+    @MainActor public func setNeedsInputModeSwitchKey(_ bool: Bool) {
         self.needsInputModeSwitchKey = bool
     }
 
@@ -30,17 +30,17 @@ public final class SemiStaticStates {
     }
 
     // MARK: 「キーボードを開く」—「キーボードを閉じる」の動作の間に変更しない値
-    private(set) public var hasFullAccess = {
+    @MainActor private(set) public var hasFullAccess = {
         UIInputViewController().hasFullAccess
     }()
 
-    public func setHasFullAccess(_ bool: Bool) {
+    @MainActor public func setHasFullAccess(_ bool: Bool) {
         self.hasFullAccess = bool
     }
 
     /// - do not  consider using screenHeight
     /// - スクリーンそのもののサイズ。キーボードビューの幅は片手モードなどによって変更が生じうるため、`screenWidth`は限定的な場面でのみ使うことが望まし。
-    private(set) public  var screenWidth: CGFloat = UIScreen.main.bounds.width
+    private(set) public var screenWidth: CGFloat = 0
     private(set) public var keyboardHeightScale: CGFloat = 1
 
     /// - note: キーボードが開かれたタイミングで一度呼ぶのが望ましい。

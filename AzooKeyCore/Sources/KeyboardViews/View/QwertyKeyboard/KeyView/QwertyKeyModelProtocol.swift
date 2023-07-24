@@ -10,7 +10,7 @@ import Foundation
 import KeyboardThemes
 import SwiftUI
 
-enum QwertyKeySizeType {
+enum QwertyKeySizeType: Sendable {
     case unit(width: Int, height: Int)
     case normal(of: Int, for: Int)
     case functional(normal: Int, functional: Int, enter: Int, space: Int)
@@ -32,7 +32,7 @@ enum QwertyKeySizeType {
         }
     }
 
-    func height(design: TabDependentDesign) -> CGFloat {
+    @MainActor func height(design: TabDependentDesign) -> CGFloat {
         switch self {
         case let .unit(_, height: height):
             return design.keyViewHeight(heightCount: height)
@@ -43,7 +43,7 @@ enum QwertyKeySizeType {
 
 }
 
-enum QwertyUnpressedKeyColorType {
+enum QwertyUnpressedKeyColorType: Sendable {
     case normal
     case special
     case enter

@@ -53,7 +53,7 @@ public enum SharedStore {
         }
     }
 
-    public enum ShareThisWordOptions: String {
+    public enum ShareThisWordOptions: String, Sendable {
         case 人・動物・会社などの名前
         case 場所・建物などの名前
         case 五段活用

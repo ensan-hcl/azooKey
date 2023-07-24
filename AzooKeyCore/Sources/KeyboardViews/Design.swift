@@ -52,7 +52,7 @@ public struct TabDependentDesign {
     }
 
     /// This property calculate suitable height for normal keyView.
-    var keyViewHeight: CGFloat {
+    @MainActor var keyViewHeight: CGFloat {
         let keyHeight = (keysHeight - (verticalKeyCount - 1) * verticalSpacing) / verticalKeyCount
         return keyHeight
     }
@@ -62,12 +62,12 @@ public struct TabDependentDesign {
     }
 
     // resultViewの幅を全体から引いたもの。キーを配置して良い部分の高さ。
-    var keysHeight: CGFloat {
+    @MainActor var keysHeight: CGFloat {
         interfaceHeight - (Design.keyboardBarHeight(interfaceHeight: interfaceHeight, orientation: orientation) + 12)
     }
 
     /// This property is equivarent to `CGSize(width: keyViewWidth, height: keyViewHeight)`. if you want to use only either of two, call `keyViewWidth` or `keyViewHeight` directly.
-    var keyViewSize: CGSize {
+    @MainActor var keyViewSize: CGSize {
         CGSize(width: keyViewWidth, height: keyViewHeight)
     }
 
@@ -103,7 +103,7 @@ public struct TabDependentDesign {
         keyViewWidth * CGFloat(widthCount) + horizontalSpacing * CGFloat(widthCount - 1)
     }
 
-    func keyViewHeight(heightCount: Int) -> CGFloat {
+    @MainActor func keyViewHeight(heightCount: Int) -> CGFloat {
         keyViewHeight * CGFloat(heightCount) + verticalSpacing * CGFloat(heightCount - 1)
     }
 
@@ -147,7 +147,7 @@ public enum Design {
 
     /// レイアウトモードを決定する
     /// 特に、iPadでフローティングキーボードを利用する場合は`phoneVertical`になる。
-    private static func layoutMode(orientation: KeyboardOrientation) -> LayoutMode {
+    @MainActor private static func layoutMode(orientation: KeyboardOrientation) -> LayoutMode {
         // TODO: この実装は検証される必要がある
         let usePadMode = UIDevice.current.userInterfaceIdiom == .pad
         // floating keyboardの場合
@@ -167,13 +167,13 @@ public enum Design {
     }
 
     /// This property calculate suitable width for normal keyView.
-    public static func keyboardScreenHeight(upsideComponent: UpsideComponent?, orientation: KeyboardOrientation) -> CGFloat {
+    @MainActor public static func keyboardScreenHeight(upsideComponent: UpsideComponent?, orientation: KeyboardOrientation) -> CGFloat {
         keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: upsideComponent) + 2
     }
 
     /// screenWidthに依存して決定する
     /// 12はresultViewのpadding
-    public static func keyboardHeight(screenWidth: CGFloat, orientation: KeyboardOrientation, upsideComponent: UpsideComponent? = nil) -> CGFloat {
+    @MainActor public static func keyboardHeight(screenWidth: CGFloat, orientation: KeyboardOrientation, upsideComponent: UpsideComponent? = nil) -> CGFloat {
         let scale: CGFloat
         if let upsideComponent {
             switch orientation {
@@ -206,11 +206,11 @@ public enum Design {
         }
     }
 
-    static func upsideComponentHeight(_ component: UpsideComponent, orientation: KeyboardOrientation) -> CGFloat {
+    @MainActor static func upsideComponentHeight(_ component: UpsideComponent, orientation: KeyboardOrientation) -> CGFloat {
         Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: component) - Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: orientation, upsideComponent: nil)
     }
     /// バー部分の高さは`interfaceHeight`に基づいて決定する
-    static func keyboardBarHeight(interfaceHeight: CGFloat, orientation: KeyboardOrientation) -> CGFloat {
+    @MainActor static func keyboardBarHeight(interfaceHeight: CGFloat, orientation: KeyboardOrientation) -> CGFloat {
         switch layoutMode(orientation: orientation) {
         case .phoneVertical:
             return (interfaceHeight - 12) * 37 / 204
@@ -227,7 +227,7 @@ public enum Design {
         }
     }
 
-    static func largeTextViewFontSize(_ text: String, upsideComponent: UpsideComponent?, orientation: KeyboardOrientation) -> CGFloat {
+    @MainActor static func largeTextViewFontSize(_ text: String, upsideComponent: UpsideComponent?, orientation: KeyboardOrientation) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 10)
         let size = text.size(withAttributes: [.font: font])
         // 閉じるボタンの高さの分

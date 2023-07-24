@@ -11,7 +11,7 @@ import Foundation
 import SwiftUI
 import SwiftUtils
 
-public enum ThemePicture: Equatable {
+public enum ThemePicture: Equatable, Sendable {
     case none
     case path(String)
     case asset(String)
@@ -95,7 +95,7 @@ extension ThemePicture: Codable {
 #else
 
 /// Mock type for enabling build in macOS
-public enum ThemePicture: Equatable, Codable {
+public enum ThemePicture: Equatable, Codable, Sendable {
     case none
 }
 

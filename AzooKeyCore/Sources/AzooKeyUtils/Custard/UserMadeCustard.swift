@@ -10,7 +10,7 @@ import CustardKit
 import Foundation
 import KeyboardViews
 
-public enum UserMadeCustard: Codable {
+public enum UserMadeCustard: Codable, Sendable {
     case gridScroll(UserMadeGridScrollCustard)
     case tenkey(UserMadeTenKeyCustard)
 }
@@ -58,7 +58,7 @@ public extension UserMadeCustard {
     }
 }
 
-public struct UserMadeGridScrollCustard: Codable {
+public struct UserMadeGridScrollCustard: Codable, Sendable {
     public init(tabName: String, direction: CustardInterfaceLayoutScrollValue.ScrollDirection, columnCount: String, rowCount: String, words: String, addTabBarAutomatically: Bool) {
         self.tabName = tabName
         self.direction = direction
@@ -76,7 +76,7 @@ public struct UserMadeGridScrollCustard: Codable {
     public var addTabBarAutomatically: Bool
 }
 
-public struct UserMadeTenKeyCustard: Codable {
+public struct UserMadeTenKeyCustard: Codable, Sendable {
     public init(tabName: String, rowCount: String, columnCount: String, inputStyle: CustardInputStyle, language: CustardLanguage, keys: [KeyPosition: UserMadeTenKeyCustard.KeyData], emptyKeys: Set<KeyPosition> = [], addTabBarAutomatically: Bool) {
         self.tabName = tabName
         self.rowCount = rowCount
@@ -97,7 +97,7 @@ public struct UserMadeTenKeyCustard: Codable {
     public var emptyKeys: Set<KeyPosition> = []
     public var addTabBarAutomatically: Bool
 
-    public struct KeyData: Codable, Hashable {
+    public struct KeyData: Codable, Hashable, Sendable {
         public init(model: CustardInterfaceKey, width: Int, height: Int) {
             self.model = model
             self.width = width

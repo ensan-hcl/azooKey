@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import SwiftUI
+@preconcurrency import SwiftUI
 
-public enum ThemeColor<SystemColor: ApplicationSpecificColor> {
+public enum ThemeColor<SystemColor: ApplicationSpecificColor>: Sendable {
     case color(Color)
     case system(SystemColor)
     case dynamic(DynamicColor)
@@ -25,7 +25,7 @@ public enum ThemeColor<SystemColor: ApplicationSpecificColor> {
         }
     }
 
-    public enum DynamicColor: String, Codable, CaseIterable {
+    public enum DynamicColor: String, Codable, CaseIterable, Sendable {
         case accentColor
         case black
         case blue

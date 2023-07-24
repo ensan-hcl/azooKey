@@ -186,7 +186,7 @@ public struct TabManager {
         self.lastTab = self.currentTab
     }
 
-    mutating private func moveTab(to destination: Tab.ExistentialTab, variableStates: VariableStates) {
+    @MainActor mutating private func moveTab(to destination: Tab.ExistentialTab, variableStates: VariableStates) {
         // VariableStateの状態を遷移先のタブに合わせて適切に変更する
         variableStates.setKeyboardLayout(destination.layout)
         variableStates.setInputStyle(destination.inputStyle)
@@ -200,7 +200,7 @@ public struct TabManager {
         self.currentTab = .existential(destination)
     }
 
-    private func updateVariableStates(_ variableStates: VariableStates, layout: KeyboardLayout, inputStyle: InputStyle, language: KeyboardLanguage?) {
+    @MainActor private func updateVariableStates(_ variableStates: VariableStates, layout: KeyboardLayout, inputStyle: InputStyle, language: KeyboardLanguage?) {
         // VariableStateの状態を遷移先のタブに合わせて適切に変更する
         variableStates.setKeyboardLayout(layout)
         variableStates.setInputStyle(inputStyle)

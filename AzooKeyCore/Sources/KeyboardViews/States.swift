@@ -9,7 +9,7 @@
 import enum UIKit.UIReturnKeyType
 import enum KanaKanjiConverterModule.KeyboardLanguage
 
-public enum KeyboardLayout: String, CaseIterable, Equatable {
+public enum KeyboardLayout: String, CaseIterable, Equatable, Sendable {
     /// フリック入力式のレイアウトで表示するスタイル
     case flick = "flick"
     /// qwerty入力式のレイアウトで表示するスタイル
@@ -31,30 +31,30 @@ extension KeyboardLanguage {
     }
 }
 
-public enum ResizingState {
+public enum ResizingState: Sendable {
     case fullwidth // 両手モードの利用
     case onehanded // 片手モードの利用
     case resizing  // 編集モード
 }
 
-public enum KeyboardOrientation {
+public enum KeyboardOrientation: Sendable {
     case vertical       // width<height
     case horizontal     // height<width
 }
 
-public enum RoughEnterKeyState {
+public enum RoughEnterKeyState: Sendable {
     case `return`
     case edit
     case complete
 }
 
-public enum EnterKeyState {
+public enum EnterKeyState: Sendable {
     case complete   // 決定
     case `return`(UIReturnKeyType)   // 改行
     case edit       // 編集
 }
 
-public enum BarState {
+public enum BarState: Sendable {
     case none   // なし
     case tab    // タブバー
     case cursor // カーソルバー

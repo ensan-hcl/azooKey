@@ -338,7 +338,7 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
 
-    private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
+    @MainActor private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
         let width = tabDesign.keyViewWidth(widthCount: width)
         let height = tabDesign.keyViewHeight(heightCount: height)
         let dx = width * 0.5 + tabDesign.keyViewWidth * CGFloat(x) + tabDesign.horizontalSpacing * CGFloat(x)
