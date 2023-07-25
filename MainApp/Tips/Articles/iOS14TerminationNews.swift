@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// swiftlint:disable:next type_name
 struct iOS14TerminationNewsView: View {
     internal init(_ readThisMessage: Binding<Bool>) {
         self._readThisMessage = readThisMessage
