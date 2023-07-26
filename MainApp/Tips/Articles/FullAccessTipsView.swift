@@ -6,6 +6,7 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+import KeyboardViews
 import SwiftUI
 
 struct FullAccessTipsView: View {
@@ -47,7 +48,7 @@ struct FullAccessTipsView: View {
             TipsContentParagraph {
                 Text("フルアクセスを許可しなくても、キーボードは完全に動作します。上記の機能を使わない場合は、オンにしないことを強くおすすめします。")
             }
-            
+
             TipsContentParagraph {
                 Text("フルアクセスを有効化する際、以下のような警告が表示されますが、すべてのキーボードアプリで共通して表示されている警告です。")
                 TipsImage("fullAccessAlert")
@@ -56,8 +57,8 @@ struct FullAccessTipsView: View {
             }
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 Button(SemiStaticStates.shared.hasFullAccess
-                       ? "フルアクセスをオフにする（設定アプリが開きます）"
-                       : "フルアクセスをオンにする（設定アプリが開きます）") {
+                        ? "フルアクセスをオフにする（設定アプリが開きます）"
+                        : "フルアクセスをオンにする（設定アプリが開きます）") {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }

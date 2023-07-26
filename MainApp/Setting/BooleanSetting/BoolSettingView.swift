@@ -6,6 +6,8 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
+import KeyboardViews
 import SwiftUI
 
 struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
@@ -99,7 +101,7 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
         }
     }
 
-    private var disabled: Bool {
+    @MainActor private var disabled: Bool {
         SettingKey.requireFullAccess && !SemiStaticStates.shared.hasFullAccess
     }
 }

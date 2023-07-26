@@ -6,32 +6,37 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import Foundation
+import KeyboardThemes
+import KeyboardViews
 import PhotosUI
 import SwiftUI
+import SwiftUIUtils
+import SwiftUtils
 
 private struct ThemeColorTranslator: Intertranslator {
-    typealias First = ThemeColor
+    typealias First = AzooKeyTheme.ColorData
     typealias Second = Color
 
-    static func convert(_ first: ThemeColor) -> Color {
+    static func convert(_ first: AzooKeyTheme.ColorData) -> Color {
         first.color
     }
 
-    static func convert(_ second: Color) -> ThemeColor {
+    static func convert(_ second: Color) -> AzooKeyTheme.ColorData {
         .color(second)
     }
 }
 
 private struct ThemeSpecialKeyColorTranslator: Intertranslator {
-    typealias First = ThemeColor
+    typealias First = AzooKeyTheme.ColorData
     typealias Second = Color
 
-    static func convert(_ first: ThemeColor) -> Color {
+    static func convert(_ first: AzooKeyTheme.ColorData) -> Color {
         ThemeColorTranslator.convert(first)
     }
 
-    static func convert(_ second: Color) -> ThemeColor {
+    static func convert(_ second: Color) -> AzooKeyTheme.ColorData {
         if let keyColor = ColorTools.rgba(second, process: {r, g, b, opacity in
             Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
         }) {
@@ -42,14 +47,14 @@ private struct ThemeSpecialKeyColorTranslator: Intertranslator {
 }
 
 private struct ThemeNormalKeyColorTranslator: Intertranslator {
-    typealias First = ThemeColor
+    typealias First = AzooKeyTheme.ColorData
     typealias Second = Color
 
-    static func convert(_ first: ThemeColor) -> Color {
+    static func convert(_ first: AzooKeyTheme.ColorData) -> Color {
         ThemeColorTranslator.convert(first)
     }
 
-    static func convert(_ second: Color) -> ThemeColor {
+    static func convert(_ second: Color) -> AzooKeyTheme.ColorData {
         if let keyColor = ColorTools.rgba(second, process: {r, g, b, opacity in
             Color(.displayP3, red: r, green: g, blue: b, opacity: max(0.001, opacity))
         }) {
@@ -75,8 +80,8 @@ private struct ThemeFontDoubleTranslator: Intertranslator {
 struct ThemeEditView: CancelableEditor {
     @EnvironmentObject private var appStates: MainAppStates
 
-    let base: ThemeData
-    @State private var theme: ThemeData = .base
+    let base: AzooKeyTheme
+    @State private var theme: AzooKeyTheme = .base
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
 

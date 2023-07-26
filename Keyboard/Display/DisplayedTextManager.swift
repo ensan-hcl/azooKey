@@ -6,11 +6,15 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
+import KanaKanjiConverterModule
+import KeyboardViews
+import SwiftUtils
 import UIKit
 
 /// UI側の入力中のテキストの更新を受け持つクラス
-final class DisplayedTextManager {
-    @MainActor init() {
+@MainActor final class DisplayedTextManager {
+    init() {
         @KeyboardSetting(.liveConversion) var enabled
         self.isLiveConversionEnabled = enabled
 

@@ -6,7 +6,13 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import Foundation
+import struct KanaKanjiConverterModule.TemplateData
+import enum KanaKanjiConverterModule.CIDData
+import KeyboardViews
+import SwiftUtils
+
 extension LOUDSBuilder {
     static var char2UInt8: [Character: UInt8] = [:]
 

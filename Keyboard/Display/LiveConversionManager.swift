@@ -6,7 +6,10 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import Foundation
+import KanaKanjiConverterModule
+import SwiftUtils
 
 // ライブ変換を管理するためのクラス
 final class LiveConversionManager {

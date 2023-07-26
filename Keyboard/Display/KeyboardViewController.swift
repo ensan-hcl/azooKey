@@ -6,7 +6,11 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
+import KanaKanjiConverterModule
+import KeyboardViews
 import SwiftUI
+import SwiftUtils
 import UIKit
 
 final private class KeyboardHostingController<Content: View>: UIHostingController<Content> {
@@ -55,20 +59,18 @@ final class KeyboardViewController: UIInputViewController {
     private static var keyboardViewHost: KeyboardHostingController<Keyboard>?
     private static var loadedInstanceCount: Int = 0
     private static let action = KeyboardActionManager()
-    private static let variableStates = VariableStates()
+    private static let variableStates = VariableStates(
+        clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(),
+        tabManagerConfig: TabManagerConfig(),
+        userDefaults: UserDefaults.standard
+    )
     private static let notificationCenter = NotificationCenter.default
 
-    deinit {
-        KeyboardViewController.keyboardViewHost = nil
-        self.view.clearAllView()
-        self.removeFromParent()
-    }
-
     struct Keyboard: View {
-        let theme: ThemeData
+        let theme: AzooKeyTheme
         var body: some View {
-            KeyboardView()
-                .environment(\.themeEnvironment, theme)
+            KeyboardView<AzooKeyKeyboardViewExtension>()
+                .themeEnvironment(theme)
                 .environment(\.userActionManager, KeyboardViewController.action)
                 .environmentObject(KeyboardViewController.variableStates)
         }
@@ -107,9 +109,9 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardViewController.action.setDelegateViewController(self)
     }
 
-    private func getCurrentTheme() -> ThemeData {
+    private func getCurrentTheme() -> AzooKeyTheme {
         let indexManager = ThemeIndexManager.load()
-        let defaultTheme = ThemeData.default(layout: KeyboardViewController.variableStates.tabManager.tab.existential.layout)
+        let defaultTheme = AzooKeySpecificTheme.default(layout: KeyboardViewController.variableStates.tabManager.existentialTab().layout)
         switch traitCollection.userInterfaceStyle {
         case .unspecified, .light:
             return (try? indexManager.theme(at: indexManager.selectedIndex)) ?? defaultTheme
@@ -178,10 +180,9 @@ final class KeyboardViewController: UIInputViewController {
         KeyboardViewController.variableStates.resultModelVariableSection.setResults(candidates)
     }
 
-    func makeChangeKeyboardButtonView(size: CGFloat) -> ChangeKeyboardButtonView {
+    func makeChangeKeyboardButtonView<Extension: ApplicationSpecificKeyboardViewExtension>(size: CGFloat) -> ChangeKeyboardButtonView<Extension> {
         let selector = #selector(self.handleInputModeList(from:with:))
-        let view = ChangeKeyboardButtonView(selector: selector, size: size)
-        return view
+        return ChangeKeyboardButtonView(selector: selector, size: size)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

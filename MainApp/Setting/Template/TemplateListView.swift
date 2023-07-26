@@ -7,13 +7,15 @@
 //
 
 import SwiftUI
+import struct KanaKanjiConverterModule.TemplateData
+import struct KanaKanjiConverterModule.DateTemplateLiteral
 
 final class TemplateDataList: ObservableObject {
     @Published var templates: [TemplateData] = []
 }
 
 extension TemplateData: Identifiable {
-    var id: String {
+    public var id: String {
         self.name
     }
 }

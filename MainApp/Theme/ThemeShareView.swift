@@ -6,6 +6,7 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import Foundation
 import SwiftUI
 
@@ -20,10 +21,10 @@ final class ShareImage {
 }
 
 struct ThemeShareView: View {
-    private let theme: ThemeData
+    private let theme: AzooKeyTheme
     private let dismissProcess: () -> Void
 
-    init(theme: ThemeData, shareImage: ShareImage, dismissProcess: @escaping () -> Void) {
+    init(theme: AzooKeyTheme, shareImage: ShareImage, dismissProcess: @escaping () -> Void) {
         self.theme = theme
         self.dismissProcess = dismissProcess
         self.shareImage = shareImage
@@ -33,7 +34,7 @@ struct ThemeShareView: View {
     @State private var captureRect: CGRect = .zero
     private var shareImage: ShareImage
 
-    @ViewBuilder private var keyboardPreview: some View {
+    @MainActor @ViewBuilder private var keyboardPreview: some View {
         KeyboardPreview(theme: theme, scale: 0.9)
     }
     var body: some View {
@@ -75,7 +76,7 @@ struct ThemeShareView: View {
         })
     }
 
-    private func shareOnTwitter() {
+    @MainActor private func shareOnTwitter() {
         let parameters = [
             "text": "azooKeyで着せ替えました！",
             "url": "https://apps.apple.com/jp/app/azookey/id1542709230",
@@ -164,7 +165,7 @@ private struct ShareButtonStyle: ButtonStyle {
 }
 
 private extension View {
-    func snapshot() -> UIImage {
+    @MainActor func snapshot() -> UIImage {
         let controller = UIHostingController(rootView: self)
         let view = controller.view
 

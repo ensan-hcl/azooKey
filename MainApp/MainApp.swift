@@ -6,6 +6,8 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
+import KeyboardViews
 import SwiftUI
 
 final class MainAppStates: ObservableObject {
@@ -25,6 +27,7 @@ final class MainAppStates: ObservableObject {
         self.englishLayout = englishKeyboardLayout
         self.custardManager = CustardManager.load()
         SemiStaticStates.shared.setHapticsAvailable()
+        SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width)
     }
 }
 

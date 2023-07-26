@@ -6,6 +6,8 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
+import KeyboardViews
 import SwiftUI
 
 struct ContentView: View {
@@ -16,7 +18,7 @@ struct ContentView: View {
     @State private var selection: TabSelection = .tips
     @State private var messageManager = MessageManager()
     @State private var showWalkthrough = false
-    @State private var importFileURL: URL? = nil
+    @State private var importFileURL: URL?
 
     var body: some View {
         ZStack {

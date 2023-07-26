@@ -34,7 +34,7 @@ struct BottomSheetView<Content: View>: View {
         isOpen ? 0 : maxHeight - minHeight
     }
 
-    private var indicator: some View {
+    @MainActor private var indicator: some View {
         RoundedRectangle(cornerRadius: 2)
             .fill(Color.secondary)
             .frame(

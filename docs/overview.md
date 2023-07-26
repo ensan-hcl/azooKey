@@ -3,10 +3,12 @@
 azooKeyは以下のような構成になっています。
 
 ```
+AzooKeyCore: azooKey全体で共有するモジュール
 MainApp: 本体アプリの実装
 Keyboard: キーボードアプリの実装
-Shared: MainAppとKeyboardで共有される実装
 azooKeyTests: MainAppとKeyboardのテスト
+DictionaryDebugger: 辞書のデバッグツール
+Resources: MainAppとKeyboardで共有されるリソース
 ```
 
 ## MainApp
@@ -14,8 +16,6 @@ azooKeyTests: MainAppとKeyboardのテスト
 MainAppはazooKeyの種々の設定を行うためのアプリです。
 
 SwiftUIを用いて実装しています。
-
-**TODO: 状態管理があまり綺麗にできていないため、リファクタリングが必要です。**
 
 ## Keyboard
 
@@ -25,21 +25,34 @@ Keyboardはキーボード本体の実装です。
 
 `KeyboardActionManager`は`InputManager`を用いて変換状態を管理します。`InputManager`は変換器である`KanaKanjiConverter`のAPIを呼び出したり、`LiveConversionManager`を通してライブ変換に関する処理を行ったり、`DisplayedTextManager`を通してディスプレイされるテキストの管理を行ったりします。
 
-`KanaKanjiConverter`は変換アルゴリズムの実装である`Kana2Kanji`のAPIを呼び出す前の差分管理や、結果を並べ替えたり候補を追加したりする処理を受け持ちます。`Kana2Kanji`は`DicdataStore`に問い合わせつつ、かな漢字変換を実行します。
+### かな漢字変換モジュール
 
-`DicdataStore`はクエリを受け取るとアプリケーションにバンドルされた辞書ファイルを読み込み、適切な応答を返します。学習、誤り訂正などはこのレイヤで管理されています。
+かな漢字変換モジュールはazooKeyとは独立のパッケージ「AzooKeyKanaKanjiConverter」として切り出されています。以下を参照してください。
 
-## Shared
+https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter
 
-SharedはazooKey全体で共有される実装です。主に以下のものを含みます。
+### キーボードの拡張
 
-* キーボードのUIの実装
-* キーボードの設定の実装
-* そのほか、全体で共有したいextensionなど
+カスタムタグ及び一部の機能はazooKeyと独立したパッケージ「CustardKit」として切り出されています。以下を参照してください。
+
+https://github.com/ensan-hcl/CustardKit
+
+## AzooKeyCore
+
+`AzooKeyCore`は全体で共有すべき実装を記述したSwift Packageです。詳しくは[README](../AzooKeyCore/README.md)を参照してください。
+
+## Resources
+
+SharedはazooKey全体で共有されるリソースです。主に以下のものなどを含みます。
+
+* 絵文字の生データ
+* Localization.strings
+* フォント
+* 色データ
 
 ## azooKeyTests
 
-主にKeyboardとSharedの実装のテストが含まれています。
+主にKeyboardの実装のテストが含まれています。
 
 ## 用語
 

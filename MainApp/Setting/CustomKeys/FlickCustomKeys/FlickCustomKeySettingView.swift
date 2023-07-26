@@ -6,8 +6,10 @@
 //  Copyright © 2020 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import CustardKit
 import Foundation
+import KeyboardViews
 import SwiftUI
 
 fileprivate extension FlickKeyPosition {
@@ -108,12 +110,12 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
         self._setting = .init(initialValue: .init())
     }
 
-    private let screenWidth = UIScreen.main.bounds.width
+    @MainActor private var screenWidth: CGFloat { UIScreen.main.bounds.width }
 
-    private var keySize: CGSize {
+    @MainActor private var keySize: CGSize {
         CGSize(width: screenWidth / 5.6, height: screenWidth / 8)
     }
-    private var spacing: CGFloat {
+    @MainActor private var spacing: CGFloat {
         (screenWidth - keySize.width * 5) / 5
     }
 
@@ -155,14 +157,14 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                                 if self.isInputActionEditable(actions: setting.value[keyPath: selectedPosition.keyPath].actions) {
                                     Text("キーを押して入力される文字を設定します。")
                                     TextField("入力", text: Binding(
-                                        get: {
-                                            setting.value[.input, selectedPosition]
-                                        },
-                                        set: {
-                                            setting.value[.input, selectedPosition] = $0
-                                        }))
-                                    .textFieldStyle(.roundedBorder)
-                                    .submitLabel(.done)
+                                                get: {
+                                                    setting.value[.input, selectedPosition]
+                                                },
+                                                set: {
+                                                    setting.value[.input, selectedPosition] = $0
+                                                }))
+                                        .textFieldStyle(.roundedBorder)
+                                        .submitLabel(.done)
                                 } else {
                                     Text("このキーには入力以外のアクションが設定されています。現在のアクションを消去して入力する文字を設定するには「入力を設定する」を押してください")
                                     Button("入力を設定する") {
@@ -187,14 +189,14 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                         Section(header: Text("ラベル")) {
                             Text("キーに表示される文字を設定します。")
                             TextField("ラベル", text: Binding(
-                                get: {
-                                    setting.value[.label, selectedPosition]
-                                },
-                                set: {
-                                    setting.value[.label, selectedPosition] = $0
-                                }))
-                            .textFieldStyle(.roundedBorder)
-                            .submitLabel(.done)
+                                        get: {
+                                            setting.value[.label, selectedPosition]
+                                        },
+                                        set: {
+                                            setting.value[.label, selectedPosition] = $0
+                                        }))
+                                .textFieldStyle(.roundedBorder)
+                                .submitLabel(.done)
                         }
                         Section(header: Text("アクション")) {
                             Text("キーを押したときの動作をより詳しく設定します。")

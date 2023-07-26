@@ -10,11 +10,11 @@ import Foundation
 import SwiftUI
 
 extension View {
-    func onEnterBackground(perform action: @escaping (NotificationCenter.Publisher.Output) -> Void ) -> some View {
+    @MainActor func onEnterBackground(perform action: @escaping (NotificationCenter.Publisher.Output) -> Void ) -> some View {
         self.onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: action)
     }
 
-    func onEnterForeground(perform action: @escaping (NotificationCenter.Publisher.Output) -> Void ) -> some View {
+    @MainActor func onEnterForeground(perform action: @escaping (NotificationCenter.Publisher.Output) -> Void ) -> some View {
         self.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification), perform: action)
     }
 }

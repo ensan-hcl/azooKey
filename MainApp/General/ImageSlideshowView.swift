@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIUtils
 
 struct ImageSlideshowView: View {
     private let pictures: [String]

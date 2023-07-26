@@ -6,7 +6,11 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
+import KanaKanjiConverterModule
+import KeyboardViews
 import OrderedCollections
+import SwiftUtils
 import UIKit
 
 @MainActor final class InputManager {
@@ -256,7 +260,7 @@ import UIKit
             self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
         }
         self.stopComposition()
-        return actions
+        return actions.map(\.action)
     }
 
     func insertMainDisplayText(_ text: String) {
@@ -733,6 +737,9 @@ import UIKit
         self.stopComposition()
     }
 
+    private static let dictionaryResourceURL = Bundle.main.bundleURL.appendingPathComponent("Dictionary", isDirectory: true)
+    private static let memoryDirectoryURL = (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? sharedContainerURL
+    private static let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
     /// 変換リクエストを送信し、結果をDisplayed Textにも反映する関数
     func setResult() {
         let inputData = composingText.prefixToCursorPosition()
@@ -767,7 +774,12 @@ import UIKit
             fullWidthRomanCandidate: fullWidthRomanCandidate,
             halfWidthKanaCandidate: halfWidthKanaCandidate,
             learningType: learningType,
-            maxMemoryCount: 65536
+            maxMemoryCount: 65536,
+            shouldResetMemory: MemoryResetCondition.shouldReset(),
+            dictionaryResourceURL: Self.dictionaryResourceURL,
+            memoryDirectoryURL: Self.memoryDirectoryURL,
+            sharedContainerURL: Self.sharedContainerURL,
+            metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")
         )
         debug("InputManager.setResult: options", options)
 
@@ -798,3 +810,23 @@ import UIKit
         }
     }
 }
+
+extension Candidate: ResultViewItemData {
+    #if DEBUG
+    public func getDebugInformation() -> String {
+        "Candidate(text: \(self.text), value: \(self.value), data: \(self.data.debugDescription))"
+    }
+    #endif
+}
+
+extension CompleteAction {
+    var action: ActionType {
+        switch self {
+        case .moveCursor(let value):
+            return .moveCursor(value)
+        }
+    }
+}
+
+extension ReplacementCandidate: ResultViewItemData {}
+extension TextReplacer.SearchResultItem: ResultViewItemData {}

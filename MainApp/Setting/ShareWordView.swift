@@ -6,6 +6,7 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import SwiftUI
 
 struct ShareWordView: View {
@@ -42,7 +43,7 @@ struct ShareWordView: View {
                 Button("申請する") {
                     Task.detached {
                         self.sending = true
-                        let _ = await SharedStore.sendSharedWord(word: word, ruby: ruby.toKatakana(), options: [])
+                        _ = await SharedStore.sendSharedWord(word: word, ruby: ruby.toKatakana(), options: [])
                         self.sending = false
                         await MainActor.run {
                             dismiss()

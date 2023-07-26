@@ -6,15 +6,17 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
+import KeyboardViews
 import SwiftUI
 
 struct DataUpdateView: View {
 
     private let id: MessageIdentifier
-    @Binding private var manager: MessageManager
+    @Binding private var manager: MessageManager<MessageIdentifier>
     private let process: () -> Void
 
-    init(id: MessageIdentifier, manager: Binding<MessageManager>, process: @escaping () -> Void) {
+    init(id: MessageIdentifier, manager: Binding<MessageManager<MessageIdentifier>>, process: @escaping () -> Void) {
         self.id = id
         self._manager = manager
         self.process = process

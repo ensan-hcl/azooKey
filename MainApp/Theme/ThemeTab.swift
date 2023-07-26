@@ -6,7 +6,11 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
+import KeyboardViews
 import SwiftUI
+import SwiftUIUtils
+import SwiftUtils
 
 struct ThemeTabView: View {
     @Namespace private var namespace
@@ -16,7 +20,7 @@ struct ThemeTabView: View {
     @State private var editViewIndex: Int?
     @State private var editViewEnabled = false
 
-    private func theme(at index: Int) -> ThemeData? {
+    private func theme(at index: Int) -> AzooKeyTheme? {
         do {
             return try manager.theme(at: index)
         } catch {
@@ -94,7 +98,7 @@ struct ThemeTabView: View {
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
                 HStack {
-                    KeyboardPreview(theme: theme,scale: 0.6, defaultTab: tab)
+                    KeyboardPreview(theme: theme, scale: 0.6, defaultTab: tab)
                         .disabled(true)
                     selectButton(index)
                     if editViewIndex == index {

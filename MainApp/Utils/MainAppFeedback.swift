@@ -8,7 +8,7 @@
 
 import class UIKit.UINotificationFeedbackGenerator
 
-enum MainAppFeedback {
+@MainActor enum MainAppFeedback {
     private static let feedbackGenerator = UINotificationFeedbackGenerator()
     static func success() {
         feedbackGenerator.notificationOccurred(.success)

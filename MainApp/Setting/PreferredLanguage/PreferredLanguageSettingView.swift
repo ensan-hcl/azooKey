@@ -6,8 +6,11 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import Foundation
 import SwiftUI
+import enum KanaKanjiConverterModule.KeyboardLanguage
+import struct KeyboardViews.PreferredLanguage
 
 struct PreferredLanguageSettingView: View {
     // Viewを動的に更新するためには設定を`@State`としておく必要がある。

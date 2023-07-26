@@ -6,9 +6,12 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import CustardKit
 import Foundation
+import KeyboardViews
 import SwiftUI
+import SwiftUIUtils
 
 private enum LabelType {
     case text, systemImage, mainAndSub
@@ -384,12 +387,12 @@ struct CustardInterfaceKeyEditor: View {
         self._height = data.height
     }
 
-    private let screenWidth = UIScreen.main.bounds.width
+    @MainActor private var screenWidth: CGFloat { UIScreen.main.bounds.width }
 
-    private var keySize: CGSize {
+    @MainActor private var keySize: CGSize {
         CGSize(width: screenWidth / 5.6, height: screenWidth / 8)
     }
-    private var spacing: CGFloat {
+    @MainActor private var spacing: CGFloat {
         (screenWidth - keySize.width * 5) / 5
     }
 
@@ -513,44 +516,44 @@ struct CustardInterfaceKeyEditor: View {
                 switch key[.custom][.labelType, position] {
                 case .text:
                     TextField("ラベル", text: Binding(
-                        get: {
-                            key[.custom][.labelText, position]
-                        },
-                        set: {
-                            key[.custom][.labelText, position] = $0
-                        })
+                                get: {
+                                    key[.custom][.labelText, position]
+                                },
+                                set: {
+                                    key[.custom][.labelText, position] = $0
+                                })
                     )
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
                 case .systemImage:
                     TextField("アイコンの名前", text: Binding(
-                        get: {
-                            key[.custom][.labelImageName, position]
-                        },
-                        set: {
-                            key[.custom][.labelImageName, position] = $0
-                        })
+                                get: {
+                                    key[.custom][.labelImageName, position]
+                                },
+                                set: {
+                                    key[.custom][.labelImageName, position] = $0
+                                })
                     )
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
                 case .mainAndSub:
                     TextField("メインのラベル", text: Binding(
-                        get: {
-                            key[.custom][.labelMain, position]
-                        },
-                        set: {
-                            key[.custom][.labelMain, position] = $0
-                        })
+                                get: {
+                                    key[.custom][.labelMain, position]
+                                },
+                                set: {
+                                    key[.custom][.labelMain, position] = $0
+                                })
                     )
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
                     TextField("サブのラベル", text: Binding(
-                        get: {
-                            key[.custom][.labelSub, position]
-                        },
-                        set: {
-                            key[.custom][.labelSub, position] = $0
-                        })
+                                get: {
+                                    key[.custom][.labelSub, position]
+                                },
+                                set: {
+                                    key[.custom][.labelSub, position] = $0
+                                })
                     )
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
@@ -602,7 +605,7 @@ struct CustardInterfaceKeyEditor: View {
         }
     }
 
-    private func keysView(key: CustardInterfaceCustomKey) -> some View {
+    @MainActor private func keysView(key: CustardInterfaceCustomKey) -> some View {
         VStack {
             keyView(key: key, position: .top)
             HStack {
@@ -614,7 +617,7 @@ struct CustardInterfaceKeyEditor: View {
         }
     }
 
-    @ViewBuilder private func keyView(key: CustardInterfaceCustomKey, position: FlickKeyPosition) -> some View {
+    @MainActor @ViewBuilder private func keyView(key: CustardInterfaceCustomKey, position: FlickKeyPosition) -> some View {
         switch key[.labelType, position] {
         case .text:
             CustomKeySettingFlickKeyView(position, label: key[.labelText, position], selectedPosition: $selectedPosition)

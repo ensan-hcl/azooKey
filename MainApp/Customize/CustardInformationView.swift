@@ -6,9 +6,13 @@
 //  Copyright © 2021 ensan. All rights reserved.
 //
 
+import AzooKeyUtils
 import CustardKit
 import Foundation
+import KeyboardViews
 import SwiftUI
+import SwiftUIUtils
+import SwiftUtils
 
 fileprivate extension CustardLanguage {
     var label: LocalizedStringKey {
@@ -123,7 +127,6 @@ struct CustardInformationView: View {
                     }
                 }
             }
-
             if added || manager.checkTabExistInTabBar(tab: .custom(custard.identifier)) {
                 Text("タブバーに追加済み")
             } else {
