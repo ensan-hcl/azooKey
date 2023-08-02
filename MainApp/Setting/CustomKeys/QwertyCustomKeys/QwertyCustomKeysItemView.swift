@@ -204,7 +204,9 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                 bottomSheetShown = false
                                 editState.toggle(.drag)
                             }
-                            Button("キーを追加する", action: self.addPressKey)
+                            Button("キーを追加する") {
+                                self.addPressKey()
+                            }
                             Button("このキーに長押しキーを追加する") {
                                 self.addLongpressKey(sIndex: selection.selectIndex)
                             }
@@ -253,7 +255,9 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         }
                         .foregroundColor(.red)
                     } else {
-                        Button("キーを追加する", action: self.addPressKey)
+                        Button("キーを追加する") {
+                            self.addPressKey()
+                        }
                     }
                 }
             }

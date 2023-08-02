@@ -49,7 +49,7 @@ struct LOUDSBuilder {
         for i in 0...value.quotient {
             var value: UInt64 = 0
             for j in 0..<unit {
-                value += (_bools[i * unit + j] ? 1:0) << (unit - j - 1)
+                value += (_bools[i * unit + j] ? 1 : 0) << (unit - j - 1)
             }
             result.append(value)
         }
@@ -71,7 +71,7 @@ struct LOUDSBuilder {
                 let items = entry.utf8.split(separator: UInt8(ascii: "\t"), omittingEmptySubsequences: false).map {String($0)!}
                 assert(items.count == 6)
                 let ruby = String(items[0])
-                let word = items[1].isEmpty ? self.ruby:String(items[1])
+                let word = items[1].isEmpty ? self.ruby : String(items[1])
                 let lcid = Int(items[2]) ?? .zero
                 let rcid = Int(items[3]) ?? lcid
                 let mid = Int(items[4]) ?? .zero
@@ -270,7 +270,7 @@ struct LOUDSBuilder {
             let indiceses: [Range<Int>] = (0...count).map {
                 let start = $0 * txtFileSplit
                 let _end = ($0 + 1) * txtFileSplit
-                let end = data.count < _end ? data.count:_end
+                let end = data.count < _end ? data.count : _end
                 return start..<end
             }
 

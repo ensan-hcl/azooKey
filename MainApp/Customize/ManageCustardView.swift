@@ -182,11 +182,11 @@ struct ManageCustardView: View {
                                 }
                             }
                         }
-                        .onDelete(perform: delete)
+                        .onDelete(perform: {self.delete(at: $0)})
                     }
                 }
             }
-            .onAppear(perform: loadWebCustard)
+            .onAppear(perform: {self.loadWebCustard()})
 
             Section(header: Text("作る")) {
                 Text("登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")

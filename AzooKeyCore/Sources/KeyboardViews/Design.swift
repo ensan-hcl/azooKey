@@ -255,11 +255,11 @@ public enum Design {
             Font.system(size: self.iconFontSize(keyViewFontSizePreference: keyViewFontSizePreference), weight: theme.textFont.weight)
         }
 
-        @MainActor func resultViewFontSize(userPrefrerence: CGFloat) -> CGFloat {
-            userPrefrerence == -1 ? 18: userPrefrerence
+        func resultViewFontSize(userPrefrerence: CGFloat) -> CGFloat {
+            userPrefrerence == -1 ? 18 : userPrefrerence
         }
 
-        @MainActor func resultViewFont(theme: ThemeData<some ApplicationSpecificTheme>, userSizePrefrerence: CGFloat, fontSize: CGFloat? = nil) -> Font {
+        func resultViewFont(theme: ThemeData<some ApplicationSpecificTheme>, userSizePrefrerence: CGFloat, fontSize: CGFloat? = nil) -> Font {
             Font.system(size: fontSize ?? resultViewFontSize(userPrefrerence: userSizePrefrerence)).weight(theme.textFont.weight)
         }
 

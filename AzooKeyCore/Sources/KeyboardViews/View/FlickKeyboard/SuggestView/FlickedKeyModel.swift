@@ -53,7 +53,7 @@ public struct FlickedKeyModel {
             .frame(width: size.width, height: size.height)
             .overlay(self.label(width: size.width, theme: theme, extension: Extension.self))
             .allowsHitTesting(false)
-            .opacity(isHidden ? 0:1)
+            .opacity(isHidden ? 0 : 1)
     }
 
     @MainActor func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, theme: Extension.Theme, extension: Extension.Type) -> some View {

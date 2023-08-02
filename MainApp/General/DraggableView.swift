@@ -49,7 +49,7 @@ struct DraggableView<Content: View, Collection: BidirectionalCollection & Random
                     }
                     .frame(width: width, height: height)
                     .padding(padding)
-                    .zIndex(selectedIndex == i ? 1:0)
+                    .zIndex(selectedIndex == i ? 1 : 0)
                 }
                 if targetIndex == items.endIndex {
                     separator

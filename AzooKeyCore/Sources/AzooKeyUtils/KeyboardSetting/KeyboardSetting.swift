@@ -31,27 +31,25 @@ public struct KeyboardSetting<T: KeyboardSettingKey> {
 
 /// 生の`SettingKey`の値を`@State`で宣言した場合、更新の反映ができない。
 /// `SettingUpdater`で包むことで、設定の更新を行いつつUIの更新も行われるようにできる。
-public struct SettingUpdater<Wrapped: KeyboardSettingKey> {
-    public var value: Wrapped.Value {
+@MainActor public struct SettingUpdater<Wrapped: KeyboardSettingKey> {
+     public var value: Wrapped.Value {
         didSet {
             let newValue = value
-            Task.detached { @MainActor in
-                Wrapped.value = newValue
-            }
+            Wrapped.value = newValue
         }
     }
 
-    @MainActor public init() {
+    public init() {
         self.value = Wrapped.value
     }
 
-    @MainActor public mutating func reload() {
+    public mutating func reload() {
         self.value = Wrapped.value
     }
 }
 
 public protocol KeyboardSettingKey {
-    associatedtype Value
+    associatedtype Value: Sendable
     static var defaultValue: Value { get }
     static var title: LocalizedStringKey { get }
     static var explanation: LocalizedStringKey { get }

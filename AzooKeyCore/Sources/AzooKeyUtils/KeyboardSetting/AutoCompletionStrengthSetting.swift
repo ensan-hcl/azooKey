@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 public struct AutomaticCompletionStrengthKey: KeyboardSettingKey, StoredInUserDefault {
-    public enum Value: Int {
+    public enum Value: Int, Sendable {
         case disabled  // 無効化
         case weak      // 弱い
         case normal    // 普通

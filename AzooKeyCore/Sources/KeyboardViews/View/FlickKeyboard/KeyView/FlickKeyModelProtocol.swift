@@ -34,8 +34,9 @@ enum FlickKeyColorType {
 public protocol FlickKeyModelProtocol<Extension> {
     associatedtype Extension: ApplicationSpecificKeyboardViewExtension
 
-    var longPressActions: LongpressActionType {get}
-    var needSuggestView: Bool {get}
+    @MainActor var needSuggestView: Bool {get}
+
+    @MainActor var longPressActions: LongpressActionType {get}
 
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
     @MainActor func backGroundColorWhenPressed<ThemeExtension: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>(theme: ThemeData<ThemeExtension>) -> Color

@@ -92,7 +92,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 self[keyPath: target].wrappedValue.current.x = self[keyPath: target].wrappedValue.initial.x + dx
                 let width = abs(bottom_right_edge.current.x - top_left_edge.current.x)
                 let px = (top_left_edge.current.x + bottom_right_edge.current.x - initialSize.width) / 2
-                if width < minimumWidth || px < -initialSize.width/2 || px > initialSize.width / 2 {
+                if width < minimumWidth || px < -initialSize.width / 2 || px > initialSize.width / 2 {
                     self[keyPath: target].wrappedValue.current.x = before
                 } else {
                     self.size.width = width
@@ -114,7 +114,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 self[keyPath: target].wrappedValue.current.y = self[keyPath: target].wrappedValue.initial.y + dy
                 let height = abs(bottom_right_edge.current.y - top_left_edge.current.y)
                 let py = (top_left_edge.current.y + bottom_right_edge.current.y - initialSize.height) / 2
-                if py < -initialSize.height/2 || py > initialSize.height / 2 {
+                if py < -initialSize.height / 2 || py > initialSize.height / 2 {
                     self[keyPath: target].wrappedValue.current.y = before
                 } else {
                     self.size.height = height

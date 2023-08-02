@@ -144,7 +144,7 @@ private struct UserDictionaryDataListView: View {
 private struct UserDictionaryDataEditor: CancelableEditor {
     @ObservedObject private var item: EditableUserDictionaryData
     @ObservedObject private var variables: UserDictManagerVariables
-    @State private var selectedTemplate: (name: String, index: Int)? = nil
+    @State private var selectedTemplate: (name: String, index: Int)?
 
     // CancelableEditor Conformance
     typealias EditTarget = (EditableUserDictionaryData, [TemplateData])
@@ -158,11 +158,11 @@ private struct UserDictionaryDataEditor: CancelableEditor {
 
     @available(iOS 16.0, *)
     private func hasTemplate(word: String) -> Bool {
-        return word.contains(templateRegex)
+        word.contains(templateRegex)
     }
 
     private func templateIndex(name: String) -> Int? {
-        return variables.templates.firstIndex(where: {$0.name == name})
+        variables.templates.firstIndex(where: {$0.name == name})
     }
 
     // こちらは「今まで同名のテンプレートがなかった」場合にのみテンプレートを追加する
@@ -173,7 +173,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
     }
 
     @State private var wordEditMode: Bool = false
-    @State private var pickerTemplateName: String? = nil
+    @State private var pickerTemplateName: String?
     @State private var shareThisWord = false
     @State private var showExplanation = false
     @State private var sending = false
@@ -250,8 +250,8 @@ private struct UserDictionaryDataEditor: CancelableEditor {
     @ViewBuilder
     private func templateEditor(index: Int, selectedTemplate: (name: String, index: Int)) -> some View {
         if variables.templates[index].name == selectedTemplate.name {
-            TemplateEditingView($variables.templates[index], validationInfo: variables.templates.map{$0.name}, options: .init(nameEdit: false, appearance: .embed { template in
-                if template.name == selectedTemplate.name && index < variables.templates.endIndex  {
+            TemplateEditingView($variables.templates[index], validationInfo: variables.templates.map {$0.name}, options: .init(nameEdit: false, appearance: .embed { template in
+                if template.name == selectedTemplate.name && index < variables.templates.endIndex {
                     variables.templates[index] = template
                 } else {
                     debug("templateEditor: Unknown situation:", template, selectedTemplate, variables.templates[index])
@@ -284,7 +284,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                             } label: {
                                 Image(systemName: "rectangle.and.pencil.and.ellipsis")
                             }
-                        } else  {
+                        } else {
                             wordField
                         }
                         Divider()
@@ -389,7 +389,6 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                         }
                     } else {
                         self.save()
-                        let data = self.item.makeStableData()
                         variables.mode = .list
                         MainAppFeedback.success()
                     }
