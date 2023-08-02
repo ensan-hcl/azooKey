@@ -197,8 +197,6 @@ struct OpenSourceSoftwaresLicenseView: View {
                     Spacer()
                     Text("azooKeyを使ってくれてありがとう！")
                 }
-                .animation(.interpolatingSpring(stiffness: 30, damping: 5))
-
             }
         }
         .multilineTextAlignment(.leading)

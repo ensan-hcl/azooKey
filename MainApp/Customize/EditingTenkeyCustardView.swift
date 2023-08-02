@@ -312,7 +312,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
             .navigationBarBackButtonHidden(true)
             .navigationTitle(Text("カスタムタブを作る"))
             .navigationBarItems(
-                leading: Button("キャンセル", role: .cancel, action: cancel),
+                leading: Button("キャンセル", role: .cancel, action: {self.cancel()}),
                 trailing: Button("保存") {
                     self.save()
                     self.dismiss()

@@ -100,15 +100,17 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
 
 struct EmojiTabResultBarButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: ButtonStyle {
     private let height: CGFloat
+    private let userSizePrefrerence: CGFloat
     @Environment(Extension.Theme.self) private var theme
 
-    init(height: CGFloat) {
+    @MainActor init(height: CGFloat) {
+        self.userSizePrefrerence = Extension.SettingProvider.resultViewFontSize
         self.height = height
     }
 
-    @MainActor func makeBody(configuration: Configuration) -> some View {
+    func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: Extension.SettingProvider.resultViewFontSize, fontSize: height * 0.9))
+            .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: self.userSizePrefrerence, fontSize: height * 0.9))
             .frame(height: height)
             .foregroundColor(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
             .background(

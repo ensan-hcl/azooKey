@@ -208,7 +208,9 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                             NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($setting.value[keyPath: selectedPosition.bindedKeyPath].longpressActions, availableCustards: CustardManager.load().availableCustards))
                                 .foregroundColor(.accentColor)
                         }
-                        Button("リセット", action: reload)
+                        Button("リセット") {
+                            self.reload()
+                        }
                             .foregroundColor(.red)
                     } else {
                         Text("このキーは編集できません")
@@ -219,7 +221,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
         }
     }
 
-    @ViewBuilder private func tabSetter(keyPath: WritableKeyPath<KeyFlickSetting, FlickCustomKey>) -> some View {
+    @MainActor @ViewBuilder private func tabSetter(keyPath: WritableKeyPath<KeyFlickSetting, FlickCustomKey>) -> some View {
         Text("このキーにはタブ移動以外のアクションが設定されています。現在のアクションを消去して移動するタブを設定するには「タブを設定する」を押してください")
         Button("タブを設定する") {
             setting.value[keyPath: keyPath].actions = [.moveTab(.system(.user_japanese))]
@@ -227,7 +229,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
         .foregroundColor(.accentColor)
     }
 
-    private func isPossiblePosition(_ position: FlickKeyPosition) -> Bool {
+    @MainActor private func isPossiblePosition(_ position: FlickKeyPosition) -> Bool {
         setting.value.identifier.ablePosition.contains(position)
     }
 
@@ -248,7 +250,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
         return nil
     }
 
-    private func reload() {
+    @MainActor private func reload() {
         if self.isPossiblePosition(selectedPosition) {
             setting.value[keyPath: selectedPosition.keyPath] = setting.value.identifier.defaultSetting[keyPath: selectedPosition.keyPath]
         }
@@ -259,7 +261,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
         case tab
     }
 
-    private var mainEditor: MainEditorSpecifier {
+    @MainActor private var mainEditor: MainEditorSpecifier {
         switch setting.value.identifier {
         case .kanaSymbols, .kogana:
             return .input

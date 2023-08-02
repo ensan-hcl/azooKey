@@ -110,7 +110,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                     .padding(.horizontal, 5)
                 }
                 // 候補を展開するボタン
-                Button(action: self.expand) {
+                Button(action: {self.expand()}) {
                     ZStack {
                         Color(white: 1, opacity: 0.001)
                             .frame(width: buttonWidth)
@@ -166,7 +166,7 @@ struct ResultContextMenuView: View {
             }
             if SemiStaticStates.shared.hasFullAccess {
                 Button {
-                    Task.detached {
+                    Task { @MainActor in
                         await action.notifyReportWrongConversion(candidate, index: index, variableStates: variableStates)
                     }
                 } label: {
@@ -187,15 +187,18 @@ struct ResultContextMenuView: View {
 
 struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: ButtonStyle {
     private let height: CGFloat
+    private let userSizePreference: Double
+
     @Environment(Extension.Theme.self) private var theme
 
-    init(height: CGFloat) {
+    @MainActor init(height: CGFloat) {
+        self.userSizePreference = Extension.SettingProvider.resultViewFontSize
         self.height = height
     }
 
-    @MainActor func makeBody(configuration: Configuration) -> some View {
+    func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: Extension.SettingProvider.resultViewFontSize))
+            .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: self.userSizePreference))
             .frame(height: height)
             .padding(.all, 5)
             .foregroundColor(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する

@@ -58,7 +58,7 @@ private struct ExportedCustardData {
     let fileIdentifier: String
 }
 
-fileprivate final class ShareURL {
+private final class ShareURL {
     private(set) var url: URL?
 
     func setURL(_ url: URL?) {

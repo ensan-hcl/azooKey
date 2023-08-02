@@ -17,8 +17,8 @@ private struct FocusViewModifier: ViewModifier {
     private let focused: Bool
 
     func body(content: Content) -> some View {
-        let shadowColor = focused ? color:.clear
-        let shadowRadius: CGFloat = focused ? 0.5:.zero
+        let shadowColor = focused ? color : .clear
+        let shadowRadius: CGFloat = focused ? 0.5 : .zero
         return content
             .shadow(color: shadowColor, radius: shadowRadius, x: 1)
             .shadow(color: shadowColor, radius: shadowRadius, x: -1)

@@ -270,7 +270,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     @objc func openURL(_ url: URL) {}
-    //https://stackoverflow.com/questions/40019521/open-my-application-from-my-keyboard-extension-in-swift-3-0より
+    // https://stackoverflow.com/questions/40019521/open-my-application-from-my-keyboard-extension-in-swift-3-0より
     func openUrl(url: URL?) {
         let selector = #selector(openURL(_:))
         var responder = (self as UIResponder).next

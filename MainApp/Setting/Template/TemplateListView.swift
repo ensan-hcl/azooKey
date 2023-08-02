@@ -58,7 +58,7 @@ struct TemplateListView: View {
                         }
                     }
                 }
-                .onDelete(perform: delete)
+                .onDelete(perform: {self.delete(at: $0)})
             }
         }.navigationBarTitle(Text("テンプレートの管理"), displayMode: .inline)
         .navigationBarItems(trailing: addButton)
