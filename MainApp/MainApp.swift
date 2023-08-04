@@ -11,6 +11,7 @@ import KeyboardViews
 import SwiftUI
 
 final class MainAppStates: ObservableObject {
+    /// キーボードが有効化（キーボードリストに追加）されているかどうかを示す
     @Published var isKeyboardActivated: Bool
     @Published var requireFirstOpenView: Bool
     @Published var japaneseLayout: LanguageLayout = .flick
