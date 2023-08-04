@@ -41,6 +41,6 @@ struct PasteLongPressButton: View {
                     text = string
                 }
             }
-            .foregroundColor(.accentColor)
+            .foregroundStyle(.accentColor)
     }
 }

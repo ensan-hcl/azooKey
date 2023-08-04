@@ -120,10 +120,10 @@ struct CustardInformationView: View {
                     switch userdata {
                     case let .gridScroll(value):
                         NavigationLink("編集する", destination: EditingScrollCustardView(manager: $manager, editingItem: value))
-                            .foregroundColor(.accentColor)
+                            .foregroundStyle(.accentColor)
                     case let .tenkey(value):
                         NavigationLink("編集する", destination: EditingTenkeyCustardView(manager: $manager, editingItem: value))
-                            .foregroundColor(.accentColor)
+                            .foregroundStyle(.accentColor)
                     }
                 }
             }

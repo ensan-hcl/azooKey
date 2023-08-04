@@ -8,6 +8,8 @@
 
 import Foundation
 import SwiftUI
+
+// TODO: in iOS 17, Text.foregroundColor is deprecated. Use Text.foregroundStyle instead.
 public extension LocalizedStringKey.StringInterpolation {
     mutating func appendInterpolation(_ value: LocalizedStringKey, color: Color? = nil) {
         self.appendInterpolation(Text(value).foregroundColor(color))

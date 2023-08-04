@@ -33,7 +33,7 @@ struct DraggableView<Content: View, Collection: BidirectionalCollection & Random
     private var separator: some View {
         Rectangle()
             .frame(width: 2, height: height * 0.9)
-            .foregroundColor(.accentColor)
+            .foregroundStyle(.accentColor)
     }
 
     var body: some View {

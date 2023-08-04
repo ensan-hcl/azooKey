@@ -38,7 +38,7 @@ struct ThemeTabView: View {
             .overlay(
                 Image(systemName: systemName)
                     .font(Font.system(size: width / 2).weight(.bold))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
             )
     }
 
@@ -133,7 +133,7 @@ struct ThemeTabView: View {
                         manager.remove(index: index)
                     } label: {
                         Label("削除する", systemImage: "trash")
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     }
                     .disabled(index == 0)
                 }
@@ -150,7 +150,7 @@ struct ThemeTabView: View {
                             editViewIndex = nil
                             editViewEnabled = true
                         }
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                         if editViewIndex == nil {
                             NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled) {
                                 EmptyView()

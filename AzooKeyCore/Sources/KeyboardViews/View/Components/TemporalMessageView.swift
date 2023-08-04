@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 15, *)
 struct TemporalMessageView: View {
     let message: TemporalMessage
     let onDismiss: () -> Void
@@ -22,7 +21,7 @@ struct TemporalMessageView: View {
         case .auto:
             Text(message.title)
                 .bold()
-                .foregroundColor(.black)
+                .foregroundStyle(.black)
                 .onAppear {
                     Task {
                         // 1.5秒待機してからdismissを実行する
@@ -34,7 +33,7 @@ struct TemporalMessageView: View {
             VStack {
                 Text(message.title)
                     .bold()
-                    .foregroundColor(.black)
+                    .foregroundStyle(.black)
                 Button("OK", action: onDismiss)
             }
         }

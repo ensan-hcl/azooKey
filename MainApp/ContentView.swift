@@ -114,7 +114,7 @@ private struct TabItem: View {
     var body: some View {
         VStack {
             Image(systemName: systemImage).font(.system(size: 20, weight: .light))
-                .foregroundColor(.systemGray2)
+                .foregroundStyle(.systemGray2)
             Text(title)
         }
     }

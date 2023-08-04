@@ -208,7 +208,7 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
             }
         }
         .allowsHitTesting(false)
-        .foregroundColor(theme.resultTextColor.color.opacity(0.4))
+        .foregroundStyle(theme.resultTextColor.color.opacity(0.4))
         .drawingGroup()
         .frame(width: viewWidth)
         .clipped()
@@ -221,7 +221,7 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
 
                 Image(systemName: "chevron.left.2")
                     .font(symbolFont(size: 18))
-                    .foregroundColor(symbolsColor)
+                    .foregroundStyle(symbolsColor)
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
@@ -242,12 +242,12 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
                 Spacer()
                 Text(verbatim: "│")
                     .font(.system(size: fontSize + 4))
-                    .foregroundColor(symbolsColor)
+                    .foregroundStyle(symbolsColor)
                     .allowsHitTesting(false)
                 Spacer()
                 Image(systemName: "chevron.right.2")
                     .font(symbolFont(size: 18))
-                    .foregroundColor(symbolsColor)
+                    .foregroundStyle(symbolsColor)
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
@@ -365,7 +365,7 @@ struct MoveCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                                 .padding()
                         })
                         Spacer()
-                    }.foregroundColor(symbolsColor))
+                    }.foregroundStyle(symbolsColor))
             }
         }
     }

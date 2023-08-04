@@ -100,10 +100,10 @@ private struct UserDictionaryDataListView: View {
                             } label: {
                                 HStack {
                                     Text(data.word)
-                                        .foregroundColor(.primary)
+                                        .foregroundStyle(.primary)
                                     Spacer()
                                     Text(data.ruby)
-                                        .foregroundColor(.systemGray)
+                                        .foregroundStyle(.systemGray)
                                 }
                             }
                             .contextMenu {
@@ -222,7 +222,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                             selectedTemplate = (String(parsedWords[i].dropFirst(2).dropLast(2)), i)
                         } label: {
                             Text(parsedWords[i])
-                                .foregroundColor(.primary)
+                                .foregroundStyle(.primary)
                                 .padding(0)
                                 .background(Color.orange.opacity(0.7).cornerRadius(5))
                         }

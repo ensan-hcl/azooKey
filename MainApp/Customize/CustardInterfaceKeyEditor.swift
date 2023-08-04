@@ -466,7 +466,7 @@ struct CustardInterfaceKeyEditor: View {
             Section {
                 Button("リセット") {
                     key = .custom(.empty)
-                }.foregroundColor(.red)
+                }.foregroundStyle(.red)
             }
         }
     }
@@ -503,7 +503,7 @@ struct CustardInterfaceKeyEditor: View {
                     Button("入力を設定する") {
                         key[.custom][.inputAction, position] = ""
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
                 }
             }
             Section(header: Text("ラベル")) {
@@ -574,12 +574,12 @@ struct CustardInterfaceKeyEditor: View {
             Section(header: Text("アクション")) {
                 Text("キーを押したときの動作をより詳しく設定します。")
                 NavigationLink("アクションを編集する", destination: CodableActionDataEditor($key[.custom][.pressAction, position], availableCustards: CustardManager.load().availableCustards))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
             }
             Section(header: Text("長押しアクション")) {
                 Text("キーを長押ししたときの動作をより詳しく設定します。")
                 NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($key[.custom][.longpressAction, position], availableCustards: CustardManager.load().availableCustards))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
             }
 
             if position == .center {
@@ -592,7 +592,7 @@ struct CustardInterfaceKeyEditor: View {
                 Section {
                     Button("リセット") {
                         key = .custom(.empty)
-                    }.foregroundColor(.red)
+                    }.foregroundStyle(.red)
                 }
             }
             if let direction = position.flickDirection {
@@ -600,7 +600,7 @@ struct CustardInterfaceKeyEditor: View {
                     key[.custom].variations.removeAll {
                         $0.type == .flickVariation(direction)
                     }
-                }.foregroundColor(.red)
+                }.foregroundStyle(.red)
             }
         }
     }

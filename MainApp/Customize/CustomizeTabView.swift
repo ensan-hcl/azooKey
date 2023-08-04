@@ -23,7 +23,7 @@ struct CustomizeTabView: View {
                             .listRowSeparator(.hidden, edges: .bottom)
                         Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
                         NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
-                            .foregroundColor(.accentColor)
+                            .foregroundStyle(.accentColor)
                     }
 
                     Section(header: Text("タブバー")) {
@@ -41,7 +41,7 @@ struct CustomizeTabView: View {
                         }
                         BoolSettingView(.displayTabBarButton)
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
-                            .foregroundColor(.accentColor)
+                            .foregroundStyle(.accentColor)
                     }
 
                     Section(header: Text("カスタムキー")) {

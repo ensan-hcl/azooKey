@@ -9,7 +9,6 @@
 import SwiftUI
 import SwiftUIUtils
 
-@available(iOS 15, *)
 struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
     @Environment(Extension.Theme.self) private var theme
@@ -112,7 +111,7 @@ struct EmojiTabResultBarButtonStyle<Extension: ApplicationSpecificKeyboardViewEx
         configuration.label
             .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: self.userSizePrefrerence, fontSize: height * 0.9))
             .frame(height: height)
-            .foregroundColor(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
+            .foregroundStyle(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
                     theme.pushedKeyFillColor.color.opacity(0.5) :

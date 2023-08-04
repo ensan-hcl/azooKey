@@ -222,7 +222,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                 Button("入力を設定する") {
                                     setting.value[.input, selection] = ""
                                 }
-                                .foregroundColor(.accentColor)
+                                .foregroundStyle(.accentColor)
                             }
                         }
                         Section(header: Text("ラベル")) {
@@ -234,7 +234,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         Section(header: Text("アクション")) {
                             Text("キーを押したときの動作をより詳しく設定します。")
                             NavigationLink("アクションを編集する", destination: CodableActionDataEditor(binded[selection].actions, availableCustards: CustardManager.load().availableCustards))
-                                .foregroundColor(.accentColor)
+                                .foregroundStyle(.accentColor)
                         }
                         Button("削除") {
                             bottomSheetShown = false
@@ -253,7 +253,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                 }
                             }
                         }
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                     } else {
                         Button("キーを追加する") {
                             self.addPressKey()

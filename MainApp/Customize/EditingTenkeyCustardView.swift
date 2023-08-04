@@ -162,7 +162,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                         )
                                         .overlay(
                                             Image(systemName: "plus.circle")
-                                                .foregroundColor(.accentColor)
+                                                .foregroundStyle(.accentColor)
                                         )
                                 }
                             }
@@ -277,19 +277,19 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                     editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
                                 } label: {
                                     Label("削除する", systemImage: "trash")
-                                        .foregroundColor(.red)
+                                        .foregroundStyle(.red)
                                 }
                                 Button(role: .destructive) {
                                     removeRow(y: y)
                                 } label: {
                                     Label("この行を削除", systemImage: "trash")
-                                        .foregroundColor(.red)
+                                        .foregroundStyle(.red)
                                 }
                                 Button(role: .destructive) {
                                     removeColumn(x: x)
                                 } label: {
                                     Label("この列を削除", systemImage: "trash")
-                                        .foregroundColor(.red)
+                                        .foregroundStyle(.red)
                                 }
                             }
                         }

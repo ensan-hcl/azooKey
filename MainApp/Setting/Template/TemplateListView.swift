@@ -46,7 +46,7 @@ struct TemplateListView: View {
                                 Text(value.item.name)
                                 Spacer()
                                 Text(value.item.previewString)
-                                    .foregroundColor(.gray)
+                                    .foregroundStyle(.gray)
                             }
                         }
                     }

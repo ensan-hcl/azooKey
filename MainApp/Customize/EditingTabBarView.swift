@@ -63,7 +63,7 @@ struct EditingTabBarView: View {
                         Label("アクション", systemImage: "terminal")
 
                         Text(makeLabelText(item: item))
-                            .foregroundColor(.gray)
+                            .foregroundStyle(.gray)
                     }
                 } label: { item in
                     label(labelType: item.label)

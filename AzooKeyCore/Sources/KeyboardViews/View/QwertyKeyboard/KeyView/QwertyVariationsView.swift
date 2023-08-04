@@ -30,7 +30,7 @@ struct QwertyVariationsView<Extension: ApplicationSpecificKeyboardViewExtension>
             ForEach(model.variations.indices, id: \.self) {(index: Int) in
                 ZStack {
                     Rectangle()
-                        .foregroundColor(index == selection ? Color.blue : suggestColor)
+                        .foregroundStyle(index == selection ? Color.blue : suggestColor)
                         .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight * 0.9, alignment: .center)
                         .cornerRadius(10.0)
                     getLabel(model.variations[index].label)

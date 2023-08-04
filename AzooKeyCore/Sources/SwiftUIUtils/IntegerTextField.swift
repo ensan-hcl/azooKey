@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@available(iOS 15.0, macOS 12.0, *)
 public struct IntegerTextField: View {
     public init(_ title: LocalizedStringKey, text: Binding<String>, range: ClosedRange<Int> = .min ... .max) {
         self.title = title

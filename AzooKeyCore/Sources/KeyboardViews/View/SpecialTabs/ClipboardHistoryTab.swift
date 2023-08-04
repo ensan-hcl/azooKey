@@ -47,7 +47,6 @@ private final class ClipboardHistory: ObservableObject {
     }
 }
 
-@available(iOS 15, *)
 struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @StateObject private var target = ClipboardHistory()
@@ -72,7 +71,7 @@ struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>:
                         if pinned {
                             HStack {
                                 Image(systemName: "pin.circle.fill")
-                                    .foregroundColor(.orange)
+                                    .foregroundStyle(.orange)
                                 Text(string)
                                     .lineLimit(2)
                             }
@@ -225,7 +224,7 @@ struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>:
             }
         }
         .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: Extension.SettingProvider.resultViewFontSize))
-        .foregroundColor(theme.resultTextColor.color)
+        .foregroundStyle(theme.resultTextColor.color)
         .onAppear {
             self.target.reload(manager: variableStates.clipboardHistoryManager)
         }
