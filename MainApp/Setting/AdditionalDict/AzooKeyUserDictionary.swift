@@ -328,14 +328,12 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                     }
                 }
                 .toggleStyle(.switch)
-                .alert(isPresented: $showExplanation) {
-                    Alert(
-                        title: Text("この単語をシェアする"),
-                        message: Text("この単語をazooKeyの本体辞書に追加することを申請します。\n個人情報を含む単語は申請しないでください。"),
-                        dismissButton: .default(Text("OK")) {
-                            showExplanation = false
-                        }
-                    )
+                .alert("この単語をシェアする", isPresented: $showExplanation) {
+                    Button("OK") {
+                        showExplanation = false
+                    }
+                } message: {
+                    Text("この単語をazooKeyの本体辞書に追加することを申請します。\n個人情報を含む単語は申請しないでください。")
                 }
             }
             if #available(iOS 16.0, *), let selectedTemplate {

@@ -11,12 +11,10 @@ import KeyboardViews
 import SwiftUI
 
 struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
-    private enum AlertMessage {
-        case `default`
-        case message(LocalizedStringKey)
-    }
-    @State private var isOn = false
-    @State private var alertMessage = AlertMessage.default
+    @State private var showExplanation = false
+    @State private var showRequireFullAccessAlert = false
+    @State private var showOnEnabledMessageAlert = false
+    @State private var onEnabledAlertMessage: LocalizedStringKey? = nil
     @State private var setting: SettingUpdater<SettingKey>
 
     @MainActor init(_ key: SettingKey) {
@@ -28,7 +26,7 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
             HStack {
                 Text(SettingKey.title)
                 Button {
-                    isOn = true
+                    showExplanation = true
                 } label: {
                     Image(systemName: "questionmark.circle")
                 }
@@ -47,7 +45,7 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
                 toggle
                     .disabled(true)
                     .onTapGesture {
-                        isOn = true
+                        showRequireFullAccessAlert = true
                     }
             } else {
                 toggle
@@ -59,44 +57,34 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
         .onChange(of: setting.value) { newValue in
             if newValue {
                 if let message = SettingKey.onEnabled() {
-                    self.alertMessage = .message(message)
-                    self.isOn = true
+                    self.onEnabledAlertMessage = message
+                    self.showOnEnabledMessageAlert = true
                 }
             } else {
                 SettingKey.onDisabled()
             }
         }
-        .alert(isPresented: $isOn) {
-            switch self.alertMessage {
-            case .default:
-                if disabled, let url = URL(string: UIApplication.openSettingsURLString) {
-                    return Alert(
-                        title: Text(SettingKey.explanation),
-                        message: Text("この機能にはフルアクセスが必要です。この機能を使いたい場合は、「設定」>「キーボード」でフルアクセスを有効にしてください。"),
-                        primaryButton: .cancel {
-                            isOn = false
-                        },
-                        secondaryButton: .default(Text("「設定」アプリを開く")) {
-                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                            isOn = false
-                        }
-                    )
-                } else {
-                    return Alert(
-                        title: Text(SettingKey.explanation),
-                        dismissButton: .default(Text("OK")) {
-                            isOn = false
-                        }
-                    )
+        .alert(SettingKey.explanation, isPresented: $showExplanation) {
+            Button("OK") {
+                self.showExplanation = false
+            }
+        }
+        .alert(SettingKey.explanation, isPresented: $showRequireFullAccessAlert) {
+            Button("キャンセル", role: .cancel) {
+                showRequireFullAccessAlert = false
+            }
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                Button("「設定」アプリを開く") {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    showRequireFullAccessAlert = false
                 }
-            case let .message(message):
-                return Alert(
-                    title: Text(message),
-                    dismissButton: .default(Text("OK")) {
-                        self.alertMessage = .default
-                        isOn = false
-                    }
-                )
+            }
+        } message: {
+            Text("この機能にはフルアクセスが必要です。この機能を使いたい場合は、「設定」>「キーボード」でフルアクセスを有効にしてください。")
+        }
+        .alert(onEnabledAlertMessage ?? "", isPresented: $showOnEnabledMessageAlert) {
+            Button("OK") {
+                showOnEnabledMessageAlert = false
             }
         }
     }

@@ -48,8 +48,10 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
                 setting.value = SettingKey.defaultValue
             }
         }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK")))
+        .alert(SettingKey.explanation, isPresented: $showAlert) {
+            Button("OK") {
+                showAlert = false
+            }
         }
         .listRowSeparator(.hidden)
 

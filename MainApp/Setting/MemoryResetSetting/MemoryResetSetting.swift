@@ -17,18 +17,16 @@ struct MemoryResetSettingItemView: View {
             self.showAlert = true
         }
         .foregroundStyle(.red)
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("学習履歴をリセットします。よろしいですか？"),
-                message: Text("この操作は取り消せません。"),
-                primaryButton: .cancel(Text("キャンセル"), action: {
-                    self.showAlert = false
-                }),
-                secondaryButton: .destructive(Text("リセットする"), action: {
-                    MemoryResetCondition.set(value: .need)
-                    self.showAlert = false
-                })
-            )
+        .alert("学習履歴をリセットします。よろしいですか？", isPresented: $showAlert) {
+            Button("キャンセル", role: .cancel) {
+                self.showAlert = false
+            }
+            Button("リセットする", role: .destructive) {
+                MemoryResetCondition.set(value: .need)
+                self.showAlert = false
+            }
+        } message: {
+            Text("この操作は取り消せません。")
         }
     }
 }

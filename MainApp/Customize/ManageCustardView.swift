@@ -14,8 +14,7 @@ import SwiftUIUtils
 import SwiftUtils
 import UniformTypeIdentifiers
 
-private enum AlertType {
-    case none
+private enum AlertType: Equatable {
     case overlapCustard(custard: Custard)
 }
 
@@ -147,7 +146,7 @@ struct ManageCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var urlString: String = ""
     @State private var showAlert = false
-    @State private var alertType = AlertType.none
+    @State private var alertType: AlertType? = nil
     @Binding private var manager: CustardManager
     @State private var webCustards: WebCustardList = .init(last_update: "", custards: [])
     @State private var showDocumentPicker = false
@@ -273,19 +272,20 @@ struct ManageCustardView: View {
             }
         }
         .navigationBarTitle(Text("カスタムタブの管理"), displayMode: .inline)
-        .alert(isPresented: $showAlert) {
+        .alert("注意", isPresented: $showAlert, presenting: alertType) { alertType in
             switch alertType {
-            case .none:
-                return Alert(title: Text("アラート"))
-            case let .overlapCustard(custard):
-                return Alert(
-                    title: Text("注意"),
-                    message: Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？"),
-                    primaryButton: .default(Text("上書き")) {
-                        self.saveCustard(custard: custard)
-                    },
-                    secondaryButton: .cancel()
-                )
+            case let .overlapCustard(custard: custard):
+                Button("上書き", role: .destructive) {
+                    self.saveCustard(custard: custard)
+                }
+                Button("キャンセル", role: .cancel) {
+                    self.showAlert = false
+                }
+            }
+        } message: { alertType in
+            switch alertType {
+            case let .overlapCustard(custard: custard):
+                Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？")
             }
         }
         .fileImporter(isPresented: $showDocumentPicker, allowedContentTypes: ["txt", "custard", "json"].compactMap {UTType(filenameExtension: $0, conformingTo: .text)}) {result in
@@ -372,7 +372,7 @@ struct ManageCustardView: View {
 struct URLImportCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var showAlert = false
-    @State private var alertType = AlertType.none
+    @State private var alertType: AlertType? = nil
     @Binding private var manager: CustardManager
     @Binding private var url: URL?
     @State private var addTabBar = true
@@ -439,19 +439,20 @@ struct URLImportCustardView: View {
                 data.download(from: url)
             }
         }
-        .alert(isPresented: $showAlert) {
+        .alert("注意", isPresented: $showAlert, presenting: alertType) { alertType in
             switch alertType {
-            case .none:
-                return Alert(title: Text("アラート"))
-            case let .overlapCustard(custard):
-                return Alert(
-                    title: Text("注意"),
-                    message: Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？"),
-                    primaryButton: .default(Text("上書き")) {
-                        self.saveCustard(custard: custard)
-                    },
-                    secondaryButton: .cancel()
-                )
+            case let .overlapCustard(custard: custard):
+                Button("上書き", role: .destructive) {
+                    self.saveCustard(custard: custard)
+                }
+                Button("キャンセル", role: .cancel) {
+                    self.showAlert = false
+                }
+            }
+        } message: { alertType in
+            switch alertType {
+            case let .overlapCustard(custard: custard):
+                Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？")
             }
         }
     }
