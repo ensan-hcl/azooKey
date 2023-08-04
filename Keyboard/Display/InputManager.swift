@@ -747,11 +747,14 @@ import UIKit
 
         let requireJapanesePrediction: Bool
         let requireEnglishPrediction: Bool
-        switch inputData.input.last?.inputStyle ?? .direct {
-        case .direct:
+        switch (isSelected, inputData.input.last?.inputStyle ?? .direct) {
+        case (true, _):
+            requireJapanesePrediction = false
+            requireEnglishPrediction = false
+        case (false, .direct):
             requireJapanesePrediction = true
             requireEnglishPrediction = true
-        case .roman2kana:
+        case (false, .roman2kana):
             requireJapanesePrediction = keyboardLanguage == .ja_JP
             requireEnglishPrediction = keyboardLanguage == .en_US
         }
