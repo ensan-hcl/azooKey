@@ -75,7 +75,7 @@ struct EnableAzooKeyViewButton: View {
                 }
             }
             .buttonStyle(LargeButtonStyle(backgroundColor: .blue))
-            .foregroundColor(.white)
+            .foregroundStyle(.white)
         case .destructive:
             Button(action: action) {
                 if let systemName {
@@ -84,7 +84,7 @@ struct EnableAzooKeyViewButton: View {
                     Text(text)
                 }
             }
-            .foregroundColor(.red)
+            .foregroundStyle(.red)
         }
     }
 }

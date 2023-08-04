@@ -119,9 +119,9 @@ struct SettingTabView: View {
                 Section(header: Text("このアプリについて")) {
                     NavigationLink("お問い合わせ", destination: ContactView())
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                     NavigationLink("更新履歴", destination: UpdateInformationView())
                     HStack {
                         Text("URL Scheme")

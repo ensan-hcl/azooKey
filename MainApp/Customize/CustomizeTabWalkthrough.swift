@@ -65,12 +65,12 @@ struct CustomizeTabWalkthroughView: View {
                                 Image(systemName: item.image)
                                     .font(imagesFont)
                                     .frame(width: geometry.size.width / 7.0, height: geometry.size.width / 7.0)
-                                    .foregroundColor(.blue)
+                                    .foregroundStyle(.blue)
                                 VStack(alignment: .leading) {
                                     Text(item.headline)
                                         .font(.subheadline.bold())
                                     Text(item.body)
-                                        .foregroundColor(.gray)
+                                        .foregroundStyle(.gray)
                                         .font(.subheadline)
                                 }
                             }
@@ -83,7 +83,7 @@ struct CustomizeTabWalkthroughView: View {
                             isShowing = false
                         }
                         .buttonStyle(LargeButtonStyle(backgroundColor: .blue))
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .padding(.top, 30)
                     }
                     .background(Color.background)

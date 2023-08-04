@@ -10,7 +10,6 @@ import CustardKit
 import Foundation
 import SwiftUI
 
-@available(iOS 15, *)
 struct FlickKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @State private var suggestState = FlickSuggestState()
 

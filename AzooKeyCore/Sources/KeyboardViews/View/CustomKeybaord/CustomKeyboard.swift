@@ -253,7 +253,6 @@ extension CustardInterfaceKey {
     }
 }
 
-@available(iOS 15, *)
 struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let custard: Custard
     private var tabDesign: TabDependentDesign {
@@ -322,7 +321,6 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
     }
 }
 
-@available(iOS 15, *)
 public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExtension, Content: View>: View {
     @State private var suggestState = FlickSuggestState()
 

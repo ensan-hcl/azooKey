@@ -14,13 +14,13 @@ struct CustomKeysSettingView: View {
             .listRowSeparator(.hidden, edges: .bottom)
         Text("「小ﾞﾟ」キーと「､｡?!」キーで入力する文字をカスタマイズすることができます。")
         NavigationLink("設定する", destination: FlickCustomKeysSettingSelectView())
-            .foregroundColor(.accentColor)
+            .foregroundStyle(.accentColor)
             .listRowSeparator(.visible, edges: .all)
         ImageSlideshowView(pictures: ["qwertyCustomKeySetting0", "qwertyCustomKeySetting1", "qwertyCustomKeySetting2"])
             .listRowSeparator(.hidden, edges: .bottom)
         Text("数字タブの青枠部分に好きな記号や文字を割り当てられます。")
         NavigationLink("設定する", destination: QwertyCustomKeysSettingView(.numberTabCustomKeys))
-            .foregroundColor(.accentColor)
+            .foregroundStyle(.accentColor)
             .listRowSeparator(.visible, edges: .all)
     }
 }

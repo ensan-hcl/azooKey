@@ -32,7 +32,7 @@ struct HeaderLogoView: View {
                     .font(Font(UIFont.systemFont(ofSize: iconSize)))
             }
         }
-        .foregroundColor(iconColor)
+        .foregroundStyle(iconColor)
         .padding(.top, 5)
         .padding(.bottom, -5)
     }

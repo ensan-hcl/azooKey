@@ -293,7 +293,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
             Label(genre.title, systemImage: systemImage)
                 .labelStyle(.iconOnly)
                 .font(.largeTitle)
-                .foregroundColor(theme.resultTextColor.color)
+                .foregroundStyle(theme.resultTextColor.color)
                 .frame(width: footerHeight, height: scrollViewHeight)
                 .contentShape(Rectangle())
         }

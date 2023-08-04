@@ -52,7 +52,7 @@ struct TemplateEditingView: CancelableEditor {
                 }
                 if case let .nameError(message) = validation() {
                     Label(message, systemImage: "exclamationmark.triangle")
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                 }
             }
         }

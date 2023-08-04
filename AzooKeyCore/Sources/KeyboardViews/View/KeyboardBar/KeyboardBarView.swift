@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 import SwiftUIUtils
 
-@available(iOS 15, *)
 struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
@@ -81,7 +80,7 @@ struct KeyboardBarButton<Extension: ApplicationSpecificKeyboardViewExtension>: V
                 case let .systemImage(name):
                     Image(systemName: name)
                         .frame(width: iconSize, height: iconSize)
-                        .foregroundColor(buttonLabelColor)
+                        .foregroundStyle(buttonLabelColor)
                 }
             }
         }

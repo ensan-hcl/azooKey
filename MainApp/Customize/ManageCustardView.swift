@@ -191,10 +191,10 @@ struct ManageCustardView: View {
             Section(header: Text("作る")) {
                 Text("登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
                 NavigationLink("スクロール式のカスタムタブを作る", destination: EditingScrollCustardView(manager: $manager))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
                 Text("フリック式のカスタムタブを作成することができます。")
                 NavigationLink("フリック式のカスタムタブを作る", destination: EditingTenkeyCustardView(manager: $manager))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
             }
             if let custards = data.custards {
                 ForEach(custards, id: \.identifier) {custard in
@@ -219,7 +219,7 @@ struct ManageCustardView: View {
                     selectedDocument = Data()
                     data.reset()
                 }
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
 
             } else {
                 Section(header: Text("おすすめ")) {
@@ -229,7 +229,7 @@ struct ManageCustardView: View {
                                 data.download(from: "https://azookey.netlify.app/static/custard/\(item.file)")
                             } label: {
                                 Image(systemName: "square.and.arrow.down")
-                                    .foregroundColor(.accentColor)
+                                    .foregroundStyle(.accentColor)
                                     .padding(.horizontal, 5)
                             }
                             Text(verbatim: item.name)
@@ -263,7 +263,7 @@ struct ManageCustardView: View {
                 if let failure = data.failureData {
                     HStack {
                         Image(systemName: "exclamationmark.triangle")
-                        Text(failure.description).foregroundColor(.red)
+                        Text(failure.description).foregroundStyle(.red)
                     }
                 }
                 Section {
@@ -406,7 +406,7 @@ struct URLImportCustardView: View {
                     data.reset()
                     url = nil
                 }
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
             } else if let text = data.processState.description {
                 Section(header: Text("読み込み中")) {
                     ProgressView(text)
@@ -414,21 +414,21 @@ struct URLImportCustardView: View {
                         data.reset()
                         url = nil
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
                 }
             } else {
                 Section(header: Text("読み込み失敗")) {
                     if let failure = data.failureData {
                         HStack {
                             Image(systemName: "exclamationmark.triangle")
-                            Text(failure.description).foregroundColor(.red)
+                            Text(failure.description).foregroundStyle(.red)
                         }
                     }
                     Button("閉じる") {
                         data.reset()
                         url = nil
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
                 }
             }
         }

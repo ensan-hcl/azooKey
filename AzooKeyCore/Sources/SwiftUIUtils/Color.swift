@@ -21,6 +21,20 @@ public extension Color {
     static let background = Color(UIColor.systemBackground)
     static let label = Color(UIColor.label)
 }
+
+public extension ShapeStyle where Self == Color {
+    static var accentColor: Self { .accentColor }
+    static var systemGray: Self { .systemGray }
+    static var systemGray2: Self { .systemGray2 }
+    static var systemGray3: Self { .systemGray3 }
+    static var systemGray4: Self { .systemGray4 }
+    static var systemGray5: Self { .systemGray5 }
+    static var systemGray6: Self { .systemGray6 }
+    static var background: Self { .background }
+    static var secondarySystemBackground: Self { .secondarySystemBackground }
+    static var label: Self { .label }
+}
+
 #elseif os(macOS)
 import AppKit
 public extension Color {

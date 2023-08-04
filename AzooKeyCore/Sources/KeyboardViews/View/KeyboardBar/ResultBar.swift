@@ -201,7 +201,7 @@ struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: B
             .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: self.userSizePreference))
             .frame(height: height)
             .padding(.all, 5)
-            .foregroundColor(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
+            .foregroundStyle(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
                     theme.pushedKeyFillColor.color.opacity(0.5) :

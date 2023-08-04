@@ -157,9 +157,9 @@ private struct ShareButtonStyle: ButtonStyle {
         configuration
             .label
             .font(.body.bold())
-            .foregroundColor(.white)
+            .foregroundStyle(.white)
             .padding()
-            .background(RoundedRectangle(cornerRadius: 3).foregroundColor(.blue))
+            .background(RoundedRectangle(cornerRadius: 3).foregroundStyle(.blue))
             .padding()
     }
 }

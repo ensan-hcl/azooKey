@@ -170,7 +170,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                                     Button("入力を設定する") {
                                         setting.value[.input, selectedPosition] = ""
                                     }
-                                    .foregroundColor(.accentColor)
+                                    .foregroundStyle(.accentColor)
                                 }
                             }
                         case .tab:
@@ -201,22 +201,22 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                         Section(header: Text("アクション")) {
                             Text("キーを押したときの動作をより詳しく設定します。")
                             NavigationLink("アクションを編集する", destination: CodableActionDataEditor($setting.value[keyPath: selectedPosition.bindedKeyPath].actions, availableCustards: CustardManager.load().availableCustards))
-                                .foregroundColor(.accentColor)
+                                .foregroundStyle(.accentColor)
                         }
                         Section(header: Text("長押しアクション")) {
                             Text("キーを長押ししたときの動作をより詳しく設定します。")
                             NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($setting.value[keyPath: selectedPosition.bindedKeyPath].longpressActions, availableCustards: CustardManager.load().availableCustards))
-                                .foregroundColor(.accentColor)
+                                .foregroundStyle(.accentColor)
                         }
                         Button("リセット") {
                             self.reload()
                         }
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                     } else {
                         Text("このキーは編集できません")
                     }
                 }
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
             }
         }
     }
@@ -226,7 +226,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
         Button("タブを設定する") {
             setting.value[keyPath: keyPath].actions = [.moveTab(.system(.user_japanese))]
         }
-        .foregroundColor(.accentColor)
+        .foregroundStyle(.accentColor)
     }
 
     @MainActor private func isPossiblePosition(_ position: FlickKeyPosition) -> Bool {

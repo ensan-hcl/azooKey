@@ -233,7 +233,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                     .frame(width: r, height: r)
                     .overlay(
                         Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(Font.system(size: r * 0.5))
                     )
                     .gesture(moveGesture)
@@ -254,7 +254,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         .frame(width: r, height: r)
                         .overlay(
                             Image(systemName: "arrow.triangle.2.circlepath")
-                                .foregroundColor(.white)
+                                .foregroundStyle(.white)
                                 .font(Font.system(size: r * 0.5))
                         )
                 }
@@ -270,7 +270,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         .frame(width: r, height: r)
                         .overlay(
                             Image(systemName: "checkmark")
-                                .foregroundColor(.white)
+                                .foregroundStyle(.white)
                                 .font(Font.system(size: r * 0.5))
                         )
                 }
@@ -333,7 +333,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
                     .frame(width: r, height: r)
                     .overlay(
                         Image(systemName: "aspectratio")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(Font.system(size: r * 0.5))
                     )
             }
@@ -347,7 +347,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
                     .frame(width: r, height: r)
                     .overlay(
                         Image(systemName: "arrow.up.backward.and.arrow.down.forward")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(Font.system(size: r * 0.5))
                     )
             }
@@ -370,7 +370,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
                     .frame(width: r, height: r)
                     .overlay(
                         Image(systemName: "arrow.triangle.2.circlepath")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(Font.system(size: r * 0.5))
                     )
             }

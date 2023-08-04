@@ -32,7 +32,7 @@ struct TipsTabView: View {
                             HStack {
                                 if !readArticle_iOS14_service_termination {
                                     Image(systemName: "exclamationmark.circle.fill")
-                                        .foregroundColor(.red)
+                                        .foregroundStyle(.red)
                                 }
                                 NavigationLink("iOS14のサポートを終了します", destination: iOS14TerminationNewsView($readArticle_iOS14_service_termination))
                             }

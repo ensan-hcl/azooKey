@@ -16,7 +16,7 @@ struct MemoryResetSettingItemView: View {
         Button("学習のリセット") {
             self.showAlert = true
         }
-        .foregroundColor(.red)
+        .foregroundStyle(.red)
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("学習履歴をリセットします。よろしいですか？"),

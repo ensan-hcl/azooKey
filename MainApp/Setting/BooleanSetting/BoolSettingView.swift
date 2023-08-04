@@ -34,7 +34,7 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
                 }
                 if SettingKey.requireFullAccess {
                     Image(systemName: "f.circle.fill")
-                        .foregroundColor(.purple)
+                        .foregroundStyle(.purple)
                 }
             }
         }

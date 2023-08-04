@@ -554,6 +554,6 @@ private struct ActionPicker: View {
                 }
             }
         }
-        .foregroundColor(.primary)
+        .foregroundStyle(.primary)
     }
 }
