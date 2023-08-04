@@ -356,23 +356,15 @@ struct ManageCustardView: View {
             return
         }
         let request = URLRequest(url: url)
-
-        URLSession.shared.dataTask(with: request) { data, _, error in
-            if let data {
-                let decoder = JSONDecoder()
-                guard let decodedResponse = try? decoder.decode(WebCustardList.self, from: data) else {
-                    debug("Failed to load https://azooKey.netlify.com/static/custard/all")
-                    return
-                }
-
-                DispatchQueue.main.async {
-                    self.webCustards = decodedResponse
-                }
-            } else {
-                debug("Fetch failed", error)
+        Task {
+            let result = try await URLSession.shared.data(from: url).0
+            let decoder = JSONDecoder()
+            guard let decodedResponse = try? decoder.decode(WebCustardList.self, from: result) else {
+                debug("Failed to load https://azooKey.netlify.com/static/custard/all")
+                return
             }
-
-        }.resume()
+            self.webCustards = decodedResponse
+        }
     }
 }
 

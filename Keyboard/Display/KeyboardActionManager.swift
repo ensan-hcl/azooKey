@@ -20,17 +20,17 @@ import SwiftUtils
     private unowned var delegate: KeyboardViewController!
 
     // 即時変数
-    private var timers: [(type: LongpressActionType, timer: Timer)] = []
+    private var tasks: [(type: LongpressActionType, task: Task<Void, Error>)] = []
     private var tempTextData: (left: String, center: String, right: String)?
 
     // キーボードを閉じる際に呼び出す
     // inputManagerはキーボードを閉じる際にある種の操作を行う
     func closeKeyboard() {
         self.inputManager.closeKeyboard()
-        for (_, timer) in self.timers {
-            timer.invalidate()
+        for (_, task) in self.tasks {
+            task.cancel()
         }
-        self.timers = []
+        self.tasks = []
         self.tempTextData = nil
     }
 
@@ -311,37 +311,37 @@ import SwiftUtils
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
     override func reserveLongPressAction(_ action: LongpressActionType, variableStates: VariableStates) {
-        if timers.contains(where: {$0.type == action}) {
+        if tasks.contains(where: {$0.type == action}) {
             return
         }
-        let startTime = Date()
-
-        let startTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
-            let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
-            if span > 0.4 {
-                action.repeat.first?.feedback(variableStates: variableStates, extension: AzooKeyKeyboardViewExtension.self)
-                self?.registerActions(action.repeat, variableStates: variableStates)
-            }
-        })
-        self.timers.append((type: action, timer: startTimer))
-
-        let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
+        let startTask = Task {
+            try await Task.sleep(nanoseconds: 0_400_000_000)
             action.start.first?.feedback(variableStates: variableStates, extension: AzooKeyKeyboardViewExtension.self)
-            self?.registerActions(action.start, variableStates: variableStates)
-        })
-        self.timers.append((type: action, timer: repeatTimer))
+            self.registerActions(action.start, variableStates: variableStates)
+        }
+        self.tasks.append((type: action, task: startTask))
+        
+        let repeatTask = Task {
+            try await Task.sleep(nanoseconds: 0_400_000_000)
+            while !Task.isCancelled {
+                action.repeat.first?.feedback(variableStates: variableStates, extension: AzooKeyKeyboardViewExtension.self)
+                self.registerActions(action.repeat, variableStates: variableStates)
+                try await Task.sleep(nanoseconds: 0_100_000_000)
+            }
+        }
+        self.tasks.append((type: action, task: repeatTask))
     }
 
     /// 長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。
     /// - Parameters:
     ///   - action: どの動作を終了するか判定するために用いる。
     override func registerLongPressActionEnd(_ action: LongpressActionType) {
-        timers = timers.compactMap {timer in
-            if timer.type == action {
-                timer.timer.invalidate()
+        tasks = tasks.compactMap {task in
+            if task.type == action {
+                task.task.cancel()
                 return nil
             }
-            return timer
+            return task
         }
     }
 

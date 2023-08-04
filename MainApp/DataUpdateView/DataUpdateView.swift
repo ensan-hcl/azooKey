@@ -9,6 +9,7 @@
 import AzooKeyUtils
 import KeyboardViews
 import SwiftUI
+import func SwiftUtils.debug
 
 struct DataUpdateView: View {
 
@@ -44,23 +45,14 @@ struct DataUpdateView: View {
                 }
             } else {
                 ProgressView("データの更新処理中です")
-                    .onAppear {
-                        let dispatchGroup = DispatchGroup()
-                        let dispatchQueue = DispatchQueue(label: "queue", attributes: .concurrent)
-
-                        // 非同期処理を実行
-                        dispatchGroup.enter()
-                        dispatchQueue.async(group: dispatchGroup) {
+                    .task {
+                        do {
                             process()
-                        }
-                        dispatchGroup.leave()
-
-                        // 全ての非同期処理完了後にメインスレッドで処理
-                        // 更新処理が短くても何が起こったかわかりやすいよう、1秒間余分に待つ
-                        dispatchGroup.notify(queue: .main) {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                done = true
-                            }
+                            // 更新処理が短くても何が起こったかわかりやすいよう、1秒間余分に待つ
+                            try await Task.sleep(nanoseconds: 1_000_000_000)
+                            self.done = true
+                        } catch {
+                            debug(error)
                         }
                     }
             }

@@ -255,7 +255,7 @@ struct ThemeEditView: CancelableEditor {
         case .themeShareView:
             ThemeShareView(theme: self.theme, shareImage: shareImage) {
                 self.dismiss()
-                RequestReviewManager.shared.shouldTryRequestReview = true
+                appStates.requestReviewManager.shouldTryRequestReview = true
             }
             .navigationBarTitle(Text("完了"), displayMode: .inline)
             .navigationBarItems(leading: EmptyView(), trailing: EmptyView())

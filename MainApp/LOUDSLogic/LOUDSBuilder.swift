@@ -14,30 +14,26 @@ import KeyboardViews
 import SwiftUtils
 
 extension LOUDSBuilder {
-    static var char2UInt8: [Character: UInt8] = [:]
-
-    static func loadCharID() {
+    static func loadCharID() -> [Character: UInt8] {
         do {
             let chidURL = Bundle.main.bundleURL.appendingPathComponent("charID.chid", isDirectory: false)
             let string = try String(contentsOf: chidURL, encoding: .utf8)
-            Self.char2UInt8 = [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
+            return [Character: UInt8].init(uniqueKeysWithValues: string.enumerated().map {($0.element, UInt8($0.offset))})
         } catch {
             debug("ファイルが存在しません: \(error)")
+            return [:]
         }
-    }
-
-    static func getID(from char: Character) -> UInt8? {
-        Self.char2UInt8[char]
     }
 }
 
 struct LOUDSBuilder {
     let txtFileSplit: Int
     let templateData: [TemplateData]
+    let char2UInt8: [Character: UInt8]
 
     init(txtFileSplit: Int) {
         self.txtFileSplit = txtFileSplit
-        Self.loadCharID()
+        self.char2UInt8 = Self.loadCharID()
         self.templateData = TemplateData.load()
     }
 
@@ -258,7 +254,7 @@ struct LOUDSBuilder {
         }
 
         do {
-            let uint8s = nodes2Characters.map {Self.getID(from: $0) ?? 0}    // エラー回避。0は"\0"に対応し、呼ばれることはない。
+            let uint8s = nodes2Characters.map {self.char2UInt8[$0] ?? 0}    // エラー回避。0は"\0"に対応し、呼ばれることはない。
             let binary = Data(bytes: uint8s, count: uint8s.count)
             try binary.write(to: loudsCharsFileURL)
         } catch {
