@@ -49,7 +49,7 @@ struct ContentView: View {
             })
             .onChange(of: selection) {value in
                 if value == .customize {
-                    if ContainerInternalSetting.shared.walkthroughState.shouldDisplay(identifier: .extensions) {
+                    if appStates.internalSettingManager.walkthroughState.shouldDisplay(identifier: .extensions) {
                         self.showWalkthrough = true
                     }
                 }

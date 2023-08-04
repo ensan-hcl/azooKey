@@ -80,23 +80,19 @@ struct AdditionalDictBlockManager: OnOffSettingSet {
 }
 
 final class AdditionalDictManager: ObservableObject {
-    @Published var systemDict: AdditionalSystemDictManager {
+    @MainActor @Published var systemDict: AdditionalSystemDictManager {
         didSet {
-            Task.detached {
-                await self.userDictUpdate()
-            }
+            self.userDictUpdate()
         }
     }
 
-    @Published var blockTargets: AdditionalDictBlockManager {
+    @MainActor @Published var blockTargets: AdditionalDictBlockManager {
         didSet {
-            Task.detached {
-                await self.userDictUpdate()
-            }
+            self.userDictUpdate()
         }
     }
 
-    init() {
+    @MainActor init() {
         let systemDictList = UserDefaults.standard.array(forKey: "additional_dict") as? [String]
         self.systemDict = .init(dataList: systemDictList ?? [])
 
@@ -163,13 +159,14 @@ struct AdditionalDictManageViewMain: View {
 }
 
 struct AdditionalDictManageView: View {
+    @EnvironmentObject private var appStates: MainAppStates
     var body: some View {
         Form {
             AdditionalDictManageViewMain()
         }
         .navigationBarTitle(Text("絵文字と顔文字"), displayMode: .inline)
         .onDisappear {
-            RequestReviewManager.shared.shouldTryRequestReview = true
+            appStates.requestReviewManager.shouldTryRequestReview = true
         }
     }
 }

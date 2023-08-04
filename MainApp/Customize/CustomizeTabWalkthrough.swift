@@ -18,6 +18,7 @@ private struct Item: Identifiable {
 
 struct CustomizeTabWalkthroughView: View {
     @Binding private var isShowing: Bool
+    @EnvironmentObject private var appStates: MainAppStates
 
     init(isShowing: Binding<Bool>) {
         self._isShowing = isShowing
@@ -43,7 +44,7 @@ struct CustomizeTabWalkthroughView: View {
     ]
 
     var body: some View {
-        if ContainerInternalSetting.shared.walkthroughState.shouldDisplay(identifier: .extensions) {
+        if appStates.internalSettingManager.walkthroughState.shouldDisplay(identifier: .extensions) {
             GeometryReader {geometry in
                 ScrollView {
                     VStack(spacing: 20) {
@@ -92,7 +93,7 @@ struct CustomizeTabWalkthroughView: View {
             .onChange(of: isShowing) {value in
                 // コードの明確化のためにfalseと比較している
                 if value == false {
-                    ContainerInternalSetting.shared.update(\.walkthroughState) {value in
+                    appStates.internalSettingManager.update(\.walkthroughState) {value in
                         value.done(identifier: .extensions)
                     }
                 }

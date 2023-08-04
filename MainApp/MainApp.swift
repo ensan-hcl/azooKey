@@ -16,6 +16,8 @@ final class MainAppStates: ObservableObject {
     @Published var japaneseLayout: LanguageLayout = .flick
     @Published var englishLayout: LanguageLayout = .flick
     @Published var custardManager: CustardManager
+    @Published var internalSettingManager = ContainerInternalSetting()
+    @Published var requestReviewManager = RequestReviewManager()
 
     @MainActor init() {
         let keyboardActivation = SharedStore.checkKeyboardActivation()

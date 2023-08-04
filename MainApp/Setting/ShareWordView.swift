@@ -41,7 +41,7 @@ struct ShareWordView: View {
             }
             Section(footer: Text("この単語をazooKeyの本体辞書に追加することを申請します。\n個人情報を含む単語は申請しないでください。")) {
                 Button("申請する") {
-                    Task.detached {
+                    Task {
                         self.sending = true
                         _ = await SharedStore.sendSharedWord(word: word, ruby: ruby.toKatakana(), options: [])
                         self.sending = false

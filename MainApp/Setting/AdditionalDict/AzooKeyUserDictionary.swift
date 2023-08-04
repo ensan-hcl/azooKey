@@ -44,6 +44,7 @@ private final class UserDictManagerVariables: ObservableObject {
 
 struct AzooKeyUserDictionaryView: View {
     @ObservedObject private var variables: UserDictManagerVariables = UserDictManagerVariables()
+    @EnvironmentObject private var appStates: MainAppStates
 
     var body: some View {
         Group {
@@ -57,7 +58,7 @@ struct AzooKeyUserDictionaryView: View {
             }
         }
         .onDisappear {
-            RequestReviewManager.shared.shouldTryRequestReview = true
+            appStates.requestReviewManager.shouldTryRequestReview = true
         }
     }
 }
