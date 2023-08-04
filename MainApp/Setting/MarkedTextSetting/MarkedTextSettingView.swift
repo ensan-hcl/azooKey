@@ -49,13 +49,10 @@ struct MarkedTextSettingView: View {
         .onAppear {
             setting.reload()
         }
-        .alert(isPresented: $isOn) {
-            Alert(
-                title: Text(SettingKey.explanation),
-                dismissButton: .default(Text("OK")) {
-                    isOn = false
-                }
-            )
+        .alert(SettingKey.explanation, isPresented: $isOn) {
+            Button("OK") {
+                isOn = false
+            }
         }
     }
 }

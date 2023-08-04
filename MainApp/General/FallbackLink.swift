@@ -47,15 +47,13 @@ struct FallbackLink: View {
         } label: {
             Label(title, systemImage: icon.systemImage)
         }
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("ブラウザを開けませんでした"),
-                message: Text("URLをコピーします。"),
-                dismissButton: .default(Text("OK")) {
-                    UIPasteboard.general.string = url.absoluteString
-                    self.showAlert = false
-                }
-            )
+        .alert("ブラウザを開けませんでした", isPresented: $showAlert) {
+            Button("OK") {
+                UIPasteboard.general.string = url.absoluteString
+                self.showAlert = false
+            }
+        } message: {
+            Text("URLをコピーします。")
         }
     }
 }

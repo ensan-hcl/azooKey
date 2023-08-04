@@ -50,8 +50,10 @@ struct FlickSensitivitySettingView: View {
                 setting.value = 1
             }
         }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK")))
+        .alert(SettingKey.explanation, isPresented: $showAlert) {
+            Button("OK") {
+                showAlert = false
+            }
         }
         if enabled {
             VStack {
