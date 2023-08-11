@@ -36,11 +36,71 @@ enum QwertyKeyPressState {
 
 }
 
+struct QwertyKeyDoublePressState {
+    enum State {
+        case inactive
+        case firstPressStarted
+        case firstPressCompleted
+        case secondPressStarted
+        case secondPressCompleted
+    }
+    
+    private var state: State = .inactive
+    private(set) var updateDate: Date = Date()
+    
+    var secondPressCompleted: Bool {
+        self.state == .secondPressCompleted
+    }
+    mutating func update(touchDownDate: Date) {
+        switch self.state {
+        case .inactive, .firstPressStarted, .secondPressStarted:
+            self.state = .firstPressStarted
+        case .firstPressCompleted:
+            // secondPressの開始までは最大0.1秒
+            if touchDownDate.timeIntervalSince(updateDate) > 0.1 {
+                self.state = .firstPressStarted
+            } else {
+                self.state = .secondPressStarted
+            }
+        case .secondPressCompleted:
+            self.state = .firstPressStarted
+        }
+        self.updateDate = touchDownDate
+    }
+    mutating func update(touchUpDate: Date) {
+        switch self.state {
+        case  .inactive, .firstPressCompleted, .secondPressCompleted:
+            self.state = .inactive
+        case .firstPressStarted:
+            // firstPressの終了までは最大0.2秒
+            if touchUpDate.timeIntervalSince(updateDate) > 0.2 {
+                self.state = .inactive
+            } else {
+                self.state = .firstPressCompleted
+            }
+        case .secondPressStarted:
+            // secondPressは最大0.2秒
+            if touchUpDate.timeIntervalSince(updateDate) > 0.2 {
+                self.state = .inactive
+            } else {
+                self.state = .secondPressCompleted
+            }
+        }
+        self.updateDate = touchUpDate
+    }
+    
+    mutating func reset() {
+        self.state = .inactive
+        self.updateDate = Date()
+    }
+}
+
 struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let model: any QwertyKeyModelProtocol
     @EnvironmentObject private var variableStates: VariableStates
 
     @State private var pressState: QwertyKeyPressState = .unpressed
+    @State private var doublePressState = QwertyKeyDoublePressState()
     @State private var suggest = false
 
     @Environment(Extension.Theme.self) private var theme
@@ -60,8 +120,10 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                 self.suggest = true
                 switch self.pressState {
                 case .unpressed:
+                    // 押し始め
                     self.model.feedback(variableStates: variableStates)
                     self.pressState = .started(Date())
+                    self.doublePressState.update(touchDownDate: Date())
                     self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                         // すでに処理が終了済みでなければ
@@ -88,16 +150,25 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
             .onEnded({_ in
                 self.action.registerLongPressActionEnd(self.model.longPressActions)
                 self.suggest = false
+                // 更新する
+                self.doublePressState.update(touchUpDate: Date())
                 // 状態に基づいて、必要な変更を加える
                 switch self.pressState {
                 case .unpressed:
                     break
                 case let .started(date):
-                    // もし0.4秒未満押していたら
-                    if Date().timeIntervalSince(date) < 0.4 {
+                    // ダブルプレスアクションが存在し、かつダブルプレス判定が成立していたらこちらを優先的に実行
+                    let doublePressActions = self.model.doublePressActions(variableStates: variableStates)
+                    if !doublePressActions.isEmpty, doublePressState.secondPressCompleted {
+                        self.action.registerActions(doublePressActions, variableStates: variableStates)
+                        // 実行したので更新する
+                        self.doublePressState.reset()
+                    } else if Date().timeIntervalSince(date) < 0.4 {
+                        // もし0.4秒未満押していたら
                         self.action.registerActions(self.model.pressActions(variableStates: variableStates), variableStates: variableStates)
                     }
                 case .longPressed:
+                    // longPressの場合はlongPress判定が成立した時点で発火済みなので何もする必要がない
                     break
                 case let .variations(selection):
                     self.model.variationsModel.performSelected(selection: selection, actionManager: action, variableStates: variableStates)
