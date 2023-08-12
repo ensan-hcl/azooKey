@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import func SwiftUtils.debug
 import SwiftUIUtils
 
 enum QwertyKeyPressState {
@@ -103,6 +104,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     @State private var doublePressState = QwertyKeyDoublePressState()
     @State private var suggest = false
 
+    @State private var longPressStartTask: Task<(), Error>? = nil
+    
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
     private let tabDesign: TabDependentDesign
@@ -125,9 +128,15 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                     self.pressState = .started(Date())
                     self.doublePressState.update(touchDownDate: Date())
                     self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    self.longPressStartTask = Task {
+                        do {
+                            // 0.4秒待つ
+                            try await Task.sleep(nanoseconds: 0_400_000_000)
+                        } catch {
+                            debug(error)
+                        }
                         // すでに処理が終了済みでなければ
-                        if self.pressState.isActive {
+                        if !Task.isCancelled && self.pressState.isActive {
                             // 長押し状態に設定する。
                             if self.model.variationsModel.variations.isEmpty {
                                 self.pressState = .longPressed
@@ -148,10 +157,13 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
             })
             // タップの終了時
             .onEnded({_ in
+                // 更新する
+                let endDate = Date()
+                self.doublePressState.update(touchUpDate: endDate)
                 self.action.registerLongPressActionEnd(self.model.longPressActions)
                 self.suggest = false
-                // 更新する
-                self.doublePressState.update(touchUpDate: Date())
+                self.longPressStartTask?.cancel()
+                self.longPressStartTask = nil
                 // 状態に基づいて、必要な変更を加える
                 switch self.pressState {
                 case .unpressed:
@@ -163,7 +175,7 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                         self.action.registerActions(doublePressActions, variableStates: variableStates)
                         // 実行したので更新する
                         self.doublePressState.reset()
-                    } else if Date().timeIntervalSince(date) < 0.4 {
+                    } else if endDate.timeIntervalSince(date) < 0.4 {
                         // もし0.4秒未満押していたら
                         self.action.registerActions(self.model.pressActions(variableStates: variableStates), variableStates: variableStates)
                     }

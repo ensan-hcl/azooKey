@@ -103,7 +103,7 @@ extension QwertyKeyModelProtocol {
     func backGroundColorWhenPressed(theme: ThemeData<some ApplicationSpecificTheme>) -> Color {
         theme.pushedKeyFillColor.color
     }
-    func doublePressActions(variableStates: VariableStates) -> [ActionType] {
+    func doublePressActions(variableStates _: VariableStates) -> [ActionType] {
         []
     }
 }
