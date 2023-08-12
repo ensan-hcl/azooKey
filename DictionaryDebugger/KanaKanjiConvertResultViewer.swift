@@ -13,7 +13,7 @@ import SwiftUIUtils
 struct KanaKanjiConvertResultViewer: View {
     private let converter: KanaKanjiConverter
 
-    init (dicdataStore: DicdataStore) {
+    @MainActor init (dicdataStore: DicdataStore) {
         self.converter = KanaKanjiConverter(dicdataStore: dicdataStore)
     }
 
@@ -21,7 +21,7 @@ struct KanaKanjiConvertResultViewer: View {
     @State private var n_best = 10
     @State private var prefix = 10
 
-    private func requestConversion() -> [Candidate] {
+    @MainActor private func requestConversion() -> [Candidate] {
         var c = ComposingText()
         c.insertAtCursorPosition(query, inputStyle: .roman2kana)
         var options = ConvertRequestOptions.appDefault
