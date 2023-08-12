@@ -96,32 +96,41 @@ import SwiftUtils
         variableStates.barState = .none
     }
 
+    private func shiftStateOff(variableStates: VariableStates) {
+        variableStates.boolStates[VariableStates.BoolStates.isShiftedKey] = false
+    }
+
     private func doAction(_ action: ActionType, requireSetResult: Bool = true, variableStates: VariableStates) {
         debug("doAction", action)
         var undoAction: ActionType?
         switch action {
         case let .input(text, simpleInsert):
             self.showResultView(variableStates: variableStates)
-            if variableStates.boolStates.isCapsLocked && [.en_US, .el_GR].contains(variableStates.keyboardLanguage) {
+            if (variableStates.boolStates.isCapsLocked || variableStates.boolStates.isShifted) && [.en_US, .el_GR].contains(variableStates.keyboardLanguage) {
                 let input = text.uppercased()
                 self.inputManager.input(text: input, requireSetResult: requireSetResult, simpleInsert: simpleInsert, inputStyle: variableStates.inputStyle)
             } else {
                 self.inputManager.input(text: text, requireSetResult: requireSetResult, simpleInsert: simpleInsert, inputStyle: variableStates.inputStyle)
             }
+            self.shiftStateOff(variableStates: variableStates)
         case let .insertMainDisplay(text):
             self.inputManager.insertMainDisplayText(text)
+            self.shiftStateOff(variableStates: variableStates)
         case let .delete(count):
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)
-
         case .smoothDelete:
             KeyboardFeedback<AzooKeyKeyboardViewExtension>.smoothDelete()
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             let deletedText = self.inputManager.smoothDelete(requireSetResult: requireSetResult)
             if !deletedText.isEmpty {
                 undoAction = .input(deletedText, simplyInsert: true)
             }
         case let .smartDelete(item):
+            self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             let deletedText: String
             switch item.direction {
             case .forward:
@@ -133,14 +142,17 @@ import SwiftUtils
                 undoAction = .input(deletedText, simplyInsert: true)
             }
         case .paste:
+            // ペーストではシフトを解除しない
             if SemiStaticStates.shared.hasFullAccess {
                 self.inputManager.paste()
             }
 
         case .deselectAndUseAsInputting:
+            self.shiftStateOff(variableStates: variableStates)
             self.inputManager.edit()
 
         case let .moveCursor(count):
+            // カーソル移動ではシフトを解除しない
             self.inputManager.moveCursor(count: count, requireSetResult: requireSetResult)
 
         case let .smartMoveCursor(item):
@@ -169,18 +181,22 @@ import SwiftUtils
 
         case .enter:
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             let actions = self.inputManager.enter()
             self.registerActions(actions, variableStates: variableStates)
 
         case .changeCharacterType:
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             self.inputManager.changeCharacter(requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
 
         case let .replaceLastCharacters(table):
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
 
         case let .moveTab(type):
+            // タブ移動ではシフトを解除しない
             variableStates.setTab(type)
 
         case let .setUpsideComponent(type):
