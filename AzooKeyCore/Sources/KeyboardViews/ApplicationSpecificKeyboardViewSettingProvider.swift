@@ -31,6 +31,7 @@ import Foundation
     static var displayTabBarButton: Bool { get }
     static var hideResetButtonInOneHandedMode: Bool { get }
     static var useBetaMoveCursorBar: Bool { get }
+    static var useShiftKey: Bool { get }
 
     static var canResetLearningForCandidate: Bool { get }
 

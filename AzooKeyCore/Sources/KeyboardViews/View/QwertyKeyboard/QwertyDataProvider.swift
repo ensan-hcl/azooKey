@@ -526,18 +526,30 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
             QwertyKeyModel<Extension>(labelType: .text("o"), pressActions: [.input("o")]),
             QwertyKeyModel<Extension>(labelType: .text("p"), pressActions: [.input("p")])
         ],
-        [
-            QwertyKeyModel<Extension>(labelType: .text("a"), pressActions: [.input("a")]),
-            QwertyKeyModel<Extension>(labelType: .text("s"), pressActions: [.input("s")]),
-            QwertyKeyModel<Extension>(labelType: .text("d"), pressActions: [.input("d")]),
-            QwertyKeyModel<Extension>(labelType: .text("f"), pressActions: [.input("f")]),
-            QwertyKeyModel<Extension>(labelType: .text("g"), pressActions: [.input("g")]),
-            QwertyKeyModel<Extension>(labelType: .text("h"), pressActions: [.input("h")]),
-            QwertyKeyModel<Extension>(labelType: .text("j"), pressActions: [.input("j")]),
-            QwertyKeyModel<Extension>(labelType: .text("k"), pressActions: [.input("k")]),
-            QwertyKeyModel<Extension>(labelType: .text("l"), pressActions: [.input("l")]),
-            QwertyAaKeyModel<Extension>.shared
-        ],
+        Extension.SettingProvider.useShiftKey ?
+            [
+                QwertyShiftKeyModel<Extension>.shared,
+                QwertyKeyModel<Extension>(labelType: .text("a"), pressActions: [.input("a")]),
+                QwertyKeyModel<Extension>(labelType: .text("s"), pressActions: [.input("s")]),
+                QwertyKeyModel<Extension>(labelType: .text("d"), pressActions: [.input("d")]),
+                QwertyKeyModel<Extension>(labelType: .text("f"), pressActions: [.input("f")]),
+                QwertyKeyModel<Extension>(labelType: .text("g"), pressActions: [.input("g")]),
+                QwertyKeyModel<Extension>(labelType: .text("h"), pressActions: [.input("h")]),
+                QwertyKeyModel<Extension>(labelType: .text("j"), pressActions: [.input("j")]),
+                QwertyKeyModel<Extension>(labelType: .text("k"), pressActions: [.input("k")]),
+                QwertyKeyModel<Extension>(labelType: .text("l"), pressActions: [.input("l")]),
+            ] : [
+                QwertyKeyModel<Extension>(labelType: .text("a"), pressActions: [.input("a")]),
+                QwertyKeyModel<Extension>(labelType: .text("s"), pressActions: [.input("s")]),
+                QwertyKeyModel<Extension>(labelType: .text("d"), pressActions: [.input("d")]),
+                QwertyKeyModel<Extension>(labelType: .text("f"), pressActions: [.input("f")]),
+                QwertyKeyModel<Extension>(labelType: .text("g"), pressActions: [.input("g")]),
+                QwertyKeyModel<Extension>(labelType: .text("h"), pressActions: [.input("h")]),
+                QwertyKeyModel<Extension>(labelType: .text("j"), pressActions: [.input("j")]),
+                QwertyKeyModel<Extension>(labelType: .text("k"), pressActions: [.input("k")]),
+                QwertyKeyModel<Extension>(labelType: .text("l"), pressActions: [.input("l")]),
+                QwertyAaKeyModel<Extension>.shared,
+            ],
         [
             Self.tabKeys(rowInfo: (7, 2, 0, 0)).languageKey,
             QwertyKeyModel<Extension>(labelType: .text("z"), pressActions: [.input("z")]),

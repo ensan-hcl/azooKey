@@ -45,8 +45,10 @@ public final class VariableStates: ObservableObject {
         var isTextMagnifying = false
         var hasUpsideComponent = false
         public var isCapsLocked = false
+        public var isShifted = false
 
         static let isCapsLockedKey = "isCapsLocked"
+        public static let isShiftedKey = "isShifted"
         static let hasUpsideComponentKey = "is_screen_expanded"
         static let hasFullAccessKey = "has_full_access"
         // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
@@ -80,6 +82,8 @@ public final class VariableStates: ObservableObject {
                     return SemiStaticStates.shared.hasFullAccess
                 } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
+                } else if key == Self.isShiftedKey {
+                    return self.isShifted
                 } else if key == Self.hasUpsideComponentKey {
                     return self.hasUpsideComponent
                 }
@@ -92,7 +96,11 @@ public final class VariableStates: ObservableObject {
                         return
                     } else if key == "isTextMagnifying" {
                         self.isTextMagnifying = newValue
+                    } else if key == Self.isShiftedKey {
+                        self.isCapsLocked = self.isCapsLocked && !newValue
+                        self.isShifted = newValue
                     } else if key == Self.isCapsLockedKey {
+                        self.isShifted = self.isShifted && !newValue
                         self.isCapsLocked = newValue
                     } else {
                         custardStates[key] = newValue
