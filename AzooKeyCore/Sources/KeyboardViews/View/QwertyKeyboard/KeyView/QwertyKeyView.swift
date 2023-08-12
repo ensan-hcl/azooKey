@@ -235,6 +235,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             .size(CGSize(width: size.width + tabDesign.horizontalSpacing, height: size.height + tabDesign.verticalSpacing))
                     )
                     .gesture(gesture)
+                    .compositingGroup()
+                    .shadow(color: theme.keyShadow?.color.color ?? .clear, radius: theme.keyShadow?.radius ?? 0, x: theme.keyShadow?.x ?? 0, y: theme.keyShadow?.y ?? 0)
                     .overlay(label(width: size.width, color: nil))
             }
             .overlay(Group {

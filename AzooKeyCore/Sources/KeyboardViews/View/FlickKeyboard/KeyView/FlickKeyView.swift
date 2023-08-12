@@ -226,6 +226,8 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
             .strokeAndFill(fillContent: keyFillColor, strokeContent: keyBorderColor, lineWidth: theme.borderWidth)
             .frame(width: keySize.width, height: keySize.height)
             .gesture(gesture)
+            .compositingGroup()
+            .shadow(color: theme.keyShadow?.color.color ?? .clear, radius: theme.keyShadow?.radius ?? 0, x: theme.keyShadow?.x ?? 0, y: theme.keyShadow?.y ?? 0)
             .overlay(self.label(width: keySize.width))
     }
 
