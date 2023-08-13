@@ -245,7 +245,7 @@ import XCTest
             ("よのなかにひつようなのはてすうりょうぜろのでんしけっさい", ["世の中に必要なのは手数料ゼロの電子決済"]),
             ("こんしゅうはとてもそーしゃる", ["今週はとてもソーシャル"]),
             ("でかすぎるそーすこーど", ["デカすぎるソースコード"]),
-            ("らちがあかないんだよね", ["埒が開かないんだよね"]),
+            ("らちがあかないんだよね", ["埒が明かないんだよね"]),
             ("まいなんばーかーどでじゅうみんひょうだせてべんり", ["マイナンバーカードで住民票出せて便利"]),
             ("でじたるかなんですか", ["デジタル化なんですか"]),
             ("じぶんのひとつしたのせだいがゆうしゅうすぎる", ["自分の一つ下の世代が優秀すぎる"]),
@@ -268,10 +268,61 @@ import XCTest
                 score += 1
             } else if results.mainResults.count > 1 && expect.contains(results.mainResults[1].text) {
                 score += 0.5
+            } else {
+                print("\(#function) Failure: input \(input), expect \(expect.joined(separator: " | ")), result: \(results.mainResults.map(\.text).prefix(5).joined(separator: ", "))")
             }
         }
         let accuracy = score / Double(cases.count)
-        print("testAccuracy Result: accuracy \(accuracy), score \(score), count \(cases.count)")
+        print("\(#function) Result: accuracy \(accuracy), score \(score), count \(cases.count)")
+        XCTAssertGreaterThan(accuracy, 0.7) // 0.7 < acuracy
+    }
+
+    // 変換結果が比較的一意なテストケースを無数に持ち、一定の割合を正解することを要求する
+    // 辞書を更新した結果性能が悪化したら気付ける
+    // 口語表現を中心にテストする
+    func testVerbalAccuracy() throws {
+        let cases: [(input: String, expect: [String])] = [
+            ("うわああああ、まじか", ["うわああああ、マジか", "うわああああ、まじか"]),
+            ("は？", ["は？"]),
+            ("おまえなんなん", ["お前なんなん"]),
+            ("めっちゃくさ", ["めっちゃ草"]),
+            ("はやってんだなぁやっぱり", ["流行ってんだなぁやっぱり"]),
+            ("そっちかぁ", ["そっちかぁ"]),
+            ("かみすぎます…！", ["神すぎます…！"]),
+            ("うおー、りかいした", ["うおー、理解した"]),
+            ("あ、なるほど", ["あ、なるほど"]),
+            ("あらま", ["あらま"]),
+            ("さすがやな…", ["流石やな…"]),
+            ("のれないんでしょうね。", ["乗れないんでしょうね。"]),
+            ("おつかれさまですわら", ["お疲れ様です笑", "おつかれさまです笑"]),
+            ("よううれたのぉわらわら", ["よう売れたのぉ笑笑"]),
+            ("わーそれはもう", ["わーそれはもう"]),
+            ("よねんまえやで？？", ["4年前やで？？", "四年前やで？？"]),
+            ("おうしょうもいいなぁ", ["王将もいいなぁ", "王将も良いなぁ"]),
+            ("それなすぎる", ["それなすぎる"]),
+            ("じじつなんでしゃーないです", ["事実なんでしゃーないです"]),
+            ("がんばりまーーーす！", ["がんばりまーーーす！", "頑張りまーーーす！"]),
+            ("うるさいよな", ["うるさいよな"]),
+            ("ほんとどゆことわらわら", ["ほんとどゆこと笑笑"])
+        ]
+
+        var score: Double = 0
+        for (input, expect) in cases {
+            let converter = KanaKanjiConverter()
+            var c = ComposingText()
+            c.insertAtCursorPosition(input, inputStyle: .direct)
+            let results = converter.requestCandidates(c, options: requestOptions())
+
+            if expect.contains(results.mainResults[0].text) {
+                score += 1
+            } else if results.mainResults.count > 1 && expect.contains(results.mainResults[1].text) {
+                score += 0.5
+            } else {
+                print("\(#function) Failure: input \(input), expect \(expect.joined(separator: " | ")), result: \(results.mainResults.map(\.text).prefix(5).joined(separator: ", "))")
+            }
+        }
+        let accuracy = score / Double(cases.count)
+        print("\(#function) Result: accuracy \(accuracy), score \(score), count \(cases.count)")
         XCTAssertGreaterThan(accuracy, 0.7) // 0.7 < acuracy
     }
 
@@ -322,6 +373,15 @@ import XCTest
 
             ("じこ、ちめい、しぼう", "事故、致命、死亡"),
             ("ちず、ちめい、ちり", "地図、地名、地理"),
+            
+            ("なんべい、ちり、りょこう", "南米、チリ、旅行"),
+            ("よごれ、ちり、そうじ", "汚れ、塵、掃除"),
+            ("ちがく、ちり、べんきょう", "地学、地理、勉強"),
+            
+            ("ごおん、ほうこう、ばくふ", "御恩、奉公、幕府"),
+            ("なんせい、ほうこう、いどう", "南西、方向、移動"),
+            ("こうすい、ほうこう、におい", "香水、芳香、匂い"),
+            ("けもの、ほうこう、おたけび", "獣、咆哮、雄叫び"),
 
             ("つみ、りょうしん、かしゃく", "罪、良心、呵責"),
             ("ちち、りょうしん、はは", "父、両親、母"),
@@ -362,6 +422,21 @@ import XCTest
 
             ("もしゃ、せいぶつ、すけっち", "模写、静物、スケッチ"),
             ("どうぶつ、せいぶつ、しよくぶつ", "動物、生物、植物"),
+
+            ("かんのうてき、せいてき、えろ", "官能的、性的、エロ"),
+            ("どうてき、せいてき、すたてぃっく", "動的、静的、スタティック"),
+            ("せいじか、せいてき、さくりゃく", "政治家、政敵、策略"),
+            
+            ("えくせる、ちかん、けつごう", "Excel、置換、結合"),
+            ("でんしゃ、ちかん、たいほ", "電車、痴漢、逮捕"),
+            
+            ("ふぁんたじー、ようせい、どらごん", "ファンタジー、妖精、ドラゴン"),
+            ("ころな、ようせい、いんせい", "コロナ、陽性、陰性"),
+            ("じしゅく、ようせい、むし", "自粛、要請、無視"),
+            ("いじん、ようせい、わかさ", "偉人、夭逝、若さ"),
+            
+            ("いじめ、むし、ほうち", "いじめ、無視、放置"),
+            ("こんちゅう、むし、ようちゅう", "昆虫、虫、幼虫"),
 
             ("けんぼう、かいせい、ろんぎ", "憲法、改正、論議"),
             ("みょうじ、かいせい、かいめい", "苗字、改姓、改名"),
@@ -543,10 +618,12 @@ import XCTest
                 score += 1
             } else if results.mainResults.count > 1 && results.mainResults[1].text == expect {
                 score += 0.5
+            } else {
+                print("\(#function) Failure: input \(input), expect \(expect), result: \(results.mainResults.map(\.text).prefix(5).joined(separator: ", "))")
             }
         }
         let accuracy = score / Double(cases.count)
-        print("testMeaningBasedConversionAccuracy Result: accuracy \(accuracy), score \(score), count \(cases.count)")
+        print("\(#function) Result: accuracy \(accuracy), score \(score), count \(cases.count)")
         XCTAssertGreaterThan(accuracy, 0.7) // 0.7 < accuracy
     }
 }
