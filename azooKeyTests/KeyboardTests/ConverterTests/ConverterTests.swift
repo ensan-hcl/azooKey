@@ -6,6 +6,7 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+import Foundation
 import KanaKanjiConverterModule
 import XCTest
 
@@ -373,11 +374,11 @@ import XCTest
 
             ("じこ、ちめい、しぼう", "事故、致命、死亡"),
             ("ちず、ちめい、ちり", "地図、地名、地理"),
-            
+
             ("なんべい、ちり、りょこう", "南米、チリ、旅行"),
             ("よごれ、ちり、そうじ", "汚れ、塵、掃除"),
             ("ちがく、ちり、べんきょう", "地学、地理、勉強"),
-            
+
             ("ごおん、ほうこう、ばくふ", "御恩、奉公、幕府"),
             ("なんせい、ほうこう、いどう", "南西、方向、移動"),
             ("こうすい、ほうこう、におい", "香水、芳香、匂い"),
@@ -426,15 +427,15 @@ import XCTest
             ("かんのうてき、せいてき、えろ", "官能的、性的、エロ"),
             ("どうてき、せいてき、すたてぃっく", "動的、静的、スタティック"),
             ("せいじか、せいてき、さくりゃく", "政治家、政敵、策略"),
-            
+
             ("えくせる、ちかん、けつごう", "Excel、置換、結合"),
             ("でんしゃ、ちかん、たいほ", "電車、痴漢、逮捕"),
-            
+
             ("ふぁんたじー、ようせい、どらごん", "ファンタジー、妖精、ドラゴン"),
             ("ころな、ようせい、いんせい", "コロナ、陽性、陰性"),
             ("じしゅく、ようせい、むし", "自粛、要請、無視"),
             ("いじん、ようせい、わかさ", "偉人、夭逝、若さ"),
-            
+
             ("いじめ、むし、ほうち", "いじめ、無視、放置"),
             ("こんちゅう、むし、ようちゅう", "昆虫、虫、幼虫"),
 
@@ -625,5 +626,129 @@ import XCTest
         let accuracy = score / Double(cases.count)
         print("\(#function) Result: accuracy \(accuracy), score \(score), count \(cases.count)")
         XCTAssertGreaterThan(accuracy, 0.7) // 0.7 < accuracy
+    }
+
+    func testMozcEvaluationData() async throws {
+        // ダウンロードするURL
+        let urlString = "https://raw.githubusercontent.com/google/mozc/master/src/data/dictionary_oss/evaluation.tsv"
+        let url = URL(string: urlString)!
+        // URLを元にURLオブジェクトを生成
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let content = String(data: data, encoding: .utf8)!
+
+        var mozcScore: Double = 0
+        var azooKeyScore: Double = 0
+        var cases = 0
+        for line in content.split(separator: "\n") {
+            if line.hasPrefix("#") {
+                continue
+            }
+            let items = line.split(separator: "\t", omittingEmptySubsequences: false)
+            if items.count != 6 {
+                continue
+            }
+            // 必要な情報を取り出す
+            let mozcStatus = items[0] == "OK:"
+            let input = String(items[1])
+            let mozcOutput = String(items[2])
+            let commandString = items[3]
+            let command: MozcCommand
+            if commandString == "Conversion Match" {
+                command = .conversionMatch
+            } else if commandString == "Conversion Not Match" {
+                command = .conversionNotMatch
+            } else if commandString == "Suggestion Not Expected" {
+                command = .suggestionNotExpected
+            } else if commandString.hasPrefix("Conversion Expected") {
+                if commandString == "Conversion Expected" {
+                    command = .conversionExpected(within: 1)
+                } else {
+                    let countString = commandString.split(separator: " ").last!
+                    command = .conversionExpected(within: Int(countString)!)
+                }
+            } else {
+                fatalError("Unknown command \(commandString)")
+            }
+
+            if command == .suggestionNotExpected {
+                // azooKeyでは扱えないため
+                continue
+            }
+
+            if mozcStatus {
+                mozcScore += 1
+            }
+
+            let argument = items[4]
+            let converter = KanaKanjiConverter()
+            var c = ComposingText()
+            c.insertAtCursorPosition(input, inputStyle: .direct)
+            var options = requestOptions()
+            options.requireJapanesePrediction = false
+            let results = converter.requestCandidates(c, options: options).mainResults
+            cases += 1
+            let azooKeyStatus = mozcEvaluation(command: command, argument: argument, results: results)
+            if azooKeyStatus {
+                azooKeyScore += 1
+                if !mozcStatus {
+                    print("\(#function) Success over Mozc: \(commandString) \(argument) for input \(input) \(results.prefix(command.requiredCount).map(\.text)), mozcResult: \(mozcOutput)")
+                }
+            } else {
+                if mozcStatus {
+                    print("\(#function) Failure over Mozc: \(commandString) \(argument) for input \(input) \(results.prefix(command.requiredCount).map(\.text)), mozcResult: \(mozcOutput)")
+                } else {
+                    print("\(#function) Failure: \(commandString) \(argument) for input \(input) \(results.prefix(command.requiredCount).map(\.text)), mozcResult: \(mozcOutput)")
+                }
+            }
+        }
+        print("\(#function) Result: Mozc Score: \(mozcScore), azooKeyScore \(azooKeyScore), count \(cases)")
+        XCTAssertTrue(mozcScore > 0)
+        XCTAssertTrue(azooKeyScore > 0)
+        XCTExpectFailure("azooKey is not as accurate as Mozc currently in this mertics, due to some reason") {
+            XCTAssertTrue(mozcScore < azooKeyScore)
+        }
+    }
+
+    enum MozcCommand: Equatable {
+        /// 変換に`arg`が現れる
+        case conversionMatch
+        /// 変換に`arg`が現れない
+        case conversionNotMatch
+        /// n番目までに`arg`が登場
+        case conversionExpected(within: Int)
+        /// サジェストに`arg`が登場しない
+        case suggestionNotExpected
+
+        var requiredCount: Int {
+            switch self {
+            case .conversionMatch, .conversionNotMatch, .suggestionNotExpected:
+                return 1
+            case .conversionExpected(within: let count):
+                return count
+            }
+        }
+    }
+
+    private func mozcEvaluation(command: MozcCommand, argument: some StringProtocol, results: [Candidate]) -> Bool {
+        guard let first = results.first else {
+            return false
+        }
+        switch command {
+        case .conversionMatch:
+            if first.text.contains(argument) {
+                return true
+            }
+        case .conversionNotMatch:
+            if !first.text.contains(argument) {
+                return true
+            }
+        case .suggestionNotExpected:
+            fatalError("mozcEvaluation does not support command \(command)")
+        case .conversionExpected(within: let count):
+            if results.prefix(count).contains(where: {$0.text == argument}) {
+                return true
+            }
+        }
+        return false
     }
 }
