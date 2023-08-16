@@ -150,7 +150,7 @@ struct LOUDSBuilder {
             let right = word[range.upperBound..<word.endIndex]
             return parseTemplate(left) + center + parseTemplate(right)
         } else {
-            return word.escaped()
+            return String(word)
         }
     }
 
