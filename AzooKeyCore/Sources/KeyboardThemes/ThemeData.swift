@@ -79,7 +79,8 @@ public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable
         self.specialKeyFillColor = try container.decode(ColorData.self, forKey: .specialKeyFillColor)
         self.pushedKeyFillColor = try container.decode(ColorData.self, forKey: .pushedKeyFillColor)
         self.suggestKeyFillColor = try? container.decode(ColorData?.self, forKey: .suggestKeyFillColor)
-        self.suggestLabelTextColor = try? container.decode(ColorData?.self, forKey: .suggestLabelTextColor)
+        /// エントリがない場合はデフォルトで黒にする
+        self.suggestLabelTextColor = (try? container.decode(ColorData?.self, forKey: .suggestLabelTextColor)) ?? .color(Color(white: 0))
         self.keyShadow = try? container.decode(ThemeShadowData<ColorData>?.self, forKey: .keyShadow)
     }
 
