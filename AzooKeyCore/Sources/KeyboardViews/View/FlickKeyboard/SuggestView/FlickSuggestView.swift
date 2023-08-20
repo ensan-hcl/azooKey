@@ -41,8 +41,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
             .frame(width: size.width, height: size.height)
             .overlay {
                 // ラベル
-                // 特に指定がなければラベルの色は黒にする
-                KeyLabel<Extension>(model.labelType, width: size.width, textColor: theme.suggestLabelTextColor?.color ?? .black)
+                KeyLabel<Extension>(model.labelType, width: size.width, textColor: theme.suggestLabelTextColor?.color)
             }
             .allowsHitTesting(false)
             .opacity(isHidden ? 0 : 1)
