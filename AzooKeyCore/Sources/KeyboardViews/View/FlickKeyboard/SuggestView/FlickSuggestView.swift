@@ -27,6 +27,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
     }
     
     private func getSuggestView(for model: FlickedKeyModel, isHidden: Bool, isPointed: Bool = false) -> some View {
+        // 着せ替えが有効の場合、サジェストの背景色はwhiteにする。
         var pointedColor: Color {
             theme != Extension.ThemeExtension.default(layout: .flick) ? .white : .systemGray4
         }
@@ -40,6 +41,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
             .frame(width: size.width, height: size.height)
             .overlay {
                 // ラベル
+                // 特に指定がなければラベルの色は黒にする
                 KeyLabel<Extension>(model.labelType, width: size.width, textColor: theme.suggestLabelTextColor?.color ?? .black)
             }
             .allowsHitTesting(false)
