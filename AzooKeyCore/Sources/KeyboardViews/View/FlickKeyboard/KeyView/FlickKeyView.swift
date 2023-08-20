@@ -52,10 +52,10 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
         Animation.easeIn(duration: 0.1).delay(0.5)
     }
 
-    private func getSuggestState() -> FlickSuggestState.SuggestType? {
+    private func getSuggestState() -> FlickSuggestType? {
         self.suggestState.items[self.position.x, default: [:]][self.position.y]
     }
-    private func setSuggestState(_ state: FlickSuggestState.SuggestType?) {
+    private func setSuggestState(_ state: FlickSuggestType?) {
         self.suggestState.items[self.position.x, default: [:]][self.position.y] = state
     }
 

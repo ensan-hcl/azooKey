@@ -40,11 +40,6 @@ struct QwertyVariationsView<Extension: ApplicationSpecificKeyboardViewExtension>
     }
 
     @MainActor private func getLabel(_ labelType: KeyLabelType) -> KeyLabel<Extension> {
-        let width = tabDesign.keyViewWidth
-        if theme != Extension.ThemeExtension.default(layout: .qwerty) {
-            return KeyLabel(labelType, width: width, textColor: .black)
-        }
-        return KeyLabel(labelType, width: width)
+        KeyLabel(labelType, width: tabDesign.keyViewWidth, textColor: theme.suggestLabelTextColor?.color ?? .black)
     }
-
 }

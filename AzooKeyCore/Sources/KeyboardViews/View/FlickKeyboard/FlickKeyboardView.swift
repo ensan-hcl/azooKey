@@ -40,7 +40,7 @@ struct FlickKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: V
     }
 
     @MainActor
-    private func suggestView(h: Int, v: Int, suggestType: FlickSuggestState.SuggestType) -> FlickSuggestView<Extension> {
+    private func suggestView(h: Int, v: Int, suggestType: FlickSuggestType) -> FlickSuggestView<Extension> {
         let model = self.keyModels[h][v]
         let size: CGSize
         if model is FlickEnterKeyModel<Extension> {
