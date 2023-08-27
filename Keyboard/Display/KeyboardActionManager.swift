@@ -20,7 +20,7 @@ import SwiftUtils
     private unowned var delegate: KeyboardViewController!
 
     // 即時変数
-    private var tasks: [(type: LongpressActionType, task: Task<Void, Error>)] = []
+    private var tasks: [(type: LongpressActionType, task: Task<Void, any Error>)] = []
     private var tempTextData: (left: String, center: String, right: String)?
 
     // キーボードを閉じる際に呼び出す
