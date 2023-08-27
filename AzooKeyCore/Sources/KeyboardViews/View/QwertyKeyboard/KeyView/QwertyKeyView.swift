@@ -104,7 +104,7 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     @State private var doublePressState = QwertyKeyDoublePressState()
     @State private var suggest = false
 
-    @State private var longPressStartTask: Task<(), Error>? = nil
+    @State private var longPressStartTask: Task<(), any Error>? = nil
     
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
