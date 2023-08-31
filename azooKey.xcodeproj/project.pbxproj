@@ -82,10 +82,6 @@
 		1A606B06292E53BA00CEDB15 /* CustardExpressionEvaluator in Frameworks */ = {isa = PBXBuildFile; productRef = 1A606B05292E53BA00CEDB15 /* CustardExpressionEvaluator */; };
 		1A606B08292E53C500CEDB15 /* CustardExpressionEvaluator in Frameworks */ = {isa = PBXBuildFile; productRef = 1A606B07292E53C500CEDB15 /* CustardExpressionEvaluator */; };
 		1A61E8F028CCD93000C5107A /* FlickSensitivitySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A61E8EF28CCD93000C5107A /* FlickSensitivitySettingView.swift */; };
-		1A62CB472A6D0856005DBBCE /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB462A6D0856005DBBCE /* KanaKanjiConverterModule */; };
-		1A62CB492A6D0856005DBBCE /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB482A6D0856005DBBCE /* SwiftUtils */; };
-		1A62CB4B2A6D0866005DBBCE /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB4A2A6D0866005DBBCE /* KanaKanjiConverterModule */; };
-		1A62CB4D2A6D0866005DBBCE /* SwiftUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1A62CB4C2A6D0866005DBBCE /* SwiftUtils */; };
 		1A64A897257B4AFD0022C081 /* UpdateInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A896257B4AFD0022C081 /* UpdateInformationView.swift */; };
 		1A64A8BD257B55360022C081 /* AzooKeyUserDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8BC257B55360022C081 /* AzooKeyUserDictionary.swift */; };
 		1A64A8CF257C7F760022C081 /* ConjunctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A64A8CE257C7F760022C081 /* ConjunctionBuilder.swift */; };
@@ -381,12 +377,10 @@
 				1A70DFFD291F2D1E00A83849 /* CustardKit in Frameworks */,
 				1A7F37832A69874C009AC382 /* KeyboardThemes in Frameworks */,
 				1A73F21229C0B36D00833C11 /* OrderedCollections in Frameworks */,
-				1A62CB492A6D0856005DBBCE /* SwiftUtils in Frameworks */,
 				1A7F37742A683428009AC382 /* SwiftUIUtils in Frameworks */,
 				1AF306022A00070000B4DAC3 /* KanaKanjiConverterModule in Frameworks */,
 				1A7F37882A6A1A90009AC382 /* KeyboardViews in Frameworks */,
 				1AED0A5F2A6D22C3005B87E5 /* AzooKeyUtils in Frameworks */,
-				1A62CB472A6D0856005DBBCE /* KanaKanjiConverterModule in Frameworks */,
 				1A606B06292E53BA00CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -413,12 +407,10 @@
 				1A7F378A2A6A1A99009AC382 /* KeyboardViews in Frameworks */,
 				1A70DFFF291F2D3B00A83849 /* CustardKit in Frameworks */,
 				1A8E454A28E5711800133D3B /* OrderedCollections in Frameworks */,
-				1A62CB4D2A6D0866005DBBCE /* SwiftUtils in Frameworks */,
 				1A9E908F2822CEC100E73846 /* DequeModule in Frameworks */,
 				1A7F37812A698741009AC382 /* KeyboardThemes in Frameworks */,
 				1AD96FB82A22F9C800FD4EA4 /* SwiftUIUtils in Frameworks */,
 				1AED0A612A6D22CB005B87E5 /* AzooKeyUtils in Frameworks */,
-				1A62CB4B2A6D0866005DBBCE /* KanaKanjiConverterModule in Frameworks */,
 				1A606B08292E53C500CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -977,8 +969,6 @@
 				1A7F37732A683428009AC382 /* SwiftUIUtils */,
 				1A7F37822A69874C009AC382 /* KeyboardThemes */,
 				1A7F37872A6A1A90009AC382 /* KeyboardViews */,
-				1A62CB462A6D0856005DBBCE /* KanaKanjiConverterModule */,
-				1A62CB482A6D0856005DBBCE /* SwiftUtils */,
 				1AED0A5E2A6D22C3005B87E5 /* AzooKeyUtils */,
 			);
 			productName = MainApp;
@@ -1047,8 +1037,6 @@
 				1AD96FB72A22F9C800FD4EA4 /* SwiftUIUtils */,
 				1A7F37802A698741009AC382 /* KeyboardThemes */,
 				1A7F37892A6A1A99009AC382 /* KeyboardViews */,
-				1A62CB4A2A6D0866005DBBCE /* KanaKanjiConverterModule */,
-				1A62CB4C2A6D0866005DBBCE /* SwiftUtils */,
 				1AED0A602A6D22CB005B87E5 /* AzooKeyUtils */,
 			);
 			productName = Keyboard;
@@ -1099,7 +1087,6 @@
 				1A9E908A2822CEB400E73846 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */,
 				1A606B00292E506200CEDB15 /* XCRemoteSwiftPackageReference "BoolExpressionEvaluator" */,
-				1A62CB452A6D0856005DBBCE /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */,
 			);
 			productRefGroup = 1A3DC1C32500D44A002CAA93 /* Products */;
 			projectDirPath = "";
@@ -1928,14 +1915,6 @@
 				kind = branch;
 			};
 		};
-		1A62CB452A6D0856005DBBCE /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter";
-			requirement = {
-				branch = develop;
-				kind = branch;
-			};
-		};
 		1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ensan-hcl/CustardKit";
@@ -1968,26 +1947,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1A606B00292E506200CEDB15 /* XCRemoteSwiftPackageReference "BoolExpressionEvaluator" */;
 			productName = CustardExpressionEvaluator;
-		};
-		1A62CB462A6D0856005DBBCE /* KanaKanjiConverterModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1A62CB452A6D0856005DBBCE /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */;
-			productName = KanaKanjiConverterModule;
-		};
-		1A62CB482A6D0856005DBBCE /* SwiftUtils */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1A62CB452A6D0856005DBBCE /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */;
-			productName = SwiftUtils;
-		};
-		1A62CB4A2A6D0866005DBBCE /* KanaKanjiConverterModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1A62CB452A6D0856005DBBCE /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */;
-			productName = KanaKanjiConverterModule;
-		};
-		1A62CB4C2A6D0866005DBBCE /* SwiftUtils */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1A62CB452A6D0856005DBBCE /* XCRemoteSwiftPackageReference "AzooKeyKanaKanjiConverter" */;
-			productName = SwiftUtils;
 		};
 		1A70DFFC291F2D1E00A83849 /* CustardKit */ = {
 			isa = XCSwiftPackageProductDependency;
