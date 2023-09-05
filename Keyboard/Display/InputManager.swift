@@ -698,6 +698,41 @@ import UIKit
         self.stopComposition()
     }
 
+    // Reference: https://teratail.com/questions/57039?link=qa_related_pc
+    func getReadingFromSystemAPI(_ text: String) -> String {
+        let inputText = text as NSString
+        let outputText = NSMutableString()
+
+        // トークナイザ
+        let tokenizer: CFStringTokenizer = CFStringTokenizerCreate(
+            kCFAllocatorDefault, 
+            inputText as CFString,
+            CFRangeMake(0, inputText.length),
+            kCFStringTokenizerUnitWordBoundary,
+            CFLocaleCopyCurrent()
+        )
+
+        // 形態素解析した結果を順に得る
+        var tokenType: CFStringTokenizerTokenType = CFStringTokenizerGoToTokenAtIndex(tokenizer, 0)
+        while tokenType.rawValue != 0 {
+            let range = CFStringTokenizerGetCurrentTokenRange(tokenizer)
+            let original = inputText.substring(with: NSRange(location: range.location, length: range.length))
+            if original.isEnglishSentence {
+                outputText.append(original)
+            } else if let romaji = CFStringTokenizerCopyCurrentTokenAttribute(tokenizer, kCFStringTokenizerAttributeLatinTranscription) as? NSString {
+                // ローマ字をまず得て、そのあとでカタカナにする
+                let reading: NSMutableString = romaji.mutableCopy() as! NSMutableString
+                CFStringTransform(reading as CFMutableString, nil, kCFStringTransformLatinKatakana, false)
+                outputText.append(reading as String)
+            } else {
+                // タイ語の文字など扱えない文字が入ってくるとここに来うる
+                outputText.append(original)
+            }
+            tokenType = CFStringTokenizerAdvanceToNextToken(tokenizer)
+        }
+        return (outputText as String).toHiragana()
+    }
+
     // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
     func userSelectedText(text: String) {
         if text.isEmpty {
@@ -720,13 +755,8 @@ import UIKit
         }
         // 過去のログを見て、再変換に利用する
         self.composingText.stopComposition()
-        if let ruby = self.getRubyIfPossible(text: text) {
-            debug("Evaluated ruby:", ruby)
-            // rubyはひらがなである
-            self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
-        } else {
-            self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
-        }
+        let ruby = getReadingFromSystemAPI(self.getRubyIfPossible(text: text) ?? text)
+        self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
 
         self.isSelected = true
         self.setResult()
