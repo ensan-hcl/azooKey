@@ -730,7 +730,7 @@ import UIKit
             }
             tokenType = CFStringTokenizerAdvanceToNextToken(tokenizer)
         }
-        return outputText as String
+        return (outputText as String).toHiragana()
     }
 
     // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
@@ -755,14 +755,8 @@ import UIKit
         }
         // 過去のログを見て、再変換に利用する
         self.composingText.stopComposition()
-        if let ruby = self.getRubyIfPossible(text: text) {
-            let ruby = getReadingFromSystemAPI(ruby)
-            // rubyはひらがなである
-            self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
-        } else {
-            let ruby = getReadingFromSystemAPI(text)
-            self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
-        }
+        let ruby = getReadingFromSystemAPI(self.getRubyIfPossible(text: text) ?? text)
+        self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
 
         self.isSelected = true
         self.setResult()
