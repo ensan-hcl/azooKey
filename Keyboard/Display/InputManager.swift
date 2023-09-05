@@ -248,7 +248,7 @@ import UIKit
                 ]
             )
         }
-        let actions = self.kanaKanjiConverter.getApporopriateActions(candidate)
+        let actions = self.kanaKanjiConverter.getAppropriateActions(candidate)
         candidate.withActions(actions)
         candidate.parseTemplate()
         self.updateLog(candidate: candidate)
@@ -786,9 +786,7 @@ import UIKit
         )
         debug("InputManager.setResult: options", options)
 
-        let results: [Candidate]
-        let firstClauseResults: [Candidate]
-        (results, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
+        let results = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
 
         // 表示を更新する
         if !self.isSelected {
@@ -796,7 +794,7 @@ import UIKit
                 self.previousSystemOperation = .setMarkedText
             }
             if liveConversionEnabled {
-                let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
+                let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, results.mainResults, firstClauseResults: results.firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: liveConversionText)
             } else {
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
@@ -804,7 +802,7 @@ import UIKit
         }
 
         if let updateResult {
-            updateResult(results)
+            updateResult(results.mainResults)
             // 自動確定の実施
             if liveConversionEnabled, let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
                 debug("InputManager.setResult: Complete first clause", firstClause)
