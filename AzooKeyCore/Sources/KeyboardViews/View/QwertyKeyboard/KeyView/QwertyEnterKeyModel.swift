@@ -27,8 +27,6 @@ struct QwertyEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
             return [.enter]
         case .return:
             return [.input("\n")]
-        case .edit:
-            return [.deselectAndUseAsInputting]
         }
     }
 
@@ -43,7 +41,7 @@ struct QwertyEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
 
     func feedback(variableStates: VariableStates) {
         switch variableStates.enterKeyState {
-        case .complete, .edit:
+        case .complete:
             KeyboardFeedback<Extension>.tabOrOtherKey()
         case let .return(type):
             switch type {

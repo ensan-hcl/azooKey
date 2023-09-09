@@ -246,8 +246,6 @@ public final class VariableStates: ObservableObject {
         switch state {
         case .return:
             self.enterKeyState = .return(enterKeyType)
-        case .edit:
-            self.enterKeyState = .edit
         case .complete:
             self.enterKeyState = .complete
         }

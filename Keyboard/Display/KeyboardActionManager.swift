@@ -147,10 +147,6 @@ import SwiftUtils
                 self.inputManager.paste()
             }
 
-        case .deselectAndUseAsInputting:
-            self.shiftStateOff(variableStates: variableStates)
-            self.inputManager.edit()
-
         case let .moveCursor(count):
             // カーソル移動ではシフトを解除しない
             self.inputManager.moveCursor(count: count, requireSetResult: requireSetResult)

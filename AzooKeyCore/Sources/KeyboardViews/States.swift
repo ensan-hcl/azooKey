@@ -44,14 +44,12 @@ public enum KeyboardOrientation: Sendable {
 
 public enum RoughEnterKeyState: Sendable {
     case `return`
-    case edit
     case complete
 }
 
 public enum EnterKeyState: Sendable {
     case complete   // 決定
     case `return`(UIReturnKeyType)   // 改行
-    case edit       // 編集
 }
 
 public enum BarState: Sendable {

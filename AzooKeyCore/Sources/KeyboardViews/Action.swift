@@ -28,8 +28,6 @@ public indirect enum ActionType: Equatable, Sendable {
     ///  - note: フルアクセスがない場合動作しない
     case paste
 
-    case deselectAndUseAsInputting   // 選択を解除して編集中とみなす
-
     // カーソル関係
     case moveCursor(Int)
     case smartMoveCursor(ScanItem)
