@@ -62,7 +62,7 @@ enum QwertyUnpressedKeyColorType: Sendable {
             return Color(white: 0, opacity: 0.001)
         case .enter:
             switch states.enterKeyState {
-            case .complete, .edit:
+            case .complete:
                 return theme.specialKeyFillColor.color
             case let .return(type):
                 switch type {

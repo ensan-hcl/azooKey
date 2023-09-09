@@ -29,7 +29,7 @@ enum SimpleUnpressedKeyColorType: UInt8 {
             return Color(white: 0, opacity: 0.001)
         case .enter:
             switch states.enterKeyState {
-            case .complete, .edit:
+            case .complete:
                 return theme.specialKeyFillColor.color
             case let .return(type):
                 switch type {
@@ -103,8 +103,6 @@ struct SimpleEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
             return [.enter]
         case .return:
             return [.input("\n")]
-        case .edit:
-            return [.deselectAndUseAsInputting]
         }
     }
 
@@ -117,7 +115,7 @@ struct SimpleEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
 
     func feedback(variableStates: VariableStates) {
         switch variableStates.enterKeyState {
-        case .complete, .edit:
+        case .complete:
             KeyboardFeedback<Extension>.tabOrOtherKey()
         case .return:
             KeyboardFeedback<Extension>.click()

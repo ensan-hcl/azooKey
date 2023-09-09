@@ -52,9 +52,7 @@ import UIKit
     }
 
     func getEnterKeyState() -> RoughEnterKeyState {
-        if self.isSelected && !self.composingText.isEmpty {
-            return .edit
-        } else if !self.composingText.isEmpty {
+        if !self.isSelected && !self.composingText.isEmpty {
             return .complete
         } else {
             return .return
@@ -227,8 +225,12 @@ import UIKit
     /// - parameters:
     ///  - shouldModifyDisplayedText: DisplayedTextを操作して良いか否か。`textDidChange`などの場合は操作してはいけない。
     func enter(shouldModifyDisplayedText: Bool = true) -> [ActionType] {
+        // selectedの場合、単に変換を止める
+        if isSelected {
+            self.stopComposition()
+            return []
+        }
         var candidate: Candidate
-        // ライブ変換中に確定する場合、現在表示されているテキストそのものが候補となる。
         if liveConversionEnabled, let _candidate = liveConversionManager.lastUsedCandidate {
             candidate = _candidate
         } else {
@@ -284,10 +286,6 @@ import UIKit
     ///   - simpleInsert: `ComposingText`を作るのではなく、直接文字を入力し、変換候補を表示しない。
     ///   - inputStyle: 入力スタイル
     func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false, inputStyle: InputStyle) {
-        if self.isSelected {
-            // 選択部分を削除する
-            self.deleteSelection()
-        }
         // 直接入力の条件
         if simpleInsert         // flag
             || text == "\n"     // 改行
@@ -295,9 +293,18 @@ import UIKit
             || self.keyboardLanguage == .none  // 言語がnone
         {
             // 必要に応じて確定する
-            _ = self.enter()
+            if !self.isSelected {
+                _ = self.enter()
+            } else {
+                self.stopComposition()
+            }
             self.displayedTextManager.insertText(text)
             return
+        }
+        // 直接入力にならない場合はまず選択部分を削除する
+        if self.isSelected {
+            // 選択部分を削除する
+            self.deleteSelection()
         }
         self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
         debug("Input Manager input:", composingText)
@@ -552,15 +559,6 @@ import UIKit
             return newLeft
         }
         return left
-    }
-
-    /// 選択状態にあるテキストを再度入力し、編集可能な状態にする
-    func edit() {
-        if isSelected {
-            let selectedText = composingText.convertTarget
-            self.stopComposition()
-            self.input(text: selectedText, inputStyle: .direct)
-        }
     }
 
     /// クリップボードの文字列をペーストする

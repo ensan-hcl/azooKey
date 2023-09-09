@@ -409,8 +409,6 @@ public enum Design {
                 @unknown default:
                     return "改行"
                 }
-            case .edit:
-                return "編集"
             }
         }
     }
