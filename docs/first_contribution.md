@@ -26,7 +26,7 @@ GitHub上で「[Feature Request] 〇〇の絵文字に「△△」の読みを�
 
 この変更は小さいので、管理者のOKを待つ必要はありません。次に進んでください。
 
-### 2.2. プロジェクトをフォークする
+### 2.2. プロジェクトを準備する
 
 GitHub上で、azooKeyのプロジェクトをフォークしてください。
 
@@ -37,6 +37,17 @@ GitHub上で、azooKeyのプロジェクトをフォークしてください。
 ```bash
 git remote add <alias> <url_to_your_fork>
 ```
+
+#### 2.2.1. linterをインストールする
+
+azooKeyではソースコードを整形するため、[SwiftLint](https://github.com/realm/SwiftLint)を用いています。`brew`などでインストールしてください。
+
+```bash
+brew install swiftlint
+swiftlint --version
+```
+
+Xcodeでは、`swiftlint`が有効になっていれば自動でソースコードの整形が行われるようになっています。それ以外の環境では手動で`swiftlint --fix`を`azooKey/`で実行してください。
 
 ### 2.3. ブランチを切る
 
