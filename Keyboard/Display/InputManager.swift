@@ -225,8 +225,12 @@ import UIKit
     /// - parameters:
     ///  - shouldModifyDisplayedText: DisplayedTextを操作して良いか否か。`textDidChange`などの場合は操作してはいけない。
     func enter(shouldModifyDisplayedText: Bool = true) -> [ActionType] {
+        // selectedの場合、単に変換を止める
+        if isSelected {
+            self.stopComposition()
+            return []
+        }
         var candidate: Candidate
-        // ライブ変換中に確定する場合、現在表示されているテキストそのものが候補となる。
         if liveConversionEnabled, let _candidate = liveConversionManager.lastUsedCandidate {
             candidate = _candidate
         } else {
@@ -282,10 +286,6 @@ import UIKit
     ///   - simpleInsert: `ComposingText`を作るのではなく、直接文字を入力し、変換候補を表示しない。
     ///   - inputStyle: 入力スタイル
     func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false, inputStyle: InputStyle) {
-        if self.isSelected {
-            // 選択部分を削除する
-            self.deleteSelection()
-        }
         // 直接入力の条件
         if simpleInsert         // flag
             || text == "\n"     // 改行
@@ -293,9 +293,18 @@ import UIKit
             || self.keyboardLanguage == .none  // 言語がnone
         {
             // 必要に応じて確定する
-            _ = self.enter()
+            if !self.isSelected {
+                _ = self.enter()
+            } else {
+                self.stopComposition()
+            }
             self.displayedTextManager.insertText(text)
             return
+        }
+        // 直接入力にならない場合はまず選択部分を削除する
+        if self.isSelected {
+            // 選択部分を削除する
+            self.deleteSelection()
         }
         self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
         debug("Input Manager input:", composingText)
@@ -671,22 +680,20 @@ import UIKit
 
     /// ユーザがキーボードを経由せずにカーソルを何かした場合の後処理を行う関数。
     ///  - note: この関数をユーティリティとして用いてはいけない。
-    func userMovedCursor(count: Int)  -> [ActionType]{
-        var actions: [ActionType] = []
+    func userMovedCursor(count: Int) -> [ActionType] {
         debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
         if composingText.isEmpty {
             // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
-            actions.append(.setCursorBar(.on))
-            return actions
+            return [.setCursorBar(.on)]
         }
         let actualCount = composingText.moveCursorFromCursorPosition(count: count)
         self.previousSystemOperation = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, adjustedMovedCount: actualCount) ? .moveCursor : nil
         setResult()
         // ライブ変換有効
-        if liveConversionEnabled{
-            actions.append(.setCursorBar(.on))
+        if liveConversionEnabled {
+            return [.setCursorBar(.on)]
         }
-        return actions
+        return []
     }
 
     /// ユーザがキーボードを経由せずカットした場合の処理
@@ -701,7 +708,7 @@ import UIKit
 
         // トークナイザ
         let tokenizer: CFStringTokenizer = CFStringTokenizerCreate(
-            kCFAllocatorDefault, 
+            kCFAllocatorDefault,
             inputText as CFString,
             CFRangeMake(0, inputText.length),
             kCFStringTokenizerUnitWordBoundary,

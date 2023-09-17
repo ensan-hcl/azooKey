@@ -539,10 +539,7 @@ import SwiftUtils
             if !wasSelected && !isSelected && b_left != a_left {
                 debug("user operation id: 2", b_left, a_left)
                 let offset = a_left.count - b_left.count
-                let actions = self.inputManager.userMovedCursor(count: offset)
-                for action in actions{
-                    doAction(action, variableStates: variableStates)
-                }
+                registerActions(self.inputManager.userMovedCursor(count: offset), variableStates: variableStates)
                 return
             }
 
