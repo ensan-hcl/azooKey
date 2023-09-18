@@ -178,7 +178,7 @@ import SwiftUtils
         case .enter:
             self.showResultView(variableStates: variableStates)
             self.shiftStateOff(variableStates: variableStates)
-            let actions = self.inputManager.enter()
+            let actions = self.inputManager.enter(requireSetResult: requireSetResult)
             self.registerActions(actions, variableStates: variableStates)
 
         case .changeCharacterType:
