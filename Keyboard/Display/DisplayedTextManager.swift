@@ -31,11 +31,8 @@ import UIKit
     private var textChangedCount = 0
 
     /// `textChangedCount`のgetter。
-    func getTextChangedCountDelta() -> Int {
-        let result = self.textChangedCount
-        // リセットうする
-        self.textChangedCount = 0
-        return result
+    func getTextChangedCount() -> Int {
+        return self.textChangedCount
     }
 
     /// marked textの有効化状態

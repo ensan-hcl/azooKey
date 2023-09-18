@@ -107,6 +107,7 @@ final class KeyboardViewController: UIInputViewController {
 
         KeyboardViewController.keyboardViewHost = host
         KeyboardViewController.action.setDelegateViewController(self)
+        KeyboardViewController.action.setResultViewUpdateCallback(Self.variableStates)
     }
 
     private func getCurrentTheme() -> AzooKeyTheme {
@@ -152,6 +153,7 @@ final class KeyboardViewController: UIInputViewController {
         }
 
         KeyboardViewController.action.setDelegateViewController(self)
+        KeyboardViewController.action.setResultViewUpdateCallback(Self.variableStates)
         SemiStaticStates.shared.setNeedsInputModeSwitchKey(self.needsInputModeSwitchKey)
         SemiStaticStates.shared.setHapticsAvailable()
         SemiStaticStates.shared.setHasFullAccess(self.hasFullAccess)

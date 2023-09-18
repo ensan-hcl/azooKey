@@ -41,8 +41,13 @@ import SwiftUtils
     func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
         self.inputManager.setTextDocumentProxy(.mainProxy(controller.textDocumentProxy))
-        self.inputManager.setUpdateResult { [weak controller] in
-            controller?.updateResultView($0)
+    }
+
+    func setResultViewUpdateCallback(_ variableStates: VariableStates) {
+        self.inputManager.setUpdateResult { [weak variableStates] in
+            if let variableStates {
+                $0(&variableStates.resultModelVariableSection)
+            }
         }
     }
 
@@ -56,10 +61,9 @@ import SwiftUtils
 
     /// 変換を確定した場合に呼ばれる。
     /// - Parameters:
-    ///   - text: String。確定された文字列。
-    ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
+    ///   - candidate: 確定された候補。
+    ///   - variableStates: 状態。
     override func notifyComplete(_ candidate: any ResultViewItemData, variableStates: VariableStates) {
-        let target = variableStates.tabManager.existentialTab().replacementTarget
         if let candidate = candidate as? Candidate {
             self.inputManager.complete(candidate: candidate)
             self.registerActions(candidate.actions.map(\.action), variableStates: variableStates)
@@ -72,12 +76,20 @@ import SwiftUtils
                 }
             }
             variableStates.lastTabCharacterPreferenceUpdate = .now
+        } else if let candidate = candidate as? PredictionCandidate {
+            self.inputManager.input(text: candidate.text, simpleInsert: true, inputStyle: .direct)
+            if !candidate.terminatePrediction {
+                self.inputManager.updatePredictionCandidates(appending: candidate)
+            } else {
+                self.inputManager.resetPredictionCandidates()
+            }
         } else {
             debug("notifyComplete: 確定できません")
         }
         // 左右の文字列
         let (left, center, right) = self.inputManager.getSurroundingText()
         // MARK: Replacementの更新をする
+        let target = variableStates.tabManager.existentialTab().replacementTarget
         if !target.isEmpty {
             self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: target)
         }
@@ -271,7 +283,10 @@ import SwiftUtils
             // エンターキーの状態
             variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
             // 文字列の変更を適用
-            variableStates.textChangedCount += self.inputManager.getTextChangedCountDelta()
+            variableStates.textChangedCount = self.inputManager.getTextChangedCount()
+            // 必要に応じて予測変換をリセット
+            self.inputManager.resetPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
+
             if let undoAction {
                 variableStates.undoAction = .init(action: undoAction, textChangedCount: variableStates.textChangedCount)
             }
@@ -540,6 +555,9 @@ import SwiftUtils
                 debug("user operation id: 2", b_left, a_left)
                 let offset = a_left.count - b_left.count
                 self.inputManager.userMovedCursor(count: offset)
+                // カーソルが動いているのでtextChangedCountを増やす
+                variableStates.textChangedCount += 1
+                self.inputManager.resetPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
                 return
             }
 
@@ -560,6 +578,8 @@ import SwiftUtils
 
         defer {
             variableStates.textChangedCount += 1
+            // 予測変換はテキストが変化したら解除する
+            self.inputManager.resetPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
         }
 
         if b_left == "\n" && b_center == a_wholeText {

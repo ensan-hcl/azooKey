@@ -22,6 +22,7 @@ private extension Equatable {
 }
 
 struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
+    @Namespace private var namespace
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
     @EnvironmentObject private var variableStates: VariableStates
@@ -42,12 +43,27 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         self._isResultViewExpanded = isResultViewExpanded
     }
 
+    private var tabBarButton: some View {
+        KeyboardBarButton<Extension> {
+            self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
+        }
+        .matchedGeometryEffect(id: "KeyboardBarButton", in: namespace)
+    }
+
+    private var resultData: [ResultData] {
+        if !variableStates.resultModelVariableSection.results.isEmpty {
+            variableStates.resultModelVariableSection.results
+        } else {
+            variableStates.resultModelVariableSection.predictionResults
+        }
+    }
+
     var body: some View {
-        if variableStates.resultModelVariableSection.results.isEmpty {
-            CenterAlignedView {
-                if displayTabBarButton {
-                    KeyboardBarButton<Extension> {
-                        self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
+        Group {
+            if resultData.isEmpty {
+                CenterAlignedView {
+                    if displayTabBarButton {
+                        tabBarButton
                     }
                     if let undoButtonAction {
                         Button {
@@ -59,70 +75,77 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight))
                     }
                 }
-            }
-            .onAppear {
-                if variableStates.undoAction?.textChangedCount == variableStates.textChangedCount {
-                    self.undoButtonAction = variableStates.undoAction
-                } else {
-                    self.undoButtonAction = nil
-                }
-            }
-            .onChange(of: variableStates.undoAction.and(variableStates.textChangedCount)) {newValue in
-                withAnimation(.easeInOut) {
-                    if newValue.first?.textChangedCount == newValue.second {
-                        self.undoButtonAction = newValue.first
+                .onAppear {
+                    if variableStates.undoAction?.textChangedCount == variableStates.textChangedCount {
+                        self.undoButtonAction = variableStates.undoAction
                     } else {
                         self.undoButtonAction = nil
                     }
                 }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.sRGB, white: 1, opacity: 0.001))
-            .onLongPressGesture {
-                self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
-            }
-        } else {
-            HStack {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    ScrollViewReader {scrollViewProxy in
-                        LazyHStack(spacing: 10) {
-                            ForEach(variableStates.resultModelVariableSection.results, id: \.id) {(data: ResultData) in
-                                if data.candidate.inputable {
-                                    Button(data.candidate.text) {
-                                        KeyboardFeedback<Extension>.click()
-                                        self.pressed(candidate: data.candidate)
-                                    }
-                                    .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight))
-                                    .contextMenu {
-                                        ResultContextMenuView(candidate: data.candidate, displayResetLearningButton: Extension.SettingProvider.canResetLearningForCandidate, index: data.id)
-                                    }
-                                    .id(data.id)
-                                } else {
-                                    Text(data.candidate.text)
-                                        .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: Extension.SettingProvider.resultViewFontSize))
-                                        .underline(true, color: .accentColor)
-                                }
-                            }
-                        }.onChange(of: variableStates.resultModelVariableSection.updateResult) { _ in
-                            scrollViewProxy.scrollTo(0, anchor: .trailing)
+                .onChange(of: variableStates.undoAction.and(variableStates.textChangedCount)) {newValue in
+                    withAnimation(.easeIn(duration: 0.2)) {
+                        if newValue.first?.textChangedCount == newValue.second {
+                            self.undoButtonAction = newValue.first
+                        } else {
+                            self.undoButtonAction = nil
                         }
                     }
-                    .padding(.horizontal, 5)
                 }
-                // 候補を展開するボタン
-                Button(action: {self.expand()}) {
-                    ZStack {
-                        Color(white: 1, opacity: 0.001)
-                            .frame(width: buttonWidth)
-                        Image(systemName: "chevron.down")
-                            .font(Design.fonts.iconImageFont(keyViewFontSizePreference: Extension.SettingProvider.keyViewFontSize, theme: theme))
-                            .frame(height: 18)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.sRGB, white: 1, opacity: 0.001))
+                .onLongPressGesture {
+                    self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
+                }
+            } else {
+                HStack {
+                    if variableStates.resultModelVariableSection.results.isEmpty && displayTabBarButton {
+                        tabBarButton
+                        Spacer()
+                    }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        ScrollViewReader {scrollViewProxy in
+                            LazyHStack(spacing: 10) {
+                                ForEach(resultData, id: \.id) {(data: ResultData) in
+                                    if data.candidate.inputable {
+                                        Button(data.candidate.text) {
+                                            KeyboardFeedback<Extension>.click()
+                                            self.pressed(candidate: data.candidate)
+                                        }
+                                        .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight))
+                                        .contextMenu {
+                                            ResultContextMenuView(candidate: data.candidate, displayResetLearningButton: Extension.SettingProvider.canResetLearningForCandidate, index: data.id)
+                                        }
+                                        .id(data.id)
+                                    } else {
+                                        Text(data.candidate.text)
+                                            .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: Extension.SettingProvider.resultViewFontSize))
+                                            .underline(true, color: .accentColor)
+                                    }
+                                }
+                            }.onChange(of: variableStates.resultModelVariableSection.updateResult) { _ in
+                                scrollViewProxy.scrollTo(0, anchor: .trailing)
+                            }
+                        }
+                        .padding(.horizontal, 5)
+                    }
+                    if variableStates.resultModelVariableSection.predictionResults.isEmpty {
+                        // 候補を展開するボタン
+                        Button(action: {self.expand()}) {
+                            ZStack {
+                                Color(white: 1, opacity: 0.001)
+                                    .frame(width: buttonWidth)
+                                Image(systemName: "chevron.down")
+                                    .font(Design.fonts.iconImageFont(keyViewFontSizePreference: Extension.SettingProvider.keyViewFontSize, theme: theme))
+                                    .frame(height: 18)
+                            }
+                        }
+                        .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight))
+                        .padding(.trailing, 10)
                     }
                 }
-                .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight))
-                .padding(.trailing, 10)
             }
         }
+        .animation(.easeIn(duration: 0.2), value: resultData.isEmpty)
     }
 
     private func pressed(candidate: any ResultViewItemData) {

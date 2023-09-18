@@ -18,15 +18,21 @@ public protocol ResultViewItemData {
 
 public struct ResultModelVariableSection {
     private(set) var results: [ResultData] = []
+    private(set) var predictionResults: [ResultData] = []
     private(set) var searchResults: [ResultData] = []
     private(set) var updateResult: Bool = false
 
     public mutating func setResults(_ results: [any ResultViewItemData]) {
         self.results = results.indices.map {ResultData(id: $0, candidate: results[$0])}
+        self.predictionResults = []
         self.updateResult.toggle()
     }
     public mutating func setSearchResults(_ results: [any ResultViewItemData]) {
         self.searchResults = results.indices.map {ResultData(id: $0, candidate: results[$0])}
+    }
+    public mutating func setPredictionResults(_ results: [any ResultViewItemData]) {
+        self.predictionResults = results.indices.map {ResultData(id: $0, candidate: results[$0])}
+        self.updateResult.toggle()
     }
 }
 
