@@ -169,6 +169,7 @@
 		1AFB68422518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */; };
 		1AFB685328D56F1800B5C717 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
 		1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
+		5598472E2AB84F5200B18C15 /* PredictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598472D2AB84F5200B18C15 /* PredictionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -358,6 +359,7 @@
 		1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceSoftwaresLicenseView.swift; sourceTree = "<group>"; };
 		1AFE772F26077E0E0041D74D /* WalkthroughState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughState.swift; sourceTree = "<group>"; };
+		5598472D2AB84F5200B18C15 /* PredictionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -498,6 +500,7 @@
 			children = (
 				1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */,
 				1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */,
+				5598472D2AB84F5200B18C15 /* PredictionManager.swift */,
 				1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */,
 				1A3DC2062500D4FF002CAA93 /* KeyboardActionManager.swift */,
 				1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */,
@@ -1369,6 +1372,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A1ECCA2295DF8DE001AD7E0 /* DisplayedTextManager.swift in Sources */,
+				5598472E2AB84F5200B18C15 /* PredictionManager.swift in Sources */,
 				1A1ECCA6295DFADF001AD7E0 /* InputManager.swift in Sources */,
 				1A1ECCA4295DF9D4001AD7E0 /* LiveConversionManager.swift in Sources */,
 				1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */,

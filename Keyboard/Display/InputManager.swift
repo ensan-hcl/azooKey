@@ -21,7 +21,8 @@ import UIKit
     // TODO: displayedTextManagerとliveConversionManagerを何らかの形で統合したい
     // ライブ変換を管理するクラス
     var liveConversionManager = LiveConversionManager()
-
+    // (ゼロクエリの)予測変換を管理するクラス
+    var predictionManager = PredictionManager()
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
     // TODO: isSelectedはdisplayedTextManagerが持っているべき
     var isSelected = false
@@ -45,7 +46,7 @@ import UIKit
     private var rubyLog: OrderedDictionary<String, String> = [:]
 
     // 変換結果の通知用関数
-    private var updateResult: (([any ResultViewItemData]) -> Void)?
+    private var updateResult: (((inout ResultModelVariableSection) -> Void) -> Void)?
 
     private var liveConversionEnabled: Bool {
         liveConversionManager.enabled && !self.isSelected
@@ -67,8 +68,8 @@ import UIKit
         return (left, center, right)
     }
 
-    func getTextChangedCountDelta() -> Int {
-        self.displayedTextManager.getTextChangedCountDelta()
+    func getTextChangedCount() -> Int {
+        self.displayedTextManager.getTextChangedCount()
     }
 
     func getComposingText() -> ComposingText {
@@ -151,7 +152,7 @@ import UIKit
         self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
-    func setUpdateResult(_ updateResult: @escaping ([any ResultViewItemData]) -> Void) {
+    func setUpdateResult(_ updateResult: (((inout ResultModelVariableSection) -> Void) -> Void)?) {
         self.updateResult = updateResult
     }
 
@@ -167,7 +168,9 @@ import UIKit
     func updateTextReplacementCandidates(left: String, center: String, right: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) {
         let results = self.textReplacer.getReplacementCandidate(left: left, center: center, right: right, target: target)
         if let updateResult {
-            updateResult(results)
+            updateResult {
+                $0.setResults(results)
+            }
         }
     }
 
@@ -175,6 +178,38 @@ import UIKit
     func getSearchResult(query: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) -> [any ResultViewItemData] {
         let results = self.textReplacer.getSearchResult(query: query, target: target)
         return results
+    }
+    
+    func updatePredictionCandidates(candidate: Candidate) {
+        if let updateResult {
+            updateResult {
+                $0.setPredictionResults(predictionManager.update(candidate: candidate, textChangedCount: self.displayedTextManager.getTextChangedCount()))
+            }
+        }
+    }
+
+    func updatePredictionCandidates(appending candidate: PredictionCandidate) {
+        // TODO: provide implementation
+    }
+
+    func resetPredictionCandidates() {
+        if let updateResult {
+            updateResult {
+                $0.setPredictionResults([])
+            }
+        }
+    }
+
+    func resetPredictionCandidatesIfNecessary(textChangedCount: Int) {
+        if predictionManager.shouldResetPrediction(textChangedCount: textChangedCount) {
+            self.resetPredictionCandidates()
+        }
+    }
+
+    /// `composingText`に入力されていた全体が変換された後に呼ばれる関数
+    private func conversionCompleted(candidate: Candidate) {
+        // 予測変換を更新する
+        self.updatePredictionCandidates(candidate: candidate)
     }
 
     /// 変換を選択した場合に呼ばれる
@@ -189,6 +224,7 @@ import UIKit
         guard !self.composingText.isEmpty else {
             // ここで入力を停止する
             self.stopComposition()
+            self.conversionCompleted(candidate: candidate)
             return
         }
         self.isSelected = false
@@ -210,7 +246,9 @@ import UIKit
         self.isSelected = false
 
         if let updateResult {
-            updateResult([])
+            updateResult {
+                $0.setResults([])
+            }
         }
     }
 
@@ -228,6 +266,9 @@ import UIKit
         // selectedの場合、単に変換を止める
         if isSelected {
             self.stopComposition()
+            return []
+        }
+        if self.composingText.isEmpty {
             return []
         }
         var candidate: Candidate
@@ -264,6 +305,7 @@ import UIKit
         }
         if self.displayedTextManager.composingText.isEmpty {
             self.stopComposition()
+            self.conversionCompleted(candidate: candidate)
         } else if requireSetResult {
             self.setResult()
         }
@@ -835,7 +877,9 @@ import UIKit
         }
 
         if let updateResult {
-            updateResult(results.mainResults)
+            updateResult {
+                $0.setResults(results.mainResults)
+            }
             // 自動確定の実施
             if liveConversionEnabled, let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
                 debug("InputManager.setResult: Complete first clause", firstClause)
