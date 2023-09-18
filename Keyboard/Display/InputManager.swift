@@ -224,7 +224,7 @@ import UIKit
     /// 「現在入力中として表示されている文字列で確定する」というセマンティクスを持った操作である。
     /// - parameters:
     ///  - shouldModifyDisplayedText: DisplayedTextを操作して良いか否か。`textDidChange`などの場合は操作してはいけない。
-    func enter(shouldModifyDisplayedText: Bool = true) -> [ActionType] {
+    func enter(shouldModifyDisplayedText: Bool = true, requireSetResult: Bool = true) -> [ActionType] {
         // selectedの場合、単に変換を止める
         if isSelected {
             self.stopComposition()
@@ -234,15 +234,16 @@ import UIKit
         if liveConversionEnabled, let _candidate = liveConversionManager.lastUsedCandidate {
             candidate = _candidate
         } else {
+            let composingText = self.composingText.prefixToCursorPosition()
             candidate = Candidate(
-                text: self.composingText.convertTarget,
+                text: composingText.convertTarget,
                 value: -18,
-                correspondingCount: self.composingText.input.count,
+                correspondingCount: composingText.input.count,
                 lastMid: MIDData.一般.mid,
                 data: [
                     DicdataElement(
-                        word: self.composingText.convertTarget,
-                        ruby: self.composingText.convertTarget.toKatakana(),
+                        word: composingText.convertTarget,
+                        ruby: composingText.convertTarget.toKatakana(),
                         cid: CIDData.固有名詞.cid,
                         mid: MIDData.一般.mid,
                         value: -18
@@ -261,7 +262,11 @@ import UIKit
             }
             self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
         }
-        self.stopComposition()
+        if self.displayedTextManager.composingText.isEmpty {
+            self.stopComposition()
+        } else if requireSetResult {
+            self.setResult()
+        }
         return actions.map(\.action)
     }
 
