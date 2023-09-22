@@ -234,10 +234,11 @@ import UIKit
     }
 
     /// 予測変換を選んだ後に呼ぶ
-    func updatePredictionCandidates(appending candidate: PredictionCandidate) {
+    func predictionCandidateSelected(candidate: PredictionCandidate) {
         guard let lastUsedCandidate = predictionManager.getLastCandidate() else {
             return
         }
+        self.kanaKanjiConverter.updateLearningData(lastUsedCandidate, with: candidate)
         let newCandidate = candidate.join(to: lastUsedCandidate)
         let results = self.kanaKanjiConverter.requestPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
         predictionManager.update(candidate: newCandidate, textChangedCount: self.displayedTextManager.getTextChangedCount())

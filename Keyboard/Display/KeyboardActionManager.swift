@@ -79,7 +79,7 @@ import SwiftUtils
         } else if let candidate = candidate as? PredictionCandidate {
             self.inputManager.input(text: candidate.text, simpleInsert: true, inputStyle: .direct)
             if !candidate.isTerminal {
-                self.inputManager.updatePredictionCandidates(appending: candidate)
+                self.inputManager.predictionCandidateSelected(candidate: candidate)
             } else {
                 self.inputManager.resetPredictionCandidates()
             }
