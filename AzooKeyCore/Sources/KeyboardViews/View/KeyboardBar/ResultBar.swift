@@ -50,8 +50,12 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         .matchedGeometryEffect(id: "KeyboardBarButton", in: namespace)
     }
 
+    private var isResultMode: Bool {
+        !variableStates.resultModelVariableSection.results.isEmpty
+    }
+
     private var resultData: [ResultData] {
-        if !variableStates.resultModelVariableSection.results.isEmpty {
+        if isResultMode {
             variableStates.resultModelVariableSection.results
         } else {
             variableStates.resultModelVariableSection.predictionResults
@@ -98,7 +102,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 }
             } else {
                 HStack {
-                    if variableStates.resultModelVariableSection.results.isEmpty && displayTabBarButton {
+                    if !isResultMode && displayTabBarButton {
                         tabBarButton
                         Spacer()
                     }
@@ -128,7 +132,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         }
                         .padding(.horizontal, 5)
                     }
-                    if variableStates.resultModelVariableSection.predictionResults.isEmpty {
+                    if isResultMode {
                         // 候補を展開するボタン
                         Button(action: {self.expand()}) {
                             ZStack {
@@ -145,7 +149,8 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 }
             }
         }
-        .animation(.easeIn(duration: 0.2), value: resultData.isEmpty)
+        .animation(.easeIn(duration: 0.2), value: variableStates.resultModelVariableSection.results.isEmpty)
+        .animation(.easeIn(duration: 0.2), value: variableStates.resultModelVariableSection.predictionResults.isEmpty)
     }
 
     private func pressed(candidate: any ResultViewItemData) {
@@ -231,5 +236,6 @@ struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: B
                     theme.resultBackgroundColor.color
             )
             .cornerRadius(5.0)
+            .animation(nil, value: configuration.isPressed)
     }
 }
