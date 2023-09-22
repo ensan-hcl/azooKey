@@ -19,14 +19,7 @@ final class PredictionManager {
 
     func update(candidate: Candidate, textChangedCount: Int, predictions: [KanaKanjiConverterModule.PredictionCandidate]) -> [PredictionCandidate] {
         self.lastState = State(candidate: candidate, textChangedCount: textChangedCount)
-        return predictions.map{.init(candidate: $0, terminatePrediction: shouldTerminate($0))}
-    }
-
-    func shouldTerminate(_ candidate: KanaKanjiConverterModule.PredictionCandidate) -> Bool {
-        if ["。", "、", ".", ","].contains(candidate.text) {
-            return true
-        }
-        return false
+        return predictions
     }
 
     func getLastCandidate() -> Candidate? {
@@ -42,26 +35,13 @@ final class PredictionManager {
     }
 }
 
-struct PredictionCandidate: ResultViewItemData {
-    init(candidate: KanaKanjiConverterModule.PredictionCandidate, terminatePrediction: Bool = false) {
-        self.candidate = candidate
-        self.terminatePrediction = terminatePrediction
-    }
-    var candidate: KanaKanjiConverterModule.PredictionCandidate
-
-    var inputable: Bool {
+extension KanaKanjiConverterModule.PredictionCandidate: ResultViewItemData {
+    public var inputable: Bool {
         true
     }
-            
-    var text: String {
-        candidate.text
-    }
-
-    var terminatePrediction: Bool
-    
-    #if DEBUG
-    func getDebugInformation() -> String {
+#if DEBUG
+    public func getDebugInformation() -> String {
         text
     }
-    #endif
+#endif
 }

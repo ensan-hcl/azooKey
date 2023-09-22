@@ -78,7 +78,7 @@ import SwiftUtils
             variableStates.lastTabCharacterPreferenceUpdate = .now
         } else if let candidate = candidate as? PredictionCandidate {
             self.inputManager.input(text: candidate.text, simpleInsert: true, inputStyle: .direct)
-            if !candidate.terminatePrediction {
+            if !candidate.isTerminal {
                 self.inputManager.updatePredictionCandidates(appending: candidate)
             } else {
                 self.inputManager.resetPredictionCandidates()

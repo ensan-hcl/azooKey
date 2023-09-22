@@ -233,7 +233,7 @@ import UIKit
 
     func updatePredictionCandidates(appending candidate: PredictionCandidate) {
         if let updateResult, let lastUsedCandidate = predictionManager.getLastCandidate() {
-            let newCandidate = candidate.candidate.join(to: lastUsedCandidate)
+            let newCandidate = candidate.join(to: lastUsedCandidate)
             let results = self.kanaKanjiConverter.requestPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
             updateResult {
                 $0.setPredictionResults(predictionManager.update(candidate: newCandidate, textChangedCount: self.displayedTextManager.getTextChangedCount(), predictions: results))
