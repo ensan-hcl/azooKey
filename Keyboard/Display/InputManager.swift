@@ -221,22 +221,29 @@ import UIKit
         let results = self.textReplacer.getSearchResult(query: query, target: target)
         return results
     }
-    
+
+    /// 確定直後に呼ぶ
     func updatePredictionCandidates(candidate: Candidate) {
         let results = self.kanaKanjiConverter.requestPredictionCandidates(leftSideCandidate: candidate, options: getConvertRequestOptions())
+        predictionManager.updateAfterComplete(candidate: candidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
         if let updateResult {
             updateResult {
-                $0.setPredictionResults(predictionManager.update(candidate: candidate, textChangedCount: self.displayedTextManager.getTextChangedCount(), predictions: results))
+                $0.setPredictionResults(results)
             }
         }
     }
 
+    /// 予測変換を選んだ後に呼ぶ
     func updatePredictionCandidates(appending candidate: PredictionCandidate) {
-        if let updateResult, let lastUsedCandidate = predictionManager.getLastCandidate() {
-            let newCandidate = candidate.join(to: lastUsedCandidate)
-            let results = self.kanaKanjiConverter.requestPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
+        guard let lastUsedCandidate = predictionManager.getLastCandidate() else {
+            return
+        }
+        let newCandidate = candidate.join(to: lastUsedCandidate)
+        let results = self.kanaKanjiConverter.requestPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
+        predictionManager.update(candidate: newCandidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
+        if let updateResult {
             updateResult {
-                $0.setPredictionResults(predictionManager.update(candidate: newCandidate, textChangedCount: self.displayedTextManager.getTextChangedCount(), predictions: results))
+                $0.setPredictionResults(results)
             }
         }
     }
