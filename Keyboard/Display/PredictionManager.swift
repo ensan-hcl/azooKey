@@ -16,7 +16,7 @@ final class PredictionManager {
     }
 
     private var lastState: State?
-    
+
     // 2つのCandidateをmergeする
     private func mergeCandidates(_ left: Candidate, _ right: Candidate) -> Candidate {
         // 厳密なmergeにはleft.lastRcidとright.lastLcidの連接コストの計算が必要だが、予測変換の文脈で厳密なValueの計算は不要なので行わない
@@ -28,7 +28,7 @@ final class PredictionManager {
         result.lastMid = right.lastMid == MIDData.EOS.mid ? left.lastMid : right.lastMid
         return result
     }
-    
+
     /// 部分的に確定した後に更新を行う
     func partialUpdate(candidate: Candidate) {
         if let lastState {
@@ -53,9 +53,9 @@ final class PredictionManager {
     }
 
     func getLastCandidate() -> Candidate? {
-        return lastState?.candidate
+        lastState?.candidate
     }
-    
+
     func shouldResetPrediction(textChangedCount: Int) -> Bool {
         if let lastState, lastState.textChangedCount != textChangedCount {
             self.lastState = nil

@@ -117,7 +117,7 @@ import UIKit
             metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")
         )
     }
-    
+
     private func updateLog(candidate: Candidate) {
         for data in candidate.data {
             // 「感謝する: カンシャスル」→を「感謝: カンシャ」に置き換える
@@ -807,7 +807,7 @@ import UIKit
 
         // トークナイザ
         let tokenizer: CFStringTokenizer = CFStringTokenizerCreate(
-            kCFAllocatorDefault, 
+            kCFAllocatorDefault,
             inputText as CFString,
             CFRangeMake(0, inputText.length),
             kCFStringTokenizerUnitWordBoundary,

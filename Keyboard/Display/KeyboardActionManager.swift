@@ -347,7 +347,7 @@ import SwiftUtils
             self.registerActions(action.start, variableStates: variableStates)
         }
         self.tasks.append((type: action, task: startTask))
-        
+
         let repeatTask = Task {
             try await Task.sleep(nanoseconds: 0_400_000_000)
             while !Task.isCancelled {
