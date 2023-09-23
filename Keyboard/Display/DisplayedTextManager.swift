@@ -32,7 +32,7 @@ import UIKit
 
     /// `textChangedCount`のgetter。
     func getTextChangedCount() -> Int {
-        return self.textChangedCount
+        self.textChangedCount
     }
 
     /// marked textの有効化状態

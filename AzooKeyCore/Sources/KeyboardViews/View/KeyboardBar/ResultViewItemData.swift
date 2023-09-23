@@ -28,10 +28,10 @@ public struct ResultModelVariableSection {
         self.updateResult.toggle()
     }
     public mutating func setSearchResults(_ results: [any ResultViewItemData]) {
-        self.searchResults = results.indices.map {ResultData(id: $0, candidate: results[$0])}
+        self.searchResults = results.enumerated().map {ResultData(id: $0.offset, candidate: $0.element)}
     }
     public mutating func setPredictionResults(_ results: [any ResultViewItemData]) {
-        self.predictionResults = results.indices.map {ResultData(id: $0, candidate: results[$0])}
+        self.predictionResults = results.enumerated().map {ResultData(id: $0.offset, candidate: $0.element)}
         self.updateResult.toggle()
     }
 }
