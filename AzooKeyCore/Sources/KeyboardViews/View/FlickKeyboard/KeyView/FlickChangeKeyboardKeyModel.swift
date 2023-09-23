@@ -43,7 +43,7 @@ struct FlickChangeKeyboardModel<Extension: ApplicationSpecificKeyboardViewExtens
         return [:]
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
             return KeyLabel(.changeKeyboard, width: width)

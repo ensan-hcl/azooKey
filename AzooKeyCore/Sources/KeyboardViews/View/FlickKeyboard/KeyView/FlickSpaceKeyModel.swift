@@ -41,7 +41,7 @@ struct FlickSpaceKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
         [.input(" ")]
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         KeyLabel(.text("空白"), width: width)
     }
 

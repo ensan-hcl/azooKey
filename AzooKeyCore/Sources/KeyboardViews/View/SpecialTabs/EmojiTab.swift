@@ -368,7 +368,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
 private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
     private var currentLevel: EmojiTabExpandModePreference.Level
     private var action: () -> Void
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         KeyLabel(.image(self.currentLevel.icon), width: width, textSize: .max)
     }
 
@@ -393,7 +393,7 @@ private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtensio
 private struct GenreKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
     private var action: () -> Void
     private var systemImage: String
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         KeyLabel(.image(systemImage), width: width, textSize: .max)
     }
 
@@ -430,7 +430,7 @@ private struct EmojiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
     var longPressActions: LongpressActionType {
         .none
     }
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states _: VariableStates, theme _: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states _: VariableStates, theme _: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         KeyLabel(.text(emoji), width: width, textSize: .max)
     }
 

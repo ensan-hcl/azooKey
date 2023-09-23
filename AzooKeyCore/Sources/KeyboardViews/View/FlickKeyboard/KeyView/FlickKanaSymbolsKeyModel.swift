@@ -33,7 +33,7 @@ struct FlickKanaSymbolsKeyModel<Extension: ApplicationSpecificKeyboardViewExtens
 
     private init() {}
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         KeyLabel(self.labelType, width: width)
     }
 
