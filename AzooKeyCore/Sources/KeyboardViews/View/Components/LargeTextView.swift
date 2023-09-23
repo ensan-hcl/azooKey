@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import SwiftUIUtils
 
+@MainActor
 struct LargeTextView: View {
     private let text: String
     @Binding private var isViewOpen: Bool

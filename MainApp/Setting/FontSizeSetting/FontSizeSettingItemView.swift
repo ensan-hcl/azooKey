@@ -73,6 +73,7 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
     }
 }
 
+@MainActor
 private struct KeyView: View {
     @EnvironmentObject private var appStates: MainAppStates
     private let fontSize: CGFloat

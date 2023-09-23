@@ -142,6 +142,7 @@ struct WebCustardList: Codable {
     var custards: [Item]
 }
 
+@MainActor
 struct ManageCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var urlString: String = ""
@@ -369,6 +370,7 @@ struct ManageCustardView: View {
 }
 
 // FIXME: ファイルを保存もキャンセルもしない状態で2つ目のファイルを読み込むとエラーになる
+@MainActor
 struct URLImportCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var showAlert = false

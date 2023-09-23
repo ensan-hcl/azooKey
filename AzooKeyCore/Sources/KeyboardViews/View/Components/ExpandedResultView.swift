@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 struct ExpandedResultView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool

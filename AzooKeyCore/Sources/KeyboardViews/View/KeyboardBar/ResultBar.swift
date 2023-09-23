@@ -21,6 +21,7 @@ private extension Equatable {
     }
 }
 
+@MainActor
 struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @Namespace private var namespace
     @Environment(Extension.Theme.self) private var theme

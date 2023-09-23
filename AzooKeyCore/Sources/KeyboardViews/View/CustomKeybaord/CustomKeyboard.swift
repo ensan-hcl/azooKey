@@ -253,6 +253,7 @@ extension CustardInterfaceKey {
     }
 }
 
+@MainActor
 struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let custard: Custard
     private var tabDesign: TabDependentDesign {

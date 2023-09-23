@@ -68,6 +68,7 @@ struct BetaMoveCursorBarState {
     }
 }
 
+@MainActor
 struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
 
@@ -283,6 +284,7 @@ private enum MoveCursorBarGestureState {
     case moving(CGPoint, Int)   // 右だったら+1、左だったら-1
 }
 
+@MainActor
 struct MoveCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
 

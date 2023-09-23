@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @State private var messageManager = MessageManager(necessaryMessages: Extension.MessageProvider.messages, userDefaults: Extension.MessageProvider.userDefaults)
     @State private var isResultViewExpanded = false

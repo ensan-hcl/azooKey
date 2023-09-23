@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     typealias Position = (current: CGPoint, initial: CGPoint)
     @State private var top_left_edge: Position
@@ -279,6 +280,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     }
 }
 
+@MainActor
 struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>: ViewModifier {
     private let initialSize: CGSize
     @Binding private var position: CGPoint

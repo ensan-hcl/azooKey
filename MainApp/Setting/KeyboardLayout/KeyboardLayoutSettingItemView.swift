@@ -25,6 +25,7 @@ extension LanguageLayout {
     }
 }
 
+@MainActor
 struct LanguageLayoutSettingView<SettingKey: LanguageLayoutKeyboardSetting>: View {
     @EnvironmentObject private var appStates: MainAppStates
     @State private var selection: LanguageLayout = .flick

@@ -101,6 +101,7 @@ private struct Selection: Hashable {
     var longpressEnabled = false
 }
 
+@MainActor
 struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: View {
     @StateObject private var editState = EditState()
     @State private var setting = SettingUpdater<SettingKey>()

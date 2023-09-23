@@ -10,6 +10,7 @@ import KeyboardThemes
 import SwiftUI
 import SwiftUtils
 
+@MainActor
 struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme

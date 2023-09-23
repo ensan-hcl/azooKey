@@ -21,6 +21,7 @@ private struct CandidateMock: ResultViewItemData {
     #endif
 }
 
+@MainActor
 struct KeyboardPreview: View {
     private let theme: AzooKeyTheme
 

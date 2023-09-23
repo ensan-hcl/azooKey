@@ -10,6 +10,8 @@ let swiftSettings: [SwiftSetting] = [
     .enableUpcomingFeature("ForwardTrailingClosures"),
     .enableUpcomingFeature("ImplicitOpenExistentials"),
     .enableUpcomingFeature("StrictConcurrency"),
+    .enableUpcomingFeature("DisableOutwardActorInference"),
+    .enableUpcomingFeature("ImportObjcForwardDeclarations"),
     .unsafeFlags(["-strict-concurrency=complete"])
 ]
 let package = Package(
