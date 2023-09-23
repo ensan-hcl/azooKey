@@ -27,7 +27,7 @@ struct TipsTabView: View {
                         }
                         NavigationLink("入力方法を選ぶ", destination: SelctInputStyleTipsView())
                     }
-//                    if #unavailable(iOS 16) {
+                    if #unavailable(iOS 16) {
                         Section(header: Text("お知らせ")) {
                             HStack {
                                 if !readArticle_iOS15_service_termination {
@@ -37,7 +37,7 @@ struct TipsTabView: View {
                                 NavigationLink("iOS15のサポートを終了します", destination: iOS15TerminationNewsView($readArticle_iOS15_service_termination))
                             }
                         }
-//                    }
+                    }
 
                     Section(header: Text("便利な使い方")) {
                         NavigationLink("片手モードを使う", destination: OneHandedModeTipsView())
