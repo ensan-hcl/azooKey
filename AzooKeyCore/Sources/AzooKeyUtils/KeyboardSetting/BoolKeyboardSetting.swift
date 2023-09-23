@@ -215,7 +215,6 @@ public extension KeyboardSettingKey where Self == EnablePasteButton {
     static var enablePasteButton: Self { .init() }
 }
 
-// TODO: Localize
 /// 「連絡先」アプリの名前情報を読み込む設定
 /// - note: この機能はフルアクセスがないと実現できない
 public struct EnableContactImport: BoolKeyboardSettingKey {

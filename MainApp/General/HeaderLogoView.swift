@@ -20,15 +20,15 @@ struct HeaderLogoView: View {
         Group {
             switch colorScheme {
             case .light:
-                Text("A")
+                Text(verbatim: "A")
                     .font(Design.fonts.azooKeyIconFont(iconSize * 0.75))
                     .accessibilityLabel("azooKeyのロゴ")
             case .dark:
-                Text("B")
+                Text(verbatim: "B")
                     .font(Design.fonts.azooKeyIconFont(iconSize * 0.75))
                     .accessibilityLabel("azooKeyのロゴ")
             @unknown default:
-                Text("azooKey")
+                Text(verbatim: "azooKey")
                     .font(Font(UIFont.systemFont(ofSize: iconSize)))
             }
         }

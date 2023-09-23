@@ -40,7 +40,6 @@ extension CodableActionData {
         case .dismissKeyboard: return "キーボードを閉じる"
         case .enableResizingMode: return "片手モードをオンにする"
         case let .launchApplication(value):
-            // TODO: Localize
             switch value.scheme {
             case .azooKey:
                 return "azooKey本体アプリを開く"

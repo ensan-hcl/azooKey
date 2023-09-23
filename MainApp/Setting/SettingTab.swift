@@ -127,7 +127,7 @@ struct SettingTabView: View {
                     HStack {
                         Text("URL Scheme")
                         Spacer()
-                        Text("azooKey://").font(.system(.body, design: .monospaced))
+                        Text(verbatim: "azooKey://").font(.system(.body, design: .monospaced))
                     }
                     HStack {
                         Text("バージョン")
