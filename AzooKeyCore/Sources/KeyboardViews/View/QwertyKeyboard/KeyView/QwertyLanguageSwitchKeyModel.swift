@@ -62,7 +62,7 @@ struct QwertySwitchLanguageKeyModel<Extension: ApplicationSpecificKeyboardViewEx
         } else if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.text(states.keyboardLanguage.symbol), width: width, textColor: color)
         } else {
-            return KeyLabel(.text(Extension.SettingProvider.preferredLanguage.first.symbol), width: width, textColor: color)
+            return KeyLabel(.text(E.SettingProvider.preferredLanguage.first.symbol), width: width, textColor: color)
         }
     }
 
