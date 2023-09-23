@@ -45,10 +45,10 @@ struct QwertyKeyDoublePressState {
         case secondPressStarted
         case secondPressCompleted
     }
-    
+
     private var state: State = .inactive
     private(set) var updateDate: Date = Date()
-    
+
     var secondPressCompleted: Bool {
         self.state == .secondPressCompleted
     }
@@ -89,7 +89,7 @@ struct QwertyKeyDoublePressState {
         }
         self.updateDate = touchUpDate
     }
-    
+
     mutating func reset() {
         self.state = .inactive
         self.updateDate = Date()
@@ -104,8 +104,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     @State private var doublePressState = QwertyKeyDoublePressState()
     @State private var suggest = false
 
-    @State private var longPressStartTask: Task<(), any Error>? = nil
-    
+    @State private var longPressStartTask: Task<(), any Error>?
+
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
     private let tabDesign: TabDependentDesign

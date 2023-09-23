@@ -93,7 +93,7 @@ public enum AzooKeyKeyboardViewExtension: ApplicationSpecificKeyboardViewExtensi
     public static var useBetaMoveCursorBar: Bool {
         UseBetaMoveCursorBar.value
     }
-    
+
     public static var useShiftKey: Bool {
         false
     }

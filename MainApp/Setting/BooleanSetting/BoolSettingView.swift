@@ -14,7 +14,7 @@ struct BoolSettingView<SettingKey: BoolKeyboardSettingKey>: View {
     @State private var showExplanation = false
     @State private var showRequireFullAccessAlert = false
     @State private var showOnEnabledMessageAlert = false
-    @State private var onEnabledAlertMessage: LocalizedStringKey? = nil
+    @State private var onEnabledAlertMessage: LocalizedStringKey?
     @State private var setting: SettingUpdater<SettingKey>
 
     @MainActor init(_ key: SettingKey) {

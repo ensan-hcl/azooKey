@@ -537,7 +537,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
                 QwertyKeyModel<Extension>(labelType: .text("h"), pressActions: [.input("h")]),
                 QwertyKeyModel<Extension>(labelType: .text("j"), pressActions: [.input("j")]),
                 QwertyKeyModel<Extension>(labelType: .text("k"), pressActions: [.input("k")]),
-                QwertyKeyModel<Extension>(labelType: .text("l"), pressActions: [.input("l")]),
+                QwertyKeyModel<Extension>(labelType: .text("l"), pressActions: [.input("l")])
             ] : [
                 QwertyKeyModel<Extension>(labelType: .text("a"), pressActions: [.input("a")]),
                 QwertyKeyModel<Extension>(labelType: .text("s"), pressActions: [.input("s")]),
@@ -548,7 +548,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
                 QwertyKeyModel<Extension>(labelType: .text("j"), pressActions: [.input("j")]),
                 QwertyKeyModel<Extension>(labelType: .text("k"), pressActions: [.input("k")]),
                 QwertyKeyModel<Extension>(labelType: .text("l"), pressActions: [.input("l")]),
-                QwertyAaKeyModel<Extension>.shared,
+                QwertyAaKeyModel<Extension>.shared
             ],
         [
             Self.tabKeys(rowInfo: (7, 2, 0, 0)).languageKey,

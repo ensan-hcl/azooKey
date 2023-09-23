@@ -174,7 +174,7 @@ struct EnableAzooKeyView: View {
             }
         }
     }
-    
+
     private func checkActiveKeyboardIsAzooKey() -> Bool {
         // キーボードが開いた時
         // 参考：https://stackoverflow.com/questions/26153336/how-do-i-find-out-the-current-keyboard-used-on-ios8

@@ -36,7 +36,7 @@ struct QwertyShiftKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
             return [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .on)]
         }
     }
-    
+
     func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
         if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width, textColor: color)
