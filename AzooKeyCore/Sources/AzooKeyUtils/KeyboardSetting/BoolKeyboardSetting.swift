@@ -215,6 +215,21 @@ public extension KeyboardSettingKey where Self == EnablePasteButton {
     static var enablePasteButton: Self { .init() }
 }
 
+// TODO: Localize
+/// 「連絡先」アプリの名前情報を読み込む設定
+/// - note: この機能はフルアクセスがないと実現できない
+public struct EnableContactImport: BoolKeyboardSettingKey {
+    public static let title: LocalizedStringKey = "変換に連絡先データを利用"
+    public static let explanation: LocalizedStringKey = "「連絡先」アプリに登録された氏名のデータを変換に利用します"
+    public static let defaultValue = false
+    public static let key: String = "enable_contact_import"
+    public static let requireFullAccess: Bool = true
+}
+
+public extension KeyboardSettingKey where Self == EnableContactImport {
+    static var enableContactImport: Self { .init() }
+}
+
 /// クリップボード履歴マネージャを有効化する設定
 /// - note: この機能はフルアクセスがないと実現できない
 public struct EnableClipboardHistoryManagerTab: BoolKeyboardSettingKey {

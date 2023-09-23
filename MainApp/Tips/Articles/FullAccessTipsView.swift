@@ -38,6 +38,7 @@ struct FullAccessTipsView: View {
                 BoolSettingView(.enablePasteButton)
             }
             BoolSettingView(.enableClipboardHistoryManagerTab)
+            ContactImportSettingView()
 
             TipsContentParagraph {
                 Text("フルアクセスをオンにすると、変換候補を長押しすることでキーボード上で誤変換を報告できるようになります。")

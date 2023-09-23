@@ -86,6 +86,7 @@ struct SettingTabView: View {
                         BoolSettingView(.typographyLetter)
                         BoolSettingView(.unicodeCandidate)
                         MarkedTextSettingView(.markedTextSetting)
+                        ContactImportSettingView()
                         NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                     }
 
