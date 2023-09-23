@@ -118,6 +118,8 @@ public final class VariableStates: ObservableObject {
     @Published private(set) public var keyboardOrientation: KeyboardOrientation = .vertical
     @Published private(set) public var keyboardLayout: KeyboardLayout = .flick
 
+    private(set) public var keyboardType: UIKeyboardType = .default
+
     /// `ResultModel`の変数
     @Published public var resultModelVariableSection = ResultModelVariableSection()
 
@@ -129,7 +131,7 @@ public final class VariableStates: ObservableObject {
     @Published public var interfacePosition: CGPoint = .zero
 
     /// 外部では利用しないが、`enterKeyState`の更新時に必要になる
-    private var enterKeyType: UIReturnKeyType = .default
+    private(set) public var returnKeyType: UIReturnKeyType = .default
     @Published private(set) var enterKeyState: EnterKeyState = .return(.default)
 
     @Published public var barState: BarState = .none
@@ -214,6 +216,7 @@ public final class VariableStates: ObservableObject {
         guard let type else {
             return
         }
+        self.keyboardType = type
         switch type {
         case .default, .asciiCapable:
             return
@@ -245,7 +248,7 @@ public final class VariableStates: ObservableObject {
     public func setEnterKeyState(_ state: RoughEnterKeyState) {
         switch state {
         case .return:
-            self.enterKeyState = .return(enterKeyType)
+            self.enterKeyState = .return(returnKeyType)
         case .complete:
             self.enterKeyState = .complete
         }
@@ -265,7 +268,7 @@ public final class VariableStates: ObservableObject {
     }
 
     public func setUIReturnKeyType(type: UIReturnKeyType) {
-        self.enterKeyType = type
+        self.returnKeyType = type
         if case let .return(prev) = self.enterKeyState, prev != type {
             self.setEnterKeyState(.return)
         }

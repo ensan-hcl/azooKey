@@ -537,7 +537,25 @@ import SwiftUtils
 
         if isSelected {
             debug("user operation id: 0", a_center)
-            self.inputManager.userSelectedText(text: a_center)
+            // 検索フィールドなどでは再変換を抑制する
+            let lengthLimit: Int = switch variableStates.keyboardType {
+            case .default, .twitter:
+                switch variableStates.returnKeyType {
+                case .emergencyCall:
+                    0
+                case .search, .google, .yahoo, .route:
+                    5
+                default:
+                    100
+                }
+            case .decimalPad, .URL, .asciiCapableNumberPad, .emailAddress, .phonePad, .namePhonePad, .alphabet, .numbersAndPunctuation, .numberPad, .asciiCapable:
+                0
+            case .webSearch:
+                5
+            @unknown default:
+                50
+            }
+            self.inputManager.userSelectedText(text: a_center, lengthLimit: lengthLimit)
             return
         }
 
