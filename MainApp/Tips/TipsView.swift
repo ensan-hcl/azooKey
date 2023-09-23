@@ -11,7 +11,7 @@ import SwiftUI
 
 struct TipsTabView: View {
     @EnvironmentObject private var appStates: MainAppStates
-    @AppStorage("read_article_iOS14_service_termination") private var readArticle_iOS14_service_termination = false
+    @AppStorage("read_article_iOS15_service_termination") private var readArticle_iOS15_service_termination = false
 
     var body: some View {
         VStack {
@@ -27,14 +27,14 @@ struct TipsTabView: View {
                         }
                         NavigationLink("入力方法を選ぶ", destination: SelctInputStyleTipsView())
                     }
-                    if #unavailable(iOS 15) {
+                    if #unavailable(iOS 16) {
                         Section(header: Text("お知らせ")) {
                             HStack {
-                                if !readArticle_iOS14_service_termination {
+                                if !readArticle_iOS15_service_termination {
                                     Image(systemName: "exclamationmark.circle.fill")
                                         .foregroundStyle(.red)
                                 }
-                                NavigationLink("iOS14のサポートを終了します", destination: iOS14TerminationNewsView($readArticle_iOS14_service_termination))
+                                NavigationLink("iOS15のサポートを終了します", destination: iOS15TerminationNewsView($readArticle_iOS15_service_termination))
                             }
                         }
                     }

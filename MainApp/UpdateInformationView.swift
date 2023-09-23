@@ -14,6 +14,23 @@ struct UpdateInformationView: View {
         Form {
             // version 2系
             Group {
+                // version 2.2系
+                Group {
+                    VersionView("2.2", releaseDate: "2023年10月xx日") {
+                        if #unavailable(iOS 16) {
+                            ParagraphView("お知らせ。") {
+                                "バージョン2.3以降でiOS15のサポートを終了します。iOS16以上で引き続きご利用いただけます。ご不便をおかけしますが、よろしくお願いいたします"
+                            }
+                        }
+                        ParagraphView("予測変換を大幅に強化しました。")
+                        ParagraphView("再変換を大幅に強化しました。")
+                        ParagraphView("機能を改善しました。") {
+                            "テキストを選択した際に表示していた「編集」機能を廃止しました"
+                            "カーソルを動かした際、カーソルバーを表示するようにしました"
+                        }
+                        ParagraphView("その他辞書の改善を行いました。")
+                    }
+                }
                 // version 2.1系
                 Group {
                     VersionView("2.1.2", releaseDate: "2023年07月27日") {
