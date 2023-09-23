@@ -98,6 +98,6 @@ private struct KeyView: View {
         RoundedRectangle(cornerRadius: 5)
             .stroke()
             .frame(width: size.width, height: size.height)
-            .overlay(Text("あ").font(.system(size: fontSize)))
+            .overlay(Text(verbatim: "あ").font(.system(size: fontSize)))
     }
 }

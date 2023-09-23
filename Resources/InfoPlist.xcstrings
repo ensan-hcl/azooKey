@@ -1,13 +1,12 @@
 {
-  "sourceLanguage" : "en",
+  "sourceLanguage" : "ja",
   "strings" : {
     "CFBundleDisplayName" : {
       "comment" : "Bundle display name",
-      "extractionState" : "extracted_with_value",
       "localizations" : {
-        "en" : {
+        "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "azooKey"
           }
         }
@@ -15,21 +14,34 @@
     },
     "CFBundleName" : {
       "comment" : "Bundle name",
-      "extractionState" : "extracted_with_value",
       "localizations" : {
-        "en" : {
+        "ja" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "azooKey"
           }
         }
       }
     },
     "custom keyboard file" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
     },
     "json custom keyboard file" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
     },
     "NSContactsUsageDescription" : {
       "extractionState" : "manual",
