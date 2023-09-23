@@ -6041,6 +6041,16 @@
         }
       }
     },
+    "右向き" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forward"
+          }
+        }
+      }
+    },
     "右端の値" : {
       "localizations" : {
         "en" : {
@@ -6683,6 +6693,16 @@
         }
       }
     },
+    "左向き" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backward"
+          }
+        }
+      }
+    },
     "左端の値" : {
       "localizations" : {
         "en" : {
@@ -7164,6 +7184,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "方向" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direction"
           }
         }
       }
@@ -7989,6 +8019,26 @@
         }
       }
     },
+    "特定の文字まで削除" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete until certain letters"
+          }
+        }
+      }
+    },
+    "特定の文字まで移動" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move cursor until certain letters"
+          }
+        }
+      }
+    },
     "特殊キーの背景色" : {
       "localizations" : {
         "en" : {
@@ -8164,6 +8214,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "目指す文字（改行区切り）" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Target characters (line-separated)"
           }
         }
       }

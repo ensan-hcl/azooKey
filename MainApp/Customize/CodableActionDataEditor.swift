@@ -46,29 +46,6 @@ extension CodableActionData {
             case .shortcuts:
                 return "ショートカットを実行する"
             }
-        //        case .setBoolState: return "Bool変数を設定"
-        //        case .boolSwitch: return "条件分岐"
-        //        case let .setCursorBar(value):
-        //            // TODO: LOCALIZE
-        //            switch value {
-        //            case .on: return "カーソルバーを表示する"
-        //            case .off: return "カーソルバーを消す"
-        //            case .toggle: return "カーソルバーの切り替え"
-        //            }
-        //        case let .setCapsLockState(value):
-        //            // TODO: LOCALIZE
-        //            switch value {
-        //            case .on: return "Caps lockのモードのオン"
-        //            case .off: return "Caps lockのモードのオフ"
-        //            case .toggle: return "Caps lockのモードの切り替え"
-        //            }
-        //        case let .setTabBar(value):
-        //            // TODO: LOCALIZE
-        //            switch value {
-        //            case .on: return "タブバーを表示する"
-        //            case .off: return "タブバーを消す"
-        //            case .toggle: return "タブバーの切り替え"
-        //            }
         }
     }
 }
@@ -208,6 +185,18 @@ private struct CodableActionEditor: View {
             Text("負の値を指定すると左にカーソルが動きます")
         case .moveTab:
             ActionMoveTabEditView($action, availableCustards: availableCustards)
+        case .smartDelete(let item):
+            ActionScanItemEditor(action: $action) { item } convert: { value in
+                // 重複を除去し、改行を追加する
+                let targets = Array(Set(item.targets + ["\n"]) )
+                return .smartDelete(ScanItem(targets: targets, direction: item.direction))
+            }
+        case .smartMoveCursor(let item):
+            ActionScanItemEditor(action: $action) { item } convert: { value in
+                // 重複を除去し、改行を追加する
+                let targets = Array(Set(item.targets + ["\n"]) )
+                return .smartMoveCursor(ScanItem(targets: targets, direction: item.direction))
+            }
         case .replaceLastCharacters:
             EmptyView()
         case let .launchApplication(item):
@@ -221,6 +210,49 @@ private struct CodableActionEditor: View {
             }
         default:
             EmptyView()
+        }
+    }
+}
+
+private struct ActionScanItemEditor: View {
+    @Binding private var action: EditingCodableActionData
+    private let convert: (ScanItem) -> CodableActionData?
+    @State private var value: ScanItem = .init(targets: CodableActionData.scanTargets, direction: .backward)
+
+    init(action: Binding<EditingCodableActionData>, initialValue: () -> ScanItem?, convert: @escaping (ScanItem) -> CodableActionData?) {
+        self.convert = convert
+        self._action = action
+        if let initialValue = initialValue() {
+            self._value = State(initialValue: initialValue)
+        }
+    }
+
+    var body: some View {
+        Group {
+            Picker("方向", selection: $value.direction) {
+                Text("左向き").tag(ScanItem.Direction.backward)
+                Text("右向き").tag(ScanItem.Direction.forward)
+            }
+            .pickerStyle(.menu)
+            HStack {
+                Text("目指す文字（改行区切り）")
+                Spacer()
+                TextEditor(text: $value.targets.converted(
+                    // バックスラッシュでエスケープする
+                    forward: {$0.joined(separator: "\n")},
+                    backward: {$0.components(separatedBy: "\n")}
+                ))
+                .background {
+                    Color.systemGray6
+                }
+                .font(.body.monospaced())
+                .frame(maxWidth: 50)
+                }
+        }
+        .onChange(of: value) {value in
+            if let data = convert(value) {
+                action.data = data
+            }
         }
     }
 }
@@ -532,6 +564,12 @@ private struct ActionPicker: View {
             Section(header: Text("高度")) {
                 Button("文頭まで削除") {
                     process(.smartDeleteDefault)
+                }
+                Button("特定の文字まで削除") {
+                    process(.smartDelete(ScanItem(targets: ["。", "、", "\n"], direction: .backward)))
+                }
+                Button("特定の文字まで移動") {
+                    process(.smartMoveCursor(ScanItem(targets: ["。", "、", "\n"], direction: .backward)))
                 }
                 Button("片手モードをオン") {
                     process(.enableResizingMode)
