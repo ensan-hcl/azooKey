@@ -48,15 +48,15 @@ struct TipsContentParagraph<Content: View>: View {
 }
 
 struct TipsImage: View {
-    private let name: String
+    private let resource: ImageResource
 
-    init(_ name: String) {
-        self.name = name
+    init(_ resource: ImageResource) {
+        self.resource = resource
     }
 
     var body: some View {
         CenterAlignedView {
-            Image(self.name)
+            Image(self.resource)
                 .resizable()
                 .scaledToFit()
                 .cornerRadius(2)

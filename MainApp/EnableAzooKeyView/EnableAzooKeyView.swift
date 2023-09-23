@@ -62,9 +62,9 @@ struct EnableAzooKeyView: View {
                             EnableAzooKeyViewHeader("追加する")
                             EnableAzooKeyViewText("下にスクロールして「追加する」を押して", with: "plus.circle")
                             EnableAzooKeyViewText("「キーボード」を押して", with: "keyboard")
-                            EnableAzooKeyViewImage("initSettingKeyboardImage-hand")
+                            EnableAzooKeyViewImage(.initSettingKeyboardImageHand)
                             EnableAzooKeyViewText("azooKeyをオンにして", with: "square.and.line.vertical.and.square.fill")
-                            EnableAzooKeyViewImage("initSettingAzooKeySwitchImage-hand")
+                            EnableAzooKeyViewImage(.initSettingAzooKeySwitchImageHand)
                             EnableAzooKeyViewText("このアプリを再び開いてください", with: "arrow.turn.down.left")
                             CenterAlignedView {
                                 EnableAzooKeyViewButton("追加する", systemName: "plus.circle") {
@@ -134,7 +134,7 @@ struct EnableAzooKeyView: View {
                                     appStates.requireFirstOpenView = false
                                 }
                             if !showDoneMessage {
-                                EnableAzooKeyViewImage("initSettingGlobeTapImage")
+                                EnableAzooKeyViewImage(.initSettingGlobeTap)
                             }
                             EnableAzooKeyViewText("azooKeyをお楽しみください！", with: "star.fill")
                             if !showDoneMessage {

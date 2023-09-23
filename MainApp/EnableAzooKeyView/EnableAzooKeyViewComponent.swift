@@ -90,13 +90,13 @@ struct EnableAzooKeyViewButton: View {
 }
 
 struct EnableAzooKeyViewImage: View {
-    private let identifier: String
-    init(_ identifier: String) {
-        self.identifier = identifier
+    private let resource: ImageResource
+    init(_ resource: ImageResource) {
+        self.resource = resource
     }
 
     var body: some View {
-        Image(identifier)
+        Image(resource)
             .resizable()
             .scaledToFit()
             .cornerRadius(2)

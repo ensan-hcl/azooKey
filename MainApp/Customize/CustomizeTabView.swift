@@ -19,7 +19,7 @@ struct CustomizeTabView: View {
             NavigationView {
                 Form {
                     Section(header: Text("カスタムタブ")) {
-                        ImageSlideshowView(pictures: ["custard_1", "custard_2", "custard_3" ])
+                        ImageSlideshowView(pictures: [.custard1, .custard2, .custard3])
                             .listRowSeparator(.hidden, edges: .bottom)
                         Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
                         NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
@@ -28,7 +28,7 @@ struct CustomizeTabView: View {
 
                     Section(header: Text("タブバー")) {
                         CenterAlignedView {
-                            Image("tabBar_1")
+                            Image(.tabBar1)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: MainAppDesign.imageMaximumWidth)

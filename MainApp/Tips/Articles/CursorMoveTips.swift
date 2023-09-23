@@ -14,7 +14,7 @@ struct CursorMoveTipsView: View {
         TipsContentView("カーソルを移動する") {
             TipsContentParagraph {
                 Text("「空白」を長押しすると、カーソルバーが現れます。ホームボタンのない端末のフリック入力では左下の\(systemImage: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right")を押して表示することも可能です。")
-                TipsImage("moveCursor")
+                TipsImage(.moveCursor)
             }
 
             TipsContentParagraph {
