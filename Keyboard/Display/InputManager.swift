@@ -836,27 +836,20 @@ import UIKit
     }
 
     // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
-    func userSelectedText(text: String) {
-        if text.isEmpty {
-            return
-        }
-        // 長すぎるのはダメ
-        if text.count > 100 {
-            return
-        }
-        if text.hasPrefix("http") {
-            return
-        }
-        // 改行文字はだめ
-        if text.contains("\n") || text.contains("\r") {
-            return
-        }
-        // 空白文字もだめ
-        if text.contains(" ") || text.contains("\t") {
+    func userSelectedText(text: String, lengthLimit: Int) {
+        self.composingText.stopComposition()
+        // 文字がない場合
+        if text.isEmpty
+            // 文字数が多すぎる場合
+            || text.count > lengthLimit
+            // httpで始まる場合
+            || text.hasPrefix("http")
+            // 扱いにくい文字を含む場合
+            || text.contains("\n") || text.contains("\r") || text.contains(" ") || text.contains("\t") {
+            self.setResult()
             return
         }
         // 過去のログを見て、再変換に利用する
-        self.composingText.stopComposition()
         let ruby = getReadingFromSystemAPI(self.getRubyIfPossible(text: text) ?? text)
         self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
 
