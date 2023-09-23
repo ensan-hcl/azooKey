@@ -211,7 +211,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                         Button("リセット") {
                             self.reload()
                         }
-                            .foregroundStyle(.red)
+                        .foregroundStyle(.red)
                     } else {
                         Text("このキーは編集できません")
                     }

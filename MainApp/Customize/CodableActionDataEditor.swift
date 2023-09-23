@@ -186,13 +186,13 @@ private struct CodableActionEditor: View {
         case .moveTab:
             ActionMoveTabEditView($action, availableCustards: availableCustards)
         case .smartDelete(let item):
-            ActionScanItemEditor(action: $action) { item } convert: { value in
+            ActionScanItemEditor(action: $action) { item } convert: { _ in
                 // 重複を除去し、改行を追加する
                 let targets = Array(Set(item.targets + ["\n"]) )
                 return .smartDelete(ScanItem(targets: targets, direction: item.direction))
             }
         case .smartMoveCursor(let item):
-            ActionScanItemEditor(action: $action) { item } convert: { value in
+            ActionScanItemEditor(action: $action) { item } convert: { _ in
                 // 重複を除去し、改行を追加する
                 let targets = Array(Set(item.targets + ["\n"]) )
                 return .smartMoveCursor(ScanItem(targets: targets, direction: item.direction))
@@ -247,7 +247,7 @@ private struct ActionScanItemEditor: View {
                 }
                 .font(.body.monospaced())
                 .frame(maxWidth: 50)
-                }
+            }
         }
         .onChange(of: value) {value in
             if let data = convert(value) {

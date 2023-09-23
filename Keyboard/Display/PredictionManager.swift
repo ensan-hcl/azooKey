@@ -69,9 +69,9 @@ extension PostCompositionPredictionCandidate: ResultViewItemData {
     public var inputable: Bool {
         true
     }
-#if DEBUG
+    #if DEBUG
     public func getDebugInformation() -> String {
         text
     }
-#endif
+    #endif
 }
