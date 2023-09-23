@@ -134,6 +134,8 @@ extension CustardInterfaceKey {
                 return FlickChangeKeyboardModel<Extension>.shared
             case .enter:
                 return FlickEnterKeyModel<Extension>()
+            case .upperLower:
+                return FlickAaKeyModel<Extension>()
             case .flickKogaki:
                 return FlickKogakiKeyModel<Extension>.shared
             case .flickKutoten:
@@ -189,6 +191,8 @@ extension CustardInterfaceKey {
                 return changeKeyboardKey
             case .enter:
                 return QwertyEnterKeyModel<Extension>(keySizeType: .enter)
+            case .upperLower:
+                return QwertyAaKeyModel<Extension>()
             case .flickKogaki:
                 return convertToQwertyKeyModel(customKey: Extension.SettingProvider.koganaFlickCustomKey.compiled(), extension: Extension.self)
             case .flickKutoten:
@@ -231,6 +235,8 @@ extension CustardInterfaceKey {
                 return SimpleChangeKeyboardKeyModel<Extension>()
             case .enter:
                 return SimpleEnterKeyModel<Extension>()
+            case .upperLower:
+                return SimpleKeyModel<Extension>(keyLabelType: .text("a/A"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .flickKogaki:
                 return SimpleKeyModel<Extension>(keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .flickKutoten:
