@@ -32,6 +32,25 @@ final class MainAppStates: ObservableObject {
         SemiStaticStates.shared.setHapticsAvailable()
         SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width)
     }
+
+    func setTutorialProgress(_ progress: EnableAzooKeyViewProgress) {
+        UserDefaults.standard.set(progress.rawValue, forKey: "tutorial_progress")
+    }
+    private func resumeTutorialProgress() -> EnableAzooKeyViewProgress? {
+        if let progressString = UserDefaults.standard.string(forKey: "tutorial_progress") {
+            return EnableAzooKeyViewProgress(rawValue: progressString)
+        } else {
+            return nil
+        }
+    }
+    func tutorialFinishedSuccessfully() -> Bool {
+        if let progress = resumeTutorialProgress() {
+            // finishで終わっていない場合、適切ではない
+            return progress == .finish
+        } else {
+            return true
+        }
+    }
 }
 
 @main

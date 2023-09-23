@@ -11,19 +11,29 @@ import SwiftUI
 import SwiftUIUtils
 import func SwiftUtils.debug
 
-private enum EnableAzooKeyViewStep {
+enum EnableAzooKeyViewProgress: String, Hashable, Codable, Sendable {
     case menu
     case append
-    case finish
     case setting
+    case finish
 }
 
 @MainActor
 struct EnableAzooKeyView: View {
     @EnvironmentObject private var appStates: MainAppStates
-    @State private var step: EnableAzooKeyViewStep = .menu
+    @State private var step: EnableAzooKeyViewProgress = .menu {
+        didSet {
+            self.appStates.setTutorialProgress(step)
+        }
+    }
     @State private var text = ""
     @State private var showDoneMessage = false
+
+    init(resumeProgress: EnableAzooKeyViewProgress? = nil) {
+        if let resumeProgress {
+            self._step = .init(initialValue: resumeProgress)
+        }
+    }
 
     var body: some View {
         ScrollView {
