@@ -169,6 +169,8 @@
 		1AFB68422518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */; };
 		1AFB685328D56F1800B5C717 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1AC5876825D930D000BB060E /* Localizable.strings */; };
 		1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
+		557D9DFB2ABEE7970028F3A0 /* ContactAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557D9DFA2ABEE7970028F3A0 /* ContactAuthManager.swift */; };
+		557D9DFD2ABEF6560028F3A0 /* ContactImportSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557D9DFC2ABEF6560028F3A0 /* ContactImportSettingView.swift */; };
 		5598472E2AB84F5200B18C15 /* PredictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598472D2AB84F5200B18C15 /* PredictionManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -359,6 +361,8 @@
 		1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceSoftwaresLicenseView.swift; sourceTree = "<group>"; };
 		1AFE772F26077E0E0041D74D /* WalkthroughState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughState.swift; sourceTree = "<group>"; };
+		557D9DFA2ABEE7970028F3A0 /* ContactAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAuthManager.swift; sourceTree = "<group>"; };
+		557D9DFC2ABEF6560028F3A0 /* ContactImportSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactImportSettingView.swift; sourceTree = "<group>"; };
 		5598472D2AB84F5200B18C15 /* PredictionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -764,6 +768,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC0315C25120A17004CA505 /* SettingTab.swift */,
+				557D9DF92ABEE78D0028F3A0 /* ContactImportSetting */,
 				1A8E454528E138F300133D3B /* MarkedTextSetting */,
 				1A347FE628D22F8E007D7852 /* LiveConversionSetting */,
 				1AAC102529B25CF90020BDE9 /* KeyboardHeightSetting */,
@@ -921,6 +926,15 @@
 				1AE1025525D1788300CA7277 /* Capture.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		557D9DF92ABEE78D0028F3A0 /* ContactImportSetting */ = {
+			isa = PBXGroup;
+			children = (
+				557D9DFA2ABEE7970028F3A0 /* ContactAuthManager.swift */,
+				557D9DFC2ABEF6560028F3A0 /* ContactImportSettingView.swift */,
+			);
+			path = ContactImportSetting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1283,6 +1297,7 @@
 				1A3022AF2631663200E4495C /* OnEnterBackground.swift in Sources */,
 				1A8E454728E1390100133D3B /* MarkedTextSettingView.swift in Sources */,
 				1AB8C3CE25E2509300D39BC5 /* CustomizeTabView.swift in Sources */,
+				557D9DFB2ABEE7970028F3A0 /* ContactAuthManager.swift in Sources */,
 				1A3A07D8259C5FF500AE1C53 /* KeyboardLayoutTypeDetailsView.swift in Sources */,
 				1A9B0A6E2565797E004203BB /* ContactView.swift in Sources */,
 				1A5B1CE026D1E495007D4E1C /* MainApp.swift in Sources */,
@@ -1333,6 +1348,7 @@
 				1A855C7829EA8A6400DD3702 /* ShareWordView.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,
 				1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */,
+				557D9DFD2ABEF6560028F3A0 /* ContactImportSettingView.swift in Sources */,
 				1AFA57602584810800477DC2 /* Focus.swift in Sources */,
 				1A18424325DD6857003985AB /* FontPicker.swift in Sources */,
 				1A9B0A2D25635090004203BB /* EmojiKaomojiView.swift in Sources */,
