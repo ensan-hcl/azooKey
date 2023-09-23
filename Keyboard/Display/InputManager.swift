@@ -223,8 +223,8 @@ import UIKit
     }
 
     /// 確定直後に呼ぶ
-    func updatePredictionCandidates(candidate: Candidate) {
-        let results = self.kanaKanjiConverter.requestPredictionCandidates(leftSideCandidate: candidate, options: getConvertRequestOptions())
+    func updatePostCompositionPredictionCandidates(candidate: Candidate) {
+        let results = self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: candidate, options: getConvertRequestOptions())
         predictionManager.updateAfterComplete(candidate: candidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
         if let updateResult {
             updateResult {
@@ -234,13 +234,13 @@ import UIKit
     }
 
     /// 予測変換を選んだ後に呼ぶ
-    func predictionCandidateSelected(candidate: PredictionCandidate) {
+    func postCompositionPredictionCandidateSelected(candidate: PostCompositionPredictionCandidate) {
         guard let lastUsedCandidate = predictionManager.getLastCandidate() else {
             return
         }
         self.kanaKanjiConverter.updateLearningData(lastUsedCandidate, with: candidate)
         let newCandidate = candidate.join(to: lastUsedCandidate)
-        let results = self.kanaKanjiConverter.requestPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
+        let results = self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
         predictionManager.update(candidate: newCandidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
         if let updateResult {
             updateResult {
@@ -249,7 +249,7 @@ import UIKit
         }
     }
 
-    func resetPredictionCandidates() {
+    func resetPostCompositionPredictionCandidates() {
         if let updateResult {
             updateResult {
                 $0.setPredictionResults([])
@@ -257,16 +257,16 @@ import UIKit
         }
     }
 
-    func resetPredictionCandidatesIfNecessary(textChangedCount: Int) {
+    func resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: Int) {
         if predictionManager.shouldResetPrediction(textChangedCount: textChangedCount) {
-            self.resetPredictionCandidates()
+            self.resetPostCompositionPredictionCandidates()
         }
     }
 
     /// `composingText`に入力されていた全体が変換された後に呼ばれる関数
     private func conversionCompleted(candidate: Candidate) {
         // 予測変換を更新する
-        self.updatePredictionCandidates(candidate: candidate)
+        self.updatePostCompositionPredictionCandidates(candidate: candidate)
     }
 
     /// 変換を選択した場合に呼ばれる

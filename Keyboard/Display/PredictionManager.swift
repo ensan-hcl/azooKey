@@ -17,7 +17,7 @@ final class PredictionManager {
 
     private var lastState: State?
 
-    // 2つのCandidateをmergeする
+    // TODO: `KanaKanjiConverter.mergeCandidates`を呼んだほうが適切
     private func mergeCandidates(_ left: Candidate, _ right: Candidate) -> Candidate {
         // 厳密なmergeにはleft.lastRcidとright.lastLcidの連接コストの計算が必要だが、予測変換の文脈で厳密なValueの計算は不要なので行わない
         var result = left
@@ -65,7 +65,7 @@ final class PredictionManager {
     }
 }
 
-extension KanaKanjiConverterModule.PredictionCandidate: ResultViewItemData {
+extension PostCompositionPredictionCandidate: ResultViewItemData {
     public var inputable: Bool {
         true
     }

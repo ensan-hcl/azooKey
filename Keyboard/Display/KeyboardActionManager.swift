@@ -76,12 +76,12 @@ import SwiftUtils
                 }
             }
             variableStates.lastTabCharacterPreferenceUpdate = .now
-        } else if let candidate = candidate as? PredictionCandidate {
+        } else if let candidate = candidate as? PostCompositionPredictionCandidate {
             self.inputManager.input(text: candidate.text, simpleInsert: true, inputStyle: .direct)
             if !candidate.isTerminal {
-                self.inputManager.predictionCandidateSelected(candidate: candidate)
+                self.inputManager.postCompositionPredictionCandidateSelected(candidate: candidate)
             } else {
-                self.inputManager.resetPredictionCandidates()
+                self.inputManager.resetPostCompositionPredictionCandidates()
             }
         } else {
             debug("notifyComplete: 確定できません")
@@ -285,7 +285,7 @@ import SwiftUtils
             // 文字列の変更を適用
             variableStates.textChangedCount = self.inputManager.getTextChangedCount()
             // 必要に応じて予測変換をリセット
-            self.inputManager.resetPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
+            self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
 
             if let undoAction {
                 variableStates.undoAction = .init(action: undoAction, textChangedCount: variableStates.textChangedCount)
@@ -557,7 +557,7 @@ import SwiftUtils
                 self.inputManager.userMovedCursor(count: offset)
                 // カーソルが動いているのでtextChangedCountを増やす
                 variableStates.textChangedCount += 1
-                self.inputManager.resetPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
+                self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
                 return
             }
 
@@ -579,7 +579,7 @@ import SwiftUtils
         defer {
             variableStates.textChangedCount += 1
             // 予測変換はテキストが変化したら解除する
-            self.inputManager.resetPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
+            self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
         }
 
         if b_left == "\n" && b_center == a_wholeText {
