@@ -47,6 +47,7 @@ private final class ClipboardHistory: ObservableObject {
     }
 }
 
+@MainActor
 struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @StateObject private var target = ClipboardHistory()

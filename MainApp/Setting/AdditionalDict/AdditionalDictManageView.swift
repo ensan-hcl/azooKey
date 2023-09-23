@@ -126,6 +126,7 @@ final class AdditionalDictManager: ObservableObject {
 
 }
 
+@MainActor
 struct AdditionalDictManageViewMain: View {
     enum Style {
         case simple

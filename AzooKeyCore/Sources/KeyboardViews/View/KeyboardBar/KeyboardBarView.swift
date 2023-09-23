@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import SwiftUIUtils
 
+@MainActor
 struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
@@ -37,6 +38,7 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
     }
 }
 
+@MainActor
 struct KeyboardBarButton<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     enum LabelType {
         case azooKeyIcon

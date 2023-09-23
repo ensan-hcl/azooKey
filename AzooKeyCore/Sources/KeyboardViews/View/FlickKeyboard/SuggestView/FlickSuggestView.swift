@@ -10,6 +10,7 @@ import CustardKit
 import Foundation
 import SwiftUI
 
+@MainActor
 struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme

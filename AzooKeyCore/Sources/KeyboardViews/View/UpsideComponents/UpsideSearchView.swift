@@ -9,6 +9,7 @@
 import SwiftUI
 import enum KanaKanjiConverterModule.ConverterBehaviorSemantics
 
+@MainActor
 struct UpsideSearchView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @Environment(\.userActionManager) private var action
     @Environment(Extension.Theme.self) private var theme

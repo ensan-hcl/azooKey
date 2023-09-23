@@ -96,6 +96,7 @@ struct QwertyKeyDoublePressState {
     }
 }
 
+@MainActor
 struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let model: any QwertyKeyModelProtocol
     @EnvironmentObject private var variableStates: VariableStates

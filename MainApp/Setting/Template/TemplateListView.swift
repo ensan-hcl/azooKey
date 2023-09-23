@@ -26,6 +26,7 @@ private final class NavigationModel: ObservableObject {
 }
 
 // Listが大元のtemplatesを持ち、各EditingViewにBindingで渡して編集させる。
+@MainActor
 struct TemplateListView: View {
     private static let dataFileName = "user_templates.json"
     @ObservedObject private var data = TemplateDataList()

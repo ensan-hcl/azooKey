@@ -10,6 +10,7 @@ import AzooKeyUtils
 import KeyboardViews
 import SwiftUI
 
+@MainActor
 struct ContentView: View {
     private enum TabSelection {
         case tips, theme, customize, settings

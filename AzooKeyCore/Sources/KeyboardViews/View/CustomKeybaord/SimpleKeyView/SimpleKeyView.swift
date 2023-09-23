@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import SwiftUIUtils
 
+@MainActor
 struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let model: any SimpleKeyModelProtocol
     @EnvironmentObject private var variableStates: VariableStates

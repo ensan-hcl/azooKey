@@ -9,6 +9,7 @@
 import SwiftUI
 import SwiftUIUtils
 
+@MainActor
 struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
     @Environment(Extension.Theme.self) private var theme

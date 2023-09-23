@@ -26,6 +26,7 @@ enum KeyPressState {
     }
 }
 
+@MainActor
 public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let model: any FlickKeyModelProtocol
 

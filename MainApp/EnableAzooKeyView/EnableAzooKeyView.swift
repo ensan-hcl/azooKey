@@ -18,6 +18,7 @@ private enum EnableAzooKeyViewStep {
     case setting
 }
 
+@MainActor
 struct EnableAzooKeyView: View {
     @EnvironmentObject private var appStates: MainAppStates
     @State private var step: EnableAzooKeyViewStep = .menu
