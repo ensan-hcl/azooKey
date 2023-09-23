@@ -93,7 +93,7 @@ public struct ThemeShadowData<ColorData>: Codable, Equatable, Sendable where Col
         self.x = x
         self.y = y
     }
-    
+
     public var color: ColorData
     public var radius: CGFloat
     public var x: CGFloat

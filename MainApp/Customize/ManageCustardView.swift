@@ -146,7 +146,7 @@ struct ManageCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var urlString: String = ""
     @State private var showAlert = false
-    @State private var alertType: AlertType? = nil
+    @State private var alertType: AlertType?
     @Binding private var manager: CustardManager
     @State private var webCustards: WebCustardList = .init(last_update: "", custards: [])
     @State private var showDocumentPicker = false
@@ -372,7 +372,7 @@ struct ManageCustardView: View {
 struct URLImportCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var showAlert = false
-    @State private var alertType: AlertType? = nil
+    @State private var alertType: AlertType?
     @Binding private var manager: CustardManager
     @Binding private var url: URL?
     @State private var addTabBar = true
