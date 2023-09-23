@@ -6424,6 +6424,16 @@
         }
       }
     },
+    "大文字・小文字キー" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Case key"
+          }
+        }
+      }
+    },
     "大文字/小文字、拗音/濁音/半濁音の切り替え" : {
       "localizations" : {
         "en" : {

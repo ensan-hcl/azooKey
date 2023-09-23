@@ -431,6 +431,7 @@ struct CustardInterfaceKeyEditor: View {
             Text("空白キー").tag(CustardInterfaceKey.custom(.flickSpace()))
             Text("地球儀キー").tag(CustardInterfaceKey.system(.changeKeyboard))
             Text("小書き・濁点化キー").tag(CustardInterfaceKey.system(.flickKogaki))
+            Text("大文字・小文字キー").tag(CustardInterfaceKey.system(.upperLower))
             Text("句読点キー").tag(CustardInterfaceKey.system(.flickKutoten))
             Text("日本語タブキー").tag(CustardInterfaceKey.system(.flickHiraTab))
             Text("英語タブキー").tag(CustardInterfaceKey.system(.flickAbcTab))
