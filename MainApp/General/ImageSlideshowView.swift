@@ -10,8 +10,8 @@ import SwiftUI
 import SwiftUIUtils
 
 struct ImageSlideshowView: View {
-    private let pictures: [String]
-    init(pictures: [String]) {
+    private let pictures: [ImageResource]
+    init(pictures: [ImageResource]) {
         self.pictures = pictures
     }
 
