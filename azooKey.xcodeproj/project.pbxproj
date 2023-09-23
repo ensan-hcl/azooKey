@@ -44,7 +44,7 @@
 		1A1ECCA2295DF8DE001AD7E0 /* DisplayedTextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */; };
 		1A1ECCA4295DF9D4001AD7E0 /* LiveConversionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */; };
 		1A1ECCA6295DFADF001AD7E0 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */; };
-		1A273F97291A6B8B001E1B02 /* iOS14TerminationNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A273F96291A6B8B001E1B02 /* iOS14TerminationNews.swift */; };
+		1A273F97291A6B8B001E1B02 /* iOS15TerminationNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A273F96291A6B8B001E1B02 /* iOS15TerminationNews.swift */; };
 		1A2B2B5F299480B40048332A /* UseMarkedTextTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B2B5E299480B40048332A /* UseMarkedTextTipsView.swift */; };
 		1A2B2B612994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */; };
 		1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2C293826273E9900DFE465 /* DraggableView.swift */; };
@@ -250,7 +250,7 @@
 		1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayedTextManager.swift; sourceTree = "<group>"; };
 		1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConversionManager.swift; sourceTree = "<group>"; };
 		1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
-		1A273F96291A6B8B001E1B02 /* iOS14TerminationNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS14TerminationNews.swift; sourceTree = "<group>"; };
+		1A273F96291A6B8B001E1B02 /* iOS15TerminationNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS15TerminationNews.swift; sourceTree = "<group>"; };
 		1A2B2B5E299480B40048332A /* UseMarkedTextTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseMarkedTextTipsView.swift; sourceTree = "<group>"; };
 		1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardBehaviorIssueAfterInstallTipsView.swift; sourceTree = "<group>"; };
 		1A2C293826273E9900DFE465 /* DraggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableView.swift; sourceTree = "<group>"; };
@@ -859,7 +859,7 @@
 			isa = PBXGroup;
 			children = (
 				1A3A16032528BFF900A5BA4F /* SelctInputStyle.swift */,
-				1A273F96291A6B8B001E1B02 /* iOS14TerminationNews.swift */,
+				1A273F96291A6B8B001E1B02 /* iOS15TerminationNews.swift */,
 				1AF6A54625FCF1240037D5ED /* OneHandedModeTips.swift */,
 				1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */,
 				1A9218DD2550FB9C005F45C4 /* SmoothDeleteTipsView.swift */,
@@ -1314,7 +1314,7 @@
 				1AFA575A2583051500477DC2 /* CapslockTips.swift in Sources */,
 				1A73F20729C01B5700833C11 /* checkKeyboardActivation.swift in Sources */,
 				1A4057F7255843850073C6F7 /* LearningTypeSettingItemView.swift in Sources */,
-				1A273F97291A6B8B001E1B02 /* iOS14TerminationNews.swift in Sources */,
+				1A273F97291A6B8B001E1B02 /* iOS15TerminationNews.swift in Sources */,
 				1AFA57662584815B00477DC2 /* QwertyCustomKeysItemView.swift in Sources */,
 				1AFB68422518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift in Sources */,
 				1A5C7EAC25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift in Sources */,
