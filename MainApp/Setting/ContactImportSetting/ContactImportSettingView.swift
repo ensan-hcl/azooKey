@@ -16,6 +16,7 @@ struct ContactImportSettingView: View {
     @State private var showRequireFullAccessAlert = false
     @State private var setting: SettingUpdater<EnableContactImport>
     @State private var showAuthErrorMessage = false
+    @State private var authorized: Bool = false
 
     @MainActor init() {
         self._setting = .init(initialValue: .init())
@@ -26,7 +27,7 @@ struct ContactImportSettingView: View {
     }
 
     @MainActor private var enabledButDenied: Bool {
-        setting.value && manager.authState != .authorized
+        !disabled && setting.value && !self.authorized
     }
 
     @MainActor @ViewBuilder private var control: some View {
@@ -71,6 +72,9 @@ struct ContactImportSettingView: View {
                 manager.requestAuthForContact { (granted, _) in
                     if !granted {
                         self.showAuthErrorMessage = true
+                        self.authorized = false
+                    } else {
+                        self.authorized = true
                     }
                 }
             } else if enabled && manager.authState == .denied {
@@ -78,9 +82,10 @@ struct ContactImportSettingView: View {
             }
         }
         .onAppear {
-            setting.reload()
+            self.authorized = manager.authState == .authorized
+            self.setting.reload()
         }
-        .alert("設定を　有効化できません", isPresented: $showAuthErrorMessage) {
+        .alert("設定を有効化できません", isPresented: $showAuthErrorMessage) {
             Button("「設定」アプリを開く") {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)

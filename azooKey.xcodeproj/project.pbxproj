@@ -171,6 +171,7 @@
 		1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
 		557D9DFB2ABEE7970028F3A0 /* ContactAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557D9DFA2ABEE7970028F3A0 /* ContactAuthManager.swift */; };
 		557D9DFD2ABEF6560028F3A0 /* ContactImportSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557D9DFC2ABEF6560028F3A0 /* ContactImportSettingView.swift */; };
+		557D9DFF2ABF2B9D0028F3A0 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 557D9DFE2ABF2B9D0028F3A0 /* InfoPlist.xcstrings */; };
 		5598472E2AB84F5200B18C15 /* PredictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598472D2AB84F5200B18C15 /* PredictionManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -363,6 +364,7 @@
 		1AFE772F26077E0E0041D74D /* WalkthroughState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughState.swift; sourceTree = "<group>"; };
 		557D9DFA2ABEE7970028F3A0 /* ContactAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAuthManager.swift; sourceTree = "<group>"; };
 		557D9DFC2ABEF6560028F3A0 /* ContactImportSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactImportSettingView.swift; sourceTree = "<group>"; };
+		557D9DFE2ABF2B9D0028F3A0 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		5598472D2AB84F5200B18C15 /* PredictionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -713,6 +715,7 @@
 			isa = PBXGroup;
 			children = (
 				1AC03158251103EF004CA505 /* Designs.xcassets */,
+				557D9DFE2ABF2B9D0028F3A0 /* InfoPlist.xcstrings */,
 				1AC5876825D930D000BB060E /* Localizable.strings */,
 				1AE191FB25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf */,
 				1A1A62F029C8BCA400EF7B26 /* Data */,
@@ -1140,6 +1143,7 @@
 				1A1A62F929C8BCD400EF7B26 /* emoji_all_E15.0.txt.gen in Resources */,
 				1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */,
 				1A1A630829C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen in Resources */,
+				557D9DFF2ABF2B9D0028F3A0 /* InfoPlist.xcstrings in Resources */,
 				1AC5876525D930D000BB060E /* Localizable.strings in Resources */,
 				1AE191FC25D7E3B40044EE4B /* AzooKeyIcon-Regular.otf in Resources */,
 				1A1A62FB29C8BCD400EF7B26 /* emoji_all_E13.1.txt.gen in Resources */,
