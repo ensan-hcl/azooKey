@@ -39,7 +39,7 @@ struct QwertyTabKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Q
         self.keySizeType = .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space)
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
         switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
             switch states.keyboardLanguage {

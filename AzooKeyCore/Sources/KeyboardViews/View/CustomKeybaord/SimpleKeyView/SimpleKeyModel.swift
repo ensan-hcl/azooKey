@@ -82,7 +82,7 @@ struct SimpleKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Simp
     private let pressActions: [ActionType]
     let longPressActions: LongpressActionType
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         KeyLabel(self.keyLabelType, width: width)
     }
 
@@ -108,7 +108,7 @@ struct SimpleEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
 
     let longPressActions: LongpressActionType = .none
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .enter
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width)
     }
@@ -134,7 +134,7 @@ struct SimpleChangeKeyboardKeyModel<Extension: ApplicationSpecificKeyboardViewEx
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
     let longPressActions: LongpressActionType = .none
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.changeKeyboard, width: width)
         } else {
