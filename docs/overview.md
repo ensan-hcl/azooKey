@@ -11,6 +11,10 @@ DictionaryDebugger: 辞書のデバッグツール
 Resources: MainAppとKeyboardで共有されるリソース
 ```
 
+## AzooKeyCore
+
+`AzooKeyCore`は全体で共有すべき実装を記述したSwift Packageです。詳しくは[README](../AzooKeyCore/README.md)を参照してください。
+
 ## MainApp
 
 MainAppはazooKeyの種々の設定を行うためのアプリです。
@@ -25,6 +29,10 @@ Keyboardはキーボード本体の実装です。
 
 `KeyboardActionManager`は`InputManager`を用いて変換状態を管理します。`InputManager`は変換器である`KanaKanjiConverter`のAPIを呼び出したり、`LiveConversionManager`を通してライブ変換に関する処理を行ったり、`DisplayedTextManager`を通してディスプレイされるテキストの管理を行ったりします。
 
+### キーボードのUI
+
+キーボードのUIはAzooKeyCore/KeyboardViewsで実装しています。
+
 ### かな漢字変換モジュール
 
 かな漢字変換モジュールはazooKeyとは独立のパッケージ「AzooKeyKanaKanjiConverter」として切り出されています。以下を参照してください。
@@ -36,10 +44,6 @@ https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter
 カスタムタグ及び一部の機能はazooKeyと独立したパッケージ「CustardKit」として切り出されています。以下を参照してください。
 
 https://github.com/ensan-hcl/CustardKit
-
-## AzooKeyCore
-
-`AzooKeyCore`は全体で共有すべき実装を記述したSwift Packageです。詳しくは[README](../AzooKeyCore/README.md)を参照してください。
 
 ## Resources
 
@@ -56,16 +60,21 @@ SharedはazooKey全体で共有されるリソースです。主に以下のも�
 
 ## 用語
 
-| 英語           | 日本語         | 備考                                                       |
-| -------------- | -------------- | ---------------------------------------------------------- |
-| Action         | ユーザの操作   |                                                            |
-| Candidate      | 変換候補       |                                                            |
-| Composing      | 編集中         | 変換対象のテキストになっている、との意味。                 |
-| Custard        | カスタード     | **Cust**om Keybo**ard**の略。カスタムタブに関わる機能。    |
-| Dicdata        | 辞書データ     |                                                            |
-| Displayed      | 表示されている | 内部状態ではなく、ユーザに見えている状態である、との意味。 |
-| InputStyle     | 入力方法       | ローマ字入力、ダイレクト入力など、入力方式を意味する。     |
-| Learning       | 学習           | 専ら学習機能を意味する。                                   |
-| LiveConversion | ライブ変換     |                                                            |
-| LOUDS          | LOUDS          | データ構造の名。                                           |
-
+| 英語                        | 日本語           | 備考                                                         |
+| --------------------------- | ---------------- | ------------------------------------------------------------ |
+| Action                      | ユーザの操作     |                                                              |
+| Candidate                   | 変換候補         |                                                              |
+| ChangeKeyboardKey           | 地球儀キー       | キーボードを変更するための地球儀キー。Appleの言葉ではInputModeSwitchKey。 |
+| Composing                   | 編集中           | 変換対象のテキストになっている、との意味。                   |
+| Cursor                      | カーソル         | 入力フィールド上に表示されるカーソル。コメントなどでは`|`の記号で表すことも多い。 |
+| Cursor Bar                  | カーソルバー     | 空白キーの長押しなどで表示されるカーソル移動用のバーUI。     |
+| Custard                     | カスタード       | **Cust**om Keybo**ard**の略。カスタムタブに関わる機能で用いている。 |
+| Dicdata                     | 辞書データ       |                                                              |
+| Displayed                   | 表示されている   | 内部状態ではなく、ユーザに見えている状態である、との意味。   |
+| InputStyle                  | 入力方法         | ローマ字入力、ダイレクト入力など、入力方式を意味する。       |
+| Learning                    | 学習             | 専ら学習機能を意味する。                                     |
+| Live Conversion             | ライブ変換       |                                                              |
+| LOUDS                       | LOUDS            | データ構造の名。                                             |
+| Post Composition Prediction | 確定後の予測変換 | 候補を全て確定した後に表示される予測変換。                   |
+| Result Bar                  | リザルトバー     | 変換候補を表示しているバーUI。                               |
+| Tab Bar                     | タブバー         | azooKeyのアイコンのボタンを押すと表示されるバーUI。タブの移動などに用いる。 |
