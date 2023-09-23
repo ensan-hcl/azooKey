@@ -1,6 +1,6 @@
 //
 //  FlickSuggestType.swift
-//  
+//
 //
 //  Created by miwa on 2023/08/20.
 //

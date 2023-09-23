@@ -188,14 +188,14 @@ private struct CodableActionEditor: View {
         case .smartDelete(let item):
             ActionScanItemEditor(action: $action) { item } convert: { value in
                 // 重複を除去し、改行を追加する
-                let targets = Array(Set(item.targets + ["\n"]) )
-                return .smartDelete(ScanItem(targets: targets, direction: item.direction))
+                let targets = Array(Set(value.targets + ["\n"]) )
+                return .smartDelete(ScanItem(targets: targets, direction: value.direction))
             }
         case .smartMoveCursor(let item):
             ActionScanItemEditor(action: $action) { item } convert: { value in
                 // 重複を除去し、改行を追加する
-                let targets = Array(Set(item.targets + ["\n"]) )
-                return .smartMoveCursor(ScanItem(targets: targets, direction: item.direction))
+                let targets = Array(Set(value.targets + ["\n"]) )
+                return .smartMoveCursor(ScanItem(targets: targets, direction: value.direction))
             }
         case .replaceLastCharacters:
             EmptyView()
@@ -247,7 +247,7 @@ private struct ActionScanItemEditor: View {
                 }
                 .font(.body.monospaced())
                 .frame(maxWidth: 50)
-                }
+            }
         }
         .onChange(of: value) {value in
             if let data = convert(value) {
