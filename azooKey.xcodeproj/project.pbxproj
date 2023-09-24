@@ -172,6 +172,7 @@
 		557D9DFF2ABF2B9D0028F3A0 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 557D9DFE2ABF2B9D0028F3A0 /* InfoPlist.xcstrings */; };
 		557D9E012ABF320F0028F3A0 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 557D9E002ABF320F0028F3A0 /* Localizable.xcstrings */; };
 		557D9E022ABF320F0028F3A0 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 557D9E002ABF320F0028F3A0 /* Localizable.xcstrings */; };
+		5592F5AE2AC0395D00AA1325 /* PredictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598472D2AB84F5200B18C15 /* PredictionManager.swift */; };
 		5598472E2AB84F5200B18C15 /* PredictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598472D2AB84F5200B18C15 /* PredictionManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -1370,6 +1371,7 @@
 				1A2E58592951EC87004F959B /* (null) in Sources */,
 				1A2E585F2951ED56004F959B /* (null) in Sources */,
 				1A73F20B29C0B01C00833C11 /* InputManager.swift in Sources */,
+				5592F5AE2AC0395D00AA1325 /* PredictionManager.swift in Sources */,
 				1AD8D749295E8A8E00112B80 /* LiveConversionManager.swift in Sources */,
 				1AC09DBE299533E0009BDBC7 /* DicdataStoreTests.swift in Sources */,
 				1A2E585A2951EC87004F959B /* (null) in Sources */,
