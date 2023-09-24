@@ -193,6 +193,6 @@ struct EnableAzooKeyView: View {
             .filtered(using: NSPredicate(format: "isDisplayed = YES"))
             .first
             .flatMap {($0 as? UITextInputMode)?.value(forKey: "identifier") as? String}
-        return currentKeyboardIdentifier == SharedStore.bundleName
+        return currentKeyboardIdentifier?.hasPrefix(SharedStore.bundleName) == true
     }
 }
