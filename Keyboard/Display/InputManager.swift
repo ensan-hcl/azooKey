@@ -26,6 +26,8 @@ import UIKit
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
     // TODO: isSelectedはdisplayedTextManagerが持っているべき
     var isSelected = false
+    // 変換リクエストタスク
+    var conversionRequestTask: Task<(), any Error>?
 
     // キーボードの言語
     private var keyboardLanguage: KeyboardLanguage = .ja_JP
@@ -871,29 +873,36 @@ import UIKit
         debug("InputManager.setResult: value to be input", inputData)
         let options = self.getConvertRequestOptions(inputStylePreference: inputData.input.last?.inputStyle)
         debug("InputManager.setResult: options", options)
-        let results = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
-
-        // 表示を更新する
-        if !self.isSelected {
-            if self.displayedTextManager.shouldSkipMarkedTextChange {
-                self.previousSystemOperation = .setMarkedText
-            }
-            if liveConversionEnabled {
-                let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, results.mainResults, firstClauseResults: results.firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
-                self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: liveConversionText)
-            } else {
-                self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
-            }
-        }
-
-        if let updateResult {
-            updateResult {
-                $0.setResults(results.mainResults)
-            }
-            // 自動確定の実施
-            if liveConversionEnabled, let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
-                debug("InputManager.setResult: Complete first clause", firstClause)
-                self.complete(candidate: firstClause)
+        self.conversionRequestTask?.cancel()
+        self.conversionRequestTask = Task {
+            let results = try await self.kanaKanjiConverter.requestCandidates(inputData, options: options)
+            try Task.checkCancellation()
+            await MainActor.run {
+                // 表示を更新する
+                if !self.isSelected {
+                    if self.displayedTextManager.shouldSkipMarkedTextChange {
+                        self.previousSystemOperation = .setMarkedText
+                    }
+                    if liveConversionEnabled {
+                        let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, results.mainResults, firstClauseResults: results.firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
+                        self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: liveConversionText)
+                    } else {
+                        self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
+                    }
+                }
+                if Task.isCancelled {
+                    return
+                }
+                if let updateResult {
+                    updateResult {
+                        $0.setResults(results.mainResults)
+                    }
+                    // 自動確定の実施
+                    if liveConversionEnabled, let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
+                        debug("InputManager.setResult: Complete first clause", firstClause)
+                        self.complete(candidate: firstClause)
+                    }
+                }
             }
         }
     }
