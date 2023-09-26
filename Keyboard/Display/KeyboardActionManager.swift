@@ -306,21 +306,33 @@ import SwiftUtils
         self.doAction(action, variableStates: variableStates)
     }
 
-    /// 複数のアクションを実行する
-    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
-    ///  サポートされている最適化
-    /// - `setResult`を一度のみ実施する
-    override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
-        let isSetActionTrigger = actions.map { action in
-            switch action {
-            case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
-                return true
-            default:
-                return false
-            }
+    private enum ActionTriggerStyle {
+        /// 集約対象ではない
+        case irrelevant
+        /// 集約を強制的に止める
+        case separator
+        /// 集約できるアクション
+        case maybe
+    }
+
+    private func actionTriggerStyle(_ action: ActionType) -> ActionTriggerStyle {
+        switch action {
+        case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
+            .maybe
+        case .enter:
+            .separator
+        default:
+            .irrelevant
         }
-        if let lastIndex = isSetActionTrigger.lastIndex(where: { $0 }) {
-            for (i, action) in actions.enumerated() {
+    }
+
+    /// actionの塊を実行する
+    ///  - parameters:
+    ///    - actionBlock: アクションの一連の列。1つのブロックの中には任意個の集約対象のアクションと集約対象でないアクションが含まれ、先頭にのみ集約できないアクションが出現できる
+    private func runActionBlock(actionBlock: some BidirectionalCollection<ActionType>, variableStates: VariableStates) {
+        // setResult可能な最後の
+        if let lastIndex = actionBlock.lastIndex(where: { actionTriggerStyle($0) != .irrelevant }) {
+            for (i, action) in zip(actionBlock.indices, actionBlock) {
                 if i == lastIndex {
                     self.doAction(action, requireSetResult: true, variableStates: variableStates)
                 } else {
@@ -328,10 +340,24 @@ import SwiftUtils
                 }
             }
         } else {
-            for action in actions {
+            for action in actionBlock {
                 self.doAction(action, variableStates: variableStates)
             }
         }
+    }
+
+    /// 複数のアクションを実行する
+    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
+    ///  サポートされている最適化
+    /// - `setResult`を一度のみ実施する
+    override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
+        var actions = actions[...]
+        while let firstIndex = actions.firstIndex(where: { actionTriggerStyle($0) == .separator }) {
+            self.runActionBlock(actionBlock: actions[...firstIndex], variableStates: variableStates)
+            self.doAction(actions[firstIndex], variableStates: variableStates)
+            actions = actions[(firstIndex + 1)...]
+        }
+        self.runActionBlock(actionBlock: actions, variableStates: variableStates)
     }
 
     /// 長押しを予約する関数。
