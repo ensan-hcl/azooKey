@@ -121,7 +121,7 @@ public final class VariableStates: ObservableObject {
     private(set) public var keyboardType: UIKeyboardType = .default
 
     /// `ResultModel`の変数
-    @Published public var resultModelVariableSection = ResultModelVariableSection()
+    @Published public var resultModel = ResultModel()
 
     // Bool値の変数はここにまとめる
     @Published public var boolStates = BoolStates()

@@ -15,7 +15,7 @@ struct ExpandedResultView<Extension: ApplicationSpecificKeyboardViewExtension>: 
     @Binding private var isResultViewExpanded: Bool
 
     private var splitedResults: [SplitedResultData] {
-        Self.registerResults(results: variableStates.resultModelVariableSection.results, interfaceWidth: variableStates.interfaceSize.width)
+        Self.registerResults(results: variableStates.resultModel.results, interfaceWidth: variableStates.interfaceSize.width)
     }
     private var buttonWidth: CGFloat {
         Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.5

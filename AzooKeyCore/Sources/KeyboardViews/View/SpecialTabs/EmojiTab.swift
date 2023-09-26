@@ -356,11 +356,11 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
             if !self.emojis[.recent, default: []].isEmpty {
                 self.selectedGenre = .recent
             }
-            variableStates.resultModelVariableSection.setResults([])
+            variableStates.resultModel.setResults([])
             variableStates.barState = .none
         }
         .onDisappear {
-            variableStates.resultModelVariableSection.setResults([])
+            variableStates.resultModel.setResults([])
         }
     }
 }

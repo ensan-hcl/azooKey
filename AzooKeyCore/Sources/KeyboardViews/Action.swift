@@ -57,6 +57,15 @@ public indirect enum ActionType: Equatable, Sendable {
 
     // 条件分岐アクション
     case boolSwitch(CompiledExpression, trueAction: [ActionType], falseAction: [ActionType])
+
+    // 選択アクション
+    case selectCandidate(CandidateSelectionRequest)
+}
+public enum CandidateSelectionRequest: Equatable, Sendable {
+    case first
+    case last
+    case exact(Int)
+    case offset(Int)
 }
 
 public struct LongpressActionType: Equatable, Sendable {
