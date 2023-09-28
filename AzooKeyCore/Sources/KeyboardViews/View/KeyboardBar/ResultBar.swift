@@ -48,6 +48,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         KeyboardBarButton<Extension> {
             self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
         }
+        .zIndex(10)
         .matchedGeometryEffect(id: "KeyboardBarButton", in: namespace)
     }
 
@@ -129,6 +130,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         }
                         .padding(.horizontal, 5)
                     }
+                    .zIndex(0)
                     if variableStates.resultModel.displayState == .results {
                         // 候補を展開するボタン
                         Button(action: {self.expand()}) {
