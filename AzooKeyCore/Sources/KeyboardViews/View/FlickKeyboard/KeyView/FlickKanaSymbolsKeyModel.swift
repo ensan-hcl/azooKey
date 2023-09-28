@@ -21,7 +21,7 @@ struct FlickKanaSymbolsKeyModel<Extension: ApplicationSpecificKeyboardViewExtens
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         customKey.compiled().actions
     }
-    @MainActor var longPressActions: LongpressActionType {
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
         customKey.compiled().longpressActions
     }
     @MainActor var labelType: KeyLabelType {

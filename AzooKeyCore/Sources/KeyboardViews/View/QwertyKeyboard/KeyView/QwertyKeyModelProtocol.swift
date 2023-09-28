@@ -83,13 +83,13 @@ enum QwertyUnpressedKeyColorType: Sendable {
 protocol QwertyKeyModelProtocol<Extension> {
     associatedtype Extension: ApplicationSpecificKeyboardViewExtension
 
-    var longPressActions: LongpressActionType {get}
     var keySizeType: QwertyKeySizeType {get}
     var needSuggestView: Bool {get}
 
     var variationsModel: VariationsModel {get}
 
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func longPressActions(variableStates: VariableStates) -> LongpressActionType
     /// 二回連続で押した際に発火するActionを指定する
     @MainActor func doublePressActions(variableStates: VariableStates) -> [ActionType]
     @MainActor func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension>

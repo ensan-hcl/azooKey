@@ -377,10 +377,12 @@ private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtensio
         self.action = action
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
-    let longPressActions: LongpressActionType = .none
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         []
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.tabOrOtherKey()
@@ -403,10 +405,12 @@ private struct GenreKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
         self.unpressedKeyColorType = unpressedKeyColorType
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType
-    let longPressActions: LongpressActionType = .none
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         []
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.tabOrOtherKey()
@@ -442,6 +446,9 @@ private struct EmojiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
     }
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         [.input(emoji)]
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.click()
