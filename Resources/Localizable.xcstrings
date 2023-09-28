@@ -810,6 +810,26 @@
         }
       }
     },
+    "%lld個隣の候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select candidates %lld positions away"
+          }
+        }
+      }
+    },
+    "%lld番目の候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select %lldth candidate"
+          }
+        }
+      }
+    },
     "%を新規作成" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5687,6 +5707,16 @@
         }
       }
     },
+    "最初の候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select first candidate"
+          }
+        }
+      }
+    },
     "最初の設定" : {
       "localizations" : {
         "en" : {
@@ -5731,6 +5761,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "最後の候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select last candidate"
           }
         }
       }
@@ -7831,6 +7871,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "次候補キー" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next candidate key"
           }
         }
       }

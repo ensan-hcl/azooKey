@@ -45,6 +45,10 @@ struct FlickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Flick
         self.pressActions
     }
 
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        self.longPressActions
+    }
+
     func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         self.flickKeys
     }

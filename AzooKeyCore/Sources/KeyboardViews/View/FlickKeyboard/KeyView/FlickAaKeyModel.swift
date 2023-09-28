@@ -23,7 +23,10 @@ struct FlickAaKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Fli
         }
     }
 
-    let longPressActions: LongpressActionType = .none
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
+    }
+
     func flickKeys(variableStates: VariableStates) -> [CustardKit.FlickDirection: FlickedKeyModel] {
         if variableStates.boolStates.isCapsLocked {
             return [:]

@@ -22,7 +22,7 @@ struct FlickTabKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Fl
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         self.data.actions
     }
-    var longPressActions: LongpressActionType {
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
         self.data.longpressActions
     }
 

@@ -46,7 +46,7 @@ import SwiftUtils
     func setResultViewUpdateCallback(_ variableStates: VariableStates) {
         self.inputManager.setUpdateResult { [weak variableStates] in
             if let variableStates {
-                $0(&variableStates.resultModelVariableSection)
+                $0(&variableStates.resultModel)
             }
         }
     }
@@ -190,8 +190,12 @@ import SwiftUtils
         case .enter:
             self.showResultView(variableStates: variableStates)
             self.shiftStateOff(variableStates: variableStates)
-            let actions = self.inputManager.enter(requireSetResult: requireSetResult)
-            self.registerActions(actions, variableStates: variableStates)
+            if let candidate = variableStates.resultModel.getSelectedCandidate() {
+                self.notifyComplete(candidate, variableStates: variableStates)
+            } else {
+                let actions = self.inputManager.enter(requireSetResult: requireSetResult)
+                self.registerActions(actions, variableStates: variableStates)
+            }
 
         case .changeCharacterType:
             self.showResultView(variableStates: variableStates)
@@ -203,6 +207,8 @@ import SwiftUtils
             self.shiftStateOff(variableStates: variableStates)
             self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
 
+        case let .selectCandidate(selection):
+            variableStates.resultModel.setSelectionRequest(selection)
         case let .moveTab(type):
             // タブ移動ではシフトを解除しない
             variableStates.setTab(type)
@@ -272,7 +278,7 @@ import SwiftUtils
             }
         case let .setSearchQuery(query, target):
             let results = self.inputManager.getSearchResult(query: query, target: target)
-            variableStates.resultModelVariableSection.setSearchResults(results)
+            variableStates.resultModel.setSearchResults(results)
         }
 
         if requireSetResult {
@@ -281,7 +287,9 @@ import SwiftUtils
             let (left, center, right) = self.inputManager.getSurroundingText()
             variableStates.setSurroundingText(leftSide: left, center: center, rightSide: right)
             // エンターキーの状態
-            variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
+            variableStates.setEnterKeyState(
+                variableStates.resultModel.getSelectedCandidate() == nil ? self.inputManager.getEnterKeyState() : .complete
+            )
             // 文字列の変更を適用
             variableStates.textChangedCount = self.inputManager.getTextChangedCount()
             // 必要に応じて予測変換をリセット
@@ -353,7 +361,7 @@ import SwiftUtils
     override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
         var actions = actions[...]
         while let firstIndex = actions.firstIndex(where: { actionTriggerStyle($0) == .separator }) {
-            self.runActionBlock(actionBlock: actions[...firstIndex], variableStates: variableStates)
+            self.runActionBlock(actionBlock: actions[..<firstIndex], variableStates: variableStates)
             self.doAction(actions[firstIndex], variableStates: variableStates)
             actions = actions[(firstIndex + 1)...]
         }

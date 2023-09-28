@@ -51,21 +51,9 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         .matchedGeometryEffect(id: "KeyboardBarButton", in: namespace)
     }
 
-    private var isResultMode: Bool {
-        !variableStates.resultModelVariableSection.results.isEmpty
-    }
-
-    private var resultData: [ResultData] {
-        if isResultMode {
-            variableStates.resultModelVariableSection.results
-        } else {
-            variableStates.resultModelVariableSection.predictionResults
-        }
-    }
-
     var body: some View {
         Group {
-            if resultData.isEmpty {
+            if variableStates.resultModel.displayState == .nothing {
                 CenterAlignedView {
                     if displayTabBarButton {
                         tabBarButton
@@ -103,20 +91,20 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 }
             } else {
                 HStack {
-                    if !isResultMode && displayTabBarButton {
+                    if variableStates.resultModel.displayState == .predictions && displayTabBarButton {
                         tabBarButton
                         Spacer()
                     }
                     ScrollView(.horizontal, showsIndicators: false) {
                         ScrollViewReader {scrollViewProxy in
                             LazyHStack(spacing: 10) {
-                                ForEach(resultData, id: \.id) {(data: ResultData) in
+                                ForEach(variableStates.resultModel.resultData, id: \.id) {(data: ResultData) in
                                     if data.candidate.inputable {
                                         Button(data.candidate.text) {
                                             KeyboardFeedback<Extension>.click()
                                             self.pressed(candidate: data.candidate)
                                         }
-                                        .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight))
+                                        .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight, selected: data.id == variableStates.resultModel.selection))
                                         .contextMenu {
                                             ResultContextMenuView(candidate: data.candidate, displayResetLearningButton: Extension.SettingProvider.canResetLearningForCandidate, index: data.id)
                                         }
@@ -127,13 +115,21 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                                             .underline(true, color: .accentColor)
                                     }
                                 }
-                            }.onChange(of: variableStates.resultModelVariableSection.updateResult) { _ in
+                            }
+                            .onChange(of: variableStates.resultModel.updateResult) { _ in
                                 scrollViewProxy.scrollTo(0, anchor: .trailing)
+                            }
+                            .onChange(of: variableStates.resultModel.selection) { value in
+                                if let value {
+                                    withAnimation(.easeIn(duration: 0.05)) {
+                                        scrollViewProxy.scrollTo(value, anchor: .trailing)
+                                    }
+                                }
                             }
                         }
                         .padding(.horizontal, 5)
                     }
-                    if isResultMode {
+                    if variableStates.resultModel.displayState == .results {
                         // 候補を展開するボタン
                         Button(action: {self.expand()}) {
                             ZStack {
@@ -150,8 +146,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 }
             }
         }
-        .animation(.easeIn(duration: 0.2), value: variableStates.resultModelVariableSection.results.isEmpty)
-        .animation(.easeIn(duration: 0.2), value: variableStates.resultModelVariableSection.predictionResults.isEmpty)
+        .animation(.easeIn(duration: 0.2), value: variableStates.resultModel.displayState)
     }
 
     private func pressed(candidate: any ResultViewItemData) {
@@ -217,12 +212,14 @@ struct ResultContextMenuView: View {
 struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: ButtonStyle {
     private let height: CGFloat
     private let userSizePreference: Double
+    private let selected: Bool
 
     @Environment(Extension.Theme.self) private var theme
 
-    @MainActor init(height: CGFloat) {
+    @MainActor init(height: CGFloat, selected: Bool = false) {
         self.userSizePreference = Extension.SettingProvider.resultViewFontSize
         self.height = height
+        self.selected = selected
     }
 
     func makeBody(configuration: Configuration) -> some View {
@@ -232,7 +229,7 @@ struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: B
             .padding(.all, 5)
             .foregroundStyle(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
             .background(
-                configuration.isPressed ?
+                (configuration.isPressed || self.selected) ?
                     theme.pushedKeyFillColor.color.opacity(0.5) :
                     theme.resultBackgroundColor.color
             )

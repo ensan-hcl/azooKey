@@ -42,6 +42,10 @@ struct QwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Qwer
         self.pressActions
     }
 
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        self.longPressActions
+    }
+
     func feedback(variableStates: VariableStates) {
         self.pressActions.first?.feedback(variableStates: variableStates, extension: Extension.self)
     }

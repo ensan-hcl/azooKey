@@ -46,7 +46,7 @@ import UIKit
     private var rubyLog: OrderedDictionary<String, String> = [:]
 
     // 変換結果の通知用関数
-    private var updateResult: (((inout ResultModelVariableSection) -> Void) -> Void)?
+    private var updateResult: (((inout ResultModel) -> Void) -> Void)?
 
     private var liveConversionEnabled: Bool {
         liveConversionManager.enabled && !self.isSelected
@@ -194,7 +194,7 @@ import UIKit
         self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
-    func setUpdateResult(_ updateResult: (((inout ResultModelVariableSection) -> Void) -> Void)?) {
+    func setUpdateResult(_ updateResult: (((inout ResultModel) -> Void) -> Void)?) {
         self.updateResult = updateResult
     }
 

@@ -128,7 +128,7 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                     self.model.feedback(variableStates: variableStates)
                     self.pressState = .started(Date())
                     self.doublePressState.update(touchDownDate: Date())
-                    self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
+                    self.action.reserveLongPressAction(self.model.longPressActions(variableStates: variableStates), variableStates: variableStates)
                     self.longPressStartTask = Task {
                         do {
                             // 0.4秒待つ
@@ -161,7 +161,7 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                 // 更新する
                 let endDate = Date()
                 self.doublePressState.update(touchUpDate: endDate)
-                self.action.registerLongPressActionEnd(self.model.longPressActions)
+                self.action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                 self.suggest = false
                 self.longPressStartTask?.cancel()
                 self.longPressStartTask = nil

@@ -34,6 +34,10 @@ struct QwertyFunctionalKeyModel<Extension: ApplicationSpecificKeyboardViewExtens
         self.pressActions
     }
 
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
+    }
+
     func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
         KeyLabel(self.labelType, width: width, textColor: color)
     }

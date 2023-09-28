@@ -58,16 +58,16 @@ struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             isPressed = true
                             pressStartDate = Date()
                             model.feedback(variableStates: variableStates)
-                            action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
+                            action.reserveLongPressAction(self.model.longPressActions(variableStates: variableStates), variableStates: variableStates)
                         } touchMovedCallBack: { state  in
                             if state.distance > 15 {
                                 isPressed = false
                                 pressStartDate = Date()
-                                action.registerLongPressActionEnd(self.model.longPressActions)
+                                action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                             }
                         } touchUpCallBack: {state in
                             isPressed = false
-                            action.registerLongPressActionEnd(self.model.longPressActions)
+                            action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                             if Date().timeIntervalSince(pressStartDate) < 0.4 && state.distance < 30 {
                                 action.registerActions(self.model.pressActions(variableStates: variableStates), variableStates: variableStates)
                                 self.model.additionalOnPress(variableStates: variableStates)
@@ -76,7 +76,7 @@ struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                     }
                 }
                 .onDisappear {
-                    action.registerLongPressActionEnd(self.model.longPressActions)
+                    action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                 }
             )
             .frame(width: keyViewWidth, height: keyViewHeight)
