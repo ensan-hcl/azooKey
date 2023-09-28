@@ -25,6 +25,8 @@ extension CodableActionData {
             return .smoothDelete
         case let .smartDelete(value):
             return .smartDelete(value)
+        case .selectCandidate(let selection):
+            return .selectCandidate(selection)
         case .complete:
             return .enter
         case let .moveCursor(value):

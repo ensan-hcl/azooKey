@@ -6,6 +6,7 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+import enum CustardKit.CandidateSelection
 import Foundation
 
 public protocol ResultViewItemData {
@@ -66,7 +67,7 @@ public struct ResultModel {
         self.selection = nil
         self.updateResult.toggle()
     }
-    public mutating func setSelectionRequest(_ request: CandidateSelectionRequest?) {
+    public mutating func setSelectionRequest(_ request: CandidateSelection?) {
         self.selection = switch request {
         case .none:
             nil
