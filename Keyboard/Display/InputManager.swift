@@ -297,6 +297,7 @@ import UIKit
 
     /// 入力を停止する。DisplayedTextには特に何もしない。
     func stopComposition() {
+        self.conversionRequestTask?.cancel()
         self.composingText.stopComposition()
         self.displayedTextManager.stopComposition()
         self.liveConversionManager.stopComposition()
