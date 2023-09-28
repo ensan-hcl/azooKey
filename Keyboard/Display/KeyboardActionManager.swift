@@ -361,7 +361,7 @@ import SwiftUtils
     override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
         var actions = actions[...]
         while let firstIndex = actions.firstIndex(where: { actionTriggerStyle($0) == .separator }) {
-            self.runActionBlock(actionBlock: actions[...firstIndex], variableStates: variableStates)
+            self.runActionBlock(actionBlock: actions[..<firstIndex], variableStates: variableStates)
             self.doAction(actions[firstIndex], variableStates: variableStates)
             actions = actions[(firstIndex + 1)...]
         }
