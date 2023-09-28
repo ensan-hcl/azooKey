@@ -1933,8 +1933,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ensan-hcl/BoolExpressionEvaluator";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = exactVersion;
+				version = 0.0.1;
 			};
 		};
 		1A70DFFB291F2D1E00A83849 /* XCRemoteSwiftPackageReference "CustardKit" */ = {
