@@ -33,7 +33,10 @@ import UIKit
     private var keyboardLanguage: KeyboardLanguage = .ja_JP
     func setKeyboardLanguage(_ value: KeyboardLanguage) {
         self.keyboardLanguage = value
-        self.kanaKanjiConverter.setKeyboardLanguage(value)
+        // This task has no need to be handled
+        Task {
+            await self.kanaKanjiConverter.setKeyboardLanguage(value)
+        }
     }
 
     /// システム側でproxyを操作した結果、`textDidChange`などがよばれてしまう場合に、その呼び出しをスキップするため、フラグを事前に立てる
@@ -189,7 +192,10 @@ import UIKit
     private var textReplacer = TextReplacer()
 
     func sendToDicdataStore(_ data: DicdataStore.Notification) {
-        self.kanaKanjiConverter.sendToDicdataStore(data)
+        // This task has no need to be handled
+        Task {
+            await self.kanaKanjiConverter.sendToDicdataStore(data)
+        }
     }
 
     func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
@@ -226,11 +232,13 @@ import UIKit
 
     /// 確定直後に呼ぶ
     func updatePostCompositionPredictionCandidates(candidate: Candidate) {
-        let results = self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: candidate, options: getConvertRequestOptions())
-        predictionManager.updateAfterComplete(candidate: candidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
-        if let updateResult {
-            updateResult {
-                $0.setPredictionResults(results)
+        Task {
+            let results = await self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: candidate, options: getConvertRequestOptions())
+            predictionManager.updateAfterComplete(candidate: candidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
+            if let updateResult {
+                updateResult {
+                    $0.setPredictionResults(results)
+                }
             }
         }
     }
@@ -240,13 +248,15 @@ import UIKit
         guard let lastUsedCandidate = predictionManager.getLastCandidate() else {
             return
         }
-        self.kanaKanjiConverter.updateLearningData(lastUsedCandidate, with: candidate)
-        let newCandidate = candidate.join(to: lastUsedCandidate)
-        let results = self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
-        predictionManager.update(candidate: newCandidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
-        if let updateResult {
-            updateResult {
-                $0.setPredictionResults(results)
+        Task {
+            async let _ = self.kanaKanjiConverter.updateLearningData(lastUsedCandidate, with: candidate)
+            let newCandidate = candidate.join(to: lastUsedCandidate)
+            let results = await self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
+            predictionManager.update(candidate: newCandidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
+            if let updateResult {
+                updateResult {
+                    $0.setPredictionResults(results)
+                }
             }
         }
     }
@@ -279,7 +289,9 @@ import UIKit
             self.previousSystemOperation = .setMarkedText
         }
         self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
-        self.kanaKanjiConverter.updateLearningData(candidate)
+        Task {
+            await self.kanaKanjiConverter.updateLearningData(candidate)
+        }
         guard !self.composingText.isEmpty else {
             // ここで入力を停止する
             self.stopComposition()
@@ -287,8 +299,9 @@ import UIKit
             return
         }
         self.isSelected = false
-        self.kanaKanjiConverter.setCompletedData(candidate)
-
+        Task {
+            await self.kanaKanjiConverter.setCompletedData(candidate)
+        }
         if liveConversionEnabled {
             self.liveConversionManager.updateAfterFirstClauseCompletion()
         }
@@ -301,8 +314,9 @@ import UIKit
         self.composingText.stopComposition()
         self.displayedTextManager.stopComposition()
         self.liveConversionManager.stopComposition()
-        self.kanaKanjiConverter.stopComposition()
-
+        Task {
+            await self.kanaKanjiConverter.stopComposition()
+        }
         self.isSelected = false
 
         if let updateResult {
@@ -352,7 +366,7 @@ import UIKit
                 ]
             )
         }
-        let actions = self.kanaKanjiConverter.getAppropriateActions(candidate)
+        let actions = KanaKanjiConverter.getAppropriateActions(candidate)
         candidate.withActions(actions)
         candidate.parseTemplate()
         self.updateLog(candidate: candidate)
@@ -382,7 +396,9 @@ import UIKit
         self.displayedTextManager.deleteBackward(count: 1)
         // 状態をリセットする
         self.composingText.stopComposition()
-        self.kanaKanjiConverter.stopComposition()
+        Task {
+            await self.kanaKanjiConverter.stopComposition()
+        }
         self.isSelected = false
     }
 
