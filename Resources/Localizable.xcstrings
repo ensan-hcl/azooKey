@@ -1877,22 +1877,6 @@
         }
       }
     },
-    "カーソルバー" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cursor bar"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "カーソルバーの切り替え" : {
       "localizations" : {
         "en" : {
@@ -4218,6 +4202,16 @@
         }
       }
     },
+    "バー" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bars"
+          }
+        }
+      }
+    },
     "バージョン" : {
       "localizations" : {
         "en" : {
@@ -4288,22 +4282,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Getting file"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "フィードバックを募集します" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feedback wanted"
           }
         },
         "ja" : {
