@@ -167,15 +167,16 @@ public extension KeyboardSettingKey where Self == DisplayTabBarButton {
     static var displayTabBarButton: Self { .init() }
 }
 
-public struct UseBetaMoveCursorBar: BoolKeyboardSettingKey {
-    public static let title: LocalizedStringKey = "新しいカーソルバーを使う (試験版)"
-    public static let explanation: LocalizedStringKey = "新しいカーソルバーを有効化します。\n試験的機能のため、予告なく提供を終了する可能性があります。"
+public struct UseSliderStyleCursorBar: BoolKeyboardSettingKey {
+    public static let title: LocalizedStringKey = "新しいカーソルバーを使う"
+    public static let explanation: LocalizedStringKey = "操作性が向上した新しいカーソルバーを有効化します。"
     public static let defaultValue = false
+    // MARK: This setting is originally introduced as 'beta cursor bar'
     public static let key: String = "use_move_cursor_bar_beta"
 }
 
-public extension KeyboardSettingKey where Self == UseBetaMoveCursorBar {
-    static var useBetaMoveCursorBar: Self { .init() }
+public extension KeyboardSettingKey where Self == UseSliderStyleCursorBar {
+    static var useSliderStyleCursorBar: Self { .init() }
 }
 
 public struct HideResetButtonInOneHandedMode: BoolKeyboardSettingKey {

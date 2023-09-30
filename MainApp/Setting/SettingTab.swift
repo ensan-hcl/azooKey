@@ -52,7 +52,7 @@ struct SettingTabView: View {
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
                     }
                     Section(header: Text("カーソルバー")) {
-                        BoolSettingView(.useBetaMoveCursorBar)
+                        BoolSettingView(.useSliderStyleCursorBar)
                         FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
                     // デバイスが触覚フィードバックをサポートしている場合のみ表示する

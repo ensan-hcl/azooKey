@@ -15,6 +15,9 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
     @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
     @Environment(Extension.Theme.self) private var theme
+    private var useReflectStyleCursorBar: Bool {
+        Extension.SettingProvider.useSliderStyleCursorBar
+    }
 
     init(isResultViewExpanded: Binding<Bool>) {
         self._isResultViewExpanded = isResultViewExpanded
@@ -23,7 +26,11 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
     var body: some View {
         switch variableStates.barState {
         case .cursor:
-            MoveCursorBar<Extension>()
+            if useReflectStyleCursorBar {
+                ReflectStyleCursorBar<Extension>()
+            } else {
+                SliderStyleCursorBar<Extension>()
+            }
         case .tab:
             let tabBarData = (try? variableStates.tabManager.config.custardManager.tabbar(identifier: 0)) ?? .default
             TabBarView<Extension>(data: tabBarData)
