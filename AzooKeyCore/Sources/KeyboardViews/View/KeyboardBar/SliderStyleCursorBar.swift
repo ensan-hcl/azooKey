@@ -97,12 +97,30 @@ struct SliderStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>
         theme.resultTextColor.color
     }
 
+    private var buttonColors: [Color] {
+        [symbolsColor.opacity(0.8), symbolsColor.opacity(0.8), symbolsColor.opacity(0.4)]
+    }
+    private var symbolsFont: Font {
+        .system(size: 22, weight: symbolsFontWeight, design: .default)
+    }
+
     @ViewBuilder private var moveLeftButton: some View {
         Button {
             self.action.registerAction(.moveCursor(-1), variableStates: variableStates)
         } label: {
-            Image(systemName: "chevron.left.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
+            let interval: Double = 0.4
+            TimelineView(.periodic(from: Date(), by: interval)) { timeline in
+                let target = Int(timeline.date.timeIntervalSince1970 / interval)
+                HStack(spacing: 0) {
+                    ForEach(0..<3, id: \.self) { i in
+                        Image(systemName: "chevron.compact.left")
+                            .font(symbolsFont)
+                            .foregroundStyle(buttonColors[(target + i) % 3])
+                    }
+                }
+                .compositingGroup()
                 .padding()
+            }
         }
     }
 
@@ -110,8 +128,19 @@ struct SliderStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>
         Button {
             self.action.registerAction(.moveCursor(1), variableStates: variableStates)
         } label: {
-            Image(systemName: "chevron.right.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
+            let interval: Double = 0.4
+            TimelineView(.periodic(from: Date(), by: interval)) { timeline in
+                let target = Int(timeline.date.timeIntervalSince1970 / interval)
+                HStack(spacing: 0) {
+                    ForEach(0..<3, id: \.self) { i in
+                        Image(systemName: "chevron.compact.right")
+                            .font(symbolsFont)
+                            .foregroundStyle(buttonColors[(target + 2 - i) % 3])
+                    }
+                }
+                .compositingGroup()
                 .padding()
+            }
         }
     }
 
@@ -124,12 +153,13 @@ struct SliderStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>
                     Spacer()
                     moveLeftButton
                     Spacer()
-                    Image(systemName: "circle.fill").font(.system(size: 22, weight: symbolsFontWeight, design: .default))
+                    Image(systemName: "circle.fill")
+                        .font(symbolsFont)
+                        .foregroundStyle(symbolsColor)
                     Spacer()
                     moveRightButton
                     Spacer()
                 }
-                    .foregroundStyle(symbolsColor)
             )
     }
 }
