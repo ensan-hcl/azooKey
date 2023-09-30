@@ -4848,40 +4848,6 @@
         }
       }
     },
-    "より強力な学習を有効化 (試験版)" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable more strong learning (experimental)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "より長い期間学習が保持されます。\n試験的機能のため、予告なく提供を終了する可能性があります。" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Histories can be remembered much longer. \nSince this is an experimental feature, this feature may be discontinued without notice."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "ライトモードで使用" : {
       "localizations" : {
         "en" : {
@@ -6931,6 +6897,23 @@
         }
       }
     },
+    "操作性が向上した新しいカーソルバーを有効化します。" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable new cursor bar which has been greatly improved usability."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
+    },
     "改行キー" : {
       "localizations" : {
         "en" : {
@@ -7187,30 +7170,13 @@
         }
       }
     },
-    "新しいカーソルバーを使う (試験版)" : {
+    "新しいカーソルバーを使う" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Use new cursor bar (experimental)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "新しいカーソルバーを有効化します。\n試験的機能のため、予告なく提供を終了する可能性があります。" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable new cursor bar. \nSince this is an experimental feature, this feature may be discontinued without notice."
+            "value" : "Use new cursor bar"
           }
         },
         "ja" : {
