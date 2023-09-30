@@ -162,7 +162,7 @@ public final class VariableStates: ObservableObject {
 
     @Published public var undoAction: UndoAction?
 
-    @Published var moveCursorBarState = BetaMoveCursorBarState()
+    @Published var moveCursorBarState = SliderStyleCursorBarState()
 
     @Published private(set) var leftSideText: String = ""
     @Published private(set) var centerText: String = ""
