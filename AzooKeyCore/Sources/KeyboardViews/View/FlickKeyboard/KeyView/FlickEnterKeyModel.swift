@@ -24,7 +24,7 @@ struct FlickEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
         }
     }
 
-    func longPressActions(variableStates _: VariableStates) -> LongpressActionType { .init(start: [.selectCandidate(.offset(1))]) }
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType { .none }
 
     func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         [:]
