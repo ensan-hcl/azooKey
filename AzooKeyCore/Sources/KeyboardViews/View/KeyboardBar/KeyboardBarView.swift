@@ -48,7 +48,7 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
 @MainActor
 struct KeyboardBarButton<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     enum LabelType {
-        case azooKeyIcon
+        case azooKeyIcon(AzooKeyIcon.Looks = .normal)
         case systemImage(String)
     }
     @Environment(Extension.Theme.self) private var theme
@@ -56,7 +56,7 @@ struct KeyboardBarButton<Extension: ApplicationSpecificKeyboardViewExtension>: V
     private var action: () -> Void
     private let label: LabelType
 
-    init(label: LabelType = .azooKeyIcon, action: @escaping () -> Void) {
+    init(label: LabelType, action: @escaping () -> Void) {
         self.label = label
         self.action = action
     }
@@ -84,8 +84,8 @@ struct KeyboardBarButton<Extension: ApplicationSpecificKeyboardViewExtension>: V
                     .strokeAndFill(fillContent: buttonBackgroundColor, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
                     .frame(width: circleSize, height: circleSize)
                 switch label {
-                case .azooKeyIcon:
-                    AzooKeyIcon(fixedSize: iconSize, color: .color(buttonLabelColor))
+                case let .azooKeyIcon(looks):
+                    AzooKeyIcon(fixedSize: iconSize, color: .color(buttonLabelColor), looks: looks)
                 case let .systemImage(name):
                     Image(systemName: name)
                         .frame(width: iconSize, height: iconSize)
