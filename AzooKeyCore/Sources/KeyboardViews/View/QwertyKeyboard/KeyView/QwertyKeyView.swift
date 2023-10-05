@@ -214,6 +214,10 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
         theme != Extension.ThemeExtension.default(layout: .qwerty) ? .black : nil
     }
 
+    private var shadowColor: Color {
+        suggestTextColor?.opacity(0.5) ?? .black.opacity(0.5)
+    }
+
     private var selection: Int? {
         if case let .variations(selection) = pressState {
             return selection
@@ -259,6 +263,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                                 .padding(.bottom, height),
                             alignment: self.model.variationsModel.direction.alignment
                         )
+                        .compositingGroup()
+                        .shadow(color: shadowColor, radius: 1, x: 0, y: 0)
                         .allowsHitTesting(false)
                     } else {
                         QwertySuggestView.scaleToFrameSize(
@@ -273,6 +279,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             label(width: size.width, color: suggestTextColor)
                                 .padding(.bottom, height)
                         )
+                        .compositingGroup()
+                        .shadow(color: shadowColor, radius: 1, x: 0, y: 0)
                         .allowsHitTesting(false)
                     }
                 }
