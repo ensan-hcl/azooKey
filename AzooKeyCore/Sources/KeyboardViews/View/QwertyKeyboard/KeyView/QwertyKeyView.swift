@@ -135,6 +135,7 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             try await Task.sleep(nanoseconds: 0_400_000_000)
                         } catch {
                             debug(error)
+                            return
                         }
                         // すでに処理が終了済みでなければ
                         if !Task.isCancelled && self.pressState.isActive {
