@@ -45,11 +45,9 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     }
 
     private var tabBarButton: some View {
-        KeyboardBarButton<Extension> {
-            self.action.registerAction(.setTabBar(.toggle), variableStates: variableStates)
-        }
-        .zIndex(10)
-        .matchedGeometryEffect(id: "KeyboardBarButton", in: namespace)
+        TabBarButton<Extension>()
+            .zIndex(10)
+            .matchedGeometryEffect(id: "KeyboardBarButton", in: namespace)
     }
 
     var body: some View {

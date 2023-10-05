@@ -30,10 +30,7 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
 
     var body: some View {
         HStack {
-            KeyboardBarButton<Extension> {
-                self.action.registerAction(.setTabBar(.on), variableStates: variableStates)
-            }
-
+            TabBarButton<Extension>()
             if !showResults {
                 // 見た目だけ表示しておいて、実際はoverlayのボタンになっている
                 InKeyboardSearchBar(text: $searchQuery, configuration: searchBarDesign)
