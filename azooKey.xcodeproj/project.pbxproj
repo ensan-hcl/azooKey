@@ -142,7 +142,6 @@
 		1AD8FDF12988076F00DA4296 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8FDF02988076F00DA4296 /* ConverterTests.swift */; };
 		1AD96FB82A22F9C800FD4EA4 /* SwiftUIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AD96FB72A22F9C800FD4EA4 /* SwiftUIUtils */; };
 		1AD96FBA2A22F9CD00FD4EA4 /* SwiftUIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AD96FB92A22F9CD00FD4EA4 /* SwiftUIUtils */; };
-		1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1023525D0C99200CA7277 /* PhotoPicker.swift */; };
 		1AE1025625D1788300CA7277 /* Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025525D1788300CA7277 /* Capture.swift */; };
 		1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102CE25D3713C00CA7277 /* TrimmingView.swift */; };
 		1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1913525D4A3370044EE4B /* ThemeShareView.swift */; };
@@ -338,7 +337,6 @@
 		1AD4454526AAB8E4003CF854 /* DisclosuringList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosuringList.swift; sourceTree = "<group>"; };
 		1AD5E17726AB230F001B4FF7 /* CustomKeysSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeysSettingView.swift; sourceTree = "<group>"; };
 		1AD8FDF02988076F00DA4296 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
-		1AE1023525D0C99200CA7277 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		1AE1025525D1788300CA7277 /* Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
 		1AE102CE25D3713C00CA7277 /* TrimmingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrimmingView.swift; sourceTree = "<group>"; };
 		1AE1913525D4A3370044EE4B /* ThemeShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeShareView.swift; sourceTree = "<group>"; };
@@ -453,7 +451,6 @@
 		1A10D81325E506460095CB67 /* Pickers */ = {
 			isa = PBXGroup;
 			children = (
-				1AE1023525D0C99200CA7277 /* PhotoPicker.swift */,
 				1A18424225DD6857003985AB /* FontPicker.swift */,
 			);
 			path = Pickers;
@@ -1337,7 +1334,6 @@
 				1AFA57662584815B00477DC2 /* QwertyCustomKeysItemView.swift in Sources */,
 				1AFB68422518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift in Sources */,
 				1A5C7EAC25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift in Sources */,
-				1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */,
 				1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */,
 				1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */,
 				1AE1025625D1788300CA7277 /* Capture.swift in Sources */,

@@ -87,10 +87,10 @@ struct ThemeEditView: CancelableEditor {
 
     @Binding private var manager: ThemeIndexManager
 
+    @State private var photosPickerItem: PhotosPickerItem?
     @State private var trimmedImage: UIImage?
     @State private var isTrimmingViewPresented = false
     @State private var pickedImage: UIImage?
-    @State private var isSheetPresented = false
     @State private var viewType = ViewType.editor
 
     private let colorConverter = ThemeColorTranslator.self
@@ -139,18 +139,15 @@ struct ThemeEditView: CancelableEditor {
                 Form {
                     Section(header: Text("背景")) {
                         if trimmedImage != nil {
-                            Button("\(systemImage: "photo")画像を選び直す") {
-                                self.isSheetPresented = true
-                            }
+                            PhotosPicker("\(systemImage: "photo")画像を選び直す", selection: $photosPickerItem)
                             Button("画像を削除") {
+                                photosPickerItem = nil
                                 pickedImage = nil
                                 trimmedImage = nil
                             }
                             .foregroundStyle(.red)
                         } else {
-                            Button("\(systemImage: "photo")画像を選ぶ") {
-                                self.isSheetPresented = true
-                            }
+                            PhotosPicker("\(systemImage: "photo")画像を選ぶ", selection: $photosPickerItem)
                             ColorPicker("背景の色", selection: $theme.backgroundColor.converted(colorConverter))
                         }
                     }
@@ -234,11 +231,18 @@ struct ThemeEditView: CancelableEditor {
                     self.theme.pushedKeyFillColor = .color(pushedKeyColor)
                 }
             }
-            .sheet(isPresented: $isSheetPresented, content: {
-                PhotoPicker(configuration: self.config,
-                            pickerResult: $pickedImage,
-                            isPresented: $isSheetPresented)
-            })
+            .onChange(of: self.photosPickerItem) { item in
+                guard let item else {
+                    return
+                }
+                Task {
+                    if let data = try await item.loadTransferable(type: Data.self) {
+                      if let uiImage = UIImage(data: data) {
+                          self.pickedImage = uiImage
+                      }
+                    }
+                }
+            }
             .navigationBarTitle(Text(self.title), displayMode: .inline)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(
