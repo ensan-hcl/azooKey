@@ -257,24 +257,14 @@ final class KeyboardViewController: UIInputViewController {
         // この関数は「これから」向きが変わる場合に呼ばれるので、デバイスの向きによってwidthとheightが逆転するUIScreen.main.bounds.sizeを用いて向きを確かめることができる。
         // ただしこの時点でのUIScreen.mainの値はOSバージョンで変わる
         debug("KeyboardViewController.viewWillTransition", size, UIScreen.main.bounds.size)
-        if #available(iOS 16, *) {
-            SemiStaticStates.shared.setScreenWidth(size.width)
-            KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical, screenWidth: size.width)
-        } else {
-            SemiStaticStates.shared.setScreenWidth(size.width)
-            KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .vertical : .horizontal, screenWidth: size.width)
-        }
+        SemiStaticStates.shared.setScreenWidth(size.width)
+        KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical, screenWidth: size.width)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         debug("KeyboardViewController.viewDidLayoutSubviews", SemiStaticStates.shared.screenWidth)
-        if #available(iOS 16, *) {
-            self.view.frame.size.height = Design.keyboardScreenHeight(upsideComponent: KeyboardViewController.variableStates.upsideComponent, orientation: KeyboardViewController.variableStates.keyboardOrientation)
-        } else {
-            self.view.frame.size.height = Design.keyboardScreenHeight(upsideComponent: KeyboardViewController.variableStates.upsideComponent, orientation: KeyboardViewController.variableStates.keyboardOrientation)
-            self.updateViewConstraints()
-        }
+        self.view.frame.size.height = Design.keyboardScreenHeight(upsideComponent: KeyboardViewController.variableStates.upsideComponent, orientation: KeyboardViewController.variableStates.keyboardOrientation)
     }
 
     func reloadAllView() {
