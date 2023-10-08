@@ -231,31 +231,31 @@ extension CustardInterfaceKey {
         }
     }
 
-    func simpleKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> any SimpleKeyModelProtocol {
+    func simpleKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> any SimpleKeyModelProtocol<Extension> {
         switch self {
         case let .system(value):
             switch value {
             case .changeKeyboard:
-                return SimpleChangeKeyboardKeyModel<Extension>()
+                return SimpleChangeKeyboardKeyModel()
             case .enter:
-                return SimpleEnterKeyModel<Extension>()
+                return SimpleEnterKeyModel()
             case .upperLower:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("a/A"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
+                return SimpleKeyModel(keyLabelType: .text("a/A"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .nextCandidate:
-                return SimpleNextCandidateKeyModel<Extension>()
+                return SimpleNextCandidateKeyModel()
             case .flickKogaki:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
+                return SimpleKeyModel(keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .flickKutoten:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
+                return SimpleKeyModel(keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
             case .flickHiraTab:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.user_japanese))])
+                return SimpleKeyModel(keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.user_japanese))])
             case .flickAbcTab:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.user_english))])
+                return SimpleKeyModel(keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.user_english))])
             case .flickStar123Tab:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.flick_numbersymbols))])
+                return SimpleKeyModel(keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.flick_numbersymbols))])
             }
         case let .custom(value):
-            return SimpleKeyModel<Extension>(
+            return SimpleKeyModel(
                 keyLabelType: value.design.label.keyLabelType,
                 unpressedKeyColorType: value.design.color.simpleKeyColorType,
                 pressActions: value.press_actions.map {$0.actionType},
