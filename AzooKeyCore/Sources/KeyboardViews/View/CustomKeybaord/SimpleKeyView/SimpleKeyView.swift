@@ -12,7 +12,7 @@ import SwiftUIUtils
 
 @MainActor
 struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
-    private let model: any SimpleKeyModelProtocol
+    private let model: any SimpleKeyModelProtocol<Extension>
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
@@ -20,13 +20,13 @@ struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     private let keyViewWidth: CGFloat
     private let keyViewHeight: CGFloat
 
-    init(model: any SimpleKeyModelProtocol, tabDesign: TabDependentDesign) {
+    init(model: any SimpleKeyModelProtocol<Extension>, tabDesign: TabDependentDesign) {
         self.model = model
         self.keyViewWidth = tabDesign.keyViewWidth
         self.keyViewHeight = tabDesign.keyViewHeight
     }
 
-    init(model: any SimpleKeyModelProtocol, width: CGFloat, height: CGFloat) {
+    init(model: any SimpleKeyModelProtocol<Extension>, width: CGFloat, height: CGFloat) {
         self.model = model
         self.keyViewWidth = width
         self.keyViewHeight = height
@@ -36,7 +36,7 @@ struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     @State private var pressStartDate = Date()
 
     private func label(width: CGFloat) -> some View {
-        model.label(width: keyViewWidth, states: variableStates, theme: theme) as KeyLabel<Extension>
+        model.label(width: keyViewWidth, states: variableStates)
     }
 
     var body: some View {

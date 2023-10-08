@@ -49,7 +49,7 @@ struct FlickNextCandidateKeyModel<Extension: ApplicationSpecificKeyboardViewExte
 
     private init() {}
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         if states.resultModel.results.isEmpty {
             KeyLabel(.text("空白"), width: width)
         } else {

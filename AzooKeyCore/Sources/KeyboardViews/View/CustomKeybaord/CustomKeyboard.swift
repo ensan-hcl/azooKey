@@ -60,7 +60,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    @MainActor func flickKeyModels<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] {
+    @MainActor func flickKeyModels<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -71,7 +71,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    @MainActor func qwertyKeyModels<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> [KeyPosition: (model: any QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
+    @MainActor func qwertyKeyModels<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> [KeyPosition: (model: any QwertyKeyModelProtocol<Extension>, sizeType: QwertyKeySizeType)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -126,28 +126,28 @@ fileprivate extension CustardKeyDesign.ColorType {
 }
 
 extension CustardInterfaceKey {
-    @MainActor public func flickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> any FlickKeyModelProtocol {
+    @MainActor public func flickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> any FlickKeyModelProtocol<Extension> {
         switch self {
         case let .system(value):
             switch value {
             case .changeKeyboard:
-                return FlickChangeKeyboardModel<Extension>.shared
+                return FlickChangeKeyboardModel.shared
             case .enter:
-                return FlickEnterKeyModel<Extension>()
+                return FlickEnterKeyModel()
             case .upperLower:
-                return FlickAaKeyModel<Extension>()
+                return FlickAaKeyModel()
             case .nextCandidate:
-                return FlickNextCandidateKeyModel<Extension>.shared
+                return FlickNextCandidateKeyModel.shared
             case .flickKogaki:
-                return FlickKogakiKeyModel<Extension>.shared
+                return FlickKogakiKeyModel.shared
             case .flickKutoten:
-                return FlickKanaSymbolsKeyModel<Extension>.shared
+                return FlickKanaSymbolsKeyModel.shared
             case .flickHiraTab:
-                return FlickTabKeyModel<Extension>.hiraTabKeyModel()
+                return FlickTabKeyModel.hiraTabKeyModel()
             case .flickAbcTab:
-                return FlickTabKeyModel<Extension>.abcTabKeyModel()
+                return FlickTabKeyModel.abcTabKeyModel()
             case .flickStar123Tab:
-                return FlickTabKeyModel<Extension>.numberTabKeyModel()
+                return FlickTabKeyModel.numberTabKeyModel()
             }
         case let .custom(value):
             let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variations.reduce(into: [:]) {dictionary, variation in
@@ -162,7 +162,7 @@ extension CustardInterfaceKey {
                     break
                 }
             }
-            let model = FlickKeyModel<Extension>(
+            return FlickKeyModel(
                 labelType: value.design.label.keyLabelType,
                 pressActions: value.press_actions.map {$0.actionType},
                 longPressActions: value.longpress_actions.longpressActionType,
@@ -170,16 +170,15 @@ extension CustardInterfaceKey {
                 needSuggestView: value.longpress_actions == .none && !value.variations.isEmpty,
                 keycolorType: value.design.color.flickKeyColorType
             )
-            return model
         }
     }
 
-    private func convertToQwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(customKey: KeyFlickSetting.SettingData, extension _: Extension.Type) -> any QwertyKeyModelProtocol {
+    private func convertToQwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(customKey: KeyFlickSetting.SettingData, extension _: Extension.Type) -> any QwertyKeyModelProtocol<Extension> {
         let variations = VariationsModel([customKey.flick[.left], customKey.flick[.top], customKey.flick[.right], customKey.flick[.bottom]].compactMap {$0}.map {(label: $0.labelType, actions: $0.pressActions)})
-        return QwertyKeyModel<Extension>(labelType: customKey.labelType, pressActions: customKey.actions, longPressActions: customKey.longpressActions, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
+        return QwertyKeyModel(labelType: customKey.labelType, pressActions: customKey.actions, longPressActions: customKey.longpressActions, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
     }
 
-    @MainActor func qwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(layout: CustardInterfaceLayout, extension: Extension.Type) -> any QwertyKeyModelProtocol {
+    @MainActor func qwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(layout: CustardInterfaceLayout, extension: Extension.Type) -> any QwertyKeyModelProtocol<Extension> {
         switch self {
         case let .system(value):
             switch value {
@@ -192,11 +191,11 @@ extension CustardInterfaceKey {
                 }
                 return changeKeyboardKey
             case .enter:
-                return QwertyEnterKeyModel<Extension>(keySizeType: .enter)
+                return QwertyEnterKeyModel(keySizeType: .enter)
             case .upperLower:
-                return QwertyAaKeyModel<Extension>()
+                return QwertyAaKeyModel()
             case .nextCandidate:
-                return QwertyNextCandidateKeyModel<Extension>()
+                return QwertyNextCandidateKeyModel()
             case .flickKogaki:
                 return convertToQwertyKeyModel(customKey: Extension.SettingProvider.koganaFlickCustomKey.compiled(), extension: Extension.self)
             case .flickKutoten:
@@ -218,7 +217,7 @@ extension CustardInterfaceKey {
                 }
             }
 
-            let model = QwertyKeyModel<Extension>(
+            return QwertyKeyModel(
                 labelType: value.design.label.keyLabelType,
                 pressActions: value.press_actions.map {$0.actionType},
                 longPressActions: value.longpress_actions.longpressActionType,
@@ -227,35 +226,34 @@ extension CustardInterfaceKey {
                 needSuggestView: value.longpress_actions == .none,
                 for: (1, 1)
             )
-            return model
         }
     }
 
-    func simpleKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> any SimpleKeyModelProtocol {
+    func simpleKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> any SimpleKeyModelProtocol<Extension> {
         switch self {
         case let .system(value):
             switch value {
             case .changeKeyboard:
-                return SimpleChangeKeyboardKeyModel<Extension>()
+                return SimpleChangeKeyboardKeyModel()
             case .enter:
-                return SimpleEnterKeyModel<Extension>()
+                return SimpleEnterKeyModel()
             case .upperLower:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("a/A"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
+                return SimpleKeyModel(keyLabelType: .text("a/A"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .nextCandidate:
-                return SimpleNextCandidateKeyModel<Extension>()
+                return SimpleNextCandidateKeyModel()
             case .flickKogaki:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
+                return SimpleKeyModel(keyLabelType: .text("小ﾞﾟ"), unpressedKeyColorType: .special, pressActions: [.changeCharacterType])
             case .flickKutoten:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
+                return SimpleKeyModel(keyLabelType: .text("、"), unpressedKeyColorType: .normal, pressActions: [.input("、")])
             case .flickHiraTab:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.user_japanese))])
+                return SimpleKeyModel(keyLabelType: .text("あいう"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.user_japanese))])
             case .flickAbcTab:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.user_english))])
+                return SimpleKeyModel(keyLabelType: .text("abc"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.user_english))])
             case .flickStar123Tab:
-                return SimpleKeyModel<Extension>(keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.flick_numbersymbols))])
+                return SimpleKeyModel(keyLabelType: .text("☆123"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.flick_numbersymbols))])
             }
         case let .custom(value):
-            return SimpleKeyModel<Extension>(
+            return SimpleKeyModel(
                 keyLabelType: value.design.label.keyLabelType,
                 unpressedKeyColorType: value.design.color.simpleKeyColorType,
                 pressActions: value.press_actions.map {$0.actionType},
@@ -337,7 +335,7 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
 public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExtension, Content: View>: View {
     @State private var suggestState = FlickSuggestState()
 
-    public init(models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
+    public init(models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
         self.models = models
         self.tabDesign = tabDesign
         self.layout = layout
@@ -345,7 +343,7 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
     }
 
     private let contentGenerator: (FlickKeyView<Extension>, Int, Int) -> (Content)
-    private let models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)]
+    private let models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)]
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
 

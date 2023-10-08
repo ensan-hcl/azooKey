@@ -44,9 +44,7 @@ public protocol FlickKeyModelProtocol<Extension> {
     @MainActor func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel]
     @MainActor func isFlickAble(to direction: FlickDirection, variableStates: VariableStates) -> Bool
 
-    // FIXME: any FlickKeyModelProtocolではassociatedtypeが扱いづらい問題に対処するため、任意のExtensionに対して扱えるようにする
-    // FIXME: iOS 16以降はany FlickKeyModelProtocol<Extension>を使って解消できる
-    @MainActor func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension>
+    @MainActor func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension>
 
     @MainActor func flickSensitivity(to direction: FlickDirection) -> CGFloat
     @MainActor func feedback(variableStates: VariableStates)

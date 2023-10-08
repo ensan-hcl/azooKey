@@ -11,9 +11,9 @@ import SwiftUI
 
 struct QwertyKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let tabDesign: TabDependentDesign
-    private let keyModels: [[any QwertyKeyModelProtocol]]
+    private let keyModels: [[any QwertyKeyModelProtocol<Extension>]]
 
-    init(keyModels: [[any QwertyKeyModelProtocol]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
+    init(keyModels: [[any QwertyKeyModelProtocol<Extension>]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
         self.keyModels = keyModels
         self.tabDesign = TabDependentDesign(width: 10, height: 4, interfaceSize: interfaceSize, layout: .qwerty, orientation: keyboardOrientation)
     }
@@ -32,7 +32,7 @@ struct QwertyKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
                 HStack(spacing: tabDesign.horizontalSpacing) {
                     ForEach(self.horizontalIndices(v: v), id: \.self) {(h: Int) in
                         let model = self.keyModels[v][h]
-                        QwertyKeyView<Extension>(
+                        QwertyKeyView(
                             model: model,
                             tabDesign: tabDesign,
                             size: CGSize(

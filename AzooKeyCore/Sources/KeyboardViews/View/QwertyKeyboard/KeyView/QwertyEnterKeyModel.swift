@@ -34,7 +34,7 @@ struct QwertyEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
         .none
     }
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width, textSize: .small, textColor: color)
     }

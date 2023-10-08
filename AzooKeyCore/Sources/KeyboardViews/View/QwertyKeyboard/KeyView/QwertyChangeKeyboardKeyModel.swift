@@ -68,7 +68,7 @@ struct QwertyChangeKeyboardKeyModel<Extension: ApplicationSpecificKeyboardViewEx
         self.fallBackType = fallBackType
     }
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.changeKeyboard, width: width, textColor: color)
         }

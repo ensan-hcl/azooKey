@@ -18,7 +18,7 @@ struct QwertySpaceKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
 
     init() {}
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
         switch states.keyboardLanguage {
         case .el_GR:
             return KeyLabel(.text("διάστημα"), width: width, textSize: .small, textColor: color)

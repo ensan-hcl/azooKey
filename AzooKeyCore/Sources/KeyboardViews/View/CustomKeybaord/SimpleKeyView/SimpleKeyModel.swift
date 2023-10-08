@@ -47,14 +47,14 @@ enum SimpleUnpressedKeyColorType: UInt8 {
     }
 }
 
-protocol SimpleKeyModelProtocol {
+protocol SimpleKeyModelProtocol<Extension> {
     associatedtype Extension: ApplicationSpecificKeyboardViewExtension
 
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
     @MainActor func longPressActions(variableStates: VariableStates) -> LongpressActionType
     @MainActor func feedback(variableStates: VariableStates)
-    @MainActor func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: Extension.Theme) -> KeyLabel<Extension>
+    @MainActor func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension>
     @MainActor func backGroundColorWhenPressed(theme: Extension.Theme) -> Color
     /// `pressActions`とは別に、押された際に発火する操作
     /// - note: タブ固有の事情で実行しなければならないような処理に利用すること
@@ -82,7 +82,7 @@ struct SimpleKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Simp
     private let pressActions: [ActionType]
     let longPressActions: LongpressActionType
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         KeyLabel(self.keyLabelType, width: width)
     }
 
@@ -115,7 +115,7 @@ struct SimpleEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
     }
 
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .enter
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width)
     }
@@ -148,7 +148,7 @@ struct SimpleNextCandidateKeyModel<Extension: ApplicationSpecificKeyboardViewExt
         }
     }
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         if states.resultModel.results.isEmpty {
             KeyLabel(.text("空白"), width: width)
         } else {
@@ -182,7 +182,7 @@ struct SimpleChangeKeyboardKeyModel<Extension: ApplicationSpecificKeyboardViewEx
         .none
     }
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.changeKeyboard, width: width)
         } else {
