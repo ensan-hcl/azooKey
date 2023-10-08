@@ -14,11 +14,11 @@ struct FlickKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: V
     @State private var suggestState = FlickSuggestState()
 
     private let tabDesign: TabDependentDesign
-    private let models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)]
-    init(keyModels: [[any FlickKeyModelProtocol]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
+    private let models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)]
+    init(keyModels: [[any FlickKeyModelProtocol<Extension>]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
         self.tabDesign = TabDependentDesign(width: 5, height: 4, interfaceSize: interfaceSize, layout: .flick, orientation: keyboardOrientation)
 
-        var models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] = [:]
+        var models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)] = [:]
         for h in keyModels.indices {
             for v in keyModels[h].indices {
                 let model = keyModels[h][v]

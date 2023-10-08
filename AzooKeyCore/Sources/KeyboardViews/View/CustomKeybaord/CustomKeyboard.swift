@@ -60,7 +60,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    @MainActor func flickKeyModels<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] {
+    @MainActor func flickKeyModels<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -126,7 +126,7 @@ fileprivate extension CustardKeyDesign.ColorType {
 }
 
 extension CustardInterfaceKey {
-    @MainActor public func flickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> any FlickKeyModelProtocol {
+    @MainActor public func flickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> any FlickKeyModelProtocol<Extension> {
         switch self {
         case let .system(value):
             switch value {
@@ -337,7 +337,7 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
 public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExtension, Content: View>: View {
     @State private var suggestState = FlickSuggestState()
 
-    public init(models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
+    public init(models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
         self.models = models
         self.tabDesign = tabDesign
         self.layout = layout
@@ -345,7 +345,7 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
     }
 
     private let contentGenerator: (FlickKeyView<Extension>, Int, Int) -> (Content)
-    private let models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)]
+    private let models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)]
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
 

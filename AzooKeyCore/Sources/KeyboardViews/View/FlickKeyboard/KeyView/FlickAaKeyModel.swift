@@ -40,7 +40,7 @@ struct FlickAaKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Fli
         }
     }
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width)
         } else {
