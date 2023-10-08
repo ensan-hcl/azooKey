@@ -131,23 +131,23 @@ extension CustardInterfaceKey {
         case let .system(value):
             switch value {
             case .changeKeyboard:
-                return FlickChangeKeyboardModel<Extension>.shared
+                return FlickChangeKeyboardModel.shared
             case .enter:
-                return FlickEnterKeyModel<Extension>()
+                return FlickEnterKeyModel()
             case .upperLower:
-                return FlickAaKeyModel<Extension>()
+                return FlickAaKeyModel()
             case .nextCandidate:
-                return FlickNextCandidateKeyModel<Extension>.shared
+                return FlickNextCandidateKeyModel.shared
             case .flickKogaki:
-                return FlickKogakiKeyModel<Extension>.shared
+                return FlickKogakiKeyModel.shared
             case .flickKutoten:
-                return FlickKanaSymbolsKeyModel<Extension>.shared
+                return FlickKanaSymbolsKeyModel.shared
             case .flickHiraTab:
-                return FlickTabKeyModel<Extension>.hiraTabKeyModel()
+                return FlickTabKeyModel.hiraTabKeyModel()
             case .flickAbcTab:
-                return FlickTabKeyModel<Extension>.abcTabKeyModel()
+                return FlickTabKeyModel.abcTabKeyModel()
             case .flickStar123Tab:
-                return FlickTabKeyModel<Extension>.numberTabKeyModel()
+                return FlickTabKeyModel.numberTabKeyModel()
             }
         case let .custom(value):
             let flickKeyModels: [FlickDirection: FlickedKeyModel] = value.variations.reduce(into: [:]) {dictionary, variation in
@@ -162,7 +162,7 @@ extension CustardInterfaceKey {
                     break
                 }
             }
-            let model = FlickKeyModel<Extension>(
+            return FlickKeyModel(
                 labelType: value.design.label.keyLabelType,
                 pressActions: value.press_actions.map {$0.actionType},
                 longPressActions: value.longpress_actions.longpressActionType,
@@ -170,7 +170,6 @@ extension CustardInterfaceKey {
                 needSuggestView: value.longpress_actions == .none && !value.variations.isEmpty,
                 keycolorType: value.design.color.flickKeyColorType
             )
-            return model
         }
     }
 
@@ -218,7 +217,7 @@ extension CustardInterfaceKey {
                 }
             }
 
-            let model = QwertyKeyModel<Extension>(
+            return QwertyKeyModel(
                 labelType: value.design.label.keyLabelType,
                 pressActions: value.press_actions.map {$0.actionType},
                 longPressActions: value.longpress_actions.longpressActionType,
@@ -227,7 +226,6 @@ extension CustardInterfaceKey {
                 needSuggestView: value.longpress_actions == .none,
                 for: (1, 1)
             )
-            return model
         }
     }
 

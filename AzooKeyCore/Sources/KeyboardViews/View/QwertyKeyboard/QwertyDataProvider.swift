@@ -15,7 +15,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         let languageKey: any QwertyKeyModelProtocol<Extension>
         let first = preferredLanguage.first
         if let second = preferredLanguage.second {
-            languageKey = QwertySwitchLanguageKeyModel<Extension>(rowInfo: rowInfo, languages: (first, second))
+            languageKey = QwertySwitchLanguageKeyModel(rowInfo: rowInfo, languages: (first, second))
         } else {
             let targetTab: TabData = {
                 switch first {
@@ -27,17 +27,17 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
                     return .system(.user_japanese)
                 }
             }()
-            languageKey = QwertyFunctionalKeyModel<Extension>(labelType: .text(first.symbol), rowInfo: rowInfo, pressActions: [.moveTab(targetTab)], longPressActions: .none, needSuggestView: false)
+            languageKey = QwertyFunctionalKeyModel(labelType: .text(first.symbol), rowInfo: rowInfo, pressActions: [.moveTab(targetTab)], longPressActions: .none, needSuggestView: false)
         }
 
-        let numbersKey: any QwertyKeyModelProtocol<Extension> = QwertyFunctionalKeyModel<Extension>(labelType: .image("textformat.123"), rowInfo: rowInfo, pressActions: [.moveTab(.system(.qwerty_numbers))], longPressActions: .init(start: [.setTabBar(.toggle)]))
-        let symbolsKey: any QwertyKeyModelProtocol<Extension> = QwertyFunctionalKeyModel<Extension>(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.system(.qwerty_symbols))], longPressActions: .init(start: [.setTabBar(.toggle)]))
+        let numbersKey: any QwertyKeyModelProtocol<Extension> = QwertyFunctionalKeyModel(labelType: .image("textformat.123"), rowInfo: rowInfo, pressActions: [.moveTab(.system(.qwerty_numbers))], longPressActions: .init(start: [.setTabBar(.toggle)]))
+        let symbolsKey: any QwertyKeyModelProtocol<Extension> = QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.system(.qwerty_symbols))], longPressActions: .init(start: [.setTabBar(.toggle)]))
 
         let changeKeyboardKey: any QwertyKeyModelProtocol<Extension>
         if let second = preferredLanguage.second {
-            changeKeyboardKey = QwertyChangeKeyboardKeyModel<Extension>(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .secondTab(secondLanguage: second))
+            changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .secondTab(secondLanguage: second))
         } else {
-            changeKeyboardKey = QwertyChangeKeyboardKeyModel<Extension>(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .tabBar)
+            changeKeyboardKey = QwertyChangeKeyboardKeyModel(keySizeType: .functional(normal: rowInfo.normal, functional: rowInfo.functional, enter: rowInfo.enter, space: rowInfo.space), fallBackType: .tabBar)
         }
         return (
             languageKey: languageKey,
