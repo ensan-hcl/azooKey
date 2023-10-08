@@ -13,6 +13,7 @@ import SwiftUIUtils
 
 struct CustomizeTabView: View {
     @EnvironmentObject private var appStates: MainAppStates
+    @Environment(\.requestReview) var requestReview
 
     var body: some View {
         ZStack {
@@ -51,9 +52,7 @@ struct CustomizeTabView: View {
                 .navigationBarTitle(Text("拡張"), displayMode: .large)
                 .onAppear {
                     if appStates.requestReviewManager.shouldTryRequestReview, appStates.requestReviewManager.shouldRequestReview() {
-                        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                            SKStoreReviewController.requestReview(in: scene)
-                        }
+                        requestReview()
                     }
                 }
             }
