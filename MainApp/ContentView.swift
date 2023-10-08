@@ -80,7 +80,7 @@ struct ContentView: View {
                 if messageManager.requireShow(data.id) {
                     switch data.id {
                     case .mock:
-                        EmptyView()g
+                        EmptyView()
                     case .ver1_9_user_dictionary_update:
                         // ユーザ辞書を更新する
                         DataUpdateView(id: data.id, manager: $messageManager) {
