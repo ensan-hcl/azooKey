@@ -98,7 +98,7 @@ struct QwertyKeyDoublePressState {
 
 @MainActor
 struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
-    private let model: any QwertyKeyModelProtocol
+    private let model: any QwertyKeyModelProtocol<Extension>
     @EnvironmentObject private var variableStates: VariableStates
 
     @State private var pressState: QwertyKeyPressState = .unpressed
@@ -112,7 +112,7 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     private let tabDesign: TabDependentDesign
     private let size: CGSize
 
-    init(model: any QwertyKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize) {
+    init(model: any QwertyKeyModelProtocol<Extension>, tabDesign: TabDependentDesign, size: CGSize) {
         self.model = model
         self.tabDesign = tabDesign
         self.size = size
@@ -227,7 +227,7 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     }
 
     private func label(width: CGFloat, color: Color?) -> some View {
-        self.model.label(width: width, states: variableStates, color: color) as KeyLabel<Extension>
+        self.model.label(width: width, states: variableStates, color: color)
     }
 
     var body: some View {

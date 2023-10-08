@@ -31,7 +31,7 @@ struct QwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Qwer
         self.unpressedKeyColorType = keyColorType
     }
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
         if (states.boolStates.isCapsLocked || states.boolStates.isShifted), states.keyboardLanguage == .en_US, case let .text(text) = self.labelType {
             return KeyLabel(.text(text.uppercased()), width: width, textColor: color)
         }

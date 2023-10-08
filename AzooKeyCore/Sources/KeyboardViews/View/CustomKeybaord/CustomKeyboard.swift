@@ -71,7 +71,7 @@ fileprivate extension CustardInterface {
         }
     }
 
-    @MainActor func qwertyKeyModels<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> [KeyPosition: (model: any QwertyKeyModelProtocol, sizeType: QwertyKeySizeType)] {
+    @MainActor func qwertyKeyModels<Extension: ApplicationSpecificKeyboardViewExtension>(extension _: Extension.Type) -> [KeyPosition: (model: any QwertyKeyModelProtocol<Extension>, sizeType: QwertyKeySizeType)] {
         self.keys.reduce(into: [:]) {dictionary, value in
             switch value.key {
             case let .gridFit(data):
@@ -174,12 +174,12 @@ extension CustardInterfaceKey {
         }
     }
 
-    private func convertToQwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(customKey: KeyFlickSetting.SettingData, extension _: Extension.Type) -> any QwertyKeyModelProtocol {
+    private func convertToQwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(customKey: KeyFlickSetting.SettingData, extension _: Extension.Type) -> any QwertyKeyModelProtocol<Extension> {
         let variations = VariationsModel([customKey.flick[.left], customKey.flick[.top], customKey.flick[.right], customKey.flick[.bottom]].compactMap {$0}.map {(label: $0.labelType, actions: $0.pressActions)})
-        return QwertyKeyModel<Extension>(labelType: customKey.labelType, pressActions: customKey.actions, longPressActions: customKey.longpressActions, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
+        return QwertyKeyModel(labelType: customKey.labelType, pressActions: customKey.actions, longPressActions: customKey.longpressActions, variationsModel: variations, keyColorType: .normal, needSuggestView: false, for: (1, 1))
     }
 
-    @MainActor func qwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(layout: CustardInterfaceLayout, extension: Extension.Type) -> any QwertyKeyModelProtocol {
+    @MainActor func qwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(layout: CustardInterfaceLayout, extension: Extension.Type) -> any QwertyKeyModelProtocol<Extension> {
         switch self {
         case let .system(value):
             switch value {
@@ -192,11 +192,11 @@ extension CustardInterfaceKey {
                 }
                 return changeKeyboardKey
             case .enter:
-                return QwertyEnterKeyModel<Extension>(keySizeType: .enter)
+                return QwertyEnterKeyModel(keySizeType: .enter)
             case .upperLower:
-                return QwertyAaKeyModel<Extension>()
+                return QwertyAaKeyModel()
             case .nextCandidate:
-                return QwertyNextCandidateKeyModel<Extension>()
+                return QwertyNextCandidateKeyModel()
             case .flickKogaki:
                 return convertToQwertyKeyModel(customKey: Extension.SettingProvider.koganaFlickCustomKey.compiled(), extension: Extension.self)
             case .flickKutoten:
