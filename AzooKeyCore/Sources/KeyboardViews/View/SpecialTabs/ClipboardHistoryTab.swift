@@ -191,7 +191,7 @@ struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>:
                 }
             }
         }
-        .iOS16_scrollContentBackground(.hidden)
+        .scrollContentBackground(.hidden)
     }
 
     private func enterKey(_ design: TabDependentDesign) -> some View {

@@ -210,10 +210,8 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         // 読み込むファイルはバージョンごとに変更する必要がある
         if #available(iOS 16.4, *) {
             fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E15.0.txt.gen", isDirectory: false)
-        } else if #available(iOS 15.4, *) {
-            fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E14.0.txt.gen", isDirectory: false)
         } else {
-            fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E13.1.txt.gen", isDirectory: false)
+            fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E14.0.txt.gen", isDirectory: false)
         }
         let genres: [String: Genre] = [
             "Symbols": .symbols,

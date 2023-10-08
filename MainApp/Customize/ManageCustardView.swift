@@ -175,10 +175,8 @@ struct ManageCustardView: View {
                                         }
                                     }
                             } else if let custardFileURL = self.getCustardFile(identifier: identifier) {
-                                if #available(iOS 16, *) {
-                                    ShareLink(item: custardFileURL) {
-                                        Label("読み込みに失敗したカスタムタブ「\(identifier)」を書き出す", systemImage: "square.and.arrow.up")
-                                    }
+                                ShareLink(item: custardFileURL) {
+                                    Label("読み込みに失敗したカスタムタブ「\(identifier)」を書き出す", systemImage: "square.and.arrow.up")
                                 }
                             }
                         }
