@@ -165,6 +165,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(strokeColor)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
+                        .compositingGroup()
                         .focus(.accentColor, focused: isSelected && selection.longpressSelectIndex == -1)
                         .focus(.systemGray, focused: isSelected && selection.longpressSelectIndex != -1)
                         .overlay(Text(item.name))
@@ -179,6 +180,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(isSelected ? Color.accentColor : .primary)
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
+                            .compositingGroup()
                             .focus(.accentColor, focused: isSelected)
                             .overlay(Text(item.name))
                     }
