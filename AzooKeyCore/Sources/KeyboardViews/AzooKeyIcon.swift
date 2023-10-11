@@ -18,6 +18,7 @@ public struct AzooKeyIcon: View {
         case king
         case santaClaus
         case strawHat
+        case fire
     }
     public enum Color {
         case auto
@@ -88,6 +89,9 @@ public struct AzooKeyIcon: View {
                 Text("\u{EA22}")
                     .foregroundStyle(.red)
             }
+        case .fire:
+            Text("δ")
+                .foregroundStyle(foregroundColor)
         }
     }
 
