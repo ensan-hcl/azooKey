@@ -1925,6 +1925,16 @@
         }
       }
     },
+    "カーソルバーを表示" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show cursor bar"
+          }
+        }
+      }
+    },
     "カーソルを移動する" : {
       "localizations" : {
         "en" : {
@@ -5356,6 +5366,16 @@
         }
       }
     },
+    "便利なボタンを追加" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add useful buttons"
+          }
+        }
+      }
+    },
     "便利な使い方" : {
       "localizations" : {
         "en" : {
@@ -8522,6 +8542,16 @@
         }
       }
     },
+    "絵文字タブを表示" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show emoji tab"
+          }
+        }
+      }
+    },
     "絵文字と顔文字" : {
       "localizations" : {
         "en" : {
@@ -8598,6 +8628,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "編集" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
           }
         }
       }
