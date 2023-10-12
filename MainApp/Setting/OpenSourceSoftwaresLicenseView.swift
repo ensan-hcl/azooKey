@@ -193,7 +193,7 @@ struct OpenSourceSoftwaresLicenseView: View {
             }
             Section {
                 HStack {
-                    AzooKeyIcon(fontSize: 60)
+                    FunnyAzooKeyIcon()
                     Spacer()
                     Text("azooKeyを使ってくれてありがとう！")
                 }
@@ -201,5 +201,112 @@ struct OpenSourceSoftwaresLicenseView: View {
         }
         .multilineTextAlignment(.leading)
         .navigationBarTitle(Text("オープンソースソフトウェア"), displayMode: .inline)
+    }
+}
+
+private struct FunnyAzooKeyIcon: View {
+    init(stage: Stage = .normal) {
+        self._stage = .init(initialValue: stage)
+    }
+    
+    struct NormalAnimationValue {
+        // degrees
+        var angle: Double = -10
+    }
+    struct KingAnimationValue {
+        // degrees
+        var yAngle: Double = -10
+        var scale: Double = 1.0
+    }
+    struct FireAnimationValue {
+        // degrees
+        var yAngle: Double = 0
+        var scale: Double = 1.0
+    }
+    enum Stage {
+        case normal
+        case king
+        case fire
+    }
+    @Namespace private var namespace
+    @State private var stage: Stage = .normal
+
+    private var iconCore: some View {
+        AzooKeyIcon(fontSize: 60)
+            .matchedGeometryEffect(id: "icon", in: namespace)
+    }
+
+    var body: some View {
+        if #available(iOS 17, *) {
+            switch stage {
+            case .normal:
+                iconCore
+                    .keyframeAnimator(initialValue: NormalAnimationValue()) { content, value in
+                        content
+                            .rotationEffect(Angle(degrees: value.angle))
+                    } keyframes: { _ in
+                            KeyframeTrack(\.angle) {
+                                CubicKeyframe(10, duration: 0.5)
+                                CubicKeyframe(-10, duration: 0.5)
+                            }
+                    }
+                    .onTapGesture {
+                        withAnimation {
+                            self.stage = Bool.random() ? .king : .fire
+                        }
+                    }
+            case .king:
+                AzooKeyIcon(fontSize: 60, looks: .king)
+                    .matchedGeometryEffect(id: "icon", in: namespace)
+                    .keyframeAnimator(initialValue: KingAnimationValue()) { content, value in
+                        content
+                            .rotationEffect(Angle(degrees: value.yAngle))
+                            .scaleEffect(value.scale)
+                    } keyframes: { _ in
+                        KeyframeTrack(\.yAngle) {
+                            CubicKeyframe(10, duration: 0.5)
+                            CubicKeyframe(-10, duration: 0.5)
+                        }
+                        KeyframeTrack(\.scale) {
+                            SpringKeyframe(1, duration: 0.2)
+                            SpringKeyframe(1.4, duration: 0.6)
+                            SpringKeyframe(1, duration: 0.2)
+                        }
+                    }
+                    .onTapGesture {
+                        withAnimation {
+                            self.stage = .normal
+                        }
+                    }
+            case .fire:
+                AzooKeyIcon(fontSize: 60, looks: .fire)
+                    .matchedGeometryEffect(id: "icon", in: namespace)
+                    .keyframeAnimator(initialValue: FireAnimationValue()) { content, value in
+                        content
+                            .rotationEffect(Angle(degrees: value.yAngle))
+                            .scaleEffect(value.scale)
+                    } keyframes: { _ in
+                        KeyframeTrack(\.yAngle) {
+                            SpringKeyframe(20, duration: 0.8)
+                            CubicKeyframe(0, duration: 0.2)
+                        }
+                    }
+                    .onTapGesture {
+                        withAnimation {
+                            self.stage = .normal
+                        }
+                    }
+            }
+        } else {
+            iconCore
+        }
+    }
+}
+
+#Preview {
+    VStack {
+        FunnyAzooKeyIcon(stage: .normal)
+        FunnyAzooKeyIcon(stage: .king)
+        FunnyAzooKeyIcon(stage: .fire)
     }
 }

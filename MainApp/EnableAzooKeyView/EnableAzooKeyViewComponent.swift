@@ -100,5 +100,6 @@ struct EnableAzooKeyViewImage: View {
             .resizable()
             .scaledToFit()
             .cornerRadius(2)
+            .frame(maxWidth: MainAppDesign.imageMaximumWidth)
     }
 }
