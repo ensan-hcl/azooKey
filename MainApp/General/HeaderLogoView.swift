@@ -33,7 +33,9 @@ struct HeaderLogoView: View {
             }
         }
         .foregroundStyle(iconColor)
-        .padding(.top, 5)
-        .padding(.bottom, -5)
     }
+}
+
+#Preview {
+    HeaderLogoView()
 }
