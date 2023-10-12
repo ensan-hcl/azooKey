@@ -84,6 +84,7 @@ struct CustomizeTabWalkthroughView: View {
                         }
                         .buttonStyle(LargeButtonStyle(backgroundColor: .blue))
                         .foregroundStyle(.white)
+                        .padding(.horizontal, 20)
                         .padding(.top, 30)
                     }
                     .background(Color.background)
