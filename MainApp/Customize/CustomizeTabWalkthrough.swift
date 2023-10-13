@@ -60,25 +60,26 @@ struct CustomizeTabWalkthroughView: View {
                         Text("azooKeyを拡張する").font(.largeTitle.bold())
                             .padding()
                         let imagesFont: Font = Font.system(size: length / 2.4, weight: .light, design: .default)
-                        ForEach(items) {item in
-                            HStack {
-                                Image(systemName: item.image)
-                                    .font(imagesFont)
-                                    .frame(width: geometry.size.width / 7.0, height: geometry.size.width / 7.0)
-                                    .foregroundStyle(.blue)
-                                VStack(alignment: .leading) {
-                                    Text(item.headline)
-                                        .font(.subheadline.bold())
-                                    Text(item.body)
-                                        .foregroundStyle(.gray)
-                                        .font(.subheadline)
+                        VStack(alignment: .leading, spacing: 20) {
+                            ForEach(items) {item in
+                                HStack {
+                                    Image(systemName: item.image)
+                                        .font(imagesFont)
+                                        .frame(width: geometry.size.width / 7.0, height: geometry.size.width / 7.0)
+                                        .foregroundStyle(.blue)
+                                    VStack(alignment: .leading) {
+                                        Text(item.headline)
+                                            .font(.subheadline.bold())
+                                        Text(item.body)
+                                            .foregroundStyle(.gray)
+                                            .font(.subheadline)
+                                    }
                                 }
+                                .padding(.horizontal, 20)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
                             }
-                            .padding(.horizontal, 20)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
                         }
-
                         Button("始める") {
                             isShowing = false
                         }
