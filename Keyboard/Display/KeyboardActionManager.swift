@@ -523,6 +523,8 @@ import SwiftUtils
         if isSelected {
             debug("user operation id: 0", a_center)
             self.inputManager.userSelectedText(text: a_center)
+            // barStateの更新
+            variableStates.barState = .none
             return
         }
 
