@@ -15,6 +15,9 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
     @EnvironmentObject private var variableStates: VariableStates
     @Binding private var isResultViewExpanded: Bool
     @Environment(Extension.Theme.self) private var theme
+    // CursorBarは操作がない場合に非表示にする。これをハンドルするためのタスク
+    @State private var dismissTask: Task<(), any Error>? = nil
+
     private var useReflectStyleCursorBar: Bool {
         Extension.SettingProvider.useSliderStyleCursorBar
     }
@@ -26,10 +29,20 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
     var body: some View {
         switch variableStates.barState {
         case .cursor:
-            if useReflectStyleCursorBar {
-                ReflectStyleCursorBar<Extension>()
-            } else {
-                SliderStyleCursorBar<Extension>()
+            Group {
+                if useReflectStyleCursorBar {
+                    ReflectStyleCursorBar<Extension>()
+                } else {
+                    SliderStyleCursorBar<Extension>()
+                }
+            }
+            .onAppear {
+                // 表示したタイミングでdismissTaskを開始
+                self.restartCursorBarDismissTask()
+            }
+            .onChange(of: variableStates.textChangedCount) { _ in
+                // カーソルが動くたびにrestart
+                self.restartCursorBarDismissTask()
             }
         case .tab:
             let tabBarData = (try? variableStates.tabManager.config.custardManager.tabbar(identifier: 0)) ?? .default
@@ -40,6 +53,18 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
                 EmojiTabResultBar<Extension>()
             default:
                 ResultBar<Extension>(isResultViewExpanded: $isResultViewExpanded)
+            }
+        }
+    }
+
+    private func restartCursorBarDismissTask() {
+        self.dismissTask?.cancel()
+        self.dismissTask = Task {
+            // 10秒待つ
+            try await Task.sleep(nanoseconds: 10_000_000_000)
+            try Task.checkCancellation()
+            withAnimation {
+                variableStates.barState = .none
             }
         }
     }
