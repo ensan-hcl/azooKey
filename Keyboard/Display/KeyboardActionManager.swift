@@ -590,6 +590,8 @@ import SwiftUtils
                 50
             }
             self.inputManager.userSelectedText(text: a_center, lengthLimit: lengthLimit)
+            // barStateの更新
+            variableStates.barState = .none
             return
         }
 
@@ -606,7 +608,8 @@ import SwiftUtils
             if !wasSelected && !isSelected && b_left != a_left {
                 debug("user operation id: 2", b_left, a_left)
                 let offset = a_left.count - b_left.count
-                self.inputManager.userMovedCursor(count: offset)
+                let actions = self.inputManager.userMovedCursor(count: offset)
+                self.registerActions(actions, variableStates: variableStates)
                 // カーソルが動いているのでtextChangedCountを増やす
                 variableStates.textChangedCount += 1
                 self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
