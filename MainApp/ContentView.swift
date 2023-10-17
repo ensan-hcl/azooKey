@@ -10,6 +10,7 @@ import AzooKeyUtils
 import KeyboardViews
 import SwiftUI
 
+@MainActor
 struct ContentView: View {
     private enum TabSelection {
         case tips, theme, customize, settings
@@ -44,8 +45,20 @@ struct ContentView: View {
                     }
                     .tag(TabSelection.settings)
             }
+            .onAppear {
+                if appStates.isKeyboardActivated && !appStates.tutorialFinishedSuccessfully() {
+                    appStates.requireFirstOpenView = true
+                }
+            }
             .fullScreenCover(isPresented: $appStates.requireFirstOpenView, content: {
-                EnableAzooKeyView()
+                // キーボードは有効化されているが正しく終了していない場合
+                if appStates.isKeyboardActivated && !appStates.tutorialFinishedSuccessfully() {
+                    // 「最初の設定」を再表示する
+                    EnableAzooKeyView(resumeProgress: .setting)
+                } else {
+                    // 最初からやる
+                    EnableAzooKeyView()
+                }
             })
             .onChange(of: selection) {value in
                 if value == .customize {

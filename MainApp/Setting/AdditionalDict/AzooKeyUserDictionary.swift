@@ -63,6 +63,7 @@ struct AzooKeyUserDictionaryView: View {
     }
 }
 
+@MainActor
 private struct UserDictionaryDataListView: View {
     private let exceptionKey = "その他"
 
@@ -142,6 +143,7 @@ private struct UserDictionaryDataListView: View {
     }
 }
 
+@MainActor
 private struct UserDictionaryDataEditor: CancelableEditor {
     @ObservedObject private var item: EditableUserDictionaryData
     @ObservedObject private var variables: UserDictManagerVariables

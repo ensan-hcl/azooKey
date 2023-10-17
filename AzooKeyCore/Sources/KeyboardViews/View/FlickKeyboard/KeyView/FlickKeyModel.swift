@@ -45,11 +45,15 @@ struct FlickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Flick
         self.pressActions
     }
 
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        self.longPressActions
+    }
+
     func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         self.flickKeys
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         KeyLabel(self.labelType, width: width)
     }
 

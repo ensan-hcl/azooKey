@@ -12,6 +12,7 @@ import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
 
+@MainActor
 struct ThemeTabView: View {
     @Namespace private var namespace
     @EnvironmentObject private var appStates: MainAppStates

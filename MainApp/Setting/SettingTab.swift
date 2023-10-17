@@ -43,17 +43,14 @@ struct SettingTabView: View {
                             BoolSettingView(.enablePasteButton)
                         }
                     }
-                    Section(header: Text("タブバー")) {
+                    Section(header: Text("バー")) {
+                        BoolSettingView(.useSliderStyleCursorBar)
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.enableClipboardHistoryManagerTab)
                         if SemiStaticStates.shared.hasFullAccess {
                             NavigationLink("「ペーストを許可」のダイアログについて", destination: PasteFromOtherAppsPermissionTipsView())
                         }
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
-                    }
-                    Section(header: Text("カーソルバー")) {
-                        BoolSettingView(.useBetaMoveCursorBar)
-                        FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
                     // デバイスが触覚フィードバックをサポートしている場合のみ表示する
                     if SemiStaticStates.shared.hapticsAvailable {
@@ -86,6 +83,7 @@ struct SettingTabView: View {
                         BoolSettingView(.typographyLetter)
                         BoolSettingView(.unicodeCandidate)
                         MarkedTextSettingView(.markedTextSetting)
+                        ContactImportSettingView()
                         NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                     }
 
@@ -126,7 +124,7 @@ struct SettingTabView: View {
                     HStack {
                         Text("URL Scheme")
                         Spacer()
-                        Text("azooKey://").font(.system(.body, design: .monospaced))
+                        Text(verbatim: "azooKey://").font(.system(.body, design: .monospaced))
                     }
                     HStack {
                         Text("バージョン")

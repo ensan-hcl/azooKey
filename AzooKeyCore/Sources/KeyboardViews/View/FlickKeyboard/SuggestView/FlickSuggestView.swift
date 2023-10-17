@@ -10,7 +10,7 @@ import CustardKit
 import Foundation
 import SwiftUI
 
-
+@MainActor
 struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
@@ -25,7 +25,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
         self.size = size
         self.suggestType = suggestType
     }
-    
+
     private func getSuggestView(for model: FlickedKeyModel, isHidden: Bool, isPointed: Bool = false) -> some View {
         // 着せ替えが有効の場合、サジェストの背景色はwhiteにする。
         var pointedColor: Color {

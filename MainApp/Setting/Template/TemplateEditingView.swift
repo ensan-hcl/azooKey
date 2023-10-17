@@ -180,13 +180,15 @@ struct RandomTemplateLiteralSettingView: View {
         self.template.literal = self.literal
     }
 
-    private func warning(_ type: Error) -> some View {
-        let warningSymbol = Image(systemName: "exclamationmark.triangle")
-        switch type {
-        case .nan:
-            return Text("\(warningSymbol)値が無効です。有効な数値を入力してください")
-        case .stringIsNil:
-            return Text("\(warningSymbol)文字列が入っていません。最低一つは必要です")
+    @ViewBuilder private func warning(_ type: Error) -> some View {
+        HStack {
+            Image(systemName: "exclamationmark.triangle")
+            switch type {
+            case .nan:
+                Text("値が無効です。有効な数値を入力してください")
+            case .stringIsNil:
+                Text("文字列が入っていません。最低一つは必要です")
+            }
         }
     }
 

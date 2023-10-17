@@ -23,7 +23,10 @@ struct FlickAaKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Fli
         }
     }
 
-    let longPressActions: LongpressActionType = .none
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
+    }
+
     func flickKeys(variableStates: VariableStates) -> [CustardKit.FlickDirection: FlickedKeyModel] {
         if variableStates.boolStates.isCapsLocked {
             return [:]
@@ -37,7 +40,7 @@ struct FlickAaKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Fli
         }
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width)
         } else {

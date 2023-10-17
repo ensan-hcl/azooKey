@@ -18,7 +18,7 @@ struct TemplateSettingTipsView: View {
             }
             TipsContentParagraph {
                 Text("まず「テンプレートの管理」から新しいテンプレートを作成します。画面右上の\(systemImage: "plus", color: .accentColor)を押して、テンプレートを追加しましょう。")
-                TipsImage("templateSettingTips_1")
+                TipsImage(.templateSettingTips1)
             }
             TipsContentParagraph {
                 Text("追加したテンプレートを選ぶと編集画面が開きます。")
@@ -26,19 +26,19 @@ struct TemplateSettingTipsView: View {
                 Text("・名前を「タイムスタンプ」に設定")
                 Text("・書式で「カスタム」を選択")
                 Text("・カスタム書式に「yyyy/MM/dd hh:mm」と入力")
-                TipsImage("templateSettingTips_2")
+                TipsImage(.templateSettingTips2)
                 Text("編集が終わったら完了ボタンを押してください。")
             }
             TipsContentParagraph {
                 Text("次にユーザ辞書でテンプレートを使います。「追加する」から新規に単語を登録し、編集画面が開きます。")
                 Text("ユーザ辞書で作成したテンプレートを使う際は、\(monospaced: "{{テンプレート名}}")という形式で記述します。")
                 Text("今回は「タイムスタンプ」というテンプレートなので、\(monospaced: "{{タイムスタンプ}}")と入力します。")
-                TipsImage("templateSettingTips_3")
+                TipsImage(.templateSettingTips3)
                 Text("編集が終わったら完了ボタンを押してください。")
             }
             TipsContentParagraph {
                 Text("以上で設定が完了です。あとは実際に使ってみましょう。")
-                TipsImage("templateSettingTips_4")
+                TipsImage(.templateSettingTips4)
             }
             TipsContentParagraph {
                 Text("「yyyy/MM/dd hh:mm」というのは日付の書式の書き方で、「yyyy」が4桁の年、「MM」が2桁の月、「dd」は2桁の日付を指しています。「hh」と「mm」も同様に時間と分です。")

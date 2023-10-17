@@ -126,6 +126,7 @@ final class AdditionalDictManager: ObservableObject {
 
 }
 
+@MainActor
 struct AdditionalDictManageViewMain: View {
     enum Style {
         case simple
@@ -142,11 +143,11 @@ struct AdditionalDictManageViewMain: View {
         Section(header: Text("利用するもの")) {
             Toggle(isOn: $viewModel.systemDict[.emoji]) {
                 Text("絵文字")
-                Text("🥺🌎♨️")
+                Text(verbatim: "🥺🌎♨️")
             }
             Toggle(isOn: $viewModel.systemDict[.kaomoji]) {
                 Text("顔文字")
-                Text("(◍•ᴗ•◍)")
+                Text(verbatim: "(◍•ᴗ•◍)")
             }
         }
         if self.style == .all {

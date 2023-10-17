@@ -75,11 +75,11 @@ struct FlickCustomKeysSettingSelectView: View {
     var body: some View {
         VStack {
             Picker(selection: $selection, label: Text("カスタムするキー")) {
-                Text("小ﾞﾟ").tag(CustomizableFlickKey.kogana)
-                Text("､｡?!").tag(CustomizableFlickKey.kanaSymbols)
-                Text("あいう").tag(CustomizableFlickKey.hiraTab)
-                Text("abc").tag(CustomizableFlickKey.abcTab)
-                Text("☆123").tag(CustomizableFlickKey.symbolsTab)
+                Text(verbatim: "小ﾞﾟ").tag(CustomizableFlickKey.kogana)
+                Text(verbatim: "､｡?!").tag(CustomizableFlickKey.kanaSymbols)
+                Text(verbatim: "あいう").tag(CustomizableFlickKey.hiraTab)
+                Text(verbatim: "abc").tag(CustomizableFlickKey.abcTab)
+                Text(verbatim: "☆123").tag(CustomizableFlickKey.symbolsTab)
             }
             .pickerStyle(.segmented)
             .padding()
@@ -211,7 +211,7 @@ struct FlickCustomKeySettingView<SettingKey: FlickCustomKeyKeyboardSetting>: Vie
                         Button("リセット") {
                             self.reload()
                         }
-                            .foregroundStyle(.red)
+                        .foregroundStyle(.red)
                     } else {
                         Text("このキーは編集できません")
                     }

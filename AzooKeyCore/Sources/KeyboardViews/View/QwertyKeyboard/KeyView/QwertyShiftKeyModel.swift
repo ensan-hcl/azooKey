@@ -1,6 +1,6 @@
 //
 //  QwertyShiftKeyModel.swift
-//  
+//
 //
 //  Created by ensan on 2023/08/11.
 //
@@ -25,7 +25,7 @@ struct QwertyShiftKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
         }
     }
 
-    var longPressActions: LongpressActionType {
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
         .init(start: [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .toggle)])
     }
 
@@ -36,8 +36,8 @@ struct QwertyShiftKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
             return [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .on)]
         }
     }
-    
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
+
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
         if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width, textColor: color)
         } else if states.boolStates.isShifted {

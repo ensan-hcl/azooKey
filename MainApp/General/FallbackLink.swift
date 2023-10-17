@@ -36,6 +36,12 @@ struct FallbackLink: View {
         self.icon = icon
     }
 
+    init(verbatim title: String, destination: String, icon: Icon = .link) {
+        self.title = LocalizedStringKey("\(title)")
+        self.url = URL(string: destination)!
+        self.icon = icon
+    }
+
     var body: some View {
         Button {
             // 外部ブラウザでURLを開く

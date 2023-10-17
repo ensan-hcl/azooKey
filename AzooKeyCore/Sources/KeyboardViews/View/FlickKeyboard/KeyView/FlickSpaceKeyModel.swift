@@ -15,8 +15,6 @@ struct FlickSpaceKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
     static var shared: Self { FlickSpaceKeyModel<Extension>() }
     let needSuggestView = true
 
-    let longPressActions: LongpressActionType = .init(start: [.setCursorBar(.toggle)])
-
     func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         flickKeys
     }
@@ -41,7 +39,11 @@ struct FlickSpaceKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
         [.input(" ")]
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .init(start: [.setCursorBar(.toggle)])
+    }
+
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         KeyLabel(.text("空白"), width: width)
     }
 

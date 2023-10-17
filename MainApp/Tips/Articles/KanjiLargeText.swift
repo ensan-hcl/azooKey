@@ -18,17 +18,17 @@ struct KanjiLargeTextTipsView: View {
 
             TipsContentParagraph {
                 Text("文字を拡大するには、まず拡大したい文字を入力した上で変換候補を長押しします。")
-                TipsImage("LargeTextTips_1")
+                TipsImage(.largeTextTips1)
             }
 
             TipsContentParagraph {
                 Text("長押し後表示される画面で「大きな文字で表示する」をタップします。")
-                TipsImage("LargeTextTips_2")
+                TipsImage(.largeTextTips2)
             }
 
             TipsContentParagraph {
                 Text("最大限大きなサイズで文字が表示されます。右にスクロールすると途切れている文字を確認することができます。")
-                TipsImage("LargeTextTips_3")
+                TipsImage(.largeTextTips3)
             }
 
             TipsContentParagraph(style: .caption) {

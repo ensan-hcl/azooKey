@@ -45,10 +45,10 @@ struct QwertyKeyDoublePressState {
         case secondPressStarted
         case secondPressCompleted
     }
-    
+
     private var state: State = .inactive
     private(set) var updateDate: Date = Date()
-    
+
     var secondPressCompleted: Bool {
         self.state == .secondPressCompleted
     }
@@ -89,13 +89,14 @@ struct QwertyKeyDoublePressState {
         }
         self.updateDate = touchUpDate
     }
-    
+
     mutating func reset() {
         self.state = .inactive
         self.updateDate = Date()
     }
 }
 
+@MainActor
 struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let model: any QwertyKeyModelProtocol
     @EnvironmentObject private var variableStates: VariableStates
@@ -104,8 +105,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     @State private var doublePressState = QwertyKeyDoublePressState()
     @State private var suggest = false
 
-    @State private var longPressStartTask: Task<(), any Error>? = nil
-    
+    @State private var longPressStartTask: Task<(), any Error>?
+
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
     private let tabDesign: TabDependentDesign
@@ -127,13 +128,14 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                     self.model.feedback(variableStates: variableStates)
                     self.pressState = .started(Date())
                     self.doublePressState.update(touchDownDate: Date())
-                    self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
+                    self.action.reserveLongPressAction(self.model.longPressActions(variableStates: variableStates), variableStates: variableStates)
                     self.longPressStartTask = Task {
                         do {
                             // 0.4秒待つ
                             try await Task.sleep(nanoseconds: 0_400_000_000)
                         } catch {
                             debug(error)
+                            return
                         }
                         // すでに処理が終了済みでなければ
                         if !Task.isCancelled && self.pressState.isActive {
@@ -160,7 +162,7 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                 // 更新する
                 let endDate = Date()
                 self.doublePressState.update(touchUpDate: endDate)
-                self.action.registerLongPressActionEnd(self.model.longPressActions)
+                self.action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                 self.suggest = false
                 self.longPressStartTask?.cancel()
                 self.longPressStartTask = nil
@@ -213,6 +215,10 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
         theme != Extension.ThemeExtension.default(layout: .qwerty) ? .black : nil
     }
 
+    private var shadowColor: Color {
+        suggestTextColor?.opacity(0.5) ?? .black.opacity(0.5)
+    }
+
     private var selection: Int? {
         if case let .variations(selection) = pressState {
             return selection
@@ -258,6 +264,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                                 .padding(.bottom, height),
                             alignment: self.model.variationsModel.direction.alignment
                         )
+                        .compositingGroup()
+                        .shadow(color: shadowColor, radius: 1, x: 0, y: 0)
                         .allowsHitTesting(false)
                     } else {
                         QwertySuggestView.scaleToFrameSize(
@@ -272,6 +280,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             label(width: size.width, color: suggestTextColor)
                                 .padding(.bottom, height)
                         )
+                        .compositingGroup()
+                        .shadow(color: shadowColor, radius: 1, x: 0, y: 0)
                         .allowsHitTesting(false)
                     }
                 }

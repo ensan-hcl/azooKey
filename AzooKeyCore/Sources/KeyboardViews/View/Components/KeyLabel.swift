@@ -18,6 +18,7 @@ public enum KeyLabelType {
     case selectable(String, String)
 }
 
+@MainActor
 public struct KeyLabel<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let labelType: KeyLabelType
     private let width: CGFloat

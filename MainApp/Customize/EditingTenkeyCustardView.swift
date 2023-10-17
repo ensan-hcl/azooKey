@@ -29,6 +29,7 @@ fileprivate extension Dictionary where Key == KeyPosition, Value == UserMadeTenK
     }
 }
 
+@MainActor
 struct EditingTenkeyCustardView: CancelableEditor {
     private static let emptyKey: UserMadeTenKeyCustard.KeyData = .init(model: .custom(.empty), width: 1, height: 1)
     private static let emptyKeys: [KeyPosition: UserMadeTenKeyCustard.KeyData] = (0..<5).reduce(into: [:]) {dict, x in

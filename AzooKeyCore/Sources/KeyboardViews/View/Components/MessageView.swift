@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 struct MessageView<ID: MessageIdentifierProtocol>: View {
     private let data: MessageData<ID>
     @Binding private var manager: MessageManager<ID>

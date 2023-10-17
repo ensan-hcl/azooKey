@@ -24,13 +24,13 @@ struct FlickEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
         }
     }
 
-    var longPressActions: LongpressActionType = .none
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType { .none }
 
     func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         [:]
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width)
     }

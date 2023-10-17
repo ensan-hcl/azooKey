@@ -39,8 +39,10 @@ struct QwertySwitchLanguageKeyModel<Extension: ApplicationSpecificKeyboardViewEx
         }
     }
 
-    let longPressActions: LongpressActionType = .none
-    /// 暫定
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
+    }
+
     let variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
@@ -53,7 +55,7 @@ struct QwertySwitchLanguageKeyModel<Extension: ApplicationSpecificKeyboardViewEx
         self.languages = languages
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
         let current = currentTabLanguage(variableStates: states)
         if languages.0 == current {
             return KeyLabel(.selectable(languages.0.symbol, languages.1.symbol), width: width, textColor: color)
@@ -62,7 +64,7 @@ struct QwertySwitchLanguageKeyModel<Extension: ApplicationSpecificKeyboardViewEx
         } else if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.text(states.keyboardLanguage.symbol), width: width, textColor: color)
         } else {
-            return KeyLabel(.text(Extension.SettingProvider.preferredLanguage.first.symbol), width: width, textColor: color)
+            return KeyLabel(.text(E.SettingProvider.preferredLanguage.first.symbol), width: width, textColor: color)
         }
     }
 

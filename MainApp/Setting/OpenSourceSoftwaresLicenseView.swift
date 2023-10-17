@@ -98,94 +98,94 @@ struct OpenSourceSoftwaresLicenseView: View {
             }
             Group {
                 Section {
-                    Text("SudachiDict").font(.title).padding()
+                    Text(verbatim: "SudachiDict").font(.title).padding()
                     Text("本アプリケーションは基礎的な語彙の基盤としてSudachiDictを使用しています。")
 
                     FallbackLink("License", destination: "https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt")
-                    FallbackLink("SudachiDict", destination: "https://github.com/WorksApplications/SudachiDict")
+                    FallbackLink(verbatim: "SudachiDict", destination: "https://github.com/WorksApplications/SudachiDict")
                 }
                 Section {
-                    Text("IPAdic").font(.title).padding()
+                    Text(verbatim: "IPAdic").font(.title).padding()
                     Text("本アプリケーションは基礎的な語彙の基盤としてIPAdicを使用しています。")
                     Text(license_ipadic)
                 }
                 Section {
-                    Text("MeCab").font(.title).padding()
+                    Text(verbatim: "MeCab").font(.title).padding()
                     Text("本アプリケーションは形態素解析器としてMeCabを使用しています。")
-                    FallbackLink("MeCab: Yet Another Part-of-Speech and Morphological Analyzer", destination: "https://taku910.github.io/mecab/")
+                    FallbackLink(verbatim: "MeCab: Yet Another Part-of-Speech and Morphological Analyzer", destination: "https://taku910.github.io/mecab/")
                     Text(license_mecab)
                 }
                 Section {
-                    Text("mecab-ipadic-NEologd").font(.title).padding()
+                    Text(verbatim: "mecab-ipadic-NEologd").font(.title).padding()
                     Text("本アプリケーションは固有名詞などの解析のためmecab-ipadic-NEologdを使用しています。")
                     FallbackLink("License", destination: "https://github.com/neologd/mecab-ipadic-neologd/blob/master/COPYING")
-                    FallbackLink("mecab-ipadic-NEologd : Neologism dictionary for MeCab", destination: "https://github.com/neologd/mecab-ipadic-neologd")
+                    FallbackLink(verbatim: "mecab-ipadic-NEologd : Neologism dictionary for MeCab", destination: "https://github.com/neologd/mecab-ipadic-neologd")
                 }
                 Section {
-                    Text("Mozc").font(.title).padding()
+                    Text(verbatim: "Mozc").font(.title).padding()
                     Text("本アプリケーションはMozcの一部のデータを利用しています。")
-                    FallbackLink("BSD 3-Clause \"New\" or \"Revised\" License", destination: "https://github.com/google/mozc/blob/master/LICENSE")
-                    FallbackLink("Mozc", destination: "https://github.com/google/mozc")
-                    Text("Copyright 2010-2022, Google Inc.")
+                    FallbackLink(verbatim: "BSD 3-Clause \"New\" or \"Revised\" License", destination: "https://github.com/google/mozc/blob/master/LICENSE")
+                    FallbackLink(verbatim: "Mozc", destination: "https://github.com/google/mozc")
+                    Text(verbatim: "Copyright 2010-2022, Google Inc.")
                 }
                 Section {
-                    Text("japanese-word2vec-model-builder").font(.title).padding()
+                    Text(verbatim: "japanese-word2vec-model-builder").font(.title).padding()
                     Text("本アプリケーションは変換精度の向上のためjapanese-word2vec-model-builderを使用しています。")
                     FallbackLink("License", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder/blob/master/LICENSE")
-                    FallbackLink("Japanese Word2Vec Model Builder", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder")
+                    FallbackLink(verbatim: "Japanese Word2Vec Model Builder", destination: "https://github.com/shiroyagicorp/japanese-word2vec-model-builder")
                 }
 
                 Group {
                     Section {
-                        Text("Emoji-IME-Dictionary").font(.title).padding()
+                        Text(verbatim: "Emoji-IME-Dictionary").font(.title).padding()
                         Text("本アプリケーションは絵文字への変換候補を表示するためにEmoji-IME-Dictionaryのデータを使用しています。")
                         FallbackLink("License", destination: "https://github.com/peaceiris/emoji-ime-dictionary/blob/main/LICENSE")
-                        FallbackLink("Emoji-IME-Dictionary", destination: "https://github.com/peaceiris/emoji-ime-dictionary")
+                        FallbackLink(verbatim: "Emoji-IME-Dictionary", destination: "https://github.com/peaceiris/emoji-ime-dictionary")
                     }
 
                     Section {
-                        Text("Kaomojitoka to Google IME Dictionary").font(.title).padding()
+                        Text(verbatim: "Kaomojitoka to Google IME Dictionary").font(.title).padding()
                         Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojitoka to Google IME Dictionaryのデータを使用しています。")
                         FallbackLink("License", destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary/blob/master/LICENSE")
                         FallbackLink(
-                            "Kaomojitoka to Google IME Dictionary",
+                            verbatim: "Kaomojitoka to Google IME Dictionary",
                             destination: "https://github.com/nikukyugamer/kaomojitoka-to-google-ime-dictionary"
                         )
                     }
 
                     Section {
-                        Text("Kaomojic").font(.title).padding()
+                        Text(verbatim: "Kaomojic").font(.title).padding()
                         Text("本アプリケーションは顔文字への変換候補を表示するためにKaomojicのデータを使用しています。")
                         FallbackLink("License", destination: "https://github.com/mika-f/kaomojic/blob/develop/LICENSE")
-                        FallbackLink("Kaomojic", destination: "https://github.com/mika-f/kaomojic")
+                        FallbackLink(verbatim: "Kaomojic", destination: "https://github.com/mika-f/kaomojic")
                     }
                 }
 
                 Section {
-                    Text("CustardKit").font(.title).padding()
+                    Text(verbatim: "CustardKit").font(.title).padding()
                     Text("本アプリケーションで利用可能なカスタムタブのデータ構造の記述をCustardKitとしてオープンソースで公開し、アプリ内でも使用しています。")
                     FallbackLink("License", destination: "https://github.com/ensan-hcl/CustardKit/blob/main/LICENSE")
                     FallbackLink(
-                        "CustardKit",
+                        verbatim: "CustardKit",
                         destination: "https://github.com/ensan-hcl/CustardKit"
                     )
                 }
                 Group {
                     Section {
-                        Text("Swift Algorithms").font(.title).padding()
+                        Text(verbatim: "Swift Algorithms").font(.title).padding()
                         Text("本アプリケーションはSwift Algorithmsを使用しています。")
-                        FallbackLink("Apache License 2.0", destination: "https://github.com/apple/swift-algorithms/blob/main/LICENSE.txt")
+                        FallbackLink(verbatim: "Apache License 2.0", destination: "https://github.com/apple/swift-algorithms/blob/main/LICENSE.txt")
                         FallbackLink(
-                            "Swift Algorithms",
+                            verbatim: "Swift Algorithms",
                             destination: "https://github.com/apple/swift-algorithms"
                         )
                     }
                     Section {
-                        Text("Swift Collections").font(.title).padding()
+                        Text(verbatim: "Swift Collections").font(.title).padding()
                         Text("本アプリケーションはSwift Collectionsを使用しています。")
-                        FallbackLink("Apache License 2.0", destination: "https://github.com/apple/swift-collections/blob/main/LICENSE.txt")
+                        FallbackLink(verbatim: "Apache License 2.0", destination: "https://github.com/apple/swift-collections/blob/main/LICENSE.txt")
                         FallbackLink(
-                            "Swift Collections",
+                            verbatim: "Swift Collections",
                             destination: "https://github.com/apple/swift-collections"
                         )
                     }
@@ -193,7 +193,7 @@ struct OpenSourceSoftwaresLicenseView: View {
             }
             Section {
                 HStack {
-                    AzooKeyIcon(fontSize: 60)
+                    FunnyAzooKeyIcon()
                     Spacer()
                     Text("azooKeyを使ってくれてありがとう！")
                 }
@@ -201,5 +201,112 @@ struct OpenSourceSoftwaresLicenseView: View {
         }
         .multilineTextAlignment(.leading)
         .navigationBarTitle(Text("オープンソースソフトウェア"), displayMode: .inline)
+    }
+}
+
+private struct FunnyAzooKeyIcon: View {
+    init(stage: Stage = .normal) {
+        self._stage = .init(initialValue: stage)
+    }
+    
+    struct NormalAnimationValue {
+        // degrees
+        var angle: Double = -10
+    }
+    struct KingAnimationValue {
+        // degrees
+        var yAngle: Double = -10
+        var scale: Double = 1.0
+    }
+    struct FireAnimationValue {
+        // degrees
+        var yAngle: Double = 0
+        var scale: Double = 1.0
+    }
+    enum Stage {
+        case normal
+        case king
+        case fire
+    }
+    @Namespace private var namespace
+    @State private var stage: Stage = .normal
+
+    private var iconCore: some View {
+        AzooKeyIcon(fontSize: 60)
+            .matchedGeometryEffect(id: "icon", in: namespace)
+    }
+
+    var body: some View {
+        if #available(iOS 17, *) {
+            switch stage {
+            case .normal:
+                iconCore
+                    .keyframeAnimator(initialValue: NormalAnimationValue()) { content, value in
+                        content
+                            .rotationEffect(Angle(degrees: value.angle))
+                    } keyframes: { _ in
+                            KeyframeTrack(\.angle) {
+                                CubicKeyframe(10, duration: 0.5)
+                                CubicKeyframe(-10, duration: 0.5)
+                            }
+                    }
+                    .onTapGesture {
+                        withAnimation {
+                            self.stage = Bool.random() ? .king : .fire
+                        }
+                    }
+            case .king:
+                AzooKeyIcon(fontSize: 60, looks: .king)
+                    .matchedGeometryEffect(id: "icon", in: namespace)
+                    .keyframeAnimator(initialValue: KingAnimationValue()) { content, value in
+                        content
+                            .rotationEffect(Angle(degrees: value.yAngle))
+                            .scaleEffect(value.scale)
+                    } keyframes: { _ in
+                        KeyframeTrack(\.yAngle) {
+                            CubicKeyframe(10, duration: 0.5)
+                            CubicKeyframe(-10, duration: 0.5)
+                        }
+                        KeyframeTrack(\.scale) {
+                            SpringKeyframe(1, duration: 0.2)
+                            SpringKeyframe(1.4, duration: 0.6)
+                            SpringKeyframe(1, duration: 0.2)
+                        }
+                    }
+                    .onTapGesture {
+                        withAnimation {
+                            self.stage = .normal
+                        }
+                    }
+            case .fire:
+                AzooKeyIcon(fontSize: 60, looks: .fire)
+                    .matchedGeometryEffect(id: "icon", in: namespace)
+                    .keyframeAnimator(initialValue: FireAnimationValue()) { content, value in
+                        content
+                            .rotationEffect(Angle(degrees: value.yAngle))
+                            .scaleEffect(value.scale)
+                    } keyframes: { _ in
+                        KeyframeTrack(\.yAngle) {
+                            SpringKeyframe(20, duration: 0.8)
+                            CubicKeyframe(0, duration: 0.2)
+                        }
+                    }
+                    .onTapGesture {
+                        withAnimation {
+                            self.stage = .normal
+                        }
+                    }
+            }
+        } else {
+            iconCore
+        }
+    }
+}
+
+#Preview {
+    VStack {
+        FunnyAzooKeyIcon(stage: .normal)
+        FunnyAzooKeyIcon(stage: .king)
+        FunnyAzooKeyIcon(stage: .fire)
     }
 }
