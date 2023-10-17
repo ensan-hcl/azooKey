@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
 
-struct SliderStyleCursorBarState {
+struct SliderStyleCursorBarState: Equatable {
     private(set) var displayLeftIndex = 0
     private(set) var displayRightIndex = 0
     fileprivate var line: [String] = []
