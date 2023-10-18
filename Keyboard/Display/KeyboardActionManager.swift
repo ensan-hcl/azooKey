@@ -524,7 +524,6 @@ import SwiftUtils
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String, variableStates: VariableStates) {
         defer {
-            // moveCursorBarStateの更新
             variableStates.setSurroundingText(leftSide: a_left, center: a_center, rightSide: a_right)
             // エンターキーの状態の更新
             variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
@@ -669,9 +668,10 @@ import SwiftUtils
             return
         }
 
-        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
+        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合→ユーザがカーソルをジャンプした
         debug("user operation id: 10, \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
-        self.inputManager.stopComposition()
+        let actions = self.inputManager.userJumpedCursor()
+        self.registerActions(actions, variableStates: variableStates)
     }
 
     private func hideLearningMemory() {

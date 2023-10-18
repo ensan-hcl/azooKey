@@ -806,6 +806,15 @@ import UIKit
         return [.setCursorBar(.off), .setTabBar(.off)]
     }
 
+    /// ユーザが行を跨いでカーソルを動かした場合に利用する
+    func userJumpedCursor() -> [ActionType] {
+        if self.composingText.isEmpty {
+            return [.setCursorBar(.on)]
+        }
+        self.stopComposition()
+        return []
+    }
+
     /// ユーザがキーボードを経由せずカットした場合の処理
     func userCutText(text: String) {
         self.stopComposition()
