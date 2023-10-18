@@ -10,6 +10,9 @@ import func AudioToolbox.AudioServicesPlaySystemSound
 import typealias AudioToolbox.SystemSoundID
 import class UIKit.UIImpactFeedbackGenerator
 
+private enum UIImpactFeedbackGeneratorHolder {
+    @MainActor static let generator = UIImpactFeedbackGenerator(style: .light)
+}
 /// フィードバックを返すためのツールセット
 public enum KeyboardFeedback<Extension: ApplicationSpecificKeyboardViewExtension> {
     @MainActor
@@ -24,9 +27,6 @@ public enum KeyboardFeedback<Extension: ApplicationSpecificKeyboardViewExtension
     private static var enableHaptics: Bool {
         SemiStaticStates.shared.hapticsAvailable && SemiStaticStates.shared.hasFullAccess && requestedHaptics
     }
-    // FIXME: possibly too heavy
-    @MainActor
-    private static var generator: UIImpactFeedbackGenerator { UIImpactFeedbackGenerator(style: .light) }
 
     // 使えそうな音
     /* i
@@ -81,7 +81,7 @@ public enum KeyboardFeedback<Extension: ApplicationSpecificKeyboardViewExtension
     public static func impactOnMainActor(intensity: Double) {
         Task { @MainActor in
             if enableHaptics {
-                generator.impactOccurred(intensity: intensity)
+                UIImpactFeedbackGeneratorHolder.generator.impactOccurred(intensity: intensity)
             }
         }
     }
