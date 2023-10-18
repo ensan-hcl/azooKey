@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@preconcurrency import SwiftUI
+import SwiftUI
 
 public enum ThemeColor<SystemColor: ApplicationSpecificColor>: Sendable {
     case color(Color)

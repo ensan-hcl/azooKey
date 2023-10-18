@@ -40,6 +40,7 @@ struct TemplateEditingView: CancelableEditor {
         self.options = options
     }
 
+    @MainActor
     @ViewBuilder
     private var editorCore: some View {
         if options.nameEdit {
@@ -292,6 +293,7 @@ struct DateTemplateLiteralSettingView: View {
     @State private var dateString: String = ""
     @State private var formatter: DateFormatter = DateFormatter()
 
+    @MainActor
     fileprivate init(_ template: Binding<TemplateData>) {
         self._template = template
         if let template = template.wrappedValue.literal as? DateTemplateLiteral {
@@ -346,6 +348,7 @@ struct DateTemplateLiteralSettingView: View {
         return f
     }()
 
+    @MainActor
     private func update() {
         DispatchQueue.main.async {
             if formatSelection == "カスタム"{

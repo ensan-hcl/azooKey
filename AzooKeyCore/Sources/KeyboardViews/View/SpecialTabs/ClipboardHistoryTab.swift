@@ -6,6 +6,7 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+@preconcurrency import LinkPresentation
 import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
@@ -253,8 +254,6 @@ struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>:
         }
     }
 }
-
-import LinkPresentation
 
 private struct RichLinkView: UIViewRepresentable {
     class UIViewType: LPLinkView {
