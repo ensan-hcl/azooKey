@@ -30,7 +30,11 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
     private func getSuggestView(for model: FlickedKeyModel, direction: FlickDirection, isHidden: Bool, isPointed: Bool = false) -> some View {
         // ポインテッド時の色を定義
         var pointedColor: Color {
-            theme != Extension.ThemeExtension.default(layout: .flick) ? .white : .systemGray4
+            if colorScheme == .light || theme != Extension.ThemeExtension.default(layout: .flick) {
+                .white
+            } else {
+                .systemGray4
+            }
         }
         // ポインテッドでない時の色を定義
         var unpointedColor: Color {
