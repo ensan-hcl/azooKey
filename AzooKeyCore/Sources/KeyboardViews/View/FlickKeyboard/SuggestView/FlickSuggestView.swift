@@ -26,7 +26,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
         self.suggestType = suggestType
     }
     
-    private func getSuggestView(for _: FlickedKeyModel, isHidden: Bool, isPointed: Bool = false) -> some View {
+    private func getSuggestView(for model: FlickedKeyModel, direction: FlickDirection, isHidden: Bool, isPointed: Bool = false) -> some View {
         // ポインテッド時の色を定義
         var pointedColor: Color {
             theme != Extension.ThemeExtension.default(layout: .flick) ? .white : .white
@@ -72,53 +72,61 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
                 Spacer().frame(width: size.width * spacers[1])
                 AnyView(shape
                     .strokeAndFill(fillContent: color, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth))
-                    .frame(width: size.width * sizeTimes[0], height: size.height * sizeTimes[1])
-                    .shadow(color: Color.gray, radius: 10, x: 5, y: 5)
-                    .overlay(self.label(width: size.width, theme: theme, extension: Extension.self).padding(EdgeInsets(top: size.width * paddings[0], leading: size.width * paddings[1], bottom: size.width * paddings[2], trailing: size.width * paddings[3])))
-                    .allowsHitTesting(false)
-                    .opacity(isHidden ? 0 : 1)
+                .frame(width: size.width * sizeTimes[0], height: size.height * sizeTimes[1])
+                .shadow(color: Color.gray, radius: 10, x: 5, y: 5)
+                .overlay {
+                    KeyLabel<Extension>(model.labelType, width: size.width, textColor: theme.suggestLabelTextColor?.color)
+                        .padding(EdgeInsets(
+                            top: size.width * paddings[0],
+                            leading: size.width * paddings[1],
+                            bottom: size.width * paddings[2],
+                            trailing: size.width * paddings[3]
+                        ))
+                }
+                .allowsHitTesting(false)
+                .opacity(isHidden ? 0 : 1)
                 Spacer().frame(width: size.width * spacers[2])
             }
         }
-        
-        /// その方向にViewの表示が必要な場合はサジェストのViewを、不要な場合は透明なViewを返す。
-        @ViewBuilder private func getSuggestViewIfNecessary(direction: FlickDirection) -> some View {
-            switch suggestType {
-            case .all:
-                if let model = model.flickKeys(variableStates: variableStates)[direction] {
-                    getSuggestView(for: model, isHidden: false)
-                } else {
-                    getSuggestView(for: .empty, isHidden: true)
-                }
-            case .flick(let targetDirection):
-                if targetDirection == direction, let model = model.flickKeys(variableStates: variableStates)[direction] {
-                    getSuggestView(for: model, isHidden: false, isPointed: true)
-                } else {
-                    getSuggestView(for: .empty, isHidden: true)
-                }
+    }
+    /// その方向にViewの表示が必要な場合はサジェストのViewを、不要な場合は透明なViewを返す。
+    @ViewBuilder private func getSuggestViewIfNecessary(direction: FlickDirection) -> some View {
+        switch suggestType {
+        case .all:
+            if let model = self.model.flickKeys(variableStates: variableStates)[direction] {
+                getSuggestView(for: model, direction: direction, isHidden: false)
+            } else {
+                getSuggestView(for: .empty, direction: direction, isHidden: true)
             }
-        }
-        
-        var body: some View {
-            VStack(spacing: tabDesign.verticalSpacing) {
-                self.getSuggestViewIfNecessary(direction: .top)
-                HStack(spacing: tabDesign.horizontalSpacing) {
-                    self.getSuggestViewIfNecessary(direction: .left)
-                    RoundedRectangle(cornerRadius: 5.0)
-                        .strokeAndFill(
-                            fillContent: theme.specialKeyFillColor.color,
-                            strokeContent: theme.borderColor.color,
-                            lineWidth: theme.borderWidth
-                        )
-                        .frame(width: size.width, height: size.height)
-                    self.getSuggestViewIfNecessary(direction: .right)
-                }
-                self.getSuggestViewIfNecessary(direction: .bottom)
+        case .flick(let targetDirection):
+            if targetDirection == direction, let model = self.model.flickKeys(variableStates: variableStates)[direction] {
+                getSuggestView(for: model, direction: direction, isHidden: false, isPointed: true)
+            } else {
+                getSuggestView(for: .empty, direction: direction, isHidden: true)
             }
-            .frame(width: size.width, height: size.height)
-            .allowsHitTesting(false)
         }
     }
+    
+    var body: some View {
+        VStack(spacing: tabDesign.verticalSpacing) {
+            self.getSuggestViewIfNecessary(direction: .top)
+            HStack(spacing: tabDesign.horizontalSpacing) {
+                self.getSuggestViewIfNecessary(direction: .left)
+                RoundedRectangle(cornerRadius: 5.0)
+                    .strokeAndFill(
+                        fillContent: theme.specialKeyFillColor.color,
+                        strokeContent: theme.borderColor.color,
+                        lineWidth: theme.borderWidth
+                    )
+                    .frame(width: size.width, height: size.height)
+                self.getSuggestViewIfNecessary(direction: .right)
+            }
+            self.getSuggestViewIfNecessary(direction: .bottom)
+        }
+        .frame(width: size.width, height: size.height)
+        .allowsHitTesting(false)
+    }
+    
 }
     
 public extension Path {
