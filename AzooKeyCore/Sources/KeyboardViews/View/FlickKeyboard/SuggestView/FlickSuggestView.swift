@@ -129,7 +129,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
     
 }
     
-public extension Path {
+private extension Path {
     mutating func addRoundedPentagon(using points: [CGPoint], cornerRadius: CGFloat = 5) {
         guard points.count == 5 else { return }
             
@@ -157,7 +157,7 @@ public extension Path {
     }
 }
     
-extension CGVector {
+private extension CGVector {
     var length: CGFloat {
         return sqrt(dx * dx + dy * dy)
     }
@@ -167,7 +167,7 @@ extension CGVector {
     }
 }
     
-struct RoundedPentagonBottom: Shape {
+private struct RoundedPentagonBottom: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let points = [
@@ -182,7 +182,7 @@ struct RoundedPentagonBottom: Shape {
     }
 }
     
-struct RoundedPentagonLeft: Shape {
+private struct RoundedPentagonLeft: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let points = [
@@ -197,7 +197,7 @@ struct RoundedPentagonLeft: Shape {
     }
 }
     
-struct RoundedPentagonRight: Shape {
+private struct RoundedPentagonRight: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let points = [
@@ -212,7 +212,7 @@ struct RoundedPentagonRight: Shape {
     }
 }
     
-struct RoundedPentagonTop: Shape {
+private struct RoundedPentagonTop: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let points = [
