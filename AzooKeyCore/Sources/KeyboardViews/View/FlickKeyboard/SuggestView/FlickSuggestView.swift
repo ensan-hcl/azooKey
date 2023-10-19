@@ -14,6 +14,7 @@ import SwiftUI
 struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     private let model: any FlickKeyModelProtocol
     private let suggestType: FlickSuggestType
     private let tabDesign: TabDependentDesign
@@ -29,13 +30,19 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
     private func getSuggestView(for model: FlickedKeyModel, direction: FlickDirection, isHidden: Bool, isPointed: Bool = false) -> some View {
         // ポインテッド時の色を定義
         var pointedColor: Color {
-            theme != Extension.ThemeExtension.default(layout: .flick) ? .white : .white
+            theme != Extension.ThemeExtension.default(layout: .flick) ? .white : .systemGray4
         }
         // ポインテッドでない時の色を定義
         var unpointedColor: Color {
             theme != Extension.ThemeExtension.default(layout: .flick) ? .white : .systemGray5
         }
-        
+        var shadowColor: Color {
+            if colorScheme == .dark || theme != Extension.ThemeExtension.default(layout: .flick) {
+                .clear
+            } else {
+                .gray
+            }
+        }
         // 現在の状態に基づいて色を選択
         let color = isPointed ? pointedColor : unpointedColor
         let shape: any Shape
@@ -73,7 +80,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
                 AnyView(shape
                     .strokeAndFill(fillContent: color, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth))
                 .frame(width: size.width * sizeTimes[0], height: size.height * sizeTimes[1])
-                .shadow(color: Color.gray, radius: 10, x: 5, y: 5)
+                .shadow(color: shadowColor, radius: 10, x: 5, y: 5)
                 .overlay {
                     KeyLabel<Extension>(model.labelType, width: size.width, textColor: theme.suggestLabelTextColor?.color)
                         .padding(EdgeInsets(
