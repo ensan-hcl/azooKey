@@ -87,6 +87,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
                 .opacity(isHidden ? 0 : 1)
                 Spacer().frame(width: size.width * spacers[2])
             }
+            Spacer().frame(height: size.height * spacers[3])
         }
     }
     /// その方向にViewの表示が必要な場合はサジェストのViewを、不要な場合は透明なViewを返す。
