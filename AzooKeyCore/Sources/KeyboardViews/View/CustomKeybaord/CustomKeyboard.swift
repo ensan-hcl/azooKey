@@ -337,10 +337,11 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
 public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExtension, Content: View>: View {
     @State private var suggestState = FlickSuggestState()
 
-    public init(models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
+    public init(models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, blur: Bool = false, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
         self.models = models
         self.tabDesign = tabDesign
         self.layout = layout
+        self.blur = blur
         self.contentGenerator = generator
     }
 
@@ -348,6 +349,7 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
     private let models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)]
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
+    private let blur: Bool
 
     @MainActor private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
         let width = tabDesign.keyViewWidth(widthCount: width)
@@ -360,8 +362,7 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
     public var body: some View {
         ZStack {
             let hasAllSuggest = self.suggestState.items.contains(where: {$0.value.contains(where: {$0.value == .all})})
-            // FIXME: キーが多すぎるとBlurの描画コストが大きくなるようなので、一旦数を制限している
-            let needKeyboardBlur = hasAllSuggest && self.layout.rowCount * self.layout.columnCount < 30
+            let needKeyboardBlur = blur && hasAllSuggest
             ForEach(0..<layout.rowCount, id: \.self) {x in
                 let columnSuggestStates = self.suggestState.items[x, default: [:]]
                 // 可能ならカラムごとにblurをかけることで描画コストを減らす
