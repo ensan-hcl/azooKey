@@ -26,8 +26,16 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
         self.size = size
         self.suggestType = suggestType
     }
-    
-    private func getSuggestView(for model: FlickedKeyModel, direction: FlickDirection, isHidden: Bool, isPointed: Bool = false) -> some View {
+
+    @ViewBuilder
+    private func keyLabel(for direction: FlickDirection, textColor: Color? = nil, textSize: Design.Fonts.LabelFontSizeStrategy = .xlarge) -> some View {
+        if let model = self.model.flickKeys(variableStates: variableStates)[direction] {
+            KeyLabel<Extension>(model.labelType, width: size.width, textSize: textSize, textColor: textColor)
+        } else {
+            EmptyView()
+        }
+    }
+    private func getSuggestView(direction: FlickDirection, isHidden: Bool, isPointed: Bool) -> some View {
         // ポインテッド時の色を定義
         var pointedColor: Color {
             if colorScheme == .light || theme != Extension.ThemeExtension.default(layout: .flick) {
@@ -77,7 +85,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
                 .frame(width: size.width * sizeTimes[0], height: size.height * sizeTimes[1])
                 .shadow(color: shadowColor, radius: 10, y: 5)
                 .overlay {
-                    KeyLabel<Extension>(model.labelType, width: size.width, textColor: theme.suggestLabelTextColor?.color)
+                    self.keyLabel(for: direction, textColor: theme.suggestLabelTextColor?.color)
                         .padding(EdgeInsets(
                             top: size.height * paddings[0],
                             leading: size.width * paddings[1],
@@ -89,50 +97,124 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
                 .opacity(isHidden ? 0 : 1)
     }
     /// その方向にViewの表示が必要な場合はサジェストのViewを、不要な場合は透明なViewを返す。
-    private func getSuggestViewIfNecessary(direction: FlickDirection) -> some View {
-        switch suggestType {
-        case .all:
-            if let model = self.model.flickKeys(variableStates: variableStates)[direction] {
-                getSuggestView(for: model, direction: direction, isHidden: false)
+    @ViewBuilder
+    private func getPointedSuggestViewIfNecessary(direction: FlickDirection, targetDirection: FlickDirection) -> some View {
+        if targetDirection == direction {
+            getSuggestView(direction: direction, isHidden: false, isPointed: true)
+        } else {
+            getSuggestView(direction: direction, isHidden: true, isPointed: false)
+        }
+    }
+
+    @ViewBuilder
+    private func roundedRectangleForAllSuggest(cornerRadius: CGFloat, direction: FlickDirection, sizeDiff: CGFloat = 2) -> some View {
+        var color: Color {
+            if colorScheme == .light || theme != Extension.ThemeExtension.default(layout: .flick) {
+                .white
             } else {
-                getSuggestView(for: .empty, direction: direction, isHidden: true)
-            }
-        case .flick(let targetDirection):
-            if targetDirection == direction, let model = self.model.flickKeys(variableStates: variableStates)[direction] {
-                getSuggestView(for: model, direction: direction, isHidden: false, isPointed: true)
-            } else {
-                getSuggestView(for: .empty, direction: direction, isHidden: true)
+                .systemGray4
             }
         }
+        let widthDiff: CGFloat = switch direction {
+        case .top, .bottom: tabDesign.horizontalSpacing
+        case .left, .right: tabDesign.horizontalSpacing / 2 + cornerRadius + sizeDiff
+        }
+        let heightDiff: CGFloat = switch direction {
+        case .top, .bottom: tabDesign.verticalSpacing / 2 + cornerRadius + sizeDiff
+        case .left, .right: tabDesign.verticalSpacing
+        }
+        let isHidden = !self.model.isFlickAble(to: direction, variableStates: variableStates)
+        RoundedRectangle(cornerRadius: cornerRadius)
+            .strokeAndFill(fillContent: color, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth)
+            .frame(width: size.width + widthDiff, height: size.height + heightDiff)
+            .overlay {
+                let offsetX: CGFloat = switch direction {
+                case .bottom, .top: 0
+                case .left: -cornerRadius + sizeDiff/2
+                case .right: cornerRadius - sizeDiff/2
+                }
+                let offsetY: CGFloat = switch direction {
+                case .left, .right: 0
+                case .top: -cornerRadius + sizeDiff/2
+                case .bottom: cornerRadius - sizeDiff/2
+                }
+                self.keyLabel(for: direction, textColor: theme.suggestLabelTextColor?.color)
+                    .offset(x: offsetX, y: offsetY)
+            }
+            .opacity(isHidden ? 0 : 1)
     }
     
     var body: some View {
-        VStack(spacing: tabDesign.verticalSpacing) {
-            self.getSuggestViewIfNecessary(direction: .top)
-                .offset(y: size.height / 2)
-                .zIndex(1)
-            HStack(spacing: tabDesign.horizontalSpacing) {
-                self.getSuggestViewIfNecessary(direction: .left)
-                    .offset(x: size.width / 2)
+        switch self.suggestType {
+        case .all:
+            let cornerRadius = 5.0
+            VStack(spacing: 0) {
+                roundedRectangleForAllSuggest(cornerRadius: cornerRadius, direction: .top)
+                    .offset(y: cornerRadius)
                     .zIndex(1)
-                RoundedRectangle(cornerRadius: 5.0)
-                    .strokeAndFill(
-                        fillContent: theme.specialKeyFillColor.color,
-                        strokeContent: theme.borderColor.color,
-                        lineWidth: theme.borderWidth
-                    )
-                    .frame(width: size.width, height: size.height)
-                    .zIndex(0)
-                self.getSuggestViewIfNecessary(direction: .right)
-                    .offset(x: -size.width / 2)
+                HStack(spacing: 0) {
+                    roundedRectangleForAllSuggest(cornerRadius: cornerRadius, direction: .left)
+                        .offset(x: cornerRadius)
+                        .zIndex(1)
+                    Rectangle()
+                        .strokeAndFill(
+                            fillContent: .blue,
+                            strokeContent: .gray,
+                            lineWidth: 0.5
+                        )
+                        .frame(
+                            width: size.width + tabDesign.horizontalSpacing,
+                            height: size.height + tabDesign.verticalSpacing
+                        )
+                        .zIndex(2)
+                        .overlay {
+                            (self.model.label(width: size.width, states: variableStates) as KeyLabel<Extension>)
+                                .textColor(.white)
+                                .textSize(.xlarge)
+                        }
+                    roundedRectangleForAllSuggest(cornerRadius: cornerRadius, direction: .right)
+                        .offset(x: -cornerRadius)
+                        .zIndex(1)
+                }
+                .zIndex(2)
+                .frame(width: size.width + tabDesign.horizontalSpacing, height: size.height + tabDesign.verticalSpacing)
+                roundedRectangleForAllSuggest(cornerRadius: cornerRadius, direction: .bottom)
+                    .offset(y: -cornerRadius)
                     .zIndex(1)
             }
-            self.getSuggestViewIfNecessary(direction: .bottom)
-                .offset(y: -size.height / 2)
-                .zIndex(1)
+            .compositingGroup()
+            .shadow(color: .gray, radius: 3)
+            .frame(width: size.width, height: size.height)
+            .allowsHitTesting(false)
+        case .flick(let targetDirection):
+            VStack(spacing: tabDesign.verticalSpacing) {
+                self.getPointedSuggestViewIfNecessary(direction: .top, targetDirection: targetDirection)
+                    .offset(y: size.height / 2)
+                    .zIndex(1)
+                HStack(spacing: tabDesign.horizontalSpacing) {
+                    self.getPointedSuggestViewIfNecessary(direction: .left, targetDirection: targetDirection)
+                        .offset(x: size.width / 2)
+                        .zIndex(1)
+                    RoundedRectangle(cornerRadius: 5.0)
+                        .strokeAndFill(
+                            fillContent: theme.specialKeyFillColor.color,
+                            strokeContent: theme.borderColor.color,
+                            lineWidth: theme.borderWidth
+                        )
+                        .frame(width: size.width, height: size.height)
+                        .zIndex(0)
+                    self.getPointedSuggestViewIfNecessary(direction: .right, targetDirection: targetDirection)
+                        .offset(x: -size.width / 2)
+                        .zIndex(1)
+                }
+                .frame(width: size.width, height: size.height)
+                self.getPointedSuggestViewIfNecessary(direction: .bottom, targetDirection: targetDirection)
+                    .offset(y: -size.height / 2)
+                    .zIndex(1)
+            }
+            .frame(width: size.width, height: size.height)
+            .allowsHitTesting(false)
         }
-        .frame(width: size.width, height: size.height)
-        .allowsHitTesting(false)
     }
     
 }

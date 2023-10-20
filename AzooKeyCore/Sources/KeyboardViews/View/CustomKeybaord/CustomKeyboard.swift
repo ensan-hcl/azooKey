@@ -359,22 +359,31 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
 
     public var body: some View {
         ZStack {
+            let hasAllSuggest = self.suggestState.items.contains(where: {$0.value.contains(where: {$0.value == .all})})
+            // FIXME: キーが多すぎるとBlurの描画コストが大きくなるようなので、一旦数を制限している
+            let needKeyboardBlur = hasAllSuggest && self.layout.rowCount * self.layout.columnCount < 30
             ForEach(0..<layout.rowCount, id: \.self) {x in
                 let columnSuggestStates = self.suggestState.items[x, default: [:]]
+                // 可能ならカラムごとにblurをかけることで描画コストを減らす
+                let needColumnWideBlur = needKeyboardBlur && columnSuggestStates.allSatisfy {$0.value != .all}
                 ForEach(0..<layout.columnCount, id: \.self) {y in
                     if let data = models[.gridFit(x: x, y: y)] {
                         let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
-                        contentGenerator(FlickKeyView(model: data.model, size: info.size, position: (x, y), suggestState: $suggestState), x, y)                            .zIndex(columnSuggestStates[y] != nil ? 1 : 0)
+                        let suggestState = columnSuggestStates[y]
+                        let needBlur = needKeyboardBlur && !needColumnWideBlur && suggestState == nil
+                        contentGenerator(FlickKeyView(model: data.model, size: info.size, position: (x, y), suggestState: $suggestState), x, y)                            .zIndex(suggestState != nil ? 1 : 0)
                             .overlay(alignment: .center) {
-                                if let suggestType = columnSuggestStates[y] {
+                                if let suggestType = suggestState {
                                     FlickSuggestView<Extension>(model: data.model, tabDesign: tabDesign, size: info.size, suggestType: suggestType)
                                         .zIndex(2)
                                 }
                             }
                             .position(x: info.position.x, y: info.position.y)
+                            .blur(radius: needBlur ? 0.75 : 0)
                     }
                 }
                 .zIndex(columnSuggestStates.isEmpty ? 0 : 1)
+                .blur(radius: needColumnWideBlur ? 0.75 : 0)
             }
             .frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
         }
