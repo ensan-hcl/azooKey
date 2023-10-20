@@ -19,7 +19,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
     private let suggestType: FlickSuggestType
     private let tabDesign: TabDependentDesign
     private let size: CGSize
-    
+
     init(model: any FlickKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize, suggestType: FlickSuggestType) {
         self.model = model
         self.tabDesign = tabDesign
@@ -60,7 +60,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
         let shape: any Shape
         let paddings: [CGFloat]
         let sizeTimes: [CGFloat]
-        
+
         switch direction {
         case .top:
             shape = RoundedPentagonTop()
@@ -79,22 +79,21 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
             paddings = [0.3, 0, 0, 0]
             sizeTimes = [1.2, 1.5]
         }
-        
-        return AnyView(shape
-                    .strokeAndFill(fillContent: color, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth))
-                .frame(width: size.width * sizeTimes[0], height: size.height * sizeTimes[1])
-                .shadow(color: shadowColor, radius: 10, y: 5)
-                .overlay {
-                    self.keyLabel(for: direction, textColor: theme.suggestLabelTextColor?.color)
-                        .padding(EdgeInsets(
-                            top: size.height * paddings[0],
-                            leading: size.width * paddings[1],
-                            bottom: size.height * paddings[2],
-                            trailing: size.width * paddings[3]
-                        ))
-                }
-                .allowsHitTesting(false)
-                .opacity(isHidden ? 0 : 1)
+
+        return AnyView(shape.strokeAndFill(fillContent: color, strokeContent: theme.borderColor.color, lineWidth: theme.borderWidth))
+            .frame(width: size.width * sizeTimes[0], height: size.height * sizeTimes[1])
+            .shadow(color: shadowColor, radius: 10, y: 5)
+            .overlay {
+                self.keyLabel(for: direction, textColor: theme.suggestLabelTextColor?.color)
+                    .padding(EdgeInsets(
+                        top: size.height * paddings[0],
+                        leading: size.width * paddings[1],
+                        bottom: size.height * paddings[2],
+                        trailing: size.width * paddings[3]
+                    ))
+            }
+            .allowsHitTesting(false)
+            .opacity(isHidden ? 0 : 1)
     }
     /// その方向にViewの表示が必要な場合はサジェストのViewを、不要な場合は透明なViewを返す。
     @ViewBuilder
@@ -130,20 +129,20 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
             .overlay {
                 let offsetX: CGFloat = switch direction {
                 case .bottom, .top: 0
-                case .left: -cornerRadius + sizeDiff/2
-                case .right: cornerRadius - sizeDiff/2
+                case .left: -cornerRadius + sizeDiff / 2
+                case .right: cornerRadius - sizeDiff / 2
                 }
                 let offsetY: CGFloat = switch direction {
                 case .left, .right: 0
-                case .top: -cornerRadius + sizeDiff/2
-                case .bottom: cornerRadius - sizeDiff/2
+                case .top: -cornerRadius + sizeDiff / 2
+                case .bottom: cornerRadius - sizeDiff / 2
                 }
                 self.keyLabel(for: direction, textColor: theme.suggestLabelTextColor?.color)
                     .offset(x: offsetX, y: offsetY)
             }
             .opacity(isHidden ? 0 : 1)
     }
-    
+
     var body: some View {
         switch self.suggestType {
         case .all:
@@ -216,47 +215,47 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
             .allowsHitTesting(false)
         }
     }
-    
+
 }
-    
+
 private extension Path {
     mutating func addRoundedPentagon(using points: [CGPoint], cornerRadius: CGFloat = 5) {
         guard points.count == 5 else { return }
-            
+
         for i in 0 ..< 5 {
             let currentPoint = points[i]
             let nextPoint = points[(i + 1) % 5]
             let prevPoint = i == 0 ? points.last! : points[i - 1]
-                
+
             let directionFromPrev = CGVector(dx: currentPoint.x - prevPoint.x, dy: currentPoint.y - prevPoint.y).normalized
             let directionToNext = CGVector(dx: nextPoint.x - currentPoint.x, dy: nextPoint.y - currentPoint.y).normalized
-                 
+
             let offsetFromCurrent1 = CGVector(dx: directionFromPrev.dx * cornerRadius, dy: directionFromPrev.dy * cornerRadius)
             let offsetFromCurrent2 = CGVector(dx: directionToNext.dx * cornerRadius, dy: directionToNext.dy * cornerRadius)
-                
+
             if i == 0 {
                 move(to: CGPoint(x: currentPoint.x - offsetFromCurrent1.dx, y: currentPoint.y - offsetFromCurrent1.dy))
             } else {
                 addLine(to: CGPoint(x: currentPoint.x - offsetFromCurrent1.dx, y: currentPoint.y - offsetFromCurrent1.dy))
             }
-                
+
             addQuadCurve(to: CGPoint(x: currentPoint.x + offsetFromCurrent2.dx, y: currentPoint.y + offsetFromCurrent2.dy), control: currentPoint)
         }
-            
+
         closeSubpath()
     }
 }
-    
+
 private extension CGVector {
     var length: CGFloat {
-        return sqrt(dx * dx + dy * dy)
+        sqrt(dx * dx + dy * dy)
     }
-        
+
     var normalized: CGVector {
-        return CGVector(dx: dx / length, dy: dy / length)
+        CGVector(dx: dx / length, dy: dy / length)
     }
 }
-    
+
 private struct RoundedPentagonBottom: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -271,7 +270,7 @@ private struct RoundedPentagonBottom: Shape {
         return path
     }
 }
-    
+
 private struct RoundedPentagonLeft: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -286,7 +285,7 @@ private struct RoundedPentagonLeft: Shape {
         return path
     }
 }
-    
+
 private struct RoundedPentagonRight: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -301,7 +300,7 @@ private struct RoundedPentagonRight: Shape {
         return path
     }
 }
-    
+
 private struct RoundedPentagonTop: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
