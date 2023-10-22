@@ -23,6 +23,13 @@ struct SettingTabView: View {
         return false
     }
 
+    private func canQwertyLayout(_ layout: LanguageLayout) -> Bool {
+        if layout == .qwerty {
+            return true
+        }
+        return false
+    }
+
     var body: some View {
         NavigationView {
             Form {
@@ -72,6 +79,9 @@ struct SettingTabView: View {
                         BoolSettingView(.hideResetButtonInOneHandedMode)
                         if self.canFlickLayout(appStates.japaneseLayout) {
                             FlickSensitivitySettingView(.flickSensitivity)
+                        }
+                        if self.canQwertyLayout(appStates.englishLayout) {
+                            BoolSettingView(.useShiftKey)
                         }
                     }
                 }
