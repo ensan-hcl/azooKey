@@ -28,6 +28,7 @@ import UIKit
     var isSelected = false
     // 変換リクエストタスク
     var conversionRequestTask: Task<(), any Error>?
+    var conversionCache: KanaKanjiConverter.Cache = .none()
 
     // キーボードの言語
     private var keyboardLanguage: KeyboardLanguage = .ja_JP
@@ -299,9 +300,7 @@ import UIKit
             return
         }
         self.isSelected = false
-        Task {
-            await self.kanaKanjiConverter.setCompletedData(candidate)
-        }
+        self.conversionCache.setCompletedData(candidate)
         if liveConversionEnabled {
             self.liveConversionManager.updateAfterFirstClauseCompletion()
         }
@@ -314,9 +313,7 @@ import UIKit
         self.composingText.stopComposition()
         self.displayedTextManager.stopComposition()
         self.liveConversionManager.stopComposition()
-        Task {
-            await self.kanaKanjiConverter.stopComposition()
-        }
+        self.conversionCache = .none()
         self.isSelected = false
 
         if let updateResult {
@@ -396,10 +393,8 @@ import UIKit
         self.displayedTextManager.deleteBackward(count: 1)
         // 状態をリセットする
         self.composingText.stopComposition()
-        Task {
-            await self.kanaKanjiConverter.stopComposition()
-        }
         self.isSelected = false
+        self.conversionCache = .none()
     }
 
     /// テキスト入力を扱う関数
@@ -912,8 +907,11 @@ import UIKit
         debug("InputManager.setResult: options", options)
         self.conversionRequestTask?.cancel()
         self.conversionRequestTask = Task {
-            let results = try await self.kanaKanjiConverter.requestCandidates(inputData, options: options)
+            let results = try await self.kanaKanjiConverter.requestCandidates(inputData, options: options, cache: self.conversionCache.consumed())
             try Task.checkCancellation()
+            // 以降はキャンセル不可
+            let (mainResults, firstClauseResults) = results.result
+            self.conversionCache = (consume results).cache
             await MainActor.run {
                 // 表示を更新する
                 if !self.isSelected {
@@ -921,18 +919,15 @@ import UIKit
                         self.previousSystemOperation = .setMarkedText
                     }
                     if liveConversionEnabled {
-                        let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, results.mainResults, firstClauseResults: results.firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
+                        let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, mainResults, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
                         self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: liveConversionText)
                     } else {
                         self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
                     }
                 }
-                if Task.isCancelled {
-                    return
-                }
                 if let updateResult {
                     updateResult {
-                        $0.setResults(results.mainResults)
+                        $0.setResults(mainResults)
                     }
                     // 自動確定の実施
                     if liveConversionEnabled, let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {

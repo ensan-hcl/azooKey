@@ -43,7 +43,7 @@ let package = Package(
         // MARK: `_: .upToNextMinor(Version)` or `exact: Version` or `revision: Version`.
         // MARK: For develop branch, you can use `revision:` specification.
         // MARK: For main branch, you must use `upToNextMinor` specification.
-        .package(url: "https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter", branch: "feature/async_api")
+        .package(url: "https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter", revision: "05061ae9d33e28daa81e5d46c07cac3f4dbc0bbe")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
