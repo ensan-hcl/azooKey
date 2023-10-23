@@ -16,7 +16,7 @@ struct FlickKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: V
     private let tabDesign: TabDependentDesign
     private let models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)]
     init(keyModels: [[any FlickKeyModelProtocol]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
-        self.tabDesign = TabDependentDesign(width: 5, height: 4, interfaceSize: interfaceSize, layout: .flick, orientation: keyboardOrientation)
+        self.tabDesign = TabDependentDesign(width: 5, height: 4, interfaceSize: interfaceSize, orientation: keyboardOrientation)
 
         var models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] = [:]
         for h in keyModels.indices {
