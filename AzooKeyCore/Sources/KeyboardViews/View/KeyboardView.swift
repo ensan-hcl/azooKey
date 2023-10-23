@@ -78,11 +78,11 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
                 }
             }
             if showMessage, let message = variableStates.temporalMessage {
-                TemporalMessageView(message: message) {
-                    withAnimation(.easeIn) {
-                        variableStates.temporalMessage = nil
-                    }
-                }
+                let isPresented = Binding(
+                    get: { variableStates.temporalMessage != nil },
+                    set: { if !$0 {variableStates.temporalMessage = nil} }
+                )
+                TemporalMessageView(message: message, isPresented: isPresented)
             }
         }
         .frame(height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))

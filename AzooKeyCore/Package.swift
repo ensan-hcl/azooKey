@@ -39,6 +39,10 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
+        // MARK: You must specify version which results reproductive and stable result
+        // MARK: `_: .upToNextMinor(Version)` or `exact: Version` or `revision: Version`.
+        // MARK: For develop branch, you can use `revision:` specification.
+        // MARK: For main branch, you must use `upToNextMinor` specification.
         .package(url: "https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter", branch: "feature/async_api")
     ],
     targets: [

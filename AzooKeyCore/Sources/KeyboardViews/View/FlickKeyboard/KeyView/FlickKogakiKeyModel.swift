@@ -15,8 +15,6 @@ struct FlickKogakiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
 
     static var shared: Self { FlickKogakiKeyModel() }
 
-    var longPressActions: LongpressActionType = .none
-
     let labelType: KeyLabelType = .text("小ﾞﾟ")
 
     @MainActor private var customKey: KeyFlickSetting {
@@ -31,6 +29,10 @@ struct FlickKogakiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         [.changeCharacterType]
+    }
+
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
     }
 
     func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {

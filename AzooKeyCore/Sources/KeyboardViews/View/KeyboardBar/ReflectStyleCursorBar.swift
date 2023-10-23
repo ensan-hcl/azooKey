@@ -1,9 +1,8 @@
 //
-//  CursorMoveView.swift
-//  Keyboard
+//  ReflectStyleCursorBar.swift
 //
-//  Created by ensan on 2020/09/21.
-//  Copyright © 2020 ensan. All rights reserved.
+//
+//  Created by miwa on 2023/09/30.
 //
 
 import Foundation
@@ -11,7 +10,7 @@ import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
 
-struct BetaMoveCursorBarState {
+private struct CursorBarState: Equatable, Hashable, Sendable {
     private(set) var displayLeftIndex = 0
     private(set) var displayRightIndex = 0
     fileprivate var line: [String] = []
@@ -26,10 +25,10 @@ struct BetaMoveCursorBarState {
     }
 
     mutating func updateLine(leftText: String, rightText: String) {
-        debug("updateLine", leftText, rightText, itemCount, line)
+        debug("CursorBarState.updateLine", leftText, rightText, itemCount, line)
         var left = leftText.map {String($0)}
-        if left.first == "\n" {
-            left.removeFirst()
+        if let index = left.firstIndex(of: "\n"), index != left.endIndex - 1 {
+            left.removeFirst(index + 1)
         }
         self.line = left + rightText.map {String($0)} + ["⏎"]
         self.displayLeftIndex = left.count - itemCount / 2
@@ -44,6 +43,10 @@ struct BetaMoveCursorBarState {
     }
 
     @MainActor mutating fileprivate func move(_ count: Int, actionManager: some UserActionManager, variableStates: VariableStates) {
+        if centerIndex + count < -1 || line.count < centerIndex + count {
+            debug("CursorBarState.move rejected", centerIndex, count, line)
+            return
+        }
         displayLeftIndex += count
         displayRightIndex += count
         actionManager.registerAction(.moveCursor(count), variableStates: variableStates)
@@ -68,31 +71,37 @@ struct BetaMoveCursorBarState {
     }
 }
 
-@MainActor
-struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: View {
+struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
 
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
 
-    enum SwipeGestureState {
+    private enum SwipeGestureState {
         case inactive
         case tap(l1: CGPoint, l2: CGPoint, l3: CGPoint)
         case moving(l1: CGPoint, l2: CGPoint, l3: CGPoint, count: Double)
     }
     @State private var swipeGestureState: SwipeGestureState = .inactive
+    @State private var cursorBarState = CursorBarState()
 
+    @MainActor
     private var fontSize: CGFloat {
         Design.fonts.resultViewFontSize(userPrefrerence: Extension.SettingProvider.resultViewFontSize)
     }
+
+    @MainActor
     fileprivate var itemWidth: CGFloat {
         fontSize * 1.3
     }
+
+    @MainActor
     fileprivate var viewWidth: CGFloat {
         variableStates.interfaceSize.width * 0.85
     }
 
+    @MainActor
     var swipeGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged {value in
@@ -133,11 +142,11 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
                     }
                     withAnimation(.linear(duration: 0.05)) {
                         if count >= 15 {
-                            variableStates.moveCursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
+                            cursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
                             count -= 15
                         }
                         if count <= -15 {
-                            variableStates.moveCursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
+                            cursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
                             count += 15
                         }
                         swipeGestureState = .moving(l1: value.location, l2: l1, l3: l2, count: count)
@@ -160,9 +169,9 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
                     let offset_double = diff_from_center / itemWidth
                     // center indexからのoffsetになる
                     let offset = Int(offset_double.rounded(.toNearestOrAwayFromZero))
-                    let index = variableStates.moveCursorBarState.centerIndex + offset
+                    let index = cursorBarState.centerIndex + offset
                     withAnimation(.easeOut(duration: 0.1)) {
-                        variableStates.moveCursorBarState.tap(at: index, actionManager: self.action, variableStates: variableStates)
+                        cursorBarState.tap(at: index, actionManager: self.action, variableStates: variableStates)
                     }
                 case .moving:
                     // 位置を揃える
@@ -188,6 +197,7 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
         theme.resultTextColor.color
     }
 
+    @MainActor
     private var background: some View {
         RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: viewWidth / 2)
             // TODO: ここからframeを消して問題なかったかチェックする
@@ -199,22 +209,31 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
         .system(size: size, weight: symbolsFontWeight, design: .default)
     }
 
+    @MainActor
     private var textView: some View {
         HStack(spacing: .zero) {
             // 多めに描画しておく
-            ForEach(variableStates.moveCursorBarState.displayLeftIndex - 4 ..< variableStates.moveCursorBarState.displayRightIndex + 4, id: \.self) { i in
-                Text(verbatim: variableStates.moveCursorBarState.getItem(at: i))
+            ForEach(cursorBarState.displayLeftIndex - 4 ..< cursorBarState.displayRightIndex + 4, id: \.self) { i in
+                let item = cursorBarState.getItem(at: i)
+                let hash = {
+                    var hasher = Hasher()
+                    hasher.combine(i)
+                    hasher.combine(item)
+                    return hasher.finalize()
+                }()
+                Text(verbatim: item)
                     .font(.system(size: fontSize).bold())
                     .frame(width: itemWidth)
+                    .id(hash)
             }
         }
         .allowsHitTesting(false)
         .foregroundStyle(theme.resultTextColor.color.opacity(0.4))
-        .drawingGroup()
         .frame(width: viewWidth)
         .clipped()
     }
 
+    @MainActor
     private var foregroundButtons: some View {
         ZStack(alignment: .center) {
             textView
@@ -235,7 +254,7 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
                             self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
-                                    variableStates.moveCursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
+                                    cursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
                                 }
                             }
                         }
@@ -261,7 +280,7 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
                             self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(1)]))
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
-                                    variableStates.moveCursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
+                                    cursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
                                 }
                             }
                         }
@@ -274,101 +293,15 @@ struct MoveCursorBarBeta<Extension: ApplicationSpecificKeyboardViewExtension>: V
         background
             .overlay(foregroundButtons)
             .onAppear {
-                variableStates.moveCursorBarState.updateItemCount(viewWidth: viewWidth, itemWidth: itemWidth)
+                cursorBarState.updateItemCount(viewWidth: viewWidth, itemWidth: itemWidth)
+                let surroundingText = variableStates.surroundingText
+                cursorBarState.updateLine(leftText: surroundingText.leftSideText + surroundingText.centerText, rightText: surroundingText.rightSideText)
             }
-    }
-}
-
-private enum MoveCursorBarGestureState {
-    case inactive
-    case moving(CGPoint, Int)   // 右だったら+1、左だったら-1
-}
-
-@MainActor
-struct MoveCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
-    init() {}
-
-    @EnvironmentObject private var variableStates: VariableStates
-    @State private var gestureState: MoveCursorBarGestureState = .inactive
-    @Environment(Extension.Theme.self) private var theme
-    @Environment(\.userActionManager) private var action
-
-    private var gesture: some Gesture {
-        DragGesture(minimumDistance: 0)
-            .onChanged {value in
-                switch self.gestureState {
-                case .inactive:
-                    self.gestureState = .moving(value.location, 0)
-                case let .moving(previous, count):
-                    let dx = (value.location.x - previous.x)
-                    if dx.isZero {
-                        break
-                    }
-                    let newCount = count + Int(dx / abs(dx))
-                    if newCount > 1 {
-                        self.gestureState = .moving(value.location, 0)
-                        self.action.registerAction(.moveCursor(1), variableStates: variableStates)
-                    } else if newCount < -1 {
-                        self.gestureState = .moving(value.location, 0)
-                        self.action.registerAction(.moveCursor(-1), variableStates: variableStates)
-                    } else {
-                        self.gestureState = .moving(value.location, newCount)
-                    }
+            .onChange(of: variableStates.surroundingText) { newValue in
+                withAnimation(.easeOut(duration: 0.1)) {
+                    cursorBarState.updateLine(leftText: newValue.leftSideText + newValue.centerText, rightText: newValue.rightSideText)
                 }
             }
-            .onEnded {_ in
-                self.gestureState = .inactive
-            }
-    }
-
-    private var centerColor: Color {
-        theme.pushedKeyFillColor.color
-    }
-
-    private var edgeColor: Color {
-        theme.backgroundColor.color
-    }
-
-    private var symbolsFontWeight: Font.Weight {
-        theme.textFont.weight
-    }
-
-    private var symbolsColor: Color {
-        theme.resultTextColor.color
-    }
-
-    private var useBeta: Bool {
-        Extension.SettingProvider.useBetaMoveCursorBar
-    }
-
-    var body: some View {
-        if useBeta {
-            MoveCursorBarBeta<Extension>()
-        } else {
-            Group {
-                RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: 200)
-                    .cornerRadius(20)
-                    .gesture(gesture)
-                    .overlay(HStack {
-                        Spacer()
-                        Button(action: {
-                            self.action.registerAction(.moveCursor(-1), variableStates: variableStates)
-                        }, label: {
-                            Image(systemName: "chevron.left.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
-                                .padding()
-                        })
-                        Spacer()
-                        Image(systemName: "circle.fill").font(.system(size: 22, weight: symbolsFontWeight, design: .default))
-                        Spacer()
-                        Button(action: {
-                            self.action.registerAction(.moveCursor(1), variableStates: variableStates)
-                        }, label: {
-                            Image(systemName: "chevron.right.2").font(.system(size: 18, weight: symbolsFontWeight, design: .default))
-                                .padding()
-                        })
-                        Spacer()
-                    }.foregroundStyle(symbolsColor))
-            }
-        }
     }
 }
+

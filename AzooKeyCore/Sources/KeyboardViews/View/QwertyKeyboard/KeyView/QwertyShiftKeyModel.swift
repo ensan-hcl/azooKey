@@ -25,7 +25,7 @@ struct QwertyShiftKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
         }
     }
 
-    var longPressActions: LongpressActionType {
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
         .init(start: [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .toggle)])
     }
 

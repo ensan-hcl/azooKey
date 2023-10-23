@@ -30,10 +30,7 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
 
     var body: some View {
         HStack {
-            KeyboardBarButton<Extension> {
-                self.action.registerAction(.setTabBar(.on), variableStates: variableStates)
-            }
-
+            TabBarButton<Extension>()
             if !showResults {
                 // 見た目だけ表示しておいて、実際はoverlayのボタンになっている
                 InKeyboardSearchBar(text: $searchQuery, configuration: searchBarDesign)
@@ -59,7 +56,7 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
                 .matchedGeometryEffect(id: "SearchBar", in: namespace)
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 10) {
-                        ForEach(variableStates.resultModelVariableSection.results, id: \.id) {(data: ResultData) in
+                        ForEach(variableStates.resultModel.results, id: \.id) {(data: ResultData) in
                             if data.candidate.inputable {
                                 Button(data.candidate.text) {
                                     KeyboardFeedback<Extension>.click()
@@ -80,7 +77,7 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
                 }
             }
         }
-        .onChange(of: variableStates.resultModelVariableSection.results.first?.candidate.text) { newValue in
+        .onChange(of: variableStates.resultModel.results.first?.candidate.text) { newValue in
             if newValue == nil && showResults {
                 withAnimation(.easeIn(duration: 0.2)) {
                     showResults = false

@@ -265,6 +265,7 @@ public enum Design {
 
         enum LabelFontSizeStrategy {
             case max
+            case xlarge
             case large
             case medium
             case small
@@ -272,6 +273,8 @@ public enum Design {
 
             var scale: CGFloat {
                 switch self {
+                case .xlarge:
+                    return 1.2
                 case .large, .max:
                     return 1
                 case .medium:

@@ -810,6 +810,26 @@
         }
       }
     },
+    "%lld個隣の候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select candidates %lld positions away"
+          }
+        }
+      }
+    },
+    "%lld番目の候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select %lldth candidate"
+          }
+        }
+      }
+    },
     "%を新規作成" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1857,22 +1877,6 @@
         }
       }
     },
-    "カーソルバー" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cursor bar"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "カーソルバーの切り替え" : {
       "localizations" : {
         "en" : {
@@ -1917,6 +1921,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "カーソルバーを表示" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show cursor bar"
           }
         }
       }
@@ -3568,6 +3582,16 @@
         }
       }
     },
+    "ダークモード" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark mode"
+          }
+        }
+      }
+    },
     "ダークモードで使用" : {
       "localizations" : {
         "en" : {
@@ -4198,6 +4222,16 @@
         }
       }
     },
+    "バー" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bars"
+          }
+        }
+      }
+    },
     "バージョン" : {
       "localizations" : {
         "en" : {
@@ -4268,22 +4302,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Getting file"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "フィードバックを募集します" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feedback wanted"
           }
         },
         "ja" : {
@@ -4828,36 +4846,12 @@
         }
       }
     },
-    "より強力な学習を有効化 (試験版)" : {
-      "extractionState" : "manual",
+    "ライトモード" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enable more strong learning (experimental)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "より長い期間学習が保持されます。\n試験的機能のため、予告なく提供を終了する可能性があります。" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Histories can be remembered much longer. \nSince this is an experimental feature, this feature may be discontinued without notice."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
+            "value" : "Light mode"
           }
         }
       }
@@ -5392,6 +5386,16 @@
         }
       }
     },
+    "便利なボタンを追加" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add useful buttons"
+          }
+        }
+      }
+    },
     "便利な使い方" : {
       "localizations" : {
         "en" : {
@@ -5687,6 +5691,16 @@
         }
       }
     },
+    "最初の候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select first candidate"
+          }
+        }
+      }
+    },
     "最初の設定" : {
       "localizations" : {
         "en" : {
@@ -5731,6 +5745,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "最後の候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select last candidate"
           }
         }
       }
@@ -6891,6 +6915,23 @@
         }
       }
     },
+    "操作性が向上した新しいカーソルバーを有効化します。" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable new cursor bar which has been greatly improved usability."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
+    },
     "改行キー" : {
       "localizations" : {
         "en" : {
@@ -7147,30 +7188,13 @@
         }
       }
     },
-    "新しいカーソルバーを使う (試験版)" : {
+    "新しいカーソルバーを使う" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Use new cursor bar (experimental)"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "新しいカーソルバーを有効化します。\n試験的機能のため、予告なく提供を終了する可能性があります。" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable new cursor bar. \nSince this is an experimental feature, this feature may be discontinued without notice."
+            "value" : "Use new cursor bar"
           }
         },
         "ja" : {
@@ -7831,6 +7855,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "次候補キー" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next candidate key"
           }
         }
       }
@@ -8528,6 +8562,16 @@
         }
       }
     },
+    "絵文字タブを表示" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show emoji tab"
+          }
+        }
+      }
+    },
     "絵文字と顔文字" : {
       "localizations" : {
         "en" : {
@@ -8604,6 +8648,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "編集" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
           }
         }
       }
@@ -9585,6 +9639,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select"
           }
         }
       }

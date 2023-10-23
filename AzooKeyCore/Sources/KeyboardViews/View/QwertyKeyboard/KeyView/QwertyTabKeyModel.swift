@@ -26,8 +26,10 @@ struct QwertyTabKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Q
         }
 
     }
-    let longPressActions: LongpressActionType = .none
-    /// 暫定
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
+    }
+
     let variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false

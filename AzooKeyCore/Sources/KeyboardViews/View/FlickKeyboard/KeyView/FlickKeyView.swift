@@ -32,6 +32,7 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
 
     @State private var pressState: KeyPressState = .inactive
     @Binding private var suggestState: FlickSuggestState
+    @State private var suggestDismissTask: Task<Void, any Error>?
     // TODO: 消せるはず
     @State private var startLocation: CGPoint?
 
@@ -82,12 +83,12 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
                     self.model.feedback(variableStates: variableStates)
                     withAnimation(suggestAnimation) {
                         // サジェストが必要な設定なら
-                        if self.model.needSuggestView && self.model.longPressActions == .none {
+                        if self.model.needSuggestView && self.model.longPressActions(variableStates: variableStates) == .none {
                             // 全てのサジェストを表示する
                             self.setSuggestState(.all)
                         }
                         // 長押しの予約をする。
-                        self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
+                        self.action.reserveLongPressAction(self.model.longPressActions(variableStates: variableStates), variableStates: variableStates)
                     }
                 // 押し始めた後の変化である場合。
                 case let .started(date):
@@ -97,8 +98,10 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
                         self.setSuggestState(nil)
                         // 一つの方向でサジェストされた状態を登録する。
                         pressState = .oneDirectionSuggested(d, Date())
+                        // もしサジェストを非表示にするタスクが走っていたら、キャンセルする
+                        self.suggestDismissTask?.cancel()
                         // 長押しされなかったと判断して終了する。
-                        self.action.registerLongPressActionEnd(self.model.longPressActions)
+                        self.action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                         // 長フリックを予約する
                         self.longFlickReserve(d)
                     }
@@ -142,7 +145,7 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
                             // 一つの方向でサジェストされた状態を登録する。
                             pressState = .oneDirectionSuggested(d, Date())
                             // 長押しは終わりと判断して終了する。
-                            self.action.registerLongPressActionEnd(self.model.longPressActions)
+                            self.action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                             // 長フリックを予約する
                             self.longFlickReserve(d)
                         }
@@ -164,8 +167,13 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
             // タップの終了時
             .onEnded {_ in
                 // サジェストを解除する
-                self.setSuggestState(nil)
-
+                // 少しdelayを入れることで表示がはっきりして、「フリックした感」が強まる
+                self.suggestDismissTask = Task {
+                    // 0.1秒だともたつき感、0.05秒だと短すぎ、という感じ
+                    try await Task.sleep(nanoseconds: 0_070_000_000)
+                    try Task.checkCancellation()
+                    self.setSuggestState(nil)
+                }
                 // 押しはじめて、そのあと動きがなかった場合ここに来る。
                 if case let .started(date) = pressState {
                     // もし0.4秒以上経っていたら
@@ -184,7 +192,7 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
                     }
                 }
                 // 有無を言わさず終わらせる
-                self.action.registerLongPressActionEnd(self.model.longPressActions)
+                self.action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                 self.flickKeys().forEach {_, flickKey in
                     self.action.registerLongPressActionEnd(flickKey.longPressActions)
                 }

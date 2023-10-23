@@ -240,7 +240,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).languageKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
-            QwertySpaceKeyModel<Extension>(),
+            QwertyNextCandidateKeyModel<Extension>(),
             QwertyEnterKeyModel<Extension>.shared
         ]
     ]
@@ -462,7 +462,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).languageKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
-            QwertySpaceKeyModel<Extension>(),
+            QwertyNextCandidateKeyModel<Extension>(),
             QwertyEnterKeyModel<Extension>.shared
         ]
     ]}
@@ -507,7 +507,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
-            QwertySpaceKeyModel<Extension>(),
+            QwertyNextCandidateKeyModel<Extension>(),
             QwertyEnterKeyModel<Extension>.shared
         ]
     ]}
@@ -564,7 +564,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
-            QwertySpaceKeyModel<Extension>(),
+            QwertyNextCandidateKeyModel<Extension>(),
             QwertyEnterKeyModel<Extension>.shared
         ]
     ]}

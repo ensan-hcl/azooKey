@@ -233,7 +233,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     func updateResultView(_ candidates: [any ResultViewItemData]) {
-        KeyboardViewController.variableStates.resultModelVariableSection.setResults(candidates)
+        KeyboardViewController.variableStates.resultModel.setResults(candidates)
     }
 
     func makeChangeKeyboardButtonView<Extension: ApplicationSpecificKeyboardViewExtension>(size: CGFloat) -> ChangeKeyboardButtonView<Extension> {

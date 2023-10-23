@@ -18,17 +18,14 @@ private struct FocusViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         let shadowColor = focused ? color : .clear
-        let shadowRadius: CGFloat = focused ? 0.5 : .zero
+        let shadowRadius: CGFloat = focused ? 3.0 : .zero
         return content
-            .shadow(color: shadowColor, radius: shadowRadius, x: 1)
-            .shadow(color: shadowColor, radius: shadowRadius, x: -1)
-            .shadow(color: shadowColor, radius: shadowRadius, y: 1)
-            .shadow(color: shadowColor, radius: shadowRadius, y: -1)
+            .shadow(color: shadowColor, radius: shadowRadius)
     }
 }
 
 extension View {
-    func focus(_ color: Color, focused: Bool) -> some View {
+    func focus(_ color: Color = .accentColor, focused: Bool) -> some View {
         self.modifier(FocusViewModifier(color: color, focused: focused))
     }
 }

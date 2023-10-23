@@ -30,7 +30,7 @@ struct FlickKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: V
 
     var body: some View {
         let layout = CustardInterfaceLayoutGridValue(rowCount: Int(tabDesign.horizontalKeyCount), columnCount: Int(tabDesign.verticalKeyCount))
-        CustardFlickKeysView(models: models, tabDesign: tabDesign, layout: layout) {(view: FlickKeyView<Extension>, _, _) in
+        CustardFlickKeysView(models: models, tabDesign: tabDesign, layout: layout, blur: true) {(view: FlickKeyView<Extension>, _, _) in
             view
         }
     }

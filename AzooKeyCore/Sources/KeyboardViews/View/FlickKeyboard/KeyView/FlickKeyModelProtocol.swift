@@ -36,9 +36,8 @@ public protocol FlickKeyModelProtocol<Extension> {
 
     @MainActor var needSuggestView: Bool {get}
 
-    @MainActor var longPressActions: LongpressActionType {get}
-
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func longPressActions(variableStates: VariableStates) -> LongpressActionType
     @MainActor func backGroundColorWhenPressed<ThemeExtension: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>(theme: ThemeData<ThemeExtension>) -> Color
     @MainActor func backGroundColorWhenUnpressed<ThemeExtension: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>(states: VariableStates, theme: ThemeData<ThemeExtension>) -> Color
 

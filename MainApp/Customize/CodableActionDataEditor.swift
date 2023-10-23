@@ -16,8 +16,8 @@ import SwiftUIUtils
 extension CodableActionData {
     var hasAssociatedValue: Bool {
         switch self {
-        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication: return true
-        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard, .paste: return false
+        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication, .selectCandidate: true
+        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard, .paste: false
         }
     }
 
@@ -31,6 +31,13 @@ extension CodableActionData {
         case .paste: return "ペーストする"
         case .moveTab: return "タブの移動"
         case .replaceLastCharacters: return "文字を置換"
+        case let .selectCandidate(selection): 
+            return switch selection {
+            case .first: "最初の候補を選択"
+            case .last: "最後の候補を選択"
+            case .offset(let value): "\(value)個隣の候補を選択"
+            case .exact(let value): "\(value)番目の候補を選択"
+            }
         case .complete: return "確定"
         case .replaceDefault: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
         case .smartDeleteDefault: return "文頭まで削除"

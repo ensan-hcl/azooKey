@@ -22,8 +22,8 @@ public enum KeyLabelType {
 public struct KeyLabel<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let labelType: KeyLabelType
     private let width: CGFloat
-    private let textColor: Color?
-    private let textSize: Design.Fonts.LabelFontSizeStrategy
+    private var textColor: Color?
+    private var textSize: Design.Fonts.LabelFontSizeStrategy
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
     @EnvironmentObject private var variableStates: VariableStates
@@ -98,5 +98,14 @@ public struct KeyLabel<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
                     .offset(y: -1)
             }.allowsHitTesting(false)
         }
+    }
+
+    consuming func textColor(_ color: Color?) -> Self {
+        self.textColor = color
+        return self
+    }
+    consuming func textSize(_ textSize: Design.Fonts.LabelFontSizeStrategy) -> Self {
+        self.textSize = textSize
+        return self
     }
 }

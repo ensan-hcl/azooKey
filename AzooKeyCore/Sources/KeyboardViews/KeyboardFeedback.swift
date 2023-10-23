@@ -7,22 +7,26 @@
 //
 
 import func AudioToolbox.AudioServicesPlaySystemSound
-import Foundation
+import typealias AudioToolbox.SystemSoundID
 import class UIKit.UIImpactFeedbackGenerator
 
+private enum UIImpactFeedbackGeneratorHolder {
+    @MainActor static let generator = UIImpactFeedbackGenerator(style: .light)
+}
 /// フィードバックを返すためのツールセット
-@MainActor public enum KeyboardFeedback<Extension: ApplicationSpecificKeyboardViewExtension> {
+public enum KeyboardFeedback<Extension: ApplicationSpecificKeyboardViewExtension> {
+    @MainActor
     private static var enableSound: Bool {
         Extension.SettingProvider.enableSound
     }
+    @MainActor
     private static var requestedHaptics: Bool {
         Extension.SettingProvider.enableHaptics
     }
+    @MainActor
     private static var enableHaptics: Bool {
         SemiStaticStates.shared.hapticsAvailable && SemiStaticStates.shared.hasFullAccess && requestedHaptics
     }
-    // FIXME: possibly too heavy
-    private static var  generator: UIImpactFeedbackGenerator { UIImpactFeedbackGenerator(style: .light) }
 
     // 使えそうな音
     /* i
@@ -42,53 +46,54 @@ import class UIKit.UIImpactFeedbackGenerator
     /// 入力を伴う操作を行う際にフィードバックを返します。
     /// - Note: 押しはじめに鳴らす方が反応が良く感じます。
     public static func click() {
-        if enableSound {
-            AudioServicesPlaySystemSound(1104)
-        }
-        if enableHaptics {
-            generator.impactOccurred(intensity: 0.7)
-        }
+        playSystemSound(1104)
+        impactOnMainActor(intensity: 0.7)
     }
 
     /// タブの移動、入力の確定、小仮名濁点化、カーソル移動などを伴う操作を行う際にフィードバックを返します。
     /// - Note: 押しはじめに鳴らす方が反応が良く感じます。
     public static func tabOrOtherKey() {
-        if enableSound {
-            AudioServicesPlaySystemSound(1156)
-        }
-        if enableHaptics {
-            generator.impactOccurred(intensity: 0.75)
-        }
+        playSystemSound(1156)
+        impactOnMainActor(intensity: 0.75)
     }
 
     /// 文字の削除などを伴う操作を行う際に音を鳴らします。
     /// - Note: 押しはじめに鳴らす方が反応が良く感じます。
     public static func delete() {
-        if enableSound {
-            AudioServicesPlaySystemSound(1155)
-        }
-        if enableHaptics {
-            generator.impactOccurred(intensity: 0.75)
-        }
+        playSystemSound(1155)
+        impactOnMainActor(intensity: 0.75)
     }
 
     /// 文字の一括削除の操作を行う際にフィードバックを返します。
     public static func smoothDelete() {
-        if enableSound {
-            AudioServicesPlaySystemSound(1105)
-        }
-        if enableHaptics {
-            generator.impactOccurred(intensity: 0.8)
-        }
+        playSystemSound(1105)
+        impactOnMainActor(intensity: 0.8)
     }
 
     /// 操作のリセットを行うときにフィードバックを返します。
     public static func reset() {
-        if enableSound {
-            AudioServicesPlaySystemSound(1533)
+        playSystemSound(1533)
+        impactOnMainActor(intensity: 1)
+    }
+
+    /// systemSoundの再生のラッパー
+    /// - Note: `generator.impactOccurred`はMainActor上でのみ動作する
+    public static func impactOnMainActor(intensity: Double) {
+        Task { @MainActor in
+            if enableHaptics {
+                UIImpactFeedbackGeneratorHolder.generator.impactOccurred(intensity: intensity)
+            }
         }
-        if enableHaptics {
-            generator.impactOccurred(intensity: 1)
+    }
+
+    /// systemSoundの再生のラッパー
+    /// - Note: `AudioServicesPlaySystemSound`は非同期で呼び出さないと爆音が鳴ることがある
+    public static func playSystemSound(_ id: SystemSoundID) {
+        Task {
+            if await enableSound {
+                // 再生自体は非同期で実行される
+                AudioServicesPlaySystemSound(id)
+            }
         }
     }
 }

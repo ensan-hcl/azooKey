@@ -356,11 +356,11 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
             if !self.emojis[.recent, default: []].isEmpty {
                 self.selectedGenre = .recent
             }
-            variableStates.resultModelVariableSection.setResults([])
+            variableStates.resultModel.setResults([])
             variableStates.barState = .none
         }
         .onDisappear {
-            variableStates.resultModelVariableSection.setResults([])
+            variableStates.resultModel.setResults([])
         }
     }
 }
@@ -377,10 +377,12 @@ private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtensio
         self.action = action
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
-    let longPressActions: LongpressActionType = .none
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         []
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.tabOrOtherKey()
@@ -403,10 +405,12 @@ private struct GenreKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
         self.unpressedKeyColorType = unpressedKeyColorType
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType
-    let longPressActions: LongpressActionType = .none
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         []
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.tabOrOtherKey()
@@ -442,6 +446,9 @@ private struct EmojiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
     }
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         [.input(emoji)]
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.click()

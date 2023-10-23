@@ -46,7 +46,7 @@ import SwiftUtils
     func setResultViewUpdateCallback(_ variableStates: VariableStates) {
         self.inputManager.setUpdateResult { [weak variableStates] in
             if let variableStates {
-                $0(&variableStates.resultModelVariableSection)
+                $0(&variableStates.resultModel)
             }
         }
     }
@@ -190,8 +190,12 @@ import SwiftUtils
         case .enter:
             self.showResultView(variableStates: variableStates)
             self.shiftStateOff(variableStates: variableStates)
-            let actions = self.inputManager.enter(requireSetResult: requireSetResult)
-            self.registerActions(actions, variableStates: variableStates)
+            if let candidate = variableStates.resultModel.getSelectedCandidate() {
+                self.notifyComplete(candidate, variableStates: variableStates)
+            } else {
+                let actions = self.inputManager.enter(requireSetResult: requireSetResult)
+                self.registerActions(actions, variableStates: variableStates)
+            }
 
         case .changeCharacterType:
             self.showResultView(variableStates: variableStates)
@@ -203,6 +207,8 @@ import SwiftUtils
             self.shiftStateOff(variableStates: variableStates)
             self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
 
+        case let .selectCandidate(selection):
+            variableStates.resultModel.setSelectionRequest(selection)
         case let .moveTab(type):
             // タブ移動ではシフトを解除しない
             variableStates.setTab(type)
@@ -272,7 +278,7 @@ import SwiftUtils
             }
         case let .setSearchQuery(query, target):
             let results = self.inputManager.getSearchResult(query: query, target: target)
-            variableStates.resultModelVariableSection.setSearchResults(results)
+            variableStates.resultModel.setSearchResults(results)
         }
 
         if requireSetResult {
@@ -281,7 +287,9 @@ import SwiftUtils
             let (left, center, right) = self.inputManager.getSurroundingText()
             variableStates.setSurroundingText(leftSide: left, center: center, rightSide: right)
             // エンターキーの状態
-            variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
+            variableStates.setEnterKeyState(
+                variableStates.resultModel.getSelectedCandidate() == nil ? self.inputManager.getEnterKeyState() : .complete
+            )
             // 文字列の変更を適用
             variableStates.textChangedCount = self.inputManager.getTextChangedCount()
             // 必要に応じて予測変換をリセット
@@ -306,21 +314,33 @@ import SwiftUtils
         self.doAction(action, variableStates: variableStates)
     }
 
-    /// 複数のアクションを実行する
-    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
-    ///  サポートされている最適化
-    /// - `setResult`を一度のみ実施する
-    override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
-        let isSetActionTrigger = actions.map { action in
-            switch action {
-            case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
-                return true
-            default:
-                return false
-            }
+    private enum ActionTriggerStyle {
+        /// 集約対象ではない
+        case irrelevant
+        /// 集約を強制的に止める
+        case separator
+        /// 集約できるアクション
+        case maybe
+    }
+
+    private func actionTriggerStyle(_ action: ActionType) -> ActionTriggerStyle {
+        switch action {
+        case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
+            .maybe
+        case .enter:
+            .separator
+        default:
+            .irrelevant
         }
-        if let lastIndex = isSetActionTrigger.lastIndex(where: { $0 }) {
-            for (i, action) in actions.enumerated() {
+    }
+
+    /// actionの塊を実行する
+    ///  - parameters:
+    ///    - actionBlock: アクションの一連の列。1つのブロックの中には任意個の集約対象のアクションと集約対象でないアクションが含まれ、先頭にのみ集約できないアクションが出現できる
+    private func runActionBlock(actionBlock: some BidirectionalCollection<ActionType>, variableStates: VariableStates) {
+        // setResult可能な最後の
+        if let lastIndex = actionBlock.lastIndex(where: { actionTriggerStyle($0) != .irrelevant }) {
+            for (i, action) in zip(actionBlock.indices, actionBlock) {
                 if i == lastIndex {
                     self.doAction(action, requireSetResult: true, variableStates: variableStates)
                 } else {
@@ -328,10 +348,24 @@ import SwiftUtils
                 }
             }
         } else {
-            for action in actions {
+            for action in actionBlock {
                 self.doAction(action, variableStates: variableStates)
             }
         }
+    }
+
+    /// 複数のアクションを実行する
+    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
+    ///  サポートされている最適化
+    /// - `setResult`を一度のみ実施する
+    override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
+        var actions = actions[...]
+        while let firstIndex = actions.firstIndex(where: { actionTriggerStyle($0) == .separator }) {
+            self.runActionBlock(actionBlock: actions[..<firstIndex], variableStates: variableStates)
+            self.doAction(actions[firstIndex], variableStates: variableStates)
+            actions = actions[(firstIndex + 1)...]
+        }
+        self.runActionBlock(actionBlock: actions, variableStates: variableStates)
     }
 
     /// 長押しを予約する関数。
@@ -490,7 +524,6 @@ import SwiftUtils
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String, variableStates: VariableStates) {
         defer {
-            // moveCursorBarStateの更新
             variableStates.setSurroundingText(leftSide: a_left, center: a_center, rightSide: a_right)
             // エンターキーの状態の更新
             variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
@@ -556,6 +589,8 @@ import SwiftUtils
                 50
             }
             self.inputManager.userSelectedText(text: a_center, lengthLimit: lengthLimit)
+            // barStateの更新
+            variableStates.barState = .none
             return
         }
 
@@ -572,7 +607,8 @@ import SwiftUtils
             if !wasSelected && !isSelected && b_left != a_left {
                 debug("user operation id: 2", b_left, a_left)
                 let offset = a_left.count - b_left.count
-                self.inputManager.userMovedCursor(count: offset)
+                let actions = self.inputManager.userMovedCursor(count: offset)
+                self.registerActions(actions, variableStates: variableStates)
                 // カーソルが動いているのでtextChangedCountを増やす
                 variableStates.textChangedCount += 1
                 self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
@@ -632,9 +668,10 @@ import SwiftUtils
             return
         }
 
-        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
+        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合→ユーザがカーソルをジャンプした
         debug("user operation id: 10, \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
-        self.inputManager.stopComposition()
+        let actions = self.inputManager.userJumpedCursor()
+        self.registerActions(actions, variableStates: variableStates)
     }
 
     private func hideLearningMemory() {

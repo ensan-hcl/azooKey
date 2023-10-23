@@ -44,7 +44,7 @@ struct DraggableView<Content: View, Collection: BidirectionalCollection & Random
                         separator
                             .focus(.accentColor, focused: true)
                     }
-                    DraggableItem(selectedIndex: $selectedIndex, index: i, update: update, onEnd: onEnd, enabled: enabled) {
+                    DraggableItem(selectedIndex: $selectedIndex, index: i, update: { self.update(index: $0, delta: $1) }, onEnd: onEnd, enabled: enabled) {
                         contentConverter(items[i], selectedIndex == i)
                     }
                     .frame(width: width, height: height)
@@ -94,6 +94,7 @@ struct DraggableView<Content: View, Collection: BidirectionalCollection & Random
 
     }
 
+    @MainActor
     private func update(index: Int, delta: CGFloat) {
         DispatchQueue.main.async {
             self.targetIndex = self.pointedIndex(index: index, delta: delta)

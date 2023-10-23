@@ -121,7 +121,7 @@ public final class VariableStates: ObservableObject {
     private(set) public var keyboardType: UIKeyboardType = .default
 
     /// `ResultModel`の変数
-    @Published public var resultModelVariableSection = ResultModelVariableSection()
+    @Published public var resultModel = ResultModel()
 
     // Bool値の変数はここにまとめる
     @Published public var boolStates = BoolStates()
@@ -162,19 +162,19 @@ public final class VariableStates: ObservableObject {
 
     @Published public var undoAction: UndoAction?
 
-    @Published var moveCursorBarState = BetaMoveCursorBarState()
-
-    @Published private(set) var leftSideText: String = ""
-    @Published private(set) var centerText: String = ""
-    @Published private(set) var rightSideText: String = ""
+    struct SurroundingText: Equatable, Hashable, Sendable {
+        var leftSideText: String = ""
+        var centerText: String = ""
+        var rightSideText: String = ""
+    }
+    @Published private(set) var surroundingText = SurroundingText()
 
     @Published public var temporalMessage: TemporalMessage?
 
     public func setSurroundingText(leftSide: String, center: String, rightSide: String) {
-        self.leftSideText = leftSide
-        self.centerText = center
-        self.rightSideText = rightSide
-        self.moveCursorBarState.updateLine(leftText: leftSide + center, rightText: rightSide)
+        self.surroundingText.leftSideText = leftSide
+        self.surroundingText.centerText = center
+        self.surroundingText.rightSideText = rightSide
     }
 
     @MainActor public func setResizingMode(_ state: ResizingState) {
@@ -197,7 +197,6 @@ public final class VariableStates: ObservableObject {
 
     @MainActor public func initialize() {
         self.tabManager.initialize(variableStates: self)
-        self.moveCursorBarState.clear()
     }
 
     @MainActor public func closeKeyboard() {

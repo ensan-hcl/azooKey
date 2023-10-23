@@ -35,7 +35,7 @@ struct UpsideSearchView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
         VStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 10) {
-                    ForEach(variableStates.resultModelVariableSection.searchResults, id: \.id) {(data: ResultData) in
+                    ForEach(variableStates.resultModel.searchResults, id: \.id) {(data: ResultData) in
                         if data.candidate.inputable {
                             Button(data.candidate.text) {
                                 KeyboardFeedback<Extension>.click()
@@ -76,7 +76,7 @@ struct UpsideSearchView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
             self.action.setTextDocumentProxy(.preference(.ikTextField))
         }
         .onDisappear {
-            self.variableStates.resultModelVariableSection.setSearchResults([])
+            self.variableStates.resultModel.setSearchResults([])
         }
     }
     private func pressed(candidate: any ResultViewItemData) {

@@ -51,7 +51,7 @@ import UIKit
     private var rubyLog: OrderedDictionary<String, String> = [:]
 
     // 変換結果の通知用関数
-    private var updateResult: (((inout ResultModelVariableSection) -> Void) -> Void)?
+    private var updateResult: (((inout ResultModel) -> Void) -> Void)?
 
     private var liveConversionEnabled: Bool {
         liveConversionManager.enabled && !self.isSelected
@@ -202,7 +202,7 @@ import UIKit
         self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
-    func setUpdateResult(_ updateResult: (((inout ResultModelVariableSection) -> Void) -> Void)?) {
+    func setUpdateResult(_ updateResult: (((inout ResultModel) -> Void) -> Void)?) {
         self.updateResult = updateResult
     }
 
@@ -803,15 +803,35 @@ import UIKit
 
     /// ユーザがキーボードを経由せずにカーソルを何かした場合の後処理を行う関数。
     ///  - note: この関数をユーティリティとして用いてはいけない。
-    func userMovedCursor(count: Int) {
+    func userMovedCursor(count: Int) -> [ActionType] {
         debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
-        if composingText.isEmpty {
+        // 選択しているテキストがある場合はリザルトバーを表示する
+        if self.isSelected {
+            // リザルトバーを表示する
+            return [.setCursorBar(.off), .setTabBar(.off)]
+        }
+        // 入力テキストなし
+        if self.composingText.isEmpty {
             // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
-            return
+            return [.setCursorBar(.on)]
+        }
+        // ライブ変換有効
+        if liveConversionEnabled {
+            return [.setCursorBar(.on)]
         }
         let actualCount = composingText.moveCursorFromCursorPosition(count: count)
         self.previousSystemOperation = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, adjustedMovedCount: actualCount) ? .moveCursor : nil
         setResult()
+        return [.setCursorBar(.off), .setTabBar(.off)]
+    }
+
+    /// ユーザが行を跨いでカーソルを動かした場合に利用する
+    func userJumpedCursor() -> [ActionType] {
+        if self.composingText.isEmpty {
+            return [.setCursorBar(.on)]
+        }
+        self.stopComposition()
+        return []
     }
 
     /// ユーザがキーボードを経由せずカットした場合の処理
