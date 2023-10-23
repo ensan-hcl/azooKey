@@ -15,25 +15,22 @@ import SwiftUIUtils
 public struct TabDependentDesign {
     let horizontalKeyCount: CGFloat
     let verticalKeyCount: CGFloat
-    let layout: KeyboardLayout
     let orientation: KeyboardOrientation
 
     private var interfaceWidth: CGFloat
     private var interfaceHeight: CGFloat
 
-    public init(width: Int, height: Int, interfaceSize: CGSize, layout: KeyboardLayout, orientation: KeyboardOrientation) {
+    public init(width: Int, height: Int, interfaceSize: CGSize, orientation: KeyboardOrientation) {
         self.horizontalKeyCount = CGFloat(width)
         self.verticalKeyCount = CGFloat(height)
-        self.layout = layout
         self.orientation = orientation
         self.interfaceWidth = interfaceSize.width
         self.interfaceHeight = interfaceSize.height
     }
 
-    public init(width: CGFloat, height: CGFloat, interfaceSize: CGSize, layout: KeyboardLayout, orientation: KeyboardOrientation) {
+    public init(width: CGFloat, height: CGFloat, interfaceSize: CGSize, orientation: KeyboardOrientation) {
         self.horizontalKeyCount = width
         self.verticalKeyCount = height
-        self.layout = layout
         self.orientation = orientation
         self.interfaceWidth = interfaceSize.width
         self.interfaceHeight = interfaceSize.height
@@ -42,10 +39,10 @@ public struct TabDependentDesign {
     /// screenWidthとhorizontalKeyCountに依存
     var keyViewWidth: CGFloat {
         let coefficient: CGFloat
-        switch (layout, orientation) {
-        case (_, .vertical):
+        switch orientation {
+        case .vertical:
             coefficient = 5 / (5.1 + horizontalKeyCount / 10)
-        case (_, .horizontal):
+        case .horizontal:
             coefficient = 10 / (10.2 + horizontalKeyCount * 0.28)
         }
         return interfaceWidth / horizontalKeyCount * coefficient
@@ -72,15 +69,11 @@ public struct TabDependentDesign {
     }
 
     var verticalSpacing: CGFloat {
-        switch (layout, orientation) {
-        case (.flick, .vertical):
-            return interfaceWidth * 3 / 140
-        case (.flick, .horizontal):
+        switch orientation {
+        case .vertical:
+            return interfaceWidth / 50
+        case .horizontal:
             return interfaceWidth / 107
-        case (.qwerty, .vertical):
-            return interfaceWidth / 36.6
-        case (.qwerty, .horizontal):
-            return interfaceWidth / 65
         }
     }
 
