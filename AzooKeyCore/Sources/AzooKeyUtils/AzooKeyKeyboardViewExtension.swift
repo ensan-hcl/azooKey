@@ -95,7 +95,7 @@ public enum AzooKeyKeyboardViewExtension: ApplicationSpecificKeyboardViewExtensi
     }
 
     public static var useShiftKey: Bool {
-        false
+        UseShiftKey.value
     }
 
     public static var canResetLearningForCandidate: Bool {

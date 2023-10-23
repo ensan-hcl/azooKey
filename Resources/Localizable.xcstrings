@@ -1443,6 +1443,17 @@
         }
       }
     },
+    "QwertyキーボードでAaキーの代わりにシフトキーを利用します。" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use shift key instead of Aa key in qwerty keyboards."
+          }
+        }
+      }
+    },
     "unicode変換" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3434,6 +3445,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "シフトキーを使う" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use shift key"
           }
         }
       }

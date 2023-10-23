@@ -179,6 +179,17 @@ public extension KeyboardSettingKey where Self == UseSliderStyleCursorBar {
     static var useSliderStyleCursorBar: Self { .init() }
 }
 
+public struct UseShiftKey: BoolKeyboardSettingKey {
+    public static let title: LocalizedStringKey = "シフトキーを使う"
+    public static let explanation: LocalizedStringKey = "QwertyキーボードでAaキーの代わりにシフトキーを利用します。"
+    public static let defaultValue = false
+    public static let key: String = "use_shift_key"
+}
+
+public extension KeyboardSettingKey where Self == UseShiftKey {
+    static var useShiftKey: Self { .init() }
+}
+
 public struct HideResetButtonInOneHandedMode: BoolKeyboardSettingKey {
     public static let title: LocalizedStringKey = "片手モードで解除ボタンを表示しない"
     public static let explanation: LocalizedStringKey = "片手モードの際に表示される解除ボタンを非表示にします。片手モードの調整はタブバーのボタンから行えます。"
