@@ -73,11 +73,11 @@ private struct CursorBarState: Equatable, Hashable, Sendable {
 
 struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
-
+    
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
-
+    
     private enum SwipeGestureState {
         case inactive
         case tap(l1: CGPoint, l2: CGPoint, l3: CGPoint)
@@ -85,22 +85,23 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
     }
     @State private var swipeGestureState: SwipeGestureState = .inactive
     @State private var cursorBarState = CursorBarState()
-
+    @State private var longPressTask: Task<(), any Error>?
+    
     @MainActor
     private var fontSize: CGFloat {
         Design.fonts.resultViewFontSize(userPrefrerence: Extension.SettingProvider.resultViewFontSize)
     }
-
+    
     @MainActor
     fileprivate var itemWidth: CGFloat {
         fontSize * 1.3
     }
-
+    
     @MainActor
     fileprivate var viewWidth: CGFloat {
         variableStates.interfaceSize.width * 0.85
     }
-
+    
     @MainActor
     var swipeGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
@@ -180,35 +181,34 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
                 swipeGestureState = .inactive
             }
     }
-
+    
     private var centerColor: Color {
         theme.pushedKeyFillColor.color
     }
-
+    
     private var edgeColor: Color {
         theme.backgroundColor.color
     }
-
+    
     private var symbolsFontWeight: Font.Weight {
         theme.textFont.weight
     }
-
+    
     private var symbolsColor: Color {
         theme.resultTextColor.color
     }
-
+    
     @MainActor
     private var background: some View {
         RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: viewWidth / 2)
-            // TODO: ここからframeを消して問題なかったかチェックする
             .cornerRadius(20)
             .gesture(swipeGesture)
     }
-
+    
     private func symbolFont(size: CGFloat) -> Font {
         .system(size: size, weight: symbolsFontWeight, design: .default)
     }
-
+    
     @MainActor
     private var textView: some View {
         HStack(spacing: .zero) {
@@ -232,30 +232,32 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
         .frame(width: viewWidth)
         .clipped()
     }
-
+    
     @MainActor
     private var foregroundButtons: some View {
         ZStack(alignment: .center) {
             textView
             HStack(spacing: .zero) {
-
                 Image(systemName: "chevron.left.2")
                     .font(symbolFont(size: 18))
                     .foregroundStyle(symbolsColor)
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]), variableStates: variableStates)
+                            self.startLongPress(offset: -1)
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
+                                self.longPressTask?.cancel()
                                 debug("touch failed")
                             }
                         } touchUpCallBack: { gestureState in
-                            self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
+                            //                            self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
+                            self.longPressTask?.cancel()
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
                                     cursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
                                 }
+                                KeyboardFeedback<Extension>.tabOrOtherKey()
                             }
                         }
                     )
@@ -271,24 +273,26 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]), variableStates: variableStates)
+                            self.startLongPress(offset: 1)
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
+                                self.longPressTask?.cancel()
                                 debug("touch failed")
                             }
                         } touchUpCallBack: { gestureState in
-                            self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(1)]))
+                            self.longPressTask?.cancel()
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
                                     cursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
                                 }
+                                KeyboardFeedback<Extension>.tabOrOtherKey()
                             }
                         }
                     )
             }
         }
     }
-
+    
     var body: some View {
         background
             .overlay(foregroundButtons)
@@ -302,6 +306,21 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
                     cursorBarState.updateLine(leftText: newValue.leftSideText + newValue.centerText, rightText: newValue.rightSideText)
                 }
             }
+    }
+
+    @MainActor
+    private func startLongPress(offset: Int) {
+        self.longPressTask = Task {
+            // 0.4秒待つ
+            try await Task.sleep(nanoseconds: 0_400_000_000)
+            while !Task.isCancelled {
+                withAnimation(.linear(duration: 0.05)) {
+                    cursorBarState.move(offset, actionManager: self.action, variableStates: variableStates)
+                }
+                KeyboardFeedback<Extension>.tabOrOtherKey()
+                try await Task.sleep(nanoseconds: 0_100_000_000)
+            }
+        }
     }
 }
 
