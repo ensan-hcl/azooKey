@@ -109,16 +109,16 @@ public final class VariableStates: ObservableObject {
             }
         }
     }
-    private(set) public var inputStyle: InputStyle = .direct
-    private(set) public var tabManager: TabManager
-    public var keyboardInternalSettingManager: KeyboardInternalSettingManager
+    @MainActor private(set) public var inputStyle: InputStyle = .direct
+    @Published private(set) public var tabManager: TabManager
+    @Published public var keyboardInternalSettingManager: KeyboardInternalSettingManager
     @Published public var clipboardHistoryManager: ClipboardHistoryManager
 
     @Published public var keyboardLanguage: KeyboardLanguage = .ja_JP
     @Published private(set) public var keyboardOrientation: KeyboardOrientation = .vertical
     @Published private(set) public var keyboardLayout: KeyboardLayout = .flick
 
-    private(set) public var keyboardType: UIKeyboardType = .default
+    @MainActor private(set) public var keyboardType: UIKeyboardType = .default
 
     /// `ResultModel`の変数
     @Published public var resultModel = ResultModel()
@@ -131,7 +131,7 @@ public final class VariableStates: ObservableObject {
     @Published public var interfacePosition: CGPoint = .zero
 
     /// 外部では利用しないが、`enterKeyState`の更新時に必要になる
-    private(set) public var returnKeyType: UIReturnKeyType = .default
+    @MainActor private(set) public var returnKeyType: UIReturnKeyType = .default
     @Published private(set) var enterKeyState: EnterKeyState = .return(.default)
 
     @Published public var barState: BarState = .none
@@ -244,7 +244,7 @@ public final class VariableStates: ObservableObject {
         }
     }
 
-    public func setEnterKeyState(_ state: RoughEnterKeyState) {
+    @MainActor public func setEnterKeyState(_ state: RoughEnterKeyState) {
         switch state {
         case .return:
             self.enterKeyState = .return(returnKeyType)
@@ -266,7 +266,7 @@ public final class VariableStates: ObservableObject {
         self.setTab(tab, temporary: temporary)
     }
 
-    public func setUIReturnKeyType(type: UIReturnKeyType) {
+    @MainActor public func setUIReturnKeyType(type: UIReturnKeyType) {
         self.returnKeyType = type
         if case let .return(prev) = self.enterKeyState, prev != type {
             self.setEnterKeyState(.return)
@@ -287,7 +287,7 @@ public final class VariableStates: ObservableObject {
         self.updateResizingState()
     }
 
-    public func setInputStyle(_ style: InputStyle) {
+    @MainActor public func setInputStyle(_ style: InputStyle) {
         self.inputStyle = style
     }
 
