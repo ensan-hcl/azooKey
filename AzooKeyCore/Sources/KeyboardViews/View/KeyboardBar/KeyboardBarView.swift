@@ -19,7 +19,11 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
     @State private var dismissTask: Task<(), any Error>? = nil
 
     private var useReflectStyleCursorBar: Bool {
-        Extension.SettingProvider.useSliderStyleCursorBar
+        Extension.SettingProvider.useReflectStyleCursorBar
+    }
+
+    private var displayCursorBarAutomatically: Bool {
+        Extension.SettingProvider.displayCursorBarAutomatically
     }
 
     init(isResultViewExpanded: Binding<Bool>) {
@@ -58,6 +62,10 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
     }
 
     private func restartCursorBarDismissTask() {
+        // 自動非表示はdisplayCursorBarAutomaticallyが有効の場合のみにする。
+        guard self.displayCursorBarAutomatically else {
+            return
+        }
         self.dismissTask?.cancel()
         self.dismissTask = Task {
             // 10秒待つ

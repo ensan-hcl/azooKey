@@ -51,7 +51,7 @@ struct SettingTabView: View {
                         }
                     }
                     Section(header: Text("バー")) {
-                        BoolSettingView(.useSliderStyleCursorBar)
+                        BoolSettingView(.useReflectStyleCursorBar)
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.enableClipboardHistoryManagerTab)
                         if SemiStaticStates.shared.hasFullAccess {
