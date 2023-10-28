@@ -791,14 +791,14 @@ import UIKit
             // リザルトバーを表示する
             return [.setCursorBar(.off), .setTabBar(.off)]
         }
+        @KeyboardSetting(.displayCursorBarAutomatically) var displayCursorBarAutomatically
         // 入力テキストなし
         if self.composingText.isEmpty {
-            // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
-            return [.setCursorBar(.on)]
+            return displayCursorBarAutomatically ? [.setCursorBar(.on)] : []
         }
         // ライブ変換有効
         if liveConversionEnabled {
-            return [.setCursorBar(.on)]
+            return displayCursorBarAutomatically ? [.setCursorBar(.on)] : []
         }
         let actualCount = composingText.moveCursorFromCursorPosition(count: count)
         self.previousSystemOperation = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, adjustedMovedCount: actualCount) ? .moveCursor : nil
@@ -809,7 +809,8 @@ import UIKit
     /// ユーザが行を跨いでカーソルを動かした場合に利用する
     func userJumpedCursor() -> [ActionType] {
         if self.composingText.isEmpty {
-            return [.setCursorBar(.on)]
+            @KeyboardSetting(.displayCursorBarAutomatically) var displayCursorBarAutomatically
+            return displayCursorBarAutomatically ? [.setCursorBar(.on)] : []
         }
         self.stopComposition()
         return []
