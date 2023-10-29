@@ -16,7 +16,7 @@ struct UpdateInformationView: View {
             Group {
                 // version 2.2系
                 Group {
-                    VersionView("2.2", releaseDate: "2023年10月xx日") {
+                    VersionView("2.2", releaseDate: "2023年11月xx日") {
                         if #unavailable(iOS 16) {
                             ParagraphView("お知らせ。") {
                                 "バージョン2.3以降でiOS15のサポートを終了します。iOS16以上で引き続きご利用いただけます。ご不便をおかけしますが、よろしくお願いいたします"
@@ -30,13 +30,13 @@ struct UpdateInformationView: View {
                             "再変換を大幅に強化しました。"
                             "「連絡先」に登録されている氏名を読み込んで変換に利用できるようになりました"
                             "テキストを選択した際に表示していた「編集」機能を廃止しました"
-                            "カーソルを動かした際、カーソルバーを表示するようにしました"
+                            "英語のQwertyキーボードでシフトキーが利用できるようになりました"
                             "カスタムキーで「次候補」と「A/a」の特殊キーを選べるようになりました"
                         }
                         ParagraphView("デザインを改善しました") {
                             "サジェストをよりはっきりと表示するようにしました"
                             "カーソルバーのデザインを改善しました"
-                            "iPadでのデザインを改善しました"
+                            "iPadでのアプリのデザインを改善しました"
                         }
                         ParagraphView("複数の不具合を修正しました。")
                         ParagraphView("その他辞書の改善を行いました。")
