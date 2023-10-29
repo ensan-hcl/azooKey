@@ -208,7 +208,7 @@ private struct FunnyAzooKeyIcon: View {
     init(stage: Stage = .normal) {
         self._stage = .init(initialValue: stage)
     }
-    
+
     struct NormalAnimationValue {
         // degrees
         var angle: Double = -10
