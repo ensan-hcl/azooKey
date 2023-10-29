@@ -73,11 +73,11 @@ private struct CursorBarState: Equatable, Hashable, Sendable {
 
 struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
-    
+
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
-    
+
     private enum SwipeGestureState {
         case inactive
         case tap(l1: CGPoint, l2: CGPoint, l3: CGPoint)
@@ -86,22 +86,22 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
     @State private var swipeGestureState: SwipeGestureState = .inactive
     @State private var cursorBarState = CursorBarState()
     @State private var longPressTask: Task<(), any Error>?
-    
+
     @MainActor
     private var fontSize: CGFloat {
         Design.fonts.resultViewFontSize(userPrefrerence: Extension.SettingProvider.resultViewFontSize)
     }
-    
+
     @MainActor
     fileprivate var itemWidth: CGFloat {
         fontSize * 1.3
     }
-    
+
     @MainActor
     fileprivate var viewWidth: CGFloat {
         variableStates.interfaceSize.width * 0.85
     }
-    
+
     @MainActor
     var swipeGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
@@ -181,34 +181,34 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
                 swipeGestureState = .inactive
             }
     }
-    
+
     private var centerColor: Color {
         theme.pushedKeyFillColor.color
     }
-    
+
     private var edgeColor: Color {
         theme.backgroundColor.color
     }
-    
+
     private var symbolsFontWeight: Font.Weight {
         theme.textFont.weight
     }
-    
+
     private var symbolsColor: Color {
         theme.resultTextColor.color
     }
-    
+
     @MainActor
     private var background: some View {
         RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: viewWidth / 2)
             .cornerRadius(20)
             .gesture(swipeGesture)
     }
-    
+
     private func symbolFont(size: CGFloat) -> Font {
         .system(size: size, weight: symbolsFontWeight, design: .default)
     }
-    
+
     @MainActor
     private var textView: some View {
         HStack(spacing: .zero) {
@@ -232,7 +232,7 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
         .frame(width: viewWidth)
         .clipped()
     }
-    
+
     @MainActor
     private var foregroundButtons: some View {
         ZStack(alignment: .center) {
@@ -292,7 +292,7 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
             }
         }
     }
-    
+
     var body: some View {
         background
             .overlay(foregroundButtons)
@@ -323,4 +323,3 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
         }
     }
 }
-

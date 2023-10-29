@@ -76,7 +76,7 @@ struct SliderStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>
                     swipeGestureState = .moving(l1: value.location, l2: l1, l3: l2, count: count)
                 }
             }
-            .onEnded {value in
+            .onEnded {_ in
                 swipeGestureState = .inactive
             }
     }

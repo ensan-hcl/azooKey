@@ -16,7 +16,7 @@ struct KeyboardBarView<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
     @Binding private var isResultViewExpanded: Bool
     @Environment(Extension.Theme.self) private var theme
     // CursorBarは操作がない場合に非表示にする。これをハンドルするためのタスク
-    @State private var dismissTask: Task<(), any Error>? = nil
+    @State private var dismissTask: Task<(), any Error>?
 
     private var useReflectStyleCursorBar: Bool {
         Extension.SettingProvider.useReflectStyleCursorBar

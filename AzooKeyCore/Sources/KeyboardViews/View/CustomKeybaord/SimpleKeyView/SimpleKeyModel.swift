@@ -89,7 +89,7 @@ struct SimpleKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Simp
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         pressActions
     }
-    
+
     func longPressActions(variableStates: VariableStates) -> LongpressActionType {
         longPressActions
     }
@@ -132,7 +132,7 @@ struct SimpleEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
 
 struct SimpleNextCandidateKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
     var unpressedKeyColorType: SimpleUnpressedKeyColorType = .normal
-    
+
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         if variableStates.resultModel.results.isEmpty {
             [.input(" ")]
@@ -167,7 +167,6 @@ struct SimpleNextCandidateKeyModel<Extension: ApplicationSpecificKeyboardViewExt
         theme.specialKeyFillColor.color
     }
 }
-
 
 struct SimpleChangeKeyboardKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
     func pressActions(variableStates: VariableStates) -> [ActionType] {
