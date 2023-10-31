@@ -16,7 +16,7 @@ struct UpdateInformationView: View {
             Group {
                 // version 2.2系
                 Group {
-                    VersionView("2.2", releaseDate: "2023年11月xx日") {
+                    VersionView("2.2", releaseDate: "2023年11月3日") {
                         if #unavailable(iOS 16) {
                             ParagraphView("お知らせ。") {
                                 "バージョン2.3以降でiOS15のサポートを終了します。iOS16以上で引き続きご利用いただけます。ご不便をおかけしますが、よろしくお願いいたします"
