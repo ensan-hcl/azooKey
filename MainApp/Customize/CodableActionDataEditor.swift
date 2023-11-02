@@ -16,8 +16,8 @@ import SwiftUIUtils
 extension CodableActionData {
     var hasAssociatedValue: Bool {
         switch self {
-        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication: return true
-        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard, .paste: return false
+        case .delete, .smartDelete, .input, .replaceLastCharacters, .moveCursor, .smartMoveCursor, .moveTab, .launchApplication, .selectCandidate: true
+        case  .enableResizingMode, .complete, .replaceDefault, .smartDeleteDefault, .toggleCapsLockState, .toggleCursorBar, .toggleTabBar, .dismissKeyboard, .paste: false
         }
     }
 
@@ -31,6 +31,13 @@ extension CodableActionData {
         case .paste: return "ペーストする"
         case .moveTab: return "タブの移動"
         case .replaceLastCharacters: return "文字を置換"
+        case let .selectCandidate(selection):
+            return switch selection {
+            case .first: "最初の候補を選択"
+            case .last: "最後の候補を選択"
+            case .offset(let value): "\(value)個隣の候補を選択"
+            case .exact(let value): "\(value)番目の候補を選択"
+            }
         case .complete: return "確定"
         case .replaceDefault: return "大文字/小文字、拗音/濁音/半濁音の切り替え"
         case .smartDeleteDefault: return "文頭まで削除"
@@ -40,36 +47,12 @@ extension CodableActionData {
         case .dismissKeyboard: return "キーボードを閉じる"
         case .enableResizingMode: return "片手モードをオンにする"
         case let .launchApplication(value):
-            // TODO: Localize
             switch value.scheme {
             case .azooKey:
                 return "azooKey本体アプリを開く"
             case .shortcuts:
                 return "ショートカットを実行する"
             }
-        //        case .setBoolState: return "Bool変数を設定"
-        //        case .boolSwitch: return "条件分岐"
-        //        case let .setCursorBar(value):
-        //            // TODO: LOCALIZE
-        //            switch value {
-        //            case .on: return "カーソルバーを表示する"
-        //            case .off: return "カーソルバーを消す"
-        //            case .toggle: return "カーソルバーの切り替え"
-        //            }
-        //        case let .setCapsLockState(value):
-        //            // TODO: LOCALIZE
-        //            switch value {
-        //            case .on: return "Caps lockのモードのオン"
-        //            case .off: return "Caps lockのモードのオフ"
-        //            case .toggle: return "Caps lockのモードの切り替え"
-        //            }
-        //        case let .setTabBar(value):
-        //            // TODO: LOCALIZE
-        //            switch value {
-        //            case .on: return "タブバーを表示する"
-        //            case .off: return "タブバーを消す"
-        //            case .toggle: return "タブバーの切り替え"
-        //            }
         }
     }
 }
@@ -209,6 +192,18 @@ private struct CodableActionEditor: View {
             Text("負の値を指定すると左にカーソルが動きます")
         case .moveTab:
             ActionMoveTabEditView($action, availableCustards: availableCustards)
+        case .smartDelete(let item):
+            ActionScanItemEditor(action: $action) { item } convert: { value in
+                // 重複を除去し、改行を追加する
+                let targets = Array(Set(value.targets + ["\n"]) )
+                return .smartDelete(ScanItem(targets: targets, direction: value.direction))
+            }
+        case .smartMoveCursor(let item):
+            ActionScanItemEditor(action: $action) { item } convert: { value in
+                // 重複を除去し、改行を追加する
+                let targets = Array(Set(value.targets + ["\n"]) )
+                return .smartMoveCursor(ScanItem(targets: targets, direction: value.direction))
+            }
         case .replaceLastCharacters:
             EmptyView()
         case let .launchApplication(item):
@@ -222,6 +217,49 @@ private struct CodableActionEditor: View {
             }
         default:
             EmptyView()
+        }
+    }
+}
+
+private struct ActionScanItemEditor: View {
+    @Binding private var action: EditingCodableActionData
+    private let convert: (ScanItem) -> CodableActionData?
+    @State private var value: ScanItem = .init(targets: CodableActionData.scanTargets, direction: .backward)
+
+    init(action: Binding<EditingCodableActionData>, initialValue: () -> ScanItem?, convert: @escaping (ScanItem) -> CodableActionData?) {
+        self.convert = convert
+        self._action = action
+        if let initialValue = initialValue() {
+            self._value = State(initialValue: initialValue)
+        }
+    }
+
+    var body: some View {
+        Group {
+            Picker("方向", selection: $value.direction) {
+                Text("左向き").tag(ScanItem.Direction.backward)
+                Text("右向き").tag(ScanItem.Direction.forward)
+            }
+            .pickerStyle(.menu)
+            HStack {
+                Text("目指す文字（改行区切り）")
+                Spacer()
+                TextEditor(text: $value.targets.converted(
+                    // バックスラッシュでエスケープする
+                    forward: {$0.joined(separator: "\n")},
+                    backward: {$0.components(separatedBy: "\n")}
+                ))
+                .background {
+                    Color.systemGray6
+                }
+                .font(.body.monospaced())
+                .frame(maxWidth: 50)
+            }
+        }
+        .onChange(of: value) {value in
+            if let data = convert(value) {
+                action.data = data
+            }
         }
     }
 }
@@ -534,6 +572,12 @@ private struct ActionPicker: View {
                 Button("文頭まで削除") {
                     process(.smartDeleteDefault)
                 }
+                Button("特定の文字まで削除") {
+                    process(.smartDelete(ScanItem(targets: ["。", "、", "\n"], direction: .backward)))
+                }
+                Button("特定の文字まで移動") {
+                    process(.smartMoveCursor(ScanItem(targets: ["。", "、", "\n"], direction: .backward)))
+                }
                 Button("片手モードをオン") {
                     process(.enableResizingMode)
                 }
@@ -554,6 +598,6 @@ private struct ActionPicker: View {
                 }
             }
         }
-        .foregroundColor(.primary)
+        .foregroundStyle(.primary)
     }
 }

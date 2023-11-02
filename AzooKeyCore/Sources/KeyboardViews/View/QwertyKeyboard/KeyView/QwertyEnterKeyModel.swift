@@ -27,14 +27,14 @@ struct QwertyEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
             return [.enter]
         case .return:
             return [.input("\n")]
-        case .edit:
-            return [.deselectAndUseAsInputting]
         }
     }
 
-    let longPressActions: LongpressActionType = .none
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
+    }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width, textSize: .small, textColor: color)
     }
@@ -43,7 +43,7 @@ struct QwertyEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
 
     func feedback(variableStates: VariableStates) {
         switch variableStates.enterKeyState {
-        case .complete, .edit:
+        case .complete:
             KeyboardFeedback<Extension>.tabOrOtherKey()
         case let .return(type):
             switch type {

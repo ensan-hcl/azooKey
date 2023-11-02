@@ -146,7 +146,7 @@ struct ThemeEditView: CancelableEditor {
                                 pickedImage = nil
                                 trimmedImage = nil
                             }
-                            .foregroundColor(.red)
+                            .foregroundStyle(.red)
                         } else {
                             Button("\(systemImage: "photo")画像を選ぶ") {
                                 self.isSheetPresented = true
@@ -183,7 +183,7 @@ struct ThemeEditView: CancelableEditor {
                             self.trimmedImage = nil
                             self.theme = self.base
                         }
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                     }
                 }
                 let tab: Tab.ExistentialTab = {
@@ -255,7 +255,7 @@ struct ThemeEditView: CancelableEditor {
         case .themeShareView:
             ThemeShareView(theme: self.theme, shareImage: shareImage) {
                 self.dismiss()
-                RequestReviewManager.shared.shouldTryRequestReview = true
+                appStates.requestReviewManager.shouldTryRequestReview = true
             }
             .navigationBarTitle(Text("完了"), displayMode: .inline)
             .navigationBarItems(leading: EmptyView(), trailing: EmptyView())

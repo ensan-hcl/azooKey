@@ -10,6 +10,7 @@ import KeyboardThemes
 import SwiftUI
 import SwiftUtils
 
+@MainActor
 struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
@@ -153,7 +154,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
 
     /// 参考用
     private var keysHeight: CGFloat {
-        TabDependentDesign(width: 1, height: 1, interfaceSize: variableStates.interfaceSize, layout: .qwerty, orientation: variableStates.keyboardOrientation).keysHeight
+        TabDependentDesign(width: 1, height: 1, interfaceSize: variableStates.interfaceSize, orientation: variableStates.keyboardOrientation).keysHeight
     }
 
     private var scrollViewHeight: CGFloat {
@@ -293,7 +294,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
             Label(genre.title, systemImage: systemImage)
                 .labelStyle(.iconOnly)
                 .font(.largeTitle)
-                .foregroundColor(theme.resultTextColor.color)
+                .foregroundStyle(theme.resultTextColor.color)
                 .frame(width: footerHeight, height: scrollViewHeight)
                 .contentShape(Rectangle())
         }
@@ -355,11 +356,11 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
             if !self.emojis[.recent, default: []].isEmpty {
                 self.selectedGenre = .recent
             }
-            variableStates.resultModelVariableSection.setResults([])
+            variableStates.resultModel.setResults([])
             variableStates.barState = .none
         }
         .onDisappear {
-            variableStates.resultModelVariableSection.setResults([])
+            variableStates.resultModel.setResults([])
         }
     }
 }
@@ -367,7 +368,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
 private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
     private var currentLevel: EmojiTabExpandModePreference.Level
     private var action: () -> Void
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         KeyLabel(.image(self.currentLevel.icon), width: width, textSize: .max)
     }
 
@@ -376,10 +377,12 @@ private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtensio
         self.action = action
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
-    let longPressActions: LongpressActionType = .none
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         []
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.tabOrOtherKey()
@@ -392,7 +395,7 @@ private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtensio
 private struct GenreKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
     private var action: () -> Void
     private var systemImage: String
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         KeyLabel(.image(systemImage), width: width, textSize: .max)
     }
 
@@ -402,10 +405,12 @@ private struct GenreKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
         self.unpressedKeyColorType = unpressedKeyColorType
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType
-    let longPressActions: LongpressActionType = .none
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         []
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.tabOrOtherKey()
@@ -429,7 +434,7 @@ private struct EmojiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
     var longPressActions: LongpressActionType {
         .none
     }
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states _: VariableStates, theme _: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states _: VariableStates, theme _: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         KeyLabel(.text(emoji), width: width, textSize: .max)
     }
 
@@ -441,6 +446,9 @@ private struct EmojiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
     }
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         [.input(emoji)]
+    }
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
     }
     func feedback(variableStates: VariableStates) {
         KeyboardFeedback<Extension>.click()

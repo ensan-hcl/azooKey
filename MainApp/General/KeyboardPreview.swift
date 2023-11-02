@@ -21,6 +21,7 @@ private struct CandidateMock: ResultViewItemData {
     #endif
 }
 
+@MainActor
 struct KeyboardPreview: View {
     private let theme: AzooKeyTheme
 
@@ -48,7 +49,7 @@ struct KeyboardPreview: View {
             .scaleEffect(scale)
             .frame(width: SemiStaticStates.shared.screenWidth * scale, height: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation) * scale)
             .onAppear {
-                variableStates.resultModelVariableSection.setResults([
+                variableStates.resultModel.setResults([
                     CandidateMock(text: "azooKey"),
                     CandidateMock(text: "あずーきー"),
                     CandidateMock(text: "アズーキー")

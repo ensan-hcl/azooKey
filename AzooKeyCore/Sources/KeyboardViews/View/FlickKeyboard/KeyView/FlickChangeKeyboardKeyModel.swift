@@ -34,7 +34,9 @@ struct FlickChangeKeyboardModel<Extension: ApplicationSpecificKeyboardViewExtens
             return [.setCursorBar(.toggle)]
         }
     }
-    var longPressActions: LongpressActionType = .none
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
+    }
 
     func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         if usePasteButton {
@@ -43,7 +45,7 @@ struct FlickChangeKeyboardModel<Extension: ApplicationSpecificKeyboardViewExtens
         return [:]
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         switch SemiStaticStates.shared.needsInputModeSwitchKey {
         case true:
             return KeyLabel(.changeKeyboard, width: width)

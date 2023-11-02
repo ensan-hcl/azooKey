@@ -24,11 +24,11 @@ struct QwertyAaKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Qw
         }
     }
 
-    var longPressActions: LongpressActionType {
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
         .init(start: [.setBoolState(VariableStates.BoolStates.isCapsLockedKey, .toggle)])
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
         if states.boolStates.isCapsLocked {
             return KeyLabel(.image("capslock.fill"), width: width, textColor: color)
         } else {

@@ -90,8 +90,16 @@ public enum AzooKeyKeyboardViewExtension: ApplicationSpecificKeyboardViewExtensi
         HideResetButtonInOneHandedMode.value
     }
 
-    public static var useBetaMoveCursorBar: Bool {
-        UseBetaMoveCursorBar.value
+    public static var useReflectStyleCursorBar: Bool {
+        UseReflectStyleCursorBar.value
+    }
+
+    public static var useShiftKey: Bool {
+        UseShiftKey.value
+    }
+
+    public static var displayCursorBarAutomatically: Bool {
+        DisplayCursorBarAutomatically.value
     }
 
     public static var canResetLearningForCandidate: Bool {

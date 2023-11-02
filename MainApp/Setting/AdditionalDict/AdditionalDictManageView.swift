@@ -80,23 +80,19 @@ struct AdditionalDictBlockManager: OnOffSettingSet {
 }
 
 final class AdditionalDictManager: ObservableObject {
-    @Published var systemDict: AdditionalSystemDictManager {
+    @MainActor @Published var systemDict: AdditionalSystemDictManager {
         didSet {
-            Task.detached {
-                await self.userDictUpdate()
-            }
+            self.userDictUpdate()
         }
     }
 
-    @Published var blockTargets: AdditionalDictBlockManager {
+    @MainActor @Published var blockTargets: AdditionalDictBlockManager {
         didSet {
-            Task.detached {
-                await self.userDictUpdate()
-            }
+            self.userDictUpdate()
         }
     }
 
-    init() {
+    @MainActor init() {
         let systemDictList = UserDefaults.standard.array(forKey: "additional_dict") as? [String]
         self.systemDict = .init(dataList: systemDictList ?? [])
 
@@ -130,6 +126,7 @@ final class AdditionalDictManager: ObservableObject {
 
 }
 
+@MainActor
 struct AdditionalDictManageViewMain: View {
     enum Style {
         case simple
@@ -146,11 +143,11 @@ struct AdditionalDictManageViewMain: View {
         Section(header: Text("利用するもの")) {
             Toggle(isOn: $viewModel.systemDict[.emoji]) {
                 Text("絵文字")
-                Text("🥺🌎♨️")
+                Text(verbatim: "🥺🌎♨️")
             }
             Toggle(isOn: $viewModel.systemDict[.kaomoji]) {
                 Text("顔文字")
-                Text("(◍•ᴗ•◍)")
+                Text(verbatim: "(◍•ᴗ•◍)")
             }
         }
         if self.style == .all {
@@ -163,13 +160,14 @@ struct AdditionalDictManageViewMain: View {
 }
 
 struct AdditionalDictManageView: View {
+    @EnvironmentObject private var appStates: MainAppStates
     var body: some View {
         Form {
             AdditionalDictManageViewMain()
         }
         .navigationBarTitle(Text("絵文字と顔文字"), displayMode: .inline)
         .onDisappear {
-            RequestReviewManager.shared.shouldTryRequestReview = true
+            appStates.requestReviewManager.shouldTryRequestReview = true
         }
     }
 }

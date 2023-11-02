@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     typealias Position = (current: CGPoint, initial: CGPoint)
     @State private var top_left_edge: Position
@@ -92,7 +93,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 self[keyPath: target].wrappedValue.current.x = self[keyPath: target].wrappedValue.initial.x + dx
                 let width = abs(bottom_right_edge.current.x - top_left_edge.current.x)
                 let px = (top_left_edge.current.x + bottom_right_edge.current.x - initialSize.width) / 2
-                if width < minimumWidth || px < -initialSize.width/2 || px > initialSize.width / 2 {
+                if width < minimumWidth || px < -initialSize.width / 2 || px > initialSize.width / 2 {
                     self[keyPath: target].wrappedValue.current.x = before
                 } else {
                     self.size.width = width
@@ -114,7 +115,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 self[keyPath: target].wrappedValue.current.y = self[keyPath: target].wrappedValue.initial.y + dy
                 let height = abs(bottom_right_edge.current.y - top_left_edge.current.y)
                 let py = (top_left_edge.current.y + bottom_right_edge.current.y - initialSize.height) / 2
-                if py < -initialSize.height/2 || py > initialSize.height / 2 {
+                if py < -initialSize.height / 2 || py > initialSize.height / 2 {
                     self[keyPath: target].wrappedValue.current.y = before
                 } else {
                     self.size.height = height
@@ -233,7 +234,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                     .frame(width: r, height: r)
                     .overlay(
                         Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(Font.system(size: r * 0.5))
                     )
                     .gesture(moveGesture)
@@ -254,7 +255,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         .frame(width: r, height: r)
                         .overlay(
                             Image(systemName: "arrow.triangle.2.circlepath")
-                                .foregroundColor(.white)
+                                .foregroundStyle(.white)
                                 .font(Font.system(size: r * 0.5))
                         )
                 }
@@ -270,7 +271,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         .frame(width: r, height: r)
                         .overlay(
                             Image(systemName: "checkmark")
-                                .foregroundColor(.white)
+                                .foregroundStyle(.white)
                                 .font(Font.system(size: r * 0.5))
                         )
                 }
@@ -279,6 +280,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     }
 }
 
+@MainActor
 struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>: ViewModifier {
     private let initialSize: CGSize
     @Binding private var position: CGPoint
@@ -333,7 +335,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
                     .frame(width: r, height: r)
                     .overlay(
                         Image(systemName: "aspectratio")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(Font.system(size: r * 0.5))
                     )
             }
@@ -347,7 +349,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
                     .frame(width: r, height: r)
                     .overlay(
                         Image(systemName: "arrow.up.backward.and.arrow.down.forward")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(Font.system(size: r * 0.5))
                     )
             }
@@ -370,7 +372,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
                     .frame(width: r, height: r)
                     .overlay(
                         Image(systemName: "arrow.triangle.2.circlepath")
-                            .foregroundColor(.white)
+                            .foregroundStyle(.white)
                             .font(Font.system(size: r * 0.5))
                     )
             }

@@ -28,8 +28,6 @@ public indirect enum ActionType: Equatable, Sendable {
     ///  - note: フルアクセスがない場合動作しない
     case paste
 
-    case deselectAndUseAsInputting   // 選択を解除して編集中とみなす
-
     // カーソル関係
     case moveCursor(Int)
     case smartMoveCursor(ScanItem)
@@ -59,6 +57,9 @@ public indirect enum ActionType: Equatable, Sendable {
 
     // 条件分岐アクション
     case boolSwitch(CompiledExpression, trueAction: [ActionType], falseAction: [ActionType])
+
+    // 選択アクション
+    case selectCandidate(CandidateSelection)
 }
 
 public struct LongpressActionType: Equatable, Sendable {

@@ -22,7 +22,7 @@ public struct MarkedTextSettingKey: KeyboardSettingKey {
         }
     }
 
-    public enum Value: String {
+    public enum Value: String, Sendable {
         case disabled
         case enabled
         case auto

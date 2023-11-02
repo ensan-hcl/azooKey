@@ -15,9 +15,9 @@ jobs:
     runs-on: macos-latest
 
     steps: 
-    - uses: swift-actions/setup-swift@65540b95f51493d65f5e59e97dcef9629ddf11bf
+    - uses: swift-actions/setup-swift@150267bf6ba01f9d942a4bd55aa2f35ba586767d
       with:
-        swift-version: "5.8"
+        swift-version: "5.9"
     - uses: actions/checkout@v3
     - name: Build
       # TODO: add KeyboardViews

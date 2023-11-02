@@ -10,8 +10,7 @@ import Foundation
 import SwiftUtils
 
 struct ContainerInternalSetting: UserDefaultsManager {
-    static var shared = Self()
-    private init() {
+    init() {
         self.walkthroughState = Self.load(key: .walkthrough_state, userDefaults: self.userDefaults)
     }
     var userDefaults: UserDefaults = UserDefaults.standard

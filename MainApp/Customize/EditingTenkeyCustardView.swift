@@ -29,6 +29,7 @@ fileprivate extension Dictionary where Key == KeyPosition, Value == UserMadeTenK
     }
 }
 
+@MainActor
 struct EditingTenkeyCustardView: CancelableEditor {
     private static let emptyKey: UserMadeTenKeyCustard.KeyData = .init(model: .custom(.empty), width: 1, height: 1)
     private static let emptyKeys: [KeyPosition: UserMadeTenKeyCustard.KeyData] = (0..<5).reduce(into: [:]) {dict, x in
@@ -149,7 +150,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                         }
                         Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                     }
-                    CustardFlickKeysView<AzooKeyKeyboardViewExtension, _>(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, interfaceSize: interfaceSize, layout: .flick, orientation: MainAppDesign.keyboardOrientation), layout: layout) {(view: FlickKeyView<AzooKeyKeyboardViewExtension>, x: Int, y: Int) in
+                    CustardFlickKeysView<AzooKeyKeyboardViewExtension, _>(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, interfaceSize: interfaceSize, orientation: MainAppDesign.keyboardOrientation), layout: layout) {(view: FlickKeyView<AzooKeyKeyboardViewExtension>, x: Int, y: Int) in
                         if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
                             if !isCovered(at: (x, y)) {
                                 Button {
@@ -162,7 +163,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                         )
                                         .overlay(
                                             Image(systemName: "plus.circle")
-                                                .foregroundColor(.accentColor)
+                                                .foregroundStyle(.accentColor)
                                         )
                                 }
                             }
@@ -277,19 +278,19 @@ struct EditingTenkeyCustardView: CancelableEditor {
                                     editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
                                 } label: {
                                     Label("削除する", systemImage: "trash")
-                                        .foregroundColor(.red)
+                                        .foregroundStyle(.red)
                                 }
                                 Button(role: .destructive) {
                                     removeRow(y: y)
                                 } label: {
                                     Label("この行を削除", systemImage: "trash")
-                                        .foregroundColor(.red)
+                                        .foregroundStyle(.red)
                                 }
                                 Button(role: .destructive) {
                                     removeColumn(x: x)
                                 } label: {
                                     Label("この列を削除", systemImage: "trash")
-                                        .foregroundColor(.red)
+                                        .foregroundStyle(.red)
                                 }
                             }
                         }
@@ -312,7 +313,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
             .navigationBarBackButtonHidden(true)
             .navigationTitle(Text("カスタムタブを作る"))
             .navigationBarItems(
-                leading: Button("キャンセル", role: .cancel, action: cancel),
+                leading: Button("キャンセル", role: .cancel, action: {self.cancel()}),
                 trailing: Button("保存") {
                     self.save()
                     self.dismiss()

@@ -21,25 +21,23 @@ struct FlickEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
             return [.enter]
         case .return:
             return [.input("\n")]
-        case .edit:
-            return [.deselectAndUseAsInputting]
         }
     }
 
-    var longPressActions: LongpressActionType = .none
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType { .none }
 
     func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         [:]
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width)
     }
 
     func backGroundColorWhenUnpressed<ThemeExtension: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>(states: VariableStates, theme: ThemeData<ThemeExtension>) -> Color {
         switch states.enterKeyState {
-        case .complete, .edit:
+        case .complete:
             return theme.specialKeyFillColor.color
         case let .return(type):
             switch type {
@@ -57,7 +55,7 @@ struct FlickEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: 
 
     func feedback(variableStates: VariableStates) {
         switch variableStates.enterKeyState {
-        case .complete, .edit:
+        case .complete:
             KeyboardFeedback<Extension>.tabOrOtherKey()
         case let .return(type):
             switch type {

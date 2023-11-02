@@ -52,8 +52,10 @@ struct QwertyChangeKeyboardKeyModel<Extension: ApplicationSpecificKeyboardViewEx
     }
     let fallBackType: FallBackType
 
-    let longPressActions: LongpressActionType = .none
-    /// 暫定
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
+        .none
+    }
+
     let variationsModel = VariationsModel([])
 
     let needSuggestView: Bool = false
@@ -66,7 +68,7 @@ struct QwertyChangeKeyboardKeyModel<Extension: ApplicationSpecificKeyboardViewEx
         self.fallBackType = fallBackType
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.changeKeyboard, width: width, textColor: color)
         }

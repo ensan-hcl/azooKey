@@ -9,7 +9,7 @@
 import SwiftUI
 import SwiftUIUtils
 
-@available(iOS 15, *)
+@MainActor
 struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
     @Environment(Extension.Theme.self) private var theme
@@ -30,10 +30,7 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
 
     var body: some View {
         HStack {
-            KeyboardBarButton<Extension> {
-                self.action.registerAction(.setTabBar(.on), variableStates: variableStates)
-            }
-
+            TabBarButton<Extension>()
             if !showResults {
                 // 見た目だけ表示しておいて、実際はoverlayのボタンになっている
                 InKeyboardSearchBar(text: $searchQuery, configuration: searchBarDesign)
@@ -59,7 +56,7 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
                 .matchedGeometryEffect(id: "SearchBar", in: namespace)
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 10) {
-                        ForEach(variableStates.resultModelVariableSection.results, id: \.id) {(data: ResultData) in
+                        ForEach(variableStates.resultModel.results, id: \.id) {(data: ResultData) in
                             if data.candidate.inputable {
                                 Button(data.candidate.text) {
                                     KeyboardFeedback<Extension>.click()
@@ -80,7 +77,7 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
                 }
             }
         }
-        .onChange(of: variableStates.resultModelVariableSection.results.first?.candidate.text) { newValue in
+        .onChange(of: variableStates.resultModel.results.first?.candidate.text) { newValue in
             if newValue == nil && showResults {
                 withAnimation(.easeIn(duration: 0.2)) {
                     showResults = false
@@ -100,17 +97,19 @@ struct EmojiTabResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: V
 
 struct EmojiTabResultBarButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: ButtonStyle {
     private let height: CGFloat
+    private let userSizePrefrerence: CGFloat
     @Environment(Extension.Theme.self) private var theme
 
-    init(height: CGFloat) {
+    @MainActor init(height: CGFloat) {
+        self.userSizePrefrerence = Extension.SettingProvider.resultViewFontSize
         self.height = height
     }
 
-    @MainActor func makeBody(configuration: Configuration) -> some View {
+    func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: Extension.SettingProvider.resultViewFontSize, fontSize: height * 0.9))
+            .font(Design.fonts.resultViewFont(theme: theme, userSizePrefrerence: self.userSizePrefrerence, fontSize: height * 0.9))
             .frame(height: height)
-            .foregroundColor(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
+            .foregroundStyle(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
             .background(
                 configuration.isPressed ?
                     theme.pushedKeyFillColor.color.opacity(0.5) :

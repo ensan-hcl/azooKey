@@ -75,7 +75,7 @@ struct EnableAzooKeyViewButton: View {
                 }
             }
             .buttonStyle(LargeButtonStyle(backgroundColor: .blue))
-            .foregroundColor(.white)
+            .foregroundStyle(.white)
         case .destructive:
             Button(action: action) {
                 if let systemName {
@@ -84,21 +84,22 @@ struct EnableAzooKeyViewButton: View {
                     Text(text)
                 }
             }
-            .foregroundColor(.red)
+            .foregroundStyle(.red)
         }
     }
 }
 
 struct EnableAzooKeyViewImage: View {
-    private let identifier: String
-    init(_ identifier: String) {
-        self.identifier = identifier
+    private let resource: ImageResource
+    init(_ resource: ImageResource) {
+        self.resource = resource
     }
 
     var body: some View {
-        Image(identifier)
+        Image(resource)
             .resizable()
             .scaledToFit()
             .cornerRadius(2)
+            .frame(maxWidth: MainAppDesign.imageMaximumWidth)
     }
 }

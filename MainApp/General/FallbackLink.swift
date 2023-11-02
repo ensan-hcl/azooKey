@@ -36,6 +36,12 @@ struct FallbackLink: View {
         self.icon = icon
     }
 
+    init(verbatim title: String, destination: String, icon: Icon = .link) {
+        self.title = LocalizedStringKey("\(title)")
+        self.url = URL(string: destination)!
+        self.icon = icon
+    }
+
     var body: some View {
         Button {
             // 外部ブラウザでURLを開く
@@ -47,15 +53,13 @@ struct FallbackLink: View {
         } label: {
             Label(title, systemImage: icon.systemImage)
         }
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("ブラウザを開けませんでした"),
-                message: Text("URLをコピーします。"),
-                dismissButton: .default(Text("OK")) {
-                    UIPasteboard.general.string = url.absoluteString
-                    self.showAlert = false
-                }
-            )
+        .alert("ブラウザを開けませんでした", isPresented: $showAlert) {
+            Button("OK") {
+                UIPasteboard.general.string = url.absoluteString
+                self.showAlert = false
+            }
+        } message: {
+            Text("URLをコピーします。")
         }
     }
 }

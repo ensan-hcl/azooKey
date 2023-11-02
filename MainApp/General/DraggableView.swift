@@ -33,7 +33,7 @@ struct DraggableView<Content: View, Collection: BidirectionalCollection & Random
     private var separator: some View {
         Rectangle()
             .frame(width: 2, height: height * 0.9)
-            .foregroundColor(.accentColor)
+            .foregroundStyle(.accentColor)
     }
 
     var body: some View {
@@ -44,12 +44,12 @@ struct DraggableView<Content: View, Collection: BidirectionalCollection & Random
                         separator
                             .focus(.accentColor, focused: true)
                     }
-                    DraggableItem(selectedIndex: $selectedIndex, index: i, update: update, onEnd: onEnd, enabled: enabled) {
+                    DraggableItem(selectedIndex: $selectedIndex, index: i, update: { self.update(index: $0, delta: $1) }, onEnd: onEnd, enabled: enabled) {
                         contentConverter(items[i], selectedIndex == i)
                     }
                     .frame(width: width, height: height)
                     .padding(padding)
-                    .zIndex(selectedIndex == i ? 1:0)
+                    .zIndex(selectedIndex == i ? 1 : 0)
                 }
                 if targetIndex == items.endIndex {
                     separator
@@ -94,6 +94,7 @@ struct DraggableView<Content: View, Collection: BidirectionalCollection & Random
 
     }
 
+    @MainActor
     private func update(index: Int, delta: CGFloat) {
         DispatchQueue.main.async {
             self.targetIndex = self.pointedIndex(index: index, delta: delta)

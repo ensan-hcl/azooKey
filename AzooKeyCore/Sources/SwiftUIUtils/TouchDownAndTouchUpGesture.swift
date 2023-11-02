@@ -81,7 +81,7 @@ public struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
     }
 }
 
-fileprivate final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
+private final class SingleScrollAndLongpressGestureRecognizer: UIGestureRecognizer {
     private var startLocation: CGPoint = .zero
 
     private var _distance: CGFloat = .zero

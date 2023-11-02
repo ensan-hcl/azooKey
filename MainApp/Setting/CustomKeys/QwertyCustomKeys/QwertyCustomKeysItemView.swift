@@ -101,6 +101,7 @@ private struct Selection: Hashable {
     var longpressEnabled = false
 }
 
+@MainActor
 struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: View {
     @StateObject private var editState = EditState()
     @State private var setting = SettingUpdater<SettingKey>()
@@ -164,6 +165,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(strokeColor)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
+                        .compositingGroup()
                         .focus(.accentColor, focused: isSelected && selection.longpressSelectIndex == -1)
                         .focus(.systemGray, focused: isSelected && selection.longpressSelectIndex != -1)
                         .overlay(Text(item.name))
@@ -178,6 +180,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(isSelected ? Color.accentColor : .primary)
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.background))
+                            .compositingGroup()
                             .focus(.accentColor, focused: isSelected)
                             .overlay(Text(item.name))
                     }
@@ -204,7 +207,9 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                 bottomSheetShown = false
                                 editState.toggle(.drag)
                             }
-                            Button("キーを追加する", action: self.addPressKey)
+                            Button("キーを追加する") {
+                                self.addPressKey()
+                            }
                             Button("このキーに長押しキーを追加する") {
                                 self.addLongpressKey(sIndex: selection.selectIndex)
                             }
@@ -220,7 +225,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                 Button("入力を設定する") {
                                     setting.value[.input, selection] = ""
                                 }
-                                .foregroundColor(.accentColor)
+                                .foregroundStyle(.accentColor)
                             }
                         }
                         Section(header: Text("ラベル")) {
@@ -232,7 +237,7 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                         Section(header: Text("アクション")) {
                             Text("キーを押したときの動作をより詳しく設定します。")
                             NavigationLink("アクションを編集する", destination: CodableActionDataEditor(binded[selection].actions, availableCustards: CustardManager.load().availableCustards))
-                                .foregroundColor(.accentColor)
+                                .foregroundStyle(.accentColor)
                         }
                         Button("削除") {
                             bottomSheetShown = false
@@ -251,9 +256,11 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
                                 }
                             }
                         }
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                     } else {
-                        Button("キーを追加する", action: self.addPressKey)
+                        Button("キーを追加する") {
+                            self.addPressKey()
+                        }
                     }
                 }
             }

@@ -21,7 +21,8 @@ import UIKit
     // TODO: displayedTextManagerとliveConversionManagerを何らかの形で統合したい
     // ライブ変換を管理するクラス
     var liveConversionManager = LiveConversionManager()
-
+    // (ゼロクエリの)予測変換を管理するクラス
+    var predictionManager = PredictionManager()
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
     // TODO: isSelectedはdisplayedTextManagerが持っているべき
     var isSelected = false
@@ -45,16 +46,14 @@ import UIKit
     private var rubyLog: OrderedDictionary<String, String> = [:]
 
     // 変換結果の通知用関数
-    private var updateResult: (([any ResultViewItemData]) -> Void)?
+    private var updateResult: (((inout ResultModel) -> Void) -> Void)?
 
     private var liveConversionEnabled: Bool {
         liveConversionManager.enabled && !self.isSelected
     }
 
     func getEnterKeyState() -> RoughEnterKeyState {
-        if self.isSelected && !self.composingText.isEmpty {
-            return .edit
-        } else if !self.composingText.isEmpty {
+        if !self.isSelected && !self.composingText.isEmpty {
             return .complete
         } else {
             return .return
@@ -69,12 +68,54 @@ import UIKit
         return (left, center, right)
     }
 
-    func getTextChangedCountDelta() -> Int {
-        self.displayedTextManager.getTextChangedCountDelta()
+    func getTextChangedCount() -> Int {
+        self.displayedTextManager.getTextChangedCount()
     }
 
     func getComposingText() -> ComposingText {
         self.composingText
+    }
+
+    private func getConvertRequestOptions(inputStylePreference: InputStyle? = nil) -> ConvertRequestOptions {
+        let requireJapanesePrediction: Bool
+        let requireEnglishPrediction: Bool
+        switch (isSelected, inputStylePreference ?? .direct) {
+        case (true, _):
+            requireJapanesePrediction = false
+            requireEnglishPrediction = false
+        case (false, .direct):
+            requireJapanesePrediction = true
+            requireEnglishPrediction = true
+        case (false, .roman2kana):
+            requireJapanesePrediction = keyboardLanguage == .ja_JP
+            requireEnglishPrediction = keyboardLanguage == .en_US
+        }
+        @KeyboardSetting(.typographyLetter) var typographyLetterCandidate
+        @KeyboardSetting(.unicodeCandidate) var unicodeCandidate
+        @KeyboardSetting(.englishCandidate) var englishCandidateInRoman2KanaInput
+        @KeyboardSetting(.fullRomanCandidate) var fullWidthRomanCandidate
+        @KeyboardSetting(.halfKanaCandidate) var halfWidthKanaCandidate
+        @KeyboardSetting(.learningType) var learningType
+
+        return ConvertRequestOptions(
+            N_best: 10,
+            requireJapanesePrediction: requireJapanesePrediction,
+            requireEnglishPrediction: requireEnglishPrediction,
+            keyboardLanguage: keyboardLanguage,
+            // KeyboardSettingsを注入
+            typographyLetterCandidate: typographyLetterCandidate,
+            unicodeCandidate: unicodeCandidate,
+            englishCandidateInRoman2KanaInput: englishCandidateInRoman2KanaInput,
+            fullWidthRomanCandidate: fullWidthRomanCandidate,
+            halfWidthKanaCandidate: halfWidthKanaCandidate,
+            learningType: learningType,
+            maxMemoryCount: 65536,
+            shouldResetMemory: MemoryResetCondition.shouldReset(),
+            dictionaryResourceURL: Self.dictionaryResourceURL,
+            memoryDirectoryURL: Self.memoryDirectoryURL,
+            sharedContainerURL: Self.sharedContainerURL,
+            metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")
+        )
     }
 
     private func updateLog(candidate: Candidate) {
@@ -153,7 +194,7 @@ import UIKit
         self.displayedTextManager.setTextDocumentProxy(proxy)
     }
 
-    func setUpdateResult(_ updateResult: @escaping ([any ResultViewItemData]) -> Void) {
+    func setUpdateResult(_ updateResult: (((inout ResultModel) -> Void) -> Void)?) {
         self.updateResult = updateResult
     }
 
@@ -169,7 +210,9 @@ import UIKit
     func updateTextReplacementCandidates(left: String, center: String, right: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) {
         let results = self.textReplacer.getReplacementCandidate(left: left, center: center, right: right, target: target)
         if let updateResult {
-            updateResult(results)
+            updateResult {
+                $0.setResults(results)
+            }
         }
     }
 
@@ -177,6 +220,53 @@ import UIKit
     func getSearchResult(query: String, target: [ConverterBehaviorSemantics.ReplacementTarget]) -> [any ResultViewItemData] {
         let results = self.textReplacer.getSearchResult(query: query, target: target)
         return results
+    }
+
+    /// 確定直後に呼ぶ
+    func updatePostCompositionPredictionCandidates(candidate: Candidate) {
+        let results = self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: candidate, options: getConvertRequestOptions())
+        predictionManager.updateAfterComplete(candidate: candidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
+        if let updateResult {
+            updateResult {
+                $0.setPredictionResults(results)
+            }
+        }
+    }
+
+    /// 予測変換を選んだ後に呼ぶ
+    func postCompositionPredictionCandidateSelected(candidate: PostCompositionPredictionCandidate) {
+        guard let lastUsedCandidate = predictionManager.getLastCandidate() else {
+            return
+        }
+        self.kanaKanjiConverter.updateLearningData(lastUsedCandidate, with: candidate)
+        let newCandidate = candidate.join(to: lastUsedCandidate)
+        let results = self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: newCandidate, options: getConvertRequestOptions())
+        predictionManager.update(candidate: newCandidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
+        if let updateResult {
+            updateResult {
+                $0.setPredictionResults(results)
+            }
+        }
+    }
+
+    func resetPostCompositionPredictionCandidates() {
+        if let updateResult {
+            updateResult {
+                $0.setPredictionResults([])
+            }
+        }
+    }
+
+    func resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: Int) {
+        if predictionManager.shouldResetPrediction(textChangedCount: textChangedCount) {
+            self.resetPostCompositionPredictionCandidates()
+        }
+    }
+
+    /// `composingText`に入力されていた全体が変換された後に呼ばれる関数
+    private func conversionCompleted(candidate: Candidate) {
+        // 予測変換を更新する
+        self.updatePostCompositionPredictionCandidates(candidate: candidate)
     }
 
     /// 変換を選択した場合に呼ばれる
@@ -191,6 +281,7 @@ import UIKit
         guard !self.composingText.isEmpty else {
             // ここで入力を停止する
             self.stopComposition()
+            self.conversionCompleted(candidate: candidate)
             return
         }
         self.isSelected = false
@@ -212,7 +303,9 @@ import UIKit
         self.isSelected = false
 
         if let updateResult {
-            updateResult([])
+            updateResult {
+                $0.setResults([])
+            }
         }
     }
 
@@ -226,21 +319,29 @@ import UIKit
     /// 「現在入力中として表示されている文字列で確定する」というセマンティクスを持った操作である。
     /// - parameters:
     ///  - shouldModifyDisplayedText: DisplayedTextを操作して良いか否か。`textDidChange`などの場合は操作してはいけない。
-    func enter(shouldModifyDisplayedText: Bool = true) -> [ActionType] {
+    func enter(shouldModifyDisplayedText: Bool = true, requireSetResult: Bool = true) -> [ActionType] {
+        // selectedの場合、単に変換を止める
+        if isSelected {
+            self.stopComposition()
+            return []
+        }
+        if self.composingText.isEmpty {
+            return []
+        }
         var candidate: Candidate
-        // ライブ変換中に確定する場合、現在表示されているテキストそのものが候補となる。
         if liveConversionEnabled, let _candidate = liveConversionManager.lastUsedCandidate {
             candidate = _candidate
         } else {
+            let composingText = self.composingText.prefixToCursorPosition()
             candidate = Candidate(
-                text: self.composingText.convertTarget,
+                text: composingText.convertTarget,
                 value: -18,
-                correspondingCount: self.composingText.input.count,
+                correspondingCount: composingText.input.count,
                 lastMid: MIDData.一般.mid,
                 data: [
                     DicdataElement(
-                        word: self.composingText.convertTarget,
-                        ruby: self.composingText.convertTarget.toKatakana(),
+                        word: composingText.convertTarget,
+                        ruby: composingText.convertTarget.toKatakana(),
                         cid: CIDData.固有名詞.cid,
                         mid: MIDData.一般.mid,
                         value: -18
@@ -248,7 +349,7 @@ import UIKit
                 ]
             )
         }
-        let actions = self.kanaKanjiConverter.getApporopriateActions(candidate)
+        let actions = self.kanaKanjiConverter.getAppropriateActions(candidate)
         candidate.withActions(actions)
         candidate.parseTemplate()
         self.updateLog(candidate: candidate)
@@ -259,7 +360,12 @@ import UIKit
             }
             self.displayedTextManager.updateComposingText(composingText: self.composingText, completedPrefix: candidate.text, isSelected: self.isSelected)
         }
-        self.stopComposition()
+        if self.displayedTextManager.composingText.isEmpty {
+            self.stopComposition()
+            self.conversionCompleted(candidate: candidate)
+        } else if requireSetResult {
+            self.setResult()
+        }
         return actions.map(\.action)
     }
 
@@ -284,10 +390,6 @@ import UIKit
     ///   - simpleInsert: `ComposingText`を作るのではなく、直接文字を入力し、変換候補を表示しない。
     ///   - inputStyle: 入力スタイル
     func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false, inputStyle: InputStyle) {
-        if self.isSelected {
-            // 選択部分を削除する
-            self.deleteSelection()
-        }
         // 直接入力の条件
         if simpleInsert         // flag
             || text == "\n"     // 改行
@@ -295,9 +397,18 @@ import UIKit
             || self.keyboardLanguage == .none  // 言語がnone
         {
             // 必要に応じて確定する
-            _ = self.enter()
+            if !self.isSelected {
+                _ = self.enter()
+            } else {
+                self.stopComposition()
+            }
             self.displayedTextManager.insertText(text)
             return
+        }
+        // 直接入力にならない場合はまず選択部分を削除する
+        if self.isSelected {
+            // 選択部分を削除する
+            self.deleteSelection()
         }
         self.composingText.insertAtCursorPosition(text, inputStyle: inputStyle)
         debug("Input Manager input:", composingText)
@@ -554,15 +665,6 @@ import UIKit
         return left
     }
 
-    /// 選択状態にあるテキストを再度入力し、編集可能な状態にする
-    func edit() {
-        if isSelected {
-            let selectedText = composingText.convertTarget
-            self.stopComposition()
-            self.input(text: selectedText, inputStyle: .direct)
-        }
-    }
-
     /// クリップボードの文字列をペーストする
     func paste() {
         guard let text = UIPasteboard.general.string else {
@@ -682,15 +784,36 @@ import UIKit
 
     /// ユーザがキーボードを経由せずにカーソルを何かした場合の後処理を行う関数。
     ///  - note: この関数をユーティリティとして用いてはいけない。
-    func userMovedCursor(count: Int) {
+    func userMovedCursor(count: Int) -> [ActionType] {
         debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
-        if composingText.isEmpty {
-            // 入力がない場合はreturnしておかないと、入力していない時にカーソルを動かせなくなってしまう。
-            return
+        // 選択しているテキストがある場合はリザルトバーを表示する
+        if self.isSelected {
+            // リザルトバーを表示する
+            return [.setCursorBar(.off), .setTabBar(.off)]
+        }
+        @KeyboardSetting(.displayCursorBarAutomatically) var displayCursorBarAutomatically
+        // 入力テキストなし
+        if self.composingText.isEmpty {
+            return displayCursorBarAutomatically ? [.setCursorBar(.on)] : []
+        }
+        // ライブ変換有効
+        if liveConversionEnabled {
+            return displayCursorBarAutomatically ? [.setCursorBar(.on)] : []
         }
         let actualCount = composingText.moveCursorFromCursorPosition(count: count)
         self.previousSystemOperation = self.displayedTextManager.updateComposingText(composingText: self.composingText, userMovedCount: count, adjustedMovedCount: actualCount) ? .moveCursor : nil
         setResult()
+        return [.setCursorBar(.off), .setTabBar(.off)]
+    }
+
+    /// ユーザが行を跨いでカーソルを動かした場合に利用する
+    func userJumpedCursor() -> [ActionType] {
+        if self.composingText.isEmpty {
+            @KeyboardSetting(.displayCursorBarAutomatically) var displayCursorBarAutomatically
+            return displayCursorBarAutomatically ? [.setCursorBar(.on)] : []
+        }
+        self.stopComposition()
+        return []
     }
 
     /// ユーザがキーボードを経由せずカットした場合の処理
@@ -698,35 +821,58 @@ import UIKit
         self.stopComposition()
     }
 
+    // Reference: https://teratail.com/questions/57039?link=qa_related_pc
+    func getReadingFromSystemAPI(_ text: String) -> String {
+        let inputText = text as NSString
+        let outputText = NSMutableString()
+
+        // トークナイザ
+        let tokenizer: CFStringTokenizer = CFStringTokenizerCreate(
+            kCFAllocatorDefault,
+            inputText as CFString,
+            CFRangeMake(0, inputText.length),
+            kCFStringTokenizerUnitWordBoundary,
+            CFLocaleCopyCurrent()
+        )
+
+        // 形態素解析した結果を順に得る
+        var tokenType: CFStringTokenizerTokenType = CFStringTokenizerGoToTokenAtIndex(tokenizer, 0)
+        while tokenType.rawValue != 0 {
+            let range = CFStringTokenizerGetCurrentTokenRange(tokenizer)
+            let original = inputText.substring(with: NSRange(location: range.location, length: range.length))
+            if original.isEnglishSentence {
+                outputText.append(original)
+            } else if let romaji = CFStringTokenizerCopyCurrentTokenAttribute(tokenizer, kCFStringTokenizerAttributeLatinTranscription) as? NSString {
+                // ローマ字をまず得て、そのあとでカタカナにする
+                let reading: NSMutableString = romaji.mutableCopy() as! NSMutableString
+                CFStringTransform(reading as CFMutableString, nil, kCFStringTransformLatinKatakana, false)
+                outputText.append(reading as String)
+            } else {
+                // タイ語の文字など扱えない文字が入ってくるとここに来うる
+                outputText.append(original)
+            }
+            tokenType = CFStringTokenizerAdvanceToNextToken(tokenizer)
+        }
+        return (outputText as String).toHiragana()
+    }
+
     // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
-    func userSelectedText(text: String) {
-        if text.isEmpty {
-            return
-        }
-        // 長すぎるのはダメ
-        if text.count > 100 {
-            return
-        }
-        if text.hasPrefix("http") {
-            return
-        }
-        // 改行文字はだめ
-        if text.contains("\n") || text.contains("\r") {
-            return
-        }
-        // 空白文字もだめ
-        if text.contains(" ") || text.contains("\t") {
+    func userSelectedText(text: String, lengthLimit: Int) {
+        self.composingText.stopComposition()
+        // 文字がない場合
+        if text.isEmpty
+            // 文字数が多すぎる場合
+            || text.count > lengthLimit
+            // httpで始まる場合
+            || text.hasPrefix("http")
+            // 扱いにくい文字を含む場合
+            || text.contains("\n") || text.contains("\r") || text.contains(" ") || text.contains("\t") {
+            self.setResult()
             return
         }
         // 過去のログを見て、再変換に利用する
-        self.composingText.stopComposition()
-        if let ruby = self.getRubyIfPossible(text: text) {
-            debug("Evaluated ruby:", ruby)
-            // rubyはひらがなである
-            self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
-        } else {
-            self.composingText.insertAtCursorPosition(text, inputStyle: .direct)
-        }
+        let ruby = getReadingFromSystemAPI(self.getRubyIfPossible(text: text) ?? text)
+        self.composingText.insertAtCursorPosition(ruby, inputStyle: .direct)
 
         self.isSelected = true
         self.setResult()
@@ -744,48 +890,9 @@ import UIKit
     func setResult() {
         let inputData = composingText.prefixToCursorPosition()
         debug("InputManager.setResult: value to be input", inputData)
-
-        let requireJapanesePrediction: Bool
-        let requireEnglishPrediction: Bool
-        switch inputData.input.last?.inputStyle ?? .direct {
-        case .direct:
-            requireJapanesePrediction = true
-            requireEnglishPrediction = true
-        case .roman2kana:
-            requireJapanesePrediction = keyboardLanguage == .ja_JP
-            requireEnglishPrediction = keyboardLanguage == .en_US
-        }
-        @KeyboardSetting(.typographyLetter) var typographyLetterCandidate
-        @KeyboardSetting(.unicodeCandidate) var unicodeCandidate
-        @KeyboardSetting(.englishCandidate) var englishCandidateInRoman2KanaInput
-        @KeyboardSetting(.fullRomanCandidate) var fullWidthRomanCandidate
-        @KeyboardSetting(.halfKanaCandidate) var halfWidthKanaCandidate
-        @KeyboardSetting(.learningType) var learningType
-
-        let options = ConvertRequestOptions(
-            N_best: 10,
-            requireJapanesePrediction: requireJapanesePrediction,
-            requireEnglishPrediction: requireEnglishPrediction,
-            keyboardLanguage: keyboardLanguage,
-            // KeyboardSettingsを注入
-            typographyLetterCandidate: typographyLetterCandidate,
-            unicodeCandidate: unicodeCandidate,
-            englishCandidateInRoman2KanaInput: englishCandidateInRoman2KanaInput,
-            fullWidthRomanCandidate: fullWidthRomanCandidate,
-            halfWidthKanaCandidate: halfWidthKanaCandidate,
-            learningType: learningType,
-            maxMemoryCount: 65536,
-            shouldResetMemory: MemoryResetCondition.shouldReset(),
-            dictionaryResourceURL: Self.dictionaryResourceURL,
-            memoryDirectoryURL: Self.memoryDirectoryURL,
-            sharedContainerURL: Self.sharedContainerURL,
-            metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")
-        )
+        let options = self.getConvertRequestOptions(inputStylePreference: inputData.input.last?.inputStyle)
         debug("InputManager.setResult: options", options)
-
-        let results: [Candidate]
-        let firstClauseResults: [Candidate]
-        (results, firstClauseResults) = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
+        let results = self.kanaKanjiConverter.requestCandidates(inputData, options: options)
 
         // 表示を更新する
         if !self.isSelected {
@@ -793,7 +900,7 @@ import UIKit
                 self.previousSystemOperation = .setMarkedText
             }
             if liveConversionEnabled {
-                let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, results, firstClauseResults: firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
+                let liveConversionText = self.liveConversionManager.updateWithNewResults(inputData, results.mainResults, firstClauseResults: results.firstClauseResults, convertTargetCursorPosition: inputData.convertTargetCursorPosition, convertTarget: inputData.convertTarget)
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: liveConversionText)
             } else {
                 self.displayedTextManager.updateComposingText(composingText: self.composingText, newLiveConversionText: nil)
@@ -801,7 +908,9 @@ import UIKit
         }
 
         if let updateResult {
-            updateResult(results)
+            updateResult {
+                $0.setResults(results.mainResults)
+            }
             // 自動確定の実施
             if liveConversionEnabled, let firstClause = self.liveConversionManager.candidateForCompleteFirstClause() {
                 debug("InputManager.setResult: Complete first clause", firstClause)

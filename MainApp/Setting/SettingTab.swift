@@ -23,6 +23,13 @@ struct SettingTabView: View {
         return false
     }
 
+    private func canQwertyLayout(_ layout: LanguageLayout) -> Bool {
+        if layout == .qwerty {
+            return true
+        }
+        return false
+    }
+
     var body: some View {
         NavigationView {
             Form {
@@ -43,17 +50,14 @@ struct SettingTabView: View {
                             BoolSettingView(.enablePasteButton)
                         }
                     }
-                    Section(header: Text("タブバー")) {
+                    Section(header: Text("バー")) {
+                        BoolSettingView(.useReflectStyleCursorBar)
                         BoolSettingView(.displayTabBarButton)
                         BoolSettingView(.enableClipboardHistoryManagerTab)
                         if SemiStaticStates.shared.hasFullAccess {
                             NavigationLink("「ペーストを許可」のダイアログについて", destination: PasteFromOtherAppsPermissionTipsView())
                         }
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
-                    }
-                    Section(header: Text("カーソルバー")) {
-                        BoolSettingView(.useBetaMoveCursorBar)
-                        FallbackLink("フィードバックを募集します", destination: "https://forms.gle/vZ8Ftuu9BJBEi98h7", icon: .link)
                     }
                     // デバイスが触覚フィードバックをサポートしている場合のみ表示する
                     if SemiStaticStates.shared.hapticsAvailable {
@@ -76,6 +80,9 @@ struct SettingTabView: View {
                         if self.canFlickLayout(appStates.japaneseLayout) {
                             FlickSensitivitySettingView(.flickSensitivity)
                         }
+                        if self.canQwertyLayout(appStates.englishLayout) {
+                            BoolSettingView(.useShiftKey)
+                        }
                     }
                 }
                 Group {
@@ -86,6 +93,7 @@ struct SettingTabView: View {
                         BoolSettingView(.typographyLetter)
                         BoolSettingView(.unicodeCandidate)
                         MarkedTextSettingView(.markedTextSetting)
+                        ContactImportSettingView()
                         NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
                     }
 
@@ -119,14 +127,14 @@ struct SettingTabView: View {
                 Section(header: Text("このアプリについて")) {
                     NavigationLink("お問い合わせ", destination: ContactView())
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                     FallbackLink("利用規約", destination: URL(string: "https://azookey.netlify.app/TermsOfService")!)
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                     NavigationLink("更新履歴", destination: UpdateInformationView())
                     HStack {
                         Text("URL Scheme")
                         Spacer()
-                        Text("azooKey://").font(.system(.body, design: .monospaced))
+                        Text(verbatim: "azooKey://").font(.system(.body, design: .monospaced))
                     }
                     HStack {
                         Text("バージョン")
@@ -137,7 +145,7 @@ struct SettingTabView: View {
             }
             .navigationBarTitle(Text("設定"), displayMode: .large)
             .onAppear {
-                if RequestReviewManager.shared.shouldTryRequestReview, RequestReviewManager.shared.shouldRequestReview() {
+                if appStates.requestReviewManager.shouldTryRequestReview, appStates.requestReviewManager.shouldRequestReview() {
                     if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                         SKStoreReviewController.requestReview(in: scene)
                     }

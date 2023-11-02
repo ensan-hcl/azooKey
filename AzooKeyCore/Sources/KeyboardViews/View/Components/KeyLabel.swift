@@ -18,11 +18,12 @@ public enum KeyLabelType {
     case selectable(String, String)
 }
 
+@MainActor
 public struct KeyLabel<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let labelType: KeyLabelType
     private let width: CGFloat
-    private let textColor: Color?
-    private let textSize: Design.Fonts.LabelFontSizeStrategy
+    private var textColor: Color?
+    private var textSize: Design.Fonts.LabelFontSizeStrategy
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
     @EnvironmentObject private var variableStates: VariableStates
@@ -48,7 +49,7 @@ public struct KeyLabel<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
             let font = Design.fonts.keyLabelFont(text: text, width: width, fontSize: self.textSize, userDecidedSize: keyViewFontSize, layout: variableStates.keyboardLayout, theme: theme)
             Text(text)
                 .font(font)
-                .foregroundColor(mainKeyColor)
+                .foregroundStyle(mainKeyColor)
                 .allowsHitTesting(false)
 
         case let .symbols(symbols):
@@ -62,13 +63,13 @@ public struct KeyLabel<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
                 Text(subText)
                     .font(subFont)
             }
-            .foregroundColor(mainKeyColor)
+            .foregroundStyle(mainKeyColor)
             .allowsHitTesting(false)
 
         case let .image(imageName):
             Image(systemName: imageName)
                 .font(Design.fonts.iconImageFont(keyViewFontSizePreference: Extension.SettingProvider.keyViewFontSize, theme: theme))
-                .foregroundColor(mainKeyColor)
+                .foregroundStyle(mainKeyColor)
                 .allowsHitTesting(false)
 
         case let .customImage(imageName):
@@ -79,7 +80,7 @@ public struct KeyLabel<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
 
         case .changeKeyboard:
             (self.action.makeChangeKeyboardButtonView() as ChangeKeyboardButtonView<Extension>)
-                .foregroundColor(mainKeyColor)
+                .foregroundStyle(mainKeyColor)
 
         case let .selectable(primary, secondery):
             let font = Design.fonts.keyLabelFont(text: primary + primary, width: width, fontSize: self.textSize, userDecidedSize: keyViewFontSize, layout: variableStates.keyboardLayout, theme: theme)
@@ -89,13 +90,22 @@ public struct KeyLabel<Extension: ApplicationSpecificKeyboardViewExtension>: Vie
                 Text(primary)
                     .font(font)
                     .padding(.trailing, -5)
-                    .foregroundColor(mainKeyColor)
+                    .foregroundStyle(mainKeyColor)
                 Text(secondery)
                     .font(subFont.bold())
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
                     .padding(.leading, -5)
                     .offset(y: -1)
             }.allowsHitTesting(false)
         }
+    }
+
+    consuming func textColor(_ color: Color?) -> Self {
+        self.textColor = color
+        return self
+    }
+    consuming func textSize(_ textSize: Design.Fonts.LabelFontSizeStrategy) -> Self {
+        self.textSize = textSize
+        return self
     }
 }

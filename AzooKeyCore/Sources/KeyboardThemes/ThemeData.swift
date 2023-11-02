@@ -24,8 +24,10 @@ public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable
     public var specialKeyFillColor: ColorData
     public var pushedKeyFillColor: ColorData   // 自動で設定する
     public var suggestKeyFillColor: ColorData?  // 自動で設定する
+    public var suggestLabelTextColor: ColorData?        // 設定は露出させない
+    public var keyShadow: ThemeShadowData<ColorData>?   // 設定は露出させない
 
-    public init(id: Int? = nil, backgroundColor: ColorData, picture: ThemePicture, textColor: ColorData, textFont: ThemeFontWeight, resultTextColor: ColorData, resultBackgroundColor: ColorData, borderColor: ColorData, borderWidth: Double, normalKeyFillColor: ColorData, specialKeyFillColor: ColorData, pushedKeyFillColor: ColorData, suggestKeyFillColor: ColorData? = nil) {
+    public init(id: Int? = nil, backgroundColor: ColorData, picture: ThemePicture, textColor: ColorData, textFont: ThemeFontWeight, resultTextColor: ColorData, resultBackgroundColor: ColorData, borderColor: ColorData, borderWidth: Double, normalKeyFillColor: ColorData, specialKeyFillColor: ColorData, pushedKeyFillColor: ColorData, suggestKeyFillColor: ColorData? = nil, suggestLabelTextColor: ColorData? = nil, keyShadow: ThemeShadowData<ColorData>? = nil) {
         self.id = id
         self.backgroundColor = backgroundColor
         self.picture = picture
@@ -39,6 +41,8 @@ public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable
         self.specialKeyFillColor = specialKeyFillColor
         self.pushedKeyFillColor = pushedKeyFillColor
         self.suggestKeyFillColor = suggestKeyFillColor
+        self.suggestLabelTextColor = suggestLabelTextColor
+        self.keyShadow = keyShadow
     }
 
     enum CodingKeys: CodingKey {
@@ -55,6 +59,8 @@ public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable
         case specialKeyFillColor
         case pushedKeyFillColor
         case suggestKeyFillColor
+        case suggestLabelTextColor
+        case keyShadow
     }
 
     public init(from decoder: any Decoder) throws {
@@ -73,8 +79,25 @@ public struct ThemeData<ApplicationExtension: ApplicationSpecificTheme>: Codable
         self.specialKeyFillColor = try container.decode(ColorData.self, forKey: .specialKeyFillColor)
         self.pushedKeyFillColor = try container.decode(ColorData.self, forKey: .pushedKeyFillColor)
         self.suggestKeyFillColor = try? container.decode(ColorData?.self, forKey: .suggestKeyFillColor)
+        /// エントリがない場合はデフォルトで黒にする
+        self.suggestLabelTextColor = (try? container.decode(ColorData?.self, forKey: .suggestLabelTextColor)) ?? .color(Color(white: 0))
+        self.keyShadow = try? container.decode(ThemeShadowData<ColorData>?.self, forKey: .keyShadow)
     }
 
+}
+
+public struct ThemeShadowData<ColorData>: Codable, Equatable, Sendable where ColorData: Codable & Equatable & Sendable {
+    public init(color: ColorData, radius: CGFloat, x: CGFloat, y: CGFloat) {
+        self.color = color
+        self.radius = radius
+        self.x = x
+        self.y = y
+    }
+
+    public var color: ColorData
+    public var radius: CGFloat
+    public var x: CGFloat
+    public var y: CGFloat
 }
 
 public enum ThemeFontWeight: Int, Codable, Sendable {

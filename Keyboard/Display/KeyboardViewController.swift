@@ -7,6 +7,7 @@
 //
 
 import AzooKeyUtils
+import Contacts
 import KanaKanjiConverterModule
 import KeyboardViews
 import SwiftUI
@@ -107,6 +108,7 @@ final class KeyboardViewController: UIInputViewController {
 
         KeyboardViewController.keyboardViewHost = host
         KeyboardViewController.action.setDelegateViewController(self)
+        KeyboardViewController.action.setResultViewUpdateCallback(Self.variableStates)
     }
 
     private func getCurrentTheme() -> AzooKeyTheme {
@@ -152,19 +154,73 @@ final class KeyboardViewController: UIInputViewController {
         }
 
         KeyboardViewController.action.setDelegateViewController(self)
+        KeyboardViewController.action.setResultViewUpdateCallback(Self.variableStates)
         SemiStaticStates.shared.setNeedsInputModeSwitchKey(self.needsInputModeSwitchKey)
         SemiStaticStates.shared.setHapticsAvailable()
         SemiStaticStates.shared.setHasFullAccess(self.hasFullAccess)
 
-        @KeyboardSetting(.useOSUserDict) var useOSUserDict
-        if useOSUserDict {
-            Task {
+        Task {
+            @KeyboardSetting(.useOSUserDict) var useOSUserDict
+            var dict: [DicdataElement] = []
+            if useOSUserDict {
                 let lexicon = await self.requestSupplementaryLexicon()
-                let dict = lexicon.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -6)}
-                KeyboardViewController.action.sendToDicdataStore(.importOSUserDict(dict))
+                dict = lexicon.entries.map {entry in DicdataElement(word: entry.documentText, ruby: entry.userInput.toKatakana(), cid: CIDData.固有名詞.cid, mid: MIDData.一般.mid, value: -6)}
             }
-        } else {
-            KeyboardViewController.action.sendToDicdataStore(.importOSUserDict([]))
+            @KeyboardSetting(.enableContactImport) var enableContactImport
+            if enableContactImport && self.hasFullAccess && CNContactStore.authorizationStatus(for: .contacts) == .authorized {
+                let contactStore: CNContactStore = CNContactStore()
+                let keys = [
+                    CNContactFamilyNameKey,
+                    CNContactPhoneticFamilyNameKey,
+                    CNContactMiddleNameKey,
+                    CNContactPhoneticMiddleNameKey,
+                    CNContactGivenNameKey,
+                    CNContactPhoneticGivenNameKey,
+                    CNContactOrganizationNameKey,
+                    CNContactPhoneticOrganizationNameKey
+                ] as [NSString]
+
+                struct NamePair: Hashable {
+                    var name: String
+                    var phoneticName: String
+                    var isValid: Bool {
+                        !name.isEmpty && !phoneticName.isEmpty
+                    }
+                }
+
+                var familyNames: Set<NamePair> = []
+                var middleNames: Set<NamePair> = []
+                var givenNames: Set<NamePair> = []
+                var orgNames: Set<NamePair> = []
+                var fullNames: Set<NamePair> = []
+
+                try contactStore.enumerateContacts(with: CNContactFetchRequest(keysToFetch: keys)) { contact, _ in
+                    familyNames.update(with: NamePair(name: contact.familyName, phoneticName: contact.phoneticFamilyName))
+                    middleNames.update(with: NamePair(name: contact.middleName, phoneticName: contact.phoneticMiddleName))
+                    givenNames.update(with: NamePair(name: contact.givenName, phoneticName: contact.phoneticGivenName))
+                    orgNames.update(with: NamePair(name: contact.organizationName, phoneticName: contact.phoneticOrganizationName))
+                    fullNames.update(with: NamePair(
+                        name: contact.familyName + contact.middleName + contact.givenName,
+                        phoneticName: contact.phoneticFamilyName + contact.phoneticMiddleName + contact.phoneticGivenName
+                    ))
+                }
+                for item in familyNames where item.isValid {
+                    dict.append(DicdataElement(word: item.name, ruby: item.phoneticName, cid: CIDData.人名姓.cid, mid: MIDData.人名姓.mid, value: -6))
+                }
+                for item in middleNames where item.isValid {
+                    dict.append(DicdataElement(word: item.name, ruby: item.phoneticName, cid: CIDData.人名一般.cid, mid: MIDData.一般.mid, value: -6))
+                }
+                for item in givenNames where item.isValid {
+                    dict.append(DicdataElement(word: item.name, ruby: item.phoneticName, cid: CIDData.人名名.cid, mid: MIDData.人名名.mid, value: -6))
+                }
+                for item in fullNames where item.isValid {
+                    dict.append(DicdataElement(word: item.name, ruby: item.phoneticName, cid: CIDData.人名一般.cid, mid: MIDData.一般.mid, value: -10))
+                }
+                for item in orgNames where item.isValid {
+                    dict.append(DicdataElement(word: item.name, ruby: item.phoneticName, cid: CIDData.固有名詞組織.cid, mid: MIDData.組織.mid, value: -7))
+                }
+            }
+            KeyboardViewController.action.sendToDicdataStore(.importOSUserDict(dict))
         }
     }
 
@@ -177,7 +233,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     func updateResultView(_ candidates: [any ResultViewItemData]) {
-        KeyboardViewController.variableStates.resultModelVariableSection.setResults(candidates)
+        KeyboardViewController.variableStates.resultModel.setResults(candidates)
     }
 
     func makeChangeKeyboardButtonView<Extension: ApplicationSpecificKeyboardViewExtension>(size: CGFloat) -> ChangeKeyboardButtonView<Extension> {
@@ -270,7 +326,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     @objc func openURL(_ url: URL) {}
-    //https://stackoverflow.com/questions/40019521/open-my-application-from-my-keyboard-extension-in-swift-3-0より
+    // https://stackoverflow.com/questions/40019521/open-my-application-from-my-keyboard-extension-in-swift-3-0より
     func openUrl(url: URL?) {
         let selector = #selector(openURL(_:))
         var responder = (self as UIResponder).next

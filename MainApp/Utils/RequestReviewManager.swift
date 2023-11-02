@@ -9,8 +9,6 @@
 import Foundation
 
 struct RequestReviewManager {
-    static var shared = RequestReviewManager()
-    private init() {}
     var shouldTryRequestReview: Bool = false
 
     mutating func shouldRequestReview() -> Bool {

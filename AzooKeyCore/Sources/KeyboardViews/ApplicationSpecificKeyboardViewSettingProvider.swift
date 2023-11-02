@@ -28,9 +28,17 @@ import Foundation
     static var enableSound: Bool { get }
     static var enableHaptics: Bool { get }
     static var enablePasteButton: Bool { get }
-    static var displayTabBarButton: Bool { get }
     static var hideResetButtonInOneHandedMode: Bool { get }
-    static var useBetaMoveCursorBar: Bool { get }
+    static var useShiftKey: Bool { get }
+
+    /// タブバーボタンを表示する
+    ///  - note: このオプションは一度削除を決めたが、ユーザから強い要望があったので維持することにした。
+    static var displayTabBarButton: Bool { get }
+    /// 反射スタイルのカーソルバーを利用する
+    static var useReflectStyleCursorBar: Bool { get }
+    /// カーソルバーを自動表示する（実験的機能）
+    ///  - note: この機能は実験的に導入しているが、仕様に議論がある。[#346](https://github.com/ensan-hcl/azooKey/issues/346)も参照。
+    static var displayCursorBarAutomatically: Bool { get }
 
     static var canResetLearningForCandidate: Bool { get }
 

@@ -18,6 +18,7 @@ public struct AzooKeyIcon: View {
         case king
         case santaClaus
         case strawHat
+        case fire
     }
     public enum Color {
         case auto
@@ -60,34 +61,37 @@ public struct AzooKeyIcon: View {
         switch looks {
         case .normal:
             Text("1")
-                .foregroundColor(foregroundColor)
+                .foregroundStyle(foregroundColor)
         case .king:
             ZStack(alignment: .center) {
                 Text("α")
-                    .foregroundColor(foregroundColor)
+                    .foregroundStyle(foregroundColor)
                 Text("\u{EA00}")
-                    .foregroundColor(.orange)
+                    .foregroundStyle(.orange)
             }
         case .strawHat:
             ZStack(alignment: .center) {
                 Text("β")
-                    .foregroundColor(foregroundColor)
+                    .foregroundStyle(foregroundColor)
                 Text("\u{EA10}")
-                    .foregroundColor(SwiftUI.Color(red: 243 / 255, green: 210 / 255, blue: 82 / 255))
+                    .foregroundStyle(SwiftUI.Color(red: 243 / 255, green: 210 / 255, blue: 82 / 255))
                 Text("\u{EA11}")
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
             }
         case .santaClaus:
             ZStack(alignment: .center) {
                 Text("γ")
-                    .foregroundColor(foregroundColor)
+                    .foregroundStyle(foregroundColor)
                 Text("\u{EA20}")
-                    .foregroundColor(.black)
+                    .foregroundStyle(.black)
                 Text("\u{EA21}")
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                 Text("\u{EA22}")
-                    .foregroundColor(.red)
+                    .foregroundStyle(.red)
             }
+        case .fire:
+            Text("δ")
+                .foregroundStyle(foregroundColor)
         }
     }
 

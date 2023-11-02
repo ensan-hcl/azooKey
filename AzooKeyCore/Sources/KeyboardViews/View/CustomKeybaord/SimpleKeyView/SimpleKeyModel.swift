@@ -29,7 +29,7 @@ enum SimpleUnpressedKeyColorType: UInt8 {
             return Color(white: 0, opacity: 0.001)
         case .enter:
             switch states.enterKeyState {
-            case .complete, .edit:
+            case .complete:
                 return theme.specialKeyFillColor.color
             case let .return(type):
                 switch type {
@@ -50,9 +50,9 @@ enum SimpleUnpressedKeyColorType: UInt8 {
 protocol SimpleKeyModelProtocol {
     associatedtype Extension: ApplicationSpecificKeyboardViewExtension
 
-    var longPressActions: LongpressActionType {get}
     var unpressedKeyColorType: SimpleUnpressedKeyColorType {get}
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func longPressActions(variableStates: VariableStates) -> LongpressActionType
     @MainActor func feedback(variableStates: VariableStates)
     @MainActor func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: Extension.Theme) -> KeyLabel<Extension>
     @MainActor func backGroundColorWhenPressed(theme: Extension.Theme) -> Color
@@ -82,12 +82,16 @@ struct SimpleKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Simp
     private let pressActions: [ActionType]
     let longPressActions: LongpressActionType
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         KeyLabel(self.keyLabelType, width: width)
     }
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         pressActions
+    }
+
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        longPressActions
     }
 
     func feedback(variableStates: VariableStates) {
@@ -103,25 +107,64 @@ struct SimpleEnterKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>:
             return [.enter]
         case .return:
             return [.input("\n")]
-        case .edit:
-            return [.deselectAndUseAsInputting]
         }
     }
 
-    let longPressActions: LongpressActionType = .none
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
+    }
+
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .enter
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         let text = Design.language.getEnterKeyText(states.enterKeyState)
         return KeyLabel(.text(text), width: width)
     }
 
     func feedback(variableStates: VariableStates) {
         switch variableStates.enterKeyState {
-        case .complete, .edit:
+        case .complete:
             KeyboardFeedback<Extension>.tabOrOtherKey()
         case .return:
             KeyboardFeedback<Extension>.click()
         }
+    }
+}
+
+struct SimpleNextCandidateKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
+    var unpressedKeyColorType: SimpleUnpressedKeyColorType = .normal
+
+    func pressActions(variableStates: VariableStates) -> [ActionType] {
+        if variableStates.resultModel.results.isEmpty {
+            [.input(" ")]
+        } else {
+            [.selectCandidate(.offset(1))]
+        }
+    }
+    @MainActor func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        if variableStates.resultModel.results.isEmpty {
+            .init(start: [.setCursorBar(.toggle)])
+        } else {
+            .init(start: [.input(" ")])
+        }
+    }
+
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
+        if states.resultModel.results.isEmpty {
+            KeyLabel(.text("空白"), width: width)
+        } else {
+            KeyLabel(.text("次候補"), width: width)
+        }
+    }
+
+    func feedback(variableStates: VariableStates) {
+        if variableStates.resultModel.results.isEmpty {
+            KeyboardFeedback<Extension>.click()
+        } else {
+            KeyboardFeedback<Extension>.tabOrOtherKey()
+        }
+    }
+    func backGroundColorWhenUnpressed<ThemeExtension: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable>(states: VariableStates, theme: ThemeData<ThemeExtension>) -> Color {
+        theme.specialKeyFillColor.color
     }
 }
 
@@ -134,9 +177,11 @@ struct SimpleChangeKeyboardKeyModel<Extension: ApplicationSpecificKeyboardViewEx
         }
     }
     let unpressedKeyColorType: SimpleUnpressedKeyColorType = .special
-    let longPressActions: LongpressActionType = .none
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        .none
+    }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
         if SemiStaticStates.shared.needsInputModeSwitchKey {
             return KeyLabel(.changeKeyboard, width: width)
         } else {

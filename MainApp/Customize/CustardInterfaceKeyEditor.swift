@@ -429,8 +429,10 @@ struct CustardInterfaceKeyEditor: View {
             Text("改行キー").tag(CustardInterfaceKey.system(.enter))
             Text("削除キー").tag(CustardInterfaceKey.custom(.flickDelete()))
             Text("空白キー").tag(CustardInterfaceKey.custom(.flickSpace()))
+            Text("次候補キー").tag(CustardInterfaceKey.system(.nextCandidate))
             Text("地球儀キー").tag(CustardInterfaceKey.system(.changeKeyboard))
             Text("小書き・濁点化キー").tag(CustardInterfaceKey.system(.flickKogaki))
+            Text("大文字・小文字キー").tag(CustardInterfaceKey.system(.upperLower))
             Text("句読点キー").tag(CustardInterfaceKey.system(.flickKutoten))
             Text("日本語タブキー").tag(CustardInterfaceKey.system(.flickHiraTab))
             Text("英語タブキー").tag(CustardInterfaceKey.system(.flickAbcTab))
@@ -466,7 +468,7 @@ struct CustardInterfaceKeyEditor: View {
             Section {
                 Button("リセット") {
                     key = .custom(.empty)
-                }.foregroundColor(.red)
+                }.foregroundStyle(.red)
             }
         }
     }
@@ -503,7 +505,7 @@ struct CustardInterfaceKeyEditor: View {
                     Button("入力を設定する") {
                         key[.custom][.inputAction, position] = ""
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
                 }
             }
             Section(header: Text("ラベル")) {
@@ -574,12 +576,12 @@ struct CustardInterfaceKeyEditor: View {
             Section(header: Text("アクション")) {
                 Text("キーを押したときの動作をより詳しく設定します。")
                 NavigationLink("アクションを編集する", destination: CodableActionDataEditor($key[.custom][.pressAction, position], availableCustards: CustardManager.load().availableCustards))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
             }
             Section(header: Text("長押しアクション")) {
                 Text("キーを長押ししたときの動作をより詳しく設定します。")
                 NavigationLink("長押しアクションを編集する", destination: CodableLongpressActionDataEditor($key[.custom][.longpressAction, position], availableCustards: CustardManager.load().availableCustards))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
             }
 
             if position == .center {
@@ -592,7 +594,7 @@ struct CustardInterfaceKeyEditor: View {
                 Section {
                     Button("リセット") {
                         key = .custom(.empty)
-                    }.foregroundColor(.red)
+                    }.foregroundStyle(.red)
                 }
             }
             if let direction = position.flickDirection {
@@ -600,7 +602,7 @@ struct CustardInterfaceKeyEditor: View {
                     key[.custom].variations.removeAll {
                         $0.type == .flickVariation(direction)
                     }
-                }.foregroundColor(.red)
+                }.foregroundStyle(.red)
             }
         }
     }

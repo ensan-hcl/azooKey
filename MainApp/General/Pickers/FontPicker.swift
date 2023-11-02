@@ -69,7 +69,7 @@ struct FontPickView: View {
             Button("フォントを選択") {
                 isFontPickerPresented = true
             }
-            Text("テキスト Text").font(selectedFont)
+            Text(verbatim: "テキスト Text").font(selectedFont)
         }
         .sheet(isPresented: $isFontPickerPresented, content: {
             FontPicker(

@@ -44,57 +44,89 @@ struct EditingTabBarView: View {
         self._manager = manager
     }
 
+    private static let anchorId = "BOTTOM_ANCHOR"
     var body: some View {
-        Form {
-            Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
-            Section {
-                Button(action: add) {
-                    Label("アイテムを追加", systemImage: "plus")
-                }
-            }
-            Section(header: Text("アイテム")) {
-                DisclosuringList($items) { $item in
-                    HStack {
-                        Label("ラベル", systemImage: "rectangle.and.pencil.and.ellipsis")
-                        Spacer()
-                        TabNavigationViewItemLabelEditView("ラベルを設定", label: $item.label)
-                    }
-                    NavigationLink(destination: CodableActionDataEditor($item.actions, availableCustards: manager.availableCustards)) {
-                        Label("アクション", systemImage: "terminal")
-
-                        Text(makeLabelText(item: item))
-                            .foregroundColor(.gray)
-                    }
-                } label: { item in
-                    label(labelType: item.label)
-                        .contextMenu {
-                            Button(role: .destructive) {
-                                items.removeAll(where: {$0.id == item.id})
-                            } label: {
-                                Label("削除", systemImage: "trash")
-                            }
+        ScrollViewReader { proxy in
+            Form {
+                Text("タブバーを編集し、タブの並び替え、削除、追加を行ったり、文字の入力やカーソルの移動など様々な機能を追加することができます。")
+                Section {
+                    Button("アイテムを追加", systemImage: "plus") {
+                        withAnimation(.interactiveSpring()) {
+                            let item = EditingTabBarItem(
+                                label: .text("アイテム"),
+                                actions: [.moveTab(.system(.user_japanese))]
+                            )
+                            self.items.append(item)
+                            proxy.scrollTo(Self.anchorId, anchor: .bottom)
                         }
+                    }
                 }
-                .onDelete(perform: delete)
-                .onMove(perform: move)
-            }
-        }
-        .onAppear {
-            if let tabBarData = try? manager.tabbar(identifier: 0), tabBarData.lastUpdateDate != self.lastUpdateDate {
-                self.items = tabBarData.items.indices.map {i in
-                    EditingTabBarItem(
-                        label: tabBarData.items[i].label,
-                        actions: tabBarData.items[i].actions
-                    )
+                Section(header: Text("アイテム")) {
+                    DisclosuringList($items) { $item in
+                        HStack {
+                            Label("ラベル", systemImage: "rectangle.and.pencil.and.ellipsis")
+                            Spacer()
+                            TabNavigationViewItemLabelEditView("ラベルを設定", label: $item.label)
+                        }
+                        NavigationLink(destination: CodableActionDataEditor($item.actions, availableCustards: manager.availableCustards)) {
+                            Label("アクション", systemImage: "terminal")
+                            Text(makeLabelText(item: item))
+                                .foregroundStyle(.gray)
+                        }
+                    } label: { item in
+                        label(labelType: item.label)
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    items.removeAll(where: {$0.id == item.id})
+                                } label: {
+                                    Label("削除", systemImage: "trash")
+                                }
+                            }
+                    }
+                    .onDelete(perform: delete)
+                    .onMove(perform: move)
+                }
+                Section(header: Text("便利なボタンを追加")) {
+                    Button("片手モードをオン", systemImage: "aspectratio") {
+                        withAnimation(.interactiveSpring()) {
+                            self.items.append(EditingTabBarItem(label: .text("片手"), actions: [.enableResizingMode]))
+                        }
+                    }
+                    .id(Self.anchorId)  // ココに付けると自動スクロールが機能する
+                    Button("絵文字タブを表示", systemImage: "face.smiling") {
+                        withAnimation(.interactiveSpring()) {
+                            self.items.append(EditingTabBarItem(label: .text("絵文字"), actions: [.moveTab(.system(.emoji_tab))]))
+                        }
+                    }
+                    Button("カーソルバーを表示", systemImage: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right") {
+                        withAnimation(.interactiveSpring()) {
+                            self.items.append(EditingTabBarItem(label: .text("カーソル移動"), actions: [.toggleCursorBar]))
+                        }
+                    }
+                    Button("キーボードを閉じる", systemImage: "keyboard.chevron.compact.down") {
+                        withAnimation(.interactiveSpring()) {
+                            self.items.append(EditingTabBarItem(label: .text("閉じる"), actions: [.dismissKeyboard]))
+                        }
+                    }
                 }
             }
+            .onAppear {
+                if let tabBarData = try? manager.tabbar(identifier: 0), tabBarData.lastUpdateDate != self.lastUpdateDate {
+                    self.items = tabBarData.items.indices.map {i in
+                        EditingTabBarItem(
+                            label: tabBarData.items[i].label,
+                            actions: tabBarData.items[i].actions
+                        )
+                    }
+                }
+            }
+            .onChange(of: items) {newValue in
+                self.save(newValue)
+            }
+            .navigationBarTitle(Text("タブバーの編集"), displayMode: .inline)
+            .navigationBarItems(trailing: editButton)
+            .environment(\.editMode, $editMode)
         }
-        .onChange(of: items) {newValue in
-            self.save(newValue)
-        }
-        .navigationBarTitle(Text("タブバーの編集"), displayMode: .inline)
-        .navigationBarItems(trailing: editButton)
-        .environment(\.editMode, $editMode)
     }
 
     @ViewBuilder private func label(labelType: TabBarItemLabelType) -> some View {
@@ -149,23 +181,12 @@ struct EditingTabBarView: View {
         } label: {
             switch editMode {
             case .inactive:
-                Text("削除と順番")
+                Text("編集")
             case .active, .transient:
                 Text("完了")
             @unknown default:
                 Text("完了")
             }
-        }
-    }
-
-    private func add() {
-        withAnimation(Animation.interactiveSpring()) {
-            items.append(
-                EditingTabBarItem(
-                    label: .text("アイテム"),
-                    actions: [.moveTab(.system(.user_japanese))]
-                )
-            )
         }
     }
 

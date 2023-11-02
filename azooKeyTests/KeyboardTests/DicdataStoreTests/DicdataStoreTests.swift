@@ -68,7 +68,8 @@ final class DicdataStoreTests: XCTestCase {
             ("タイ", "体."),
             ("アサッテ", "明日"),
             ("チョ", "ちょwww"),
-            ("a", "あ")   // direct入力の場合「a」で「あ」をサジェストしてはいけない
+            ("a", "あ"),   // direct入力の場合「a」で「あ」をサジェストしてはいけない
+            ("\\n", "\n")
         ]
         for (key, word) in mustWords {
             var c = ComposingText()

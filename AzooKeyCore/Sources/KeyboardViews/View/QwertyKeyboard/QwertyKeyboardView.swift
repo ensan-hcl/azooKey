@@ -15,7 +15,7 @@ struct QwertyKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
 
     init(keyModels: [[any QwertyKeyModelProtocol]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
         self.keyModels = keyModels
-        self.tabDesign = TabDependentDesign(width: 10, height: 4, interfaceSize: interfaceSize, layout: .qwerty, orientation: keyboardOrientation)
+        self.tabDesign = TabDependentDesign(width: 10, height: 4, interfaceSize: interfaceSize, orientation: keyboardOrientation)
     }
 
     private var verticalIndices: Range<Int> {

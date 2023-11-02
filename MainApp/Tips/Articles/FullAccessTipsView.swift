@@ -38,6 +38,7 @@ struct FullAccessTipsView: View {
                 BoolSettingView(.enablePasteButton)
             }
             BoolSettingView(.enableClipboardHistoryManagerTab)
+            ContactImportSettingView()
 
             TipsContentParagraph {
                 Text("フルアクセスをオンにすると、変換候補を長押しすることでキーボード上で誤変換を報告できるようになります。")
@@ -51,7 +52,7 @@ struct FullAccessTipsView: View {
 
             TipsContentParagraph {
                 Text("フルアクセスを有効化する際、以下のような警告が表示されますが、すべてのキーボードアプリで共通して表示されている警告です。")
-                TipsImage("fullAccessAlert")
+                TipsImage(.fullAccessAlert)
                 Text("azooKeyは安全なキーボードアプリであり、ユーザの明示的な同意なく、個人情報を外部に送信したり、保存したりすることはありません。")
                 Text("なお、azooKeyはオープンソースであり、誰もが実装を確認することができます。")
             }

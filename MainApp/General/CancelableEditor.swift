@@ -10,6 +10,6 @@ import SwiftUI
 
 protocol CancelableEditor: View {
     associatedtype EditTarget
-    var base: EditTarget { get }
-    func cancel()
+    @MainActor var base: EditTarget { get }
+    @MainActor func cancel()
 }

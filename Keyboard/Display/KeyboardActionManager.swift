@@ -20,17 +20,17 @@ import SwiftUtils
     private unowned var delegate: KeyboardViewController!
 
     // 即時変数
-    private var timers: [(type: LongpressActionType, timer: Timer)] = []
+    private var tasks: [(type: LongpressActionType, task: Task<Void, any Error>)] = []
     private var tempTextData: (left: String, center: String, right: String)?
 
     // キーボードを閉じる際に呼び出す
     // inputManagerはキーボードを閉じる際にある種の操作を行う
     func closeKeyboard() {
         self.inputManager.closeKeyboard()
-        for (_, timer) in self.timers {
-            timer.invalidate()
+        for (_, task) in self.tasks {
+            task.cancel()
         }
-        self.timers = []
+        self.tasks = []
         self.tempTextData = nil
     }
 
@@ -41,8 +41,13 @@ import SwiftUtils
     func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
         self.inputManager.setTextDocumentProxy(.mainProxy(controller.textDocumentProxy))
-        self.inputManager.setUpdateResult { [weak controller] in
-            controller?.updateResultView($0)
+    }
+
+    func setResultViewUpdateCallback(_ variableStates: VariableStates) {
+        self.inputManager.setUpdateResult { [weak variableStates] in
+            if let variableStates {
+                $0(&variableStates.resultModel)
+            }
         }
     }
 
@@ -56,10 +61,9 @@ import SwiftUtils
 
     /// 変換を確定した場合に呼ばれる。
     /// - Parameters:
-    ///   - text: String。確定された文字列。
-    ///   - count: Int。確定された文字数。例えば「検証」を確定した場合5。
+    ///   - candidate: 確定された候補。
+    ///   - variableStates: 状態。
     override func notifyComplete(_ candidate: any ResultViewItemData, variableStates: VariableStates) {
-        let target = variableStates.tabManager.existentialTab().replacementTarget
         if let candidate = candidate as? Candidate {
             self.inputManager.complete(candidate: candidate)
             self.registerActions(candidate.actions.map(\.action), variableStates: variableStates)
@@ -72,12 +76,20 @@ import SwiftUtils
                 }
             }
             variableStates.lastTabCharacterPreferenceUpdate = .now
+        } else if let candidate = candidate as? PostCompositionPredictionCandidate {
+            self.inputManager.input(text: candidate.text, simpleInsert: true, inputStyle: .direct)
+            if !candidate.isTerminal {
+                self.inputManager.postCompositionPredictionCandidateSelected(candidate: candidate)
+            } else {
+                self.inputManager.resetPostCompositionPredictionCandidates()
+            }
         } else {
             debug("notifyComplete: 確定できません")
         }
         // 左右の文字列
         let (left, center, right) = self.inputManager.getSurroundingText()
         // MARK: Replacementの更新をする
+        let target = variableStates.tabManager.existentialTab().replacementTarget
         if !target.isEmpty {
             self.inputManager.updateTextReplacementCandidates(left: left, center: center, right: right, target: target)
         }
@@ -96,32 +108,41 @@ import SwiftUtils
         variableStates.barState = .none
     }
 
+    private func shiftStateOff(variableStates: VariableStates) {
+        variableStates.boolStates[VariableStates.BoolStates.isShiftedKey] = false
+    }
+
     private func doAction(_ action: ActionType, requireSetResult: Bool = true, variableStates: VariableStates) {
         debug("doAction", action)
         var undoAction: ActionType?
         switch action {
         case let .input(text, simpleInsert):
             self.showResultView(variableStates: variableStates)
-            if variableStates.boolStates.isCapsLocked && [.en_US, .el_GR].contains(variableStates.keyboardLanguage) {
+            if (variableStates.boolStates.isCapsLocked || variableStates.boolStates.isShifted) && [.en_US, .el_GR].contains(variableStates.keyboardLanguage) {
                 let input = text.uppercased()
                 self.inputManager.input(text: input, requireSetResult: requireSetResult, simpleInsert: simpleInsert, inputStyle: variableStates.inputStyle)
             } else {
                 self.inputManager.input(text: text, requireSetResult: requireSetResult, simpleInsert: simpleInsert, inputStyle: variableStates.inputStyle)
             }
+            self.shiftStateOff(variableStates: variableStates)
         case let .insertMainDisplay(text):
             self.inputManager.insertMainDisplayText(text)
+            self.shiftStateOff(variableStates: variableStates)
         case let .delete(count):
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             self.inputManager.deleteBackward(convertTargetCount: count, requireSetResult: requireSetResult)
-
         case .smoothDelete:
             KeyboardFeedback<AzooKeyKeyboardViewExtension>.smoothDelete()
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             let deletedText = self.inputManager.smoothDelete(requireSetResult: requireSetResult)
             if !deletedText.isEmpty {
                 undoAction = .input(deletedText, simplyInsert: true)
             }
         case let .smartDelete(item):
+            self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             let deletedText: String
             switch item.direction {
             case .forward:
@@ -133,14 +154,13 @@ import SwiftUtils
                 undoAction = .input(deletedText, simplyInsert: true)
             }
         case .paste:
+            // ペーストではシフトを解除しない
             if SemiStaticStates.shared.hasFullAccess {
                 self.inputManager.paste()
             }
 
-        case .deselectAndUseAsInputting:
-            self.inputManager.edit()
-
         case let .moveCursor(count):
+            // カーソル移動ではシフトを解除しない
             self.inputManager.moveCursor(count: count, requireSetResult: requireSetResult)
 
         case let .smartMoveCursor(item):
@@ -169,18 +189,28 @@ import SwiftUtils
 
         case .enter:
             self.showResultView(variableStates: variableStates)
-            let actions = self.inputManager.enter()
-            self.registerActions(actions, variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
+            if let candidate = variableStates.resultModel.getSelectedCandidate() {
+                self.notifyComplete(candidate, variableStates: variableStates)
+            } else {
+                let actions = self.inputManager.enter(requireSetResult: requireSetResult)
+                self.registerActions(actions, variableStates: variableStates)
+            }
 
         case .changeCharacterType:
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             self.inputManager.changeCharacter(requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
 
         case let .replaceLastCharacters(table):
             self.showResultView(variableStates: variableStates)
+            self.shiftStateOff(variableStates: variableStates)
             self.inputManager.replaceLastCharacters(table: table, requireSetResult: requireSetResult, inputStyle: variableStates.inputStyle)
 
+        case let .selectCandidate(selection):
+            variableStates.resultModel.setSelectionRequest(selection)
         case let .moveTab(type):
+            // タブ移動ではシフトを解除しない
             variableStates.setTab(type)
 
         case let .setUpsideComponent(type):
@@ -248,7 +278,7 @@ import SwiftUtils
             }
         case let .setSearchQuery(query, target):
             let results = self.inputManager.getSearchResult(query: query, target: target)
-            variableStates.resultModelVariableSection.setSearchResults(results)
+            variableStates.resultModel.setSearchResults(results)
         }
 
         if requireSetResult {
@@ -257,9 +287,14 @@ import SwiftUtils
             let (left, center, right) = self.inputManager.getSurroundingText()
             variableStates.setSurroundingText(leftSide: left, center: center, rightSide: right)
             // エンターキーの状態
-            variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
+            variableStates.setEnterKeyState(
+                variableStates.resultModel.getSelectedCandidate() == nil ? self.inputManager.getEnterKeyState() : .complete
+            )
             // 文字列の変更を適用
-            variableStates.textChangedCount += self.inputManager.getTextChangedCountDelta()
+            variableStates.textChangedCount = self.inputManager.getTextChangedCount()
+            // 必要に応じて予測変換をリセット
+            self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
+
             if let undoAction {
                 variableStates.undoAction = .init(action: undoAction, textChangedCount: variableStates.textChangedCount)
             }
@@ -279,21 +314,33 @@ import SwiftUtils
         self.doAction(action, variableStates: variableStates)
     }
 
-    /// 複数のアクションを実行する
-    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
-    ///  サポートされている最適化
-    /// - `setResult`を一度のみ実施する
-    override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
-        let isSetActionTrigger = actions.map { action in
-            switch action {
-            case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
-                return true
-            default:
-                return false
-            }
+    private enum ActionTriggerStyle {
+        /// 集約対象ではない
+        case irrelevant
+        /// 集約を強制的に止める
+        case separator
+        /// 集約できるアクション
+        case maybe
+    }
+
+    private func actionTriggerStyle(_ action: ActionType) -> ActionTriggerStyle {
+        switch action {
+        case .input, .delete, .changeCharacterType, .smoothDelete, .smartDelete, .moveCursor, .replaceLastCharacters, .smartMoveCursor:
+            .maybe
+        case .enter:
+            .separator
+        default:
+            .irrelevant
         }
-        if let lastIndex = isSetActionTrigger.lastIndex(where: { $0 }) {
-            for (i, action) in actions.enumerated() {
+    }
+
+    /// actionの塊を実行する
+    ///  - parameters:
+    ///    - actionBlock: アクションの一連の列。1つのブロックの中には任意個の集約対象のアクションと集約対象でないアクションが含まれ、先頭にのみ集約できないアクションが出現できる
+    private func runActionBlock(actionBlock: some BidirectionalCollection<ActionType>, variableStates: VariableStates) {
+        // setResult可能な最後の
+        if let lastIndex = actionBlock.lastIndex(where: { actionTriggerStyle($0) != .irrelevant }) {
+            for (i, action) in zip(actionBlock.indices, actionBlock) {
                 if i == lastIndex {
                     self.doAction(action, requireSetResult: true, variableStates: variableStates)
                 } else {
@@ -301,47 +348,61 @@ import SwiftUtils
                 }
             }
         } else {
-            for action in actions {
+            for action in actionBlock {
                 self.doAction(action, variableStates: variableStates)
             }
         }
+    }
+
+    /// 複数のアクションを実行する
+    /// - note: アクションを実行する前に最適化を施すことでパフォーマンスを向上させる
+    ///  サポートされている最適化
+    /// - `setResult`を一度のみ実施する
+    override func registerActions(_ actions: [ActionType], variableStates: VariableStates) {
+        var actions = actions[...]
+        while let firstIndex = actions.firstIndex(where: { actionTriggerStyle($0) == .separator }) {
+            self.runActionBlock(actionBlock: actions[..<firstIndex], variableStates: variableStates)
+            self.doAction(actions[firstIndex], variableStates: variableStates)
+            actions = actions[(firstIndex + 1)...]
+        }
+        self.runActionBlock(actionBlock: actions, variableStates: variableStates)
     }
 
     /// 長押しを予約する関数。
     /// - Parameters:
     ///   - action: 長押しで起こる動作のタイプ。
     override func reserveLongPressAction(_ action: LongpressActionType, variableStates: VariableStates) {
-        if timers.contains(where: {$0.type == action}) {
+        if tasks.contains(where: {$0.type == action}) {
             return
         }
-        let startTime = Date()
-
-        let startTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: {[weak self] (timer) in
-            let span: TimeInterval = timer.fireDate.timeIntervalSince(startTime)
-            if span > 0.4 {
-                action.repeat.first?.feedback(variableStates: variableStates, extension: AzooKeyKeyboardViewExtension.self)
-                self?.registerActions(action.repeat, variableStates: variableStates)
-            }
-        })
-        self.timers.append((type: action, timer: startTimer))
-
-        let repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false, block: {[weak self] _ in
+        let startTask = Task {
+            try await Task.sleep(nanoseconds: 0_400_000_000)
             action.start.first?.feedback(variableStates: variableStates, extension: AzooKeyKeyboardViewExtension.self)
-            self?.registerActions(action.start, variableStates: variableStates)
-        })
-        self.timers.append((type: action, timer: repeatTimer))
+            self.registerActions(action.start, variableStates: variableStates)
+        }
+        self.tasks.append((type: action, task: startTask))
+
+        let repeatTask = Task {
+            try await Task.sleep(nanoseconds: 0_400_000_000)
+            while !Task.isCancelled {
+                action.repeat.first?.feedback(variableStates: variableStates, extension: AzooKeyKeyboardViewExtension.self)
+                self.registerActions(action.repeat, variableStates: variableStates)
+                try await Task.sleep(nanoseconds: 0_100_000_000)
+            }
+        }
+        self.tasks.append((type: action, task: repeatTask))
     }
 
     /// 長押しを終了する関数。継続的な動作、例えば連続的な文字削除を行っていたタイマーを停止する。
     /// - Parameters:
     ///   - action: どの動作を終了するか判定するために用いる。
     override func registerLongPressActionEnd(_ action: LongpressActionType) {
-        timers = timers.compactMap {timer in
-            if timer.type == action {
-                timer.timer.invalidate()
+        tasks = tasks.compactMap {task in
+            if task.type == action {
+                task.task.cancel()
                 return nil
             }
-            return timer
+            return task
         }
     }
 
@@ -463,7 +524,6 @@ import SwiftUtils
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String, variableStates: VariableStates) {
         defer {
-            // moveCursorBarStateの更新
             variableStates.setSurroundingText(leftSide: a_left, center: a_center, rightSide: a_right)
             // エンターキーの状態の更新
             variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
@@ -510,7 +570,27 @@ import SwiftUtils
 
         if isSelected {
             debug("user operation id: 0", a_center)
-            self.inputManager.userSelectedText(text: a_center)
+            // 検索フィールドなどでは再変換を抑制する
+            let lengthLimit: Int = switch variableStates.keyboardType {
+            case .default, .twitter:
+                switch variableStates.returnKeyType {
+                case .emergencyCall:
+                    0
+                case .search, .google, .yahoo, .route:
+                    5
+                default:
+                    100
+                }
+            case .decimalPad, .URL, .asciiCapableNumberPad, .emailAddress, .phonePad, .namePhonePad, .alphabet, .numbersAndPunctuation, .numberPad, .asciiCapable:
+                0
+            case .webSearch:
+                5
+            @unknown default:
+                50
+            }
+            self.inputManager.userSelectedText(text: a_center, lengthLimit: lengthLimit)
+            // barStateの更新
+            variableStates.barState = .none
             return
         }
 
@@ -527,7 +607,11 @@ import SwiftUtils
             if !wasSelected && !isSelected && b_left != a_left {
                 debug("user operation id: 2", b_left, a_left)
                 let offset = a_left.count - b_left.count
-                self.inputManager.userMovedCursor(count: offset)
+                let actions = self.inputManager.userMovedCursor(count: offset)
+                self.registerActions(actions, variableStates: variableStates)
+                // カーソルが動いているのでtextChangedCountを増やす
+                variableStates.textChangedCount += 1
+                self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
                 return
             }
 
@@ -548,6 +632,8 @@ import SwiftUtils
 
         defer {
             variableStates.textChangedCount += 1
+            // 予測変換はテキストが変化したら解除する
+            self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
         }
 
         if b_left == "\n" && b_center == a_wholeText {
@@ -582,9 +668,10 @@ import SwiftUtils
             return
         }
 
-        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
+        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合→ユーザがカーソルをジャンプした
         debug("user operation id: 10, \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
-        self.inputManager.stopComposition()
+        let actions = self.inputManager.userJumpedCursor()
+        self.registerActions(actions, variableStates: variableStates)
     }
 
     private func hideLearningMemory() {

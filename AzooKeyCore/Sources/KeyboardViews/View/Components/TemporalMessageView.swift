@@ -9,33 +9,34 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 15, *)
 struct TemporalMessageView: View {
-    let message: TemporalMessage
-    let onDismiss: () -> Void
-    @EnvironmentObject private var variableStates: VariableStates
-    @Environment(\.userActionManager) private var action
+    init(message: TemporalMessage, isPresented: Binding<Bool>) {
+        self.message = message
+        self._isPresented = isPresented
+    }
 
+    private let message: TemporalMessage
+    @Binding private var isPresented: Bool
+
+    @MainActor
     @ViewBuilder
     private var core: some View {
         switch message.dismissCondition {
         case .auto:
             Text(message.title)
                 .bold()
-                .foregroundColor(.black)
-                .onAppear {
-                    Task {
-                        // 1.5秒待機してからdismissを実行する
-                        try await Task.sleep(nanoseconds: 1_500_000_000)
-                        self.onDismiss()
-                    }
+                .foregroundStyle(.black)
+                .task {
+                    // 1.5秒待機してからdismissを実行する
+                    try? await Task.sleep(nanoseconds: 1_500_000_000)
+                    self.dismiss()
                 }
         case .ok:
             VStack {
                 Text(message.title)
                     .bold()
-                    .foregroundColor(.black)
-                Button("OK", action: onDismiss)
+                    .foregroundStyle(.black)
+                Button("OK", action: self.dismiss)
             }
         }
     }
@@ -52,4 +53,14 @@ struct TemporalMessageView: View {
                 Color.black.opacity(0.5)
             }
     }
+
+    private func dismiss() {
+        withAnimation(.easeIn) {
+            self.isPresented = false
+        }
+    }
+}
+
+#Preview {
+    TemporalMessageView(message: .doneReportWrongConversion, isPresented: .init(get: { true }, set: { _ in }))
 }

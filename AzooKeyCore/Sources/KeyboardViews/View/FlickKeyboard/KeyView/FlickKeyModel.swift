@@ -11,7 +11,6 @@ import Foundation
 import KeyboardThemes
 import SwiftUI
 
-// M：基本は変わらない
 struct FlickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: FlickKeyModelProtocol {
     static var delete: Self { Self(labelType: .image("delete.left"), pressActions: [.delete(1)], longPressActions: .init(repeat: [.delete(1)]), flickKeys: [
         .left: FlickedKeyModel(
@@ -46,11 +45,15 @@ struct FlickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Flick
         self.pressActions
     }
 
+    func longPressActions(variableStates: VariableStates) -> LongpressActionType {
+        self.longPressActions
+    }
+
     func flickKeys(variableStates: VariableStates) -> [FlickDirection: FlickedKeyModel] {
         self.flickKeys
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         KeyLabel(self.labelType, width: width)
     }
 

@@ -26,6 +26,7 @@ private final class NavigationModel: ObservableObject {
 }
 
 // Listが大元のtemplatesを持ち、各EditingViewにBindingで渡して編集させる。
+@MainActor
 struct TemplateListView: View {
     private static let dataFileName = "user_templates.json"
     @ObservedObject private var data = TemplateDataList()
@@ -46,7 +47,7 @@ struct TemplateListView: View {
                                 Text(value.item.name)
                                 Spacer()
                                 Text(value.item.previewString)
-                                    .foregroundColor(.gray)
+                                    .foregroundStyle(.gray)
                             }
                         }
                     }
@@ -58,7 +59,7 @@ struct TemplateListView: View {
                         }
                     }
                 }
-                .onDelete(perform: delete)
+                .onDelete(perform: {self.delete(at: $0)})
             }
         }.navigationBarTitle(Text("テンプレートの管理"), displayMode: .inline)
         .navigationBarItems(trailing: addButton)

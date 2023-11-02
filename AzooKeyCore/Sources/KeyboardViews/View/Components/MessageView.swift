@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@MainActor
 struct MessageView<ID: MessageIdentifierProtocol>: View {
     private let data: MessageData<ID>
     @Binding private var manager: MessageManager<ID>
@@ -89,11 +90,11 @@ struct MessageView<ID: MessageIdentifierProtocol>: View {
                         Text(data.title)
                             .font(.title.bold())
                             .padding(.top)
-                            .foregroundColor(.black)
+                            .foregroundStyle(.black)
                         ScrollView {
                             Text(data.description)
                                 .padding(.horizontal)
-                                .foregroundColor(.black)
+                                .foregroundStyle(.black)
                                 .lineLimit(nil)
                                 .fixedSize(horizontal: false, vertical: true)
                         }

@@ -22,7 +22,7 @@ struct FlickTabKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Fl
     func pressActions(variableStates: VariableStates) -> [ActionType] {
         self.data.actions
     }
-    var longPressActions: LongpressActionType {
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
         self.data.longpressActions
     }
 
@@ -37,7 +37,7 @@ struct FlickTabKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Fl
         self.tab = tab
     }
 
-    func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
+    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
         KeyLabel(self.data.labelType, width: width)
     }
 

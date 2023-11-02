@@ -12,6 +12,7 @@ import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
 
+@MainActor
 struct ThemeTabView: View {
     @Namespace private var namespace
     @EnvironmentObject private var appStates: MainAppStates
@@ -30,55 +31,15 @@ struct ThemeTabView: View {
     }
 
     @MainActor
-    private func circle(geometry: GeometryProxy, systemName: String, color: Color) -> some View {
-        let width = min(min(geometry.size.width / 1.5, 180), geometry.size.height / 2.5) // 高さに2つ入るサイズを超えないように設定
-        return Circle()
+    private func circle(width: CGFloat, systemName: String, color: Color) -> some View {
+        Circle()
             .fill(color)
             .frame(width: width, height: width)
             .overlay(
                 Image(systemName: systemName)
                     .font(Font.system(size: width / 2).weight(.bold))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
             )
-    }
-
-    @MainActor
-    private func selectButton(_ index: Int) -> some View {
-        GeometryReader {geometry in
-            if manager.selectedIndex == manager.selectedIndexInDarkMode {
-                CenterAlignedView {
-                    VStack {
-                        Spacer()
-                        circle(geometry: geometry, systemName: "checkmark", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                            .matchedGeometryEffect(id: "ThemeLightButton\(index)", in: namespace)
-                            .matchedGeometryEffect(id: "ThemeDarkButton\(index)", in: namespace)
-                        Spacer()
-                    }
-                    .onTapGesture {
-                        manager.select(at: index)
-                    }
-                }
-            } else {
-                CenterAlignedView {
-                    VStack {
-                        Spacer()
-                        circle(geometry: geometry, systemName: "sun.max.fill", color: manager.selectedIndex == index ? Color.blue : Color.systemGray4)
-                            .matchedGeometryEffect(id: "ThemeLightButton\(index)", in: namespace)
-                            .onTapGesture {
-                                manager.selectForLightMode(at: index)
-                            }
-                        Spacer(minLength: 10)
-                        circle(geometry: geometry, systemName: "moon.fill", color: manager.selectedIndexInDarkMode == index ? Color.blue : Color.systemGray4)
-                            .matchedGeometryEffect(id: "ThemeDarkButton\(index)", in: namespace)
-                            .onTapGesture {
-                                manager.selectForDarkMode(at: index)
-                            }
-                        Spacer()
-                    }
-                }
-            }
-        }
-        .animation(.easeIn(duration: 0.2), value: manager.selectedIndex == manager.selectedIndexInDarkMode)
     }
 
     private var tab: Tab.ExistentialTab {
@@ -98,9 +59,62 @@ struct ThemeTabView: View {
         ForEach(manager.indices.reversed(), id: \.self) { index in
             if let theme = theme(at: index) {
                 HStack {
-                    KeyboardPreview(theme: theme, scale: 0.6, defaultTab: tab)
-                        .disabled(true)
-                    selectButton(index)
+                    ZStack {
+                        KeyboardPreview(theme: theme, scale: 0.6, defaultTab: tab)
+                            .disabled(true)
+                            .overlay {
+                                if manager.selectedIndex == index || manager.selectedIndexInDarkMode == index {
+                                    Color.black.opacity(0.3)
+                                }
+                            }
+                            .onTapGesture {
+                                if manager.selectedIndex != index && manager.selectedIndexInDarkMode != index {
+                                    self.manager.select(at: index)
+                                }
+                            }
+                        if manager.selectedIndex == manager.selectedIndexInDarkMode,
+                           manager.selectedIndex == index {
+                            circle(width: 80, systemName: "checkmark", color: .blue)
+                                .matchedGeometryEffect(id: "selected_theme_checkmark", in: namespace)
+                        } else if manager.selectedIndex == index {
+                            circle(width: 80, systemName: "sun.max.fill", color: .blue)
+                                .matchedGeometryEffect(id: "selected_theme_light", in: namespace)
+                        } else if manager.selectedIndexInDarkMode == index {
+                            circle(width: 80, systemName: "moon.fill", color: .blue)
+                                .matchedGeometryEffect(id: "selected_theme_dark", in: namespace)
+                        }
+                    }
+                    Spacer()
+                    VStack {
+                        if manager.selectedIndex == manager.selectedIndexInDarkMode {
+                            if manager.selectedIndex != index {
+                                Button("選択", systemImage: "checkmark") {
+                                    manager.select(at: index)
+                                }
+                            }
+                        } else {
+                            if manager.selectedIndex != index {
+                                Button("ライトモード", systemImage: "sun.max.fill") {
+                                    manager.selectForLightMode(at: index)
+                                }
+                            }
+                            if manager.selectedIndexInDarkMode != index {
+                                Button("ダークモード", systemImage: "moon.fill") {
+                                    manager.selectForDarkMode(at: index)
+                                }
+                            }
+                        }
+                        if index != 0 {
+                            Button("編集", systemImage: "slider.horizontal.3") {
+                                editViewIndex = index
+                                editViewEnabled = true
+                            }
+                        }
+                    }
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(LargeButtonStyle(backgroundColor: .systemGray5))
+                    Spacer()
+                    // 編集用
                     if editViewIndex == index {
                         NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled) {
                             EmptyView()
@@ -109,36 +123,27 @@ struct ThemeTabView: View {
                 }
                 .contextMenu {
                     if self.manager.selectedIndex == self.manager.selectedIndexInDarkMode {
-                        Button {
+                        Button("ライトモードで使用", systemImage: "sun.max.fill") {
                             manager.selectForLightMode(at: index)
-                        } label: {
-                            Image(systemName: "sun.max.fill")
-                            Text("ライトモードで使用")
                         }
-                        Button {
+                        Button("ダークモードで使用", systemImage: "moon.fill") {
                             manager.selectForDarkMode(at: index)
-                        } label: {
-                            Image(systemName: "moon.fill")
-                            Text("ダークモードで使用")
                         }
                     }
-                    Button {
+                    Button("編集する", systemImage: "slider.horizontal.3") {
                         editViewIndex = index
                         editViewEnabled = true
-                    } label: {
-                        Image(systemName: "pencil")
-                        Text("編集する")
-                    }.disabled(index == 0)
-                    Button(role: .destructive) {
+                    }
+                    .disabled(index == 0)
+                    Button("削除する", systemImage: "trash", role: .destructive) {
                         manager.remove(index: index)
-                    } label: {
-                        Label("削除する", systemImage: "trash")
-                            .foregroundColor(.red)
                     }
                     .disabled(index == 0)
                 }
             }
         }
+        .animation(.easeIn(duration: 0.15), value: manager.selectedIndex)
+        .animation(.easeIn(duration: 0.15), value: manager.selectedIndexInDarkMode)
     }
 
     var body: some View {
@@ -150,7 +155,7 @@ struct ThemeTabView: View {
                             editViewIndex = nil
                             editViewEnabled = true
                         }
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                         if editViewIndex == nil {
                             NavigationLink(destination: ThemeEditView(index: editViewIndex, manager: $manager), isActive: $editViewEnabled) {
                                 EmptyView()

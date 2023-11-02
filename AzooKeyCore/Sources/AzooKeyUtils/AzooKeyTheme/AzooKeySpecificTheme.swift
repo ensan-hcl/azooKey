@@ -55,7 +55,9 @@ public extension AzooKeyTheme {
         normalKeyFillColor: .color(Color(.displayP3, white: 1, opacity: 1)),
         specialKeyFillColor: .color(Color(.displayP3, red: 0.804, green: 0.808, blue: 0.835)),
         pushedKeyFillColor: .color(Color(.displayP3, red: 0.929, green: 0.929, blue: 0.945)),
-        suggestKeyFillColor: nil
+        suggestKeyFillColor: nil,
+        suggestLabelTextColor: .color(Color(.displayP3, white: 0, opacity: 1)),
+        keyShadow: nil
     )
 }
 
@@ -73,7 +75,9 @@ extension AzooKeySpecificTheme: ApplicationSpecificKeyboardViewExtensionLayoutDe
             normalKeyFillColor: .system(layout == .qwerty ? .qwertyNormalKeyColor : .normalKeyColor),
             specialKeyFillColor: .system(.specialKeyColor),
             pushedKeyFillColor: .system(layout == .qwerty ? .qwertyHighlightedKeyColor : .highlightedKeyColor),
-            suggestKeyFillColor: nil
+            suggestKeyFillColor: nil,
+            suggestLabelTextColor: nil,
+            keyShadow: nil
         )
     }
 }

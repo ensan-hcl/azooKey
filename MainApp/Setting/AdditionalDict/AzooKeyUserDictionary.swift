@@ -44,6 +44,7 @@ private final class UserDictManagerVariables: ObservableObject {
 
 struct AzooKeyUserDictionaryView: View {
     @ObservedObject private var variables: UserDictManagerVariables = UserDictManagerVariables()
+    @EnvironmentObject private var appStates: MainAppStates
 
     var body: some View {
         Group {
@@ -57,11 +58,12 @@ struct AzooKeyUserDictionaryView: View {
             }
         }
         .onDisappear {
-            RequestReviewManager.shared.shouldTryRequestReview = true
+            appStates.requestReviewManager.shouldTryRequestReview = true
         }
     }
 }
 
+@MainActor
 private struct UserDictionaryDataListView: View {
     private let exceptionKey = "その他"
 
@@ -99,10 +101,10 @@ private struct UserDictionaryDataListView: View {
                             } label: {
                                 HStack {
                                     Text(data.word)
-                                        .foregroundColor(.primary)
+                                        .foregroundStyle(.primary)
                                     Spacer()
                                     Text(data.ruby)
-                                        .foregroundColor(.systemGray)
+                                        .foregroundStyle(.systemGray)
                                 }
                             }
                             .contextMenu {
@@ -141,10 +143,11 @@ private struct UserDictionaryDataListView: View {
     }
 }
 
+@MainActor
 private struct UserDictionaryDataEditor: CancelableEditor {
     @ObservedObject private var item: EditableUserDictionaryData
     @ObservedObject private var variables: UserDictManagerVariables
-    @State private var selectedTemplate: (name: String, index: Int)? = nil
+    @State private var selectedTemplate: (name: String, index: Int)?
 
     // CancelableEditor Conformance
     typealias EditTarget = (EditableUserDictionaryData, [TemplateData])
@@ -158,11 +161,11 @@ private struct UserDictionaryDataEditor: CancelableEditor {
 
     @available(iOS 16.0, *)
     private func hasTemplate(word: String) -> Bool {
-        return word.contains(templateRegex)
+        word.contains(templateRegex)
     }
 
     private func templateIndex(name: String) -> Int? {
-        return variables.templates.firstIndex(where: {$0.name == name})
+        variables.templates.firstIndex(where: {$0.name == name})
     }
 
     // こちらは「今まで同名のテンプレートがなかった」場合にのみテンプレートを追加する
@@ -173,7 +176,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
     }
 
     @State private var wordEditMode: Bool = false
-    @State private var pickerTemplateName: String? = nil
+    @State private var pickerTemplateName: String?
     @State private var shareThisWord = false
     @State private var showExplanation = false
     @State private var sending = false
@@ -221,7 +224,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                             selectedTemplate = (String(parsedWords[i].dropFirst(2).dropLast(2)), i)
                         } label: {
                             Text(parsedWords[i])
-                                .foregroundColor(.primary)
+                                .foregroundStyle(.primary)
                                 .padding(0)
                                 .background(Color.orange.opacity(0.7).cornerRadius(5))
                         }
@@ -250,8 +253,8 @@ private struct UserDictionaryDataEditor: CancelableEditor {
     @ViewBuilder
     private func templateEditor(index: Int, selectedTemplate: (name: String, index: Int)) -> some View {
         if variables.templates[index].name == selectedTemplate.name {
-            TemplateEditingView($variables.templates[index], validationInfo: variables.templates.map{$0.name}, options: .init(nameEdit: false, appearance: .embed { template in
-                if template.name == selectedTemplate.name && index < variables.templates.endIndex  {
+            TemplateEditingView($variables.templates[index], validationInfo: variables.templates.map {$0.name}, options: .init(nameEdit: false, appearance: .embed { template in
+                if template.name == selectedTemplate.name && index < variables.templates.endIndex {
                     variables.templates[index] = template
                 } else {
                     debug("templateEditor: Unknown situation:", template, selectedTemplate, variables.templates[index])
@@ -284,7 +287,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                             } label: {
                                 Image(systemName: "rectangle.and.pencil.and.ellipsis")
                             }
-                        } else  {
+                        } else {
                             wordField
                         }
                         Divider()
@@ -327,14 +330,12 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                     }
                 }
                 .toggleStyle(.switch)
-                .alert(isPresented: $showExplanation) {
-                    Alert(
-                        title: Text("この単語をシェアする"),
-                        message: Text("この単語をazooKeyの本体辞書に追加することを申請します。\n個人情報を含む単語は申請しないでください。"),
-                        dismissButton: .default(Text("OK")) {
-                            showExplanation = false
-                        }
-                    )
+                .alert("この単語をシェアする", isPresented: $showExplanation) {
+                    Button("OK") {
+                        showExplanation = false
+                    }
+                } message: {
+                    Text("この単語をazooKeyの本体辞書に追加することを申請します。\n個人情報を含む単語は申請しないでください。")
                 }
             }
             if #available(iOS 16.0, *), let selectedTemplate {
@@ -389,7 +390,6 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                         }
                     } else {
                         self.save()
-                        let data = self.item.makeStableData()
                         variables.mode = .list
                         MainAppFeedback.success()
                     }

@@ -7,14 +7,12 @@
 //
 
 import Foundation
+import class UIKit.UITextInputMode
 import enum AzooKeyUtils.SharedStore
 
 extension SharedStore {
-    static func checkKeyboardActivation() -> Bool {
-        let bundleName = SharedStore.bundleName
-        guard let keyboards = UserDefaults.standard.dictionaryRepresentation()["AppleKeyboards"] as? [String] else {
-            return true
-        }
-        return keyboards.contains(bundleName)
+    @MainActor static func checkKeyboardActivation() -> Bool {
+        let keyboards = UITextInputMode.activeInputModes.compactMap {$0.value(forKey: "identifier") as? String}
+        return keyboards.contains { $0.hasPrefix(SharedStore.bundleName) }
     }
 }

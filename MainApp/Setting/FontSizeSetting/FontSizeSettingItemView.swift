@@ -48,8 +48,10 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
                 setting.value = SettingKey.defaultValue
             }
         }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text(SettingKey.explanation), dismissButton: .default(Text("OK")))
+        .alert(SettingKey.explanation, isPresented: $showAlert) {
+            Button("OK") {
+                showAlert = false
+            }
         }
         .listRowSeparator(.hidden)
 
@@ -71,6 +73,7 @@ struct FontSizeSettingView<SettingKey: DoubleKeyboardSettingKey>: View {
     }
 }
 
+@MainActor
 private struct KeyView: View {
     @EnvironmentObject private var appStates: MainAppStates
     private let fontSize: CGFloat
@@ -95,6 +98,6 @@ private struct KeyView: View {
         RoundedRectangle(cornerRadius: 5)
             .stroke()
             .frame(width: size.width, height: size.height)
-            .overlay(Text("あ").font(.system(size: fontSize)))
+            .overlay(Text(verbatim: "あ").font(.system(size: fontSize)))
     }
 }

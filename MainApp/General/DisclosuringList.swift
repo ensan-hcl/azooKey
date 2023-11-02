@@ -91,7 +91,7 @@ private struct MiniDisclosureGroup<Label: View, Content: View>: View {
             } label: {
                 Image(systemName: hidden ? "chevron.right" : "chevron.down")
                     .font(.system(.caption).bold())
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
             }
         }
         if !hidden {

@@ -62,7 +62,7 @@ enum QwertyUnpressedKeyColorType: Sendable {
             return Color(white: 0, opacity: 0.001)
         case .enter:
             switch states.enterKeyState {
-            case .complete, .edit:
+            case .complete:
                 return theme.specialKeyFillColor.color
             case let .return(type):
                 switch type {
@@ -83,13 +83,15 @@ enum QwertyUnpressedKeyColorType: Sendable {
 protocol QwertyKeyModelProtocol<Extension> {
     associatedtype Extension: ApplicationSpecificKeyboardViewExtension
 
-    var longPressActions: LongpressActionType {get}
     var keySizeType: QwertyKeySizeType {get}
     var needSuggestView: Bool {get}
 
     var variationsModel: VariationsModel {get}
 
     @MainActor func pressActions(variableStates: VariableStates) -> [ActionType]
+    @MainActor func longPressActions(variableStates: VariableStates) -> LongpressActionType
+    /// 二回連続で押した際に発火するActionを指定する
+    @MainActor func doublePressActions(variableStates: VariableStates) -> [ActionType]
     @MainActor func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension>
     func backGroundColorWhenPressed(theme: Extension.Theme) -> Color
     var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
@@ -100,5 +102,8 @@ protocol QwertyKeyModelProtocol<Extension> {
 extension QwertyKeyModelProtocol {
     func backGroundColorWhenPressed(theme: ThemeData<some ApplicationSpecificTheme>) -> Color {
         theme.pushedKeyFillColor.color
+    }
+    func doublePressActions(variableStates _: VariableStates) -> [ActionType] {
+        []
     }
 }

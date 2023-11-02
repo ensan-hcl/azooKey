@@ -19,16 +19,16 @@ struct CustomizeTabView: View {
             NavigationView {
                 Form {
                     Section(header: Text("カスタムタブ")) {
-                        ImageSlideshowView(pictures: ["custard_1", "custard_2", "custard_3" ])
+                        ImageSlideshowView(pictures: [.custard1, .custard2, .custard3])
                             .listRowSeparator(.hidden, edges: .bottom)
                         Text("好きな文字や文章を並べたオリジナルのタブを作成することができます。")
                         NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
-                            .foregroundColor(.accentColor)
+                            .foregroundStyle(.accentColor)
                     }
 
                     Section(header: Text("タブバー")) {
                         CenterAlignedView {
-                            Image("tabBar_1")
+                            Image(.tabBar1)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: MainAppDesign.imageMaximumWidth)
@@ -41,7 +41,7 @@ struct CustomizeTabView: View {
                         }
                         BoolSettingView(.displayTabBarButton)
                         NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
-                            .foregroundColor(.accentColor)
+                            .foregroundStyle(.accentColor)
                     }
 
                     Section(header: Text("カスタムキー")) {
@@ -50,7 +50,7 @@ struct CustomizeTabView: View {
                 }
                 .navigationBarTitle(Text("拡張"), displayMode: .large)
                 .onAppear {
-                    if RequestReviewManager.shared.shouldTryRequestReview, RequestReviewManager.shared.shouldRequestReview() {
+                    if appStates.requestReviewManager.shouldTryRequestReview, appStates.requestReviewManager.shouldRequestReview() {
                         if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                             SKStoreReviewController.requestReview(in: scene)
                         }

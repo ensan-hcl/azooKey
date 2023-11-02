@@ -10,19 +10,17 @@ import SwiftUI
 
 struct LargeButtonStyle: ButtonStyle {
     private let backgroundColor: Color
-    private let screenWidth: CGFloat
     @MainActor init(backgroundColor: Color) {
         self.backgroundColor = backgroundColor
-        self.screenWidth = UIScreen.main.bounds.width
     }
     @ViewBuilder func makeBody(configuration: Configuration) -> some View {
         configuration
             .label
             .font(.body.bold())
             .padding()
-            .frame(width: screenWidth * 0.9)
+            .frame(maxWidth: .infinity)
             .background(
-                RoundedRectangle(cornerRadius: screenWidth / 4.8 * 0.17)
+                RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
             )
             .opacity(configuration.isPressed ? 0.8 : 1)

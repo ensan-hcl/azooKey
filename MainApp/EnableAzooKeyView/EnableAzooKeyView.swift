@@ -9,19 +9,31 @@
 import AzooKeyUtils
 import SwiftUI
 import SwiftUIUtils
+import func SwiftUtils.debug
 
-private enum EnableAzooKeyViewStep {
+enum EnableAzooKeyViewProgress: String, Hashable, Codable, Sendable {
     case menu
     case append
-    case finish
     case setting
+    case finish
 }
 
+@MainActor
 struct EnableAzooKeyView: View {
     @EnvironmentObject private var appStates: MainAppStates
-    @State private var step: EnableAzooKeyViewStep = .menu
+    @State private var step: EnableAzooKeyViewProgress = .menu {
+        didSet {
+            self.appStates.setTutorialProgress(step)
+        }
+    }
     @State private var text = ""
     @State private var showDoneMessage = false
+
+    init(resumeProgress: EnableAzooKeyViewProgress? = nil) {
+        if let resumeProgress {
+            self._step = .init(initialValue: resumeProgress)
+        }
+    }
 
     var body: some View {
         ScrollView {
@@ -50,9 +62,13 @@ struct EnableAzooKeyView: View {
                             EnableAzooKeyViewHeader("追加する")
                             EnableAzooKeyViewText("下にスクロールして「追加する」を押して", with: "plus.circle")
                             EnableAzooKeyViewText("「キーボード」を押して", with: "keyboard")
-                            EnableAzooKeyViewImage("initSettingKeyboardImage-hand")
+                            CenterAlignedView {
+                                EnableAzooKeyViewImage(.initSettingKeyboardImageHand)
+                            }
                             EnableAzooKeyViewText("azooKeyをオンにして", with: "square.and.line.vertical.and.square.fill")
-                            EnableAzooKeyViewImage("initSettingAzooKeySwitchImage-hand")
+                            CenterAlignedView {
+                                EnableAzooKeyViewImage(.initSettingAzooKeySwitchImageHand)
+                            }
                             EnableAzooKeyViewText("このアプリを再び開いてください", with: "arrow.turn.down.left")
                             CenterAlignedView {
                                 EnableAzooKeyViewButton("追加する", systemName: "plus.circle") {
@@ -122,7 +138,9 @@ struct EnableAzooKeyView: View {
                                     appStates.requireFirstOpenView = false
                                 }
                             if !showDoneMessage {
-                                EnableAzooKeyViewImage("initSettingGlobeTapImage")
+                                CenterAlignedView {
+                                    EnableAzooKeyViewImage(.initSettingGlobeTap)
+                                }
                             }
                             EnableAzooKeyViewText("azooKeyをお楽しみください！", with: "star.fill")
                             if !showDoneMessage {
@@ -141,12 +159,13 @@ struct EnableAzooKeyView: View {
                         }
                         .onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) {_ in
                             // キーボードが開いた時
-                            // 参考：https://stackoverflow.com/questions/26153336/how-do-i-find-out-the-current-keyboard-used-on-ios8
-                            let currentKeyboardIdentifier = NSArray(array: UITextInputMode.activeInputModes)
-                                .filtered(using: NSPredicate(format: "isDisplayed = YES"))
-                                .first
-                                .flatMap {($0 as? UITextInputMode)?.value(forKey: "identifier") as? String}
-                            if currentKeyboardIdentifier == SharedStore.bundleName {
+                            if checkActiveKeyboardIsAzooKey() {
+                                showDoneMessage = true
+                            }
+                        }
+                        .onReceive(NotificationCenter.default.publisher(for: UITextInputMode.currentInputModeDidChangeNotification)) {_ in
+                            // アクティブなキーボードが変化したとき
+                            if checkActiveKeyboardIsAzooKey() {
                                 showDoneMessage = true
                             }
                         }
@@ -157,11 +176,29 @@ struct EnableAzooKeyView: View {
         }
         .animation(.interactiveSpring(), value: step)
         .animation(.spring(), value: showDoneMessage)
-        .onEnterForeground { _ in
-            if SharedStore.checkKeyboardActivation() {
-                self.step = .setting
-                appStates.isKeyboardActivated = true
+        .task {
+            // 0.2秒に一度チェックを挟んでkeyboardの状態をチェックする
+            while !Task.isCancelled && !appStates.isKeyboardActivated {
+                if SharedStore.checkKeyboardActivation() {
+                    self.step = .setting
+                    appStates.isKeyboardActivated = true
+                }
+                do {
+                    try await Task.sleep(nanoseconds: 0_200_000_000)
+                } catch {
+                    debug(error)
+                }
             }
         }
+    }
+
+    private func checkActiveKeyboardIsAzooKey() -> Bool {
+        // キーボードが開いた時
+        // 参考：https://stackoverflow.com/questions/26153336/how-do-i-find-out-the-current-keyboard-used-on-ios8
+        let currentKeyboardIdentifier = NSArray(array: UITextInputMode.activeInputModes)
+            .filtered(using: NSPredicate(format: "isDisplayed = YES"))
+            .first
+            .flatMap {($0 as? UITextInputMode)?.value(forKey: "identifier") as? String}
+        return currentKeyboardIdentifier?.hasPrefix(SharedStore.bundleName) == true
     }
 }

@@ -18,6 +18,7 @@ private struct Item: Identifiable {
 
 struct CustomizeTabWalkthroughView: View {
     @Binding private var isShowing: Bool
+    @EnvironmentObject private var appStates: MainAppStates
 
     init(isShowing: Binding<Bool>) {
         self._isShowing = isShowing
@@ -43,7 +44,7 @@ struct CustomizeTabWalkthroughView: View {
     ]
 
     var body: some View {
-        if ContainerInternalSetting.shared.walkthroughState.shouldDisplay(identifier: .extensions) {
+        if appStates.internalSettingManager.walkthroughState.shouldDisplay(identifier: .extensions) {
             GeometryReader {geometry in
                 ScrollView {
                     VStack(spacing: 20) {
@@ -59,30 +60,32 @@ struct CustomizeTabWalkthroughView: View {
                         Text("azooKeyを拡張する").font(.largeTitle.bold())
                             .padding()
                         let imagesFont: Font = Font.system(size: length / 2.4, weight: .light, design: .default)
-                        ForEach(items) {item in
-                            HStack {
-                                Image(systemName: item.image)
-                                    .font(imagesFont)
-                                    .frame(width: geometry.size.width / 7.0, height: geometry.size.width / 7.0)
-                                    .foregroundColor(.blue)
-                                VStack(alignment: .leading) {
-                                    Text(item.headline)
-                                        .font(.subheadline.bold())
-                                    Text(item.body)
-                                        .foregroundColor(.gray)
-                                        .font(.subheadline)
+                        VStack(alignment: .leading, spacing: 20) {
+                            ForEach(items) {item in
+                                HStack {
+                                    Image(systemName: item.image)
+                                        .font(imagesFont)
+                                        .frame(width: geometry.size.width / 7.0, height: geometry.size.width / 7.0)
+                                        .foregroundStyle(.blue)
+                                    VStack(alignment: .leading) {
+                                        Text(item.headline)
+                                            .font(.subheadline.bold())
+                                        Text(item.body)
+                                            .foregroundStyle(.gray)
+                                            .font(.subheadline)
+                                    }
                                 }
+                                .padding(.horizontal, 20)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
                             }
-                            .padding(.horizontal, 20)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
                         }
-
                         Button("始める") {
                             isShowing = false
                         }
                         .buttonStyle(LargeButtonStyle(backgroundColor: .blue))
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 20)
                         .padding(.top, 30)
                     }
                     .background(Color.background)
@@ -92,7 +95,7 @@ struct CustomizeTabWalkthroughView: View {
             .onChange(of: isShowing) {value in
                 // コードの明確化のためにfalseと比較している
                 if value == false {
-                    ContainerInternalSetting.shared.update(\.walkthroughState) {value in
+                    appStates.internalSettingManager.update(\.walkthroughState) {value in
                         value.done(identifier: .extensions)
                     }
                 }

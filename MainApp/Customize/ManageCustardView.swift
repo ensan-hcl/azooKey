@@ -14,8 +14,7 @@ import SwiftUIUtils
 import SwiftUtils
 import UniformTypeIdentifiers
 
-private enum AlertType {
-    case none
+private enum AlertType: Equatable {
     case overlapCustard(custard: Custard)
 }
 
@@ -114,7 +113,6 @@ private final class ImportedCustardData: ObservableObject {
         }
     }
 
-    @MainActor
     private func downloadAsync(from url: URL) async {
         do {
             self.processState = .getFile
@@ -143,11 +141,12 @@ struct WebCustardList: Codable {
     var custards: [Item]
 }
 
+@MainActor
 struct ManageCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var urlString: String = ""
     @State private var showAlert = false
-    @State private var alertType = AlertType.none
+    @State private var alertType: AlertType?
     @Binding private var manager: CustardManager
     @State private var webCustards: WebCustardList = .init(last_update: "", custards: [])
     @State private var showDocumentPicker = false
@@ -182,19 +181,19 @@ struct ManageCustardView: View {
                                 }
                             }
                         }
-                        .onDelete(perform: delete)
+                        .onDelete(perform: {self.delete(at: $0)})
                     }
                 }
             }
-            .onAppear(perform: loadWebCustard)
+            .onAppear(perform: {self.loadWebCustard()})
 
             Section(header: Text("作る")) {
                 Text("登録したい文字や単語を順番に書いていくだけでスクロール式のカスタムタブを作成することができます。")
                 NavigationLink("スクロール式のカスタムタブを作る", destination: EditingScrollCustardView(manager: $manager))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
                 Text("フリック式のカスタムタブを作成することができます。")
                 NavigationLink("フリック式のカスタムタブを作る", destination: EditingTenkeyCustardView(manager: $manager))
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
             }
             if let custards = data.custards {
                 ForEach(custards, id: \.identifier) {custard in
@@ -219,7 +218,7 @@ struct ManageCustardView: View {
                     selectedDocument = Data()
                     data.reset()
                 }
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
 
             } else {
                 Section(header: Text("おすすめ")) {
@@ -229,7 +228,7 @@ struct ManageCustardView: View {
                                 data.download(from: "https://azookey.netlify.app/static/custard/\(item.file)")
                             } label: {
                                 Image(systemName: "square.and.arrow.down")
-                                    .foregroundColor(.accentColor)
+                                    .foregroundStyle(.accentColor)
                                     .padding(.horizontal, 5)
                             }
                             Text(verbatim: item.name)
@@ -263,7 +262,7 @@ struct ManageCustardView: View {
                 if let failure = data.failureData {
                     HStack {
                         Image(systemName: "exclamationmark.triangle")
-                        Text(failure.description).foregroundColor(.red)
+                        Text(failure.description).foregroundStyle(.red)
                     }
                 }
                 Section {
@@ -273,19 +272,20 @@ struct ManageCustardView: View {
             }
         }
         .navigationBarTitle(Text("カスタムタブの管理"), displayMode: .inline)
-        .alert(isPresented: $showAlert) {
+        .alert("注意", isPresented: $showAlert, presenting: alertType) { alertType in
             switch alertType {
-            case .none:
-                return Alert(title: Text("アラート"))
-            case let .overlapCustard(custard):
-                return Alert(
-                    title: Text("注意"),
-                    message: Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？"),
-                    primaryButton: .default(Text("上書き")) {
-                        self.saveCustard(custard: custard)
-                    },
-                    secondaryButton: .cancel()
-                )
+            case let .overlapCustard(custard: custard):
+                Button("上書き", role: .destructive) {
+                    self.saveCustard(custard: custard)
+                }
+                Button("キャンセル", role: .cancel) {
+                    self.showAlert = false
+                }
+            }
+        } message: { alertType in
+            switch alertType {
+            case let .overlapCustard(custard: custard):
+                Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？")
             }
         }
         .fileImporter(isPresented: $showDocumentPicker, allowedContentTypes: ["txt", "custard", "json"].compactMap {UTType(filenameExtension: $0, conformingTo: .text)}) {result in
@@ -355,32 +355,24 @@ struct ManageCustardView: View {
         guard let url = URL(string: "https://azooKey.netlify.com/static/custard/all") else {
             return
         }
-        let request = URLRequest(url: url)
-
-        URLSession.shared.dataTask(with: request) { data, _, error in
-            if let data {
-                let decoder = JSONDecoder()
-                guard let decodedResponse = try? decoder.decode(WebCustardList.self, from: data) else {
-                    debug("Failed to load https://azooKey.netlify.com/static/custard/all")
-                    return
-                }
-
-                DispatchQueue.main.async {
-                    self.webCustards = decodedResponse
-                }
-            } else {
-                debug("Fetch failed", error)
+        Task {
+            let result = try await URLSession.shared.data(from: url).0
+            let decoder = JSONDecoder()
+            guard let decodedResponse = try? decoder.decode(WebCustardList.self, from: result) else {
+                debug("Failed to load https://azooKey.netlify.com/static/custard/all")
+                return
             }
-
-        }.resume()
+            self.webCustards = decodedResponse
+        }
     }
 }
 
 // FIXME: ファイルを保存もキャンセルもしない状態で2つ目のファイルを読み込むとエラーになる
+@MainActor
 struct URLImportCustardView: View {
     @ObservedObject private var data = ImportedCustardData()
     @State private var showAlert = false
-    @State private var alertType = AlertType.none
+    @State private var alertType: AlertType?
     @Binding private var manager: CustardManager
     @Binding private var url: URL?
     @State private var addTabBar = true
@@ -414,7 +406,7 @@ struct URLImportCustardView: View {
                     data.reset()
                     url = nil
                 }
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
             } else if let text = data.processState.description {
                 Section(header: Text("読み込み中")) {
                     ProgressView(text)
@@ -422,21 +414,21 @@ struct URLImportCustardView: View {
                         data.reset()
                         url = nil
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
                 }
             } else {
                 Section(header: Text("読み込み失敗")) {
                     if let failure = data.failureData {
                         HStack {
                             Image(systemName: "exclamationmark.triangle")
-                            Text(failure.description).foregroundColor(.red)
+                            Text(failure.description).foregroundStyle(.red)
                         }
                     }
                     Button("閉じる") {
                         data.reset()
                         url = nil
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundStyle(.accentColor)
                 }
             }
         }
@@ -447,19 +439,20 @@ struct URLImportCustardView: View {
                 data.download(from: url)
             }
         }
-        .alert(isPresented: $showAlert) {
+        .alert("注意", isPresented: $showAlert, presenting: alertType) { alertType in
             switch alertType {
-            case .none:
-                return Alert(title: Text("アラート"))
-            case let .overlapCustard(custard):
-                return Alert(
-                    title: Text("注意"),
-                    message: Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？"),
-                    primaryButton: .default(Text("上書き")) {
-                        self.saveCustard(custard: custard)
-                    },
-                    secondaryButton: .cancel()
-                )
+            case let .overlapCustard(custard: custard):
+                Button("上書き", role: .destructive) {
+                    self.saveCustard(custard: custard)
+                }
+                Button("キャンセル", role: .cancel) {
+                    self.showAlert = false
+                }
+            }
+        } message: { alertType in
+            switch alertType {
+            case let .overlapCustard(custard: custard):
+                Text("識別子\(custard.identifier)を持つカスタムタブが既に登録されています。上書きしますか？")
             }
         }
     }

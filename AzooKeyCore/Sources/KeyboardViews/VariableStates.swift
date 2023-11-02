@@ -45,8 +45,10 @@ public final class VariableStates: ObservableObject {
         var isTextMagnifying = false
         var hasUpsideComponent = false
         public var isCapsLocked = false
+        public var isShifted = false
 
         static let isCapsLockedKey = "isCapsLocked"
+        public static let isShiftedKey = "isShifted"
         static let hasUpsideComponentKey = "is_screen_expanded"
         static let hasFullAccessKey = "has_full_access"
         // ビルトインのステートとカスタムのステートの両方を適切に扱いたい
@@ -80,6 +82,8 @@ public final class VariableStates: ObservableObject {
                     return SemiStaticStates.shared.hasFullAccess
                 } else if key == Self.isCapsLockedKey {
                     return self.isCapsLocked
+                } else if key == Self.isShiftedKey {
+                    return self.isShifted
                 } else if key == Self.hasUpsideComponentKey {
                     return self.hasUpsideComponent
                 }
@@ -92,7 +96,11 @@ public final class VariableStates: ObservableObject {
                         return
                     } else if key == "isTextMagnifying" {
                         self.isTextMagnifying = newValue
+                    } else if key == Self.isShiftedKey {
+                        self.isCapsLocked = self.isCapsLocked && !newValue
+                        self.isShifted = newValue
                     } else if key == Self.isCapsLockedKey {
+                        self.isShifted = self.isShifted && !newValue
                         self.isCapsLocked = newValue
                     } else {
                         custardStates[key] = newValue
@@ -101,17 +109,19 @@ public final class VariableStates: ObservableObject {
             }
         }
     }
-    private(set) public var inputStyle: InputStyle = .direct
-    private(set) public var tabManager: TabManager
-    public var keyboardInternalSettingManager: KeyboardInternalSettingManager
+    @MainActor private(set) public var inputStyle: InputStyle = .direct
+    @Published private(set) public var tabManager: TabManager
+    @Published public var keyboardInternalSettingManager: KeyboardInternalSettingManager
     @Published public var clipboardHistoryManager: ClipboardHistoryManager
 
     @Published public var keyboardLanguage: KeyboardLanguage = .ja_JP
     @Published private(set) public var keyboardOrientation: KeyboardOrientation = .vertical
     @Published private(set) public var keyboardLayout: KeyboardLayout = .flick
 
+    @MainActor private(set) public var keyboardType: UIKeyboardType = .default
+
     /// `ResultModel`の変数
-    @Published public var resultModelVariableSection = ResultModelVariableSection()
+    @Published public var resultModel = ResultModel()
 
     // Bool値の変数はここにまとめる
     @Published public var boolStates = BoolStates()
@@ -121,7 +131,7 @@ public final class VariableStates: ObservableObject {
     @Published public var interfacePosition: CGPoint = .zero
 
     /// 外部では利用しないが、`enterKeyState`の更新時に必要になる
-    private var enterKeyType: UIReturnKeyType = .default
+    @MainActor private(set) public var returnKeyType: UIReturnKeyType = .default
     @Published private(set) var enterKeyState: EnterKeyState = .return(.default)
 
     @Published public var barState: BarState = .none
@@ -152,19 +162,19 @@ public final class VariableStates: ObservableObject {
 
     @Published public var undoAction: UndoAction?
 
-    @Published var moveCursorBarState = BetaMoveCursorBarState()
-
-    @Published private(set) var leftSideText: String = ""
-    @Published private(set) var centerText: String = ""
-    @Published private(set) var rightSideText: String = ""
+    struct SurroundingText: Equatable, Hashable, Sendable {
+        var leftSideText: String = ""
+        var centerText: String = ""
+        var rightSideText: String = ""
+    }
+    @Published private(set) var surroundingText = SurroundingText()
 
     @Published public var temporalMessage: TemporalMessage?
 
     public func setSurroundingText(leftSide: String, center: String, rightSide: String) {
-        self.leftSideText = leftSide
-        self.centerText = center
-        self.rightSideText = rightSide
-        self.moveCursorBarState.updateLine(leftText: leftSide + center, rightText: rightSide)
+        self.surroundingText.leftSideText = leftSide
+        self.surroundingText.centerText = center
+        self.surroundingText.rightSideText = rightSide
     }
 
     @MainActor public func setResizingMode(_ state: ResizingState) {
@@ -187,7 +197,6 @@ public final class VariableStates: ObservableObject {
 
     @MainActor public func initialize() {
         self.tabManager.initialize(variableStates: self)
-        self.moveCursorBarState.clear()
     }
 
     @MainActor public func closeKeyboard() {
@@ -206,6 +215,7 @@ public final class VariableStates: ObservableObject {
         guard let type else {
             return
         }
+        self.keyboardType = type
         switch type {
         case .default, .asciiCapable:
             return
@@ -234,12 +244,10 @@ public final class VariableStates: ObservableObject {
         }
     }
 
-    public func setEnterKeyState(_ state: RoughEnterKeyState) {
+    @MainActor public func setEnterKeyState(_ state: RoughEnterKeyState) {
         switch state {
         case .return:
-            self.enterKeyState = .return(enterKeyType)
-        case .edit:
-            self.enterKeyState = .edit
+            self.enterKeyState = .return(returnKeyType)
         case .complete:
             self.enterKeyState = .complete
         }
@@ -258,8 +266,8 @@ public final class VariableStates: ObservableObject {
         self.setTab(tab, temporary: temporary)
     }
 
-    public func setUIReturnKeyType(type: UIReturnKeyType) {
-        self.enterKeyType = type
+    @MainActor public func setUIReturnKeyType(type: UIReturnKeyType) {
+        self.returnKeyType = type
         if case let .return(prev) = self.enterKeyState, prev != type {
             self.setEnterKeyState(.return)
         }
@@ -279,7 +287,7 @@ public final class VariableStates: ObservableObject {
         self.updateResizingState()
     }
 
-    public func setInputStyle(_ style: InputStyle) {
+    @MainActor public func setInputStyle(_ style: InputStyle) {
         self.inputStyle = style
     }
 

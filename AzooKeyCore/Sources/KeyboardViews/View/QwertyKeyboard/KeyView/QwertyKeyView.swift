@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import func SwiftUtils.debug
 import SwiftUIUtils
 
 enum QwertyKeyPressState {
@@ -36,12 +37,75 @@ enum QwertyKeyPressState {
 
 }
 
+struct QwertyKeyDoublePressState {
+    enum State {
+        case inactive
+        case firstPressStarted
+        case firstPressCompleted
+        case secondPressStarted
+        case secondPressCompleted
+    }
+
+    private var state: State = .inactive
+    private(set) var updateDate: Date = Date()
+
+    var secondPressCompleted: Bool {
+        self.state == .secondPressCompleted
+    }
+    mutating func update(touchDownDate: Date) {
+        switch self.state {
+        case .inactive, .firstPressStarted, .secondPressStarted:
+            self.state = .firstPressStarted
+        case .firstPressCompleted:
+            // secondPressの開始までは最大0.1秒
+            if touchDownDate.timeIntervalSince(updateDate) > 0.1 {
+                self.state = .firstPressStarted
+            } else {
+                self.state = .secondPressStarted
+            }
+        case .secondPressCompleted:
+            self.state = .firstPressStarted
+        }
+        self.updateDate = touchDownDate
+    }
+    mutating func update(touchUpDate: Date) {
+        switch self.state {
+        case  .inactive, .firstPressCompleted, .secondPressCompleted:
+            self.state = .inactive
+        case .firstPressStarted:
+            // firstPressの終了までは最大0.2秒
+            if touchUpDate.timeIntervalSince(updateDate) > 0.2 {
+                self.state = .inactive
+            } else {
+                self.state = .firstPressCompleted
+            }
+        case .secondPressStarted:
+            // secondPressは最大0.2秒
+            if touchUpDate.timeIntervalSince(updateDate) > 0.2 {
+                self.state = .inactive
+            } else {
+                self.state = .secondPressCompleted
+            }
+        }
+        self.updateDate = touchUpDate
+    }
+
+    mutating func reset() {
+        self.state = .inactive
+        self.updateDate = Date()
+    }
+}
+
+@MainActor
 struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let model: any QwertyKeyModelProtocol
     @EnvironmentObject private var variableStates: VariableStates
 
     @State private var pressState: QwertyKeyPressState = .unpressed
+    @State private var doublePressState = QwertyKeyDoublePressState()
     @State private var suggest = false
+
+    @State private var longPressStartTask: Task<(), any Error>?
 
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
@@ -60,12 +124,21 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                 self.suggest = true
                 switch self.pressState {
                 case .unpressed:
+                    // 押し始め
                     self.model.feedback(variableStates: variableStates)
                     self.pressState = .started(Date())
-                    self.action.reserveLongPressAction(self.model.longPressActions, variableStates: variableStates)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    self.doublePressState.update(touchDownDate: Date())
+                    self.action.reserveLongPressAction(self.model.longPressActions(variableStates: variableStates), variableStates: variableStates)
+                    self.longPressStartTask = Task {
+                        do {
+                            // 0.4秒待つ
+                            try await Task.sleep(nanoseconds: 0_400_000_000)
+                        } catch {
+                            debug(error)
+                            return
+                        }
                         // すでに処理が終了済みでなければ
-                        if self.pressState.isActive {
+                        if !Task.isCancelled && self.pressState.isActive {
                             // 長押し状態に設定する。
                             if self.model.variationsModel.variations.isEmpty {
                                 self.pressState = .longPressed
@@ -86,18 +159,30 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
             })
             // タップの終了時
             .onEnded({_ in
-                self.action.registerLongPressActionEnd(self.model.longPressActions)
+                // 更新する
+                let endDate = Date()
+                self.doublePressState.update(touchUpDate: endDate)
+                self.action.registerLongPressActionEnd(self.model.longPressActions(variableStates: variableStates))
                 self.suggest = false
+                self.longPressStartTask?.cancel()
+                self.longPressStartTask = nil
                 // 状態に基づいて、必要な変更を加える
                 switch self.pressState {
                 case .unpressed:
                     break
                 case let .started(date):
-                    // もし0.4秒未満押していたら
-                    if Date().timeIntervalSince(date) < 0.4 {
+                    // ダブルプレスアクションが存在し、かつダブルプレス判定が成立していたらこちらを優先的に実行
+                    let doublePressActions = self.model.doublePressActions(variableStates: variableStates)
+                    if !doublePressActions.isEmpty, doublePressState.secondPressCompleted {
+                        self.action.registerActions(doublePressActions, variableStates: variableStates)
+                        // 実行したので更新する
+                        self.doublePressState.reset()
+                    } else if endDate.timeIntervalSince(date) < 0.4 {
+                        // もし0.4秒未満押していたら
                         self.action.registerActions(self.model.pressActions(variableStates: variableStates), variableStates: variableStates)
                     }
                 case .longPressed:
+                    // longPressの場合はlongPress判定が成立した時点で発火済みなので何もする必要がない
                     break
                 case let .variations(selection):
                     self.model.variationsModel.performSelected(selection: selection, actionManager: action, variableStates: variableStates)
@@ -130,6 +215,10 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
         theme != Extension.ThemeExtension.default(layout: .qwerty) ? .black : nil
     }
 
+    private var shadowColor: Color {
+        suggestTextColor?.opacity(0.5) ?? .black.opacity(0.5)
+    }
+
     private var selection: Int? {
         if case let .variations(selection) = pressState {
             return selection
@@ -152,6 +241,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             .size(CGSize(width: size.width + tabDesign.horizontalSpacing, height: size.height + tabDesign.verticalSpacing))
                     )
                     .gesture(gesture)
+                    .compositingGroup()
+                    .shadow(color: theme.keyShadow?.color.color ?? .clear, radius: theme.keyShadow?.radius ?? 0, x: theme.keyShadow?.x ?? 0, y: theme.keyShadow?.y ?? 0)
                     .overlay(label(width: size.width, color: nil))
             }
             .overlay(Group {
@@ -173,6 +264,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                                 .padding(.bottom, height),
                             alignment: self.model.variationsModel.direction.alignment
                         )
+                        .compositingGroup()
+                        .shadow(color: shadowColor, radius: 1, x: 0, y: 0)
                         .allowsHitTesting(false)
                     } else {
                         QwertySuggestView.scaleToFrameSize(
@@ -187,6 +280,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             label(width: size.width, color: suggestTextColor)
                                 .padding(.bottom, height)
                         )
+                        .compositingGroup()
+                        .shadow(color: shadowColor, radius: 1, x: 0, y: 0)
                         .allowsHitTesting(false)
                     }
                 }
