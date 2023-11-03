@@ -280,7 +280,17 @@ import UIKit
             // (挿入): 愛[|してる]
             // (挿入): 愛[|してる]
             // (移動): 愛[してる|]
-            // 選択中でない場合、削除する
+            // (例３): [愛してる|] (「愛してる」をライブ変換しており、そのまま確定)
+            // (何もしない)
+            defer {
+                self.composingText = composingText
+                self.displayedLiveConversionText = nil
+            }
+            // 例３のケース
+            if composingText.isEmpty && completedPrefix == self.displayedLiveConversionText {
+                return
+            }
+            // 選択中でない場合、必要なだけ削除を実行する
             if !isSelected {
                 let count = self.displayedLiveConversionText?.count ?? self.composingText.convertTargetCursorPosition
                 self.deleteBackward(count: count)
@@ -289,8 +299,6 @@ import UIKit
             let cursorPosition = self.composingText.convertTargetCursorPosition - delta
             self.insertText(completedPrefix + String(self.composingText.convertTargetBeforeCursor.suffix(cursorPosition)))
             self.moveCursor(count: composingText.convertTargetCursorPosition - cursorPosition)
-            self.composingText = composingText
-            self.displayedLiveConversionText = nil
         }
     }
 }

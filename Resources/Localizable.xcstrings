@@ -1443,6 +1443,17 @@
         }
       }
     },
+    "QwertyキーボードでAaキーの代わりにシフトキーを利用します。" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use shift key instead of Aa key in qwerty keyboards."
+          }
+        }
+      }
+    },
     "unicode変換" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1921,6 +1932,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "カーソルバーを表示" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show cursor bar"
           }
         }
       }
@@ -3428,6 +3449,17 @@
         }
       }
     },
+    "シフトキーを使う" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use shift key"
+          }
+        }
+      }
+    },
     "ショートカットを実行" : {
       "localizations" : {
         "en" : {
@@ -3568,6 +3600,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "ダークモード" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark mode"
           }
         }
       }
@@ -4826,6 +4868,16 @@
         }
       }
     },
+    "ライトモード" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light mode"
+          }
+        }
+      }
+    },
     "ライトモードで使用" : {
       "localizations" : {
         "en" : {
@@ -5352,6 +5404,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "便利なボタンを追加" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add useful buttons"
           }
         }
       }
@@ -8522,6 +8584,16 @@
         }
       }
     },
+    "絵文字タブを表示" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show emoji tab"
+          }
+        }
+      }
+    },
     "絵文字と顔文字" : {
       "localizations" : {
         "en" : {
@@ -8598,6 +8670,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "編集" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
           }
         }
       }
@@ -9579,6 +9661,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select"
           }
         }
       }

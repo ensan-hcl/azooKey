@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
 
-struct SliderStyleCursorBarState {
+private struct CursorBarState: Equatable, Hashable, Sendable {
     private(set) var displayLeftIndex = 0
     private(set) var displayRightIndex = 0
     fileprivate var line: [String] = []
@@ -25,10 +25,10 @@ struct SliderStyleCursorBarState {
     }
 
     mutating func updateLine(leftText: String, rightText: String) {
-        debug("updateLine", leftText, rightText, itemCount, line)
+        debug("CursorBarState.updateLine", leftText, rightText, itemCount, line)
         var left = leftText.map {String($0)}
-        if left.first == "\n" {
-            left.removeFirst()
+        if let index = left.firstIndex(of: "\n"), index != left.endIndex - 1 {
+            left.removeFirst(index + 1)
         }
         self.line = left + rightText.map {String($0)} + ["⏎"]
         self.displayLeftIndex = left.count - itemCount / 2
@@ -43,6 +43,10 @@ struct SliderStyleCursorBarState {
     }
 
     @MainActor mutating fileprivate func move(_ count: Int, actionManager: some UserActionManager, variableStates: VariableStates) {
+        if centerIndex + count < -1 || line.count < centerIndex + count {
+            debug("CursorBarState.move rejected", centerIndex, count, line)
+            return
+        }
         displayLeftIndex += count
         displayRightIndex += count
         actionManager.registerAction(.moveCursor(count), variableStates: variableStates)
@@ -67,7 +71,6 @@ struct SliderStyleCursorBarState {
     }
 }
 
-@MainActor
 struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     init() {}
 
@@ -75,23 +78,31 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
 
-    enum SwipeGestureState {
+    private enum SwipeGestureState {
         case inactive
         case tap(l1: CGPoint, l2: CGPoint, l3: CGPoint)
         case moving(l1: CGPoint, l2: CGPoint, l3: CGPoint, count: Double)
     }
     @State private var swipeGestureState: SwipeGestureState = .inactive
+    @State private var cursorBarState = CursorBarState()
+    @State private var longPressTask: Task<(), any Error>?
 
+    @MainActor
     private var fontSize: CGFloat {
         Design.fonts.resultViewFontSize(userPrefrerence: Extension.SettingProvider.resultViewFontSize)
     }
+
+    @MainActor
     fileprivate var itemWidth: CGFloat {
         fontSize * 1.3
     }
+
+    @MainActor
     fileprivate var viewWidth: CGFloat {
         variableStates.interfaceSize.width * 0.85
     }
 
+    @MainActor
     var swipeGesture: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged {value in
@@ -132,11 +143,11 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
                     }
                     withAnimation(.linear(duration: 0.05)) {
                         if count >= 15 {
-                            variableStates.moveCursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
+                            cursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
                             count -= 15
                         }
                         if count <= -15 {
-                            variableStates.moveCursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
+                            cursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
                             count += 15
                         }
                         swipeGestureState = .moving(l1: value.location, l2: l1, l3: l2, count: count)
@@ -159,9 +170,9 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
                     let offset_double = diff_from_center / itemWidth
                     // center indexからのoffsetになる
                     let offset = Int(offset_double.rounded(.toNearestOrAwayFromZero))
-                    let index = variableStates.moveCursorBarState.centerIndex + offset
+                    let index = cursorBarState.centerIndex + offset
                     withAnimation(.easeOut(duration: 0.1)) {
-                        variableStates.moveCursorBarState.tap(at: index, actionManager: self.action, variableStates: variableStates)
+                        cursorBarState.tap(at: index, actionManager: self.action, variableStates: variableStates)
                     }
                 case .moving:
                     // 位置を揃える
@@ -187,9 +198,9 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
         theme.resultTextColor.color
     }
 
+    @MainActor
     private var background: some View {
         RadialGradient(gradient: Gradient(colors: [centerColor, edgeColor]), center: .center, startRadius: 1, endRadius: viewWidth / 2)
-            // TODO: ここからframeを消して問題なかったかチェックする
             .cornerRadius(20)
             .gesture(swipeGesture)
     }
@@ -198,44 +209,55 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
         .system(size: size, weight: symbolsFontWeight, design: .default)
     }
 
+    @MainActor
     private var textView: some View {
         HStack(spacing: .zero) {
             // 多めに描画しておく
-            ForEach(variableStates.moveCursorBarState.displayLeftIndex - 4 ..< variableStates.moveCursorBarState.displayRightIndex + 4, id: \.self) { i in
-                Text(verbatim: variableStates.moveCursorBarState.getItem(at: i))
+            ForEach(cursorBarState.displayLeftIndex - 4 ..< cursorBarState.displayRightIndex + 4, id: \.self) { i in
+                let item = cursorBarState.getItem(at: i)
+                let hash = {
+                    var hasher = Hasher()
+                    hasher.combine(i)
+                    hasher.combine(item)
+                    return hasher.finalize()
+                }()
+                Text(verbatim: item)
                     .font(.system(size: fontSize).bold())
                     .frame(width: itemWidth)
+                    .id(hash)
             }
         }
         .allowsHitTesting(false)
         .foregroundStyle(theme.resultTextColor.color.opacity(0.4))
-        .drawingGroup()
         .frame(width: viewWidth)
         .clipped()
     }
 
+    @MainActor
     private var foregroundButtons: some View {
         ZStack(alignment: .center) {
             textView
             HStack(spacing: .zero) {
-
                 Image(systemName: "chevron.left.2")
                     .font(symbolFont(size: 18))
                     .foregroundStyle(symbolsColor)
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(-1)]), variableStates: variableStates)
+                            self.startLongPress(offset: -1)
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
+                                self.longPressTask?.cancel()
                                 debug("touch failed")
                             }
                         } touchUpCallBack: { gestureState in
-                            self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
+                            //                            self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(-1)]))
+                            self.longPressTask?.cancel()
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
-                                    variableStates.moveCursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
+                                    cursorBarState.move(-1, actionManager: self.action, variableStates: variableStates)
                                 }
+                                KeyboardFeedback<Extension>.tabOrOtherKey()
                             }
                         }
                     )
@@ -251,17 +273,19 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
                     .padding()
                     .overlay(
                         TouchDownAndTouchUpGestureView {
-                            self.action.reserveLongPressAction(.init(start: [], repeat: [.moveCursor(1)]), variableStates: variableStates)
+                            self.startLongPress(offset: 1)
                         } touchMovedCallBack: { state in
                             if state.distance > 20 { // 20以上動いたらダメ
+                                self.longPressTask?.cancel()
                                 debug("touch failed")
                             }
                         } touchUpCallBack: { gestureState in
-                            self.action.registerLongPressActionEnd(.init(start: [], repeat: [.moveCursor(1)]))
+                            self.longPressTask?.cancel()
                             if gestureState.time < 0.4 {
                                 withAnimation(.linear(duration: 0.15)) {
-                                    variableStates.moveCursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
+                                    cursorBarState.move(1, actionManager: self.action, variableStates: variableStates)
                                 }
+                                KeyboardFeedback<Extension>.tabOrOtherKey()
                             }
                         }
                     )
@@ -273,8 +297,29 @@ struct ReflectStyleCursorBar<Extension: ApplicationSpecificKeyboardViewExtension
         background
             .overlay(foregroundButtons)
             .onAppear {
-                variableStates.moveCursorBarState.updateItemCount(viewWidth: viewWidth, itemWidth: itemWidth)
+                cursorBarState.updateItemCount(viewWidth: viewWidth, itemWidth: itemWidth)
+                let surroundingText = variableStates.surroundingText
+                cursorBarState.updateLine(leftText: surroundingText.leftSideText + surroundingText.centerText, rightText: surroundingText.rightSideText)
+            }
+            .onChange(of: variableStates.surroundingText) { newValue in
+                withAnimation(.easeOut(duration: 0.1)) {
+                    cursorBarState.updateLine(leftText: newValue.leftSideText + newValue.centerText, rightText: newValue.rightSideText)
+                }
             }
     }
-}
 
+    @MainActor
+    private func startLongPress(offset: Int) {
+        self.longPressTask = Task {
+            // 0.4秒待つ
+            try await Task.sleep(nanoseconds: 0_400_000_000)
+            while !Task.isCancelled {
+                withAnimation(.linear(duration: 0.05)) {
+                    cursorBarState.move(offset, actionManager: self.action, variableStates: variableStates)
+                }
+                KeyboardFeedback<Extension>.tabOrOtherKey()
+                try await Task.sleep(nanoseconds: 0_100_000_000)
+            }
+        }
+    }
+}

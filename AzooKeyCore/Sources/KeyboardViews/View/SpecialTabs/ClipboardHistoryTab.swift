@@ -6,6 +6,7 @@
 //  Copyright © 2023 ensan. All rights reserved.
 //
 
+@preconcurrency import LinkPresentation
 import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
@@ -208,7 +209,7 @@ struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>:
                 VStack {
                     listView
                     HStack {
-                        let design = TabDependentDesign(width: 2, height: 7, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .vertical)
+                        let design = TabDependentDesign(width: 2, height: 7, interfaceSize: variableStates.interfaceSize, orientation: .vertical)
                         enterKey(design)
                         deleteKey(design)
                     }
@@ -217,7 +218,7 @@ struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>:
                 HStack {
                     listView
                     VStack {
-                        let design = TabDependentDesign(width: 8, height: 2, interfaceSize: variableStates.interfaceSize, layout: .flick, orientation: .horizontal)
+                        let design = TabDependentDesign(width: 8, height: 2, interfaceSize: variableStates.interfaceSize, orientation: .horizontal)
                         deleteKey(design)
                         enterKey(design)
                     }
@@ -253,8 +254,6 @@ struct ClipboardHistoryTab<Extension: ApplicationSpecificKeyboardViewExtension>:
         }
     }
 }
-
-import LinkPresentation
 
 private struct RichLinkView: UIViewRepresentable {
     class UIViewType: LPLinkView {

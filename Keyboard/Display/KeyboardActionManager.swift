@@ -513,7 +513,6 @@ import SwiftUtils
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String, variableStates: VariableStates) {
         defer {
-            // moveCursorBarStateの更新
             variableStates.setSurroundingText(leftSide: a_left, center: a_center, rightSide: a_right)
             // エンターキーの状態の更新
             variableStates.setEnterKeyState(self.inputManager.getEnterKeyState())
@@ -579,6 +578,8 @@ import SwiftUtils
                 50
             }
             self.inputManager.userSelectedText(text: a_center, lengthLimit: lengthLimit)
+            // barStateの更新
+            variableStates.barState = .none
             return
         }
 
@@ -595,7 +596,8 @@ import SwiftUtils
             if !wasSelected && !isSelected && b_left != a_left {
                 debug("user operation id: 2", b_left, a_left)
                 let offset = a_left.count - b_left.count
-                self.inputManager.userMovedCursor(count: offset)
+                let actions = self.inputManager.userMovedCursor(count: offset)
+                self.registerActions(actions, variableStates: variableStates)
                 // カーソルが動いているのでtextChangedCountを増やす
                 variableStates.textChangedCount += 1
                 self.inputManager.resetPostCompositionPredictionCandidatesIfNecessary(textChangedCount: variableStates.textChangedCount)
@@ -655,9 +657,10 @@ import SwiftUtils
             return
         }
 
-        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合
+        // 上記のどれにも引っかからず、なおかつテキスト全体が変更された場合→ユーザがカーソルをジャンプした
         debug("user operation id: 10, \((a_left, a_center, a_right)), \((b_left, b_center, b_right))")
-        self.inputManager.stopComposition()
+        let actions = self.inputManager.userJumpedCursor()
+        self.registerActions(actions, variableStates: variableStates)
     }
 
     private func hideLearningMemory() {

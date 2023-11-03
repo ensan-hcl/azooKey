@@ -34,7 +34,7 @@ struct FlickChangeKeyboardModel<Extension: ApplicationSpecificKeyboardViewExtens
             return [.setCursorBar(.toggle)]
         }
     }
-    func longPressActions(variableStates _: VariableStates) ->  LongpressActionType {
+    func longPressActions(variableStates _: VariableStates) -> LongpressActionType {
         .none
     }
 

@@ -167,7 +167,7 @@ public extension KeyboardSettingKey where Self == DisplayTabBarButton {
     static var displayTabBarButton: Self { .init() }
 }
 
-public struct UseSliderStyleCursorBar: BoolKeyboardSettingKey {
+public struct UseReflectStyleCursorBar: BoolKeyboardSettingKey {
     public static let title: LocalizedStringKey = "新しいカーソルバーを使う"
     public static let explanation: LocalizedStringKey = "操作性が向上した新しいカーソルバーを有効化します。"
     public static let defaultValue = false
@@ -175,8 +175,30 @@ public struct UseSliderStyleCursorBar: BoolKeyboardSettingKey {
     public static let key: String = "use_move_cursor_bar_beta"
 }
 
-public extension KeyboardSettingKey where Self == UseSliderStyleCursorBar {
-    static var useSliderStyleCursorBar: Self { .init() }
+public extension KeyboardSettingKey where Self == UseReflectStyleCursorBar {
+    static var useReflectStyleCursorBar: Self { .init() }
+}
+
+public struct DisplayCursorBarAutomatically: BoolKeyboardSettingKey {
+    public static let title: LocalizedStringKey = "カーソルバーを自動表示"
+    public static let explanation: LocalizedStringKey = "カーソル移動の際にカーソルバーを自動表示します"
+    public static let defaultValue = false
+    public static let key: String = "display_cursor_bar_automatically"
+}
+
+public extension KeyboardSettingKey where Self == DisplayCursorBarAutomatically {
+    static var displayCursorBarAutomatically: Self { .init() }
+}
+
+public struct UseShiftKey: BoolKeyboardSettingKey {
+    public static let title: LocalizedStringKey = "シフトキーを使う"
+    public static let explanation: LocalizedStringKey = "QwertyキーボードでAaキーの代わりにシフトキーを利用します。"
+    public static let defaultValue = false
+    public static let key: String = "use_shift_key"
+}
+
+public extension KeyboardSettingKey where Self == UseShiftKey {
+    static var useShiftKey: Self { .init() }
 }
 
 public struct HideResetButtonInOneHandedMode: BoolKeyboardSettingKey {

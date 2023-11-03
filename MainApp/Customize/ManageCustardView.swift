@@ -113,7 +113,6 @@ private final class ImportedCustardData: ObservableObject {
         }
     }
 
-    @MainActor
     private func downloadAsync(from url: URL) async {
         do {
             self.processState = .getFile
@@ -354,7 +353,6 @@ struct ManageCustardView: View {
         guard let url = URL(string: "https://azooKey.netlify.com/static/custard/all") else {
             return
         }
-        let request = URLRequest(url: url)
         Task {
             let result = try await URLSession.shared.data(from: url).0
             let decoder = JSONDecoder()

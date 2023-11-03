@@ -16,7 +16,7 @@ struct FlickKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: V
     private let tabDesign: TabDependentDesign
     private let models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)]
     init(keyModels: [[any FlickKeyModelProtocol<Extension>]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
-        self.tabDesign = TabDependentDesign(width: 5, height: 4, interfaceSize: interfaceSize, layout: .flick, orientation: keyboardOrientation)
+        self.tabDesign = TabDependentDesign(width: 5, height: 4, interfaceSize: interfaceSize, orientation: keyboardOrientation)
 
         var models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)] = [:]
         for h in keyModels.indices {
@@ -30,7 +30,7 @@ struct FlickKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: V
 
     var body: some View {
         let layout = CustardInterfaceLayoutGridValue(rowCount: Int(tabDesign.horizontalKeyCount), columnCount: Int(tabDesign.verticalKeyCount))
-        CustardFlickKeysView(models: models, tabDesign: tabDesign, layout: layout) {(view: FlickKeyView<Extension>, _, _) in
+        CustardFlickKeysView(models: models, tabDesign: tabDesign, layout: layout, blur: true) {(view: FlickKeyView<Extension>, _, _) in
             view
         }
     }

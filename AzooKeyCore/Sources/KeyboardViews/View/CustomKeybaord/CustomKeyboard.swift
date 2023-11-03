@@ -49,13 +49,13 @@ fileprivate extension CustardInterface {
     func tabDesign(interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) -> TabDependentDesign {
         switch self.keyLayout {
         case let .gridFit(value):
-            return TabDependentDesign(width: value.rowCount, height: value.columnCount, interfaceSize: interfaceSize, layout: keyStyle.keyboardLayout, orientation: keyboardOrientation)
+            return TabDependentDesign(width: value.rowCount, height: value.columnCount, interfaceSize: interfaceSize, orientation: keyboardOrientation)
         case let .gridScroll(value):
             switch value.direction {
             case .vertical:
-                return TabDependentDesign(width: CGFloat(Int(value.rowCount)), height: CGFloat(value.columnCount), interfaceSize: interfaceSize, layout: .flick, orientation: keyboardOrientation)
+                return TabDependentDesign(width: CGFloat(Int(value.rowCount)), height: CGFloat(value.columnCount), interfaceSize: interfaceSize, orientation: keyboardOrientation)
             case .horizontal:
-                return TabDependentDesign(width: CGFloat(value.rowCount), height: CGFloat(Int(value.columnCount)), interfaceSize: interfaceSize, layout: .flick, orientation: keyboardOrientation)
+                return TabDependentDesign(width: CGFloat(value.rowCount), height: CGFloat(Int(value.columnCount)), interfaceSize: interfaceSize, orientation: keyboardOrientation)
             }
         }
     }
@@ -335,10 +335,11 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
 public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExtension, Content: View>: View {
     @State private var suggestState = FlickSuggestState()
 
-    public init(models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
+    public init(models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, blur: Bool = false, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
         self.models = models
         self.tabDesign = tabDesign
         self.layout = layout
+        self.blur = blur
         self.contentGenerator = generator
     }
 
@@ -346,6 +347,7 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
     private let models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)]
     private let tabDesign: TabDependentDesign
     private let layout: CustardInterfaceLayoutGridValue
+    private let blur: Bool
 
     @MainActor private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
         let width = tabDesign.keyViewWidth(widthCount: width)
@@ -357,22 +359,30 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
 
     public var body: some View {
         ZStack {
+            let hasAllSuggest = self.suggestState.items.contains(where: {$0.value.contains(where: {$0.value == .all})})
+            let needKeyboardBlur = blur && hasAllSuggest
             ForEach(0..<layout.rowCount, id: \.self) {x in
                 let columnSuggestStates = self.suggestState.items[x, default: [:]]
+                // 可能ならカラムごとにblurをかけることで描画コストを減らす
+                let needColumnWideBlur = needKeyboardBlur && columnSuggestStates.allSatisfy {$0.value != .all}
                 ForEach(0..<layout.columnCount, id: \.self) {y in
                     if let data = models[.gridFit(x: x, y: y)] {
                         let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
-                        contentGenerator(FlickKeyView(model: data.model, size: info.size, position: (x, y), suggestState: $suggestState), x, y)                            .zIndex(columnSuggestStates[y] != nil ? 1 : 0)
+                        let suggestState = columnSuggestStates[y]
+                        let needBlur = needKeyboardBlur && !needColumnWideBlur && suggestState == nil
+                        contentGenerator(FlickKeyView(model: data.model, size: info.size, position: (x, y), suggestState: $suggestState), x, y)                            .zIndex(suggestState != nil ? 1 : 0)
                             .overlay(alignment: .center) {
-                                if let suggestType = columnSuggestStates[y] {
+                                if let suggestType = suggestState {
                                     FlickSuggestView<Extension>(model: data.model, tabDesign: tabDesign, size: info.size, suggestType: suggestType)
                                         .zIndex(2)
                                 }
                             }
                             .position(x: info.position.x, y: info.position.y)
+                            .blur(radius: needBlur ? 0.75 : 0)
                     }
                 }
                 .zIndex(columnSuggestStates.isEmpty ? 0 : 1)
+                .blur(radius: needColumnWideBlur ? 0.75 : 0)
             }
             .frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
         }

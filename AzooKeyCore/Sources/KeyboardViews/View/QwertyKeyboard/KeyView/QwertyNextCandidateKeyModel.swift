@@ -13,13 +13,13 @@ import SwiftUI
 
 struct QwertyNextCandidateKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: QwertyKeyModelProtocol {
     let keySizeType: QwertyKeySizeType = .space
-    
+
     let needSuggestView: Bool = false
-    
+
     let variationsModel: VariationsModel = .init([])
-    
+
     let unpressedKeyColorType: QwertyUnpressedKeyColorType = .normal
-    
+
     static var shared: Self { QwertyNextCandidateKeyModel<Extension>() }
 
     func pressActions(variableStates: VariableStates) -> [ActionType] {

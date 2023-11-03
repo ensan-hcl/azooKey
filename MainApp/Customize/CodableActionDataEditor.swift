@@ -31,7 +31,7 @@ extension CodableActionData {
         case .paste: return "ペーストする"
         case .moveTab: return "タブの移動"
         case .replaceLastCharacters: return "文字を置換"
-        case let .selectCandidate(selection): 
+        case let .selectCandidate(selection):
             return switch selection {
             case .first: "最初の候補を選択"
             case .last: "最後の候補を選択"

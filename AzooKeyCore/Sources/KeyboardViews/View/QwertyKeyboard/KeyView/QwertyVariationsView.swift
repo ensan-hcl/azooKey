@@ -13,6 +13,7 @@ struct QwertyVariationsView<Extension: ApplicationSpecificKeyboardViewExtension>
     private let model: VariationsModel
     private let selection: Int?
     @Environment(Extension.Theme.self) private var theme
+    @Namespace private var namespace
     private let tabDesign: TabDependentDesign
 
     init(model: VariationsModel, selection: Int?, tabDesign: TabDependentDesign) {
@@ -29,17 +30,21 @@ struct QwertyVariationsView<Extension: ApplicationSpecificKeyboardViewExtension>
         HStack(spacing: tabDesign.horizontalSpacing) {
             ForEach(model.variations.indices, id: \.self) {(index: Int) in
                 ZStack {
-                    Rectangle()
-                        .foregroundStyle(index == selection ? Color.blue : suggestColor)
-                        .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight * 0.9, alignment: .center)
-                        .cornerRadius(10.0)
-                    getLabel(model.variations[index].label)
+                    if index == selection {
+                        Rectangle()
+                            .foregroundStyle(.blue)
+                            .cornerRadius(10.0)
+                            .matchedGeometryEffect(id: "focus", in: namespace)
+                    }
+                    getLabel(model.variations[index].label, textColor: index == selection ? .white : theme.suggestLabelTextColor?.color ?? .black)
                 }
+                .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight * 0.9, alignment: .center)
             }
         }
+        .animation(.easeOut(duration: 0.075), value: selection)
     }
 
-    @MainActor private func getLabel(_ labelType: KeyLabelType) -> KeyLabel<Extension> {
-        KeyLabel(labelType, width: tabDesign.keyViewWidth, textColor: theme.suggestLabelTextColor?.color ?? .black)
+    @MainActor private func getLabel(_ labelType: KeyLabelType, textColor: Color) -> KeyLabel<Extension> {
+        KeyLabel(labelType, width: tabDesign.keyViewWidth, textColor: textColor)
     }
 }

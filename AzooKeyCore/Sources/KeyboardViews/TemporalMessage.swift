@@ -7,7 +7,7 @@
 
 import struct SwiftUI.LocalizedStringKey
 
-public enum TemporalMessage {
+public enum TemporalMessage: Sendable {
     case doneForgetCandidate
     case doneReportWrongConversion
     case failedReportWrongConversion
@@ -23,7 +23,7 @@ public enum TemporalMessage {
         }
     }
 
-    public enum DismissCondition {
+    public enum DismissCondition: Sendable {
         case auto
         case ok
     }
