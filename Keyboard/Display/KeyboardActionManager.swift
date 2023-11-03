@@ -510,17 +510,6 @@ import SwiftUtils
      ---------------------
      */
 
-    private func adjustLeftString(_ left: String) -> String {
-        if #available(iOS 16, *) {
-            var newLeft = left.components(separatedBy: "\n").last ?? ""
-            if left.contains("\n") && newLeft.isEmpty {
-                newLeft = "\n"
-            }
-            return newLeft
-        }
-        return left
-    }
-
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String, variableStates: VariableStates) {
         defer {
@@ -543,8 +532,8 @@ import SwiftUtils
         }
 
         // iOS16以降左側の文字列の設計が変わったので、adjustする
-        let a_left = adjustLeftString(a_left)
-        let b_left = adjustLeftString(tempLeft)
+        let a_left = self.inputManager.adjustLeftString(a_left)
+        let b_left = self.inputManager.adjustLeftString(tempLeft)
 
         // システムによる操作でこの関数が呼ばれた場合はスルーする
         if let operation = self.inputManager.getPreviousSystemOperation() {

@@ -45,14 +45,10 @@ struct ThemeShareView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             Button {
-                if #available(iOS 16, *) {
-                    let renderer = ImageRenderer(content: keyboardPreview)
-                    renderer.scale = 3.0
-                    if let image = renderer.uiImage {
-                        shareImage.setImage(image)
-                    }
-                } else {
-                    shareImage.setImage(keyboardPreview.snapshot())
+                let renderer = ImageRenderer(content: keyboardPreview)
+                renderer.scale = 3.0
+                if let image = renderer.uiImage {
+                    shareImage.setImage(image)
                 }
                 showActivityView = true
             } label: {

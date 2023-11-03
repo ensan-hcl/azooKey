@@ -159,7 +159,6 @@ private struct UserDictionaryDataEditor: CancelableEditor {
         self.base = (item.copy(), variables.templates)
     }
 
-    @available(iOS 16.0, *)
     private func hasTemplate(word: String) -> Bool {
         word.contains(templateRegex)
     }
@@ -182,12 +181,10 @@ private struct UserDictionaryDataEditor: CancelableEditor {
     @State private var sending = false
     @FocusState private var focusOnWordField: Bool?
 
-    @available(iOS 16.0, *)
     private var templateRegex: some RegexComponent {
         /{{.+?}}/
     }
 
-    @available(iOS 16.0, *)
     private func parsedWord(word: String) -> [String] {
         var result: [String] = []
         var startIndex = word.startIndex
@@ -201,7 +198,6 @@ private struct UserDictionaryDataEditor: CancelableEditor {
         return result
     }
 
-    @available(iOS 16.0, *)
     private func replaceTemplate(selectedTemplate: (name: String, index: Int), newName: String) {
         var parsedWords = parsedWord(word: item.data.word)
         if parsedWords.indices.contains(selectedTemplate.index) && parsedWords[selectedTemplate.index] == "{{\(selectedTemplate.name)}}" {
@@ -211,7 +207,6 @@ private struct UserDictionaryDataEditor: CancelableEditor {
     }
 
     @ViewBuilder
-    @available(iOS 16.0, *)
     private func templateWordView(word: String) -> some View {
         let parsedWords = parsedWord(word: word)
         ScrollView(.horizontal, showsIndicators: false) {
@@ -249,7 +244,6 @@ private struct UserDictionaryDataEditor: CancelableEditor {
             }
     }
 
-    @available(iOS 16.0, *)
     @ViewBuilder
     private func templateEditor(index: Int, selectedTemplate: (name: String, index: Int)) -> some View {
         if variables.templates[index].name == selectedTemplate.name {
@@ -276,7 +270,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                     if wordEditMode {
                         wordField
                     } else {
-                        if #available(iOS 16.0, *), hasTemplate(word: item.data.word) {
+                        if hasTemplate(word: item.data.word) {
                             templateWordView(word: item.data.word)
                             Spacer()
                             Divider()
@@ -338,7 +332,7 @@ private struct UserDictionaryDataEditor: CancelableEditor {
                     Text("この単語をazooKeyの本体辞書に追加することを申請します。\n個人情報を含む単語は申請しないでください。")
                 }
             }
-            if #available(iOS 16.0, *), let selectedTemplate {
+            if let selectedTemplate {
                 if let index = templateIndex(name: selectedTemplate.name) {
                     Section(header: Text("テンプレートを編集する")) {
                         Text("{{\(selectedTemplate.name)}}を編集できます")

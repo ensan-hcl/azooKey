@@ -12,6 +12,7 @@ import StoreKit
 import SwiftUI
 
 struct SettingTabView: View {
+    @Environment(\.requestReview) var requestReview
     @EnvironmentObject private var appStates: MainAppStates
     private func canFlickLayout(_ layout: LanguageLayout) -> Bool {
         if layout == .flick {
@@ -146,9 +147,7 @@ struct SettingTabView: View {
             .navigationBarTitle(Text("設定"), displayMode: .large)
             .onAppear {
                 if appStates.requestReviewManager.shouldTryRequestReview, appStates.requestReviewManager.shouldRequestReview() {
-                    if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                        SKStoreReviewController.requestReview(in: scene)
-                    }
+                    requestReview()
                 }
             }
         }

@@ -47,7 +47,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     @Binding private var manager: CustardManager
     @State private var showPreview = false
     @State private var copiedKey: UserMadeTenKeyCustard.KeyData?
-    private var models: [KeyPosition: (model: any FlickKeyModelProtocol, width: Int, height: Int)] {
+    private var models: [KeyPosition: (model: any FlickKeyModelProtocol<AzooKeyKeyboardViewExtension>, width: Int, height: Int)] {
         (0..<layout.rowCount).reduce(into: [:]) {dict, x in
             (0..<layout.columnCount).forEach {y in
                 if let value = editingItem.keys[.gridFit(x: x, y: y)] {

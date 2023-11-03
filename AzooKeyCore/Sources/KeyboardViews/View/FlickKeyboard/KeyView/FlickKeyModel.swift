@@ -53,7 +53,7 @@ struct FlickKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: Flick
         self.flickKeys
     }
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         KeyLabel(self.labelType, width: width)
     }
 

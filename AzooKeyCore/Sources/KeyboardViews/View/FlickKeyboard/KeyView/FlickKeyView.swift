@@ -28,7 +28,7 @@ enum KeyPressState {
 
 @MainActor
 public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
-    private let model: any FlickKeyModelProtocol
+    private let model: any FlickKeyModelProtocol<Extension>
 
     @State private var pressState: KeyPressState = .inactive
     @Binding private var suggestState: FlickSuggestState
@@ -43,7 +43,7 @@ public struct FlickKeyView<Extension: ApplicationSpecificKeyboardViewExtension>:
     private let size: CGSize
     private let position: (x: Int, y: Int)
 
-    init(model: any FlickKeyModelProtocol, size: CGSize, position: (x: Int, y: Int), suggestState: Binding<FlickSuggestState>) {
+    init(model: any FlickKeyModelProtocol<Extension>, size: CGSize, position: (x: Int, y: Int), suggestState: Binding<FlickSuggestState>) {
         self.model = model
         self.size = size
         self.position = position

@@ -655,14 +655,11 @@ import UIKit
 
     /// iOS16以上の仕様変更に対応するため追加されたAPI
     func adjustLeftString(_ left: String) -> String {
-        if #available(iOS 16, *) {
-            var newLeft = left.components(separatedBy: "\n").last ?? ""
-            if left.contains("\n") && newLeft.isEmpty {
-                newLeft = "\n"
-            }
-            return newLeft
+        var newLeft = left.components(separatedBy: "\n").last ?? ""
+        if left.contains("\n") && newLeft.isEmpty {
+            newLeft = "\n"
         }
-        return left
+        return newLeft
     }
 
     /// クリップボードの文字列をペーストする
