@@ -113,223 +113,201 @@ struct EditingTenkeyCustardView: CancelableEditor {
 
     var body: some View {
         VStack {
-            GeometryReader {_ in
-                VStack {
-                    Form {
-                        TextField("タブの名前", text: $editingItem.tabName)
-                            .textFieldStyle(.roundedBorder)
-                            .submitLabel(.done)
-                        Button("プレビュー") {
-                            showPreview = true
-                            UIApplication.shared.closeKeyboard()
-                        }
-                        HStack {
-                            Text("縦方向キー数")
-                            Spacer()
-                            IntegerTextField("縦方向キー数", text: $editingItem.columnCount, range: 1 ... .max)
-                                .keyboardType(.numberPad)
-                                .textFieldStyle(.roundedBorder)
-                                .submitLabel(.done)
-                        }
-                        HStack {
-                            Text("横方向キー数")
-                            Spacer()
-                            IntegerTextField("横方向キー数", text: $editingItem.rowCount, range: 1 ... .max)
-                                .keyboardType(.numberPad)
-                                .textFieldStyle(.roundedBorder)
-                                .submitLabel(.done)
-                        }
-                        Picker("言語", selection: $editingItem.language) {
-                            Text("なし").tag(CustardLanguage.none)
-                            Text("日本語").tag(CustardLanguage.ja_JP)
-                            Text("英語").tag(CustardLanguage.en_US)
-                        }
-                        Picker("入力方式", selection: $editingItem.inputStyle) {
-                            Text("そのまま入力").tag(CustardInputStyle.direct)
-                            Text("ローマ字かな入力").tag(CustardInputStyle.roman2kana)
-                        }
-                        Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
+            Form {
+                TextField("タブの名前", text: $editingItem.tabName)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+                Button("プレビュー") {
+                    showPreview = true
+                    UIApplication.shared.closeKeyboard()
+                }
+                HStack {
+                    Text("縦方向キー数")
+                    Spacer()
+                    IntegerTextField("縦方向キー数", text: $editingItem.columnCount, range: 1 ... .max)
+                        .keyboardType(.numberPad)
+                        .textFieldStyle(.roundedBorder)
+                        .submitLabel(.done)
+                }
+                HStack {
+                    Text("横方向キー数")
+                    Spacer()
+                    IntegerTextField("横方向キー数", text: $editingItem.rowCount, range: 1 ... .max)
+                        .keyboardType(.numberPad)
+                        .textFieldStyle(.roundedBorder)
+                        .submitLabel(.done)
+                }
+                Picker("言語", selection: $editingItem.language) {
+                    Text("なし").tag(CustardLanguage.none)
+                    Text("日本語").tag(CustardLanguage.ja_JP)
+                    Text("英語").tag(CustardLanguage.en_US)
+                }
+                Picker("入力方式", selection: $editingItem.inputStyle) {
+                    Text("そのまま入力").tag(CustardInputStyle.direct)
+                    Text("ローマ字かな入力").tag(CustardInputStyle.roman2kana)
+                }
+                Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
+            }
+            HStack {
+                Spacer()
+                if showPreview {
+                    Button("閉じる", systemImage: "xmark.circle") {
+                        showPreview = false
                     }
-                    HStack {
-                        Spacer()
-                        if showPreview {
-                            Button("閉じる", systemImage: "xmark.circle") {
-                                showPreview = false
-                            }
-                        } else {
-                            Button("プレビュー", systemImage: "eye") {
-                                showPreview = true
-                            }
-                        }
-                    }
-                    .labelStyle(.iconOnly)
-                    .font(.title)
-                    .padding(.horizontal, 8)
-                    if !showPreview {
-                        CustardFlickKeysView<AzooKeyKeyboardViewExtension, _>(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, interfaceSize: interfaceSize, orientation: MainAppDesign.keyboardOrientation), layout: layout) {(view: FlickKeyView<AzooKeyKeyboardViewExtension>, x: Int, y: Int) in
-                            if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
-                                if !isCovered(at: (x, y)) {
-                                    Button {
-                                        editingItem.emptyKeys.remove(.gridFit(x: x, y: y))
-                                    } label: {
-                                        view.disabled(true)
-                                            .opacity(0)
-                                            .overlay(
-                                                Rectangle().stroke(style: .init(lineWidth: 2, dash: [5]))
-                                            )
-                                            .overlay(
-                                                Image(systemName: "plus.circle")
-                                                    .foregroundStyle(.accentColor)
-                                            )
-                                    }
-                                }
-                            } else {
-                                NavigationLink(destination: CustardInterfaceKeyEditor(data: $editingItem.keys[.gridFit(x: x, y: y)])) {
-                                    view.disabled(true)
-                                        .border(Color.primary)
-                                }
-                                .contextMenu {
-                                    // TODO: これ、OSのクリップボード使ったほうがいいのかも
-                                    // TODO: Swap、DuplicateみたいなAPIも追加したい
-                                    Button {
-                                        copiedKey = editingItem.keys[.gridFit(x: x, y: y)]
-                                    } label: {
-                                        Label("コピーする", systemImage: "doc.on.doc")
-                                    }
-                                    Button {
-                                        if let copiedKey {
-                                            editingItem.keys[.gridFit(x: x, y: y)] = copiedKey
-                                        }
-                                    } label: {
-                                        Label("ペーストする", systemImage: "doc.on.clipboard")
-                                    }
-                                    .disabled(copiedKey == nil)
-                                    Button {
-                                        editingItem.columnCount = Int(editingItem.columnCount)?.advanced(by: 1).description ?? editingItem.columnCount
-                                        for px in 0 ..< Int(layout.rowCount) {
-                                            for py in (y + 1 ..< Int(layout.columnCount)).reversed() {
-                                                editingItem.keys[.gridFit(x: px, y: py + 1)] = editingItem.keys[.gridFit(x: px, y: py)]
-                                            }
-                                        }
-                                        for px in 0 ..< Int(layout.rowCount) {
-                                            editingItem.keys[.gridFit(x: px, y: y + 1)] = nil
-                                        }
-                                        editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
-                                            switch item {
-                                            case .gridFit(x: let px, y: let py) where y + 1 <= py:
-                                                return .gridFit(x: px, y: py + 1)
-                                            default:
-                                                return item
-                                            }
-                                        }
-                                    } label: {
-                                        Label("下に行を追加", systemImage: "plus")
-                                    }
-                                    Button {
-                                        editingItem.columnCount = Int(editingItem.columnCount)?.advanced(by: 1).description ?? editingItem.columnCount
-                                        for px in 0 ..< Int(layout.rowCount) {
-                                            for py in (y ..< Int(layout.columnCount)).reversed() {
-                                                editingItem.keys[.gridFit(x: px, y: py + 1)] = editingItem.keys[.gridFit(x: px, y: py)]
-                                            }
-                                        }
-                                        for px in 0 ..< Int(layout.rowCount) {
-                                            editingItem.keys[.gridFit(x: px, y: y)] = nil
-                                        }
-                                        editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
-                                            switch item {
-                                            case .gridFit(x: let px, y: let py) where y <= py:
-                                                return .gridFit(x: px, y: py + 1)
-                                            default:
-                                                return item
-                                            }
-                                        }
-                                    } label: {
-                                        Label("上に行を追加", systemImage: "plus")
-                                    }
-                                    Button {
-                                        editingItem.rowCount = Int(editingItem.rowCount)?.advanced(by: 1).description ?? editingItem.rowCount
-                                        for px in (x + 1 ..< Int(layout.rowCount)).reversed() {
-                                            for py in 0 ..< Int(layout.columnCount) {
-                                                editingItem.keys[.gridFit(x: px + 1, y: py)] = editingItem.keys[.gridFit(x: px, y: py)]
-                                            }
-                                        }
-                                        for py in 0 ..< Int(layout.columnCount) {
-                                            editingItem.keys[.gridFit(x: x + 1, y: py)] = nil
-                                        }
-                                        editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
-                                            switch item {
-                                            case .gridFit(x: let px, y: let py) where x + 1 <= px:
-                                                return .gridFit(x: px + 1, y: py)
-                                            default:
-                                                return item
-                                            }
-                                        }
-                                    } label: {
-                                        Label("右に列を追加", systemImage: "plus")
-                                    }
-                                    Button {
-                                        editingItem.rowCount = Int(editingItem.rowCount)?.advanced(by: 1).description ?? editingItem.rowCount
-                                        for px in (x ..< Int(layout.rowCount)).reversed() {
-                                            for py in 0 ..< Int(layout.columnCount) {
-                                                editingItem.keys[.gridFit(x: px + 1, y: py)] = editingItem.keys[.gridFit(x: px, y: py)]
-                                            }
-                                        }
-                                        for py in 0 ..< Int(layout.columnCount) {
-                                            editingItem.keys[.gridFit(x: x, y: py)] = nil
-                                        }
-                                        editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
-                                            switch item {
-                                            case .gridFit(x: let px, y: let py) where x <= px:
-                                                return .gridFit(x: px + 1, y: py)
-                                            default:
-                                                return item
-                                            }
-                                        }
-                                    } label: {
-                                        Label("左に列を追加", systemImage: "plus")
-
-                                    }
-                                    Divider()
-                                    Button(role: .destructive) {
-                                        editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
-                                    } label: {
-                                        Label("削除する", systemImage: "trash")
-                                            .foregroundStyle(.red)
-                                    }
-                                    Button(role: .destructive) {
-                                        removeRow(y: y)
-                                    } label: {
-                                        Label("この行を削除", systemImage: "trash")
-                                            .foregroundStyle(.red)
-                                    }
-                                    Button(role: .destructive) {
-                                        removeColumn(x: x)
-                                    } label: {
-                                        Label("この列を削除", systemImage: "trash")
-                                            .foregroundStyle(.red)
-                                    }
-                                }
-                            }
-                        }
-                        .environmentObject(variableStates)
-                    } else {
-                        KeyboardPreview(defaultTab: .custard(custard))
+                } else {
+                    Button("プレビュー", systemImage: "eye") {
+                        showPreview = true
                     }
                 }
             }
-            .onChange(of: layout) {_ in
-                updateModel()
+            .labelStyle(.iconOnly)
+            .font(.title)
+            .padding(.horizontal, 8)
+            if !showPreview {
+                CustardFlickKeysView<AzooKeyKeyboardViewExtension, _>(models: models, tabDesign: .init(width: layout.rowCount, height: layout.columnCount, interfaceSize: interfaceSize, orientation: MainAppDesign.keyboardOrientation), layout: layout) {(view: FlickKeyView<AzooKeyKeyboardViewExtension>, x: Int, y: Int) in
+                    if editingItem.emptyKeys.contains(.gridFit(x: x, y: y)) {
+                        if !isCovered(at: (x, y)) {
+                            Button {
+                                editingItem.emptyKeys.remove(.gridFit(x: x, y: y))
+                            } label: {
+                                view.disabled(true)
+                                    .opacity(0)
+                                    .overlay(
+                                        Rectangle().stroke(style: .init(lineWidth: 2, dash: [5]))
+                                    )
+                                    .overlay(
+                                        Image(systemName: "plus.circle")
+                                            .foregroundStyle(.accentColor)
+                                    )
+                            }
+                        }
+                    } else {
+                        NavigationLink(destination: CustardInterfaceKeyEditor(data: $editingItem.keys[.gridFit(x: x, y: y)])) {
+                            view.disabled(true)
+                                .border(Color.primary)
+                        }
+                        .contextMenu {
+                            // TODO: これ、OSのクリップボード使ったほうがいいのかも
+                            // TODO: Swap、DuplicateみたいなAPIも追加したい
+                            Button("コピーする", systemImage: "doc.on.doc") {
+                                copiedKey = editingItem.keys[.gridFit(x: x, y: y)]
+                            }
+                            Button("ペーストする", systemImage: "doc.on.clipboard") {
+                                if let copiedKey {
+                                    editingItem.keys[.gridFit(x: x, y: y)] = copiedKey
+                                }
+                            }
+                            .disabled(copiedKey == nil)
+                            Button("下に行を追加", systemImage: "plus") {
+                                editingItem.columnCount = Int(editingItem.columnCount)?.advanced(by: 1).description ?? editingItem.columnCount
+                                for px in 0 ..< Int(layout.rowCount) {
+                                    for py in (y + 1 ..< Int(layout.columnCount)).reversed() {
+                                        editingItem.keys[.gridFit(x: px, y: py + 1)] = editingItem.keys[.gridFit(x: px, y: py)]
+                                    }
+                                }
+                                for px in 0 ..< Int(layout.rowCount) {
+                                    editingItem.keys[.gridFit(x: px, y: y + 1)] = nil
+                                }
+                                editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
+                                    switch item {
+                                    case .gridFit(x: let px, y: let py) where y + 1 <= py:
+                                        return .gridFit(x: px, y: py + 1)
+                                    default:
+                                        return item
+                                    }
+                                }
+                            }
+                            Button("上に行を追加", systemImage: "plus") {
+                                editingItem.columnCount = Int(editingItem.columnCount)?.advanced(by: 1).description ?? editingItem.columnCount
+                                for px in 0 ..< Int(layout.rowCount) {
+                                    for py in (y ..< Int(layout.columnCount)).reversed() {
+                                        editingItem.keys[.gridFit(x: px, y: py + 1)] = editingItem.keys[.gridFit(x: px, y: py)]
+                                    }
+                                }
+                                for px in 0 ..< Int(layout.rowCount) {
+                                    editingItem.keys[.gridFit(x: px, y: y)] = nil
+                                }
+                                editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
+                                    switch item {
+                                    case .gridFit(x: let px, y: let py) where y <= py:
+                                        return .gridFit(x: px, y: py + 1)
+                                    default:
+                                        return item
+                                    }
+                                }
+                            }
+                            Button("右に列を追加", systemImage: "plus") {
+                                editingItem.rowCount = Int(editingItem.rowCount)?.advanced(by: 1).description ?? editingItem.rowCount
+                                for px in (x + 1 ..< Int(layout.rowCount)).reversed() {
+                                    for py in 0 ..< Int(layout.columnCount) {
+                                        editingItem.keys[.gridFit(x: px + 1, y: py)] = editingItem.keys[.gridFit(x: px, y: py)]
+                                    }
+                                }
+                                for py in 0 ..< Int(layout.columnCount) {
+                                    editingItem.keys[.gridFit(x: x + 1, y: py)] = nil
+                                }
+                                editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
+                                    switch item {
+                                    case .gridFit(x: let px, y: let py) where x + 1 <= px:
+                                        return .gridFit(x: px + 1, y: py)
+                                    default:
+                                        return item
+                                    }
+                                }
+                            }
+                            Button("左に列を追加", systemImage: "plus") {
+                                editingItem.rowCount = Int(editingItem.rowCount)?.advanced(by: 1).description ?? editingItem.rowCount
+                                for px in (x ..< Int(layout.rowCount)).reversed() {
+                                    for py in 0 ..< Int(layout.columnCount) {
+                                        editingItem.keys[.gridFit(x: px + 1, y: py)] = editingItem.keys[.gridFit(x: px, y: py)]
+                                    }
+                                }
+                                for py in 0 ..< Int(layout.columnCount) {
+                                    editingItem.keys[.gridFit(x: x, y: py)] = nil
+                                }
+                                editingItem.emptyKeys = editingItem.emptyKeys.mapSet { item in
+                                    switch item {
+                                    case .gridFit(x: let px, y: let py) where x <= px:
+                                        return .gridFit(x: px + 1, y: py)
+                                    default:
+                                        return item
+                                    }
+                                }
+                            }
+                            Divider()
+                            Button("削除する", systemImage: "trash", role: .destructive) {
+                                editingItem.emptyKeys.insert(.gridFit(x: x, y: y))
+                            }
+                            Button("この行を削除", systemImage: "trash", role: .destructive) {
+                                removeRow(y: y)
+                            }
+                            Button("この列を削除", systemImage: "trash", role: .destructive) {
+                                removeColumn(x: x)
+                            }
+                        }
+                    }
+                }
+                .environmentObject(variableStates)
+            } else {
+                KeyboardPreview(defaultTab: .custard(custard))
             }
-            .background(Color.secondarySystemBackground)
-            .navigationBarBackButtonHidden(true)
-            .navigationTitle(Text("カスタムタブを作る"))
-            .navigationBarItems(
-                leading: Button("キャンセル", role: .cancel, action: {self.cancel()}),
-                trailing: Button("保存") {
+        }
+        .onChange(of: layout) {_ in
+            updateModel()
+        }
+        .background(Color.secondarySystemBackground)
+        .navigationBarBackButtonHidden(true)
+        .navigationTitle(Text("カスタムタブを作る"))
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button("キャンセル", role: .cancel, action: {self.cancel()})
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("保存") {
                     self.save()
                     self.dismiss()
                 }
-            )
+            }
         }
         .onAppear {
             variableStates.setInterfaceSize(orientation: MainAppDesign.keyboardOrientation, screenWidth: SemiStaticStates.shared.screenWidth)
