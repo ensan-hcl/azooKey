@@ -9,6 +9,7 @@
 import AzooKeyUtils
 import KanaKanjiConverterModule
 import KeyboardViews
+import enum KeyboardExtensionUtils.AnyTextDocumentProxy
 import SwiftUI
 import SwiftUtils
 
@@ -605,7 +606,8 @@ import SwiftUtils
             }
 
             // MarkedTextを有効化している場合、テキストの送信等でここに来ることがある
-            if self.inputManager.displayedTextManager.isMarkedTextEnabled {
+            @KeyboardSetting(.liveConversion) var liveConversionEnabled
+            if liveConversionEnabled {
                 debug("user operation id: 2.5")
                 self.inputManager.stopComposition()
                 return

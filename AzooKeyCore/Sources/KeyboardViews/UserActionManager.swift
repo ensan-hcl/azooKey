@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import KeyboardExtensionUtils
 
 /// キーボードの操作を管理するためのクラス
 /// - finalにはできない
