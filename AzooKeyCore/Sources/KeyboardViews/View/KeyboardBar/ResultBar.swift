@@ -146,7 +146,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 }
             }
         }
-        .animation(.easeIn(duration: 0.2), value: variableStates.resultModel.displayState)
+        .animation(.easeIn(duration: 0.2), value: variableStates.resultModel.displayState == .nothing)
     }
 
     private func pressed(candidate: any ResultViewItemData) {
