@@ -449,6 +449,16 @@
         }
       }
     },
+    "「連絡先」アプリのデータを使って、家族や友人、職場の人の名前を素早く入力することができます。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can now quickly input the names of family, friends, and colleagues by using data from the 'Contacts' app."
+          }
+        }
+      }
+    },
     "「連絡先」へのアクセスを許可する必要があります" : {
       "localizations" : {
         "en" : {
@@ -1057,6 +1067,7 @@
       }
     },
     "azooKeyの設定タブよりキーの文字サイズを設定することが可能です。そちらもお試しください。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1450,6 +1461,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use shift key instead of Aa key in qwerty keyboards."
+          }
+        }
+      }
+    },
+    "Qwerty英語キーボードでシフトキーを使いたい場合、次の設定をオンにしてください" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you want to use the Shift key on the Qwerty English keyboard, please turn on the following setting."
           }
         }
       }
@@ -3234,6 +3255,26 @@
         }
       }
     },
+    "この機能を利用するには、「フルアクセス」の許可が必要です。詳しくはこちらをお読みください" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To use this feature, 'Full Access' permission is required. Please read more details here."
+          }
+        }
+      }
+    },
+    "この機能を利用するには、連絡先データの利用の許可が必要です。機能を有効化しようとすると、許可を求める画面が表示されるので、「許可」を選んでください" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To utilize this feature, permission to access contact data is necessary. When attempting to enable the function, a screen requesting permission will appear. Please select 'Allow' when prompted."
+          }
+        }
+      }
+    },
     "この行を削除" : {
       "localizations" : {
         "en" : {
@@ -3456,6 +3497,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "シフトキーが使えるようになりました！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift key is now available!"
           }
         }
       }
@@ -5130,6 +5181,7 @@
       }
     },
     "一度端末を再起動していただくと設定が反映されます。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -7255,6 +7307,16 @@
         }
       }
     },
+    "新機能" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Features"
+          }
+        }
+      }
+    },
     "方向" : {
       "localizations" : {
         "en" : {
@@ -7902,6 +7964,16 @@
         }
       }
     },
+    "次候補キーが使えるようになりました！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The next candidate key is now available!"
+          }
+        }
+      }
+    },
     "次候補キーを使う" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8526,7 +8598,18 @@
         }
       }
     },
+    "空白キーに「次候補」ボタンを表示するには、次の設定をオンにしてください" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To display the 'Next Candidate' button on the space key, please turn on the following setting."
+          }
+        }
+      }
+    },
     "端末の文字サイズの設定を変更しても、キーボードに表示される文字の大きさが変わらないことがあります。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -8543,6 +8626,7 @@
       }
     },
     "端末の文字サイズ設定が反映されない" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9667,6 +9751,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "連絡先情報を読み込めるようになりました！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "azooKey can now utilize contact information!"
           }
         }
       }
