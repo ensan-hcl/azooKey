@@ -30,6 +30,7 @@ import Foundation
     static var enablePasteButton: Bool { get }
     static var hideResetButtonInOneHandedMode: Bool { get }
     static var useShiftKey: Bool { get }
+    static var useNextCandidateKey: Bool { get }
 
     /// タブバーボタンを表示する
     ///  - note: このオプションは一度削除を決めたが、ユーザから強い要望があったので維持することにした。

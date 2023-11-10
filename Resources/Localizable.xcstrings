@@ -2462,6 +2462,17 @@
         }
       }
     },
+    "キーボードで入力中、空白キーに「次候補」機能を表示します" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "While composing, the space key will change into the 'Next Candidate' key"
+          }
+        }
+      }
+    },
     "キーボードの入力方式" : {
       "localizations" : {
         "en" : {
@@ -7887,6 +7898,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Next candidate key"
+          }
+        }
+      }
+    },
+    "次候補キーを使う" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use 'Next Candidate' Key"
           }
         }
       }

@@ -121,7 +121,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                             .onChange(of: variableStates.resultModel.selection) { value in
                                 if let value {
                                     withAnimation(.easeIn(duration: 0.05)) {
-                                        scrollViewProxy.scrollTo(value, anchor: .trailing)
+                                        scrollViewProxy.scrollTo(value, anchor: .center)
                                     }
                                 }
                             }

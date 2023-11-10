@@ -98,6 +98,10 @@ public enum AzooKeyKeyboardViewExtension: ApplicationSpecificKeyboardViewExtensi
         UseShiftKey.value
     }
 
+    public static var useNextCandidateKey: Bool {
+        UseNextCandidateKey.value
+    }
+
     public static var displayCursorBarAutomatically: Bool {
         DisplayCursorBarAutomatically.value
     }

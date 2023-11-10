@@ -15,6 +15,16 @@ struct FlickDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         Extension.SettingProvider.preferredLanguage
     }
 
+    // 第5列
+    @MainActor static func functionalKeys() -> [any FlickKeyModelProtocol] {
+        return [
+            FlickKeyModel<Extension>.delete,
+            Extension.SettingProvider.useNextCandidateKey ? FlickNextCandidateKeyModel<Extension>.shared : FlickSpaceKeyModel<Extension>.shared,
+            FlickEnterKeyModel<Extension>.shared
+        ]
+    }
+
+    // 第1列
     @MainActor static func TabKeys() -> [any FlickKeyModelProtocol] {
         let first: any FlickKeyModelProtocol = {
             switch preferredLanguage.first {
@@ -262,12 +272,7 @@ struct FlickDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
                 FlickKanaSymbolsKeyModel<Extension>.shared
             ],
             // 第5列
-            [
-                FlickKeyModel<Extension>.delete,
-                FlickSpaceKeyModel<Extension>.shared,
-                FlickEnterKeyModel<Extension>.shared
-            ]
-
+            Self.functionalKeys()
         ]
     }
 
@@ -426,11 +431,7 @@ struct FlickDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
                 ])
             ],
             // 第5列
-            [
-                FlickKeyModel<Extension>.delete,
-                FlickSpaceKeyModel<Extension>.shared,
-                FlickEnterKeyModel<Extension>.shared
-            ]
+            Self.functionalKeys()
         ]
     }
     // 縦に並べる
@@ -617,11 +618,7 @@ struct FlickDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
                 ])
             ],
             // 第5列
-            [
-                FlickKeyModel<Extension>.delete,
-                FlickSpaceKeyModel<Extension>.shared,
-                FlickEnterKeyModel<Extension>.shared
-            ]
+            Self.functionalKeys()
         ]
     }
 
