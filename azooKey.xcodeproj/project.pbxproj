@@ -153,7 +153,6 @@
 		1AED0A612A6D22CB005B87E5 /* AzooKeyUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AED0A602A6D22CB005B87E5 /* AzooKeyUtils */; };
 		1AF28CE0253C9FFC0012CF94 /* CursorMoveTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */; };
 		1AF28CE6253CA0F50012CF94 /* KanjiLargeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */; };
-		1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */; };
 		1AF306022A00070000B4DAC3 /* KanaKanjiConverterModule in Frameworks */ = {isa = PBXBuildFile; productRef = 1AF306012A00070000B4DAC3 /* KanaKanjiConverterModule */; };
 		1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */; };
 		1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF6784925CC20B400F3987B /* ThemeTab.swift */; };
@@ -167,6 +166,11 @@
 		1AFA57662584815B00477DC2 /* QwertyCustomKeysItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */; };
 		1AFB68422518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */; };
 		1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
+		5531AA392AFE7C7B00A9642A /* UseShiftKeyNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531AA382AFE7C7B00A9642A /* UseShiftKeyNews.swift */; };
+		5531AA3B2AFE7F1400A9642A /* UseNextCandidateKeyNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531AA3A2AFE7F1400A9642A /* UseNextCandidateKeyNews.swift */; };
+		5531AA3E2AFE800E00A9642A /* UseContactInfoSettingNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531AA3D2AFE800E00A9642A /* UseContactInfoSettingNews.swift */; };
+		5531AA402AFE81FB00A9642A /* TipsNewsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531AA3F2AFE81FB00A9642A /* TipsNewsSection.swift */; };
+		5531AA422AFE82BE00A9642A /* IconNavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531AA412AFE82BE00A9642A /* IconNavigationLink.swift */; };
 		557D9DFB2ABEE7970028F3A0 /* ContactAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557D9DFA2ABEE7970028F3A0 /* ContactAuthManager.swift */; };
 		557D9DFD2ABEF6560028F3A0 /* ContactImportSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557D9DFC2ABEF6560028F3A0 /* ContactImportSettingView.swift */; };
 		557D9DFF2ABF2B9D0028F3A0 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 557D9DFE2ABF2B9D0028F3A0 /* InfoPlist.xcstrings */; };
@@ -347,7 +351,6 @@
 		1AE70BEA258E5767009B9B8B /* TemplateEditingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateEditingView.swift; sourceTree = "<group>"; };
 		1AF28CDF253C9FFC0012CF94 /* CursorMoveTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorMoveTips.swift; sourceTree = "<group>"; };
 		1AF28CE5253CA0F50012CF94 /* KanjiLargeText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiLargeText.swift; sourceTree = "<group>"; };
-		1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTypeSettingFailureTips.swift; sourceTree = "<group>"; };
 		1AF3060029FE6C2800B4DAC3 /* AzooKeyCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AzooKeyCore; sourceTree = "<group>"; };
 		1AF616B3256D409E001A0B32 /* MemoryResetSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryResetSetting.swift; sourceTree = "<group>"; };
 		1AF6784925CC20B400F3987B /* ThemeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTab.swift; sourceTree = "<group>"; };
@@ -360,6 +363,11 @@
 		1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceSoftwaresLicenseView.swift; sourceTree = "<group>"; };
 		1AFE772F26077E0E0041D74D /* WalkthroughState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughState.swift; sourceTree = "<group>"; };
+		5531AA382AFE7C7B00A9642A /* UseShiftKeyNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseShiftKeyNews.swift; sourceTree = "<group>"; };
+		5531AA3A2AFE7F1400A9642A /* UseNextCandidateKeyNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseNextCandidateKeyNews.swift; sourceTree = "<group>"; };
+		5531AA3D2AFE800E00A9642A /* UseContactInfoSettingNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseContactInfoSettingNews.swift; sourceTree = "<group>"; };
+		5531AA3F2AFE81FB00A9642A /* TipsNewsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsNewsSection.swift; sourceTree = "<group>"; };
+		5531AA412AFE82BE00A9642A /* IconNavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconNavigationLink.swift; sourceTree = "<group>"; };
 		557D9DFA2ABEE7970028F3A0 /* ContactAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAuthManager.swift; sourceTree = "<group>"; };
 		557D9DFC2ABEF6560028F3A0 /* ContactImportSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactImportSettingView.swift; sourceTree = "<group>"; };
 		557D9DFE2ABF2B9D0028F3A0 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
@@ -536,6 +544,7 @@
 			children = (
 				1A4E09042527390100E7ABE5 /* TipsView.swift */,
 				1ACEEFE82566601700899DA2 /* TipsViewComponent.swift */,
+				5531AA3C2AFE7F2500A9642A /* News */,
 				1ACEEFE72566600700899DA2 /* Articles */,
 			);
 			path = Tips;
@@ -852,6 +861,7 @@
 				1A4A3255262FAAFD00EDAB08 /* CancelableEditor.swift */,
 				1AFA575F2584810800477DC2 /* Focus.swift */,
 				1A3022AE2631663200E4495C /* OnEnterBackground.swift */,
+				5531AA412AFE82BE00A9642A /* IconNavigationLink.swift */,
 				1AFA4BB2257E169100477DC2 /* PasteButton.swift */,
 				1AD4454226AA8E93003CF854 /* LargeButtonStyle.swift */,
 				1A3A160D2528C70800A5BA4F /* HeaderLogoView.swift */,
@@ -875,7 +885,6 @@
 				1AFA57592583051500477DC2 /* CapslockTips.swift */,
 				1AC8A5812594EF6500B71E5A /* TemplateSettingTipsView.swift */,
 				1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */,
-				1AF28CFF253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift */,
 				1A2B2B5E299480B40048332A /* UseMarkedTextTipsView.swift */,
 				1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */,
 				1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */,
@@ -929,6 +938,17 @@
 				1AE1025525D1788300CA7277 /* Capture.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		5531AA3C2AFE7F2500A9642A /* News */ = {
+			isa = PBXGroup;
+			children = (
+				5531AA3D2AFE800E00A9642A /* UseContactInfoSettingNews.swift */,
+				5531AA382AFE7C7B00A9642A /* UseShiftKeyNews.swift */,
+				5531AA3A2AFE7F1400A9642A /* UseNextCandidateKeyNews.swift */,
+				5531AA3F2AFE81FB00A9642A /* TipsNewsSection.swift */,
+			);
+			path = News;
 			sourceTree = "<group>";
 		};
 		557D9DF92ABEE78D0028F3A0 /* ContactImportSetting */ = {
@@ -1293,6 +1313,7 @@
 				1AB8C3FE25E35B3C00D39BC5 /* ManageCustardView.swift in Sources */,
 				1AAC102729B25D060020BDE9 /* KeyboardHeightSettingView.swift in Sources */,
 				1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */,
+				5531AA392AFE7C7B00A9642A /* UseShiftKeyNews.swift in Sources */,
 				1AFA4BB3257E169100477DC2 /* PasteButton.swift in Sources */,
 				1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */,
 				1AB8C3DE25E2854C00D39BC5 /* CodableActionDataEditor.swift in Sources */,
@@ -1309,9 +1330,11 @@
 				1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */,
 				1A9B0A5025642C38004203BB /* EnableAzooKeyViewComponent.swift in Sources */,
 				1AD4454626AAB8E4003CF854 /* DisclosuringList.swift in Sources */,
+				5531AA402AFE81FB00A9642A /* TipsNewsSection.swift in Sources */,
 				1AB5076B255ECC3C003C0BF2 /* Trie.swift in Sources */,
 				1A2B2B612994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift in Sources */,
 				1A4A3256262FAAFD00EDAB08 /* CancelableEditor.swift in Sources */,
+				5531AA3E2AFE800E00A9642A /* UseContactInfoSettingNews.swift in Sources */,
 				1A3DC1CA2500D44B002CAA93 /* ContentView.swift in Sources */,
 				1AF6A54725FCF1240037D5ED /* OneHandedModeTips.swift in Sources */,
 				1AB50760255EC23C003C0BF2 /* AdditionalDictManageView.swift in Sources */,
@@ -1322,6 +1345,7 @@
 				1A4057DF255843330073C6F7 /* BoolSettingView.swift in Sources */,
 				1AC8A5822594EF6500B71E5A /* TemplateSettingTipsView.swift in Sources */,
 				1A3ACF1725FB78BF007E9938 /* ContainerInternalSetting.swift in Sources */,
+				5531AA3B2AFE7F1400A9642A /* UseNextCandidateKeyNews.swift in Sources */,
 				1A9218DE2550FB9C005F45C4 /* SmoothDeleteTipsView.swift in Sources */,
 				1A12E25825C4484200316009 /* DataUpdateView.swift in Sources */,
 				1A3A160E2528C70800A5BA4F /* HeaderLogoView.swift in Sources */,
@@ -1339,7 +1363,6 @@
 				1A5C7EAC25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift in Sources */,
 				1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */,
 				1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */,
-				1AF28D00253DA5250012CF94 /* DynamicTypeSettingFailureTips.swift in Sources */,
 				1AE1025625D1788300CA7277 /* Capture.swift in Sources */,
 				1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */,
 				1AD4454326AA8E93003CF854 /* LargeButtonStyle.swift in Sources */,
@@ -1351,6 +1374,7 @@
 				1AE70BE1258DB4B9009B9B8B /* TemplateListView.swift in Sources */,
 				1A855C7829EA8A6400DD3702 /* ShareWordView.swift in Sources */,
 				1AF616B4256D409E001A0B32 /* MemoryResetSetting.swift in Sources */,
+				5531AA422AFE82BE00A9642A /* IconNavigationLink.swift in Sources */,
 				1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */,
 				557D9DFD2ABEF6560028F3A0 /* ContactImportSettingView.swift in Sources */,
 				1AFA57602584810800477DC2 /* Focus.swift in Sources */,
