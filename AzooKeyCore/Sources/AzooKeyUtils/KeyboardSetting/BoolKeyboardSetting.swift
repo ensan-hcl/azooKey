@@ -201,6 +201,17 @@ public extension KeyboardSettingKey where Self == UseShiftKey {
     static var useShiftKey: Self { .init() }
 }
 
+public struct UseNextCandidateKey: BoolKeyboardSettingKey {
+    public static let title: LocalizedStringKey = "次候補キーを使う"
+    public static let explanation: LocalizedStringKey = "キーボードで入力中、空白キーに「次候補」機能を表示します"
+    public static let defaultValue = false
+    public static let key: String = "use_next_candidate_key"
+}
+
+public extension KeyboardSettingKey where Self == UseNextCandidateKey {
+    static var useNextCandidateKey: Self { .init() }
+}
+
 public struct HideResetButtonInOneHandedMode: BoolKeyboardSettingKey {
     public static let title: LocalizedStringKey = "片手モードで解除ボタンを表示しない"
     public static let explanation: LocalizedStringKey = "片手モードの際に表示される解除ボタンを非表示にします。片手モードの調整はタブバーのボタンから行えます。"

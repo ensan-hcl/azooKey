@@ -30,6 +30,13 @@ struct SettingTabView: View {
         return false
     }
 
+    private func isCustard(_ layout: LanguageLayout) -> Bool {
+        if case .custard = layout {
+            return true
+        }
+        return false
+    }
+
     var body: some View {
         NavigationView {
             Form {
@@ -44,8 +51,14 @@ struct SettingTabView: View {
                 }
 
                 Group {
-                    Section(header: Text("カスタムキー")) {
+                    Section("カスタムキー") {
                         CustomKeysSettingView()
+                        if !self.isCustard(appStates.japaneseLayout) || !self.isCustard(appStates.englishLayout) {
+                            BoolSettingView(.useNextCandidateKey)
+                        }
+                        if self.canQwertyLayout(appStates.englishLayout) {
+                            BoolSettingView(.useShiftKey)
+                        }
                         if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(appStates.japaneseLayout) {
                             BoolSettingView(.enablePasteButton)
                         }
@@ -79,9 +92,6 @@ struct SettingTabView: View {
                         BoolSettingView(.hideResetButtonInOneHandedMode)
                         if self.canFlickLayout(appStates.japaneseLayout) {
                             FlickSensitivitySettingView(.flickSensitivity)
-                        }
-                        if self.canQwertyLayout(appStates.englishLayout) {
-                            BoolSettingView(.useShiftKey)
                         }
                     }
                 }

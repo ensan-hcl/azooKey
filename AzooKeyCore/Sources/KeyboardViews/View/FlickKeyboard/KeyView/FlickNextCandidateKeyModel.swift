@@ -26,16 +26,25 @@ struct FlickNextCandidateKeyModel<Extension: ApplicationSpecificKeyboardViewExte
         if variableStates.resultModel.results.isEmpty {
             .init(start: [.setCursorBar(.toggle)])
         } else {
-            .init(start: [.input(" ")])
+            .init(repeat: [.selectCandidate(.offset(1))])
         }
     }
     func flickKeys(variableStates: VariableStates) -> [CustardKit.FlickDirection: FlickedKeyModel] {
-        [
-            .left: FlickedKeyModel(
+        let leftFlickKey = if variableStates.resultModel.selection != nil {
+            FlickedKeyModel(
+                labelType: .text("前候補"),
+                pressActions: [.selectCandidate(.offset(-1))],
+                longPressActions: .init(repeat: [.selectCandidate(.offset(-1))])
+            )
+        } else {
+            FlickedKeyModel(
                 labelType: .text("←"),
                 pressActions: [.moveCursor(-1)],
                 longPressActions: .init(repeat: [.moveCursor(-1)])
-            ),
+            )
+        }
+        return [
+            .left: leftFlickKey,
             .top: FlickedKeyModel(
                 labelType: .text("全角"),
                 pressActions: [.input("　")]

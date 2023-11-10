@@ -47,6 +47,10 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         )
     }
 
+    @MainActor static func spaceKey() -> any QwertyKeyModelProtocol {
+        Extension.SettingProvider.useNextCandidateKey ? QwertyNextCandidateKeyModel<Extension>() : QwertySpaceKeyModel<Extension>()
+    }
+
     // 横に並べる
     @MainActor static var numberKeyboard: [[any QwertyKeyModelProtocol]] {[
         [
@@ -240,7 +244,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).languageKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
-            QwertyNextCandidateKeyModel<Extension>(),
+            Self.spaceKey(),
             QwertyEnterKeyModel<Extension>.shared
         ]
     ]
@@ -462,7 +466,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).languageKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
-            QwertyNextCandidateKeyModel<Extension>(),
+            Self.spaceKey(),
             QwertyEnterKeyModel<Extension>.shared
         ]
     ]}
@@ -507,7 +511,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
-            QwertyNextCandidateKeyModel<Extension>(),
+            Self.spaceKey(),
             QwertyEnterKeyModel<Extension>.shared
         ]
     ]}
@@ -564,7 +568,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         [
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
-            QwertyNextCandidateKeyModel<Extension>(),
+            Self.spaceKey(),
             QwertyEnterKeyModel<Extension>.shared
         ]
     ]}
