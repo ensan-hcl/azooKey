@@ -58,11 +58,9 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         tabBarButton
                     }
                     if let undoButtonAction {
-                        Button {
+                        Button("取り消す", systemImage: "arrow.uturn.backward") {
                             KeyboardFeedback<Extension>.click()
                             self.action.registerAction(undoButtonAction.action, variableStates: variableStates)
-                        } label: {
-                            Label("取り消す", systemImage: "arrow.uturn.backward")
                         }
                         .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight))
                     }
@@ -103,7 +101,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                                             KeyboardFeedback<Extension>.click()
                                             self.pressed(candidate: data.candidate)
                                         }
-                                        .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight, selected: data.id == variableStates.resultModel.selection))
+                                        .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight, selected: .init(selection: variableStates.resultModel.selection, index: data.id)))
                                         .contextMenu {
                                             ResultContextMenuView(candidate: data.candidate, displayResetLearningButton: Extension.SettingProvider.canResetLearningForCandidate, index: data.id)
                                         }
@@ -172,54 +170,69 @@ struct ResultContextMenuView: View {
     }
 
     var body: some View {
-        Group {
-            Button(action: {
-                variableStates.magnifyingText = candidate.text
-                variableStates.boolStates.isTextMagnifying = true
-            }) {
-                Text("大きな文字で表示する")
-                Image(systemName: "plus.magnifyingglass")
-            }
-            if displayResetLearningButton {
-                Button(action: {
-                    action.notifyForgetCandidate(candidate, variableStates: variableStates)
-                }) {
-                    Text("この候補の学習をリセットする")
-                    Image(systemName: "clear")
-                }
-            }
-            if SemiStaticStates.shared.hasFullAccess {
-                Button {
-                    Task { @MainActor in
-                        await action.notifyReportWrongConversion(candidate, index: index, variableStates: variableStates)
-                    }
-                } label: {
-                    Label("誤変換を報告", systemImage: "exclamationmark.bubble")
-                }
-            }
-            #if DEBUG
-            Button(action: {
-                debug(self.candidate.getDebugInformation())
-            }) {
-                Text("デバッグ情報を表示する")
-                Image(systemName: "ladybug.fill")
-            }
-            #endif
+        Button("大きな文字で表示", systemImage: "plus.magnifyingglass") {
+            variableStates.magnifyingText = candidate.text
+            variableStates.boolStates.isTextMagnifying = true
         }
+        if displayResetLearningButton {
+            Button("この候補の学習をリセットする", systemImage: "clear") {
+                action.notifyForgetCandidate(candidate, variableStates: variableStates)
+            }
+        }
+        if SemiStaticStates.shared.hasFullAccess {
+            Button("誤変換を報告", systemImage: "exclamationmark.bubble") {
+                Task { @MainActor in
+                    await action.notifyReportWrongConversion(candidate, index: index, variableStates: variableStates)
+                }
+            }
+        }
+        #if DEBUG
+        Button("デバッグ情報を表示する", systemImage: "ladybug.fill"){
+            debug(self.candidate.getDebugInformation())
+        }
+        #endif
     }
 }
 
 struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: ButtonStyle {
+    enum SelectionState: Sendable {
+        case nothing
+        case this
+        case other
+        init(selection: Int?, index: Int) {
+            if let selection {
+                if selection == index {
+                    self = .this
+                } else {
+                    self = .other
+                }
+            } else {
+                self = .nothing
+            }
+        }
+    }
     private let height: CGFloat
     private let userSizePreference: Double
-    private let selected: Bool
+    private let selected: SelectionState
 
     @Environment(Extension.Theme.self) private var theme
 
-    @MainActor init(height: CGFloat, selected: Bool = false) {
+    @MainActor init(height: CGFloat, selected: SelectionState = .nothing) {
         self.userSizePreference = Extension.SettingProvider.resultViewFontSize
         self.height = height
         self.selected = selected
+    }
+
+    private func background(configuration: Configuration) -> any ShapeStyle {
+        if configuration.isPressed {
+            theme.pushedKeyFillColor.color.opacity(0.5)
+        } else {
+            switch self.selected {
+            case .nothing: theme.resultBackgroundColor.color
+            case .this: Material.thin
+            case .other: theme.resultBackgroundColor.color.opacity(0.5)
+            }
+        }
     }
 
     func makeBody(configuration: Configuration) -> some View {
@@ -228,12 +241,10 @@ struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: B
             .frame(height: height)
             .padding(.all, 5)
             .foregroundStyle(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
-            .background(
-                (configuration.isPressed || self.selected) ?
-                    theme.pushedKeyFillColor.color.opacity(0.5) :
-                    theme.resultBackgroundColor.color
-            )
+            .background(AnyShapeStyle(background(configuration: configuration)))
             .cornerRadius(5.0)
+            .compositingGroup()
+            .contentShape(Rectangle())
             .animation(nil, value: configuration.isPressed)
     }
 }
