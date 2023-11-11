@@ -103,7 +103,7 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                                             KeyboardFeedback<Extension>.click()
                                             self.pressed(candidate: data.candidate)
                                         }
-                                        .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight, selected: data.id == variableStates.resultModel.selection))
+                                        .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight, selected: .init(selection: variableStates.resultModel.selection, index: data.id)))
                                         .contextMenu {
                                             ResultContextMenuView(candidate: data.candidate, displayResetLearningButton: Extension.SettingProvider.canResetLearningForCandidate, index: data.id)
                                         }
@@ -210,16 +210,44 @@ struct ResultContextMenuView: View {
 }
 
 struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: ButtonStyle {
+    enum SelectionState: Sendable {
+        case nothing
+        case this
+        case other
+        init(selection: Int?, index: Int) {
+            if let selection {
+                if selection == index {
+                    self = .this
+                } else {
+                    self = .other
+                }
+            } else {
+                self = .nothing
+            }
+        }
+    }
     private let height: CGFloat
     private let userSizePreference: Double
-    private let selected: Bool
+    private let selected: SelectionState
 
     @Environment(Extension.Theme.self) private var theme
 
-    @MainActor init(height: CGFloat, selected: Bool = false) {
+    @MainActor init(height: CGFloat, selected: SelectionState = .nothing) {
         self.userSizePreference = Extension.SettingProvider.resultViewFontSize
         self.height = height
         self.selected = selected
+    }
+
+    private func background(configuration: Configuration) -> any ShapeStyle {
+        if configuration.isPressed {
+            theme.pushedKeyFillColor.color.opacity(0.5)
+        } else {
+            switch self.selected {
+            case .nothing: theme.resultBackgroundColor.color
+            case .this: Material.thin
+            case .other: theme.resultBackgroundColor.color.opacity(0.5)
+            }
+        }
     }
 
     func makeBody(configuration: Configuration) -> some View {
@@ -228,12 +256,10 @@ struct ResultButtonStyle<Extension: ApplicationSpecificKeyboardViewExtension>: B
             .frame(height: height)
             .padding(.all, 5)
             .foregroundStyle(theme.resultTextColor.color) // 文字色は常に不透明度1で描画する
-            .background(
-                (configuration.isPressed || self.selected) ?
-                    theme.pushedKeyFillColor.color.opacity(0.5) :
-                    theme.resultBackgroundColor.color
-            )
+            .background(AnyShapeStyle(background(configuration: configuration)))
             .cornerRadius(5.0)
+            .compositingGroup()
+            .contentShape(Rectangle())
             .animation(nil, value: configuration.isPressed)
     }
 }
