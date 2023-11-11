@@ -166,6 +166,7 @@
 		1AFA57662584815B00477DC2 /* QwertyCustomKeysItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */; };
 		1AFB68422518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */; };
 		1AFE773026077E0E0041D74D /* WalkthroughState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFE772F26077E0E0041D74D /* WalkthroughState.swift */; };
+		5525377F2AFF1C8000F1E253 /* CustomActionWorksUnexpectedlyTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525377E2AFF1C8000F1E253 /* CustomActionWorksUnexpectedlyTipsView.swift */; };
 		5531AA392AFE7C7B00A9642A /* UseShiftKeyNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531AA382AFE7C7B00A9642A /* UseShiftKeyNews.swift */; };
 		5531AA3B2AFE7F1400A9642A /* UseNextCandidateKeyNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531AA3A2AFE7F1400A9642A /* UseNextCandidateKeyNews.swift */; };
 		5531AA3E2AFE800E00A9642A /* UseContactInfoSettingNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5531AA3D2AFE800E00A9642A /* UseContactInfoSettingNews.swift */; };
@@ -363,6 +364,7 @@
 		1AFA57652584815A00477DC2 /* QwertyCustomKeysItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QwertyCustomKeysItemView.swift; sourceTree = "<group>"; };
 		1AFB68412518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSourceSoftwaresLicenseView.swift; sourceTree = "<group>"; };
 		1AFE772F26077E0E0041D74D /* WalkthroughState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughState.swift; sourceTree = "<group>"; };
+		5525377E2AFF1C8000F1E253 /* CustomActionWorksUnexpectedlyTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActionWorksUnexpectedlyTipsView.swift; sourceTree = "<group>"; };
 		5531AA382AFE7C7B00A9642A /* UseShiftKeyNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseShiftKeyNews.swift; sourceTree = "<group>"; };
 		5531AA3A2AFE7F1400A9642A /* UseNextCandidateKeyNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseNextCandidateKeyNews.swift; sourceTree = "<group>"; };
 		5531AA3D2AFE800E00A9642A /* UseContactInfoSettingNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseContactInfoSettingNews.swift; sourceTree = "<group>"; };
@@ -887,6 +889,7 @@
 				1AA346C72568294300B41A16 /* CustomKeyTipsView.swift */,
 				1A2B2B5E299480B40048332A /* UseMarkedTextTipsView.swift */,
 				1A2B2B602994846B0048332A /* KeyboardBehaviorIssueAfterInstallTipsView.swift */,
+				5525377E2AFF1C8000F1E253 /* CustomActionWorksUnexpectedlyTipsView.swift */,
 				1A9B0A2C25635090004203BB /* EmojiKaomojiView.swift */,
 				1AAC102829B4EE4A0020BDE9 /* FullAccessTipsView.swift */,
 				1A3B4E2729D7E348005F0CDC /* PasteFromOtherAppsPermissionTipsView.swift */,
@@ -1351,6 +1354,7 @@
 				1A3A160E2528C70800A5BA4F /* HeaderLogoView.swift in Sources */,
 				1AF6784A25CC20B400F3987B /* ThemeTab.swift in Sources */,
 				1A9B0A4925642935004203BB /* EnableAzooKeyView.swift in Sources */,
+				5525377F2AFF1C8000F1E253 /* CustomActionWorksUnexpectedlyTipsView.swift in Sources */,
 				1AD5E17826AB230F001B4FF7 /* CustomKeysSettingView.swift in Sources */,
 				1A347FE828D22FA2007D7852 /* LiveConversionSettingView.swift in Sources */,
 				1ACB07CA25E552940077DE04 /* EditingScrollCustardView.swift in Sources */,
