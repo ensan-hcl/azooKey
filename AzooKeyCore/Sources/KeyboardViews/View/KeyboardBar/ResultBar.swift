@@ -58,11 +58,9 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         tabBarButton
                     }
                     if let undoButtonAction {
-                        Button {
+                        Button("取り消す", systemImage: "arrow.uturn.backward") {
                             KeyboardFeedback<Extension>.click()
                             self.action.registerAction(undoButtonAction.action, variableStates: variableStates)
-                        } label: {
-                            Label("取り消す", systemImage: "arrow.uturn.backward")
                         }
                         .buttonStyle(ResultButtonStyle<Extension>(height: buttonHeight))
                     }
@@ -172,40 +170,27 @@ struct ResultContextMenuView: View {
     }
 
     var body: some View {
-        Group {
-            Button(action: {
-                variableStates.magnifyingText = candidate.text
-                variableStates.boolStates.isTextMagnifying = true
-            }) {
-                Text("大きな文字で表示する")
-                Image(systemName: "plus.magnifyingglass")
-            }
-            if displayResetLearningButton {
-                Button(action: {
-                    action.notifyForgetCandidate(candidate, variableStates: variableStates)
-                }) {
-                    Text("この候補の学習をリセットする")
-                    Image(systemName: "clear")
-                }
-            }
-            if SemiStaticStates.shared.hasFullAccess {
-                Button {
-                    Task { @MainActor in
-                        await action.notifyReportWrongConversion(candidate, index: index, variableStates: variableStates)
-                    }
-                } label: {
-                    Label("誤変換を報告", systemImage: "exclamationmark.bubble")
-                }
-            }
-            #if DEBUG
-            Button(action: {
-                debug(self.candidate.getDebugInformation())
-            }) {
-                Text("デバッグ情報を表示する")
-                Image(systemName: "ladybug.fill")
-            }
-            #endif
+        Button("大きな文字で表示", systemImage: "plus.magnifyingglass") {
+            variableStates.magnifyingText = candidate.text
+            variableStates.boolStates.isTextMagnifying = true
         }
+        if displayResetLearningButton {
+            Button("この候補の学習をリセットする", systemImage: "clear") {
+                action.notifyForgetCandidate(candidate, variableStates: variableStates)
+            }
+        }
+        if SemiStaticStates.shared.hasFullAccess {
+            Button("誤変換を報告", systemImage: "exclamationmark.bubble") {
+                Task { @MainActor in
+                    await action.notifyReportWrongConversion(candidate, index: index, variableStates: variableStates)
+                }
+            }
+        }
+        #if DEBUG
+        Button("デバッグ情報を表示する", systemImage: "ladybug.fill"){
+            debug(self.candidate.getDebugInformation())
+        }
+        #endif
     }
 }
 
