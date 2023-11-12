@@ -18,9 +18,9 @@ fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
     var label: LocalizedStringKey {
         switch self {
         case .vertical:
-            return "縦"
+            "縦"
         case .horizontal:
-            return "横"
+            "横"
         }
     }
 }
@@ -49,70 +49,81 @@ struct EditingScrollCustardView: CancelableEditor {
 
     var body: some View {
         VStack {
-            GeometryReader {geometry in
-                VStack {
-                    Form {
-                        TextField("タブの名前", text: $editingItem.tabName)
-                            .submitLabel(.done)
-                        Text("一行ずつ登録したい文字や単語を入力してください")
-                        Button("プレビュー") {
-                            UIApplication.shared.closeKeyboard()
-                            showPreview = true
+            Form {
+                TextField("タブの名前", text: $editingItem.tabName)
+                    .submitLabel(.done)
+                Button("プレビュー") {
+                    UIApplication.shared.closeKeyboard()
+                    showPreview = true
+                }
+                DisclosureGroup("詳細設定") {
+                    HStack {
+                        Text("スクロール方向")
+                        Spacer()
+                        Picker("スクロール方向", selection: $editingItem.direction) {
+                            Text("縦").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.vertical)
+                            Text("横").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.horizontal)
                         }
-                        DisclosureGroup("詳細設定") {
-                            HStack {
-                                Text("スクロール方向")
-                                Spacer()
-                                Picker("スクロール方向", selection: $editingItem.direction) {
-                                    Text("縦").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.vertical)
-                                    Text("横").tag(CustardInterfaceLayoutScrollValue.ScrollDirection.horizontal)
-                                }
-                                .pickerStyle(.segmented)
-                            }
-                            HStack {
-                                Text("縦方向キー数")
-                                Spacer()
-                                IntegerTextField("縦方向キー数", text: $editingItem.columnCount, range: 1 ... .max)
-                                    .keyboardType(.numberPad)
-                                    .textFieldStyle(.roundedBorder)
-                                    .submitLabel(.done)
-                            }
-                            HStack {
-                                Text("横方向キー数")
-                                Spacer()
-                                IntegerTextField("横方向キー数", text: $editingItem.rowCount, range: 1 ... .max)
-                                    .keyboardType(.numberPad)
-                                    .textFieldStyle(.roundedBorder)
-                                    .submitLabel(.done)
-                            }
-                            Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
-                        }
+                        .pickerStyle(.segmented)
                     }
-                    .frame(height: geometry.size.height * 0.4)
-
-                    TextEditor(text: $editingItem.words)
-                        .frame(height: geometry.size.height * 0.6)
-
+                    HStack {
+                        Text("縦方向キー数")
+                        Spacer()
+                        IntegerTextField("縦方向キー数", text: $editingItem.columnCount, range: 1 ... .max)
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
+                    }
+                    HStack {
+                        Text("横方向キー数")
+                        Spacer()
+                        IntegerTextField("横方向キー数", text: $editingItem.rowCount, range: 1 ... .max)
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(.roundedBorder)
+                            .submitLabel(.done)
+                    }
+                    Toggle("自動的にタブバーに追加", isOn: $editingItem.addTabBarAutomatically)
                 }
-                BottomSheetView(
-                    isOpen: $showPreview,
-                    maxHeight: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation) + 40,
-                    minHeight: 0
-                ) {
-                    KeyboardPreview(defaultTab: .custard(makeCustard(data: editingItem)))
+            }
+            HStack {
+                Text("一行ずつ登録したい文字や単語を入力してください")
+                Spacer()
+                if showPreview {
+                    Button("閉じる", systemImage: "xmark.circle") {
+                        showPreview = false
+                    }
+                    .font(.title)
+                } else {
+                    Button("プレビュー", systemImage: "eye") {
+                        showPreview = true
+                    }
+                    .font(.title)
                 }
+            }
+            .labelStyle(.iconOnly)
+            .padding(.horizontal, 8)
+            if showPreview {
+                KeyboardPreview(defaultTab: .custard(makeCustard(data: editingItem)))
+            } else {
+                TextEditor(text: $editingItem.words)
+                    .frame(maxHeight: .infinity)
             }
         }
         .background(Color.secondarySystemBackground)
         .navigationBarBackButtonHidden(true)
-        .navigationBarTitle(Text("カスタムタブを作る"), displayMode: .inline)
-        .navigationBarItems(
-            leading: Button("キャンセル", action: cancel),
-            trailing: Button("保存") {
-                self.save()
-                self.dismiss()
+        .navigationTitle(Text("カスタムタブを作る"))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button("キャンセル", role: .cancel, action: {self.cancel()})
             }
-        )
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("保存") {
+                    self.save()
+                    self.dismiss()
+                }
+            }
+        }
     }
 
     private func makeCustard(data: UserMadeGridScrollCustard) -> Custard {

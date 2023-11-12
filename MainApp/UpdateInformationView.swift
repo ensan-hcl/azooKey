@@ -16,6 +16,13 @@ struct UpdateInformationView: View {
             Group {
                 // version 2.2系
                 Group {
+                    VersionView("2.2.1", releaseDate: "2023年11月12日") {
+                        ParagraphView("機能を改善しました。") {
+                            "「空白キー」に換えて「次候補」キーを選べるようになりました"
+                            "Qwertyキーボードで常に「次候補キー」が表示されていた問題を修正しました"
+                            "デザインを改善しました"
+                        }
+                    }
                     VersionView("2.2", releaseDate: "2023年11月3日") {
                         if #unavailable(iOS 16) {
                             ParagraphView("お知らせ。") {

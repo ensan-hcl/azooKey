@@ -325,6 +325,16 @@
         }
       }
     },
+    "「ペースト」アクションにはフルアクセスの許可が必要で、これがない場合思った通りに動かないことがあります。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The 'Paste' action requires full access permission, and it may not function as expected if this permission is not granted."
+          }
+        }
+      }
+    },
     "「ペーストを許可」のダイアログについて" : {
       "localizations" : {
         "en" : {
@@ -445,6 +455,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use names in 'Contacts.app' in conversion to enable more accurate conversion."
+          }
+        }
+      }
+    },
+    "「連絡先」アプリのデータを使って、家族や友人、職場の人の名前を素早く入力することができます。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can now quickly input the names of family, friends, and colleagues by using data from the 'Contacts' app."
           }
         }
       }
@@ -1056,22 +1076,6 @@
         }
       }
     },
-    "azooKeyの設定タブよりキーの文字サイズを設定することが可能です。そちらもお試しください。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On the Settings tab in azooKey, you can set key font size. Please try it."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "azooKeyは、キーボードの振動フィードバックや、キーボードからのペーストを実現するために、フルアクセスの許可が必要です。フルアクセスを許可していただくことで、これらの機能が使用できます。" : {
       "localizations" : {
         "en" : {
@@ -1450,6 +1454,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use shift key instead of Aa key in qwerty keyboards."
+          }
+        }
+      }
+    },
+    "Qwerty英語キーボードでシフトキーを使いたい場合、次の設定をオンにしてください" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you want to use the Shift key on the Qwerty English keyboard, please turn on the following setting."
           }
         }
       }
@@ -2010,6 +2024,46 @@
         }
       }
     },
+    "カスタムアクションがうまく動かない" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom actions doesn't work as expected"
+          }
+        }
+      }
+    },
+    "カスタムアクションが思った通りに動かない場合、実現したい操作をなるべくそのまま実行することが重要です。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If your custom action isn't working as expected, it's crucial to try to replicate the desired operation as closely as possible."
+          }
+        }
+      }
+    },
+    "カスタムアクションでこれを再現する場合、「(」の入力→「)」の入力→「確定」の順でアクションを設定すれば上手く動きます。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you want to replicate this using a custom action, set up the action in the following order: input '(' -> input ')' -> confirm. This should work as expected."
+          }
+        }
+      }
+    },
+    "カスタムアクションをうまく設定するためのヒントを紹介します。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here are some tips for setting up custom actions successfully."
+          }
+        }
+      }
+    },
     "カスタムキー" : {
       "localizations" : {
         "en" : {
@@ -2022,6 +2076,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "カスタムキーで高度なアクションを設定した際、思った通りに動かないことがあります。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When setting up advanced actions with custom keys, they may not work as expected."
           }
         }
       }
@@ -2458,6 +2522,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "キーボードで入力中、空白キーに「次候補」機能を表示します" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "While composing, the space key will change into the 'Next Candidate' key"
           }
         }
       }
@@ -3127,6 +3202,16 @@
         }
       }
     },
+    "このとき、実際のキーボードでは「(」を入力し、「)」を入力し、ついで「確定」を押します。azooKeyは自動でカーソルを移動するので、これで実現したい操作が完了します。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In this case, you would input '(' and then ')', followed by pressing 'Enter' on the actual keyboard. Since azooKey automatically moves the cursor, this sequence accomplishes the desired action."
+          }
+        }
+      }
+    },
     "この列を削除" : {
       "localizations" : {
         "en" : {
@@ -3219,6 +3304,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "この機能を利用するには、「フルアクセス」の許可が必要です。詳しくはこちらをお読みください" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To use this feature, 'Full Access' permission is required. Please read more details here."
+          }
+        }
+      }
+    },
+    "この機能を利用するには、連絡先データの利用の許可が必要です。機能を有効化しようとすると、許可を求める画面が表示されるので、「許可」を選んでください" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To utilize this feature, permission to access contact data is necessary. When attempting to enable the function, a screen requesting permission will appear. Please select 'Allow' when prompted."
           }
         }
       }
@@ -3317,6 +3422,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "これを防ぐには、一文字ずつ入力して確定することができます。つまり、「あ」の入力→「確定」→「さ」の入力→「確定」の順で実行することで、ひらがなの「あさ」を入力することができます" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To prevent this, you can input one character at a time and confirm. In other words, executing the sequence: input 'あ' -> confirm -> input 'さ' -> confirm allows you to input the hiragana 'あさ'."
           }
         }
       }
@@ -3445,6 +3560,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "シフトキーが使えるようになりました！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shift key is now available!"
           }
         }
       }
@@ -3674,6 +3799,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "ただし、まとめられるアクションはまとめた方が効率よく動きます。今回の場合では「()」の入力→「確定」の順にすることで、より良いカスタムアクションになります。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "However, for more efficient performance, it is recommended to consolidate actions when possible. In this case, combining the input of '()' and the confirmation steps into a single action would create a more effective custom action."
           }
         }
       }
@@ -4910,6 +5045,26 @@
         }
       }
     },
+    "ライブ変換がオンになっている場合、入力中のカーソル移動は無効になります。カーソルを移動する前に一度「確定」を挟むことで、思った通りの挙動になります。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When live conversion is enabled, cursor movement during input is disabled. To achieve the desired behavior, insert a 'confirm' action before moving the cursor."
+          }
+        }
+      }
+    },
+    "ライブ変換などの設定によって、思っていない挙動が発生することがあります。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unexpected behaviors may occur due to settings such as live conversion."
+          }
+        }
+      }
+    },
     "ライブ変換の設定" : {
       "localizations" : {
         "en" : {
@@ -5118,22 +5273,6 @@
         }
       }
     },
-    "一度端末を再起動していただくと設定が反映されます。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please reboot your device, and the setting can work."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "一行ずつ登録したい文字や単語を入力してください" : {
       "localizations" : {
         "en" : {
@@ -5162,6 +5301,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "一部のアクションは、設定によって異なる動作をします。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some actions may exhibit different behaviors depending on the configuration settings."
           }
         }
       }
@@ -5404,6 +5553,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "例えば、「()を入力して一文字カーソルを左に動かす」というアクションを作ることを考えます。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consider creating an action, for instance, where you input '()' and move the cursor one character to the left."
+          }
+        }
+      }
+    },
+    "例えば、ひらがなで「あさ」を入力するアクションを設定していても、ライブ変換がオンになっている場合自動で「朝」になってしまいます。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For instance, even if you've set up an action to input 'あさ' in hiragana, when live conversion is enabled, it may automatically change to '朝'."
           }
         }
       }
@@ -7244,6 +7413,16 @@
         }
       }
     },
+    "新機能" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Features"
+          }
+        }
+      }
+    },
     "方向" : {
       "localizations" : {
         "en" : {
@@ -7891,6 +8070,27 @@
         }
       }
     },
+    "次候補キーが使えるようになりました！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The next candidate key is now available!"
+          }
+        }
+      }
+    },
+    "次候補キーを使う" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use 'Next Candidate' Key"
+          }
+        }
+      }
+    },
     "正しくない形式のファイルです" : {
       "localizations" : {
         "en" : {
@@ -8504,34 +8704,12 @@
         }
       }
     },
-    "端末の文字サイズの設定を変更しても、キーボードに表示される文字の大きさが変わらないことがあります。" : {
+    "空白キーに「次候補」ボタンを表示するには、次の設定をオンにしてください" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sometimes the setting of your device's font size doesn't affect the keyboard."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "端末の文字サイズ設定が反映されない" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Setting of device's font size doesn't work"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
+            "value" : "To display the 'Next Candidate' button on the space key, please turn on the following setting."
           }
         }
       }
@@ -9645,6 +9823,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "連絡先情報を読み込めるようになりました！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "azooKey can now utilize contact information!"
           }
         }
       }
