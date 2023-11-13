@@ -273,12 +273,8 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         }), width: functionKeyWidth, height: footerHeight)
     }
 
-    private func tabBarKey() -> SimpleKeyView<Extension> {
-        SimpleKeyView(model: SimpleKeyModel<Extension>(keyLabelType: .image("list.bullet"), unpressedKeyColorType: .special, pressActions: [.setTabBar(.toggle)], longPressActions: .none), width: functionKeyWidth, height: footerHeight)
-    }
-
     private func backTabKey() -> SimpleKeyView<Extension> {
-        SimpleKeyView(model: SimpleKeyModel<Extension>(keyLabelType: .image("arrow.uturn.backward"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.last_tab))], longPressActions: .none), width: functionKeyWidth, height: footerHeight)
+        SimpleKeyView(model: SimpleKeyModel<Extension>(keyLabelType: .text("戻る"), unpressedKeyColorType: .special, pressActions: [.moveTab(.system(.last_tab))], longPressActions: .none), width: functionKeyWidth * 2, height: footerHeight)
     }
 
     private func genreKey(_ genre: Genre) -> some View {
@@ -332,7 +328,6 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
 
             HStack(spacing: 0) {
                 backTabKey()
-                tabBarKey()
                 ForEach(allGenre, id: \.self) { genre in
                     if !self.emojis[genre, default: []].isEmpty {
                         genreKey(genre)

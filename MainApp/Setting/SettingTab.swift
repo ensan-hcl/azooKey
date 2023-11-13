@@ -31,101 +31,100 @@ struct SettingTabView: View {
         return false
     }
 
+    private func isCustard(_ layout: LanguageLayout) -> Bool {
+        if case .custard = layout {
+            return true
+        }
+        return false
+    }
+
     var body: some View {
         NavigationView {
             Form {
-                Group {
-                    Section(header: Text("キーボードの種類")) {
-                        NavigationLink("キーボードの種類を設定する", destination: KeyboardLayoutTypeDetailsView())
-                    }
+                Section("キーボードの種類") {
+                    NavigationLink("キーボードの種類を設定する", destination: KeyboardLayoutTypeDetailsView())
                 }
-                Section(header: Text("ライブ変換")) {
+                Section("ライブ変換") {
                     BoolSettingView(.liveConversion)
                     NavigationLink("詳しい設定", destination: LiveConversionSettingView())
                 }
-
-                Group {
-                    Section(header: Text("カスタムキー")) {
-                        CustomKeysSettingView()
-                        if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(appStates.japaneseLayout) {
-                            BoolSettingView(.enablePasteButton)
-                        }
+                Section("カスタムキー") {
+                    CustomKeysSettingView()
+                    if !self.isCustard(appStates.japaneseLayout) || !self.isCustard(appStates.englishLayout) {
+                        BoolSettingView(.useNextCandidateKey)
                     }
-                    Section(header: Text("バー")) {
-                        BoolSettingView(.useReflectStyleCursorBar)
-                        BoolSettingView(.displayTabBarButton)
-                        BoolSettingView(.enableClipboardHistoryManagerTab)
-                        if SemiStaticStates.shared.hasFullAccess {
-                            NavigationLink("「ペーストを許可」のダイアログについて", destination: PasteFromOtherAppsPermissionTipsView())
-                        }
-                        NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
+                    if self.canQwertyLayout(appStates.englishLayout) {
+                        BoolSettingView(.useShiftKey)
                     }
-                    // デバイスが触覚フィードバックをサポートしている場合のみ表示する
-                    if SemiStaticStates.shared.hapticsAvailable {
-                        Section(header: Text("サウンドと振動")) {
-                            BoolSettingView(.enableKeySound)
-                            BoolSettingView(.enableKeyHaptics)
-                        }
-                    } else {
-                        Section(header: Text("サウンド")) {
-                            BoolSettingView(.enableKeySound)
-                        }
-                    }
-                    Section(header: Text("表示")) {
-                        KeyboardHeightSettingView(.keyboardHeightScale)
-                        FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)
-                        FontSizeSettingView(.resultViewFontSize, .result, availableValueRange: 12...24)
-                    }
-                    Section(header: Text("操作性")) {
-                        BoolSettingView(.hideResetButtonInOneHandedMode)
-                        if self.canFlickLayout(appStates.japaneseLayout) {
-                            FlickSensitivitySettingView(.flickSensitivity)
-                        }
-                        if self.canQwertyLayout(appStates.englishLayout) {
-                            BoolSettingView(.useShiftKey)
-                        }
+                    if !SemiStaticStates.shared.needsInputModeSwitchKey, self.canFlickLayout(appStates.japaneseLayout) {
+                        BoolSettingView(.enablePasteButton)
                     }
                 }
-                Group {
-                    Section(header: Text("変換")) {
-                        BoolSettingView(.englishCandidate)
-                        BoolSettingView(.halfKanaCandidate)
-                        BoolSettingView(.fullRomanCandidate)
-                        BoolSettingView(.typographyLetter)
-                        BoolSettingView(.unicodeCandidate)
-                        MarkedTextSettingView(.markedTextSetting)
-                        ContactImportSettingView()
-                        NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
+                Section("バー") {
+                    BoolSettingView(.useReflectStyleCursorBar)
+                    BoolSettingView(.displayTabBarButton)
+                    BoolSettingView(.enableClipboardHistoryManagerTab)
+                    if SemiStaticStates.shared.hasFullAccess {
+                        NavigationLink("「ペーストを許可」のダイアログについて", destination: PasteFromOtherAppsPermissionTipsView())
                     }
-
-                    Section(header: Text("言語")) {
-                        PreferredLanguageSettingView()
+                    NavigationLink("タブバーを編集", destination: EditingTabBarView(manager: $appStates.custardManager))
+                }
+                // デバイスが触覚フィードバックをサポートしている場合のみ表示する
+                if SemiStaticStates.shared.hapticsAvailable {
+                    Section("サウンドと振動") {
+                        BoolSettingView(.enableKeySound)
+                        BoolSettingView(.enableKeyHaptics)
                     }
-
-                    Section(header: Text("ユーザ辞書")) {
-                        BoolSettingView(.useOSUserDict)
-                        NavigationLink("azooKeyユーザ辞書", destination: AzooKeyUserDictionaryView())
-                    }
-
-                    Section(header: Text("テンプレート")) {
-                        NavigationLink("テンプレートの管理", destination: TemplateListView())
-                    }
-
-                    Section(header: Text("学習機能")) {
-                        LearningTypeSettingView()
-                        MemoryResetSettingItemView()
-                    }
-
-                    Section(header: Text("カスタムタブ")) {
-                        NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
+                } else {
+                    Section("サウンド") {
+                        BoolSettingView(.enableKeySound)
                     }
                 }
-                Section(header: Text("オープンソースソフトウェア")) {
+                Section("表示") {
+                    KeyboardHeightSettingView(.keyboardHeightScale)
+                    FontSizeSettingView(.keyViewFontSize, .key, availableValueRange: 15 ... 28)
+                    FontSizeSettingView(.resultViewFontSize, .result, availableValueRange: 12...24)
+                }
+
+                Section("操作性") {
+                    BoolSettingView(.hideResetButtonInOneHandedMode)
+                    if self.canFlickLayout(appStates.japaneseLayout) {
+                        FlickSensitivitySettingView(.flickSensitivity)
+                    }
+                }
+                Section("変換") {
+                    BoolSettingView(.englishCandidate)
+                    BoolSettingView(.halfKanaCandidate)
+                    BoolSettingView(.fullRomanCandidate)
+                    BoolSettingView(.typographyLetter)
+                    BoolSettingView(.unicodeCandidate)
+                    MarkedTextSettingView(.markedTextSetting)
+                    ContactImportSettingView()
+                    NavigationLink("絵文字と顔文字", destination: AdditionalDictManageView())
+                }
+                Section("言語") {
+                    PreferredLanguageSettingView()
+                }
+                Section("ユーザ辞書") {
+                    BoolSettingView(.useOSUserDict)
+                    NavigationLink("azooKeyユーザ辞書", destination: AzooKeyUserDictionaryView())
+                }
+                Section("テンプレート") {
+                    NavigationLink("テンプレートの管理", destination: TemplateListView())
+                }
+                Section("学習機能") {
+                    LearningTypeSettingView()
+                    MemoryResetSettingItemView()
+                }
+                Section("カスタムタブ") {
+                    NavigationLink("カスタムタブの管理", destination: ManageCustardView(manager: $appStates.custardManager))
+                }
+                Section("オープンソースソフトウェア") {
                     Text("azooKeyはオープンソースソフトウェアであり、GitHubでソースコードを公開しています。")
                     FallbackLink("View azooKey on GitHub", destination: URL(string: "https://github.com/ensan-hcl/azooKey")!)
                     NavigationLink("Acknowledgements", destination: OpenSourceSoftwaresLicenseView())
                 }
-                Section(header: Text("このアプリについて")) {
+                Section("このアプリについて") {
                     NavigationLink("お問い合わせ", destination: ContactView())
                     FallbackLink("プライバシーポリシー", destination: URL(string: "https://azookey.netlify.app/PrivacyPolicy")!)
                         .foregroundStyle(.primary)
@@ -140,11 +139,12 @@ struct SettingTabView: View {
                     HStack {
                         Text("バージョン")
                         Spacer()
-                        Text(SharedStore.currentAppVersion?.description ?? "取得中です")
+                        Text(verbatim: SharedStore.currentAppVersion?.description ?? "取得中です")
                     }
                 }
             }
-            .navigationBarTitle(Text("設定"), displayMode: .large)
+            .navigationTitle("設定")
+            .navigationBarTitleDisplayMode(.large)
             .onAppear {
                 if appStates.requestReviewManager.shouldTryRequestReview, appStates.requestReviewManager.shouldRequestReview() {
                     requestReview()
