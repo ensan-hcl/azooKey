@@ -47,8 +47,8 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         )
     }
 
-    @MainActor static func spaceKey() -> any QwertyKeyModelProtocol {
-        Extension.SettingProvider.useNextCandidateKey ? QwertyNextCandidateKeyModel<Extension>() : QwertySpaceKeyModel<Extension>()
+    @MainActor static func spaceKey() -> any QwertyKeyModelProtocol<Extension> {
+        Extension.SettingProvider.useNextCandidateKey ? QwertyNextCandidateKeyModel() : QwertySpaceKeyModel()
     }
 
     // 横に並べる
