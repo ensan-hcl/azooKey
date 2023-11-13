@@ -16,6 +16,11 @@ struct UpdateInformationView: View {
             Group {
                 // version 2.2系
                 Group {
+                    VersionView("2.2.2", releaseDate: "2023年11月13日") {
+                        ParagraphView("不具合を修正しました。") {
+                            "起動に関する問題を修正しました"
+                        }
+                    }
                     VersionView("2.2.1", releaseDate: "2023年11月12日") {
                         ParagraphView("機能を改善しました。") {
                             "「空白キー」に換えて「次候補」キーを選べるようになりました"
