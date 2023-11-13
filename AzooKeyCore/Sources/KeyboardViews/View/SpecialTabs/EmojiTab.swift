@@ -210,10 +210,8 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         // 読み込むファイルはバージョンごとに変更する必要がある
         if #available(iOS 16.4, *) {
             fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E15.0.txt.gen", isDirectory: false)
-        } else if #available(iOS 15.4, *) {
-            fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E14.0.txt.gen", isDirectory: false)
         } else {
-            fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E13.1.txt.gen", isDirectory: false)
+            fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E14.0.txt.gen", isDirectory: false)
         }
         let genres: [String: Genre] = [
             "Symbols": .symbols,
@@ -363,7 +361,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
 private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
     private var currentLevel: EmojiTabExpandModePreference.Level
     private var action: () -> Void
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         KeyLabel(.image(self.currentLevel.icon), width: width, textSize: .max)
     }
 
@@ -390,7 +388,7 @@ private struct ExpandKeyModel<Extension: ApplicationSpecificKeyboardViewExtensio
 private struct GenreKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>: SimpleKeyModelProtocol {
     private var action: () -> Void
     private var systemImage: String
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, theme: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates) -> KeyLabel<Extension> {
         KeyLabel(.image(systemImage), width: width, textSize: .max)
     }
 
@@ -429,7 +427,7 @@ private struct EmojiKeyModel<Extension: ApplicationSpecificKeyboardViewExtension
     var longPressActions: LongpressActionType {
         .none
     }
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states _: VariableStates, theme _: ThemeData<some ApplicationSpecificTheme>) -> KeyLabel<E> {
+    func label(width: CGFloat, states _: VariableStates) -> KeyLabel<Extension> {
         KeyLabel(.text(emoji), width: width, textSize: .max)
     }
 

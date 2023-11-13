@@ -9,6 +9,7 @@
 import AzooKeyUtils
 import KanaKanjiConverterModule
 import KeyboardViews
+import enum KeyboardExtensionUtils.AnyTextDocumentProxy
 import SwiftUI
 import SwiftUtils
 
@@ -510,17 +511,6 @@ import SwiftUtils
      ---------------------
      */
 
-    private func adjustLeftString(_ left: String) -> String {
-        if #available(iOS 16, *) {
-            var newLeft = left.components(separatedBy: "\n").last ?? ""
-            if left.contains("\n") && newLeft.isEmpty {
-                newLeft = "\n"
-            }
-            return newLeft
-        }
-        return left
-    }
-
     /// 何かが変化した後に状態を比較し、どのような変化が起こったのか判断する関数。
     override func notifySomethingDidChange(a_left: String, a_center: String, a_right: String, variableStates: VariableStates) {
         defer {
@@ -543,8 +533,8 @@ import SwiftUtils
         }
 
         // iOS16以降左側の文字列の設計が変わったので、adjustする
-        let a_left = adjustLeftString(a_left)
-        let b_left = adjustLeftString(tempLeft)
+        let a_left = self.inputManager.adjustLeftString(a_left)
+        let b_left = self.inputManager.adjustLeftString(tempLeft)
 
         // システムによる操作でこの関数が呼ばれた場合はスルーする
         if let operation = self.inputManager.getPreviousSystemOperation() {
@@ -616,7 +606,8 @@ import SwiftUtils
             }
 
             // MarkedTextを有効化している場合、テキストの送信等でここに来ることがある
-            if self.inputManager.displayedTextManager.isMarkedTextEnabled {
+            @KeyboardSetting(.liveConversion) var liveConversionEnabled
+            if liveConversionEnabled {
                 debug("user operation id: 2.5")
                 self.inputManager.stopComposition()
                 return

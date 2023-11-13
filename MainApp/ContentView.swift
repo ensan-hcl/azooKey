@@ -100,7 +100,7 @@ struct ContentView: View {
                             tabBarData.lastUpdateDate = .now
                             try? manager.saveTabBarData(tabBarData: tabBarData)
                         }
-                    case .iOS15_4_new_emoji, .iOS16_4_new_emoji:
+                    case .iOS16_4_new_emoji:
                         // 絵文字を更新する
                         DataUpdateView(id: data.id, manager: $messageManager) {
                             AdditionalDictManager().userDictUpdate()

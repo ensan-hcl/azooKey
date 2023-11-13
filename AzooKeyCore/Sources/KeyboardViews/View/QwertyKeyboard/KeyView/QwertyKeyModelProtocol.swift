@@ -92,7 +92,7 @@ protocol QwertyKeyModelProtocol<Extension> {
     @MainActor func longPressActions(variableStates: VariableStates) -> LongpressActionType
     /// 二回連続で押した際に発火するActionを指定する
     @MainActor func doublePressActions(variableStates: VariableStates) -> [ActionType]
-    @MainActor func label<Extension: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension>
+    @MainActor func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension>
     func backGroundColorWhenPressed(theme: Extension.Theme) -> Color
     var unpressedKeyColorType: QwertyUnpressedKeyColorType {get}
 

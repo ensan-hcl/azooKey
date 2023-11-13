@@ -38,7 +38,7 @@ struct QwertyNextCandidateKeyModel<Extension: ApplicationSpecificKeyboardViewExt
         }
     }
 
-    func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
+    func label(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<Extension> {
         if states.resultModel.results.isEmpty {
             switch states.keyboardLanguage {
             case .el_GR:

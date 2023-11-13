@@ -41,7 +41,6 @@
 		1A1A630B29C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */; };
 		1A1A630C29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */; };
 		1A1A630D29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */; };
-		1A1ECCA2295DF8DE001AD7E0 /* DisplayedTextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */; };
 		1A1ECCA4295DF9D4001AD7E0 /* LiveConversionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */; };
 		1A1ECCA6295DFADF001AD7E0 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */; };
 		1A273F97291A6B8B001E1B02 /* iOS15TerminationNews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A273F96291A6B8B001E1B02 /* iOS15TerminationNews.swift */; };
@@ -93,7 +92,6 @@
 		1A73F20529C01B0F00833C11 /* RequestReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20429C01B0F00833C11 /* RequestReviewManager.swift */; };
 		1A73F20729C01B5700833C11 /* checkKeyboardActivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20629C01B5700833C11 /* checkKeyboardActivation.swift */; };
 		1A73F20929C01B7600833C11 /* closeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A73F20829C01B7600833C11 /* closeKeyboard.swift */; };
-		1A73F20A29C0A6E000833C11 /* DisplayedTextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */; };
 		1A73F20B29C0B01C00833C11 /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */; };
 		1A73F21229C0B36D00833C11 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 1A73F21129C0B36D00833C11 /* OrderedCollections */; };
 		1A7B147325F6602E00BE2472 /* CustomizeTabWalkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7B147225F6602E00BE2472 /* CustomizeTabWalkthrough.swift */; };
@@ -142,7 +140,6 @@
 		1AD8FDF12988076F00DA4296 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD8FDF02988076F00DA4296 /* ConverterTests.swift */; };
 		1AD96FB82A22F9C800FD4EA4 /* SwiftUIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AD96FB72A22F9C800FD4EA4 /* SwiftUIUtils */; };
 		1AD96FBA2A22F9CD00FD4EA4 /* SwiftUIUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 1AD96FB92A22F9CD00FD4EA4 /* SwiftUIUtils */; };
-		1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1023525D0C99200CA7277 /* PhotoPicker.swift */; };
 		1AE1025625D1788300CA7277 /* Capture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1025525D1788300CA7277 /* Capture.swift */; };
 		1AE102CF25D3713C00CA7277 /* TrimmingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE102CE25D3713C00CA7277 /* TrimmingView.swift */; };
 		1AE1913625D4A3370044EE4B /* ThemeShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE1913525D4A3370044EE4B /* ThemeShareView.swift */; };
@@ -178,6 +175,7 @@
 		557D9E012ABF320F0028F3A0 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 557D9E002ABF320F0028F3A0 /* Localizable.xcstrings */; };
 		557D9E022ABF320F0028F3A0 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 557D9E002ABF320F0028F3A0 /* Localizable.xcstrings */; };
 		5592F5AE2AC0395D00AA1325 /* PredictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598472D2AB84F5200B18C15 /* PredictionManager.swift */; };
+		55950E542AF8E09400ACACAB /* KeyboardExtensionUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 55950E532AF8E09400ACACAB /* KeyboardExtensionUtils */; };
 		5598472E2AB84F5200B18C15 /* PredictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598472D2AB84F5200B18C15 /* PredictionManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -256,7 +254,6 @@
 		1A1A630529C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_dict_E14.0.txt.gen; path = Gen/generated/emoji_dict_E14.0.txt.gen; sourceTree = SOURCE_ROOT; };
 		1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_dict_E13.1.txt.gen; path = Gen/generated/emoji_dict_E13.1.txt.gen; sourceTree = SOURCE_ROOT; };
 		1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = text; name = emoji_dict_E15.0.txt.gen; path = Gen/generated/emoji_dict_E15.0.txt.gen; sourceTree = SOURCE_ROOT; };
-		1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayedTextManager.swift; sourceTree = "<group>"; };
 		1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveConversionManager.swift; sourceTree = "<group>"; };
 		1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		1A273F96291A6B8B001E1B02 /* iOS15TerminationNews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS15TerminationNews.swift; sourceTree = "<group>"; };
@@ -343,7 +340,6 @@
 		1AD4454526AAB8E4003CF854 /* DisclosuringList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosuringList.swift; sourceTree = "<group>"; };
 		1AD5E17726AB230F001B4FF7 /* CustomKeysSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeysSettingView.swift; sourceTree = "<group>"; };
 		1AD8FDF02988076F00DA4296 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
-		1AE1023525D0C99200CA7277 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		1AE1025525D1788300CA7277 /* Capture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capture.swift; sourceTree = "<group>"; };
 		1AE102CE25D3713C00CA7277 /* TrimmingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrimmingView.swift; sourceTree = "<group>"; };
 		1AE1913525D4A3370044EE4B /* ThemeShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeShareView.swift; sourceTree = "<group>"; };
@@ -429,6 +425,7 @@
 				1A7F37812A698741009AC382 /* KeyboardThemes in Frameworks */,
 				1AD96FB82A22F9C800FD4EA4 /* SwiftUIUtils in Frameworks */,
 				1AED0A612A6D22CB005B87E5 /* AzooKeyUtils in Frameworks */,
+				55950E542AF8E09400ACACAB /* KeyboardExtensionUtils in Frameworks */,
 				1A606B08292E53C500CEDB15 /* CustardExpressionEvaluator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -463,7 +460,6 @@
 		1A10D81325E506460095CB67 /* Pickers */ = {
 			isa = PBXGroup;
 			children = (
-				1AE1023525D0C99200CA7277 /* PhotoPicker.swift */,
 				1A18424225DD6857003985AB /* FontPicker.swift */,
 			);
 			path = Pickers;
@@ -514,7 +510,6 @@
 		1A1ECCA0295DF8A2001AD7E0 /* Display */ = {
 			isa = PBXGroup;
 			children = (
-				1A1ECCA1295DF8DE001AD7E0 /* DisplayedTextManager.swift */,
 				1A1ECCA3295DF9D4001AD7E0 /* LiveConversionManager.swift */,
 				5598472D2AB84F5200B18C15 /* PredictionManager.swift */,
 				1A1ECCA5295DFADF001AD7E0 /* InputManager.swift */,
@@ -1081,6 +1076,7 @@
 				1A7F37802A698741009AC382 /* KeyboardThemes */,
 				1A7F37892A6A1A99009AC382 /* KeyboardViews */,
 				1AED0A602A6D22CB005B87E5 /* AzooKeyUtils */,
+				55950E532AF8E09400ACACAB /* KeyboardExtensionUtils */,
 			);
 			productName = Keyboard;
 			productReference = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */;
@@ -1365,7 +1361,6 @@
 				1AFA57662584815B00477DC2 /* QwertyCustomKeysItemView.swift in Sources */,
 				1AFB68422518C48100C649C4 /* OpenSourceSoftwaresLicenseView.swift in Sources */,
 				1A5C7EAC25F36A6E00A7CBA8 /* PreferredLanguageSettingView.swift in Sources */,
-				1AE1023625D0C99200CA7277 /* PhotoPicker.swift in Sources */,
 				1A2C293926273E9900DFE465 /* DraggableView.swift in Sources */,
 				1AE1025625D1788300CA7277 /* Capture.swift in Sources */,
 				1A10D7F825E4E8D30095CB67 /* CustardInformationView.swift in Sources */,
@@ -1404,7 +1399,6 @@
 				1AC09DBE299533E0009BDBC7 /* DicdataStoreTests.swift in Sources */,
 				1A2E585A2951EC87004F959B /* (null) in Sources */,
 				1A2E58542951EC87004F959B /* (null) in Sources */,
-				1A73F20A29C0A6E000833C11 /* DisplayedTextManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1420,7 +1414,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A1ECCA2295DF8DE001AD7E0 /* DisplayedTextManager.swift in Sources */,
 				5598472E2AB84F5200B18C15 /* PredictionManager.swift in Sources */,
 				1A1ECCA6295DFADF001AD7E0 /* InputManager.swift in Sources */,
 				1A1ECCA4295DF9D4001AD7E0 /* LiveConversionManager.swift in Sources */,
@@ -1670,7 +1663,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MainApp/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1706,7 +1699,7 @@
 				"GCC_OPTIMIZATION_LEVEL[arch=*]" = s;
 				INFOPLIST_FILE = MainApp/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1735,7 +1728,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				INFOPLIST_FILE = azooKeyTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1759,7 +1752,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				INFOPLIST_FILE = azooKeyTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1785,7 +1778,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				INFOPLIST_FILE = MainAppUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1810,7 +1803,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9S3UXHYP65;
 				INFOPLIST_FILE = MainAppUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1839,7 +1832,7 @@
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				INFOPLIST_FILE = Keyboard/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1874,7 +1867,7 @@
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				INFOPLIST_FILE = Keyboard/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2066,6 +2059,10 @@
 		1AF306012A00070000B4DAC3 /* KanaKanjiConverterModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = KanaKanjiConverterModule;
+		};
+		55950E532AF8E09400ACACAB /* KeyboardExtensionUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardExtensionUtils;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

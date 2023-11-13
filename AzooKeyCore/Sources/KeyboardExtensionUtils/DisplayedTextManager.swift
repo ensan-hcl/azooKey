@@ -6,32 +6,27 @@
 //  Copyright © 2022 ensan. All rights reserved.
 //
 
-import AzooKeyUtils
 import KanaKanjiConverterModule
-import KeyboardViews
 import SwiftUtils
 import UIKit
 
 /// UI側の入力中のテキストの更新を受け持つクラス
-@MainActor final class DisplayedTextManager {
-    init() {
-        @KeyboardSetting(.liveConversion) var enabled
-        self.isLiveConversionEnabled = enabled
-
-        @KeyboardSetting(.markedTextSetting) var markedTextEnabled
-        self.isMarkedTextEnabled = markedTextEnabled != .disabled
+@MainActor final public class DisplayedTextManager {
+    public init(isLiveConversionEnabled: Bool, isMarkedTextEnabled: Bool) {
+        self.isLiveConversionEnabled = isLiveConversionEnabled
+        self.isMarkedTextEnabled = isMarkedTextEnabled
     }
     /// `convertTarget`に対応する文字列
-    private(set) var composingText: ComposingText = .init()
+    private(set) public var composingText: ComposingText = .init()
     /// ライブ変換の有効化状態
-    private(set) var isLiveConversionEnabled: Bool
+    private(set) public var isLiveConversionEnabled: Bool
     /// ライブ変換結果として表示されるべきテキスト
-    private(set) var displayedLiveConversionText: String?
+    private(set) public var displayedLiveConversionText: String?
     /// テキストを変更するたびに増やす値
     private var textChangedCount = 0
 
     /// `textChangedCount`のgetter。
-    func getTextChangedCount() -> Int {
+    public func getTextChangedCount() -> Int {
         self.textChangedCount
     }
 
@@ -50,7 +45,7 @@ import UIKit
     /// キーボード内テキストフィールドの`UITextDocumentProxy`
     private var ikTextFieldProxy: (id: UUID, proxy: (any UITextDocumentProxy))?
 
-    func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
+    public func setTextDocumentProxy(_ proxy: AnyTextDocumentProxy) {
         switch proxy {
         case let .mainProxy(proxy):
             self.displayedTextProxy = proxy
@@ -66,28 +61,29 @@ import UIKit
         }
     }
 
-    var documentContextAfterInput: String? {
+    public var documentContextAfterInput: String? {
         self.proxy?.documentContextAfterInput
     }
 
-    var selectedText: String? {
+    public var selectedText: String? {
         self.proxy?.selectedText
     }
 
-    var documentContextBeforeInput: String? {
+    public var documentContextBeforeInput: String? {
         self.proxy?.documentContextBeforeInput
     }
 
-    var shouldSkipMarkedTextChange: Bool {
+    public var shouldSkipMarkedTextChange: Bool {
         self.isMarkedTextEnabled && preferredTextProxy == .ikTextField && ikTextFieldProxy != nil
     }
 
-    func closeKeyboard() {
+    public func closeKeyboard() {
         self.ikTextFieldProxy = nil
     }
 
     /// 入力を停止する
-    @MainActor func stopComposition() {
+    /// - note: この関数を呼んだ後に`updateSettings`を呼ぶと良い
+    @MainActor public func stopComposition() {
         debug("DisplayedTextManager.stopComposition")
         if self.isMarkedTextEnabled {
             self.proxy?.unmarkText()
@@ -96,15 +92,12 @@ import UIKit
         }
         self.composingText = .init()
         self.displayedLiveConversionText = nil
-        self.reloadSetting()
     }
 
     /// 設定を更新する
-    @MainActor private func reloadSetting() {
-        @KeyboardSetting(.liveConversion) var enabled
-        self.isLiveConversionEnabled = enabled
-        @KeyboardSetting(.markedTextSetting) var markedTextEnabled
-        self.isMarkedTextEnabled = markedTextEnabled != .disabled
+    @MainActor public func updateSettings(isLiveConversionEnabled: Bool, isMarkedTextEnabled: Bool) {
+        self.isLiveConversionEnabled = isLiveConversionEnabled
+        self.isMarkedTextEnabled = isMarkedTextEnabled
     }
 
     /// カーソルを何カウント分動かせばいいか計算する
@@ -140,7 +133,7 @@ import UIKit
         self.proxy?.setMarkedText(text, selectedRange: NSRange(location: cursorPosition, length: 0))
     }
 
-    func insertText(_ text: String) {
+    public func insertText(_ text: String) {
         guard !text.isEmpty else {
             return
         }
@@ -149,7 +142,7 @@ import UIKit
     }
 
     /// In-Keyboard TextFiledが用いられていても、そちらではない方に強制的に入力を行う関数
-    func insertMainDisplayText(_ text: String) {
+    public func insertMainDisplayText(_ text: String) {
         guard !text.isEmpty else {
             return
         }
@@ -157,7 +150,7 @@ import UIKit
         self.textChangedCount += 1
     }
 
-    func moveCursor(count: Int) {
+    public func moveCursor(count: Int) {
         guard count != 0 else {
             return
         }
@@ -179,7 +172,7 @@ import UIKit
 
     // isComposingの場合、countはadjust済みであることを期待する
     // されていなかった場合は例外を投げる
-    func deleteBackward(count: Int) {
+    public func deleteBackward(count: Int) {
         if count == 0 {
             return
         }
@@ -212,7 +205,7 @@ import UIKit
 
     // isComposingの場合、countはadjust済みであることを期待する
     // されていなかった場合は例外を投げる
-    func deleteForward(count: Int = 1) {
+    public func deleteForward(count: Int = 1) {
         if count == 0 {
             return
         }
@@ -224,7 +217,7 @@ import UIKit
     }
 
     /// `composingText`を更新する
-    func updateComposingText(composingText: ComposingText, newLiveConversionText: String?) {
+    public func updateComposingText(composingText: ComposingText, newLiveConversionText: String?) {
         if isMarkedTextEnabled {
             self.composingText = composingText
             self.displayedLiveConversionText = newLiveConversionText
@@ -251,7 +244,7 @@ import UIKit
         }
     }
 
-    func updateComposingText(composingText: ComposingText, userMovedCount: Int, adjustedMovedCount: Int) -> Bool {
+    public func updateComposingText(composingText: ComposingText, userMovedCount: Int, adjustedMovedCount: Int) -> Bool {
         let delta = adjustedMovedCount - userMovedCount
         self.composingText = composingText
         if delta != 0 {
@@ -262,7 +255,7 @@ import UIKit
         return false
     }
 
-    func updateComposingText(composingText: ComposingText, completedPrefix: String, isSelected: Bool) {
+    public func updateComposingText(composingText: ComposingText, completedPrefix: String, isSelected: Bool) {
         if isMarkedTextEnabled {
             self.insertText(completedPrefix)
             self.composingText = composingText

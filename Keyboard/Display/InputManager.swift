@@ -12,12 +12,13 @@ import KeyboardViews
 import OrderedCollections
 import SwiftUtils
 import UIKit
+import KeyboardExtensionUtils
 
 @MainActor final class InputManager {
     // 入力中の文字列を管理する構造体
     private(set) var composingText = ComposingText()
     // 表示される文字列を管理するクラス
-    private(set) var displayedTextManager = DisplayedTextManager()
+    private(set) var displayedTextManager: DisplayedTextManager
     // TODO: displayedTextManagerとliveConversionManagerを何らかの形で統合したい
     // ライブ変換を管理するクラス
     var liveConversionManager = LiveConversionManager()
@@ -27,6 +28,12 @@ import UIKit
     // TODO: isSelectedはdisplayedTextManagerが持っているべき
     var isSelected = false
 
+    init() {
+        @KeyboardSetting(.liveConversion) var liveConversion
+        @KeyboardSetting(.markedTextSetting) var markedTextSetting
+
+        self.displayedTextManager = DisplayedTextManager(isLiveConversionEnabled: liveConversion, isMarkedTextEnabled: markedTextSetting != .disabled)
+    }
     // キーボードの言語
     private var keyboardLanguage: KeyboardLanguage = .ja_JP
     func setKeyboardLanguage(_ value: KeyboardLanguage) {
@@ -307,6 +314,11 @@ import UIKit
                 $0.setResults([])
             }
         }
+
+        @KeyboardSetting(.liveConversion) var liveConversion
+        @KeyboardSetting(.markedTextSetting) var markedTextSetting
+
+        self.displayedTextManager.updateSettings(isLiveConversionEnabled: liveConversion, isMarkedTextEnabled: markedTextSetting != .disabled)
     }
 
     func closeKeyboard() {
@@ -655,14 +667,11 @@ import UIKit
 
     /// iOS16以上の仕様変更に対応するため追加されたAPI
     func adjustLeftString(_ left: String) -> String {
-        if #available(iOS 16, *) {
-            var newLeft = left.components(separatedBy: "\n").last ?? ""
-            if left.contains("\n") && newLeft.isEmpty {
-                newLeft = "\n"
-            }
-            return newLeft
+        var newLeft = left.components(separatedBy: "\n").last ?? ""
+        if left.contains("\n") && newLeft.isEmpty {
+            newLeft = "\n"
         }
-        return left
+        return newLeft
     }
 
     /// クリップボードの文字列をペーストする

@@ -16,7 +16,7 @@ let swiftSettings: [SwiftSetting] = [
 ]
 let package = Package(
     name: "AzooKeyCore",
-    platforms: [.iOS(.v15), .macOS(.v12)],
+    platforms: [.iOS(.v16), .macOS(.v13)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -34,6 +34,10 @@ let package = Package(
         .library(
             name: "AzooKeyUtils",
             targets: ["AzooKeyUtils"]
+        ),
+        .library(
+            name: "KeyboardExtensionUtils",
+            targets: ["KeyboardExtensionUtils"]
         )
     ],
     dependencies: [
@@ -67,6 +71,7 @@ let package = Package(
             name: "KeyboardViews",
             dependencies: [
                 "KeyboardThemes",
+                "KeyboardExtensionUtils",
                 .product(name: "KanaKanjiConverterModule", package: "AzooKeyKanaKanjiConverter")
             ],
             resources: [],
@@ -80,6 +85,20 @@ let package = Package(
             ],
             resources: [],
             swiftSettings: swiftSettings
+        ),
+        .target(
+            name: "KeyboardExtensionUtils",
+            dependencies: [
+                .product(name: "KanaKanjiConverterModule", package: "AzooKeyKanaKanjiConverter")
+            ],
+            resources: [],
+            swiftSettings: swiftSettings
+        ),
+        .testTarget(
+            name: "KeyboardExtensionUtilsTests",
+            dependencies: [
+                "KeyboardExtensionUtils"
+            ]
         )
     ]
 )

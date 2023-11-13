@@ -15,12 +15,12 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.colorScheme) private var colorScheme
-    private let model: any FlickKeyModelProtocol
+    private let model: any FlickKeyModelProtocol<Extension>
     private let suggestType: FlickSuggestType
     private let tabDesign: TabDependentDesign
     private let size: CGSize
 
-    init(model: any FlickKeyModelProtocol, tabDesign: TabDependentDesign, size: CGSize, suggestType: FlickSuggestType) {
+    init(model: any FlickKeyModelProtocol<Extension>, tabDesign: TabDependentDesign, size: CGSize, suggestType: FlickSuggestType) {
         self.model = model
         self.tabDesign = tabDesign
         self.size = size
@@ -167,7 +167,7 @@ struct FlickSuggestView<Extension: ApplicationSpecificKeyboardViewExtension>: Vi
                         )
                         .zIndex(2)
                         .overlay {
-                            (self.model.label(width: size.width, states: variableStates) as KeyLabel<Extension>)
+                            (self.model.label(width: size.width, states: variableStates))
                                 .textColor(.white)
                                 .textSize(.xlarge)
                         }
