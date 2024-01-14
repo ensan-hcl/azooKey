@@ -20,11 +20,11 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
             let targetTab: TabData = {
                 switch first {
                 case .en_US:
-                    return .system(.user_english)
+                    .system(.user_english)
                 case .ja_JP:
-                    return .system(.user_japanese)
+                    .system(.user_japanese)
                 case .none, .el_GR:
-                    return .system(.user_japanese)
+                    .system(.user_japanese)
                 }
             }()
             languageKey = QwertyFunctionalKeyModel<Extension>(labelType: .text(first.symbol), rowInfo: rowInfo, pressActions: [.moveTab(targetTab)], longPressActions: .none, needSuggestView: false)

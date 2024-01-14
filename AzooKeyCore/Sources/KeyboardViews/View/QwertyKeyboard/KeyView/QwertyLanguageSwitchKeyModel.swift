@@ -24,7 +24,7 @@ struct QwertySwitchLanguageKeyModel<Extension: ApplicationSpecificKeyboardViewEx
             target = languages.1
         } else if languages.1 == current {
             target = languages.0
-        } else if SemiStaticStates.shared.needsInputModeSwitchKey {
+        } else if SemiStaticStates.shared.needsInputModeSwitchKey && [.ja_JP, .en_US, .el_GR].contains(variableStates.keyboardLanguage) {
             target = variableStates.keyboardLanguage
         } else {
             target = Extension.SettingProvider.preferredLanguage.first
@@ -57,14 +57,14 @@ struct QwertySwitchLanguageKeyModel<Extension: ApplicationSpecificKeyboardViewEx
 
     func label<E: ApplicationSpecificKeyboardViewExtension>(width: CGFloat, states: VariableStates, color: Color?) -> KeyLabel<E> {
         let current = currentTabLanguage(variableStates: states)
-        if languages.0 == current {
-            return KeyLabel(.selectable(languages.0.symbol, languages.1.symbol), width: width, textColor: color)
+        return if languages.0 == current {
+            KeyLabel(.selectable(languages.0.symbol, languages.1.symbol), width: width, textColor: color)
         } else if languages.1 == current {
-            return KeyLabel(.selectable(languages.1.symbol, languages.0.symbol), width: width, textColor: color)
-        } else if SemiStaticStates.shared.needsInputModeSwitchKey {
-            return KeyLabel(.text(states.keyboardLanguage.symbol), width: width, textColor: color)
+            KeyLabel(.selectable(languages.1.symbol, languages.0.symbol), width: width, textColor: color)
+        } else if SemiStaticStates.shared.needsInputModeSwitchKey && [.ja_JP, .en_US, .el_GR].contains(states.keyboardLanguage) {
+            KeyLabel(.text(states.keyboardLanguage.symbol), width: width, textColor: color)
         } else {
-            return KeyLabel(.text(E.SettingProvider.preferredLanguage.first.symbol), width: width, textColor: color)
+            KeyLabel(.text(E.SettingProvider.preferredLanguage.first.symbol), width: width, textColor: color)
         }
     }
 
