@@ -179,12 +179,19 @@ struct ResultContextMenuView: View {
                 action.notifyForgetCandidate(candidate, variableStates: variableStates)
             }
         }
-        if SemiStaticStates.shared.hasFullAccess {
-            Button("誤変換を報告", systemImage: "exclamationmark.bubble") {
+        Section(SemiStaticStates.shared.hasFullAccess ? "フィードバックを送信" : "フルアクセスが必要です") {
+            Button("意図した変換ではない", systemImage: "exclamationmark.bubble") {
                 Task { @MainActor in
                     await action.notifyReportWrongConversion(candidate, index: index, variableStates: variableStates)
                 }
             }
+            .disabled(!SemiStaticStates.shared.hasFullAccess)
+            Button("欲しい変換がない", systemImage: "questionmark.bubble") {
+                Task { @MainActor in
+                    await action.notifyReportWrongConversion(candidate, index: index, variableStates: variableStates)
+                }
+            }
+            .disabled(!SemiStaticStates.shared.hasFullAccess)
         }
         #if DEBUG
         Button("デバッグ情報を表示する", systemImage: "ladybug.fill"){
