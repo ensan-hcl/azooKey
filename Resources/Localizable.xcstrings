@@ -4469,6 +4469,17 @@
         }
       }
     },
+    "フィードバックを送信" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send feedback"
+          }
+        }
+      }
+    },
     "フォントはiOSで標準的に利用される「ヒラギノ明朝」を用いています。明朝体の字形は手書きする際の規範的な字形と必ずしも一致しません。ご了承ください。" : {
       "localizations" : {
         "en" : {
@@ -4659,6 +4670,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "フルアクセスが必要です" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requires full access"
           }
         }
       }
@@ -6944,6 +6966,17 @@
         }
       }
     },
+    "意図した変換ではない" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unexpected candidate"
+          }
+        }
+      }
+    },
     "手順を見る" : {
       "localizations" : {
         "en" : {
@@ -8087,6 +8120,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use 'Next Candidate' Key"
+          }
+        }
+      }
+    },
+    "欲しい変換がない" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No expected candidate"
           }
         }
       }
