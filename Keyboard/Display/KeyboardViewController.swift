@@ -79,6 +79,12 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // 初回のみscreenWidthに初期値を与える
+        // FIXME: アドホックな対処であり、例えば初期状態でiPhoneを横持ちしている場合には不正な挙動が発生する
+        if SemiStaticStates.shared.screenWidth == 0 {
+            SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width)
+        }
+
         debug("KeyboardViewController.viewDidLoad, loadedInstanceCount:", KeyboardViewController.loadedInstanceCount)
         KeyboardViewController.loadedInstanceCount += 1
 
