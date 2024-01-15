@@ -119,7 +119,6 @@ public struct ClipboardHistoryManager {
         while self.items.count > config.maxCount {
             self.items.removeLast()
         }
-        debug("checkUpdate", self.items)
     }
 
     private static func historyFileURL(config: any ClipboardHistoryManagerConfiguration) -> URL? {
