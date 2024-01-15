@@ -55,7 +55,7 @@ struct SettingTabView: View {
                     if self.canQwertyLayout(appStates.englishLayout) {
                         BoolSettingView(.useShiftKey)
                         // Version 2.2.2以前にインストールしており、UseShiftKey.valueがtrueの人にのみこのオプションを表示する
-                        if let initialVersion = SharedStore.initialAppVersion, initialVersion <= .azooKey_v2_2_2, UseShiftKey.value == true {
+                        if #unavailable(iOS 18), let initialVersion = SharedStore.initialAppVersion, initialVersion <= .azooKey_v2_2_2, UseShiftKey.value == true {
                             BoolSettingView(.keepDeprecatedShiftKeyBehavior)
                         }
                     }
