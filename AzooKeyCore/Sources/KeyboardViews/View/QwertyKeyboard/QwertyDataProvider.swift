@@ -47,6 +47,40 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
         )
     }
 
+    private enum ShiftBehaviorPreference {
+        /// Version 2.2.3から導入。シフトキーは左下に配置
+        ///  - 2.2.3以降に初めてシフトキーを使い始めた人はデフォルトでこちら
+        ///  - iOS 18以降は全員こちら
+        case leftbottom
+        /// Version 2.2で導入したが、不評なので挙動を変える予定
+        ///  - 2.2.3より前に初めてシフトキーを使い始めた人はこちら
+        ///  - ただしiOS 18以降ではこのオプションを削除する
+        case left
+        /// シフトは使わない（デフォルト）
+        case off
+    }
+
+    @MainActor
+    private static var shiftBehaviorPreference: ShiftBehaviorPreference {
+        if #available(iOS 18, *) {
+            if Extension.SettingProvider.useShiftKey {
+                .leftbottom
+            } else {
+                .off
+            }
+        } else {
+            if Extension.SettingProvider.useShiftKey {
+                if Extension.SettingProvider.keepDeprecatedShiftKeyBehavior {
+                    .left
+                } else {
+                    .leftbottom
+                }
+            } else {
+                .off
+            }
+        }
+    }
+
     @MainActor static func spaceKey() -> any QwertyKeyModelProtocol<Extension> {
         Extension.SettingProvider.useNextCandidateKey ? QwertyNextCandidateKeyModel() : QwertySpaceKeyModel()
     }
@@ -495,7 +529,21 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
             QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
             QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
             QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
-            QwertyKeyModel(labelType: .text("ー"), pressActions: [.input("ー")])
+            QwertyKeyModel(
+                labelType: .text("ー"),
+                pressActions: [.input("ー")],
+                variationsModel: VariationsModel(
+                    [
+                        (label: .text("ー"), actions: [.input("ー")]),
+                        (label: .text("。"), actions: [.input("。")]),
+                        (label: .text("、"), actions: [.input("、")]),
+                        (label: .text("！"), actions: [.input("！")]),
+                        (label: .text("？"), actions: [.input("？")]),
+                        (label: .text("・"), actions: [.input("・")]),
+                    ],
+                    direction: .left
+                )
+            )
         ],
         [
             Self.tabKeys(rowInfo: (7, 2, 0, 0)).languageKey,
@@ -530,19 +578,9 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
             QwertyKeyModel(labelType: .text("o"), pressActions: [.input("o")]),
             QwertyKeyModel(labelType: .text("p"), pressActions: [.input("p")])
         ],
-        Extension.SettingProvider.useShiftKey ?
-            [
-                QwertyShiftKeyModel.shared,
-                QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
-                QwertyKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
-                QwertyKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
-                QwertyKeyModel(labelType: .text("f"), pressActions: [.input("f")]),
-                QwertyKeyModel(labelType: .text("g"), pressActions: [.input("g")]),
-                QwertyKeyModel(labelType: .text("h"), pressActions: [.input("h")]),
-                QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
-                QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
-                QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")])
-            ] : [
+        // offの場合は一番右にAaキーを、leftの場合は一番左にShiftキーを、leftbottomの場合は一番右にピリオドキーを置く
+        {
+            let core: [any QwertyKeyModelProtocol<Extension>] = [
                 QwertyKeyModel(labelType: .text("a"), pressActions: [.input("a")]),
                 QwertyKeyModel(labelType: .text("s"), pressActions: [.input("s")]),
                 QwertyKeyModel(labelType: .text("d"), pressActions: [.input("d")]),
@@ -552,8 +590,29 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
                 QwertyKeyModel(labelType: .text("j"), pressActions: [.input("j")]),
                 QwertyKeyModel(labelType: .text("k"), pressActions: [.input("k")]),
                 QwertyKeyModel(labelType: .text("l"), pressActions: [.input("l")]),
-                QwertyAaKeyModel.shared
-            ],
+            ]
+            return switch shiftBehaviorPreference {
+            case .leftbottom:
+                core + [QwertyKeyModel(
+                    labelType: .text("."),
+                    pressActions: [.input(".")],
+                    variationsModel: VariationsModel(
+                        [
+                            (label: .text("."), actions: [.input(".")]),
+                            (label: .text(","), actions: [.input(",")]),
+                            (label: .text("!"), actions: [.input("!")]),
+                            (label: .text("?"), actions: [.input("?")]),
+                            (label: .text("'"), actions: [.input("'")]),
+                            (label: .text("\""), actions: [.input("\"")]),
+                        ],
+                        direction: .left
+                    )
+                )]
+            case .left:
+                [QwertyShiftKeyModel.shared] + core
+            case .off:
+                core + [QwertyAaKeyModel.shared]
+        }}(),
         [
             Self.tabKeys(rowInfo: (7, 2, 0, 0)).languageKey,
             QwertyKeyModel(labelType: .text("z"), pressActions: [.input("z")]),
@@ -566,7 +625,11 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
             QwertyFunctionalKeyModel.delete
         ],
         [
-            Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey,
+            // left, offの場合は単にnumbersKeyを表示し、leftbottomの場合はシフトキーをこの位置に表示する
+            {switch shiftBehaviorPreference {
+            case .left, .off: Self.tabKeys(rowInfo: (0, 2, 1, 1)).numbersKey
+            case .leftbottom: QwertyShiftKeyModel(keySizeType: .functional(normal: 0, functional: 2, enter: 1, space: 1))
+            }}(),
             Self.tabKeys(rowInfo: (0, 2, 1, 1)).changeKeyboardKey,
             Self.spaceKey(),
             QwertyEnterKeyModel.shared

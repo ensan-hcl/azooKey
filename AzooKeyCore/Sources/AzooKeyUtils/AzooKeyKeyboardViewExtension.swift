@@ -98,6 +98,10 @@ public enum AzooKeyKeyboardViewExtension: ApplicationSpecificKeyboardViewExtensi
         UseShiftKey.value
     }
 
+    public static var keepDeprecatedShiftKeyBehavior: Bool {
+        KeepDeprecatedShiftKeyBehavior.value
+    }
+
     public static var useNextCandidateKey: Bool {
         UseNextCandidateKey.value
     }
