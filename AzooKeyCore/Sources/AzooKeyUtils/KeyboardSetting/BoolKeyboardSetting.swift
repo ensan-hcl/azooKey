@@ -201,6 +201,17 @@ public extension KeyboardSettingKey where Self == UseShiftKey {
     static var useShiftKey: Self { .init() }
 }
 
+public struct KeepDeprecatedShiftKeyBehavior: BoolKeyboardSettingKey {
+    public static let title: LocalizedStringKey = "シフトキーの古い挙動を使う"
+    public static let explanation: LocalizedStringKey = "シフトキーの以前の挙動を利用します。iOS 18以降では廃止されます。"
+    public static var defaultValue: Bool = true
+    public static let key: String = "keep_deprecated_shift_key_behavior"
+}
+
+public extension KeyboardSettingKey where Self == KeepDeprecatedShiftKeyBehavior {
+    static var keepDeprecatedShiftKeyBehavior: Self { .init() }
+}
+
 public struct UseNextCandidateKey: BoolKeyboardSettingKey {
     public static let title: LocalizedStringKey = "次候補キーを使う"
     public static let explanation: LocalizedStringKey = "キーボードで入力中、空白キーに「次候補」機能を表示します"

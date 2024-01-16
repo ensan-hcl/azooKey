@@ -84,6 +84,7 @@ public enum SharedStore {
 }
 
 public extension AppVersion {
+    static let azooKey_v2_2_2 = AppVersion("2.2.2")!
     static let azooKey_v2_0_2 = AppVersion("2.0.2")!
     static let azooKey_v1_9 = AppVersion("1.9")!
     static let azooKey_v1_8_1 = AppVersion("1.8.1")!

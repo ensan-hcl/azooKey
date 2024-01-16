@@ -68,6 +68,11 @@ struct MainApp: App {
                     messageManager.getMessagesContainerAppShouldMakeWhichDone().forEach {
                         messageManager.done($0.id)
                     }
+                    // 設定を上書きする
+                    if let initialVersion = SharedStore.initialAppVersion, initialVersion > .azooKey_v2_2_2 {
+                        // Version 2.2.3以降にインストールしたユーザにはこのオプションを有効化しない
+                        KeepDeprecatedShiftKeyBehavior.value = false
+                    }
                 }
         }
     }

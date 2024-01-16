@@ -30,6 +30,7 @@ import Foundation
     static var enablePasteButton: Bool { get }
     static var hideResetButtonInOneHandedMode: Bool { get }
     static var useShiftKey: Bool { get }
+    static var keepDeprecatedShiftKeyBehavior: Bool { get }
     static var useNextCandidateKey: Bool { get }
 
     /// タブバーボタンを表示する
