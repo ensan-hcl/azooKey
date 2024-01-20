@@ -179,17 +179,47 @@ extension CustardInterfaceKey {
     }
 
     @MainActor func qwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(layout: CustardInterfaceLayout, extension: Extension.Type) -> any QwertyKeyModelProtocol<Extension> {
+        let rowInfo = switch layout {
+        case let .gridFit(value): (normal: value.rowCount, functional: 0, space: 0, enter: 0)
+        case let .gridScroll(value): (normal: Int(value.rowCount), functional: 0, space: 0, enter: 0)
+        }
         switch self {
         case let .system(value):
             switch value {
             case .changeKeyboard:
-                let changeKeyboardKey: QwertyChangeKeyboardKeyModel<Extension>
-                if let second = Extension.SettingProvider.preferredLanguage.second {
-                    changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .secondTab(secondLanguage: second))
+                let changeKeyboardKeySize: QwertyKeySizeType = .normal(of: 1, for: 1)
+                return if let second = Extension.SettingProvider.preferredLanguage.second {
+                    QwertyConditionalKeyModel(keySizeType: changeKeyboardKeySize, needSuggestView: false, unpressedKeyColorType: .special) { states in
+                        if SemiStaticStates.shared.needsInputModeSwitchKey {
+                            return QwertyChangeKeyboardKeyModel(keySizeType: changeKeyboardKeySize)
+                        } else {
+                            // 普通のキーで良い場合
+                            let targetTab: TabData = switch second {
+                            case .en_US:
+                                .system(.user_english)
+                            case .ja_JP, .none, .el_GR:
+                                .system(.user_japanese)
+                            }
+                            return switch states.tabManager.existentialTab() {
+                            case .qwerty_hira, .qwerty_abc:
+                                QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.system(.qwerty_symbols))], longPressActions: .init(start: [.setTabBar(.toggle)]))
+                            case .qwerty_numbers, .qwerty_symbols:
+                                QwertyFunctionalKeyModel(labelType: .text(second.symbol), rowInfo: rowInfo, pressActions: [.moveTab(targetTab)])
+                            default:
+                                QwertyFunctionalKeyModel(labelType: .image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), rowInfo: rowInfo, pressActions: [.setCursorBar(.toggle)])
+                            }
+                        }
+                    }
                 } else {
-                    changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .tabBar)
+                    QwertyConditionalKeyModel(keySizeType: changeKeyboardKeySize, needSuggestView: false, unpressedKeyColorType: .special) { states in
+                        if SemiStaticStates.shared.needsInputModeSwitchKey {
+                            // 地球儀キーが必要な場合
+                            QwertyChangeKeyboardKeyModel(keySizeType: changeKeyboardKeySize)
+                        } else {
+                            QwertyFunctionalKeyModel(labelType: .image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), rowInfo: rowInfo, pressActions: [.setCursorBar(.toggle)])
+                        }
+                    }
                 }
-                return changeKeyboardKey
             case .enter:
                 return QwertyEnterKeyModel(keySizeType: .enter)
             case .upperLower:
