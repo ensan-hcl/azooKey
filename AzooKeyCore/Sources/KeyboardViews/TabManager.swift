@@ -28,7 +28,7 @@ extension TabData {
             case .qwerty_english:
                 return .existential(.qwerty_abc)
             case .qwerty_numbers:
-                return .existential(.qwerty_number)
+                return .existential(.qwerty_numbers)
             case .qwerty_symbols:
                 return .existential(.qwerty_symbols)
             case .user_japanese:

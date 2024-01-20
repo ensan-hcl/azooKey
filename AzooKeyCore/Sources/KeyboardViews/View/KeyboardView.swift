@@ -101,7 +101,7 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
             QwertyKeyboardView<Extension>(keyModels: QwertyDataProvider<Extension>.hiraKeyboard(), interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case .qwerty_abc:
             QwertyKeyboardView<Extension>(keyModels: QwertyDataProvider<Extension>.abcKeyboard(), interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
-        case .qwerty_number:
+        case .qwerty_numbers:
             QwertyKeyboardView<Extension>(keyModels: QwertyDataProvider<Extension>.numberKeyboard, interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)
         case .qwerty_symbols:
             QwertyKeyboardView<Extension>(keyModels: QwertyDataProvider<Extension>.symbolsKeyboard(), interfaceSize: variableStates.interfaceSize, keyboardOrientation: variableStates.keyboardOrientation)

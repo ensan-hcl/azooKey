@@ -25,14 +25,14 @@ public enum Tab: Equatable {
         case flick_numbersymbols
         case qwerty_hira
         case qwerty_abc
-        case qwerty_number
+        case qwerty_numbers
         case qwerty_symbols
         case custard(Custard)
         case special(SpecialTab)
 
         public static func == (lhs: ExistentialTab, rhs: ExistentialTab) -> Bool {
             switch (lhs, rhs) {
-            case (.flick_hira, .flick_hira), (.flick_abc, .flick_abc), (.flick_numbersymbols, .flick_numbersymbols), (.qwerty_hira, .qwerty_hira), (.qwerty_abc, .qwerty_abc), (.qwerty_number, .qwerty_number), (.qwerty_symbols, .qwerty_symbols): return true
+            case (.flick_hira, .flick_hira), (.flick_abc, .flick_abc), (.flick_numbersymbols, .flick_numbersymbols), (.qwerty_hira, .qwerty_hira), (.qwerty_abc, .qwerty_abc), (.qwerty_numbers, .qwerty_numbers), (.qwerty_symbols, .qwerty_symbols): return true
             case (.custard(let l), .custard(let r)):
                 return l.identifier == r.identifier
                     && l.input_style == r.input_style
@@ -63,7 +63,7 @@ public enum Tab: Equatable {
             switch self {
             case .flick_hira, .flick_abc, .flick_numbersymbols:
                 return .flick
-            case .qwerty_hira, .qwerty_abc, .qwerty_number, .qwerty_symbols:
+            case .qwerty_hira, .qwerty_abc, .qwerty_numbers, .qwerty_symbols:
                 return .qwerty
             case let .custard(custard):
                 switch custard.interface.keyStyle {
@@ -97,7 +97,7 @@ public enum Tab: Equatable {
                 case .none:
                     return KeyboardLanguage.none
                 }
-            case .flick_numbersymbols, .qwerty_number, .qwerty_symbols:
+            case .flick_numbersymbols, .qwerty_numbers, .qwerty_symbols:
                 return nil
             case .special:
                 return KeyboardLanguage.none
