@@ -6,9 +6,11 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 
 azooKeyの変換エンジンについては[AzooKeyKanaKanjiConverter](https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter)を参照ください。
 
-## コミュニティ
+## コミュニティ＆β版
 
 azooKeyの開発に参加したい方、使い方に質問がある方、要望や不具合報告がある方は、ぜひ[azooKeyのDiscordサーバ](https://discord.gg/dY9gHuyZN5)にご参加ください。
+
+開発中のベータ版は[TestFlight](https://testflight.apple.com/join/x6TKEeB2)で利用できます。フィードバックをDiscordやIssue等でお寄せください。
 
 ## 開発ガイド
 * パフォーマンス改善、バグ修正、機能追加などのPull Requestを歓迎します。機能追加の場合は事前にIssueで議論した方がスムーズです。
