@@ -7156,6 +7156,16 @@
         }
       }
     },
+    "改行" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Newline"
+          }
+        }
+      }
+    },
     "改行キー" : {
       "localizations" : {
         "en" : {
@@ -8528,12 +8538,12 @@
         }
       }
     },
-    "目指す文字（改行区切り）" : {
+    "目指す文字を追加" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Target characters (line-separated)"
+            "value" : "Add target character"
           }
         }
       }
@@ -9819,6 +9829,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "追加済" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added"
           }
         }
       }
