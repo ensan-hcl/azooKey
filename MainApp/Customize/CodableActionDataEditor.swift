@@ -21,13 +21,17 @@ extension CodableActionData {
         }
     }
 
+    private func stringArrayDescription(_ array: [String]) -> String {
+        array.map {$0 == "\n" ? "改行" : "'\($0)'"}.joined(separator: ", ")
+    }
+
     var label: LocalizedStringKey {
         switch self {
         case let .input(value): return "「\(value)」を入力"
         case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
-        case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
+        case let .smartMoveCursor(value): return "\(stringArrayDescription(value.targets))の隣までカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
-        case let .smartDelete(value): return "\(value.targets.joined(separator: ","))の隣まで削除"
+        case let .smartDelete(value): return "\(stringArrayDescription(value.targets))の隣まで削除"
         case .paste: return "ペーストする"
         case .moveTab: return "タブの移動"
         case .replaceLastCharacters: return "文字を置換"
@@ -195,13 +199,13 @@ private struct CodableActionEditor: View {
         case .smartDelete(let item):
             ActionScanItemEditor(action: $action) { item } convert: { value in
                 // 重複を除去し、改行を追加する
-                let targets = Array(Set(value.targets + ["\n"]) )
+                let targets = Array(value.targets.uniqued())
                 return .smartDelete(ScanItem(targets: targets, direction: value.direction))
             }
         case .smartMoveCursor(let item):
             ActionScanItemEditor(action: $action) { item } convert: { value in
                 // 重複を除去し、改行を追加する
-                let targets = Array(Set(value.targets + ["\n"]) )
+                let targets = Array(value.targets.uniqued())
                 return .smartMoveCursor(ScanItem(targets: targets, direction: value.direction))
             }
         case .replaceLastCharacters:
@@ -224,6 +228,7 @@ private struct CodableActionEditor: View {
 private struct ActionScanItemEditor: View {
     @Binding private var action: EditingCodableActionData
     private let convert: (ScanItem) -> CodableActionData?
+    @State private var addItem: String = ""
     @State private var value: ScanItem = .init(targets: CodableActionData.scanTargets, direction: .backward)
 
     init(action: Binding<EditingCodableActionData>, initialValue: () -> ScanItem?, convert: @escaping (ScanItem) -> CodableActionData?) {
@@ -231,6 +236,27 @@ private struct ActionScanItemEditor: View {
         self._action = action
         if let initialValue = initialValue() {
             self._value = State(initialValue: initialValue)
+        }
+    }
+
+    func targetItemView(action: @escaping () -> (), leftLabel: () -> some View, rightLabel: () -> some View) -> some View {
+        HStack {
+            leftLabel()
+                .padding(.horizontal)
+            Divider()
+            Button {
+                action()
+            } label: {
+                rightLabel()
+                    .padding(7)
+                    .contentShape(Rectangle())
+            }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.borderless)
+        }
+        .background {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(Color.systemGray5)
         }
     }
 
@@ -242,18 +268,66 @@ private struct ActionScanItemEditor: View {
             }
             .pickerStyle(.menu)
             HStack {
-                Text("目指す文字（改行区切り）")
-                Spacer()
-                TextEditor(text: $value.targets.converted(
-                    // バックスラッシュでエスケープする
-                    forward: {$0.joined(separator: "\n")},
-                    backward: {$0.components(separatedBy: "\n")}
-                ))
-                .background {
-                    Color.systemGray6
+                TextField("目指す文字を追加", text: $addItem)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+                if value.targets.contains(addItem) {
+                    Button("追加済", systemImage: "plus") {}
+                        .buttonStyle(.borderless)
+                        .labelStyle(.titleOnly)
+                        .disabled(true)
+                        .padding(7)
+                        .background {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.systemGray5)
+                        }
+                } else {
+                    Button("追加", systemImage: "plus") {
+                        value.targets.append(addItem)
+                        addItem = ""
+                    }
+                    .buttonStyle(.borderless)
+                    .labelStyle(.titleOnly)
+                    .disabled(addItem.isEmpty)
+                    .padding(7)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.systemGray5)
+                    }
+
                 }
-                .font(.body.monospaced())
-                .frame(maxWidth: 50)
+            }
+            HStack {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(value.targets, id: \.self) { item in
+                            targetItemView  {
+                                value.targets.removeAll(where: { $0 == item })
+                            } leftLabel: {
+                                if item == "\n" {
+                                    Text("改行")
+                                } else {
+                                    Text(item)
+                                }
+                            } rightLabel: {
+                                Label("削除", systemImage: "xmark")
+                            }
+                        }
+                    }
+                }
+                if !value.targets.contains("\n") {
+                    Spacer()
+                    Divider()
+                    HStack {
+                        targetItemView  {
+                            value.targets.append("\n")
+                        } leftLabel: {
+                            Text("改行")
+                        } rightLabel: {
+                            Label("追加", systemImage: "plus")
+                        }
+                    }
+                }
             }
         }
         .onChange(of: value) {value in
