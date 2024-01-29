@@ -34,7 +34,7 @@ extension CodableActionData {
         case let .smartDelete(value): return "\(stringArrayDescription(value.targets))の隣まで削除"
         case .paste: return "ペーストする"
         case .moveTab: return "タブの移動"
-        case .replaceLastCharacters: return "文字を置換"
+        case .replaceLastCharacters: return "末尾の文字を置換"
         case let .selectCandidate(selection):
             return switch selection {
             case .first: "最初の候補を選択"
@@ -208,8 +208,12 @@ private struct CodableActionEditor: View {
                 let targets = Array(value.targets.uniqued())
                 return .smartMoveCursor(ScanItem(targets: targets, direction: value.direction))
             }
-        case .replaceLastCharacters:
-            EmptyView()
+        case let .replaceLastCharacters(pairs):
+            ActionPairItemEditor(action: $action) { pairs.map{.init(first: $0.key, second: $0.value)} } convert: { value in
+                // 重複を除去し、改行を追加する
+                let items = Dictionary(value.uniqued().map{(key: $0.first, value: $0.second)}, uniquingKeysWith: {first, second in first})
+                return .replaceLastCharacters(items)
+            }
         case let .launchApplication(item):
             if item.target.hasPrefix("run-shortcut?") {
                 ActionEditTextField("オプション", action: $action) {String(item.target.dropFirst("run-shortcut?".count))} convert: {value in
@@ -337,6 +341,104 @@ private struct ActionScanItemEditor: View {
         }
     }
 }
+
+private struct ActionPairItemEditor: View {
+    struct Pair: Equatable, Hashable {
+        var first: String
+        var second: String
+    }
+    @Binding private var action: EditingCodableActionData
+    private let convert: ([Pair]) -> CodableActionData?
+    @State private var addFirstItem: String = ""
+    @State private var addSecondItem: String = ""
+    @State private var value: [Pair] = []
+
+    init(action: Binding<EditingCodableActionData>, initialValue: () -> [Pair]?, convert: @escaping ([Pair]) -> CodableActionData?) {
+        self.convert = convert
+        self._action = action
+        if let initialValue = initialValue() {
+            self._value = State(initialValue: initialValue)
+        }
+    }
+
+    func targetItemView(action: @escaping () -> (), leftLabel: () -> some View, rightLabel: () -> some View) -> some View {
+        HStack {
+            leftLabel()
+                .padding(.leading)
+            Divider()
+            Button {
+                action()
+            } label: {
+                rightLabel()
+                    .padding(.vertical, 7)
+                    .padding(.trailing, 7)
+                    .contentShape(Rectangle())
+            }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.borderless)
+        }
+        .background {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(Color.systemGray5)
+        }
+    }
+
+    var body: some View {
+        Group {
+            HStack {
+                TextField("置換前", text: $addFirstItem)
+                TextField("置換後", text: $addSecondItem)
+                if value.contains(where: { $0.first == addFirstItem }) {
+                    Button("追加済") {}
+                        .padding(.horizontal, 3)
+                        .padding(.vertical, 7)
+                        .background {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.systemGray5)
+                        }
+                        .disabled(true) // addSecondItemは空白でも良い
+                } else {
+                    Button("追加") {
+                        self.value.append(.init(first: addFirstItem, second: addSecondItem))
+                        addFirstItem = ""
+                        addSecondItem = ""
+                    }
+                    .padding(.horizontal, 3)
+                    .padding(.vertical, 7)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.systemGray5)
+                    }
+                    .disabled(addFirstItem.isEmpty) // addSecondItemは空白でも良い
+                }
+            }
+            .textFieldStyle(.roundedBorder)
+            .submitLabel(.done)
+            .buttonStyle(.borderless)
+            HStack {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(self.value, id: \.self) { item in
+                            targetItemView  {
+                                value.removeAll(where: { $0 == item })
+                            } leftLabel: {
+                                Text(item.first + "→" + item.second)
+                            } rightLabel: {
+                                Label("削除", systemImage: "xmark")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .onChange(of: value) {value in
+            if let data = convert(value) {
+                action.data = data
+            }
+        }
+    }
+}
+
 
 private struct ActionEditTextField: View {
     private let title: LocalizedStringKey
@@ -651,6 +753,9 @@ private struct ActionPicker: View {
                 }
                 Button("特定の文字まで移動") {
                     process(.smartMoveCursor(ScanItem(targets: ["。", "、", "\n"], direction: .backward)))
+                }
+                Button("末尾の文字を置換") {
+                    process(.replaceLastCharacters(["(^^)": "😄", "(TT)": "😭"]))
                 }
                 Button("片手モードをオン") {
                     process(.enableResizingMode)
