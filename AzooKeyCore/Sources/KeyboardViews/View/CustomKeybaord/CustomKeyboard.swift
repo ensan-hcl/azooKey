@@ -307,9 +307,9 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
 
     private func qwertyKeyData(x: Int, y: Int, size: QwertyKeySizeType) -> (position: CGPoint, size: CGSize) {
         let width = size.width(design: tabDesign)
-        let height = size.height(design: tabDesign)
+        let height = size.height(design: tabDesign, screenWidth: variableStates.screenWidth)
         let dx = width * 0.5 + tabDesign.keyViewWidth * CGFloat(x) + tabDesign.horizontalSpacing * CGFloat(x)
-        let dy = height * 0.5 + tabDesign.keyViewHeight * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
+        let dy = height * 0.5 + tabDesign.keyViewHeight(screenWidth: variableStates.screenWidth) * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
         return (CGPoint(x: dx, y: dy), CGSize(width: width, height: height))
     }
 
@@ -332,11 +332,11 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
                                     .position(x: info.position.x, y: info.position.y)
                             }
                         }
-                    }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+                    }.frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight(screenWidth: variableStates.screenWidth))
                 }
             }
         case let .gridScroll(value):
-            let height = tabDesign.keysHeight
+            let height = tabDesign.keysHeight(screenWidth: variableStates.screenWidth)
             let models = (0..<custard.interface.keys.count).compactMap {custard.interface.keys[.gridScroll(GridScrollPositionSpecifier($0))]}
             switch value.direction {
             case .vertical:
@@ -349,7 +349,7 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
                     }
                 }.frame(height: height)
             case .horizontal:
-                let gridItem = GridItem(.fixed(tabDesign.keyViewHeight), spacing: tabDesign.verticalSpacing / 2)
+                let gridItem = GridItem(.fixed(tabDesign.keyViewHeight(screenWidth: variableStates.screenWidth)), spacing: tabDesign.verticalSpacing / 2)
                 ScrollView(.horizontal) {
                     LazyHGrid(rows: Array(repeating: gridItem, count: Int(value.columnCount)), spacing: tabDesign.horizontalSpacing / 2) {
                         ForEach(0..<models.count, id: \.self) {i in
@@ -364,6 +364,7 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
 
 public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExtension, Content: View>: View {
     @State private var suggestState = FlickSuggestState()
+    @EnvironmentObject private var variableStates: VariableStates
 
     public init(models: [KeyPosition: (model: any FlickKeyModelProtocol<Extension>, width: Int, height: Int)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutGridValue, blur: Bool = false, @ViewBuilder generator: @escaping (FlickKeyView<Extension>, Int, Int) -> (Content)) {
         self.models = models
@@ -381,9 +382,9 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
 
     @MainActor private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
         let width = tabDesign.keyViewWidth(widthCount: width)
-        let height = tabDesign.keyViewHeight(heightCount: height)
+        let height = tabDesign.keyViewHeight(heightCount: height, screenWidth: variableStates.screenWidth)
         let dx = width * 0.5 + tabDesign.keyViewWidth * CGFloat(x) + tabDesign.horizontalSpacing * CGFloat(x)
-        let dy = height * 0.5 + tabDesign.keyViewHeight * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
+        let dy = height * 0.5 + tabDesign.keyViewHeight(screenWidth: variableStates.screenWidth) * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
         return (CGPoint(x: dx, y: dy), CGSize(width: width, height: height))
     }
 
@@ -414,7 +415,7 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
                 .zIndex(columnSuggestStates.isEmpty ? 0 : 1)
                 .blur(radius: needColumnWideBlur ? 0.75 : 0)
             }
-            .frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight)
+            .frame(width: tabDesign.keysWidth, height: tabDesign.keysHeight(screenWidth: variableStates.screenWidth))
         }
     }
 }

@@ -16,20 +16,45 @@ struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
     @Environment(\.userActionManager) private var action
+    enum SizeProvider {
+        case tabDesign(TabDependentDesign)
+        case direct(CGSize)
+        var keyViewWidth: CGFloat {
+            switch self {
+            case .tabDesign(let tabDesign):
+                tabDesign.keyViewWidth
+            case .direct(let size):
+                size.width
+            }
+        }
+        @MainActor func keyViewHeight(screenWidth: CGFloat) -> CGFloat {
+            switch self {
+            case .tabDesign(let tabDesign):
+                tabDesign.keyViewHeight(screenWidth: screenWidth)
+            case .direct(let size):
+                size.height
+            }
+        }
+    }
+    private let provider: SizeProvider
 
-    private let keyViewWidth: CGFloat
-    private let keyViewHeight: CGFloat
+
+    private var keyViewWidth: CGFloat {
+        provider.keyViewWidth
+    }
+
+    @MainActor private var keyViewHeight: CGFloat {
+        provider.keyViewHeight(screenWidth: variableStates.screenWidth)
+    }
 
     init(model: any SimpleKeyModelProtocol<Extension>, tabDesign: TabDependentDesign) {
         self.model = model
-        self.keyViewWidth = tabDesign.keyViewWidth
-        self.keyViewHeight = tabDesign.keyViewHeight
+        self.provider = .tabDesign(tabDesign)
     }
 
     init(model: any SimpleKeyModelProtocol<Extension>, width: CGFloat, height: CGFloat) {
         self.model = model
-        self.keyViewWidth = width
-        self.keyViewHeight = height
+        self.provider = .direct(.init(width: width, height: height))
     }
 
     @State private var isPressed = false

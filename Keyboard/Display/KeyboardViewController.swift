@@ -81,8 +81,8 @@ final class KeyboardViewController: UIInputViewController {
         super.viewDidLoad()
         // 初回のみscreenWidthに初期値を与える
         // FIXME: アドホックな対処であり、例えば初期状態でiPhoneを横持ちしている場合には不正な挙動が発生する
-        if SemiStaticStates.shared.screenWidth == 0 {
-            SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width)
+        if Self.variableStates.screenWidth == 0 {
+            Self.variableStates.screenWidth = UIScreen.main.bounds.width
         }
 
         debug("KeyboardViewController.viewDidLoad, loadedInstanceCount:", KeyboardViewController.loadedInstanceCount)
@@ -233,7 +233,7 @@ final class KeyboardViewController: UIInputViewController {
     func registerScreenActualSize() {
         if let bounds = KeyboardViewController.keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
             debug("KeyboardViewController.registerScreenActualSize bounds", bounds)
-            SemiStaticStates.shared.setScreenWidth(bounds.width)
+            Self.variableStates.screenWidth = bounds.width
             KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height ? .vertical : .horizontal, screenWidth: bounds.width)
         }
     }
@@ -263,14 +263,14 @@ final class KeyboardViewController: UIInputViewController {
         // この関数は「これから」向きが変わる場合に呼ばれるので、デバイスの向きによってwidthとheightが逆転するUIScreen.main.bounds.sizeを用いて向きを確かめることができる。
         // ただしこの時点でのUIScreen.mainの値はOSバージョンで変わる
         debug("KeyboardViewController.viewWillTransition", size, UIScreen.main.bounds.size)
-        SemiStaticStates.shared.setScreenWidth(size.width)
+        Self.variableStates.screenWidth = size.width
         KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical, screenWidth: size.width)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        debug("KeyboardViewController.viewDidLayoutSubviews", SemiStaticStates.shared.screenWidth)
-        self.view.frame.size.height = Design.keyboardScreenHeight(upsideComponent: KeyboardViewController.variableStates.upsideComponent, orientation: KeyboardViewController.variableStates.keyboardOrientation)
+        debug("KeyboardViewController.viewDidLayoutSubviews", Self.variableStates.screenWidth)
+        self.view.frame.size.height = Design.keyboardScreenHeight(upsideComponent: KeyboardViewController.variableStates.upsideComponent, orientation: KeyboardViewController.variableStates.keyboardOrientation, screenWidth: Self.variableStates.screenWidth)
     }
 
     func reloadAllView() {

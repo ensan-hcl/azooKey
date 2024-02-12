@@ -310,7 +310,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
             }
         }
         .onAppear {
-            variableStates.setInterfaceSize(orientation: MainAppDesign.keyboardOrientation, screenWidth: SemiStaticStates.shared.screenWidth)
+            variableStates.setInterfaceSize(orientation: MainAppDesign.keyboardOrientation, screenWidth: variableStates.screenWidth)
         }
     }
 

@@ -243,7 +243,7 @@ import SwiftUtils
             }
 
         case .enableResizingMode:
-            variableStates.setResizingMode(.resizing)
+            variableStates.setResizingMode(.resizing, screenWidth: variableStates.screenWidth)
 
         case .hideLearningMemory:
             self.hideLearningMemory()

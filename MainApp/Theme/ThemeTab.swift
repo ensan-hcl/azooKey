@@ -60,7 +60,7 @@ struct ThemeTabView: View {
             if let theme = theme(at: index) {
                 HStack {
                     ZStack {
-                        KeyboardPreview(theme: theme, scale: 0.6, defaultTab: tab)
+                        KeyboardPreview(theme: theme, defaultTab: tab)
                             .disabled(true)
                             .overlay {
                                 if manager.selectedIndex == index || manager.selectedIndexInDarkMode == index {
@@ -113,6 +113,7 @@ struct ThemeTabView: View {
                     }
                     .labelStyle(.iconOnly)
                     .buttonStyle(LargeButtonStyle(backgroundColor: .systemGray5))
+                    .frame(maxWidth: 100)
                     Spacer()
                     // 編集用
                     if editViewIndex == index {

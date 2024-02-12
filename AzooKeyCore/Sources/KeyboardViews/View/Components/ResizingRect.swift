@@ -261,9 +261,9 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 }
                 Button {
                     if self.position == .zero && self.size == self.initialSize {
-                        variableStates.setResizingMode(.fullwidth)
+                        variableStates.setResizingMode(.fullwidth, screenWidth: variableStates.screenWidth)
                     } else {
-                        variableStates.setResizingMode(.onehanded)
+                        variableStates.setResizingMode(.onehanded, screenWidth: variableStates.screenWidth)
                     }
                 }label: {
                     Circle()
@@ -328,7 +328,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
             let max = min(initialSize.width, initialSize.height) * 0.15
             let r = min(data.max * 0.7, max)
             let button1 = Button {
-                variableStates.setResizingMode(.resizing)
+                variableStates.setResizingMode(.resizing, screenWidth: variableStates.screenWidth)
             }label: {
                 Circle()
                     .fill(Color.blue)
@@ -342,7 +342,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
             .frame(width: r, height: r)
 
             let button2 = Button {
-                variableStates.setResizingMode(.fullwidth)
+                variableStates.setResizingMode(.fullwidth, screenWidth: variableStates.screenWidth)
             }label: {
                 Circle()
                     .fill(Color.blue)
@@ -361,7 +361,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
                     self.position = .zero
                     self.size.width = initialSize.width
                     self.size.height = initialSize.height
-                    variableStates.setResizingMode(.fullwidth)
+                    variableStates.setResizingMode(.fullwidth, screenWidth: variableStates.screenWidth)
                 }
                 variableStates.keyboardInternalSettingManager.update(\.oneHandedModeSetting) {value in
                     value.set(layout: variableStates.keyboardLayout, orientation: variableStates.keyboardOrientation, size: initialSize, position: .zero)

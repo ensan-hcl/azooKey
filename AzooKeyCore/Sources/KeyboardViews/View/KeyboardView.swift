@@ -34,7 +34,14 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))
+                                .frame(
+                                    width: variableStates.screenWidth,
+                                    height: Design.keyboardScreenHeight(
+                                        upsideComponent: variableStates.upsideComponent,
+                                        orientation: variableStates.keyboardOrientation,
+                                        screenWidth: variableStates.screenWidth
+                                    )
+                                )
                                 .clipped()
                         }
                     }
@@ -47,14 +54,26 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
                             UpsideSearchView<Extension>(target: target)
                         }
                     }
-                    .frame(height: Design.upsideComponentHeight(upsideComponent, orientation: variableStates.keyboardOrientation))
+                    .frame(
+                        height: Design.upsideComponentHeight(
+                            upsideComponent,
+                            orientation: variableStates.keyboardOrientation,
+                            screenWidth: variableStates.screenWidth
+                        )
+                    )
                 }
                 if isResultViewExpanded {
                     ExpandedResultView<Extension>(isResultViewExpanded: $isResultViewExpanded)
                 } else {
                     VStack(spacing: 0) {
                         KeyboardBarView<Extension>(isResultViewExpanded: $isResultViewExpanded)
-                            .frame(height: Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation))
+                            .frame(
+                                height: Design.keyboardBarHeight(
+                                    interfaceHeight: variableStates.interfaceSize.height,
+                                    orientation: variableStates.keyboardOrientation,
+                                    screenWidth: variableStates.screenWidth
+                                )
+                            )
                             .padding(.vertical, 6)
                         keyboardView(tab: defaultTab ?? variableStates.tabManager.existentialTab())
                     }
@@ -63,7 +82,7 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
             .resizingFrame(
                 size: $variableStates.interfaceSize,
                 position: $variableStates.interfacePosition,
-                initialSize: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: variableStates.keyboardOrientation)),
+                initialSize: CGSize(width: variableStates.screenWidth, height: Design.keyboardHeight(screenWidth: variableStates.screenWidth, orientation: variableStates.keyboardOrientation)),
                 extension: Extension.self
             )
             .padding(.bottom, 2)
@@ -85,7 +104,13 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
                 TemporalMessageView(message: message, isPresented: isPresented)
             }
         }
-        .frame(height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation))
+        .frame(
+            height: Design.keyboardScreenHeight(
+                upsideComponent: variableStates.upsideComponent,
+                orientation: variableStates.keyboardOrientation,
+                screenWidth: variableStates.screenWidth
+            )
+        )
     }
 
     @MainActor @ViewBuilder

@@ -15,6 +15,7 @@ struct QwertyVariationsView<Extension: ApplicationSpecificKeyboardViewExtension>
     @Environment(Extension.Theme.self) private var theme
     @Namespace private var namespace
     private let tabDesign: TabDependentDesign
+    @EnvironmentObject private var variableStates: VariableStates
 
     init(model: VariationsModel, selection: Int?, tabDesign: TabDependentDesign) {
         self.tabDesign = tabDesign
@@ -38,7 +39,7 @@ struct QwertyVariationsView<Extension: ApplicationSpecificKeyboardViewExtension>
                     }
                     getLabel(model.variations[index].label, textColor: index == selection ? .white : theme.suggestLabelTextColor?.color ?? .black)
                 }
-                .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight * 0.9, alignment: .center)
+                .frame(width: tabDesign.keyViewWidth, height: tabDesign.keyViewHeight(screenWidth: variableStates.screenWidth) * 0.9, alignment: .center)
             }
         }
         .animation(.easeOut(duration: 0.075), value: selection)
