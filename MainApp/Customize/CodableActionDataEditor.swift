@@ -223,8 +223,10 @@ private struct CodableActionEditor: View {
             } else {
                 Text("このアプリでは編集できないアクションです")
             }
-        default:
+        case .paste, .complete, .replaceDefault, .smartDeleteDefault, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapsLockState, .dismissKeyboard:
             EmptyView()
+        case .selectCandidate(_):
+            Text("このアプリでは編集できないアクションです")
         }
     }
 }
