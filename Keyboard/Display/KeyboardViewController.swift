@@ -15,6 +15,13 @@ import SwiftUtils
 import UIKit
 
 final private class KeyboardHostingController<Content: View>: UIHostingController<Content> {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if #unavailable(iOS 16) {
+            self.view.invalidateIntrinsicContentSize()
+        }
+    }
+
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         .bottom
     }
@@ -126,7 +133,9 @@ final class KeyboardViewController: UIInputViewController {
     private func setupKeyboardView() {
         let host = KeyboardViewController.keyboardViewHost ?? KeyboardHostingController(rootView: Keyboard(theme: getCurrentTheme()))
         // コンテントのサイズに応じてkeyboardViewHostのサイズが可変になる
-        host.sizingOptions = [.intrinsicContentSize]
+        if #available(iOS 16, *) {
+            host.sizingOptions = [.intrinsicContentSize]
+        }
         // コントロールセンターを出しにくくする。
         host.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
