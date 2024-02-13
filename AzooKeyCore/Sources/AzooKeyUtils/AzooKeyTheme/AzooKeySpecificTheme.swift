@@ -62,6 +62,7 @@ public extension AzooKeyTheme {
 }
 
 extension AzooKeySpecificTheme: ApplicationSpecificKeyboardViewExtensionLayoutDependentDefaultThemeProvidable {
+    #if os(iOS)
     public static func `default`(layout: KeyboardLayout) -> AzooKeyTheme {
         .init(
             backgroundColor: .system(.backgroundColor),
@@ -80,4 +81,24 @@ extension AzooKeySpecificTheme: ApplicationSpecificKeyboardViewExtensionLayoutDe
             keyShadow: nil
         )
     }
+    #elseif os(visionOS)
+    public static func `default`(layout: KeyboardLayout) -> AzooKeyTheme {
+        .init(
+            backgroundColor: .dynamic(.clear),
+            picture: .none,
+            textColor: .dynamic(.primary),
+            textFont: .semibold,
+            resultTextColor: .dynamic(.primary),
+            resultBackgroundColor: .color(.init(white: 0.2, opacity: 0.5)),
+            borderColor: .dynamic(.clear),
+            borderWidth: 1,
+            normalKeyFillColor: .color(.init(white: 0.2, opacity: 0.5)),
+            specialKeyFillColor: .color(.init(white: 0.05, opacity: 0.5)),
+            pushedKeyFillColor: .color(.init(white: 0.6, opacity: 0.5)),
+            suggestKeyFillColor: nil,
+            suggestLabelTextColor: nil,
+            keyShadow: nil
+        )
+    }
+    #endif
 }
