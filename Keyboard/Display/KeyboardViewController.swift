@@ -102,7 +102,7 @@ final class KeyboardViewController: UIInputViewController {
                     screenWidth: proxy.size.width,
                     orientation: variableStates.keyboardOrientation,
                     upsideComponent: variableStates.upsideComponent
-                )
+                ) + 2
                 KeyboardView<AzooKeyKeyboardViewExtension>()
                     .onAppear {
                         variableStates.screenWidth = proxy.size.width
