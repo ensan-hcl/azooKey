@@ -106,9 +106,16 @@ struct EditingTenkeyCustardView: CancelableEditor {
         }
         return false
     }
+    @MainActor private var screenWidth: CGFloat {
+        #if os(iOS)
+        UIScreen.main.bounds.width
+        #elseif os(visionOS)
+        500
+        #endif
+    }
 
     private var interfaceSize: CGSize {
-        .init(width: UIScreen.main.bounds.width, height: Design.keyboardHeight(screenWidth: UIScreen.main.bounds.width, orientation: MainAppDesign.keyboardOrientation))
+        .init(width: screenWidth, height: Design.keyboardHeight(screenWidth: screenWidth, orientation: MainAppDesign.keyboardOrientation))
     }
 
     var body: some View {

@@ -112,7 +112,13 @@ struct QwertyCustomKeysSettingView<SettingKey: QwertyCustomKeyKeyboardSetting>: 
         spacing / 2
     }
 
-    private let screenWidth = UIScreen.main.bounds.width
+    @MainActor private var screenWidth: CGFloat {
+        #if os(iOS)
+        UIScreen.main.bounds.width
+        #elseif os(visionOS)
+        500
+        #endif
+    }
 
     private var keySize: CGSize {
         CGSize(width: screenWidth / 12.2, height: screenWidth / 9)

@@ -9,8 +9,12 @@
 import class UIKit.UINotificationFeedbackGenerator
 
 @MainActor enum MainAppFeedback {
+    #if os(iOS)
     private static let feedbackGenerator = UINotificationFeedbackGenerator()
+    #endif
     static func success() {
+        #if os(iOS)
         feedbackGenerator.notificationOccurred(.success)
+        #endif
     }
 }

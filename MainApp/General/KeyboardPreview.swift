@@ -92,9 +92,17 @@ struct RawKeyboardPreview: View {
         self.defaultTab = defaultTab
     }
 
+    @MainActor private var screenWidth: CGFloat {
+        #if os(iOS)
+        UIScreen.main.bounds.width
+        #elseif os(visionOS)
+        500
+        #endif
+    }
+
     var body: some View {
-        let keyboardWidth = UIScreen.main.bounds.width
-        let keyboardHeight = Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation, screenWidth: UIScreen.main.bounds.width)
+        let keyboardWidth = screenWidth
+        let keyboardHeight = Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation, screenWidth: screenWidth)
         KeyboardView<AzooKeyKeyboardViewExtension>(defaultTab: defaultTab)
             .environmentObject(variableStates)
             .themeEnvironment(theme)

@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 import SwiftUtils
 
-#if os(iOS)
+#if os(iOS) || os(visionOS)
 import UIKit
 public struct TouchDownAndTouchUpGestureView: UIViewRepresentable {
     public init(touchDownCallBack: @escaping () -> Void, touchMovedCallBack: @escaping (TouchDownAndTouchUpGestureView.GestureState) -> Void, touchUpCallBack: @escaping (TouchDownAndTouchUpGestureView.GestureState) -> Void) {

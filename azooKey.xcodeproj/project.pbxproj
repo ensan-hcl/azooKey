@@ -68,7 +68,7 @@
 		1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A3DC1D02500D44E002CAA93 /* LaunchScreen.storyboard */; };
 		1A3DC1E82500D44E002CAA93 /* MainAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1E72500D44E002CAA93 /* MainAppUITests.swift */; };
 		1A3DC1FC2500D488002CAA93 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC1FB2500D488002CAA93 /* KeyboardViewController.swift */; };
-		1A3DC2002500D488002CAA93 /* Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1A3DC2002500D488002CAA93 /* Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1A3DC1F92500D488002CAA93 /* Keyboard.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1A3DC2072500D4FF002CAA93 /* KeyboardActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC2062500D4FF002CAA93 /* KeyboardActionManager.swift */; };
 		1A4057DF255843330073C6F7 /* BoolSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057DE255843330073C6F7 /* BoolSettingView.swift */; };
 		1A4057E9255843460073C6F7 /* KeyboardLayoutSettingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4057E8255843460073C6F7 /* KeyboardLayoutSettingItemView.swift */; };
@@ -1437,6 +1437,7 @@
 		};
 		1A3DC1FF2500D488002CAA93 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 1A3DC1F82500D488002CAA93 /* Keyboard */;
 			targetProxy = 1A3DC1FE2500D488002CAA93 /* PBXContainerItemProxy */;
 		};
@@ -1673,13 +1674,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Debug;
 		};
@@ -1710,13 +1712,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = DevEn3.azooKey;
 				PRODUCT_NAME = azooKey;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
 			};
 			name = Release;
 		};

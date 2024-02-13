@@ -132,6 +132,14 @@ struct ThemeEditView: CancelableEditor {
         return config
     }
 
+    @MainActor private var screenWidth: CGFloat {
+        #if os(iOS)
+        UIScreen.main.bounds.width
+        #elseif os(visionOS)
+        500
+        #endif
+    }
+
     var body: some View {
         switch viewType {
         case .editor:
@@ -201,11 +209,11 @@ struct ThemeEditView: CancelableEditor {
                             resultImage: $trimmedImage,
                             maxSize: CGSize(width: 1280, height: 720),
                             aspectRatio: CGSize(
-                                width: UIScreen.main.bounds.width,
+                                width: screenWidth,
                                 height: Design.keyboardScreenHeight(
                                     upsideComponent: nil,
                                     orientation: MainAppDesign.keyboardOrientation,
-                                    screenWidth: UIScreen.main.bounds.width
+                                    screenWidth: screenWidth
                                 )
                             )
                         )}

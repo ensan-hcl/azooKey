@@ -34,11 +34,11 @@ struct BottomSheetView<Content: View>: View {
         isOpen ? 0 : maxHeight - minHeight
     }
 
-    @MainActor private var indicator: some View {
+    @MainActor private func indicator(availableWidth: CGFloat) -> some View {
         RoundedRectangle(cornerRadius: 2)
             .fill(Color.secondary)
             .frame(
-                width: UIScreen.main.bounds.width * 0.6,
+                width: availableWidth * 0.6,
                 height: 4
             )
     }
@@ -47,7 +47,7 @@ struct BottomSheetView<Content: View>: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                self.indicator.padding()
+                self.indicator(availableWidth: geometry.size.width).padding()
                 self.content()
             }
             .frame(width: geometry.size.width, height: self.maxHeight, alignment: .top)

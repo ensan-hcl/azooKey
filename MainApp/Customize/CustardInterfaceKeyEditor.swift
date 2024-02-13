@@ -387,7 +387,13 @@ struct CustardInterfaceKeyEditor: View {
         self._height = data.height
     }
 
-    @MainActor private var screenWidth: CGFloat { UIScreen.main.bounds.width }
+    @MainActor private var screenWidth: CGFloat { 
+        #if os(iOS)
+        UIScreen.main.bounds.width
+        #elseif os(visionOS)
+        500
+        #endif
+    }
 
     @MainActor private var keySize: CGSize {
         CGSize(width: screenWidth / 5.6, height: screenWidth / 8)

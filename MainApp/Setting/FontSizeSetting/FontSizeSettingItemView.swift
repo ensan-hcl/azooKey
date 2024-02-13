@@ -83,7 +83,11 @@ private struct KeyView: View {
     }
 
     private var size: CGSize {
-        let screenWidth = UIScreen.main.bounds.width
+        #if os(iOS)
+        let screenWidth: CGFloat = UIScreen.main.bounds.width
+        #elseif os(visionOS)
+        let screenWidth: CGFloat = 500
+        #endif
         switch appStates.japaneseLayout {
         case .flick:
             return CGSize(width: screenWidth / 5.6, height: screenWidth / 8)

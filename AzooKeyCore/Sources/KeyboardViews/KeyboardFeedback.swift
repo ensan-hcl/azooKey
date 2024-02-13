@@ -11,7 +11,9 @@ import typealias AudioToolbox.SystemSoundID
 import class UIKit.UIImpactFeedbackGenerator
 
 private enum UIImpactFeedbackGeneratorHolder {
+    #if os(iOS)
     @MainActor static let generator = UIImpactFeedbackGenerator(style: .light)
+    #endif
 }
 /// フィードバックを返すためのツールセット
 public enum KeyboardFeedback<Extension: ApplicationSpecificKeyboardViewExtension> {
@@ -80,9 +82,11 @@ public enum KeyboardFeedback<Extension: ApplicationSpecificKeyboardViewExtension
     /// - Note: `generator.impactOccurred`はMainActor上でのみ動作する
     public static func impactOnMainActor(intensity: Double) {
         Task { @MainActor in
+            #if os(iOS)
             if enableHaptics {
                 UIImpactFeedbackGeneratorHolder.generator.impactOccurred(intensity: intensity)
             }
+            #endif
         }
     }
 

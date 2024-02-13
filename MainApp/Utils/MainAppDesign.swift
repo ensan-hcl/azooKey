@@ -14,10 +14,14 @@ enum MainAppDesign {
     static let imageMaximumWidth: Double = 500
 
     @MainActor static var keyboardOrientation: KeyboardOrientation {
+        #if os(visionOS)
+        return .vertical
+        #else
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .vertical
         } else {
             return UIDevice.current.orientation == UIDeviceOrientation.unknown ? .vertical : (UIDevice.current.orientation == UIDeviceOrientation.portrait ? .vertical : .horizontal)
         }
+        #endif
     }
 }
