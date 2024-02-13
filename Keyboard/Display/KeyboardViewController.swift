@@ -65,25 +65,51 @@ final class KeyboardViewController: UIInputViewController {
         tabManagerConfig: TabManagerConfig(),
         userDefaults: UserDefaults.standard
     )
-    private static let notificationCenter = NotificationCenter.default
+
+    private struct HeightKey: PreferenceKey {
+        static var defaultValue: CGFloat = .zero
+        static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+            value = nextValue()
+        }
+    }
 
     struct Keyboard: View {
+        @State private var height = 0.0
         let theme: AzooKeyTheme
         var body: some View {
-            KeyboardView<AzooKeyKeyboardViewExtension>()
+            _Keyboard()
+                .environmentObject(KeyboardViewController.variableStates)
                 .themeEnvironment(theme)
                 .environment(\.userActionManager, KeyboardViewController.action)
-                .environmentObject(KeyboardViewController.variableStates)
+                .onPreferenceChange(HeightKey.self) {
+                    self.height = $0
+                }
+                .frame(minHeight: height, maxHeight: height)
+        }
+    }
+    private struct _Keyboard: View {
+        @EnvironmentObject private var variableStates: VariableStates
+        var body: some View {
+            GeometryReader { proxy in
+                let keyboardHeight = Design.keyboardHeight(
+                    screenWidth: proxy.size.width,
+                    orientation: variableStates.keyboardOrientation,
+                    upsideComponent: variableStates.upsideComponent
+                )
+                KeyboardView<AzooKeyKeyboardViewExtension>()
+                    .onAppear {
+                        variableStates.screenWidth = proxy.size.width
+                    }
+                    .onChange(of: proxy.size.width) { newValue in
+                        variableStates.screenWidth = proxy.size.width
+                    }
+                    .preference(key: HeightKey.self, value: keyboardHeight)
+            }
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 初回のみscreenWidthに初期値を与える
-        // FIXME: アドホックな対処であり、例えば初期状態でiPhoneを横持ちしている場合には不正な挙動が発生する
-        if Self.variableStates.screenWidth == 0 {
-            Self.variableStates.screenWidth = UIScreen.main.bounds.width
-        }
 
         debug("KeyboardViewController.viewDidLoad, loadedInstanceCount:", KeyboardViewController.loadedInstanceCount)
         KeyboardViewController.loadedInstanceCount += 1
@@ -99,6 +125,8 @@ final class KeyboardViewController: UIInputViewController {
 
     private func setupKeyboardView() {
         let host = KeyboardViewController.keyboardViewHost ?? KeyboardHostingController(rootView: Keyboard(theme: getCurrentTheme()))
+        // コンテントのサイズに応じてkeyboardViewHostのサイズが可変になる
+        host.sizingOptions = [.intrinsicContentSize]
         // コントロールセンターを出しにくくする。
         host.setNeedsUpdateOfScreenEdgesDeferringSystemGestures()
 
@@ -134,7 +162,6 @@ final class KeyboardViewController: UIInputViewController {
         debug("KeyboardViewController.viewDidAppear")
         super.viewDidAppear(animated)
         self.updateStates()
-        self.registerScreenActualSize()
 
         let window = self.view.window!
         let gr0 = window.gestureRecognizers![0] as UIGestureRecognizer
@@ -230,14 +257,6 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
-    func registerScreenActualSize() {
-        if let bounds = KeyboardViewController.keyboardViewHost?.view.safeAreaLayoutGuide.owningView?.bounds {
-            debug("KeyboardViewController.registerScreenActualSize bounds", bounds)
-            Self.variableStates.screenWidth = bounds.width
-            KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height ? .vertical : .horizontal, screenWidth: bounds.width)
-        }
-    }
-
     func updateResultView(_ candidates: [any ResultViewItemData]) {
         KeyboardViewController.variableStates.resultModel.setResults(candidates)
     }
@@ -263,23 +282,11 @@ final class KeyboardViewController: UIInputViewController {
         // この関数は「これから」向きが変わる場合に呼ばれるので、デバイスの向きによってwidthとheightが逆転するUIScreen.main.bounds.sizeを用いて向きを確かめることができる。
         // ただしこの時点でのUIScreen.mainの値はOSバージョンで変わる
         debug("KeyboardViewController.viewWillTransition", size, UIScreen.main.bounds.size)
-        Self.variableStates.screenWidth = size.width
         KeyboardViewController.variableStates.setInterfaceSize(orientation: UIScreen.main.bounds.width < UIScreen.main.bounds.height ? .horizontal : .vertical, screenWidth: size.width)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        debug("KeyboardViewController.viewDidLayoutSubviews", Self.variableStates.screenWidth)
-        self.view.frame.size.height = Design.keyboardScreenHeight(upsideComponent: KeyboardViewController.variableStates.upsideComponent, orientation: KeyboardViewController.variableStates.keyboardOrientation, screenWidth: Self.variableStates.screenWidth)
-    }
-
-    func reloadAllView() {
-        debug("KeyboardViewController.reloadAllView")
-        // subviewsを一度完全に削除する
-        self.view.subviews.forEach {$0.clearAllView()}
-        self.children.forEach {$0.removeFromParent()}
-        KeyboardViewController.keyboardViewHost = nil
-        self.setupKeyboardView()
     }
 
     /*
