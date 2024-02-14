@@ -30,12 +30,11 @@ struct ThemeShareView: View {
         self.shareImage = shareImage
     }
     @State private var showActivityView: Bool = false
-    // キャプチャ用
-    @State private var captureRect: CGRect = .zero
     private var shareImage: ShareImage
 
     @MainActor @ViewBuilder private var keyboardPreview: some View {
-        KeyboardPreview(theme: theme, scale: 0.9)
+        RawKeyboardPreview(theme: theme)
+            .frame(maxWidth: .infinity)
     }
     var body: some View {
         VStack {

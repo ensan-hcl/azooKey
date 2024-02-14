@@ -22,7 +22,16 @@ struct LargeTextView: View {
     }
 
     private var font: Font {
-        Font.system(size: Design.largeTextViewFontSize(text, upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation), weight: .regular, design: .serif)
+        Font.system(
+            size: Design.largeTextViewFontSize(
+                text,
+                upsideComponent: variableStates.upsideComponent,
+                orientation: variableStates.keyboardOrientation,
+                screenWidth: variableStates.screenWidth
+            ),
+            weight: .regular,
+            design: .serif
+        )
     }
     var body: some View {
         VStack {
@@ -34,9 +43,23 @@ struct LargeTextView: View {
                 isViewOpen = false
             } label: {
                 Label("閉じる", systemImage: "xmark")
-            }.frame(width: nil, height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation) * 0.15)
+            }.frame(
+                width: nil,
+                height: Design.keyboardScreenHeight(
+                    upsideComponent: variableStates.upsideComponent,
+                    orientation: variableStates.keyboardOrientation,
+                    screenWidth: variableStates.screenWidth
+                ) * 0.15
+            )
         }
         .background(Color.background)
-        .frame(height: Design.keyboardScreenHeight(upsideComponent: variableStates.upsideComponent, orientation: variableStates.keyboardOrientation), alignment: .bottom)
+        .frame(
+            height: Design.keyboardScreenHeight(
+                upsideComponent: variableStates.upsideComponent,
+                orientation: variableStates.keyboardOrientation,
+                screenWidth: variableStates.screenWidth
+            ),
+            alignment: .bottom
+        )
     }
 }

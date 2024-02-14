@@ -30,7 +30,6 @@ final class MainAppStates: ObservableObject {
         self.englishLayout = englishKeyboardLayout
         self.custardManager = CustardManager.load()
         SemiStaticStates.shared.setHapticsAvailable()
-        SemiStaticStates.shared.setScreenWidth(UIScreen.main.bounds.width)
     }
 
     func setTutorialProgress(_ progress: EnableAzooKeyViewProgress) {

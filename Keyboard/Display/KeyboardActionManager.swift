@@ -215,19 +215,9 @@ import SwiftUtils
             variableStates.setTab(type)
 
         case let .setUpsideComponent(type):
-            switch type {
-            case nil:
-                if variableStates.upsideComponent != nil {
-                    variableStates.upsideComponent = nil
-                    self.delegate.reloadAllView()
-                } else {
-                    variableStates.upsideComponent = nil
-                }
-            case .some:
+            if variableStates.upsideComponent != type {
                 variableStates.upsideComponent = type
-                self.delegate.reloadAllView()
             }
-
         case let .setTabBar(operation):
             switch operation {
             case .on:
@@ -243,7 +233,7 @@ import SwiftUtils
             }
 
         case .enableResizingMode:
-            variableStates.setResizingMode(.resizing)
+            variableStates.setResizingMode(.resizing, screenWidth: variableStates.screenWidth)
 
         case .hideLearningMemory:
             self.hideLearningMemory()

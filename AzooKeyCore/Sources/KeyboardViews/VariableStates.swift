@@ -127,6 +127,7 @@ public final class VariableStates: ObservableObject {
     @Published public var boolStates = BoolStates()
 
     // 片手モードの実行時、キーボードの幅はinterfaceSizeによって決定できる。
+    @Published public var screenWidth: CGFloat = .zero
     @Published public var interfaceSize: CGSize = .zero
     @Published public var interfacePosition: CGPoint = .zero
 
@@ -177,14 +178,24 @@ public final class VariableStates: ObservableObject {
         self.surroundingText.rightSideText = rightSide
     }
 
-    @MainActor public func setResizingMode(_ state: ResizingState) {
+    @MainActor public func setResizingMode(_ state: ResizingState, screenWidth: Double) {
         switch state {
         case .fullwidth:
-            interfaceSize = .init(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardHeight(screenWidth: SemiStaticStates.shared.screenWidth, orientation: self.keyboardOrientation) + 2)
+            interfaceSize = .init(width: screenWidth, height: Design.keyboardHeight(screenWidth: screenWidth, orientation: self.keyboardOrientation) + 2)
         case .onehanded, .resizing:
             let item = keyboardInternalSettingManager.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation)
             // キーボードスクリーンのサイズを超えないように設定
-            interfaceSize = CGSize(width: min(item.size.width, SemiStaticStates.shared.screenWidth), height: min(item.size.height, Design.keyboardScreenHeight(upsideComponent: self.upsideComponent, orientation: self.keyboardOrientation)))
+            interfaceSize = CGSize(
+                width: min(item.size.width, screenWidth),
+                height: min(
+                    item.size.height,
+                    Design.keyboardScreenHeight(
+                        upsideComponent: self.upsideComponent,
+                        orientation: self.keyboardOrientation,
+                        screenWidth: screenWidth
+                    )
+                )
+            )
             interfacePosition = item.position
         }
         self.resizingState = state
@@ -273,18 +284,18 @@ public final class VariableStates: ObservableObject {
         }
     }
 
-    @MainActor public func updateResizingState() {
+    @MainActor public func updateResizingState(screenWidth: Double) {
         let isLastOnehandedMode = keyboardInternalSettingManager.oneHandedModeSetting.item(layout: keyboardLayout, orientation: keyboardOrientation).isLastOnehandedMode
         if isLastOnehandedMode {
-            self.setResizingMode(.onehanded)
+            self.setResizingMode(.onehanded, screenWidth: screenWidth)
         } else {
-            self.setResizingMode(.fullwidth)
+            self.setResizingMode(.fullwidth, screenWidth: screenWidth)
         }
     }
 
-    @MainActor public func setKeyboardLayout(_ layout: KeyboardLayout) {
+    @MainActor public func setKeyboardLayout(_ layout: KeyboardLayout, screenWidth: Double) {
         self.keyboardLayout = layout
-        self.updateResizingState()
+        self.updateResizingState(screenWidth: screenWidth)
     }
 
     @MainActor public func setInputStyle(_ style: InputStyle) {
@@ -295,7 +306,7 @@ public final class VariableStates: ObservableObject {
         let height = Design.keyboardHeight(screenWidth: screenWidth, orientation: orientation)
         if self.keyboardOrientation != orientation {
             self.keyboardOrientation = orientation
-            self.updateResizingState()
+            self.updateResizingState(screenWidth: screenWidth)
         }
         let layout = self.keyboardLayout
 

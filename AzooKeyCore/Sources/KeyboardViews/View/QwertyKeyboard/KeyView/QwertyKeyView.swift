@@ -257,7 +257,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             borderColor: keyBorderColor,
                             borderWidth: keyBorderWidth,
                             direction: model.variationsModel.direction,
-                            tabDesign: tabDesign
+                            tabDesign: tabDesign,
+                            screenWidth: variableStates.screenWidth
                         )
                         .overlay(
                             QwertyVariationsView<Extension>(model: self.model.variationsModel, selection: selection, tabDesign: tabDesign)
@@ -274,7 +275,8 @@ struct QwertyKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
                             color: suggestColor,
                             borderColor: keyBorderColor,
                             borderWidth: keyBorderWidth,
-                            tabDesign: tabDesign
+                            tabDesign: tabDesign,
+                            screenWidth: variableStates.screenWidth
                         )
                         .overlay(
                             label(width: size.width, color: suggestTextColor)

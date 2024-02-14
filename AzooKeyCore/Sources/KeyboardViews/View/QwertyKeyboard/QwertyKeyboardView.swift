@@ -12,6 +12,7 @@ import SwiftUI
 struct QwertyKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let tabDesign: TabDependentDesign
     private let keyModels: [[any QwertyKeyModelProtocol<Extension>]]
+    @EnvironmentObject private var variableStates: VariableStates
 
     init(keyModels: [[any QwertyKeyModelProtocol<Extension>]], interfaceSize: CGSize, keyboardOrientation: KeyboardOrientation) {
         self.keyModels = keyModels
@@ -37,7 +38,7 @@ struct QwertyKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
                             tabDesign: tabDesign,
                             size: CGSize(
                                 width: model.keySizeType.width(design: tabDesign),
-                                height: model.keySizeType.height(design: tabDesign)
+                                height: model.keySizeType.height(design: tabDesign, screenWidth: variableStates.screenWidth)
                             )
                         )
                     }

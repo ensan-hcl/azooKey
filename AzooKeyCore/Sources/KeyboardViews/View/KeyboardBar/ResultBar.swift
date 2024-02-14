@@ -34,10 +34,18 @@ struct ResultBar<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     }
 
     private var buttonWidth: CGFloat {
-        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.5
+        Design.keyboardBarHeight(
+            interfaceHeight: variableStates.interfaceSize.height,
+            orientation: variableStates.keyboardOrientation,
+            screenWidth: variableStates.screenWidth
+        ) * 0.5
     }
     private var buttonHeight: CGFloat {
-        Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.6
+        Design.keyboardBarHeight(
+            interfaceHeight: variableStates.interfaceSize.height,
+            orientation: variableStates.keyboardOrientation,
+            screenWidth: variableStates.screenWidth
+        ) * 0.6
     }
 
     init(isResultViewExpanded: Binding<Bool>) {

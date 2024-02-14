@@ -39,10 +39,24 @@ struct TabBarView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                                 Image(systemName: image)
                             }
                         }
-                        .buttonStyle(ResultButtonStyle<Extension>(height: Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation) * 0.6))
+                        .buttonStyle(
+                            ResultButtonStyle<Extension>(
+                                height: Design.keyboardBarHeight(
+                                    interfaceHeight: variableStates.interfaceSize.height,
+                                    orientation: variableStates.keyboardOrientation,
+                                    screenWidth: variableStates.screenWidth
+                                ) * 0.6
+                            )
+                        )
                     }
                 }
             }
-        }.frame(height: Design.keyboardBarHeight(interfaceHeight: variableStates.interfaceSize.height, orientation: variableStates.keyboardOrientation))
+        }.frame(
+            height: Design.keyboardBarHeight(
+                interfaceHeight: variableStates.interfaceSize.height,
+                orientation: variableStates.keyboardOrientation,
+                screenWidth: variableStates.screenWidth
+            )
+        )
     }
 }

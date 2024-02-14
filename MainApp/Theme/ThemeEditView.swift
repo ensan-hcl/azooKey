@@ -200,9 +200,17 @@ struct ThemeEditView: CancelableEditor {
                             uiImage: pickedImage,
                             resultImage: $trimmedImage,
                             maxSize: CGSize(width: 1280, height: 720),
-                            aspectRatio: CGSize(width: SemiStaticStates.shared.screenWidth, height: Design.keyboardScreenHeight(upsideComponent: nil, orientation: MainAppDesign.keyboardOrientation))
+                            aspectRatio: CGSize(
+                                width: UIScreen.main.bounds.width,
+                                height: Design.keyboardScreenHeight(
+                                    upsideComponent: nil,
+                                    orientation: MainAppDesign.keyboardOrientation,
+                                    screenWidth: UIScreen.main.bounds.width
+                                )
+                            )
                         )}
-                }, isActive: $isTrimmingViewPresented) {
+                },
+                               isActive: $isTrimmingViewPresented) {
                     EmptyView()
                 }
             }
