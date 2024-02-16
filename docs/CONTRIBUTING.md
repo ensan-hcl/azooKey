@@ -24,18 +24,16 @@ azooKeyの絵文字検索・変換は、絵文字データをベースに実装�
 
 GitHub上で「[Feature Request] 〇〇の絵文字に「△△」の読みを追加する」というIssueを立ててください。Assigneeを自分のアカウントに変更してください。
 
-この変更は小さいので、管理者のOKを待つ必要はありません。次に進んでください。
+この変更は小さいので、コア開発者のOKを待つ必要はありません。次に進んでください。
 
 ### 2.2. プロジェクトを準備する
 
-GitHub上で、azooKeyのプロジェクトをフォークしてください。
+GitHub上で、azooKeyのプロジェクトをフォークしてください。あなたのユーザ名が「hoge」の場合は「https://github.com/hoge/azooKey」ができあがります。
 
-先ほどクローンしたazooKeyのディレクトリで、以下のコマンドを実行します。
-
-あなたのユーザ名が「hoge」の場合、`<alias>`部分は`hoge`(など)、`<url_to_your_fork>`は`https://github.com/hoge/azooKey`という形にすると良いでしょう。
+「1」でクローンして動かしたazooKeyのディレクトリで、以下のコマンドを実行します。`<alias>`部分は好きな名前（例えば`hoge`）に置き換えてください。これにより、あなたのフォークに`hoge`と言うエイリアスが追加されます。
 
 ```bash
-git remote add <alias> <url_to_your_fork>
+git remote add <alias> https://github.com/hoge/azooKey
 ```
 
 #### 2.2.1. linterをインストールする
