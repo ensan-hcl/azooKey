@@ -5641,6 +5641,26 @@
         }
       }
     },
+    "候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select candidate"
+          }
+        }
+      }
+    },
+    "値" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Value"
+          }
+        }
+      }
+    },
     "値が無効です。有効な数値を入力してください" : {
       "localizations" : {
         "en" : {
@@ -5904,6 +5924,16 @@
         }
       }
     },
+    "最初の候補" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select first candidate"
+          }
+        }
+      }
+    },
     "最初の候補を選択" : {
       "localizations" : {
         "en" : {
@@ -5958,6 +5988,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "最後の候補" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select last candidate"
           }
         }
       }
@@ -8558,6 +8598,16 @@
         }
       }
     },
+    "相対位置の候補" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select with relative position"
+          }
+        }
+      }
+    },
     "着せ替え" : {
       "localizations" : {
         "en" : {
@@ -8896,6 +8946,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "絶対位置の候補" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select with absolute position"
           }
         }
       }
@@ -9911,6 +9971,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "azooKey can now utilize contact information!"
+          }
+        }
+      }
+    },
+    "選び方" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position Specification"
           }
         }
       }
