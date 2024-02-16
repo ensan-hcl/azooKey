@@ -16,7 +16,7 @@ azooKeyの開発に参加したい方、使い方に質問がある方、要望�
 * パフォーマンス改善、バグ修正、機能追加などのPull Requestを歓迎します。機能追加の場合は事前にIssueで議論した方がスムーズです。
 * 開発は基本的に`develop`で行います。新規にPRを作成する場合、まずこのレポジトリをフォークし、`develop`からブランチを切ってください。
 
-[Let's Contribute](docs/first_contribution.md)も合わせてお読みください。
+[Let's Contribute](docs/CONTRIBUTING.md)も合わせてお読みください。
 
 ### ビルド・利用方法
 
