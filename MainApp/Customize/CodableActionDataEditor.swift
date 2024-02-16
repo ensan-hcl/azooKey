@@ -223,10 +223,10 @@ private struct CodableActionEditor: View {
             } else {
                 Text("このアプリでは編集できないアクションです")
             }
+        case .selectCandidate(let item):
+            ActionEditCandidateSelection(action: $action, initialValue: {item})
         case .paste, .complete, .replaceDefault, .smartDeleteDefault, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapsLockState, .dismissKeyboard:
             EmptyView()
-        case .selectCandidate(_):
-            Text("このアプリでは編集できないアクションです")
         }
     }
 }
@@ -499,6 +499,85 @@ private struct ActionEditIntegerTextField: View {
     }
 }
 
+private struct ActionEditCandidateSelection: View {
+
+    private enum CandidateSelectionKeys: String, Equatable, Hashable, Sendable, CaseIterable {
+        case first, last, offset, exact
+        init(from selection: CandidateSelection) {
+            self = switch selection {
+            case .first:
+                .first
+            case .last:
+                .last
+            case .offset:
+                .offset
+            case .exact:
+                .exact
+            }
+        }
+    }
+
+    init(action: Binding<EditingCodableActionData>, initialValue: () -> CandidateSelection?) {
+        self._action = action
+        if let initialValue = initialValue() {
+            self._selectionType = State(initialValue: .init(from: initialValue))
+            switch initialValue {
+            case .first, .last:
+                self._integerValue = State(initialValue: "")
+            case .offset(let int), .exact(let int):
+                self._integerValue = State(initialValue: "\(int)")
+            }
+        }
+    }
+
+    @State private var selectionType: CandidateSelectionKeys = .first
+    @State private var integerValue = ""
+    @Binding private var action: EditingCodableActionData
+
+    private var resultCandidateSelection: CandidateSelection {
+        switch selectionType {
+        case .first:
+            .first
+        case .last:
+            .last
+        case .offset:
+            .offset(Int(self.integerValue) ?? 0)
+        case .exact:
+            .exact(Int(self.integerValue) ?? 0)
+        }
+    }
+
+    var body: some View {
+        Group {
+            Picker("選び方", selection: $selectionType) {
+                Text("最初の候補").tag(CandidateSelectionKeys.first)
+                Text("最後の候補").tag(CandidateSelectionKeys.last)
+                Text("絶対位置の候補").tag(CandidateSelectionKeys.exact)
+                Text("相対位置の候補").tag(CandidateSelectionKeys.offset)
+            }
+            switch self.selectionType {
+            case .first, .last: EmptyView()
+            case .offset:
+                IntegerTextField("値", text: $integerValue, range: .min ... .max)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+            case .exact:
+                IntegerTextField("値", text: $integerValue, range: 0 ... .max)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+            }
+        }
+        .onChange(of: integerValue) {value in
+            action.data = .selectCandidate(resultCandidateSelection)
+        }
+        .onChange(of: selectionType) {value in
+            action.data = .selectCandidate(resultCandidateSelection)
+        }
+    }
+}
+
 private struct ActionMoveTabEditView: View {
     @Binding private var action: EditingCodableActionData
     private let availableCustards: [String]
@@ -761,6 +840,9 @@ private struct ActionPicker: View {
                 }
                 Button("片手モードをオン") {
                     process(.enableResizingMode)
+                }
+                Button("候補を選択") {
+                    process(.selectCandidate(.offset(1)))
                 }
                 Button("入力の確定") {
                     process(.complete)
