@@ -21,16 +21,20 @@ extension CodableActionData {
         }
     }
 
+    private func stringArrayDescription(_ array: [String]) -> String {
+        array.map {$0 == "\n" ? "改行" : "'\($0)'"}.joined(separator: ", ")
+    }
+
     var label: LocalizedStringKey {
         switch self {
         case let .input(value): return "「\(value)」を入力"
         case let .moveCursor(value): return "\(String(value))文字分カーソルを移動"
-        case let .smartMoveCursor(value): return "\(value.targets.joined(separator: ","))の隣までカーソルを移動"
+        case let .smartMoveCursor(value): return "\(stringArrayDescription(value.targets))の隣までカーソルを移動"
         case let .delete(value): return "\(String(value))文字削除"
-        case let .smartDelete(value): return "\(value.targets.joined(separator: ","))の隣まで削除"
+        case let .smartDelete(value): return "\(stringArrayDescription(value.targets))の隣まで削除"
         case .paste: return "ペーストする"
         case .moveTab: return "タブの移動"
-        case .replaceLastCharacters: return "文字を置換"
+        case .replaceLastCharacters: return "末尾の文字を置換"
         case let .selectCandidate(selection):
             return switch selection {
             case .first: "最初の候補を選択"
@@ -195,17 +199,21 @@ private struct CodableActionEditor: View {
         case .smartDelete(let item):
             ActionScanItemEditor(action: $action) { item } convert: { value in
                 // 重複を除去し、改行を追加する
-                let targets = Array(Set(value.targets + ["\n"]) )
+                let targets = Array(value.targets.uniqued())
                 return .smartDelete(ScanItem(targets: targets, direction: value.direction))
             }
         case .smartMoveCursor(let item):
             ActionScanItemEditor(action: $action) { item } convert: { value in
                 // 重複を除去し、改行を追加する
-                let targets = Array(Set(value.targets + ["\n"]) )
+                let targets = Array(value.targets.uniqued())
                 return .smartMoveCursor(ScanItem(targets: targets, direction: value.direction))
             }
-        case .replaceLastCharacters:
-            EmptyView()
+        case let .replaceLastCharacters(pairs):
+            ActionPairItemEditor(action: $action) { pairs.map{.init(first: $0.key, second: $0.value)} } convert: { value in
+                // 重複を除去し、改行を追加する
+                let items = Dictionary(value.uniqued().map{(key: $0.first, value: $0.second)}, uniquingKeysWith: {first, second in first})
+                return .replaceLastCharacters(items)
+            }
         case let .launchApplication(item):
             if item.target.hasPrefix("run-shortcut?") {
                 ActionEditTextField("オプション", action: $action) {String(item.target.dropFirst("run-shortcut?".count))} convert: {value in
@@ -215,7 +223,9 @@ private struct CodableActionEditor: View {
             } else {
                 Text("このアプリでは編集できないアクションです")
             }
-        default:
+        case .selectCandidate(let item):
+            ActionEditCandidateSelection(action: $action, initialValue: {item})
+        case .paste, .complete, .replaceDefault, .smartDeleteDefault, .enableResizingMode, .toggleTabBar, .toggleCursorBar, .toggleCapsLockState, .dismissKeyboard:
             EmptyView()
         }
     }
@@ -224,6 +234,7 @@ private struct CodableActionEditor: View {
 private struct ActionScanItemEditor: View {
     @Binding private var action: EditingCodableActionData
     private let convert: (ScanItem) -> CodableActionData?
+    @State private var addItem: String = ""
     @State private var value: ScanItem = .init(targets: CodableActionData.scanTargets, direction: .backward)
 
     init(action: Binding<EditingCodableActionData>, initialValue: () -> ScanItem?, convert: @escaping (ScanItem) -> CodableActionData?) {
@@ -231,6 +242,27 @@ private struct ActionScanItemEditor: View {
         self._action = action
         if let initialValue = initialValue() {
             self._value = State(initialValue: initialValue)
+        }
+    }
+
+    func targetItemView(action: @escaping () -> (), leftLabel: () -> some View, rightLabel: () -> some View) -> some View {
+        HStack {
+            leftLabel()
+                .padding(.horizontal)
+            Divider()
+            Button {
+                action()
+            } label: {
+                rightLabel()
+                    .padding(7)
+                    .contentShape(Rectangle())
+            }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.borderless)
+        }
+        .background {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(Color.systemGray5)
         }
     }
 
@@ -242,18 +274,66 @@ private struct ActionScanItemEditor: View {
             }
             .pickerStyle(.menu)
             HStack {
-                Text("目指す文字（改行区切り）")
-                Spacer()
-                TextEditor(text: $value.targets.converted(
-                    // バックスラッシュでエスケープする
-                    forward: {$0.joined(separator: "\n")},
-                    backward: {$0.components(separatedBy: "\n")}
-                ))
-                .background {
-                    Color.systemGray6
+                TextField("目指す文字を追加", text: $addItem)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+                if value.targets.contains(addItem) {
+                    Button("追加済", systemImage: "plus") {}
+                        .buttonStyle(.borderless)
+                        .labelStyle(.titleOnly)
+                        .disabled(true)
+                        .padding(7)
+                        .background {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.systemGray5)
+                        }
+                } else {
+                    Button("追加", systemImage: "plus") {
+                        value.targets.append(addItem)
+                        addItem = ""
+                    }
+                    .buttonStyle(.borderless)
+                    .labelStyle(.titleOnly)
+                    .disabled(addItem.isEmpty)
+                    .padding(7)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.systemGray5)
+                    }
+
                 }
-                .font(.body.monospaced())
-                .frame(maxWidth: 50)
+            }
+            HStack {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(value.targets, id: \.self) { item in
+                            targetItemView  {
+                                value.targets.removeAll(where: { $0 == item })
+                            } leftLabel: {
+                                if item == "\n" {
+                                    Text("改行")
+                                } else {
+                                    Text(item)
+                                }
+                            } rightLabel: {
+                                Label("削除", systemImage: "xmark")
+                            }
+                        }
+                    }
+                }
+                if !value.targets.contains("\n") {
+                    Spacer()
+                    Divider()
+                    HStack {
+                        targetItemView  {
+                            value.targets.append("\n")
+                        } leftLabel: {
+                            Text("改行")
+                        } rightLabel: {
+                            Label("追加", systemImage: "plus")
+                        }
+                    }
+                }
             }
         }
         .onChange(of: value) {value in
@@ -263,6 +343,104 @@ private struct ActionScanItemEditor: View {
         }
     }
 }
+
+private struct ActionPairItemEditor: View {
+    struct Pair: Equatable, Hashable {
+        var first: String
+        var second: String
+    }
+    @Binding private var action: EditingCodableActionData
+    private let convert: ([Pair]) -> CodableActionData?
+    @State private var addFirstItem: String = ""
+    @State private var addSecondItem: String = ""
+    @State private var value: [Pair] = []
+
+    init(action: Binding<EditingCodableActionData>, initialValue: () -> [Pair]?, convert: @escaping ([Pair]) -> CodableActionData?) {
+        self.convert = convert
+        self._action = action
+        if let initialValue = initialValue() {
+            self._value = State(initialValue: initialValue)
+        }
+    }
+
+    func targetItemView(action: @escaping () -> (), leftLabel: () -> some View, rightLabel: () -> some View) -> some View {
+        HStack {
+            leftLabel()
+                .padding(.leading)
+            Divider()
+            Button {
+                action()
+            } label: {
+                rightLabel()
+                    .padding(.vertical, 7)
+                    .padding(.trailing, 7)
+                    .contentShape(Rectangle())
+            }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.borderless)
+        }
+        .background {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(Color.systemGray5)
+        }
+    }
+
+    var body: some View {
+        Group {
+            HStack {
+                TextField("置換前", text: $addFirstItem)
+                TextField("置換後", text: $addSecondItem)
+                if value.contains(where: { $0.first == addFirstItem }) {
+                    Button("追加済") {}
+                        .padding(.horizontal, 3)
+                        .padding(.vertical, 7)
+                        .background {
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.systemGray5)
+                        }
+                        .disabled(true) // addSecondItemは空白でも良い
+                } else {
+                    Button("追加") {
+                        self.value.append(.init(first: addFirstItem, second: addSecondItem))
+                        addFirstItem = ""
+                        addSecondItem = ""
+                    }
+                    .padding(.horizontal, 3)
+                    .padding(.vertical, 7)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.systemGray5)
+                    }
+                    .disabled(addFirstItem.isEmpty) // addSecondItemは空白でも良い
+                }
+            }
+            .textFieldStyle(.roundedBorder)
+            .submitLabel(.done)
+            .buttonStyle(.borderless)
+            HStack {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(self.value, id: \.self) { item in
+                            targetItemView  {
+                                value.removeAll(where: { $0 == item })
+                            } leftLabel: {
+                                Text(item.first + "→" + item.second)
+                            } rightLabel: {
+                                Label("削除", systemImage: "xmark")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .onChange(of: value) {value in
+            if let data = convert(value) {
+                action.data = data
+            }
+        }
+    }
+}
+
 
 private struct ActionEditTextField: View {
     private let title: LocalizedStringKey
@@ -318,6 +496,85 @@ private struct ActionEditIntegerTextField: View {
             .keyboardType(.numberPad)
             .textFieldStyle(.roundedBorder)
             .submitLabel(.done)
+    }
+}
+
+private struct ActionEditCandidateSelection: View {
+
+    private enum CandidateSelectionKeys: String, Equatable, Hashable, Sendable, CaseIterable {
+        case first, last, offset, exact
+        init(from selection: CandidateSelection) {
+            self = switch selection {
+            case .first:
+                .first
+            case .last:
+                .last
+            case .offset:
+                .offset
+            case .exact:
+                .exact
+            }
+        }
+    }
+
+    init(action: Binding<EditingCodableActionData>, initialValue: () -> CandidateSelection?) {
+        self._action = action
+        if let initialValue = initialValue() {
+            self._selectionType = State(initialValue: .init(from: initialValue))
+            switch initialValue {
+            case .first, .last:
+                self._integerValue = State(initialValue: "")
+            case .offset(let int), .exact(let int):
+                self._integerValue = State(initialValue: "\(int)")
+            }
+        }
+    }
+
+    @State private var selectionType: CandidateSelectionKeys = .first
+    @State private var integerValue = ""
+    @Binding private var action: EditingCodableActionData
+
+    private var resultCandidateSelection: CandidateSelection {
+        switch selectionType {
+        case .first:
+            .first
+        case .last:
+            .last
+        case .offset:
+            .offset(Int(self.integerValue) ?? 0)
+        case .exact:
+            .exact(Int(self.integerValue) ?? 0)
+        }
+    }
+
+    var body: some View {
+        Group {
+            Picker("選び方", selection: $selectionType) {
+                Text("最初の候補").tag(CandidateSelectionKeys.first)
+                Text("最後の候補").tag(CandidateSelectionKeys.last)
+                Text("絶対位置の候補").tag(CandidateSelectionKeys.exact)
+                Text("相対位置の候補").tag(CandidateSelectionKeys.offset)
+            }
+            switch self.selectionType {
+            case .first, .last: EmptyView()
+            case .offset:
+                IntegerTextField("値", text: $integerValue, range: .min ... .max)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+            case .exact:
+                IntegerTextField("値", text: $integerValue, range: 0 ... .max)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.done)
+            }
+        }
+        .onChange(of: integerValue) {value in
+            action.data = .selectCandidate(resultCandidateSelection)
+        }
+        .onChange(of: selectionType) {value in
+            action.data = .selectCandidate(resultCandidateSelection)
+        }
     }
 }
 
@@ -578,8 +835,14 @@ private struct ActionPicker: View {
                 Button("特定の文字まで移動") {
                     process(.smartMoveCursor(ScanItem(targets: ["。", "、", "\n"], direction: .backward)))
                 }
+                Button("末尾の文字を置換") {
+                    process(.replaceLastCharacters(["(^^)": "😄", "(TT)": "😭"]))
+                }
                 Button("片手モードをオン") {
                     process(.enableResizingMode)
+                }
+                Button("候補を選択") {
+                    process(.selectCandidate(.offset(1)))
                 }
                 Button("入力の確定") {
                     process(.complete)

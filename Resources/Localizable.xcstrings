@@ -5641,6 +5641,26 @@
         }
       }
     },
+    "候補を選択" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select candidate"
+          }
+        }
+      }
+    },
+    "値" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Value"
+          }
+        }
+      }
+    },
     "値が無効です。有効な数値を入力してください" : {
       "localizations" : {
         "en" : {
@@ -5904,6 +5924,16 @@
         }
       }
     },
+    "最初の候補" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select first candidate"
+          }
+        }
+      }
+    },
     "最初の候補を選択" : {
       "localizations" : {
         "en" : {
@@ -5958,6 +5988,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "最後の候補" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select last candidate"
           }
         }
       }
@@ -7156,6 +7196,16 @@
         }
       }
     },
+    "改行" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Newline"
+          }
+        }
+      }
+    },
     "改行キー" : {
       "localizations" : {
         "en" : {
@@ -7306,22 +7356,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zooming difficult letters"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "文字を置換" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Replace characters"
           }
         },
         "ja" : {
@@ -7785,6 +7819,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "末尾の文字を置換" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replace suffix characters"
           }
         }
       }
@@ -8528,12 +8572,12 @@
         }
       }
     },
-    "目指す文字（改行区切り）" : {
+    "目指す文字を追加" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Target characters (line-separated)"
+            "value" : "Add target character"
           }
         }
       }
@@ -8550,6 +8594,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "相対位置の候補" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select with relative position"
           }
         }
       }
@@ -8896,6 +8950,16 @@
         }
       }
     },
+    "絶対位置の候補" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select with absolute position"
+          }
+        }
+      }
+    },
     "編集" : {
       "localizations" : {
         "en" : {
@@ -9014,6 +9078,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "置換前" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before"
+          }
+        }
+      }
+    },
+    "置換後" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After"
           }
         }
       }
@@ -9823,6 +9907,16 @@
         }
       }
     },
+    "追加済" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added"
+          }
+        }
+      }
+    },
     "通常キーの背景色" : {
       "localizations" : {
         "en" : {
@@ -9877,6 +9971,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "azooKey can now utilize contact information!"
+          }
+        }
+      }
+    },
+    "選び方" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position Specification"
           }
         }
       }
