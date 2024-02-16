@@ -1,0 +1,3 @@
+[submodule "azooKey_dictionary_storage"]
+	path = azooKey_dictionary_storage
+	url = https://github.com/ensan-hcl/azooKey_dictionary_storage
