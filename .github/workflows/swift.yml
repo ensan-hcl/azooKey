@@ -18,11 +18,14 @@ jobs:
     - uses: swift-actions/setup-swift@cdbe0f7f4c77929b6580e71983e8606e55ffe7e4
       with:
         swift-version: "5.9"
+
     - uses: actions/checkout@v4
       with:
         submodules: true
+
     - name: Build
       # TODO: add KeyboardViews
       run: swift build --package-path AzooKeyCore --target SwiftUIUtils;swift build --package-path AzooKeyCore --target KeyboardThemes
+
     - name: Run tests
       run: echo "There is no test suits yet"
