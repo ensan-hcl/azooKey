@@ -114,6 +114,7 @@ import UIKit
             dictionaryResourceURL: Self.dictionaryResourceURL,
             memoryDirectoryURL: Self.memoryDirectoryURL,
             sharedContainerURL: Self.sharedContainerURL,
+            textReplacer: self.textReplacer,
             metadata: .init(appVersionString: SharedStore.currentAppVersion?.description ?? "Unknown")
         )
     }
@@ -184,7 +185,18 @@ import UIKit
     /// かな漢字変換を受け持つ変換器。
     private var kanaKanjiConverter = KanaKanjiConverter()
     /// 置換機
-    private var textReplacer = TextReplacer()
+    private var textReplacer = TextReplacer(emojiDataProvider: {
+        // 読み込むファイルはバージョンごとに変更する必要がある
+        if #available(iOS 17.4, *) {
+            Bundle.main.bundleURL.appendingPathComponent("emoji_all_E15.1.txt.gen", isDirectory: false)
+        } else if #available(iOS 16.4, *) {
+            Bundle.main.bundleURL.appendingPathComponent("emoji_all_E15.0.txt.gen", isDirectory: false)
+        } else if #available(iOS 15.4, *) {
+            Bundle.main.bundleURL.appendingPathComponent("emoji_all_E14.0.txt.gen", isDirectory: false)
+        } else {
+            Bundle.main.bundleURL.appendingPathComponent("emoji_all_E13.1.txt.gen", isDirectory: false)
+        }
+    })
 
     func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.kanaKanjiConverter.sendToDicdataStore(data)
