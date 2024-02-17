@@ -2,16 +2,16 @@
 # Please refer to the following link for guidance:
 # https://zenn.dev/articles/how-to-build-ios-app-in-github-actions
 
-name: Build
+name: Upload build to App Store Connect
 
 on:
   push:
     branches:
       - develop
 
-jobs:          
-  build:
-    name: Build
+jobs:
+  build_and_upload:
+    name: Build and Upload to App Store Connect
     runs-on: macos-14
 
     steps:
