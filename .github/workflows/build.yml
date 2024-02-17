@@ -1,3 +1,7 @@
+# It is necessary to configure secrets for this workflow.
+# Please refer to the following link for guidance:
+# https://zenn.dev/articles/how-to-build-ios-app-in-github-actions
+
 name: Build
 
 on:
