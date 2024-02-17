@@ -41,7 +41,9 @@ struct AdditionalSystemDictManager: OnOffSettingSet {
         var dictFileIdentifiers: [String] {
             switch self {
             case .emoji:
-                if #available(iOS 16.4, *) {
+                if #available(iOS 17.4, *) {
+                    return ["emoji_dict_E15.1.txt.gen"]
+                } else if #available(iOS 16.4, *) {
                     return ["emoji_dict_E15.0.txt.gen"]
                 } else {
                     return ["emoji_dict_E14.0.txt.gen"]
