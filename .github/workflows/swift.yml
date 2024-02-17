@@ -23,6 +23,15 @@ jobs:
       with:
         submodules: true
 
+    - uses: actions/cache@v4
+      with:
+        path: |
+          .build
+          ~/Library/Caches/org.swift.swiftpm
+        key: ${{ runner.os }}-swift-${{ hashFiles('**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-swift-
+
     - name: Build
       # TODO: add KeyboardViews
       run: swift build --package-path AzooKeyCore --target SwiftUIUtils;swift build --package-path AzooKeyCore --target KeyboardThemes
