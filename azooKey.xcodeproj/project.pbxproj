@@ -178,6 +178,12 @@
 		55950E542AF8E09400ACACAB /* KeyboardExtensionUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 55950E532AF8E09400ACACAB /* KeyboardExtensionUtils */; };
 		5598472E2AB84F5200B18C15 /* PredictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5598472D2AB84F5200B18C15 /* PredictionManager.swift */; };
 		55EE424B2B8091B400C75B3D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 55EE424A2B8091B400C75B3D /* PrivacyInfo.xcprivacy */; };
+		55EE424F2B80B03400C75B3D /* emoji_all_E15.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 55EE424C2B80B03400C75B3D /* emoji_all_E15.1.txt.gen */; };
+		55EE42502B80B03400C75B3D /* emoji_all_E15.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 55EE424C2B80B03400C75B3D /* emoji_all_E15.1.txt.gen */; };
+		55EE42512B80B03400C75B3D /* emoji_dict_E15.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 55EE424D2B80B03400C75B3D /* emoji_dict_E15.1.txt.gen */; };
+		55EE42522B80B03400C75B3D /* emoji_dict_E15.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 55EE424D2B80B03400C75B3D /* emoji_dict_E15.1.txt.gen */; };
+		55EE42532B80B03400C75B3D /* emoji_genre_E15.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 55EE424E2B80B03400C75B3D /* emoji_genre_E15.1.txt.gen */; };
+		55EE42542B80B03400C75B3D /* emoji_genre_E15.1.txt.gen in Resources */ = {isa = PBXBuildFile; fileRef = 55EE424E2B80B03400C75B3D /* emoji_genre_E15.1.txt.gen */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -374,6 +380,9 @@
 		557D9E032ABF3E350028F3A0 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5598472D2AB84F5200B18C15 /* PredictionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionManager.swift; sourceTree = "<group>"; };
 		55EE424A2B8091B400C75B3D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		55EE424C2B80B03400C75B3D /* emoji_all_E15.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_all_E15.1.txt.gen; path = Gen/generated/emoji_all_E15.1.txt.gen; sourceTree = SOURCE_ROOT; };
+		55EE424D2B80B03400C75B3D /* emoji_dict_E15.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_dict_E15.1.txt.gen; path = Gen/generated/emoji_dict_E15.1.txt.gen; sourceTree = SOURCE_ROOT; };
+		55EE424E2B80B03400C75B3D /* emoji_genre_E15.1.txt.gen */ = {isa = PBXFileReference; lastKnownFileType = file; name = emoji_genre_E15.1.txt.gen; path = Gen/generated/emoji_genre_E15.1.txt.gen; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -499,12 +508,15 @@
 				1A1A62F329C8BCD300EF7B26 /* emoji_all_E13.1.txt.gen */,
 				1A1A62F629C8BCD400EF7B26 /* emoji_all_E14.0.txt.gen */,
 				1A1A62F229C8BCD300EF7B26 /* emoji_all_E15.0.txt.gen */,
+				55EE424C2B80B03400C75B3D /* emoji_all_E15.1.txt.gen */,
 				1A1A62F129C8BCD300EF7B26 /* emoji_genre_E13.1.txt.gen */,
 				1A1A62F429C8BCD300EF7B26 /* emoji_genre_E14.0.txt.gen */,
 				1A1A62F529C8BCD300EF7B26 /* emoji_genre_E15.0.txt.gen */,
+				55EE424E2B80B03400C75B3D /* emoji_genre_E15.1.txt.gen */,
 				1A1A630629C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen */,
 				1A1A630529C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen */,
 				1A1A630729C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen */,
+				55EE424D2B80B03400C75B3D /* emoji_dict_E15.1.txt.gen */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1162,6 +1174,7 @@
 				1A1A62FD29C8BCD400EF7B26 /* emoji_genre_E14.0.txt.gen in Resources */,
 				1ACEEFF72566786A00899DA2 /* kaomoji_dict.tsv in Resources */,
 				1A1A62FF29C8BCD400EF7B26 /* emoji_genre_E15.0.txt.gen in Resources */,
+				55EE424F2B80B03400C75B3D /* emoji_all_E15.1.txt.gen in Resources */,
 				1A1A62F929C8BCD400EF7B26 /* emoji_all_E15.0.txt.gen in Resources */,
 				1A3DC1D22500D44E002CAA93 /* LaunchScreen.storyboard in Resources */,
 				557D9E012ABF320F0028F3A0 /* Localizable.xcstrings in Resources */,
@@ -1172,9 +1185,11 @@
 				1AF679B625CEE92600F3987B /* Designs.xcassets in Resources */,
 				1A1A630C29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */,
 				1A1A62F729C8BCD400EF7B26 /* emoji_genre_E13.1.txt.gen in Resources */,
+				55EE42532B80B03400C75B3D /* emoji_genre_E15.1.txt.gen in Resources */,
 				1A60058525275CB9008E2B92 /* Settings.bundle in Resources */,
 				1AF6A55925FE0DA70037D5ED /* charID.chid in Resources */,
 				1A1A630A29C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen in Resources */,
+				55EE42512B80B03400C75B3D /* emoji_dict_E15.1.txt.gen in Resources */,
 				1A3DC1CF2500D44E002CAA93 /* Preview Assets.xcassets in Resources */,
 				55EE424B2B8091B400C75B3D /* PrivacyInfo.xcprivacy in Resources */,
 				1A3DC1CC2500D44E002CAA93 /* Assets.xcassets in Resources */,
@@ -1204,12 +1219,15 @@
 				1A1A630D29C9C91A00EF7B26 /* emoji_dict_E15.0.txt.gen in Resources */,
 				1A1A62FA29C8BCD400EF7B26 /* emoji_all_E15.0.txt.gen in Resources */,
 				1A1A62FE29C8BCD400EF7B26 /* emoji_genre_E14.0.txt.gen in Resources */,
+				55EE42502B80B03400C75B3D /* emoji_all_E15.1.txt.gen in Resources */,
 				1A1A630B29C9C91A00EF7B26 /* emoji_dict_E13.1.txt.gen in Resources */,
 				1A1A630929C9C91A00EF7B26 /* emoji_dict_E14.0.txt.gen in Resources */,
 				1A1A62F829C8BCD400EF7B26 /* emoji_genre_E13.1.txt.gen in Resources */,
 				1A09112C2A20B13C00ABFC72 /* Dictionary in Resources */,
 				1A1A62FC29C8BCD400EF7B26 /* emoji_all_E13.1.txt.gen in Resources */,
 				1A1A630029C8BCD400EF7B26 /* emoji_genre_E15.0.txt.gen in Resources */,
+				55EE42522B80B03400C75B3D /* emoji_dict_E15.1.txt.gen in Resources */,
+				55EE42542B80B03400C75B3D /* emoji_genre_E15.1.txt.gen in Resources */,
 				1AC03159251103EF004CA505 /* Designs.xcassets in Resources */,
 				557D9E022ABF320F0028F3A0 /* Localizable.xcstrings in Resources */,
 				1A7F547126A96A5F0032E91E /* AzooKeyIcon-Regular.otf in Resources */,
