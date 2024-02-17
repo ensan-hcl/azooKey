@@ -538,7 +538,7 @@ struct QwertyDataProvider<Extension: ApplicationSpecificKeyboardViewExtension> {
                     (label: .text("!"), actions: [.input("!")] )
                 ]),
                 for: (7, 5)),
-            QwertyKeyModel(labelType: .text("・"), pressActions: [.input("…")], for: (7, 5)),
+            QwertyKeyModel(labelType: .text("…"), pressActions: [.input("…")], for: (7, 5)),
             QwertyFunctionalKeyModel.delete
         ],
         [
