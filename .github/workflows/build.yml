@@ -1,0 +1,65 @@
+# It is necessary to configure secrets for this workflow.
+# Please refer to the following link for guidance:
+# https://zenn.dev/articles/how-to-build-ios-app-in-github-actions
+
+name: Build
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:          
+  build:
+    name: Build
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Build Project
+        run: |
+          xcodebuild build -project azooKey.xcodeproj \
+                     -scheme MainApp \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     CODE_SIGNING_ALLOWED=NO \
+
+      - name: Archive Project
+        run: |                        
+          xcodebuild archive -project azooKey.xcodeproj \
+                             -scheme MainApp \
+                             -sdk iphoneos \
+                             -configuration Release \
+                             -archivePath azooKey.xcarchive \
+                             CODE_SIGNING_ALLOWED=NO
+
+      - name: Create ExportOptions.plist
+        run: |
+          echo '${{ secrets.EXPORT_OPTIONS }}' > ExportOptions.plist
+
+      - name: Create Private Key
+        run: |
+          mkdir private_keys
+          echo -n '${{ secrets.APPLE_API_KEY }}' | base64 --decode > ./private_keys/AuthKey_${{ secrets.APPLE_API_ISSUER_ID }}.p8
+
+      - name: Export IPA
+        run: |   
+          xcodebuild -exportArchive \
+                     -archivePath azooKey.xcarchive \
+                     -exportOptionsPlist ExportOptions.plist \
+                     -exportPath app.ipa \
+                     -allowProvisioningUpdates \
+                     -authenticationKeyPath `pwd`/private_keys/AuthKey_${{ secrets.APPLE_API_ISSUER_ID }}.p8 \
+                     -authenticationKeyID ${{ secrets.APPLE_API_KEY_ID }} \
+                     -authenticationKeyIssuerID ${{ secrets.APPLE_API_ISSUER_ID }}
+
+      - name: Upload IPA to App Store Connect
+        run: |
+          xcrun altool --upload-app -f app.ipa/azookey.ipa \
+                       -u ${{ secrets.APPLE_ID }} \
+                       -p ${{ secrets.APP_SPECIFIC_PASSWORD }} \
+                       --type ios
