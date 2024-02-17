@@ -14,6 +14,50 @@ import SwiftUI
 import SwiftUIUtils
 import SwiftUtils
 
+private extension Custard {
+    var userMadeTenKeyCustard: UserMadeTenKeyCustard? {
+        guard self.interface.keyStyle == .tenkeyStyle else {
+            return nil
+        }
+        guard case let .gridFit(layout) = self.interface.keyLayout else {
+            return nil
+        }
+        var keys: [KeyPosition: UserMadeTenKeyCustard.KeyData] = [:]
+        // empty keysは「キー情報のない位置」とする
+        var emptyKeys = Set<KeyPosition>()
+        for (position, key) in self.interface.keys {
+            guard case let .gridFit(value) = position else {
+                // エラーでもいいかもしれない
+                continue
+            }
+            guard value.width > 0 && value.height > 0 else {
+                continue
+            }
+            keys[.gridFit(x: value.x, y: value.y)] = .init(model: key, width: value.width, height: value.height)
+            // 削除を反映する
+            // empty keysには消えるやつだけ残っていて欲しい
+            for px in value.x ..< value.x + value.width {
+                for py in value.y ..< value.y + value.height {
+                    if px == value.x && py == value.y {
+                        continue
+                    }
+                    emptyKeys.update(with: .gridFit(x: px, y: py))
+                }
+            }
+        }
+        return UserMadeTenKeyCustard(
+            tabName: self.identifier,
+            rowCount: layout.rowCount.description,
+            columnCount: layout.columnCount.description,
+            inputStyle: self.input_style,
+            language: self.language,
+            keys: keys,
+            emptyKeys: emptyKeys,
+            addTabBarAutomatically: true
+        )
+    }
+}
+
 fileprivate extension CustardLanguage {
     var label: LocalizedStringKey {
         switch self {
@@ -125,6 +169,9 @@ struct CustardInformationView: View {
                         NavigationLink("編集する", destination: EditingTenkeyCustardView(manager: $manager, editingItem: value))
                             .foregroundStyle(.accentColor)
                     }
+                } else if let editingItem = custard.userMadeTenKeyCustard {
+                    NavigationLink("編集する", destination: EditingTenkeyCustardView(manager: $manager, editingItem: editingItem))
+                        .foregroundStyle(.accentColor)
                 }
             }
             if added || manager.checkTabExistInTabBar(tab: .custom(custard.identifier)) {
