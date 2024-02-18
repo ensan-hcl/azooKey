@@ -11,7 +11,7 @@ import SwiftUI
 import SwiftUIUtils
 
 @MainActor
-struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
+public struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let model: any SimpleKeyModelProtocol<Extension>
     @EnvironmentObject private var variableStates: VariableStates
     @Environment(Extension.Theme.self) private var theme
@@ -39,7 +39,7 @@ struct SimpleKeyView<Extension: ApplicationSpecificKeyboardViewExtension>: View 
         model.label(width: keyViewWidth, states: variableStates)
     }
 
-    var body: some View {
+    public var body: some View {
         label(width: keyViewWidth)
             .background(
                 RoundedRectangle(cornerRadius: 6)

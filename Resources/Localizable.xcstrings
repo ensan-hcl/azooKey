@@ -5295,22 +5295,6 @@
         }
       }
     },
-    "一行ずつ登録したい文字や単語を入力してください" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "List up letters and sentences you want to use in this custom tab in line-separated format"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "一覧" : {
       "localizations" : {
         "en" : {
@@ -8568,6 +8552,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "登録する文字" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Words to append"
           }
         }
       }

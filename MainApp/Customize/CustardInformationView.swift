@@ -22,7 +22,7 @@ private extension Custard {
         guard case let .gridFit(layout) = self.interface.keyLayout else {
             return nil
         }
-        var keys: [KeyPosition: UserMadeTenKeyCustard.KeyData] = [:]
+        var keys: [KeyPosition: UserMadeKeyData] = [:]
         // empty keysは「キー情報のない位置」とする
         var emptyKeys = Set<KeyPosition>()
         for (position, key) in self.interface.keys {

@@ -336,31 +336,66 @@ struct CustomKeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>: 
                 }
             }
         case let .gridScroll(value):
-            let height = tabDesign.keysHeight
-            let models = (0..<custard.interface.keys.count).compactMap {custard.interface.keys[.gridScroll(GridScrollPositionSpecifier($0))]}
-            switch value.direction {
-            case .vertical:
-                let gridItem = GridItem(.fixed(tabDesign.keyViewWidth), spacing: tabDesign.horizontalSpacing / 2)
-                ScrollView(.vertical) {
-                    LazyVGrid(columns: Array(repeating: gridItem, count: Int(value.rowCount)), spacing: tabDesign.verticalSpacing / 2) {
-                        ForEach(0..<models.count, id: \.self) {i in
-                            SimpleKeyView<Extension>(model: models[i].simpleKeyModel(extension: Extension.self), tabDesign: tabDesign)
-                        }
-                    }
-                }.frame(height: height)
-            case .horizontal:
-                let gridItem = GridItem(.fixed(tabDesign.keyViewHeight), spacing: tabDesign.verticalSpacing / 2)
-                ScrollView(.horizontal) {
-                    LazyHGrid(rows: Array(repeating: gridItem, count: Int(value.columnCount)), spacing: tabDesign.horizontalSpacing / 2) {
-                        ForEach(0..<models.count, id: \.self) {i in
-                            SimpleKeyView<Extension>(model: models[i].simpleKeyModel(extension: Extension.self), tabDesign: tabDesign)
-                        }
-                    }
-                }.frame(height: height)
+            let models = (0..<custard.interface.keys.count).compactMap { index in
+                (custard.interface.keys[.gridScroll(GridScrollPositionSpecifier(index))]).map {($0, index)}
+            }
+            CustardScrollKeysView<Extension, Int, _>(models: models, tabDesign: tabDesign, layout: value) { (view, _) in
+                view
             }
         }
     }
 }
+
+public struct CustardScrollKeysView<Extension: ApplicationSpecificKeyboardViewExtension, ID: Hashable, Content: View>: View {
+    public init(models: [(CustardInterfaceKey, ID)], tabDesign: TabDependentDesign, layout: CustardInterfaceLayoutScrollValue, @ViewBuilder generator: @escaping (_ view: SimpleKeyView<Extension>, _ id: ID) -> (Content)) {
+        self.models = models
+        self.tabDesign = tabDesign
+        self.layout = layout
+        self.contentGenerator = generator
+    }
+
+    private let contentGenerator: (_ view: SimpleKeyView<Extension>, _ id: ID) -> (Content)
+    private let models: [(CustardInterfaceKey, ID)]
+    private let tabDesign: TabDependentDesign
+    private let layout: CustardInterfaceLayoutScrollValue
+
+    public var body: some View {
+        let height = tabDesign.keysHeight
+        switch layout.direction {
+        case .vertical:
+            let gridItem = GridItem(.fixed(tabDesign.keyViewWidth), spacing: tabDesign.horizontalSpacing / 2)
+            ScrollView(.vertical) {
+                LazyVGrid(columns: Array(repeating: gridItem, count: Int(layout.rowCount)), spacing: tabDesign.verticalSpacing / 2) {
+                    ForEach(models, id: \.1) {(model, id) in
+                        contentGenerator(
+                            SimpleKeyView<Extension>(
+                                model: model.simpleKeyModel(extension: Extension.self),
+                                tabDesign: tabDesign
+                            ),
+                            id
+                        )
+                    }
+                }
+            }.frame(height: height)
+        case .horizontal:
+            let gridItem = GridItem(.fixed(tabDesign.keyViewHeight), spacing: tabDesign.verticalSpacing / 2)
+            ScrollView(.horizontal) {
+                LazyHGrid(rows: Array(repeating: gridItem, count: Int(layout.columnCount)), spacing: tabDesign.horizontalSpacing / 2) {
+                    ForEach(models, id: \.1) {(model, id) in
+                        contentGenerator(
+                            SimpleKeyView<Extension>(
+                                model: model.simpleKeyModel(extension: Extension.self),
+                                tabDesign: tabDesign
+                            ),
+                            id
+                        )
+                    }
+                }
+            }.frame(height: height)
+        }
+    }
+}
+
 
 public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExtension, Content: View>: View {
     @State private var suggestState = FlickSuggestState()

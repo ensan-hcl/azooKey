@@ -377,14 +377,30 @@ struct CustardInterfaceKeyEditor: View {
     @Binding private var width: Int
     @Binding private var height: Int
     private let intStringConverter = IntStringConversion.self
+    private let target: Target
 
     @State private var selectedPosition: FlickKeyPosition = .center
     @State private var bottomSheetShown = false
 
-    init(data: Binding<UserMadeTenKeyCustard.KeyData>) {
+    enum Target {
+        /// フリック用のカスタムキーの編集画面
+        case flick
+        /// スクロール用のカスタムキーの編集画面
+        /// バリエーションを表示しない
+        case simple
+        // TODO: Qwerty用のカスタムキーの編集画面を統合する？
+    }
+
+    init(data: Binding<UserMadeKeyData>, target: Target = .flick) {
         self._key = data.model
         self._width = data.width
         self._height = data.height
+        self.target = target
+        switch target {
+        case .flick: break
+        case .simple:
+            self._bottomSheetShown = .init(initialValue: true)
+        }
     }
 
     @MainActor private var screenWidth: CGFloat { UIScreen.main.bounds.width }
@@ -401,9 +417,14 @@ struct CustardInterfaceKeyEditor: View {
             VStack {
                 switch key {
                 case let .custom(value):
-                    Text("編集したい方向を選択してください。")
-                        .padding(.vertical)
-                    keysView(key: value)
+                    switch target {
+                    case .flick:
+                        Text("編集したい方向を選択してください。")
+                            .padding(.vertical)
+                        flickKeysView(key: value)
+                    case .simple:
+                        keyView(key: value, position: .center)
+                    }
                     BottomSheetView(isOpen: self.$bottomSheetShown, maxHeight: geometry.size.height * 0.7) {
                         customKeyEditor(position: selectedPosition)
                     }
@@ -462,8 +483,13 @@ struct CustardInterfaceKeyEditor: View {
             Section {
                 keyPicker
             }
-            Section(header: Text("キーのサイズ")) {
-                sizePicker
+            switch target {
+            case .flick:
+                Section(header: Text("キーのサイズ")) {
+                    sizePicker
+                }
+            case .simple:
+                EmptyView()
             }
             Section {
                 Button("リセット") {
@@ -584,18 +610,23 @@ struct CustardInterfaceKeyEditor: View {
                     .foregroundStyle(.accentColor)
             }
 
-            if position == .center {
-                Section(header: Text("キーのサイズ")) {
-                    sizePicker
+            switch target {
+            case .flick:
+                if position == .center {
+                    Section(header: Text("キーのサイズ")) {
+                        sizePicker
+                    }
                 }
-                Section {
-                    keyPicker
-                }
-                Section {
-                    Button("リセット") {
-                        key = .custom(.empty)
-                    }.foregroundStyle(.red)
-                }
+            case .simple:
+                EmptyView()
+            }
+            Section {
+                keyPicker
+            }
+            Section {
+                Button("リセット") {
+                    key = .custom(.empty)
+                }.foregroundStyle(.red)
             }
             if let direction = position.flickDirection {
                 Button("クリア") {
@@ -607,7 +638,7 @@ struct CustardInterfaceKeyEditor: View {
         }
     }
 
-    @MainActor private func keysView(key: CustardInterfaceCustomKey) -> some View {
+    @ViewBuilder @MainActor private func flickKeysView(key: CustardInterfaceCustomKey) -> some View {
         VStack {
             keyView(key: key, position: .top)
             HStack {

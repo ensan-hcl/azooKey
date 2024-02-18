@@ -18,7 +18,7 @@ extension CustardInterfaceCustomKey {
     static let empty: Self = .init(design: .init(label: .text(""), color: .normal), press_actions: [], longpress_actions: .none, variations: [])
 }
 
-fileprivate extension Dictionary where Key == KeyPosition, Value == UserMadeTenKeyCustard.KeyData {
+fileprivate extension Dictionary where Key == KeyPosition, Value == UserMadeKeyData {
     subscript(key: Key) -> Value {
         get {
             self[key, default: .init(model: .custom(.empty), width: 1, height: 1)]
@@ -31,8 +31,8 @@ fileprivate extension Dictionary where Key == KeyPosition, Value == UserMadeTenK
 
 @MainActor
 struct EditingTenkeyCustardView: CancelableEditor {
-    private static let emptyKey: UserMadeTenKeyCustard.KeyData = .init(model: .custom(.empty), width: 1, height: 1)
-    private static let emptyKeys: [KeyPosition: UserMadeTenKeyCustard.KeyData] = (0..<5).reduce(into: [:]) {dict, x in
+    private static let emptyKey: UserMadeKeyData = .init(model: .custom(.empty), width: 1, height: 1)
+    private static let emptyKeys: [KeyPosition: UserMadeKeyData] = (0..<5).reduce(into: [:]) {dict, x in
         (0..<4).forEach {y in
             dict[.gridFit(x: x, y: y)] = emptyKey
         }
@@ -46,7 +46,7 @@ struct EditingTenkeyCustardView: CancelableEditor {
     @State private var editingItem: UserMadeTenKeyCustard
     @Binding private var manager: CustardManager
     @State private var showPreview = false
-    @State private var copiedKey: UserMadeTenKeyCustard.KeyData?
+    @State private var copiedKey: UserMadeKeyData?
     private var models: [KeyPosition: (model: any FlickKeyModelProtocol<AzooKeyKeyboardViewExtension>, width: Int, height: Int)] {
         (0..<layout.rowCount).reduce(into: [:]) {dict, x in
             (0..<layout.columnCount).forEach {y in

@@ -9,6 +9,7 @@
 import AzooKeyUtils
 import CustardKit
 import Foundation
+import UniformTypeIdentifiers
 import KeyboardViews
 import SwiftUI
 import SwiftUIUtils
@@ -25,14 +26,25 @@ fileprivate extension CustardInterfaceLayoutScrollValue.ScrollDirection {
     }
 }
 
+@MainActor
 struct EditingScrollCustardView: CancelableEditor {
-    private static let `default`: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [
-        .gridScroll(0): .system(.changeKeyboard),
-        .gridScroll(1): .custom(.init(design: .init(label: .systemImage("list.bullet"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])),
-        .gridScroll(2): .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])),
-        .gridScroll(3): .system(.enter)
-    ]
-    private static let emptyItem: UserMadeGridScrollCustard = .init(tabName: "", direction: .vertical, columnCount: "", rowCount: "", words: "é\n√\nπ\nΩ", addTabBarAutomatically: true)
+    private static let emptyItem: UserMadeGridScrollCustard = .init(
+        tabName: "",
+        direction: .vertical,
+        columnCount: "4",
+        rowCount: "4",
+        keys: [
+            .init(model: .system(.changeKeyboard), width: 1, height: 1),
+            .init(model: .custom(.init(design: .init(label: .systemImage("list.bullet"), color: .special), press_actions: [.toggleTabBar], longpress_actions: .none, variations: [])), width: 1, height: 1),
+            .init(model: .custom(.init(design: .init(label: .systemImage("delete.left"), color: .special), press_actions: [.delete(1)], longpress_actions: .init(repeat: [.delete(1)]), variations: [])), width: 1, height: 1),
+            .init(model: .system(.enter), width: 1, height: 1),
+            .init(model: .custom(.init(design: .init(label: .text("おはよう"), color: .normal), press_actions: [.input("おはよう")], longpress_actions: .none, variations: [])), width: 1, height: 1),
+            .init(model: .custom(.init(design: .init(label: .text("こんにちは"), color: .normal), press_actions: [.input("こんにちは")], longpress_actions: .none, variations: [])), width: 1, height: 1),
+            .init(model: .custom(.init(design: .init(label: .text("おつかれさま"), color: .normal), press_actions: [.input("おつかれさま")], longpress_actions: .none, variations: [])), width: 1, height: 1),
+            .init(model: .custom(.init(design: .init(label: .text("おやすみ"), color: .normal), press_actions: [.input("おやすみ")], longpress_actions: .none, variations: [])), width: 1, height: 1),
+        ],
+        addTabBarAutomatically: true
+    )
     let base: UserMadeGridScrollCustard
 
     @Environment(\.dismiss) private var dismiss
@@ -40,11 +52,18 @@ struct EditingScrollCustardView: CancelableEditor {
     @State private var showPreview = false
     @State private var editingItem: UserMadeGridScrollCustard
     @Binding private var manager: CustardManager
+    @State private var addingItem = ""
+    @State private var dragFrom: UUID?
+    @StateObject private var variableStates = VariableStates(clipboardHistoryManagerConfig: ClipboardHistoryManagerConfig(), tabManagerConfig: TabManagerConfig(), userDefaults: UserDefaults.standard)
 
     init(manager: Binding<CustardManager>, editingItem: UserMadeGridScrollCustard? = nil) {
         self._manager = manager
         self.base = editingItem ?? Self.emptyItem
         self._editingItem = State(initialValue: self.base)
+    }
+    
+    private var interfaceSize: CGSize {
+        .init(width: UIScreen.main.bounds.width, height: Design.keyboardHeight(screenWidth: UIScreen.main.bounds.width, orientation: MainAppDesign.keyboardOrientation))
     }
 
     var body: some View {
@@ -86,7 +105,6 @@ struct EditingScrollCustardView: CancelableEditor {
                 }
             }
             HStack {
-                Text("一行ずつ登録したい文字や単語を入力してください")
                 Spacer()
                 if showPreview {
                     Button("閉じる", systemImage: "xmark.circle") {
@@ -95,6 +113,7 @@ struct EditingScrollCustardView: CancelableEditor {
                     .font(.title)
                 } else {
                     Button("プレビュー", systemImage: "eye") {
+                        UIApplication.shared.closeKeyboard()
                         showPreview = true
                     }
                     .font(.title)
@@ -105,8 +124,77 @@ struct EditingScrollCustardView: CancelableEditor {
             if showPreview {
                 KeyboardPreview(defaultTab: .custard(makeCustard(data: editingItem)))
             } else {
-                TextEditor(text: $editingItem.words)
-                    .frame(maxHeight: .infinity)
+                HStack {
+                    TextField("登録する文字", text: $addingItem)
+                        .textFieldStyle(.roundedBorder)
+                        .submitLabel(.done)
+                    Button("追加", systemImage: "plus") {
+                        guard !self.addingItem.isEmpty else {
+                            return
+                        }
+                        self.editingItem.keys.append(
+                            .init(
+                                model: .custom(
+                                    .init(
+                                        design: .init(label: .text(addingItem), color: .normal),
+                                        press_actions: [.input(addingItem)],
+                                        longpress_actions: .none,
+                                        variations: []
+                                    )
+                                ),
+                                width: 1,
+                                height: 1
+                            )
+                        )
+                        self.addingItem = ""
+                    }
+                    .disabled(self.addingItem.isEmpty)
+                    .labelStyle(.titleOnly)
+                    .padding(.horizontal, 3)
+                    .padding(.vertical, 7)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.systemGray5)
+                    }
+                }
+                .padding(.horizontal, 5)
+                CustardScrollKeysView<AzooKeyKeyboardViewExtension, UUID, _>(
+                    models: self.editingItem.keys.map {
+                        ($0.model, $0.id)
+                    },
+                    tabDesign: .init(width: Double(editingItem.rowCount) ?? 4, height: Double(editingItem.columnCount) ?? 8, interfaceSize: interfaceSize, orientation: .vertical),
+                    layout: .init(
+                            direction: editingItem.direction,
+                            rowCount: Double(editingItem.rowCount) ?? 4,
+                            columnCount: Double(editingItem.columnCount) ?? 8
+                        )
+                    ) {(view, keyId) in
+                        if let itemIndex = editingItem.keys.firstIndex(where: {$0.id == keyId}) {
+                            NavigationLink(destination: CustardInterfaceKeyEditor(data: $editingItem.keys[itemIndex], target: .simple)) {
+                                view.disabled(true)
+                            }
+                            .onDrag {
+                                self.dragFrom = keyId
+                                return NSItemProvider(contentsOf: URL(string: "\(keyId)")!)!
+                            }
+                            .onDrop(of: [.url], delegate: DropViewDelegate {
+                                //from
+                                guard let fromIndex = editingItem.keys.firstIndex (where: {$0.id == self.dragFrom}),
+                                      let toIndex = editingItem.keys.firstIndex (where: {$0.id == keyId}) else {
+                                    return
+                                }
+                                editingItem.keys.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
+                            })
+                            .contextMenu {
+                                Button("削除する", systemImage: "trash", role: .destructive) {
+                                    self.editingItem.keys.removeAll {
+                                        $0.id == keyId
+                                    }
+                                }
+                            }
+                        }
+                  }
+                    .environmentObject(variableStates)
             }
         }
         .background(Color.secondarySystemBackground)
@@ -127,25 +215,11 @@ struct EditingScrollCustardView: CancelableEditor {
     }
 
     private func makeCustard(data: UserMadeGridScrollCustard) -> Custard {
-        var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = Self.default
-        // TODO: ここで「|」および「\|」が特殊な動作に充てられていることを明確化する
-        for substring in data.words.split(separator: "\n") {
-            let target = substring.components(separatedBy: "\\|").map {$0.components(separatedBy: "|")}.reduce(into: [String]()) {array, value in
-                if let last = array.last, let first = value.first {
-                    array.removeLast()
-                    array.append([last, first].joined(separator: "|"))
-                    array.append(contentsOf: value.dropFirst())
-                } else {
-                    array.append(contentsOf: value)
-                }
-            }
-            guard let input = target.first else {
-                continue
-            }
-            let label = target.count > 1 ? target[1] : input
-            keys[.gridScroll(.init(keys.count))] = .custom(.init(design: .init(label: .text(label), color: .normal), press_actions: [.input(input)], longpress_actions: .none, variations: []))
+        var keys: [CustardKeyPositionSpecifier: CustardInterfaceKey] = [:]
+        for (index, keyData) in zip(data.keys.indices, data.keys) {
+            let position: CustardKeyPositionSpecifier = .gridScroll(GridScrollPositionSpecifier(index))
+            keys[position] = keyData.model
         }
-
         let rowCount = max(Double(data.rowCount) ?? 8, 1)
         let columnCount = max(Double(data.columnCount) ?? 4, 1)
         return Custard(
@@ -176,5 +250,23 @@ struct EditingScrollCustardView: CancelableEditor {
 
     func cancel() {
         self.dismiss()
+    }
+}
+
+private struct DropViewDelegate: DropDelegate {
+    let onMove: () -> ()
+
+    func performDrop(info: DropInfo) -> Bool {
+        return true
+    }
+
+    func dropEntered(info: DropInfo) {
+        withAnimation(.default) {
+            self.onMove()
+        }
+    }
+
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        return DropProposal(operation: .move)
     }
 }
