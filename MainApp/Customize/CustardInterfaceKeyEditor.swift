@@ -421,7 +421,7 @@ struct CustardInterfaceKeyEditor: View {
 
     private var keyPicker: some View {
         Picker("キーの種類", selection: $key) {
-            if [CustardInterfaceKey.system(.enter), .custom(.flickSpace()), .custom(.flickDelete()), .system(.changeKeyboard), .system(.flickKogaki), .system(.flickKutoten), .system(.flickHiraTab), .system(.flickAbcTab), .system(.flickStar123Tab)].contains(key) {
+            if [CustardInterfaceKey.system(.enter), .custom(.flickSpace()), .custom(.flickDelete()), .system(.changeKeyboard), .system(.flickKogaki), .system(.flickKutoten), .system(.flickHiraTab), .system(.flickAbcTab), .system(.flickStar123Tab), .system(.upperLower), .system(.nextCandidate)].contains(key) {
                 Text("カスタム").tag(CustardInterfaceKey.custom(.empty))
             } else {
                 Text("カスタム").tag(key)
