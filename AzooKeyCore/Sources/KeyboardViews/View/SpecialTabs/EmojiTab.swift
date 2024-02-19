@@ -208,7 +208,9 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private static func getEmojis(keyboardInternalSettingManager: KeyboardInternalSettingManager) -> [Genre: [EmojiData]] {
         let fileURL: URL
         // 読み込むファイルはバージョンごとに変更する必要がある
-        if #available(iOS 16.4, *) {
+        if #available(iOS 17.4, *) {
+            fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E15.1.txt.gen", isDirectory: false)
+        } else if #available(iOS 16.4, *) {
             fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E15.0.txt.gen", isDirectory: false)
         } else if #available(iOS 15.4, *) {
             fileURL = Bundle.main.bundleURL.appendingPathComponent("emoji_genre_E14.0.txt.gen", isDirectory: false)
@@ -225,6 +227,7 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
             "Travel & Places": .trips,
             "Objects": .items
         ]
+        let ignoredGenre = ["Component"]
         var emojis: [Genre: [String]] = [:]
         do {
             let string = try String(contentsOf: fileURL, encoding: .utf8)
@@ -234,6 +237,9 @@ struct EmojiTab<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                 guard splited.count == 2 else {
                     debug("error", line)
                     return [:]
+                }
+                if ignoredGenre.contains(String(splited[0])) {
+                    continue
                 }
                 guard let genre = genres[String(splited[0])] else {
                     debug("unknown genre", line)

@@ -180,17 +180,47 @@ extension CustardInterfaceKey {
     }
 
     @MainActor func qwertyKeyModel<Extension: ApplicationSpecificKeyboardViewExtension>(layout: CustardInterfaceLayout, extension: Extension.Type) -> any QwertyKeyModelProtocol {
+        let rowInfo = switch layout {
+        case let .gridFit(value): (normal: value.rowCount, functional: 0, space: 0, enter: 0)
+        case let .gridScroll(value): (normal: Int(value.rowCount), functional: 0, space: 0, enter: 0)
+        }
         switch self {
         case let .system(value):
             switch value {
             case .changeKeyboard:
-                let changeKeyboardKey: QwertyChangeKeyboardKeyModel<Extension>
-                if let second = Extension.SettingProvider.preferredLanguage.second {
-                    changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .secondTab(secondLanguage: second))
+                let changeKeyboardKeySize: QwertyKeySizeType = .normal(of: 1, for: 1)
+                return if let second = Extension.SettingProvider.preferredLanguage.second {
+                    QwertyConditionalKeyModel<Extension>(keySizeType: changeKeyboardKeySize, needSuggestView: false, unpressedKeyColorType: .special) { states in
+                        if SemiStaticStates.shared.needsInputModeSwitchKey {
+                            return QwertyChangeKeyboardKeyModel(keySizeType: changeKeyboardKeySize)
+                        } else {
+                            // 普通のキーで良い場合
+                            let targetTab: TabData = switch second {
+                            case .en_US:
+                                .system(.user_english)
+                            case .ja_JP, .none, .el_GR:
+                                .system(.user_japanese)
+                            }
+                            return switch states.tabManager.existentialTab() {
+                            case .qwerty_hira, .qwerty_abc:
+                                QwertyFunctionalKeyModel(labelType: .text("#+="), rowInfo: rowInfo, pressActions: [.moveTab(.system(.qwerty_symbols))], longPressActions: .init(start: [.setTabBar(.toggle)]))
+                            case .qwerty_numbers, .qwerty_symbols:
+                                QwertyFunctionalKeyModel(labelType: .text(second.symbol), rowInfo: rowInfo, pressActions: [.moveTab(targetTab)])
+                            default:
+                                QwertyFunctionalKeyModel(labelType: .image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), rowInfo: rowInfo, pressActions: [.setCursorBar(.toggle)])
+                            }
+                        }
+                    }
                 } else {
-                    changeKeyboardKey = .init(keySizeType: .normal(of: 1, for: 1), fallBackType: .tabBar)
+                    QwertyConditionalKeyModel<Extension>(keySizeType: changeKeyboardKeySize, needSuggestView: false, unpressedKeyColorType: .special) { states in
+                        if SemiStaticStates.shared.needsInputModeSwitchKey {
+                            // 地球儀キーが必要な場合
+                            QwertyChangeKeyboardKeyModel(keySizeType: changeKeyboardKeySize)
+                        } else {
+                            QwertyFunctionalKeyModel(labelType: .image("arrowtriangle.left.and.line.vertical.and.arrowtriangle.right"), rowInfo: rowInfo, pressActions: [.setCursorBar(.toggle)])
+                        }
+                    }
                 }
-                return changeKeyboardKey
             case .enter:
                 return QwertyEnterKeyModel<Extension>(keySizeType: .enter)
             case .upperLower:
@@ -351,12 +381,14 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
     private let layout: CustardInterfaceLayoutGridValue
     private let blur: Bool
 
-    @MainActor private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize) {
+    @MainActor private func flickKeyData(x: Int, y: Int, width: Int, height: Int) -> (position: CGPoint, size: CGSize, contentSize: CGSize) {
         let width = tabDesign.keyViewWidth(widthCount: width)
         let height = tabDesign.keyViewHeight(heightCount: height)
         let dx = width * 0.5 + tabDesign.keyViewWidth * CGFloat(x) + tabDesign.horizontalSpacing * CGFloat(x)
         let dy = height * 0.5 + tabDesign.keyViewHeight * CGFloat(y) + tabDesign.verticalSpacing * CGFloat(y)
-        return (CGPoint(x: dx, y: dy), CGSize(width: width, height: height))
+        let contentWidth = width + tabDesign.horizontalSpacing
+        let contentHeight = height + tabDesign.verticalSpacing
+        return (CGPoint(x: dx, y: dy), CGSize(width: width, height: height), CGSize(width: contentWidth, height: contentHeight))
     }
 
     public var body: some View {
@@ -372,13 +404,16 @@ public struct CustardFlickKeysView<Extension: ApplicationSpecificKeyboardViewExt
                         let info = flickKeyData(x: x, y: y, width: data.width, height: data.height)
                         let suggestState = columnSuggestStates[y]
                         let needBlur = needKeyboardBlur && !needColumnWideBlur && suggestState == nil
-                        contentGenerator(FlickKeyView(model: data.model, size: info.size, position: (x, y), suggestState: $suggestState), x, y)                            .zIndex(suggestState != nil ? 1 : 0)
+                        contentGenerator(FlickKeyView(model: data.model, size: info.size, position: (x, y), suggestState: $suggestState), x, y)
+                            .zIndex(suggestState != nil ? 1 : 0)
                             .overlay(alignment: .center) {
                                 if let suggestType = suggestState {
                                     FlickSuggestView<Extension>(model: data.model, tabDesign: tabDesign, size: info.size, suggestType: suggestType)
                                         .zIndex(2)
                                 }
                             }
+                            .frame(width: info.contentSize.width, height: info.contentSize.height)
+                            .contentShape(Rectangle())
                             .position(x: info.position.x, y: info.position.y)
                             .blur(radius: needBlur ? 0.75 : 0)
                     }

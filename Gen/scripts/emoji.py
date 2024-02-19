@@ -307,11 +307,12 @@ def apply_emoji_test_data(emojis):
             count += 1
             codepoints = [int(cp, 16)
                           for cp in line.split(";")[0].strip().split(" ")]
-            unicode_emoji1 = "".join([chr(cp)for cp in codepoints])
-            unicode_emoji2 = "".join([chr(cp)
+            unicode_emoji1 = "".join([chr(cp)for cp in codepoints] + [chr(0xFE0F)])
+            unicode_emoji2 = "".join([chr(cp)for cp in codepoints])
+            unicode_emoji3 = "".join([chr(cp)
                                      for cp in codepoints if cp != 0xFE0F])
             for i in range(len(emojis)):
-                if emojis[i].codepoints in [unicode_emoji1, unicode_emoji2]:
+                if emojis[i].codepoints in [unicode_emoji1, unicode_emoji2, unicode_emoji3]:
                     # namedtupleのフィールドを変更するには、_replaceを使う
                     emojis[i] = emojis[i]._replace(genre=current_group)
                     emojis[i] = emojis[i]._replace(order=count)
@@ -355,8 +356,7 @@ def apply_manual_filter(emojis):
         new_keywords = list(sorted(set(new_keywords)))
         emojis[i] = emojis[i]._replace(keywords=new_keywords)
         if emojis[i].genre is None:
-            print("Error", emojis[i].codepoints, [ord(c)
-                                                  for c in emojis[i].codepoints])
+            print("Error genre not found", emojis[i].codepoints, [ord(c) for c in emojis[i].codepoints])
             continue
 
 
@@ -375,7 +375,6 @@ def output(emojis, version_targets: list[str]):
             emojis_genre_sorted[genre], key=lambda emoji: emoji.order)
 
     emojis_sorted = sorted(emojis, key=lambda emoji: emoji.order)
-    # E13.1以下、E14.0以下、E15.0以下の3つをターゲットにファイルを出力する
     for maximum_version in version_targets:
         # ジャンルごとにソートし、genre\temojis,の形式で出力する
         with open(f"{parent_dir}/generated/emoji_genre_{maximum_version}.txt.gen", "w") as f:
@@ -441,4 +440,4 @@ if __name__ == "__main__":
     apply_additional_dict(emojis)
     apply_emoji_test_data(emojis)
     apply_manual_filter(emojis)
-    output(emojis, version_targets=["E13.1", "E14.0", "E15.0"])
+    output(emojis, version_targets=["E13.1", "E14.0", "E15.0", "E15.1"])

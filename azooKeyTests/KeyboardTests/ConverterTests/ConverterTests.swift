@@ -145,16 +145,18 @@ import XCTest
                 ("つかっている", "使っている"),
                 ("しんだどうぶつ", "死んだ動物"),
                 ("けいさん", "計算"),
-                ("azooKeyのへんかんのうりょく。", "azooKeyの変換能力。"),
+                ("azooKeyをつかう", "azooKeyを使う"),
                 ("じどうAIそうじゅう。", "自動AI操縦。")
             ]
 
             // full input
+            var options = requestOptions()
+            options.requireJapanesePrediction = false
             for (input, expect) in cases {
                 let converter = KanaKanjiConverter()
                 var c = ComposingText()
                 sequentialInput(&c, sequence: input, inputStyle: .direct)
-                let results = converter.requestCandidates(c, options: requestOptions())
+                let results = converter.requestCandidates(c, options: options)
                 XCTAssertEqual(results.mainResults.first?.text, expect)
             }
             // gradual input
@@ -163,7 +165,7 @@ import XCTest
                 var c = ComposingText()
                 for char in input {
                     c.insertAtCursorPosition(String(char), inputStyle: .direct)
-                    let results = converter.requestCandidates(c, options: requestOptions())
+                    let results = converter.requestCandidates(c, options: options)
                     if c.input.count == input.count {
                         XCTAssertEqual(results.mainResults.first?.text, expect)
                     }
@@ -179,11 +181,13 @@ import XCTest
             ]
 
             // full input
+            var options = requestOptions()
+            options.requireJapanesePrediction = false
             for (input, expect) in cases {
                 let converter = KanaKanjiConverter()
                 var c = ComposingText()
                 sequentialInput(&c, sequence: input, inputStyle: .roman2kana)
-                let results = converter.requestCandidates(c, options: requestOptions())
+                let results = converter.requestCandidates(c, options: options)
                 XCTAssertEqual(results.mainResults.first?.text, expect)
             }
 
@@ -193,7 +197,7 @@ import XCTest
                 var c = ComposingText()
                 for char in input {
                     c.insertAtCursorPosition(String(char), inputStyle: .roman2kana)
-                    let results = converter.requestCandidates(c, options: requestOptions())
+                    let results = converter.requestCandidates(c, options: options)
                     if c.input.count == input.count {
                         XCTAssertEqual(results.mainResults.first?.text, expect)
                     }

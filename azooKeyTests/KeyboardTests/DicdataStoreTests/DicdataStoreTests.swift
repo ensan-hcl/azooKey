@@ -43,10 +43,15 @@ final class DicdataStoreTests: XCTestCase {
         let dicdataStore = DicdataStore(convertRequestOptions: requestOptions())
         let mustWords = [
             ("アサッテ", "明後日"),
+            ("オトトシ", "一昨年"),
             ("ダイヒョウ", "代表"),
             ("テキナ", "的な"),
             ("ヤマダ", "山田"),
             ("アイロ", "隘路"),
+            ("フツカ", "二日"),
+            ("フツカ", "2日"),
+            ("ガデンインスイ", "我田引水"),
+            ("フトウフクツ", "不撓不屈"),
             ("ナンタイ", "軟体"),
             ("ナンジ", "何時"),
             ("ナド", "等")
@@ -68,6 +73,7 @@ final class DicdataStoreTests: XCTestCase {
             ("タイ", "体."),
             ("アサッテ", "明日"),
             ("チョ", "ちょwww"),
+            ("シンコウホウホウ", "進行方向"),
             ("a", "あ"),   // direct入力の場合「a」で「あ」をサジェストしてはいけない
             ("\\n", "\n")
         ]

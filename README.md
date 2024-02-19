@@ -8,16 +8,16 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 * パフォーマンス改善、バグ修正、機能追加などのPull Requestを歓迎します。機能追加の場合は事前にIssueで議論した方がスムーズです。
 * 開発は基本的に`develop`で行います。新規にPRを作成する場合、まずこのレポジトリをフォークし、`develop`からブランチを切ってください。
 
-[Let's Contribute](docs/first_contribution.md)も合わせてお読みください。
+[Let's Contribute](docs/CONTRIBUTING.md)も合わせてお読みください。
 
 ### ビルド・利用方法
 
 Apple Developer Account（無料）が必要です。開発環境は最新のXcodeを利用してください。
 
-1. `setup.sh`を実行してください。[Google Drive](https://drive.google.com/drive/folders/1Kh7fgMFIzkpg7YwP3GhWTxFkXI-yzT9E?usp=sharing)から辞書ファイルがダウンロードされます。
+1. azooKeyを開発環境にクローンします。azooKeyはサブモジュールを利用しているため、`--recursive`オプションを必ず追加してください。
 
-   ```bash
-   sh setup.sh
+   ```
+   git clone https://github.com/ensan-hcl/azooKey --recursive
    ```
 
 1. `azooKey.xcodeproj`を開き、Xcodeの指示に従って「Run (Command+R)」を実行してください。
@@ -29,7 +29,7 @@ Apple Developer Account（無料）が必要です。開発環境は最新のXco
 
 ### 辞書の変更
 
-azooKeyの辞書ファイルは任意に置き換えることができます。過去のバージョンの辞書を利用するには、[Google DriveからazooKeyの辞書をダウンロードします](https://drive.google.com/drive/folders/1Kh7fgMFIzkpg7YwP3GhWTxFkXI-yzT9E?usp=sharing)。任意のバージョンのフォルダの中にある「`Dictionary`」というフォルダを右クリックし、フォルダごとダウンロードします。ついで、`Keyboard/`配下に`Dictionary`フォルダを配置してください。上書きして構いません。
+azooKeyの辞書ファイルは任意に置き換えることができます。azooKey_dictionary_storageを任意のcommitにチェックアウトすることで、過去のバージョンの辞書を利用できます。また、[Google Drive](https://drive.google.com/drive/folders/1Kh7fgMFIzkpg7YwP3GhWTxFkXI-yzT9E?usp=sharing)ではさらに古いバージョンの辞書データも配布しています。
 
 ### さらに詳しく
 
