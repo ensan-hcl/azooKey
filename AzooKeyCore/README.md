@@ -11,7 +11,7 @@ Keyboardの着せ替えデータ(`ThemeData`)に関するモジュールです�
 
 ## KeyboardViews
 
-KeyboardのViewを実装したモジュールです最小で以下のように利用できます。
+KeyboardのViewを実装したモジュールです。最小で以下のように利用できます。
 
 ```swift
 var body: some View {
