@@ -12,8 +12,8 @@ import class CoreHaptics.CHHapticEngine
 
 /// 実行しないと値が確定しないが、実行されれば全く変更されない値。収容アプリでも共有できる形にすること。
 public final class SemiStaticStates {
-    public static let shared = SemiStaticStates()
-    private init() {}
+    @MainActor public static let shared = SemiStaticStates()
+    @MainActor private init() {}
 
     // MARK: 端末依存の値
     @MainActor private(set) public lazy var needsInputModeSwitchKey = {

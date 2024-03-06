@@ -15,7 +15,7 @@ import SwiftUtils
 
 /// キーボードへのアクション部門の動作を担う。
 @MainActor final class KeyboardActionManager: UserActionManager {
-    override init() {}
+    @MainActor override init() {}
 
     private var inputManager = InputManager()
     private unowned var delegate: KeyboardViewController!
