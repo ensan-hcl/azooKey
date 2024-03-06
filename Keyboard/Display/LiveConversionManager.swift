@@ -13,8 +13,7 @@ import SwiftUtils
 
 // ライブ変換を管理するためのクラス
 final class LiveConversionManager {
-    @MainActor init() {
-        @KeyboardSetting(.liveConversion) var enabled
+    init(enabled: Bool) {
         self.enabled = enabled
     }
     var enabled = false

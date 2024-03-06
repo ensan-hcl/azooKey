@@ -14,7 +14,7 @@ import SwiftUI
 import SwiftUtils
 
 /// キーボードへのアクション部門の動作を担う。
-@MainActor final class KeyboardActionManager: UserActionManager {
+final class KeyboardActionManager: UserActionManager {
     override init() {}
 
     private var inputManager = InputManager()
@@ -26,7 +26,7 @@ import SwiftUtils
 
     // キーボードを閉じる際に呼び出す
     // inputManagerはキーボードを閉じる際にある種の操作を行う
-    func closeKeyboard() {
+    @MainActor func closeKeyboard() {
         self.inputManager.closeKeyboard()
         for (_, task) in self.tasks {
             task.cancel()
@@ -35,16 +35,16 @@ import SwiftUtils
         self.tempTextData = nil
     }
 
-    func sendToDicdataStore(_ data: DicdataStore.Notification) {
+    @MainActor func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.inputManager.sendToDicdataStore(data)
     }
 
-    func setDelegateViewController(_ controller: KeyboardViewController) {
+    @MainActor  func setDelegateViewController(_ controller: KeyboardViewController) {
         self.delegate = controller
         self.inputManager.setTextDocumentProxy(.mainProxy(controller.textDocumentProxy))
     }
 
-    func setResultViewUpdateCallback(_ variableStates: VariableStates) {
+    @MainActor func setResultViewUpdateCallback(_ variableStates: VariableStates) {
         self.inputManager.setUpdateResult { [weak variableStates] in
             if let variableStates {
                 $0(&variableStates.resultModel)
@@ -109,11 +109,11 @@ import SwiftUtils
         variableStates.barState = .none
     }
 
-    private func shiftStateOff(variableStates: VariableStates) {
+    @MainActor private func shiftStateOff(variableStates: VariableStates) {
         variableStates.boolStates[VariableStates.BoolStates.isShiftedKey] = false
     }
 
-    private func doAction(_ action: ActionType, requireSetResult: Bool = true, variableStates: VariableStates) {
+    @MainActor private func doAction(_ action: ActionType, requireSetResult: Bool = true, variableStates: VariableStates) {
         debug("doAction", action)
         var undoAction: ActionType?
         switch action {
@@ -338,7 +338,7 @@ import SwiftUtils
     /// actionの塊を実行する
     ///  - parameters:
     ///    - actionBlock: アクションの一連の列。1つのブロックの中には任意個の集約対象のアクションと集約対象でないアクションが含まれ、先頭にのみ集約できないアクションが出現できる
-    private func runActionBlock(actionBlock: some BidirectionalCollection<ActionType>, variableStates: VariableStates) {
+    @MainActor private func runActionBlock(actionBlock: some BidirectionalCollection<ActionType>, variableStates: VariableStates) {
         // setResult可能な最後の
         if let lastIndex = actionBlock.lastIndex(where: { actionTriggerStyle($0) != .irrelevant }) {
             for (i, action) in zip(actionBlock.indices, actionBlock) {

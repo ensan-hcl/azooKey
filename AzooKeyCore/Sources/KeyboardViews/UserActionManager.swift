@@ -11,7 +11,6 @@ import SwiftUI
 import KeyboardExtensionUtils
 
 /// キーボードの操作を管理するためのクラス
-/// - finalにはできない
 open class UserActionManager {
     public init() {}
     @MainActor open func registerAction(_ action: ActionType, variableStates: VariableStates) {}

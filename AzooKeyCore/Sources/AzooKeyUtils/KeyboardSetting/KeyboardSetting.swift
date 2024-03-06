@@ -16,10 +16,9 @@ protocol Savable {
 }
 
 @propertyWrapper
-@MainActor
 public struct KeyboardSetting<T: KeyboardSettingKey> {
     public init(_ key: T) {}
-    public var wrappedValue: T.Value {
+    @MainActor public var wrappedValue: T.Value {
         get {
             T.value
         }

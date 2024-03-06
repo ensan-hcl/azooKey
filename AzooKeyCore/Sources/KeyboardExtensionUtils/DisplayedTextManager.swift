@@ -11,7 +11,7 @@ import SwiftUtils
 import UIKit
 
 /// UI側の入力中のテキストの更新を受け持つクラス
-@MainActor final public class DisplayedTextManager {
+final public class DisplayedTextManager {
     public init(isLiveConversionEnabled: Bool, isMarkedTextEnabled: Bool) {
         self.isLiveConversionEnabled = isLiveConversionEnabled
         self.isMarkedTextEnabled = isMarkedTextEnabled
@@ -61,15 +61,15 @@ import UIKit
         }
     }
 
-    public var documentContextAfterInput: String? {
+    @MainActor public var documentContextAfterInput: String? {
         self.proxy?.documentContextAfterInput
     }
 
-    public var selectedText: String? {
+    @MainActor public var selectedText: String? {
         self.proxy?.selectedText
     }
 
-    public var documentContextBeforeInput: String? {
+    @MainActor public var documentContextBeforeInput: String? {
         self.proxy?.documentContextBeforeInput
     }
 
@@ -101,7 +101,7 @@ import UIKit
     }
 
     /// カーソルを何カウント分動かせばいいか計算する
-    private func getActualOffset(count: Int) -> Int {
+    @MainActor private func getActualOffset(count: Int) -> Int {
         if count == 0 {
             return 0
         } else if count > 0 {
@@ -127,13 +127,13 @@ import UIKit
 
     /// MarkedTextを更新する関数
     /// この関数自体はisMarkedTextEnabledのチェックを行わない。
-    private func updateMarkedText() {
+    @MainActor private func updateMarkedText() {
         let text = self.displayedLiveConversionText ?? self.composingText.convertTarget
         let cursorPosition = self.displayedLiveConversionText.map(NSString.init(string:))?.length ?? NSString(string: String(self.composingText.convertTarget.prefix(self.composingText.convertTargetCursorPosition))).length
         self.proxy?.setMarkedText(text, selectedRange: NSRange(location: cursorPosition, length: 0))
     }
 
-    public func insertText(_ text: String) {
+    @MainActor public func insertText(_ text: String) {
         guard !text.isEmpty else {
             return
         }
@@ -142,7 +142,7 @@ import UIKit
     }
 
     /// In-Keyboard TextFiledが用いられていても、そちらではない方に強制的に入力を行う関数
-    public func insertMainDisplayText(_ text: String) {
+    @MainActor public func insertMainDisplayText(_ text: String) {
         guard !text.isEmpty else {
             return
         }
@@ -150,7 +150,7 @@ import UIKit
         self.textChangedCount += 1
     }
 
-    public func moveCursor(count: Int) {
+    @MainActor public func moveCursor(count: Int) {
         guard count != 0 else {
             return
         }
@@ -160,7 +160,7 @@ import UIKit
     }
 
     // ただ与えられた回数の削除を実行する関数
-    private func rawDeleteBackward(count: Int = 1) {
+    @MainActor private func rawDeleteBackward(count: Int = 1) {
         guard count != 0 else {
             return
         }
@@ -172,7 +172,7 @@ import UIKit
 
     // isComposingの場合、countはadjust済みであることを期待する
     // されていなかった場合は例外を投げる
-    public func deleteBackward(count: Int) {
+    @MainActor public func deleteBackward(count: Int) {
         if count == 0 {
             return
         }
@@ -186,7 +186,7 @@ import UIKit
     // ただ与えられた回数の削除を入力方向に実行する関数
     // カーソルが動かせない場合を検知するために工夫を入れている
     // TODO: iOS16以降のテキストフィールドの仕様変更で動かなくなっている。直す必要があるが、どうしようもない気がしている。
-    private func rawDeleteForward(count: Int) {
+    @MainActor private func rawDeleteForward(count: Int) {
         guard count != 0 else {
             return
         }
@@ -205,7 +205,7 @@ import UIKit
 
     // isComposingの場合、countはadjust済みであることを期待する
     // されていなかった場合は例外を投げる
-    public func deleteForward(count: Int = 1) {
+    @MainActor public func deleteForward(count: Int = 1) {
         if count == 0 {
             return
         }
@@ -217,7 +217,7 @@ import UIKit
     }
 
     /// `composingText`を更新する
-    public func updateComposingText(composingText: ComposingText, newLiveConversionText: String?) {
+    @MainActor public func updateComposingText(composingText: ComposingText, newLiveConversionText: String?) {
         if isMarkedTextEnabled {
             self.composingText = composingText
             self.displayedLiveConversionText = newLiveConversionText
@@ -244,7 +244,7 @@ import UIKit
         }
     }
 
-    public func updateComposingText(composingText: ComposingText, userMovedCount: Int, adjustedMovedCount: Int) -> Bool {
+    @MainActor public func updateComposingText(composingText: ComposingText, userMovedCount: Int, adjustedMovedCount: Int) -> Bool {
         let delta = adjustedMovedCount - userMovedCount
         self.composingText = composingText
         if delta != 0 {
@@ -255,7 +255,7 @@ import UIKit
         return false
     }
 
-    public func updateComposingText(composingText: ComposingText, completedPrefix: String, isSelected: Bool) {
+    @MainActor public func updateComposingText(composingText: ComposingText, completedPrefix: String, isSelected: Bool) {
         if isMarkedTextEnabled {
             self.insertText(completedPrefix)
             self.composingText = composingText

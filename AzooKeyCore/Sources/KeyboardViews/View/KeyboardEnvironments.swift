@@ -47,7 +47,7 @@ public extension View {
 struct MessageEnvironmentKey: EnvironmentKey {
     typealias Value = Bool
 
-    static var defaultValue = true
+    static let defaultValue = true
 }
 
 public extension EnvironmentValues {
@@ -64,7 +64,7 @@ public extension EnvironmentValues {
 struct UserActionManagerEnvironmentKey: EnvironmentKey {
     typealias Value = UserActionManager
 
-    static var defaultValue = UserActionManager()
+    static let defaultValue = UserActionManager()
 }
 
 public extension EnvironmentValues {
