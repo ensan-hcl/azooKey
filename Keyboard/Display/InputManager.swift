@@ -14,29 +14,32 @@ import SwiftUtils
 import UIKit
 import KeyboardExtensionUtils
 
-@MainActor final class InputManager {
+final class InputManager {
     // 入力中の文字列を管理する構造体
     private(set) var composingText = ComposingText()
     // 表示される文字列を管理するクラス
     private(set) var displayedTextManager: DisplayedTextManager
     // TODO: displayedTextManagerとliveConversionManagerを何らかの形で統合したい
     // ライブ変換を管理するクラス
-    var liveConversionManager = LiveConversionManager()
+    var liveConversionManager: LiveConversionManager
     // (ゼロクエリの)予測変換を管理するクラス
     var predictionManager = PredictionManager()
     // セレクトされているか否か、現在入力中の文字全体がセレクトされているかどうかである。
     // TODO: isSelectedはdisplayedTextManagerが持っているべき
     var isSelected = false
+    /// かな漢字変換を受け持つ変換器。
+    @MainActor private lazy var kanaKanjiConverter = KanaKanjiConverter()
 
     init() {
         @KeyboardSetting(.liveConversion) var liveConversion
         @KeyboardSetting(.markedTextSetting) var markedTextSetting
 
         self.displayedTextManager = DisplayedTextManager(isLiveConversionEnabled: liveConversion, isMarkedTextEnabled: markedTextSetting != .disabled)
+        self.liveConversionManager = LiveConversionManager(enabled: liveConversion)
     }
     // キーボードの言語
     private var keyboardLanguage: KeyboardLanguage = .ja_JP
-    func setKeyboardLanguage(_ value: KeyboardLanguage) {
+    @MainActor func setKeyboardLanguage(_ value: KeyboardLanguage) {
         self.keyboardLanguage = value
         self.kanaKanjiConverter.setKeyboardLanguage(value)
     }
@@ -67,7 +70,7 @@ import KeyboardExtensionUtils
         }
     }
 
-    func getSurroundingText() -> (leftText: String, center: String, rightText: String) {
+    @MainActor func getSurroundingText() -> (leftText: String, center: String, rightText: String) {
         let left = adjustLeftString(self.displayedTextManager.documentContextBeforeInput ?? "")
         let center = self.displayedTextManager.selectedText ?? ""
         let right = self.displayedTextManager.documentContextAfterInput ?? ""
@@ -83,7 +86,7 @@ import KeyboardExtensionUtils
         self.composingText
     }
 
-    private func getConvertRequestOptions(inputStylePreference: InputStyle? = nil) -> ConvertRequestOptions {
+    @MainActor private func getConvertRequestOptions(inputStylePreference: InputStyle? = nil) -> ConvertRequestOptions {
         let requireJapanesePrediction: Bool
         let requireEnglishPrediction: Bool
         switch (isSelected, inputStylePreference ?? .direct) {
@@ -188,9 +191,6 @@ import KeyboardExtensionUtils
         }
         return nil
     }
-
-    /// かな漢字変換を受け持つ変換器。
-    private var kanaKanjiConverter = KanaKanjiConverter()
     /// 置換機
     private var textReplacer = TextReplacer(emojiDataProvider: {
         // 読み込むファイルはバージョンごとに変更する必要がある
@@ -205,7 +205,7 @@ import KeyboardExtensionUtils
         }
     })
 
-    func sendToDicdataStore(_ data: DicdataStore.Notification) {
+    @MainActor func sendToDicdataStore(_ data: DicdataStore.Notification) {
         self.kanaKanjiConverter.sendToDicdataStore(data)
     }
 
@@ -242,7 +242,7 @@ import KeyboardExtensionUtils
     }
 
     /// 確定直後に呼ぶ
-    func updatePostCompositionPredictionCandidates(candidate: Candidate) {
+    @MainActor func updatePostCompositionPredictionCandidates(candidate: Candidate) {
         let results = self.kanaKanjiConverter.requestPostCompositionPredictionCandidates(leftSideCandidate: candidate, options: getConvertRequestOptions())
         predictionManager.updateAfterComplete(candidate: candidate, textChangedCount: self.displayedTextManager.getTextChangedCount())
         if let updateResult {
@@ -253,7 +253,7 @@ import KeyboardExtensionUtils
     }
 
     /// 予測変換を選んだ後に呼ぶ
-    func postCompositionPredictionCandidateSelected(candidate: PostCompositionPredictionCandidate) {
+    @MainActor func postCompositionPredictionCandidateSelected(candidate: PostCompositionPredictionCandidate) {
         guard let lastUsedCandidate = predictionManager.getLastCandidate() else {
             return
         }
@@ -283,13 +283,13 @@ import KeyboardExtensionUtils
     }
 
     /// `composingText`に入力されていた全体が変換された後に呼ばれる関数
-    private func conversionCompleted(candidate: Candidate) {
+    @MainActor private func conversionCompleted(candidate: Candidate) {
         // 予測変換を更新する
         self.updatePostCompositionPredictionCandidates(candidate: candidate)
     }
 
     /// 変換を選択した場合に呼ばれる
-    func complete(candidate: Candidate) {
+    @MainActor func complete(candidate: Candidate) {
         self.updateLog(candidate: candidate)
         self.composingText.prefixComplete(correspondingCount: candidate.correspondingCount)
         if self.displayedTextManager.shouldSkipMarkedTextChange {
@@ -313,7 +313,7 @@ import KeyboardExtensionUtils
     }
 
     /// 入力を停止する。DisplayedTextには特に何もしない。
-    func stopComposition() {
+    @MainActor func stopComposition() {
         self.composingText.stopComposition()
         self.displayedTextManager.stopComposition()
         self.liveConversionManager.stopComposition()
@@ -333,7 +333,7 @@ import KeyboardExtensionUtils
         self.displayedTextManager.updateSettings(isLiveConversionEnabled: liveConversion, isMarkedTextEnabled: markedTextSetting != .disabled)
     }
 
-    func closeKeyboard() {
+    @MainActor func closeKeyboard() {
         debug("closeKeyboard: キーボードが閉じます")
         self.sendToDicdataStore(.closeKeyboard)
         self.displayedTextManager.closeKeyboard()
@@ -343,7 +343,7 @@ import KeyboardExtensionUtils
     /// 「現在入力中として表示されている文字列で確定する」というセマンティクスを持った操作である。
     /// - parameters:
     ///  - shouldModifyDisplayedText: DisplayedTextを操作して良いか否か。`textDidChange`などの場合は操作してはいけない。
-    func enter(shouldModifyDisplayedText: Bool = true, requireSetResult: Bool = true) -> [ActionType] {
+    @MainActor func enter(shouldModifyDisplayedText: Bool = true, requireSetResult: Bool = true) -> [ActionType] {
         // selectedの場合、単に変換を止める
         if isSelected {
             self.stopComposition()
@@ -393,11 +393,11 @@ import KeyboardExtensionUtils
         return actions.map(\.action)
     }
 
-    func insertMainDisplayText(_ text: String) {
+    @MainActor func insertMainDisplayText(_ text: String) {
         self.displayedTextManager.insertMainDisplayText(text)
     }
 
-    func deleteSelection() {
+    @MainActor func deleteSelection() {
         // 選択部分を削除する
         self.previousSystemOperation = .removeSelection
         self.displayedTextManager.deleteBackward(count: 1)
@@ -413,7 +413,7 @@ import KeyboardExtensionUtils
     ///   - requireSetResult: `View`のアップデートを、この呼び出しで実施するべきか。この後さらに別の呼び出しを行う場合は、`false`にする。
     ///   - simpleInsert: `ComposingText`を作るのではなく、直接文字を入力し、変換候補を表示しない。
     ///   - inputStyle: 入力スタイル
-    func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false, inputStyle: InputStyle) {
+    @MainActor func input(text: String, requireSetResult: Bool = true, simpleInsert: Bool = false, inputStyle: InputStyle) {
         // 直接入力の条件
         if simpleInsert         // flag
             || text == "\n"     // 改行
@@ -444,7 +444,7 @@ import KeyboardExtensionUtils
 
     /// テキストの進行方向に削除する
     /// `ab|c → ab|`のイメージ
-    func deleteForward(count: Int, requireSetResult: Bool = true) {
+    @MainActor func deleteForward(count: Int, requireSetResult: Bool = true) {
         if count < 0 {
             return
         }
@@ -468,7 +468,7 @@ import KeyboardExtensionUtils
     /// - Parameters:
     ///   - convertTargetCount: `convertTarget`の文字数。`displayedText`の文字数ではない。
     ///   - requireSetResult: `setResult()`の呼び出しを要求するか。
-    func deleteBackward(convertTargetCount: Int, requireSetResult: Bool = true) {
+    @MainActor func deleteBackward(convertTargetCount: Int, requireSetResult: Bool = true) {
         if convertTargetCount == 0 {
             return
         }
@@ -501,7 +501,7 @@ import KeyboardExtensionUtils
 
     /// 特定の文字まで削除する
     ///  - returns: 削除した文字列
-    func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) -> String {
+    @MainActor func smoothDelete(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) -> String {
         // 選択状態ではオール削除になる
         if self.isSelected {
             let targetText = self.composingText.convertTarget
@@ -557,7 +557,7 @@ import KeyboardExtensionUtils
 
     /// テキストの進行方向に、特定の文字まで削除する
     /// 入力中はカーソルから右側を全部消す
-    func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) -> String {
+    @MainActor func smoothDeleteForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) -> String {
         // 選択状態ではオール削除になる
         if self.isSelected {
             let targetText = self.composingText.convertTarget
@@ -607,7 +607,7 @@ import KeyboardExtensionUtils
     }
 
     /// テキストの進行方向と逆に、特定の文字までカーソルを動かす
-    func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
+    @MainActor func smartMoveCursorBackward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態では左にカーソルを移動
         if isSelected {
             // 左にカーソルを動かす
@@ -643,7 +643,7 @@ import KeyboardExtensionUtils
     }
 
     /// テキストの進行方向に、特定の文字までカーソルを動かす
-    func smartMoveCursorForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
+    @MainActor func smartMoveCursorForward(to nexts: [Character] = ["、", "。", "！", "？", ".", ",", "．", "，", "\n"], requireSetResult: Bool = true) {
         // 選択状態では最も右にカーソルを移動
         if isSelected {
             self.displayedTextManager.moveCursor(count: 1)
@@ -687,7 +687,7 @@ import KeyboardExtensionUtils
     }
 
     /// クリップボードの文字列をペーストする
-    func paste() {
+    @MainActor func paste() {
         guard let text = UIPasteboard.general.string else {
             return
         }
@@ -704,7 +704,7 @@ import KeyboardExtensionUtils
     /// 文字のreplaceを実施する
     /// `changeCharacter`を`CustardKit`で扱うためのAPI。
     /// キーボード経由でのみ実行される。
-    func replaceLastCharacters(table: [String: String], requireSetResult: Bool = true, inputStyle: InputStyle) {
+    @MainActor func replaceLastCharacters(table: [String: String], requireSetResult: Bool = true, inputStyle: InputStyle) {
         debug(table, composingText, isSelected)
         if isSelected {
             if let replace = table[self.composingText.convertTarget] {
@@ -753,7 +753,7 @@ import KeyboardExtensionUtils
 
     /// カーソル左側の1文字を変更する関数
     /// ひらがなの場合は小書き・濁点・半濁点化し、英字・ギリシャ文字・キリル文字の場合は大文字・小文字化する
-    func changeCharacter(requireSetResult: Bool = true, inputStyle: InputStyle) {
+    @MainActor func changeCharacter(requireSetResult: Bool = true, inputStyle: InputStyle) {
         if self.isSelected {
             return
         }
@@ -772,7 +772,7 @@ import KeyboardExtensionUtils
     }
 
     /// キーボード経由でのカーソル移動
-    func moveCursor(count: Int, requireSetResult: Bool = true) {
+    @MainActor func moveCursor(count: Int, requireSetResult: Bool = true) {
         if self.isSelected {
             // ただ横に動かす(選択解除)
             self.displayedTextManager.moveCursor(count: 1)
@@ -805,7 +805,7 @@ import KeyboardExtensionUtils
 
     /// ユーザがキーボードを経由せずにカーソルを何かした場合の後処理を行う関数。
     ///  - note: この関数をユーティリティとして用いてはいけない。
-    func userMovedCursor(count: Int) -> [ActionType] {
+    @MainActor func userMovedCursor(count: Int) -> [ActionType] {
         debug("userによるカーソル移動を検知、今の位置は\(composingText.convertTargetCursorPosition)、動かしたオフセットは\(count)")
         // 選択しているテキストがある場合はリザルトバーを表示する
         if self.isSelected {
@@ -828,7 +828,7 @@ import KeyboardExtensionUtils
     }
 
     /// ユーザが行を跨いでカーソルを動かした場合に利用する
-    func userJumpedCursor() -> [ActionType] {
+    @MainActor func userJumpedCursor() -> [ActionType] {
         if self.composingText.isEmpty {
             @KeyboardSetting(.displayCursorBarAutomatically) var displayCursorBarAutomatically
             return displayCursorBarAutomatically ? [.setCursorBar(.on)] : []
@@ -838,7 +838,7 @@ import KeyboardExtensionUtils
     }
 
     /// ユーザがキーボードを経由せずカットした場合の処理
-    func userCutText(text: String) {
+    @MainActor func userCutText(text: String) {
         self.stopComposition()
     }
 
@@ -878,7 +878,7 @@ import KeyboardExtensionUtils
     }
 
     // ユーザが文章を選択した場合、その部分を入力中であるとみなす(再変換)
-    func userSelectedText(text: String, lengthLimit: Int) {
+    @MainActor func userSelectedText(text: String, lengthLimit: Int) {
         self.composingText.stopComposition()
         // 文字がない場合
         if text.isEmpty
@@ -900,7 +900,7 @@ import KeyboardExtensionUtils
     }
 
     /// 選択を解除した場合、Compositionをリセットする
-    func userDeselectedText() {
+    @MainActor func userDeselectedText() {
         self.stopComposition()
     }
 
@@ -908,7 +908,7 @@ import KeyboardExtensionUtils
     private static let memoryDirectoryURL = (try? FileManager.default.url(for: .libraryDirectory, in: .userDomainMask, appropriateFor: nil, create: false)) ?? sharedContainerURL
     private static let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedStore.appGroupKey)!
     /// 変換リクエストを送信し、結果をDisplayed Textにも反映する関数
-    func setResult() {
+    @MainActor func setResult() {
         let inputData = composingText.prefixToCursorPosition()
         debug("InputManager.setResult: value to be input", inputData)
         let options = self.getConvertRequestOptions(inputStylePreference: inputData.input.last?.inputStyle)
