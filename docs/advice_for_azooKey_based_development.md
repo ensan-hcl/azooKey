@@ -28,7 +28,7 @@ azooKeyのデフォルトのUIは英字のシフトに対応していません�
 
 ### 「次候補」ボタン
 
-標準キーボードは入力時に「空白」が「次候補」キーに変わり、これを押すことで変換候補を選択することができます。この機能はazooKeyでは対応していません。
+標準キーボードは入力時に「空白」が「次候補」キーに変わり、これを押すことで変換候補を選択することができます。この機能はazooKeyではデフォルトで無効ですが、`ApplicationSpecificKeyboardViewSettingProvider`を実装する際に`useNextCandidateKey`を`true`にすることでこの挙動を得られます。
 
 ## 修正されるべき実装
 
@@ -38,12 +38,16 @@ azooKeyでは歴史的事情により、データの保存がナイーブな方�
 
 この点はマイグレーションの難しさなどの理由から解決されていません。azooKeyをベースにした新規開発を行う場合は、このような点を解決すると将来的に楽でしょう。
 
+### 着せ替えの画像ファイル
+
+azooKeyでは着せ替えの画像のオリジナルを保存せず、切り抜いたバージョンのみを保存しています。このため、着せ替えを他の端末に移すことが困難です。
+
 ### 辞書の提供方法
 
 azooKeyはアプリケーションと辞書をバンドルしています。しかし個別に更新できるよう、切り離したほうが開発が楽でしょう。
 
 ## その他の懸念
 
-### ポータビリティ
+日本語入力エンジンはSwiftによる実装の[AzooKeyKanaKanjiConverter](https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter)を利用しています。このため、AndroidやWindowsへの移植が困難となる可能性があります。これが問題となる場合、Mozcなどの利用をおすすめします。
 
-azooKeyはSwiftによる実装のため、AndroidやWindowsへの移植が困難となる可能性があります。これが問題となる場合、Mozcなどの利用をおすすめします。
+AzooKeyKanaKanjiConverterについて注意すべき点は[Failures](https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter/blob/develop/Docs/failures.md)もご覧ください。
