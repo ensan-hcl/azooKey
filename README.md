@@ -6,6 +6,8 @@ azooKeyは[App Store](https://apps.apple.com/jp/app/azookey-%E8%87%AA%E7%94%B1%E
 
 azooKeyの変換エンジンについては[AzooKeyKanaKanjiConverter](https://github.com/ensan-hcl/AzooKeyKanaKanjiConverter)を参照ください。
 
+azooKeyのmacOS版については[azooKey-Desktop](https://github.com/ensan-hcl/azooKey-Desktop)を参照ください。
+
 ## コミュニティ＆β版
 
 azooKeyの開発に参加したい方、使い方に質問がある方、要望や不具合報告がある方は、ぜひ[azooKeyのDiscordサーバ](https://discord.gg/dY9gHuyZN5)にご参加ください。
