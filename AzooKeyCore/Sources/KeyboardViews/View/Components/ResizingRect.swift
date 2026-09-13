@@ -8,6 +8,55 @@
 import Foundation
 import SwiftUI
 
+struct OneHandedVerticalResizeResult: Equatable {
+    let height: CGFloat
+    let bottomOffset: CGFloat
+
+    static func movingTopHandle(
+        initialHeight: CGFloat,
+        bottomOffset: CGFloat,
+        translation: CGFloat,
+        minimumHeight: CGFloat,
+        maximumHeight: CGFloat
+    ) -> Self? {
+        validated(
+            height: initialHeight - translation,
+            bottomOffset: bottomOffset,
+            minimumHeight: minimumHeight,
+            maximumHeight: maximumHeight
+        )
+    }
+
+    static func movingBottomHandle(
+        initialHeight: CGFloat,
+        initialBottomOffset: CGFloat,
+        translation: CGFloat,
+        minimumHeight: CGFloat,
+        maximumHeight: CGFloat
+    ) -> Self? {
+        validated(
+            height: initialHeight + translation,
+            bottomOffset: initialBottomOffset - translation,
+            minimumHeight: minimumHeight,
+            maximumHeight: maximumHeight
+        )
+    }
+
+    private static func validated(
+        height: CGFloat,
+        bottomOffset: CGFloat,
+        minimumHeight: CGFloat,
+        maximumHeight: CGFloat
+    ) -> Self? {
+        guard height >= minimumHeight,
+              bottomOffset >= 0,
+              height + bottomOffset <= maximumHeight else {
+            return nil
+        }
+        return Self(height: height, bottomOffset: bottomOffset)
+    }
+}
+
 @MainActor
 struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     typealias Position = (current: CGPoint, initial: CGPoint)
@@ -19,26 +68,35 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     private let edgeRatio: CGFloat = 1 / 5
     private let edgeColor: Color = .blue
 
-    @State private var initialPosition: CGPoint
+    @State private var initialHeight: CGFloat
+    @State private var initialBottomOffset: CGFloat
 
     @Binding private var size: CGSize
     @Binding private var position: CGPoint
+    @Binding private var bottomOffset: CGFloat
 
     private let initialSize: CGSize
     private let minimumWidth: CGFloat = 120
 
-    init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize) {
+    init(
+        size: Binding<CGSize>,
+        position: Binding<CGPoint>,
+        bottomOffset: Binding<CGFloat>,
+        initialSize: CGSize
+    ) {
         self._size = size
         self._position = position
-        self._initialPosition = .init(initialValue: position.wrappedValue)
+        self._bottomOffset = bottomOffset
+        self._initialHeight = .init(initialValue: size.height.wrappedValue)
+        self._initialBottomOffset = .init(initialValue: bottomOffset.wrappedValue)
         let tl = CGPoint(
             x: (2 * position.x.wrappedValue - size.width.wrappedValue + initialSize.width) / 2,
-            y: (2 * position.y.wrappedValue - size.height.wrappedValue + initialSize.height) / 2
+            y: (-size.height.wrappedValue + initialSize.height) / 2
         )
         self._top_left_edge = .init(initialValue: (tl, tl))
         let br = CGPoint(
             x: (2 * position.x.wrappedValue + size.width.wrappedValue + initialSize.width) / 2,
-            y: (2 * position.y.wrappedValue + size.height.wrappedValue + initialSize.height) / 2
+            y: (size.height.wrappedValue + initialSize.height) / 2
         )
         self._bottom_right_edge = .init(initialValue: (br, br))
         self.initialSize = initialSize
@@ -47,7 +105,12 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     func updateUserDefaults() {
         // UserDefaultsのデータを更新する
         variableStates.keyboardInternalSettingManager.update(\.oneHandedModeSetting) {value in
-            value.set(orientation: variableStates.keyboardOrientation, size: size, position: position)
+            value.set(
+                orientation: variableStates.keyboardOrientation,
+                size: size,
+                position: position,
+                bottomOffset: bottomOffset
+            )
         }
     }
 
@@ -60,7 +123,8 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
     }
 
     func setInitial() {
-        self.initialPosition = self.position
+        self.initialHeight = self.size.height
+        self.initialBottomOffset = self.bottomOffset
         self.top_left_edge.initial = self.top_left_edge.current
         self.bottom_right_edge.initial = self.bottom_right_edge.current
     }
@@ -91,33 +155,35 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
         DragGesture(minimumDistance: .zero, coordinateSpace: .global)
             .onChanged { value in
                 let dy = value.location.y - value.startLocation.y
-                // ドラッグ前の Y 値を記憶
                 let beforeY = self[keyPath: target].wrappedValue.current.y
-                // 仮セット
                 self[keyPath: target].wrappedValue.current.y = self[keyPath: target].wrappedValue.initial.y + dy
-
-                // エッジ位置と新しい高さを計算
-                let topY    = top_left_edge.current.y
-                let bottomY = bottom_right_edge.current.y
-                let newHeight = abs(bottomY - topY)
-
-                // 縮小禁止（下端ハンドルの場合）
-                let isShrinkOnBottom = !isTopHandle && newHeight < size.height
-                // 最小・最大を超えたらキャンセル
-                let isTooShort = newHeight < Design.keyboardHeight(
+                let minimumHeight = Design.keyboardHeight(
                     context: variableStates.layoutContext
                 ) / 2
-                let isTooTall = newHeight > variableStates.maximumHeight
-
-                if isTooShort || isTooTall || isShrinkOnBottom {
-                    // 範囲外なら元に戻す
-                    self[keyPath: target].wrappedValue.current.y = beforeY
+                let result = if isTopHandle {
+                    OneHandedVerticalResizeResult.movingTopHandle(
+                        initialHeight: initialHeight,
+                        bottomOffset: initialBottomOffset,
+                        translation: dy,
+                        minimumHeight: minimumHeight,
+                        maximumHeight: variableStates.maximumHeight
+                    )
                 } else {
-                    // 有効範囲内なら適用
-                    self.size.height   = newHeight
-                    // centerY 再計算（initialSizeは元の高さ）
-                    self.position.y    = (topY + bottomY - initialSize.height) / 2
+                    OneHandedVerticalResizeResult.movingBottomHandle(
+                        initialHeight: initialHeight,
+                        initialBottomOffset: initialBottomOffset,
+                        translation: dy,
+                        minimumHeight: minimumHeight,
+                        maximumHeight: variableStates.maximumHeight
+                    )
                 }
+                guard let result else {
+                    self[keyPath: target].wrappedValue.current.y = beforeY
+                    return
+                }
+                self.size.height = result.height
+                self.bottomOffset = result.bottomOffset
+                self.position.y = 0
             }
             .onEnded { _ in
                 self.correctOrder()
@@ -158,6 +224,16 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
             }
             .stroke(Color.white, lineWidth: 3)
             .gesture(xGesture(target: \.$bottom_right_edge))
+            Path {path in
+                for i in 0..<4 {
+                    let y = size.height - size.height / 24 * CGFloat(i)
+                    let ratio = (1 - CGFloat(i) / 4) * 0.8
+                    path.move(to: CGPoint(x: size.width / 2 - size.width * edgeRatio * ratio, y: y))
+                    path.addLine(to: CGPoint(x: size.width / 2 + size.width * edgeRatio * ratio, y: y))
+                }
+            }
+            .stroke(Color.white, lineWidth: 3)
+            .gesture(yGesture(target: \.$bottom_right_edge, isTopHandle: false))
             HStack {
                 let cur = min(size.width, size.height) * 0.22
                 let max = min(initialSize.width, initialSize.height) * 0.22
@@ -182,7 +258,7 @@ struct ResizingRect<Extension: ApplicationSpecificKeyboardViewExtension>: View {
                         }
                 }
                 Button {
-                    if self.position == .zero && self.size == self.initialSize {
+                    if self.position == .zero && self.size == self.initialSize && self.bottomOffset == 0 {
                         variableStates.setResizingMode(.fullwidth)
                     } else {
                         variableStates.setResizingMode(.onehanded)
@@ -236,14 +312,21 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
     private let initialSize: CGSize
     @Binding private var position: CGPoint
     @Binding private var size: CGSize
+    @Binding private var bottomOffset: CGFloat
     @EnvironmentObject private var variableStates: VariableStates
     private var hideResetButtonInOneHandedMode: Bool {
         Extension.SettingProvider.hideResetButtonInOneHandedMode
     }
-    init(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize) {
+    init(
+        size: Binding<CGSize>,
+        position: Binding<CGPoint>,
+        bottomOffset: Binding<CGFloat>,
+        initialSize: CGSize
+    ) {
         self.initialSize = initialSize
         self._size = size
         self._position = position
+        self._bottomOffset = bottomOffset
     }
 
     private var isAtDefaultWidth: Bool {
@@ -304,10 +387,16 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
         switch variableStates.resizingState {
         case .onehanded:
             // 親Viewに対して、そのサイズを教えてくれるGeometryReaderを重ねる
-            content
-                .frame(width: size.width, height: size.height)
-                .offset(x: position.x, y: 0)
-                .overlay {
+            VStack(spacing: 0) {
+                content
+                    .frame(width: size.width, height: size.height)
+                Color.clear
+                    .frame(height: bottomOffset)
+                    .allowsHitTesting(false)
+            }
+            .frame(width: size.width, height: size.height + bottomOffset, alignment: .top)
+            .offset(x: position.x, y: 0)
+            .overlay {
                     if !hideResetButtonInOneHandedMode && !isAtDefaultWidth {
                         // GeometryReaderが親のサイズ(initialSize)を正確に教えてくれる
                         GeometryReader { geo in
@@ -338,7 +427,7 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
         case .resizing:
             let maximumHeight = variableStates.maximumHeight
             let height = variableStates.interfaceSize.height
-            let offSet = (maximumHeight - height) / 2
+            let offSet = (maximumHeight - height) / 2 - bottomOffset
             ZStack {
                 content
                 Rectangle()
@@ -347,7 +436,12 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
             }
             .disabled(true)
             .overlay {
-                ResizingRect<Extension>(size: $size, position: $position, initialSize: initialSize)
+                ResizingRect<Extension>(
+                    size: $size,
+                    position: $position,
+                    bottomOffset: $bottomOffset,
+                    initialSize: initialSize
+                )
             }
             .frame(width: size.width, height: size.height)
             .offset(x: position.x, y: offSet)
@@ -356,7 +450,20 @@ struct ResizingBindingFrame<Extension: ApplicationSpecificKeyboardViewExtension>
 }
 
 extension View {
-    @MainActor func resizingFrame<Extension: ApplicationSpecificKeyboardViewExtension>(size: Binding<CGSize>, position: Binding<CGPoint>, initialSize: CGSize, extension: Extension.Type) -> some View {
-        self.modifier(ResizingBindingFrame<Extension>(size: size, position: position, initialSize: initialSize))
+    @MainActor func resizingFrame<Extension: ApplicationSpecificKeyboardViewExtension>(
+        size: Binding<CGSize>,
+        position: Binding<CGPoint>,
+        bottomOffset: Binding<CGFloat>,
+        initialSize: CGSize,
+        extension: Extension.Type
+    ) -> some View {
+        self.modifier(
+            ResizingBindingFrame<Extension>(
+                size: size,
+                position: position,
+                bottomOffset: bottomOffset,
+                initialSize: initialSize
+            )
+        )
     }
 }
