@@ -14,7 +14,7 @@ struct UpdateHistoryView: View {
             // version 3系
             Group {
                 // version 3.1系
-                VersionView("3.1.1", releaseDate: "2026年08月29日") {
+                VersionView("3.1.1", releaseDate: "2026年09月14日") {
                     ParagraphView("機能を改善しました。") {
                         "片手モードのサイズ調整画面に下ハンドルを追加し、キーボードの下側に余白を設定できるようになりました"
                         "キー数の多いカスタムタブで、キー同士の間隔が広くなりすぎないようにしました"
