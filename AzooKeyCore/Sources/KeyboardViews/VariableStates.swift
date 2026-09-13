@@ -156,6 +156,7 @@ public final class VariableStates: ObservableObject {
     @Published private(set) public var containerWidth: CGFloat = 0
     @Published public var interfaceSize: CGSize = .zero
     @Published public var interfacePosition: CGPoint = .zero
+    @Published public var interfaceBottomOffset: CGFloat = 0
 
     /// 外部では利用しないが、`enterKeyState`の更新時に必要になる
     @MainActor private(set) public var returnKeyType: UIReturnKeyType = .default
@@ -232,6 +233,7 @@ public final class VariableStates: ObservableObject {
                 height: (height ?? baseHeight) * self.heightScaleFromKeyboardHeightSetting
             )
             interfacePosition = .zero
+            interfaceBottomOffset = 0
 
         case .onehanded:
             break
@@ -241,11 +243,14 @@ public final class VariableStates: ObservableObject {
             let item = keyboardInternalSettingManager.oneHandedModeSetting.item(orientation: keyboardOrientation)
             let height = keyboardInternalSettingManager.oneHandedModeSetting.heightItem(orientation: keyboardOrientation).height
             interfaceSize = CGSize(width: min(item.width, containerWidth), height: (height ?? baseHeight) * heightScaleFromKeyboardHeightSetting)
-            interfacePosition = item.position
+            interfacePosition = CGPoint(x: item.position.x, y: 0)
+            interfaceBottomOffset = keyboardInternalSettingManager.oneHandedModeSetting.bottomOffset(
+                orientation: keyboardOrientation
+            )
         }
 
         // 以下の処理は全ケースで共通
-        self.maximumHeight = interfaceSize.height
+        self.maximumHeight = interfaceSize.height + interfaceBottomOffset
         self.resizingState = state
         keyboardInternalSettingManager.update(\.oneHandedModeSetting) {value in
             value.update(orientation: keyboardOrientation) {value in
@@ -377,11 +382,15 @@ public final class VariableStates: ObservableObject {
         switch self.resizingState {
         case .fullwidth:
             self.interfaceSize = CGSize(width: width, height: effectiveHeight)
+            self.interfaceBottomOffset = 0
         case .onehanded, .resizing:
             let item = keyboardInternalSettingManager.oneHandedModeSetting.item(orientation: orientation)
             // 安全のため、指示されたwidth, heightを超える値を許可しない。
             self.interfaceSize = CGSize(width: min(width, item.width), height: effectiveHeight)
-            self.interfacePosition = ignoreStoredHeight ? .zero : item.position
+            self.interfacePosition = ignoreStoredHeight ? .zero : CGPoint(x: item.position.x, y: 0)
+            self.interfaceBottomOffset = ignoreStoredHeight
+                ? 0
+                : keyboardInternalSettingManager.oneHandedModeSetting.bottomOffset(orientation: orientation)
         }
     }
 

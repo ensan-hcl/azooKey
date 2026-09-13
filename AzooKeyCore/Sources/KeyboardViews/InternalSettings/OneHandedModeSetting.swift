@@ -39,19 +39,25 @@ public struct OneHandedModeSetting: Sendable, Codable, StaticInitialValueAvailab
         }
     }
 
+    public func bottomOffset(orientation: KeyboardOrientation) -> CGFloat {
+        max(0, heightItem(orientation: orientation).bottomOffset ?? 0)
+    }
+
     mutating func update(orientation: KeyboardOrientation, process: (inout OneHandedModeSettingItem) -> Void) {
         process(&self[keyPath: keyPath(orientation: orientation)])
     }
 
-    mutating func set(orientation: KeyboardOrientation, size: CGSize, position: CGPoint) {
+    mutating func set(orientation: KeyboardOrientation, size: CGSize, position: CGPoint, bottomOffset: CGFloat) {
         self[keyPath: keyPath(orientation: orientation)].hasUsed = true
         self[keyPath: keyPath(orientation: orientation)].width = size.width
-        self[keyPath: keyPath(orientation: orientation)].position = position
+        self[keyPath: keyPath(orientation: orientation)].position = CGPoint(x: position.x, y: 0)
         switch orientation {
         case .vertical:
             self.verticalHeight.height = size.height
+            self.verticalHeight.bottomOffset = max(0, bottomOffset)
         case .horizontal:
             self.horizontalHeight.height = size.height
+            self.horizontalHeight.bottomOffset = max(0, bottomOffset)
         }
     }
 
@@ -66,9 +72,15 @@ public struct OneHandedModeSetting: Sendable, Codable, StaticInitialValueAvailab
             if self.verticalHeight.height == nil {
                 self.verticalHeight.height = size.height
             }
+            if self.verticalHeight.bottomOffset == nil {
+                self.verticalHeight.bottomOffset = 0
+            }
         case .horizontal:
             if self.horizontalHeight.height == nil {
                 self.horizontalHeight.height = size.height
+            }
+            if self.horizontalHeight.bottomOffset == nil {
+                self.horizontalHeight.bottomOffset = 0
             }
         }
     }
@@ -159,6 +171,8 @@ public struct OneHandedModeSettingItem: Sendable, Codable {
 /// v2.5で導入。
 public struct OneHandedModeHeightSettingItem: Sendable, Codable {
     var height: CGFloat?
+    /// キー領域とキーボード下端の間に確保する余白。nilは旧バージョンの保存値を表す。
+    var bottomOffset: CGFloat?
     /// 片手モードの高さスケール設定（v2.4.2まで存在）に対して片手モード上の高さ設定を優先させるか判定するための値。
     public var userHasOverwrittenKeyboardHeightSetting: Bool = false
 }

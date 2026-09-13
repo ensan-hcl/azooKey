@@ -57,13 +57,14 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
     }
 
     private var totalBackgroundHeight: CGFloat {
+        let currentBodyHeight = resolvedInterfaceHeight + variableStates.interfaceBottomOffset
         let bodyHeight = if variableStates.boolStates.isTextMagnifying {
             max(
-                resolvedInterfaceHeight,
+                currentBodyHeight,
                 Design.keyboardHeight(context: variableStates.layoutContext)
             )
         } else {
-            resolvedInterfaceHeight
+            currentBodyHeight
         }
         return bodyHeight + Design.keyboardScreenBottomPadding + componentOverlayHeight
     }
@@ -82,7 +83,9 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
             }
             .frame(
                 width: variableStates.containerWidth,
-                height: resolvedInterfaceHeight + Design.keyboardScreenBottomPadding
+                height: resolvedInterfaceHeight
+                    + variableStates.interfaceBottomOffset
+                    + Design.keyboardScreenBottomPadding
             )
     }
 
@@ -154,6 +157,7 @@ public struct KeyboardView<Extension: ApplicationSpecificKeyboardViewExtension>:
                 .resizingFrame(
                     size: $variableStates.interfaceSize,
                     position: $variableStates.interfacePosition,
+                    bottomOffset: $variableStates.interfaceBottomOffset,
                     initialSize: CGSize(
                         width: variableStates.containerWidth,
                         height: Design.keyboardHeight(context: variableStates.layoutContext)

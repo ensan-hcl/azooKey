@@ -155,9 +155,11 @@ final class KeyboardViewController: UIInputViewController {
                     .map { $0["isTextMagnifying"] ?? false }
                     .removeDuplicates()
             )
+            .combineLatest(KeyboardViewController.variableStates.$interfaceBottomOffset)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] values, isTextMagnifying in
+            .sink { [weak self] combinedValues, bottomOffset in
                 guard let self = self else { return }
+                let (values, isTextMagnifying) = combinedValues
                 let (interfaceSize, state, maxH, upsideComponent) = values
                 // In resizing mode use the dynamic maxH; otherwise default to interfaceSize.height
                 // 1. upsideComponentの高さを計算する（存在しない場合は0）
@@ -168,7 +170,9 @@ final class KeyboardViewController: UIInputViewController {
                     )
                 } ?? 0
 
-                let currentBodyHeight = (state == .resizing) ? maxH : interfaceSize.height
+                let currentBodyHeight = (state == .resizing)
+                    ? maxH
+                    : interfaceSize.height + bottomOffset
                 let bodyHeight = if isTextMagnifying {
                     max(
                         currentBodyHeight,
@@ -185,7 +189,7 @@ final class KeyboardViewController: UIInputViewController {
                 SharedStore.setResolvedKeyboardSize(
                     CGSize(
                         width: KeyboardViewController.variableStates.containerWidth,
-                        height: interfaceSize.height + Design.keyboardScreenBottomPadding
+                        height: interfaceSize.height + bottomOffset + Design.keyboardScreenBottomPadding
                     ),
                     orientation: KeyboardViewController.variableStates.keyboardOrientation
                 )
@@ -461,7 +465,7 @@ final class KeyboardViewController: UIInputViewController {
         if variableStates.resizingState == .resizing {
             bodyHeight = variableStates.maximumHeight
         } else {
-            bodyHeight = variableStates.interfaceSize.height
+            bodyHeight = variableStates.interfaceSize.height + variableStates.interfaceBottomOffset
         }
         let totalHeight = bodyHeight + componentHeight + Design.keyboardScreenBottomPadding
         KeyboardViewController.variableStates.maximumHeight = max(variableStates.maximumHeight, bodyHeight)
